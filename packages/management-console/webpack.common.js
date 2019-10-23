@@ -75,6 +75,8 @@ module.exports = {
       },
       {
         test: /\.svg$/,
+        // only process SVG modules with this loader when they don't live under a 'bgimages',
+        // 'fonts', or 'pficon' directory, those are handled with other loaders
         include: input => (
           (input.indexOf(BG_IMAGES_DIRNAME) === -1) &&
           (input.indexOf('fonts') === -1) &&
@@ -116,7 +118,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    modules: [path.resolve("../../node_modules"), path.resolve("./node_modules"), path.resolve("./src")],
     plugins: [
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, './tsconfig.json')
