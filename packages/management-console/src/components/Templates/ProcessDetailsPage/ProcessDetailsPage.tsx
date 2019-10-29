@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Page, PageSection, Grid, GridItem } from '@patternfly/react-core';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
@@ -41,6 +41,7 @@ const ProcessDetailsPage = ({ match }) => {
   {
     if (loading) return <p>Loading..</p>;
   }
+  
   return (
     <>
       <Page>
