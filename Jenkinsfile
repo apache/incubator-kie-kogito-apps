@@ -4,7 +4,9 @@ pipeline {
     agent {
         label 'image-test'
     }
-
+    tools {
+        nodejs "nodejs-11.0.0"
+    }
     options {
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')
         timeout(time: 90, unit: 'MINUTES')
@@ -19,7 +21,7 @@ pipeline {
                 sh "npm -v"
                 sh "npm install -g yarn --registry=${NPM_REGISTRY_URL}"
                 sh "echo 'after installation'"
-                sh "nmp -v"
+                sh "npm -v"
                 sh "yarn config set registry ${NPM_REGISTRY_URL}"
                 sh "export XAUTHORITY=$HOME/.Xauthority"
                 sh "chmod 600 $HOME/.vnc/passwd"
