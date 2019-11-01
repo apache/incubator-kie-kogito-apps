@@ -4,9 +4,6 @@ pipeline {
     agent {
         label 'image-test'
     }
-    tools {
-        nodejs "nodejs-11.0.0"
-    }
     options {
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')
         timeout(time: 90, unit: 'MINUTES')
