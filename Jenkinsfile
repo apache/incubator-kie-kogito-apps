@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label 'kie-rhel7&&kie-mem8g'
+        label 'image-test'
     }
     tools {
         nodejs "nodejs-11.0.0"
