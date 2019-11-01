@@ -18,10 +18,10 @@ pipeline {
         stage('Prepare') {
             steps {
                 sh "echo 'before installation'"
-                sh "npm -v"
+                sh "node -v"
                 sh "npm install -g yarn --registry=${NPM_REGISTRY_URL}"
                 sh "echo 'after installation'"
-                sh "npm -v"
+                sh "node -v"
                 sh "yarn config set registry ${NPM_REGISTRY_URL}"
                 sh "export XAUTHORITY=$HOME/.Xauthority"
                 sh "chmod 600 $HOME/.vnc/passwd"
