@@ -18,6 +18,8 @@ import {
 } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from 'react-apollo';
+import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyState';
+import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 /* tslint:disable:no-string-literal */
 export interface IOwnProps {
   id: number;
@@ -26,10 +28,18 @@ export interface IOwnProps {
   processID: string;
   parentInstanceID: string | null;
   processName: string;
-  start:string;
+  start: string;
 }
 
-const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceState, processID, parentInstanceID, processName,start }) => {
+const DataListItemComponent: React.FC<IOwnProps> = ({
+  id,
+  instanceID,
+  instanceState,
+  processID,
+  parentInstanceID,
+  processName,
+  start
+}) => {
   const [expanded, setexpanded] = useState(['kie-datalist-toggle']);
   const [isOpen, setisOpen] = useState(false);
   const [isLoaded, setisLoaded] = useState(false);
@@ -66,7 +76,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
     const newExpanded =
       index >= 0 ? [...expanded.slice(0, index), ...expanded.slice(index + 1, expanded.length)] : [...expanded, _id];
     setexpanded(newExpanded);
-    if (!isLoaded){
+    if (!isLoaded) {
       const data = await client.query({
         query: GET_CHILD_INSTANCES,
         variables: {
@@ -79,7 +89,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
   };
   return (
     <React.Fragment>
-      <DataListItem aria-labelledby="kie-datalist-item" isExpanded={expanded.includes('kie-datalist-toggle')}>
+      <DataListItem aria-labelledby="kie-datalist-item" isExpanded={!expanded.includes('kie-datalist-toggle')}>
         <DataListItemRow>
           <DataListToggle
             onClick={() => toggle('kie-datalist-toggle')}
@@ -99,9 +109,11 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
             dataListCells={[
               <DataListCell key={1}>{processName}</DataListCell>,
               <DataListCell key={2}>
-                {start? 
+                {start ? (
                   <TimeAgo date={new Date(`${start}`)} render={({ error, value }) => <span>{value}</span>} />
-                : ''}
+                ) : (
+                  ''
+                )}
               </DataListCell>,
               <DataListCell key={3}>{instanceState}</DataListCell>
             ]}
@@ -127,9 +139,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
               isOpen={isOpen}
               onSelect={onSelect}
               toggle={<KebabToggle onToggle={onToggle} />}
-              dropdownItems={[
-                <DropdownItem key={1}>Abort</DropdownItem>,
-              ]}
+              dropdownItems={[<DropdownItem key={1}>Abort</DropdownItem>]}
             />
           </DataListAction>
         </DataListItemRow>
@@ -154,6 +164,10 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
                 />
               );
             })}
+          {isLoaded && Array.isArray(childList['ProcessInstances']) && childList['ProcessInstances'].length === 0 && (
+            <EmptyStateComponent />
+          )}
+          {!isLoaded && <SpinnerComponent />}
         </DataListContent>
       </DataListItem>
     </React.Fragment>

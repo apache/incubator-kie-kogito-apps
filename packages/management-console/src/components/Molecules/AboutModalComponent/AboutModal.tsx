@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AboutModal, Button, TextContent, TextList, TextListItem } from '@patternfly/react-core';
 import './AboutModal.css';
+import { version } from '../../../../package.json';
 export interface IOwnProps {
   isOpenProp: boolean;
   handleModalToggleProp: any;
@@ -18,8 +19,8 @@ const AboutModalBox: React.FC<IOwnProps> = ({ isOpenProp, handleModalToggleProp 
     >
       <TextContent>
         <TextList component="dl">
-          <TextListItem component="dt">CFME Version</TextListItem>
-          <TextListItem component="dd">5.5.3.4.20102789036450</TextListItem>
+          <TextListItem component="dt">Version</TextListItem>
+          <TextListItem component="dd">{version}</TextListItem>
           <TextListItem component="dt">Cloudforms Version</TextListItem>
           <TextListItem component="dd">4.1</TextListItem>
           <TextListItem component="dt">Server Name</TextListItem>
