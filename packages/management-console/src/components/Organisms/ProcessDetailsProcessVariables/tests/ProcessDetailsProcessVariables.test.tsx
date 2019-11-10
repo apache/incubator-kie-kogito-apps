@@ -27,4 +27,3 @@ describe('Process Variables component', () => {
         expect(wrapper).toMatchSnapshot();
     });
 })
-

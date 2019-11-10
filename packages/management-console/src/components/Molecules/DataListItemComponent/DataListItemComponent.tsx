@@ -1,6 +1,7 @@
 import { TimeAgo } from '@n1ru4l/react-time-ago';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import gql from 'graphql-tag';
+import axios from 'axios';
 import {
   DataListItem,
   DataListItemRow,
@@ -14,7 +15,8 @@ import {
   KebabToggle,
   DropdownItem,
   DataListContent,
-  DropdownPosition
+  DropdownPosition,
+  Modal
 } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 import { useApolloClient } from 'react-apollo';
@@ -27,14 +29,18 @@ export interface IOwnProps {
   parentInstanceID: string | null;
   processName: string;
   start:string;
+  state:string;
+  managementEnabled: boolean;
 }
 
-const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceState, processID, parentInstanceID, processName,start }) => {
+const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceState, state, managementEnabled, processID, parentInstanceID, processName,start }) => {
   const [expanded, setexpanded] = useState(['kie-datalist-toggle']);
   const [isOpen, setisOpen] = useState(false);
   const [isLoaded, setisLoaded] = useState(false);
   const [isChecked, setisChecked] = useState(false);
   const [childList, setchildList] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [error, setError] = useState('')
   const client = useApolloClient();
 
   const GET_CHILD_INSTANCES = gql`
@@ -50,6 +56,13 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
       }
     }
   `;
+  const handleModal = useCallback(async (_processID, _instanceID) => {
+    const processInstanceId = instanceID;
+    const processId = processID;
+    setOpenModal(true);
+    const result = await axios.get(`http://localhost:8090/management/process/${processId}/instances/${processInstanceId}/error`);
+    setError(result.data);
+  },[])
   const onSelect = event => {
     setisOpen(isOpen ? false : true);
   };
@@ -60,6 +73,10 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
   const onToggle = _isOpen => {
     setisOpen(_isOpen);
   };
+
+  const handleModalToggle = () => {
+    setOpenModal(!openModal)
+  }
 
   const toggle = async _id => {
     const index = expanded.indexOf(_id);
@@ -77,6 +94,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
       setisLoaded(true);
     }
   };
+
   return (
     <React.Fragment>
       <DataListItem aria-labelledby="kie-datalist-item" isExpanded={expanded.includes('kie-datalist-toggle')}>
@@ -100,7 +118,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
               <DataListCell key={1}>{processName}</DataListCell>,
               <DataListCell key={2}>
                 {start? 
-                  <TimeAgo date={new Date(`${start}`)} render={({ error, value }) => <span>{value}</span>} />
+                  <TimeAgo date={new Date(`${start}`)} render={({ _error, value }) => <span>{value}</span>} />
                 : ''}
               </DataListCell>,
               <DataListCell key={3}>{instanceState}</DataListCell>
@@ -121,16 +139,49 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
             id="kie-datalist-action"
             aria-label="Actions"
           >
-            <Dropdown
+            {state === "ERROR" && managementEnabled ? 
+              <Dropdown
               isPlain
               position={DropdownPosition.right}
               isOpen={isOpen}
               onSelect={onSelect}
               toggle={<KebabToggle onToggle={onToggle} />}
               dropdownItems={[
-                <DropdownItem key={1}>Abort</DropdownItem>,
+                <DropdownItem key={1}>Retry</DropdownItem>,
+                <DropdownItem key={2}>Skip</DropdownItem>,
+                <DropdownItem key={3} onClick = {() => handleModal(processID, instanceID) }>View Error</DropdownItem>,
               ]}
-            />
+            />: <Dropdown
+            isPlain
+            position={DropdownPosition.right}
+            isOpen={isOpen}
+            onSelect={onSelect}
+            toggle={<KebabToggle onToggle={onToggle} />}
+            dropdownItems={[
+              <DropdownItem key={1}>Abort</DropdownItem>,
+            ]}
+          />
+          }
+          <Modal
+          isLarge
+          title="Error"
+          isOpen={openModal}
+          onClose={handleModalToggle}
+          actions={[
+              <Button key="confirm" variant="secondary" onClick={handleModalToggle}>
+                Skip
+              </Button>,
+              <Button key="confirm" variant="secondary" onClick={handleModalToggle}>
+                Retry
+              </Button>,
+              <Button key="confirm" variant="primary" onClick={handleModalToggle}>
+                Close
+              </Button>
+          ]}
+          >
+            {error}
+          </Modal>
+
           </DataListAction>
         </DataListItemRow>
         <DataListContent
@@ -151,6 +202,8 @@ const DataListItemComponent: React.FC<IOwnProps> = ({ id, instanceID, instanceSt
                   parentInstanceID={child.parentProcessInstanceId}
                   processName={child.processName}
                   start={child.start}
+                  state={child.state}
+                  managementEnabled={child.state}
                 />
               );
             })}

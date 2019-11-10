@@ -28,6 +28,7 @@ const DataListComponent: React.FC<{}> = () => {
         roles
         state
         start
+        managementEnabled
       }
     }
   `;
@@ -152,6 +153,8 @@ const DataListComponent: React.FC<{}> = () => {
                               parentInstanceID={item.parentProcessInstanceId}
                               processName={item.processName}
                               start={item.start}
+                              state={item.state}
+                              managementEnabled={item.managementEnabled}
                           />
                       );
                     })}
