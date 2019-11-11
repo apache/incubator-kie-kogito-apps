@@ -12,7 +12,7 @@ import { FilterIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 
 interface IOwnProps {
-  checkedArray: Array<String>;
+  checkedArray: [string];
   filterClick: () => void;
   setCheckedArray: any;
 }
@@ -89,7 +89,7 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({ checkedArray, filterClick,
   };
 
   const onDelete = (type = '', id = '') => {
-    let index = checkedArray.indexOf(id);
+    const index = checkedArray.indexOf(id);
     checkedArray.splice(index, 1);
     onFilterClick();
   };
