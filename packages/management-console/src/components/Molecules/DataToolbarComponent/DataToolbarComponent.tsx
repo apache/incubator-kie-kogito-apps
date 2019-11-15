@@ -24,7 +24,7 @@ interface IOwnProps {
   filters: any;
   setFilters: any;
 }
-const DataToolbarWithFilter: React.FC<IOwnProps> = ({
+const DataToolbarComponent: React.FC<IOwnProps> = ({
   checkedArray,
   filterClick,
   setCheckedArray,
@@ -171,4 +171,4 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
   );
 };
 
-export default DataToolbarWithFilter;
+export default DataToolbarComponent;

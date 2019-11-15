@@ -78,3 +78,109 @@ const GET_PROCESS_INSTANCE = gql`
     }
   }
 `;
+
+const GET_PICKER = gql`
+  query getPicker($columnPickerType: String!) {
+    __type(name: $columnPickerType) {
+      name
+      fields {
+        name
+        type {
+          name
+          kind
+          fields {
+            name
+            type {
+              name
+              kind
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const GET_QUERY_TYPES = gql`
+  query getQueryTypes {
+    __schema {
+      queryType: types {
+        name
+        kind
+        fields {
+          name
+          type {
+            name
+            kind
+          }
+        }
+        inputFields {
+          name
+          type {
+            name
+            kind
+          }
+        }
+      }
+    }
+  }
+`;
+
+const GET_QUERY = gql`
+  query getQuery {
+    __type(name: "Query") {
+      name
+      fields {
+        name
+        args {
+          name
+          type {
+            kind
+            name
+          }
+        }
+        type {
+          ofType {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+const GET_SCHEMA = gql`
+  query getSchema($currentQuery: String!) {
+    __type(name: $currentQuery) {
+      name
+      inputFields {
+        name
+        type {
+          name
+          kind
+          inputFields {
+            name
+            type {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const GET_TYPES = gql`
+  query getTypes($currentArgument: String!) {
+    __type(name: $currentArgument) {
+      name
+      inputFields {
+        name
+        type {
+          name
+          kind
+        }
+      }
+    }
+  }
+`;

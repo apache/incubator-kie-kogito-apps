@@ -370,9 +370,17 @@ module.exports = typeDefs = gql`
 
   type Address {
     city: String
-    country: String
+    country: Country
     street: String
     zipCode: String
+  }
+
+  type City {
+    test: String
+  }
+
+  type Country {
+    test2: String
   }
 
   type Traveller {
