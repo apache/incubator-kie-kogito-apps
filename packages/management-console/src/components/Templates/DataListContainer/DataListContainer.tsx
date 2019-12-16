@@ -5,7 +5,8 @@ import {
   Card,
   Grid,
   GridItem,
-  PageSection
+  PageSection,
+  Alert
 } from '@patternfly/react-core';
 import gql from 'graphql-tag';
 import _ from 'lodash';
@@ -21,6 +22,7 @@ const DataListContainer: React.FC<{}> = () => {
   const [checkedArray, setCheckedArray] = useState<any>(['ACTIVE']);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isStatusSelected, setIsStatusSelected] = useState(false);
   const client = useApolloClient();
 
   /* tslint:disable:no-string-literal */
@@ -81,6 +83,12 @@ const DataListContainer: React.FC<{}> = () => {
           <BreadcrumbItem isActive>Process instances</BreadcrumbItem>
         </Breadcrumb>
       </PageSection>
+      {isStatusSelected && (
+        <Alert
+          variant="warning"
+          title="Select a state from the dropdown menu"
+        />
+      )}
       <PageSection>
         <Grid gutter="md">
           <GridItem span={12}>
@@ -90,6 +98,7 @@ const DataListContainer: React.FC<{}> = () => {
                   checkedArray={checkedArray}
                   filterClick={onFilterClick}
                   setCheckedArray={setCheckedArray}
+                  setIsStatusSelected={setIsStatusSelected}
                 />
               )}
               <DataListComponent

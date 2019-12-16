@@ -20,26 +20,35 @@ interface IOwnProps {
   checkedArray: any;
   filterClick: any;
   setCheckedArray: any;
+  setIsStatusSelected: any;
 }
 const DataToolbarWithFilter: React.FC<IOwnProps> = ({
   checkedArray,
   filterClick,
-  setCheckedArray
+  setCheckedArray,
+  setIsStatusSelected
 }) => {
   const [isExpanded, setisExpanded] = useState(false);
   const [filters, setfilters] = useState(checkedArray);
   const [isFilterClicked, setIsFilterClicked] = useState(false);
   const [isClearAllClicked, setIsClearAllClicked] = useState(false);
-  const allStates = ['ACTIVE', 'COMPLETED', 'ERROR', 'SUSPENDED', 'ABORTED'];
+
   const onFilterClick = () => {
-    setfilters(checkedArray);
-    filterClick();
-    setIsFilterClicked(true);
+    if (checkedArray.length === 0) {
+      setfilters(checkedArray);
+      setIsFilterClicked(true);
+      setIsStatusSelected(true);
+    } else {
+      setfilters(checkedArray);
+      filterClick();
+      setIsFilterClicked(true);
+    }
   };
 
   const onSelect = (event, selection) => {
     setIsFilterClicked(false);
     setIsClearAllClicked(false);
+    setIsStatusSelected(false);
     if (selection) {
       const index = checkedArray.indexOf(selection);
       if (index === -1) {
@@ -57,7 +66,7 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
   const onDelete = (type = '', id = '') => {
     const index = checkedArray.indexOf(id);
     checkedArray.splice(index, 1);
-    onFilterClick();
+    filterClick();
   };
 
   useEffect(() => {
@@ -74,10 +83,11 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
   };
 
   const onRefreshClick = () => {
-    if (isFilterClicked) {
+    if (checkedArray.length === 0) {
+      checkedArray.lenght = 0;
+    } else if (isFilterClicked) {
       filterClick(checkedArray);
-    }
-    if (isClearAllClicked) {
+    } else if (isClearAllClicked) {
       filterClick(['ACTIVE']);
     }
   };

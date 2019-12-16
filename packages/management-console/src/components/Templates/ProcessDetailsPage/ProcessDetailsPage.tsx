@@ -12,7 +12,6 @@ import gql from 'graphql-tag';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
-import ProcessDetailsProcessDiagram from '../../Organisms/ProcessDetailsProcessDiagram/ProcessDetailsProcessDiagram';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
 import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
 import './ProcessDetailsPage.css';
