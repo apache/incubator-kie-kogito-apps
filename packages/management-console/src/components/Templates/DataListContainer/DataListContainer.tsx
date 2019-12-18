@@ -24,6 +24,7 @@ const DataListContainer: React.FC<{}> = () => {
   const [isError, setIsError] = useState(false);
   const [isStatusSelected, setIsStatusSelected] = useState(true);
   const [filters, setFilters] = useState(checkedArray);
+
   const client = useApolloClient();
 
   /* tslint:disable:no-string-literal */
