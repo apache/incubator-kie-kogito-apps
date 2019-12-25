@@ -44,6 +44,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
         roles
         state
         start
+        lastUpdate
         addons
         endpoint
         error {
