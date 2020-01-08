@@ -17,12 +17,13 @@ import { FilterIcon, SyncIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 
 interface IOwnProps {
-  checkedArray: any;
+  checkedArray: string[];
   filterClick: any;
   setCheckedArray: any;
   setIsStatusSelected: any;
-  filters: any;
+  filters: string[];
   setFilters: any;
+  setSelectedInstances: any;
 }
 const DataToolbarWithFilter: React.FC<IOwnProps> = ({
   checkedArray,
@@ -30,14 +31,14 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
   setCheckedArray,
   filters,
   setFilters,
-  setIsStatusSelected
+  setIsStatusSelected,
+  setSelectedInstances
 }) => {
-  const [isExpanded, setisExpanded] = useState(false);
+  const [isExpanded, setisExpanded] = useState<boolean>(false);
+  const [isFilterClicked, setIsFilterClicked] = useState<boolean>(true);
+  const [isClearAllClicked, setIsClearAllClicked] = useState<boolean>(false);
 
-  const [isFilterClicked, setIsFilterClicked] = useState(true);
-  const [isClearAllClicked, setIsClearAllClicked] = useState(false);
-
-  const onFilterClick = () => {
+  const onFilterClick = (): void => {
     if (checkedArray.length === 0) {
       setFilters(checkedArray);
       setIsFilterClicked(true);
@@ -50,7 +51,7 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
     }
   };
 
-  const onSelect = (event, selection) => {
+  const onSelect = (event, selection): void => {
     setIsFilterClicked(false);
     setIsClearAllClicked(false);
     if (selection) {
@@ -67,7 +68,8 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
     }
   };
 
-  const onDelete = (type = '', id = '') => {
+  const onDelete = (type: string = '', id: string = ''): void => {
+    setSelectedInstances([]);
     if (checkedArray.length === 1 && filters.length === 1) {
       const index = checkedArray.indexOf(id);
       checkedArray.splice(index, 1);
@@ -101,14 +103,15 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
     }
   }, [checkedArray]);
 
-  const clearAll = () => {
+  const clearAll = (): void => {
     setIsClearAllClicked(true);
     setCheckedArray(['ACTIVE']);
     setFilters(['ACTIVE']);
     filterClick(['ACTIVE']);
   };
 
-  const onRefreshClick = () => {
+  const onRefreshClick = (): void => {
+    setSelectedInstances([]);
     if (checkedArray.length === 0) {
       checkedArray.length = 0;
     } else if (isFilterClicked) {
@@ -123,7 +126,7 @@ const DataToolbarWithFilter: React.FC<IOwnProps> = ({
       filterClick(['ACTIVE']);
     }
   };
-  const onStatusToggle = isExpandedItem => {
+  const onStatusToggle = (isExpandedItem: boolean): void => {
     setisExpanded(isExpandedItem);
   };
   const statusMenuItems = [

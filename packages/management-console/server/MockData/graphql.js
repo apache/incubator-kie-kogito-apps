@@ -448,7 +448,8 @@ module.exports = data = [
       {
         id: 'fc1b6535-d557-40df-82c8-b425b9dc531b',
         processName: 'subprocess-1'
-      }, {
+      },
+      {
         id: 'ff65b793-bb88-4567-b7e3-73eee35772a4',
         processName: 'subprocess-2'
       }
@@ -551,7 +552,8 @@ module.exports = data = [
       {
         id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e',
         processName: 'subprocess-1'
-      }, {
+      },
+      {
         id: '2d962eef-45b8-48a9-ad4e-9cde0ad6af88',
         processName: 'subprocess-2'
       }
@@ -563,7 +565,7 @@ module.exports = data = [
     parentProcessInstanceId: null,
     processName: 'travels',
     roles: [],
-    state: 'ACTIVE',
+    state: 'ABORTED',
     rootProcessInstanceId: null,
     endpoint: 'http://localhost:4000',
     addons: [],
@@ -649,7 +651,59 @@ module.exports = data = [
         type: 'StartNode'
       }
     ],
-    childProcessInstanceId: []
+    childProcessInstanceId: [
+      {
+        id: '2d962eef-45b8-48a9-ad4e-9cde0ad6af88abc',
+        processName: 'subprocess-1'
+      }
+    ]
+  },
+  {
+    id: '2d962eef-45b8-48a9-ad4e-9cde0ad6af88abc',
+    processId: 'hotelBooking',
+    parentProcessInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0basadadads',
+    rootProcessInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0basadadads',
+    processName: 'HotelBooking',
+    roles: [],
+    state: 'COMPLETED',
+    endpoint: 'http://localhost:4000',
+    addons: ['jobs-management', 'prometheus-monitoring'],
+    error: {
+      nodeDefinitionId: 'a1qa139d5-4e77-181x8c9-84ae-34578e90433n',
+      message: 'Something went wrong'
+    },
+    start: '2019-10-22T03:40:44.089Z',
+    lastUpdate: '2019-12-25T03:40:44.089Z',
+    end: '2019-10-22T05:40:44.089Z',
+    variables:
+      '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Berlin","country":"Germany","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Berlin","country":"Germany","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Karkow","country":"Poland","street":"palna","zipCode":"200300"},"email":"rob@redhat.com","firstName":"Rob","lastName":"Rob","nationality":"Polish"}}',
+    nodes: [
+      {
+        name: 'End Event 1',
+        definitionId: 'EndEvent_1',
+        id: '7a770672-8493-4566-8288-515c0b5360a8',
+        enter: '2019-10-22T04:43:01.146Z',
+        exit: '2019-10-22T04:43:01.146Z',
+        type: 'EndNode'
+      },
+      {
+        name: 'Book hotel',
+        definitionId: 'ServiceTask_1',
+        id: 'f10ed686-84f0-48b6-844e-5cfafa32a7bc',
+        enter: '2019-10-22T04:43:01.146Z',
+        exit: '2019-10-22T04:43:01.146Z',
+        type: 'WorkItemNode'
+      },
+      {
+        name: 'StartProcess',
+        definitionId: 'StartEvent_1',
+        id: '5a6bd73e-1d3d-43d9-8f27-8081c3014716',
+        enter: '2019-10-22T04:43:01.146Z',
+        exit: '2019-10-22T04:43:01.146Z',
+        type: 'StartNode'
+      }
+    ],
+    childProcessInstances: []
   },
   {
     id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0bccddee',
@@ -790,10 +844,12 @@ module.exports = data = [
         type: 'StartNode'
       }
     ],
-    childProcessInstances: [{
-      id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eaccd',
-      processName: 'subprocess'
-    }]
+    childProcessInstances: [
+      {
+        id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eaccd',
+        processName: 'subprocess'
+      }
+    ]
   },
   {
     id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eaccd',
@@ -840,10 +896,12 @@ module.exports = data = [
         type: 'StartNode'
       }
     ],
-    childProcessInstances: [{
-      id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eajabbcc',
-      processName: 'subprocess'
-    }]
+    childProcessInstances: [
+      {
+        id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eajabbcc',
+        processName: 'subprocess'
+      }
+    ]
   },
   {
     id: 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eajabbcc',

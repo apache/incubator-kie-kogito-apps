@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataList, Bullseye } from '@patternfly/react-core';
 import DataListItemComponent from '../../Molecules/DataListItemComponent/DataListItemComponent';
 import gql from 'graphql-tag';
@@ -13,6 +13,10 @@ interface IOwnProps {
   isLoading: boolean;
   setIsError: any;
   setIsLoading: any;
+  abortedArray: any;
+  setAbortedArray: any;
+  completedAndAbortedArray: any;
+  setCompletedAndAbortedArray: any;
 }
 
 enum ProcessInstanceState {
@@ -28,7 +32,11 @@ const DataListComponent: React.FC<IOwnProps> = ({
   initData,
   setInitData,
   isLoading,
-  setIsError
+  setIsError,
+  abortedArray,
+  setAbortedArray,
+  completedAndAbortedArray,
+  setCompletedAndAbortedArray
 }) => {
   const GET_INSTANCES = gql`
     query getInstances($state: [ProcessInstanceState!]) {
@@ -42,6 +50,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
         processId
         processName
         parentProcessInstanceId
+        rootProcessInstanceId
         roles
         state
         start
@@ -67,6 +76,12 @@ const DataListComponent: React.FC<IOwnProps> = ({
   );
   useEffect(() => {
     setIsError(false);
+    setAbortedArray([]);
+    if (!loading) {
+      data.ProcessInstances.map(instance => {
+        instance.isChecked = false;
+      });
+    }
     setInitData(data);
   }, [data]);
 
@@ -108,6 +123,13 @@ const DataListComponent: React.FC<IOwnProps> = ({
               id={index}
               key={item.id}
               processInstanceData={item}
+              initData={initData}
+              setInitData={setInitData}
+              loading={loading}
+              abortedArray={abortedArray}
+              setAbortedArray={setAbortedArray}
+              completedAndAbortedArray={completedAndAbortedArray}
+              setCompletedAndAbortedArray={setCompletedAndAbortedArray}
             />
           );
         })}

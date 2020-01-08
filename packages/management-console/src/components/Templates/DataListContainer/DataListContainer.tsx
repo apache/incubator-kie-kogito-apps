@@ -5,7 +5,8 @@ import {
   Card,
   Grid,
   GridItem,
-  PageSection
+  PageSection,
+  Button
 } from '@patternfly/react-core';
 import gql from 'graphql-tag';
 import _ from 'lodash';
@@ -16,6 +17,7 @@ import DataToolbarComponent from '../../Molecules/DataToolbarComponent/DataToolb
 import './DataList.css';
 import DataListComponent from '../../Organisms/DataListComponent/DataListComponent';
 import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
+import axios from 'axios';
 
 const DataListContainer: React.FC<{}> = () => {
   const [initData, setInitData] = useState<any>([]);
@@ -24,7 +26,8 @@ const DataListContainer: React.FC<{}> = () => {
   const [isError, setIsError] = useState(false);
   const [isStatusSelected, setIsStatusSelected] = useState(true);
   const [filters, setFilters] = useState(checkedArray);
-
+  const [abortedArray, setAbortedArray] = useState([]);
+  const [completedAndAbortedArray, setCompletedAndAbortedArray] = useState([]);
   const client = useApolloClient();
 
   /* tslint:disable:no-string-literal */
@@ -40,6 +43,7 @@ const DataListContainer: React.FC<{}> = () => {
         processId
         processName
         parentProcessInstanceId
+        rootProcessInstanceId
         roles
         state
         start
@@ -58,6 +62,7 @@ const DataListContainer: React.FC<{}> = () => {
     setIsLoading(true);
     setIsError(false);
     setIsStatusSelected(true);
+    setAbortedArray([]);
     await client
       .query({
         query: GET_INSTANCES,
@@ -68,7 +73,58 @@ const DataListContainer: React.FC<{}> = () => {
       })
       .then(result => {
         setIsLoading(result.loading);
+        setAbortedArray([]);
+        if (!result.loading) {
+          result.data.ProcessInstances.map(instance => {
+            instance.isChecked = false;
+          });
+        }
         setInitData(result.data);
+      });
+  };
+
+  const handleAbortAll = () => {
+    const completedAndAborted = [];
+    const tempAbortedArray = [...abortedArray];
+    tempAbortedArray.map(abortedInstances => {
+      initData.ProcessInstances.map(instance => {
+        if (instance.id === abortedInstances) {
+          if (instance.state === 'COMPLETED' || instance.state === 'ABORTED') {
+            completedAndAborted.push(abortedInstances);
+          }
+        }
+        if (instance.childDataList !== undefined) {
+          instance.childDataList.map(child => {
+            if (child.id === abortedInstances) {
+              if (child.state === 'COMPLETED' || child.state === 'ABORTED') {
+                completedAndAborted.push(abortedInstances);
+              }
+            }
+          });
+        }
+      });
+    });
+    if (completedAndAborted.length > 0) {
+      alert(
+        `sorry the following proccesses are skiped since they are either completed or aborted ${[
+          ...completedAndAborted
+        ]}`
+      );
+    }
+
+    const filteredAbortedArray = tempAbortedArray.filter(
+      val => !completedAndAborted.includes(val)
+    );
+    const endpoint = initData.ProcessInstances[0].endpoint;
+    axios
+      .post(
+        `${endpoint}/management/processes/instances/${filteredAbortedArray}/abortAll`
+      )
+      .then(result => {
+        result = result;
+      })
+      .catch(err => {
+        err = err;
       });
   };
 
@@ -92,14 +148,37 @@ const DataListContainer: React.FC<{}> = () => {
           <GridItem span={12}>
             <Card className="dataList">
               {!isError && (
-                <DataToolbarComponent
-                  checkedArray={checkedArray}
-                  filterClick={onFilterClick}
-                  setCheckedArray={setCheckedArray}
-                  setIsStatusSelected={setIsStatusSelected}
-                  filters={filters}
-                  setFilters={setFilters}
-                />
+                <>
+                  <DataToolbarComponent
+                    checkedArray={checkedArray}
+                    filterClick={onFilterClick}
+                    setCheckedArray={setCheckedArray}
+                    setIsStatusSelected={setIsStatusSelected}
+                    filters={filters}
+                    setFilters={setFilters}
+                    setSelectedInstances={setIsStatusSelected}
+                  />
+                  {abortedArray.length !== 0 ? (
+                    <div className="pf-u-pr-sm pf-u-pb-sm">
+                      <Button
+                        className="pf-u-float-right"
+                        onClick={handleAbortAll}
+                      >
+                        Abort all
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="pf-u-pr-sm pf-u-pb-sm">
+                      <Button
+                        variant="primary"
+                        className="pf-u-float-right"
+                        isDisabled
+                      >
+                        Abort all
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
               {isStatusSelected ? (
                 <DataListComponent
@@ -108,6 +187,10 @@ const DataListContainer: React.FC<{}> = () => {
                   isLoading={isLoading}
                   setIsLoading={setIsLoading}
                   setIsError={setIsError}
+                  abortedArray={abortedArray}
+                  setAbortedArray={setAbortedArray}
+                  completedAndAbortedArray={completedAndAbortedArray}
+                  setCompletedAndAbortedArray={setCompletedAndAbortedArray}
                 />
               ) : (
                 <EmptyStateComponent

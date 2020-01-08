@@ -53,6 +53,10 @@ app.post(
   '/management/processes/:processId/instances/:processInstanceId',
   controller.callAbort
 );
+app.post(
+  '/management/processes/instances/:processInstanceIds/abortAll',
+  controller.callAbortAll
+);
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
