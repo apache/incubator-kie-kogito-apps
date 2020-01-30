@@ -20,6 +20,7 @@ interface IOwnProps {
   setFilters?: any;
   setCheckedArray?: any;
   refetch?: any;
+  refetchAll?: any;
 }
 const EmptyStateComponent: React.FC<IOwnProps> = ({
   iconType,
@@ -28,7 +29,8 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
   filterClick,
   setFilters,
   setCheckedArray,
-  refetch
+  refetch,
+  refetchAll
 }) => {
   const resetClick = () => {
     filterClick(['ACTIVE']);
@@ -58,7 +60,13 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
         <Title size="lg">{title}</Title>
         <EmptyStateBody>{body}</EmptyStateBody>
         {iconType === 'warningTriangleIcon' && (
-          <Button variant="primary" onClick={() => refetch()}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              refetch();
+              refetchAll();
+            }}
+          >
             Refresh
           </Button>
         )}

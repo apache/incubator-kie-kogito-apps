@@ -6,7 +6,8 @@ import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateCompo
 import '@patternfly/patternfly/patternfly-addons.css';
 import {
   useGetProcessInstancesQuery,
-  ProcessInstanceState
+  ProcessInstanceState,
+  useGetAllProcessInstancesQuery
 } from '../.././../graphql/types';
 
 interface IOwnProps {
@@ -14,14 +15,15 @@ interface IOwnProps {
   initData: any;
   isLoading: boolean;
   setIsError: any;
-  setIsLoading: any;
+  setTotalProcesses: any;
 }
 
 const DataListComponent: React.FC<IOwnProps> = ({
   initData,
   setInitData,
   isLoading,
-  setIsError
+  setIsError,
+  setTotalProcesses
 }) => {
   const {
     loading,
@@ -31,11 +33,24 @@ const DataListComponent: React.FC<IOwnProps> = ({
     networkStatus
   } = useGetProcessInstancesQuery({
     variables: {
-      state: [ProcessInstanceState.Active]
+      state: [ProcessInstanceState.Active],
+      offset: 0,
+      limit: 10
     },
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true
   });
+
+  const totalProcessInstances = useGetAllProcessInstancesQuery({
+    variables: { state: [ProcessInstanceState.Active] },
+    fetchPolicy: 'network-only'
+  });
+
+  useEffect(() => {
+    if (!totalProcessInstances.loading) {
+      setTotalProcesses(totalProcessInstances.data.ProcessInstances.length);
+    }
+  }, [totalProcessInstances.data]);
 
   useEffect(() => {
     setIsError(false);
@@ -67,6 +82,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
           title="Oops... error while loading"
           body="Try using the refresh action to reload process instances"
           refetch={refetch}
+          refetchAll={totalProcessInstances.refetch}
         />
       </div>
     );

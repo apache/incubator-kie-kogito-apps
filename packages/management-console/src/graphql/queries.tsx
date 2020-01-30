@@ -1,7 +1,38 @@
 import gql from 'graphql-tag';
 
 const GET_PROCESS_INSTANCES = gql`
-  query getProcessInstances($state: [ProcessInstanceState!]) {
+  query getProcessInstances(
+    $state: [ProcessInstanceState!]
+    $offset: Int
+    $limit: Int
+  ) {
+    ProcessInstances(
+      where: {
+        parentProcessInstanceId: { isNull: true }
+        state: { in: $state }
+      }
+      pagination: { offset: $offset, limit: $limit }
+    ) {
+      id
+      processId
+      processName
+      parentProcessInstanceId
+      roles
+      state
+      start
+      lastUpdate
+      addons
+      endpoint
+      error {
+        nodeDefinitionId
+        message
+      }
+    }
+  }
+`;
+
+const GET_ALL_PROCESS_INSTANCES = gql`
+  query getAllProcessInstances($state: [ProcessInstanceState!]) {
     ProcessInstances(
       where: {
         parentProcessInstanceId: { isNull: true }

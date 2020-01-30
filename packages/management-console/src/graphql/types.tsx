@@ -422,9 +422,44 @@ export type UserTaskInstanceOrderBy = {
 
 export type GetProcessInstancesQueryVariables = {
   state?: Maybe<Array<ProcessInstanceState>>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 export type GetProcessInstancesQuery = { __typename?: 'Query' } & {
+  ProcessInstances: Maybe<
+    Array<
+      Maybe<
+        { __typename?: 'ProcessInstance' } & Pick<
+          ProcessInstance,
+          | 'id'
+          | 'processId'
+          | 'processName'
+          | 'parentProcessInstanceId'
+          | 'roles'
+          | 'state'
+          | 'start'
+          | 'lastUpdate'
+          | 'addons'
+          | 'endpoint'
+        > & {
+            error: Maybe<
+              { __typename?: 'ProcessInstanceError' } & Pick<
+                ProcessInstanceError,
+                'nodeDefinitionId' | 'message'
+              >
+            >;
+          }
+      >
+    >
+  >;
+};
+
+export type GetAllProcessInstancesQueryVariables = {
+  state?: Maybe<Array<ProcessInstanceState>>;
+};
+
+export type GetAllProcessInstancesQuery = { __typename?: 'Query' } & {
   ProcessInstances: Maybe<
     Array<
       Maybe<
@@ -536,12 +571,17 @@ export type GetProcessInstanceByIdQuery = { __typename?: 'Query' } & {
 };
 
 export const GetProcessInstancesDocument = gql`
-  query getProcessInstances($state: [ProcessInstanceState!]) {
+  query getProcessInstances(
+    $state: [ProcessInstanceState!]
+    $offset: Int
+    $limit: Int
+  ) {
     ProcessInstances(
       where: {
         parentProcessInstanceId: { isNull: true }
         state: { in: $state }
       }
+      pagination: { offset: $offset, limit: $limit }
     ) {
       id
       processId
@@ -574,6 +614,8 @@ export const GetProcessInstancesDocument = gql`
  * const { data, loading, error } = useGetProcessInstancesQuery({
  *   variables: {
  *      state: // value for 'state'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -608,6 +650,80 @@ export type GetProcessInstancesLazyQueryHookResult = ReturnType<
 export type GetProcessInstancesQueryResult = ApolloReactCommon.QueryResult<
   GetProcessInstancesQuery,
   GetProcessInstancesQueryVariables
+>;
+export const GetAllProcessInstancesDocument = gql`
+  query getAllProcessInstances($state: [ProcessInstanceState!]) {
+    ProcessInstances(
+      where: {
+        parentProcessInstanceId: { isNull: true }
+        state: { in: $state }
+      }
+    ) {
+      id
+      processId
+      processName
+      parentProcessInstanceId
+      roles
+      state
+      start
+      lastUpdate
+      addons
+      endpoint
+      error {
+        nodeDefinitionId
+        message
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetAllProcessInstancesQuery__
+ *
+ * To run a query within a React component, call `useGetAllProcessInstancesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllProcessInstancesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllProcessInstancesQuery({
+ *   variables: {
+ *      state: // value for 'state'
+ *   },
+ * });
+ */
+export function useGetAllProcessInstancesQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetAllProcessInstancesQuery,
+    GetAllProcessInstancesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    GetAllProcessInstancesQuery,
+    GetAllProcessInstancesQueryVariables
+  >(GetAllProcessInstancesDocument, baseOptions);
+}
+export function useGetAllProcessInstancesLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetAllProcessInstancesQuery,
+    GetAllProcessInstancesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    GetAllProcessInstancesQuery,
+    GetAllProcessInstancesQueryVariables
+  >(GetAllProcessInstancesDocument, baseOptions);
+}
+export type GetAllProcessInstancesQueryHookResult = ReturnType<
+  typeof useGetAllProcessInstancesQuery
+>;
+export type GetAllProcessInstancesLazyQueryHookResult = ReturnType<
+  typeof useGetAllProcessInstancesLazyQuery
+>;
+export type GetAllProcessInstancesQueryResult = ApolloReactCommon.QueryResult<
+  GetAllProcessInstancesQuery,
+  GetAllProcessInstancesQueryVariables
 >;
 export const GetChildInstancesDocument = gql`
   query getChildInstances($rootProcessInstanceId: String) {

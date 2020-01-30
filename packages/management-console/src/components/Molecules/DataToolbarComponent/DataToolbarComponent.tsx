@@ -15,6 +15,7 @@ import {
 } from '@patternfly/react-core';
 import { FilterIcon, SyncIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
+import { ProcessInstanceState } from '../../../graphql/types';
 
 interface IOwnProps {
   checkedArray: any;
@@ -23,6 +24,10 @@ interface IOwnProps {
   setIsStatusSelected: any;
   filters: any;
   setFilters: any;
+  setPage: any;
+  setOffset: any;
+  getProcessInstances: any;
+  setLimit: any;
 }
 const DataToolbarComponent: React.FC<IOwnProps> = ({
   checkedArray,
@@ -30,7 +35,11 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
   setCheckedArray,
   filters,
   setFilters,
-  setIsStatusSelected
+  setIsStatusSelected,
+  setPage,
+  setOffset,
+  getProcessInstances,
+  setLimit
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isFilterClicked, setIsFilterClicked] = useState<boolean>(false);
@@ -87,10 +96,16 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
   }, [checkedArray]);
 
   const clearAll = () => {
+    setOffset(0);
+    setPage(0);
+    setLimit(10);
     setIsClearAllClicked(true);
     setCheckedArray(['ACTIVE']);
     setFilters(['ACTIVE']);
     filterClick(['ACTIVE']);
+    getProcessInstances({
+      variables: { state: ProcessInstanceState.Active, offset: 0, limit: 10 }
+    });
   };
 
   const onRefreshClick = () => {
