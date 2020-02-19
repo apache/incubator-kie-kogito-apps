@@ -43,6 +43,7 @@ pipeline {
                         sh('yarn run init && yarn build:prod')
                     }
                     maven.runMavenWithSubmarineSettings('clean install -Prun-code-coverage', false)
+                    maven.runMavenWithSubmarineSettings('-e -nsu validate -Psonarcloud-analysis', false)
                 }
             }
         }
@@ -74,13 +75,6 @@ pipeline {
                 }
             }
         }
-//         stage('Analyze kogito-apps') {
-//             steps {
-//                 script {
-//                     maven.runMavenWithSubmarineSettings('-e -nsu generate-resources -Psonarcloud-analysis', false)
-//                 }
-//             }
-//         }
     }
     post {
         unstable {
@@ -95,6 +89,7 @@ pipeline {
         }
         always {
             junit '**/**/junit.xml'
+            junit '**/target/surefire-reports/**/*.xml'
             cleanWs()
         }
     }
