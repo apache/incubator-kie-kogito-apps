@@ -1,18 +1,31 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-
+const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
 
 module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src', 'index.tsx')
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'src', 'index.html'),
+      favicon: 'src/favicon.ico'
+    }),
+    new webpack.EnvironmentPlugin({
+      KOGITO_AUTH_ENABLED: false,
+      KOGITO_KEYCLOAK_REALM: "kogito",
+      KOGITO_KEYCLOAK_URL: "http://localhost:8280",
+      KOGITO_KEYCLOAK_CLIENT_ID: "kogito-management-console",
+      KOGITO_DATAINDEX_HTTP_URL: "http://localhost:4000"
+    })
+  ],
   module: {
     rules: [
       {
-        include: path.resolve(__dirname, 'src'),
         test: /\.(tsx|ts)?$/,
+        include: path.resolve(__dirname, 'src'),
         use: [
           {
             loader: 'ts-loader',
@@ -23,8 +36,7 @@ module.exports = {
         ]
       },
       {
-        // only process modules with this loader
-        // if they live under a 'fonts' or 'pficon' directory
+        test: /\.(svg|ttf|eot|woff|woff2)$/,
         include: [
           path.resolve('../../node_modules/patternfly/dist/fonts'),
           path.resolve(
@@ -38,56 +50,43 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@patternfly/patternfly/assets/pficon'
-          )
+          ),
+          path.resolve('./src/static')
         ],
-        test: /\.(svg|ttf|eot|woff|woff2)$/,
         use: {
           loader: 'file-loader',
           options: {
             // Limit at 50k. larger files emited into separate files
             limit: 5000,
-            name: '[name].[ext]',
-            outputPath: 'fonts'
+            outputPath: 'fonts',
+            name: '[name].[ext]'
           }
         }
       },
       {
-        include: input => input.indexOf('background-filter.svg') > 1,
         test: /\.svg$/,
+        include: input => input.indexOf('background-filter.svg') > 1,
         use: [
           {
             loader: 'url-loader',
             options: {
               limit: 5000,
-              name: '[name].[ext]',
-              outputPath: 'svgs'
+              outputPath: 'svgs',
+              name: '[name].[ext]'
             }
           }
         ]
       },
       {
-        // only process SVG modules with this loader if they live under a 'bgimages' directory
-        // this is primarily useful when applying a CSS background using an SVG
-        include: input => input.indexOf(BG_IMAGES_DIRNAME) > -1,
         test: /\.svg$/,
+        include: input => input.indexOf(BG_IMAGES_DIRNAME) > -1,
         use: {
           loader: 'svg-url-loader',
           options: {}
         }
       },
       {
-        include: input =>
-          input.indexOf(BG_IMAGES_DIRNAME) === -1 &&
-          input.indexOf('fonts') === -1 &&
-          input.indexOf('background-filter') === -1 &&
-          input.indexOf('pficon') === -1,
-        test: /\.svg$/,
-        use: {
-          loader: 'raw-loader',
-          options: {}
-        }
-      },
-      {
+        test: /\.(jpg|jpeg|png|gif)$/i,
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve('../../node_modules/patternfly'),
@@ -107,14 +106,13 @@ module.exports = {
             '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
           )
         ],
-        test: /\.(jpg|jpeg|png|gif)$/i,
         use: [
           {
             loader: 'url-loader',
             options: {
               limit: 5000,
-              name: '[name].[ext]',
-              outputPath: 'images'
+              outputPath: 'images',
+              name: '[name].[ext]'
             }
           }
         ]
@@ -123,16 +121,10 @@ module.exports = {
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      favicon: 'src/favicon.ico',
-      template: path.resolve(__dirname, 'src', 'index.html')
-    })
-  ],
   resolve: {
-    cacheWithContext: false,
     extensions: ['.ts', '.tsx', '.js'],
     modules: [
       path.resolve('../../node_modules'),
@@ -144,6 +136,7 @@ module.exports = {
         configFile: path.resolve(__dirname, './tsconfig.json')
       })
     ],
-    symlinks: false
+    symlinks: false,
+    cacheWithContext: false
   }
 };
