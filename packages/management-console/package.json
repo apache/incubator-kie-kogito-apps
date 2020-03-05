@@ -30,7 +30,9 @@
     "clean": "rimraf dist",
     "codegen": "graphql-codegen",
     "cypress:run": "cypress run",
-    "cypress:open": "cypress open"
+    "cypress:run-with-dev-server": "start-server-and-test 'yarn dev' 9000 'yarn cypress:run'",
+    "cypress:open": "cypress open",
+    "cypress:open-with-dev-server": "start-server-and-test 'yarn dev' 9000 'yarn cypress:open'"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
