@@ -11,6 +11,72 @@
   <name>Kogito :: Data Index Service</name>
 
   <dependencies>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-common</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-buffer</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler-proxy</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec-socks</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec-http</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec-http2</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-resolver</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-resolver-dns</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec-dns</artifactId>
+      <version>4.1.46.Final</version>
+    </dependency>
+
+
+
+
+
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-api</artifactId>
@@ -124,26 +190,17 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <executions>
           <execution>
-            <id>testWithoutKeycloak</id>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>testWithKeycloak</id>
             <goals>
               <goal>test</goal>
             </goals>
             <configuration>
-              <includes>
-                <include>KeycloakIntegrationIndexingServiceTest.java</include>
-              </includes>
-              <excludes>
-                <exclude>none</exclude>
-              </excludes>
-              <systemPropertyVariables>
-                <quarkus.profile>test</quarkus.profile>
-              </systemPropertyVariables>
+              <argLine>
+                -Dquarkus.http.auth.policy.role-policy1.roles-allowed=confidential
+                -Dquarkus.http.auth.permission.roles1.paths=/graphql
+                -Dquarkus.http.auth.permission.roles1.policy=role-policy1
+              </argLine>
+              <test>org.kie.kogito.index.service.KeycloakIntegrationIndexingServiceTest.java</test>
             </configuration>
           </execution>
         </executions>
