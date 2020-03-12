@@ -8,7 +8,7 @@ import {
   Title
 } from '@patternfly/react-core';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessDiagram from '../../Organisms/ProcessDetailsProcessDiagram/ProcessDetailsProcessDiagram';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
@@ -26,6 +26,13 @@ const ProcessDetailsPage = ({ match }) => {
   if (loading) {
     return <p>Loading...</p>;
   }
+  if(data) {
+        const result = data.ProcessInstances;
+        if(result.length === 0) {
+          return <Redirect to={{pathname: '/ErrorComponent', state: {prev: location.pathname, 
+      description: `Process instance with the id ${id} not found`}}}  />
+        }
+      }
 
   return (
     <>
