@@ -138,6 +138,7 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
           <Select
             variant={SelectVariant.checkbox}
             aria-label="Status"
+            className="kogito-management-console__state-dropdown-list"
             onToggle={onStatusToggle}
             onSelect={onSelect}
             selections={checkedArray}
