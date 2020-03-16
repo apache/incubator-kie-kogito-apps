@@ -15,13 +15,20 @@ import DataListComponent from '../../Organisms/DataListComponent/DataListCompone
 import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
 import { useGetProcessInstancesLazyQuery } from '../../../graphql/types';
 
-const DataListContainer: React.FC<{}> = () => {
+interface IOwnProps {
+  arrayOfStates: any;
+  setArrayOfStates: any;
+}
+const DataListContainer: React.FC<IOwnProps> = ({
+  arrayOfStates,
+  setArrayOfStates
+}) => {
   const [initData, setInitData] = useState<any>([]);
-  const [checkedArray, setCheckedArray] = useState<any>(['ACTIVE']);
+  const [checkedArray, setCheckedArray] = useState<any>(arrayOfStates);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isStatusSelected, setIsStatusSelected] = useState(true);
-  const [filters, setFilters] = useState(checkedArray);
+  const [filters, setFilters] = useState(arrayOfStates);
 
   const [
     getProcessInstances,
@@ -34,6 +41,7 @@ const DataListContainer: React.FC<{}> = () => {
   const onFilterClick = async (arr = checkedArray) => {
     setIsLoading(true);
     setIsError(false);
+    setArrayOfStates(checkedArray);
     setIsStatusSelected(true);
     getProcessInstances({ variables: { state: arr } });
   };

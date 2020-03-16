@@ -19,9 +19,15 @@ import BrandComponent from '../../Atoms/BrandComponent/BrandComponent';
 import ErrorComponent from '../../Molecules/ErrorComponent/ErrorComponent';
 import './Dashboard.css';
 
-import { useGetQueryFieldsQuery } from '../../../graphql/types';
+import {
+  useGetQueryFieldsQuery,
+  ProcessInstanceState
+} from '../../../graphql/types';
 
 const Dashboard: React.FC<{}> = (props: any) => {
+  const [arrayOfStates, setArrayOfStates] = useState([
+    ProcessInstanceState.Active
+  ]);
   const pageId = 'main-content-page-layout-default-nav';
   const PageSkipToContent = (
     <SkipToContent href={`#${pageId}`}>Skip to Content</SkipToContent>
@@ -80,7 +86,16 @@ const Dashboard: React.FC<{}> = (props: any) => {
             path="/"
             render={() => <Redirect to="/ProcessInstances" />}
           />
-          <Route exact path="/ProcessInstances" component={DataListContainer} />
+          <Route
+            exact
+            path="/ProcessInstances"
+            component={() => (
+              <DataListContainer
+                arrayOfStates={arrayOfStates}
+                setArrayOfStates={setArrayOfStates}
+              />
+            )}
+          />
           <Route
             exact
             path="/ProcessInstances/:instanceID"

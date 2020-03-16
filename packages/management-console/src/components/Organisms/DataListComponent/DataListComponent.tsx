@@ -1,14 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataList, Bullseye } from '@patternfly/react-core';
 import DataListItemComponent from '../../Molecules/DataListItemComponent/DataListItemComponent';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
 import '@patternfly/patternfly/patternfly-addons.css';
 import './DataListComponent.css';
-import {
-  useGetProcessInstancesQuery,
-  ProcessInstanceState
-} from '../.././../graphql/types';
+import { useGetProcessInstancesQuery } from '../.././../graphql/types';
 
 interface IOwnProps {
   setInitData: any;
@@ -16,7 +13,7 @@ interface IOwnProps {
   isLoading: boolean;
   setIsError: any;
   setIsLoading: any;
-  checkedArray: string[];
+  checkedArray: any;
 }
 
 const DataListComponent: React.FC<IOwnProps> = ({
@@ -26,6 +23,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   setIsError,
   checkedArray
 }) => {
+  const [arrayOfStates, setArrayOfStates] = useState(checkedArray);
   const {
     loading,
     error,
@@ -34,7 +32,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
     networkStatus
   } = useGetProcessInstancesQuery({
     variables: {
-      state: [ProcessInstanceState.Active]
+      state: arrayOfStates
     },
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true
