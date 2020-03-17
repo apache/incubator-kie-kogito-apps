@@ -7,10 +7,10 @@ import {
   EmptyStateVariant,
   Button,
   EmptyStateBody,
-  Title
+  Title,
 } from '@patternfly/react-core';
 import {
-  ExclamationCircleIcon
+    SearchIcon
 } from '@patternfly/react-icons';
 import { Redirect } from 'react-router';
 
@@ -32,19 +32,16 @@ const ErrorComponent = (props) => {
   return (
     <>
       {isRedirect && <Redirect to={`/${prevPath[0]}`} />}
-      <PageSection variant="light">
+      <PageSection isFilled={true}>
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
-            <EmptyStateIcon
-              icon={ExclamationCircleIcon}
-              size="md"
-              color="var(--pf-global--danger-color--100)" />
-            <Title headingLevel="h1" size="4xl">404 Error: page not found</Title>
+          <EmptyStateIcon icon={SearchIcon} />
+            <Title headingLevel="h1" size="4xl">{props.location.state ? props.location.state.title : 'No matches'}</Title>
             <EmptyStateBody>
-            {props.location.state ? props.location.state.description : 'This page could not be found.'}
+            {props.location.state ? props.location.state.description: 'No data to display'}
                   </EmptyStateBody>
             <Button variant="primary" onClick={redirectHandler}>
-              Navigate to home
+              Navigate to home
               </Button>
           </EmptyState>
         </Bullseye>
