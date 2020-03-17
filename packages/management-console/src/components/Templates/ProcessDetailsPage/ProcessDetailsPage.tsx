@@ -29,8 +29,8 @@ const ProcessDetailsPage = ({ match }) => {
   if(data) {
         const result = data.ProcessInstances;
         if(result.length === 0) {
-          return <Redirect to={{pathname: '/ErrorComponent', state: {prev: location.pathname, 
-      description: `Process instance with the id ${id} not found`}}}  />
+          return <Redirect to={{pathname: '/NoData', state: {prev: location.pathname, 
+      title:'Process not found', description: `Process instance with the id ${id} not found`}}}  />
         }
       }
 

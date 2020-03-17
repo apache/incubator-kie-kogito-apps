@@ -184,8 +184,8 @@ const DomainExplorerDashboard = props => {
 
   return (
     <>
-      {!props.domains.includes(domainName) && <Redirect to={{pathname: '/ErrorComponent', state: {prev: location.pathname,
-        description: `Domain with the name ${domainName} not found`}}}  />}
+      {!props.domains.includes(domainName) && <Redirect to={{pathname: '/NoData', state: {prev: location.pathname,
+        title: 'Domain not found', description: `Domain with the name ${domainName} not found`}}}  />}
       <PageSection variant="light">
         <PageTitleComponent title="Domain Explorer" />
         <Breadcrumb>
