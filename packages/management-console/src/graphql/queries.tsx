@@ -62,6 +62,7 @@ const GET_PROCESS_INSTANCE = gql`
         id
         processName
       }
+      addons
       roles
       variables
       state

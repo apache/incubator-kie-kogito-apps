@@ -3,6 +3,8 @@ import { shallow } from 'enzyme';
 import ProcessDetails from '../ProcessDetails';
 
 const props = {
+  handleSkip: jest.fn(),
+  handleRetry: jest.fn(),
   data: {
     ProcessInstances: [
       {
@@ -35,6 +37,8 @@ const props = {
 
 const props2 = {
   loading: true,
+  handleSkip: jest.fn(),
+  handleRetry: jest.fn(),
   data: {
     ProcessInstances: [
       {

@@ -23,12 +23,20 @@ import {
 } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
 import { ProcessInstanceState } from '../../../graphql/types';
+import ErrorPopover from '../../Atoms/ErrorPopoverComponent/ErrorPopoverComponent';
 
 interface IOwnProps {
   loading: boolean;
   data: any;
+  handleSkip: () => void;
+  handleRetry: () => void;
 }
-const ProcessDetails: React.FC<IOwnProps> = ({ data, loading }) => {
+const ProcessDetails: React.FC<IOwnProps> = ({
+  data,
+  loading,
+  handleRetry,
+  handleSkip
+}) => {
   const stateIconCreator = state => {
     switch (state) {
       case ProcessInstanceState.Active:
@@ -91,7 +99,16 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, loading }) => {
           </FormGroup>
           <FormGroup label="State" fieldId="state">
             <Text component={TextVariants.p}>
-              {stateIconCreator(data.ProcessInstances[0].state)}
+              {data.ProcessInstances[0].state === 'ERROR' ? (
+                <ErrorPopover
+                  handleRetry={handleRetry}
+                  handleSkip={handleSkip}
+                  processInstanceData={data.ProcessInstances[0]}
+                  stateIconCreator={stateIconCreator}
+                />
+              ) : (
+                stateIconCreator(data.ProcessInstances[0].state)
+              )}
             </Text>
           </FormGroup>
           <FormGroup label="Id" fieldId="id">
@@ -105,8 +122,8 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, loading }) => {
                 {data.ProcessInstances[0].endpoint}
               </Text>
             ) : (
-                ''
-              )}
+              ''
+            )}
           </FormGroup>
           <FormGroup label="Start" fieldId="start">
             {data.ProcessInstances[0].start ? (
@@ -116,8 +133,8 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, loading }) => {
                 </Moment>
               </Text>
             ) : (
-                ''
-              )}
+              ''
+            )}
           </FormGroup>
           <FormGroup label="End" fieldId="end">
             {data.ProcessInstances[0].end ? (
@@ -127,56 +144,56 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, loading }) => {
                 </Moment>
               </Text>
             ) : (
-                ''
-              )}
+              ''
+            )}
           </FormGroup>
           {!loading &&
-            data.ProcessInstances[0].parentProcessInstance !== null ? (
-              <FormGroup label="Parent Process" fieldId="parent">
-                <div>
-                  <Link
-                    to={
-                      '/ProcessInstances/' +
-                      data.ProcessInstances[0].parentProcessInstance.id
-                    }
+          data.ProcessInstances[0].parentProcessInstance !== null ? (
+            <FormGroup label="Parent Process" fieldId="parent">
+              <div>
+                <Link
+                  to={
+                    '/ProcessInstances/' +
+                    data.ProcessInstances[0].parentProcessInstance.id
+                  }
+                >
+                  <Tooltip
+                    content={data.ProcessInstances[0].parentProcessInstance.id}
                   >
-                    <Tooltip
-                      content={data.ProcessInstances[0].parentProcessInstance.id}
-                    >
-                      <Button variant="link" icon={<LevelUpAltIcon />}>
-                        {
-                          data.ProcessInstances[0].parentProcessInstance
-                            .processName
-                        }
-                      </Button>
-                    </Tooltip>
-                  </Link>
-                </div>
-              </FormGroup>
-            ) : (
-              <div />
-            )}
+                    <Button variant="link" icon={<LevelUpAltIcon />}>
+                      {
+                        data.ProcessInstances[0].parentProcessInstance
+                          .processName
+                      }
+                    </Button>
+                  </Tooltip>
+                </Link>
+              </div>
+            </FormGroup>
+          ) : (
+            <div />
+          )}
 
           {!loading &&
-            data.ProcessInstances[0].childProcessInstances.length !== 0 ? (
-              <FormGroup label="Sub Processes" fieldId="child">
-                {data.ProcessInstances[0].childProcessInstances.map(
-                  (child, index) => (
-                    <div key={child.id}>
-                      <Link to={'/ProcessInstances/' + child.id}>
-                        <Tooltip content={child.id}>
-                          <Button variant="link" icon={<LevelDownAltIcon />}>
-                            {child.processName}
-                          </Button>
-                        </Tooltip>
-                      </Link>
-                    </div>
-                  )
-                )}
-              </FormGroup>
-            ) : (
-              <div />
-            )}
+          data.ProcessInstances[0].childProcessInstances.length !== 0 ? (
+            <FormGroup label="Sub Processes" fieldId="child">
+              {data.ProcessInstances[0].childProcessInstances.map(
+                (child, index) => (
+                  <div key={child.id}>
+                    <Link to={'/ProcessInstances/' + child.id}>
+                      <Tooltip content={child.id}>
+                        <Button variant="link" icon={<LevelDownAltIcon />}>
+                          {child.processName}
+                        </Button>
+                      </Tooltip>
+                    </Link>
+                  </div>
+                )
+              )}
+            </FormGroup>
+          ) : (
+            <div />
+          )}
         </Form>
       </CardBody>
     </Card>

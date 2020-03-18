@@ -18,7 +18,7 @@ interface IOwnProps {
   abortedMessageObj?: any;
   completedMessageObj?: any;
   isModalOpen: boolean;
-  checkedArray: string[];
+  checkedArray?: string[];
   handleSkip?: any;
   handleRetry?: any;
   isAddonPresent?: boolean;

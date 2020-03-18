@@ -162,7 +162,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
           </>
         );
     }
-  }
+  };
 
   const handleSkipModalToggle = () => {
     setIsSkipModalOpen(!isSkipModalOpen);
@@ -177,7 +177,6 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
   const handleAbortModalToggle = () => {
     setIsAbortModalOpen(!isAbortModalOpen);
   };
-
 
   const handleErrorModalToggle = () => {
     setModalTitle('Error');
@@ -285,9 +284,9 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
     const newExpanded =
       index >= 0
         ? [
-          ...expanded.slice(0, index),
-          ...expanded.slice(index + 1, expanded.length)
-        ]
+            ...expanded.slice(0, index),
+            ...expanded.slice(index + 1, expanded.length)
+          ]
         : [...expanded, _id];
     setexpanded(newExpanded);
 
@@ -456,8 +455,8 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
           modalTitle === 'Skip operation'
             ? handleSkipModalToggle
             : modalTitle === 'Retry operation'
-              ? handleRetryModalToggle
-              : null
+            ? handleRetryModalToggle
+            : null
         }
         checkedArray={checkedArray}
         modalTitle={
@@ -490,19 +489,19 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
               }}
             />
           ) : (
-              <Tooltip
-                content={
-                  'Management add-on capability not enabled. Contact your administrator to set up.'
-                }
-                distance={-15}
-              >
-                <DataListCheck
-                  aria-labelledby="width-kie-datalist-item"
-                  name="width-kie-datalist-item"
-                  isDisabled={true}
-                />
-              </Tooltip>
-            )}
+            <Tooltip
+              content={
+                'Management add-on capability not enabled. Contact your administrator to set up.'
+              }
+              distance={-15}
+            >
+              <DataListCheck
+                aria-labelledby="width-kie-datalist-item"
+                name="width-kie-datalist-item"
+                isDisabled={true}
+              />
+            </Tooltip>
+          )}
           <DataListItemCells
             dataListCells={[
               <DataListCell key={1}>
@@ -526,16 +525,14 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
               <DataListCell key={4}>
                 {processInstanceData.state === 'ERROR' ? (
                   <ErrorPopover
-                    isPopoverOpen={isPopoverOpen}
                     handleRetry={handleRetry}
                     handleSkip={handleSkip}
-                    setIsPopoverOpen={setIsPopoverOpen}
                     processInstanceData={processInstanceData}
                     stateIconCreator={stateIconCreator}
                   />
                 ) : (
-                    stateIconCreator(processInstanceData.state)
-                  )}
+                  stateIconCreator(processInstanceData.state)
+                )}
               </DataListCell>,
               <DataListCell key={2}>
                 {processInstanceData.start ? (
@@ -546,8 +543,8 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
                     </Moment>
                   </>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </DataListCell>,
               <DataListCell key={3}>
                 {processInstanceData.lastUpdate ? (
@@ -559,8 +556,8 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
                     </Moment>
                   </span>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </DataListCell>
             ]}
           />
@@ -570,26 +567,26 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
             aria-label="Actions"
           >
             {processInstanceData.state === 'ERROR' ||
-              processInstanceData.state === 'ACTIVE' ||
-              processInstanceData.state === 'SUSPENDED' ? (
-                <Dropdown
-                  isPlain
-                  position={DropdownPosition.right}
-                  isOpen={isOpen}
-                  onSelect={onSelect}
-                  toggle={<KebabToggle onToggle={onToggle} />}
-                  dropdownItems={dropDownList()}
-                />
-              ) : (
-                <Dropdown
-                  isPlain
-                  position={DropdownPosition.right}
-                  isOpen={isOpen}
-                  onSelect={onSelect}
-                  toggle={<KebabToggle isDisabled onToggle={onToggle} />}
-                  dropdownItems={[]}
-                />
-              )}
+            processInstanceData.state === 'ACTIVE' ||
+            processInstanceData.state === 'SUSPENDED' ? (
+              <Dropdown
+                isPlain
+                position={DropdownPosition.right}
+                isOpen={isOpen}
+                onSelect={onSelect}
+                toggle={<KebabToggle onToggle={onToggle} />}
+                dropdownItems={dropDownList()}
+              />
+            ) : (
+              <Dropdown
+                isPlain
+                position={DropdownPosition.right}
+                isOpen={isOpen}
+                onSelect={onSelect}
+                toggle={<KebabToggle isDisabled onToggle={onToggle} />}
+                dropdownItems={[]}
+              />
+            )}
             <ProcessBulkModalComponent
               modalTitle={setTitle(titleType, modalTitle)}
               isModalLarge={true}
