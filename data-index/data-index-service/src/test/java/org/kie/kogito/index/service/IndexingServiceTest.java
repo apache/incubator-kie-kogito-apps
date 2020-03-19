@@ -371,15 +371,15 @@ public class IndexingServiceTest {
 
     private void indexProcessCloudEvent(KogitoProcessCloudEvent event) throws Exception {
         CompletableFuture.allOf(
-                consumer.onProcessInstanceEvent(event).toCompletableFuture(),
-                consumer.onProcessInstanceDomainEvent(event).toCompletableFuture()
+                consumer.onProcessInstanceEvent(() -> event).toCompletableFuture(),
+                consumer.onProcessInstanceDomainEvent(() -> event).toCompletableFuture()
         ).get();
     }
 
     private void indexUserTaskCloudEvent(KogitoUserTaskCloudEvent event) throws Exception {
         CompletableFuture.allOf(
-                consumer.onUserTaskInstanceEvent(event).toCompletableFuture(),
-                consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture()
+                consumer.onUserTaskInstanceEvent(() -> event).toCompletableFuture(),
+                consumer.onUserTaskInstanceDomainEvent(() -> event).toCompletableFuture()
         ).get();
     }
 
@@ -397,7 +397,7 @@ public class IndexingServiceTest {
                 .then().log().ifValidationFails().statusCode(200).body("data.Travels", isA(Collection.class));
 
         KogitoUserTaskCloudEvent userTaskEvent = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state);
-        consumer.onUserTaskInstanceDomainEvent(userTaskEvent).toCompletableFuture().get();
+        consumer.onUserTaskInstanceDomainEvent(() -> userTaskEvent).toCompletableFuture().get();
 
         given().contentType(ContentType.JSON)
                 .body(geTravelsByUserTaskId(taskId))
@@ -420,7 +420,7 @@ public class IndexingServiceTest {
                 .body("data.Travels[0].metadata.processInstances", is(nullValue()));
 
         KogitoProcessCloudEvent processEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
-        consumer.onProcessInstanceDomainEvent(processEvent).toCompletableFuture().get();
+        consumer.onProcessInstanceDomainEvent(() -> processEvent).toCompletableFuture().get();
 
         given().contentType(ContentType.JSON)
                 .body(getTravelsByProcessInstanceId(processInstanceId))
@@ -463,7 +463,7 @@ public class IndexingServiceTest {
                 .then().log().ifValidationFails().statusCode(200).body("data.Travels", isA(Collection.class));
 
         KogitoProcessCloudEvent processEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
-        consumer.onProcessInstanceDomainEvent(processEvent).toCompletableFuture().get();
+        consumer.onProcessInstanceDomainEvent(() -> processEvent).toCompletableFuture().get();
 
         given().contentType(ContentType.JSON)
                 .body(getTravelsByProcessInstanceId(processInstanceId))
@@ -483,9 +483,8 @@ public class IndexingServiceTest {
                 .body("data.Travels[0].metadata.processInstances[0].parentProcessInstanceId", is(nullValue()))
                 .body("data.Travels[0].metadata.processInstances[0].lastUpdate", is(formatZonedDateTime(processEvent.getTime().withZoneSameInstant(ZoneOffset.UTC))));
 
-
         KogitoUserTaskCloudEvent userTaskEvent = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state);
-        consumer.onUserTaskInstanceDomainEvent(userTaskEvent).toCompletableFuture().get();
+        consumer.onUserTaskInstanceDomainEvent(() -> userTaskEvent).toCompletableFuture().get();
 
         given().contentType(ContentType.JSON)
                 .body(geTravelsByUserTaskId(taskId))
@@ -530,8 +529,8 @@ public class IndexingServiceTest {
         KogitoUserTaskCloudEvent userTaskEvent = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state);
 
         CompletableFuture.allOf(
-                consumer.onProcessInstanceDomainEvent(processEvent).toCompletableFuture(),
-                consumer.onUserTaskInstanceDomainEvent(userTaskEvent).toCompletableFuture()
+                consumer.onProcessInstanceDomainEvent(() -> processEvent).toCompletableFuture(),
+                consumer.onUserTaskInstanceDomainEvent(() -> userTaskEvent).toCompletableFuture()
         ).get();
 
         given().contentType(ContentType.JSON)
@@ -587,7 +586,7 @@ public class IndexingServiceTest {
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200)
                 .body("data.Travels[0].id", is(processInstanceId))
-                .body("data.Travels[0].metadata.lastUpdate", is(formatZonedDateTime(startEvent.getTime().withZoneSameInstant(ZoneOffset.UTC))))                
+                .body("data.Travels[0].metadata.lastUpdate", is(formatZonedDateTime(startEvent.getTime().withZoneSameInstant(ZoneOffset.UTC))))
                 .body("data.Travels[0].metadata.processInstances.size()", is(1))
                 .body("data.Travels[0].metadata.processInstances[0].id", is(processInstanceId))
                 .body("data.Travels[0].metadata.processInstances[0].processId", is(processId))
@@ -721,10 +720,10 @@ public class IndexingServiceTest {
         String jobId = UUID.randomUUID().toString();
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();
-        
+
         KogitoJobCloudEvent event = getJobCloudEvent(jobId, processId, processInstanceId, null, null, "EXECUTED");
-        
-        consumer.onJobEvent(event).toCompletableFuture().get();
+
+        consumer.onJobEvent(() -> event).toCompletableFuture().get();
 
         validateJob(getJobById(jobId), event);
     }

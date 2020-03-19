@@ -16,7 +16,6 @@
 
 package org.kie.kogito.index.messaging;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.apache.kafka.common.serialization.Deserializer;
@@ -46,7 +45,7 @@ public abstract class AbstractCloudEventDeserializer<T> implements Deserializer<
 
         try {
             return JsonUtils.getObjectMapper().readValue(data, type);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("Error parsing JSON content: {}", e.getMessage(), e);
             throw new RuntimeException(e);
         }

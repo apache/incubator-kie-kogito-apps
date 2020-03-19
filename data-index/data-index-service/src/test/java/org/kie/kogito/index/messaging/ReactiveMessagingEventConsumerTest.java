@@ -67,7 +67,7 @@ public class ReactiveMessagingEventConsumerTest {
 
         KogitoProcessCloudEvent event = getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null);
 
-        consumer.onProcessInstanceDomainEvent(event).toCompletableFuture().get();
+        consumer.onProcessInstanceDomainEvent(() -> event).toCompletableFuture().get();
         ArgumentCaptor<ObjectNode> captor = ArgumentCaptor.forClass(ObjectNode.class);
         verify(eventBus).request(eq(format(KOGITO_DOMAIN_EVENTS, processId)), captor.capture(), any(Handler.class));
 
@@ -90,7 +90,7 @@ public class ReactiveMessagingEventConsumerTest {
 
         KogitoUserTaskCloudEvent event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress");
 
-        consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture().get();
+        consumer.onUserTaskInstanceDomainEvent(() -> event).toCompletableFuture().get();
         ArgumentCaptor<ObjectNode> captor = ArgumentCaptor.forClass(ObjectNode.class);
         verify(eventBus).request(eq(format(KOGITO_DOMAIN_EVENTS, processId)), captor.capture(), any(Handler.class));
 
@@ -103,14 +103,14 @@ public class ReactiveMessagingEventConsumerTest {
     @Test
     public void testOnProcessInstanceEvent() throws Exception {
         KogitoProcessCloudEvent event = mock(KogitoProcessCloudEvent.class);
-        consumer.onProcessInstanceEvent(event).toCompletableFuture().get();
+        consumer.onProcessInstanceEvent(() -> event).toCompletableFuture().get();
         verify(service).indexProcessInstance(event.getData());
     }
 
     @Test
     public void testOnUserTaskInstanceEvent() throws Exception {
         KogitoUserTaskCloudEvent event = mock(KogitoUserTaskCloudEvent.class);
-        consumer.onUserTaskInstanceEvent(event).toCompletableFuture().get();
+        consumer.onUserTaskInstanceEvent(() -> event).toCompletableFuture().get();
         verify(service).indexUserTaskInstance(event.getData());
     }
 }
