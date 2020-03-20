@@ -4,6 +4,7 @@ const common = require('./webpack.common.js');
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || '9000';
+const webpack = require('webpack');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -19,6 +20,13 @@ module.exports = merge(common, {
     overlay: true,
     open: true
   },
+
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      KOGITO_DATAINDEX_HTTP_URL: "http://localhost:4000/graphql"
+    })
+  ],
+
   module: {
     rules: [
       {
