@@ -113,6 +113,12 @@ const GET_PROCESS_INSTANCE = gql`
       lastUpdate
       end
       endpoint
+      addons
+      serviceUrl
+      error {
+        nodeDefinitionId
+        message
+      }
       childProcessInstances {
         id
         processName
@@ -120,10 +126,12 @@ const GET_PROCESS_INSTANCE = gql`
       }
       nodes {
         id
+        nodeId
         name
         enter
         exit
         type
+        definitionId
       }
     }
   }
