@@ -17,6 +17,7 @@
 package org.kie.kogito.index.model;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -170,5 +171,34 @@ public class ProcessInstanceMeta {
                 ", parentProcessInstanceId='" + parentProcessInstanceId + '\'' +
                 ", lastUpdated=" + lastUpdate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ProcessInstanceMeta that = (ProcessInstanceMeta) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(processId, that.processId) &&
+                Objects.equals(processName, that.processName) &&
+                Objects.equals(state, that.state) &&
+                Objects.equals(businessKey, that.businessKey) &&
+                Objects.equals(endpoint, that.endpoint) &&
+                Objects.equals(roles, that.roles) &&
+                Objects.equals(start, that.start) &&
+                Objects.equals(end, that.end) &&
+                Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) &&
+                Objects.equals(rootProcessId, that.rootProcessId) &&
+                Objects.equals(parentProcessInstanceId, that.parentProcessInstanceId) &&
+                Objects.equals(lastUpdate, that.lastUpdate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, processId, processName, state, businessKey, endpoint, roles, start, end, rootProcessInstanceId, rootProcessId, parentProcessInstanceId, lastUpdate);
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.protostream;
+package org.kie.kogito.index.protobuf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.descriptors.Option;
 import org.infinispan.protostream.impl.SerializationContextImpl;
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.index.infinispan.cache.InfinispanCacheManager;
+import org.kie.kogito.index.cache.CacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,10 @@ public class ProtobufService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtobufService.class);
 
     @Inject
-    InfinispanCacheManager manager;
+    ProtobufManager manager;
+
+    @Inject
+    CacheService service;
 
     @Inject
     FileDescriptorSource kogitoDescriptors;
@@ -103,7 +106,7 @@ public class ProtobufService {
 
         Map<String, String> cache = manager.getProtobufCache();
         cache.put(processId + ".proto", content);
-        manager.getProcessIdModelCache().put(processId, fullTypeName);
+        service.getProcessIdModelCache().put(processId, fullTypeName);
         List<String> errors = checkSchemaErrors(cache);
         if (errors.isEmpty()) {
             event.fire(new FileDescriptorRegisteredEvent(desc));

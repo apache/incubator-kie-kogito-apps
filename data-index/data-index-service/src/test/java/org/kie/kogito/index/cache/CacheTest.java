@@ -16,19 +16,10 @@
 
 package org.kie.kogito.index.cache;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.ProcessInstanceState;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.TestUtils.getProcessInstance;
 
 @QuarkusTest
 public class CacheTest {
@@ -38,45 +29,16 @@ public class CacheTest {
 
     @Test
     public void testObjectCreatedListener() throws Exception {
-        String processId = "travels";
-        String processInstanceId = UUID.randomUUID().toString();
-
-        CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
-        Cache<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
-        cache.addObjectCreatedListener(pi -> cf.complete(pi));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
-
-        ProcessInstance pi = cf.get(1, TimeUnit.MINUTES);
-        assertThat(pi).hasFieldOrPropertyWithValue("id", processInstanceId).hasFieldOrPropertyWithValue("processId", processId);
+        CacheTestBase.testObjectCreatedListener(cacheService);
     }
 
     @Test
     public void testObjectUpdatedListener() throws Exception {
-        String processId = "travels";
-        String processInstanceId = UUID.randomUUID().toString();
-
-        CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
-        Cache<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
-        cache.addObjectUpdatedListener(pi -> cf.complete(pi));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
-
-        ProcessInstance pi = cf.get(1, TimeUnit.MINUTES);
-        assertThat(pi).hasFieldOrPropertyWithValue("id", processInstanceId).hasFieldOrPropertyWithValue("state", ProcessInstanceState.COMPLETED.ordinal());
+        CacheTestBase.testObjectUpdatedListener(cacheService);
     }
 
     @Test
     public void testObjectRemovedListener() throws Exception {
-        String processId = "travels";
-        String processInstanceId = UUID.randomUUID().toString();
-
-        CompletableFuture<String> cf = new CompletableFuture<>();
-        Cache<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
-        cache.addObjectRemovedListener(id -> cf.complete(id));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
-        cache.remove(processInstanceId);
-
-        String id = cf.get(1, TimeUnit.MINUTES);
-        assertThat(id).isEqualTo(processInstanceId);
+        CacheTestBase.testObjectRemovedListener(cacheService);
     }
 }

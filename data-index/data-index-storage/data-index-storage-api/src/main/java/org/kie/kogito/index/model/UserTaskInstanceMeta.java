@@ -17,6 +17,7 @@
 package org.kie.kogito.index.model;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -197,5 +198,37 @@ public class UserTaskInstanceMeta {
                 ", referenceName='" + referenceName + '\'' +
                 ", lastUpdate=" + lastUpdate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserTaskInstanceMeta that = (UserTaskInstanceMeta) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(priority, that.priority) &&
+                Objects.equals(processInstanceId, that.processInstanceId) &&
+                Objects.equals(state, that.state) &&
+                Objects.equals(actualOwner, that.actualOwner) &&
+                Objects.equals(adminGroups, that.adminGroups) &&
+                Objects.equals(adminUsers, that.adminUsers) &&
+                Objects.equals(completed, that.completed) &&
+                Objects.equals(started, that.started) &&
+                Objects.equals(excludedUsers, that.excludedUsers) &&
+                Objects.equals(potentialGroups, that.potentialGroups) &&
+                Objects.equals(potentialUsers, that.potentialUsers) &&
+                Objects.equals(referenceName, that.referenceName) &&
+                Objects.equals(lastUpdate, that.lastUpdate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, name, priority, processInstanceId, state, actualOwner, adminGroups, adminUsers, completed, started, excludedUsers, potentialGroups, potentialUsers, referenceName, lastUpdate);
     }
 }

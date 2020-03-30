@@ -61,7 +61,7 @@ public class GraphQLScalarTypeProducer {
                         ZonedDateTime dateTime;
                         if (input instanceof ZonedDateTime) {
                             dateTime = (ZonedDateTime) input;
-                        } else if (input instanceof String) {
+                        } else if (input instanceof String || input instanceof Long) {
                             try {
                                 dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(input.toString())), ZoneOffset.UTC);
                             } catch (NumberFormatException ex) {

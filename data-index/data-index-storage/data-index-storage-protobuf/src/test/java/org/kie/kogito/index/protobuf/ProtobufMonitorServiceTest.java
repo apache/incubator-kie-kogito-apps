@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.protostream;
+package org.kie.kogito.index.protobuf;
 
 import java.io.IOException;
 import java.nio.file.Files;

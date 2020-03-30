@@ -17,7 +17,15 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-storage-protobuf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-infinispan</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-storage-mongodb</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -34,6 +42,14 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>smallrye-reactive-messaging-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>smallrye-reactive-messaging-provider</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -114,6 +130,13 @@
       <artifactId>vertx-kafka-client</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-storage-mongodb</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -134,8 +157,17 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <systemProperties>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <infinispan.version>${version.org.infinispan.image}</infinispan.version>
+            <keycloak.version>${version.org.keycloak.image}</keycloak.version>
+            <mongodb.version>${version.org.mongodb.image}</mongodb.version>
+          </systemProperties>
+        </configuration>
         <executions>
           <execution>
+            <id>integration-test</id>
             <goals>
               <goal>integration-test</goal>
               <goal>verify</goal>
@@ -143,12 +175,23 @@
             <configuration>
               <excludes>
                 <exclude>**/Native*IT.java</exclude>
+                <exclude>**/MongoDBIT.java</exclude>
               </excludes>
-              <systemProperties>
-                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                <infinispan.version>${version.org.infinispan.image}</infinispan.version>
-                <keycloak.version>${version.org.keycloak.image}</keycloak.version>
-              </systemProperties>
+            </configuration>
+          </execution>
+          <execution>
+            <id>mongodb-integration-test</id>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/MongoDBIT.java</include>
+              </includes>
+              <systemPropertyVariables>
+                <quarkus.test.profile>mongodb</quarkus.test.profile>
+              </systemPropertyVariables>
             </configuration>
           </execution>
         </executions>
@@ -179,6 +222,7 @@
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <infinispan.version>${version.org.infinispan.image}</infinispan.version>
             <keycloak.version>${version.org.keycloak.image}</keycloak.version>
+            <mongodb.version>${version.org.mongodb.image}</mongodb.version>
           </systemPropertyVariables>
         </configuration>
       </plugin>

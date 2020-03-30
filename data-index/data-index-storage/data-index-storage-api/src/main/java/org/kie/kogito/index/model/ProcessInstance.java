@@ -17,6 +17,7 @@
 package org.kie.kogito.index.model;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -71,5 +72,28 @@ public class ProcessInstance extends ProcessInstanceMeta {
                 ", addons=" + addons +
                 ", error=" + error +
                 "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        ProcessInstance instance = (ProcessInstance) o;
+        return Objects.equals(variables, instance.variables) &&
+                Objects.equals(nodes, instance.nodes) &&
+                Objects.equals(addons, instance.addons) &&
+                Objects.equals(error, instance.error);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), variables, nodes, addons, error);
     }
 }

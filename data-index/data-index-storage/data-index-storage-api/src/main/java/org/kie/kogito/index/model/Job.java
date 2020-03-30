@@ -17,6 +17,7 @@
 package org.kie.kogito.index.model;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -181,5 +182,36 @@ public class Job {
                 ", lastUpdate=" + lastUpdate +
                 ", executionCounter=" + executionCounter +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Job job = (Job) o;
+        return Objects.equals(id, job.id) &&
+                Objects.equals(processId, job.processId) &&
+                Objects.equals(processInstanceId, job.processInstanceId) &&
+                Objects.equals(rootProcessId, job.rootProcessId) &&
+                Objects.equals(rootProcessInstanceId, job.rootProcessInstanceId) &&
+                Objects.equals(expirationTime, job.expirationTime) &&
+                Objects.equals(priority, job.priority) &&
+                Objects.equals(callbackEndpoint, job.callbackEndpoint) &&
+                Objects.equals(repeatInterval, job.repeatInterval) &&
+                Objects.equals(repeatLimit, job.repeatLimit) &&
+                Objects.equals(scheduledId, job.scheduledId) &&
+                Objects.equals(retries, job.retries) &&
+                Objects.equals(status, job.status) &&
+                Objects.equals(lastUpdate, job.lastUpdate) &&
+                Objects.equals(executionCounter, job.executionCounter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, processId, processInstanceId, rootProcessId, rootProcessInstanceId, expirationTime, priority, callbackEndpoint, repeatInterval, repeatLimit, scheduledId, retries, status, lastUpdate, executionCounter);
     }
 }

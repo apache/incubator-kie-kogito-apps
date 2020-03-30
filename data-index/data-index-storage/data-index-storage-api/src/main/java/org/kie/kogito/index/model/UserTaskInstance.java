@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.model;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class UserTaskInstance extends UserTaskInstanceMeta {
@@ -81,5 +83,26 @@ public class UserTaskInstance extends UserTaskInstanceMeta {
 
     public void setOutputs(JsonNode outputs) {
         this.outputs = outputs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserTaskInstance that = (UserTaskInstance) o;
+        return Objects.equals(processId, that.processId) &&
+                Objects.equals(rootProcessId, that.rootProcessId) &&
+                Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) &&
+                Objects.equals(inputs, that.inputs) &&
+                Objects.equals(outputs, that.outputs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(processId, rootProcessId, rootProcessInstanceId, inputs, outputs);
     }
 }

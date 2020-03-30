@@ -25,6 +25,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.quarkus.arc.DefaultBean;
 import io.quarkus.runtime.ShutdownEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.infinispan.client.hotrod.DataFormat;
@@ -38,11 +39,13 @@ import org.kie.kogito.index.cache.CacheService;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.index.protobuf.ProtobufManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class InfinispanCacheManager implements CacheService {
+@DefaultBean
+public class InfinispanCacheManager implements CacheService, ProtobufManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanCacheManager.class);
     private static final String PROCESS_INSTANCES_CACHE = "processinstances";
@@ -124,12 +127,14 @@ public class InfinispanCacheManager implements CacheService {
         return new CacheImpl<>(getOrCreateCache(JOBS_CACHE, cacheTemplateName), Job.class.getName());
     }
 
+    @Override
     public Map<String, String> getProtobufCache() {
         return manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
     }
 
-    public Map<String, String> getProcessIdModelCache() {
-        return manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null);
+    @Override
+    public Cache<String, String> getProcessIdModelCache() {
+        return new CacheImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
     }
 
     @Override
