@@ -14,7 +14,9 @@ import {
   ButtonVariant,
   OverflowMenuControl,
   Dropdown,
-  KebabToggle
+  KebabToggle,
+  Split,
+  SplitItem
 } from '@patternfly/react-core';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -244,24 +246,26 @@ const ProcessDetailsPage = ({ match }) => {
                 </BreadcrumbItem>
               </Breadcrumb>
             </GridItem>
-            <GridItem span={10}>
-              <Title headingLevel="h1" size="4xl">
-                {data.ProcessInstances[0].processName}
-              </Title>
-            </GridItem>
-            <GridItem span={2}>
-              <React.Fragment>
-                <OverflowMenu breakpoint="lg">
-                  <OverflowMenuContent isPersistent>
-                    <OverflowMenuGroup groupType="button" isPersistent>
-                      {processManagementButtons()}
-                    </OverflowMenuGroup>
-                  </OverflowMenuContent>
-                  {/* <OverflowMenuControl hasAdditionalOptions>
+            <GridItem span={12}>
+              <Split gutter={'md'} component={'div'}>
+                <SplitItem isFilled={true}>
+                  <Title headingLevel="h1" size="4xl">
+                    {data.ProcessInstances[0].processName}
+                  </Title>
+                </SplitItem>
+                <SplitItem>
+                  <OverflowMenu breakpoint="lg">
+                    <OverflowMenuContent isPersistent>
+                      <OverflowMenuGroup groupType="button" isPersistent>
+                        {processManagementButtons()}
+                      </OverflowMenuGroup>
+                    </OverflowMenuContent>
+                    {/* <OverflowMenuControl hasAdditionalOptions>
                     <Dropdown toggle={<KebabToggle />} isPlain />
                   </OverflowMenuControl> */}
-                </OverflowMenu>
-              </React.Fragment>
+                  </OverflowMenu>
+                </SplitItem>
+              </Split>
             </GridItem>
             <GridItem>
               <ProcessDetails
