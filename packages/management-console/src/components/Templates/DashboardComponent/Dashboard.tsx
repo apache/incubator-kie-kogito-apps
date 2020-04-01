@@ -62,8 +62,9 @@ const Dashboard: React.FC<{}> = (props: any) => {
   );
 
   const getQuery = useGetQueryFieldsQuery();
-  const availableDomains =
-    !getQuery.loading && getQuery.data.__type.fields.slice(2);
+  const availableDomains = [];
+  !getQuery.loading && getQuery.data && availableDomains.push(getQuery.data.__type.fields.slice(2));
+
   const domains = [];
   availableDomains && availableDomains.map(item => domains.push(item.name));
   return (

@@ -24,10 +24,9 @@ const DomainExplorerLandingPage = () => {
   const getQuery = useGetQueryFieldsQuery();
   const domains = [];
 
-  let availableDomains =
-    !getQuery.loading && getQuery.data.__type.fields.slice(2);
+  let availableDomains = [];
+  !getQuery.loading && getQuery.data && availableDomains.push(getQuery.data.__type.fields.slice(2));
 
-    
   availableDomains = availableDomains && availableDomains.filter(item => {
     if(item.name !== 'Jobs' ) {
       return item;
