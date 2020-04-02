@@ -119,9 +119,9 @@ const DomainExplorerTable = ({ columnFilters, tableLoading, displayTable }) => {
       }
     };
     const tempKeys = [];
-    let tempValue = [];
+    const tempValue = [];
     iter(object);
-    tempValue = tempValue.filter(value => value !== null)
+    // tempValue = tempValue.filter(value => value !== null)
     return { tempKeys, tempValue };
   };
 
@@ -201,15 +201,15 @@ const DomainExplorerTable = ({ columnFilters, tableLoading, displayTable }) => {
     return { tempKeys, tempValue };
   };
   const firstKey = Object.keys(columnFilters)[0];
-  const tableContent = columnFilters[firstKey];
+  const tableContent = columnFilters;
 
   const parentkeys = [];
   let values = [];
   let parentIndex = 0;
 
   const initLoad = () => {
-    if (tableContent) {
-      tableContent.map(item => {
+    if (columnFilters.length> 0) {
+      columnFilters.map(item => {
         let metaArray = [];
         const metaKeys = [];
         const metaValues = [];
