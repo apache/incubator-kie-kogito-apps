@@ -94,7 +94,6 @@ const ProcessDetailsPage = ({ match }) => {
       );
     }
   };
-
   let prevPath;
   const BreadCrumb = [];
   let BreadCrumbRoute = [];

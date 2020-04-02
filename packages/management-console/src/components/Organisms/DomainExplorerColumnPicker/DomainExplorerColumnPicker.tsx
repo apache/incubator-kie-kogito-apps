@@ -26,6 +26,8 @@ export interface IOwnProps {
   getPicker: any;
   setError: any;
   setDisplayEmptyState: any;
+  enableFilter: any;
+  queryAttributes: any;
 }
 
 const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
@@ -41,7 +43,9 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
   data,
   getPicker,
   setError,
-  setDisplayEmptyState
+  setDisplayEmptyState,
+  enableFilter,
+  queryAttributes
 }) => {
   // tslint:disable: forin
   // tslint:disable: no-floating-promises
@@ -184,7 +188,8 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
     if (columnPickerType && parameters.length > 1) {
       const Query = query({
         operation: columnPickerType,
-        fields: parameters
+        fields: parameters,
+        variables: enableFilter ? queryAttributes.variables : {}
       });
 
       try {
@@ -193,6 +198,7 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
             query: gql`
               ${Query.query}
             `,
+            variables: Query.variables,
             fetchPolicy: 'no-cache'
           })
           .then(response => {

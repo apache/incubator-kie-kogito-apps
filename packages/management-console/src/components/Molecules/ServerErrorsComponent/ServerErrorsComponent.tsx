@@ -14,11 +14,11 @@ import {
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import './ServerErrorsComponent.css';
-import { useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const ServerErrorsComponent = props => {
   const [displayError, setDisplayError] = useState(false);
-  const history = useHistory();
+  // const history = useHistory();
 
   return (
     <PageSection variant="light">
@@ -54,8 +54,8 @@ const ServerErrorsComponent = props => {
               </ClipboardCopy>
             </EmptyStateBody>
           )}
-          <Button variant="primary" onClick={() => history.goBack()}>
-            Go back               {' '}
+          <Button variant="primary" onClick={() => props.history.goBack()}>
+            Go back
           </Button>
         </EmptyState>
       </Bullseye>
@@ -63,4 +63,4 @@ const ServerErrorsComponent = props => {
   );
 };
 
-export default ServerErrorsComponent;
+export default withRouter(ServerErrorsComponent);
