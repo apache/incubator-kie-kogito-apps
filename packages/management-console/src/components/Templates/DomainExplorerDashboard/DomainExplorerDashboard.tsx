@@ -6,7 +6,9 @@ import {
   DataToolbarGroup,
   PageSection,
   Breadcrumb,
-  BreadcrumbItem
+  BreadcrumbItem,
+  Card,
+  Bullseye
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
@@ -15,6 +17,7 @@ import './DomainExplorerDashboard.css';
 import DomainExplorerColumnPicker from '../../Organisms/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
 import DomainExplorerTable from '../../Organisms/DomainExplorerTable/DomainExplorerTable';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
+import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 
 import {
   useGetQueryTypesQuery,
@@ -48,6 +51,7 @@ const DomainExplorerDashboard = props => {
   const [columnFilters, setColumnFilters] = useState({});
   const [tableLoading, setTableLoading] = useState(true);
   const [displayTable, setDisplayTable] = useState(false);
+  const [displayEmptyState, setDisplayEmptyState] = useState(false);
   const [selected, setSelected] = useState([]);
   const [parameters, setParameters] = useState([
     { metadata: [{ processInstances: ['id','processName', 'state', 'start', 'lastUpdate','businessKey'] }] }
@@ -172,6 +176,7 @@ const DomainExplorerDashboard = props => {
                   setSelected={setSelected}
                   data={data}
                   getPicker={getPicker}
+                  setDisplayEmptyState={setDisplayEmptyState}
                 />
               )}
             </DataToolbarGroup>
@@ -218,13 +223,20 @@ const DomainExplorerDashboard = props => {
       <PageSection>
         {renderToolbar()}
 
-        <div className="kogito-management-console--domain-explorer__table-OverFlow">
+        {!tableLoading ? (<div className="kogito-management-console--domain-explorer__table-OverFlow">
           <DomainExplorerTable
             columnFilters={columnFilters}
             tableLoading={tableLoading}
             displayTable={displayTable}
+            displayEmptyState={displayEmptyState}
           />
-        </div>
+        </div>) : (
+            <Card>
+              <Bullseye>
+                <SpinnerComponent spinnerText="Loading domain data..." />
+              </Bullseye>
+            </Card>
+          )}
       </PageSection>
     </>
   );
