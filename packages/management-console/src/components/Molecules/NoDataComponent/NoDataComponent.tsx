@@ -18,8 +18,6 @@ const NoDataComponent = (props) => {
     let prevPath;
     if (props.location.state !== undefined) {
         prevPath = props.location.state.prev;
-    } else {
-        prevPath = '/ProcessInstances'
     }
 
     const tempPath = prevPath.split('/');
