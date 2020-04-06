@@ -17,12 +17,17 @@
 package org.kie.kogito.index.messaging;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;
+import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
 import org.kie.kogito.index.model.ProcessInstanceState;
@@ -34,12 +39,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.lang.String.format;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 import static org.kie.kogito.index.messaging.ReactiveMessagingEventConsumer.KOGITO_DOMAIN_EVENTS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -58,16 +66,22 @@ public class ReactiveMessagingEventConsumerTest {
     @Test
     public void testOnProcessInstanceDomainEvent() throws Exception {
         when(eventBus.request(any(), any(), any(Handler.class))).thenAnswer(invocation -> {
-            ((Handler) invocation.getArgument(2)).handle(null);
+            ((Handler) invocation.getArgument(2)).handle(Future.succeededFuture());
             return null;
         });
 
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        KogitoProcessCloudEvent event = getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null);
+        Message<KogitoProcessCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null));
 
-        consumer.onProcessInstanceDomainEvent(event).toCompletableFuture().get();
+        CompletableFuture<Void> future = consumer.onProcessInstanceDomainEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event).ack();
+        assertThat(future).isDone().isNotCompletedExceptionally();
+
         ArgumentCaptor<ObjectNode> captor = ArgumentCaptor.forClass(ObjectNode.class);
         verify(eventBus).request(eq(format(KOGITO_DOMAIN_EVENTS, processId)), captor.capture(), any(Handler.class));
 
@@ -78,9 +92,42 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
+    public void testOnProcessInstanceDomainEventIndexingException() throws Exception {
+        when(eventBus.request(any(), any(), any(Handler.class))).thenAnswer(invocation -> {
+            ((Handler) invocation.getArgument(2)).handle(Future.failedFuture(new RuntimeException()));
+            return null;
+        });
+
+        String processId = "travels";
+        String processInstanceId = UUID.randomUUID().toString();
+
+        Message<KogitoProcessCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null));
+
+        CompletableFuture<Void> future = consumer.onProcessInstanceDomainEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        assertThat(future).isDone().isNotCompletedExceptionally();
+    }
+
+    @Test
+    public void testOnProcessInstanceDomainEventMappingException() throws Exception {
+        Message<KogitoProcessCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoProcessCloudEvent.class));
+
+        CompletableFuture<Void> future = consumer.onProcessInstanceDomainEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        assertThat(future).isDone().isNotCompletedExceptionally();
+        verify(eventBus, never()).request(any(), any(), any());
+    }
+
+    @Test
     public void testOnUserTaskInstanceDomainEvent() throws Exception {
         when(eventBus.request(any(), any(), any(Handler.class))).thenAnswer(invocation -> {
-            ((Handler) invocation.getArgument(2)).handle(null);
+            ((Handler) invocation.getArgument(2)).handle(Future.succeededFuture());
             return null;
         });
 
@@ -88,9 +135,15 @@ public class ReactiveMessagingEventConsumerTest {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        KogitoUserTaskCloudEvent event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress");
+        Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress"));
 
-        consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture().get();
+        CompletableFuture<Void> future = consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event).ack();
+        assertThat(future).isDone().isNotCompletedExceptionally();
+
         ArgumentCaptor<ObjectNode> captor = ArgumentCaptor.forClass(ObjectNode.class);
         verify(eventBus).request(eq(format(KOGITO_DOMAIN_EVENTS, processId)), captor.capture(), any(Handler.class));
 
@@ -101,16 +154,117 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
+    public void testOnUserTaskInstanceDomainEventIndexingException() throws Exception {
+        when(eventBus.request(any(), any(), any(Handler.class))).thenAnswer(invocation -> {
+            ((Handler) invocation.getArgument(2)).handle(Future.failedFuture(new RuntimeException()));
+            return null;
+        });
+
+        String taskId = UUID.randomUUID().toString();
+        String processId = "travels";
+        String processInstanceId = UUID.randomUUID().toString();
+
+        Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress"));
+
+        CompletableFuture<Void> future = consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        assertThat(future).isDone().isNotCompletedExceptionally();
+    }
+
+    @Test
+    public void testOnUserTaskInstanceDomainEventMappingException() throws Exception {
+        Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoUserTaskCloudEvent.class));
+
+        CompletableFuture<Void> future = consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        assertThat(future).isDone().isNotCompletedExceptionally();
+        verify(eventBus, never()).request(any(), any(), any());
+    }
+
+    @Test
     public void testOnProcessInstanceEvent() throws Exception {
-        KogitoProcessCloudEvent event = mock(KogitoProcessCloudEvent.class);
-        consumer.onProcessInstanceEvent(event).toCompletableFuture().get();
-        verify(service).indexProcessInstance(event.getData());
+        Message<KogitoProcessCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoProcessCloudEvent.class));
+
+        CompletableFuture<Void> future = consumer.onProcessInstanceEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event).ack();
+        verify(service).indexProcessInstance(event.getPayload().getData());
+        assertThat(future).isDone().isNotCompletedExceptionally();
+    }
+
+    @Test
+    public void testOnProcessInstanceEventException() throws Exception {
+        Message<KogitoProcessCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoProcessCloudEvent.class));
+        doThrow(new RuntimeException()).when(service).indexProcessInstance(any());
+
+        CompletableFuture<Void> future = consumer.onProcessInstanceEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        verify(service).indexProcessInstance(event.getPayload().getData());
+        assertThat(future).isDone().isNotCompletedExceptionally();
     }
 
     @Test
     public void testOnUserTaskInstanceEvent() throws Exception {
-        KogitoUserTaskCloudEvent event = mock(KogitoUserTaskCloudEvent.class);
-        consumer.onUserTaskInstanceEvent(event).toCompletableFuture().get();
-        verify(service).indexUserTaskInstance(event.getData());
+        Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoUserTaskCloudEvent.class));
+
+        CompletableFuture<Void> future = consumer.onUserTaskInstanceEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event).ack();
+        verify(service).indexUserTaskInstance(event.getPayload().getData());
+        assertThat(future).isDone().isNotCompletedExceptionally();
+    }
+
+    @Test
+    public void testOnUserTaskInstanceEventException() throws Exception {
+        Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoUserTaskCloudEvent.class));
+        doThrow(new RuntimeException()).when(service).indexUserTaskInstance(any());
+
+        CompletableFuture<Void> future = consumer.onUserTaskInstanceEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        verify(service).indexUserTaskInstance(event.getPayload().getData());
+        assertThat(future).isDone().isNotCompletedExceptionally();
+    }
+
+    @Test
+    public void testOnJobEvent() throws Exception {
+        Message<KogitoJobCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoJobCloudEvent.class));
+
+        CompletableFuture<Void> future = consumer.onJobEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event).ack();
+        verify(service).indexJob(event.getPayload().getData());
+        assertThat(future).isDone().isNotCompletedExceptionally();
+    }
+
+    @Test
+    public void testOnJobEventException() throws Exception {
+        Message<KogitoJobCloudEvent> event = mock(Message.class);
+        when(event.getPayload()).thenReturn(mock(KogitoJobCloudEvent.class));
+        doThrow(new RuntimeException()).when(service).indexJob(any());
+
+        CompletableFuture<Void> future = consumer.onJobEvent(event).toCompletableFuture();
+        future.get(1, TimeUnit.MINUTES);
+
+        verify(event, never()).ack();
+        verify(service).indexJob(event.getPayload().getData());
+        assertThat(future).isDone().isNotCompletedExceptionally();
     }
 }
