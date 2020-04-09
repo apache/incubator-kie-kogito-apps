@@ -21,8 +21,6 @@
     <version.npm>6.10.3</version.npm>
     <version.yarn>v1.19.1</version.yarn>
     <maven.compiler.release>11</maven.compiler.release> 
-    <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.source>11</maven.compiler.source> 
   </properties>
 
   <build>
