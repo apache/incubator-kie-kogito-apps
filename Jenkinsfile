@@ -23,6 +23,13 @@ pipeline {
                 sh "chmod 600 $HOME/.vnc/passwd"
             }
         }
+        stage('build sh script') {
+            steps {
+                script {
+                    mailer.buildLogScriptPR()
+                }
+            }
+        }
         stage('Build kogito-runtimes') {
             steps {
                 dir("kogito-runtimes") {
@@ -61,20 +68,29 @@ pipeline {
         }
     }
     post {
-        unstable {
-            script {
-                mailer.sendEmailFailure()
-            }
+        always {
+            sh '$WORKSPACE/trace.sh'
+            junit '**/target/surefire-reports/**/*.xml'
         }
         failure {
             script {
-                mailer.sendEmailFailure()
+                mailer.sendEmail_failedPR()
             }
+            cleanWs()
         }
-        always {
-            archiveArtifacts artifacts: 'management-console/target/*-runner.jar, data-index/data-index-service/target/*-runner.jar, jobs-service/target/*-runner.jar', fingerprint: true
-            junit '**/**/junit.xml'
-            junit '**/target/surefire-reports/**/*.xml'
+        unstable {
+            script {
+                mailer.sendEmail_unstablePR()
+            }
+            cleanWs()
+        }
+        fixed {
+            script {
+                mailer.sendEmail_fixedPR()
+            }
+            cleanWs()
+        }
+        success {
             cleanWs()
         }
     }
