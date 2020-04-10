@@ -36,7 +36,7 @@ import './DomainExplorerTable.css';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
 
-const DomainExplorerTable = ({ columnFilters, tableLoading, displayTable, displayEmptyState }) => {
+const DomainExplorerTable = ({ columnFilters, tableLoading, displayTable, displayEmptyState, parameters, selected }) => {
   // tslint:disable: forin
   const [columns, setColumns] = useState([]);
   const [rows, setRows] = useState([]);
@@ -155,7 +155,7 @@ const DomainExplorerTable = ({ columnFilters, tableLoading, displayTable, displa
                 const ele = {
                   title: (
                     <>
-                     <Link to={'/Process/' + tempObj.id}>
+                     <Link to={{pathname:'/Process/' + tempObj.id, state:{parameters,selected}}}>
                     <strong>
                       <ProcessDescriptor processInstanceData={tempObj}/>
                       </strong>

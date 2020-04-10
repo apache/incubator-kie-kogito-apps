@@ -32,6 +32,8 @@ export interface IOwnProps {
 }
 
 const DomainExplorerDashboard = props => {
+  const rememberedParams = props.location.state && props.location.state.parameters || []
+  const rememberedSelections = props.location.state && props.location.state.selected || []
   const domainName = props.match.params.domainName;
   let BreadCrumb = props.location.pathname.split('/');
   BreadCrumb = BreadCrumb.filter(item => {
@@ -128,8 +130,13 @@ const DomainExplorerDashboard = props => {
   defaultParams = defaultParams.slice(0, 5);
 
   useEffect(() => {
+    if(rememberedParams.length > 0 ){
+      setParameters(rememberedParams)
+      setSelected(rememberedSelections)
+    } else {
     setParameters(prev => [...defaultParams, ...prev]);
     setSelected(selections);
+    }
   }, [columnPickerType, selections.length > 0]);
 
   useEffect(() => {
@@ -180,6 +187,7 @@ const DomainExplorerDashboard = props => {
                   getPicker={getPicker}
                   setError={setError}
                   setDisplayEmptyState={setDisplayEmptyState}
+                  rememberedParams={rememberedParams}
                 />
               )}
             </DataToolbarGroup>
@@ -244,6 +252,8 @@ const DomainExplorerDashboard = props => {
             tableLoading={tableLoading}
             displayTable={displayTable}
             displayEmptyState={displayEmptyState}
+            parameters={parameters}
+            selected={selected}
           />
         </div>) : (
             <Card>
