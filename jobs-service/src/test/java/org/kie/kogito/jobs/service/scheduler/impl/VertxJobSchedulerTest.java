@@ -67,7 +67,6 @@ class VertxJobSchedulerTest extends BaseTimerJobSchedulerTest {
     @Captor
     private ArgumentCaptor<Long> timeCaptor;
 
-
     @BeforeEach
     public void setUp() {
         super.setUp();
@@ -111,5 +110,12 @@ class VertxJobSchedulerTest extends BaseTimerJobSchedulerTest {
         verify(vertx, never()).cancelTimer(Long.valueOf(SCHEDULED_ID));
         Flowable.fromPublisher(cancel).subscribe();
         verify(vertx).cancelTimer(Long.valueOf(SCHEDULED_ID));
+    }
+
+    @Test
+    void testDoCancelNullId() {
+        Publisher<Boolean> cancel = tested.doCancel(ScheduledJob.builder().job(job).scheduledId(null).build());
+        Flowable.fromPublisher(cancel).subscribe();
+        verify(vertx, never()).cancelTimer(anyLong());
     }
 }
