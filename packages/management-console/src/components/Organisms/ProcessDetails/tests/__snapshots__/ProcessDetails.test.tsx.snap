@@ -39,13 +39,7 @@ exports[`Process Details component Snapshot tests 1`] = `
       <FormGroup
         fieldId="endpoint"
         label="Endpoint"
-      >
-        <Text
-          component="p"
-        >
-          test
-        </Text>
-      </FormGroup>
+      />
       <FormGroup
         fieldId="start"
         label="Start"
