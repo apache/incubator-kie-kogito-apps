@@ -17,6 +17,7 @@
 package org.kie.kogito.jobs.service.resource;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 
 import javax.inject.Inject;
 
@@ -26,6 +27,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
+import io.vertx.core.Vertx;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.jobs.api.Job;
@@ -35,6 +37,7 @@ import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -45,6 +48,9 @@ public class JobResourceTest {
 
     @Inject
     private ObjectMapper objectMapper;
+
+    @Inject
+    private Vertx vertx;
 
     @Test
     void create() throws Exception {
@@ -133,4 +139,70 @@ public class JobResourceTest {
         assertEquals(JobStatus.SCHEDULED, scheduledJob.getStatus());
         assertNotNull(scheduledJob.getScheduledId());
     }
+
+    @Test
+    void cancelRunningPeriodicJobTest() throws Exception {
+        final String id = "1000";
+        int timeMillis = 200;
+        final Job job = JobBuilder
+                .builder()
+                .id(id)
+                .expirationTime(DateUtil.now().plus(timeMillis, ChronoUnit.MILLIS))
+                .repeatLimit(10)
+                .repeatInterval(100l)
+                .callbackEndpoint("http://localhost:8081/callback")
+                .priority(1)
+                .build();
+        create(jobToJson(job));
+
+        //check the job was created
+        ScheduledJob scheduledJob = given()
+                .pathParam("id", id)
+                .when()
+                .get(JobResource.JOBS_PATH + "/{id}")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .assertThat()
+                .extract()
+                .as(ScheduledJob.class);
+        assertThat(scheduledJob.getId()).isEqualTo(job.getId());
+        assertThat(scheduledJob.getStatus()).isEqualTo(JobStatus.SCHEDULED);
+        assertThat(scheduledJob.getScheduledId()).isNotBlank();
+        assertThat(scheduledJob.getExecutionCounter()).isEqualTo(0);
+
+        //guarantee the job is running
+        Thread.sleep(timeMillis + 1);
+
+        //canceled the running job
+        scheduledJob = given()
+                .pathParam("id", id)
+                .when()
+                .delete(JobResource.JOBS_PATH + "/{id}")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .assertThat()
+                .extract()
+                .as(ScheduledJob.class);
+
+        assertEquals(scheduledJob.getId(), job.getId());
+        assertThat(scheduledJob.getExecutionCounter()).isGreaterThan(0);
+        assertEquals(JobStatus.CANCELED, scheduledJob.getStatus());
+        assertThat(scheduledJob.getScheduledId()).isNotBlank();
+
+        //assert the job was deleted from the api perspective
+        given()
+                .pathParam("id", id)
+                .when()
+                .get(JobResource.JOBS_PATH + "/{id}")
+                .then()
+                .statusCode(404);
+
+        //ensure the job was indeed canceled on vertx
+        Long scheduledId = Long.valueOf(scheduledJob.getScheduledId());
+        boolean timerCanceled = vertx.cancelTimer(scheduledId);
+        assertThat(timerCanceled).isFalse();
+    }
 }
+
