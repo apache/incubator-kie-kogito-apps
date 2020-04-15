@@ -122,4 +122,44 @@ public class ProtobufMonitorServiceTest {
             }
         }
     }
+
+    @Test
+    public void testDeletingFilesAfterStart() throws Exception {
+        Path dir = null;
+        try {
+            dir = Files.createTempDirectory(this.getClass().getName());
+            Files.createFile(dir.resolve("kogito-application.proto"));
+            Files.createFile(dir.resolve("test1.proto"));
+            Path subProto = dir.resolve("proto");
+            final Path sub = Files.createDirectory(subProto);
+            Files.createFile(sub.resolve("test2.proto"));
+            CountDownLatch latch = new CountDownLatch(2);
+            doAnswer(args -> {
+                latch.countDown();
+                return null;
+            }).when(protobufService).registerProtoBufferType(any());
+
+            protobufMonitorService.monitor = true;
+            protobufMonitorService.protoFiles = Optional.of(dir.toAbsolutePath().toString());
+            protobufMonitorService.onFolderWatch = path ->
+                    CompletableFuture.runAsync(() -> {
+                        try {
+                            Files.delete(sub.resolve("test2.proto"));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+            protobufMonitorService.onStart(null);
+
+            latch.await(1, TimeUnit.MINUTES);
+            assertEquals(0, latch.getCount());
+        } finally {
+            if (dir != null) {
+                try {
+                    Files.deleteIfExists(dir);
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
 }

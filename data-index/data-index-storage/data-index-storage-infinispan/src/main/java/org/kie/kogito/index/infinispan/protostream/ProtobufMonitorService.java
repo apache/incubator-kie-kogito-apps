@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import static java.lang.String.format;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 @ApplicationScoped
@@ -132,11 +133,11 @@ public class ProtobufMonitorService {
         @Override
         public void run() {
             try (WatchService ws = FileSystems.getDefault().newWatchService()) {
-                keys.put(folder.register(ws, ENTRY_MODIFY, ENTRY_CREATE), folder);
+                keys.put(folder.register(ws, ENTRY_MODIFY, ENTRY_CREATE, ENTRY_DELETE), folder);
                 Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
                     @Override
                     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                        keys.put(dir.register(ws, ENTRY_MODIFY, ENTRY_CREATE), dir);
+                        keys.put(dir.register(ws, ENTRY_MODIFY, ENTRY_CREATE, ENTRY_DELETE), dir);
                         return FileVisitResult.CONTINUE;
                     }
                 });
