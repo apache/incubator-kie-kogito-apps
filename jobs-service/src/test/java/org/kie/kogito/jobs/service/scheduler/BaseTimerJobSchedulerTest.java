@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
@@ -45,6 +46,7 @@ import org.mockito.Mock;
 import org.reactivestreams.Publisher;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
 import static org.kie.kogito.jobs.service.model.JobStatus.SCHEDULED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -168,7 +170,16 @@ public abstract class BaseTimerJobSchedulerTest {
         //assert always a scheduled job is canceled (periodic or not)
         Optional.ofNullable(jobStatus)
                 .filter(SCHEDULED::equals)
-                .ifPresent(s -> verify(tested()).cancel(scheduleCaptorFuture.capture()));
+                .ifPresent(s -> {
+                    verify(tested()).cancel(scheduleCaptorFuture.capture());
+                    try {
+                        ScheduledJob value = scheduleCaptorFuture.getValue().toCompletableFuture().get(1, TimeUnit.MILLISECONDS);
+                        assertThat(value.getId()).isEqualTo(scheduledJob.getId());
+                        assertThat(value.getStatus()).isEqualTo(CANCELED);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         if (!expired) {
             ScheduledJob returnedScheduledJob = scheduleCaptor.getValue();
@@ -266,8 +277,7 @@ public abstract class BaseTimerJobSchedulerTest {
         verify(tested(), never()).doSchedule(delayCaptor.capture(), eq(scheduledJob));
     }
 
-    @NotNull
-    private <T> Consumer<T> dummyCallback() {
+    protected  <T> Consumer<T> dummyCallback() {
         return t -> {
         };
     }
