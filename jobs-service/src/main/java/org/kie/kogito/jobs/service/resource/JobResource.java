@@ -70,7 +70,10 @@ public class JobResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public CompletionStage<ScheduledJob> patch(Job job) {
         LOGGER.debug("REST patch update {}", job);
-        return jobRepository.merge(ScheduledJob.builder().job(job).build());
+        return jobRepository.merge(ScheduledJob.builder().job(job).build())
+                .thenApply(result -> Optional
+                        .ofNullable(result)
+                        .orElseThrow(() -> new NotFoundException("Job not found " + job)));
     }
 
     @DELETE

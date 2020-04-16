@@ -18,6 +18,7 @@ package org.kie.kogito.jobs.service.repository.impl;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
@@ -71,11 +72,15 @@ public abstract class BaseReactiveJobRepository implements ReactiveJobRepository
     @Override
     public CompletionStage<ScheduledJob> merge(ScheduledJob job) {
         return get(job.getId())
-                .thenApply(current -> ScheduledJob
-                        .builder()
-                        .of(current)
-                        .merge(job)
-                        .build())
-                .thenCompose(this::save);
+                .thenApply(Optional::ofNullable)
+                .thenApply(current -> current
+                        .map(j -> ScheduledJob
+                                .builder()
+                                .of(j)
+                                .merge(job)
+                                .build()))
+                .thenCompose(j -> j
+                        .map(this::save)
+                        .orElse(CompletableFuture.completedFuture(null)));
     }
 }
