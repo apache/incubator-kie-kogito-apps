@@ -233,4 +233,37 @@ public class JobResourceIT {
         assertThat(scheduledJob.getScheduledId()).isNotBlank();
         return scheduledJob;
     }
+
+    @Test
+    void patchCallbackEndpointTest() throws Exception {
+        final String id = UUID.randomUUID().toString();
+        final Job job = getJob(id);
+        create(jobToJson(job));
+
+        final String newCallbackEndpoint = "http://localhost/newcallback";
+        final Job toPatch = JobBuilder.builder().id(id).callbackEndpoint(newCallbackEndpoint).build();
+
+        final ScheduledJob scheduledJob = given()
+                .contentType(ContentType.JSON)
+                .body(jobToJson(toPatch))
+                .when()
+                .patch(JobResource.JOBS_PATH)
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .assertThat()
+                .extract()
+                .as(ScheduledJob.class);
+
+        assertThat(scheduledJob.getCallbackEndpoint()).isEqualTo(newCallbackEndpoint);
+        assertThat(scheduledJob.getId()).isEqualTo(job.getId());
+        assertThat(scheduledJob.getExpirationTime()).isEqualTo(job.getExpirationTime());
+        assertThat(scheduledJob.getPriority()).isEqualTo(job.getPriority());
+        assertThat(scheduledJob.getRepeatLimit()).isEqualTo(job.getRepeatLimit());
+        assertThat(scheduledJob.getRepeatInterval()).isEqualTo(job.getRepeatInterval());
+        assertThat(scheduledJob.getProcessId()).isEqualTo(job.getProcessId());
+        assertThat(scheduledJob.getRootProcessInstanceId()).isEqualTo(job.getRootProcessInstanceId());
+        assertThat(scheduledJob.getRootProcessId()).isEqualTo(job.getRootProcessId());
+        assertThat(scheduledJob.getProcessInstanceId()).isEqualTo(job.getRootProcessInstanceId());
+    }
 }

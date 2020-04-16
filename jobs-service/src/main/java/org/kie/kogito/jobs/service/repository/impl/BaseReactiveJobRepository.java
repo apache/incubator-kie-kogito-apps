@@ -42,7 +42,8 @@ public abstract class BaseReactiveJobRepository implements ReactiveJobRepository
 
     public <T> CompletionStage<T> runAsync(Supplier<T> function) {
         final CompletableFuture<T> future = new CompletableFuture<>();
-        vertx.executeBlocking(v -> future.complete(function.get()), r ->{});
+        vertx.executeBlocking(v -> future.complete(function.get()), r -> {
+        });
         return future;
     }
 
@@ -65,5 +66,16 @@ public abstract class BaseReactiveJobRepository implements ReactiveJobRepository
     public CompletionStage<ScheduledJob> delete(ScheduledJob job) {
         return delete(job.getId())
                 .thenApply(j -> jobStreams.publishJobStatusChange(job));
+    }
+
+    @Override
+    public CompletionStage<ScheduledJob> merge(ScheduledJob job) {
+        return get(job.getId())
+                .thenApply(current -> ScheduledJob
+                        .builder()
+                        .of(current)
+                        .merge(job)
+                        .build())
+                .thenCompose(this::save);
     }
 }
