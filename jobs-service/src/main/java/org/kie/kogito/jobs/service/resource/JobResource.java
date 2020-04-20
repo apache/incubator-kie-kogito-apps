@@ -32,6 +32,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
@@ -66,10 +67,18 @@ public class JobResource {
     }
 
     @PATCH
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public CompletionStage<ScheduledJob> patch(Job job) {
+    public CompletionStage<ScheduledJob> patch(@PathParam("id") String id, @RequestBody Job job) {
         LOGGER.debug("REST patch update {}", job);
+
+        //validate parameters for job and id
+        Optional.ofNullable(job)
+                .map(Job::getId)
+                .filter(id::equals)
+                .orElseThrow(()-> new IllegalArgumentException("Job Id must be the same as id on path : "+  id));
+
         return jobRepository.merge(ScheduledJob.builder().job(job).build())
                 .thenApply(result -> Optional
                         .ofNullable(result)

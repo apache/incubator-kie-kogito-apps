@@ -244,10 +244,11 @@ public class JobResourceIT {
         final Job toPatch = JobBuilder.builder().id(id).callbackEndpoint(newCallbackEndpoint).build();
 
         final ScheduledJob scheduledJob = given()
+                .pathParam("id", id)
                 .contentType(ContentType.JSON)
                 .body(jobToJson(toPatch))
                 .when()
-                .patch(JobResource.JOBS_PATH)
+                .patch(JobResource.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
@@ -265,5 +266,24 @@ public class JobResourceIT {
         assertThat(scheduledJob.getRootProcessInstanceId()).isEqualTo(job.getRootProcessInstanceId());
         assertThat(scheduledJob.getRootProcessId()).isEqualTo(job.getRootProcessId());
         assertThat(scheduledJob.getProcessInstanceId()).isEqualTo(job.getRootProcessInstanceId());
+    }
+
+    @Test
+    void patchInvalidIdPathTest() throws Exception {
+        final String id = UUID.randomUUID().toString();
+        final Job job = getJob(id);
+        create(jobToJson(job));
+
+        final String newCallbackEndpoint = "http://localhost/newcallback";
+        final Job toPatch = JobBuilder.builder().id(id).callbackEndpoint(newCallbackEndpoint).build();
+
+        given()
+                .pathParam("id", "invalid")
+                .contentType(ContentType.JSON)
+                .body(jobToJson(toPatch))
+                .when()
+                .patch(JobResource.JOBS_PATH + "/{id}")
+                .then()
+                .statusCode(500);
     }
 }
