@@ -18,14 +18,31 @@ import BrandComponent from '../../Atoms/BrandComponent/BrandComponent';
 import ErrorComponent from '../../Molecules/ErrorComponent/ErrorComponent';
 import NoDataComponent from '../../Molecules/NoDataComponent/NoDataComponent';
 import './Dashboard.css';
+import {
+  useGetQueryFieldsQuery,
+  ProcessInstanceState
+} from '../../../graphql/types';
 
-import { useGetQueryFieldsQuery } from '../../../graphql/types';
+export type filtersType = {
+  status: ProcessInstanceState[];
+  businessKey: string[];
+};
+export type searchWordsArrayType = {
+  businessKey: { like: string };
+};
 
 const Dashboard: React.FC<{}> = (props: any) => {
   const pageId = 'main-content-page-layout-default-nav';
   const [isNavOpen, setIsNavOpen] = useState(true);
   const { pathname } = props.location;
-
+  const [checkedArray, setCheckedArray] = useState<ProcessInstanceState[]>([
+    ProcessInstanceState.Active
+  ]);
+  const [filters, setFilters] = useState<filtersType>({
+    status: [ProcessInstanceState.Active],
+    businessKey: []
+  });
+  const [wordsArray, setWordsArray] = useState<searchWordsArrayType[]>([]);
   const onNavToggle = () => {
     setIsNavOpen(!isNavOpen);
   };
@@ -76,7 +93,21 @@ const Dashboard: React.FC<{}> = (props: any) => {
             path="/"
             render={() => <Redirect to="/ProcessInstances" />}
           />
-          <Route exact path="/ProcessInstances" component={DataListContainer} />
+          <Route
+            exact
+            path="/ProcessInstances"
+            render={defaultProps => (
+              <DataListContainer
+                {...defaultProps}
+                checkedArray={checkedArray}
+                setCheckedArray={setCheckedArray}
+                filters={filters}
+                setFilters={setFilters}
+                wordsArray={wordsArray}
+                setWordsArray={setWordsArray}
+              />
+            )}
+          />
           <Route
             exact
             path="/Process/:instanceID"

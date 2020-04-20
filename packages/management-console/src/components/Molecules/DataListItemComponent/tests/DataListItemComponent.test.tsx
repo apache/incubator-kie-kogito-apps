@@ -122,7 +122,6 @@ const props = {
   setInitData: jest.fn(),
   setAbortedObj: jest.fn(),
   abortedObj: { '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': 'travels' },
-  loadingInitData: false,
   setIsAllChecked: jest.fn(),
   selectedNumber: 0,
   setSelectedNumber: jest.fn()

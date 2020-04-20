@@ -1274,6 +1274,15 @@ exports[`DataList component tests Snapshot tests 1 1`] = `
     setIsError={[MockFunction]}
     setIsLoading={[MockFunction]}
     setSelectedNumber={[MockFunction]}
+    wordsArray={
+      Array [
+        Object {
+          "businessKey": Object {
+            "like": "Tra",
+          },
+        },
+      ]
+    }
   />
 </ApolloProvider>
 `;

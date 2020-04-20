@@ -286,7 +286,8 @@ const props1 = {
   },
   setIsAllChecked: jest.fn(),
   selectedNumber: 0,
-  setSelectedNumber: jest.fn()
+  setSelectedNumber: jest.fn(),
+  wordsArray: [{ businessKey: { like: 'Tra' } }]
 };
 
 describe('DataList component tests', () => {

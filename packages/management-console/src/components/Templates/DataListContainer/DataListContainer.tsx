@@ -26,33 +26,47 @@ import {
 import axios from 'axios';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import ServerErrorsComponent from '../../Molecules/ServerErrorsComponent/ServerErrorsComponent';
+import {
+  filtersType,
+  searchWordsArrayType
+} from '../DashboardComponent/Dashboard';
 
-const DataListContainer: React.FC<{}> = () => {
+interface IOwnProps {
+  checkedArray: ProcessInstanceState[];
+  setCheckedArray: (checkedArray: ProcessInstanceState[]) => void;
+  filters: filtersType;
+  setFilters: (filters: filtersType) => void;
+  wordsArray: searchWordsArrayType[];
+  setWordsArray: (wordsArray: searchWordsArrayType[]) => void;
+}
+const DataListContainer: React.FC<IOwnProps> = ({
+  checkedArray,
+  setCheckedArray,
+  filters,
+  setFilters,
+  wordsArray,
+  setWordsArray
+}) => {
   const pSize = 10;
   const [initData, setInitData] = useState<any>({});
-  const [checkedArray, setCheckedArray] = useState<any>(['ACTIVE']);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isStatusSelected, setIsStatusSelected] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isStatusSelected, setIsStatusSelected] = useState<boolean>(true);
   const [abortedObj, setAbortedObj] = useState({});
-  const [isAbortModalOpen, setIsAbortModalOpen] = useState(false);
+  const [isAbortModalOpen, setIsAbortModalOpen] = useState<boolean>(false);
   const [abortedMessageObj, setAbortedMessageObj] = useState({});
   const [completedMessageObj, setCompletedMessageObj] = useState({});
-  const [titleType, setTitleType] = useState('');
-  const [modalTitle, setModalTitle] = useState('');
-  const [limit, setLimit] = useState(pSize);
-  const [offset, setOffset] = useState(10);
-  const [pageSize, setPageSize] = useState(pSize);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isDefiningFilter, setIsDefiningFilter] = useState(true);
-  const [filters, setFilters] = useState({
-    status: ['ACTIVE'],
-    businessKey: []
-  });
+  const [titleType, setTitleType] = useState<string>('');
+  const [modalTitle, setModalTitle] = useState<string>('');
+  const [limit, setLimit] = useState<number>(pSize);
+  const [offset, setOffset] = useState<number>(10);
+  const [pageSize, setPageSize] = useState<number>(pSize);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [isDefiningFilter, setIsDefiningFilter] = useState<boolean>(true);
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFilterClicked, setIsFilterClicked] = useState<boolean>(false);
   const [selectedNumber, setSelectedNumber] = useState<number>(0);
-  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
   const [
     getProcessInstances,
     { loading, data, error }
@@ -74,8 +88,8 @@ const DataListContainer: React.FC<{}> = () => {
   };
 
   const onFilterClick = async (arr = checkedArray) => {
-    const searchWordsArray = [];
-    const copyOfBusinessKeysArray = [...filters.businessKey];
+    const searchWordsArray: searchWordsArrayType[] = [];
+    const copyOfBusinessKeysArray: string[] = [...filters.businessKey];
     if (searchWord.length !== 0) {
       if (!copyOfBusinessKeysArray.includes(searchWord)) {
         copyOfBusinessKeysArray.push(searchWord);
@@ -87,9 +101,12 @@ const DataListContainer: React.FC<{}> = () => {
       }
     }
     copyOfBusinessKeysArray.map(word => {
-      const tempBusinessKeys = { businessKey: { like: word } };
+      const tempBusinessKeys: searchWordsArrayType = {
+        businessKey: { like: word }
+      };
       searchWordsArray.push(tempBusinessKeys);
     });
+    setWordsArray(searchWordsArray);
     setIsFilterClicked(true);
     setIsLoading(true);
     setIsLoadingMore(false);
@@ -362,6 +379,7 @@ const DataListContainer: React.FC<{}> = () => {
                   setIsAllChecked={setIsAllChecked}
                   setSelectedNumber={setSelectedNumber}
                   selectedNumber={selectedNumber}
+                  wordsArray={wordsArray}
                 />
               ) : (
                 <EmptyStateComponent

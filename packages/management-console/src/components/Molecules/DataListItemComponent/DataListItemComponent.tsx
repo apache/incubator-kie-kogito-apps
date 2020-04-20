@@ -44,7 +44,6 @@ interface IOwnProps {
   checkedArray: string[];
   initData: any;
   setInitData: any;
-  loadingInitData: boolean;
   abortedObj: any;
   setAbortedObj: any;
   setIsAllChecked: any;
@@ -57,7 +56,6 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
   checkedArray,
   initData,
   setInitData,
-  loadingInitData,
   abortedObj,
   setAbortedObj,
   setIsAllChecked,
@@ -209,7 +207,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
     }
   };
   useEffect(() => {
-    if (data !== undefined && !loading && !loadingInitData) {
+    if (data !== undefined && !loading) {
       data.ProcessInstances.map((instance: any) => {
         instance.isChecked = false;
       });
@@ -457,7 +455,6 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
         >
           {isLoaded &&
             !loading &&
-            !loadingInitData &&
             !error &&
             initData.ProcessInstances.map((instance, idx) => {
               if (instance.id === processInstanceData.id) {
@@ -480,7 +477,6 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
                         checkedArray={checkedArray}
                         initData={initData}
                         setInitData={setInitData}
-                        loadingInitData={loading}
                         abortedObj={abortedObj}
                         setAbortedObj={setAbortedObj}
                         setIsAllChecked={setIsAllChecked}

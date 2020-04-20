@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DataList,
   DataListCell,
@@ -14,9 +14,13 @@ import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateCompo
 import '@patternfly/patternfly/patternfly-addons.css';
 import './DataListComponent.css';
 import {
-  useGetProcessInstancesQuery,
-  ProcessInstanceState
+  useGetProcessInstancesWithBusinessKeyQuery,
+  useGetProcessInstancesQuery
 } from '../.././../graphql/types';
+import {
+  searchWordsArrayType,
+  filtersType
+} from '../../Templates/DashboardComponent/Dashboard';
 
 interface IOwnProps {
   setInitData: any;
@@ -34,6 +38,7 @@ interface IOwnProps {
   setIsAllChecked: any;
   selectedNumber: number;
   setSelectedNumber: (selectedNumber: number) => void;
+  wordsArray: searchWordsArrayType[];
 }
 
 const DataListComponent: React.FC<IOwnProps> = ({
@@ -41,7 +46,6 @@ const DataListComponent: React.FC<IOwnProps> = ({
   setInitData,
   isLoading,
   setIsError,
-  setIsLoading,
   checkedArray,
   abortedObj,
   setAbortedObj,
@@ -51,14 +55,33 @@ const DataListComponent: React.FC<IOwnProps> = ({
   filters,
   setIsAllChecked,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  wordsArray
 }) => {
-  const { loading, error, data, networkStatus } = useGetProcessInstancesQuery({
+  const [copyOfFilters, setCopyOfFilters] = useState<filtersType>(filters);
+  const {
+    loading: byBusinessKeyLoadingState,
+    error: byBusinessKeyError,
+    data: byBusinessKeyData
+  } = useGetProcessInstancesWithBusinessKeyQuery({
     variables: {
-      state: [ProcessInstanceState.Active],
+      state: copyOfFilters.status,
+      offset: 0,
+      limit: pageSize,
+      businessKeys: wordsArray
+    },
+    skip: wordsArray.length === 0,
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true
+  });
+
+  const { loading, error, data } = useGetProcessInstancesQuery({
+    variables: {
+      state: copyOfFilters.status,
       offset: 0,
       limit: pageSize
     },
+    skip: wordsArray.length !== 0,
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true
   });
@@ -66,6 +89,26 @@ const DataListComponent: React.FC<IOwnProps> = ({
   useEffect(() => {
     setIsError(false);
     setAbortedObj({});
+    setCopyOfFilters(copyOfFilters);
+    if (
+      !byBusinessKeyLoadingState &&
+      byBusinessKeyData !== undefined &&
+      filters.status.length === 1 &&
+      filters.status.includes('ACTIVE') &&
+      !isFilterClicked
+    ) {
+      byBusinessKeyData.ProcessInstances.map((instance: any) => {
+        instance.isChecked = false;
+        instance.isOpen = false;
+      });
+    }
+    setInitData(byBusinessKeyData);
+  }, [byBusinessKeyData]);
+
+  useEffect(() => {
+    setIsError(false);
+    setAbortedObj({});
+    setCopyOfFilters(copyOfFilters);
     if (
       !loading &&
       data !== undefined &&
@@ -81,7 +124,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
     setInitData(data);
   }, [data]);
 
-  if (loading || isLoading) {
+  if (byBusinessKeyLoadingState || isLoading || loading) {
     return (
       <Bullseye>
         <SpinnerComponent spinnerText="Loading process instances..." />
@@ -89,12 +132,9 @@ const DataListComponent: React.FC<IOwnProps> = ({
     );
   }
 
-  if (networkStatus === 4) {
-    return (
-      <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
-      </Bullseye>
-    );
+  if (byBusinessKeyError) {
+    setIsError(true);
+    return <ServerErrorsComponent message={byBusinessKeyError} />;
   }
 
   if (error) {
@@ -104,7 +144,8 @@ const DataListComponent: React.FC<IOwnProps> = ({
 
   return (
     <DataList aria-label="Process instance list">
-      {!loading &&
+      {!byBusinessKeyLoadingState &&
+        !loading &&
         initData !== undefined &&
         initData.ProcessInstances.map((item, index) => {
           return (
@@ -115,7 +156,6 @@ const DataListComponent: React.FC<IOwnProps> = ({
               checkedArray={checkedArray}
               initData={initData}
               setInitData={setInitData}
-              loadingInitData={loading}
               abortedObj={abortedObj}
               setAbortedObj={setAbortedObj}
               setIsAllChecked={setIsAllChecked}
