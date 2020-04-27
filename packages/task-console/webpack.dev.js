@@ -24,6 +24,7 @@ module.exports = merge(common, {
       {
         include: [
           path.resolve(__dirname, 'src'),
+
           path.resolve('../../node_modules/patternfly'),
           path.resolve('../../node_modules/@patternfly/patternfly'),
           path.resolve('../../node_modules/@patternfly/react-styles/css'),
@@ -38,6 +39,9 @@ module.exports = merge(common, {
           ),
           path.resolve(
             '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css'
+          ),
+          path.resolve(__dirname,
+            '../../node_modules/@kogito-apps/common/src/components'
           )
         ],
         test: /\.css$/,

@@ -27,7 +27,6 @@ import {
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import ServerErrorsComponent from '../../Molecules/ServerErrorsComponent/ServerErrorsComponent';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 import ProcessBulkModalComponent from '../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent';
 import {
   handleAbort,
@@ -163,7 +162,7 @@ const ProcessDetailsPage = ({ match }) => {
               modalTitle={setTitle(titleType, modalTitle)}
               modalContent={modalContent}
             />
-            <PageTitleComponent title="Process Details" />
+            <Title headingLevel="h1" size="4xl">Process Details</Title>
             {!loading ? (
               <Grid gutter="md" span={12} lg={6} xl={4}>
                 <GridItem span={12}>

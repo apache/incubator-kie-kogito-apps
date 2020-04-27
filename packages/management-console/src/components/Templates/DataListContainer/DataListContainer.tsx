@@ -7,11 +7,11 @@ import {
   DataListCell,
   Grid,
   GridItem,
-  PageSection
+  PageSection,
+  Title
 } from '@patternfly/react-core';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 import DataToolbarComponent from '../../Molecules/DataToolbarComponent/DataToolbarComponent';
 import './DataList.css';
 import DataListComponent from '../../Organisms/DataListComponent/DataListComponent';
@@ -305,7 +305,7 @@ const DataListContainer: React.FC<{}> = () => {
         isSingleAbort={false}
       />
       <PageSection variant="light">
-        <PageTitleComponent title="Process Instances" />
+        <Title headingLevel="h1" size="4xl">Process Instances</Title>
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to={'/'}>Home</Link>

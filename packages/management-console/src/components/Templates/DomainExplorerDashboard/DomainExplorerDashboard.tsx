@@ -8,7 +8,8 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Card,
-  Bullseye
+  Bullseye,
+  Title
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
@@ -16,7 +17,6 @@ import { Redirect } from 'react-router';
 import './DomainExplorerDashboard.css';
 import DomainExplorerColumnPicker from '../../Organisms/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
 import DomainExplorerTable from '../../Organisms/DomainExplorerTable/DomainExplorerTable';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import ServerErrorsComponent from '../../Molecules/ServerErrorsComponent/ServerErrorsComponent';
 
@@ -213,7 +213,7 @@ const DomainExplorerDashboard = props => {
           />
         )}
       <PageSection variant="light">
-        <PageTitleComponent title="Domain Explorer" />
+        <Title headingLevel="h1" size="4xl">Domain Explorer</Title>
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to={'/'}>Home</Link>

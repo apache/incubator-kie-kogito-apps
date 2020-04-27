@@ -3,6 +3,7 @@
   "packages": [
     "packages/*"
   ],
+  "private": true,
   "npmClient": "yarn",
   "useWorkspaces": true
 }

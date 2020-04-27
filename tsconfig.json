@@ -12,7 +12,11 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "lib": ["es6", "dom"],
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "paths": {
+      "@kogito-apps/*": ["packages/*/src"],
+      "@kogito-apps/common": ["packages/common/src/components"] 
+    }
   },
   "exclude": ["node_modules"]
 }

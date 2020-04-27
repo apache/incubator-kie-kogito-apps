@@ -18,7 +18,6 @@ import {
 } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 import { CubesIcon } from '@patternfly/react-icons';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 
 import { useGetQueryFieldsQuery } from '../../../graphql/types';
 
@@ -39,7 +38,7 @@ const DomainExplorerLandingPage = () => {
   return (
     <>
       <PageSection variant="light">
-        <PageTitleComponent title="Domain Explorer" />
+        <Title headingLevel="h1" size="4xl">Domain Explorer</Title>
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to={'/'}>Home</Link>

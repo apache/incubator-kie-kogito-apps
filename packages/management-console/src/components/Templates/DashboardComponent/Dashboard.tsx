@@ -1,45 +1,25 @@
 import {
-  Page,
-  PageSidebar,
-  PageHeader,
   Nav,
   NavList,
-  NavItem
+  NavItem,
 } from '@patternfly/react-core';
-import React, { useState } from 'react';
+import React from 'react';
 import { Redirect, Route, Link, Switch } from 'react-router-dom';
+import { PageLayout } from '@kogito-apps/common/src/components';
 import DataListContainer from '../DataListContainer/DataListContainer';
 import ProcessDetailsPage from '../ProcessDetailsPage/ProcessDetailsPage';
 import DomainExplorerDashboard from '../DomainExplorerDashboard/DomainExplorerDashboard';
 import DomainExplorerLandingPage from '../DomainExplorerLandingPage/DomainExplorerLandingPage';
-import Avatar from '../../Atoms/AvatarComponent/AvatarComponent';
-import PageToolbarComponent from '../../Organisms/PageToolbarComponent/PageToolbarComponent';
-import BrandComponent from '../../Atoms/BrandComponent/BrandComponent';
 import ErrorComponent from '../../Molecules/ErrorComponent/ErrorComponent';
 import NoDataComponent from '../../Molecules/NoDataComponent/NoDataComponent';
 import './Dashboard.css';
+import managementConsoleLogo from '../../../static/managementConsoleLogo.svg';
 
 import { useGetQueryFieldsQuery } from '../../../graphql/types';
 
 const Dashboard: React.FC<{}> = (props: any) => {
-  const pageId = 'main-content-page-layout-default-nav';
-  const [isNavOpen, setIsNavOpen] = useState(true);
   const { pathname } = props.location;
 
-  const onNavToggle = () => {
-    setIsNavOpen(!isNavOpen);
-  };
-
-  const Header = (
-    <PageHeader
-      logo={<BrandComponent />}
-      toolbar={<PageToolbarComponent />}
-      avatar={<Avatar />}
-      showNavToggle
-      isNavOpen={isNavOpen}
-      onNavToggle={onNavToggle}
-    />
-  );
 
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
@@ -53,9 +33,10 @@ const Dashboard: React.FC<{}> = (props: any) => {
       </NavList>
     </Nav>
   );
-  const Sidebar = (
-    <PageSidebar nav={PageNav} isNavOpen={isNavOpen} theme="dark" />
-  );
+
+  const BrandClick = () => {
+    props.history.push('/ProcessInstances');
+  };
 
   const getQuery = useGetQueryFieldsQuery();
   const availableDomains =
@@ -63,42 +44,40 @@ const Dashboard: React.FC<{}> = (props: any) => {
   const domains = [];
   availableDomains && availableDomains.map(item => domains.push(item.name));
   return (
-    <React.Fragment>
-      <Page
-        header={Header}
-        mainContainerId={pageId}
-        sidebar={Sidebar}
-        className="kogito-management-console--dashboard-page"
-      >
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => <Redirect to="/ProcessInstances" />}
-          />
-          <Route exact path="/ProcessInstances" component={DataListContainer} />
-          <Route
-            exact
-            path="/Process/:instanceID"
-            component={ProcessDetailsPage}
-          />
-          <Route
-            exact
-            path="/DomainExplorer"
-            component={DomainExplorerLandingPage}
-          />
-          <Route
-            exact
-            path="/DomainExplorer/:domainName"
-            render={_props => (
-              <DomainExplorerDashboard {..._props} domains={domains} />
-            )}
-          />
-          <Route path="/NoData" component={NoDataComponent} />
-          <Route path="*" component={ErrorComponent} />
-        </Switch>
-      </Page>
-    </React.Fragment>
+
+    <PageLayout PageNav={PageNav}
+      BrandSrc={managementConsoleLogo}
+      BrandAltText="Task Consol Logo"
+      BrandClick={BrandClick}
+    >
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => <Redirect to="/ProcessInstances" />}
+        />
+        <Route exact path="/ProcessInstances" component={DataListContainer} />
+        <Route
+          exact
+          path="/Process/:instanceID"
+          component={ProcessDetailsPage}
+        />
+        <Route
+          exact
+          path="/DomainExplorer"
+          component={DomainExplorerLandingPage}
+        />
+        <Route
+          exact
+          path="/DomainExplorer/:domainName"
+          render={_props => (
+            <DomainExplorerDashboard {..._props} domains={domains} />
+          )}
+        />
+        <Route path="/NoData" component={NoDataComponent} />
+        <Route path="*" component={ErrorComponent} />
+      </Switch> {' '}
+    </PageLayout>
   );
 };
 

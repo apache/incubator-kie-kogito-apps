@@ -18,9 +18,12 @@ exports[`DataListContainer component tests Snapshot tests 1`] = `
   <PageSection
     variant="light"
   >
-    <PageTitleComponent
-      title="Process Instances"
-    />
+    <Title
+      headingLevel="h1"
+      size="4xl"
+    >
+      Process Instances
+    </Title>
     <Component>
       <BreadcrumbItem>
         <Link

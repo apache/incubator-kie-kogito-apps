@@ -91,6 +91,7 @@
   },
   "dependencies": {
     "@kogito-apps/management-console": "file:packages/management-console",
-    "@kogito-apps/task-console": "file:packages/task-console"
+    "@kogito-apps/task-console": "file:packages/task-console",
+    "@kogito-apps/common": "file:packages/common"
   }
 }
