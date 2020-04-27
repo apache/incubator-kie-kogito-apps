@@ -134,32 +134,28 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/Native*IT.java</exclude>
+            <exclude>**/KeycloakIntegrationIndexingServiceIT.java</exclude> <!-- Separate execution for this one -->
+          </excludes>
+          <systemProperties>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <infinispan.version>${version.org.infinispan.image}</infinispan.version>
+            <keycloak.version>${version.org.keycloak.image}</keycloak.version>
+          </systemProperties>
+        </configuration>
         <executions>
           <execution>
+            <id>default</id>
             <goals>
               <goal>integration-test</goal>
-              <goal>verify</goal>
             </goals>
-            <configuration>
-              <excludes>
-                <exclude>**/Native*IT.java</exclude>
-              </excludes>
-              <systemProperties>
-                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                <infinispan.version>${version.org.infinispan.image}</infinispan.version>
-                <keycloak.version>${version.org.keycloak.image}</keycloak.version>
-              </systemProperties>
-            </configuration>
           </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <executions>
           <execution>
             <id>testWithKeycloak</id>
             <goals>
-              <goal>test</goal>
+              <goal>integration-test</goal>
             </goals>
             <configuration>
               <argLine>
@@ -167,18 +163,19 @@
                 -Dquarkus.http.auth.permission.roles1.paths=/graphql
                 -Dquarkus.http.auth.permission.roles1.policy=role-policy1
               </argLine>
-              <test>org.kie.kogito.index.service.KeycloakIntegrationIndexingServiceTest.java</test>
+              <systemProperties>
+                <quarkus.test.profile>keycloak</quarkus.test.profile>
+              </systemProperties>
+              <test>org.kie.kogito.index.service.KeycloakIntegrationIndexingServiceIT.java</test>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <excludes>
-            <exclude>**/KeycloakIntegrationIndexingServiceTest.java</exclude>
-          </excludes>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <infinispan.version>${version.org.infinispan.image}</infinispan.version>
-            <keycloak.version>${version.org.keycloak.image}</keycloak.version>
           </systemPropertyVariables>
         </configuration>
       </plugin>
