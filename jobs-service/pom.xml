@@ -216,6 +216,12 @@
               </systemPropertyVariables>
             </configuration>
           </execution>
+          <execution>
+            <id>verify</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>
