@@ -43,6 +43,7 @@ public class KeycloakServerTestResource implements QuarkusTestResourceLifecycleM
         LOGGER.info("Using Keycloak image: {}", KEYCLOAK_IMAGE);
         keycloak = new FixedHostPortGenericContainer(KEYCLOAK_IMAGE)
                 .withFixedExposedPort(8281, 8080)
+                .withReuse(false)
                 .withEnv("KEYCLOAK_USER", "admin")
                 .withEnv("KEYCLOAK_PASSWORD", "admin")
                 .withEnv("KEYCLOAK_IMPORT", "/tmp/realm.json")
