@@ -183,8 +183,8 @@
           </excludes>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <infinispan.version>${version.org.infinispan.image}</infinispan.version>
-            <keycloak.version>${version.org.keycloak.image}</keycloak.version>
+            <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
+            <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
           </systemPropertyVariables>
         </configuration>
         <executions>

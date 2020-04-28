@@ -29,17 +29,17 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 public class InfinispanServerTestResource implements QuarkusTestResourceLifecycleManager {
 
-    private static final String INFINISPAN_VERSION = System.getProperty("infinispan.version");
+    private static final String INFINISPAN_IMAGE = System.getProperty("container.image.infinispan");
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanServerTestResource.class);
     private GenericContainer infinispan;
 
     @Override
     public Map<String, String> start() {
-        if (INFINISPAN_VERSION == null) {
-            throw new RuntimeException("Please define a valid Infinispan image version in system property infinispan.version");
+        if (INFINISPAN_IMAGE == null) {
+            throw new RuntimeException("Please define a valid Infinispan image in system property container.image.infinispan");
         }
-        LOGGER.info("Using Infinispan image version: {}", INFINISPAN_VERSION);
-        infinispan = new FixedHostPortGenericContainer("quay.io/infinispan/server:" + INFINISPAN_VERSION)
+        LOGGER.info("Using Infinispan image: {}", INFINISPAN_IMAGE);
+        infinispan = new FixedHostPortGenericContainer(INFINISPAN_IMAGE)
                 .withFixedExposedPort(11232, 11222)
                 .withEnv("USER", "admin")
                 .withEnv("PASS", "admin")
