@@ -27,7 +27,7 @@ public interface ReactiveJobRepository {
 
     CompletionStage<ScheduledJob> save(ScheduledJob job);
 
-    CompletionStage<ScheduledJob> merge(ScheduledJob job);
+    CompletionStage<ScheduledJob> merge(String id, ScheduledJob job);
 
     CompletionStage<ScheduledJob> get(String id);
 

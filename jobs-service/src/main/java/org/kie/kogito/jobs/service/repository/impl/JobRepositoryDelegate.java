@@ -96,7 +96,7 @@ public class JobRepositoryDelegate implements ReactiveJobRepository {
     }
 
     @Override
-    public CompletionStage<ScheduledJob> merge(ScheduledJob job) {
-        return delegate.merge(job);
+    public CompletionStage<ScheduledJob> merge(String id, ScheduledJob job) {
+        return delegate.merge(id, job);
     }
 }

@@ -173,7 +173,7 @@ public abstract class BaseJobRepositoryTest {
                              .build())
                 .build();
 
-        ScheduledJob merged = tested().merge(toMerge).toCompletableFuture().get();
+        ScheduledJob merged = tested().merge(id, toMerge).toCompletableFuture().get();
         assertThat(merged.getCallbackEndpoint()).isEqualTo(newCallbackEndpoint);
         assertThat(merged.getId()).isEqualTo(job.getId());
         assertThat(merged.getExpirationTime()).isEqualTo(job.getExpirationTime());

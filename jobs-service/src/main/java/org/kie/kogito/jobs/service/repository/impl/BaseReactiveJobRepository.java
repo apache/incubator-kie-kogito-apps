@@ -24,6 +24,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
 import io.vertx.core.Vertx;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
@@ -70,17 +71,21 @@ public abstract class BaseReactiveJobRepository implements ReactiveJobRepository
     }
 
     @Override
-    public CompletionStage<ScheduledJob> merge(ScheduledJob job) {
-        return get(job.getId())
-                .thenApply(Optional::ofNullable)
-                .thenApply(current -> current
-                        .map(j -> ScheduledJob
-                                .builder()
-                                .of(j)
-                                .merge(job)
-                                .build()))
-                .thenCompose(j -> j
-                        .map(this::save)
-                        .orElse(CompletableFuture.completedFuture(null)));
+    public CompletionStage<ScheduledJob> merge(String id, ScheduledJob job) {
+        return Optional.ofNullable(id)
+                .filter(StringUtils::isNotBlank)
+                .filter(s -> StringUtils.isBlank(job.getId()) || s.equals(job.getId()))
+                .map(s -> get(s)
+                        .thenApply(Optional::ofNullable)
+                        .thenApply(current -> current
+                                .map(j -> ScheduledJob
+                                        .builder()
+                                        .of(j)
+                                        .merge(job)
+                                        .build()))
+                        .thenCompose(j -> j
+                                .map(this::save)
+                                .orElse(CompletableFuture.completedFuture(null))))
+                .orElseThrow(() -> new IllegalArgumentException("Id is empty or not equals to Job.id : " + id));
     }
 }

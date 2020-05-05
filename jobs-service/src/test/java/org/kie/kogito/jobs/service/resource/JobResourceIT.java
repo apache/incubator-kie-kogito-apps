@@ -151,7 +151,7 @@ public class JobResourceIT {
     }
 
     @Test
-    @Disabled // see https://issues.redhat.com/browse/KOGITO-1941
+    @Disabled("see https://issues.redhat.com/browse/KOGITO-1941")
     void cancelRunningPeriodicJobTest() throws Exception {
         final String id = UUID.randomUUID().toString();
         int timeMillis = 1000;
@@ -241,7 +241,7 @@ public class JobResourceIT {
         create(jobToJson(job));
 
         final String newCallbackEndpoint = "http://localhost/newcallback";
-        final Job toPatch = JobBuilder.builder().id(id).callbackEndpoint(newCallbackEndpoint).build();
+        final Job toPatch = JobBuilder.builder().callbackEndpoint(newCallbackEndpoint).build();
 
         final ScheduledJob scheduledJob = given()
                 .pathParam("id", id)
@@ -275,10 +275,22 @@ public class JobResourceIT {
         create(jobToJson(job));
 
         final String newCallbackEndpoint = "http://localhost/newcallback";
-        final Job toPatch = JobBuilder.builder().id(id).callbackEndpoint(newCallbackEndpoint).build();
+        Job toPatch = JobBuilder.builder().callbackEndpoint(newCallbackEndpoint).build();
 
+        //not found id on path
         given()
                 .pathParam("id", "invalid")
+                .contentType(ContentType.JSON)
+                .body(jobToJson(toPatch))
+                .when()
+                .patch(JobResource.JOBS_PATH + "/{id}")
+                .then()
+                .statusCode(404);
+
+        //different id on the job object from path id
+        toPatch = JobBuilder.builder().id("differentId").callbackEndpoint(newCallbackEndpoint).build();
+        given()
+                .pathParam("id", id)
                 .contentType(ContentType.JSON)
                 .body(jobToJson(toPatch))
                 .when()
