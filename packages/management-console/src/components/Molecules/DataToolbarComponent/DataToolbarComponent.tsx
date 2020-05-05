@@ -41,8 +41,8 @@ interface IOwnProps {
   pageSize: number;
   setSearchWord: (searchWord: string) => void;
   searchWord: string;
-  isAllChecked: boolean;
-  setIsAllChecked: (isAllChecked: boolean) => void;
+  isAllChecked: boolean | null;
+  setIsAllChecked: (isAllChecked: boolean | null) => void;
   setSelectedNumber: (selectedNumber: number) => void;
   selectedNumber: number;
 }
@@ -218,6 +218,7 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
       setInitData(copyOfInitData);
     } else if (selection === 'parent') {
       let parentSelectedNumber = 0;
+      let totalSelectedNumber = 0;
       setIsAllChecked(true);
       const copyOfInitData = { ...initData };
       let copyOfAbortedObj = { ...abortedObj };
@@ -230,15 +231,20 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
           instance.isChecked = true;
           tempObj[instance.id] = instance;
           parentSelectedNumber += 1;
+          totalSelectedNumber += 1;
         }
         if (instance.childDataList !== undefined && instance.isOpen) {
           instance.childDataList.map(child => {
             delete copyOfAbortedObj[child.id];
             child.isChecked = false;
+            totalSelectedNumber += 1;
           });
         }
         copyOfAbortedObj = { ...copyOfAbortedObj, ...tempObj };
       });
+      if (parentSelectedNumber < totalSelectedNumber) {
+        setIsAllChecked(null);
+      }
       setSelectedNumber(parentSelectedNumber);
       setAbortedObj(copyOfAbortedObj);
       setInitData(copyOfInitData);

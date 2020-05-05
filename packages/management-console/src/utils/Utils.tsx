@@ -202,3 +202,42 @@ export const modalToggle = (
     return handleRetryModalToggle;
   }
 };
+
+export const lengthChecker = (copyOfData, setIsAllChecked) => {
+  let totalLength = 0;
+  let isCheckedLength = 0;
+  copyOfData.ProcessInstances.map(instance => {
+    if (
+      instance.addons.includes('process-management') &&
+      instance.serviceUrl !== null
+    ) {
+      totalLength += 1;
+      if (instance.isChecked) {
+        isCheckedLength += 1;
+      }
+    }
+
+    if (instance.childDataList !== undefined) {
+      instance.childDataList.map(child => {
+        if (
+          child.addons.includes('process-management') &&
+          instance.serviceUrl !== null
+        ) {
+          totalLength += 1;
+          if (child.isChecked) {
+            isCheckedLength += 1;
+          }
+        }
+      });
+    }
+  });
+  if (isCheckedLength === totalLength) {
+    setIsAllChecked(true);
+  } else if (isCheckedLength === 0) {
+    setIsAllChecked(false);
+  } else if (isCheckedLength < totalLength) {
+    setIsAllChecked(null);
+  } else {
+    setIsAllChecked(false);
+  }
+};

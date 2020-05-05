@@ -26,6 +26,7 @@ import {
 import axios from 'axios';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import ServerErrorsComponent from '../../Molecules/ServerErrorsComponent/ServerErrorsComponent';
+import { lengthChecker } from '../../../utils/Utils';
 
 const DataListContainer: React.FC<{}> = () => {
   const pSize = 10;
@@ -52,7 +53,7 @@ const DataListContainer: React.FC<{}> = () => {
   const [searchWord, setSearchWord] = useState<string>('');
   const [isFilterClicked, setIsFilterClicked] = useState<boolean>(false);
   const [selectedNumber, setSelectedNumber] = useState<number>(0);
-  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [isAllChecked, setIsAllChecked] = useState<boolean | null>(false);
   const [
     getProcessInstances,
     { loading, data, error }
@@ -151,6 +152,7 @@ const DataListContainer: React.FC<{}> = () => {
       } else {
         setInitData(data);
       }
+      lengthChecker(initData, setIsAllChecked);
     }
   }, [data]);
 
@@ -180,6 +182,7 @@ const DataListContainer: React.FC<{}> = () => {
       } else {
         setInitData(getProcessInstancesWithBK.data);
       }
+      lengthChecker(initData, setIsAllChecked);
     }
   }, [getProcessInstancesWithBK.data]);
 

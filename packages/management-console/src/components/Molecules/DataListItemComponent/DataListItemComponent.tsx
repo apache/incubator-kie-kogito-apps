@@ -35,7 +35,8 @@ import {
   handleRetry,
   handleAbort,
   isModalOpen,
-  modalToggle
+  modalToggle,
+  lengthChecker
 } from '../../../utils/Utils';
 import EndpointLink from '../EndpointLink/EndpointLink';
 interface IOwnProps {
@@ -121,7 +122,6 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
           ]
         : [...expanded, _id];
     setexpanded(newExpanded);
-
     if (!isLoaded) {
       getChildInstances({
         variables: {
@@ -129,6 +129,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
         }
       });
     }
+    lengthChecker(initData, setIsAllChecked);
   };
 
   const onCheckBoxClick = () => {
@@ -170,44 +171,11 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
         });
       }
     });
-    lengthChecker(copyOfInitData);
+    lengthChecker(copyOfInitData, setIsAllChecked);
     setInitData(copyOfInitData);
     setAbortedObj(copyOfAbortedObject);
   };
-  const lengthChecker = copyOfData => {
-    let totalLength = 0;
-    let isCheckedLength = 0;
-    copyOfData.ProcessInstances.map(instance => {
-      if (
-        instance.addons.includes('process-management') &&
-        instance.serviceUrl !== null
-      ) {
-        totalLength += 1;
-        if (instance.isChecked) {
-          isCheckedLength += 1;
-        }
-      }
 
-      if (instance.childDataList !== undefined) {
-        instance.childDataList.map(child => {
-          if (
-            child.addons.includes('process-management') &&
-            instance.serviceUrl !== null
-          ) {
-            totalLength += 1;
-            if (child.isChecked) {
-              isCheckedLength += 1;
-            }
-          }
-        });
-      }
-    });
-    if (isCheckedLength === totalLength) {
-      setIsAllChecked(true);
-    } else {
-      setIsAllChecked(false);
-    }
-  };
   useEffect(() => {
     if (data !== undefined && !loading && !loadingInitData) {
       data.ProcessInstances.map((instance: any) => {
@@ -220,6 +188,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
         }
       });
       setInitData(copyOfInitData);
+      lengthChecker(initData, setIsAllChecked);
       setisLoaded(true);
     }
   }, [data]);
