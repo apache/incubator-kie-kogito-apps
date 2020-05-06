@@ -71,21 +71,23 @@ public abstract class BaseReactiveJobRepository implements ReactiveJobRepository
     }
 
     @Override
-    public CompletionStage<ScheduledJob> merge(String id, ScheduledJob job) {
+    public CompletionStage<ScheduledJob> merge(String id, ScheduledJob jobToMerge) {
         return Optional.ofNullable(id)
+                //do validations
                 .filter(StringUtils::isNotBlank)
-                .filter(s -> StringUtils.isBlank(job.getId()) || s.equals(job.getId()))
-                .map(s -> get(s)
+                .filter(s -> StringUtils.isBlank(jobToMerge.getId()) || s.equals(jobToMerge.getId()))
+                //perform merge
+                .map(jobId -> this.get(jobId)
                         .thenApply(Optional::ofNullable)
-                        .thenApply(current -> current
-                                .map(j -> ScheduledJob
-                                        .builder()
-                                        .of(j)
-                                        .merge(job)
-                                        .build()))
-                        .thenCompose(j -> j
-                                .map(this::save)
-                                .orElse(CompletableFuture.completedFuture(null))))
+                        .thenApply(j -> j.map(currentJob -> doMerge(jobToMerge, currentJob)))
+                        .thenCompose(j -> j.map(this::save).orElse(CompletableFuture.completedFuture(null))))//save it
                 .orElseThrow(() -> new IllegalArgumentException("Id is empty or not equals to Job.id : " + id));
+    }
+
+    private ScheduledJob doMerge(ScheduledJob toMerge, ScheduledJob current) {
+        return ScheduledJob.builder()
+                .of(current)
+                .merge(toMerge)
+                .build();
     }
 }
