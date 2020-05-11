@@ -36,6 +36,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
+import org.kie.kogito.jobs.service.model.ScheduledJob.ScheduledJobBuilder;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.VertxJobScheduler;
 import org.slf4j.Logger;
@@ -72,7 +73,7 @@ public class JobResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public CompletionStage<ScheduledJob> patch(@PathParam("id") String id, @RequestBody Job job) {
         LOGGER.debug("REST patch update {}", job);
-        return jobRepository.merge(id, ScheduledJob.builder().job(job).build())
+        return jobRepository.merge(id, ScheduledJobBuilder.from(job))
                 .thenApply(result -> Optional
                         .ofNullable(result)
                         .orElseThrow(() -> new NotFoundException("Job not found " + job)));

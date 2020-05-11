@@ -218,6 +218,10 @@ public class ScheduledJob extends Job {
             return this;
         }
 
+        public static ScheduledJob from(Job job) {
+            return builder().job(job).build();
+        }
+
         public ScheduledJob build() {
             ScheduledJob instance = new ScheduledJob(Optional.ofNullable(job), Optional.ofNullable(expirationTime));
             instance.scheduledId = scheduledId;
