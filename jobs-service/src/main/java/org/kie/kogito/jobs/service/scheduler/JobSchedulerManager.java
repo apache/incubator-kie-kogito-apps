@@ -99,7 +99,8 @@ public class JobSchedulerManager {
     }
 
     private PublisherBuilder<ScheduledJob> loadJobsInCurrentChunk() {
-        return repository.findByStatusBetweenDatesOrderByPriority(DateUtil.now(), DateUtil.now().plusMinutes(schedulerChunkInMinutes),
+        return repository.findByStatusBetweenDatesOrderByPriority(DateUtil.now().minusDays(1),
+                                                                  DateUtil.now().plusMinutes(schedulerChunkInMinutes),
                                                                   JobStatus.SCHEDULED, JobStatus.RETRY);
     }
 }
