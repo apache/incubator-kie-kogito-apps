@@ -29,6 +29,7 @@ import { ProcessInstanceState } from '../../../graphql/types';
 import './DomainExplorerTable.css';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
+import EndpointLink from '../../Molecules/EndpointLink/EndpointLink';
 
 const DomainExplorerTable = ({
   columnFilters,
@@ -152,7 +153,8 @@ const DomainExplorerTable = ({
                 const tempObj = {
                   id: data.id,
                   processName: data.processName,
-                  businessKey: data.businessKey
+                  businessKey: data.businessKey,
+                  serviceUrl: data.serviceUrl
                 };
                 const ele = {
                   title: (
@@ -167,6 +169,12 @@ const DomainExplorerTable = ({
                           <ProcessDescriptor processInstanceData={tempObj} />
                         </strong>
                       </Link>
+                      <div>
+                        <EndpointLink
+                          serviceUrl={tempObj.serviceUrl}
+                          isLinkShown={false}
+                        />
+                      </div>
                     </>
                   )
                 };

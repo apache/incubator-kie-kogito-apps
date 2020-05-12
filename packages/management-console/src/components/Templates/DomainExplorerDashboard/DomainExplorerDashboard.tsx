@@ -85,7 +85,8 @@ const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchPro
             'state',
             'start',
             'lastUpdate',
-            'businessKey'
+            'businessKey',
+            'serviceUrl'
           ]
         }
       ]
