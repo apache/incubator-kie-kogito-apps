@@ -35,7 +35,8 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
   setCheckedArray,
   refetch,
   setSearchWord,
-  filters
+  filters,
+  ...props
 }) => {
   const resetClick = () => {
     setSearchWord('');
@@ -45,7 +46,7 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
   };
   return (
     <Bullseye>
-      <EmptyState variant={EmptyStateVariant.full}>
+      <EmptyState variant={EmptyStateVariant.full} data-ouia-component-type="empty-state" {...props}>
         {iconType === 'searchIcon' && (
           <EmptyStateIcon icon={SearchIcon} size="sm" />
         )}

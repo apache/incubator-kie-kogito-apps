@@ -261,7 +261,7 @@ const DomainExplorerTable = ({
             props: { colSpan: 8 },
             title: (
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain explorer" />
+                <SpinnerComponent spinnerText="Loading domain explorer" data-ouia-component-id="loading-domain-explorer" />
               </Bullseye>
             )
           }

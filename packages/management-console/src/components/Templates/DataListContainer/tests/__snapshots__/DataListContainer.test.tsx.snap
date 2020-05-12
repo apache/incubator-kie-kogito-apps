@@ -54,6 +54,7 @@ exports[`DataListContainer component tests Snapshot tests 1`] = `
                 "ACTIVE",
               ]
             }
+            data-ouia-component-id="toolbar-process-instances"
             filterClick={[Function]}
             filters={
               Object {
@@ -88,6 +89,7 @@ exports[`DataListContainer component tests Snapshot tests 1`] = `
                 "ACTIVE",
               ]
             }
+            data-ouia-component-id="list-process-instances"
             filters={
               Object {
                 "businessKey": Array [],

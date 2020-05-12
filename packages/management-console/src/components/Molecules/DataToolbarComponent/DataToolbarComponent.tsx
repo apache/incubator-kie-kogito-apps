@@ -67,7 +67,8 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
   setIsAllChecked,
   setAbortedObj,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ...params
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isFilterClicked, setIsFilterClicked] = useState<boolean>(false);
@@ -353,17 +354,17 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
   ];
 
   const statusMenuItems = [
-    <SelectOption key="ACTIVE" value="ACTIVE" />,
-    <SelectOption key="COMPLETED" value="COMPLETED" />,
-    <SelectOption key="ERROR" value="ERROR" />,
-    <SelectOption key="ABORTED" value="ABORTED" />,
-    <SelectOption key="SUSPENDED" value="SUSPENDED" />
+    <SelectOption key="ACTIVE" value="ACTIVE" data-ouia-component-type="select-option" data-ouia-component-id="active"/>,
+    <SelectOption key="COMPLETED" value="COMPLETED" data-ouia-component-type="select-option" data-ouia-component-id="completed"/>,
+    <SelectOption key="ERROR" value="ERROR" data-ouia-component-type="select-option" data-ouia-component-id="error" />,
+    <SelectOption key="ABORTED" value="ABORTED" data-ouia-component-type="select-option" data-ouia-component-id="aborted"/>,
+    <SelectOption key="SUSPENDED" value="SUSPENDED" data-ouia-component-type="select-option" data-ouia-component-id="suspended"/>
   ];
 
   const toggleGroupItems = (
     <React.Fragment>
-      <DataToolbarGroup variant="filter-group">
-        <DataToolbarItem variant="bulk-select">
+      <DataToolbarGroup variant="filter-group" data-ouia-component-type="data-toolbar-group">
+        <DataToolbarItem variant="bulk-select" data-ouia-component-type="data-toolbar-item">
           <Dropdown
             position={DropdownPosition.left}
             toggle={
@@ -378,10 +379,11 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
                     onChange={() =>
                       handleCheckboxSelectClick('parent&child', true)
                     }
+                    data-ouia-component-id="checkbox-bulk-select"
                   />
                 ]}
               >
-                {selectedNumber === 0 ? '' : selectedNumber + ' selected'}
+                <span data-ouia-component-id="count-selected">{selectedNumber === 0 ? '' : selectedNumber + ' selected'}</span>
               </DropdownToggle>
             }
             dropdownItems={checkboxItems}
@@ -394,6 +396,8 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
           deleteChip={onDelete}
           className="kogito-management-console__state-dropdown-list pf-u-mr-sm"
           categoryName="Status"
+          data-ouia-component-type="data-toolbar-filter"
+          data-ouia-component-id="filter-process-status"
         >
           <Select
             variant={SelectVariant.checkbox}
@@ -411,6 +415,8 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
           chips={filters.businessKey}
           deleteChip={onDelete}
           categoryName="Business key"
+          data-ouia-component-type="data-toolbar-filter"
+          data-ouia-component-id="filter-business-key"
         >
           <InputGroup>
             <TextInput
@@ -426,8 +432,8 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
             />
           </InputGroup>
         </DataToolbarFilter>
-        <DataToolbarItem>
-          <Button variant="primary" onClick={onFilterClick}>
+        <DataToolbarItem data-ouia-component-type="data-toolbar-item">
+          <Button variant="primary" onClick={onFilterClick} data-ouia-component-id="button-apply-filter">
             Apply filter
           </Button>
         </DataToolbarItem>
@@ -437,13 +443,13 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
 
   const buttonItems = (
     <React.Fragment>
-      <DataToolbarItem>
+      <DataToolbarItem data-ouia-component-type="data-toolbar-item">
         {Object.keys(abortedObj).length !== 0 ? (
-          <Button variant="secondary" onClick={handleAbortAll}>
+          <Button variant="secondary" onClick={handleAbortAll} data-ouia-component-id="button-abort-selected">
             Abort selected
           </Button>
         ) : (
-          <Button variant="secondary" isDisabled>
+          <Button variant="secondary" isDisabled data-ouia-component-id="button-abort-selected">
             Abort selected
           </Button>
         )}
@@ -453,7 +459,7 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
 
   const toolbarItems = (
     <React.Fragment>
-      <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
+      <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl" data-ouia-component-type="toggle-filter">
         {toggleGroupItems}
       </DataToolbarToggleGroup>
       <DataToolbarGroup variant="icon-button-group">
@@ -462,6 +468,7 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
             variant="plain"
             onClick={onRefreshClick}
             aria-label="Refresh list"
+            data-ouia-component-id="button-refresh"
           >
             <SyncIcon />
           </Button>
@@ -479,6 +486,8 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
       collapseListedFiltersBreakpoint="xl"
       clearAllFilters={() => clearAll()}
       clearFiltersButtonText="Reset to default"
+      data-ouia-component-type="data-toolbar"
+      {...params}
     >
       <DataToolbarContent>{toolbarItems}</DataToolbarContent>
     </DataToolbar>

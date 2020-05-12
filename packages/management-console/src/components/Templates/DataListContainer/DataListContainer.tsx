@@ -342,6 +342,7 @@ const DataListContainer: React.FC<{}> = () => {
                     setIsAllChecked={setIsAllChecked}
                     selectedNumber={selectedNumber}
                     setSelectedNumber={setSelectedNumber}
+                    data-ouia-component-id="toolbar-process-instances"
                   />
                 </>
               )}
@@ -362,6 +363,7 @@ const DataListContainer: React.FC<{}> = () => {
                   setIsAllChecked={setIsAllChecked}
                   setSelectedNumber={setSelectedNumber}
                   selectedNumber={selectedNumber}
+                  data-ouia-component-id="list-process-instances"
                 />
               ) : (
                 <EmptyStateComponent
@@ -373,6 +375,7 @@ const DataListContainer: React.FC<{}> = () => {
                   setCheckedArray={setCheckedArray}
                   setSearchWord={setSearchWord}
                   filters={filters}
+                  data-ouia-component-id="empty-state-no-filters-selected"
                 />
               )}
               {!loading &&

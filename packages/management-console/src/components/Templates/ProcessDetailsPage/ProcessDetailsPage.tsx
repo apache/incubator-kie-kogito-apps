@@ -267,7 +267,7 @@ const ProcessDetailsPage = props => {
             ) : (
               <Card>
                 <Bullseye>
-                  <SpinnerComponent spinnerText="Loading process details..." />
+                    <SpinnerComponent spinnerText="Loading process details..." data-ouia-component-id={"loading-process-details-" + id} />
                 </Bullseye>
               </Card>
             )}

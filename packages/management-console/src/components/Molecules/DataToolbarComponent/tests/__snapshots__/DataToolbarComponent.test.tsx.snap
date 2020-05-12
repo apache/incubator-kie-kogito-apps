@@ -6,7 +6,11 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
   clearAllFilters={[Function]}
   clearFiltersButtonText="Reset to default"
   collapseListedFiltersBreakpoint="xl"
+  data-ouia-component-type="data-toolbar"
+  handleCheckAll={[MockFunction]}
   id="data-toolbar-with-filter"
+  setFilteredData={[MockFunction]}
+  setIsClearAllClicked={[MockFunction]}
 >
   <DataToolbarContent
     breakpointMods={Array []}
@@ -16,6 +20,7 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
     <DataToolbarToggleGroup
       breakpoint="xl"
       breakpointMods={Array []}
+      data-ouia-component-type="toggle-filter"
       toggleIcon={
         <FilterIcon
           color="currentColor"
@@ -26,9 +31,11 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
       }
     >
       <ForwardRef
+        data-ouia-component-type="data-toolbar-group"
         variant="filter-group"
       >
         <DataToolbarItem
+          data-ouia-component-type="data-toolbar-item"
           variant="bulk-select"
         >
           <Dropdown
@@ -61,6 +68,7 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
                     <DropdownToggleCheckbox
                       aria-label="Select all"
                       className=""
+                      data-ouia-component-id="checkbox-bulk-select"
                       id="select-all-checkbox"
                       isChecked={false}
                       isDisabled={false}
@@ -70,7 +78,11 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
                   ]
                 }
               >
-                
+                <span
+                  data-ouia-component-id="count-selected"
+                >
+                  
+                </span>
               </DropdownToggle>
             }
           />
@@ -79,6 +91,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
           categoryName="Status"
           chips={Array []}
           className="kogito-management-console__state-dropdown-list pf-u-mr-sm"
+          data-ouia-component-id="filter-process-status"
+          data-ouia-component-type="data-toolbar-filter"
           deleteChip={[Function]}
           showToolbarItem={true}
         >
@@ -102,6 +116,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
             <SelectOption
               className=""
               component="button"
+              data-ouia-component-id="active"
+              data-ouia-component-type="select-option"
               index={0}
               isChecked={false}
               isDisabled={false}
@@ -118,6 +134,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
             <SelectOption
               className=""
               component="button"
+              data-ouia-component-id="completed"
+              data-ouia-component-type="select-option"
               index={0}
               isChecked={false}
               isDisabled={false}
@@ -134,6 +152,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
             <SelectOption
               className=""
               component="button"
+              data-ouia-component-id="error"
+              data-ouia-component-type="select-option"
               index={0}
               isChecked={false}
               isDisabled={false}
@@ -150,6 +170,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
             <SelectOption
               className=""
               component="button"
+              data-ouia-component-id="aborted"
+              data-ouia-component-type="select-option"
               index={0}
               isChecked={false}
               isDisabled={false}
@@ -166,6 +188,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
             <SelectOption
               className=""
               component="button"
+              data-ouia-component-id="suspended"
+              data-ouia-component-type="select-option"
               index={0}
               isChecked={false}
               isDisabled={false}
@@ -184,6 +208,8 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
         <DataToolbarFilter
           categoryName="Business key"
           chips={Array []}
+          data-ouia-component-id="filter-business-key"
+          data-ouia-component-type="data-toolbar-filter"
           deleteChip={[Function]}
           showToolbarItem={true}
         >
@@ -201,8 +227,11 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
             />
           </InputGroup>
         </DataToolbarFilter>
-        <DataToolbarItem>
+        <DataToolbarItem
+          data-ouia-component-type="data-toolbar-item"
+        >
           <Component
+            data-ouia-component-id="button-apply-filter"
             onClick={[Function]}
             variant="primary"
           >
@@ -217,6 +246,7 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
       <DataToolbarItem>
         <Component
           aria-label="Refresh list"
+          data-ouia-component-id="button-refresh"
           onClick={[Function]}
           variant="plain"
         >
@@ -235,8 +265,11 @@ exports[`DataToolbar component tests Snapshot tests 1`] = `
     <ForwardRef
       className="pf-u-ml-md"
     >
-      <DataToolbarItem>
+      <DataToolbarItem
+        data-ouia-component-type="data-toolbar-item"
+      >
         <Component
+          data-ouia-component-id="button-abort-selected"
           onClick={[MockFunction]}
           variant="secondary"
         >

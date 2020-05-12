@@ -53,6 +53,7 @@ interface IOwnProps {
 }
 
 const DataListItemComponent: React.FC<IOwnProps> = ({
+  id,
   processInstanceData,
   checkedArray,
   initData,
@@ -62,7 +63,8 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
   setAbortedObj,
   setIsAllChecked,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ...props
 }) => {
   const [expanded, setexpanded] = useState([]);
   const [isOpen, setisOpen] = useState(false);
@@ -325,6 +327,8 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
       <DataListItem
         aria-labelledby={'kie-datalist-item-' + processInstanceData.id}
         isExpanded={expanded.includes('kie-datalist-toggle')}
+        data-ouia-component-type="data-list-item"
+        {...props}
       >
         <DataListItemRow>
           {processInstanceData.parentProcessInstanceId === null && (
@@ -486,6 +490,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
                         setIsAllChecked={setIsAllChecked}
                         selectedNumber={selectedNumber}
                         setSelectedNumber={setSelectedNumber}
+                        {...props}
                       />
                     );
                   });
@@ -494,7 +499,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
             })}
           {!isLoaded && !error && (
             <Bullseye>
-              <SpinnerComponent spinnerText="Loading process instances..." />
+              <SpinnerComponent spinnerText="Loading process instances..." data-ouia-component-id={"loading-subprocesses-" + processInstanceData.id}/>
             </Bullseye>
           )}
           {error && <ServerErrorsComponents message={error} />}

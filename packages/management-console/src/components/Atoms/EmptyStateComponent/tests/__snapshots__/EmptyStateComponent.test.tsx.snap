@@ -3,6 +3,7 @@
 exports[`Emptystate component tests snapshot testing 1`] = `
 <Bullseye>
   <EmptyState
+    data-ouia-component-type="empty-state"
     variant="full"
   >
     <EmptyStateIcon

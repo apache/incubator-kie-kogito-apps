@@ -51,7 +51,8 @@ const DataListComponent: React.FC<IOwnProps> = ({
   filters,
   setIsAllChecked,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ...params
 }) => {
   const { loading, error, data, networkStatus } = useGetProcessInstancesQuery({
     variables: {
@@ -84,7 +85,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   if (loading || isLoading) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
+        <SpinnerComponent spinnerText="Loading process instances..." data-ouia-component-id="empty-state-loading-process-instances" />
       </Bullseye>
     );
   }
@@ -92,7 +93,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   if (networkStatus === 4) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
+        <SpinnerComponent spinnerText="Loading process instances..." data-ouia-component-id="empty-state-loading-process-instances" />
       </Bullseye>
     );
   }
@@ -103,7 +104,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   }
 
   return (
-    <DataList aria-label="Process instance list">
+    <DataList aria-label="Process instance list" data-ouia-component-type="data-list" {...params} >
       {!loading &&
         initData !== undefined &&
         initData.ProcessInstances.map((item, index) => {
@@ -121,6 +122,8 @@ const DataListComponent: React.FC<IOwnProps> = ({
               setIsAllChecked={setIsAllChecked}
               selectedNumber={selectedNumber}
               setSelectedNumber={setSelectedNumber}
+              data-ouia-component-type="data-list-item"
+              data-ouia-component-id={"process-list-item-" + item.id}
             />
           );
         })}

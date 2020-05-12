@@ -139,7 +139,7 @@ const DomainExplorerDashboard = props => {
         collapseListedFiltersBreakpoint="md"
       >
         <DataToolbarContent>
-          <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
+          <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md" data-ouia-component-type="toggle-filter">
             <DataToolbarGroup>
               {!getPicker.loading && (
                 <DomainExplorerColumnPicker
@@ -239,7 +239,7 @@ const DomainExplorerDashboard = props => {
           ) : (
             <Card>
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain data..." />
+                <SpinnerComponent spinnerText="Loading domain data..." data-ouia-component-id="loading-domain-data" />
               </Bullseye>
             </Card>
           )}

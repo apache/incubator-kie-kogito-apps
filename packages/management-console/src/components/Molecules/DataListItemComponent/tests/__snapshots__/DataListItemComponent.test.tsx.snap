@@ -80,6 +80,7 @@ exports[`DataListItem component tests Snapshot tests 1`] = `
   />
   <DataListItem
     aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+    data-ouia-component-type="data-list-item"
     isExpanded={false}
   >
     <DataListItemRow>
@@ -318,6 +319,7 @@ exports[`DataListItem component tests Snapshot tests 1`] = `
     >
       <Bullseye>
         <EmptyStateSpinner
+          data-ouia-component-id="loading-subprocesses-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
           spinnerText="Loading process instances..."
         />
       </Bullseye>

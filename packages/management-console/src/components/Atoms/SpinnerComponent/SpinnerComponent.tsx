@@ -10,9 +10,9 @@ interface IOwnProps {
   spinnerText: string;
 }
 
-const EmptyStateSpinner: React.FC<IOwnProps> = ({ spinnerText }) => {
+const EmptyStateSpinner: React.FC<IOwnProps> = ({ spinnerText, ...props}) => {
   return (
-    <EmptyState>
+    <EmptyState data-ouia-component-type="empty-state" {...props}>
       <EmptyStateIcon variant="container" component={Spinner} />
       <Title size="lg">{spinnerText}</Title>
     </EmptyState>
