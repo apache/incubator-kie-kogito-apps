@@ -13,7 +13,9 @@ import {
   Dropdown,
   KebabToggle,
   DropdownItem,
-  Tooltip
+  Tooltip,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import {
   UserIcon,
@@ -24,7 +26,8 @@ import {
 import React, { useState } from 'react';
 import './ProcessDetailsTimeline.css';
 import { ProcessInstance } from '../../../graphql/types';
-import { handleRetry, handleSkip } from '../../../utils/Utils';
+import { handleRetry, handleSkip } from '../../../utils/Utils'
+import { componentOuiaProps } from '@kogito-apps/common';
 
 export interface IOwnProps {
   data: Pick<
@@ -38,13 +41,15 @@ export interface IOwnProps {
   handleRetryModalToggle: () => void;
 }
 
-const ProcessDetailsTimeline: React.FC<IOwnProps> = ({
+const ProcessDetailsTimeline: React.FC<IOwnProps & InjectedOuiaProps> = ({
   data,
   setModalTitle,
   setModalContent,
   setTitleType,
   handleRetryModalToggle,
-  handleSkipModalToggle
+  handleSkipModalToggle,
+  ouiaContext,
+  ouiaId
 }) => {
   const [isKebabOpen, setIsKebabOpen] = useState(false);
   const dropdownItems = [
@@ -88,7 +93,8 @@ const ProcessDetailsTimeline: React.FC<IOwnProps> = ({
     setIsKebabOpen(!isKebabOpen);
   };
   return (
-    <Card>
+    <Card
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ProcessDetailsTimeline', true)}>
       <CardHeader>
         <Title headingLevel="h3" size="xl">
           Timeline
@@ -198,4 +204,5 @@ const ProcessDetailsTimeline: React.FC<IOwnProps> = ({
   );
 };
 
-export default ProcessDetailsTimeline;
+const ProcessDetailsTimelineWithContext = withOuiaContext(ProcessDetailsTimeline);
+export default ProcessDetailsTimelineWithContext;

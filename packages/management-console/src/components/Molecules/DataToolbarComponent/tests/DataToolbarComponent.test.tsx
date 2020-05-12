@@ -1,7 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import DataToolbarComponent from '../DataToolbarComponent';
 import { ProcessInstanceState } from '../../../../graphql/types';
+import { getWrapper } from '@kogito-apps/common';
 
 const initData = {
   ProcessInstances: [
@@ -143,7 +143,7 @@ const props = {
 
 describe('DataToolbar component tests', () => {
   it('Snapshot tests', () => {
-    const wrapper = shallow(<DataToolbarComponent {...props} />);
+    const wrapper = getWrapper(<DataToolbarComponent {...props} />, 'DataToolbarComponent');
     expect(wrapper).toMatchSnapshot();
   });
 });

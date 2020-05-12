@@ -1,65 +1,51 @@
 import React from 'react';
-import { Tooltip } from '@patternfly/react-core';
+import { Tooltip, InjectedOuiaProps, withOuiaContext } from '@patternfly/react-core';
 import { ProcessInstance } from '../../../graphql/types';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   processInstanceData: ProcessInstance;
   component: any;
 }
 
-const DisablePopup: React.FC<IOwnProps> = ({
+const DisablePopup: React.FC<IOwnProps & InjectedOuiaProps> = ({
   processInstanceData,
-  component
+  component,
+  ouiaContext,
+  ouiaId
 }) => {
+  let content = ''
+  const distance = -15
   if (
     !processInstanceData.addons.includes('process-management') &&
     processInstanceData.serviceUrl === null
   ) {
-    return (
-      <Tooltip
-        content={
-          'Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up.'
-        }
-        distance={-15}
-      >
-        {component}
-      </Tooltip>
-    );
+  
+    content = 'Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up.'
+  
   } else if (
     processInstanceData.serviceUrl === null &&
     processInstanceData.addons.includes('process-management')
   ) {
-    return (
-      <Tooltip
-        content={
-          'This Kogito runtime is missing the kogito.service.url property. Contact your administrator to set up.'
-        }
-        distance={-15}
-      >
-        {component}
-      </Tooltip>
-    );
+    
+    content = 'This Kogito runtime is missing the kogito.service.url property. Contact your administrator to set up.'
+  
   } else if (
     !processInstanceData.addons.includes('process-management') &&
     processInstanceData.serviceUrl !== null
   ) {
-    return (
-      <Tooltip
-        content={
-          'Management add-on capability not enabled. Contact your administrator to set up'
-        }
-        distance={-15}
-      >
-        {component}
-      </Tooltip>
-    );
-  } else {
-    return (
-      <Tooltip content={''} distance={-15}>
-        {component}
-      </Tooltip>
-    );
+    
+    content = 'Management add-on capability not enabled. Contact your administrator to set up'
   }
+  return (
+    <Tooltip
+      {...componentOuiaProps(ouiaContext, ouiaId, 'DisabledPopup', true)} content={content} distance={distance}
+    >
+      {component}
+    </Tooltip>
+  );
+  
 };
 
-export default DisablePopup;
+const DisablePopupWithContext = withOuiaContext(DisablePopup);
+export default DisablePopupWithContext;

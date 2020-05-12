@@ -1,7 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import ProcessDetails from '../ProcessDetails';
 import { ProcessInstanceState } from '../../../../graphql/types';
+import { getWrapper } from '@kogito-apps/common';
 
 const props = {
   data: {
@@ -68,13 +68,16 @@ const props2 = {
   childResult: []
 };
 
+jest.mock('@patternfly/react-icons')
+global.Date.now = jest.fn(() => 1590000000000);
+
 describe('Process Details component', () => {
   it('Snapshot tests', () => {
-    const wrapper = shallow(<ProcessDetails {...props} />);
+    const wrapper = getWrapper(<ProcessDetails {...props} />, 'ProcessDetails');
     expect(wrapper).toMatchSnapshot();
   });
   it('Sample test case', () => {
-    const wrapper = shallow(<ProcessDetails {...props2} />);
+    const wrapper = getWrapper(<ProcessDetails {...props2} />, 'ProcessDetails');
     expect(
       wrapper
         .find('Text')

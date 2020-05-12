@@ -13,10 +13,15 @@ import {
   OverflowMenu,
   OverflowMenuContent,
   OverflowMenuGroup,
-  InjectedOuiaProps,
-  withOuiaContext
+  withOuiaContext,
+  InjectedOuiaProps
 } from '@patternfly/react-core';
-import { ServerErrors, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import {
+  ServerErrors,
+  ouiaPageTypeAndObjectId,
+  componentOuiaProps,
+  attributeOuiaId
+} from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
@@ -36,7 +41,7 @@ import {
   setTitle,
   isModalOpen,
   modalToggle
-} from '../../../utils/Utils';
+} from '../../../utils/Utils'
 
 interface MatchProps {
   instanceID: string
@@ -44,6 +49,7 @@ interface MatchProps {
 
 const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps> = ({
   ouiaContext,
+  ouiaId,
   ...props
 }) => {
   const id = props.match.params.instanceID;
@@ -225,7 +231,9 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
               ''
             )}
           </PageSection>
-          <PageSection>
+          <PageSection
+            {...componentOuiaProps(ouiaContext, ouiaId, 'ProcessDetailsPage', !loading)}
+          >
             {!loading ? (
               <Grid gutter="md" span={12} lg={6} xl={4}>
                 <GridItem span={12}>
@@ -278,7 +286,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
             ) : (
               <Card>
                 <Bullseye>
-                  <SpinnerComponent spinnerText="Loading process details..." />
+                    <SpinnerComponent spinnerText="Loading process details..." {...attributeOuiaId(ouiaContext, "loading-process-details-" + id)} />
                 </Bullseye>
               </Card>
             )}

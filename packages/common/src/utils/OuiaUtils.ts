@@ -1,16 +1,7 @@
 import { ReactElement } from 'react';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
+import wait from 'waait';
 import { act } from 'react-dom/test-utils';
-
-/** 
- * ugly workaround for the mount function in getWrapper to wait until component does all the hooks and effects
- */
-const waitForComponentToPaint = async (wrapper: any) => {
-  await act(async () => {
-    await new Promise(resolve => setTimeout(resolve, 0));
-    wrapper.update();
-  });
-};
 
 /**
  * Wrapper used in snapshot testing to get rid of unnecessary wrappers of components.
@@ -18,10 +9,24 @@ const waitForComponentToPaint = async (wrapper: any) => {
  * @param component The actual component with wrappers, e.g. <Router><MyGreatComponent /></Router>
  * @param name name of the component to be extracted as string, e.g. 'MyGreatComponent'
  */
-export const getWrapper = (component: ReactElement, name: string) => {
-  const wrapper = mount(component)
-  waitForComponentToPaint(wrapper)
-  return wrapper.find(name)
+export const getWrapperAsync = async (component: ReactElement, name: string): Promise<ReactWrapper> => {
+  const wrapper = mount(component);
+  await act(async () => {
+    await wait(0)
+  })
+  const promise: Promise<ReactWrapper> = new Promise(resolve => { resolve(wrapper.update().find(name)) })
+  return promise
+}
+
+/**
+ * Wrapper used in snapshot testing to get rid of unnecessary wrappers of components.
+ * Not only OUIA wrappers, but also Routers, MockedProvider,...
+ * @param component The actual component with wrappers, e.g. <Router><MyGreatComponent /></Router>
+ * @param name name of the component to be extracted as string, e.g. 'MyGreatComponent'
+ */
+export const getWrapper = (component: ReactElement, name: string): ReactWrapper => {
+  const wrapper = mount(component);
+  return wrapper.update().find(name)
 }
 
 /**
@@ -55,4 +60,24 @@ export const ouiaPageTypeAndObjectId = (
  */
 export const ouiaAttribute = (ouiaContext, name: string, value: string) => {
   return (ouiaContext.isOuia && {[name]:value})
+}
+
+export const componentOuiaProps = (
+  ouiaContext,
+  ouiaId,
+  ouiaType,
+  isSafe?
+) => {
+  return ouiaContext.isOuia && {
+    'data-ouia-component-type': ouiaType,
+    'data-ouia-component-id': ouiaId || ouiaContext.ouiaId,
+    'data-ouia-safe': (isSafe)?true:false
+  }
+};
+
+export const attributeOuiaId = (
+  ouiaContext,
+  ouiaId:string
+) => {
+  return ouiaAttribute(ouiaContext, 'ouiaId', ouiaId)
 }

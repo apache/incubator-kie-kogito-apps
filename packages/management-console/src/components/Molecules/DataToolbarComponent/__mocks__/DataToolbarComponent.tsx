@@ -1,7 +1,7 @@
 import React from "react";
 
-const DataToolbarComponent = (): React.ReactElement => {
+const MockedDataToolbarComponent = (): React.ReactElement => {
   return <></>
 };
 
-export default DataToolbarComponent;
+export default MockedDataToolbarComponent;

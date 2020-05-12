@@ -1,5 +1,6 @@
 import Moment from 'react-moment';
 import React, { useState, useEffect } from 'react';
+
 import {
   DataListAction,
   DataListCell,
@@ -13,9 +14,15 @@ import {
   DropdownItem,
   DropdownPosition,
   Bullseye,
-  KebabToggle
+  KebabToggle,
+  withOuiaContext,
+  InjectedOuiaProps
 } from '@patternfly/react-core';
-import { ServerErrors } from '@kogito-apps/common';
+import {
+  ServerErrors,
+  componentOuiaProps,
+  attributeOuiaId
+} from '@kogito-apps/common';
 import { Link } from 'react-router-dom';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import {
@@ -36,7 +43,7 @@ import {
   handleAbort,
   isModalOpen,
   modalToggle
-} from '../../../utils/Utils';
+} from '../../../utils/Utils'
 import EndpointLink from '../EndpointLink/EndpointLink';
 interface IOwnProps {
   id: number;
@@ -52,7 +59,8 @@ interface IOwnProps {
   selectedNumber: number;
 }
 
-const DataListItemComponent: React.FC<IOwnProps> = ({
+const DataListItemComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  id,
   processInstanceData,
   checkedArray,
   initData,
@@ -62,7 +70,9 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
   setAbortedObj,
   setIsAllChecked,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ouiaContext,
+  ouiaId
 }) => {
   const [expanded, setexpanded] = useState([]);
   const [isOpen, setisOpen] = useState(false);
@@ -225,76 +235,62 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
   }, [data]);
 
   const dropDownList = () => {
+    const items = []
     if (
       processInstanceData.addons.includes('process-management') &&
       processInstanceData.serviceUrl !== null
     ) {
       if (processInstanceData.state === 'ERROR') {
-        return [
-          <DropdownItem
-            key={1}
-            onClick={() =>
-              handleRetry(
-                processInstanceData,
-                setModalTitle,
-                setTitleType,
-                setModalContent,
-                handleRetryModalToggle
-              )
-            }
-          >
-            Retry
-          </DropdownItem>,
-          <DropdownItem
-            key={2}
-            onClick={() =>
-              handleSkip(
-                processInstanceData,
-                setModalTitle,
-                setTitleType,
-                setModalContent,
-                handleSkipModalToggle
-              )
-            }
-          >
-            Skip
-          </DropdownItem>,
-          <DropdownItem
-            key={4}
-            onClick={() =>
-              handleAbort(
-                processInstanceData,
-                setModalTitle,
-                setTitleType,
-                setModalContent,
-                handleAbortModalToggle
-              )
-            }
-          >
-            Abort
-          </DropdownItem>
-        ];
-      } else {
-        return [
-          <DropdownItem
-            key={4}
-            onClick={() =>
-              handleAbort(
-                processInstanceData,
-                setModalTitle,
-                setTitleType,
-                setModalContent,
-                handleAbortModalToggle
-              )
-            }
-          >
-            Abort
-          </DropdownItem>
-        ];
+          items.push(
+            <DropdownItem
+              key={1}
+              onClick={() =>
+                handleRetry(
+                  processInstanceData,
+                  setModalTitle,
+                  setTitleType,
+                  setModalContent,
+                  handleRetryModalToggle
+                )
+              }
+            >
+              Retry
+            </DropdownItem>,
+            <DropdownItem
+              key={2}
+              onClick={() =>
+                handleSkip(
+                  processInstanceData,
+                  setModalTitle,
+                  setTitleType,
+                  setModalContent,
+                  handleSkipModalToggle
+                )
+              }
+            >
+              Skip
+            </DropdownItem>
+          )
       }
-    } else {
-      return [];
+
+      items.push(
+        <DropdownItem
+          key={4}
+          onClick={() =>
+            handleAbort(
+              processInstanceData,
+              setModalTitle,
+              setTitleType,
+              setModalContent,
+              handleAbortModalToggle
+            )
+          }
+        >
+          Abort
+        </DropdownItem>
+      )
     }
+    return items;
   };
 
   return (
@@ -310,6 +306,7 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
         }}
         completedMessageObj={{}}
         isAbortModalOpen={isAbortModalOpen}
+        {...attributeOuiaId(ouiaContext, "modal-process-bulk-abort")}
       />
       <ProcessBulkModalComponent
         isModalOpen={isModalOpen(modalTitle, isSkipModalOpen, isRetryModalOpen)}
@@ -321,10 +318,12 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
         checkedArray={checkedArray}
         modalTitle={setTitle(titleType, modalTitle)}
         modalContent={modalContent}
+        {...attributeOuiaId(ouiaContext, "modal-process-bulk-other")}
       />
       <DataListItem
         aria-labelledby={'kie-datalist-item-' + processInstanceData.id}
         isExpanded={expanded.includes('kie-datalist-toggle')}
+        {...componentOuiaProps(ouiaContext, ouiaId, 'DataListItem',!loadingInitData && !loading)}
       >
         <DataListItemRow>
           {processInstanceData.parentProcessInstanceId === null && (
@@ -494,14 +493,15 @@ const DataListItemComponent: React.FC<IOwnProps> = ({
             })}
           {!isLoaded && !error && (
             <Bullseye>
-              <SpinnerComponent spinnerText="Loading process instances..." />
+              <SpinnerComponent spinnerText="Loading process instances..." {...attributeOuiaId(ouiaContext, "loading-subprocesses-" + processInstanceData.id)}/>
             </Bullseye>
           )}
           {error && <ServerErrors error={error} />}
         </DataListContent>
-      </DataListItem>
+        </DataListItem>
     </React.Fragment>
   );
 };
 
-export default DataListItemComponent;
+const DataListItemComponentWithContext = withOuiaContext(DataListItemComponent);
+export default DataListItemComponentWithContext;

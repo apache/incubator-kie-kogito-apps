@@ -100,12 +100,12 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
               path="/ProcessInstances"
             />
             <Route
-              component={[Function]}
+              component={[MockFunction]}
               exact={true}
               path="/Process/:instanceID"
             />
             <Route
-              component={[Function]}
+              component={[MockFunction]}
               exact={true}
               path="/DomainExplorer"
             />
@@ -189,7 +189,7 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
               }
               isNavOpen={true}
               logo={
-                <BrandLogo
+                <Unknown
                   alt="Management Console Logo"
                   brandClick={[Function]}
                   src="managementConsoleLogo.svg"
@@ -201,7 +201,7 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
                 <Context.Provider
                   value="managementConsoleLogo.svg"
                 >
-                  <PageToolbar />
+                  <Unknown />
                 </Context.Provider>
               }
             />
@@ -261,7 +261,7 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
               }
               isNavOpen={true}
               logo={
-                <BrandLogo
+                <Unknown
                   alt="Management Console Logo"
                   brandClick={[Function]}
                   src="managementConsoleLogo.svg"
@@ -273,7 +273,7 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
                 <Context.Provider
                   value="managementConsoleLogo.svg"
                 >
-                  <PageToolbar />
+                  <Unknown />
                 </Context.Provider>
               }
             >
@@ -379,154 +379,176 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
                   <a
                     className="pf-c-page__header-brand-link"
                   >
-                    <BrandLogo
+                    <Component
                       alt="Management Console Logo"
                       brandClick={[Function]}
                       src="managementConsoleLogo.svg"
                     >
-                      <Brand
-                        alt="Management Console Logo"
-                        onClick={[Function]}
-                        src="managementConsoleLogo.svg"
+                      <ComponentWithOuia
+                        component={[Function]}
+                        componentProps={
+                          Object {
+                            "alt": "Management Console Logo",
+                            "brandClick": [Function],
+                            "src": "managementConsoleLogo.svg",
+                          }
+                        }
+                        consumerContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
                       >
-                        <img
+                        <BrandLogo
                           alt="Management Console Logo"
-                          className="pf-c-brand"
-                          onClick={[Function]}
+                          brandClick={[Function]}
+                          ouiaContext={
+                            Object {
+                              "isOuia": false,
+                              "ouiaId": null,
+                            }
+                          }
                           src="managementConsoleLogo.svg"
-                        />
-                      </Brand>
-                    </BrandLogo>
+                        >
+                          <Brand
+                            alt="Management Console Logo"
+                            onClick={[Function]}
+                            src="managementConsoleLogo.svg"
+                          >
+                            <img
+                              alt="Management Console Logo"
+                              className="pf-c-brand"
+                              onClick={[Function]}
+                              src="managementConsoleLogo.svg"
+                            />
+                          </Brand>
+                        </BrandLogo>
+                      </ComponentWithOuia>
+                    </Component>
                   </a>
                 </div>
                 <div
                   className="pf-c-page__header-tools"
                 >
-                  <PageToolbar>
-                    <AboutModalBox
-                      handleModalToggleProp={[Function]}
-                      isOpenProp={false}
+                  <Component>
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={Object {}}
+                      consumerContext={
+                        Object {
+                          "isOuia": false,
+                          "ouiaId": null,
+                        }
+                      }
                     >
-                      <AboutModal
-                        appendTo={null}
-                        backgroundImageSrc="kogitoAbout.png"
-                        brandImageAlt="Kogito Logo"
-                        brandImageSrc="managementConsoleLogo.svg"
-                        className=""
-                        isOpen={false}
-                        noAboutModalBoxContentContainer={false}
-                        onClose={[Function]}
-                        productName=""
-                        trademark="undefined is part of Kogito, an open source software released under the Apache Software License 2.0"
+                      <PageToolbar
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
                       >
-                        <Portal
-                          containerInfo={<div />}
+                        <Component
+                          handleModalToggleProp={[Function]}
+                          isOpenProp={false}
                         >
-                          <AboutModalContainer
-                            ariaDescribedById="pf-about-modal-content-0"
-                            ariaLabelledbyId="pf-about-modal-title-0"
-                            backgroundImageSrc="kogitoAbout.png"
-                            brandImageAlt="Kogito Logo"
-                            brandImageSrc="managementConsoleLogo.svg"
-                            className=""
-                            isOpen={false}
-                            noAboutModalBoxContentContainer={false}
-                            onClose={[Function]}
-                            productName=""
-                            trademark="undefined is part of Kogito, an open source software released under the Apache Software License 2.0"
-                          />
-                        </Portal>
-                      </AboutModal>
-                    </AboutModalBox>
-                    <Toolbar>
-                      <div
-                        className="pf-l-toolbar"
-                      >
-                        <ToolbarGroup>
-                          <div
-                            className="pf-l-toolbar__group"
+                          <ComponentWithOuia
+                            component={[Function]}
+                            componentProps={
+                              Object {
+                                "handleModalToggleProp": [Function],
+                                "isOpenProp": false,
+                              }
+                            }
+                            consumerContext={
+                              Object {
+                                "isOuia": false,
+                                "ouiaId": null,
+                              }
+                            }
                           >
-                            <ToolbarItem
-                              className="pf-u-screen-reader pf-u-visible-on-md"
+                            <AboutModalBox
+                              handleModalToggleProp={[Function]}
+                              isOpenProp={false}
+                              ouiaContext={
+                                Object {
+                                  "isOuia": false,
+                                  "ouiaId": null,
+                                }
+                              }
                             >
-                              <div
-                                className="pf-l-toolbar__item pf-u-screen-reader pf-u-visible-on-md"
+                              <AboutModal
+                                appendTo={null}
+                                backgroundImageSrc="kogitoAbout.png"
+                                brandImageAlt="Kogito Logo"
+                                brandImageSrc="managementConsoleLogo.svg"
+                                className=""
+                                isOpen={false}
+                                noAboutModalBoxContentContainer={false}
+                                onClose={[Function]}
+                                productName=""
+                                trademark="undefined is part of Kogito, an open source software released under the Apache Software License 2.0"
                               >
-                                <Dropdown
-                                  dropdownItems={
-                                    Array [
-                                      <DropdownItem
-                                        onClick={[Function]}
-                                      >
-                                        About
-                                      </DropdownItem>,
-                                    ]
-                                  }
-                                  isOpen={false}
-                                  isPlain={true}
-                                  onSelect={[Function]}
-                                  position="right"
-                                  toggle={
-                                    <DropdownToggle
-                                      onToggle={[Function]}
-                                    >
-                                      Anonymous
-                                    </DropdownToggle>
-                                  }
+                                <Portal
+                                  containerInfo={<div />}
                                 >
-                                  <Component
-                                    dropdownItems={
-                                      Array [
-                                        <DropdownItem
-                                          onClick={[Function]}
-                                        >
-                                          About
-                                        </DropdownItem>,
-                                      ]
-                                    }
+                                  <AboutModalContainer
+                                    ariaDescribedById="pf-about-modal-content-0"
+                                    ariaLabelledbyId="pf-about-modal-title-0"
+                                    backgroundImageSrc="kogitoAbout.png"
+                                    brandImageAlt="Kogito Logo"
+                                    brandImageSrc="managementConsoleLogo.svg"
+                                    className=""
                                     isOpen={false}
-                                    isPlain={true}
-                                    position="right"
-                                    toggle={
-                                      <DropdownToggle
-                                        onToggle={[Function]}
-                                      >
-                                        Anonymous
-                                      </DropdownToggle>
-                                    }
+                                    noAboutModalBoxContentContainer={false}
+                                    onClose={[Function]}
+                                    productName=""
+                                    trademark="undefined is part of Kogito, an open source software released under the Apache Software License 2.0"
+                                  />
+                                </Portal>
+                              </AboutModal>
+                            </AboutModalBox>
+                          </ComponentWithOuia>
+                        </Component>
+                        <Toolbar>
+                          <div
+                            className="pf-l-toolbar"
+                          >
+                            <ToolbarGroup>
+                              <div
+                                className="pf-l-toolbar__group"
+                              >
+                                <ToolbarItem
+                                  className="pf-u-screen-reader pf-u-visible-on-md"
+                                >
+                                  <div
+                                    className="pf-l-toolbar__item pf-u-screen-reader pf-u-visible-on-md"
                                   >
-                                    <ComponentWithOuia
-                                      component={[Function]}
-                                      componentProps={
-                                        Object {
-                                          "dropdownItems": Array [
-                                            <DropdownItem
-                                              onClick={[Function]}
-                                            >
-                                              About
-                                            </DropdownItem>,
-                                          ],
-                                          "isOpen": false,
-                                          "isPlain": true,
-                                          "position": "right",
-                                          "toggle": <DropdownToggle
-                                            onToggle={[Function]}
+                                    <Dropdown
+                                      dropdownItems={
+                                        Array [
+                                          <DropdownItem
+                                            onClick={[Function]}
                                           >
-                                            Anonymous
-                                          </DropdownToggle>,
-                                        }
+                                            About
+                                          </DropdownItem>,
+                                        ]
                                       }
-                                      consumerContext={
-                                        Object {
-                                          "isOuia": false,
-                                          "ouiaId": null,
-                                        }
+                                      isOpen={false}
+                                      isPlain={true}
+                                      onSelect={[Function]}
+                                      position="right"
+                                      toggle={
+                                        <DropdownToggle
+                                          onToggle={[Function]}
+                                        >
+                                          Anonymous
+                                        </DropdownToggle>
                                       }
                                     >
-                                      <DropdownWithContext
-                                        autoFocus={true}
-                                        className=""
-                                        direction="down"
+                                      <Component
                                         dropdownItems={
                                           Array [
                                             <DropdownItem
@@ -536,17 +558,8 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
                                             </DropdownItem>,
                                           ]
                                         }
-                                        isGrouped={false}
                                         isOpen={false}
                                         isPlain={true}
-                                        onSelect={[Function]}
-                                        ouiaComponentType="Dropdown"
-                                        ouiaContext={
-                                          Object {
-                                            "isOuia": false,
-                                            "ouiaId": null,
-                                          }
-                                        }
                                         position="right"
                                         toggle={
                                           <DropdownToggle
@@ -556,93 +569,201 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
                                           </DropdownToggle>
                                         }
                                       >
-                                        <div
-                                          className="pf-c-dropdown pf-m-align-right"
+                                        <ComponentWithOuia
+                                          component={[Function]}
+                                          componentProps={
+                                            Object {
+                                              "dropdownItems": Array [
+                                                <DropdownItem
+                                                  onClick={[Function]}
+                                                >
+                                                  About
+                                                </DropdownItem>,
+                                              ],
+                                              "isOpen": false,
+                                              "isPlain": true,
+                                              "position": "right",
+                                              "toggle": <DropdownToggle
+                                                onToggle={[Function]}
+                                              >
+                                                Anonymous
+                                              </DropdownToggle>,
+                                            }
+                                          }
+                                          consumerContext={
+                                            Object {
+                                              "isOuia": false,
+                                              "ouiaId": null,
+                                            }
+                                          }
                                         >
-                                          <DropdownToggle
-                                            ariaHasPopup={true}
-                                            id="pf-toggle-id-0"
+                                          <DropdownWithContext
+                                            autoFocus={true}
+                                            className=""
+                                            direction="down"
+                                            dropdownItems={
+                                              Array [
+                                                <DropdownItem
+                                                  onClick={[Function]}
+                                                >
+                                                  About
+                                                </DropdownItem>,
+                                              ]
+                                            }
+                                            isGrouped={false}
                                             isOpen={false}
                                             isPlain={true}
-                                            key=".0"
-                                            onEnter={[Function]}
-                                            onToggle={[Function]}
-                                            parentRef={
+                                            onSelect={[Function]}
+                                            ouiaComponentType="Dropdown"
+                                            ouiaContext={
                                               Object {
-                                                "current": <div
-                                                  class="pf-c-dropdown pf-m-align-right"
+                                                "isOuia": false,
+                                                "ouiaId": null,
+                                              }
+                                            }
+                                            position="right"
+                                            toggle={
+                                              <DropdownToggle
+                                                onToggle={[Function]}
+                                              >
+                                                Anonymous
+                                              </DropdownToggle>
+                                            }
+                                          >
+                                            <div
+                                              className="pf-c-dropdown pf-m-align-right"
+                                            >
+                                              <DropdownToggle
+                                                ariaHasPopup={true}
+                                                id="pf-toggle-id-1"
+                                                isOpen={false}
+                                                isPlain={true}
+                                                key=".0"
+                                                onEnter={[Function]}
+                                                onToggle={[Function]}
+                                                parentRef={
+                                                  Object {
+                                                    "current": <div
+                                                      class="pf-c-dropdown pf-m-align-right"
+                                                    >
+                                                      <button
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="pf-c-dropdown__toggle pf-m-plain"
+                                                        id="pf-toggle-id-1"
+                                                        type="button"
+                                                      >
+                                                        <span
+                                                          class="pf-c-dropdown__toggle-text"
+                                                        >
+                                                          Anonymous
+                                                        </span>
+                                                        <svg
+                                                          aria-hidden="true"
+                                                          class="pf-c-dropdown__toggle-icon"
+                                                          fill="currentColor"
+                                                          height="1em"
+                                                          role="img"
+                                                          style="vertical-align: -0.125em;"
+                                                          viewBox="0 0 320 512"
+                                                          width="1em"
+                                                        >
+                                                          <path
+                                                            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                                                            transform=""
+                                                          />
+                                                        </svg>
+                                                      </button>
+                                                    </div>,
+                                                  }
+                                                }
+                                              >
+                                                <Toggle
+                                                  ariaHasPopup={true}
+                                                  bubbleEvent={false}
+                                                  className=""
+                                                  id="pf-toggle-id-1"
+                                                  isActive={false}
+                                                  isDisabled={false}
+                                                  isFocused={false}
+                                                  isHovered={false}
+                                                  isOpen={false}
+                                                  isPlain={true}
+                                                  isPrimary={false}
+                                                  isSplitButton={false}
+                                                  onEnter={[Function]}
+                                                  onToggle={[Function]}
+                                                  parentRef={
+                                                    Object {
+                                                      "current": <div
+                                                        class="pf-c-dropdown pf-m-align-right"
+                                                      >
+                                                        <button
+                                                          aria-expanded="false"
+                                                          aria-haspopup="true"
+                                                          class="pf-c-dropdown__toggle pf-m-plain"
+                                                          id="pf-toggle-id-1"
+                                                          type="button"
+                                                        >
+                                                          <span
+                                                            class="pf-c-dropdown__toggle-text"
+                                                          >
+                                                            Anonymous
+                                                          </span>
+                                                          <svg
+                                                            aria-hidden="true"
+                                                            class="pf-c-dropdown__toggle-icon"
+                                                            fill="currentColor"
+                                                            height="1em"
+                                                            role="img"
+                                                            style="vertical-align: -0.125em;"
+                                                            viewBox="0 0 320 512"
+                                                            width="1em"
+                                                          >
+                                                            <path
+                                                              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                                                              transform=""
+                                                            />
+                                                          </svg>
+                                                        </button>
+                                                      </div>,
+                                                    }
+                                                  }
                                                 >
                                                   <button
-                                                    aria-expanded="false"
-                                                    aria-haspopup="true"
-                                                    class="pf-c-dropdown__toggle pf-m-plain"
-                                                    id="pf-toggle-id-0"
+                                                    aria-expanded={false}
+                                                    aria-haspopup={true}
+                                                    className="pf-c-dropdown__toggle pf-m-plain"
+                                                    disabled={false}
+                                                    id="pf-toggle-id-1"
+                                                    onClick={[Function]}
+                                                    onKeyDown={[Function]}
                                                     type="button"
                                                   >
                                                     <span
-                                                      class="pf-c-dropdown__toggle-text"
+                                                      className="pf-c-dropdown__toggle-text"
                                                     >
                                                       Anonymous
                                                     </span>
-                                                    <svg
-                                                      aria-hidden="true"
-                                                      class="pf-c-dropdown__toggle-icon"
-                                                      fill="currentColor"
-                                                      height="1em"
-                                                      role="img"
-                                                      style="vertical-align: -0.125em;"
-                                                      viewBox="0 0 320 512"
-                                                      width="1em"
+                                                    <CaretDownIcon
+                                                      className="pf-c-dropdown__toggle-icon"
+                                                      color="currentColor"
+                                                      noVerticalAlign={false}
+                                                      size="sm"
+                                                      title={null}
                                                     >
-                                                      <path
-                                                        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                                        transform=""
-                                                      />
-                                                    </svg>
-                                                  </button>
-                                                </div>,
-                                              }
-                                            }
-                                          >
-                                            <Toggle
-                                              ariaHasPopup={true}
-                                              bubbleEvent={false}
-                                              className=""
-                                              id="pf-toggle-id-0"
-                                              isActive={false}
-                                              isDisabled={false}
-                                              isFocused={false}
-                                              isHovered={false}
-                                              isOpen={false}
-                                              isPlain={true}
-                                              isPrimary={false}
-                                              isSplitButton={false}
-                                              onEnter={[Function]}
-                                              onToggle={[Function]}
-                                              parentRef={
-                                                Object {
-                                                  "current": <div
-                                                    class="pf-c-dropdown pf-m-align-right"
-                                                  >
-                                                    <button
-                                                      aria-expanded="false"
-                                                      aria-haspopup="true"
-                                                      class="pf-c-dropdown__toggle pf-m-plain"
-                                                      id="pf-toggle-id-0"
-                                                      type="button"
-                                                    >
-                                                      <span
-                                                        class="pf-c-dropdown__toggle-text"
-                                                      >
-                                                        Anonymous
-                                                      </span>
                                                       <svg
-                                                        aria-hidden="true"
-                                                        class="pf-c-dropdown__toggle-icon"
+                                                        aria-hidden={true}
+                                                        aria-labelledby={null}
+                                                        className="pf-c-dropdown__toggle-icon"
                                                         fill="currentColor"
                                                         height="1em"
                                                         role="img"
-                                                        style="vertical-align: -0.125em;"
+                                                        style={
+                                                          Object {
+                                                            "verticalAlign": "-0.125em",
+                                                          }
+                                                        }
                                                         viewBox="0 0 320 512"
                                                         width="1em"
                                                       >
@@ -651,69 +772,24 @@ exports[`PageLayoutComponent component tests snapshot testing 1`] = `
                                                           transform=""
                                                         />
                                                       </svg>
-                                                    </button>
-                                                  </div>,
-                                                }
-                                              }
-                                            >
-                                              <button
-                                                aria-expanded={false}
-                                                aria-haspopup={true}
-                                                className="pf-c-dropdown__toggle pf-m-plain"
-                                                disabled={false}
-                                                id="pf-toggle-id-0"
-                                                onClick={[Function]}
-                                                onKeyDown={[Function]}
-                                                type="button"
-                                              >
-                                                <span
-                                                  className="pf-c-dropdown__toggle-text"
-                                                >
-                                                  Anonymous
-                                                </span>
-                                                <CaretDownIcon
-                                                  className="pf-c-dropdown__toggle-icon"
-                                                  color="currentColor"
-                                                  noVerticalAlign={false}
-                                                  size="sm"
-                                                  title={null}
-                                                >
-                                                  <svg
-                                                    aria-hidden={true}
-                                                    aria-labelledby={null}
-                                                    className="pf-c-dropdown__toggle-icon"
-                                                    fill="currentColor"
-                                                    height="1em"
-                                                    role="img"
-                                                    style={
-                                                      Object {
-                                                        "verticalAlign": "-0.125em",
-                                                      }
-                                                    }
-                                                    viewBox="0 0 320 512"
-                                                    width="1em"
-                                                  >
-                                                    <path
-                                                      d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                                      transform=""
-                                                    />
-                                                  </svg>
-                                                </CaretDownIcon>
-                                              </button>
-                                            </Toggle>
-                                          </DropdownToggle>
-                                        </div>
-                                      </DropdownWithContext>
-                                    </ComponentWithOuia>
-                                  </Component>
-                                </Dropdown>
+                                                    </CaretDownIcon>
+                                                  </button>
+                                                </Toggle>
+                                              </DropdownToggle>
+                                            </div>
+                                          </DropdownWithContext>
+                                        </ComponentWithOuia>
+                                      </Component>
+                                    </Dropdown>
+                                  </div>
+                                </ToolbarItem>
                               </div>
-                            </ToolbarItem>
+                            </ToolbarGroup>
                           </div>
-                        </ToolbarGroup>
-                      </div>
-                    </Toolbar>
-                  </PageToolbar>
+                        </Toolbar>
+                      </PageToolbar>
+                    </ComponentWithOuia>
+                  </Component>
                   <Avatar
                     alt="Kogito Logo"
                     src="avatar.svg"

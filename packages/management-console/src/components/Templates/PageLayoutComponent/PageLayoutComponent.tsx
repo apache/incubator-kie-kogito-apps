@@ -1,6 +1,6 @@
 import { Nav, NavList, NavItem, withOuiaContext, InjectedOuiaProps } from '@patternfly/react-core';
 import React from 'react';
-import { Redirect, Route, Link, Switch} from 'react-router-dom';
+import { Redirect, Route, Link, Switch } from 'react-router-dom';
 import {
   PageLayout,
   PageNotFound,

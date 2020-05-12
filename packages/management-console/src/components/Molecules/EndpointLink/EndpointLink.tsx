@@ -1,17 +1,24 @@
 import React from 'react';
-import { Button } from '@patternfly/react-core';
+import { Button, InjectedOuiaProps, withOuiaContext } from '@patternfly/react-core';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   serviceUrl: string;
   isLinkShown: boolean;
 }
 
-const EndpointLink: React.FC<IOwnProps> = ({ serviceUrl, isLinkShown }) => {
+const EndpointLink: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  serviceUrl,
+  isLinkShown,
+  ouiaContext,
+  ouiaId
+}) => {
   return (
     <>
       {serviceUrl !== null ? (
         <Button
+          {...componentOuiaProps(ouiaContext, ouiaId, 'EndpointLink', true)}
           component={'a'}
           variant={'link'}
           target={'_blank'}
@@ -28,4 +35,5 @@ const EndpointLink: React.FC<IOwnProps> = ({ serviceUrl, isLinkShown }) => {
   );
 };
 
-export default EndpointLink;
+const EndpointLinkWithContext = withOuiaContext(EndpointLink);
+export default EndpointLinkWithContext;

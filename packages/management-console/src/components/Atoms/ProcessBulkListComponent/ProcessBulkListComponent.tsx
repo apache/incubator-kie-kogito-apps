@@ -5,7 +5,9 @@ import {
   Text,
   Divider,
   TextList,
-  TextListItem
+  TextListItem,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
 
@@ -16,12 +18,14 @@ interface IOwnProps {
   checkedArray: any;
   isAbortModalOpen: boolean;
 }
-const ProcessBulkListComponent: React.FC<IOwnProps> = ({
+const ProcessBulkListComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
   abortedMessageObj,
   completedMessageObj,
   isSingleAbort,
   checkedArray,
-  isAbortModalOpen
+  isAbortModalOpen,
+  ouiaContext,
+  ouiaId
 }) => {
   return (
     <>
@@ -173,4 +177,4 @@ const ProcessBulkListComponent: React.FC<IOwnProps> = ({
   );
 };
 
-export default ProcessBulkListComponent;
+export default withOuiaContext(ProcessBulkListComponent);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import LoadMoreComponent from '../LoadMoreComponent';
+import { getWrapper } from '@kogito-apps/common';
 
 describe('LoadMore component tests with isLoading false', () => {
   const props = {
@@ -11,15 +11,15 @@ describe('LoadMore component tests with isLoading false', () => {
     isLoadingMore: false
   };
   it('snapshot testing', () => {
-    const wrapper = shallow(<LoadMoreComponent {...props} />);
+    const wrapper = getWrapper(<LoadMoreComponent {...props} />, 'LoadMoreComponent');
     expect(wrapper).toMatchSnapshot();
   });
   it('test loadMore button click', () => {
-    const wrapper = shallow(<LoadMoreComponent {...props} />);
-    const button1 = wrapper.find('#load10');
-    const button2 = wrapper.find('#load20');
-    const button3 = wrapper.find('#load50');
-    const button4 = wrapper.find('#load100');
+    const wrapper = getWrapper(<LoadMoreComponent {...props} />, 'LoadMoreComponent');
+    const button1 = wrapper.find('#load10').first();
+    const button2 = wrapper.find('#load20').first();
+    const button3 = wrapper.find('#load50').first();
+    const button4 = wrapper.find('#load100').first();
     button1.simulate('click');
     button2.simulate('click');
     button3.simulate('click');
@@ -43,11 +43,11 @@ describe('LoadMore component tests with isLoading true', () => {
     isLoadingMore: true
   };
   it('snapshot testing', () => {
-    const wrapper = shallow(<LoadMoreComponent {...props} />);
+    const wrapper = getWrapper(<LoadMoreComponent {...props} />, 'LoadMoreComponent');
     expect(wrapper).toMatchSnapshot();
   });
   it('test Loading button displayed', () => {
-    const wrapper = shallow(<LoadMoreComponent {...props} />);
+    const wrapper = getWrapper(<LoadMoreComponent {...props} />, 'LoadMoreComponent');
     expect(wrapper.find('#loading').exists()).toBeTruthy();
   });
 });

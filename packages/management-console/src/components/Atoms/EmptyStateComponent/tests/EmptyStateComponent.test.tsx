@@ -1,6 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import EmptyStateComponent from '../EmptyStateComponent';
+import { getWrapper } from '@kogito-apps/common';
+
+jest.mock('@patternfly/react-icons')
 
 const props1 = {
   iconType: 'warningTriangleIcon',
@@ -9,7 +11,7 @@ const props1 = {
 };
 describe('Emptystate component tests', () => {
   it('snapshot testing', () => {
-    const wrapper = shallow(<EmptyStateComponent {...props1} />);
+    const wrapper = getWrapper(<EmptyStateComponent {...props1} />, "EmptyStateComponent")
     expect(wrapper).toMatchSnapshot();
   });
 });

@@ -9,13 +9,16 @@ import {
   Text,
   TextVariants,
   Title,
-  Tooltip
+  Tooltip,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import React from 'react';
 import { LevelDownAltIcon, LevelUpAltIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
-import { stateIconCreator } from '../../../utils/Utils';
+import { stateIconCreator } from '../../../utils/Utils'
+import { componentOuiaProps } from '@kogito-apps/common';
 import { ProcessInstance } from '../../../graphql/types';
 import EndpointLink from '../../Molecules/EndpointLink/EndpointLink';
 
@@ -37,9 +40,16 @@ interface IOwnProps {
   };
   from: any;
 }
-const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
+const ProcessDetails: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  data,
+  from,
+  ouiaContext,
+  ouiaId
+}) => {
   return (
-    <Card>
+    <Card
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ProcessDetails', true)}
+    >
       <CardHeader>
         <Title headingLevel="h3" size="xl">
           Details
@@ -170,4 +180,5 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
   );
 };
 
-export default ProcessDetails;
+const ProcessDetailsWithContext = withOuiaContext(ProcessDetails);
+export default ProcessDetailsWithContext;

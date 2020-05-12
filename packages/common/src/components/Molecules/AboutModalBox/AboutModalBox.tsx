@@ -4,19 +4,24 @@ import {
   TextContent,
   Text,
   TextList,
-  TextListItem
+  TextListItem,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import './AboutModalBox.css';
 import { aboutLogoContext } from '../../contexts';
 import aboutPageBackground from '../../../static/kogitoAbout.png';
+import { componentOuiaProps } from '../../../utils/OuiaUtils';
 
 export interface IOwnProps {
   isOpenProp: boolean;
   handleModalToggleProp: any;
 }
-const AboutModalBox: React.FC<IOwnProps> = ({
+const AboutModalBox: React.FC<IOwnProps & InjectedOuiaProps> = ({
   isOpenProp,
-  handleModalToggleProp
+  handleModalToggleProp,
+  ouiaContext,
+  ouiaId
 }) => {
   const dataIndexURL =
     // @ts-ignore
@@ -30,6 +35,7 @@ const AboutModalBox: React.FC<IOwnProps> = ({
       brandImageAlt="Kogito Logo"
       brandImageSrc={logoSrc}
       backgroundImageSrc={aboutPageBackground}
+      {...componentOuiaProps(ouiaContext, ouiaId, 'AboutModalBox', true)}
     >
       <TextContent>
         <Text component="h5" />
@@ -76,4 +82,4 @@ const AboutModalBox: React.FC<IOwnProps> = ({
   );
 };
 
-export default AboutModalBox;
+export default withOuiaContext(AboutModalBox);

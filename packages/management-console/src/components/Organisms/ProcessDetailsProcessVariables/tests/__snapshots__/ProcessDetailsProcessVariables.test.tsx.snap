@@ -1,93 +1,150 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Process Variables component Assertion for props 1`] = `
-<Card>
-  <CardHeader>
-    <Title
-      headingLevel="h3"
-      size="xl"
+<ProcessDetailsProcessVariables
+  data={
+    Object {
+      "ProcessInstances": Array [
+        Object {
+          "variables": "{\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+        },
+      ],
+    }
+  }
+  loading={false}
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+>
+  <Card>
+    <article
+      className="pf-c-card"
     >
-      Process Variables
-    </Title>
-  </CardHeader>
-  <CardBody>
-    <TextContent>
-      <div
-        key="0"
-      >
-        <t
-          collapseStringsAfterLength={false}
-          collapsed={false}
-          defaultValue={null}
-          displayDataTypes={true}
-          displayObjectSize={true}
-          enableClipboard={true}
-          groupArraysAfterLength={100}
-          iconStyle="triangle"
-          indentWidth={4}
-          name="root"
-          onAdd={false}
-          onDelete={false}
-          onEdit={false}
-          onSelect={false}
-          shouldCollapse={false}
-          sortKeys={false}
-          src={
-            Object {
-              "hotel": Object {
-                "address": Object {
-                  "city": "Berlin",
-                  "country": "Germany",
-                  "street": "street",
-                  "zipCode": "12345",
-                },
-                "bookingNumber": "XX-012345",
-                "name": "Perfect hotel",
-                "phone": "09876543",
-              },
-              "traveller": Object {
-                "address": Object {
-                  "city": "Karkow",
-                  "country": "Poland",
-                  "street": "palna",
-                  "zipCode": "200300",
-                },
-                "email": "rob@redhat.com",
-                "firstName": "Rob",
-                "lastName": "Rob",
-                "nationality": "Polish",
-              },
-              "trip": Object {
-                "begin": "2019-10-22T22:00:00Z[UTC]",
-                "city": "Berlin",
-                "country": "Germany",
-                "end": "2019-10-30T22:00:00Z[UTC]",
-                "visaRequired": false,
-              },
-            }
-          }
-          style={Object {}}
-          theme="rjv-default"
-          validationMessage="Validation Error"
-        />
-      </div>
-    </TextContent>
-  </CardBody>
-</Card>
+      <CardHeader>
+        <div
+          className="pf-c-card__header pf-c-title pf-m-md"
+        >
+          <Title
+            headingLevel="h3"
+            size="xl"
+          >
+            <h3
+              className="pf-c-title pf-m-xl"
+            >
+              Process Variables
+            </h3>
+          </Title>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div
+          className="pf-c-card__body"
+        >
+          <TextContent>
+            <div
+              className="pf-c-content"
+            >
+              <div
+                key="0"
+              >
+                <MockedJsonDetailsComponent
+                  src={
+                    Object {
+                      "hotel": Object {
+                        "address": Object {
+                          "city": "Berlin",
+                          "country": "Germany",
+                          "street": "street",
+                          "zipCode": "12345",
+                        },
+                        "bookingNumber": "XX-012345",
+                        "name": "Perfect hotel",
+                        "phone": "09876543",
+                      },
+                      "traveller": Object {
+                        "address": Object {
+                          "city": "Karkow",
+                          "country": "Poland",
+                          "street": "palna",
+                          "zipCode": "200300",
+                        },
+                        "email": "rob@redhat.com",
+                        "firstName": "Rob",
+                        "lastName": "Rob",
+                        "nationality": "Polish",
+                      },
+                      "trip": Object {
+                        "begin": "2019-10-22T22:00:00Z[UTC]",
+                        "city": "Berlin",
+                        "country": "Germany",
+                        "end": "2019-10-30T22:00:00Z[UTC]",
+                        "visaRequired": false,
+                      },
+                    }
+                  }
+                >
+                  <div />
+                </MockedJsonDetailsComponent>
+              </div>
+            </div>
+          </TextContent>
+        </div>
+      </CardBody>
+    </article>
+  </Card>
+</ProcessDetailsProcessVariables>
 `;
 
 exports[`Process Variables component Sample test case 1`] = `
-<Card>
-  <CardHeader>
-    <Title
-      headingLevel="h3"
-      size="xl"
+<ProcessDetailsProcessVariables
+  data={
+    Object {
+      "ProcessInstances": Array [],
+    }
+  }
+  loading={true}
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+>
+  <Card>
+    <article
+      className="pf-c-card"
     >
-      Process Variables
-    </Title>
-  </CardHeader>
-  <CardBody>
-    <TextContent />
-  </CardBody>
-</Card>
+      <CardHeader>
+        <div
+          className="pf-c-card__header pf-c-title pf-m-md"
+        >
+          <Title
+            headingLevel="h3"
+            size="xl"
+          >
+            <h3
+              className="pf-c-title pf-m-xl"
+            >
+              Process Variables
+            </h3>
+          </Title>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div
+          className="pf-c-card__body"
+        >
+          <TextContent>
+            <div
+              className="pf-c-content"
+            />
+          </TextContent>
+        </div>
+      </CardBody>
+    </article>
+  </Card>
+</ProcessDetailsProcessVariables>
 `;

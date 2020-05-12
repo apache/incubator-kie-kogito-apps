@@ -12,7 +12,9 @@ import {
   PageSidebar,
   PageHeader,
   Avatar,
-  Brand
+  Brand,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -20,8 +22,18 @@ import { aboutLogoContext } from '../../contexts';
 import PageToolbar from '../PageToolbar/PageToolbar';
 import userImage from '../../../static/avatar.svg';
 import './ServerUnavailable.css';
+import { componentOuiaProps } from '../../../utils/OuiaUtils';
 
-const ServerUnavailable = props => {
+interface IOwnProps {
+  src: any,
+  PageNav: any
+}
+
+const ServerUnavailable: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId,
+  ...props
+}) => {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const onNavToggle = () => {
     setIsNavOpen(!isNavOpen);
@@ -58,7 +70,8 @@ const ServerUnavailable = props => {
           isManagedSidebar
           className="kogito-common--PageLayout"
         >
-          <PageSection variant="light">
+          <PageSection variant="light"
+            {...componentOuiaProps(ouiaContext, ouiaId, 'ServerUnavailable', true)}>
             <Bullseye>
               <EmptyState variant={EmptyStateVariant.full}>
                 <EmptyStateIcon
@@ -91,4 +104,4 @@ const ServerUnavailable = props => {
   );
 };
 
-export default ServerUnavailable;
+export default withOuiaContext(ServerUnavailable);

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Popover, Button } from '@patternfly/react-core';
+import { Popover, Button, InjectedOuiaProps, withOuiaContext } from '@patternfly/react-core';
 import {
   handleSkip,
   handleRetry,
   stateIconCreator
-} from '../../../utils/Utils';
+} from '../../../utils/Utils'
+import { componentOuiaProps } from '@kogito-apps/common';
 import { ProcessInstance } from '../../../graphql/types';
 interface IOwnProps {
   processInstanceData: ProcessInstance;
@@ -14,13 +15,15 @@ interface IOwnProps {
   handleRetryModalToggle: () => void;
   handleSkipModalToggle: () => void;
 }
-const ErrorPopover: React.FC<IOwnProps> = ({
+const ErrorPopover: React.FC<IOwnProps & InjectedOuiaProps> = ({
   processInstanceData,
   setModalTitle,
   setTitleType,
   setModalContent,
   handleRetryModalToggle,
-  handleSkipModalToggle
+  handleSkipModalToggle,
+  ouiaContext,
+  ouiaId
 }) => {
   return (
     <Popover
@@ -71,6 +74,7 @@ const ErrorPopover: React.FC<IOwnProps> = ({
         ]
       }
       position="auto"
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ErrorPopover', true)}
     >
       <Button variant="link" isInline>
         {stateIconCreator(processInstanceData.state)}
@@ -79,4 +83,5 @@ const ErrorPopover: React.FC<IOwnProps> = ({
   );
 };
 
-export default ErrorPopover;
+const ErrorPopoverWithContext = withOuiaContext(ErrorPopover);
+export default ErrorPopoverWithContext;

@@ -5,12 +5,15 @@ import {
   EmptyStateIcon,
   EmptyStateBody,
   Bullseye,
-  Button
+  Button,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import '@patternfly/patternfly/patternfly-addons.css';
+import { componentOuiaProps } from '../../../utils/OuiaUtils';
 
 interface IOwnProps {
   iconType: string;
@@ -21,14 +24,16 @@ interface IOwnProps {
   setCheckedArray?: any;
   refetch?: any;
 }
-const EmptyStateComponent: React.FC<IOwnProps> = ({
+const EmptyStateComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
   iconType,
   title,
   body,
   filterClick,
   setFilters,
   setCheckedArray,
-  refetch
+  refetch,
+  ouiaContext,
+  ouiaId
 }) => {
   const resetClick = () => {
     filterClick(['Ready']);
@@ -36,7 +41,7 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
     setCheckedArray(['Ready']);
   };
   return (
-    <Bullseye>
+    <Bullseye {...componentOuiaProps(ouiaContext, ouiaId, 'EmptyState', true)}>
       <EmptyState>
         {iconType === 'searchIcon' && <EmptyStateIcon icon={SearchIcon} />}
         {iconType === 'warningTriangleIcon' && (
@@ -72,4 +77,4 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
   );
 };
 
-export default EmptyStateComponent;
+export default withOuiaContext(EmptyStateComponent);

@@ -1,9 +1,18 @@
 import React from 'react';
-import { Avatar } from '@patternfly/react-core';
+import { Avatar, withOuiaContext, InjectedOuiaProps } from '@patternfly/react-core';
 import userImage from '../../../static/avatar.svg';
+import { componentOuiaProps } from '@kogito-apps/common'
 
-const AvatarComponent: React.FC = () => {
-  return <Avatar src={userImage} alt="Kogito Logo" />;
+const AvatarComponent: React.FC<InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId
+}) => {
+  return <Avatar
+    src={userImage}
+    alt="Kogito Logo"
+    {...componentOuiaProps(ouiaContext, ouiaId, 'Avatar', true)}
+  />;
 };
 
-export default AvatarComponent;
+const AvatarComponentWithContext = withOuiaContext(AvatarComponent);
+export default AvatarComponentWithContext;

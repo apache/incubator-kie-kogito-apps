@@ -6,9 +6,12 @@ import {
   BaseSizes,
   Button,
   TextContent,
-  Text
+  Text,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import ProcessBulkListComponent from '../ProcessBulkListComponent/ProcessBulkListComponent';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   modalTitle: JSX.Element;
@@ -21,7 +24,7 @@ interface IOwnProps {
   isAbortModalOpen?: boolean;
   isSingleAbort?: any;
 }
-const Modalbox: React.FC<IOwnProps> = ({
+const Modalbox: React.FC<IOwnProps & InjectedOuiaProps> = ({
   modalContent,
   modalTitle,
   abortedMessageObj,
@@ -30,7 +33,9 @@ const Modalbox: React.FC<IOwnProps> = ({
   checkedArray,
   handleModalToggle,
   isAbortModalOpen,
-  isSingleAbort
+  isSingleAbort,
+  ouiaContext,
+  ouiaId
 }) => {
   return (
     <Modal
@@ -53,6 +58,7 @@ const Modalbox: React.FC<IOwnProps> = ({
         </Button>
       ]}
       isFooterLeftAligned={false}
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ProcessBulkModal', true)}
     >
       {abortedMessageObj !== undefined &&
         completedMessageObj !== undefined &&
@@ -74,4 +80,5 @@ const Modalbox: React.FC<IOwnProps> = ({
   );
 };
 
-export default Modalbox;
+const ModalboxWithContext = withOuiaContext(Modalbox);
+export default ModalboxWithContext;

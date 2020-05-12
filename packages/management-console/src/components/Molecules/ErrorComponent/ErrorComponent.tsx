@@ -13,14 +13,18 @@ import {
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { Redirect, RouteComponentProps } from 'react-router';
-import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import {
+  ouiaPageTypeAndObjectId, 
+  componentOuiaProps
+} from '@kogito-apps/common';
 
 interface LocationProps {
-  prev?: any,
+  prev?: any
 }
 
 const ErrorComponent: React.FC<RouteComponentProps<{}, {}, LocationProps> & InjectedOuiaProps> = ({
   ouiaContext,
+  ouiaId,
   ...props
 }) => {
   let prevPath;
@@ -43,7 +47,9 @@ const ErrorComponent: React.FC<RouteComponentProps<{}, {}, LocationProps> & Inje
   return (
     <>
       {isRedirect && <Redirect to={`/${prevPath[0]}`} />}
-      <PageSection variant="light">
+      <PageSection variant="light"
+        {...componentOuiaProps(ouiaContext, ouiaId, 'Error', true)}
+      >
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
             <EmptyStateIcon
@@ -65,4 +71,5 @@ const ErrorComponent: React.FC<RouteComponentProps<{}, {}, LocationProps> & Inje
   );
 };
 
-export default withOuiaContext(ErrorComponent);
+const ErrorComponentWithContext = withOuiaContext(ErrorComponent);
+export default ErrorComponentWithContext;

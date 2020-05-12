@@ -10,7 +10,8 @@ import {
 } from '@patternfly/react-core';
 import {
   ServerErrors,
-  ouiaPageTypeAndObjectId
+  ouiaPageTypeAndObjectId,
+  componentOuiaProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -30,7 +31,8 @@ import axios from 'axios';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 
 const DataListContainer: React.FC<InjectedOuiaProps> = ({
-  ouiaContext
+  ouiaContext,
+  ouiaId
 }) => {
   const [defaultPageSize] = useState(10);
   const [initData, setInitData] = useState<any>({});
@@ -312,7 +314,9 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
           <BreadcrumbItem isActive>Process instances</BreadcrumbItem>
         </Breadcrumb>
       </PageSection>
-      <PageSection>
+      <PageSection
+        {...componentOuiaProps(ouiaContext, ouiaId, 'DataListContainer',!isLoading && !isLoadingMore && !loading)}
+      >
         <Grid gutter="md">
           <GridItem span={12}>
             <Card className="dataList">
@@ -338,6 +342,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                     setIsAllChecked={setIsAllChecked}
                     selectedNumber={selectedNumber}
                     setSelectedNumber={setSelectedNumber}
+                    ouiaId="toolbar-process-instances"
                   />
                 </>
               )}
@@ -356,6 +361,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                   setIsAllChecked={setIsAllChecked}
                   setSelectedNumber={setSelectedNumber}
                   selectedNumber={selectedNumber}
+                  ouiaId="list-process-instances"
                 />
               ) : (
                 <EmptyStateComponent
@@ -367,6 +373,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                   setCheckedArray={setCheckedArray}
                   setSearchWord={setSearchWord}
                   filters={filters}
+                  ouiaId="empty-state-no-filters-selected"
                 />
               )}
               {(!loading || isLoadingMore) &&
@@ -379,6 +386,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                     getMoreItems={onGetMoreInstances}
                     pageSize={pageSize}
                     isLoadingMore={isLoadingMore}
+                    ouia-id="load-more-processes"
                   />
                 )}
             </Card>
@@ -389,4 +397,5 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
   );
 };
 
-export default withOuiaContext(DataListContainer);
+const DataListContainerWithContext = withOuiaContext(DataListContainer)
+export default DataListContainerWithContext;

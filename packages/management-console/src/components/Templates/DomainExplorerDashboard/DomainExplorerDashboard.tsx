@@ -9,12 +9,13 @@ import {
   BreadcrumbItem,
   Card,
   Bullseye,
-  InjectedOuiaProps,
-  withOuiaContext
+  withOuiaContext,
+  InjectedOuiaProps
 } from '@patternfly/react-core';
 import {
   ServerErrors,
-  ouiaPageTypeAndObjectId
+  ouiaPageTypeAndObjectId,
+  componentOuiaProps
 } from '@kogito-apps/common';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
@@ -33,7 +34,7 @@ import {
 } from '../../../graphql/types';
 
 interface IOwnProps {
-  domains: any
+  domains: any;
 }
 
 interface MatchProps {
@@ -47,6 +48,7 @@ interface LocationProps {
 
 const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchProps, {}, LocationProps> & InjectedOuiaProps> = ({
   ouiaContext,
+  ouiaId,
   ...props
 }) => {
   const rememberedParams =
@@ -266,7 +268,9 @@ const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchPro
         </Breadcrumb>
       </PageSection>
       {!error ? (
-        <PageSection>
+        <PageSection
+          {...componentOuiaProps(ouiaContext, ouiaId, 'DomainExplorerDashboard', !tableLoading)}
+        >
           {renderToolbar()}
 
           {!tableLoading || isLoadingMore ? (
@@ -296,7 +300,7 @@ const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchPro
           ) : (
             <Card>
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain data..." />
+                <SpinnerComponent spinnerText="Loading domain data..." ouiaId="loading-domain-data" />
               </Bullseye>
             </Card>
           )}

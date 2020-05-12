@@ -1,6 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import ProcessDetailsProcessVariables from '../ProcessDetailsProcessVariables';
+import { getWrapper } from '@kogito-apps/common';
+
+jest.mock('react-json-view', () => {
+  const MockedJsonDetailsComponent = () => <div />;
+  return MockedJsonDetailsComponent;
+})
 
 const props = {
   loading: true,
@@ -22,11 +27,11 @@ const props2 = {
 };
 describe('Process Variables component', () => {
   it('Sample test case', () => {
-    const wrapper = shallow(<ProcessDetailsProcessVariables {...props} />);
+    const wrapper = getWrapper(<ProcessDetailsProcessVariables {...props}/>, 'ProcessDetailsProcessVariables');
     expect(wrapper).toMatchSnapshot();
   });
   it('Assertion for props', () => {
-    const wrapper = shallow(<ProcessDetailsProcessVariables {...props2} />);
+    const wrapper = getWrapper(<ProcessDetailsProcessVariables {...props2}/>, 'ProcessDetailsProcessVariables');
     expect(wrapper).toMatchSnapshot();
   });
 });

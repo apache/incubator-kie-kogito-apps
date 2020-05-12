@@ -16,12 +16,15 @@ import {
   DropdownToggle,
   DropdownToggleCheckbox,
   DropdownItem,
-  DropdownPosition
+  DropdownPosition,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { FilterIcon, SyncIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 import './DatatoolbarComponent.css';
 import { ProcessInstanceState } from '../../../graphql/types';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   checkedArray: any;
@@ -43,7 +46,7 @@ interface IOwnProps {
   setSelectedNumber: (selectedNumber: number) => void;
   selectedNumber: number;
 }
-const DataToolbarComponent: React.FC<IOwnProps> = ({
+const DataToolbarComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
   checkedArray,
   filterClick,
   setCheckedArray,
@@ -61,7 +64,9 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
   setIsAllChecked,
   setAbortedObj,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ouiaContext,
+  ouiaId
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isFilterClicked, setIsFilterClicked] = useState<boolean>(false);
@@ -373,7 +378,7 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
                   />
                 ]}
               >
-                {selectedNumber === 0 ? '' : selectedNumber + ' selected'}
+                <span>{selectedNumber === 0 ? '' : selectedNumber + ' selected'}</span>
               </DropdownToggle>
             }
             dropdownItems={checkboxItems}
@@ -471,10 +476,12 @@ const DataToolbarComponent: React.FC<IOwnProps> = ({
       collapseListedFiltersBreakpoint="xl"
       clearAllFilters={() => clearAll()}
       clearFiltersButtonText="Reset to default"
+      {...componentOuiaProps(ouiaContext, ouiaId, 'DataToolbar', true)}
     >
       <DataToolbarContent>{toolbarItems}</DataToolbarContent>
     </DataToolbar>
   );
 };
 
-export default DataToolbarComponent;
+const DataToolbarComponentWithContext = withOuiaContext(DataToolbarComponent);
+export default DataToolbarComponentWithContext;

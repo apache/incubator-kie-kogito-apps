@@ -3,20 +3,30 @@ import {
   Title,
   EmptyState,
   EmptyStateIcon,
-  Spinner
+  Spinner,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   spinnerText: string;
 }
 
-const EmptyStateSpinner: React.FC<IOwnProps> = ({ spinnerText }) => {
+const EmptyStateSpinner: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  spinnerText,
+  ouiaContext,
+  ouiaId
+}) => {
   return (
-    <EmptyState>
+    <EmptyState
+      {...componentOuiaProps(ouiaContext, ouiaId, 'EmptyStateSpinner', true)}
+    > 
       <EmptyStateIcon variant="container" component={Spinner} />
       <Title size="lg">{spinnerText}</Title>
     </EmptyState>
   );
 };
 
-export default EmptyStateSpinner;
+const EmptyStateSpinnerWithContext = withOuiaContext(EmptyStateSpinner);
+export default EmptyStateSpinnerWithContext;

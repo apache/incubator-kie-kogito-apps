@@ -7,6 +7,8 @@ import { MockedProvider } from '@apollo/react-testing';
 
 jest.mock('../../../Molecules/DataToolbarComponent/DataToolbarComponent');
 jest.mock('../../../Organisms/DataListComponent/DataListComponent');
+jest.mock('../../../Atoms/LoadMoreComponent/LoadMoreComponent');
+jest.mock('../../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent');
 
 describe('DataListContainer component tests', () => {
   it('Snapshot tests', () => {

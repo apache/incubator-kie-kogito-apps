@@ -4,9 +4,12 @@ import {
   Badge,
   TextContent,
   Text,
-  TextVariants
+  TextVariants,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { ProcessInstance } from '../../../graphql/types';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   processInstanceData: Pick<
@@ -14,7 +17,11 @@ interface IOwnProps {
     'id' | 'processName' | 'businessKey'
   >;
 }
-const ProcessDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
+const ProcessDescriptor: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  processInstanceData,
+  ouiaContext,
+  ouiaId
+}) => {
   const idStringModifier = (strId: string) => {
     return (
       <TextContent className="pf-u-display-inline">
@@ -26,7 +33,9 @@ const ProcessDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
   };
   return (
     <>
-      <Tooltip content={processInstanceData.id}>
+      <Tooltip content={processInstanceData.id}
+        {...componentOuiaProps(ouiaContext, ouiaId, 'ProcessDescriptor', true)}
+      >
         <span>
           {processInstanceData.processName}{' '}
           {processInstanceData.businessKey ? (
@@ -40,4 +49,5 @@ const ProcessDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
   );
 };
 
-export default ProcessDescriptor;
+const ProcessDescriptorWithContext = withOuiaContext(ProcessDescriptor);
+export default ProcessDescriptorWithContext;

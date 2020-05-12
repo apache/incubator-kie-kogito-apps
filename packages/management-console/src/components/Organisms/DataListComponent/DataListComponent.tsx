@@ -1,6 +1,15 @@
 import React, { useEffect } from 'react';
-import { DataList, Bullseye } from '@patternfly/react-core';
-import { ServerErrors } from '@kogito-apps/common';
+import {
+  DataList,
+  Bullseye,
+  InjectedOuiaProps,
+  withOuiaContext
+} from '@patternfly/react-core';
+import {
+  ServerErrors,
+  componentOuiaProps,
+  attributeOuiaId
+} from '@kogito-apps/common';
 import '../../Templates/DataListContainer/DataList.css';
 import DataListItemComponent from '../../Molecules/DataListItemComponent/DataListItemComponent';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
@@ -28,7 +37,7 @@ interface IOwnProps {
   setSelectedNumber: (selectedNumber: number) => void;
 }
 
-const DataListComponent: React.FC<IOwnProps> = ({
+const DataListComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
   initData,
   setInitData,
   isLoading,
@@ -41,9 +50,11 @@ const DataListComponent: React.FC<IOwnProps> = ({
   filters,
   setIsAllChecked,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ouiaContext,
+  ouiaId
 }) => {
-  const { loading, error, data, networkStatus } = useGetProcessInstancesQuery({
+  const { loading, error, data } = useGetProcessInstancesQuery({
     variables: {
       state: [ProcessInstanceState.Active],
       offset: 0,
@@ -74,15 +85,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   if (loading || isLoading) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
-      </Bullseye>
-    );
-  }
-
-  if (networkStatus === 4) {
-    return (
-      <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
+        <SpinnerComponent spinnerText="Loading process instances..." {...attributeOuiaId(ouiaContext, "empty-state-loading-process-instances")} />
       </Bullseye>
     );
   }
@@ -93,7 +96,8 @@ const DataListComponent: React.FC<IOwnProps> = ({
   }
 
   return (
-    <DataList aria-label="Process instance list">
+    <DataList aria-label="Process instance list"
+      {...componentOuiaProps(ouiaContext, ouiaId, 'DataListComponent', !loading || !isLoading)}>
       {!loading &&
         initData !== undefined &&
         initData.ProcessInstances.map((item, index) => {
@@ -111,6 +115,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
               setIsAllChecked={setIsAllChecked}
               selectedNumber={selectedNumber}
               setSelectedNumber={setSelectedNumber}
+              {...attributeOuiaId(ouiaContext, "process-list-item-" + item.id)}
             />
           );
         })}
@@ -127,4 +132,5 @@ const DataListComponent: React.FC<IOwnProps> = ({
   );
 };
 
-export default DataListComponent;
+const DataListComponentWithContext = withOuiaContext(DataListComponent);
+export default DataListComponentWithContext;

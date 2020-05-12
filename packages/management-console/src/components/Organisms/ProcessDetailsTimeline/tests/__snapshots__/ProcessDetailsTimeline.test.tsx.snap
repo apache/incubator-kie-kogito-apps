@@ -1,303 +1,1400 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Process Details Timeline component Sample test case 1`] = `
-<Card>
-  <CardHeader>
-    <Title
-      headingLevel="h3"
-      size="xl"
+<ProcessDetailsTimeline
+  data={
+    Object {
+      "addons": Array [
+        "jobs-management",
+        "prometheus-monitoring",
+        "process-management",
+      ],
+      "childProcessInstances": Array [],
+      "end": null,
+      "endpoint": "http://localhost:4000",
+      "error": Object {
+        "message": "Something went wrong",
+        "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
+      },
+      "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+      "nodes": Array [
+        Object {
+          "definitionId": "EndEvent_1",
+          "enter": "2019-10-22T04:43:01.144Z",
+          "exit": "2019-10-22T04:43:01.144Z",
+          "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+          "name": "End Event 1",
+          "nodeId": "123-456-789",
+          "type": "EndNode",
+        },
+        Object {
+          "definitionId": "ServiceTask_1",
+          "enter": "2019-10-22T04:43:01.144Z",
+          "exit": "2019-10-22T04:43:01.144Z",
+          "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+          "name": "Book flight",
+          "nodeId": "123-456-789",
+          "type": "WorkItemNode",
+        },
+        Object {
+          "definitionId": "StartEvent_1",
+          "enter": "2019-10-22T04:43:01.144Z",
+          "exit": "2019-10-22T04:43:01.144Z",
+          "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+          "name": "StartProcess",
+          "nodeId": "123-456-789",
+          "type": "StartNode",
+        },
+      ],
+      "parentProcessInstance": null,
+      "parentProcessInstanceId": null,
+      "processId": "travels",
+      "processName": "travels",
+      "roles": Array [],
+      "rootProcessInstanceId": null,
+      "start": "2019-10-22T03:40:44.089Z",
+      "state": "ACTIVE",
+      "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+    }
+  }
+  handleRetryModalToggle={[MockFunction]}
+  handleSkipModalToggle={[MockFunction]}
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+  setModalContent={[MockFunction]}
+  setModalTitle={[MockFunction]}
+  setTitleType={[MockFunction]}
+>
+  <Card>
+    <article
+      className="pf-c-card"
     >
-      Timeline
-    </Title>
-  </CardHeader>
-  <CardBody>
-    <Stack
-      className="kogito-management-console--timeline"
-      gutter="md"
-    >
-      <Split
-        className="kogito-management-console--timeline-item"
-        gutter="sm"
-        key="7244ba1b-75ec-4789-8c65-499a0c5b1a6f"
-      >
-        <SplitItem>
-          <Tooltip
-            appendTo={[Function]}
-            aria="describedby"
-            boundary="window"
-            className=""
-            content="Completed"
-            distance={15}
-            enableFlip={true}
-            entryDelay={500}
-            exitDelay={500}
-            flipBehavior={
-              Array [
-                "top",
-                "right",
-                "bottom",
-                "left",
-                "top",
-                "right",
-                "bottom",
-              ]
-            }
-            id=""
-            isAppLauncher={false}
-            isContentLeftAligned={false}
-            isVisible={false}
-            maxWidth="18.75rem"
-            position="top"
-            tippyProps={Object {}}
-            trigger="mouseenter focus"
-            zIndex={9999}
-          >
-            <CheckCircleIcon
-              className="kogito-management-console--timeline-status"
-              color="var(--pf-global--success-color--100)"
-              noVerticalAlign={false}
-              size="sm"
-              title={null}
-            />
-          </Tooltip>
-        </SplitItem>
-        <SplitItem
-          isFilled={true}
+      <CardHeader>
+        <div
+          className="pf-c-card__header pf-c-title pf-m-md"
         >
-          <TextContent>
-            <Text
-              component="p"
-            >
-              End Event 1
-              <span />
-              <Text
-                component="small"
-              >
-                <t
-                  ago={false}
-                  calendar={false}
-                  decimal={false}
-                  element={null}
-                  filter={[Function]}
-                  fromNow={true}
-                  interval={60000}
-                  local={false}
-                  onChange={[Function]}
-                  titleFormat=""
-                  toNow={false}
-                  unit={null}
-                  unix={false}
-                  utc={false}
-                  withTitle={false}
-                >
-                  <Component />
-                </t>
-              </Text>
-            </Text>
-          </TextContent>
-        </SplitItem>
-        <SplitItem>
-          <Dropdown
-            isPlain={true}
-            toggle={
-              <KebabToggle
-                id="timeline-kebab-toggle-disabled-0"
-                isDisabled={true}
-              />
-            }
-          />
-        </SplitItem>
-         
-      </Split>
-      <Split
-        className="kogito-management-console--timeline-item"
-        gutter="sm"
-        key="2f588da5-a323-4111-9017-3093ef9319d1"
-      >
-        <SplitItem>
-          <Tooltip
-            appendTo={[Function]}
-            aria="describedby"
-            boundary="window"
-            className=""
-            content="Completed"
-            distance={15}
-            enableFlip={true}
-            entryDelay={500}
-            exitDelay={500}
-            flipBehavior={
-              Array [
-                "top",
-                "right",
-                "bottom",
-                "left",
-                "top",
-                "right",
-                "bottom",
-              ]
-            }
-            id=""
-            isAppLauncher={false}
-            isContentLeftAligned={false}
-            isVisible={false}
-            maxWidth="18.75rem"
-            position="top"
-            tippyProps={Object {}}
-            trigger="mouseenter focus"
-            zIndex={9999}
+          <Title
+            headingLevel="h3"
+            size="xl"
           >
-            <CheckCircleIcon
-              className="kogito-management-console--timeline-status"
-              color="var(--pf-global--success-color--100)"
-              noVerticalAlign={false}
-              size="sm"
-              title={null}
-            />
-          </Tooltip>
-        </SplitItem>
-        <SplitItem
-          isFilled={true}
-        >
-          <TextContent>
-            <Text
-              component="p"
+            <h3
+              className="pf-c-title pf-m-xl"
             >
-              Book flight
-              <span />
-              <Text
-                component="small"
-              >
-                <t
-                  ago={false}
-                  calendar={false}
-                  decimal={false}
-                  element={null}
-                  filter={[Function]}
-                  fromNow={true}
-                  interval={60000}
-                  local={false}
-                  onChange={[Function]}
-                  titleFormat=""
-                  toNow={false}
-                  unit={null}
-                  unix={false}
-                  utc={false}
-                  withTitle={false}
-                >
-                  <Component />
-                </t>
-              </Text>
-            </Text>
-          </TextContent>
-        </SplitItem>
-        <SplitItem>
-          <Dropdown
-            isPlain={true}
-            toggle={
-              <KebabToggle
-                id="timeline-kebab-toggle-disabled-1"
-                isDisabled={true}
-              />
-            }
-          />
-        </SplitItem>
-         
-      </Split>
-      <Split
-        className="kogito-management-console--timeline-item"
-        gutter="sm"
-        key="6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2"
-      >
-        <SplitItem>
-          <Tooltip
-            appendTo={[Function]}
-            aria="describedby"
-            boundary="window"
-            className=""
-            content="Completed"
-            distance={15}
-            enableFlip={true}
-            entryDelay={500}
-            exitDelay={500}
-            flipBehavior={
-              Array [
-                "top",
-                "right",
-                "bottom",
-                "left",
-                "top",
-                "right",
-                "bottom",
-              ]
-            }
-            id=""
-            isAppLauncher={false}
-            isContentLeftAligned={false}
-            isVisible={false}
-            maxWidth="18.75rem"
-            position="top"
-            tippyProps={Object {}}
-            trigger="mouseenter focus"
-            zIndex={9999}
+              Timeline
+            </h3>
+          </Title>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div
+          className="pf-c-card__body"
+        >
+          <Stack
+            className="kogito-management-console--timeline"
+            gutter="md"
           >
-            <CheckCircleIcon
-              className="kogito-management-console--timeline-status"
-              color="var(--pf-global--success-color--100)"
-              noVerticalAlign={false}
-              size="sm"
-              title={null}
-            />
-          </Tooltip>
-        </SplitItem>
-        <SplitItem
-          isFilled={true}
-        >
-          <TextContent>
-            <Text
-              component="p"
+            <div
+              className="pf-l-stack pf-m-gutter kogito-management-console--timeline"
             >
-              StartProcess
-              <span />
-              <Text
-                component="small"
+              <Split
+                className="kogito-management-console--timeline-item"
+                gutter="sm"
+                key="7244ba1b-75ec-4789-8c65-499a0c5b1a6f"
               >
-                <t
-                  ago={false}
-                  calendar={false}
-                  decimal={false}
-                  element={null}
-                  filter={[Function]}
-                  fromNow={true}
-                  interval={60000}
-                  local={false}
-                  onChange={[Function]}
-                  titleFormat=""
-                  toNow={false}
-                  unit={null}
-                  unix={false}
-                  utc={false}
-                  withTitle={false}
+                <div
+                  className="pf-l-split pf-m-gutter kogito-management-console--timeline-item"
                 >
-                  <Component />
-                </t>
-              </Text>
-            </Text>
-          </TextContent>
-        </SplitItem>
-        <SplitItem>
-          <Dropdown
-            isPlain={true}
-            toggle={
-              <KebabToggle
-                id="timeline-kebab-toggle-disabled-2"
-                isDisabled={true}
-              />
-            }
-          />
-        </SplitItem>
-         
-      </Split>
-    </Stack>
-  </CardBody>
-</Card>
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <Tooltip
+                        appendTo={[Function]}
+                        aria="describedby"
+                        boundary="window"
+                        className=""
+                        content="Completed"
+                        distance={15}
+                        enableFlip={true}
+                        entryDelay={500}
+                        exitDelay={500}
+                        flipBehavior={
+                          Array [
+                            "top",
+                            "right",
+                            "bottom",
+                            "left",
+                            "top",
+                            "right",
+                            "bottom",
+                          ]
+                        }
+                        id=""
+                        isAppLauncher={false}
+                        isContentLeftAligned={false}
+                        isVisible={false}
+                        maxWidth="18.75rem"
+                        position="top"
+                        tippyProps={Object {}}
+                        trigger="mouseenter focus"
+                        zIndex={9999}
+                      >
+                        <PopoverBase
+                          appendTo={[Function]}
+                          aria="describedby"
+                          arrow={true}
+                          boundary="window"
+                          content={
+                            <div
+                              className=""
+                              id=""
+                              role="tooltip"
+                            >
+                              <TooltipContent
+                                isLeftAligned={false}
+                              >
+                                Completed
+                              </TooltipContent>
+                            </div>
+                          }
+                          delay={
+                            Array [
+                              500,
+                              500,
+                            ]
+                          }
+                          distance={15}
+                          flip={true}
+                          flipBehavior={
+                            Array [
+                              "top",
+                              "right",
+                              "bottom",
+                              "left",
+                              "top",
+                              "right",
+                              "bottom",
+                            ]
+                          }
+                          isVisible={false}
+                          lazy={true}
+                          maxWidth="18.75rem"
+                          onCreate={[Function]}
+                          placement="top"
+                          popperOptions={
+                            Object {
+                              "modifiers": Object {
+                                "hide": Object {
+                                  "enabled": true,
+                                },
+                                "preventOverflow": Object {
+                                  "enabled": true,
+                                },
+                              },
+                            }
+                          }
+                          theme="pf-tooltip"
+                          trigger="mouseenter focus"
+                          zIndex={9999}
+                        >
+                          <CheckCircleIcon
+                            className="kogito-management-console--timeline-status"
+                            color="var(--pf-global--success-color--100)"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              className="kogito-management-console--timeline-status"
+                              fill="var(--pf-global--success-color--100)"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 512 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
+                                transform=""
+                              />
+                            </svg>
+                          </CheckCircleIcon>
+                          <Portal
+                            containerInfo={
+                              <div>
+                                <div
+                                  class=""
+                                  id=""
+                                  role="tooltip"
+                                >
+                                  <div
+                                    class="pf-c-tooltip__content"
+                                  >
+                                    Completed
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          >
+                            <div
+                              className=""
+                              id=""
+                              role="tooltip"
+                            >
+                              <TooltipContent
+                                isLeftAligned={false}
+                              >
+                                <div
+                                  className="pf-c-tooltip__content"
+                                >
+                                  Completed
+                                </div>
+                              </TooltipContent>
+                            </div>
+                          </Portal>
+                        </PopoverBase>
+                      </Tooltip>
+                    </div>
+                  </SplitItem>
+                  <SplitItem
+                    isFilled={true}
+                  >
+                    <div
+                      className="pf-l-split__item pf-m-fill"
+                    >
+                      <TextContent>
+                        <div
+                          className="pf-c-content"
+                        >
+                          <Text
+                            component="p"
+                          >
+                            <p
+                              className=""
+                              data-pf-content={true}
+                            >
+                              End Event 1
+                              <span />
+                              <Text
+                                component="small"
+                              >
+                                <small
+                                  className=""
+                                  data-pf-content={true}
+                                >
+                                  <t
+                                    ago={false}
+                                    calendar={false}
+                                    decimal={false}
+                                    element={null}
+                                    filter={[Function]}
+                                    fromNow={true}
+                                    interval={60000}
+                                    local={false}
+                                    onChange={[Function]}
+                                    titleFormat=""
+                                    toNow={false}
+                                    unit={null}
+                                    unix={false}
+                                    utc={false}
+                                    withTitle={false}
+                                  >
+                                    <time
+                                      dateTime={"2019-10-22T04:43:01.144Z"}
+                                    >
+                                      7 months ago
+                                    </time>
+                                  </t>
+                                </small>
+                              </Text>
+                            </p>
+                          </Text>
+                        </div>
+                      </TextContent>
+                    </div>
+                  </SplitItem>
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <Dropdown
+                        isPlain={true}
+                        toggle={
+                          <KebabToggle
+                            id="timeline-kebab-toggle-disabled-0"
+                            isDisabled={true}
+                          />
+                        }
+                      >
+                        <Component
+                          isPlain={true}
+                          toggle={
+                            <KebabToggle
+                              id="timeline-kebab-toggle-disabled-0"
+                              isDisabled={true}
+                            />
+                          }
+                        >
+                          <ComponentWithOuia
+                            component={[Function]}
+                            componentProps={
+                              Object {
+                                "isPlain": true,
+                                "toggle": <KebabToggle
+                                  id="timeline-kebab-toggle-disabled-0"
+                                  isDisabled={true}
+                                />,
+                              }
+                            }
+                            consumerContext={
+                              Object {
+                                "isOuia": false,
+                                "ouiaId": null,
+                              }
+                            }
+                          >
+                            <DropdownWithContext
+                              autoFocus={true}
+                              className=""
+                              direction="down"
+                              dropdownItems={Array []}
+                              isGrouped={false}
+                              isOpen={false}
+                              isPlain={true}
+                              onSelect={[Function]}
+                              ouiaComponentType="Dropdown"
+                              ouiaContext={
+                                Object {
+                                  "isOuia": false,
+                                  "ouiaId": null,
+                                }
+                              }
+                              position="left"
+                              toggle={
+                                <KebabToggle
+                                  id="timeline-kebab-toggle-disabled-0"
+                                  isDisabled={true}
+                                />
+                              }
+                            >
+                              <div
+                                className="pf-c-dropdown"
+                              >
+                                <KebabToggle
+                                  ariaHasPopup={false}
+                                  id="timeline-kebab-toggle-disabled-0"
+                                  isDisabled={true}
+                                  isOpen={false}
+                                  isPlain={true}
+                                  key=".0"
+                                  onEnter={[Function]}
+                                  parentRef={
+                                    Object {
+                                      "current": <div
+                                        class="pf-c-dropdown"
+                                      >
+                                        <button
+                                          aria-expanded="false"
+                                          aria-haspopup="false"
+                                          aria-label="Actions"
+                                          class="pf-c-dropdown__toggle pf-m-plain"
+                                          disabled=""
+                                          id="timeline-kebab-toggle-disabled-0"
+                                          type="button"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            fill="currentColor"
+                                            height="1em"
+                                            role="img"
+                                            style="vertical-align: -0.125em;"
+                                            viewBox="0 0 192 512"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                              transform=""
+                                            />
+                                          </svg>
+                                        </button>
+                                      </div>,
+                                    }
+                                  }
+                                >
+                                  <Toggle
+                                    aria-label="Actions"
+                                    ariaHasPopup={false}
+                                    bubbleEvent={false}
+                                    className=""
+                                    id="timeline-kebab-toggle-disabled-0"
+                                    isActive={false}
+                                    isDisabled={true}
+                                    isFocused={false}
+                                    isHovered={false}
+                                    isOpen={false}
+                                    isPlain={true}
+                                    isPrimary={false}
+                                    isSplitButton={false}
+                                    onEnter={[Function]}
+                                    onToggle={[Function]}
+                                    parentRef={
+                                      Object {
+                                        "current": <div
+                                          class="pf-c-dropdown"
+                                        >
+                                          <button
+                                            aria-expanded="false"
+                                            aria-haspopup="false"
+                                            aria-label="Actions"
+                                            class="pf-c-dropdown__toggle pf-m-plain"
+                                            disabled=""
+                                            id="timeline-kebab-toggle-disabled-0"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 192 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                                transform=""
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>,
+                                      }
+                                    }
+                                  >
+                                    <button
+                                      aria-expanded={false}
+                                      aria-haspopup={false}
+                                      aria-label="Actions"
+                                      className="pf-c-dropdown__toggle pf-m-plain"
+                                      disabled={true}
+                                      id="timeline-kebab-toggle-disabled-0"
+                                      onClick={[Function]}
+                                      onKeyDown={[Function]}
+                                      type="button"
+                                    >
+                                      <EllipsisVIcon
+                                        color="currentColor"
+                                        noVerticalAlign={false}
+                                        size="sm"
+                                        title={null}
+                                      >
+                                        <svg
+                                          aria-hidden={true}
+                                          aria-labelledby={null}
+                                          fill="currentColor"
+                                          height="1em"
+                                          role="img"
+                                          style={
+                                            Object {
+                                              "verticalAlign": "-0.125em",
+                                            }
+                                          }
+                                          viewBox="0 0 192 512"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                            transform=""
+                                          />
+                                        </svg>
+                                      </EllipsisVIcon>
+                                    </button>
+                                  </Toggle>
+                                </KebabToggle>
+                              </div>
+                            </DropdownWithContext>
+                          </ComponentWithOuia>
+                        </Component>
+                      </Dropdown>
+                    </div>
+                  </SplitItem>
+                   
+                </div>
+              </Split>
+              <Split
+                className="kogito-management-console--timeline-item"
+                gutter="sm"
+                key="2f588da5-a323-4111-9017-3093ef9319d1"
+              >
+                <div
+                  className="pf-l-split pf-m-gutter kogito-management-console--timeline-item"
+                >
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <Tooltip
+                        appendTo={[Function]}
+                        aria="describedby"
+                        boundary="window"
+                        className=""
+                        content="Completed"
+                        distance={15}
+                        enableFlip={true}
+                        entryDelay={500}
+                        exitDelay={500}
+                        flipBehavior={
+                          Array [
+                            "top",
+                            "right",
+                            "bottom",
+                            "left",
+                            "top",
+                            "right",
+                            "bottom",
+                          ]
+                        }
+                        id=""
+                        isAppLauncher={false}
+                        isContentLeftAligned={false}
+                        isVisible={false}
+                        maxWidth="18.75rem"
+                        position="top"
+                        tippyProps={Object {}}
+                        trigger="mouseenter focus"
+                        zIndex={9999}
+                      >
+                        <PopoverBase
+                          appendTo={[Function]}
+                          aria="describedby"
+                          arrow={true}
+                          boundary="window"
+                          content={
+                            <div
+                              className=""
+                              id=""
+                              role="tooltip"
+                            >
+                              <TooltipContent
+                                isLeftAligned={false}
+                              >
+                                Completed
+                              </TooltipContent>
+                            </div>
+                          }
+                          delay={
+                            Array [
+                              500,
+                              500,
+                            ]
+                          }
+                          distance={15}
+                          flip={true}
+                          flipBehavior={
+                            Array [
+                              "top",
+                              "right",
+                              "bottom",
+                              "left",
+                              "top",
+                              "right",
+                              "bottom",
+                            ]
+                          }
+                          isVisible={false}
+                          lazy={true}
+                          maxWidth="18.75rem"
+                          onCreate={[Function]}
+                          placement="top"
+                          popperOptions={
+                            Object {
+                              "modifiers": Object {
+                                "hide": Object {
+                                  "enabled": true,
+                                },
+                                "preventOverflow": Object {
+                                  "enabled": true,
+                                },
+                              },
+                            }
+                          }
+                          theme="pf-tooltip"
+                          trigger="mouseenter focus"
+                          zIndex={9999}
+                        >
+                          <CheckCircleIcon
+                            className="kogito-management-console--timeline-status"
+                            color="var(--pf-global--success-color--100)"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              className="kogito-management-console--timeline-status"
+                              fill="var(--pf-global--success-color--100)"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 512 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
+                                transform=""
+                              />
+                            </svg>
+                          </CheckCircleIcon>
+                          <Portal
+                            containerInfo={
+                              <div>
+                                <div
+                                  class=""
+                                  id=""
+                                  role="tooltip"
+                                >
+                                  <div
+                                    class="pf-c-tooltip__content"
+                                  >
+                                    Completed
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          >
+                            <div
+                              className=""
+                              id=""
+                              role="tooltip"
+                            >
+                              <TooltipContent
+                                isLeftAligned={false}
+                              >
+                                <div
+                                  className="pf-c-tooltip__content"
+                                >
+                                  Completed
+                                </div>
+                              </TooltipContent>
+                            </div>
+                          </Portal>
+                        </PopoverBase>
+                      </Tooltip>
+                    </div>
+                  </SplitItem>
+                  <SplitItem
+                    isFilled={true}
+                  >
+                    <div
+                      className="pf-l-split__item pf-m-fill"
+                    >
+                      <TextContent>
+                        <div
+                          className="pf-c-content"
+                        >
+                          <Text
+                            component="p"
+                          >
+                            <p
+                              className=""
+                              data-pf-content={true}
+                            >
+                              Book flight
+                              <span />
+                              <Text
+                                component="small"
+                              >
+                                <small
+                                  className=""
+                                  data-pf-content={true}
+                                >
+                                  <t
+                                    ago={false}
+                                    calendar={false}
+                                    decimal={false}
+                                    element={null}
+                                    filter={[Function]}
+                                    fromNow={true}
+                                    interval={60000}
+                                    local={false}
+                                    onChange={[Function]}
+                                    titleFormat=""
+                                    toNow={false}
+                                    unit={null}
+                                    unix={false}
+                                    utc={false}
+                                    withTitle={false}
+                                  >
+                                    <time
+                                      dateTime={"2019-10-22T04:43:01.144Z"}
+                                    >
+                                      7 months ago
+                                    </time>
+                                  </t>
+                                </small>
+                              </Text>
+                            </p>
+                          </Text>
+                        </div>
+                      </TextContent>
+                    </div>
+                  </SplitItem>
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <Dropdown
+                        isPlain={true}
+                        toggle={
+                          <KebabToggle
+                            id="timeline-kebab-toggle-disabled-1"
+                            isDisabled={true}
+                          />
+                        }
+                      >
+                        <Component
+                          isPlain={true}
+                          toggle={
+                            <KebabToggle
+                              id="timeline-kebab-toggle-disabled-1"
+                              isDisabled={true}
+                            />
+                          }
+                        >
+                          <ComponentWithOuia
+                            component={[Function]}
+                            componentProps={
+                              Object {
+                                "isPlain": true,
+                                "toggle": <KebabToggle
+                                  id="timeline-kebab-toggle-disabled-1"
+                                  isDisabled={true}
+                                />,
+                              }
+                            }
+                            consumerContext={
+                              Object {
+                                "isOuia": false,
+                                "ouiaId": null,
+                              }
+                            }
+                          >
+                            <DropdownWithContext
+                              autoFocus={true}
+                              className=""
+                              direction="down"
+                              dropdownItems={Array []}
+                              isGrouped={false}
+                              isOpen={false}
+                              isPlain={true}
+                              onSelect={[Function]}
+                              ouiaComponentType="Dropdown"
+                              ouiaContext={
+                                Object {
+                                  "isOuia": false,
+                                  "ouiaId": null,
+                                }
+                              }
+                              position="left"
+                              toggle={
+                                <KebabToggle
+                                  id="timeline-kebab-toggle-disabled-1"
+                                  isDisabled={true}
+                                />
+                              }
+                            >
+                              <div
+                                className="pf-c-dropdown"
+                              >
+                                <KebabToggle
+                                  ariaHasPopup={false}
+                                  id="timeline-kebab-toggle-disabled-1"
+                                  isDisabled={true}
+                                  isOpen={false}
+                                  isPlain={true}
+                                  key=".0"
+                                  onEnter={[Function]}
+                                  parentRef={
+                                    Object {
+                                      "current": <div
+                                        class="pf-c-dropdown"
+                                      >
+                                        <button
+                                          aria-expanded="false"
+                                          aria-haspopup="false"
+                                          aria-label="Actions"
+                                          class="pf-c-dropdown__toggle pf-m-plain"
+                                          disabled=""
+                                          id="timeline-kebab-toggle-disabled-1"
+                                          type="button"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            fill="currentColor"
+                                            height="1em"
+                                            role="img"
+                                            style="vertical-align: -0.125em;"
+                                            viewBox="0 0 192 512"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                              transform=""
+                                            />
+                                          </svg>
+                                        </button>
+                                      </div>,
+                                    }
+                                  }
+                                >
+                                  <Toggle
+                                    aria-label="Actions"
+                                    ariaHasPopup={false}
+                                    bubbleEvent={false}
+                                    className=""
+                                    id="timeline-kebab-toggle-disabled-1"
+                                    isActive={false}
+                                    isDisabled={true}
+                                    isFocused={false}
+                                    isHovered={false}
+                                    isOpen={false}
+                                    isPlain={true}
+                                    isPrimary={false}
+                                    isSplitButton={false}
+                                    onEnter={[Function]}
+                                    onToggle={[Function]}
+                                    parentRef={
+                                      Object {
+                                        "current": <div
+                                          class="pf-c-dropdown"
+                                        >
+                                          <button
+                                            aria-expanded="false"
+                                            aria-haspopup="false"
+                                            aria-label="Actions"
+                                            class="pf-c-dropdown__toggle pf-m-plain"
+                                            disabled=""
+                                            id="timeline-kebab-toggle-disabled-1"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 192 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                                transform=""
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>,
+                                      }
+                                    }
+                                  >
+                                    <button
+                                      aria-expanded={false}
+                                      aria-haspopup={false}
+                                      aria-label="Actions"
+                                      className="pf-c-dropdown__toggle pf-m-plain"
+                                      disabled={true}
+                                      id="timeline-kebab-toggle-disabled-1"
+                                      onClick={[Function]}
+                                      onKeyDown={[Function]}
+                                      type="button"
+                                    >
+                                      <EllipsisVIcon
+                                        color="currentColor"
+                                        noVerticalAlign={false}
+                                        size="sm"
+                                        title={null}
+                                      >
+                                        <svg
+                                          aria-hidden={true}
+                                          aria-labelledby={null}
+                                          fill="currentColor"
+                                          height="1em"
+                                          role="img"
+                                          style={
+                                            Object {
+                                              "verticalAlign": "-0.125em",
+                                            }
+                                          }
+                                          viewBox="0 0 192 512"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                            transform=""
+                                          />
+                                        </svg>
+                                      </EllipsisVIcon>
+                                    </button>
+                                  </Toggle>
+                                </KebabToggle>
+                              </div>
+                            </DropdownWithContext>
+                          </ComponentWithOuia>
+                        </Component>
+                      </Dropdown>
+                    </div>
+                  </SplitItem>
+                   
+                </div>
+              </Split>
+              <Split
+                className="kogito-management-console--timeline-item"
+                gutter="sm"
+                key="6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2"
+              >
+                <div
+                  className="pf-l-split pf-m-gutter kogito-management-console--timeline-item"
+                >
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <Tooltip
+                        appendTo={[Function]}
+                        aria="describedby"
+                        boundary="window"
+                        className=""
+                        content="Completed"
+                        distance={15}
+                        enableFlip={true}
+                        entryDelay={500}
+                        exitDelay={500}
+                        flipBehavior={
+                          Array [
+                            "top",
+                            "right",
+                            "bottom",
+                            "left",
+                            "top",
+                            "right",
+                            "bottom",
+                          ]
+                        }
+                        id=""
+                        isAppLauncher={false}
+                        isContentLeftAligned={false}
+                        isVisible={false}
+                        maxWidth="18.75rem"
+                        position="top"
+                        tippyProps={Object {}}
+                        trigger="mouseenter focus"
+                        zIndex={9999}
+                      >
+                        <PopoverBase
+                          appendTo={[Function]}
+                          aria="describedby"
+                          arrow={true}
+                          boundary="window"
+                          content={
+                            <div
+                              className=""
+                              id=""
+                              role="tooltip"
+                            >
+                              <TooltipContent
+                                isLeftAligned={false}
+                              >
+                                Completed
+                              </TooltipContent>
+                            </div>
+                          }
+                          delay={
+                            Array [
+                              500,
+                              500,
+                            ]
+                          }
+                          distance={15}
+                          flip={true}
+                          flipBehavior={
+                            Array [
+                              "top",
+                              "right",
+                              "bottom",
+                              "left",
+                              "top",
+                              "right",
+                              "bottom",
+                            ]
+                          }
+                          isVisible={false}
+                          lazy={true}
+                          maxWidth="18.75rem"
+                          onCreate={[Function]}
+                          placement="top"
+                          popperOptions={
+                            Object {
+                              "modifiers": Object {
+                                "hide": Object {
+                                  "enabled": true,
+                                },
+                                "preventOverflow": Object {
+                                  "enabled": true,
+                                },
+                              },
+                            }
+                          }
+                          theme="pf-tooltip"
+                          trigger="mouseenter focus"
+                          zIndex={9999}
+                        >
+                          <CheckCircleIcon
+                            className="kogito-management-console--timeline-status"
+                            color="var(--pf-global--success-color--100)"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              className="kogito-management-console--timeline-status"
+                              fill="var(--pf-global--success-color--100)"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 512 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
+                                transform=""
+                              />
+                            </svg>
+                          </CheckCircleIcon>
+                          <Portal
+                            containerInfo={
+                              <div>
+                                <div
+                                  class=""
+                                  id=""
+                                  role="tooltip"
+                                >
+                                  <div
+                                    class="pf-c-tooltip__content"
+                                  >
+                                    Completed
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                          >
+                            <div
+                              className=""
+                              id=""
+                              role="tooltip"
+                            >
+                              <TooltipContent
+                                isLeftAligned={false}
+                              >
+                                <div
+                                  className="pf-c-tooltip__content"
+                                >
+                                  Completed
+                                </div>
+                              </TooltipContent>
+                            </div>
+                          </Portal>
+                        </PopoverBase>
+                      </Tooltip>
+                    </div>
+                  </SplitItem>
+                  <SplitItem
+                    isFilled={true}
+                  >
+                    <div
+                      className="pf-l-split__item pf-m-fill"
+                    >
+                      <TextContent>
+                        <div
+                          className="pf-c-content"
+                        >
+                          <Text
+                            component="p"
+                          >
+                            <p
+                              className=""
+                              data-pf-content={true}
+                            >
+                              StartProcess
+                              <span />
+                              <Text
+                                component="small"
+                              >
+                                <small
+                                  className=""
+                                  data-pf-content={true}
+                                >
+                                  <t
+                                    ago={false}
+                                    calendar={false}
+                                    decimal={false}
+                                    element={null}
+                                    filter={[Function]}
+                                    fromNow={true}
+                                    interval={60000}
+                                    local={false}
+                                    onChange={[Function]}
+                                    titleFormat=""
+                                    toNow={false}
+                                    unit={null}
+                                    unix={false}
+                                    utc={false}
+                                    withTitle={false}
+                                  >
+                                    <time
+                                      dateTime={"2019-10-22T04:43:01.144Z"}
+                                    >
+                                      7 months ago
+                                    </time>
+                                  </t>
+                                </small>
+                              </Text>
+                            </p>
+                          </Text>
+                        </div>
+                      </TextContent>
+                    </div>
+                  </SplitItem>
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <Dropdown
+                        isPlain={true}
+                        toggle={
+                          <KebabToggle
+                            id="timeline-kebab-toggle-disabled-2"
+                            isDisabled={true}
+                          />
+                        }
+                      >
+                        <Component
+                          isPlain={true}
+                          toggle={
+                            <KebabToggle
+                              id="timeline-kebab-toggle-disabled-2"
+                              isDisabled={true}
+                            />
+                          }
+                        >
+                          <ComponentWithOuia
+                            component={[Function]}
+                            componentProps={
+                              Object {
+                                "isPlain": true,
+                                "toggle": <KebabToggle
+                                  id="timeline-kebab-toggle-disabled-2"
+                                  isDisabled={true}
+                                />,
+                              }
+                            }
+                            consumerContext={
+                              Object {
+                                "isOuia": false,
+                                "ouiaId": null,
+                              }
+                            }
+                          >
+                            <DropdownWithContext
+                              autoFocus={true}
+                              className=""
+                              direction="down"
+                              dropdownItems={Array []}
+                              isGrouped={false}
+                              isOpen={false}
+                              isPlain={true}
+                              onSelect={[Function]}
+                              ouiaComponentType="Dropdown"
+                              ouiaContext={
+                                Object {
+                                  "isOuia": false,
+                                  "ouiaId": null,
+                                }
+                              }
+                              position="left"
+                              toggle={
+                                <KebabToggle
+                                  id="timeline-kebab-toggle-disabled-2"
+                                  isDisabled={true}
+                                />
+                              }
+                            >
+                              <div
+                                className="pf-c-dropdown"
+                              >
+                                <KebabToggle
+                                  ariaHasPopup={false}
+                                  id="timeline-kebab-toggle-disabled-2"
+                                  isDisabled={true}
+                                  isOpen={false}
+                                  isPlain={true}
+                                  key=".0"
+                                  onEnter={[Function]}
+                                  parentRef={
+                                    Object {
+                                      "current": <div
+                                        class="pf-c-dropdown"
+                                      >
+                                        <button
+                                          aria-expanded="false"
+                                          aria-haspopup="false"
+                                          aria-label="Actions"
+                                          class="pf-c-dropdown__toggle pf-m-plain"
+                                          disabled=""
+                                          id="timeline-kebab-toggle-disabled-2"
+                                          type="button"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            fill="currentColor"
+                                            height="1em"
+                                            role="img"
+                                            style="vertical-align: -0.125em;"
+                                            viewBox="0 0 192 512"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                              transform=""
+                                            />
+                                          </svg>
+                                        </button>
+                                      </div>,
+                                    }
+                                  }
+                                >
+                                  <Toggle
+                                    aria-label="Actions"
+                                    ariaHasPopup={false}
+                                    bubbleEvent={false}
+                                    className=""
+                                    id="timeline-kebab-toggle-disabled-2"
+                                    isActive={false}
+                                    isDisabled={true}
+                                    isFocused={false}
+                                    isHovered={false}
+                                    isOpen={false}
+                                    isPlain={true}
+                                    isPrimary={false}
+                                    isSplitButton={false}
+                                    onEnter={[Function]}
+                                    onToggle={[Function]}
+                                    parentRef={
+                                      Object {
+                                        "current": <div
+                                          class="pf-c-dropdown"
+                                        >
+                                          <button
+                                            aria-expanded="false"
+                                            aria-haspopup="false"
+                                            aria-label="Actions"
+                                            class="pf-c-dropdown__toggle pf-m-plain"
+                                            disabled=""
+                                            id="timeline-kebab-toggle-disabled-2"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 192 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                                transform=""
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>,
+                                      }
+                                    }
+                                  >
+                                    <button
+                                      aria-expanded={false}
+                                      aria-haspopup={false}
+                                      aria-label="Actions"
+                                      className="pf-c-dropdown__toggle pf-m-plain"
+                                      disabled={true}
+                                      id="timeline-kebab-toggle-disabled-2"
+                                      onClick={[Function]}
+                                      onKeyDown={[Function]}
+                                      type="button"
+                                    >
+                                      <EllipsisVIcon
+                                        color="currentColor"
+                                        noVerticalAlign={false}
+                                        size="sm"
+                                        title={null}
+                                      >
+                                        <svg
+                                          aria-hidden={true}
+                                          aria-labelledby={null}
+                                          fill="currentColor"
+                                          height="1em"
+                                          role="img"
+                                          style={
+                                            Object {
+                                              "verticalAlign": "-0.125em",
+                                            }
+                                          }
+                                          viewBox="0 0 192 512"
+                                          width="1em"
+                                        >
+                                          <path
+                                            d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                            transform=""
+                                          />
+                                        </svg>
+                                      </EllipsisVIcon>
+                                    </button>
+                                  </Toggle>
+                                </KebabToggle>
+                              </div>
+                            </DropdownWithContext>
+                          </ComponentWithOuia>
+                        </Component>
+                      </Dropdown>
+                    </div>
+                  </SplitItem>
+                   
+                </div>
+              </Split>
+            </div>
+          </Stack>
+        </div>
+      </CardBody>
+    </article>
+  </Card>
+</ProcessDetailsTimeline>
 `;

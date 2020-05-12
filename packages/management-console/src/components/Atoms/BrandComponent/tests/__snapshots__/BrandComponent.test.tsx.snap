@@ -1,7 +1,61 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Brand component tests snapshot testing 1`] = `
-<ContextConsumer>
-  <Component />
-</ContextConsumer>
+<BrandComponent
+  history={
+    Object {
+      "action": "POP",
+      "block": [Function],
+      "createHref": [Function],
+      "go": [Function],
+      "goBack": [Function],
+      "goForward": [Function],
+      "length": 1,
+      "listen": [Function],
+      "location": Object {
+        "hash": "",
+        "pathname": "/",
+        "search": "",
+        "state": undefined,
+      },
+      "push": [Function],
+      "replace": [Function],
+    }
+  }
+  location={
+    Object {
+      "hash": "",
+      "pathname": "/",
+      "search": "",
+      "state": undefined,
+    }
+  }
+  match={
+    Object {
+      "isExact": true,
+      "params": Object {},
+      "path": "/",
+      "url": "/",
+    }
+  }
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+>
+  <Brand
+    alt="Management Console Logo"
+    onClick={[Function]}
+    src="managementConsoleLogo.svg"
+  >
+    <img
+      alt="Management Console Logo"
+      className="pf-c-brand"
+      onClick={[Function]}
+      src="managementConsoleLogo.svg"
+    />
+  </Brand>
+</BrandComponent>
 `;

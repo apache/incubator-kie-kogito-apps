@@ -4,13 +4,16 @@ import {
   SelectOption,
   SelectVariant,
   SelectGroup,
-  Button
+  Button,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { SyncIcon } from '@patternfly/react-icons';
 import { query } from 'gql-query-builder';
 import _ from 'lodash';
 import gql from 'graphql-tag';
-import { useApolloClient } from 'react-apollo';
+import { useApolloClient } from '@apollo/react-hooks';
+import { componentOuiaProps, attributeOuiaId } from '@kogito-apps/common';
 
 export interface IOwnProps {
   columnPickerType: any;
@@ -37,7 +40,7 @@ export interface IOwnProps {
   isLoadingMore: boolean;
 }
 
-const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
+const DomainExplorerColumnPicker: React.FC<IOwnProps & InjectedOuiaProps> = ({
   columnPickerType,
   setColumnFilters,
   setTableLoading,
@@ -59,7 +62,9 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
   setOffsetVal,
   setPageSize,
   setIsLoadingMore,
-  isLoadingMore
+  isLoadingMore,
+  ouiaContext,
+  ouiaId
 }) => {
   // tslint:disable: forin
   // tslint:disable: no-floating-promises
@@ -402,6 +407,7 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
       {!getPicker.loading && columnPickerType && (
         <>
           <Select
+            {...componentOuiaProps(ouiaContext, ouiaId, 'ColumnPicker', true)}
             variant={SelectVariant.checkbox}
             aria-label="Select Input"
             onToggle={onToggle}
@@ -420,6 +426,7 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
             onClick={() => {
               onResetQuery(parameters);
             }}
+            {...attributeOuiaId(ouiaContext, "button-apply-columns")}
           >
             Apply columns
           </Button>
@@ -430,6 +437,7 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
             }}
             className="pf-u-m-md"
             aria-label={'Refresh list'}
+            {...attributeOuiaId(ouiaContext, "button-refresh-list")}
           >
             <SyncIcon />
           </Button>
@@ -439,4 +447,5 @@ const DomainExplorerColumnPicker: React.FC<IOwnProps> = ({
   );
 };
 
-export default DomainExplorerColumnPicker;
+const DomainExplorerColumnPickerWithContext = withOuiaContext(DomainExplorerColumnPicker);
+export default DomainExplorerColumnPickerWithContext;

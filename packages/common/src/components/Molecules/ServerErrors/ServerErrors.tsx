@@ -10,17 +10,32 @@ import {
   EmptyStateBody,
   Title,
   ClipboardCopy,
-  ClipboardCopyVariant
+  ClipboardCopyVariant,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import './ServerErrors.css';
-import { withRouter } from 'react-router-dom';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { componentOuiaProps } from '../../../utils/OuiaUtils';
 
-const ServerErrors = props => {
+export interface IOwnProps {
+  history: any,
+  message?: any,
+  error: any
+}
+
+const ServerErrors: React.FC<IOwnProps & RouteComponentProps & InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId,
+  ...props
+}) => {
   const [displayError, setDisplayError] = useState(false);
 
   return (
-    <PageSection variant="light">
+    <PageSection variant="light"
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ServerErrors', true)}
+    >
       <Bullseye>
         <EmptyState variant={EmptyStateVariant.full}>
           <EmptyStateIcon
@@ -62,4 +77,4 @@ const ServerErrors = props => {
   );
 };
 
-export default withRouter(ServerErrors);
+export default withRouter(withOuiaContext(ServerErrors));

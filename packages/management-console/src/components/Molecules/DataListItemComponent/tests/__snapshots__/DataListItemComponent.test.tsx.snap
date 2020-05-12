@@ -1,8 +1,145 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DataListItem component tests Snapshot tests 1`] = `
-<Fragment>
-  <Modalbox
+<DataListItemComponent
+  abortedObj={
+    Object {
+      "8035b580-6ae4-4aa8-9ec0-e18e19809e0b": "travels",
+    }
+  }
+  checkedArray={
+    Array [
+      "ACTIVE",
+    ]
+  }
+  id={0}
+  initData={
+    Object {
+      "ProcessInstances": Array [
+        Object {
+          "addons": Array [
+            "jobs-management",
+            "prometheus-monitoring",
+            "process-management",
+          ],
+          "childProcessInstances": Array [],
+          "end": null,
+          "endpoint": "http://localhost:4000",
+          "error": Object {
+            "message": "Something went wrong",
+            "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
+          },
+          "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+          "nodes": Array [
+            Object {
+              "definitionId": "EndEvent_1",
+              "enter": "2019-10-22T04:43:01.144Z",
+              "exit": "2019-10-22T04:43:01.144Z",
+              "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+              "name": "End Event 1",
+              "nodeId": "123-456-789",
+              "type": "EndNode",
+            },
+            Object {
+              "definitionId": "ServiceTask_1",
+              "enter": "2019-10-22T04:43:01.144Z",
+              "exit": "2019-10-22T04:43:01.144Z",
+              "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+              "name": "Book flight",
+              "nodeId": "123-456-789",
+              "type": "WorkItemNode",
+            },
+            Object {
+              "definitionId": "StartEvent_1",
+              "enter": "2019-10-22T04:43:01.144Z",
+              "exit": "2019-10-22T04:43:01.144Z",
+              "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+              "name": "StartProcess",
+              "nodeId": "123-456-789",
+              "type": "StartNode",
+            },
+          ],
+          "parentProcessInstance": null,
+          "parentProcessInstanceId": null,
+          "processId": "travels",
+          "processName": "travels",
+          "roles": Array [],
+          "rootProcessInstanceId": null,
+          "start": "2019-10-22T03:40:44.089Z",
+          "state": "ACTIVE",
+          "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+        },
+      ],
+    }
+  }
+  loadingInitData={false}
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+  processInstanceData={
+    Object {
+      "addons": Array [],
+      "childProcessInstances": Array [],
+      "end": "2019-10-22T05:40:44.089Z",
+      "endpoint": "http://localhost:4000",
+      "error": Object {
+        "message": "Something went wrong",
+        "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+      },
+      "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+      "isChecked": false,
+      "lastUpdate": "2019-10-22T03:40:44.089Z",
+      "nodes": Array [
+        Object {
+          "definitionId": "EndEvent_1",
+          "enter": "2019-10-22T04:43:01.144Z",
+          "exit": "2019-10-22T04:43:01.144Z",
+          "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+          "name": "End Event 1",
+          "nodeId": "1",
+          "type": "EndNode",
+        },
+        Object {
+          "definitionId": "ServiceTask_1",
+          "enter": "2019-10-22T04:43:01.144Z",
+          "exit": "2019-10-22T04:43:01.144Z",
+          "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+          "name": "Book flight",
+          "nodeId": "2",
+          "type": "WorkItemNode",
+        },
+        Object {
+          "definitionId": "StartEvent_1",
+          "enter": "2019-10-22T04:43:01.144Z",
+          "exit": "2019-10-22T04:43:01.144Z",
+          "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+          "name": "StartProcess",
+          "nodeId": "3",
+          "type": "StartNode",
+        },
+      ],
+      "parentProcessInstance": null,
+      "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+      "processId": "flightBooking",
+      "processName": "FlightBooking",
+      "roles": Array [],
+      "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+      "serviceUrl": null,
+      "start": "2019-10-22T03:40:44.089Z",
+      "state": "COMPLETED",
+      "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+    }
+  }
+  selectedNumber={0}
+  setAbortedObj={[MockFunction]}
+  setInitData={[MockFunction]}
+  setIsAllChecked={[MockFunction]}
+  setSelectedNumber={[MockFunction]}
+>
+  <MockedBulkModal
     abortedMessageObj={
       Object {
         "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e": Object {
@@ -70,7 +207,7 @@ exports[`DataListItem component tests Snapshot tests 1`] = `
     isModalOpen={false}
     isSingleAbort={true}
   />
-  <Modalbox
+  <MockedBulkModal
     checkedArray={
       Array [
         "ACTIVE",
@@ -82,246 +219,1022 @@ exports[`DataListItem component tests Snapshot tests 1`] = `
     aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
     isExpanded={false}
   >
-    <DataListItemRow>
-      <DisablePopup
-        component={
-          <DataListCheck
-            aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
-            isDisabled={true}
-          />
-        }
-        processInstanceData={
-          Object {
-            "addons": Array [],
-            "childProcessInstances": Array [],
-            "end": "2019-10-22T05:40:44.089Z",
-            "endpoint": "http://localhost:4000",
-            "error": Object {
-              "message": "Something went wrong",
-              "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
-            },
-            "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
-            "isChecked": false,
-            "lastUpdate": "2019-10-22T03:40:44.089Z",
-            "nodes": Array [
+    <li
+      aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+      className="pf-c-data-list__item"
+      id=""
+    >
+      <DataListItemRow
+        key=".0"
+        rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+      >
+        <div
+          className="pf-c-data-list__item-row"
+        >
+          <Component
+            component={
+              <DataListCheck
+                aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                isDisabled={true}
+              />
+            }
+            key=".1"
+            processInstanceData={
               Object {
-                "definitionId": "EndEvent_1",
-                "enter": "2019-10-22T04:43:01.144Z",
-                "exit": "2019-10-22T04:43:01.144Z",
-                "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
-                "name": "End Event 1",
-                "nodeId": "1",
-                "type": "EndNode",
-              },
-              Object {
-                "definitionId": "ServiceTask_1",
-                "enter": "2019-10-22T04:43:01.144Z",
-                "exit": "2019-10-22T04:43:01.144Z",
-                "id": "2f588da5-a323-4111-9017-3093ef9319d1",
-                "name": "Book flight",
-                "nodeId": "2",
-                "type": "WorkItemNode",
-              },
-              Object {
-                "definitionId": "StartEvent_1",
-                "enter": "2019-10-22T04:43:01.144Z",
-                "exit": "2019-10-22T04:43:01.144Z",
-                "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
-                "name": "StartProcess",
-                "nodeId": "3",
-                "type": "StartNode",
-              },
-            ],
-            "parentProcessInstance": null,
-            "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-            "processId": "flightBooking",
-            "processName": "FlightBooking",
-            "roles": Array [],
-            "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-            "serviceUrl": null,
-            "start": "2019-10-22T03:40:44.089Z",
-            "state": "COMPLETED",
-            "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
-          }
-        }
-      />
-      <DataListItemCells
-        dataListCells={
-          Array [
-            <DataListCell
-              id="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                "addons": Array [],
+                "childProcessInstances": Array [],
+                "end": "2019-10-22T05:40:44.089Z",
+                "endpoint": "http://localhost:4000",
+                "error": Object {
+                  "message": "Something went wrong",
+                  "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                },
+                "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+                "isChecked": false,
+                "lastUpdate": "2019-10-22T03:40:44.089Z",
+                "nodes": Array [
+                  Object {
+                    "definitionId": "EndEvent_1",
+                    "enter": "2019-10-22T04:43:01.144Z",
+                    "exit": "2019-10-22T04:43:01.144Z",
+                    "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+                    "name": "End Event 1",
+                    "nodeId": "1",
+                    "type": "EndNode",
+                  },
+                  Object {
+                    "definitionId": "ServiceTask_1",
+                    "enter": "2019-10-22T04:43:01.144Z",
+                    "exit": "2019-10-22T04:43:01.144Z",
+                    "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+                    "name": "Book flight",
+                    "nodeId": "2",
+                    "type": "WorkItemNode",
+                  },
+                  Object {
+                    "definitionId": "StartEvent_1",
+                    "enter": "2019-10-22T04:43:01.144Z",
+                    "exit": "2019-10-22T04:43:01.144Z",
+                    "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+                    "name": "StartProcess",
+                    "nodeId": "3",
+                    "type": "StartNode",
+                  },
+                ],
+                "parentProcessInstance": null,
+                "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                "processId": "flightBooking",
+                "processName": "FlightBooking",
+                "roles": Array [],
+                "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                "serviceUrl": null,
+                "start": "2019-10-22T03:40:44.089Z",
+                "state": "COMPLETED",
+                "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+              }
+            }
+            rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+          >
+            <ComponentWithOuia
+              component={[Function]}
+              componentProps={
+                Object {
+                  "component": <DataListCheck
+                    aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                    isDisabled={true}
+                  />,
+                  "processInstanceData": Object {
+                    "addons": Array [],
+                    "childProcessInstances": Array [],
+                    "end": "2019-10-22T05:40:44.089Z",
+                    "endpoint": "http://localhost:4000",
+                    "error": Object {
+                      "message": "Something went wrong",
+                      "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                    },
+                    "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+                    "isChecked": false,
+                    "lastUpdate": "2019-10-22T03:40:44.089Z",
+                    "nodes": Array [
+                      Object {
+                        "definitionId": "EndEvent_1",
+                        "enter": "2019-10-22T04:43:01.144Z",
+                        "exit": "2019-10-22T04:43:01.144Z",
+                        "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+                        "name": "End Event 1",
+                        "nodeId": "1",
+                        "type": "EndNode",
+                      },
+                      Object {
+                        "definitionId": "ServiceTask_1",
+                        "enter": "2019-10-22T04:43:01.144Z",
+                        "exit": "2019-10-22T04:43:01.144Z",
+                        "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+                        "name": "Book flight",
+                        "nodeId": "2",
+                        "type": "WorkItemNode",
+                      },
+                      Object {
+                        "definitionId": "StartEvent_1",
+                        "enter": "2019-10-22T04:43:01.144Z",
+                        "exit": "2019-10-22T04:43:01.144Z",
+                        "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+                        "name": "StartProcess",
+                        "nodeId": "3",
+                        "type": "StartNode",
+                      },
+                    ],
+                    "parentProcessInstance": null,
+                    "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                    "processId": "flightBooking",
+                    "processName": "FlightBooking",
+                    "roles": Array [],
+                    "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                    "serviceUrl": null,
+                    "start": "2019-10-22T03:40:44.089Z",
+                    "state": "COMPLETED",
+                    "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                  },
+                  "rowid": "kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+                }
+              }
+              consumerContext={
+                Object {
+                  "isOuia": false,
+                  "ouiaId": null,
+                }
+              }
             >
-              <Link
-                to="/Process/c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+              <DisablePopup
+                component={
+                  <DataListCheck
+                    aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                    isDisabled={true}
+                  />
+                }
+                ouiaContext={
+                  Object {
+                    "isOuia": false,
+                    "ouiaId": null,
+                  }
+                }
+                processInstanceData={
+                  Object {
+                    "addons": Array [],
+                    "childProcessInstances": Array [],
+                    "end": "2019-10-22T05:40:44.089Z",
+                    "endpoint": "http://localhost:4000",
+                    "error": Object {
+                      "message": "Something went wrong",
+                      "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                    },
+                    "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+                    "isChecked": false,
+                    "lastUpdate": "2019-10-22T03:40:44.089Z",
+                    "nodes": Array [
+                      Object {
+                        "definitionId": "EndEvent_1",
+                        "enter": "2019-10-22T04:43:01.144Z",
+                        "exit": "2019-10-22T04:43:01.144Z",
+                        "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+                        "name": "End Event 1",
+                        "nodeId": "1",
+                        "type": "EndNode",
+                      },
+                      Object {
+                        "definitionId": "ServiceTask_1",
+                        "enter": "2019-10-22T04:43:01.144Z",
+                        "exit": "2019-10-22T04:43:01.144Z",
+                        "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+                        "name": "Book flight",
+                        "nodeId": "2",
+                        "type": "WorkItemNode",
+                      },
+                      Object {
+                        "definitionId": "StartEvent_1",
+                        "enter": "2019-10-22T04:43:01.144Z",
+                        "exit": "2019-10-22T04:43:01.144Z",
+                        "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+                        "name": "StartProcess",
+                        "nodeId": "3",
+                        "type": "StartNode",
+                      },
+                    ],
+                    "parentProcessInstance": null,
+                    "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                    "processId": "flightBooking",
+                    "processName": "FlightBooking",
+                    "roles": Array [],
+                    "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                    "serviceUrl": null,
+                    "start": "2019-10-22T03:40:44.089Z",
+                    "state": "COMPLETED",
+                    "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                  }
+                }
+                rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
               >
-                <div>
-                  <strong>
-                    <ProcessDescriptor
-                      processInstanceData={
-                        Object {
-                          "addons": Array [],
-                          "childProcessInstances": Array [],
-                          "end": "2019-10-22T05:40:44.089Z",
-                          "endpoint": "http://localhost:4000",
-                          "error": Object {
-                            "message": "Something went wrong",
-                            "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                <Tooltip
+                  appendTo={[Function]}
+                  aria="describedby"
+                  boundary="window"
+                  className=""
+                  content="Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up."
+                  distance={-15}
+                  enableFlip={true}
+                  entryDelay={500}
+                  exitDelay={500}
+                  flipBehavior={
+                    Array [
+                      "top",
+                      "right",
+                      "bottom",
+                      "left",
+                      "top",
+                      "right",
+                      "bottom",
+                    ]
+                  }
+                  id=""
+                  isAppLauncher={false}
+                  isContentLeftAligned={false}
+                  isVisible={false}
+                  maxWidth="18.75rem"
+                  position="top"
+                  tippyProps={Object {}}
+                  trigger="mouseenter focus"
+                  zIndex={9999}
+                >
+                  <PopoverBase
+                    appendTo={[Function]}
+                    aria="describedby"
+                    arrow={true}
+                    boundary="window"
+                    content={
+                      <div
+                        className=""
+                        id=""
+                        role="tooltip"
+                      >
+                        <TooltipContent
+                          isLeftAligned={false}
+                        >
+                          Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up.
+                        </TooltipContent>
+                      </div>
+                    }
+                    delay={
+                      Array [
+                        500,
+                        500,
+                      ]
+                    }
+                    distance={-15}
+                    flip={true}
+                    flipBehavior={
+                      Array [
+                        "top",
+                        "right",
+                        "bottom",
+                        "left",
+                        "top",
+                        "right",
+                        "bottom",
+                      ]
+                    }
+                    isVisible={false}
+                    lazy={true}
+                    maxWidth="18.75rem"
+                    onCreate={[Function]}
+                    placement="top"
+                    popperOptions={
+                      Object {
+                        "modifiers": Object {
+                          "hide": Object {
+                            "enabled": true,
                           },
-                          "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
-                          "isChecked": false,
-                          "lastUpdate": "2019-10-22T03:40:44.089Z",
-                          "nodes": Array [
+                          "preventOverflow": Object {
+                            "enabled": true,
+                          },
+                        },
+                      }
+                    }
+                    theme="pf-tooltip"
+                    trigger="mouseenter focus"
+                    zIndex={9999}
+                  >
+                    <DataListCheck
+                      aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                      isDisabled={true}
+                    >
+                      <div
+                        className="pf-c-data-list__item-control"
+                      >
+                        <div
+                          className="pf-c-data-list__check"
+                        >
+                          <input
+                            aria-invalid={false}
+                            aria-labelledby="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                            checked={null}
+                            disabled={true}
+                            onChange={[Function]}
+                            type="checkbox"
+                          />
+                        </div>
+                      </div>
+                    </DataListCheck>
+                    <Portal
+                      containerInfo={
+                        <div>
+                          <div
+                            class=""
+                            id=""
+                            role="tooltip"
+                          >
+                            <div
+                              class="pf-c-tooltip__content"
+                            >
+                              Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up.
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <div
+                        className=""
+                        id=""
+                        role="tooltip"
+                      >
+                        <TooltipContent
+                          isLeftAligned={false}
+                        >
+                          <div
+                            className="pf-c-tooltip__content"
+                          >
+                            Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up.
+                          </div>
+                        </TooltipContent>
+                      </div>
+                    </Portal>
+                  </PopoverBase>
+                </Tooltip>
+              </DisablePopup>
+            </ComponentWithOuia>
+          </Component>
+          <DataListItemCells
+            dataListCells={
+              Array [
+                <DataListCell
+                  id="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                >
+                  <Link
+                    to="/Process/c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                  >
+                    <div>
+                      <strong>
+                        <MockedProcessDescriptor
+                          processInstanceData={
                             Object {
-                              "definitionId": "EndEvent_1",
-                              "enter": "2019-10-22T04:43:01.144Z",
-                              "exit": "2019-10-22T04:43:01.144Z",
-                              "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
-                              "name": "End Event 1",
-                              "nodeId": "1",
-                              "type": "EndNode",
-                            },
-                            Object {
-                              "definitionId": "ServiceTask_1",
-                              "enter": "2019-10-22T04:43:01.144Z",
-                              "exit": "2019-10-22T04:43:01.144Z",
-                              "id": "2f588da5-a323-4111-9017-3093ef9319d1",
-                              "name": "Book flight",
-                              "nodeId": "2",
-                              "type": "WorkItemNode",
-                            },
-                            Object {
-                              "definitionId": "StartEvent_1",
-                              "enter": "2019-10-22T04:43:01.144Z",
-                              "exit": "2019-10-22T04:43:01.144Z",
-                              "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
-                              "name": "StartProcess",
-                              "nodeId": "3",
-                              "type": "StartNode",
-                            },
-                          ],
-                          "parentProcessInstance": null,
-                          "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "processId": "flightBooking",
-                          "processName": "FlightBooking",
-                          "roles": Array [],
-                          "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                              "addons": Array [],
+                              "childProcessInstances": Array [],
+                              "end": "2019-10-22T05:40:44.089Z",
+                              "endpoint": "http://localhost:4000",
+                              "error": Object {
+                                "message": "Something went wrong",
+                                "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                              },
+                              "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+                              "isChecked": false,
+                              "lastUpdate": "2019-10-22T03:40:44.089Z",
+                              "nodes": Array [
+                                Object {
+                                  "definitionId": "EndEvent_1",
+                                  "enter": "2019-10-22T04:43:01.144Z",
+                                  "exit": "2019-10-22T04:43:01.144Z",
+                                  "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+                                  "name": "End Event 1",
+                                  "nodeId": "1",
+                                  "type": "EndNode",
+                                },
+                                Object {
+                                  "definitionId": "ServiceTask_1",
+                                  "enter": "2019-10-22T04:43:01.144Z",
+                                  "exit": "2019-10-22T04:43:01.144Z",
+                                  "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+                                  "name": "Book flight",
+                                  "nodeId": "2",
+                                  "type": "WorkItemNode",
+                                },
+                                Object {
+                                  "definitionId": "StartEvent_1",
+                                  "enter": "2019-10-22T04:43:01.144Z",
+                                  "exit": "2019-10-22T04:43:01.144Z",
+                                  "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+                                  "name": "StartProcess",
+                                  "nodeId": "3",
+                                  "type": "StartNode",
+                                },
+                              ],
+                              "parentProcessInstance": null,
+                              "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                              "processId": "flightBooking",
+                              "processName": "FlightBooking",
+                              "roles": Array [],
+                              "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                              "serviceUrl": null,
+                              "start": "2019-10-22T03:40:44.089Z",
+                              "state": "COMPLETED",
+                              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                            }
+                          }
+                        />
+                      </strong>
+                    </div>
+                  </Link>
+                  <Unknown
+                    isLinkShown={false}
+                    serviceUrl={null}
+                  />
+                </DataListCell>,
+                <DataListCell>
+                  <React.Fragment>
+                    <CheckCircleIcon
+                      className="pf-u-mr-sm"
+                      color="var(--pf-global--success-color--100)"
+                      noVerticalAlign={false}
+                      size="sm"
+                      title={null}
+                    />
+                    Completed
+                  </React.Fragment>
+                </DataListCell>,
+                <DataListCell>
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    2019-10-22T03:40:44.089Z
+                  </t>
+                </DataListCell>,
+                <DataListCell>
+                  <span>
+                     
+                    <HistoryIcon
+                      className="pf-u-mr-sm"
+                      color="currentColor"
+                      noVerticalAlign={false}
+                      size="sm"
+                      title={null}
+                    />
+                     Updated
+                     
+                    <t
+                      ago={false}
+                      calendar={false}
+                      decimal={false}
+                      element={null}
+                      filter={[Function]}
+                      fromNow={true}
+                      interval={60000}
+                      local={false}
+                      onChange={[Function]}
+                      titleFormat=""
+                      toNow={false}
+                      unit={null}
+                      unix={false}
+                      utc={false}
+                      withTitle={false}
+                    >
+                      2019-10-22T03:40:44.089Z
+                    </t>
+                  </span>
+                </DataListCell>,
+              ]
+            }
+            key=".2"
+            rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+          >
+            <div
+              className="pf-c-data-list__item-content"
+            >
+              <DataListCell
+                id="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                key="1"
+              >
+                <div
+                  className="pf-c-data-list__cell"
+                  id="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                >
+                  <Link
+                    to="/Process/c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                  >
+                    <LinkAnchor
+                      href="/Process/c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                      navigate={[Function]}
+                    >
+                      <a
+                        href="/Process/c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+                        onClick={[Function]}
+                      >
+                        <div>
+                          <strong>
+                            <MockedProcessDescriptor
+                              processInstanceData={
+                                Object {
+                                  "addons": Array [],
+                                  "childProcessInstances": Array [],
+                                  "end": "2019-10-22T05:40:44.089Z",
+                                  "endpoint": "http://localhost:4000",
+                                  "error": Object {
+                                    "message": "Something went wrong",
+                                    "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                                  },
+                                  "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+                                  "isChecked": false,
+                                  "lastUpdate": "2019-10-22T03:40:44.089Z",
+                                  "nodes": Array [
+                                    Object {
+                                      "definitionId": "EndEvent_1",
+                                      "enter": "2019-10-22T04:43:01.144Z",
+                                      "exit": "2019-10-22T04:43:01.144Z",
+                                      "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
+                                      "name": "End Event 1",
+                                      "nodeId": "1",
+                                      "type": "EndNode",
+                                    },
+                                    Object {
+                                      "definitionId": "ServiceTask_1",
+                                      "enter": "2019-10-22T04:43:01.144Z",
+                                      "exit": "2019-10-22T04:43:01.144Z",
+                                      "id": "2f588da5-a323-4111-9017-3093ef9319d1",
+                                      "name": "Book flight",
+                                      "nodeId": "2",
+                                      "type": "WorkItemNode",
+                                    },
+                                    Object {
+                                      "definitionId": "StartEvent_1",
+                                      "enter": "2019-10-22T04:43:01.144Z",
+                                      "exit": "2019-10-22T04:43:01.144Z",
+                                      "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
+                                      "name": "StartProcess",
+                                      "nodeId": "3",
+                                      "type": "StartNode",
+                                    },
+                                  ],
+                                  "parentProcessInstance": null,
+                                  "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                                  "processId": "flightBooking",
+                                  "processName": "FlightBooking",
+                                  "roles": Array [],
+                                  "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                                  "serviceUrl": null,
+                                  "start": "2019-10-22T03:40:44.089Z",
+                                  "state": "COMPLETED",
+                                  "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                                }
+                              }
+                            />
+                          </strong>
+                        </div>
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                  <Component
+                    isLinkShown={false}
+                    serviceUrl={null}
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "isLinkShown": false,
                           "serviceUrl": null,
-                          "start": "2019-10-22T03:40:44.089Z",
-                          "state": "COMPLETED",
-                          "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
                         }
                       }
-                    />
-                  </strong>
+                      consumerContext={
+                        Object {
+                          "isOuia": false,
+                          "ouiaId": null,
+                        }
+                      }
+                    >
+                      <EndpointLink
+                        isLinkShown={false}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        serviceUrl={null}
+                      />
+                    </ComponentWithOuia>
+                  </Component>
                 </div>
-              </Link>
-              <EndpointLink
-                isLinkShown={false}
-                serviceUrl={null}
-              />
-            </DataListCell>,
-            <DataListCell>
-              <React.Fragment>
-                <CheckCircleIcon
-                  className="pf-u-mr-sm"
-                  color="var(--pf-global--success-color--100)"
-                  noVerticalAlign={false}
-                  size="sm"
-                  title={null}
-                />
-                Completed
-              </React.Fragment>
-            </DataListCell>,
-            <DataListCell>
-              <t
-                ago={false}
-                calendar={false}
-                decimal={false}
-                element={null}
-                filter={[Function]}
-                fromNow={true}
-                interval={60000}
-                local={false}
-                onChange={[Function]}
-                titleFormat=""
-                toNow={false}
-                unit={null}
-                unix={false}
-                utc={false}
-                withTitle={false}
+              </DataListCell>
+              <DataListCell
+                key="4"
               >
-                2019-10-22T03:40:44.089Z
-              </t>
-            </DataListCell>,
-            <DataListCell>
-              <span>
-                 
-                <HistoryIcon
-                  className="pf-u-mr-sm"
-                  color="currentColor"
-                  noVerticalAlign={false}
-                  size="sm"
-                  title={null}
-                />
-                 Updated
-                 
-                <t
-                  ago={false}
-                  calendar={false}
-                  decimal={false}
-                  element={null}
-                  filter={[Function]}
-                  fromNow={true}
-                  interval={60000}
-                  local={false}
-                  onChange={[Function]}
-                  titleFormat=""
-                  toNow={false}
-                  unit={null}
-                  unix={false}
-                  utc={false}
-                  withTitle={false}
+                <div
+                  className="pf-c-data-list__cell"
                 >
-                  2019-10-22T03:40:44.089Z
-                </t>
-              </span>
-            </DataListCell>,
-          ]
-        }
-      />
-      <DataListAction
-        aria-label="Actions"
-        aria-labelledby="kie-datalist-item kie-datalist-action"
-        className=""
-        id="kie-datalist-action"
+                  <CheckCircleIcon
+                    className="pf-u-mr-sm"
+                    color="var(--pf-global--success-color--100)"
+                    noVerticalAlign={false}
+                    size="sm"
+                    title={null}
+                  >
+                    <svg
+                      aria-hidden={true}
+                      aria-labelledby={null}
+                      className="pf-u-mr-sm"
+                      fill="var(--pf-global--success-color--100)"
+                      height="1em"
+                      role="img"
+                      style={
+                        Object {
+                          "verticalAlign": "-0.125em",
+                        }
+                      }
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
+                        transform=""
+                      />
+                    </svg>
+                  </CheckCircleIcon>
+                  Completed
+                </div>
+              </DataListCell>
+              <DataListCell
+                key="2"
+              >
+                <div
+                  className="pf-c-data-list__cell"
+                >
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    <time
+                      dateTime={"2019-10-22T03:40:44.089Z"}
+                    >
+                      7 months ago
+                    </time>
+                  </t>
+                </div>
+              </DataListCell>
+              <DataListCell
+                key="3"
+              >
+                <div
+                  className="pf-c-data-list__cell"
+                >
+                  <span>
+                     
+                    <HistoryIcon
+                      className="pf-u-mr-sm"
+                      color="currentColor"
+                      noVerticalAlign={false}
+                      size="sm"
+                      title={null}
+                    >
+                      <svg
+                        aria-hidden={true}
+                        aria-labelledby={null}
+                        className="pf-u-mr-sm"
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style={
+                          Object {
+                            "verticalAlign": "-0.125em",
+                          }
+                        }
+                        viewBox="0 0 512 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"
+                          transform=""
+                        />
+                      </svg>
+                    </HistoryIcon>
+                     Updated
+                     
+                    <t
+                      ago={false}
+                      calendar={false}
+                      decimal={false}
+                      element={null}
+                      filter={[Function]}
+                      fromNow={true}
+                      interval={60000}
+                      local={false}
+                      onChange={[Function]}
+                      titleFormat=""
+                      toNow={false}
+                      unit={null}
+                      unix={false}
+                      utc={false}
+                      withTitle={false}
+                    >
+                      <time
+                        dateTime={"2019-10-22T03:40:44.089Z"}
+                      >
+                        7 months ago
+                      </time>
+                    </t>
+                  </span>
+                </div>
+              </DataListCell>
+            </div>
+          </DataListItemCells>
+          <DataListAction
+            aria-label="Actions"
+            aria-labelledby="kie-datalist-item kie-datalist-action"
+            className=""
+            id="kie-datalist-action"
+            key=".3"
+            rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+          >
+            <div
+              className="pf-c-data-list__item-action"
+              rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+            >
+              <Dropdown
+                dropdownItems={Array []}
+                isOpen={false}
+                isPlain={true}
+                onSelect={[Function]}
+                position="right"
+                toggle={
+                  <KebabToggle
+                    isDisabled={true}
+                    onToggle={[Function]}
+                  />
+                }
+              >
+                <Component
+                  dropdownItems={Array []}
+                  isOpen={false}
+                  isPlain={true}
+                  position="right"
+                  toggle={
+                    <KebabToggle
+                      isDisabled={true}
+                      onToggle={[Function]}
+                    />
+                  }
+                >
+                  <ComponentWithOuia
+                    component={[Function]}
+                    componentProps={
+                      Object {
+                        "dropdownItems": Array [],
+                        "isOpen": false,
+                        "isPlain": true,
+                        "position": "right",
+                        "toggle": <KebabToggle
+                          isDisabled={true}
+                          onToggle={[Function]}
+                        />,
+                      }
+                    }
+                    consumerContext={
+                      Object {
+                        "isOuia": false,
+                        "ouiaId": null,
+                      }
+                    }
+                  >
+                    <DropdownWithContext
+                      autoFocus={true}
+                      className=""
+                      direction="down"
+                      dropdownItems={Array []}
+                      isGrouped={false}
+                      isOpen={false}
+                      isPlain={true}
+                      onSelect={[Function]}
+                      ouiaComponentType="Dropdown"
+                      ouiaContext={
+                        Object {
+                          "isOuia": false,
+                          "ouiaId": null,
+                        }
+                      }
+                      position="right"
+                      toggle={
+                        <KebabToggle
+                          isDisabled={true}
+                          onToggle={[Function]}
+                        />
+                      }
+                    >
+                      <div
+                        className="pf-c-dropdown pf-m-align-right"
+                      >
+                        <KebabToggle
+                          ariaHasPopup={false}
+                          id="pf-toggle-id-0"
+                          isDisabled={true}
+                          isOpen={false}
+                          isPlain={true}
+                          key=".0"
+                          onEnter={[Function]}
+                          onToggle={[Function]}
+                          parentRef={
+                            Object {
+                              "current": <div
+                                class="pf-c-dropdown pf-m-align-right"
+                              >
+                                <button
+                                  aria-expanded="false"
+                                  aria-haspopup="false"
+                                  aria-label="Actions"
+                                  class="pf-c-dropdown__toggle pf-m-plain"
+                                  disabled=""
+                                  id="pf-toggle-id-0"
+                                  type="button"
+                                >
+                                  <svg
+                                    aria-hidden="true"
+                                    fill="currentColor"
+                                    height="1em"
+                                    role="img"
+                                    style="vertical-align: -0.125em;"
+                                    viewBox="0 0 192 512"
+                                    width="1em"
+                                  >
+                                    <path
+                                      d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                      transform=""
+                                    />
+                                  </svg>
+                                </button>
+                              </div>,
+                            }
+                          }
+                        >
+                          <Toggle
+                            aria-label="Actions"
+                            ariaHasPopup={false}
+                            bubbleEvent={false}
+                            className=""
+                            id="pf-toggle-id-0"
+                            isActive={false}
+                            isDisabled={true}
+                            isFocused={false}
+                            isHovered={false}
+                            isOpen={false}
+                            isPlain={true}
+                            isPrimary={false}
+                            isSplitButton={false}
+                            onEnter={[Function]}
+                            onToggle={[Function]}
+                            parentRef={
+                              Object {
+                                "current": <div
+                                  class="pf-c-dropdown pf-m-align-right"
+                                >
+                                  <button
+                                    aria-expanded="false"
+                                    aria-haspopup="false"
+                                    aria-label="Actions"
+                                    class="pf-c-dropdown__toggle pf-m-plain"
+                                    disabled=""
+                                    id="pf-toggle-id-0"
+                                    type="button"
+                                  >
+                                    <svg
+                                      aria-hidden="true"
+                                      fill="currentColor"
+                                      height="1em"
+                                      role="img"
+                                      style="vertical-align: -0.125em;"
+                                      viewBox="0 0 192 512"
+                                      width="1em"
+                                    >
+                                      <path
+                                        d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                        transform=""
+                                      />
+                                    </svg>
+                                  </button>
+                                </div>,
+                              }
+                            }
+                          >
+                            <button
+                              aria-expanded={false}
+                              aria-haspopup={false}
+                              aria-label="Actions"
+                              className="pf-c-dropdown__toggle pf-m-plain"
+                              disabled={true}
+                              id="pf-toggle-id-0"
+                              onClick={[Function]}
+                              onKeyDown={[Function]}
+                              type="button"
+                            >
+                              <EllipsisVIcon
+                                color="currentColor"
+                                noVerticalAlign={false}
+                                size="sm"
+                                title={null}
+                              >
+                                <svg
+                                  aria-hidden={true}
+                                  aria-labelledby={null}
+                                  fill="currentColor"
+                                  height="1em"
+                                  role="img"
+                                  style={
+                                    Object {
+                                      "verticalAlign": "-0.125em",
+                                    }
+                                  }
+                                  viewBox="0 0 192 512"
+                                  width="1em"
+                                >
+                                  <path
+                                    d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                    transform=""
+                                  />
+                                </svg>
+                              </EllipsisVIcon>
+                            </button>
+                          </Toggle>
+                        </KebabToggle>
+                      </div>
+                    </DropdownWithContext>
+                  </ComponentWithOuia>
+                </Component>
+              </Dropdown>
+            </div>
+          </DataListAction>
+        </div>
+      </DataListItemRow>
+      <DataListContent
+        aria-label="Primary Content Details"
+        className="kogito-management-console__embedded-list pf-m-compact"
+        id="kie-datalist-expand-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+        isHidden={true}
+        key=".1"
+        rowid="kie-datalist-item-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
       >
-        <Dropdown
-          dropdownItems={Array []}
-          isOpen={false}
-          isPlain={true}
-          onSelect={[Function]}
-          position="right"
-          toggle={
-            <KebabToggle
-              isDisabled={true}
-              onToggle={[Function]}
-            />
-          }
-        />
-      </DataListAction>
-    </DataListItemRow>
-    <DataListContent
-      aria-label="Primary Content Details"
-      className="kogito-management-console__embedded-list pf-m-compact"
-      id="kie-datalist-expand-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
-      isHidden={true}
-    >
-      <Bullseye>
-        <EmptyStateSpinner
-          spinnerText="Loading process instances..."
-        />
-      </Bullseye>
-    </DataListContent>
+        <section
+          aria-label="Primary Content Details"
+          className="pf-c-data-list__expandable-content kogito-management-console__embedded-list pf-m-compact"
+          hidden={true}
+          id="kie-datalist-expand-c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e"
+        >
+          <div
+            className="pf-c-data-list__expandable-content-body"
+          >
+            <Bullseye>
+              <div
+                className="pf-l-bullseye"
+              >
+                <MockedSpinner
+                  spinnerText="Loading process instances..."
+                />
+              </div>
+            </Bullseye>
+          </div>
+        </section>
+      </DataListContent>
+    </li>
   </DataListItem>
-</Fragment>
+</DataListItemComponent>
 `;

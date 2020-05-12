@@ -1,7 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import ProcessDescriptor from '../ProcessDescriptor';
 import { ProcessInstanceState } from '../../../../graphql/types';
+import { getWrapper } from '@kogito-apps/common';
 
 const processInstanceData = {
   id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
@@ -57,8 +57,8 @@ const processInstanceData = {
 };
 describe('ProcessDescriptor tests', () => {
   it('snapshot tests', () => {
-    const wrapper = shallow(
-      <ProcessDescriptor processInstanceData={processInstanceData} />
+    const wrapper = getWrapper(
+      <ProcessDescriptor processInstanceData={processInstanceData} />,'ProcessDescriptor'
     );
     expect(wrapper).toMatchSnapshot();
   });

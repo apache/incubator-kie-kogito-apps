@@ -6,19 +6,16 @@ import {
   TableVariant
 } from '@patternfly/react-table';
 import {
-  Title,
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateBody,
   Bullseye,
   Card,
-  CardBody
+  CardBody,
+  withOuiaContext,
+  InjectedOuiaProps
 } from '@patternfly/react-core';
 import {
   CheckCircleIcon,
   BanIcon,
   OnRunningIcon,
-  SearchIcon,
   ErrorCircleOIcon,
   PausedIcon,
   HistoryIcon
@@ -29,8 +26,21 @@ import { ProcessInstanceState } from '../../../graphql/types';
 import './DomainExplorerTable.css';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
+import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
 
-const DomainExplorerTable = ({
+export interface IOwnProps {
+  columnFilters:any,
+  tableLoading:boolean,
+  displayTable:boolean,
+  displayEmptyState:boolean,
+  parameters:any,
+  selected:any,
+  offset:number,
+  setRows:any,
+  rows:any,
+  isLoadingMore:boolean
+}
+const DomainExplorerTable: React.FC<IOwnProps & InjectedOuiaProps> = ({
   columnFilters,
   tableLoading,
   displayTable,
@@ -40,7 +50,9 @@ const DomainExplorerTable = ({
   offset,
   setRows,
   rows,
-  isLoadingMore
+  isLoadingMore,
+  ouiaContext,
+  ouiaId
 }) => {
   // tslint:disable: forin
   const [columns, setColumns] = useState([]);
@@ -264,7 +276,7 @@ const DomainExplorerTable = ({
             props: { colSpan: 8 },
             title: (
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain explorer" />
+                <SpinnerComponent spinnerText="Loading domain explorer" ouiaId="loading-domain-explorer" />
               </Bullseye>
             )
           }
@@ -305,6 +317,7 @@ const DomainExplorerTable = ({
           aria-label="Domain Explorer Table"
           className="kogito-management-console--domain-explorer__table"
           onCollapse={onCollapse}
+          ouiaId="domain-explorer-table"
         >
           <TableHeader />
           <TableBody rowKey="rowKey" />
@@ -313,34 +326,24 @@ const DomainExplorerTable = ({
       {!displayEmptyState && !displayTable && (
         <Card component={'div'}>
           <CardBody>
-            <Bullseye>
-              <EmptyState>
-                <EmptyStateIcon icon={SearchIcon} />
-                <Title headingLevel="h5" size="lg">
-                  No columns selected
-                </Title>
-                <EmptyStateBody>
-                  Select columns from the dropdown to see content
-                </EmptyStateBody>
-              </EmptyState>
-            </Bullseye>
+            <EmptyStateComponent
+              title='No columns selected'
+              body='Select columns from the dropdown to see content'
+              iconType='searchIcon'
+              ouiaId='no-columns-selected'
+            />
           </CardBody>
         </Card>
       )}
       {displayEmptyState && (
         <Card component={'div'}>
           <CardBody>
-            <Bullseye>
-              <EmptyState>
-                <EmptyStateIcon icon={SearchIcon} />
-                <Title headingLevel="h5" size="lg">
-                  No data available
-                </Title>
-                <EmptyStateBody>
-                  Selected domain has no data to display. Check other domains.
-                </EmptyStateBody>
-              </EmptyState>
-            </Bullseye>
+            <EmptyStateComponent
+              title='No data available'
+              body='Selected domain has no data to display. Check other domains.'
+              iconType='searchIcon'
+              ouiaId='no-data'
+            />
           </CardBody>
         </Card>
       )}
@@ -348,4 +351,5 @@ const DomainExplorerTable = ({
   );
 };
 
-export default DomainExplorerTable;
+const DomainExplorerTableWithContext = withOuiaContext(DomainExplorerTable);
+export default DomainExplorerTableWithContext;

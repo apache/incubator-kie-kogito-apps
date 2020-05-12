@@ -1,5 +1,6 @@
 import React from 'react';
-import { Brand } from '@patternfly/react-core';
+import { Brand, InjectedOuiaProps, withOuiaContext } from '@patternfly/react-core';
+import { componentOuiaProps } from '../../../utils/OuiaUtils';
 
 interface IOwnProps {
   src: string;
@@ -7,8 +8,12 @@ interface IOwnProps {
   brandClick: any;
 }
 
-const BrandLogo: React.FC<IOwnProps> = props => {
-  return <Brand src={props.src} alt={props.alt} onClick={props.brandClick} />;
+const BrandLogo: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId,
+  ...props
+}) => {
+  return <Brand src={props.src} alt={props.alt} onClick={props.brandClick} {...componentOuiaProps(ouiaContext, ouiaId, 'BrandLogo', true)}/>;
 };
 
-export default BrandLogo;
+export default withOuiaContext(BrandLogo);

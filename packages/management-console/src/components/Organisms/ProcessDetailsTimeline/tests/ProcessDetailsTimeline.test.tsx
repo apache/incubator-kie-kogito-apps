@@ -1,7 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import ProcessDetailsTimeline from '../ProcessDetailsTimeline';
 import { ProcessInstanceState } from '../../../../graphql/types';
+import { getWrapper } from '@kogito-apps/common';
 
 const props = {
   data: {
@@ -63,7 +63,7 @@ const props = {
 
 describe('Process Details Timeline component', () => {
   it('Sample test case', () => {
-    const wrapper = shallow(<ProcessDetailsTimeline {...props} />);
+    const wrapper = getWrapper(<ProcessDetailsTimeline {...props}/>, 'ProcessDetailsTimeline');
     expect(wrapper).toMatchSnapshot();
   });
 });

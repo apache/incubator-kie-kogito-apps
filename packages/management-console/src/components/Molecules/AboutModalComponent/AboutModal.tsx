@@ -4,24 +4,30 @@ import {
   TextContent,
   Text,
   TextList,
-  TextListItem
+  TextListItem,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import './AboutModal.css';
 import aboutPageLogo from '../../../static/managementConsoleLogo.svg';
 import aboutPageBackground from '../../../static/KogitoAbout.png';
+import { componentOuiaProps } from '@kogito-apps/common';
 export interface IOwnProps {
   isOpenProp: boolean;
   handleModalToggleProp: any;
 }
-const AboutModalBox: React.FC<IOwnProps> = ({
+const AboutModalBox: React.FC<IOwnProps & InjectedOuiaProps> = ({
   isOpenProp,
-  handleModalToggleProp
+  handleModalToggleProp,
+  ouiaContext,
+  ouiaId
 }) => {
   const dataIndexURL =
     // @ts-ignore
     window.DATA_INDEX_ENDPOINT || process.env.KOGITO_DATAINDEX_HTTP_URL;
   return (
     <AboutModal
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ModalAbout', true)}
       isOpen={isOpenProp}
       onClose={handleModalToggleProp}
       trademark="Management Console is part of Kogito, an open source software released under the Apache Software License 2.0"
@@ -74,4 +80,5 @@ const AboutModalBox: React.FC<IOwnProps> = ({
   );
 };
 
-export default AboutModalBox;
+const AboutModalBoxWithContext = withOuiaContext(AboutModalBox);
+export default AboutModalBoxWithContext;

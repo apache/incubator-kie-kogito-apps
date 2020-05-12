@@ -23,7 +23,7 @@ interface LocationProps {
   buttonText: string
 }
 
-const NoDataComponent: React.FC<RouteComponentProps<{}, {}, LocationProps> &InjectedOuiaProps> = ({
+const NoDataComponent: React.FC<RouteComponentProps<{}, {}, LocationProps> & InjectedOuiaProps> = ({
   ouiaContext,
   ...props
 }) => {

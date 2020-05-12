@@ -23,10 +23,11 @@ import { CubesIcon } from '@patternfly/react-icons';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 
 import { useGetQueryFieldsQuery } from '../../../graphql/types';
-import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import { ouiaPageTypeAndObjectId, componentOuiaProps } from '@kogito-apps/common';
 
 const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
-  ouiaContext
+  ouiaContext,
+  ouiaId
 }) => {
   const getQuery = useGetQueryFieldsQuery();
 
@@ -54,7 +55,9 @@ const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
           <BreadcrumbItem isActive>Domain Explorer</BreadcrumbItem>
         </Breadcrumb>
       </PageSection>
-      <PageSection>
+      <PageSection
+        {...componentOuiaProps(ouiaContext, ouiaId, 'DomainExplorerDashboard', true)}
+      >
         <Card>
           <CardBody>
             <EmptyState variant={EmptyStateVariant.full}>

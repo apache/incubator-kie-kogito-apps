@@ -1,7 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import DataListItemComponent from '../DataListItemComponent';
 import { ProcessInstanceState } from '../../../../graphql/types';
+import { getWrapper } from '@kogito-apps/common';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const initData = {
   ProcessInstances: [
@@ -127,10 +128,15 @@ const props = {
   selectedNumber: 0,
   setSelectedNumber: jest.fn()
 };
+jest.mock('../../../Atoms/SpinnerComponent/SpinnerComponent')
+jest.mock('../../../Atoms/EmptyStateComponent/EmptyStateComponent')
+jest.mock('../../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent')
+jest.mock('../../../Atoms/ErrorPopoverComponent/ErrorPopoverComponent')
+jest.mock('../../ProcessDescriptor/ProcessDescriptor')
 
 describe('DataListItem component tests', () => {
   it('Snapshot tests', () => {
-    const wrapper = shallow(<DataListItemComponent {...props} />);
+    const wrapper = getWrapper(<Router><DataListItemComponent {...props}/></Router>, 'DataListItemComponent');
     expect(wrapper).toMatchSnapshot();
   });
 });

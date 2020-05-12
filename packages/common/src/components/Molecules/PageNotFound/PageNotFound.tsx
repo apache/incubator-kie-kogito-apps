@@ -7,10 +7,13 @@ import {
   EmptyStateVariant,
   Button,
   EmptyStateBody,
-  Title
+  Title,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { Redirect } from 'react-router';
+import { componentOuiaProps } from '../../../utils/OuiaUtils';
 
 interface IOwnProps {
   defaultPath: string;
@@ -18,7 +21,11 @@ interface IOwnProps {
   location: any;
 }
 
-const PageNotFound: React.FC<IOwnProps> = props => {
+const PageNotFound: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId,
+  ...props
+}) => {
   let prevPath;
   if (props.location.state !== undefined) {
     prevPath = props.location.state.prev;
@@ -36,7 +43,8 @@ const PageNotFound: React.FC<IOwnProps> = props => {
   return (
     <>
       {isRedirect && <Redirect to={`/${prevPath[0]}`} />}
-      <PageSection variant="light">
+      <PageSection variant="light"
+        {...componentOuiaProps(ouiaContext, ouiaId, 'PageNotFound', true)}>
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full}>
             <EmptyStateIcon
@@ -58,4 +66,4 @@ const PageNotFound: React.FC<IOwnProps> = props => {
   );
 };
 
-export default PageNotFound;
+export default withOuiaContext(PageNotFound);

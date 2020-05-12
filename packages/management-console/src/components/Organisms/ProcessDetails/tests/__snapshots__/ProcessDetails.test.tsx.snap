@@ -1,136 +1,334 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Process Details component Snapshot tests 1`] = `
-<Card>
-  <CardHeader>
-    <Title
-      headingLevel="h3"
-      size="xl"
+<ProcessDetails
+  childLoading={true}
+  childResult={
+    Array [
+      Object {
+        "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21eaccd",
+        "parentProcessInstanceId": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
+        "processName": "FlightBooking test 1",
+      },
+    ]
+  }
+  data={
+    Object {
+      "ProcessInstances": Array [
+        Object {
+          "childProcessInstances": Array [],
+          "end": "2019-10-22T03:40:44.089Z",
+          "endpoint": "test",
+          "id": "",
+          "lastUpdate": "2019-10-22T03:40:44.089Z",
+          "parentProcessInstance": null,
+          "parentProcessInstanceId": "e4448857-fa0c-403b-ad69-f0a353458b9d",
+          "processId": "",
+          "start": "2019-10-22T03:40:44.089Z",
+          "state": "ACTIVE",
+        },
+      ],
+    }
+  }
+  from={
+    Object {
+      "prev": "",
+    }
+  }
+  loading={true}
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+  parentLoading={true}
+  parentResult={
+    Object {
+      "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+      "parentProcessInstanceId": null,
+      "processName": "travels",
+    }
+  }
+>
+  <Card>
+    <article
+      className="pf-c-card"
     >
-      Details
-    </Title>
-  </CardHeader>
-  <CardBody>
-    <Form>
-      <FormGroup
-        fieldId="name"
-        label="Name"
-      >
-        <Text
-          component="p"
-        />
-      </FormGroup>
-      <FormGroup
-        fieldId="state"
-        label="State"
-      >
-        <Text
-          component="p"
+      <CardHeader>
+        <div
+          className="pf-c-card__header pf-c-title pf-m-md"
         >
-          <OnRunningIcon
-            className="pf-u-mr-sm"
-            color="currentColor"
-            noVerticalAlign={false}
-            size="sm"
-            title={null}
-          />
-          Active
-        </Text>
-      </FormGroup>
-      <FormGroup
-        fieldId="id"
-        label="Id"
-      >
-        <Text
-          className="kogito-management-console--u-WordBreak"
-          component="p"
-        />
-      </FormGroup>
-      <FormGroup
-        fieldId="start"
-        label="Start"
-      >
-        <Text
-          component="p"
-        >
-          <t
-            ago={false}
-            calendar={false}
-            decimal={false}
-            element={null}
-            filter={[Function]}
-            fromNow={true}
-            interval={60000}
-            local={false}
-            onChange={[Function]}
-            titleFormat=""
-            toNow={false}
-            unit={null}
-            unix={false}
-            utc={false}
-            withTitle={false}
+          <Title
+            headingLevel="h3"
+            size="xl"
           >
-            <Component />
-          </t>
-        </Text>
-      </FormGroup>
-      <FormGroup
-        fieldId="lastUpdate"
-        label="Last Updated"
-      >
-        <Text
-          component="p"
+            <h3
+              className="pf-c-title pf-m-xl"
+            >
+              Details
+            </h3>
+          </Title>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div
+          className="pf-c-card__body"
         >
-          <t
-            ago={false}
-            calendar={false}
-            decimal={false}
-            element={null}
-            filter={[Function]}
-            fromNow={true}
-            interval={60000}
-            local={false}
-            onChange={[Function]}
-            titleFormat=""
-            toNow={false}
-            unit={null}
-            unix={false}
-            utc={false}
-            withTitle={false}
-          >
-            <Component />
-          </t>
-        </Text>
-      </FormGroup>
-      <FormGroup
-        fieldId="end"
-        label="End"
-      >
-        <Text
-          component="p"
-        >
-          <t
-            ago={false}
-            calendar={false}
-            decimal={false}
-            element={null}
-            filter={[Function]}
-            fromNow={true}
-            interval={60000}
-            local={false}
-            onChange={[Function]}
-            titleFormat=""
-            toNow={false}
-            unit={null}
-            unix={false}
-            utc={false}
-            withTitle={false}
-          >
-            <Component />
-          </t>
-        </Text>
-      </FormGroup>
-    </Form>
-  </CardBody>
-</Card>
+          <Form>
+            <form
+              className="pf-c-form"
+              noValidate={true}
+            >
+              <FormGroup
+                fieldId="name"
+                label="Name"
+              >
+                <div
+                  className="pf-c-form__group"
+                >
+                  <label
+                    className="pf-c-form__label"
+                    htmlFor="name"
+                  >
+                    <span
+                      className="pf-c-form__label-text"
+                    >
+                      Name
+                    </span>
+                  </label>
+                  <Text
+                    component="p"
+                  >
+                    <p
+                      className=""
+                      data-pf-content={true}
+                    />
+                  </Text>
+                </div>
+              </FormGroup>
+              <FormGroup
+                fieldId="state"
+                label="State"
+              >
+                <div
+                  className="pf-c-form__group"
+                >
+                  <label
+                    className="pf-c-form__label"
+                    htmlFor="state"
+                  >
+                    <span
+                      className="pf-c-form__label-text"
+                    >
+                      State
+                    </span>
+                  </label>
+                  <Text
+                    component="p"
+                  >
+                    <p
+                      className=""
+                      data-pf-content={true}
+                    >
+                      <OnRunningIcon
+                        className="pf-u-mr-sm"
+                        color="currentColor"
+                        noVerticalAlign={false}
+                        size="sm"
+                        title={null}
+                      />
+                      Active
+                    </p>
+                  </Text>
+                </div>
+              </FormGroup>
+              <FormGroup
+                fieldId="id"
+                label="Id"
+              >
+                <div
+                  className="pf-c-form__group"
+                >
+                  <label
+                    className="pf-c-form__label"
+                    htmlFor="id"
+                  >
+                    <span
+                      className="pf-c-form__label-text"
+                    >
+                      Id
+                    </span>
+                  </label>
+                  <Text
+                    className="kogito-management-console--u-WordBreak"
+                    component="p"
+                  >
+                    <p
+                      className="kogito-management-console--u-WordBreak"
+                      data-pf-content={true}
+                    />
+                  </Text>
+                </div>
+              </FormGroup>
+              <FormGroup
+                fieldId="start"
+                label="Start"
+              >
+                <div
+                  className="pf-c-form__group"
+                >
+                  <label
+                    className="pf-c-form__label"
+                    htmlFor="start"
+                  >
+                    <span
+                      className="pf-c-form__label-text"
+                    >
+                      Start
+                    </span>
+                  </label>
+                  <Text
+                    component="p"
+                  >
+                    <p
+                      className=""
+                      data-pf-content={true}
+                    >
+                      <t
+                        ago={false}
+                        calendar={false}
+                        decimal={false}
+                        element={null}
+                        filter={[Function]}
+                        fromNow={true}
+                        interval={60000}
+                        local={false}
+                        onChange={[Function]}
+                        titleFormat=""
+                        toNow={false}
+                        unit={null}
+                        unix={false}
+                        utc={false}
+                        withTitle={false}
+                      >
+                        <time
+                          dateTime={"2019-10-22T03:40:44.089Z"}
+                        >
+                          7 months ago
+                        </time>
+                      </t>
+                    </p>
+                  </Text>
+                </div>
+              </FormGroup>
+              <FormGroup
+                fieldId="lastUpdate"
+                label="Last Updated"
+              >
+                <div
+                  className="pf-c-form__group"
+                >
+                  <label
+                    className="pf-c-form__label"
+                    htmlFor="lastUpdate"
+                  >
+                    <span
+                      className="pf-c-form__label-text"
+                    >
+                      Last Updated
+                    </span>
+                  </label>
+                  <Text
+                    component="p"
+                  >
+                    <p
+                      className=""
+                      data-pf-content={true}
+                    >
+                      <t
+                        ago={false}
+                        calendar={false}
+                        decimal={false}
+                        element={null}
+                        filter={[Function]}
+                        fromNow={true}
+                        interval={60000}
+                        local={false}
+                        onChange={[Function]}
+                        titleFormat=""
+                        toNow={false}
+                        unit={null}
+                        unix={false}
+                        utc={false}
+                        withTitle={false}
+                      >
+                        <time
+                          dateTime={"2019-10-22T03:40:44.089Z"}
+                        >
+                          7 months ago
+                        </time>
+                      </t>
+                    </p>
+                  </Text>
+                </div>
+              </FormGroup>
+              <FormGroup
+                fieldId="end"
+                label="End"
+              >
+                <div
+                  className="pf-c-form__group"
+                >
+                  <label
+                    className="pf-c-form__label"
+                    htmlFor="end"
+                  >
+                    <span
+                      className="pf-c-form__label-text"
+                    >
+                      End
+                    </span>
+                  </label>
+                  <Text
+                    component="p"
+                  >
+                    <p
+                      className=""
+                      data-pf-content={true}
+                    >
+                      <t
+                        ago={false}
+                        calendar={false}
+                        decimal={false}
+                        element={null}
+                        filter={[Function]}
+                        fromNow={true}
+                        interval={60000}
+                        local={false}
+                        onChange={[Function]}
+                        titleFormat=""
+                        toNow={false}
+                        unit={null}
+                        unix={false}
+                        utc={false}
+                        withTitle={false}
+                      >
+                        <time
+                          dateTime={"2019-10-22T03:40:44.089Z"}
+                        >
+                          7 months ago
+                        </time>
+                      </t>
+                    </p>
+                  </Text>
+                </div>
+              </FormGroup>
+            </form>
+          </Form>
+        </div>
+      </CardBody>
+    </article>
+  </Card>
+</ProcessDetails>
 `;

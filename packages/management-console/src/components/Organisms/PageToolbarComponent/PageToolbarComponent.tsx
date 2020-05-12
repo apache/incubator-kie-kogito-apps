@@ -6,14 +6,20 @@ import {
   ToolbarGroup,
   ToolbarItem,
   DropdownItem,
-  DropdownSeparator
+  DropdownSeparator,
+  withOuiaContext,
+  InjectedOuiaProps
 } from '@patternfly/react-core';
 import accessibleStyles from '@patternfly/react-styles/css/utilities/Accessibility/accessibility';
 import { css } from '@patternfly/react-styles';
 import AboutModalBox from '../../Molecules/AboutModalComponent/AboutModal';
 import Keycloak from 'keycloak-js';
+import { componentOuiaProps } from '@kogito-apps/common';
 
-const PageToolbarComponent: React.FunctionComponent = () => {
+const PageToolbarComponent: React.FC<InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId
+}) => {
   let userName = 'Anonymous';
   let kcInfo;
 
@@ -67,7 +73,9 @@ const PageToolbarComponent: React.FunctionComponent = () => {
         isOpenProp={modalToggle}
         handleModalToggleProp={handleModalToggle}
       />
-      <Toolbar>
+      <Toolbar
+        {...componentOuiaProps(ouiaContext, ouiaId, 'PageToolbar', true)}
+      >
         <ToolbarGroup>
           <ToolbarItem
             className={css(
@@ -94,4 +102,5 @@ const PageToolbarComponent: React.FunctionComponent = () => {
   );
 };
 
-export default PageToolbarComponent;
+const PageToolbarComponentWithContext = withOuiaContext(PageToolbarComponent);
+export default PageToolbarComponentWithContext;

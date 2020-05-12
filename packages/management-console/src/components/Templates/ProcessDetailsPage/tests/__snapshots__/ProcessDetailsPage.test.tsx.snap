@@ -34,7 +34,7 @@ exports[`Process Details Page component Sample test case 1`] = `
     Object {
       "isExact": false,
       "params": Object {
-        "instanceID": "1232131",
+        "instanceID": "201a8a42-043e-375a-9f52-57c804b24db4",
       },
       "path": "",
       "url": "",
@@ -53,7 +53,133 @@ exports[`Process Details Page component Sample test case 1`] = `
     <section
       className="pf-c-page__main-section pf-m-light"
     >
-      <Modalbox
+      <MockedBulkModal
+        abortedMessageObj={
+          Object {
+            "201a8a42-043e-375a-9f52-57c804b24db4": Object {
+              "addons": Array [
+                "process-management",
+                "infinispan-persistence",
+                "prometheus-monitoring",
+              ],
+              "businessKey": "MQQ640",
+              "childProcessInstances": Array [
+                Object {
+                  "businessKey": null,
+                  "id": "bfde98ed-0cdd-4700-ae87-377f7ec430cd",
+                  "processName": "HotelBooking",
+                },
+                Object {
+                  "businessKey": null,
+                  "id": "e607b2a9-0aca-4788-9623-dd2e156ce9c4",
+                  "processName": "FlightBooking",
+                },
+              ],
+              "end": null,
+              "endpoint": "http://localhost:8080/travels",
+              "error": null,
+              "id": "201a8a42-043e-375a-9f52-57c804b24db4",
+              "lastUpdate": "2020-05-07T06:50:18.502Z",
+              "nodes": Array [
+                Object {
+                  "definitionId": "_1A708F87-11C0-42A0-A464-0B7E259C426F",
+                  "enter": "2020-05-07T06:50:18.429Z",
+                  "exit": "2020-05-07T06:50:18.439Z",
+                  "id": "39d5fe7c-4e37-44ce-8d25-05a4a29ec6ea",
+                  "name": "Book Hotel",
+                  "nodeId": "17",
+                  "type": "SubProcessNode",
+                },
+                Object {
+                  "definitionId": "_2140F05A-364F-40B3-BB7B-B12927065DF8",
+                  "enter": "2020-05-07T06:50:18.443Z",
+                  "exit": null,
+                  "id": "1d3d7ebe-79ec-4848-b1d6-d7c5a371b4dd",
+                  "name": "Confirm travel",
+                  "nodeId": "8",
+                  "type": "HumanTaskNode",
+                },
+                Object {
+                  "definitionId": "_5D0733B5-53FE-40E9-9900-4CC13419C67A",
+                  "enter": "2020-05-07T06:50:18.442Z",
+                  "exit": "2020-05-07T06:50:18.443Z",
+                  "id": "4fc774f5-c429-4b97-8981-bd60d1f59954",
+                  "name": "Join",
+                  "nodeId": "7",
+                  "type": "Join",
+                },
+                Object {
+                  "definitionId": "_F543B3F0-AB44-4A5B-BF17-8D9DEB505815",
+                  "enter": "2020-05-07T06:50:18.439Z",
+                  "exit": "2020-05-07T06:50:18.442Z",
+                  "id": "60309b28-1dbe-49c3-b0d8-8cefb86be8b4",
+                  "name": "Book Flight",
+                  "nodeId": "10",
+                  "type": "SubProcessNode",
+                },
+                Object {
+                  "definitionId": "_175DC79D-C2F1-4B28-BE2D-B583DFABF70D",
+                  "enter": "2020-05-07T06:50:18.428Z",
+                  "exit": "2020-05-07T06:50:18.439Z",
+                  "id": "efa5a6c0-9470-4405-8609-620bdbfbb6d9",
+                  "name": "Book",
+                  "nodeId": "2",
+                  "type": "Split",
+                },
+                Object {
+                  "definitionId": "_B34ADDEE-DEA5-47C5-A913-F8B85ED5641F",
+                  "enter": "2020-05-07T06:50:18.428Z",
+                  "exit": "2020-05-07T06:50:18.428Z",
+                  "id": "acc87f1f-e436-4364-b4d3-9069ddb359c9",
+                  "name": "Join",
+                  "nodeId": "14",
+                  "type": "Join",
+                },
+                Object {
+                  "definitionId": "_5EA95D17-59A6-4567-92DF-74D36CE7F35A",
+                  "enter": "2020-05-07T06:50:18.427Z",
+                  "exit": "2020-05-07T06:50:18.428Z",
+                  "id": "6c20729a-3e2b-44c5-af5c-8554f21a7ebf",
+                  "name": "is visa required",
+                  "nodeId": "15",
+                  "type": "Split",
+                },
+                Object {
+                  "definitionId": "_54ABE1ED-61BE-45F9-812C-795A5D4ED35E",
+                  "enter": "2020-05-07T06:50:18.278Z",
+                  "exit": "2020-05-07T06:50:18.427Z",
+                  "id": "3fb92a0a-e88b-45a4-a48b-65f11a679b96",
+                  "name": "Visa check",
+                  "nodeId": "5",
+                  "type": "RuleSetNode",
+                },
+                Object {
+                  "definitionId": "_1B11BEC9-402A-4E73-959A-296BD334CAB0",
+                  "enter": "2020-05-07T06:50:18.276Z",
+                  "exit": "2020-05-07T06:50:18.278Z",
+                  "id": "2860e474-dffc-498c-8731-e6b6f0b5d4d4",
+                  "name": "StartProcess",
+                  "nodeId": "16",
+                  "type": "StartNode",
+                },
+              ],
+              "parentProcessInstance": null,
+              "parentProcessInstanceId": null,
+              "processId": "travels",
+              "processName": "travels",
+              "roles": Array [],
+              "serviceUrl": "http://localhost:8080",
+              "start": "2020-05-07T06:50:18.274Z",
+              "state": "ACTIVE",
+              "variables": "{\\"flight\\":{\\"flightNumber\\":\\"MX555\\",\\"seat\\":null,\\"gate\\":null,\\"departure\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"arrival\\":\\"2020-05-09T03:30:00.000+05:30\\"},\\"hotel\\":{\\"name\\":\\"Perfect hotel\\",\\"address\\":{\\"street\\":\\"street\\",\\"city\\":\\"Bengaluru\\",\\"zipCode\\":\\"12345\\",\\"country\\":\\"India\\"},\\"phone\\":\\"09876543\\",\\"bookingNumber\\":\\"XX-012345\\",\\"room\\":null},\\"trip\\":{\\"city\\":\\"Bengaluru\\",\\"country\\":\\"India\\",\\"begin\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"end\\":\\"2020-05-09T03:30:00.000+05:30\\",\\"visaRequired\\":false},\\"traveller\\":{\\"firstName\\":\\"Ajay\\",\\"lastName\\":\\"Jaganathan\\",\\"email\\":\\"ajaganat@redhat.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Bangalore\\",\\"city\\":\\"Bangalore\\",\\"zipCode\\":\\"560093\\",\\"country\\":\\"Poland\\"}}}",
+            },
+          }
+        }
+        checkedArray={
+          Array [
+            "ACTIVE",
+          ]
+        }
         completedMessageObj={Object {}}
         handleModalToggle={[Function]}
         isAbortModalOpen={false}
@@ -73,249 +199,658 @@ exports[`Process Details Page component Sample test case 1`] = `
              
           </React.Fragment>
         }
-      >
-        <Modal
-          actions={
-            Array [
-              <Unknown
-                onClick={[Function]}
-                variant="primary"
-              >
-                OK
-              </Unknown>,
-            ]
-          }
-          appendTo={
-            <body>
-              <div />
-              <div />
-            </body>
-          }
-          ariaDescribedById=""
-          className=""
-          header={
-            <Title
-              headingLevel="h1"
-              size="2xl"
-            >
-              <React.Fragment>
-                <InfoCircleIcon
-                  className="pf-u-mr-sm"
-                  color="var(--pf-global--info-color--100)"
-                  noVerticalAlign={false}
-                  size="sm"
-                  title={null}
-                />
-                 
-                Abort operation
-                 
-              </React.Fragment>
-            </Title>
-          }
-          hideTitle={false}
-          isFooterLeftAligned={false}
-          isLarge={false}
-          isOpen={false}
-          isSmall={true}
-          onClose={[Function]}
-          showClose={true}
-          title=""
-        >
-          <Portal
-            containerInfo={<div />}
-          >
-            <ModalContent
-              actions={
-                Array [
-                  <Unknown
-                    onClick={[Function]}
-                    variant="primary"
-                  >
-                    OK
-                  </Unknown>,
-                ]
-              }
-              ariaDescribedById=""
-              className=""
-              header={
-                <Title
-                  headingLevel="h1"
-                  size="2xl"
-                >
-                  <React.Fragment>
-                    <InfoCircleIcon
-                      className="pf-u-mr-sm"
-                      color="var(--pf-global--info-color--100)"
-                      noVerticalAlign={false}
-                      size="sm"
-                      title={null}
-                    />
-                     
-                    Abort operation
-                     
-                  </React.Fragment>
-                </Title>
-              }
-              hideTitle={false}
-              id="pf-modal-0"
-              isFooterLeftAligned={false}
-              isLarge={false}
-              isOpen={false}
-              isSmall={true}
-              onClose={[Function]}
-              showClose={true}
-              title=""
-            />
-          </Portal>
-        </Modal>
-      </Modalbox>
-      <Modalbox
+      />
+      <MockedBulkModal
+        checkedArray={
+          Array [
+            "ACTIVE",
+          ]
+        }
         modalContent=""
-      >
-        <Modal
-          actions={
-            Array [
-              <Unknown
-                variant="primary"
-              >
-                OK
-              </Unknown>,
-            ]
-          }
-          appendTo={
-            <body>
-              <div />
-              <div />
-            </body>
-          }
-          ariaDescribedById=""
-          className=""
-          header={
-            <Title
-              headingLevel="h1"
-              size="2xl"
-            />
-          }
-          hideTitle={false}
-          isFooterLeftAligned={false}
-          isLarge={false}
-          isOpen={false}
-          isSmall={true}
-          onClose={[Function]}
-          showClose={true}
-          title=""
-        >
-          <Portal
-            containerInfo={<div />}
-          >
-            <ModalContent
-              actions={
-                Array [
-                  <Unknown
-                    variant="primary"
-                  >
-                    OK
-                  </Unknown>,
-                ]
-              }
-              ariaDescribedById=""
-              className=""
-              header={
-                <Title
-                  headingLevel="h1"
-                  size="2xl"
-                />
-              }
-              hideTitle={false}
-              id="pf-modal-1"
-              isFooterLeftAligned={false}
-              isLarge={false}
-              isOpen={false}
-              isSmall={true}
-              onClose={[Function]}
-              showClose={true}
-              title=""
-            />
-          </Portal>
-        </Modal>
-      </Modalbox>
-      <PageTitleComponent
+      />
+      <MockedPageTitle
         title="Process Details"
+      />
+      <Grid
+        gutter="md"
+        lg={6}
+        span={12}
+        xl={4}
       >
-        <Title
-          headingLevel="h1"
-          size="4xl"
+        <div
+          className="pf-l-grid pf-m-all-12-col pf-m-all-6-col-on-lg pf-m-all-4-col-on-xl pf-m-gutter"
         >
-          <h1
-            className="pf-c-title pf-m-4xl"
+          <GridItem
+            span={12}
           >
-            Process Details
-          </h1>
-        </Title>
-      </PageTitleComponent>
+            <div
+              className="pf-l-grid__item pf-m-12-col"
+            >
+              <Component>
+                <ComponentWithOuia
+                  component={[Function]}
+                  componentProps={
+                    Object {
+                      "children": Array [
+                        <BreadcrumbItem>
+                          <Link
+                            to="/"
+                          >
+                            Home
+                          </Link>
+                        </BreadcrumbItem>,
+                        Array [],
+                        <BreadcrumbItem
+                          isActive={true}
+                        >
+                          travels
+                        </BreadcrumbItem>,
+                      ],
+                    }
+                  }
+                  consumerContext={
+                    Object {
+                      "isOuia": false,
+                      "ouiaId": null,
+                    }
+                  }
+                >
+                  <Breadcrumb
+                    ouiaContext={
+                      Object {
+                        "isOuia": false,
+                        "ouiaId": null,
+                      }
+                    }
+                  >
+                    <nav
+                      aria-label="Breadcrumb"
+                      className="pf-c-breadcrumb"
+                    >
+                      <ol
+                        className="pf-c-breadcrumb__list"
+                      >
+                        <BreadcrumbItem>
+                          <li
+                            className="pf-c-breadcrumb__item"
+                          >
+                            <Link
+                              to="/"
+                            >
+                              <LinkAnchor
+                                href="/"
+                                navigate={[Function]}
+                              >
+                                <a
+                                  href="/"
+                                  onClick={[Function]}
+                                >
+                                  Home
+                                </a>
+                              </LinkAnchor>
+                            </Link>
+                            <span
+                              className="pf-c-breadcrumb__item-divider"
+                            >
+                              <AngleRightIcon
+                                color="currentColor"
+                                noVerticalAlign={false}
+                                size="sm"
+                                title={null}
+                              >
+                                <svg
+                                  aria-hidden={true}
+                                  aria-labelledby={null}
+                                  fill="currentColor"
+                                  height="1em"
+                                  role="img"
+                                  style={
+                                    Object {
+                                      "verticalAlign": "-0.125em",
+                                    }
+                                  }
+                                  viewBox="0 0 256 512"
+                                  width="1em"
+                                >
+                                  <path
+                                    d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                                    transform=""
+                                  />
+                                </svg>
+                              </AngleRightIcon>
+                            </span>
+                          </li>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem
+                          isActive={true}
+                        >
+                          <li
+                            className="pf-c-breadcrumb__item"
+                          >
+                            travels
+                          </li>
+                        </BreadcrumbItem>
+                      </ol>
+                    </nav>
+                  </Breadcrumb>
+                </ComponentWithOuia>
+              </Component>
+            </div>
+          </GridItem>
+        </div>
+      </Grid>
     </section>
   </PageSection>
   <PageSection>
     <section
       className="pf-c-page__main-section"
     >
-      <Card>
-        <article
-          className="pf-c-card"
+      <Grid
+        gutter="md"
+        lg={6}
+        span={12}
+        xl={4}
+      >
+        <div
+          className="pf-l-grid pf-m-all-12-col pf-m-all-6-col-on-lg pf-m-all-4-col-on-xl pf-m-gutter"
         >
-          <Bullseye>
+          <GridItem
+            span={12}
+          >
             <div
-              className="pf-l-bullseye"
+              className="pf-l-grid__item pf-m-12-col"
             >
-              <EmptyStateSpinner
-                spinnerText="Loading process details..."
+              <Split
+                className="pf-u-align-items-center"
+                component="div"
+                gutter="md"
               >
-                <EmptyState>
-                  <div
-                    className="pf-c-empty-state pf-m-lg"
+                <div
+                  className="pf-l-split pf-m-gutter pf-u-align-items-center"
+                >
+                  <SplitItem
+                    isFilled={true}
                   >
-                    <EmptyStateIcon
-                      component={[Function]}
-                      variant="container"
+                    <div
+                      className="pf-l-split__item pf-m-fill"
                     >
-                      <div
-                        className="pf-c-empty-state__icon"
+                      <Title
+                        className="kogito-management-console--details__title"
+                        headingLevel="h2"
+                        size="4xl"
                       >
-                        <Spinner>
-                          <span
-                            aria-valuetext="Loading..."
-                            className="pf-c-spinner pf-m-xl"
-                            role="progressbar"
+                        <h2
+                          className="pf-c-title pf-m-4xl kogito-management-console--details__title"
+                        >
+                          <MockedProcessDescriptor
+                            processInstanceData={
+                              Object {
+                                "addons": Array [
+                                  "process-management",
+                                  "infinispan-persistence",
+                                  "prometheus-monitoring",
+                                ],
+                                "businessKey": "MQQ640",
+                                "childProcessInstances": Array [
+                                  Object {
+                                    "businessKey": null,
+                                    "id": "bfde98ed-0cdd-4700-ae87-377f7ec430cd",
+                                    "processName": "HotelBooking",
+                                  },
+                                  Object {
+                                    "businessKey": null,
+                                    "id": "e607b2a9-0aca-4788-9623-dd2e156ce9c4",
+                                    "processName": "FlightBooking",
+                                  },
+                                ],
+                                "end": null,
+                                "endpoint": "http://localhost:8080/travels",
+                                "error": null,
+                                "id": "201a8a42-043e-375a-9f52-57c804b24db4",
+                                "lastUpdate": "2020-05-07T06:50:18.502Z",
+                                "nodes": Array [
+                                  Object {
+                                    "definitionId": "_1A708F87-11C0-42A0-A464-0B7E259C426F",
+                                    "enter": "2020-05-07T06:50:18.429Z",
+                                    "exit": "2020-05-07T06:50:18.439Z",
+                                    "id": "39d5fe7c-4e37-44ce-8d25-05a4a29ec6ea",
+                                    "name": "Book Hotel",
+                                    "nodeId": "17",
+                                    "type": "SubProcessNode",
+                                  },
+                                  Object {
+                                    "definitionId": "_2140F05A-364F-40B3-BB7B-B12927065DF8",
+                                    "enter": "2020-05-07T06:50:18.443Z",
+                                    "exit": null,
+                                    "id": "1d3d7ebe-79ec-4848-b1d6-d7c5a371b4dd",
+                                    "name": "Confirm travel",
+                                    "nodeId": "8",
+                                    "type": "HumanTaskNode",
+                                  },
+                                  Object {
+                                    "definitionId": "_5D0733B5-53FE-40E9-9900-4CC13419C67A",
+                                    "enter": "2020-05-07T06:50:18.442Z",
+                                    "exit": "2020-05-07T06:50:18.443Z",
+                                    "id": "4fc774f5-c429-4b97-8981-bd60d1f59954",
+                                    "name": "Join",
+                                    "nodeId": "7",
+                                    "type": "Join",
+                                  },
+                                  Object {
+                                    "definitionId": "_F543B3F0-AB44-4A5B-BF17-8D9DEB505815",
+                                    "enter": "2020-05-07T06:50:18.439Z",
+                                    "exit": "2020-05-07T06:50:18.442Z",
+                                    "id": "60309b28-1dbe-49c3-b0d8-8cefb86be8b4",
+                                    "name": "Book Flight",
+                                    "nodeId": "10",
+                                    "type": "SubProcessNode",
+                                  },
+                                  Object {
+                                    "definitionId": "_175DC79D-C2F1-4B28-BE2D-B583DFABF70D",
+                                    "enter": "2020-05-07T06:50:18.428Z",
+                                    "exit": "2020-05-07T06:50:18.439Z",
+                                    "id": "efa5a6c0-9470-4405-8609-620bdbfbb6d9",
+                                    "name": "Book",
+                                    "nodeId": "2",
+                                    "type": "Split",
+                                  },
+                                  Object {
+                                    "definitionId": "_B34ADDEE-DEA5-47C5-A913-F8B85ED5641F",
+                                    "enter": "2020-05-07T06:50:18.428Z",
+                                    "exit": "2020-05-07T06:50:18.428Z",
+                                    "id": "acc87f1f-e436-4364-b4d3-9069ddb359c9",
+                                    "name": "Join",
+                                    "nodeId": "14",
+                                    "type": "Join",
+                                  },
+                                  Object {
+                                    "definitionId": "_5EA95D17-59A6-4567-92DF-74D36CE7F35A",
+                                    "enter": "2020-05-07T06:50:18.427Z",
+                                    "exit": "2020-05-07T06:50:18.428Z",
+                                    "id": "6c20729a-3e2b-44c5-af5c-8554f21a7ebf",
+                                    "name": "is visa required",
+                                    "nodeId": "15",
+                                    "type": "Split",
+                                  },
+                                  Object {
+                                    "definitionId": "_54ABE1ED-61BE-45F9-812C-795A5D4ED35E",
+                                    "enter": "2020-05-07T06:50:18.278Z",
+                                    "exit": "2020-05-07T06:50:18.427Z",
+                                    "id": "3fb92a0a-e88b-45a4-a48b-65f11a679b96",
+                                    "name": "Visa check",
+                                    "nodeId": "5",
+                                    "type": "RuleSetNode",
+                                  },
+                                  Object {
+                                    "definitionId": "_1B11BEC9-402A-4E73-959A-296BD334CAB0",
+                                    "enter": "2020-05-07T06:50:18.276Z",
+                                    "exit": "2020-05-07T06:50:18.278Z",
+                                    "id": "2860e474-dffc-498c-8731-e6b6f0b5d4d4",
+                                    "name": "StartProcess",
+                                    "nodeId": "16",
+                                    "type": "StartNode",
+                                  },
+                                ],
+                                "parentProcessInstance": null,
+                                "parentProcessInstanceId": null,
+                                "processId": "travels",
+                                "processName": "travels",
+                                "roles": Array [],
+                                "serviceUrl": "http://localhost:8080",
+                                "start": "2020-05-07T06:50:18.274Z",
+                                "state": "ACTIVE",
+                                "variables": "{\\"flight\\":{\\"flightNumber\\":\\"MX555\\",\\"seat\\":null,\\"gate\\":null,\\"departure\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"arrival\\":\\"2020-05-09T03:30:00.000+05:30\\"},\\"hotel\\":{\\"name\\":\\"Perfect hotel\\",\\"address\\":{\\"street\\":\\"street\\",\\"city\\":\\"Bengaluru\\",\\"zipCode\\":\\"12345\\",\\"country\\":\\"India\\"},\\"phone\\":\\"09876543\\",\\"bookingNumber\\":\\"XX-012345\\",\\"room\\":null},\\"trip\\":{\\"city\\":\\"Bengaluru\\",\\"country\\":\\"India\\",\\"begin\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"end\\":\\"2020-05-09T03:30:00.000+05:30\\",\\"visaRequired\\":false},\\"traveller\\":{\\"firstName\\":\\"Ajay\\",\\"lastName\\":\\"Jaganathan\\",\\"email\\":\\"ajaganat@redhat.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Bangalore\\",\\"city\\":\\"Bangalore\\",\\"zipCode\\":\\"560093\\",\\"country\\":\\"Poland\\"}}}",
+                              }
+                            }
+                          />
+                        </h2>
+                      </Title>
+                    </div>
+                  </SplitItem>
+                  <SplitItem>
+                    <div
+                      className="pf-l-split__item"
+                    >
+                      <OverflowMenu
+                        breakpoint="lg"
+                      >
+                        <div
+                          className="pf-c-overflow-menu"
+                        >
+                          <OverflowMenuContent
+                            isPersistent={true}
                           >
-                            <span
-                              className="pf-c-spinner__clipper"
-                            />
-                            <span
-                              className="pf-c-spinner__lead-ball"
-                            />
-                            <span
-                              className="pf-c-spinner__tail-ball"
-                            />
-                          </span>
-                        </Spinner>
-                      </div>
-                    </EmptyStateIcon>
-                    <Title
-                      size="lg"
-                    >
-                      <h1
-                        className="pf-c-title pf-m-lg"
-                      >
-                        Loading process details...
-                      </h1>
-                    </Title>
-                  </div>
-                </EmptyState>
-              </EmptyStateSpinner>
+                            <div
+                              className="pf-c-overflow-menu__content"
+                            >
+                              <OverflowMenuGroup
+                                groupType="button"
+                                isPersistent={true}
+                              >
+                                <div
+                                  className="pf-c-overflow-menu__group pf-m-button-group"
+                                >
+                                  <Component
+                                    onClick={[Function]}
+                                    variant="secondary"
+                                  >
+                                    <ComponentWithOuia
+                                      component={[Function]}
+                                      componentProps={
+                                        Object {
+                                          "children": "Abort",
+                                          "onClick": [Function],
+                                          "variant": "secondary",
+                                        }
+                                      }
+                                      consumerContext={
+                                        Object {
+                                          "isOuia": false,
+                                          "ouiaId": null,
+                                        }
+                                      }
+                                    >
+                                      <Button
+                                        onClick={[Function]}
+                                        ouiaContext={
+                                          Object {
+                                            "isOuia": false,
+                                            "ouiaId": null,
+                                          }
+                                        }
+                                        variant="secondary"
+                                      >
+                                        <button
+                                          aria-disabled={null}
+                                          aria-label={null}
+                                          className="pf-c-button pf-m-secondary"
+                                          disabled={false}
+                                          onClick={[Function]}
+                                          tabIndex={null}
+                                          type="button"
+                                        >
+                                          Abort
+                                        </button>
+                                      </Button>
+                                    </ComponentWithOuia>
+                                  </Component>
+                                </div>
+                              </OverflowMenuGroup>
+                            </div>
+                          </OverflowMenuContent>
+                        </div>
+                      </OverflowMenu>
+                    </div>
+                  </SplitItem>
+                </div>
+              </Split>
             </div>
-          </Bullseye>
-        </article>
-      </Card>
+          </GridItem>
+          <GridItem>
+            <div
+              className="pf-l-grid__item"
+            >
+              <MockedProcessVariables
+                data={
+                  Object {
+                    "ProcessInstances": Array [
+                      Object {
+                        "addons": Array [
+                          "process-management",
+                          "infinispan-persistence",
+                          "prometheus-monitoring",
+                        ],
+                        "businessKey": "MQQ640",
+                        "childProcessInstances": Array [
+                          Object {
+                            "businessKey": null,
+                            "id": "bfde98ed-0cdd-4700-ae87-377f7ec430cd",
+                            "processName": "HotelBooking",
+                          },
+                          Object {
+                            "businessKey": null,
+                            "id": "e607b2a9-0aca-4788-9623-dd2e156ce9c4",
+                            "processName": "FlightBooking",
+                          },
+                        ],
+                        "end": null,
+                        "endpoint": "http://localhost:8080/travels",
+                        "error": null,
+                        "id": "201a8a42-043e-375a-9f52-57c804b24db4",
+                        "lastUpdate": "2020-05-07T06:50:18.502Z",
+                        "nodes": Array [
+                          Object {
+                            "definitionId": "_1A708F87-11C0-42A0-A464-0B7E259C426F",
+                            "enter": "2020-05-07T06:50:18.429Z",
+                            "exit": "2020-05-07T06:50:18.439Z",
+                            "id": "39d5fe7c-4e37-44ce-8d25-05a4a29ec6ea",
+                            "name": "Book Hotel",
+                            "nodeId": "17",
+                            "type": "SubProcessNode",
+                          },
+                          Object {
+                            "definitionId": "_2140F05A-364F-40B3-BB7B-B12927065DF8",
+                            "enter": "2020-05-07T06:50:18.443Z",
+                            "exit": null,
+                            "id": "1d3d7ebe-79ec-4848-b1d6-d7c5a371b4dd",
+                            "name": "Confirm travel",
+                            "nodeId": "8",
+                            "type": "HumanTaskNode",
+                          },
+                          Object {
+                            "definitionId": "_5D0733B5-53FE-40E9-9900-4CC13419C67A",
+                            "enter": "2020-05-07T06:50:18.442Z",
+                            "exit": "2020-05-07T06:50:18.443Z",
+                            "id": "4fc774f5-c429-4b97-8981-bd60d1f59954",
+                            "name": "Join",
+                            "nodeId": "7",
+                            "type": "Join",
+                          },
+                          Object {
+                            "definitionId": "_F543B3F0-AB44-4A5B-BF17-8D9DEB505815",
+                            "enter": "2020-05-07T06:50:18.439Z",
+                            "exit": "2020-05-07T06:50:18.442Z",
+                            "id": "60309b28-1dbe-49c3-b0d8-8cefb86be8b4",
+                            "name": "Book Flight",
+                            "nodeId": "10",
+                            "type": "SubProcessNode",
+                          },
+                          Object {
+                            "definitionId": "_175DC79D-C2F1-4B28-BE2D-B583DFABF70D",
+                            "enter": "2020-05-07T06:50:18.428Z",
+                            "exit": "2020-05-07T06:50:18.439Z",
+                            "id": "efa5a6c0-9470-4405-8609-620bdbfbb6d9",
+                            "name": "Book",
+                            "nodeId": "2",
+                            "type": "Split",
+                          },
+                          Object {
+                            "definitionId": "_B34ADDEE-DEA5-47C5-A913-F8B85ED5641F",
+                            "enter": "2020-05-07T06:50:18.428Z",
+                            "exit": "2020-05-07T06:50:18.428Z",
+                            "id": "acc87f1f-e436-4364-b4d3-9069ddb359c9",
+                            "name": "Join",
+                            "nodeId": "14",
+                            "type": "Join",
+                          },
+                          Object {
+                            "definitionId": "_5EA95D17-59A6-4567-92DF-74D36CE7F35A",
+                            "enter": "2020-05-07T06:50:18.427Z",
+                            "exit": "2020-05-07T06:50:18.428Z",
+                            "id": "6c20729a-3e2b-44c5-af5c-8554f21a7ebf",
+                            "name": "is visa required",
+                            "nodeId": "15",
+                            "type": "Split",
+                          },
+                          Object {
+                            "definitionId": "_54ABE1ED-61BE-45F9-812C-795A5D4ED35E",
+                            "enter": "2020-05-07T06:50:18.278Z",
+                            "exit": "2020-05-07T06:50:18.427Z",
+                            "id": "3fb92a0a-e88b-45a4-a48b-65f11a679b96",
+                            "name": "Visa check",
+                            "nodeId": "5",
+                            "type": "RuleSetNode",
+                          },
+                          Object {
+                            "definitionId": "_1B11BEC9-402A-4E73-959A-296BD334CAB0",
+                            "enter": "2020-05-07T06:50:18.276Z",
+                            "exit": "2020-05-07T06:50:18.278Z",
+                            "id": "2860e474-dffc-498c-8731-e6b6f0b5d4d4",
+                            "name": "StartProcess",
+                            "nodeId": "16",
+                            "type": "StartNode",
+                          },
+                        ],
+                        "parentProcessInstance": null,
+                        "parentProcessInstanceId": null,
+                        "processId": "travels",
+                        "processName": "travels",
+                        "roles": Array [],
+                        "serviceUrl": "http://localhost:8080",
+                        "start": "2020-05-07T06:50:18.274Z",
+                        "state": "ACTIVE",
+                        "variables": "{\\"flight\\":{\\"flightNumber\\":\\"MX555\\",\\"seat\\":null,\\"gate\\":null,\\"departure\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"arrival\\":\\"2020-05-09T03:30:00.000+05:30\\"},\\"hotel\\":{\\"name\\":\\"Perfect hotel\\",\\"address\\":{\\"street\\":\\"street\\",\\"city\\":\\"Bengaluru\\",\\"zipCode\\":\\"12345\\",\\"country\\":\\"India\\"},\\"phone\\":\\"09876543\\",\\"bookingNumber\\":\\"XX-012345\\",\\"room\\":null},\\"trip\\":{\\"city\\":\\"Bengaluru\\",\\"country\\":\\"India\\",\\"begin\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"end\\":\\"2020-05-09T03:30:00.000+05:30\\",\\"visaRequired\\":false},\\"traveller\\":{\\"firstName\\":\\"Ajay\\",\\"lastName\\":\\"Jaganathan\\",\\"email\\":\\"ajaganat@redhat.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Bangalore\\",\\"city\\":\\"Bangalore\\",\\"zipCode\\":\\"560093\\",\\"country\\":\\"Poland\\"}}}",
+                      },
+                    ],
+                  }
+                }
+              />
+            </div>
+          </GridItem>
+          <GridItem>
+            <div
+              className="pf-l-grid__item"
+            >
+              <MockedProcessTimeline
+                data={
+                  Object {
+                    "addons": Array [
+                      "process-management",
+                      "infinispan-persistence",
+                      "prometheus-monitoring",
+                    ],
+                    "businessKey": "MQQ640",
+                    "childProcessInstances": Array [
+                      Object {
+                        "businessKey": null,
+                        "id": "bfde98ed-0cdd-4700-ae87-377f7ec430cd",
+                        "processName": "HotelBooking",
+                      },
+                      Object {
+                        "businessKey": null,
+                        "id": "e607b2a9-0aca-4788-9623-dd2e156ce9c4",
+                        "processName": "FlightBooking",
+                      },
+                    ],
+                    "end": null,
+                    "endpoint": "http://localhost:8080/travels",
+                    "error": null,
+                    "id": "201a8a42-043e-375a-9f52-57c804b24db4",
+                    "lastUpdate": "2020-05-07T06:50:18.502Z",
+                    "nodes": Array [
+                      Object {
+                        "definitionId": "_1A708F87-11C0-42A0-A464-0B7E259C426F",
+                        "enter": "2020-05-07T06:50:18.429Z",
+                        "exit": "2020-05-07T06:50:18.439Z",
+                        "id": "39d5fe7c-4e37-44ce-8d25-05a4a29ec6ea",
+                        "name": "Book Hotel",
+                        "nodeId": "17",
+                        "type": "SubProcessNode",
+                      },
+                      Object {
+                        "definitionId": "_2140F05A-364F-40B3-BB7B-B12927065DF8",
+                        "enter": "2020-05-07T06:50:18.443Z",
+                        "exit": null,
+                        "id": "1d3d7ebe-79ec-4848-b1d6-d7c5a371b4dd",
+                        "name": "Confirm travel",
+                        "nodeId": "8",
+                        "type": "HumanTaskNode",
+                      },
+                      Object {
+                        "definitionId": "_5D0733B5-53FE-40E9-9900-4CC13419C67A",
+                        "enter": "2020-05-07T06:50:18.442Z",
+                        "exit": "2020-05-07T06:50:18.443Z",
+                        "id": "4fc774f5-c429-4b97-8981-bd60d1f59954",
+                        "name": "Join",
+                        "nodeId": "7",
+                        "type": "Join",
+                      },
+                      Object {
+                        "definitionId": "_F543B3F0-AB44-4A5B-BF17-8D9DEB505815",
+                        "enter": "2020-05-07T06:50:18.439Z",
+                        "exit": "2020-05-07T06:50:18.442Z",
+                        "id": "60309b28-1dbe-49c3-b0d8-8cefb86be8b4",
+                        "name": "Book Flight",
+                        "nodeId": "10",
+                        "type": "SubProcessNode",
+                      },
+                      Object {
+                        "definitionId": "_175DC79D-C2F1-4B28-BE2D-B583DFABF70D",
+                        "enter": "2020-05-07T06:50:18.428Z",
+                        "exit": "2020-05-07T06:50:18.439Z",
+                        "id": "efa5a6c0-9470-4405-8609-620bdbfbb6d9",
+                        "name": "Book",
+                        "nodeId": "2",
+                        "type": "Split",
+                      },
+                      Object {
+                        "definitionId": "_B34ADDEE-DEA5-47C5-A913-F8B85ED5641F",
+                        "enter": "2020-05-07T06:50:18.428Z",
+                        "exit": "2020-05-07T06:50:18.428Z",
+                        "id": "acc87f1f-e436-4364-b4d3-9069ddb359c9",
+                        "name": "Join",
+                        "nodeId": "14",
+                        "type": "Join",
+                      },
+                      Object {
+                        "definitionId": "_5EA95D17-59A6-4567-92DF-74D36CE7F35A",
+                        "enter": "2020-05-07T06:50:18.427Z",
+                        "exit": "2020-05-07T06:50:18.428Z",
+                        "id": "6c20729a-3e2b-44c5-af5c-8554f21a7ebf",
+                        "name": "is visa required",
+                        "nodeId": "15",
+                        "type": "Split",
+                      },
+                      Object {
+                        "definitionId": "_54ABE1ED-61BE-45F9-812C-795A5D4ED35E",
+                        "enter": "2020-05-07T06:50:18.278Z",
+                        "exit": "2020-05-07T06:50:18.427Z",
+                        "id": "3fb92a0a-e88b-45a4-a48b-65f11a679b96",
+                        "name": "Visa check",
+                        "nodeId": "5",
+                        "type": "RuleSetNode",
+                      },
+                      Object {
+                        "definitionId": "_1B11BEC9-402A-4E73-959A-296BD334CAB0",
+                        "enter": "2020-05-07T06:50:18.276Z",
+                        "exit": "2020-05-07T06:50:18.278Z",
+                        "id": "2860e474-dffc-498c-8731-e6b6f0b5d4d4",
+                        "name": "StartProcess",
+                        "nodeId": "16",
+                        "type": "StartNode",
+                      },
+                    ],
+                    "parentProcessInstance": null,
+                    "parentProcessInstanceId": null,
+                    "processId": "travels",
+                    "processName": "travels",
+                    "roles": Array [],
+                    "serviceUrl": "http://localhost:8080",
+                    "start": "2020-05-07T06:50:18.274Z",
+                    "state": "ACTIVE",
+                    "variables": "{\\"flight\\":{\\"flightNumber\\":\\"MX555\\",\\"seat\\":null,\\"gate\\":null,\\"departure\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"arrival\\":\\"2020-05-09T03:30:00.000+05:30\\"},\\"hotel\\":{\\"name\\":\\"Perfect hotel\\",\\"address\\":{\\"street\\":\\"street\\",\\"city\\":\\"Bengaluru\\",\\"zipCode\\":\\"12345\\",\\"country\\":\\"India\\"},\\"phone\\":\\"09876543\\",\\"bookingNumber\\":\\"XX-012345\\",\\"room\\":null},\\"trip\\":{\\"city\\":\\"Bengaluru\\",\\"country\\":\\"India\\",\\"begin\\":\\"2020-05-08T03:30:00.000+05:30\\",\\"end\\":\\"2020-05-09T03:30:00.000+05:30\\",\\"visaRequired\\":false},\\"traveller\\":{\\"firstName\\":\\"Ajay\\",\\"lastName\\":\\"Jaganathan\\",\\"email\\":\\"ajaganat@redhat.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Bangalore\\",\\"city\\":\\"Bangalore\\",\\"zipCode\\":\\"560093\\",\\"country\\":\\"Poland\\"}}}",
+                  }
+                }
+                handleRetryModalToggle={[Function]}
+                handleSkipModalToggle={[Function]}
+                setModalContent={[Function]}
+                setModalTitle={[Function]}
+                setTitleType={[Function]}
+              />
+            </div>
+          </GridItem>
+        </div>
+      </Grid>
     </section>
   </PageSection>
 </ProcessDetailsPage>

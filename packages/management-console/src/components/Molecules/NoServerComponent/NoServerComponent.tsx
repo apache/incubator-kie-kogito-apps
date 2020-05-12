@@ -62,47 +62,45 @@ const NoServerComponent = props => {
   );
 
   return (
-    <>
-      <Router>
-        <Page
-          header={Header}
-          skipToContent={PageSkipToContent}
-          mainContainerId={pageId}
-          sidebar={Sidebar}
-          isManagedSidebar
-          className="kogito-management-console--dashboard-page"
-        >
-          <PageSection variant="light">
-            <Bullseye>
-              <EmptyState variant={EmptyStateVariant.full}>
-                <EmptyStateIcon
-                  icon={ExclamationCircleIcon}
-                  size="md"
-                  color="var(--pf-global--danger-color--100)"
-                />
-                <Title headingLevel="h1" size="4xl">
-                  Error connecting server
-                </Title>
-                <EmptyStateBody>
-                  The management console could not access the server to display
-                  content.
-                </EmptyStateBody>
-                <EmptyStateBody>
-                  Try reloading the page, or contact your administrator for more
-                  information.
-                </EmptyStateBody>
-                <Button
-                  variant="primary"
-                  onClick={() => window.location.reload()}
-                >
-                  Refresh               
-                </Button>
-              </EmptyState>
-            </Bullseye>
-          </PageSection>
-        </Page>
-      </Router>
-    </>
+    <Router>
+      <Page
+        header={Header}
+        skipToContent={PageSkipToContent}
+        mainContainerId={pageId}
+        sidebar={Sidebar}
+        isManagedSidebar
+        className="kogito-management-console--dashboard-page"
+      >
+        <PageSection variant="light">
+          <Bullseye>
+            <EmptyState variant={EmptyStateVariant.full}>
+              <EmptyStateIcon
+                icon={ExclamationCircleIcon}
+                size="md"
+                color="var(--pf-global--danger-color--100)"
+              />
+              <Title headingLevel="h1" size="4xl">
+                Error connecting server
+              </Title>
+              <EmptyStateBody>
+                The management console could not access the server to display
+                content.
+              </EmptyStateBody>
+              <EmptyStateBody>
+                Try reloading the page, or contact your administrator for more
+                information.
+              </EmptyStateBody>
+              <Button
+                variant="primary"
+                onClick={() => window.location.reload()}
+              >
+                Refresh               
+              </Button>
+            </EmptyState>
+          </Bullseye>
+        </PageSection>
+      </Page>
+    </Router>
   );
 };
 

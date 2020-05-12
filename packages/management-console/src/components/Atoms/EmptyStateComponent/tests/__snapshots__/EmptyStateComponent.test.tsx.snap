@@ -1,30 +1,127 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Emptystate component tests snapshot testing 1`] = `
-<Bullseye>
-  <EmptyState
-    variant="full"
-  >
-    <EmptyStateIcon
-      color="var(--pf-global--warning-color--100)"
-      icon={[Function]}
-      size="sm"
-    />
-    <Title
-      headingLevel="h5"
-      size="lg"
+<EmptyStateComponent
+  body="This process has no related sub processes"
+  iconType="warningTriangleIcon"
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+  title="No child process instances"
+>
+  <Bullseye>
+    <div
+      className="pf-l-bullseye"
     >
-      No child process instances
-    </Title>
-    <EmptyStateBody>
-      This process has no related sub processes
-    </EmptyStateBody>
-    <Component
-      onClick={[Function]}
-      variant="primary"
-    >
-      Refresh
-    </Component>
-  </EmptyState>
-</Bullseye>
+      <EmptyState
+        variant="full"
+      >
+        <div
+          className="pf-c-empty-state"
+        >
+          <EmptyStateIcon
+            color="var(--pf-global--warning-color--100)"
+            icon={
+              [MockFunction] {
+                "calls": Array [
+                  Array [
+                    Object {
+                      "aria-hidden": "true",
+                      "className": "pf-c-empty-state__icon",
+                      "color": "var(--pf-global--warning-color--100)",
+                      "noVerticalAlign": false,
+                      "size": "sm",
+                      "title": null,
+                    },
+                    Object {},
+                  ],
+                ],
+                "results": Array [
+                  Object {
+                    "type": "return",
+                    "value": undefined,
+                  },
+                ],
+              }
+            }
+            size="sm"
+          >
+            <ExclamationTriangleIcon
+              aria-hidden="true"
+              className="pf-c-empty-state__icon"
+              color="var(--pf-global--warning-color--100)"
+              noVerticalAlign={false}
+              size="sm"
+              title={null}
+            />
+          </EmptyStateIcon>
+          <Title
+            headingLevel="h5"
+            size="lg"
+          >
+            <h5
+              className="pf-c-title pf-m-lg"
+            >
+              No child process instances
+            </h5>
+          </Title>
+          <EmptyStateBody>
+            <div
+              className="pf-c-empty-state__body"
+            >
+              This process has no related sub processes
+            </div>
+          </EmptyStateBody>
+          <Component
+            onClick={[Function]}
+            variant="primary"
+          >
+            <ComponentWithOuia
+              component={[Function]}
+              componentProps={
+                Object {
+                  "children": "Refresh",
+                  "onClick": [Function],
+                  "variant": "primary",
+                }
+              }
+              consumerContext={
+                Object {
+                  "isOuia": false,
+                  "ouiaId": null,
+                }
+              }
+            >
+              <Button
+                onClick={[Function]}
+                ouiaContext={
+                  Object {
+                    "isOuia": false,
+                    "ouiaId": null,
+                  }
+                }
+                variant="primary"
+              >
+                <button
+                  aria-disabled={null}
+                  aria-label={null}
+                  className="pf-c-button pf-m-primary"
+                  disabled={false}
+                  onClick={[Function]}
+                  tabIndex={null}
+                  type="button"
+                >
+                  Refresh
+                </button>
+              </Button>
+            </ComponentWithOuia>
+          </Component>
+        </div>
+      </EmptyState>
+    </div>
+  </Bullseye>
+</EmptyStateComponent>
 `;

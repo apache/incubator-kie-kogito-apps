@@ -6,7 +6,9 @@ import {
   EmptyStateBody,
   Bullseye,
   Button,
-  EmptyStateVariant
+  EmptyStateVariant,
+  withOuiaContext,
+  InjectedOuiaProps
 } from '@patternfly/react-core';
 import {
   SearchIcon,
@@ -14,6 +16,7 @@ import {
   InfoCircleIcon
 } from '@patternfly/react-icons';
 import '@patternfly/patternfly/patternfly-addons.css';
+import { componentOuiaProps } from '@kogito-apps/common';
 
 interface IOwnProps {
   iconType: string;
@@ -25,8 +28,9 @@ interface IOwnProps {
   refetch?: any;
   setSearchWord?: any;
   filters?: any;
+  ouiaComponentType?: string;
 }
-const EmptyStateComponent: React.FC<IOwnProps> = ({
+const EmptyStateComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
   iconType,
   title,
   body,
@@ -35,7 +39,9 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
   setCheckedArray,
   refetch,
   setSearchWord,
-  filters
+  filters,
+  ouiaContext,
+  ouiaId
 }) => {
   const resetClick = () => {
     setSearchWord('');
@@ -44,7 +50,8 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
     setFilters({ ...filters, status: ['ACTIVE'] });
   };
   return (
-    <Bullseye>
+    <Bullseye
+      {...componentOuiaProps(ouiaContext, ouiaId, 'EmptyState', true)}>
       <EmptyState variant={EmptyStateVariant.full}>
         {iconType === 'searchIcon' && (
           <EmptyStateIcon icon={SearchIcon} size="sm" />
@@ -87,4 +94,5 @@ const EmptyStateComponent: React.FC<IOwnProps> = ({
   );
 };
 
-export default EmptyStateComponent;
+const EmptyStateComponentWithContext = withOuiaContext(EmptyStateComponent);
+export default EmptyStateComponentWithContext;

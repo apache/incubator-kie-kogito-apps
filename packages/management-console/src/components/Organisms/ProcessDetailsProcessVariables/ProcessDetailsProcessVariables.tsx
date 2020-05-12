@@ -3,14 +3,27 @@ import {
   CardBody,
   CardHeader,
   TextContent,
-  Title
+  Title,
+  InjectedOuiaProps,
+  withOuiaContext
 } from '@patternfly/react-core';
 import React from 'react';
 import ReactJson from 'react-json-view';
+import { componentOuiaProps } from '@kogito-apps/common';
 
-const ProcessDetailsProcessVariables = ({ data }) => {
+export interface IOwnProps {
+  data: any
+}
+
+const ProcessDetailsProcessVariables: React.FC<IOwnProps & InjectedOuiaProps> = ({
+  ouiaContext,
+  ouiaId,
+  data
+}) => {
   return (
-    <Card>
+    <Card
+      {...componentOuiaProps(ouiaContext, ouiaId, 'ProcessVariables', true)}
+    >
       <CardHeader>
         <Title headingLevel="h3" size="xl">
           Process Variables
@@ -31,4 +44,5 @@ const ProcessDetailsProcessVariables = ({ data }) => {
   );
 };
 
-export default ProcessDetailsProcessVariables;
+const ProcessDetailsProcessVariablesWithContext = withOuiaContext(ProcessDetailsProcessVariables);
+export default ProcessDetailsProcessVariablesWithContext;
