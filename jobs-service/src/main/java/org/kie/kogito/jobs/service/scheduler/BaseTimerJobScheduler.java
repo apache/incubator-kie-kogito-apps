@@ -56,7 +56,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler<Sche
     long maxIntervalLimitToRetryMillis;
 
     /**
-     * Flag to allow anf force a job with expirationTime in the past to be executed immediately. If false and
+     * Flag to allow and force a job with expirationTime in the past to be executed immediately. If false an
      * exception will be thrown.
      */
     @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs")
