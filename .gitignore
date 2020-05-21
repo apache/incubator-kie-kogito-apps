@@ -13,8 +13,10 @@ out/
 package-lock.json
 
 # Eclipse, Netbeans and IntelliJ files
+/.*
 !.github
 !.gitignore
+!.mvn
 /nbproject
 /*.ipr
 /*.iws
