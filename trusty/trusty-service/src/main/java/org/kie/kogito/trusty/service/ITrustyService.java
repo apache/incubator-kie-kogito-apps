@@ -42,5 +42,11 @@ public interface ITrustyService {
      */
     List<Execution> getExecutionHeaders(Date from, Date to, int limit, int offset, String prefix);
 
+    /**
+     * Stores an execution.
+     * @param executionId The unique execution ID
+     * @param execution The execution object.
+     * @throws RuntimeException Throws RuntimeException in case the executionId is already present in the system.
+     */
     void storeExecution(String executionId, Execution execution);
 }
