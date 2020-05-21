@@ -1,1 +1,0 @@
-## Kogito Trusty execution service

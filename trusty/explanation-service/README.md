@@ -1,1 +1,0 @@
-## Kogito Trusty explanation service
