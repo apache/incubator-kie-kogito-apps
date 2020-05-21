@@ -16,6 +16,31 @@
 
 package org.kie.kogito.trusty.service;
 
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import org.kie.kogito.trusty.service.models.Execution;
+
+/**
+ * The trusty service interface.
+ *
+ * The service exposes the api to CRUD the executions.
+ */
 public interface ITrustyService {
 
+    /**
+     * Gets all the headers of the executions that were evaluated within a specified time range.
+     * @param from The start datetime.
+     * @param to The end datetime.
+     * @param limit The maximum (non-negative) number of items to be returned.
+     * @param offset The non-negative pagination offset.
+     * @param prefix The executionId prefix to be matched in the search.
+     * @return The execution headers that satisfy the time range, pagination and prefix conditions.
+     */
+    List<Execution> getExecutionHeaders(Date from, Date to, int limit, int offset, String prefix);
+
+    void storeExecution(String executionId, Execution execution);
 }
