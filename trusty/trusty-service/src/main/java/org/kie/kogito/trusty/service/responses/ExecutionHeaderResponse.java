@@ -64,6 +64,7 @@ public class ExecutionHeaderResponse {
 
     /**
      * Gets the execution id.
+     *
      * @return The execution id.
      */
     public String getExecutionId() {
@@ -72,6 +73,7 @@ public class ExecutionHeaderResponse {
 
     /**
      * Gets the execution date.
+     *
      * @return The execution date.
      */
     public Date getExecutionDate() {
@@ -80,6 +82,7 @@ public class ExecutionHeaderResponse {
 
     /**
      * Gets the information of the operational success of the execution.
+     *
      * @return true if the execution was successful from an technical point of view, false otherwise.
      */
     public boolean hasSucceeded() {
@@ -88,6 +91,7 @@ public class ExecutionHeaderResponse {
 
     /**
      * Gets the executor name.
+     *
      * @return The executor name.
      */
     public String getExecutorName() {
@@ -96,6 +100,7 @@ public class ExecutionHeaderResponse {
 
     /**
      * Gets the name of the executed model.
+     *
      * @return The name of the executed model.
      */
     public String getExecutedModelName() {
@@ -104,9 +109,10 @@ public class ExecutionHeaderResponse {
 
     /**
      * Gets the execution type.
+     *
      * @return The execution type.
      */
-    public ExecutionTypeEnumResponse getExecutionType(){
+    public ExecutionTypeEnumResponse getExecutionType() {
         return executionType;
     }
 }

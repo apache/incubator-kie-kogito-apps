@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -50,19 +49,20 @@ import org.slf4j.LoggerFactory;
  * The trusty api resource.
  */
 @Path("v1/executions")
-public class TrustyApiV1 {
+public class ExecutionsApiV1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrustyApiV1.class);
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionsApiV1.class);
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @Inject
     ITrustyService executionService;
 
     /**
      * Gets all the headers of the executions that were evaluated within a specified time range.
-     * @param from The start datetime.
-     * @param to The end datetime.
-     * @param limit The maximum (non-negative) number of items to be returned.
+     *
+     * @param from   The start datetime.
+     * @param to     The end datetime.
+     * @param limit  The maximum (non-negative) number of items to be returned.
      * @param offset The non-negative pagination offset.
      * @param prefix The executionId prefix to be matched in the search.
      * @return The execution headers that satisfy the time range, pagination and prefix conditions.
@@ -107,7 +107,7 @@ public class TrustyApiV1 {
                     schema = @Schema(implementation = String.class)
             ) @DefaultValue("") @QueryParam("search") String prefix) {
 
-        if (from == null || to == null){
+        if (from == null || to == null) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Time range parameters can not be empty.").build();
         }
         if (limit < 0 || offset < 0) {

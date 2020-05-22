@@ -49,6 +49,7 @@ public class ExecutionsResponse {
 
     /**
      * Gets the total number of items returned.
+     *
      * @return The total number of items returned.
      */
     public int getTotal() {
@@ -57,6 +58,7 @@ public class ExecutionsResponse {
 
     /**
      * Gets the requested limit.
+     *
      * @return The maximum number of items to be returned.
      */
     public int getLimit() {
@@ -65,6 +67,7 @@ public class ExecutionsResponse {
 
     /**
      * Gets the starting offset for the pagination.
+     *
      * @return The pagination offset.
      */
     public int getOffset() {
@@ -73,6 +76,7 @@ public class ExecutionsResponse {
 
     /**
      * Gets the execution headers.
+     *
      * @return THe execution headers.
      */
     public List<ExecutionHeaderResponse> getHeaders() {
