@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public class ExecutionsApiV1 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionsApiV1.class);
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @Inject
     ITrustyService executionService;
