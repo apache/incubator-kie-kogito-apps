@@ -52,6 +52,7 @@ public interface ITrustyService {
 
     /**
      * Gets the execution by ID.
+     *
      * @param executionId The execution ID.
      * @return The execution.
      */

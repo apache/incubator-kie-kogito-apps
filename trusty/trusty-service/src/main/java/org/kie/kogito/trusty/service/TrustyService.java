@@ -43,7 +43,7 @@ public class TrustyService implements ITrustyService {
     }
 
     @Override
-    public Optional<Execution> getExecutionById(String executionId){
+    public Optional<Execution> getExecutionById(String executionId) {
         throw new NotImplementedYetException("Not implemented yet.");
     }
 }

@@ -1,6 +1,5 @@
 package org.kie.kogito.trusty.service.api;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -21,11 +20,17 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.models.Execution;
 import org.kie.kogito.trusty.service.responses.ExecutionHeaderResponse;
+import org.kie.kogito.trusty.storage.api.IStorageManager;
+import org.kie.kogito.trusty.storage.mongo.MongoStorageManager;
 
 @Path("v1/executions/decisions")
 public class DecisionsApiV1 {
+
     @Inject
     ITrustyService trustyService;
+
+    @Inject
+    IStorageManager storageManager;
 
     @GET
     @Path("/{key}")

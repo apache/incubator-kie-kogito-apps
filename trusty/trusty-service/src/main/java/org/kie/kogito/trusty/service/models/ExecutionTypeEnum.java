@@ -31,7 +31,7 @@ public enum ExecutionTypeEnum {
      */
     PROCESS("PROCESS");
 
-    private String type;
+    public String type;
 
     ExecutionTypeEnum(String type) {
         this.type = type;

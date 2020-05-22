@@ -33,7 +33,7 @@ public enum ExecutionTypeEnumResponse {
      */
     PROCESS("PROCESS");
 
-    private String type;
+    public String type;
 
     ExecutionTypeEnumResponse(String type) {
         this.type = type;

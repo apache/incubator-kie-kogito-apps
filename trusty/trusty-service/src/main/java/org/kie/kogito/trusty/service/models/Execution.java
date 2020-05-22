@@ -56,7 +56,7 @@ public class Execution {
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
         this.executedModelName = executedModelName;
-        this.executionType = executionType;
+        //this.executionType = executionType;
     }
 
     /**
