@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -50,9 +49,9 @@ import org.slf4j.LoggerFactory;
  * The trusty api resource.
  */
 @Path("v1/executions")
-public class TrustyApiV1 {
+public class ExecutionsApiV1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrustyApiV1.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionsApiV1.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @Inject

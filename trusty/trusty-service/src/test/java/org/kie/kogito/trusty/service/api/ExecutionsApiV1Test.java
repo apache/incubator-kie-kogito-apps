@@ -40,7 +40,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TrustyApiV1Test {
+public class ExecutionsApiV1Test {
 
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
