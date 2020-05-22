@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -48,10 +49,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The trusty api resource.
  */
-@Path("/executions")
-public class TrustyApi {
+@Path("v1/executions")
+public class TrustyApiV1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrustyApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrustyApiV1.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @Inject
@@ -106,6 +107,9 @@ public class TrustyApi {
                     schema = @Schema(implementation = String.class)
             ) @DefaultValue("") @QueryParam("search") String prefix) {
 
+        if (from == null || to == null){
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Time range parameters can not be empty.").build();
+        }
         if (limit < 0 || offset < 0) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Pagination parameters can not have negative values.").build();
         }
