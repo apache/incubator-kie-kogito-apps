@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -38,6 +39,11 @@ public class TrustyService implements ITrustyService {
 
     @Override
     public void storeExecution(String executionId, Execution execution) {
+        throw new NotImplementedYetException("Not implemented yet.");
+    }
+
+    @Override
+    public Optional<Execution> getExecutionById(String executionId){
         throw new NotImplementedYetException("Not implemented yet.");
     }
 }

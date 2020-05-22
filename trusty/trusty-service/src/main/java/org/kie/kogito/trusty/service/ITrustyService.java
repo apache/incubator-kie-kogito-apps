@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -49,4 +50,11 @@ public interface ITrustyService {
      * @throws RuntimeException Throws RuntimeException in case the executionId is already present in the system.
      */
     void storeExecution(String executionId, Execution execution);
+
+    /**
+     * Gets the execution by ID.
+     * @param executionId The execution ID.
+     * @return The execution.
+     */
+    Optional<Execution> getExecutionById(String executionId);
 }
