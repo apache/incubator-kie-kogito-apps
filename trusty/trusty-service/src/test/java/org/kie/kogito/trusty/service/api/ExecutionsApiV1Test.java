@@ -40,7 +40,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ExecutionsApiV1Test {
+class ExecutionsApiV1Test {
 
     private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
@@ -48,7 +48,7 @@ public class ExecutionsApiV1Test {
     ITrustyService executionService;
 
     @Test
-    public void GivenRequestWithoutLimitAndOffsetParameters_WhenExecutionEndpointIsCalled_ThenTheDefaultValuesAreCorrect() {
+    void GivenRequestWithoutLimitAndOffsetParameters_WhenExecutionEndpointIsCalled_ThenTheDefaultValuesAreCorrect() {
         Mockito.when(executionService.getExecutionHeaders(any(Date.class), any(Date.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(new ArrayList<>());
         ExecutionsResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z").as(ExecutionsResponse.class);
 
@@ -58,20 +58,20 @@ public class ExecutionsApiV1Test {
     }
 
     @Test
-    public void GivenARequestWithoutTimeRangeParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
+    void GivenARequestWithoutTimeRangeParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
         given().when().get("/v1/executions").then().statusCode(400);
         given().when().get("/v1/executions?from=2000-01-01T00:00:00Z").then().statusCode(400);
         given().when().get("/v1/executions?to=2000-01-01T00:00:00Z").then().statusCode(400);
     }
 
     @Test
-    public void GivenARequestWithInvalidPaginationParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
+    void GivenARequestWithInvalidPaginationParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
         given().when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&offset=-1").then().statusCode(400);
         given().when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=-1").then().statusCode(400);
     }
 
     @Test
-    public void GivenARequestWitMalformedTimeRange_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
+    void GivenARequestWitMalformedTimeRange_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
         given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01&to=2021-01-01T00:00:00Z").then().statusCode(400);
         given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01").then().statusCode(400);
         given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00&to=2021-01-01T00:00:00Z").then().statusCode(400);
@@ -80,7 +80,7 @@ public class ExecutionsApiV1Test {
     }
 
     @Test
-    public void GivenARequestWithMalformedTimeRange_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() throws ParseException {
+    void GivenARequestWithMalformedTimeRange_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() throws ParseException {
         Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z"), true, "name", "model", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(Date.class), any(Date.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));
 

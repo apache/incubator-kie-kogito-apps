@@ -59,9 +59,10 @@ public class ExecutionsApiV1 {
 
     /**
      * Gets all the headers of the executions that were evaluated within a specified time range.
-     * @param from The start datetime.
-     * @param to The end datetime.
-     * @param limit The maximum (non-negative) number of items to be returned.
+     *
+     * @param from   The start datetime.
+     * @param to     The end datetime.
+     * @param limit  The maximum (non-negative) number of items to be returned.
      * @param offset The non-negative pagination offset.
      * @param prefix The executionId prefix to be matched in the search.
      * @return The execution headers that satisfy the time range, pagination and prefix conditions.
@@ -106,7 +107,7 @@ public class ExecutionsApiV1 {
                     schema = @Schema(implementation = String.class)
             ) @DefaultValue("") @QueryParam("search") String prefix) {
 
-        if (from == null || to == null){
+        if (from == null || to == null) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Time range parameters can not be empty.").build();
         }
         if (limit < 0 || offset < 0) {
