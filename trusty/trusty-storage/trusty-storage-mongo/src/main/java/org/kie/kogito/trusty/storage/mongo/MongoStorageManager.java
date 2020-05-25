@@ -26,6 +26,10 @@ public class MongoStorageManager implements IStorageManager {
 
     private MongoDatabase database;
 
+    public MongoStorageManager(MongoDatabase mongoDatabase) {
+        this.database = mongoDatabase;
+    }
+
     @PostConstruct
     void setup() {
         database = defaultMongoClient.getDatabase("TrustyDB");

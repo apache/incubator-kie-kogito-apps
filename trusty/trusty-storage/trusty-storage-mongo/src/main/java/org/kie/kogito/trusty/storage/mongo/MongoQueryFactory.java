@@ -3,8 +3,6 @@ package org.kie.kogito.trusty.storage.mongo;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.NotSupportedException;
-
 import org.bson.conversions.Bson;
 import org.kie.kogito.trusty.storage.api.TrustyStorageQuery;
 import org.kie.kogito.trusty.storage.api.models.WhereCondition;
@@ -27,11 +25,11 @@ public class MongoQueryFactory {
     public static Bson build(TrustyStorageQuery query) {
         List<Bson> conditions = new ArrayList<>();
 
-        conditions.addAll(buildIntegerConditions(query.integerOperations));
+        conditions.addAll(buildIntegerConditions(query.getIntegerConditions()));
 
-        conditions.addAll(buildStringConditions(query.stringOperations));
+        conditions.addAll(buildStringConditions(query.getStringConditions()));
 
-        conditions.addAll(buildDateConditions(query.dateOperations));
+        conditions.addAll(buildDateConditions(query.getDateConditions()));
 
         if (conditions.size() > 1) {
             return and(conditions);
@@ -41,7 +39,22 @@ public class MongoQueryFactory {
 
     private static List<Bson> buildIntegerConditions(List<WhereCondition<IntegerOperator, Integer>> conditions) {
         List<Bson> result = new ArrayList<>();
-        conditions.forEach(x -> result.add(eq(x.property, x.value)));
+        for (WhereCondition<IntegerOperator, Integer> condition : conditions) {
+            switch (condition.operator) {
+                case EQUALS:
+                    result.add(eq(condition.property, condition.value));
+                    break;
+                case GTE:
+                    result.add(gte(condition.property, condition.value));
+                    break;
+                case LTE:
+                    result.add(lte(condition.property, condition.value));
+                    break;
+                default:
+                    throw new RuntimeException("Integer operator not supported.");
+            }
+        }
+
         return result;
     }
 

@@ -10,28 +10,40 @@ import org.kie.kogito.trusty.storage.api.operators.StringOperator;
 
 public class TrustyStorageQuery {
 
-    public List<WhereCondition<StringOperator, String>> stringOperations = new ArrayList<>();
+    private List<WhereCondition<StringOperator, String>> stringConditions = new ArrayList<>();
 
-    public List<WhereCondition<IntegerOperator, Integer>> integerOperations = new ArrayList<>();
+    private List<WhereCondition<IntegerOperator, Integer>> integerConditions = new ArrayList<>();
 
-    public List<WhereCondition<DateOperator, String>> dateOperations = new ArrayList<>();
+    private List<WhereCondition<DateOperator, String>> dateConditions = new ArrayList<>();
 
     public TrustyStorageQuery() {
     }
 
     public TrustyStorageQuery where(String property, StringOperator operator, String value) {
-        stringOperations.add(new WhereCondition(property, operator, value));
+        stringConditions.add(new WhereCondition(property, operator, value));
         return this;
     }
 
     public TrustyStorageQuery where(String property, IntegerOperator operator, Integer value) {
-        integerOperations.add(new WhereCondition(property, operator, value));
+        integerConditions.add(new WhereCondition(property, operator, value));
         return this;
     }
 
     public TrustyStorageQuery where(String property, DateOperator operator, String value) {
         System.out.println(value);
-        dateOperations.add(new WhereCondition(property, operator, value));
+        dateConditions.add(new WhereCondition(property, operator, value));
         return this;
+    }
+
+    public List<WhereCondition<StringOperator, String>> getStringConditions() {
+        return stringConditions;
+    }
+
+    public List<WhereCondition<IntegerOperator, Integer>> getIntegerConditions() {
+        return integerConditions;
+    }
+
+    public List<WhereCondition<DateOperator, String>> getDateConditions() {
+        return dateConditions;
     }
 }
