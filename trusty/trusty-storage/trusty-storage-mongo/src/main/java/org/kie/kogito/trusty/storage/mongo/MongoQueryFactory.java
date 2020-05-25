@@ -3,8 +3,11 @@ package org.kie.kogito.trusty.storage.mongo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.NotSupportedException;
+
 import org.bson.conversions.Bson;
 import org.kie.kogito.trusty.storage.api.TrustyStorageQuery;
+import org.kie.kogito.trusty.storage.api.models.WhereCondition;
 import org.kie.kogito.trusty.storage.api.operators.DateOperator;
 import org.kie.kogito.trusty.storage.api.operators.IntegerOperator;
 import org.kie.kogito.trusty.storage.api.operators.StringOperator;
@@ -21,39 +24,58 @@ public class MongoQueryFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoQueryFactory.class);
 
-    public static Bson build(TrustyStorageQuery query, String entity) {
+    public static Bson build(TrustyStorageQuery query) {
         List<Bson> conditions = new ArrayList<>();
 
-        for (TrustyStorageQuery.InternalWhereDecision<IntegerOperator, Integer> condition : query.integerOperations) {
-            conditions.add(eq(condition.property, condition.value));
-        }
+        conditions.addAll(buildIntegerConditions(query.integerOperations));
 
-        for (TrustyStorageQuery.InternalWhereDecision<StringOperator, String> condition : query.stringOperations) {
-            switch (condition.operator){
-                case EQUALS:
-                    conditions.add(eq(condition.property, condition.value));
-                    break;
-                case PREFIX:
-                    conditions.add(regex(condition.property, "^" + condition.value + "*"));
-                    break;
-            }
-        }
+        conditions.addAll(buildStringConditions(query.stringOperations));
 
-        for (TrustyStorageQuery.InternalWhereDecision<DateOperator, String> condition : query.dateOperations) {
-            switch (condition.operator) {
-                case GTE:
-                    conditions.add(gte(condition.property, condition.value));
-                    break;
-                case LTE:
-                    conditions.add(lte(condition.property, condition.value));
-                    break;
-            }
+        conditions.addAll(buildDateConditions(query.dateOperations));
 
-        }
-
-        if (conditions.size() > 1){
+        if (conditions.size() > 1) {
             return and(conditions);
         }
         return conditions.get(0);
+    }
+
+    private static List<Bson> buildIntegerConditions(List<WhereCondition<IntegerOperator, Integer>> conditions) {
+        List<Bson> result = new ArrayList<>();
+        conditions.forEach(x -> result.add(eq(x.property, x.value)));
+        return result;
+    }
+
+    private static List<Bson> buildStringConditions(List<WhereCondition<StringOperator, String>> conditions) {
+        List<Bson> result = new ArrayList<>();
+        for (WhereCondition<StringOperator, String> condition : conditions) {
+            switch (condition.operator) {
+                case EQUALS:
+                    result.add(eq(condition.property, condition.value));
+                    break;
+                case PREFIX:
+                    result.add(regex(condition.property, "^" + condition.value + "*"));
+                    break;
+                default:
+                    throw new RuntimeException("String operator not supported.");
+            }
+        }
+        return result;
+    }
+
+    private static List<Bson> buildDateConditions(List<WhereCondition<DateOperator, String>> conditions) {
+        List<Bson> result = new ArrayList<>();
+        for (WhereCondition<DateOperator, String> condition : conditions) {
+            switch (condition.operator) {
+                case GTE:
+                    result.add(gte(condition.property, condition.value));
+                    break;
+                case LTE:
+                    result.add(lte(condition.property, condition.value));
+                    break;
+                default:
+                    throw new RuntimeException("Date operator not supported.");
+            }
+        }
+        return result;
     }
 }

@@ -21,14 +21,14 @@ public class MongoStorageManager implements IStorageManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoStorageManager.class);
 
-    private MongoDatabase database;
-
     @Inject
     MongoClient defaultMongoClient;
 
+    private MongoDatabase database;
+
     @PostConstruct
     void setup() {
-        database = defaultMongoClient.getDatabase("myMongoDb");
+        database = defaultMongoClient.getDatabase("TrustyDB");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MongoStorageManager implements IStorageManager {
     public <T> List<T> search(TrustyStorageQuery query, String index, Class<T> type) {
         MongoCollection<T> collection = getOrCreateCollection(index, type);
 
-        Iterator<T> i = collection.find(MongoQueryFactory.build(query, index)).iterator();
+        Iterator<T> i = collection.find(MongoQueryFactory.build(query)).iterator();
         List<T> copy = new ArrayList<T>();
         while (i.hasNext()) {
             copy.add(i.next());

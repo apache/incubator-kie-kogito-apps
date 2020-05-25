@@ -3,47 +3,35 @@ package org.kie.kogito.trusty.storage.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.kogito.trusty.storage.api.models.WhereCondition;
 import org.kie.kogito.trusty.storage.api.operators.DateOperator;
 import org.kie.kogito.trusty.storage.api.operators.IntegerOperator;
 import org.kie.kogito.trusty.storage.api.operators.StringOperator;
 
 public class TrustyStorageQuery {
 
-    public List<InternalWhereDecision<StringOperator, String>> stringOperations = new ArrayList<InternalWhereDecision<StringOperator, String>>();
+    public List<WhereCondition<StringOperator, String>> stringOperations = new ArrayList<>();
 
-    public List<InternalWhereDecision<IntegerOperator, Integer>> integerOperations = new ArrayList<InternalWhereDecision<IntegerOperator, Integer>>();
+    public List<WhereCondition<IntegerOperator, Integer>> integerOperations = new ArrayList<>();
 
-    public List<InternalWhereDecision<DateOperator, String>> dateOperations = new ArrayList<InternalWhereDecision<DateOperator, String>>();
+    public List<WhereCondition<DateOperator, String>> dateOperations = new ArrayList<>();
 
     public TrustyStorageQuery() {
     }
 
     public TrustyStorageQuery where(String property, StringOperator operator, String value) {
-        stringOperations.add(new InternalWhereDecision(property, operator, value));
+        stringOperations.add(new WhereCondition(property, operator, value));
         return this;
     }
 
     public TrustyStorageQuery where(String property, IntegerOperator operator, Integer value) {
-        integerOperations.add(new InternalWhereDecision(property, operator, value));
+        integerOperations.add(new WhereCondition(property, operator, value));
         return this;
     }
 
     public TrustyStorageQuery where(String property, DateOperator operator, String value) {
         System.out.println(value);
-        dateOperations.add(new InternalWhereDecision(property, operator, value));
+        dateOperations.add(new WhereCondition(property, operator, value));
         return this;
-    }
-
-    public class InternalWhereDecision<T, K> {
-
-        public String property;
-        public T operator;
-        public K value;
-
-        public InternalWhereDecision(String property, T operator, K value) {
-            this.property = property;
-            this.operator = operator;
-            this.value = value;
-        }
     }
 }
