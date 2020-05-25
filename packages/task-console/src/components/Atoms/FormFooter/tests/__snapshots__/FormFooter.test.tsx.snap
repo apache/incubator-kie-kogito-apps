@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form Footer test testing action click 1`] = `
+<ActionGroup>
+  <Component
+    key="submit-action1"
+    onClick={[Function]}
+    type="submit"
+    variant="primary"
+  >
+    action1
+  </Component>
+  <Component
+    key="submit-action2"
+    onClick={[Function]}
+    type="submit"
+    variant="secondary"
+  >
+    action2
+  </Component>
+</ActionGroup>
+`;
+
+exports[`Form Footer test testing showing actions 1`] = `
+<ActionGroup>
+  <Component
+    key="submit-action1"
+    onClick={[Function]}
+    type="submit"
+    variant="primary"
+  >
+    action1
+  </Component>
+  <Component
+    key="submit-action2"
+    onClick={[Function]}
+    type="submit"
+    variant="secondary"
+  >
+    action2
+  </Component>
+</ActionGroup>
+`;
+
+exports[`Form Footer test testing showing empty actions 1`] = `""`;
+
+exports[`Form Footer test testing showing no actions 1`] = `""`;
