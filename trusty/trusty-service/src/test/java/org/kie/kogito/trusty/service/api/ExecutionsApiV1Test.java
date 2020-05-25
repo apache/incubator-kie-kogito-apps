@@ -81,7 +81,7 @@ class ExecutionsApiV1Test {
 
     @Test
     void GivenARequestWithMalformedTimeRange_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() throws ParseException {
-        Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z"), true, "name", "model", ExecutionTypeEnum.DECISION);
+        Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z").toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(Date.class), any(Date.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));
 
         ExecutionsResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z").as(ExecutionsResponse.class);

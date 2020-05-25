@@ -60,7 +60,7 @@ public class ExecutionHeaderResponse {
     }
 
     public static ExecutionHeaderResponse fromExecution(Execution execution) {
-        return new ExecutionHeaderResponse(execution.getExecutionId(), execution.getExecutionDate(), execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), execution.getExecutionType());
+        return new ExecutionHeaderResponse(execution.getExecutionId(), new Date(execution.getExecutionTimestamp()), execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), execution.getExecutionType());
     }
 
     /**

@@ -31,9 +31,8 @@ public class Execution {
     @JsonProperty("executionId")
     private String executionId;
 
-    @JsonProperty("executionDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private Date executionDate;
+    @JsonProperty("executionTimestamp")
+    private Long executionTimestamp;
 
     @JsonProperty("hasSucceeded")
     private boolean hasSucceeded;
@@ -50,9 +49,9 @@ public class Execution {
     public Execution() {
     }
 
-    public Execution(String executionId, Date executionDate, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
+    public Execution(String executionId, Long executionTimestamp, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
         this.executionId = executionId;
-        this.executionDate = executionDate;
+        this.executionTimestamp = executionTimestamp;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
         this.executedModelName = executedModelName;
@@ -73,8 +72,8 @@ public class Execution {
      *
      * @return The execution date.
      */
-    public Date getExecutionDate() {
-        return executionDate;
+    public Long getExecutionTimestamp() {
+        return executionTimestamp;
     }
 
     /**
