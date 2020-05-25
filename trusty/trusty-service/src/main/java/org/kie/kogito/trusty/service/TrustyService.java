@@ -41,7 +41,6 @@ public class TrustyService implements ITrustyService {
     public void storeExecution(String executionId, Execution execution) {
         throw new NotImplementedYetException("Not implemented yet.");
     }
-
     @Override
     public Optional<Execution> getExecutionById(String executionId) {
         throw new NotImplementedYetException("Not implemented yet.");
