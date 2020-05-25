@@ -21,6 +21,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kie.kogito.trusty.service.models.Execution;
+import org.kie.kogito.trusty.service.models.ExecutionTypeEnum;
 
 /**
  * An execution header.
@@ -44,12 +45,12 @@ public class ExecutionHeaderResponse {
     private String executedModelName;
 
     @JsonProperty("executionType")
-    private ExecutionTypeEnumResponse executionType;
+    private ExecutionTypeEnum executionType;
 
     public ExecutionHeaderResponse() {
     }
 
-    public ExecutionHeaderResponse(String executionId, Date executionDate, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnumResponse executionType) {
+    public ExecutionHeaderResponse(String executionId, Date executionDate, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
         this.executionId = executionId;
         this.executionDate = executionDate;
         this.hasSucceeded = hasSucceeded;
@@ -59,7 +60,7 @@ public class ExecutionHeaderResponse {
     }
 
     public static ExecutionHeaderResponse fromExecution(Execution execution) {
-        return new ExecutionHeaderResponse(execution.getExecutionId(), execution.getExecutionDate(), execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), ExecutionTypeEnumResponse.from(execution.getExecutionType()));
+        return new ExecutionHeaderResponse(execution.getExecutionId(), execution.getExecutionDate(), execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), execution.getExecutionType());
     }
 
     /**
@@ -112,7 +113,7 @@ public class ExecutionHeaderResponse {
      *
      * @return The execution type.
      */
-    public ExecutionTypeEnumResponse getExecutionType() {
+    public ExecutionTypeEnum getExecutionType() {
         return executionType;
     }
 }
