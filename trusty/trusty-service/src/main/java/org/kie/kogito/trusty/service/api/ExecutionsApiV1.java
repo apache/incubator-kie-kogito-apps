@@ -16,10 +16,13 @@
 
 package org.kie.kogito.trusty.service.api;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -52,7 +55,6 @@ import org.slf4j.LoggerFactory;
 public class ExecutionsApiV1 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionsApiV1.class);
-    private final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @Inject
     ITrustyService executionService;
@@ -114,12 +116,12 @@ public class ExecutionsApiV1 {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Pagination parameters can not have negative values.").build();
         }
 
-        Date fromDate;
-        Date toDate;
+        OffsetDateTime fromDate;
+        OffsetDateTime toDate;
         try {
-            fromDate = DATE_FORMAT.parse(from);
-            toDate = DATE_FORMAT.parse(to);
-        } catch (ParseException e) {
+            fromDate = ZonedDateTime.parse(from, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+            toDate = ZonedDateTime.parse(to, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+        } catch (DateTimeParseException e) {
             LOGGER.warn("Invalid date", e);
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Date format should be yyyy-MM-dd'T'HH:mm:ssZ").build();
         }
