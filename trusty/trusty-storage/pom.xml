@@ -16,6 +16,7 @@
   <modules>
     <module>trusty-storage-api</module>
     <module>trusty-storage-mongo</module>
+    <module>trusty-storage-infinispan</module>
   </modules>
 
 </project>
