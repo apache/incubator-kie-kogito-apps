@@ -16,6 +16,7 @@
 
 package org.kie.kogito.trusty.service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public interface ITrustyService {
      * @param prefix The executionId prefix to be matched in the search.
      * @return The execution headers that satisfy the time range, pagination and prefix conditions.
      */
-    List<Execution> getExecutionHeaders(Date from, Date to, int limit, int offset, String prefix);
+    List<Execution> getExecutionHeaders(LocalDate from, LocalDate to, int limit, int offset, String prefix);
 
     /**
      * Stores an execution.
