@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +42,6 @@ import static org.mockito.ArgumentMatchers.any;
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ExecutionsApiV1Test {
-
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     @InjectMock
     ITrustyService executionService;
@@ -85,7 +84,7 @@ class ExecutionsApiV1Test {
 
     @Test
     void GivenARequest_WhenExecutionEndpointIsCalled_ThenTheExecutionHeaderIsReturned() throws ParseException {
-        Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z").toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
+        Execution execution = new Execution("test1", OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));
 
         ExecutionsResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z").as(ExecutionsResponse.class);
