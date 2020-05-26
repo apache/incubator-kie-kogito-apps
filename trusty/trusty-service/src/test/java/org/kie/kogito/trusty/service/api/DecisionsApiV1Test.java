@@ -30,7 +30,7 @@ public class DecisionsApiV1Test {
 
     @Test
     public void GivenAnExecution_WhenDecisionDetailEndpointIsCalled_ThenTheExecutionDetailIsProperlyReturned() throws ParseException {
-        Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z"), true, "name", "model", ExecutionTypeEnum.DECISION);
+        Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z").toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionById("test1")).thenReturn(Optional.of(execution));
         ExecutionHeaderResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/test1").as(ExecutionHeaderResponse.class);
         Assertions.assertNotNull(response);
