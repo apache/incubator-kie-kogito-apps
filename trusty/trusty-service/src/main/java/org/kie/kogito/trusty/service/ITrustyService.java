@@ -17,7 +17,6 @@
 package org.kie.kogito.trusty.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import org.kie.kogito.trusty.service.models.Execution;
