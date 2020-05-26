@@ -51,6 +51,10 @@
       "../../config/Jest-config/test-setup.js",
       "core-js"
     ],
+    "coveragePathIgnorePatterns": [
+      "./src/graphql",
+      "./src/static"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
