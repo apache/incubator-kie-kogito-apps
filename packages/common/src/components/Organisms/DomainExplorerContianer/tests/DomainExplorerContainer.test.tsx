@@ -6,7 +6,7 @@ import {
   useGetQueryFieldsQuery,
   useGetColumnPickerAttributesQuery
 } from '../../../../graphql/types';
-import DomainExplorerDashboard from '../DomainExplorerDashboard';
+import DomainExplorerContainer from '../DomainExplorerContainer';
 import { MockedProvider } from '@apollo/react-testing';
 import gql from 'graphql-tag';
 
@@ -36,27 +36,53 @@ const GET_QUERY_FIELDS = gql`
 
 const props = {
   domains: ['Travels', 'VisaApplications'],
+  loadingState: false,
+  rememberedParams: [{ flight: ['arrival'] }, { flight: ['departure'] }],
+  rememberedSelections: [],
+  domainName: 'Travels',
+  metaData: {
+    metadata: [
+      {
+        processInstances: [
+          'id',
+          'processName',
+          'state',
+          'start',
+          'lastUpdate',
+          'businessKey'
+        ]
+      }
+    ]
+  }
 };
 
 const routeComponentPropsMock = {
   history: {} as any,
-  location: {pathname: '/DomainExplorer/Travels',
-  state: {
-    parameters: [{ flight: ['arrival'] }, { flight: ['departure'] }]
-  }} as any,
-  match: {params: {
-    domainName: 'Travels'
-  }} as any,
+  location: {
+    pathname: '/DomainExplorer/Travels',
+    state: {
+      parameters: [{ flight: ['arrival'] }, { flight: ['departure'] }]
+    }
+  } as any,
+  match: {
+    params: {
+      domainName: 'Travels'
+    }
+  } as any,
 }
 const routeComponentPropsMock2 = {
   history: {} as any,
-  location: {pathname: '/DomainExplorer/Travels',
-  state: {
-    
-  }} as any,
-  match: {params: {
-    domainName: 'Travels'
-  }} as any,
+  location: {
+    pathname: '/DomainExplorer/Travels',
+    state: {
+
+    }
+  } as any,
+  match: {
+    params: {
+      domainName: 'Travels'
+    }
+  } as any,
 }
 const props2 = {
   domains: ['Travels', 'VisaApplications'],
@@ -68,11 +94,15 @@ const props2 = {
     params: {
       domainName: 'Travels'
     }
-  }
+  },
+  rememberedParams: [],
+  rememberedSelections: [],
+  domainName: 'Travels',
+  metaData: {}
 };
 
 jest.mock('../../../../graphql/types');
-describe('Domain Explorer Dashboard component', () => {
+describe('Domain Explorer Container component', () => {
   it('Snapshot test', () => {
     // @ts-ignore
     useGetColumnPickerAttributesQuery.mockReturnValue({
@@ -134,7 +164,7 @@ describe('Domain Explorer Dashboard component', () => {
     });
     const wrapper = mount(
       <BrowserRouter>
-        <DomainExplorerDashboard {...props} {...routeComponentPropsMock}/>
+        <DomainExplorerContainer {...props} {...routeComponentPropsMock} />
       </BrowserRouter>
     );
 
@@ -152,13 +182,13 @@ describe('Domain Explorer Dashboard component', () => {
     const wrapper = mount(
       <BrowserRouter>
         <MockedProvider mocks={[]} addTypename={false}>
-          <DomainExplorerDashboard {...props} {...routeComponentPropsMock} />
+          <DomainExplorerContainer {...props} {...routeComponentPropsMock} />
         </MockedProvider>
       </BrowserRouter>
     );
     wrapper.update();
     wrapper.setProps({});
-    expect(wrapper.find(DomainExplorerDashboard)).toMatchSnapshot();
+    expect(wrapper.find(DomainExplorerContainer)).toMatchSnapshot();
   });
   it('Mock query testing', async () => {
     // @ts-ignore
@@ -247,13 +277,13 @@ describe('Domain Explorer Dashboard component', () => {
     const wrapper = mount(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <DomainExplorerDashboard {...props} {...routeComponentPropsMock}/>
+          <DomainExplorerContainer {...props} {...routeComponentPropsMock} />
         </MockedProvider>
       </BrowserRouter>
     );
     wrapper.update();
     wrapper.setProps({});
-    expect(wrapper.find(DomainExplorerDashboard)).toMatchSnapshot();
+    expect(wrapper.find(DomainExplorerContainer)).toMatchSnapshot();
     expect(useGetQueryFieldsQuery).toHaveBeenCalled();
     expect(useGetQueryTypesQuery).toHaveBeenCalled();
     expect(useGetColumnPickerAttributesQuery).toBeCalledWith({
@@ -268,7 +298,7 @@ describe('Domain Explorer Dashboard component', () => {
     });
     const wrapper = mount(
       <BrowserRouter>
-        <DomainExplorerDashboard {...props} {...routeComponentPropsMock}/>
+        <DomainExplorerContainer {...props} {...routeComponentPropsMock} />
       </BrowserRouter>
     );
     wrapper.update();
@@ -284,7 +314,7 @@ describe('Domain Explorer Dashboard component', () => {
     });
     const wrapper = mount(
       <BrowserRouter>
-        <DomainExplorerDashboard {...props} {...routeComponentPropsMock}/>
+        <DomainExplorerContainer {...props} {...routeComponentPropsMock} />
       </BrowserRouter>
     );
     wrapper.update();
@@ -294,7 +324,7 @@ describe('Domain Explorer Dashboard component', () => {
   it('check assertions on rememberedParams', () => {
     const wrapper = mount(
       <BrowserRouter>
-        <DomainExplorerDashboard {...props2} {...routeComponentPropsMock2}/>
+        <DomainExplorerContainer {...props2} {...routeComponentPropsMock2} />
       </BrowserRouter>
     );
     wrapper.update();
