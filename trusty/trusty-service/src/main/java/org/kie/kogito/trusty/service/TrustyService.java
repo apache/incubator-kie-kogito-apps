@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.service;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -32,7 +32,7 @@ public class TrustyService implements ITrustyService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrustyService.class);
 
     @Override
-    public List<Execution> getExecutionHeaders(LocalDate from, LocalDate to, int limit, int offset, String prefix) {
+    public List<Execution> getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix) {
         throw new NotImplementedYetException("Not implemented yet.");
     }
 

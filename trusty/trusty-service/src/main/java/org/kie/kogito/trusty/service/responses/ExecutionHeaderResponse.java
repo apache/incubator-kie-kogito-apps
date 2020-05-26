@@ -16,7 +16,9 @@
 
 package org.kie.kogito.trusty.service.responses;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,7 +35,7 @@ public class ExecutionHeaderResponse {
 
     @JsonProperty("executionDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private Date executionDate;
+    private OffsetDateTime executionDate;
 
     @JsonProperty("hasSucceeded")
     private boolean hasSucceeded;
@@ -50,7 +52,7 @@ public class ExecutionHeaderResponse {
     public ExecutionHeaderResponse() {
     }
 
-    public ExecutionHeaderResponse(String executionId, Date executionDate, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
+    public ExecutionHeaderResponse(String executionId, OffsetDateTime executionDate, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
         this.executionId = executionId;
         this.executionDate = executionDate;
         this.hasSucceeded = hasSucceeded;
@@ -60,7 +62,8 @@ public class ExecutionHeaderResponse {
     }
 
     public static ExecutionHeaderResponse fromExecution(Execution execution) {
-        return new ExecutionHeaderResponse(execution.getExecutionId(), new Date(execution.getExecutionTimestamp()), execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), execution.getExecutionType());
+        OffsetDateTime ldt = OffsetDateTime.ofInstant((Instant.ofEpochMilli(execution.getExecutionTimestamp())), ZoneOffset.UTC);
+        return new ExecutionHeaderResponse(execution.getExecutionId(), ldt, execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), execution.getExecutionType());
     }
 
     /**
@@ -77,7 +80,7 @@ public class ExecutionHeaderResponse {
      *
      * @return The execution date.
      */
-    public Date getExecutionDate() {
+    public OffsetDateTime getExecutionDate() {
         return executionDate;
     }
 

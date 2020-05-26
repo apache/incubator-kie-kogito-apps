@@ -19,7 +19,7 @@ package org.kie.kogito.trusty.service.api;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +49,7 @@ class ExecutionsApiV1Test {
 
     @Test
     void GivenRequestWithoutLimitAndOffsetParameters_WhenExecutionEndpointIsCalled_ThenTheDefaultValuesAreCorrect() {
-        Mockito.when(executionService.getExecutionHeaders(any(LocalDate.class), any(LocalDate.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(new ArrayList<>());
+        Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(new ArrayList<>());
         ExecutionsResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z").as(ExecutionsResponse.class);
 
         Assertions.assertEquals(100, response.getLimit());
@@ -65,6 +65,11 @@ class ExecutionsApiV1Test {
     }
 
     @Test
+    void GivenARequestWithoutTimeZoneInformation_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
+        given().when().get("/v1/executions?to=2000-01-01T00:00:00").then().statusCode(400);
+    }
+
+    @Test
     void GivenARequestWithInvalidPaginationParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
         given().when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&offset=-1").then().statusCode(400);
         given().when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=-1").then().statusCode(400);
@@ -76,13 +81,12 @@ class ExecutionsApiV1Test {
         given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01").then().statusCode(400);
         given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00&to=2021-01-01T00:00:00Z").then().statusCode(400);
         given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00").then().statusCode(400);
-        given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00Z&to=2021-01-01T00:00:00Z").then().statusCode(400);
     }
 
     @Test
-    void GivenARequestWithMalformedTimeRange_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() throws ParseException {
+    void GivenARequest_WhenExecutionEndpointIsCalled_ThenTheExecutionHeaderIsReturned() throws ParseException {
         Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z").toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
-        Mockito.when(executionService.getExecutionHeaders(any(LocalDate.class), any(LocalDate.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));
+        Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));
 
         ExecutionsResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z").as(ExecutionsResponse.class);
 
