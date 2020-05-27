@@ -57,15 +57,15 @@ class ExecutionsApiV1Test {
     }
 
     @Test
-    void GivenARequestWithoutTimeRangeParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
-        given().when().get("/v1/executions").then().statusCode(400);
-        given().when().get("/v1/executions?from=2000-01-01T00:00:00Z").then().statusCode(400);
-        given().when().get("/v1/executions?to=2000-01-01T00:00:00Z").then().statusCode(400);
+    void GivenARequestWithoutTimeRangeParameters_WhenExecutionEndpointIsCalled_ThenTheDefaultValuesAreUsed() {
+        given().when().get("/v1/executions").then().statusCode(200);
+        given().when().get("/v1/executions?from=2000-01-01T00:00:00Z").then().statusCode(200);
+        given().when().get("/v1/executions?to=2000-01-01T00:00:00Z").then().statusCode(200);
     }
 
     @Test
     void GivenARequestWithoutTimeZoneInformation_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
-        given().when().get("/v1/executions?to=2000-01-01T00:00:00").then().statusCode(400);
+        given().when().get("/v1/executions?to=2000-01-01T00:00:00&from=2000-01-01T00:00:00Z").then().statusCode(400);
     }
 
     @Test
@@ -84,7 +84,9 @@ class ExecutionsApiV1Test {
 
     @Test
     void GivenARequest_WhenExecutionEndpointIsCalled_ThenTheExecutionHeaderIsReturned() throws ParseException {
-        Execution execution = new Execution("test1", OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
+        Execution execution = new Execution("test1",
+                                            OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
+                                            true, "name", "model", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));
 
         ExecutionsResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z").as(ExecutionsResponse.class);

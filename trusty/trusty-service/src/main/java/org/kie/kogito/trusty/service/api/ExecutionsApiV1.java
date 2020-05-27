@@ -71,7 +71,10 @@ public class ExecutionsApiV1 {
      */
     @GET
     @APIResponses(value = {
-            @APIResponse(description = "Returns the execution headers.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionsResponse.class))),
+            @APIResponse(description = "Returns the execution headers.",
+                    responseCode = "200",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionsResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     }
     )
@@ -81,15 +84,15 @@ public class ExecutionsApiV1 {
             @Parameter(
                     name = "from",
                     description = "Start datetime for the lookup. Date in the format \"yyyy-MM-dd'T'HH:mm:ssZ\"",
-                    required = true,
+                    required = false,
                     schema = @Schema(implementation = String.class)
-            ) @QueryParam("from") String from,
+            ) @DefaultValue("yesterday") @QueryParam("from") String from,
             @Parameter(
                     name = "to",
                     description = "End datetime for the lookup. Date in the format \"yyyy-MM-dd'T'HH:mm:ssZ\"",
-                    required = true,
+                    required = false,
                     schema = @Schema(implementation = String.class)
-            ) @QueryParam("to") String to,
+            ) @DefaultValue("now") @QueryParam("to") String to,
             @Parameter(
                     name = "limit",
                     description = "Maximum number of results to return.",
@@ -109,9 +112,6 @@ public class ExecutionsApiV1 {
                     schema = @Schema(implementation = String.class)
             ) @DefaultValue("") @QueryParam("search") String prefix) {
 
-        if (from == null || to == null) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Time range parameters can not be empty.").build();
-        }
         if (limit < 0 || offset < 0) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Pagination parameters can not have negative values.").build();
         }
@@ -119,8 +119,8 @@ public class ExecutionsApiV1 {
         OffsetDateTime fromDate;
         OffsetDateTime toDate;
         try {
-            fromDate = ZonedDateTime.parse(from, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
-            toDate = ZonedDateTime.parse(to, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+            fromDate = from.equals("yesterday") ? OffsetDateTime.now(ZoneOffset.UTC).minusDays(1) :  ZonedDateTime.parse(from, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+            toDate = to.equals("now") ? OffsetDateTime.now(ZoneOffset.UTC) : ZonedDateTime.parse(to, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
         } catch (DateTimeParseException e) {
             LOGGER.warn("Invalid date", e);
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Date format should be yyyy-MM-dd'T'HH:mm:ssZ").build();
