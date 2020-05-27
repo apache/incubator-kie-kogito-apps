@@ -71,7 +71,10 @@ public class ExecutionsApiV1 {
      */
     @GET
     @APIResponses(value = {
-            @APIResponse(description = "Returns the execution headers.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionsResponse.class))),
+            @APIResponse(description = "Returns the execution headers.",
+                    responseCode = "200",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionsResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     }
     )

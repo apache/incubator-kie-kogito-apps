@@ -46,7 +46,8 @@ public class Execution {
     public Execution() {
     }
 
-    public Execution(String executionId, Long executionTimestamp, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
+    public Execution(String executionId, Long executionTimestamp, boolean hasSucceeded,
+                     String executorName, String executedModelName, ExecutionTypeEnum executionType) {
         this.executionId = executionId;
         this.executionTimestamp = executionTimestamp;
         this.hasSucceeded = hasSucceeded;
