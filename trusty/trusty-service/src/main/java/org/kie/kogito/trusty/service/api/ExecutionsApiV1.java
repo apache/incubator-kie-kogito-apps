@@ -16,7 +16,6 @@
 
 package org.kie.kogito.trusty.service.api;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -74,7 +73,7 @@ public class ExecutionsApiV1 {
             @APIResponse(description = "Returns the execution headers.",
                     responseCode = "200",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                    schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionsResponse.class))),
+                            schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionsResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     }
     )
@@ -119,8 +118,8 @@ public class ExecutionsApiV1 {
         OffsetDateTime fromDate;
         OffsetDateTime toDate;
         try {
-            fromDate = from.equals("yesterday") ? OffsetDateTime.now(ZoneOffset.UTC).minusDays(1) :  ZonedDateTime.parse(from, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
-            toDate = to.equals("now") ? OffsetDateTime.now(ZoneOffset.UTC) : ZonedDateTime.parse(to, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+            fromDate = parseParameterDate(from);
+            toDate = parseParameterDate(to);
         } catch (DateTimeParseException e) {
             LOGGER.warn("Invalid date", e);
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Date format should be yyyy-MM-dd'T'HH:mm:ssZ").build();
@@ -131,5 +130,16 @@ public class ExecutionsApiV1 {
         List<ExecutionHeaderResponse> headersResponses = new ArrayList<>();
         executions.forEach(x -> headersResponses.add(ExecutionHeaderResponse.fromExecution(x)));
         return Response.ok(new ExecutionsResponse(headersResponses.size(), limit, offset, headersResponses)).build();
+    }
+
+    private OffsetDateTime parseParameterDate(String date) {
+        if (date.equals("yesterday")) {
+            return OffsetDateTime.now(ZoneOffset.UTC).minusDays(1);
+        }
+        if (date.equals("now")) {
+            return OffsetDateTime.now(ZoneOffset.UTC);
+        }
+
+        return ZonedDateTime.parse(date, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
     }
 }
