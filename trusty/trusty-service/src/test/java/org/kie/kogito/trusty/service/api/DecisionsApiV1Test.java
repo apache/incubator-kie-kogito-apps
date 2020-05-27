@@ -19,6 +19,8 @@ package org.kie.kogito.trusty.service.api;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -39,14 +41,13 @@ import static io.restassured.RestAssured.given;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DecisionsApiV1Test {
 
-    private static final DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
     @InjectMock
     ITrustyService executionService;
 
     @Test
     public void GivenAnExecution_WhenDecisionDetailEndpointIsCalled_ThenTheExecutionDetailIsProperlyReturned() throws ParseException {
-        Execution execution = new Execution("test1", sdf.parse("2020-01-01T00:00:00Z").toInstant().toEpochMilli(), true, "name", "model", ExecutionTypeEnum.DECISION);
+        Execution execution = new Execution("test1", OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
+                                            true, "name", "model", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionById("test1")).thenReturn(Optional.of(execution));
         ExecutionHeaderResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/test1").as(ExecutionHeaderResponse.class);
         Assertions.assertNotNull(response);
