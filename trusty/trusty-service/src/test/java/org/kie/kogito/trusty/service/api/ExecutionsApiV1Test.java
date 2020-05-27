@@ -57,15 +57,15 @@ class ExecutionsApiV1Test {
     }
 
     @Test
-    void GivenARequestWithoutTimeRangeParameters_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
-        given().when().get("/v1/executions").then().statusCode(400);
-        given().when().get("/v1/executions?from=2000-01-01T00:00:00Z").then().statusCode(400);
-        given().when().get("/v1/executions?to=2000-01-01T00:00:00Z").then().statusCode(400);
+    void GivenARequestWithoutTimeRangeParameters_WhenExecutionEndpointIsCalled_ThenTheDefaultValuesAreUsed() {
+        given().when().get("/v1/executions").then().statusCode(200);
+        given().when().get("/v1/executions?from=2000-01-01T00:00:00Z").then().statusCode(200);
+        given().when().get("/v1/executions?to=2000-01-01T00:00:00Z").then().statusCode(200);
     }
 
     @Test
     void GivenARequestWithoutTimeZoneInformation_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
-        given().when().get("/v1/executions?to=2000-01-01T00:00:00").then().statusCode(400);
+        given().when().get("/v1/executions?to=2000-01-01T00:00:00&from=2000-01-01T00:00:00Z").then().statusCode(400);
     }
 
     @Test
