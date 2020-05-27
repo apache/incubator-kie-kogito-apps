@@ -29,8 +29,6 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class TrustyService implements ITrustyService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrustyService.class);
-
     @Override
     public List<Execution> getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix) {
         throw new NotImplementedYetException("Not implemented yet.");
