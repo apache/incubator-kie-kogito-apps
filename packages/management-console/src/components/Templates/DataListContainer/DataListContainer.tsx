@@ -11,7 +11,8 @@ import {
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
-  componentOuiaProps
+  componentOuiaProps,
+  attributeOuiaId
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -342,7 +343,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                     setIsAllChecked={setIsAllChecked}
                     selectedNumber={selectedNumber}
                     setSelectedNumber={setSelectedNumber}
-                    ouiaId="toolbar-process-instances"
+                    {...attributeOuiaId(ouiaContext, 'toolbar-process-instances')}
                   />
                 </>
               )}
@@ -361,7 +362,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                   setIsAllChecked={setIsAllChecked}
                   setSelectedNumber={setSelectedNumber}
                   selectedNumber={selectedNumber}
-                  ouiaId="list-process-instances"
+                  {...attributeOuiaId(ouiaContext, 'list-process-instances')}
                 />
               ) : (
                 <EmptyStateComponent
@@ -373,7 +374,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                   setCheckedArray={setCheckedArray}
                   setSearchWord={setSearchWord}
                   filters={filters}
-                  ouiaId="empty-state-no-filters-selected"
+                  {...attributeOuiaId(ouiaContext, 'empty-state-no-filters-selected')}
                 />
               )}
               {(!loading || isLoadingMore) &&
@@ -381,12 +382,12 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                 initData !== undefined &&
                 (limit === pageSize || isLoadingMore) && (
                   <LoadMoreComponent
-                    offset={offset}
-                    setOffset={setOffset}
-                    getMoreItems={onGetMoreInstances}
-                    pageSize={pageSize}
-                    isLoadingMore={isLoadingMore}
-                    ouia-id="load-more-processes"
+                  offset={offset}
+                  setOffset={setOffset}
+                  getMoreItems={onGetMoreInstances}
+                  pageSize={pageSize}
+                  isLoadingMore={isLoadingMore}
+                  {...attributeOuiaId(ouiaContext, 'load-more-processes')}
                   />
                 )}
             </Card>

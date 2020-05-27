@@ -15,7 +15,8 @@ import {
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
-  componentOuiaProps
+  componentOuiaProps,
+  attributeOuiaId
 } from '@kogito-apps/common';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
@@ -300,7 +301,7 @@ const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchPro
           ) : (
             <Card>
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain data..." ouiaId="loading-domain-data" />
+                  <SpinnerComponent spinnerText="Loading domain data..." {...attributeOuiaId(ouiaContext, 'loading-domain-data')} />
               </Bullseye>
             </Card>
           )}

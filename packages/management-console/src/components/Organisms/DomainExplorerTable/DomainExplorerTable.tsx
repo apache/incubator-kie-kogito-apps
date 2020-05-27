@@ -27,6 +27,7 @@ import './DomainExplorerTable.css';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
 import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
+import { attributeOuiaId } from '@kogito-apps/common';
 
 export interface IOwnProps {
   columnFilters:any,
@@ -276,7 +277,7 @@ const DomainExplorerTable: React.FC<IOwnProps & InjectedOuiaProps> = ({
             props: { colSpan: 8 },
             title: (
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain explorer" ouiaId="loading-domain-explorer" />
+                <SpinnerComponent spinnerText="Loading domain explorer" {...attributeOuiaId(ouiaContext, 'loading-domain-explorer')} />
               </Bullseye>
             )
           }
@@ -317,7 +318,7 @@ const DomainExplorerTable: React.FC<IOwnProps & InjectedOuiaProps> = ({
           aria-label="Domain Explorer Table"
           className="kogito-management-console--domain-explorer__table"
           onCollapse={onCollapse}
-          ouiaId="domain-explorer-table"
+          {...attributeOuiaId(ouiaContext, 'domain-explorer-table')}
         >
           <TableHeader />
           <TableBody rowKey="rowKey" />
@@ -330,7 +331,7 @@ const DomainExplorerTable: React.FC<IOwnProps & InjectedOuiaProps> = ({
               title='No columns selected'
               body='Select columns from the dropdown to see content'
               iconType='searchIcon'
-              ouiaId='no-columns-selected'
+              {...attributeOuiaId(ouiaContext, 'no-columns-selected')}
             />
           </CardBody>
         </Card>
@@ -342,7 +343,7 @@ const DomainExplorerTable: React.FC<IOwnProps & InjectedOuiaProps> = ({
               title='No data available'
               body='Selected domain has no data to display. Check other domains.'
               iconType='searchIcon'
-              ouiaId='no-data'
+              {...attributeOuiaId(ouiaContext, 'no-data')}
             />
           </CardBody>
         </Card>
