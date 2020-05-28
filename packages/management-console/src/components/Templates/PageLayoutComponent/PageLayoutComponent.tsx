@@ -7,7 +7,7 @@ import {
   NoData,
   ouiaAttribute
 } from '@kogito-apps/common';
-import DataListContainer from '../DataListContainer/DataListContainer';
+import ProcessListPage from '../ProcessListPage/ProcessListPage';
 import ProcessDetailsPage from '../ProcessDetailsPage/ProcessDetailsPage';
 import DomainExplorerPage from '../DomainExplorerPage/DomainExplorerPage';
 import DomainExplorerLandingPage from '../DomainExplorerLandingPage/DomainExplorerLandingPage';
@@ -67,7 +67,7 @@ const PageLayoutComponent: React.FC<IOwnProps & InjectedOuiaProps> = ({
             path="/"
             render={() => <Redirect to="/ProcessInstances" />}
           />
-          <Route exact path="/ProcessInstances" component={DataListContainer} />
+          <Route exact path="/ProcessInstances" component={ProcessListPage} />
           <Route
             exact
             path="/Process/:instanceID"

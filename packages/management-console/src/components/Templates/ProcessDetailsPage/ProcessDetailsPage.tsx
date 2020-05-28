@@ -30,7 +30,7 @@ import {
 import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
-import ProcessBulkModalComponent from '../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent';
+import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import {
   handleAbort,
   setTitle,
@@ -152,7 +152,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
       {!error ? (
         <>
           <PageSection variant="light">
-            <ProcessBulkModalComponent
+            <ProcessListModal
               isModalOpen={isAbortModalOpen}
               handleModalToggle={handleAbortModalToggle}
               checkedArray={data && [data.ProcessInstances[0].state]}
@@ -166,7 +166,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
               completedMessageObj={{}}
               isAbortModalOpen={isAbortModalOpen}
             />
-            <ProcessBulkModalComponent
+            <ProcessListModal
               isModalOpen={isModalOpen(
                 modalTitle,
                 isSkipModalOpen,

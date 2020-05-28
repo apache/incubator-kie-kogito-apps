@@ -943,7 +943,7 @@ exports[`PageLayoutComponent tests snapshot testing 1`] = `
                   }
                   path="/ProcessInstances"
                 >
-                  <DataListContainer
+                  <ProcessListPage
                     history={
                       Object {
                         "action": "REPLACE",

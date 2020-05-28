@@ -15,7 +15,7 @@ const props: any = {
 
 const mocks = [];
 
-jest.mock('../../DataListContainer/DataListContainer.tsx');
+jest.mock('../../ProcessListPage/ProcessListPage.tsx');
    
 jest.mock('../../../../graphql/types');
 describe('PageLayoutComponent tests', () => {
