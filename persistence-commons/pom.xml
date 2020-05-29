@@ -13,12 +13,27 @@
   <artifactId>persistence-commons</artifactId>
   <packaging>pom</packaging>
 
-  <modules>
-    <module>persistence-commons-api</module>
-    <module>persistence-commons-infinispan</module>
-    <module>persistence-commons-protobuf</module>
-  </modules>
-
-
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>persistence-commons-api</module>
+        <module>persistence-commons-protobuf</module>
+        <module>persistence-commons-infinispan</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>experimental</id>
+      <modules>
+        <module>persistence-commons-api</module>
+        <module>persistence-commons-protobuf</module>
+        <module>persistence-commons-infinispan</module>
+        <module>persistence-commons-mongodb</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>

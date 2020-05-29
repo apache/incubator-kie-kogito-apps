@@ -21,6 +21,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import io.quarkus.runtime.ShutdownEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -52,22 +53,33 @@ public class InfinispanCacheManager implements StorageService {
     @ConfigProperty(name = "kogito.cache.domain.template", defaultValue = "kogito-template")
     String cacheTemplateName;
 
+    @ConfigProperty(name = "kogito.persistence.type")
+    String storageType;
+
     @Inject
+    Provider<RemoteCacheManager> remoteCacheManagerProvider;
+
     RemoteCacheManager manager;
 
     @PostConstruct
     public void init() {
         jsonDataFormat = DataFormat.builder().valueType(MediaType.APPLICATION_JSON).valueMarshaller(marshaller).build();
-        manager.start();
+        // Not initialize RemoteCacheManager if not using infinispan to avoid connection error
+        if (INFINISPAN_STORAGE.equals(storageType)) {
+            manager = remoteCacheManagerProvider.get();
+            manager.start();
+        }
     }
 
     @PreDestroy
     public void destroy() {
-        manager.stop();
-        try {
-            manager.close();
-        } catch (Exception ex) {
-            LOGGER.warn("Error trying to close Infinispan remote cache manager", ex);
+        if (manager != null) {
+            manager.stop();
+            try {
+                manager.close();
+            } catch (Exception ex) {
+                LOGGER.warn("Error trying to close Infinispan remote cache manager", ex);
+            }
         }
     }
 
