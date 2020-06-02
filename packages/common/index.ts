@@ -10,4 +10,10 @@ export {
 } from './src/components/Molecules/ServerUnavailable/ServerUnavailable';
 export { default as NoData } from './src/components/Molecules/NoData/NoData';
 export { default as ServerErrors } from './src/components/Molecules/ServerErrors/ServerErrors';
-export * from './src/utils/OuiaUtils'
+export { default as KogitoSpinner } from './src/components/Atoms/KogitoSpinner/KogitoSpinner';
+export { default as KogitoEmptyState } from './src/components/Atoms/KogitoEmptyState/KogitoEmptyState';
+export { default as LoadMore } from './src/components/Atoms/LoadMore/LoadMore';
+export { default as ProcessDescriptor } from './src/components/Molecules/ProcessDescriptor/ProcessDescriptor';
+export { default as DomainExplorer } from './src/components/Organisms/DomainExplorer/DomainExplorer';
+export { default as DomainExplorerContainer } from './src/components/Organisms/DomainExplorerContainer/DomainExplorerContainer'
+export * from './src/utils/OuiaUtils';

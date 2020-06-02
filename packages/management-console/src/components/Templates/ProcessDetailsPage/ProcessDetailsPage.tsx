@@ -16,7 +16,7 @@ import {
   InjectedOuiaProps,
   withOuiaContext
 } from '@patternfly/react-core';
-import { ServerErrors, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import { ServerErrors, ProcessDescriptor, KogitoSpinner, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
@@ -27,8 +27,6 @@ import {
   useGetProcessInstanceByIdQuery,
   ProcessInstanceState
 } from '../../../graphql/types';
-import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 import ProcessBulkModalComponent from '../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent';
 import {
@@ -241,7 +239,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
                         className="kogito-management-console--details__title"
                       >
                         <ProcessDescriptor
-                          processInstanceData={data.ProcessInstances[0]}
+                          instanceData={data.ProcessInstances[0]}
                         />
                       </Title>
                     </SplitItem>
@@ -278,7 +276,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
             ) : (
               <Card>
                 <Bullseye>
-                  <SpinnerComponent spinnerText="Loading process details..." />
+                  <KogitoSpinner spinnerText="Loading process details..." />
                 </Bullseye>
               </Card>
             )}

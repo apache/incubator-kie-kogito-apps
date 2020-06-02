@@ -1,0 +1,575 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Server errors component tests Snapshot testing 1`] = `
+<MemoryRouter
+  keyLength={0}
+>
+  <Router
+    history={
+      Object {
+        "action": "POP",
+        "block": [Function],
+        "canGo": [Function],
+        "createHref": [Function],
+        "entries": Array [
+          Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+        ],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "index": 0,
+        "length": 1,
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        },
+        "push": [Function],
+        "replace": [Function],
+      }
+    }
+  >
+    <withRouter(ServerErrors)>
+      <ServerErrors
+        history={
+          Object {
+            "action": "POP",
+            "block": [Function],
+            "canGo": [Function],
+            "createHref": [Function],
+            "entries": Array [
+              Object {
+                "hash": "",
+                "pathname": "/",
+                "search": "",
+                "state": undefined,
+              },
+            ],
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "index": 0,
+            "length": 1,
+            "listen": [Function],
+            "location": Object {
+              "hash": "",
+              "pathname": "/",
+              "search": "",
+              "state": undefined,
+            },
+            "push": [Function],
+            "replace": [Function],
+          }
+        }
+        location={
+          Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          }
+        }
+        match={
+          Object {
+            "isExact": true,
+            "params": Object {},
+            "path": "/",
+            "url": "/",
+          }
+        }
+      >
+        <PageSection
+          variant="light"
+        >
+          <section
+            className="pf-c-page__main-section pf-m-light"
+          >
+            <Bullseye>
+              <div
+                className="pf-l-bullseye"
+              >
+                <EmptyState
+                  variant="full"
+                >
+                  <div
+                    className="pf-c-empty-state"
+                  >
+                    <EmptyStateIcon
+                      color="var(--pf-global--danger-color--100)"
+                      icon={[Function]}
+                      size="md"
+                    >
+                      <ExclamationCircleIcon
+                        aria-hidden="true"
+                        className="pf-c-empty-state__icon"
+                        color="var(--pf-global--danger-color--100)"
+                        noVerticalAlign={false}
+                        size="md"
+                        title={null}
+                      >
+                        <svg
+                          aria-hidden="true"
+                          aria-labelledby={null}
+                          className="pf-c-empty-state__icon"
+                          fill="var(--pf-global--danger-color--100)"
+                          height="1.5em"
+                          role="img"
+                          style={
+                            Object {
+                              "verticalAlign": "-0.1875em",
+                            }
+                          }
+                          viewBox="0 0 512 512"
+                          width="1.5em"
+                        >
+                          <path
+                            d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+                            transform=""
+                          />
+                        </svg>
+                      </ExclamationCircleIcon>
+                    </EmptyStateIcon>
+                    <Title
+                      headingLevel="h1"
+                      size="4xl"
+                    >
+                      <h1
+                        className="pf-c-title pf-m-4xl"
+                      >
+                        Error fetching data
+                      </h1>
+                    </Title>
+                    <EmptyStateBody>
+                      <div
+                        className="pf-c-empty-state__body"
+                      >
+                        An error occurred while accessing data.
+                         
+                        <Component
+                          id="More-details"
+                          isInline={true}
+                          onClick={[Function]}
+                          variant="link"
+                        >
+                          <ComponentWithOuia
+                            component={[Function]}
+                            componentProps={
+                              Object {
+                                "children": "See more details",
+                                "id": "More-details",
+                                "isInline": true,
+                                "onClick": [Function],
+                                "variant": "link",
+                              }
+                            }
+                            consumerContext={null}
+                          >
+                            <Button
+                              id="More-details"
+                              isInline={true}
+                              onClick={[Function]}
+                              ouiaContext={
+                                Object {
+                                  "isOuia": false,
+                                  "ouiaId": null,
+                                }
+                              }
+                              variant="link"
+                            >
+                              <button
+                                aria-disabled={null}
+                                aria-label={null}
+                                className="pf-c-button pf-m-link pf-m-inline"
+                                disabled={false}
+                                id="More-details"
+                                onClick={[Function]}
+                                tabIndex={null}
+                                type="button"
+                              >
+                                <span
+                                  className="pf-c-button__text"
+                                >
+                                  See more details
+                                </span>
+                              </button>
+                            </Button>
+                          </ComponentWithOuia>
+                        </Component>
+                      </div>
+                    </EmptyStateBody>
+                    <EmptyStateBody>
+                      <div
+                        className="pf-c-empty-state__body"
+                      >
+                        <ClipboardCopy
+                          className="pf-u-text-align-left"
+                          clickTip="Successfully copied to clipboard!"
+                          entryDelay={100}
+                          exitDelay={1600}
+                          hoverTip="Copy to clipboard"
+                          isCode={true}
+                          isExpanded={true}
+                          isReadOnly={false}
+                          maxWidth="150px"
+                          onChange={[Function]}
+                          onCopy={[Function]}
+                          position="top"
+                          switchDelay={2000}
+                          textAriaLabel="Copyable input"
+                          toggleAriaLabel="Show content"
+                          variant="expansion"
+                        >
+                          <div
+                            className="pf-c-clipboard-copy pf-m-expanded pf-u-text-align-left"
+                          >
+                            <GenerateId
+                              prefix=""
+                            >
+                              <div
+                                className="pf-c-clipboard-copy__group"
+                              >
+                                <ClipboardCopyToggle
+                                  aria-label="Show content"
+                                  contentId="content--0"
+                                  id="toggle--0"
+                                  isExpanded={true}
+                                  onClick={[Function]}
+                                  textId="text-input--0"
+                                >
+                                  <button
+                                    aria-controls="toggle--0 content--0"
+                                    aria-expanded={true}
+                                    aria-label="Show content"
+                                    aria-labelledby="toggle--0 text-input--0"
+                                    className="pf-c-clipboard-copy__group-toggle"
+                                    id="toggle--0"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <AngleRightIcon
+                                      aria-hidden="true"
+                                      className="pf-c-clipboard-copy__group-toggle-icon"
+                                      color="currentColor"
+                                      noVerticalAlign={false}
+                                      size="sm"
+                                      title={null}
+                                    >
+                                      <svg
+                                        aria-hidden="true"
+                                        aria-labelledby={null}
+                                        className="pf-c-clipboard-copy__group-toggle-icon"
+                                        fill="currentColor"
+                                        height="1em"
+                                        role="img"
+                                        style={
+                                          Object {
+                                            "verticalAlign": "-0.125em",
+                                          }
+                                        }
+                                        viewBox="0 0 256 512"
+                                        width="1em"
+                                      >
+                                        <path
+                                          d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                                          transform=""
+                                        />
+                                      </svg>
+                                    </AngleRightIcon>
+                                  </button>
+                                </ClipboardCopyToggle>
+                                <ForwardRef
+                                  aria-label="Copyable input"
+                                  id="text-input-0"
+                                  isReadOnly={true}
+                                  onChange={[Function]}
+                                >
+                                  <TextInputBase
+                                    aria-label="Copyable input"
+                                    className=""
+                                    id="text-input-0"
+                                    innerRef={null}
+                                    isDisabled={false}
+                                    isReadOnly={true}
+                                    isRequired={false}
+                                    isValid={true}
+                                    onChange={[Function]}
+                                    type="text"
+                                    validated="default"
+                                  >
+                                    <input
+                                      aria-invalid={false}
+                                      aria-label="Copyable input"
+                                      className="pf-c-form-control"
+                                      disabled={false}
+                                      id="text-input-0"
+                                      onChange={[Function]}
+                                      readOnly={true}
+                                      required={false}
+                                      type="text"
+                                    />
+                                  </TextInputBase>
+                                </ForwardRef>
+                                <ClipboardCopyButton
+                                  aria-label="Copy to clipboard"
+                                  entryDelay={100}
+                                  exitDelay={1600}
+                                  id="copy-button-0"
+                                  maxWidth="150px"
+                                  onClick={[Function]}
+                                  position="top"
+                                  textId="text-input-0"
+                                >
+                                  <Tooltip
+                                    appendTo={[Function]}
+                                    aria="describedby"
+                                    boundary="window"
+                                    className=""
+                                    content={
+                                      <div>
+                                        Copy to clipboard
+                                      </div>
+                                    }
+                                    distance={15}
+                                    enableFlip={true}
+                                    entryDelay={100}
+                                    exitDelay={1600}
+                                    flipBehavior={
+                                      Array [
+                                        "top",
+                                        "right",
+                                        "bottom",
+                                        "left",
+                                        "top",
+                                        "right",
+                                        "bottom",
+                                      ]
+                                    }
+                                    id=""
+                                    isAppLauncher={false}
+                                    isContentLeftAligned={false}
+                                    isVisible={false}
+                                    maxWidth="150px"
+                                    position="top"
+                                    tippyProps={Object {}}
+                                    trigger="mouseenter focus click"
+                                    zIndex={9999}
+                                  >
+                                    <PopoverBase
+                                      appendTo={[Function]}
+                                      aria="describedby"
+                                      arrow={true}
+                                      boundary="window"
+                                      content={
+                                        <div
+                                          className=""
+                                          id=""
+                                          role="tooltip"
+                                        >
+                                          <TooltipContent
+                                            isLeftAligned={false}
+                                          >
+                                            <div>
+                                              Copy to clipboard
+                                            </div>
+                                          </TooltipContent>
+                                        </div>
+                                      }
+                                      delay={
+                                        Array [
+                                          100,
+                                          1600,
+                                        ]
+                                      }
+                                      distance={15}
+                                      flip={true}
+                                      flipBehavior={
+                                        Array [
+                                          "top",
+                                          "right",
+                                          "bottom",
+                                          "left",
+                                          "top",
+                                          "right",
+                                          "bottom",
+                                        ]
+                                      }
+                                      isVisible={false}
+                                      lazy={true}
+                                      maxWidth="150px"
+                                      onCreate={[Function]}
+                                      placement="top"
+                                      popperOptions={
+                                        Object {
+                                          "modifiers": Object {
+                                            "hide": Object {
+                                              "enabled": true,
+                                            },
+                                            "preventOverflow": Object {
+                                              "enabled": true,
+                                            },
+                                          },
+                                        }
+                                      }
+                                      theme="pf-tooltip"
+                                      trigger="mouseenter focus click"
+                                      zIndex={9999}
+                                    >
+                                      <button
+                                        aria-label="Copy to clipboard"
+                                        aria-labelledby="copy-button-0 text-input-0"
+                                        className="pf-c-clipboard-copy__group-copy"
+                                        id="copy-button-0"
+                                        onClick={[Function]}
+                                        type="button"
+                                      >
+                                        <CopyIcon
+                                          color="currentColor"
+                                          noVerticalAlign={false}
+                                          size="sm"
+                                          title={null}
+                                        >
+                                          <svg
+                                            aria-hidden={true}
+                                            aria-labelledby={null}
+                                            fill="currentColor"
+                                            height="1em"
+                                            role="img"
+                                            style={
+                                              Object {
+                                                "verticalAlign": "-0.125em",
+                                              }
+                                            }
+                                            viewBox="0 0 448 512"
+                                            width="1em"
+                                          >
+                                            <path
+                                              d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z"
+                                              transform=""
+                                            />
+                                          </svg>
+                                        </CopyIcon>
+                                      </button>
+                                      <Portal
+                                        containerInfo={
+                                          <div>
+                                            <div
+                                              class=""
+                                              id=""
+                                              role="tooltip"
+                                            >
+                                              <div
+                                                class="pf-c-tooltip__content"
+                                              >
+                                                <div>
+                                                  Copy to clipboard
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        }
+                                      >
+                                        <div
+                                          className=""
+                                          id=""
+                                          role="tooltip"
+                                        >
+                                          <TooltipContent
+                                            isLeftAligned={false}
+                                          >
+                                            <div
+                                              className="pf-c-tooltip__content"
+                                            >
+                                              <div>
+                                                Copy to clipboard
+                                              </div>
+                                            </div>
+                                          </TooltipContent>
+                                        </div>
+                                      </Portal>
+                                    </PopoverBase>
+                                  </Tooltip>
+                                </ClipboardCopyButton>
+                              </div>
+                              <ClipboardCopyExpanded
+                                className=""
+                                id="content-0"
+                                isCode={true}
+                                isReadOnly={false}
+                                onChange={[Function]}
+                              >
+                                <div
+                                  className="pf-c-clipboard-copy__expandable-content"
+                                  contentEditable={true}
+                                  id="content-0"
+                                  onInput={[Function]}
+                                  suppressContentEditableWarning={true}
+                                >
+                                  <pre />
+                                </div>
+                              </ClipboardCopyExpanded>
+                            </GenerateId>
+                          </div>
+                        </ClipboardCopy>
+                      </div>
+                    </EmptyStateBody>
+                    <Component
+                      id="GoBack-Button"
+                      onClick={[Function]}
+                      variant="primary"
+                    >
+                      <ComponentWithOuia
+                        component={[Function]}
+                        componentProps={
+                          Object {
+                            "children": "Go back",
+                            "id": "GoBack-Button",
+                            "onClick": [Function],
+                            "variant": "primary",
+                          }
+                        }
+                        consumerContext={null}
+                      >
+                        <Button
+                          id="GoBack-Button"
+                          onClick={[Function]}
+                          ouiaContext={
+                            Object {
+                              "isOuia": false,
+                              "ouiaId": null,
+                            }
+                          }
+                          variant="primary"
+                        >
+                          <button
+                            aria-disabled={null}
+                            aria-label={null}
+                            className="pf-c-button pf-m-primary"
+                            disabled={false}
+                            id="GoBack-Button"
+                            onClick={[Function]}
+                            tabIndex={null}
+                            type="button"
+                          >
+                            Go back
+                          </button>
+                        </Button>
+                      </ComponentWithOuia>
+                    </Component>
+                  </div>
+                </EmptyState>
+              </div>
+            </Bullseye>
+          </section>
+        </PageSection>
+      </ServerErrors>
+    </withRouter(ServerErrors)>
+  </Router>
+</MemoryRouter>
+`;

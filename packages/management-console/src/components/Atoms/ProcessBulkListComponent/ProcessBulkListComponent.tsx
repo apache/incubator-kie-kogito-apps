@@ -7,7 +7,7 @@ import {
   TextList,
   TextListItem
 } from '@patternfly/react-core';
-import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
+import { ProcessDescriptor } from '@kogito-apps/common';
 
 interface IOwnProps {
   abortedMessageObj: any;
@@ -40,7 +40,7 @@ const ProcessBulkListComponent: React.FC<IOwnProps> = ({
                 {Object.entries(abortedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ProcessDescriptor processInstanceData={process[1]} />
+                      <ProcessDescriptor instanceData={process[1]} />
                     </TextListItem>
                   );
                 })}
@@ -68,7 +68,7 @@ const ProcessBulkListComponent: React.FC<IOwnProps> = ({
                 {Object.entries(completedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ProcessDescriptor processInstanceData={process[1]} />
+                      <ProcessDescriptor instanceData={process[1]} />
                     </TextListItem>
                   );
                 })}
@@ -97,7 +97,7 @@ const ProcessBulkListComponent: React.FC<IOwnProps> = ({
                 {Object.entries(completedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ProcessDescriptor processInstanceData={process[1]} />
+                      <ProcessDescriptor instanceData={process[1]} />
                     </TextListItem>
                   );
                 })}
@@ -118,7 +118,7 @@ const ProcessBulkListComponent: React.FC<IOwnProps> = ({
                 {Object.entries(abortedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ProcessDescriptor processInstanceData={process[1]} />
+                      <ProcessDescriptor instanceData={process[1]} />
                     </TextListItem>
                   );
                 })}
@@ -150,7 +150,7 @@ const ProcessBulkListComponent: React.FC<IOwnProps> = ({
                 {Object.entries(abortedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ProcessDescriptor processInstanceData={process[1]} />
+                      <ProcessDescriptor instanceData={process[1]} />
                     </TextListItem>
                   );
                 })}

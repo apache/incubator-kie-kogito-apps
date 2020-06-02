@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import { DataList, Bullseye } from '@patternfly/react-core';
-import { ServerErrors } from '@kogito-apps/common';
+import { ServerErrors, KogitoSpinner, KogitoEmptyState } from '@kogito-apps/common';
 import '../../Templates/DataListContainer/DataList.css';
 import DataListItemComponent from '../../Molecules/DataListItemComponent/DataListItemComponent';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
-import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
 import '@patternfly/patternfly/patternfly-addons.css';
 import './DataListComponent.css';
 import {
@@ -74,7 +72,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   if (loading || isLoading) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
+        <KogitoSpinner spinnerText="Loading process instances..." />
       </Bullseye>
     );
   }
@@ -82,7 +80,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
   if (networkStatus === 4) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading process instances..." />
+        <KogitoSpinner spinnerText="Loading process instances..." />
       </Bullseye>
     );
   }
@@ -117,7 +115,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
       {initData !== undefined &&
         !isLoading &&
         initData.ProcessInstances.length === 0 && (
-          <EmptyStateComponent
+          <KogitoEmptyState
             iconType="searchIcon"
             title="No results found"
             body="Try using different filters"

@@ -11,10 +11,10 @@ import {
   Title,
   Tooltip
 } from '@patternfly/react-core';
+import { ProcessDescriptor } from '@kogito-apps/common';
 import React from 'react';
 import { LevelDownAltIcon, LevelUpAltIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
-import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
 import { stateIconCreator } from '../../../utils/Utils';
 import { ProcessInstance } from '../../../graphql/types';
 import EndpointLink from '../../Molecules/EndpointLink/EndpointLink';

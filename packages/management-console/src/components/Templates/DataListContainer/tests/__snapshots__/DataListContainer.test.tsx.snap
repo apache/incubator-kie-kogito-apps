@@ -300,7 +300,7 @@ exports[`DataListContainer component tests Snapshot tests 1`] = `
                     setIsError={[Function]}
                     setSelectedNumber={[Function]}
                   />
-                  <LoadMoreComponent
+                  <LoadMore
                     getMoreItems={[Function]}
                     isLoadingMore={false}
                     offset={10}
@@ -323,12 +323,12 @@ exports[`DataListContainer component tests Snapshot tests 1`] = `
                             id=""
                           >
                             <DataListCell
-                              className="kogito-management-console__load-more"
+                              className="kogito-common__load-more"
                               key=".0"
                               rowid="kie-datalist-item"
                             >
                               <div
-                                className="pf-c-data-list__cell kogito-management-console__load-more"
+                                className="pf-c-data-list__cell kogito-common__load-more"
                                 rowid="kie-datalist-item"
                               >
                                 <Component
@@ -532,7 +532,7 @@ exports[`DataListContainer component tests Snapshot tests 1`] = `
                         </DataListItem>
                       </ul>
                     </DataList>
-                  </LoadMoreComponent>
+                  </LoadMore>
                 </article>
               </Card>
             </div>

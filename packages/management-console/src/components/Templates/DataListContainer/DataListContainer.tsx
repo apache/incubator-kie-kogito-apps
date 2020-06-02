@@ -10,6 +10,8 @@ import {
 } from '@patternfly/react-core';
 import {
   ServerErrors,
+  LoadMore,
+  KogitoEmptyState,
   ouiaPageTypeAndObjectId
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
@@ -18,8 +20,6 @@ import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComp
 import DataToolbarComponent from '../../Molecules/DataToolbarComponent/DataToolbarComponent';
 import './DataList.css';
 import DataListComponent from '../../Organisms/DataListComponent/DataListComponent';
-import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
-import LoadMoreComponent from '../../Atoms/LoadMoreComponent/LoadMoreComponent';
 import ProcessBulkModalComponent from '../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent';
 import {
   useGetProcessInstancesLazyQuery,
@@ -358,7 +358,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                   selectedNumber={selectedNumber}
                 />
               ) : (
-                <EmptyStateComponent
+                <KogitoEmptyState
                   iconType="warningTriangleIcon1"
                   title="No status is selected"
                   body="Try selecting at least one status to see results"
@@ -373,7 +373,7 @@ const DataListContainer: React.FC<InjectedOuiaProps> = ({
                 !isLoading &&
                 initData !== undefined &&
                 (limit === pageSize || isLoadingMore) && (
-                  <LoadMoreComponent
+                  <LoadMore
                     offset={offset}
                     setOffset={setOffset}
                     getMoreItems={onGetMoreInstances}
