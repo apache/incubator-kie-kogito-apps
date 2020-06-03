@@ -254,7 +254,7 @@ const DomainExplorerTable = ({
                     variant={TableVariant.compact}
                     cells={finalMetaKeys}
                     rows={metaValues}
-                    className="kogito-common__embedded-table"
+                    className="kogito-management-console__embedded-table"
                   >
                     <TableHeader />
                     <TableBody />
@@ -313,7 +313,7 @@ const DomainExplorerTable = ({
           cells={columns}
           rows={rows}
           aria-label="Domain Explorer Table"
-          className="kogito-common--domain-explorer__table"
+          className="kogito-management-console--domain-explorer__table"
           onCollapse={onCollapse}
         >
           <TableHeader />
