@@ -16,24 +16,49 @@
 
 package org.kie.kogito.storage.infinispan.query;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.kie.kogito.storage.api.query.AttributeFilter;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Arrays.asList;
-import static org.kie.kogito.storage.api.query.QueryFilterFactory.*;
+import static java.util.Collections.emptyList;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.and;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.between;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.contains;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.containsAll;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.containsAny;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.equalTo;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.greaterThan;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.greaterThanEqual;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.in;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.isNull;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.lessThan;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.lessThanEqual;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.like;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.notNull;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.or;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.orderBy;
+import static org.kie.kogito.storage.api.query.SortDirection.ASC;
+import static org.kie.kogito.storage.api.query.SortDirection.DESC;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InfinispanQueryTest {
+
+    private static final String rootType = "org.kie.kogito.index.model.ProcessInstance";
 
     @Mock
     QueryFactory factory;
@@ -114,64 +139,63 @@ public class InfinispanQueryTest {
     public void setup() {
         when(factory.create(any())).thenReturn(mockQuery);
     }
-    //TODO: Refactor
-//
-//    @Test
-//    public void testNoParameters() {
-//        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
-//
-//        query.execute();
-//
-//        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o");
-//        verify(mockQuery).list();
-//    }
-//
-//    @Test
-//    public void testEmptyParameters() {
-//        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
-//        query.filter(emptyList());
-//        query.sort(emptyList());
-//
-//        query.execute();
-//
-//        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o");
-//        verify(mockQuery).list();
-//    }
-//
-//    @Test
-//    public void testPagination() {
-//        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
-//        query.limit(10);
-//        query.offset(0);
-//
-//        query.execute();
-//
-//        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o");
-//        verify(mockQuery).startOffset(0);
-//        verify(mockQuery).maxResults(10);
-//        verify(mockQuery).list();
-//    }
-//
-//    @Test
-//    public void testOrderBy() {
-//        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
-//        query.sort(asList(orderBy("name", DESC), orderBy("date", ASC)));
-//
-//        query.execute();
-//
-//        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o order by o.name DESC, o.date ASC");
-//        verify(mockQuery).list();
-//    }
-//
-//    @ParameterizedTest
-//    @MethodSource("provideFilters")
-//    public void assertQueryFilters(List<AttributeFilter> filters, String queryString) {
-//        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
-//        query.filter(filters);
-//
-//        query.execute();
-//
-//        verify(factory).create(queryString);
-//        verify(mockQuery).list();
-//    }
+
+    @Test
+    public void testNoParameters() {
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
+
+        query.execute();
+
+        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o");
+        verify(mockQuery).list();
+    }
+
+    @Test
+    public void testEmptyParameters() {
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
+        query.filter(emptyList());
+        query.sort(emptyList());
+
+        query.execute();
+
+        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o");
+        verify(mockQuery).list();
+    }
+
+    @Test
+    public void testPagination() {
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
+        query.limit(10);
+        query.offset(0);
+
+        query.execute();
+
+        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o");
+        verify(mockQuery).startOffset(0);
+        verify(mockQuery).maxResults(10);
+        verify(mockQuery).list();
+    }
+
+    @Test
+    public void testOrderBy() {
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
+        query.sort(asList(orderBy("name", DESC), orderBy("date", ASC)));
+
+        query.execute();
+
+        verify(factory).create("from org.kie.kogito.index.model.ProcessInstance o order by o.name DESC, o.date ASC");
+        verify(mockQuery).list();
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideFilters")
+    public void assertQueryFilters(List<AttributeFilter> filters, String queryString) {
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
+        query.filter(filters);
+
+        query.execute();
+
+        verify(factory).create(queryString);
+        verify(mockQuery).list();
+    }
 }
