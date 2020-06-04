@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.storage;
+package org.kie.kogito.storage.api.annotations;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
@@ -23,7 +23,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.storage.api.CacheService;
 
 @ApplicationScoped
 public class Producer {
@@ -33,10 +33,10 @@ public class Producer {
 
     @Inject
     @Any
-    Instance<IDataIndexStorageExtension> cacheServices;
+    Instance<CacheService> cacheServices;
 
     @Produces
-    public IDataIndexStorageExtension cacheService() {
+    public CacheService cacheService() {
         return cacheServices.select(new StorageImpl(storageType)).get();
     }
 }

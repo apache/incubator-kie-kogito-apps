@@ -14,38 +14,36 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.storage;
+package org.kie.kogito.storage.api.annotations;
 
 import javax.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.storage.api.CacheService;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProducerTest {
 
     @Mock
-    Instance<IDataIndexStorageExtension> cacheServices;
+    Instance<CacheService> cacheServices;
 
     @InjectMocks
     Producer cacheProducer;
 
     @Mock
-    Instance<IDataIndexStorageExtension> instance;
+    Instance<CacheService> instance;
 
     @BeforeEach
     void prepare() {
         String storageType = "test";
-        when(cacheServices.select(eq(new StorageImpl(storageType)))).thenReturn(instance);
+        Mockito.when(cacheServices.select(ArgumentMatchers.eq(new StorageImpl(storageType)))).thenReturn(instance);
         cacheProducer.storageType = storageType;
     }
 
@@ -53,6 +51,6 @@ class ProducerTest {
     void produceInfinispanCacheService() {
         cacheProducer.cacheService();
 
-        verify(instance).get();
+        Mockito.verify(instance).get();
     }
 }
