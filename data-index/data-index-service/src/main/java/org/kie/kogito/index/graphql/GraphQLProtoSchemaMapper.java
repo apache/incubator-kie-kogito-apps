@@ -35,8 +35,8 @@ import graphql.schema.GraphQLTypeReference;
 import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
 import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
-import org.kie.kogito.storage.protobuf.domain.DomainDescriptor;
-import org.kie.kogito.storage.protobuf.domain.DomainModelRegisteredEvent;
+import org.kie.kogito.index.protobuf.domain.DomainDescriptor;
+import org.kie.kogito.index.protobuf.domain.DomainModelRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

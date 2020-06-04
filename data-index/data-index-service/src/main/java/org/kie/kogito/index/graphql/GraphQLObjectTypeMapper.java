@@ -26,8 +26,8 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import org.kie.kogito.index.model.KogitoMetadata;
-import org.kie.kogito.storage.protobuf.domain.AttributeDescriptor;
-import org.kie.kogito.storage.protobuf.domain.DomainDescriptor;
+import org.kie.kogito.index.protobuf.domain.AttributeDescriptor;
+import org.kie.kogito.index.protobuf.domain.DomainDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

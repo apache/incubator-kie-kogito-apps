@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.storage.api;
+package org.kie.kogito.index.protobuf;
 
-import java.util.Map;
+public class ProtobufValidationException extends Exception {
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+    public ProtobufValidationException() {
+    }
 
-public interface CacheService {
-
-    Map<String, String> getProtobufCache();
-
-    <T> Cache<String, T> getCache(String index, Class<T> type);
-
-    Cache<String, ObjectNode> getDomainModelCache(String processId);
-
-    Cache<String, String> getProcessIdModelCache();
+    public ProtobufValidationException(String message) {
+        super(message);
+    }
 }

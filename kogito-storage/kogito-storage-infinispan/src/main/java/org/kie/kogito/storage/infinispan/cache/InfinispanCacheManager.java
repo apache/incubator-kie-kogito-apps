@@ -107,6 +107,7 @@ public class InfinispanCacheManager implements CacheService {
         }
     }
 
+    @Override
     public Map<String, String> getProtobufCache() {
         return manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
     }

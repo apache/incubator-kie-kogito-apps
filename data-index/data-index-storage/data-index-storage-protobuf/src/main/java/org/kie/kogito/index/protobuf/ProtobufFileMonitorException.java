@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.storage.api;
+package org.kie.kogito.index.protobuf;
 
-import java.util.Map;
+class ProtobufFileMonitorException extends RuntimeException {
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+    ProtobufFileMonitorException(String message) {
+        super(message);
+    }
 
-public interface CacheService {
+    ProtobufFileMonitorException(Throwable cause) {
+        super(cause);
+    }
 
-    Map<String, String> getProtobufCache();
-
-    <T> Cache<String, T> getCache(String index, Class<T> type);
-
-    Cache<String, ObjectNode> getDomainModelCache(String processId);
-
-    Cache<String, String> getProcessIdModelCache();
+    ProtobufFileMonitorException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
