@@ -17,7 +17,6 @@
 package org.kie.kogito.index.messaging;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -36,7 +35,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.InfinispanServerTestResource;
 import org.kie.kogito.index.KafkaTestResource;
-import org.kie.kogito.index.protobuf.ProtobufService;
+import org.kie.kogito.storage.protobuf.ProtobufService;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;

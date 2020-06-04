@@ -47,8 +47,7 @@ import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
 import io.vertx.axle.core.eventbus.MessageConsumer;
 import io.vertx.axle.core.eventbus.MessageProducer;
-import org.kie.kogito.index.cache.Cache;
-import org.kie.kogito.index.cache.CacheService;
+import org.kie.kogito.index.IDataIndexStorageExtension;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.json.DataIndexParsingException;
@@ -56,7 +55,8 @@ import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.index.query.Query;
+import org.kie.kogito.storage.api.Cache;
+import org.kie.kogito.storage.api.query.Query;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
-import static org.kie.kogito.index.query.QueryFilterFactory.equalTo;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.equalTo;
 
 @ApplicationScoped
 public class GraphQLSchemaManager {
@@ -78,7 +78,7 @@ public class GraphQLSchemaManager {
     private static final String JOB_ADDED = "JobAdded";
 
     @Inject
-    CacheService cacheService;
+    IDataIndexStorageExtension cacheService;
 
     @Inject
     GraphQLScalarType qlDateTimeScalarType;

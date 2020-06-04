@@ -21,7 +21,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>data-index-storage-infinispan</artifactId>
+      <artifactId>kogito-storage-protobuf</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

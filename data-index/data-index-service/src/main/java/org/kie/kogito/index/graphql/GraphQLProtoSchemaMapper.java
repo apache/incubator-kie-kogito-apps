@@ -32,11 +32,11 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
-import org.kie.kogito.index.domain.DomainDescriptor;
-import org.kie.kogito.index.event.DomainModelRegisteredEvent;
 import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
 import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
+import org.kie.kogito.storage.protobuf.domain.DomainDescriptor;
+import org.kie.kogito.storage.protobuf.domain.DomainModelRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -26,13 +26,13 @@ import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
-import org.kie.kogito.index.query.AttributeFilter;
-import org.kie.kogito.index.query.FilterCondition;
+import org.kie.kogito.storage.api.query.AttributeFilter;
+import org.kie.kogito.storage.api.query.FilterCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.index.query.QueryFilterFactory.*;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.*;
 
 public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, GraphQLQueryParser> {
 

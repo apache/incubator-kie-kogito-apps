@@ -25,9 +25,11 @@ import javax.inject.Inject;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.IDataIndexStorageExtension;
 import org.kie.kogito.index.InfinispanServerTestResource;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
+import org.kie.kogito.storage.api.Cache;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.TestUtils.getProcessInstance;
@@ -37,7 +39,7 @@ import static org.kie.kogito.index.TestUtils.getProcessInstance;
 public class CacheIT {
 
     @Inject
-    CacheService cacheService;
+    IDataIndexStorageExtension cacheService;
 
     @Test
     public void testObjectCreatedListener() throws Exception {

@@ -20,6 +20,8 @@ import java.util.Objects;
 
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.kie.kogito.storage.api.annotations.Storage;
+
 public class StorageImpl extends AnnotationLiteral<Storage> implements Storage {
 
     private final String type;
