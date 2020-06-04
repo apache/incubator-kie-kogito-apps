@@ -16,14 +16,9 @@
 
 package org.kie.kogito.storage.api;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface CacheService {
-
-    Map<String, String> getProtobufCache();
-
     <T> Cache<String, T> getCache(String index, Class<T> type);
 
     Cache<String, ObjectNode> getDomainModelCache(String processId);

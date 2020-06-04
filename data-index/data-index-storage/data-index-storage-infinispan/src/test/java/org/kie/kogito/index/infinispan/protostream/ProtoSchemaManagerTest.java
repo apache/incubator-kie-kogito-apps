@@ -16,16 +16,14 @@
 
 package org.kie.kogito.index.infinispan.protostream;
 
-import java.util.Map;
-
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kie.kogito.index.IDataIndexStorageExtension;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaManager;
 import org.kie.kogito.storage.api.Cache;
-import org.kie.kogito.storage.api.CacheService;
 import org.kie.kogito.storage.api.schema.ProcessDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
@@ -49,13 +47,13 @@ class ProtoSchemaManagerTest {
     ProtoSchemaAcceptor protoSchemaAcceptor;
 
     @Mock
-    CacheService cacheManager;
+    IDataIndexStorageExtension cacheManager;
 
     @InjectMocks
     ProtoSchemaManager protoSchemaManager;
 
     @Mock
-    Map<String, String> protobufCache;
+    Cache<String, String> protobufCache;
 
     @Mock
     Cache<String, String> processIdModelCache;

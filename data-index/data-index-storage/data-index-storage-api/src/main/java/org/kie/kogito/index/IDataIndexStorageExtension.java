@@ -8,6 +8,8 @@ import org.kie.kogito.storage.api.Cache;
 
 public interface IDataIndexStorageExtension {
 
+    Cache<String, String> getProtobufCache();
+
     Cache<String, ProcessInstance> getProcessInstancesCache();
 
     Cache<String, UserTaskInstance> getUserTaskInstancesCache();

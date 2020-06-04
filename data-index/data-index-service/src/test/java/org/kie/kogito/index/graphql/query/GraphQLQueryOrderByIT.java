@@ -33,7 +33,6 @@ import graphql.schema.GraphQLType;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.InfinispanServerTestResource;
 import org.kie.kogito.index.graphql.GraphQLSchemaManager;

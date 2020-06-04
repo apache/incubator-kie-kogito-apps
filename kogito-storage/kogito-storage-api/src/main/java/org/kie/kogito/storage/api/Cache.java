@@ -16,6 +16,8 @@
 
 package org.kie.kogito.storage.api;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.kie.kogito.storage.api.query.Query;
@@ -35,6 +37,10 @@ public interface Cache<K, V> {
     V put(K key, V value);
 
     V remove(Object key);
+
+    boolean containsKey(K key);
+
+    Set<Map.Entry<K, V>> entrySet();
 
     void clear();
 

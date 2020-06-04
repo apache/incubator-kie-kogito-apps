@@ -32,7 +32,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.storage.api.query.QueryFilterFactory.*;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.and;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.between;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.contains;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.containsAll;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.containsAny;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.equalTo;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.greaterThan;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.greaterThanEqual;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.in;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.isNull;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.lessThan;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.lessThanEqual;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.like;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.notNull;
+import static org.kie.kogito.storage.api.query.QueryFilterFactory.or;
 
 public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, GraphQLQueryParser> {
 

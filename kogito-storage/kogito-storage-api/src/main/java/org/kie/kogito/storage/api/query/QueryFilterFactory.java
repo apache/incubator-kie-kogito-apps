@@ -19,7 +19,21 @@ package org.kie.kogito.storage.api.query;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.kie.kogito.storage.api.query.FilterCondition.*;
+import static org.kie.kogito.storage.api.query.FilterCondition.AND;
+import static org.kie.kogito.storage.api.query.FilterCondition.BETWEEN;
+import static org.kie.kogito.storage.api.query.FilterCondition.CONTAINS;
+import static org.kie.kogito.storage.api.query.FilterCondition.CONTAINS_ALL;
+import static org.kie.kogito.storage.api.query.FilterCondition.CONTAINS_ANY;
+import static org.kie.kogito.storage.api.query.FilterCondition.EQUAL;
+import static org.kie.kogito.storage.api.query.FilterCondition.GT;
+import static org.kie.kogito.storage.api.query.FilterCondition.GTE;
+import static org.kie.kogito.storage.api.query.FilterCondition.IN;
+import static org.kie.kogito.storage.api.query.FilterCondition.IS_NULL;
+import static org.kie.kogito.storage.api.query.FilterCondition.LIKE;
+import static org.kie.kogito.storage.api.query.FilterCondition.LT;
+import static org.kie.kogito.storage.api.query.FilterCondition.LTE;
+import static org.kie.kogito.storage.api.query.FilterCondition.NOT_NULL;
+import static org.kie.kogito.storage.api.query.FilterCondition.OR;
 
 public final class QueryFilterFactory {
 

@@ -18,7 +18,6 @@ package org.kie.kogito.index.infinispan.schema;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -26,8 +25,8 @@ import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.storage.api.CacheService;
-import org.kie.kogito.storage.infinispan.cache.InfinispanCacheManager;
+import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.storage.api.Cache;
 import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.storage.api.schema.SchemaRegistrationException;
@@ -46,14 +45,14 @@ public class ProtoSchemaManager {
 
     @Inject
     @Any
-    CacheService cacheManager;
+    IDataIndexStorageExtension cacheManager;
 
     public void onSchemaRegisteredEvent(@Observes SchemaRegisteredEvent event) {
         if (schemaAcceptor.accept(event.getSchemaType())) {
             SchemaDescriptor schemaDescriptor = event.getSchemaDescriptor();
             cacheManager.getProtobufCache().put(schemaDescriptor.getName(), schemaDescriptor.getSchemaContent());
             schemaDescriptor.getProcessDescriptor().ifPresent(processDescriptor -> {
-                Map<String, String> cache = cacheManager.getProtobufCache();
+                Cache<String, String> cache = cacheManager.getProtobufCache();
                 cacheManager.getProcessIdModelCache().put(processDescriptor.getProcessId(), processDescriptor.getProcessType());
 
                 List<String> errors = checkSchemaErrors(cache);
@@ -70,7 +69,7 @@ public class ProtoSchemaManager {
         }
     }
 
-    private List<String> checkSchemaErrors(Map<String, String> metadataCache) {
+    private List<String> checkSchemaErrors(Cache<String, String> metadataCache) {
         if (metadataCache.containsKey(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX)) {
             List<String> errors = new ArrayList<>();
             // The existence of this key indicates there are errors in some files

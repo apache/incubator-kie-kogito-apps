@@ -37,10 +37,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.kie.kogito.index.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
 import static org.kie.kogito.index.protobuf.TestUtils.ADDITIONAL_DESCRIPTORS;
 import static org.kie.kogito.index.protobuf.TestUtils.DOMAIN_DESCRIPTOR;
 import static org.kie.kogito.index.protobuf.TestUtils.PROCESS_ID;
-import static org.kie.kogito.index.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 

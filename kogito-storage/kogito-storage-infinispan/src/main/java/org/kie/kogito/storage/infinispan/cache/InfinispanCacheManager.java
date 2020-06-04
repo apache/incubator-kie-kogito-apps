@@ -16,8 +16,6 @@
 
 package org.kie.kogito.storage.infinispan.cache;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
@@ -32,7 +30,6 @@ import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 import org.infinispan.commons.dataconversion.MediaType;
-import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.kie.kogito.storage.api.Cache;
 import org.kie.kogito.storage.api.CacheService;
 import org.kie.kogito.storage.api.annotations.Storage;
@@ -105,11 +102,6 @@ public class InfinispanCacheManager implements CacheService {
             }
             throw e;
         }
-    }
-
-    @Override
-    public Map<String, String> getProtobufCache() {
-        return manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
     }
 
     @Override

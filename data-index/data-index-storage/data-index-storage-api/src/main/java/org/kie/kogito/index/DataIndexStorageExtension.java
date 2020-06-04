@@ -15,9 +15,15 @@ public class DataIndexStorageExtension implements IDataIndexStorageExtension {
     private static final String USER_TASK_INSTANCES_CACHE = "usertaskinstances";
     private static final String JOBS_CACHE = "jobs";
     private static final String PROCESS_ID_MODEL_CACHE = "processidmodel";
+    private static final String PROTOBUF_CACHE = "protobufschemas";
 
     @Inject
     CacheService cacheService;
+
+    @Override
+    public Cache<String, String> getProtobufCache() {
+        return cacheService.getCache(PROTOBUF_CACHE, String.class);
+    }
 
     @Override
     public Cache<String, ProcessInstance> getProcessInstancesCache() {

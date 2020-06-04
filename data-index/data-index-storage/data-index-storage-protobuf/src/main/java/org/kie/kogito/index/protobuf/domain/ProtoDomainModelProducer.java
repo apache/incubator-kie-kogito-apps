@@ -33,8 +33,8 @@ import org.kie.kogito.index.protobuf.FileDescriptorRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @ApplicationScoped
 public class ProtoDomainModelProducer {
