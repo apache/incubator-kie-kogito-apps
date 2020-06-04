@@ -5,7 +5,7 @@ on:
     branches: [ master ]
     paths:
     - 'trusty/**'
-    - 'explainability-service/**'
+    - 'explanability-service/**'
 jobs:
   build:
     runs-on: ubuntu-latest
