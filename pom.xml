@@ -64,6 +64,6 @@
     <module>management-console</module>
     <module>explainability-service</module>
     <module>trusty</module>
-    <module>kogito-storage</module>   
+    <module>kogito-storage</module>
   </modules>
 </project>
