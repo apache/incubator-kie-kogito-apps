@@ -27,7 +27,7 @@ pipeline {
             steps {
                 dir("kogito-runtimes") {
                     script {
-                        githubscm.checkoutIfExists('kogito-runtimes', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET")
+                        githubscm.checkoutIfExists('kogito-runtimes', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET", true)
                         maven.runMavenWithSubmarineSettings('clean install', false)
                     }
                 }
@@ -35,9 +35,12 @@ pipeline {
         }
         stage('Build kogito-apps') {
             steps {
-                script {
-                    maven.runMavenWithSubmarineSettings('clean install -Prun-code-coverage', false)
-                    maven.runMavenWithSubmarineSettings('-e -nsu validate -Psonarcloud-analysis', false)
+                dir("kogito-apps") {
+                    script {
+                        githubscm.checkoutIfExists('kogito-apps', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET", true)
+                        maven.runMavenWithSubmarineSettings('clean install -Prun-code-coverage', false)
+                        maven.runMavenWithSubmarineSettings('-e -nsu validate -Psonarcloud-analysis', false)
+                    }
                 }
             }
         }
@@ -45,14 +48,14 @@ pipeline {
             steps {
                 dir("kogito-examples") {
                     script {
-                        githubscm.checkoutIfExists('kogito-examples', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET")
+                        githubscm.checkoutIfExists('kogito-examples', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET", true)
                         maven.runMavenWithSubmarineSettings('clean install', false)
                     }
                 }
                 // Use a separate dir for persistence to not overwrite the test results
                 dir("kogito-examples-persistence") {
                     script {
-                        githubscm.checkoutIfExists('kogito-examples', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET")
+                        githubscm.checkoutIfExists('kogito-examples', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET", true)
                         // Don't run with tests so far, see: https://github.com/quarkusio/quarkus/issues/6885
                         maven.runMavenWithSubmarineSettings('clean install -Ppersistence', true)
                     }
