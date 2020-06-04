@@ -8,7 +8,7 @@ import {
 import '../../Templates/DataListContainer/DataList.css';
 import DataListItemComponent from '../../Molecules/DataListItemComponent/DataListItemComponent';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
-import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
+import KogitoEmptyState from '../../Atoms/KogitoEmptyState/KogitoEmptyState';
 import '@patternfly/patternfly/patternfly-addons.css';
 import './DataListComponent.css';
 
@@ -117,7 +117,7 @@ const DataListComponent: React.FC<IOwnProps> = ({
       {initData !== undefined &&
         !isLoading &&
         initData.ProcessInstances.length === 0 && (
-          <EmptyStateComponent
+          <KogitoEmptyState
             iconType="searchIcon"
             title="No results found"
             body="Try using different filters"
