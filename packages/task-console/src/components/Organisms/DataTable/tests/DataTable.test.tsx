@@ -4,6 +4,11 @@ import DataTable from '../DataTable';
 import { gql } from 'apollo-boost';
 import { MockedProvider } from '@apollo/react-testing';
 
+jest.mock('uuid', () => {
+  let value = 1;
+  return () => value++;
+});
+
 const data = [
   {
     id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',

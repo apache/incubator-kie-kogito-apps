@@ -84,7 +84,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
             "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
             "Ready",
           ],
-          "rowKey": "{\\"id\\":\\"45a73767-5da3",
+          "rowKey": 1,
         },
         Object {
           "cells": Array [
@@ -94,7 +94,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
             "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
             "Ready",
           ],
-          "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+          "rowKey": 2,
         },
       ]
     }
@@ -126,7 +126,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                 "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                 "Ready",
               ],
-              "rowKey": "{\\"id\\":\\"45a73767-5da3",
+              "rowKey": 1,
             },
             Object {
               "cells": Array [
@@ -136,7 +136,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                 "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                 "Ready",
               ],
-              "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+              "rowKey": 2,
             },
           ],
         }
@@ -180,7 +180,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                 "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                 "Ready",
               ],
-              "rowKey": "{\\"id\\":\\"45a73767-5da3",
+              "rowKey": 1,
             },
             Object {
               "cells": Array [
@@ -190,7 +190,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                 "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                 "Ready",
               ],
-              "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+              "rowKey": 2,
             },
           ]
         }
@@ -1237,7 +1237,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                         "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                         "Ready",
                       ],
-                      "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                      "rowKey": 1,
                     },
                     Object {
                       "cells": Array [
@@ -1247,7 +1247,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                         "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                         "Ready",
                       ],
-                      "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                      "rowKey": 2,
                     },
                   ]
                 }
@@ -1296,7 +1296,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                           },
                           "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                         },
-                        "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                        "rowKey": 1,
                         "state": Object {
                           "props": Object {
                             "isVisible": true,
@@ -1343,7 +1343,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                           },
                           "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                         },
-                        "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                        "rowKey": 2,
                         "state": Object {
                           "props": Object {
                             "isVisible": true,
@@ -1396,7 +1396,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                           },
                           "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                         },
-                        "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                        "rowKey": 1,
                         "state": Object {
                           "props": Object {
                             "isVisible": true,
@@ -1443,7 +1443,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                           },
                           "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                         },
-                        "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                        "rowKey": 2,
                         "state": Object {
                           "props": Object {
                             "isVisible": true,
@@ -1717,7 +1717,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             },
                             "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                           },
-                          "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                          "rowKey": 1,
                           "state": Object {
                             "props": Object {
                               "isVisible": true,
@@ -1764,7 +1764,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             },
                             "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                           },
-                          "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                          "rowKey": 2,
                           "state": Object {
                             "props": Object {
                               "isVisible": true,
@@ -1832,7 +1832,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             },
                             "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                           },
-                          "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                          "rowKey": 1,
                           "state": Object {
                             "props": Object {
                               "isVisible": true,
@@ -1879,7 +1879,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             },
                             "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                           },
-                          "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                          "rowKey": 2,
                           "state": Object {
                             "props": Object {
                               "isVisible": true,
@@ -1934,7 +1934,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                               },
                               "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                             },
-                            "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                            "rowKey": 1,
                             "state": Object {
                               "props": Object {
                                 "isVisible": true,
@@ -1981,7 +1981,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                               },
                               "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                             },
-                            "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                            "rowKey": 2,
                             "state": Object {
                               "props": Object {
                                 "isVisible": true,
@@ -2215,7 +2215,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                               },
                             ]
                           }
-                          key="{\\"id\\":\\"45a73767-5da3-row"
+                          key="1-row"
                           onRow={[Function]}
                           renderers={
                             Object {
@@ -2264,7 +2264,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                 },
                                 "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                               },
-                              "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                              "rowKey": 1,
                               "state": Object {
                                 "props": Object {
                                   "isVisible": true,
@@ -2274,7 +2274,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             }
                           }
                           rowIndex={0}
-                          rowKey="{\\"id\\":\\"45a73767-5da3-row"
+                          rowKey="1-row"
                         >
                           <Component
                             onMouseDown={[Function]}
@@ -2318,7 +2318,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                   },
                                   "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                                 },
-                                "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                                "rowKey": 1,
                                 "state": Object {
                                   "props": Object {
                                     "isVisible": true,
@@ -2330,7 +2330,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             rowProps={
                               Object {
                                 "rowIndex": 0,
-                                "rowKey": "{\\"id\\":\\"45a73767-5da3-row",
+                                "rowKey": "1-row",
                               }
                             }
                           >
@@ -2415,7 +2415,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                       },
                                       "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                                     },
-                                    "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                                    "rowKey": 1,
                                     "state": Object {
                                       "props": Object {
                                         "isVisible": true,
@@ -2425,7 +2425,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                   },
                                   "rowProps": Object {
                                     "rowIndex": 0,
-                                    "rowKey": "{\\"id\\":\\"45a73767-5da3-row",
+                                    "rowKey": "1-row",
                                   },
                                 }
                               }
@@ -2485,7 +2485,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                       },
                                       "title": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
                                     },
-                                    "rowKey": "{\\"id\\":\\"45a73767-5da3",
+                                    "rowKey": 1,
                                     "state": Object {
                                       "props": Object {
                                         "isVisible": true,
@@ -2497,7 +2497,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                 rowProps={
                                   Object {
                                     "rowIndex": 0,
-                                    "rowKey": "{\\"id\\":\\"45a73767-5da3-row",
+                                    "rowKey": "1-row",
                                   }
                                 }
                               >
@@ -2801,7 +2801,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                               },
                             ]
                           }
-                          key="{\\"id\\":\\"047ec38d-5d57-row"
+                          key="2-row"
                           onRow={[Function]}
                           renderers={
                             Object {
@@ -2850,7 +2850,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                 },
                                 "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                               },
-                              "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                              "rowKey": 2,
                               "state": Object {
                                 "props": Object {
                                   "isVisible": true,
@@ -2860,7 +2860,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             }
                           }
                           rowIndex={1}
-                          rowKey="{\\"id\\":\\"047ec38d-5d57-row"
+                          rowKey="2-row"
                         >
                           <Component
                             onMouseDown={[Function]}
@@ -2904,7 +2904,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                   },
                                   "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                                 },
-                                "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                                "rowKey": 2,
                                 "state": Object {
                                   "props": Object {
                                     "isVisible": true,
@@ -2916,7 +2916,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                             rowProps={
                               Object {
                                 "rowIndex": 1,
-                                "rowKey": "{\\"id\\":\\"047ec38d-5d57-row",
+                                "rowKey": "2-row",
                               }
                             }
                           >
@@ -3001,7 +3001,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                       },
                                       "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                                     },
-                                    "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                                    "rowKey": 2,
                                     "state": Object {
                                       "props": Object {
                                         "isVisible": true,
@@ -3011,7 +3011,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                   },
                                   "rowProps": Object {
                                     "rowIndex": 1,
-                                    "rowKey": "{\\"id\\":\\"047ec38d-5d57-row",
+                                    "rowKey": "2-row",
                                   },
                                 }
                               }
@@ -3071,7 +3071,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                       },
                                       "title": "9ae407dd-cdfa-4722-8a49-0a6d2e14550d",
                                     },
-                                    "rowKey": "{\\"id\\":\\"047ec38d-5d57",
+                                    "rowKey": 2,
                                     "state": Object {
                                       "props": Object {
                                         "isVisible": true,
@@ -3083,7 +3083,7 @@ exports[`DataTable component tests Snapshot tests 1`] = `
                                 rowProps={
                                   Object {
                                     "rowIndex": 1,
-                                    "rowKey": "{\\"id\\":\\"047ec38d-5d57-row",
+                                    "rowKey": "2-row",
                                   }
                                 }
                               >

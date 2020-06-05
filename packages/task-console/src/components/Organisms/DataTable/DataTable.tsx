@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Bullseye } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import { KogitoSpinner } from '@kogito-apps/common';
+import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
 import '@patternfly/patternfly/patternfly-addons.css';
 import _ from 'lodash';
+import uuidv4 from 'uuid';
 
 interface IOwnProps {
   data: any[];
@@ -48,7 +49,7 @@ const getRows = (data, columns) => {
           },
           []
         ),
-        rowKey: JSON.stringify(rowData).substr(0, 20) // This is a walkaround to bypass the "id" cannot be included in "columns" issue
+        rowKey: uuidv4() // This is a walkaround to bypass the "id" cannot be included in "columns" issue
       };
     });
   }
@@ -85,7 +86,7 @@ const DataTable: React.FC<IOwnProps> = ({
       <React.Fragment>{LoadingComponent}</React.Fragment>
     ) : (
       <Bullseye>
-        <KogitoSpinner spinnerText="Loading..." />
+        <SpinnerComponent spinnerText="Loading..." />
       </Bullseye>
     );
   }
@@ -95,7 +96,7 @@ const DataTable: React.FC<IOwnProps> = ({
       <React.Fragment>{LoadingComponent}</React.Fragment>
     ) : (
       <Bullseye>
-        <KogitoSpinner spinnerText="Loading..." />
+        <SpinnerComponent spinnerText="Loading..." />
       </Bullseye>
     );
   }
