@@ -1,5 +1,7 @@
 package org.kie.kogito.index;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -9,6 +11,7 @@ import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.storage.api.Cache;
 import org.kie.kogito.storage.api.CacheService;
 
+@ApplicationScoped
 public class DataIndexStorageExtension implements IDataIndexStorageExtension {
 
     private static final String PROCESS_INSTANCES_CACHE = "processinstances";

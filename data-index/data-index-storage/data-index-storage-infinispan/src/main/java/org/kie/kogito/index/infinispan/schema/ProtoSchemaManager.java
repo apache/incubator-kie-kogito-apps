@@ -44,7 +44,6 @@ public class ProtoSchemaManager {
     ProtoSchemaAcceptor schemaAcceptor;
 
     @Inject
-    @Any
     IDataIndexStorageExtension cacheManager;
 
     public void onSchemaRegisteredEvent(@Observes SchemaRegisteredEvent event) {
