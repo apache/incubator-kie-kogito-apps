@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bullseye } from '@patternfly/react-core';
 import { Table, TableHeader, TableBody } from '@patternfly/react-table';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
+import { KogitoSpinner } from '@kogito-apps/common';
 import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
 import '@patternfly/patternfly/patternfly-addons.css';
 import _ from 'lodash';
@@ -86,7 +86,7 @@ const DataTable: React.FC<IOwnProps> = ({
       <React.Fragment>{LoadingComponent}</React.Fragment>
     ) : (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading..." />
+        <KogitoSpinner spinnerText="Loading..." />
       </Bullseye>
     );
   }
@@ -96,7 +96,7 @@ const DataTable: React.FC<IOwnProps> = ({
       <React.Fragment>{LoadingComponent}</React.Fragment>
     ) : (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading..." />
+        <KogitoSpinner spinnerText="Loading..." />
       </Bullseye>
     );
   }

@@ -164,7 +164,7 @@ exports[`DataTableContainer component tests Snapshot tests 1`] = `
                   <MockDataTable
                     LoadingComponent={
                       <Bullseye>
-                        <EmptyStateSpinner
+                        <KogitoSpinner
                           spinnerText="Loading user tasks..."
                         />
                       </Bullseye>

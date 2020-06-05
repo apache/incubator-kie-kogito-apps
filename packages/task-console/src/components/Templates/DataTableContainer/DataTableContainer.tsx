@@ -16,12 +16,11 @@ import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComp
 import './DataTable.css';
 import DataTable from '../../Organisms/DataTable/DataTable';
 import { useGetUserTasksByStatesQuery } from '../../../graphql/types';
-import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
+import { ouiaPageTypeAndObjectId, KogitoSpinner } from '@kogito-apps/common';
 
 const UserTaskLoadingComponent = (
   <Bullseye>
-    <SpinnerComponent spinnerText="Loading user tasks..." />
+    <KogitoSpinner spinnerText="Loading user tasks..." />
   </Bullseye>
 );
 
