@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.storage.protobuf;
 
-class ProtobufFileMonitorException extends RuntimeException {
+import org.infinispan.protostream.descriptors.FileDescriptor;
 
-    ProtobufFileMonitorException(String message) {
-        super(message);
+public class FileDescriptorRegisteredEvent {
+
+    private final FileDescriptor descriptor;
+
+    public FileDescriptorRegisteredEvent(FileDescriptor descriptor) {
+        this.descriptor = descriptor;
     }
 
-    ProtobufFileMonitorException(Throwable cause) {
-        super(cause);
+    public FileDescriptor getDescriptor() {
+        return descriptor;
     }
 
-    ProtobufFileMonitorException(String message, Throwable cause) {
-        super(message, cause);
+    @Override
+    public String toString() {
+        return "FileDescriptorRegisteredEvent{" +
+                "descriptor=" + descriptor +
+                '}';
     }
 }

@@ -38,9 +38,9 @@ import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
 import org.kie.kogito.index.json.ProcessInstanceMetaMapper;
 import org.kie.kogito.index.json.UserTaskInstanceMetaMapper;
-import org.kie.kogito.index.protobuf.domain.DomainModelRegisteredEvent;
 import org.kie.kogito.index.service.IndexingService;
 import org.kie.kogito.index.vertx.ObjectNodeMessageCodec;
+import org.kie.kogito.storage.protobuf.domain.DomainModelRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

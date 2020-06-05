@@ -15,6 +15,7 @@
   <modules>
     <module>kogito-storage-commons-api</module>
     <module>kogito-storage-commons-infinispan</module>
+    <module>kogito-storage-commons-protobuf</module>
   </modules>
 
 

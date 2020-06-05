@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   <parent>
+    <artifactId>kogito-apps</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>data-index-storage</artifactId>
     <version>8.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>data-index-storage-protobuf</artifactId>
-  <name>Kogito :: Data Index Storage Protobuf</name>
+  <artifactId>kogito-storage-commons-protobuf</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-storage-commons-protobuf</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -52,5 +46,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
 </project>

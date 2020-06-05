@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf.domain;
+package org.kie.kogito.storage.protobuf.domain;
 
 import java.util.Objects;
 

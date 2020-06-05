@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.storage.protobuf;
 
-public class ProtobufValidationException extends Exception {
+class ProtobufFileMonitorException extends RuntimeException {
 
-    public ProtobufValidationException() {
+    ProtobufFileMonitorException(String message) {
+        super(message);
     }
 
-    public ProtobufValidationException(String message) {
-        super(message);
+    ProtobufFileMonitorException(Throwable cause) {
+        super(cause);
+    }
+
+    ProtobufFileMonitorException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

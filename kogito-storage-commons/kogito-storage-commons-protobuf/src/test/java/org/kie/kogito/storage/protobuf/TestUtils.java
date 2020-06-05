@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.storage.protobuf;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,10 +28,10 @@ import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.config.Configuration;
 import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.impl.SerializationContextImpl;
-import org.kie.kogito.index.protobuf.domain.AttributeDescriptor;
-import org.kie.kogito.index.protobuf.domain.DomainDescriptor;
+import org.kie.kogito.storage.protobuf.domain.AttributeDescriptor;
+import org.kie.kogito.storage.protobuf.domain.DomainDescriptor;
 
-import static org.kie.kogito.index.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
+import static org.kie.kogito.storage.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
 
 public class TestUtils {
 

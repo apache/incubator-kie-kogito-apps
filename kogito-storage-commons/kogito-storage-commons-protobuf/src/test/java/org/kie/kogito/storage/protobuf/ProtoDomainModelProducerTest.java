@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.storage.protobuf;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,16 +31,16 @@ import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.impl.SerializationContextImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.index.protobuf.domain.DomainModelRegisteredEvent;
-import org.kie.kogito.index.protobuf.domain.ProtoDomainModelProducer;
+import org.kie.kogito.storage.protobuf.domain.DomainModelRegisteredEvent;
+import org.kie.kogito.storage.protobuf.domain.ProtoDomainModelProducer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.kie.kogito.index.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
-import static org.kie.kogito.index.protobuf.TestUtils.ADDITIONAL_DESCRIPTORS;
-import static org.kie.kogito.index.protobuf.TestUtils.DOMAIN_DESCRIPTOR;
-import static org.kie.kogito.index.protobuf.TestUtils.PROCESS_ID;
+import static org.kie.kogito.storage.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
+import static org.kie.kogito.storage.protobuf.TestUtils.ADDITIONAL_DESCRIPTORS;
+import static org.kie.kogito.storage.protobuf.TestUtils.DOMAIN_DESCRIPTOR;
+import static org.kie.kogito.storage.protobuf.TestUtils.PROCESS_ID;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
