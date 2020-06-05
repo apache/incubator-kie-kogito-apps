@@ -18,6 +18,7 @@ package org.kie.kogito.index.infinispan.schema;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -51,7 +52,7 @@ public class ProtoSchemaManager {
             SchemaDescriptor schemaDescriptor = event.getSchemaDescriptor();
             cacheManager.getProtobufCache().put(schemaDescriptor.getName(), schemaDescriptor.getSchemaContent());
             schemaDescriptor.getProcessDescriptor().ifPresent(processDescriptor -> {
-                Cache<String, String> cache = cacheManager.getProtobufCache();
+                Map<String, String> cache = cacheManager.getProtobufCache();
                 cacheManager.getProcessIdModelCache().put(processDescriptor.getProcessId(), processDescriptor.getProcessType());
 
                 List<String> errors = checkSchemaErrors(cache);
@@ -68,7 +69,7 @@ public class ProtoSchemaManager {
         }
     }
 
-    private List<String> checkSchemaErrors(Cache<String, String> metadataCache) {
+    private List<String> checkSchemaErrors(Map<String, String> metadataCache) {
         if (metadataCache.containsKey(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX)) {
             List<String> errors = new ArrayList<>();
             // The existence of this key indicates there are errors in some files

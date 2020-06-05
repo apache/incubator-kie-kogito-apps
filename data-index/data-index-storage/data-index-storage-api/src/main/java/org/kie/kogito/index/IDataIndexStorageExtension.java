@@ -1,5 +1,7 @@
 package org.kie.kogito.index;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -8,7 +10,7 @@ import org.kie.kogito.storage.api.Cache;
 
 public interface IDataIndexStorageExtension {
 
-    Cache<String, String> getProtobufCache();
+    Map<String, String> getProtobufCache();
 
     Cache<String, ProcessInstance> getProcessInstancesCache();
 

@@ -16,6 +16,8 @@
 
 package org.kie.kogito.storage.infinispan.cache;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
@@ -24,12 +26,14 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.quarkus.runtime.ShutdownEvent;
+import org.apache.commons.lang3.NotImplementedException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.infinispan.client.hotrod.DataFormat;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 import org.infinispan.commons.dataconversion.MediaType;
+import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.kie.kogito.storage.api.Cache;
 import org.kie.kogito.storage.api.CacheService;
 import org.kie.kogito.storage.api.annotations.Storage;
@@ -105,13 +109,18 @@ public class InfinispanCacheManager implements CacheService {
     }
 
     @Override
+    public Map<String, String> getProtobufCache() {
+        return manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
+    }
+
+    @Override
     public Cache<String, String> getProcessIdModelCache() {
         return new CacheImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
     }
 
     @Override
     public <T> Cache<String, T> getCache(String index, Class<T> type) {
-        return new CacheImpl<>(manager.administration().getOrCreateCache(index, cacheTemplateName), type.getName());
+        return new CacheImpl<>(getOrCreateCache(index, cacheTemplateName), type.getName());
     }
 
     @Override

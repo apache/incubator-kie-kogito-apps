@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.infinispan.protostream;
 
+import java.util.Map;
+
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,7 +55,7 @@ class ProtoSchemaManagerTest {
     ProtoSchemaManager protoSchemaManager;
 
     @Mock
-    Cache<String, String> protobufCache;
+    Map<String, String> protobufCache;
 
     @Mock
     Cache<String, String> processIdModelCache;

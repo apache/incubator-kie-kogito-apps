@@ -1,7 +1,8 @@
 package org.kie.kogito.index;
 
+import java.util.Map;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,14 +19,13 @@ public class DataIndexStorageExtension implements IDataIndexStorageExtension {
     private static final String USER_TASK_INSTANCES_CACHE = "usertaskinstances";
     private static final String JOBS_CACHE = "jobs";
     private static final String PROCESS_ID_MODEL_CACHE = "processidmodel";
-    private static final String PROTOBUF_CACHE = "protobufschemas";
 
     @Inject
     CacheService cacheService;
 
     @Override
-    public Cache<String, String> getProtobufCache() {
-        return cacheService.getCache(PROTOBUF_CACHE, String.class);
+    public Map<String, String> getProtobufCache() {
+        return cacheService.getProtobufCache();
     }
 
     @Override
