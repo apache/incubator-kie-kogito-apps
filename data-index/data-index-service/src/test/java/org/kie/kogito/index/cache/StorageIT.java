@@ -36,7 +36,7 @@ import static org.kie.kogito.index.TestUtils.getProcessInstance;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanServerTestResource.class)
-public class CacheIT {
+public class StorageIT {
 
     @Inject
     DataIndexStorageService cacheService;

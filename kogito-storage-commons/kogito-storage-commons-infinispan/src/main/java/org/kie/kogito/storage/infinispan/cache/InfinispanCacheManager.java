@@ -46,7 +46,6 @@ import static org.kie.kogito.storage.infinispan.Constants.INFINISPAN_STORAGE;
 public class InfinispanCacheManager implements StorageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanCacheManager.class);
-    private static final String PROCESS_ID_MODEL_CACHE = "processidmodel";
 
     @Inject
     JsonDataFormatMarshaller marshaller;
@@ -108,23 +107,23 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public Map<String, String> getProtobufCache() {
-        return manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
+    public Storage<String, String> getProtobufCache() {
+        return new StorageImpl<>(manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME), String.class.getName());
     }
 
     @Override
-    public Storage<String, String> getProcessIdModelCache() {
-        return new CacheImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
+    public Storage<String, String> getProcessIdModelCache(String index) {
+        return new StorageImpl<>(manager.administration().getOrCreateCache(index, (String) null), String.class.getName());
     }
 
     @Override
     public <T> Storage<String, T> getCache(String index, Class<T> type) {
-        return new CacheImpl<>(getOrCreateCache(index, cacheTemplateName), type.getName());
+        return new StorageImpl<>(getOrCreateCache(index, cacheTemplateName), type.getName());
     }
 
     @Override
-    public Storage<String, ObjectNode> getDomainModelCache(String processId) {
-        String rootType = getProcessIdModelCache().get(processId);
-        return rootType == null ? null : new CacheImpl<>(getOrCreateCache(processId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
+    public Storage<String, ObjectNode> getDomainModelCache(String index, String elementId) {
+        String rootType = getProcessIdModelCache(index).get(elementId);
+        return rootType == null ? null : new StorageImpl<>(getOrCreateCache(elementId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
     }
 }

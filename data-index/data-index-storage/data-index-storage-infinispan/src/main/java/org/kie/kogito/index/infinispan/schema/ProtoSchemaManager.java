@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.storage.api.schema.SchemaRegistrationException;
@@ -50,7 +51,7 @@ public class ProtoSchemaManager {
             SchemaDescriptor schemaDescriptor = event.getSchemaDescriptor();
             cacheManager.getProtobufCache().put(schemaDescriptor.getName(), schemaDescriptor.getSchemaContent());
             schemaDescriptor.getProcessDescriptor().ifPresent(processDescriptor -> {
-                Map<String, String> cache = cacheManager.getProtobufCache();
+                Storage<String, String> cache = cacheManager.getProtobufCache();
                 cacheManager.getProcessIdModelCache().put(processDescriptor.getProcessId(), processDescriptor.getProcessType());
 
                 List<String> errors = checkSchemaErrors(cache);
@@ -67,7 +68,7 @@ public class ProtoSchemaManager {
         }
     }
 
-    private List<String> checkSchemaErrors(Map<String, String> metadataCache) {
+    private List<String> checkSchemaErrors(Storage<String, String> metadataCache) {
         if (metadataCache.containsKey(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX)) {
             List<String> errors = new ArrayList<>();
             // The existence of this key indicates there are errors in some files

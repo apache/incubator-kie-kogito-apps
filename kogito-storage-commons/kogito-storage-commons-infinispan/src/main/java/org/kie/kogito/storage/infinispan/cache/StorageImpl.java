@@ -30,14 +30,14 @@ import org.kie.kogito.storage.infinispan.query.InfinispanQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CacheImpl<K, V> implements Storage<K, V> {
+public class StorageImpl<K, V> implements Storage<K, V> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CacheImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StorageImpl.class);
 
     private RemoteCache<K, V> delegate;
     private String rootType;
 
-    public CacheImpl(RemoteCache<K, V> delegate, String rootType) {
+    public StorageImpl(RemoteCache<K, V> delegate, String rootType) {
         this.delegate = delegate;
         this.rootType = rootType;
     }

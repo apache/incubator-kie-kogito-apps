@@ -21,11 +21,11 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface StorageService {
-    Map<String, String> getProtobufCache();
+    Storage<String, String> getProtobufCache();
 
     <T> Storage<String, T> getCache(String index, Class<T> type);
 
-    Storage<String, ObjectNode> getDomainModelCache(String processId);
+    Storage<String, ObjectNode> getDomainModelCache(String index, String processId);
 
-    Storage<String, String> getProcessIdModelCache();
+    Storage<String, String> getProcessIdModelCache(String index);
 }

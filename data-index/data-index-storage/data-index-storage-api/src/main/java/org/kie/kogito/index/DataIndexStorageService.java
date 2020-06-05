@@ -10,7 +10,7 @@ import org.kie.kogito.storage.api.Storage;
 
 public interface DataIndexStorageService {
 
-    Map<String, String> getProtobufCache();
+    Storage<String, String> getProtobufCache();
 
     Storage<String, ProcessInstance> getProcessInstancesCache();
 

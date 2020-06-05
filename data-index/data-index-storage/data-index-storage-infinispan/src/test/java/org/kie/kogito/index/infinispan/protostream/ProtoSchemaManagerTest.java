@@ -55,7 +55,7 @@ class ProtoSchemaManagerTest {
     ProtoSchemaManager protoSchemaManager;
 
     @Mock
-    Map<String, String> protobufCache;
+    Storage<String, String> protobufCache;
 
     @Mock
     Storage<String, String> processIdModelCache;

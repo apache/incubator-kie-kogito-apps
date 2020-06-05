@@ -9,7 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>kogito-storage</artifactId>
+  <artifactId>kogito-storage-commons</artifactId>
   <packaging>pom</packaging>
 
   <modules>

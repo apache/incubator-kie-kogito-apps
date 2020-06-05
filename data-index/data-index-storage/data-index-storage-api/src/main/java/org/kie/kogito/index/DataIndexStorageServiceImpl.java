@@ -24,7 +24,7 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
     StorageService cacheService;
 
     @Override
-    public Map<String, String> getProtobufCache() {
+    public Storage<String, String> getProtobufCache() {
         return cacheService.getProtobufCache();
     }
 
@@ -45,11 +45,11 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     @Override
     public Storage<String, ObjectNode> getDomainModelCache(String processId) {
-        return cacheService.getDomainModelCache(processId);
+        return cacheService.getDomainModelCache(PROCESS_ID_MODEL_CACHE, processId);
     }
 
     @Override
     public Storage<String, String> getProcessIdModelCache() {
-        return cacheService.getProcessIdModelCache();
+        return cacheService.getProcessIdModelCache(PROCESS_ID_MODEL_CACHE);
     }
 }
