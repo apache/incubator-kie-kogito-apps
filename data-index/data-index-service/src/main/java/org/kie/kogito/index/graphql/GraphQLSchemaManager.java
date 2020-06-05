@@ -47,7 +47,7 @@ import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
 import io.vertx.axle.core.eventbus.MessageConsumer;
 import io.vertx.axle.core.eventbus.MessageProducer;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.json.DataIndexParsingException;
@@ -55,7 +55,7 @@ import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.storage.api.Cache;
+import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.query.Query;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
@@ -78,7 +78,7 @@ public class GraphQLSchemaManager {
     private static final String JOB_ADDED = "JobAdded";
 
     @Inject
-    IDataIndexStorageExtension cacheService;
+    DataIndexStorageService cacheService;
 
     @Inject
     GraphQLScalarType qlDateTimeScalarType;
@@ -208,7 +208,7 @@ public class GraphQLSchemaManager {
         return executeAdvancedQueryForCache(cacheService.getJobsCache(), env);
     }
 
-    private <T> List<T> executeAdvancedQueryForCache(Cache<String, T> cache, DataFetchingEnvironment env) {
+    private <T> List<T> executeAdvancedQueryForCache(Storage<String, T> cache, DataFetchingEnvironment env) {
         String inputTypeName = env.getFieldDefinition().getArgument("where").getType().getName();
 
         Query<T> query = cache.query();
@@ -261,11 +261,11 @@ public class GraphQLSchemaManager {
         return ojectCreatedPublisher(JOB_ADDED, cacheService.getJobsCache());
     }
 
-    private DataFetcher<Publisher<ObjectNode>> ojectCreatedPublisher(String address, Cache cache) {
+    private DataFetcher<Publisher<ObjectNode>> ojectCreatedPublisher(String address, Storage cache) {
         return env -> createPublisher(address, producer -> cache.addObjectCreatedListener(ut -> producer.write(getObjectMapper().convertValue(ut, ObjectNode.class))));
     }
 
-    private DataFetcher<Publisher<ObjectNode>> objectUpdatedPublisher(String address, Cache cache) {
+    private DataFetcher<Publisher<ObjectNode>> objectUpdatedPublisher(String address, Storage cache) {
         return env -> createPublisher(address, producer -> cache.addObjectUpdatedListener(ut -> producer.write(getObjectMapper().convertValue(ut, ObjectNode.class))));
     }
 

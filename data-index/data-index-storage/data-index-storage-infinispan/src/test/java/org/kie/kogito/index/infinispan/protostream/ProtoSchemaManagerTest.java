@@ -22,10 +22,10 @@ import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaManager;
-import org.kie.kogito.storage.api.Cache;
+import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.schema.ProcessDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
@@ -49,7 +49,7 @@ class ProtoSchemaManagerTest {
     ProtoSchemaAcceptor protoSchemaAcceptor;
 
     @Mock
-    IDataIndexStorageExtension cacheManager;
+    DataIndexStorageService cacheManager;
 
     @InjectMocks
     ProtoSchemaManager protoSchemaManager;
@@ -58,7 +58,7 @@ class ProtoSchemaManagerTest {
     Map<String, String> protobufCache;
 
     @Mock
-    Cache<String, String> processIdModelCache;
+    Storage<String, String> processIdModelCache;
 
     @BeforeEach
     void prepare() {

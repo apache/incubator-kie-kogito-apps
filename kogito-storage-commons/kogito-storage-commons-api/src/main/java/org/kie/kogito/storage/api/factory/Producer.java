@@ -23,7 +23,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.storage.api.CacheService;
+import org.kie.kogito.storage.api.StorageService;
 
 @ApplicationScoped
 public class Producer {
@@ -33,10 +33,10 @@ public class Producer {
 
     @Inject
     @Any
-    Instance<CacheService> cacheServices;
+    Instance<StorageService> cacheServices;
 
     @Produces
-    public CacheService cacheService() {
+    public StorageService cacheService() {
         return cacheServices.select(new StorageQualifierImpl(storageType)).get();
     }
 }

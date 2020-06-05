@@ -25,11 +25,11 @@ import javax.inject.Inject;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.InfinispanServerTestResource;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
-import org.kie.kogito.storage.api.Cache;
+import org.kie.kogito.storage.api.Storage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.TestUtils.getProcessInstance;
@@ -39,7 +39,7 @@ import static org.kie.kogito.index.TestUtils.getProcessInstance;
 public class CacheIT {
 
     @Inject
-    IDataIndexStorageExtension cacheService;
+    DataIndexStorageService cacheService;
 
     @Test
     public void testObjectCreatedListener() throws Exception {
@@ -47,7 +47,7 @@ public class CacheIT {
         String processInstanceId = UUID.randomUUID().toString();
 
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
-        Cache<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectCreatedListener(pi -> cf.complete(pi));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
 
@@ -61,7 +61,7 @@ public class CacheIT {
         String processInstanceId = UUID.randomUUID().toString();
 
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
-        Cache<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectUpdatedListener(pi -> cf.complete(pi));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
@@ -76,7 +76,7 @@ public class CacheIT {
         String processInstanceId = UUID.randomUUID().toString();
 
         CompletableFuture<String> cf = new CompletableFuture<>();
-        Cache<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectRemovedListener(id -> cf.complete(id));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.remove(processInstanceId);

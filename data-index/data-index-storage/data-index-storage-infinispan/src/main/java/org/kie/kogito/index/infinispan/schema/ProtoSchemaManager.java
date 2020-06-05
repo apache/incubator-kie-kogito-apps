@@ -22,12 +22,10 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.index.IDataIndexStorageExtension;
-import org.kie.kogito.storage.api.Cache;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.storage.api.schema.SchemaRegistrationException;
@@ -45,7 +43,7 @@ public class ProtoSchemaManager {
     ProtoSchemaAcceptor schemaAcceptor;
 
     @Inject
-    IDataIndexStorageExtension cacheManager;
+    DataIndexStorageService cacheManager;
 
     public void onSchemaRegisteredEvent(@Observes SchemaRegisteredEvent event) {
         if (schemaAcceptor.accept(event.getSchemaType())) {

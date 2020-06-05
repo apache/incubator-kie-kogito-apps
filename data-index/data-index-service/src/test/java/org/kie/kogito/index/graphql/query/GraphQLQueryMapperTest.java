@@ -24,7 +24,7 @@ import graphql.schema.GraphQLScalarType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.graphql.GraphQLScalarTypeProducer;
 import org.kie.kogito.index.graphql.GraphQLSchemaManager;
 import org.kie.kogito.storage.api.query.AttributeFilter;
@@ -55,7 +55,7 @@ public class GraphQLQueryMapperTest {
     GraphQLSchemaManager manager;
 
     @Mock
-    IDataIndexStorageExtension cacheService;
+    DataIndexStorageService cacheService;
 
     @Spy
     GraphQLScalarType qlDateTimeScalarType = new GraphQLScalarTypeProducer().dateTimeScalar();

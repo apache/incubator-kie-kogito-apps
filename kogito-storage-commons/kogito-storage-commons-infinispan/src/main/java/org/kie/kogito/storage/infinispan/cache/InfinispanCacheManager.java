@@ -33,8 +33,8 @@ import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 import org.infinispan.commons.dataconversion.MediaType;
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.storage.api.Cache;
-import org.kie.kogito.storage.api.CacheService;
+import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.storage.api.StorageService;
 import org.kie.kogito.storage.api.factory.StorageQualifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ import static org.kie.kogito.storage.infinispan.Constants.INFINISPAN_STORAGE;
 
 @ApplicationScoped
 @StorageQualifier(INFINISPAN_STORAGE)
-public class InfinispanCacheManager implements CacheService {
+public class InfinispanCacheManager implements StorageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanCacheManager.class);
     private static final String PROCESS_ID_MODEL_CACHE = "processidmodel";
@@ -113,17 +113,17 @@ public class InfinispanCacheManager implements CacheService {
     }
 
     @Override
-    public Cache<String, String> getProcessIdModelCache() {
+    public Storage<String, String> getProcessIdModelCache() {
         return new CacheImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
     }
 
     @Override
-    public <T> Cache<String, T> getCache(String index, Class<T> type) {
+    public <T> Storage<String, T> getCache(String index, Class<T> type) {
         return new CacheImpl<>(getOrCreateCache(index, cacheTemplateName), type.getName());
     }
 
     @Override
-    public Cache<String, ObjectNode> getDomainModelCache(String processId) {
+    public Storage<String, ObjectNode> getDomainModelCache(String processId) {
         String rootType = getProcessIdModelCache().get(processId);
         return rootType == null ? null : new CacheImpl<>(getOrCreateCache(processId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
     }

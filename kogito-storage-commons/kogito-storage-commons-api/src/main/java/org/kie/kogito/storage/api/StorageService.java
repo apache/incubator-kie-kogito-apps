@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,32 +17,15 @@
 package org.kie.kogito.storage.api;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 
-import org.kie.kogito.storage.api.query.Query;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public interface Cache<K, V> {
+public interface StorageService {
+    Map<String, String> getProtobufCache();
 
-    void addObjectCreatedListener(Consumer<V> consumer);
+    <T> Storage<String, T> getCache(String index, Class<T> type);
 
-    void addObjectUpdatedListener(Consumer<V> consumer);
+    Storage<String, ObjectNode> getDomainModelCache(String processId);
 
-    void addObjectRemovedListener(Consumer<K> consumer);
-
-    Query<V> query();
-
-    V get(Object key);
-
-    V put(K key, V value);
-
-    V remove(Object key);
-
-    boolean containsKey(K key);
-
-    Set<Map.Entry<K, V>> entrySet();
-
-    void clear();
-
-    String getRootType();
+    Storage<String, String> getProcessIdModelCache();
 }

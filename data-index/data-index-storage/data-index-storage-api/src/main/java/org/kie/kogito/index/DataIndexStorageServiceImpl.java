@@ -9,11 +9,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.storage.api.Cache;
-import org.kie.kogito.storage.api.CacheService;
+import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.storage.api.StorageService;
 
 @ApplicationScoped
-public class DataIndexStorageExtension implements IDataIndexStorageExtension {
+public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     private static final String PROCESS_INSTANCES_CACHE = "processinstances";
     private static final String USER_TASK_INSTANCES_CACHE = "usertaskinstances";
@@ -21,7 +21,7 @@ public class DataIndexStorageExtension implements IDataIndexStorageExtension {
     private static final String PROCESS_ID_MODEL_CACHE = "processidmodel";
 
     @Inject
-    CacheService cacheService;
+    StorageService cacheService;
 
     @Override
     public Map<String, String> getProtobufCache() {
@@ -29,27 +29,27 @@ public class DataIndexStorageExtension implements IDataIndexStorageExtension {
     }
 
     @Override
-    public Cache<String, ProcessInstance> getProcessInstancesCache() {
+    public Storage<String, ProcessInstance> getProcessInstancesCache() {
         return cacheService.getCache(PROCESS_INSTANCES_CACHE, ProcessInstance.class);
     }
 
     @Override
-    public Cache<String, UserTaskInstance> getUserTaskInstancesCache() {
+    public Storage<String, UserTaskInstance> getUserTaskInstancesCache() {
         return  cacheService.getCache(USER_TASK_INSTANCES_CACHE, UserTaskInstance.class);
     }
 
     @Override
-    public Cache<String, Job> getJobsCache() {
+    public Storage<String, Job> getJobsCache() {
         return cacheService.getCache(JOBS_CACHE, Job.class);
     }
 
     @Override
-    public Cache<String, ObjectNode> getDomainModelCache(String processId) {
+    public Storage<String, ObjectNode> getDomainModelCache(String processId) {
         return cacheService.getDomainModelCache(processId);
     }
 
     @Override
-    public Cache<String, String> getProcessIdModelCache() {
+    public Storage<String, String> getProcessIdModelCache() {
         return cacheService.getProcessIdModelCache();
     }
 }

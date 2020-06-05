@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import org.infinispan.client.hotrod.RemoteCache;
-import org.kie.kogito.storage.api.Cache;
+import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.query.Query;
 import org.kie.kogito.storage.infinispan.listener.CacheObjectCreatedListener;
 import org.kie.kogito.storage.infinispan.listener.CacheObjectRemovedListener;
@@ -30,7 +30,7 @@ import org.kie.kogito.storage.infinispan.query.InfinispanQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CacheImpl<K, V> implements Cache<K, V> {
+public class CacheImpl<K, V> implements Storage<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheImpl.class);
 

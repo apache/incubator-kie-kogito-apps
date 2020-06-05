@@ -26,7 +26,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.IDataIndexStorageExtension;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.InfinispanServerTestResource;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.storage.api.query.AttributeFilter;
@@ -55,7 +55,7 @@ import static org.kie.kogito.storage.api.query.QueryFilterFactory.notNull;
 public class QueryIT {
 
     @Inject
-    IDataIndexStorageExtension cacheService;
+    DataIndexStorageService cacheService;
 
     @BeforeEach
     public void setup() {

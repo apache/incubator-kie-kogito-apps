@@ -21,7 +21,7 @@ import javax.enterprise.inject.Instance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.storage.api.CacheService;
+import org.kie.kogito.storage.api.StorageService;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,13 +34,13 @@ import static org.mockito.Mockito.when;
 class ProducerTest {
 
     @Mock
-    Instance<CacheService> cacheServices;
+    Instance<StorageService> cacheServices;
 
     @InjectMocks
     Producer cacheProducer;
 
     @Mock
-    Instance<CacheService> instance;
+    Instance<StorageService> instance;
 
     @BeforeEach
     void prepare() {
