@@ -17,21 +17,34 @@
 package org.kie.kogito.trusty.service;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.jboss.resteasy.spi.NotImplementedYetException;
-import org.kie.kogito.trusty.service.models.Execution;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.storage.api.query.AttributeFilter;
+import org.kie.kogito.storage.api.query.QueryFilterFactory;
+import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.Execution;
 
 @ApplicationScoped
 public class TrustyService implements ITrustyService {
 
+    @Inject
+    TrustyStorageService storageService;
+
     @Override
     public List<Execution> getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix) {
-        throw new NotImplementedYetException("Not implemented yet.");
+        Storage<String, Execution> storage = storageService.getExecutionStorage();
+        List<AttributeFilter> filters = new ArrayList<>();
+        filters.add(QueryFilterFactory.like("executionId", prefix));
+        filters.add(QueryFilterFactory.greaterThanEqual("executionTimestamp", from.toInstant().toEpochMilli()));
+        filters.add(QueryFilterFactory.lessThanEqual("executionTimestamp", to.toInstant().toEpochMilli()));
+
+        return storage.query().limit(limit).offset(offset).filter(filters).execute();
     }
 
     @Override

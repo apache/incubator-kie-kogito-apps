@@ -16,9 +16,7 @@
 
 package org.kie.kogito.trusty.service.api;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,9 +29,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.trusty.service.ITrustyService;
-import org.kie.kogito.trusty.service.models.Execution;
-import org.kie.kogito.trusty.service.models.ExecutionTypeEnum;
 import org.kie.kogito.trusty.service.responses.ExecutionsResponse;
+import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 import org.mockito.Mockito;
 
 import static io.restassured.RestAssured.given;

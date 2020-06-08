@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.models;
+package org.kie.kogito.trusty.storage.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -19,7 +19,7 @@ package org.kie.kogito.trusty.service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import org.kie.kogito.trusty.service.models.Execution;
+import org.kie.kogito.trusty.storage.api.model.Execution;
 
 /**
  * The trusty service interface.
