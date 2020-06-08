@@ -8,7 +8,7 @@ It is composed by three modules:
 2) `kogito-storage-commons-infinispan` contains all the classes to manage infinispan as persistence layer. 
 3) `kogito-storage-commons-protobuf` contains the `ProtobufService` that the consumer can use to manage his protobuf schemas. 
 
-## How to use the abstraction provided by this module
+## How to use it
 
 The consumer has to 
 
