@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.query.AttributeFilter;
 import org.kie.kogito.storage.api.query.QueryFilterFactory;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 
 @ApplicationScoped
@@ -38,13 +40,12 @@ public class TrustyService implements ITrustyService {
 
     @Override
     public List<Execution> getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix) {
-        Storage<String, Execution> storage = storageService.getDecisionsStorage();
+        Storage<String, Decision> storage = storageService.getDecisionsStorage();
         List<AttributeFilter> filters = new ArrayList<>();
         filters.add(QueryFilterFactory.like("executionId", prefix));
         filters.add(QueryFilterFactory.greaterThanEqual("executionTimestamp", from.toInstant().toEpochMilli()));
         filters.add(QueryFilterFactory.lessThanEqual("executionTimestamp", to.toInstant().toEpochMilli()));
-
-        return storage.query().limit(limit).offset(offset).filter(filters).execute();
+        return new ArrayList<>(storage.query().limit(limit).offset(offset).filter(filters).execute());
     }
 
     @Override
