@@ -27,5 +27,5 @@ public interface StorageService {
 
     Storage<String, ObjectNode> getDomainModelCache(String index, String processId);
 
-    Storage<String, String> getProcessIdModelCache(String index);
+    Storage<String, String> getModelCacheByType(String index);
 }

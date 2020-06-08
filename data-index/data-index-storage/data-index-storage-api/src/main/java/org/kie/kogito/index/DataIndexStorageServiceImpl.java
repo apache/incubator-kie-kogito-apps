@@ -1,7 +1,5 @@
 package org.kie.kogito.index;
 
-import java.util.Map;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -50,6 +48,6 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     @Override
     public Storage<String, String> getProcessIdModelCache() {
-        return cacheService.getProcessIdModelCache(PROCESS_ID_MODEL_CACHE);
+        return cacheService.getModelCacheByType(PROCESS_ID_MODEL_CACHE);
     }
 }

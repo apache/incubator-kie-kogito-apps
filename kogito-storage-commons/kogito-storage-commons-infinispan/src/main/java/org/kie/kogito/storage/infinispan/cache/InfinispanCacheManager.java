@@ -16,8 +16,6 @@
 
 package org.kie.kogito.storage.infinispan.cache;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
@@ -112,7 +110,7 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public Storage<String, String> getProcessIdModelCache(String index) {
+    public Storage<String, String> getModelCacheByType(String index) {
         return new StorageImpl<>(manager.administration().getOrCreateCache(index, (String) null), String.class.getName());
     }
 
@@ -122,8 +120,8 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public Storage<String, ObjectNode> getDomainModelCache(String index, String elementId) {
-        String rootType = getProcessIdModelCache(index).get(elementId);
+    public Storage<String, ObjectNode> getDomainModelCache(String type, String elementId) {
+        String rootType = getModelCacheByType(type).get(elementId);
         return rootType == null ? null : new StorageImpl<>(getOrCreateCache(elementId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
     }
 }

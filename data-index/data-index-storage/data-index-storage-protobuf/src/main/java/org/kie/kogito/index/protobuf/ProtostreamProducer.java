@@ -24,7 +24,6 @@ import javax.enterprise.inject.Produces;
 import org.infinispan.protostream.FileDescriptorSource;
 
 @ApplicationScoped
-// TODO: wiring class to leave in consumer
 public class ProtostreamProducer {
 
     static final String KOGITO_INDEX_PROTO = "kogito-index.proto";

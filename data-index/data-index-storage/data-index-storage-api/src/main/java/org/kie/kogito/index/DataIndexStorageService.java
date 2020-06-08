@@ -18,7 +18,7 @@ public interface DataIndexStorageService {
 
     Storage<String, Job> getJobsCache();
 
-    Storage<String, ObjectNode> getDomainModelCache(String processId);
+    Storage<String, ObjectNode> getDomainModelCache(String elementId);
 
     Storage<String, String> getProcessIdModelCache();
 }
