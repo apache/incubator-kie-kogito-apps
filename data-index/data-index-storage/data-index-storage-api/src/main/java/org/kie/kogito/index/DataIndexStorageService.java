@@ -16,8 +16,6 @@
 
 package org.kie.kogito.index;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;

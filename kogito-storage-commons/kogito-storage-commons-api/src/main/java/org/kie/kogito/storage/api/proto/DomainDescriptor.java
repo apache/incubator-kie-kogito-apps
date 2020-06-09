@@ -14,44 +14,37 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.storage.protobuf.domain;
+package org.kie.kogito.storage.api.proto;
 
+import java.util.List;
 import java.util.Objects;
 
-public class AttributeDescriptor {
+public class DomainDescriptor {
 
-    private String name;
     private String typeName;
+    private List<AttributeDescriptor> attributes;
 
-    public AttributeDescriptor() {
+    public List<AttributeDescriptor> getAttributes() {
+        return attributes;
     }
 
-    public AttributeDescriptor(String name, String typeName) {
-        this.name = name;
-        this.typeName = typeName;
+    public void setAttributes(List<AttributeDescriptor> attributes) {
+        this.attributes = attributes;
     }
 
     public String getTypeName() {
         return typeName;
     }
-
+    
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
-        return "AttributeDescriptor{" +
-                "name='" + name + '\'' +
-                ", typeName='" + typeName + '\'' +
+        return "DomainDescriptor{" +
+                "typeName='" + typeName + '\'' +
+                ", attributes=" + attributes +
                 '}';
     }
 
@@ -63,13 +56,13 @@ public class AttributeDescriptor {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        AttributeDescriptor that = (AttributeDescriptor) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(typeName, that.typeName);
+        DomainDescriptor that = (DomainDescriptor) o;
+        return Objects.equals(typeName, that.typeName) &&
+                Objects.equals(attributes, that.attributes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, typeName);
+        return Objects.hash(typeName, attributes);
     }
 }

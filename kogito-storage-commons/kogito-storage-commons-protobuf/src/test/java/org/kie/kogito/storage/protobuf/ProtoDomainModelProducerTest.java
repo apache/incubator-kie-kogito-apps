@@ -31,7 +31,7 @@ import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.impl.SerializationContextImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.storage.protobuf.domain.DomainModelRegisteredEvent;
+import org.kie.kogito.storage.api.proto.DomainModelRegisteredEvent;
 import org.kie.kogito.storage.protobuf.domain.ProtoDomainModelProducer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
