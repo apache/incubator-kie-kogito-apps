@@ -17,7 +17,6 @@
 package org.kie.kogito.jobs.service.executor;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
@@ -36,8 +35,10 @@ import org.kie.kogito.jobs.api.URIBuilder;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.ScheduledJob;
+import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
+import org.kie.kogito.jobs.service.refactoring.job.Recipient;
 import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,19 +106,27 @@ public class HttpJobExecutor implements JobExecutor {
     }
 
     @Override
-    public CompletionStage<ScheduledJob> execute(CompletionStage<ScheduledJob> futureJob) {
+    public CompletionStage<JobDetails> execute(CompletionStage<JobDetails> futureJob) {
         return futureJob
                 .thenCompose(job -> {
                     //Using just POST method for now
+                    String callbackEndpoint =
+                            Optional.ofNullable(job.getRecipient())
+                                    .filter(Recipient.HTTPRecipient.class::isInstance)
+                                    .map(Recipient.HTTPRecipient.HTTPRecipient.class::cast)
+                                    .map(Recipient.HTTPRecipient::getEndpoint)
+                                    .orElse("");
+                    String limit = Optional.ofNullable(job.getTrigger())
+                            .filter(IntervalTrigger.class::isInstance)
+                            .map(interval -> getRepeatableJobCountDown(job))
+                            .map(String::valueOf)
+                            .orElse(null);
+
                     final HTTPRequestCallback callback = HTTPRequestCallback.builder()
-                            .url(job.getCallbackEndpoint())
+                            .url(callbackEndpoint)
                             .method(HTTPRequestCallback.HTTPMethod.POST)
                             //in case of repeatable jobs add the limit parameter
-                            .addQueryParam("limit", job
-                                    .hasInterval()
-                                    .map(interval -> getRepeatableJobCountDown(job))
-                                    .map(String::valueOf)
-                                    .orElse(null))
+                            .addQueryParam("limit", limit)
                             .build();
 
                     return ReactiveStreams.fromCompletionStage(executeCallback(callback))
@@ -143,8 +152,8 @@ public class HttpJobExecutor implements JobExecutor {
                 });
     }
 
-    private int getRepeatableJobCountDown(ScheduledJob job) {
-        return job.getRepeatLimit() - (job.getExecutionCounter() + 1);
+    private int getRepeatableJobCountDown(JobDetails job) {
+        return ((IntervalTrigger) job.getTrigger()).getRepeatLimit() - (job.getExecutionCounter() + 1);
     }
 
     WebClient getClient() {

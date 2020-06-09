@@ -29,12 +29,13 @@ import io.vertx.axle.ext.web.client.WebClient;
 import io.vertx.core.http.HttpMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.jobs.api.Job;
-import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.ScheduledJob;
+import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
+import org.kie.kogito.jobs.service.refactoring.job.Recipient;
+import org.kie.kogito.jobs.service.refactoring.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -77,9 +78,12 @@ class HttpJobExecutorTest {
 
     @Test
     void testExecutePeriodic(@Mock HttpRequest<Buffer> request, @Mock MultiMap params) {
-        Job job = JobBuilder.builder().repeatInterval(1l).repeatLimit(10).callbackEndpoint(ENDPOINT).id(JOB_ID).
-                build();
-        ScheduledJob scheduledJob = ScheduledJob.builder().job(job).executionCounter(1).build();
+        JobDetails scheduledJob =
+                JobDetails.builder()
+                        .id(JOB_ID)
+                        .recipient(new Recipient.HTTPRecipient(ENDPOINT))
+                        .trigger(ScheduledJobAdapter.intervalTrigger(DateUtil.now(), 10, 1))
+                        .executionCounter(1).build();
 
         Map queryParams = assertExecuteAndReturnQueryParams(request, params, scheduledJob, false);
         assertThat(queryParams.size()).isEqualTo(1);
@@ -87,7 +91,7 @@ class HttpJobExecutorTest {
     }
 
     private Map assertExecuteAndReturnQueryParams(@Mock HttpRequest<Buffer> request, @Mock MultiMap params,
-                                                  ScheduledJob scheduledJob, boolean mockError) {
+                                                  JobDetails scheduledJob, boolean mockError) {
         when(webClient.request(HttpMethod.POST, 8080, "localhost", "/endpoint")).thenReturn(request);
         when(request.queryParams()).thenReturn(params);
         HttpResponse response = mock(HttpResponse.class);
@@ -113,23 +117,21 @@ class HttpJobExecutorTest {
 
     @Test
     void testExecute(@Mock HttpRequest<Buffer> request, @Mock MultiMap params) {
-        Job job = createSimpleJob();
-        ScheduledJob scheduledJob = ScheduledJob.builder().job(job).build();
+        JobDetails job = createSimpleJob();
 
-        Map queryParams = assertExecuteAndReturnQueryParams(request, params, scheduledJob, false);
+        Map queryParams = assertExecuteAndReturnQueryParams(request, params, job, false);
         assertThat(queryParams.size()).isEqualTo(0);
     }
 
     @Test
     void testExecuteWithError(@Mock HttpRequest<Buffer> request, @Mock MultiMap params) {
-        Job job = createSimpleJob();
-        ScheduledJob scheduledJob = ScheduledJob.builder().job(job).build();
+        JobDetails job = createSimpleJob();
 
-        Map queryParams = assertExecuteAndReturnQueryParams(request, params, scheduledJob, true);
+        Map queryParams = assertExecuteAndReturnQueryParams(request, params, job, true);
         assertThat(queryParams.size()).isEqualTo(0);
     }
 
-    private Job createSimpleJob() {
-        return JobBuilder.builder().callbackEndpoint(ENDPOINT).id(JOB_ID).build();
+    private JobDetails createSimpleJob() {
+        return JobDetails.builder().recipient(new Recipient.HTTPRecipient(ENDPOINT)).id(JOB_ID).build();
     }
 }
