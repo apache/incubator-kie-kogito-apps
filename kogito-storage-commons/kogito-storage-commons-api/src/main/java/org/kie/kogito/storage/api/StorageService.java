@@ -16,12 +16,9 @@
 
 package org.kie.kogito.storage.api;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface StorageService {
-    Storage<String, String> getProtobufCache();
 
     <T> Storage<String, T> getCache(String index, Class<T> type);
 

@@ -25,6 +25,7 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.StorageService;
+import org.kie.kogito.storage.protobuf.ProtobufService;
 
 @ApplicationScoped
 public class DataIndexStorageServiceImpl implements DataIndexStorageService {
@@ -37,9 +38,12 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
     @Inject
     StorageService cacheService;
 
+    @Inject
+    ProtobufService protobufService;
+
     @Override
     public Storage<String, String> getProtobufCache() {
-        return cacheService.getProtobufCache();
+        return protobufService.getProtobufCache();
     }
 
     @Override

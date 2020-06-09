@@ -30,6 +30,8 @@ import org.infinispan.protostream.descriptors.FieldDescriptor;
 import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.descriptors.Option;
 import org.infinispan.protostream.impl.SerializationContextImpl;
+import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.storage.api.StorageService;
 import org.kie.kogito.storage.api.schema.ProcessDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
@@ -57,11 +59,18 @@ public class ProtobufService {
     @Inject
     Event<SchemaRegisteredEvent> schemaEvent;
 
+    @Inject
+    StorageService storageService;
+
     void onStart(@Observes StartupEvent ev) {
         kogitoDescriptors.getFileDescriptors().forEach((name, bytes) -> {
             LOGGER.info("Registering Kogito ProtoBuffer file: {}", name);
             schemaEvent.fire(new SchemaRegisteredEvent(new SchemaDescriptor(name, new String(bytes), null), SCHEMA_TYPE));
         });
+    }
+
+    public Storage<String, String> getProtobufCache() {
+        return storageService.getCache(Constants.PROTOBUF_METADATA_CACHE_NAME, String.class);
     }
 
     public void registerProtoBufferType(String content) throws ProtobufValidationException {
