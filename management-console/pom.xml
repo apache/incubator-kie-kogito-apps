@@ -13,7 +13,12 @@
   <name>Kogito :: Management Console</name>
 
   <properties>
-    <path.to.frontend.app>../packages/management-console</path.to.frontend.app>
+    <path.to.frontend.app>${project.basedir}/../packages/management-console</path.to.frontend.app>
+    <sonar.projectBaseDir>${path.to.frontend.app}</sonar.projectBaseDir>
+    <sonar.sources>${path.to.frontend.app}/src</sonar.sources>
+    <sonar.exclusions>**/__mocks__/**</sonar.exclusions>
+    <sonar.test.inclusions>**/*test.ts,**/*test.tsx</sonar.test.inclusions>
+    <sonar.javascript.lcov.reportPaths>${path.to.frontend.app}/coverage/lcov.info</sonar.javascript.lcov.reportPaths>
   </properties>
   
   <dependencyManagement>
@@ -145,13 +150,13 @@
     <profile>
       <!--
         Installs node and yarn in the webapp's node and node_modules folders.
-        Run 'mvn package -Dui.deps':
-          * the first time you have checked out the source.
-          * whenever the dependencies have been changed in package.json (delete the webapp's node_modules folder first!)
+        Active by default, to skip run 'mvn package -Dskip.ui.deps'
       -->
       <id>Install node and yarn</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!skip.ui.deps</name>
+        </property>
       </activation>
       <build>
         <plugins>
@@ -194,10 +199,16 @@
         </plugins>
       </build>
     </profile>
+      <!--
+        Builds the application using the yarn script in its package.json file.
+        Active by default, to skip run 'mvn package -Dskip.ui.build'
+      -->
     <profile>
       <id>Build the UI</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!skip.ui.build</name>
+        </property>
       </activation>
       <build>
         <plugins>
