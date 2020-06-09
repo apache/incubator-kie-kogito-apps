@@ -16,6 +16,71 @@
 
 package org.kie.kogito.trusty.service;
 
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.storage.api.query.Query;
+import org.kie.kogito.trusty.service.mock.StorageImplMock;
+import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@QuarkusTest
 public class TrustyServiceTest {
 
+    @Inject
+    TrustyService trustyService;
+
+    @InjectMock
+    TrustyStorageService storageService;
+
+    @Test
+    void GivenADecision_WhenStoreDecisionIsCalled_ThenNoExceptionsAreThrown() {
+        Decision decision = new Decision();
+        Storage storageMock = mock(Storage.class);
+        when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
+
+        when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+        Assertions.assertDoesNotThrow( () -> trustyService.storeDecision("test", decision));
+    }
+
+    @Test
+    void GivenADecision_WhenStoreDecisionIsCalledAndRetrieved_ThenTheOriginalObjectIsReturned() {
+        Decision decision = new Decision();
+        decision.setExecutionId("executionId");
+
+        Query queryMock = mock(Query.class);
+        when(queryMock.filter(any(List.class))).thenReturn(queryMock);
+        when(queryMock.limit(any(Integer.class))).thenReturn(queryMock);
+        when(queryMock.offset(any(Integer.class))).thenReturn(queryMock);
+        when(queryMock.execute()).thenReturn(List.of(decision));
+
+        Storage storageMock = mock(Storage.class);
+        when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
+        when(storageMock.query()).thenReturn(queryMock);
+
+        when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+
+        trustyService.storeDecision("test", decision);
+
+        List<Execution> result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
+
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(decision.getExecutionId(), result.get(0).getExecutionId());
+    }
 }

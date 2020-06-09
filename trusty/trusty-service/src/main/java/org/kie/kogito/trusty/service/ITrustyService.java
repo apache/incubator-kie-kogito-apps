@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 
 /**
@@ -41,11 +42,11 @@ public interface ITrustyService {
     List<Execution> getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix);
 
     /**
-     * Stores an execution.
+     * Stores a decision.
      *
      * @param executionId The unique execution ID
-     * @param execution   The execution object.
+     * @param decision   The decision object.
      * @throws RuntimeException Throws RuntimeException in case the executionId is already present in the system.
      */
-    void storeExecution(String executionId, Execution execution);
+    void storeDecision(String executionId, Decision decision);
 }

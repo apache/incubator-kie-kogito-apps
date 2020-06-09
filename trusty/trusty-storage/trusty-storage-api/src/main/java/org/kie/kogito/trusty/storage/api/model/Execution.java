@@ -109,4 +109,52 @@ public class Execution {
     public ExecutionTypeEnum getExecutionType() {
         return executionType;
     }
+
+    /**
+     * Sets the execution id.
+      * @param executionId The execution Id.
+     */
+    public void setExecutionId(String executionId) {
+        this.executionId = executionId;
+    }
+
+    /**
+     * Sets the execution timestamp.
+     * @param executionTimestamp The execution timestamp.
+     */
+    public void setExecutionTimestamp(Long executionTimestamp) {
+        this.executionTimestamp = executionTimestamp;
+    }
+
+    /**
+     * Sets the success information.
+     * @param hasSucceeded Success value.
+     */
+    public void setSuccess(boolean hasSucceeded) {
+        this.hasSucceeded = hasSucceeded;
+    }
+
+    /**
+     * Sets the executor name.
+     * @param executorName The executor name.
+     */
+    public void setExecutorName(String executorName) {
+        this.executorName = executorName;
+    }
+
+    /**
+     * Sets the executed model name.
+     * @param executedModelName The executed model name.
+     */
+    public void setExecutedModelName(String executedModelName) {
+        this.executedModelName = executedModelName;
+    }
+
+    /**
+     * Sets the execution type.
+     * @param executionType The execution type.
+     */
+    public void setExecutionType(ExecutionTypeEnum executionType) {
+        this.executionType = executionType;
+    }
 }
