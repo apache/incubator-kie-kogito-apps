@@ -4,7 +4,7 @@ import ProcessDescriptor from './../ProcessDescriptor';
 import { GraphQL } from '../../../../graphql/types';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 
-const processInstanceData = {
+const instanceData = {
   id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
   processId: 'hotelBooking',
   businessKey: 'T1234HotelBooking01',
@@ -58,9 +58,7 @@ const processInstanceData = {
 };
 describe('ProcessDescriptor tests', () => {
   it('snapshot tests', () => {
-    const wrapper = shallow(
-      <ProcessDescriptor processInstanceData={processInstanceData} />
-    );
+    const wrapper = shallow(<ProcessDescriptor instanceData={instanceData} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

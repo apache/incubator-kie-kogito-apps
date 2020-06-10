@@ -6,16 +6,11 @@ import {
   Text,
   TextVariants
 } from '@patternfly/react-core';
-import { GraphQL } from '../../../graphql/types';
-import ProcessInstance = GraphQL.ProcessInstance;
 
 interface IOwnProps {
-  processInstanceData: Pick<
-    ProcessInstance,
-    'id' | 'processName' | 'businessKey'
-  >;
+  instanceData: any;
 }
-const ProcessDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
+const ProcessDescriptor: React.FC<IOwnProps> = ({ instanceData }) => {
   const idStringModifier = (strId: string) => {
     return (
       <TextContent className="pf-u-display-inline">
@@ -27,13 +22,15 @@ const ProcessDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
   };
   return (
     <>
-      <Tooltip content={processInstanceData.id}>
+      <Tooltip content={instanceData.id}>
         <span>
-          {processInstanceData.processName}{' '}
-          {processInstanceData.businessKey ? (
-            <Badge>{processInstanceData.businessKey}</Badge>
+          {instanceData.processName
+            ? instanceData.processName
+            : instanceData.name}
+          {instanceData.businessKey ? (
+            <Badge>{instanceData.businessKey}</Badge>
           ) : (
-            idStringModifier(processInstanceData.id)
+            idStringModifier(instanceData.id)
           )}
         </span>
       </Tooltip>

@@ -87,6 +87,17 @@ exports[`Domain Explorer Table Component check false value of isLoadingMore 1`] 
   displayEmptyState={true}
   displayTable={true}
   isLoadingMore={false}
+  metaObj={
+    Object {
+      "processInstances": Array [
+        "id",
+        "processName",
+        "state",
+        "start",
+        "lastUpdate",
+      ],
+    }
+  }
   offset={0}
   parameters={Array []}
   rows={
@@ -195,11 +206,11 @@ exports[`Domain Explorer Table Component check false value of isLoadingMore 1`] 
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -292,11 +303,11 @@ exports[`Domain Explorer Table Component check false value of isLoadingMore 1`] 
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -428,11 +439,11 @@ exports[`Domain Explorer Table Component check false value of isLoadingMore 1`] 
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -525,11 +536,11 @@ exports[`Domain Explorer Table Component check false value of isLoadingMore 1`] 
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -760,6 +771,17 @@ exports[`Domain Explorer Table Component check null value for process instance a
   displayEmptyState={true}
   displayTable={true}
   isLoadingMore={false}
+  metaObj={
+    Object {
+      "processInstances": Array [
+        "id",
+        "processName",
+        "state",
+        "start",
+        "lastUpdate",
+      ],
+    }
+  }
   offset={0}
   parameters={Array []}
   rows={
@@ -868,11 +890,11 @@ exports[`Domain Explorer Table Component check null value for process instance a
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -965,11 +987,11 @@ exports[`Domain Explorer Table Component check null value for process instance a
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -1101,11 +1123,11 @@ exports[`Domain Explorer Table Component check null value for process instance a
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": null,
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -1198,11 +1220,11 @@ exports[`Domain Explorer Table Component check null value for process instance a
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -1433,6 +1455,17 @@ exports[`Domain Explorer Table Component check zero offset 1`] = `
   displayEmptyState={true}
   displayTable={true}
   isLoadingMore={true}
+  metaObj={
+    Object {
+      "processInstances": Array [
+        "id",
+        "processName",
+        "state",
+        "start",
+        "lastUpdate",
+      ],
+    }
+  }
   offset={0}
   parameters={Array []}
   rows={
@@ -1541,11 +1574,11 @@ exports[`Domain Explorer Table Component check zero offset 1`] = `
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -1638,11 +1671,11 @@ exports[`Domain Explorer Table Component check zero offset 1`] = `
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -1774,11 +1807,11 @@ exports[`Domain Explorer Table Component check zero offset 1`] = `
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />
@@ -1871,11 +1904,11 @@ exports[`Domain Explorer Table Component check zero offset 1`] = `
                                 >
                                   <strong>
                                     <ProcessDescriptor
-                                      processInstanceData={
+                                      instanceData={
                                         Object {
                                           "businessKey": "Hello World",
                                           "id": "Hello World",
-                                          "processName": "Hello World",
+                                          "name": "Hello World",
                                         }
                                       }
                                     />

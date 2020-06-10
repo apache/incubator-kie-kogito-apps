@@ -12,7 +12,8 @@ import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
   GraphQL,
-  KogitoEmptyState
+  KogitoEmptyState,
+  LoadMore
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -20,7 +21,6 @@ import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComp
 import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
-import LoadMore from '../../Atoms/LoadMore/LoadMore';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import axios from 'axios';
 import { InfoCircleIcon } from '@patternfly/react-icons';

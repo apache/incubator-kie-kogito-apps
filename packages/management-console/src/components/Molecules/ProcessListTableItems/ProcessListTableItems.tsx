@@ -367,9 +367,7 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
                 <Link to={'/Process/' + processInstanceData.id}>
                   <div>
                     <strong>
-                      <ProcessDescriptor
-                        processInstanceData={processInstanceData}
-                      />
+                      <ProcessDescriptor instanceData={processInstanceData} />
                     </strong>
                   </div>
                 </Link>
