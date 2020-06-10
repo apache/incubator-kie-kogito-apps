@@ -34,7 +34,7 @@ import org.kie.kogito.index.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CacheImpl<K, V> implements Cache<K, V> {
+public class CacheI mpl<K, V> implements Cache<K, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheImpl.class);
 
