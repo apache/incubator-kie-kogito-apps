@@ -4,16 +4,27 @@
 
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-apps</artifactId>
+    <artifactId>kogito-apps-ui-services</artifactId>
     <version>8.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
   
-  <artifactId>management-console</artifactId>
-  <name>Kogito :: Management Console</name>
+  <artifactId>kogito-apps-ui-packages-build</artifactId>
+  <name>Kogito Apps :: UI Packages Build</name>
 
   <properties>
-    <path.to.frontend.app>../packages/management-console</path.to.frontend.app>
+    <path.to.root>${project.basedir}/../../</path.to.root> <!-- package.json in root dir-->
+    <sonar.projectBaseDir>${path.to.root}/packages/</sonar.projectBaseDir>
+    <sonar.sources>${path.to.root}/packages/</sonar.sources>
+    <sonar.exclusions>**/__mocks__/**</sonar.exclusions>
+    <sonar.inclusions>*/src/**</sonar.inclusions>
+    <sonar.test.inclusions>**/*test.ts,**/*test.tsx</sonar.test.inclusions>
+    <sonar.javascript.lcov.reportPaths>
+      ${path.to.root}packages/common/coverage/lcov.info,
+      ${path.to.root}packages/management-console/coverage/lcov.info,
+      ${path.to.root}packages/task-console/coverage/lcov.info
+    </sonar.javascript.lcov.reportPaths>
   </properties>
   
   <dependencyManagement>
@@ -34,114 +45,19 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <configuration>
-          <uberJar>true</uberJar>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemProperties>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemProperties>
-        </configuration>
-      </plugin>
       <!-- frontend related plugins-->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <configuration>
-          <workingDirectory>${path.to.frontend.app}</workingDirectory>
+          <workingDirectory>${path.to.root}</workingDirectory>
         </configuration>
-      </plugin>
-      <!-- Copy the built webapp to the directory used by Quarkus -->
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/classes/META-INF/resources/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${path.to.frontend.app}/dist</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
   <profiles>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-                <configuration>
-                  <systemProperties>
-                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                  </systemProperties>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-      <properties>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
-    </profile>
     <profile>
       <!--
         Installs node and yarn in the webapp's node and node_modules folders.
@@ -149,9 +65,9 @@
           * the first time you have checked out the source.
           * whenever the dependencies have been changed in package.json (delete the webapp's node_modules folder first!)
       -->
-      <id>Install node and yarn</id>
+      <id>install-node-yarn</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property><name>!skip.ui.deps</name></property>
       </activation>
       <build>
         <plugins>
@@ -195,9 +111,38 @@
       </build>
     </profile>
     <profile>
-      <id>Build the UI</id>
+      <id>install-ui-deps</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property><name>!skip.ui.deps</name></property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>yarn init</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+                  <arguments>run init</arguments>
+                  <environmentVariables>
+                    <KOGITO_MANAGEMENTCONSOLE_VERSION>${project.version}</KOGITO_MANAGEMENTCONSOLE_VERSION>
+                </environmentVariables>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>build-ui</id>
+      <activation>
+        <property><name>!skip.ui.build</name></property>
       </activation>
       <build>
         <plugins>

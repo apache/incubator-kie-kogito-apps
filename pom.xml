@@ -61,7 +61,7 @@
   <modules>
     <module>jobs-service</module>
     <module>data-index</module>
-    <module>management-console</module>
+    <module>ui-services</module>
     <module>explainability-service</module>
     <module>trusty</module>
   </modules>
