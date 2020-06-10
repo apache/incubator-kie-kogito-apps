@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.storage.infinispan.protostream.AbstractMarshaller;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 
 public class DecisionMarshaller extends AbstractMarshaller implements MessageMarshaller<Decision> {
 
@@ -21,11 +22,10 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
 
         result.setExecutionId(reader.readString("executionId"));
         result.setExecutionTimestamp(reader.readLong("executionTimestamp"));
-//        result.modelId = reader.readString("modelId");
+        result.setSuccess(reader.readBoolean("hasSucceeded"));
+        result.setExecutorName(reader.readString("executorName"));
         result.setExecutedModelName(reader.readString("executedModelName"));
-//        result.modelNamespace = reader.readString("modelNamespace");
-//        result.context = myMapper.readValue(reader.readString("context"), Map.class);
-//        result.decisions = Arrays.asList(reader.readArray("decisions", OutcomeModel.class));
+        result.setExecutionType(reader.readEnum("executionType", ExecutionTypeEnum.class));
         return result;
     }
 
@@ -33,11 +33,10 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
     public void writeTo(ProtoStreamWriter writer, Decision result) throws IOException {
         writer.writeString("executionId", result.getExecutionId() );
         writer.writeLong("executionTimestamp", result.getExecutionTimestamp() );
-//        writer.writeString("modelId", result.getExecutedModelName() );
+        writer.writeBoolean("hasSucceeded", result.hasSucceeded());
+        writer.writeString("executorName", result.getExecutorName() );
         writer.writeString("executedModelName", result.getExecutedModelName() );
-//        writer.writeString("modelName", result.getExecutedModelName() );
-//        writer.writeArray("decisions", result.decisions.toArray(), OutcomeModel.class );
-//        writer.writeString("context", myMapper.writeValueAsString(result.context));
+        writer.writeEnum("executionType", result.getExecutionType());
     }
 
     @Override

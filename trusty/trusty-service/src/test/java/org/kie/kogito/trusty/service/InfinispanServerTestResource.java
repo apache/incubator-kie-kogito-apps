@@ -29,9 +29,12 @@ public class InfinispanServerTestResource implements QuarkusTestResourceWithClea
     @Override
     public Map<String, String> start() {
         if (INFINISPAN_IMAGE == null) {
-            RuntimeException e = new RuntimeException();
-            e.printStackTrace();
-            throw new RuntimeException("Please define a valid Infinispan image in system property container.image.infinispan");
+
+            LOGGER.warn("InfinispanServerTestResource started without an infinispan image properly set.");
+            return Collections.emptyMap();
+//            RuntimeException e = new RuntimeException();
+//            e.printStackTrace();
+//            throw new RuntimeException("Please define a valid Infinispan image in system property container.image.infinispan");
         }
         LOGGER.info("Using Infinispan image: {}", INFINISPAN_IMAGE);
         infinispan = new FixedHostPortGenericContainer(INFINISPAN_IMAGE)

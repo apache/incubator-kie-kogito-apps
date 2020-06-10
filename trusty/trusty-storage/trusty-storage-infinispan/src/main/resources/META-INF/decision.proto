@@ -26,6 +26,10 @@ message Decision {
 
 enum ExecutionTypeEnum {
   option allow_alias = true;
-  DECISION = 0;
-  PROCESS = 1;
+
+   /* @Field(store = Store.YES) */
+   DECISION = 0;
+
+   /* @Field(store = Store.YES) */
+   PROCESS = 1;
  }

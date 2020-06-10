@@ -35,15 +35,32 @@ public class TrustyServiceIT {
 
     @Test
     public void testStoreAndRetrieveExecution() {
-        Decision decision = new Decision();
-        decision.setExecutionId("executionId");
-        decision.setExecutionTimestamp(1591692958000L);
-        trustyService.storeDecision(decision.getExecutionId(), decision);
+        storeExecution("executionId", 1591692958000L);
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692957000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692959000L), ZoneOffset.UTC);
         List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
         Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals(decision.getExecutionId(), result.get(0).getExecutionId());
+        Assertions.assertEquals("executionId", result.get(0).getExecutionId());
+    }
+
+    @Test
+    public void GivenTwoExecutions_WhenTheQueryExcludesOneExecution_ThenOnlyOneExecutionIsReturned() {
+        storeExecution("executionId", 1591692950000L);
+        storeExecution("executionId2", 1591692958000L);
+
+        OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692940000L), ZoneOffset.UTC);
+        OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692955000L), ZoneOffset.UTC);
+        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals("executionId", result.get(0).getExecutionId());
+    }
+
+    private Decision storeExecution(String executionId, Long timestamp){
+        Decision decision = new Decision();
+        decision.setExecutionId(executionId);
+        decision.setExecutionTimestamp(timestamp);
+        trustyService.storeDecision(decision.getExecutionId(), decision);
+        return decision;
     }
 }
