@@ -28,7 +28,7 @@ import org.kie.kogito.storage.api.StorageService;
 @ApplicationScoped
 public class Producer {
 
-    @ConfigProperty(name = "kogito.data-index.storage.type")
+    @ConfigProperty(name = "kogito.storage.type")
     String storageType;
 
     @Inject

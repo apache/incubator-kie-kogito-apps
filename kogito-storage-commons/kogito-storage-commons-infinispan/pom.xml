@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>kogito-storage-commons-infinispan</artifactId>
-  <name>Kogito :: Kogito Storage Infinispan</name>
+  <name>Kogito :: Kogito Storage Commons Infinispan</name>
 
   <dependencies>
     <dependency>

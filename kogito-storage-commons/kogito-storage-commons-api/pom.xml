@@ -8,7 +8,7 @@
     <version>8.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <name>Kogito :: Kogito Storage API</name>
+  <name>Kogito :: Kogito Storage Commons API</name>
   <artifactId>kogito-storage-commons-api</artifactId>
 
   <dependencies>

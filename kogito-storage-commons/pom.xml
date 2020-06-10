@@ -9,6 +9,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
+  <name>Kogito :: Kogito Storage Commons</name>
   <artifactId>kogito-storage-commons</artifactId>
   <packaging>pom</packaging>
 
