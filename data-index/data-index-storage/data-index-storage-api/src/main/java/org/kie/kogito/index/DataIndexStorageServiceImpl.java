@@ -59,7 +59,7 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
     @Override
     public Storage<String, ObjectNode> getDomainModelCache(String processId) {
         String rootType = getProcessIdModelCache().get(processId);
-        return rootType == null ? null : cacheService.getCacheWithDataFormat(processId, ObjectNode.class, rootType);
+        return rootType == null ? null : cacheService.getCacheWithDataFormat(processId + "_domain", ObjectNode.class, rootType);
     }
 
     @Override
