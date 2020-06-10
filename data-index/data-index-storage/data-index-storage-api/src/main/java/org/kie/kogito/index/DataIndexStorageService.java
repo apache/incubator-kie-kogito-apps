@@ -24,8 +24,6 @@ import org.kie.kogito.storage.api.Storage;
 
 public interface DataIndexStorageService {
 
-    Storage<String, String> getProtobufCache();
-
     Storage<String, ProcessInstance> getProcessInstancesCache();
 
     Storage<String, UserTaskInstance> getUserTaskInstancesCache();

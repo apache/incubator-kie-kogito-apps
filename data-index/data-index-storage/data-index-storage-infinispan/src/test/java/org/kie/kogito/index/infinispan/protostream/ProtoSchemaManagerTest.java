@@ -31,6 +31,7 @@ import org.kie.kogito.storage.api.schema.SchemaDescriptor;
 import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.storage.api.schema.SchemaRegistrationException;
 import org.kie.kogito.storage.api.schema.SchemaType;
+import org.kie.kogito.storage.protobuf.ProtobufService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -51,6 +52,9 @@ class ProtoSchemaManagerTest {
     @Mock
     DataIndexStorageService cacheManager;
 
+    @Mock
+    ProtobufService protobufService;
+
     @InjectMocks
     ProtoSchemaManager protoSchemaManager;
 
@@ -64,7 +68,7 @@ class ProtoSchemaManagerTest {
     void prepare() {
         initMocks(this);
         when(protoSchemaAcceptor.accept(any())).thenReturn(true);
-        when(cacheManager.getProtobufCache()).thenReturn(protobufCache);
+        when(protobufService.getProtobufCache()).thenReturn(protobufCache);
         when(cacheManager.getProcessIdModelCache()).thenReturn(processIdModelCache);
     }
 

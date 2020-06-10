@@ -18,4 +18,7 @@ package org.kie.kogito.storage.protobuf;
 
 public class Constants {
     public static final String KOGITO_DOMAIN_ATTRIBUTE = "metadata";
+
+    // Copied from org.infinispan.query.remote.client.ProtobufMetadataManagerConstants to avoid the import of the entire module.
+    public static final String PROTOBUF_METADATA_CACHE_NAME = "___protobuf_metadata";
 }

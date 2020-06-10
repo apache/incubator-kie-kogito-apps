@@ -105,11 +105,6 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public Storage<String, String> getProtobufCache() {
-        return new StorageImpl<>(manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME), String.class.getName());
-    }
-
-    @Override
     public Storage<String, String> getModelCacheByType(String index) {
         return new StorageImpl<>(manager.administration().getOrCreateCache(index, (String) null), String.class.getName());
     }
