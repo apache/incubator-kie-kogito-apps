@@ -58,11 +58,12 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     @Override
     public Storage<String, ObjectNode> getDomainModelCache(String processId) {
-        return cacheService.getDomainModelCache(PROCESS_ID_MODEL_CACHE, processId);
+        String rootType = getProcessIdModelCache().get(processId);
+        return rootType == null ? null : cacheService.getCacheWithDataFormat(processId, ObjectNode.class, rootType);
     }
 
     @Override
     public Storage<String, String> getProcessIdModelCache() {
-        return cacheService.getModelCacheByType(PROCESS_ID_MODEL_CACHE);
+        return cacheService.getCache(PROCESS_ID_MODEL_CACHE);
     }
 }

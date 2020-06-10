@@ -16,13 +16,11 @@
 
 package org.kie.kogito.storage.api;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 public interface StorageService {
+
+    Storage<String, String> getCache(String index);
 
     <T> Storage<String, T> getCache(String index, Class<T> type);
 
-    Storage<String, ObjectNode> getDomainModelCache(String type, String elementId);
-
-    Storage<String, String> getModelCacheByType(String index);
+    <T> Storage<String, T> getCacheWithDataFormat(String index, Class<T> type, String rootType);
 }
