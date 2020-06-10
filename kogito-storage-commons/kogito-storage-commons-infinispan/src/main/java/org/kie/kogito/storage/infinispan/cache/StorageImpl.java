@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StorageImpl<K, V> implements Storage<K, V> {
-
+ 
     private static final Logger LOGGER = LoggerFactory.getLogger(StorageImpl.class);
 
     private RemoteCache<K, V> delegate;
