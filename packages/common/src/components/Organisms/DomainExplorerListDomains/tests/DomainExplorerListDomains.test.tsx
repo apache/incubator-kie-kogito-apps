@@ -15,7 +15,11 @@ describe('DomainExplorerListDomains Component test cases', () => {
         __type: {
           fields: [
             {
-              name: 'Jobs',
+              name: 'ProcessInstances',
+              args: []
+            },
+            {
+              name: 'UserTaskInstances',
               args: []
             },
             {
@@ -24,6 +28,10 @@ describe('DomainExplorerListDomains Component test cases', () => {
             },
             {
               name: 'visaApplication',
+              args: []
+            },
+            {
+              name: 'Jobs',
               args: []
             }
           ]
@@ -36,7 +44,7 @@ describe('DomainExplorerListDomains Component test cases', () => {
       </Router>
     );
     expect(useGetQueryFieldsQuery).toHaveBeenCalled();
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(DomainExplorerListDomains)).toMatchSnapshot();
   });
   it('Assertions', () => {
     // @ts-ignore
@@ -45,6 +53,14 @@ describe('DomainExplorerListDomains Component test cases', () => {
       data: {
         __type: {
           fields: [
+            {
+              name: 'UserTaskInstances',
+              args: []
+            },
+            {
+              name: 'ProcessInstances',
+              args: []
+            },
             {
               name: 'Travels',
               args: [
@@ -95,6 +111,6 @@ describe('DomainExplorerListDomains Component test cases', () => {
       </Router>
     );
     expect(useGetQueryFieldsQuery).toHaveBeenCalled();
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(DomainExplorerListDomains)).toMatchSnapshot();
   });
 });

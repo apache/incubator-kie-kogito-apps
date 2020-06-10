@@ -9,6 +9,9 @@ import useGetQueryTypesQuery = GraphQL.useGetQueryTypesQuery;
 import useGetQueryFieldsQuery = GraphQL.useGetQueryFieldsQuery;
 import useGetColumnPickerAttributesQuery = GraphQL.useGetColumnPickerAttributesQuery;
 jest.mock('react-apollo');
+jest.mock(
+  '../../../Molecules/DomainExplorerColumnPicker/DomainExplorerColumnPicker'
+);
 
 const props = {
   domains: ['Travels', 'VisaApplications'],
@@ -255,7 +258,7 @@ describe('Domain Explorer Container component', () => {
     );
     wrapper.update();
     wrapper.setProps({});
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(DomainExplorer)).toMatchSnapshot();
   });
   it('Check error response for getQueryTypes', () => {
     // @ts-ignore
@@ -271,7 +274,7 @@ describe('Domain Explorer Container component', () => {
     );
     wrapper.update();
     wrapper.setProps({});
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(DomainExplorer)).toMatchSnapshot();
   });
   it('check assertions on rememberedParams', () => {
     const wrapper = mount(

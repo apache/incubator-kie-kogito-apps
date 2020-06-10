@@ -1,7 +1,8 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { getWrapperAsync } from '../../../../utils/OuiaUtils';
 
 import DomainExplorerTable from '../DomainExplorerTable';
+import { MockedProvider } from '@apollo/react-testing';
 
 global.Math.random = () => 0.7218415351930461;
 
@@ -15,7 +16,7 @@ describe('Domain Explorer Table Component', () => {
     mockUseEffect();
     mockUseEffect();
   });
-  it('Snapshot test', () => {
+  it('Snapshot test with default props', async () => {
     const props = {
       columnFilters: [
         {
@@ -102,7 +103,7 @@ describe('Domain Explorer Table Component', () => {
           rowKey: '0.6632979792309541',
           cells: [
             {
-              title: {}
+              title: ''
             }
           ]
         }
@@ -110,12 +111,16 @@ describe('Domain Explorer Table Component', () => {
       setRows: jest.fn(),
       offset: 10
     };
-    const wrapper = shallow(<DomainExplorerTable {...props} />);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider>
+        <DomainExplorerTable {...props} />
+      </MockedProvider>,
+      'DomainExplorerTable'
+    );
     wrapper.update();
-    wrapper.setProps({});
     expect(wrapper).toMatchSnapshot();
   });
-  it('Boolean assertions-false', () => {
+  it('Boolean assertions-false', async () => {
     const props = {
       columnFilters: [
         {
@@ -202,7 +207,7 @@ describe('Domain Explorer Table Component', () => {
           rowKey: '0.6632979792309541',
           cells: [
             {
-              title: {}
+              title: ''
             }
           ]
         }
@@ -211,14 +216,17 @@ describe('Domain Explorer Table Component', () => {
       offset: 10
     };
 
-    const wrapper = shallow(<DomainExplorerTable {...props} />);
-
+    const wrapper = await getWrapperAsync(
+      <MockedProvider>
+        <DomainExplorerTable {...props} />
+      </MockedProvider>,
+      'DomainExplorerTable'
+    );
     wrapper.update();
-    wrapper.setProps({});
 
     expect(wrapper).toMatchSnapshot();
   });
-  it('Boolean assertions-true', () => {
+  it('Boolean assertions-true', async () => {
     const props = {
       columnFilters: [
         {
@@ -305,7 +313,7 @@ describe('Domain Explorer Table Component', () => {
           rowKey: '0.6632979792309541',
           cells: [
             {
-              title: {}
+              title: ''
             }
           ]
         }
@@ -313,11 +321,16 @@ describe('Domain Explorer Table Component', () => {
       setRows: jest.fn(),
       offset: 10
     };
-    const wrapper = shallow(<DomainExplorerTable {...props} />);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider>
+        <DomainExplorerTable {...props} />
+      </MockedProvider>,
+      'DomainExplorerTable'
+    );
     wrapper.update();
     expect(wrapper).toMatchSnapshot();
   });
-  it('check zero offset', () => {
+  it('check zero offset', async () => {
     const props = {
       columnFilters: [
         {
@@ -404,7 +417,7 @@ describe('Domain Explorer Table Component', () => {
           rowKey: '0.6632979792309541',
           cells: [
             {
-              title: {}
+              title: ''
             }
           ]
         }
@@ -412,11 +425,16 @@ describe('Domain Explorer Table Component', () => {
       setRows: jest.fn(),
       offset: 0
     };
-    const wrapper = mount(<DomainExplorerTable {...props} />);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider>
+        <DomainExplorerTable {...props} />
+      </MockedProvider>,
+      'DomainExplorerTable'
+    );
     wrapper.update();
     expect(wrapper).toMatchSnapshot();
   });
-  it('check false value of isLoadingMore', () => {
+  it('check false value of isLoadingMore', async () => {
     const props = {
       columnFilters: [
         {
@@ -503,7 +521,7 @@ describe('Domain Explorer Table Component', () => {
           rowKey: '0.6632979792309541',
           cells: [
             {
-              title: {}
+              title: ''
             }
           ]
         }
@@ -511,11 +529,16 @@ describe('Domain Explorer Table Component', () => {
       setRows: jest.fn(),
       offset: 0
     };
-    const wrapper = mount(<DomainExplorerTable {...props} />);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider>
+        <DomainExplorerTable {...props} />
+      </MockedProvider>,
+      'DomainExplorerTable'
+    );
     wrapper.update();
     expect(wrapper).toMatchSnapshot();
   });
-  it('check null value for process instance attributes', () => {
+  it('check null value for process instance attributes', async () => {
     const props = {
       columnFilters: [
         {
@@ -602,7 +625,7 @@ describe('Domain Explorer Table Component', () => {
           rowKey: '0.6632979792309541',
           cells: [
             {
-              title: {}
+              title: ''
             }
           ]
         }
@@ -610,7 +633,12 @@ describe('Domain Explorer Table Component', () => {
       setRows: jest.fn(),
       offset: 0
     };
-    const wrapper = mount(<DomainExplorerTable {...props} />);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider>
+        <DomainExplorerTable {...props} />
+      </MockedProvider>,
+      'DomainExplorerTable'
+    );
     wrapper.update();
     expect(wrapper).toMatchSnapshot();
   });

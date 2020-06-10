@@ -1,8 +1,9 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import DomainExplorerPage from '../DomainExplorerPage';
+import { getWrapper } from '@kogito-apps/common';
 
 const props = {
   domains: ['Travels', 'VisaApplications'],
@@ -49,43 +50,43 @@ const props2 = {
   loadingState: false
 };
 
-describe('Domain Explorer Dashboard component', () => {
-  it('Snapshot test', () => {
-    const wrapper = mount(
+describe('DomainExplorerPage component', () => {
+  it('Snapshot with default props', () => {
+    const wrapper = getWrapper(
       <MockedProvider mocks={[]} addTypename={false}>
         <BrowserRouter>
           <DomainExplorerPage {...props} {...routeComponentPropsMock} />
         </BrowserRouter>
-      </MockedProvider>
+      </MockedProvider>,
+      'DomainExplorerPage'
     );
 
     wrapper.update();
-    wrapper.setProps({});
     expect(wrapper).toMatchSnapshot();
   });
   it('Check error response for getQueryFields query', async () => {
-    const wrapper = mount(
+    const wrapper = getWrapper(
       <BrowserRouter>
         <MockedProvider mocks={[]} addTypename={false}>
           <DomainExplorerPage {...props} {...routeComponentPropsMock} />
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
+      'DomainExplorerPage'
     );
     wrapper.update();
-    wrapper.setProps({});
-    expect(wrapper.find(DomainExplorerPage)).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
   it('Mock query testing', async () => {
-    const wrapper = mount(
+    const wrapper = getWrapper(
       <BrowserRouter>
         <MockedProvider mocks={[]} addTypename={false}>
           <DomainExplorerPage {...props} {...routeComponentPropsMock} />
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
+      'DomainExplorerPage'
     );
     wrapper.update();
-    wrapper.setProps({});
-    expect(wrapper.find(DomainExplorerPage)).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
   it('Check error response for getPicker query', () => {
     const wrapper = shallow(
@@ -108,15 +109,15 @@ describe('Domain Explorer Dashboard component', () => {
     expect(wrapper).toMatchSnapshot();
   });
   it('check assertions on rememberedParams', () => {
-    const wrapper = mount(
+    const wrapper = getWrapper(
       <BrowserRouter>
         <MockedProvider mocks={[]} addTypename={false}>
           <DomainExplorerPage {...props2} {...routeComponentPropsMock2} />
         </MockedProvider>
-      </BrowserRouter>
+      </BrowserRouter>,
+      'DomainExplorerPage'
     );
     wrapper.update();
-    wrapper.setProps({});
     expect(wrapper).toMatchSnapshot();
   });
 });
