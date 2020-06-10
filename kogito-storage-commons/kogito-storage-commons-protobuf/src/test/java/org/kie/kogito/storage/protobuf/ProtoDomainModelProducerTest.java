@@ -63,26 +63,9 @@ class ProtoDomainModelProducerTest {
     }
 
     static FileDescriptor getTestFileDescriptor() {
-        String content = getTestFileContent();
+        String content = TestUtils.getTestFileContent();
         SerializationContext ctx = new SerializationContextImpl(Configuration.builder().build());
         ctx.registerProtoFiles(FileDescriptorSource.fromString(DOMAIN_MODEL_PROTO_NAME, content));
         return ctx.getFileDescriptors().get(DOMAIN_MODEL_PROTO_NAME);
-    }
-
-    static String getTestFileContent() {
-        return getTestFileContent("test.proto");
-    }
-
-    static String getTestFileInvalidContent() {
-        return getTestFileContent("test_invalid.proto");
-    }
-
-    static String getTestFileContent(String protofile) {
-        try {
-            Path path = Paths.get(Thread.currentThread().getContextClassLoader().getResource(protofile).toURI());
-            return new String(Files.readAllBytes(path));
-        } catch (URISyntaxException | IOException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 }
