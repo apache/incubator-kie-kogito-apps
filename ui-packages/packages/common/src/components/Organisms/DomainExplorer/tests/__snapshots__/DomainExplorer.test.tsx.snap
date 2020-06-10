@@ -1,322 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Domain Explorer Container component Check error response for getPicker query 1`] = `
-<BrowserRouter>
-  <Router
-    history={
-      Object {
-        "action": "POP",
-        "block": [Function],
-        "createHref": [Function],
-        "go": [Function],
-        "goBack": [Function],
-        "goForward": [Function],
-        "length": 1,
-        "listen": [Function],
-        "location": Object {
-          "hash": "",
-          "pathname": "/",
-          "search": "",
-          "state": undefined,
-        },
-        "push": [Function],
-        "replace": [Function],
-      }
-    }
-  >
-    <DomainExplorer
-      domainName="Travels"
-      domains={
-        Array [
-          "Travels",
-          "VisaApplications",
-        ]
-      }
-      history={
-        Object {
-          "locations": Object {
-            "key": "ugubul",
-          },
-        }
-      }
-      loadingState={false}
-      location={
-        Object {
-          "key": "ugubul",
-          "pathname": "/DomainExplorer/Travels",
-          "state": Object {
-            "parameters": Array [
-              Object {
-                "flight": Array [
-                  "arrival",
-                ],
-              },
-              Object {
-                "flight": Array [
-                  "departure",
-                ],
-              },
-            ],
-          },
-        }
-      }
-      match={
-        Object {
-          "params": Object {
-            "domainName": "Travels",
-          },
-        }
-      }
-      metaData={
-        Object {
-          "metadata": Array [
-            Object {
-              "processInstances": Array [
-                "id",
-                "processName",
-                "state",
-                "start",
-                "lastUpdate",
-                "businessKey",
-              ],
-            },
-          ],
-        }
-      }
-      rememberedParams={
-        Array [
-          Object {
-            "flight": Array [
-              "arrival",
-            ],
-          },
-          Object {
-            "flight": Array [
-              "departure",
-            ],
-          },
-        ]
-      }
-      rememberedSelections={Array []}
-    >
-      <withRouter(ServerErrors)
-        error={Object {}}
-      >
-        <ServerErrors
-          error={Object {}}
-          history={
-            Object {
-              "action": "POP",
-              "block": [Function],
-              "createHref": [Function],
-              "go": [Function],
-              "goBack": [Function],
-              "goForward": [Function],
-              "length": 1,
-              "listen": [Function],
-              "location": Object {
-                "hash": "",
-                "pathname": "/",
-                "search": "",
-                "state": undefined,
-              },
-              "push": [Function],
-              "replace": [Function],
-            }
-          }
-          location={
-            Object {
-              "hash": "",
-              "pathname": "/",
-              "search": "",
-              "state": undefined,
-            }
-          }
-          match={
-            Object {
-              "isExact": true,
-              "params": Object {},
-              "path": "/",
-              "url": "/",
-            }
-          }
-        >
-          <PageSection
-            variant="light"
-          >
-            <section
-              className="pf-c-page__main-section pf-m-light"
-            >
-              <Bullseye>
-                <div
-                  className="pf-l-bullseye"
-                >
-                  <EmptyState
-                    variant="full"
-                  >
-                    <div
-                      className="pf-c-empty-state"
-                    >
-                      <EmptyStateIcon
-                        color="var(--pf-global--danger-color--100)"
-                        icon={[Function]}
-                        size="md"
-                      >
-                        <ExclamationCircleIcon
-                          aria-hidden="true"
-                          className="pf-c-empty-state__icon"
-                          color="var(--pf-global--danger-color--100)"
-                          noVerticalAlign={false}
-                          size="md"
-                          title={null}
-                        >
-                          <svg
-                            aria-hidden="true"
-                            aria-labelledby={null}
-                            className="pf-c-empty-state__icon"
-                            fill="var(--pf-global--danger-color--100)"
-                            height="1.5em"
-                            role="img"
-                            style={
-                              Object {
-                                "verticalAlign": "-0.1875em",
-                              }
-                            }
-                            viewBox="0 0 512 512"
-                            width="1.5em"
-                          >
-                            <path
-                              d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
-                              transform=""
-                            />
-                          </svg>
-                        </ExclamationCircleIcon>
-                      </EmptyStateIcon>
-                      <Title
-                        headingLevel="h1"
-                        size="4xl"
-                      >
-                        <h1
-                          className="pf-c-title pf-m-4xl"
-                        >
-                          Error fetching data
-                        </h1>
-                      </Title>
-                      <EmptyStateBody>
-                        <div
-                          className="pf-c-empty-state__body"
-                        >
-                          An error occurred while accessing data.
-                           
-                          <Component
-                            id="display-error"
-                            isInline={true}
-                            onClick={[Function]}
-                            variant="link"
-                          >
-                            <ComponentWithOuia
-                              component={[Function]}
-                              componentProps={
-                                Object {
-                                  "children": "See more details",
-                                  "id": "display-error",
-                                  "isInline": true,
-                                  "onClick": [Function],
-                                  "variant": "link",
-                                }
-                              }
-                              consumerContext={null}
-                            >
-                              <Button
-                                id="display-error"
-                                isInline={true}
-                                onClick={[Function]}
-                                ouiaContext={
-                                  Object {
-                                    "isOuia": false,
-                                    "ouiaId": null,
-                                  }
-                                }
-                                variant="link"
-                              >
-                                <button
-                                  aria-disabled={null}
-                                  aria-label={null}
-                                  className="pf-c-button pf-m-link pf-m-inline"
-                                  disabled={false}
-                                  id="display-error"
-                                  onClick={[Function]}
-                                  tabIndex={null}
-                                  type="button"
-                                >
-                                  <span
-                                    className="pf-c-button__text"
-                                  >
-                                    See more details
-                                  </span>
-                                </button>
-                              </Button>
-                            </ComponentWithOuia>
-                          </Component>
-                        </div>
-                      </EmptyStateBody>
-                      <Component
-                        id="goback-button"
-                        onClick={[Function]}
-                        variant="primary"
-                      >
-                        <ComponentWithOuia
-                          component={[Function]}
-                          componentProps={
-                            Object {
-                              "children": "Go back",
-                              "id": "goback-button",
-                              "onClick": [Function],
-                              "variant": "primary",
-                            }
-                          }
-                          consumerContext={null}
-                        >
-                          <Button
-                            id="goback-button"
-                            onClick={[Function]}
-                            ouiaContext={
-                              Object {
-                                "isOuia": false,
-                                "ouiaId": null,
-                              }
-                            }
-                            variant="primary"
-                          >
-                            <button
-                              aria-disabled={null}
-                              aria-label={null}
-                              className="pf-c-button pf-m-primary"
-                              disabled={false}
-                              id="goback-button"
-                              onClick={[Function]}
-                              tabIndex={null}
-                              type="button"
-                            >
-                              Go back
-                            </button>
-                          </Button>
-                        </ComponentWithOuia>
-                      </Component>
-                    </div>
-                  </EmptyState>
-                </div>
-              </Bullseye>
-            </section>
-          </PageSection>
-        </ServerErrors>
-      </withRouter(ServerErrors)>
-    </DomainExplorer>
-  </Router>
-</BrowserRouter>
-`;
-
-exports[`Domain Explorer Container component Check error response for getQueryFields query 1`] = `
+exports[`Domain Explorer component Check error response for getPicker query 1`] = `
 <DomainExplorer
   domainName="Travels"
   domains={
@@ -607,91 +291,29 @@ exports[`Domain Explorer Container component Check error response for getQueryFi
 </DomainExplorer>
 `;
 
-exports[`Domain Explorer Container component Check error response for getQueryTypes 1`] = `
-<BrowserRouter>
-  <Router
-    history={
-      Object {
-        "action": "POP",
-        "block": [Function],
-        "createHref": [Function],
-        "go": [Function],
-        "goBack": [Function],
-        "goForward": [Function],
-        "length": 1,
-        "listen": [Function],
-        "location": Object {
-          "hash": "",
-          "pathname": "/",
-          "search": "",
-          "state": undefined,
-        },
-        "push": [Function],
-        "replace": [Function],
-      }
+exports[`Domain Explorer component Check error response for getQueryFields query 1`] = `
+<DomainExplorer
+  domainName="Travels"
+  domains={
+    Array [
+      "Travels",
+      "VisaApplications",
+    ]
+  }
+  history={
+    Object {
+      "locations": Object {
+        "key": "ugubul",
+      },
     }
-  >
-    <DomainExplorer
-      domainName="Travels"
-      domains={
-        Array [
-          "Travels",
-          "VisaApplications",
-        ]
-      }
-      history={
-        Object {
-          "locations": Object {
-            "key": "ugubul",
-          },
-        }
-      }
-      loadingState={false}
-      location={
-        Object {
-          "key": "ugubul",
-          "pathname": "/DomainExplorer/Travels",
-          "state": Object {
-            "parameters": Array [
-              Object {
-                "flight": Array [
-                  "arrival",
-                ],
-              },
-              Object {
-                "flight": Array [
-                  "departure",
-                ],
-              },
-            ],
-          },
-        }
-      }
-      match={
-        Object {
-          "params": Object {
-            "domainName": "Travels",
-          },
-        }
-      }
-      metaData={
-        Object {
-          "metadata": Array [
-            Object {
-              "processInstances": Array [
-                "id",
-                "processName",
-                "state",
-                "start",
-                "lastUpdate",
-                "businessKey",
-              ],
-            },
-          ],
-        }
-      }
-      rememberedParams={
-        Array [
+  }
+  loadingState={false}
+  location={
+    Object {
+      "key": "ugubul",
+      "pathname": "/DomainExplorer/Travels",
+      "state": Object {
+        "parameters": Array [
           Object {
             "flight": Array [
               "arrival",
@@ -702,250 +324,1627 @@ exports[`Domain Explorer Container component Check error response for getQueryTy
               "departure",
             ],
           },
-        ]
+        ],
+      },
+    }
+  }
+  match={
+    Object {
+      "params": Object {
+        "domainName": "Travels",
+      },
+    }
+  }
+  metaData={
+    Object {
+      "metadata": Array [
+        Object {
+          "processInstances": Array [
+            "id",
+            "processName",
+            "state",
+            "start",
+            "lastUpdate",
+            "businessKey",
+          ],
+        },
+      ],
+    }
+  }
+  rememberedParams={
+    Array [
+      Object {
+        "flight": Array [
+          "arrival",
+        ],
+      },
+      Object {
+        "flight": Array [
+          "departure",
+        ],
+      },
+    ]
+  }
+  rememberedSelections={Array []}
+>
+  <withRouter(ServerErrors)
+    error={Object {}}
+  >
+    <ServerErrors
+      error={Object {}}
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "createHref": [Function],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
       }
-      rememberedSelections={Array []}
+      location={
+        Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        }
+      }
+      match={
+        Object {
+          "isExact": true,
+          "params": Object {},
+          "path": "/",
+          "url": "/",
+        }
+      }
     >
-      <withRouter(ServerErrors)
-        error={Object {}}
+      <PageSection
+        variant="light"
       >
-        <ServerErrors
-          error={Object {}}
-          history={
-            Object {
-              "action": "POP",
-              "block": [Function],
-              "createHref": [Function],
-              "go": [Function],
-              "goBack": [Function],
-              "goForward": [Function],
-              "length": 1,
-              "listen": [Function],
-              "location": Object {
-                "hash": "",
-                "pathname": "/",
-                "search": "",
-                "state": undefined,
-              },
-              "push": [Function],
-              "replace": [Function],
-            }
-          }
-          location={
-            Object {
-              "hash": "",
-              "pathname": "/",
-              "search": "",
-              "state": undefined,
-            }
-          }
-          match={
-            Object {
-              "isExact": true,
-              "params": Object {},
-              "path": "/",
-              "url": "/",
-            }
-          }
+        <section
+          className="pf-c-page__main-section pf-m-light"
         >
-          <PageSection
-            variant="light"
+          <Bullseye>
+            <div
+              className="pf-l-bullseye"
+            >
+              <EmptyState
+                variant="full"
+              >
+                <div
+                  className="pf-c-empty-state"
+                >
+                  <EmptyStateIcon
+                    color="var(--pf-global--danger-color--100)"
+                    icon={[Function]}
+                    size="md"
+                  >
+                    <ExclamationCircleIcon
+                      aria-hidden="true"
+                      className="pf-c-empty-state__icon"
+                      color="var(--pf-global--danger-color--100)"
+                      noVerticalAlign={false}
+                      size="md"
+                      title={null}
+                    >
+                      <svg
+                        aria-hidden="true"
+                        aria-labelledby={null}
+                        className="pf-c-empty-state__icon"
+                        fill="var(--pf-global--danger-color--100)"
+                        height="1.5em"
+                        role="img"
+                        style={
+                          Object {
+                            "verticalAlign": "-0.1875em",
+                          }
+                        }
+                        viewBox="0 0 512 512"
+                        width="1.5em"
+                      >
+                        <path
+                          d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+                          transform=""
+                        />
+                      </svg>
+                    </ExclamationCircleIcon>
+                  </EmptyStateIcon>
+                  <Title
+                    headingLevel="h1"
+                    size="4xl"
+                  >
+                    <h1
+                      className="pf-c-title pf-m-4xl"
+                    >
+                      Error fetching data
+                    </h1>
+                  </Title>
+                  <EmptyStateBody>
+                    <div
+                      className="pf-c-empty-state__body"
+                    >
+                      An error occurred while accessing data.
+                       
+                      <Component
+                        id="display-error"
+                        isInline={true}
+                        onClick={[Function]}
+                        variant="link"
+                      >
+                        <ComponentWithOuia
+                          component={[Function]}
+                          componentProps={
+                            Object {
+                              "children": "See more details",
+                              "id": "display-error",
+                              "isInline": true,
+                              "onClick": [Function],
+                              "variant": "link",
+                            }
+                          }
+                          consumerContext={null}
+                        >
+                          <Button
+                            id="display-error"
+                            isInline={true}
+                            onClick={[Function]}
+                            ouiaContext={
+                              Object {
+                                "isOuia": false,
+                                "ouiaId": null,
+                              }
+                            }
+                            variant="link"
+                          >
+                            <button
+                              aria-disabled={null}
+                              aria-label={null}
+                              className="pf-c-button pf-m-link pf-m-inline"
+                              disabled={false}
+                              id="display-error"
+                              onClick={[Function]}
+                              tabIndex={null}
+                              type="button"
+                            >
+                              <span
+                                className="pf-c-button__text"
+                              >
+                                See more details
+                              </span>
+                            </button>
+                          </Button>
+                        </ComponentWithOuia>
+                      </Component>
+                    </div>
+                  </EmptyStateBody>
+                  <Component
+                    id="goback-button"
+                    onClick={[Function]}
+                    variant="primary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Go back",
+                          "id": "goback-button",
+                          "onClick": [Function],
+                          "variant": "primary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="goback-button"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="primary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-primary"
+                          disabled={false}
+                          id="goback-button"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Go back
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                </div>
+              </EmptyState>
+            </div>
+          </Bullseye>
+        </section>
+      </PageSection>
+    </ServerErrors>
+  </withRouter(ServerErrors)>
+</DomainExplorer>
+`;
+
+exports[`Domain Explorer component Check error response for getQueryTypes 1`] = `
+<DomainExplorer
+  domainName="Travels"
+  domains={
+    Array [
+      "Travels",
+      "VisaApplications",
+    ]
+  }
+  history={
+    Object {
+      "locations": Object {
+        "key": "ugubul",
+      },
+    }
+  }
+  loadingState={false}
+  location={
+    Object {
+      "key": "ugubul",
+      "pathname": "/DomainExplorer/Travels",
+      "state": Object {
+        "parameters": Array [
+          Object {
+            "flight": Array [
+              "arrival",
+            ],
+          },
+          Object {
+            "flight": Array [
+              "departure",
+            ],
+          },
+        ],
+      },
+    }
+  }
+  match={
+    Object {
+      "params": Object {
+        "domainName": "Travels",
+      },
+    }
+  }
+  metaData={
+    Object {
+      "metadata": Array [
+        Object {
+          "processInstances": Array [
+            "id",
+            "processName",
+            "state",
+            "start",
+            "lastUpdate",
+            "businessKey",
+          ],
+        },
+      ],
+    }
+  }
+  rememberedParams={
+    Array [
+      Object {
+        "flight": Array [
+          "arrival",
+        ],
+      },
+      Object {
+        "flight": Array [
+          "departure",
+        ],
+      },
+    ]
+  }
+  rememberedSelections={Array []}
+>
+  <withRouter(ServerErrors)
+    error={Object {}}
+  >
+    <ServerErrors
+      error={Object {}}
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "createHref": [Function],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
+      }
+      location={
+        Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        }
+      }
+      match={
+        Object {
+          "isExact": true,
+          "params": Object {},
+          "path": "/",
+          "url": "/",
+        }
+      }
+    >
+      <PageSection
+        variant="light"
+      >
+        <section
+          className="pf-c-page__main-section pf-m-light"
+        >
+          <Bullseye>
+            <div
+              className="pf-l-bullseye"
+            >
+              <EmptyState
+                variant="full"
+              >
+                <div
+                  className="pf-c-empty-state"
+                >
+                  <EmptyStateIcon
+                    color="var(--pf-global--danger-color--100)"
+                    icon={[Function]}
+                    size="md"
+                  >
+                    <ExclamationCircleIcon
+                      aria-hidden="true"
+                      className="pf-c-empty-state__icon"
+                      color="var(--pf-global--danger-color--100)"
+                      noVerticalAlign={false}
+                      size="md"
+                      title={null}
+                    >
+                      <svg
+                        aria-hidden="true"
+                        aria-labelledby={null}
+                        className="pf-c-empty-state__icon"
+                        fill="var(--pf-global--danger-color--100)"
+                        height="1.5em"
+                        role="img"
+                        style={
+                          Object {
+                            "verticalAlign": "-0.1875em",
+                          }
+                        }
+                        viewBox="0 0 512 512"
+                        width="1.5em"
+                      >
+                        <path
+                          d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+                          transform=""
+                        />
+                      </svg>
+                    </ExclamationCircleIcon>
+                  </EmptyStateIcon>
+                  <Title
+                    headingLevel="h1"
+                    size="4xl"
+                  >
+                    <h1
+                      className="pf-c-title pf-m-4xl"
+                    >
+                      Error fetching data
+                    </h1>
+                  </Title>
+                  <EmptyStateBody>
+                    <div
+                      className="pf-c-empty-state__body"
+                    >
+                      An error occurred while accessing data.
+                       
+                      <Component
+                        id="display-error"
+                        isInline={true}
+                        onClick={[Function]}
+                        variant="link"
+                      >
+                        <ComponentWithOuia
+                          component={[Function]}
+                          componentProps={
+                            Object {
+                              "children": "See more details",
+                              "id": "display-error",
+                              "isInline": true,
+                              "onClick": [Function],
+                              "variant": "link",
+                            }
+                          }
+                          consumerContext={null}
+                        >
+                          <Button
+                            id="display-error"
+                            isInline={true}
+                            onClick={[Function]}
+                            ouiaContext={
+                              Object {
+                                "isOuia": false,
+                                "ouiaId": null,
+                              }
+                            }
+                            variant="link"
+                          >
+                            <button
+                              aria-disabled={null}
+                              aria-label={null}
+                              className="pf-c-button pf-m-link pf-m-inline"
+                              disabled={false}
+                              id="display-error"
+                              onClick={[Function]}
+                              tabIndex={null}
+                              type="button"
+                            >
+                              <span
+                                className="pf-c-button__text"
+                              >
+                                See more details
+                              </span>
+                            </button>
+                          </Button>
+                        </ComponentWithOuia>
+                      </Component>
+                    </div>
+                  </EmptyStateBody>
+                  <Component
+                    id="goback-button"
+                    onClick={[Function]}
+                    variant="primary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Go back",
+                          "id": "goback-button",
+                          "onClick": [Function],
+                          "variant": "primary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="goback-button"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="primary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-primary"
+                          disabled={false}
+                          id="goback-button"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Go back
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                </div>
+              </EmptyState>
+            </div>
+          </Bullseye>
+        </section>
+      </PageSection>
+    </ServerErrors>
+  </withRouter(ServerErrors)>
+</DomainExplorer>
+`;
+
+exports[`Domain Explorer component Mock query testing 1`] = `
+<DomainExplorer
+  domainName="Travels"
+  domains={
+    Array [
+      "Travels",
+      "VisaApplications",
+    ]
+  }
+  history={
+    Object {
+      "locations": Object {
+        "key": "ugubul",
+      },
+    }
+  }
+  loadingState={false}
+  location={
+    Object {
+      "key": "ugubul",
+      "pathname": "/DomainExplorer/Travels",
+      "state": Object {
+        "parameters": Array [
+          Object {
+            "flight": Array [
+              "arrival",
+            ],
+          },
+          Object {
+            "flight": Array [
+              "departure",
+            ],
+          },
+        ],
+      },
+    }
+  }
+  match={
+    Object {
+      "params": Object {
+        "domainName": "Travels",
+      },
+    }
+  }
+  metaData={
+    Object {
+      "metadata": Array [
+        Object {
+          "processInstances": Array [
+            "id",
+            "processName",
+            "state",
+            "start",
+            "lastUpdate",
+            "businessKey",
+          ],
+        },
+      ],
+    }
+  }
+  rememberedParams={
+    Array [
+      Object {
+        "flight": Array [
+          "arrival",
+        ],
+      },
+      Object {
+        "flight": Array [
+          "departure",
+        ],
+      },
+    ]
+  }
+  rememberedSelections={Array []}
+>
+  <DataToolbar
+    className="pf-m-toggle-group-container"
+    collapseListedFiltersBreakpoint="md"
+    id="data-toolbar-with-chip-groups"
+  >
+    <div
+      className="pf-c-data-toolbar pf-m-toggle-group-container"
+      id="data-toolbar-with-chip-groups"
+    >
+      <DataToolbarContent
+        breakpointMods={Array []}
+        isExpanded={false}
+        key=".0"
+        showClearFiltersButton={false}
+        toolbarId="data-toolbar-with-chip-groups"
+      >
+        <div
+          className="pf-c-data-toolbar__content"
+        >
+          <div
+            className="pf-c-data-toolbar__content-section"
           >
-            <section
-              className="pf-c-page__main-section pf-m-light"
+            <DataToolbarToggleGroup
+              breakpoint="md"
+              breakpointMods={Array []}
+              toggleIcon={
+                <FilterIcon
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                  title={null}
+                />
+              }
             >
-              <Bullseye>
+              <div
+                className="pf-c-data-toolbar__group pf-m-toggle-group pf-m-show-on-md"
+              >
                 <div
-                  className="pf-l-bullseye"
+                  className="pf-c-data-toolbar__toggle"
                 >
-                  <EmptyState
-                    variant="full"
+                  <Component
+                    aria-controls="data-toolbar-with-chip-groups-expandable-content-3"
+                    aria-haspopup={false}
+                    aria-label="Show Filters"
+                    onClick={[Function]}
+                    variant="plain"
                   >
-                    <div
-                      className="pf-c-empty-state"
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "aria-controls": "data-toolbar-with-chip-groups-expandable-content-3",
+                          "aria-haspopup": false,
+                          "aria-label": "Show Filters",
+                          "children": <FilterIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          />,
+                          "onClick": [Function],
+                          "variant": "plain",
+                        }
+                      }
+                      consumerContext={null}
                     >
-                      <EmptyStateIcon
-                        color="var(--pf-global--danger-color--100)"
-                        icon={[Function]}
-                        size="md"
+                      <Button
+                        aria-controls="data-toolbar-with-chip-groups-expandable-content-3"
+                        aria-haspopup={false}
+                        aria-label="Show Filters"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="plain"
                       >
-                        <ExclamationCircleIcon
-                          aria-hidden="true"
-                          className="pf-c-empty-state__icon"
-                          color="var(--pf-global--danger-color--100)"
-                          noVerticalAlign={false}
-                          size="md"
-                          title={null}
+                        <button
+                          aria-controls="data-toolbar-with-chip-groups-expandable-content-3"
+                          aria-disabled={null}
+                          aria-haspopup={false}
+                          aria-label="Show Filters"
+                          className="pf-c-button pf-m-plain"
+                          disabled={false}
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
                         >
-                          <svg
-                            aria-hidden="true"
-                            aria-labelledby={null}
-                            className="pf-c-empty-state__icon"
-                            fill="var(--pf-global--danger-color--100)"
-                            height="1.5em"
-                            role="img"
-                            style={
-                              Object {
-                                "verticalAlign": "-0.1875em",
-                              }
-                            }
-                            viewBox="0 0 512 512"
-                            width="1.5em"
+                          <FilterIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
                           >
-                            <path
-                              d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
-                              transform=""
-                            />
-                          </svg>
-                        </ExclamationCircleIcon>
-                      </EmptyStateIcon>
-                      <Title
-                        headingLevel="h1"
-                        size="4xl"
-                      >
-                        <h1
-                          className="pf-c-title pf-m-4xl"
-                        >
-                          Error fetching data
-                        </h1>
-                      </Title>
-                      <EmptyStateBody>
-                        <div
-                          className="pf-c-empty-state__body"
-                        >
-                          An error occurred while accessing data.
-                           
-                          <Component
-                            id="display-error"
-                            isInline={true}
-                            onClick={[Function]}
-                            variant="link"
-                          >
-                            <ComponentWithOuia
-                              component={[Function]}
-                              componentProps={
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              fill="currentColor"
+                              height="1em"
+                              role="img"
+                              style={
                                 Object {
-                                  "children": "See more details",
-                                  "id": "display-error",
-                                  "isInline": true,
-                                  "onClick": [Function],
-                                  "variant": "link",
+                                  "verticalAlign": "-0.125em",
                                 }
                               }
-                              consumerContext={null}
+                              viewBox="0 0 512 512"
+                              width="1em"
                             >
-                              <Button
-                                id="display-error"
-                                isInline={true}
-                                onClick={[Function]}
-                                ouiaContext={
+                              <path
+                                d="M487.976 0H24.028C2.71 0-8.047 25.866 7.058 40.971L192 225.941V432c0 7.831 3.821 15.17 10.237 19.662l80 55.98C298.02 518.69 320 507.493 320 487.98V225.941l184.947-184.97C520.021 25.896 509.338 0 487.976 0z"
+                                transform=""
+                              />
+                            </svg>
+                          </FilterIcon>
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                </div>
+                <ForwardRef>
+                  <DataToolbarGroupWithRef
+                    breakpointMods={Array []}
+                    innerRef={null}
+                  >
+                    <div
+                      className="pf-c-data-toolbar__group"
+                    >
+                      <MockedDomainExplorerColumnPicker
+                        columnPickerType="Travels"
+                        data={
+                          Array [
+                            Object {
+                              "name": "id",
+                              "type": Object {
+                                "fields": null,
+                                "kind": "SCALAR",
+                                "name": "String",
+                              },
+                            },
+                            Object {
+                              "name": "flight",
+                              "type": Object {
+                                "fields": Array [
                                   Object {
-                                    "isOuia": false,
-                                    "ouiaId": null,
-                                  }
+                                    "name": "arrival",
+                                    "type": Object {
+                                      "kind": "SCALAR",
+                                      "name": "String",
+                                    },
+                                  },
+                                ],
+                                "kind": "OBJECT",
+                                "name": "Flight",
+                              },
+                            },
+                          ]
+                        }
+                        enableCache={true}
+                        getPicker={
+                          Object {
+                            "data": Object {
+                              "__type": Object {
+                                "fields": Array [
+                                  Object {
+                                    "name": "flight",
+                                    "type": Object {
+                                      "fields": Array [
+                                        Object {
+                                          "name": "arrival",
+                                          "type": Object {
+                                            "kind": "SCALAR",
+                                            "name": "String",
+                                          },
+                                        },
+                                      ],
+                                      "kind": "OBJECT",
+                                      "name": "Flight",
+                                    },
+                                  },
+                                  Object {
+                                    "name": "id",
+                                    "type": Object {
+                                      "fields": null,
+                                      "kind": "SCALAR",
+                                      "name": "String",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            "loading": false,
+                          }
+                        }
+                        getQueryTypes={
+                          Object {
+                            "data": Object {},
+                            "loading": false,
+                          }
+                        }
+                        isLoadingMore={false}
+                        offsetVal={0}
+                        pageSize={10}
+                        parameters={
+                          Array [
+                            Object {
+                              "flight": Array [
+                                "arrival",
+                              ],
+                            },
+                            Object {
+                              "flight": Array [
+                                "departure",
+                              ],
+                            },
+                          ]
+                        }
+                        rememberedParams={
+                          Array [
+                            Object {
+                              "flight": Array [
+                                "arrival",
+                              ],
+                            },
+                            Object {
+                              "flight": Array [
+                                "departure",
+                              ],
+                            },
+                          ]
+                        }
+                        selected={Array []}
+                        setColumnFilters={[Function]}
+                        setDisplayEmptyState={[Function]}
+                        setDisplayTable={[Function]}
+                        setEnableCache={[Function]}
+                        setError={[Function]}
+                        setIsLoadingMore={[Function]}
+                        setOffsetVal={[Function]}
+                        setPageSize={[Function]}
+                        setParameters={[Function]}
+                        setSelected={[Function]}
+                        setTableLoading={[Function]}
+                      />
+                    </div>
+                  </DataToolbarGroupWithRef>
+                </ForwardRef>
+              </div>
+            </DataToolbarToggleGroup>
+          </div>
+          <DataToolbarExpandableContent
+            chipContainerRef={
+              Object {
+                "current": null,
+              }
+            }
+            clearFiltersButtonText="Clear all filters"
+            expandableContentRef={
+              Object {
+                "current": <div
+                  class="pf-c-data-toolbar__expandable-content"
+                  id="data-toolbar-with-chip-groups-expandable-content-3"
+                >
+                  <div
+                    class="pf-c-data-toolbar__group"
+                  />
+                </div>,
+              }
+            }
+            id="data-toolbar-with-chip-groups-expandable-content-3"
+            isExpanded={false}
+            showClearFiltersButton={false}
+          >
+            <div
+              className="pf-c-data-toolbar__expandable-content"
+              id="data-toolbar-with-chip-groups-expandable-content-3"
+            >
+              <ForwardRef>
+                <DataToolbarGroupWithRef
+                  breakpointMods={Array []}
+                  innerRef={null}
+                >
+                  <div
+                    className="pf-c-data-toolbar__group"
+                  />
+                </DataToolbarGroupWithRef>
+              </ForwardRef>
+            </div>
+          </DataToolbarExpandableContent>
+        </div>
+      </DataToolbarContent>
+      <DataToolbarChipGroupContent
+        chipGroupContentRef={
+          Object {
+            "current": <div
+              class="pf-c-data-toolbar__content pf-m-hidden"
+              hidden=""
+            >
+              <div
+                class="pf-c-data-toolbar__group"
+              />
+            </div>,
+          }
+        }
+        clearFiltersButtonText="Clear all filters"
+        collapseListedFiltersBreakpoint="md"
+        isExpanded={false}
+        numberOfFilters={0}
+        showClearFiltersButton={false}
+      >
+        <div
+          className="pf-c-data-toolbar__content pf-m-hidden"
+          hidden={true}
+        >
+          <ForwardRef
+            className=""
+          >
+            <DataToolbarGroupWithRef
+              breakpointMods={Array []}
+              className=""
+              innerRef={null}
+            >
+              <div
+                className="pf-c-data-toolbar__group"
+              />
+            </DataToolbarGroupWithRef>
+          </ForwardRef>
+        </div>
+      </DataToolbarChipGroupContent>
+    </div>
+  </DataToolbar>
+  <div
+    className="kogito-common--domain-explorer__table-OverFlow"
+  >
+    <MockedDomainExplorerTable
+      columnFilters={Object {}}
+      displayEmptyState={false}
+      displayTable={false}
+      isLoadingMore={false}
+      offset={0}
+      parameters={
+        Array [
+          Object {
+            "flight": Array [
+              "arrival",
+            ],
+          },
+          Object {
+            "flight": Array [
+              "departure",
+            ],
+          },
+        ]
+      }
+      rows={Array []}
+      selected={Array []}
+      setRows={[Function]}
+      tableLoading={false}
+    />
+    <LoadMore
+      getMoreItems={[Function]}
+      isLoadingMore={false}
+      offset={0}
+      pageSize={10}
+      setOffset={[Function]}
+    >
+      <DataList
+        aria-label="Simple data list example"
+      >
+        <ul
+          aria-label="Simple data list example"
+          className="pf-c-data-list"
+        >
+          <DataListItem
+            aria-labelledby="kie-datalist-item"
+          >
+            <li
+              aria-labelledby="kie-datalist-item"
+              className="pf-c-data-list__item"
+              id=""
+            >
+              <DataListCell
+                className="kogito-management-console__load-more"
+                key=".0"
+                rowid="kie-datalist-item"
+              >
+                <div
+                  className="pf-c-data-list__cell kogito-management-console__load-more"
+                  rowid="kie-datalist-item"
+                >
+                  <Component
+                    id="load10"
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Load 10 more",
+                          "id": "load10",
+                          "onClick": [Function],
+                          "variant": "secondary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="load10"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="secondary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-secondary"
+                          disabled={false}
+                          id="load10"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Load 10 more
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                   
+                  <Component
+                    id="load20"
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Load 20 more",
+                          "id": "load20",
+                          "onClick": [Function],
+                          "variant": "secondary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="load20"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="secondary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-secondary"
+                          disabled={false}
+                          id="load20"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Load 20 more
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                   
+                  <Component
+                    id="load50"
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Load 50 more",
+                          "id": "load50",
+                          "onClick": [Function],
+                          "variant": "secondary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="load50"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="secondary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-secondary"
+                          disabled={false}
+                          id="load50"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Load 50 more
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                   
+                  <Component
+                    id="load100"
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Load 100 more",
+                          "id": "load100",
+                          "onClick": [Function],
+                          "variant": "secondary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="load100"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="secondary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-secondary"
+                          disabled={false}
+                          id="load100"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Load 100 more
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                </div>
+              </DataListCell>
+            </li>
+          </DataListItem>
+        </ul>
+      </DataList>
+    </LoadMore>
+  </div>
+</DomainExplorer>
+`;
+
+exports[`Domain Explorer component Snapshot test with default prop 1`] = `
+<DomainExplorer
+  domainName="Travels"
+  domains={
+    Array [
+      "Travels",
+      "VisaApplications",
+    ]
+  }
+  history={
+    Object {
+      "locations": Object {
+        "key": "ugubul",
+      },
+    }
+  }
+  loadingState={false}
+  location={
+    Object {
+      "key": "ugubul",
+      "pathname": "/DomainExplorer/Travels",
+      "state": Object {
+        "parameters": Array [
+          Object {
+            "flight": Array [
+              "arrival",
+            ],
+          },
+          Object {
+            "flight": Array [
+              "departure",
+            ],
+          },
+        ],
+      },
+    }
+  }
+  match={
+    Object {
+      "params": Object {
+        "domainName": "Travels",
+      },
+    }
+  }
+  metaData={
+    Object {
+      "metadata": Array [
+        Object {
+          "processInstances": Array [
+            "id",
+            "processName",
+            "state",
+            "start",
+            "lastUpdate",
+            "businessKey",
+          ],
+        },
+      ],
+    }
+  }
+  rememberedParams={
+    Array [
+      Object {
+        "flight": Array [
+          "arrival",
+        ],
+      },
+      Object {
+        "flight": Array [
+          "departure",
+        ],
+      },
+    ]
+  }
+  rememberedSelections={Array []}
+>
+  <DataToolbar
+    className="pf-m-toggle-group-container"
+    collapseListedFiltersBreakpoint="md"
+    id="data-toolbar-with-chip-groups"
+  >
+    <div
+      className="pf-c-data-toolbar pf-m-toggle-group-container"
+      id="data-toolbar-with-chip-groups"
+    >
+      <DataToolbarContent
+        breakpointMods={Array []}
+        isExpanded={false}
+        key=".0"
+        showClearFiltersButton={false}
+        toolbarId="data-toolbar-with-chip-groups"
+      >
+        <div
+          className="pf-c-data-toolbar__content"
+        >
+          <div
+            className="pf-c-data-toolbar__content-section"
+          >
+            <DataToolbarToggleGroup
+              breakpoint="md"
+              breakpointMods={Array []}
+              toggleIcon={
+                <FilterIcon
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                  title={null}
+                />
+              }
+            >
+              <div
+                className="pf-c-data-toolbar__group pf-m-toggle-group pf-m-show-on-md"
+              >
+                <div
+                  className="pf-c-data-toolbar__toggle"
+                >
+                  <Component
+                    aria-controls="data-toolbar-with-chip-groups-expandable-content-1"
+                    aria-haspopup={false}
+                    aria-label="Show Filters"
+                    onClick={[Function]}
+                    variant="plain"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "aria-controls": "data-toolbar-with-chip-groups-expandable-content-1",
+                          "aria-haspopup": false,
+                          "aria-label": "Show Filters",
+                          "children": <FilterIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          />,
+                          "onClick": [Function],
+                          "variant": "plain",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        aria-controls="data-toolbar-with-chip-groups-expandable-content-1"
+                        aria-haspopup={false}
+                        aria-label="Show Filters"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="plain"
+                      >
+                        <button
+                          aria-controls="data-toolbar-with-chip-groups-expandable-content-1"
+                          aria-disabled={null}
+                          aria-haspopup={false}
+                          aria-label="Show Filters"
+                          className="pf-c-button pf-m-plain"
+                          disabled={false}
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          <FilterIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                            title={null}
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              fill="currentColor"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
                                 }
-                                variant="link"
-                              >
-                                <button
-                                  aria-disabled={null}
-                                  aria-label={null}
-                                  className="pf-c-button pf-m-link pf-m-inline"
-                                  disabled={false}
-                                  id="display-error"
-                                  onClick={[Function]}
-                                  tabIndex={null}
-                                  type="button"
-                                >
-                                  <span
-                                    className="pf-c-button__text"
-                                  >
-                                    See more details
-                                  </span>
-                                </button>
-                              </Button>
-                            </ComponentWithOuia>
-                          </Component>
-                        </div>
-                      </EmptyStateBody>
-                      <Component
-                        id="goback-button"
-                        onClick={[Function]}
-                        variant="primary"
-                      >
-                        <ComponentWithOuia
-                          component={[Function]}
-                          componentProps={
-                            Object {
-                              "children": "Go back",
-                              "id": "goback-button",
-                              "onClick": [Function],
-                              "variant": "primary",
-                            }
-                          }
-                          consumerContext={null}
-                        >
-                          <Button
-                            id="goback-button"
-                            onClick={[Function]}
-                            ouiaContext={
-                              Object {
-                                "isOuia": false,
-                                "ouiaId": null,
                               }
-                            }
-                            variant="primary"
-                          >
-                            <button
-                              aria-disabled={null}
-                              aria-label={null}
-                              className="pf-c-button pf-m-primary"
-                              disabled={false}
-                              id="goback-button"
-                              onClick={[Function]}
-                              tabIndex={null}
-                              type="button"
+                              viewBox="0 0 512 512"
+                              width="1em"
                             >
-                              Go back
-                            </button>
-                          </Button>
-                        </ComponentWithOuia>
-                      </Component>
-                    </div>
-                  </EmptyState>
+                              <path
+                                d="M487.976 0H24.028C2.71 0-8.047 25.866 7.058 40.971L192 225.941V432c0 7.831 3.821 15.17 10.237 19.662l80 55.98C298.02 518.69 320 507.493 320 487.98V225.941l184.947-184.97C520.021 25.896 509.338 0 487.976 0z"
+                                transform=""
+                              />
+                            </svg>
+                          </FilterIcon>
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
                 </div>
-              </Bullseye>
-            </section>
-          </PageSection>
-        </ServerErrors>
-      </withRouter(ServerErrors)>
-    </DomainExplorer>
-  </Router>
-</BrowserRouter>
-`;
-
-exports[`Domain Explorer Container component Mock query testing 1`] = `
-<DomainExplorer
-  domainName="Travels"
-  domains={
-    Array [
-      "Travels",
-      "VisaApplications",
-    ]
-  }
-  history={
-    Object {
-      "locations": Object {
-        "key": "ugubul",
-      },
-    }
-  }
-  loadingState={false}
-  location={
-    Object {
-      "key": "ugubul",
-      "pathname": "/DomainExplorer/Travels",
-      "state": Object {
-        "parameters": Array [
+                <ForwardRef>
+                  <DataToolbarGroupWithRef
+                    breakpointMods={Array []}
+                    innerRef={null}
+                  >
+                    <div
+                      className="pf-c-data-toolbar__group"
+                    >
+                      <MockedDomainExplorerColumnPicker
+                        columnPickerType="Travels"
+                        data={
+                          Array [
+                            Object {
+                              "name": "id",
+                              "type": Object {
+                                "fields": null,
+                                "kind": "SCALAR",
+                                "name": "String",
+                              },
+                            },
+                            Object {
+                              "name": "flight",
+                              "type": Object {
+                                "fields": Array [
+                                  Object {
+                                    "name": "arrival",
+                                    "type": Object {
+                                      "kind": "SCALAR",
+                                      "name": "String",
+                                    },
+                                  },
+                                ],
+                                "kind": "OBJECT",
+                                "name": "Flight",
+                              },
+                            },
+                          ]
+                        }
+                        enableCache={true}
+                        getPicker={
+                          Object {
+                            "data": Object {
+                              "__type": Object {
+                                "fields": Array [
+                                  Object {
+                                    "name": "flight",
+                                    "type": Object {
+                                      "fields": Array [
+                                        Object {
+                                          "name": "arrival",
+                                          "type": Object {
+                                            "kind": "SCALAR",
+                                            "name": "String",
+                                          },
+                                        },
+                                      ],
+                                      "kind": "OBJECT",
+                                      "name": "Flight",
+                                    },
+                                  },
+                                  Object {
+                                    "name": "id",
+                                    "type": Object {
+                                      "fields": null,
+                                      "kind": "SCALAR",
+                                      "name": "String",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            "loading": false,
+                          }
+                        }
+                        getQueryTypes={
+                          Object {
+                            "data": Object {},
+                            "loading": false,
+                          }
+                        }
+                        isLoadingMore={false}
+                        offsetVal={0}
+                        pageSize={10}
+                        parameters={
+                          Array [
+                            Object {
+                              "flight": Array [
+                                "arrival",
+                              ],
+                            },
+                            Object {
+                              "flight": Array [
+                                "departure",
+                              ],
+                            },
+                          ]
+                        }
+                        rememberedParams={
+                          Array [
+                            Object {
+                              "flight": Array [
+                                "arrival",
+                              ],
+                            },
+                            Object {
+                              "flight": Array [
+                                "departure",
+                              ],
+                            },
+                          ]
+                        }
+                        selected={Array []}
+                        setColumnFilters={[Function]}
+                        setDisplayEmptyState={[Function]}
+                        setDisplayTable={[Function]}
+                        setEnableCache={[Function]}
+                        setError={[Function]}
+                        setIsLoadingMore={[Function]}
+                        setOffsetVal={[Function]}
+                        setPageSize={[Function]}
+                        setParameters={[Function]}
+                        setSelected={[Function]}
+                        setTableLoading={[Function]}
+                      />
+                    </div>
+                  </DataToolbarGroupWithRef>
+                </ForwardRef>
+              </div>
+            </DataToolbarToggleGroup>
+          </div>
+          <DataToolbarExpandableContent
+            chipContainerRef={
+              Object {
+                "current": null,
+              }
+            }
+            clearFiltersButtonText="Clear all filters"
+            expandableContentRef={
+              Object {
+                "current": <div
+                  class="pf-c-data-toolbar__expandable-content"
+                  id="data-toolbar-with-chip-groups-expandable-content-1"
+                >
+                  <div
+                    class="pf-c-data-toolbar__group"
+                  />
+                </div>,
+              }
+            }
+            id="data-toolbar-with-chip-groups-expandable-content-1"
+            isExpanded={false}
+            showClearFiltersButton={false}
+          >
+            <div
+              className="pf-c-data-toolbar__expandable-content"
+              id="data-toolbar-with-chip-groups-expandable-content-1"
+            >
+              <ForwardRef>
+                <DataToolbarGroupWithRef
+                  breakpointMods={Array []}
+                  innerRef={null}
+                >
+                  <div
+                    className="pf-c-data-toolbar__group"
+                  />
+                </DataToolbarGroupWithRef>
+              </ForwardRef>
+            </div>
+          </DataToolbarExpandableContent>
+        </div>
+      </DataToolbarContent>
+      <DataToolbarChipGroupContent
+        chipGroupContentRef={
+          Object {
+            "current": <div
+              class="pf-c-data-toolbar__content pf-m-hidden"
+              hidden=""
+            >
+              <div
+                class="pf-c-data-toolbar__group"
+              />
+            </div>,
+          }
+        }
+        clearFiltersButtonText="Clear all filters"
+        collapseListedFiltersBreakpoint="md"
+        isExpanded={false}
+        numberOfFilters={0}
+        showClearFiltersButton={false}
+      >
+        <div
+          className="pf-c-data-toolbar__content pf-m-hidden"
+          hidden={true}
+        >
+          <ForwardRef
+            className=""
+          >
+            <DataToolbarGroupWithRef
+              breakpointMods={Array []}
+              className=""
+              innerRef={null}
+            >
+              <div
+                className="pf-c-data-toolbar__group"
+              />
+            </DataToolbarGroupWithRef>
+          </ForwardRef>
+        </div>
+      </DataToolbarChipGroupContent>
+    </div>
+  </DataToolbar>
+  <div
+    className="kogito-common--domain-explorer__table-OverFlow"
+  >
+    <MockedDomainExplorerTable
+      columnFilters={Object {}}
+      displayEmptyState={false}
+      displayTable={false}
+      isLoadingMore={false}
+      offset={0}
+      parameters={
+        Array [
           Object {
             "flight": Array [
               "arrival",
@@ -956,229 +1955,63 @@ exports[`Domain Explorer Container component Mock query testing 1`] = `
               "departure",
             ],
           },
-        ],
-      },
-    }
-  }
-  match={
-    Object {
-      "params": Object {
-        "domainName": "Travels",
-      },
-    }
-  }
-  metaData={
-    Object {
-      "metadata": Array [
-        Object {
-          "processInstances": Array [
-            "id",
-            "processName",
-            "state",
-            "start",
-            "lastUpdate",
-            "businessKey",
-          ],
-        },
-      ],
-    }
-  }
-  rememberedParams={
-    Array [
-      Object {
-        "flight": Array [
-          "arrival",
-        ],
-      },
-      Object {
-        "flight": Array [
-          "departure",
-        ],
-      },
-    ]
-  }
-  rememberedSelections={Array []}
->
-  <withRouter(ServerErrors)
-    error={[TypeError: Cannot read property 'query' of undefined]}
-  >
-    <ServerErrors
-      error={[TypeError: Cannot read property 'query' of undefined]}
-      history={
-        Object {
-          "action": "POP",
-          "block": [Function],
-          "createHref": [Function],
-          "go": [Function],
-          "goBack": [Function],
-          "goForward": [Function],
-          "length": 1,
-          "listen": [Function],
-          "location": Object {
-            "hash": "",
-            "pathname": "/",
-            "search": "",
-            "state": undefined,
-          },
-          "push": [Function],
-          "replace": [Function],
-        }
+        ]
       }
-      location={
-        Object {
-          "hash": "",
-          "pathname": "/",
-          "search": "",
-          "state": undefined,
-        }
-      }
-      match={
-        Object {
-          "isExact": true,
-          "params": Object {},
-          "path": "/",
-          "url": "/",
-        }
-      }
+      rows={Array []}
+      selected={Array []}
+      setRows={[Function]}
+      tableLoading={false}
+    />
+    <LoadMore
+      getMoreItems={[Function]}
+      isLoadingMore={false}
+      offset={0}
+      pageSize={10}
+      setOffset={[Function]}
     >
-      <PageSection
-        variant="light"
+      <DataList
+        aria-label="Simple data list example"
       >
-        <section
-          className="pf-c-page__main-section pf-m-light"
+        <ul
+          aria-label="Simple data list example"
+          className="pf-c-data-list"
         >
-          <Bullseye>
-            <div
-              className="pf-l-bullseye"
+          <DataListItem
+            aria-labelledby="kie-datalist-item"
+          >
+            <li
+              aria-labelledby="kie-datalist-item"
+              className="pf-c-data-list__item"
+              id=""
             >
-              <EmptyState
-                variant="full"
+              <DataListCell
+                className="kogito-management-console__load-more"
+                key=".0"
+                rowid="kie-datalist-item"
               >
                 <div
-                  className="pf-c-empty-state"
+                  className="pf-c-data-list__cell kogito-management-console__load-more"
+                  rowid="kie-datalist-item"
                 >
-                  <EmptyStateIcon
-                    color="var(--pf-global--danger-color--100)"
-                    icon={[Function]}
-                    size="md"
-                  >
-                    <ExclamationCircleIcon
-                      aria-hidden="true"
-                      className="pf-c-empty-state__icon"
-                      color="var(--pf-global--danger-color--100)"
-                      noVerticalAlign={false}
-                      size="md"
-                      title={null}
-                    >
-                      <svg
-                        aria-hidden="true"
-                        aria-labelledby={null}
-                        className="pf-c-empty-state__icon"
-                        fill="var(--pf-global--danger-color--100)"
-                        height="1.5em"
-                        role="img"
-                        style={
-                          Object {
-                            "verticalAlign": "-0.1875em",
-                          }
-                        }
-                        viewBox="0 0 512 512"
-                        width="1.5em"
-                      >
-                        <path
-                          d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
-                          transform=""
-                        />
-                      </svg>
-                    </ExclamationCircleIcon>
-                  </EmptyStateIcon>
-                  <Title
-                    headingLevel="h1"
-                    size="4xl"
-                  >
-                    <h1
-                      className="pf-c-title pf-m-4xl"
-                    >
-                      Error fetching data
-                    </h1>
-                  </Title>
-                  <EmptyStateBody>
-                    <div
-                      className="pf-c-empty-state__body"
-                    >
-                      An error occurred while accessing data.
-                       
-                      <Component
-                        id="display-error"
-                        isInline={true}
-                        onClick={[Function]}
-                        variant="link"
-                      >
-                        <ComponentWithOuia
-                          component={[Function]}
-                          componentProps={
-                            Object {
-                              "children": "See more details",
-                              "id": "display-error",
-                              "isInline": true,
-                              "onClick": [Function],
-                              "variant": "link",
-                            }
-                          }
-                          consumerContext={null}
-                        >
-                          <Button
-                            id="display-error"
-                            isInline={true}
-                            onClick={[Function]}
-                            ouiaContext={
-                              Object {
-                                "isOuia": false,
-                                "ouiaId": null,
-                              }
-                            }
-                            variant="link"
-                          >
-                            <button
-                              aria-disabled={null}
-                              aria-label={null}
-                              className="pf-c-button pf-m-link pf-m-inline"
-                              disabled={false}
-                              id="display-error"
-                              onClick={[Function]}
-                              tabIndex={null}
-                              type="button"
-                            >
-                              <span
-                                className="pf-c-button__text"
-                              >
-                                See more details
-                              </span>
-                            </button>
-                          </Button>
-                        </ComponentWithOuia>
-                      </Component>
-                    </div>
-                  </EmptyStateBody>
                   <Component
-                    id="goback-button"
+                    id="load10"
                     onClick={[Function]}
-                    variant="primary"
+                    variant="secondary"
                   >
                     <ComponentWithOuia
                       component={[Function]}
                       componentProps={
                         Object {
-                          "children": "Go back",
-                          "id": "goback-button",
+                          "children": "Load 10 more",
+                          "id": "load10",
                           "onClick": [Function],
-                          "variant": "primary",
+                          "variant": "secondary",
                         }
                       }
                       consumerContext={null}
                     >
                       <Button
-                        id="goback-button"
+                        id="load10"
                         onClick={[Function]}
                         ouiaContext={
                           Object {
@@ -1186,290 +2019,43 @@ exports[`Domain Explorer Container component Mock query testing 1`] = `
                             "ouiaId": null,
                           }
                         }
-                        variant="primary"
+                        variant="secondary"
                       >
                         <button
                           aria-disabled={null}
                           aria-label={null}
-                          className="pf-c-button pf-m-primary"
+                          className="pf-c-button pf-m-secondary"
                           disabled={false}
-                          id="goback-button"
+                          id="load10"
                           onClick={[Function]}
                           tabIndex={null}
                           type="button"
                         >
-                          Go back
+                          Load 10 more
                         </button>
                       </Button>
                     </ComponentWithOuia>
                   </Component>
-                </div>
-              </EmptyState>
-            </div>
-          </Bullseye>
-        </section>
-      </PageSection>
-    </ServerErrors>
-  </withRouter(ServerErrors)>
-</DomainExplorer>
-`;
-
-exports[`Domain Explorer Container component Snapshot test 1`] = `
-<DomainExplorer
-  domainName="Travels"
-  domains={
-    Array [
-      "Travels",
-      "VisaApplications",
-    ]
-  }
-  history={
-    Object {
-      "locations": Object {
-        "key": "ugubul",
-      },
-    }
-  }
-  loadingState={false}
-  location={
-    Object {
-      "key": "ugubul",
-      "pathname": "/DomainExplorer/Travels",
-      "state": Object {
-        "parameters": Array [
-          Object {
-            "flight": Array [
-              "arrival",
-            ],
-          },
-          Object {
-            "flight": Array [
-              "departure",
-            ],
-          },
-        ],
-      },
-    }
-  }
-  match={
-    Object {
-      "params": Object {
-        "domainName": "Travels",
-      },
-    }
-  }
-  metaData={
-    Object {
-      "metadata": Array [
-        Object {
-          "processInstances": Array [
-            "id",
-            "processName",
-            "state",
-            "start",
-            "lastUpdate",
-            "businessKey",
-          ],
-        },
-      ],
-    }
-  }
-  rememberedParams={
-    Array [
-      Object {
-        "flight": Array [
-          "arrival",
-        ],
-      },
-      Object {
-        "flight": Array [
-          "departure",
-        ],
-      },
-    ]
-  }
-  rememberedSelections={Array []}
->
-  <withRouter(ServerErrors)
-    error={[TypeError: Cannot read property 'query' of undefined]}
-  >
-    <ServerErrors
-      error={[TypeError: Cannot read property 'query' of undefined]}
-      history={
-        Object {
-          "action": "POP",
-          "block": [Function],
-          "createHref": [Function],
-          "go": [Function],
-          "goBack": [Function],
-          "goForward": [Function],
-          "length": 1,
-          "listen": [Function],
-          "location": Object {
-            "hash": "",
-            "pathname": "/",
-            "search": "",
-            "state": undefined,
-          },
-          "push": [Function],
-          "replace": [Function],
-        }
-      }
-      location={
-        Object {
-          "hash": "",
-          "pathname": "/",
-          "search": "",
-          "state": undefined,
-        }
-      }
-      match={
-        Object {
-          "isExact": true,
-          "params": Object {},
-          "path": "/",
-          "url": "/",
-        }
-      }
-    >
-      <PageSection
-        variant="light"
-      >
-        <section
-          className="pf-c-page__main-section pf-m-light"
-        >
-          <Bullseye>
-            <div
-              className="pf-l-bullseye"
-            >
-              <EmptyState
-                variant="full"
-              >
-                <div
-                  className="pf-c-empty-state"
-                >
-                  <EmptyStateIcon
-                    color="var(--pf-global--danger-color--100)"
-                    icon={[Function]}
-                    size="md"
-                  >
-                    <ExclamationCircleIcon
-                      aria-hidden="true"
-                      className="pf-c-empty-state__icon"
-                      color="var(--pf-global--danger-color--100)"
-                      noVerticalAlign={false}
-                      size="md"
-                      title={null}
-                    >
-                      <svg
-                        aria-hidden="true"
-                        aria-labelledby={null}
-                        className="pf-c-empty-state__icon"
-                        fill="var(--pf-global--danger-color--100)"
-                        height="1.5em"
-                        role="img"
-                        style={
-                          Object {
-                            "verticalAlign": "-0.1875em",
-                          }
-                        }
-                        viewBox="0 0 512 512"
-                        width="1.5em"
-                      >
-                        <path
-                          d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
-                          transform=""
-                        />
-                      </svg>
-                    </ExclamationCircleIcon>
-                  </EmptyStateIcon>
-                  <Title
-                    headingLevel="h1"
-                    size="4xl"
-                  >
-                    <h1
-                      className="pf-c-title pf-m-4xl"
-                    >
-                      Error fetching data
-                    </h1>
-                  </Title>
-                  <EmptyStateBody>
-                    <div
-                      className="pf-c-empty-state__body"
-                    >
-                      An error occurred while accessing data.
-                       
-                      <Component
-                        id="display-error"
-                        isInline={true}
-                        onClick={[Function]}
-                        variant="link"
-                      >
-                        <ComponentWithOuia
-                          component={[Function]}
-                          componentProps={
-                            Object {
-                              "children": "See more details",
-                              "id": "display-error",
-                              "isInline": true,
-                              "onClick": [Function],
-                              "variant": "link",
-                            }
-                          }
-                          consumerContext={null}
-                        >
-                          <Button
-                            id="display-error"
-                            isInline={true}
-                            onClick={[Function]}
-                            ouiaContext={
-                              Object {
-                                "isOuia": false,
-                                "ouiaId": null,
-                              }
-                            }
-                            variant="link"
-                          >
-                            <button
-                              aria-disabled={null}
-                              aria-label={null}
-                              className="pf-c-button pf-m-link pf-m-inline"
-                              disabled={false}
-                              id="display-error"
-                              onClick={[Function]}
-                              tabIndex={null}
-                              type="button"
-                            >
-                              <span
-                                className="pf-c-button__text"
-                              >
-                                See more details
-                              </span>
-                            </button>
-                          </Button>
-                        </ComponentWithOuia>
-                      </Component>
-                    </div>
-                  </EmptyStateBody>
+                   
                   <Component
-                    id="goback-button"
+                    id="load20"
                     onClick={[Function]}
-                    variant="primary"
+                    variant="secondary"
                   >
                     <ComponentWithOuia
                       component={[Function]}
                       componentProps={
                         Object {
-                          "children": "Go back",
-                          "id": "goback-button",
+                          "children": "Load 20 more",
+                          "id": "load20",
                           "onClick": [Function],
-                          "variant": "primary",
+                          "variant": "secondary",
                         }
                       }
                       consumerContext={null}
                     >
                       <Button
-                        id="goback-button"
+                        id="load20"
                         onClick={[Function]}
                         ouiaContext={
                           Object {
@@ -1477,35 +2063,123 @@ exports[`Domain Explorer Container component Snapshot test 1`] = `
                             "ouiaId": null,
                           }
                         }
-                        variant="primary"
+                        variant="secondary"
                       >
                         <button
                           aria-disabled={null}
                           aria-label={null}
-                          className="pf-c-button pf-m-primary"
+                          className="pf-c-button pf-m-secondary"
                           disabled={false}
-                          id="goback-button"
+                          id="load20"
                           onClick={[Function]}
                           tabIndex={null}
                           type="button"
                         >
-                          Go back
+                          Load 20 more
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                   
+                  <Component
+                    id="load50"
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Load 50 more",
+                          "id": "load50",
+                          "onClick": [Function],
+                          "variant": "secondary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="load50"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="secondary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-secondary"
+                          disabled={false}
+                          id="load50"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Load 50 more
+                        </button>
+                      </Button>
+                    </ComponentWithOuia>
+                  </Component>
+                   
+                  <Component
+                    id="load100"
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <ComponentWithOuia
+                      component={[Function]}
+                      componentProps={
+                        Object {
+                          "children": "Load 100 more",
+                          "id": "load100",
+                          "onClick": [Function],
+                          "variant": "secondary",
+                        }
+                      }
+                      consumerContext={null}
+                    >
+                      <Button
+                        id="load100"
+                        onClick={[Function]}
+                        ouiaContext={
+                          Object {
+                            "isOuia": false,
+                            "ouiaId": null,
+                          }
+                        }
+                        variant="secondary"
+                      >
+                        <button
+                          aria-disabled={null}
+                          aria-label={null}
+                          className="pf-c-button pf-m-secondary"
+                          disabled={false}
+                          id="load100"
+                          onClick={[Function]}
+                          tabIndex={null}
+                          type="button"
+                        >
+                          Load 100 more
                         </button>
                       </Button>
                     </ComponentWithOuia>
                   </Component>
                 </div>
-              </EmptyState>
-            </div>
-          </Bullseye>
-        </section>
-      </PageSection>
-    </ServerErrors>
-  </withRouter(ServerErrors)>
+              </DataListCell>
+            </li>
+          </DataListItem>
+        </ul>
+      </DataList>
+    </LoadMore>
+  </div>
 </DomainExplorer>
 `;
 
-exports[`Domain Explorer Container component check assertions on rememberedParams 1`] = `
+exports[`Domain Explorer component check assertions on rememberedParams 1`] = `
 <DomainExplorer
   domainName="Travels"
   domains={
