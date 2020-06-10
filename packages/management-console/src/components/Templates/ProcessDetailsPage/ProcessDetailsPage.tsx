@@ -43,9 +43,8 @@ interface MatchProps {
   instanceID: string;
 }
 
-const ProcessDetailsPage: React.FC<
-  RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps
-> = ({ ouiaContext, ...props }) => {
+const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
+  InjectedOuiaProps> = ({ ouiaContext, ...props }) => {
   const id = props.match.params.instanceID;
   const [isSkipModalOpen, setIsSkipModalOpen] = useState<boolean>(false);
   const [isRetryModalOpen, setIsRetryModalOpen] = useState<boolean>(false);
@@ -243,7 +242,7 @@ const ProcessDetailsPage: React.FC<
                         className="kogito-management-console--details__title"
                       >
                         <ProcessDescriptor
-                          processInstanceData={data.ProcessInstances[0]}
+                          instanceData={data.ProcessInstances[0]}
                         />
                       </Title>
                     </SplitItem>

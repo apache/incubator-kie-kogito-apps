@@ -134,7 +134,7 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
                   >
                     <Button variant="link" icon={<LevelUpAltIcon />}>
                       <ProcessDescriptor
-                        processInstanceData={
+                        instanceData={
                           data.ProcessInstances[0].parentProcessInstance
                         }
                       />
@@ -155,7 +155,7 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
                     >
                       <Tooltip content={child.id}>
                         <Button variant="link" icon={<LevelDownAltIcon />}>
-                          <ProcessDescriptor processInstanceData={child} />
+                          <ProcessDescriptor instanceData={child} />
                         </Button>
                       </Tooltip>
                     </Link>

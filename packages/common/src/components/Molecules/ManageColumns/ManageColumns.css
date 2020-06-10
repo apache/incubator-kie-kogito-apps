@@ -1,0 +1,20 @@
+.kogito-common--Manage-columns__DataList-content .pf-c-data-list__expandable-content-body{
+    padding: 0px;   
+}
+.kogito-common--Manage-columns__DataList-content .pf-c-data-list__expandable-content-body
+    .pf-c-data-list__item-row {
+    padding-left: 5em;
+}
+
+.kogito-common--Manage-columns__DataList-content .pf-c-data-list__expandable-content-body .pf-c-data-list__item-content{
+    padding: 0px;   
+}
+
+.kogito-common--Manage-columns__DataList-content .pf-c-data-list__expandable-content-body .pf-c-data-list__item-control{
+    padding: 10px 0 10px 0;   
+}
+
+.kogito-common--Manage-columns__DataList-content .pf-c-data-list__expandable-content-body .pf-c-data-list__item-content
+    .pf-c-data-list__cell{
+    padding: 10px 0 10px 0;
+}

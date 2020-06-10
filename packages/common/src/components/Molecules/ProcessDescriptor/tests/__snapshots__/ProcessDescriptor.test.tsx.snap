@@ -35,7 +35,6 @@ exports[`ProcessDescriptor tests snapshot tests 1`] = `
   >
     <span>
       HotelBooking
-       
       <Badge>
         T1234HotelBooking01
       </Badge>

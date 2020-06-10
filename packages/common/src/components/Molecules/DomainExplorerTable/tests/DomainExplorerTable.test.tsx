@@ -17,6 +17,9 @@ describe('Domain Explorer Table Component', () => {
   });
   it('Snapshot test', () => {
     const props = {
+      metaObj: {
+        processInstances: ['id', 'processName', 'state', 'start', 'lastUpdate']
+      },
       columnFilters: [
         {
           flight: {
@@ -117,6 +120,9 @@ describe('Domain Explorer Table Component', () => {
   });
   it('Boolean assertions-false', () => {
     const props = {
+      metaObj: {
+        processInstances: ['id', 'processName', 'state', 'start', 'lastUpdate']
+      },
       columnFilters: [
         {
           flight: {
@@ -220,6 +226,9 @@ describe('Domain Explorer Table Component', () => {
   });
   it('Boolean assertions-true', () => {
     const props = {
+      metaObj: {
+        processInstances: ['id', 'processName', 'state', 'start', 'lastUpdate']
+      },
       columnFilters: [
         {
           flight: {
@@ -319,6 +328,9 @@ describe('Domain Explorer Table Component', () => {
   });
   it('check zero offset', () => {
     const props = {
+      metaObj: {
+        processInstances: ['id', 'processName', 'state', 'start', 'lastUpdate']
+      },
       columnFilters: [
         {
           flight: {
@@ -418,6 +430,9 @@ describe('Domain Explorer Table Component', () => {
   });
   it('check false value of isLoadingMore', () => {
     const props = {
+      metaObj: {
+        processInstances: ['id', 'processName', 'state', 'start', 'lastUpdate']
+      },
       columnFilters: [
         {
           flight: {
@@ -517,6 +532,9 @@ describe('Domain Explorer Table Component', () => {
   });
   it('check null value for process instance attributes', () => {
     const props = {
+      metaObj: {
+        processInstances: ['id', 'processName', 'state', 'start', 'lastUpdate']
+      },
       columnFilters: [
         {
           flight: {

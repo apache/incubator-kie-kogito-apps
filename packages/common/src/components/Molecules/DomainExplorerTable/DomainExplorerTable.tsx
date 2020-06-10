@@ -26,7 +26,9 @@ import {
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 import './DomainExplorerTable.css';
-import { ProcessDescriptor, GraphQL, KogitoSpinner } from '@kogito-apps/common';
+import ProcessDescriptor from '../ProcessDescriptor/ProcessDescriptor';
+import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
+import { GraphQL } from '../../../graphql/types';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 
 const DomainExplorerTable = ({
@@ -39,12 +41,16 @@ const DomainExplorerTable = ({
   offset,
   setRows,
   rows,
-  isLoadingMore
+  isLoadingMore,
+  metaObj
 }) => {
   // tslint:disable: forin
   const [columns, setColumns] = useState([]);
   const currentPage = { prev: location.pathname };
   window.localStorage.setItem('state', JSON.stringify(currentPage));
+
+  const metaFirstKey = Object.keys(metaObj)[0];
+  const metaDataArray = metaObj[metaFirstKey];
 
   const stateIcon = state => {
     switch (state) {
@@ -147,10 +153,10 @@ const DomainExplorerTable = ({
           if (rest !== '__typename' && !rest.match('/ __typename')) {
             !tempKeys.includes(k + rest) && tempKeys.push(k + rest);
             if (rest.hasOwnProperty) {
-              if (rest === 'processName') {
+              if (rest === metaDataArray[1]) {
                 const tempObj = {
                   id: data.id,
-                  processName: data.processName,
+                  name: data[metaDataArray[1]],
                   businessKey: data.businessKey
                 };
                 const ele = {
@@ -163,24 +169,24 @@ const DomainExplorerTable = ({
                         }}
                       >
                         <strong>
-                          <ProcessDescriptor processInstanceData={tempObj} />
+                          <ProcessDescriptor instanceData={tempObj} />
                         </strong>
                       </Link>
                     </>
                   )
                 };
                 tempValue.push(ele);
-              } else if (rest === 'start') {
-                const ele = {
-                  title: <Moment fromNow>{data[i].toString()}</Moment>
-                };
-                tempValue.push(ele);
-              } else if (rest === 'state') {
+              } else if (rest === metaDataArray[2]) {
                 const ele = {
                   title: stateIcon(data[i].toString())
                 };
                 tempValue.push(ele);
-              } else if (rest === 'lastUpdate') {
+              } else if (rest === metaDataArray[3]) {
+                const ele = {
+                  title: <Moment fromNow>{data[i].toString()}</Moment>
+                };
+                tempValue.push(ele);
+              } else if (rest === metaDataArray[4]) {
                 const ele = {
                   title: (
                     <>
@@ -214,7 +220,8 @@ const DomainExplorerTable = ({
         let metaArray = [];
         const metaKeys = [];
         const metaValues = [];
-        metaArray = item.metadata.processInstances;
+        const firstKey = Object.keys(item.metadata)[0];
+        metaArray = item.metadata[firstKey];
         const tempParents = getKeys(item);
         parentkeys.push(tempParents.tempKeys);
         values.push({
@@ -230,7 +237,15 @@ const DomainExplorerTable = ({
             rowKey: Math.random().toString()
           });
         });
-        const finalMetaKeys = ['Process name', 'State', 'Start', 'Last update'];
+        const finalMetaKeys = [];
+        const tempList = metaDataArray.slice(1, 5);
+        tempList.map(ele => {
+          ele = ele
+            .replace(/([A-Z])/g, ' $1')
+            .trim()
+            .toLowerCase();
+          finalMetaKeys.push(ele[0].toUpperCase() + ele.slice(1));
+        });
         const innerTable = [
           {
             parent: parentIndex,
