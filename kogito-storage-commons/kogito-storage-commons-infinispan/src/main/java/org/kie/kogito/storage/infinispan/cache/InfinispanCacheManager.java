@@ -103,7 +103,7 @@ public class InfinispanCacheManager implements StorageService {
             throw e;
         }
     }
-    
+
     @Override
     public Storage<String, String> getModelCacheByType(String index) {
         return new StorageImpl<>(manager.administration().getOrCreateCache(index, (String) null), String.class.getName());

@@ -42,11 +42,6 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
     ProtobufService protobufService;
 
     @Override
-    public Storage<String, String> getProtobufCache() {
-        return protobufService.getProtobufCache();
-    }
-
-    @Override
     public Storage<String, ProcessInstance> getProcessInstancesCache() {
         return cacheService.getCache(PROCESS_INSTANCES_CACHE, ProcessInstance.class);
     }
