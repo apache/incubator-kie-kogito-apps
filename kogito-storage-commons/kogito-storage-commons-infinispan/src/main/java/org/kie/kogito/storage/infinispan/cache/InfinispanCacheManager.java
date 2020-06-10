@@ -30,7 +30,6 @@ import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 import org.infinispan.commons.dataconversion.MediaType;
-import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.kie.kogito.storage.api.Storage;
 import org.kie.kogito.storage.api.StorageService;
 import org.kie.kogito.storage.api.factory.StorageQualifier;
