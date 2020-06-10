@@ -14,41 +14,39 @@ import {
 } from '@patternfly/react-core';
 import {
   ServerErrors,
-  ouiaPageTypeAndObjectId
+  ouiaPageTypeAndObjectId,
+  useGetQueryTypesQuery,
+  useGetQueryFieldsQuery,
+  useGetColumnPickerAttributesQuery
 } from '@kogito-apps/common';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
 import { Redirect, RouteComponentProps } from 'react-router';
-import './DomainExplorerDashboard.css';
+import './DomainExplorerPage.css';
 import DomainExplorerColumnPicker from '../../Organisms/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
 import DomainExplorerTable from '../../Organisms/DomainExplorerTable/DomainExplorerTable';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import LoadMoreComponent from '../../Atoms/LoadMoreComponent/LoadMoreComponent';
 
-import {
-  useGetQueryTypesQuery,
-  useGetQueryFieldsQuery,
-  useGetColumnPickerAttributesQuery
-} from '../../../graphql/types';
-
 interface IOwnProps {
-  domains: any
+  domains: any;
 }
 
 interface MatchProps {
-  domainName: string
+  domainName: string;
 }
 
 interface LocationProps {
-  parameters?: any[],
-  selected?: any[]
+  parameters?: any[];
+  selected?: any[];
 }
 
-const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchProps, {}, LocationProps> & InjectedOuiaProps> = ({
-  ouiaContext,
-  ...props
-}) => {
+const DomainExplorerPage: React.FC<
+  IOwnProps &
+    RouteComponentProps<MatchProps, {}, LocationProps> &
+    InjectedOuiaProps
+> = ({ ouiaContext, ...props }) => {
   const rememberedParams =
     (props.location.state && props.location.state.parameters) || [];
   const rememberedSelections =
@@ -98,7 +96,9 @@ const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchPro
     }
   }, []);
 
-  useEffect(() => { return ouiaPageTypeAndObjectId(ouiaContext, "domain-explorer", domainName) })
+  useEffect(() => {
+    return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer', domainName);
+  });
 
   const getQuery = useGetQueryFieldsQuery();
   const getQueryTypes = useGetQueryTypesQuery();
@@ -308,4 +308,4 @@ const DomainExplorerDashboard: React.FC<IOwnProps & RouteComponentProps<MatchPro
   );
 };
 
-export default React.memo(withOuiaContext(DomainExplorerDashboard));
+export default React.memo(withOuiaContext(DomainExplorerPage));
