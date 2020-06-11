@@ -18,18 +18,18 @@ package org.kie.kogito.index.infinispan.schema;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.index.event.SchemaRegisteredEvent;
-import org.kie.kogito.index.infinispan.cache.InfinispanCacheManager;
-import org.kie.kogito.index.schema.SchemaDescriptor;
-import org.kie.kogito.index.schema.SchemaRegistrationException;
+import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.schema.SchemaDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
+import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,15 +44,17 @@ public class ProtoSchemaManager {
     ProtoSchemaAcceptor schemaAcceptor;
 
     @Inject
-    @Any
-    InfinispanCacheManager cacheManager;
+    DataIndexStorageService cacheManager;
+
+    @Inject
+    ProtobufService protobufService;
 
     public void onSchemaRegisteredEvent(@Observes SchemaRegisteredEvent event) {
         if (schemaAcceptor.accept(event.getSchemaType())) {
             SchemaDescriptor schemaDescriptor = event.getSchemaDescriptor();
-            cacheManager.getProtobufCache().put(schemaDescriptor.getName(), schemaDescriptor.getSchemaContent());
+            protobufService.getProtobufCache().put(schemaDescriptor.getName(), schemaDescriptor.getSchemaContent());
             schemaDescriptor.getProcessDescriptor().ifPresent(processDescriptor -> {
-                Map<String, String> cache = cacheManager.getProtobufCache();
+                Storage<String, String> cache = protobufService.getProtobufCache();
                 cacheManager.getProcessIdModelCache().put(processDescriptor.getProcessId(), processDescriptor.getProcessType());
 
                 List<String> errors = checkSchemaErrors(cache);
@@ -69,7 +71,7 @@ public class ProtoSchemaManager {
         }
     }
 
-    private List<String> checkSchemaErrors(Map<String, String> metadataCache) {
+    private List<String> checkSchemaErrors(Storage<String, String> metadataCache) {
         if (metadataCache.containsKey(ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX)) {
             List<String> errors = new ArrayList<>();
             // The existence of this key indicates there are errors in some files
@@ -88,7 +90,7 @@ public class ProtoSchemaManager {
 
     private void logProtoCacheKeys() {
         LOGGER.debug(">>>>>>list cache keys start");
-        cacheManager.getProtobufCache().entrySet().forEach(e -> LOGGER.debug(e.toString()));
+        protobufService.getProtobufCache().entrySet().forEach(e -> LOGGER.debug(e.toString()));
         LOGGER.debug(">>>>>>list cache keys end");
     }
 }
