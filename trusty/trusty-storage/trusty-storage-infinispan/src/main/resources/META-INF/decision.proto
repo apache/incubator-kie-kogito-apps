@@ -21,15 +21,5 @@ message Decision {
     optional string executedModelName = 5;
 
     /* @Field(store = Store.YES) */
-    optional org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum executionType = 6;
+    optional string executionType = 6;
 }
-
-enum ExecutionTypeEnum {
-  option allow_alias = true;
-
-   /* @Field(store = Store.YES) */
-   DECISION = 0;
-
-   /* @Field(store = Store.YES) */
-   PROCESS = 1;
- }

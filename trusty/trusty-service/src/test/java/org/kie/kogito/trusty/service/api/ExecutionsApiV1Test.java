@@ -38,7 +38,6 @@ import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ExecutionsApiV1Test {
 
     @InjectMock

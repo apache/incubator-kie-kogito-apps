@@ -25,17 +25,16 @@ public class InfinispanServerTestResource implements QuarkusTestResourceWithClea
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanServerTestResource.class);
     private GenericContainer infinispan;
     private RemoteCacheManager cacheManager;
+    private boolean isIntegrationTest = true;
 
     @Override
     public Map<String, String> start() {
         if (INFINISPAN_IMAGE == null) {
-
+            isIntegrationTest = false;
             LOGGER.warn("InfinispanServerTestResource started without an infinispan image properly set.");
             return Collections.emptyMap();
-//            RuntimeException e = new RuntimeException();
-//            e.printStackTrace();
-//            throw new RuntimeException("Please define a valid Infinispan image in system property container.image.infinispan");
         }
+
         LOGGER.info("Using Infinispan image: {}", INFINISPAN_IMAGE);
         infinispan = new FixedHostPortGenericContainer(INFINISPAN_IMAGE)
                 .withFixedExposedPort(PORT, 11222)
@@ -50,6 +49,10 @@ public class InfinispanServerTestResource implements QuarkusTestResourceWithClea
 
     @Override
     public void stop() {
+        if (!isIntegrationTest){
+            return;
+        }
+
         if (cacheManager != null) {
             cacheManager.close();
         }
@@ -86,7 +89,7 @@ public class InfinispanServerTestResource implements QuarkusTestResourceWithClea
 
     @Override
     public void cleanup() {
-        if (!infinispan.isRunning()) {
+        if (!isIntegrationTest || !infinispan.isRunning()) {
             return;
         }
 
