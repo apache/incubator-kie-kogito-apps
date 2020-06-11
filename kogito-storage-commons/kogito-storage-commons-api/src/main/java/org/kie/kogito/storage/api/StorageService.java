@@ -18,9 +18,9 @@ package org.kie.kogito.storage.api;
 
 public interface StorageService {
 
-    Storage<String, String> getCache(String index);
+    Storage<String, String> getCache(String name);
 
-    <T> Storage<String, T> getCache(String index, Class<T> type);
+    <T> Storage<String, T> getCache(String name, Class<T> type);
 
-    <T> Storage<String, T> getCacheWithDataFormat(String index, Class<T> type, String rootType);
+    <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType);
 }
