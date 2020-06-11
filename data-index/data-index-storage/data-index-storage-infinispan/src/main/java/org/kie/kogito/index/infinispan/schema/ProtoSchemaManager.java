@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.protostream;
+package org.kie.kogito.index.infinispan.schema;
 
 import java.util.ArrayList;
 import java.util.List;

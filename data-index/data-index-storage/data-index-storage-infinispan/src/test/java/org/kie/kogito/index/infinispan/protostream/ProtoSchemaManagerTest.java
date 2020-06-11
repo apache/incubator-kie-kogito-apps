@@ -25,6 +25,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.index.cache.Cache;
 import org.kie.kogito.index.event.SchemaRegisteredEvent;
 import org.kie.kogito.index.infinispan.cache.InfinispanCacheManager;
+import org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor;
+import org.kie.kogito.index.infinispan.schema.ProtoSchemaManager;
 import org.kie.kogito.index.schema.ProcessDescriptor;
 import org.kie.kogito.index.schema.SchemaDescriptor;
 import org.kie.kogito.index.schema.SchemaRegistrationException;
@@ -34,7 +36,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.kie.kogito.index.infinispan.protostream.ProtoSchemaAcceptor.PROTO_SCHEMA_TYPE;
+import static org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor.PROTO_SCHEMA_TYPE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;

@@ -17,10 +17,11 @@
 package org.kie.kogito.index.infinispan.protostream;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor;
 import org.kie.kogito.index.schema.SchemaType;
 
 import static org.kie.kogito.index.infinispan.Constants.INFINISPAN_STORAGE;
-import static org.kie.kogito.index.infinispan.protostream.ProtoSchemaAcceptor.PROTO_SCHEMA_TYPE;
+import static org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor.PROTO_SCHEMA_TYPE;
 import static org.wildfly.common.Assert.assertFalse;
 import static org.wildfly.common.Assert.assertTrue;
 
