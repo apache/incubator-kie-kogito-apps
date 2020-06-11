@@ -9,14 +9,14 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Kogito :: Kogito Persistence Commons</name>
-  <artifactId>kogito-persistence-commons</artifactId>
+  <name>Kogito :: Persistence Commons</name>
+  <artifactId>persistence-commons</artifactId>
   <packaging>pom</packaging>
 
   <modules>
-    <module>kogito-persistence-commons-api</module>
-    <module>kogito-persistence-commons-infinispan</module>
-    <module>kogito-persistence-commons-protobuf</module>
+    <module>persistence-commons-api</module>
+    <module>persistence-commons-infinispan</module>
+    <module>persistence-commons-protobuf</module>
   </modules>
 
 

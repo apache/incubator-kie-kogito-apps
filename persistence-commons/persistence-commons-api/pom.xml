@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>kogito-persistence-commons</artifactId>
+    <artifactId>persistence-commons</artifactId>
     <groupId>org.kie.kogito</groupId>
     <version>8.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <name>Kogito :: Kogito Persistence Commons API</name>
-  <artifactId>kogito-persistence-commons-api</artifactId>
+  <name>Kogito :: Persistence Commons API</name>
+  <artifactId>persistence-commons-api</artifactId>
 
   <dependencies>
     <dependency>
