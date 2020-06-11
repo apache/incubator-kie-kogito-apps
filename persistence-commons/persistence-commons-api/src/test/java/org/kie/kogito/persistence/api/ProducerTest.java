@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory;
+package org.kie.kogito.persistence.api;
 
 import javax.enterprise.inject.Instance;
 
@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.index.cache.CacheService;
+import org.kie.kogito.persistence.api.factory.Producer;
 import org.kie.kogito.persistence.api.factory.factory.Producer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

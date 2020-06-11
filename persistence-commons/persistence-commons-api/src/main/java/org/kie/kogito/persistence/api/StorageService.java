@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory;
+package org.kie.kogito.persistence.api;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
