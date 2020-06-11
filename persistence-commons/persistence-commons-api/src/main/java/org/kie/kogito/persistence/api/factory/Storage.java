@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,13 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory;
+package org.kie.kogito.persistence.api;
 
-import java.util.concurrent.ConcurrentMap;
-import java.util.function.Consumer;
+public interface StorageService {
 
-import org.kie.kogito.index.query.Query;
+    Storage<String, String> getCache(String name);
 
-public interface Storage<K, V> extends ConcurrentMap<K, V> {
+    <T> Storage<String, T> getCache(String name, Class<T> type);
 
-    void addObjectCreatedListener(Consumer<V> consumer);
-
-    void addObjectUpdatedListener(Consumer<V> consumer);
-
-    void addObjectRemovedListener(Consumer<K> consumer);
-    
-    Query<V> query();
-    
-    String getRootType();
+    <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType);
 }

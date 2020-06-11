@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.schema;
+package org.kie.kogito.persistence.api.schema;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -25,9 +25,9 @@ public class SchemaDescriptor {
 
     String schemaContent;
 
-    ProcessDescriptor processDescriptor;
+    org.kie.kogito.persistence.api.schema.ProcessDescriptor processDescriptor;
 
-    public SchemaDescriptor(String name, String schemaContent, ProcessDescriptor processDescriptor) {
+    public SchemaDescriptor(String name, String schemaContent, org.kie.kogito.persistence.api.schema.ProcessDescriptor processDescriptor) {
         this.name = name;
         this.schemaContent = schemaContent;
         this.processDescriptor = processDescriptor;
@@ -41,7 +41,7 @@ public class SchemaDescriptor {
         return schemaContent;
     }
 
-    public Optional<ProcessDescriptor> getProcessDescriptor() {
+    public Optional<org.kie.kogito.persistence.api.schema.ProcessDescriptor> getProcessDescriptor() {
         return Optional.ofNullable(processDescriptor);
     }
 

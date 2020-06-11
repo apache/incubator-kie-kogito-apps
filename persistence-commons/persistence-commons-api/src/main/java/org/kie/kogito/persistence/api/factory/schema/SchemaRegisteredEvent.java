@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.schema;
+package org.kie.kogito.persistence.api.schema;
 
 import java.util.Objects;
 
-import org.kie.kogito.index.schema.SchemaDescriptor;
-import org.kie.kogito.index.schema.SchemaType;
-
 public class SchemaRegisteredEvent {
 
-    SchemaDescriptor schemaDescriptor;
+    org.kie.kogito.persistence.api.schema.SchemaDescriptor schemaDescriptor;
 
     SchemaType schemaType;
 
-    public SchemaRegisteredEvent(SchemaDescriptor schemaDescriptor, SchemaType type) {
+    public SchemaRegisteredEvent(org.kie.kogito.persistence.api.schema.SchemaDescriptor schemaDescriptor, SchemaType type) {
         this.schemaDescriptor = schemaDescriptor;
         this.schemaType = type;
     }
 
-    public SchemaDescriptor getSchemaDescriptor() {
+    public org.kie.kogito.persistence.api.schema.SchemaDescriptor getSchemaDescriptor() {
         return schemaDescriptor;
     }
 

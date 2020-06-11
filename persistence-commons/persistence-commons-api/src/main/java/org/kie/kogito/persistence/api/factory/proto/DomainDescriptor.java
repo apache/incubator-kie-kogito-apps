@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.proto;
+package org.kie.kogito.persistence.api.proto;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,20 +22,20 @@ import java.util.Objects;
 public class DomainDescriptor {
 
     private String typeName;
-    private List<AttributeDescriptor> attributes;
+    private List<org.kie.kogito.persistence.api.proto.AttributeDescriptor> attributes;
 
-    public List<AttributeDescriptor> getAttributes() {
+    public List<org.kie.kogito.persistence.api.proto.AttributeDescriptor> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<AttributeDescriptor> attributes) {
+    public void setAttributes(List<org.kie.kogito.persistence.api.proto.AttributeDescriptor> attributes) {
         this.attributes = attributes;
     }
 
     public String getTypeName() {
         return typeName;
     }
-    
+
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }

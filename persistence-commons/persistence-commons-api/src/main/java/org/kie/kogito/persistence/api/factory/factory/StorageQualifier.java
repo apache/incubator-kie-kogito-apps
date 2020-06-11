@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.factory;
+package org.kie.kogito.persistence.api.factory;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

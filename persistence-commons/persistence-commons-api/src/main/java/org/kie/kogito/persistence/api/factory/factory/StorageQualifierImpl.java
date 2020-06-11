@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.factory;
+package org.kie.kogito.persistence.api.factory;
 
 import java.util.Objects;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-public class StorageQualifierImpl extends AnnotationLiteral<StorageQualifier> implements StorageQualifier {
+public class StorageQualifierImpl extends AnnotationLiteral<org.kie.kogito.persistence.api.factory.StorageQualifier> implements org.kie.kogito.persistence.api.factory.StorageQualifier {
 
     private final String type;
 

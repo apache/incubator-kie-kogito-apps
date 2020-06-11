@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.query;
+package org.kie.kogito.persistence.api.query;
 
 public enum FilterCondition {
 

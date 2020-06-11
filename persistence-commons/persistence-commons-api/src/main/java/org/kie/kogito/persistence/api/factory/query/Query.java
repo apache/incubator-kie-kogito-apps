@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.query;
+package org.kie.kogito.persistence.api.query;
 
 import java.util.List;
 
@@ -24,10 +24,10 @@ public interface Query<T> {
 
     Query<T> offset(Integer offset);
 
-    Query<T> filter(List<AttributeFilter> filters);
+    Query<T> filter(List<org.kie.kogito.persistence.api.query.AttributeFilter> filters);
 
-    Query<T> sort(List<AttributeSort> sortBy);
-    
+    Query<T> sort(List<org.kie.kogito.persistence.api.query.AttributeSort> sortBy);
+
     List<T> execute();
 
 }

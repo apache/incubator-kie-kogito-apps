@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.factory;
+package org.kie.kogito.persistence.api.factory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
@@ -23,20 +23,20 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.index.cache.CacheService;
+import org.kie.kogito.persistence.api.StorageService;
 
 @ApplicationScoped
 public class Producer {
 
-    @ConfigProperty(name = "kogito.data-index.storage.type")
+    @ConfigProperty(name = "kogito.persistence.type")
     String storageType;
 
     @Inject
     @Any
-    Instance<CacheService> cacheServices;
+    Instance<StorageService> cacheServices;
 
     @Produces
-    public CacheService cacheService() {
+    public StorageService cacheService() {
         return cacheServices.select(new StorageQualifierImpl(storageType)).get();
     }
 }

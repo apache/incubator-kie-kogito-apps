@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.schema;
+package org.kie.kogito.persistence.api.schema;
 
 public interface SchemaAcceptor {
 

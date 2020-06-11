@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api.factory.proto;
+package org.kie.kogito.persistence.api.proto;
 
 import java.util.List;
 import java.util.Objects;
 
-import org.kie.kogito.index.domain.DomainDescriptor;
-
 public class DomainModelRegisteredEvent {
 
     private String processId;
-    private DomainDescriptor domainDescriptor;
-    private List<DomainDescriptor> additionalTypes;
+    private org.kie.kogito.persistence.api.proto.DomainDescriptor domainDescriptor;
+    private List<org.kie.kogito.persistence.api.proto.DomainDescriptor> additionalTypes;
 
-    public DomainModelRegisteredEvent(String processId, DomainDescriptor domainDescriptor, List<DomainDescriptor> additionalTypes) {
+    public DomainModelRegisteredEvent(String processId, org.kie.kogito.persistence.api.proto.DomainDescriptor domainDescriptor, List<org.kie.kogito.persistence.api.proto.DomainDescriptor> additionalTypes) {
         this.processId = processId;
         this.domainDescriptor = domainDescriptor;
         this.additionalTypes = additionalTypes;
@@ -37,11 +35,11 @@ public class DomainModelRegisteredEvent {
         return processId;
     }
 
-    public List<DomainDescriptor> getAdditionalTypes() {
+    public List<org.kie.kogito.persistence.api.proto.DomainDescriptor> getAdditionalTypes() {
         return additionalTypes;
     }
 
-    public DomainDescriptor getDomainDescriptor() {
+    public org.kie.kogito.persistence.api.proto.DomainDescriptor getDomainDescriptor() {
         return domainDescriptor;
     }
 
