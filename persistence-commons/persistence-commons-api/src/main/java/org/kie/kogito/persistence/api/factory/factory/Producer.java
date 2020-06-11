@@ -37,6 +37,6 @@ public class Producer {
 
     @Produces
     public CacheService cacheService() {
-        return cacheServices.select(new StorageImpl(storageType)).get();
+        return cacheServices.select(new StorageQualifierImpl(storageType)).get();
     }
 }

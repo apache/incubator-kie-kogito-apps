@@ -35,13 +35,13 @@ import static org.mockito.Mockito.when;
 class ProducerTest {
 
     @Mock
-    Instance<CacheService> cacheServices;
+    Instance<StorageService> cacheServices;
 
     @InjectMocks
     Producer cacheProducer;
 
     @Mock
-    Instance<CacheService> instance;
+    Instance<StorageService> instance;
 
     @BeforeEach
     void prepare() {

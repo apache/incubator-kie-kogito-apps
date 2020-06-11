@@ -20,11 +20,11 @@ import java.util.Objects;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-public class StorageImpl extends AnnotationLiteral<Storage> implements Storage {
+public class StorageQualifierImpl extends AnnotationLiteral<StorageQualifier> implements StorageQualifier {
 
     private final String type;
 
-    StorageImpl(final String type) {
+    StorageQualifierImpl(final String type) {
         this.type = type;
     }
 
@@ -44,7 +44,7 @@ public class StorageImpl extends AnnotationLiteral<Storage> implements Storage {
         if (!super.equals(o)) {
             return false;
         }
-        StorageImpl storage = (StorageImpl) o;
+        StorageQualifierImpl storage = (StorageQualifierImpl) o;
         return Objects.equals(type, storage.type);
     }
 
