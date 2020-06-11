@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.api;
+package org.kie.kogito.persistence.api.factory;
 
 import javax.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.index.cache.CacheService;
-import org.kie.kogito.persistence.api.factory.Producer;
-import org.kie.kogito.persistence.api.factory.factory.Producer;
+import org.kie.kogito.persistence.api.StorageService;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +45,7 @@ class ProducerTest {
     @BeforeEach
     void prepare() {
         String storageType = "test";
-        when(cacheServices.select(eq(new StorageImpl(storageType)))).thenReturn(instance);
+        when(cacheServices.select(ArgumentMatchers.eq(new StorageQualifierImpl(storageType)))).thenReturn(instance);
         cacheProducer.storageType = storageType;
     }
 
