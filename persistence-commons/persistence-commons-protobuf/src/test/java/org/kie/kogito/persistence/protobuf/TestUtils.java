@@ -28,10 +28,10 @@ import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.config.Configuration;
 import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.impl.SerializationContextImpl;
-import org.kie.kogito.index.domain.AttributeDescriptor;
-import org.kie.kogito.index.domain.DomainDescriptor;
+import org.kie.kogito.persistence.api.proto.AttributeDescriptor;
+import org.kie.kogito.persistence.api.proto.DomainDescriptor;
 
-import static org.kie.kogito.index.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
+import static org.kie.kogito.persistence.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
 
 public class TestUtils {
 

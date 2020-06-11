@@ -23,9 +23,9 @@ import org.infinispan.protostream.FileDescriptorSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.index.event.SchemaRegisteredEvent;
-import org.kie.kogito.index.schema.ProcessDescriptor;
-import org.kie.kogito.index.schema.SchemaDescriptor;
+import org.kie.kogito.persistence.api.schema.ProcessDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -33,11 +33,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.kie.kogito.index.protobuf.ProtobufService.SCHEMA_TYPE;
-import static org.kie.kogito.persistence.protobuf.TestUtils.PROCESS_ID;
-import static org.kie.kogito.persistence.protobuf.TestUtils.PROCESS_TYPE;
+import static org.kie.kogito.persistence.protobuf.ProtobufService.SCHEMA_TYPE;
 import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileContent;
-import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileInvalidContent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -81,7 +78,7 @@ class ProtobufServiceTest {
     @Test
     void registerProtoBufferTypeWithInvalidKogitoDescriptors() {
         kogitoDescriptors.addProtoFile("test", "test");
-        String content = getTestFileContent();
+        String content = TestUtils.getTestFileContent();
 
         String exceptionMessage = "";
 
@@ -99,7 +96,7 @@ class ProtobufServiceTest {
 
     @Test
     void registerProtoBufferTypeWithInvalidProtoFile() {
-        String content = getTestFileInvalidContent();
+        String content = TestUtils.getTestFileInvalidContent();
 
         String exceptionMessage = "";
 
@@ -119,7 +116,7 @@ class ProtobufServiceTest {
     void registerProtoBufferTypeSchemaRegistrationFailed() {
         String testExceptionMessage = "test schema registration fail";
         doThrow(new RuntimeException(testExceptionMessage)).when(schemaEvent).fire(any(SchemaRegisteredEvent.class));
-        String content = getTestFileContent();
+        String content = TestUtils.getTestFileContent();
 
         String exceptionMessage = "";
 
@@ -131,13 +128,13 @@ class ProtobufServiceTest {
 
         assertEquals(testExceptionMessage, exceptionMessage);
 
-        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(new SchemaDescriptor(PROCESS_ID + ".proto", content, new ProcessDescriptor(PROCESS_ID, PROCESS_TYPE)), SCHEMA_TYPE));
+        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(new SchemaDescriptor(TestUtils.PROCESS_ID + ".proto", content, new ProcessDescriptor(TestUtils.PROCESS_ID, TestUtils.PROCESS_TYPE)), SCHEMA_TYPE));
         verify(domainModelEvent, never()).fire(any(FileDescriptorRegisteredEvent.class));
     }
 
     @Test
     void registerProtoBufferType() {
-        String content = getTestFileContent();
+        String content = TestUtils.getTestFileContent();
 
         try {
             protobufService.registerProtoBufferType(content);
@@ -145,7 +142,7 @@ class ProtobufServiceTest {
             fail("RegisterProtoBufferType failed", e);
         }
 
-        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(new SchemaDescriptor(PROCESS_ID + ".proto", content, new ProcessDescriptor(PROCESS_ID, PROCESS_TYPE)), SCHEMA_TYPE));
+        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(new SchemaDescriptor(TestUtils.PROCESS_ID + ".proto", content, new ProcessDescriptor(TestUtils.PROCESS_ID, TestUtils.PROCESS_TYPE)), SCHEMA_TYPE));
         verify(domainModelEvent, times(1)).fire(any(FileDescriptorRegisteredEvent.class));
     }
 }

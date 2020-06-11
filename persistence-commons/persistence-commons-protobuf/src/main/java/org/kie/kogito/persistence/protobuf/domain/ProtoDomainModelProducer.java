@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,21 +29,21 @@ import org.infinispan.protostream.descriptors.Descriptor;
 import org.infinispan.protostream.descriptors.FieldDescriptor;
 import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.impl.AnnotatedDescriptorImpl;
-import org.kie.kogito.index.domain.AttributeDescriptor;
-import org.kie.kogito.index.domain.DomainDescriptor;
-import org.kie.kogito.index.event.DomainModelRegisteredEvent;
+import org.kie.kogito.persistence.api.proto.AttributeDescriptor;
+import org.kie.kogito.persistence.api.proto.DomainDescriptor;
+import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
 import org.kie.kogito.persistence.protobuf.FileDescriptorRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @ApplicationScoped
 public class ProtoDomainModelProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtoDomainModelProducer.class);
-    
+
     @Inject
     Event<DomainModelRegisteredEvent> domainEvent;
 

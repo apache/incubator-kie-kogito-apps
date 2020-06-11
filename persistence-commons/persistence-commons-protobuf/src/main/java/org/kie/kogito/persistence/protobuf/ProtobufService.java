@@ -30,15 +30,16 @@ import org.infinispan.protostream.descriptors.FieldDescriptor;
 import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.infinispan.protostream.descriptors.Option;
 import org.infinispan.protostream.impl.SerializationContextImpl;
-import org.kie.kogito.index.event.SchemaRegisteredEvent;
-import org.kie.kogito.index.schema.ProcessDescriptor;
-import org.kie.kogito.index.schema.SchemaDescriptor;
-import org.kie.kogito.index.schema.SchemaType;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.StorageService;
+import org.kie.kogito.persistence.api.schema.ProcessDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
+import org.kie.kogito.persistence.api.schema.SchemaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.lang.String.format;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 
 @ApplicationScoped
 public class ProtobufService {
@@ -47,7 +48,7 @@ public class ProtobufService {
 
     static final SchemaType SCHEMA_TYPE = new SchemaType("proto");
 
-    static final String DOMAIN_MODEL_PROTO_NAME = "domainModel";
+    public static final String DOMAIN_MODEL_PROTO_NAME = "domainModel";
 
     @Inject
     FileDescriptorSource kogitoDescriptors;
@@ -58,11 +59,18 @@ public class ProtobufService {
     @Inject
     Event<SchemaRegisteredEvent> schemaEvent;
 
+    @Inject
+    StorageService storageService;
+
     void onStart(@Observes StartupEvent ev) {
         kogitoDescriptors.getFileDescriptors().forEach((name, bytes) -> {
             LOGGER.info("Registering Kogito ProtoBuffer file: {}", name);
             schemaEvent.fire(new SchemaRegisteredEvent(new SchemaDescriptor(name, new String(bytes), null), SCHEMA_TYPE));
         });
+    }
+
+    public Storage<String, String> getProtobufCache() {
+        return storageService.getCache(Constants.PROTOBUF_METADATA_CACHE_NAME, String.class);
     }
 
     public void registerProtoBufferType(String content) throws ProtobufValidationException {
