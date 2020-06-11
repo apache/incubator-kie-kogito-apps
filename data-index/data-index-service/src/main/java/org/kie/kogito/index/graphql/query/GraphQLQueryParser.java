@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.kie.kogito.storage.api.query.AttributeFilter;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;

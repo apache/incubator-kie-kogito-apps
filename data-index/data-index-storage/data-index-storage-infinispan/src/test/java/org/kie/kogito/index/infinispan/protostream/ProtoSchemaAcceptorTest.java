@@ -18,9 +18,9 @@ package org.kie.kogito.index.infinispan.protostream;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor;
-import org.kie.kogito.storage.api.schema.SchemaType;
+import org.kie.kogito.persistence.api.schema.SchemaType;
 
-import static org.kie.kogito.storage.infinispan.Constants.INFINISPAN_STORAGE;
+import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
 import static org.wildfly.common.Assert.assertFalse;
 import static org.wildfly.common.Assert.assertTrue;
 

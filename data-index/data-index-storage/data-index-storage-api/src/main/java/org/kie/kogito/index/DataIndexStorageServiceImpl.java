@@ -23,9 +23,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.storage.api.Storage;
-import org.kie.kogito.storage.api.StorageService;
-import org.kie.kogito.storage.protobuf.ProtobufService;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.StorageService;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 @ApplicationScoped
 public class DataIndexStorageServiceImpl implements DataIndexStorageService {

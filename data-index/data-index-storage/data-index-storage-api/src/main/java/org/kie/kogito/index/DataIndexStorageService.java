@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.persistence.api.Storage;
 
 public interface DataIndexStorageService {
 

@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-storage-commons-infinispan</artifactId>
+      <artifactId>kogito-persistence-commons-infinispan</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

@@ -16,8 +16,6 @@
 
 package org.kie.kogito.index.infinispan.protostream;
 
-import java.util.Map;
-
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +23,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaAcceptor;
 import org.kie.kogito.index.infinispan.schema.ProtoSchemaManager;
-import org.kie.kogito.storage.api.Storage;
-import org.kie.kogito.storage.api.schema.ProcessDescriptor;
-import org.kie.kogito.storage.api.schema.SchemaDescriptor;
-import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
-import org.kie.kogito.storage.api.schema.SchemaRegistrationException;
-import org.kie.kogito.storage.api.schema.SchemaType;
-import org.kie.kogito.storage.protobuf.ProtobufService;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.schema.ProcessDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
+import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
+import org.kie.kogito.persistence.api.schema.SchemaType;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
