@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.persistence.protobuf;
 
 import javax.enterprise.event.Event;
 
@@ -34,10 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.kie.kogito.index.protobuf.ProtobufService.SCHEMA_TYPE;
-import static org.kie.kogito.index.protobuf.TestUtils.PROCESS_ID;
-import static org.kie.kogito.index.protobuf.TestUtils.PROCESS_TYPE;
-import static org.kie.kogito.index.protobuf.TestUtils.getTestFileContent;
-import static org.kie.kogito.index.protobuf.TestUtils.getTestFileInvalidContent;
+import static org.kie.kogito.persistence.protobuf.TestUtils.PROCESS_ID;
+import static org.kie.kogito.persistence.protobuf.TestUtils.PROCESS_TYPE;
+import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileContent;
+import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileInvalidContent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;

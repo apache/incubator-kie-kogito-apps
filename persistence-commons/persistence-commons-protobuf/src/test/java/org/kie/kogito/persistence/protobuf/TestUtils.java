@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.persistence.protobuf;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

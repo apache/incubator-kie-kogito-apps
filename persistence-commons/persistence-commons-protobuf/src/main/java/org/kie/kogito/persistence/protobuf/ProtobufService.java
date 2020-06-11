@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.persistence.protobuf;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -99,7 +99,7 @@ public class ProtobufService {
             throw new ProtobufValidationException(format("Could not find message with name: %s in proto file, e, please review option kogito_model", fullTypeName));
         }
 
-        validateDescriptorField(messageName, descriptor, KOGITO_DOMAIN_ATTRIBUTE);
+        validateDescriptorField(messageName, descriptor, Constants.KOGITO_DOMAIN_ATTRIBUTE);
 
         try {
             schemaEvent.fire(new SchemaRegisteredEvent(new SchemaDescriptor(processId + ".proto", content, new ProcessDescriptor(processId, fullTypeName)), SCHEMA_TYPE));

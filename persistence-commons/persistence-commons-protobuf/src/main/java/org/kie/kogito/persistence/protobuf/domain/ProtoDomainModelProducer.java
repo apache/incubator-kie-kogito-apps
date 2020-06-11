@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.persistence.protobuf.domain;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +32,7 @@ import org.infinispan.protostream.impl.AnnotatedDescriptorImpl;
 import org.kie.kogito.index.domain.AttributeDescriptor;
 import org.kie.kogito.index.domain.DomainDescriptor;
 import org.kie.kogito.index.event.DomainModelRegisteredEvent;
+import org.kie.kogito.persistence.protobuf.FileDescriptorRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

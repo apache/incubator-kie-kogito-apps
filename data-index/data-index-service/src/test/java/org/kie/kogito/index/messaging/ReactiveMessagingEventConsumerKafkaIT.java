@@ -17,7 +17,6 @@
 package org.kie.kogito.index.messaging;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;

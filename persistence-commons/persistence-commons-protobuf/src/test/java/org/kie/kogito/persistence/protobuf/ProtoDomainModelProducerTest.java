@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.protobuf;
+package org.kie.kogito.persistence.protobuf;
 
 import javax.enterprise.event.Event;
 
@@ -26,10 +26,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.kie.kogito.index.protobuf.TestUtils.ADDITIONAL_DESCRIPTORS;
-import static org.kie.kogito.index.protobuf.TestUtils.DOMAIN_DESCRIPTOR;
-import static org.kie.kogito.index.protobuf.TestUtils.PROCESS_ID;
-import static org.kie.kogito.index.protobuf.TestUtils.getTestFileDescriptor;
+import static org.kie.kogito.persistence.protobuf.TestUtils.ADDITIONAL_DESCRIPTORS;
+import static org.kie.kogito.persistence.protobuf.TestUtils.DOMAIN_DESCRIPTOR;
+import static org.kie.kogito.persistence.protobuf.TestUtils.PROCESS_ID;
+import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileDescriptor;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
