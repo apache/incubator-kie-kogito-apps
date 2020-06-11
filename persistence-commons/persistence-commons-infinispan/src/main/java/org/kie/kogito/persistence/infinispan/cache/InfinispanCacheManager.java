@@ -115,17 +115,17 @@ public class InfinispanCacheManager implements CacheService {
 
     @Override
     public Cache<String, ProcessInstance> getProcessInstancesCache() {
-        return new CacheImpl<>(getOrCreateCache(PROCESS_INSTANCES_CACHE, cacheTemplateName), ProcessInstance.class.getName());
+        return new StorageImpl<>(getOrCreateCache(PROCESS_INSTANCES_CACHE, cacheTemplateName), ProcessInstance.class.getName());
     }
 
     @Override
     public Cache<String, UserTaskInstance> getUserTaskInstancesCache() {
-        return new CacheImpl<>(getOrCreateCache(USER_TASK_INSTANCES_CACHE, cacheTemplateName), UserTaskInstance.class.getName());
+        return new StorageImpl<>(getOrCreateCache(USER_TASK_INSTANCES_CACHE, cacheTemplateName), UserTaskInstance.class.getName());
     }
 
     @Override
     public Cache<String, Job> getJobsCache() {
-        return new CacheImpl<>(getOrCreateCache(JOBS_CACHE, cacheTemplateName), Job.class.getName());
+        return new StorageImpl<>(getOrCreateCache(JOBS_CACHE, cacheTemplateName), Job.class.getName());
     }
 
     public Map<String, String> getProtobufCache() {
@@ -134,12 +134,12 @@ public class InfinispanCacheManager implements CacheService {
 
     @Override
     public Cache<String, String> getProcessIdModelCache() {
-        return new CacheImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
+        return new StorageImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
     }
 
     @Override
     public Cache<String, ObjectNode> getDomainModelCache(String processId) {
         String rootType = getProcessIdModelCache().get(processId);
-        return rootType == null ? null : new CacheImpl<>(getOrCreateCache(processId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
+        return rootType == null ? null : new StorageImpl<>(getOrCreateCache(processId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
     }
 }
