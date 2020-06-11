@@ -62,7 +62,7 @@ public class ProcessInstanceMetaMapperTest {
                 a -> a.node(piPrefix + "[0].lastUpdate").isEqualTo(event.getData().getLastUpdate().toInstant().toEpochMilli())
         );
     }
-    
+
     @Test
     public void testProcessInstanceMapperWithBusinessKey() {
         String processId = "travels";
