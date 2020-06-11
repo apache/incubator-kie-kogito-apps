@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,11 @@
 
 package org.kie.kogito.persistence.api;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.UserTaskInstance;
-
 public interface StorageService {
 
-    Storage<String, ProcessInstance> getProcessInstancesCache();
+    Storage<String, String> getCache(String name);
 
-    Storage<String, UserTaskInstance> getUserTaskInstancesCache();
+    <T> Storage<String, T> getCache(String name, Class<T> type);
 
-    Storage<String, Job> getJobsCache();
-
-    Storage<String, ObjectNode> getDomainModelCache(String processId);
-
-    Storage<String, String> getProcessIdModelCache();
+    <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType);
 }

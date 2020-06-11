@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,33 @@
 
 package org.kie.kogito.persistence.api;
 
-public interface StorageService {
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
 
-    Storage<String, String> getCache(String name);
+import org.kie.kogito.persistence.api.query.Query;
 
-    <T> Storage<String, T> getCache(String name, Class<T> type);
+public interface Storage<K, V> {
 
-    <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType);
+    void addObjectCreatedListener(Consumer<V> consumer);
+
+    void addObjectUpdatedListener(Consumer<V> consumer);
+
+    void addObjectRemovedListener(Consumer<K> consumer);
+
+    Query<V> query();
+
+    V get(Object key);
+
+    V put(K key, V value);
+
+    V remove(Object key);
+
+    boolean containsKey(K key);
+
+    Set<Map.Entry<K, V>> entrySet();
+
+    void clear();
+
+    String getRootType();
 }
