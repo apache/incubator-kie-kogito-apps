@@ -16,36 +16,36 @@ import {
   InjectedOuiaProps,
   withOuiaContext
 } from '@patternfly/react-core';
-import { ServerErrors, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import {
+  ServerErrors,
+  ouiaPageTypeAndObjectId,
+  GraphQL,
+  ProcessDescriptor,
+  KogitoSpinner
+} from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
 import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
 import './ProcessDetailsPage.css';
-import {
-  useGetProcessInstanceByIdQuery,
-  ProcessInstanceState
-} from '../../../graphql/types';
-import ProcessDescriptor from '../../Molecules/ProcessDescriptor/ProcessDescriptor';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
-import ProcessBulkModalComponent from '../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent';
+import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import {
   handleAbort,
   setTitle,
   isModalOpen,
   modalToggle
 } from '../../../utils/Utils';
+import ProcessInstanceState = GraphQL.ProcessInstanceState;
 
 interface MatchProps {
-  instanceID: string
+  instanceID: string;
 }
 
-const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps> = ({
-  ouiaContext,
-  ...props
-}) => {
+const ProcessDetailsPage: React.FC<
+  RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps
+> = ({ ouiaContext, ...props }) => {
   const id = props.match.params.instanceID;
   const [isSkipModalOpen, setIsSkipModalOpen] = useState<boolean>(false);
   const [isRetryModalOpen, setIsRetryModalOpen] = useState<boolean>(false);
@@ -55,7 +55,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
   const [isAbortModalOpen, setIsAbortModalOpen] = useState<boolean>(false);
   const currentPage = JSON.parse(window.localStorage.getItem('state'));
 
-  const { loading, error, data } = useGetProcessInstanceByIdQuery({
+  const { loading, error, data } = GraphQL.useGetProcessInstanceByIdQuery({
     variables: { id }
   });
 
@@ -77,7 +77,9 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
     };
   });
 
-  useEffect(() => { return ouiaPageTypeAndObjectId(ouiaContext, "process-instances", id) })
+  useEffect(() => {
+    return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances', id);
+  });
 
   const abortButton = () => {
     if (
@@ -152,7 +154,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
       {!error ? (
         <>
           <PageSection variant="light">
-            <ProcessBulkModalComponent
+            <ProcessListModal
               isModalOpen={isAbortModalOpen}
               handleModalToggle={handleAbortModalToggle}
               checkedArray={data && [data.ProcessInstances[0].state]}
@@ -166,7 +168,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
               completedMessageObj={{}}
               isAbortModalOpen={isAbortModalOpen}
             />
-            <ProcessBulkModalComponent
+            <ProcessListModal
               isModalOpen={isModalOpen(
                 modalTitle,
                 isSkipModalOpen,
@@ -278,7 +280,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> & Inj
             ) : (
               <Card>
                 <Bullseye>
-                  <SpinnerComponent spinnerText="Loading process details..." />
+                  <KogitoSpinner spinnerText="Loading process details..." />
                 </Bullseye>
               </Card>
             )}

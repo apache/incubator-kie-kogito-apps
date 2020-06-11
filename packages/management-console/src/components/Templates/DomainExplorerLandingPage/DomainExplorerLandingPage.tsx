@@ -22,13 +22,12 @@ import { Link } from 'react-router-dom';
 import { CubesIcon } from '@patternfly/react-icons';
 import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
 
-import { useGetQueryFieldsQuery } from '../../../graphql/types';
-import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import { GraphQL, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
 
 const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
   ouiaContext
 }) => {
-  const getQuery = useGetQueryFieldsQuery();
+  const getQuery = GraphQL.useGetQueryFieldsQuery();
   let availableDomains =
     !getQuery.loading && getQuery.data.__type.fields.slice(2);
 
@@ -41,7 +40,9 @@ const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
       }
     });
 
-  useEffect(() => { return ouiaPageTypeAndObjectId(ouiaContext, "domain-explorer") })
+  useEffect(() => {
+    return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer');
+  });
 
   return (
     <>

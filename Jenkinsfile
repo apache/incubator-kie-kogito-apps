@@ -1,5 +1,9 @@
 @Library('jenkins-pipeline-shared-libraries')_
 
+def changeAuthor = env.ghprbPullAuthorLogin ?: CHANGE_AUTHOR
+def changeBranch = env.ghprbSourceBranch ?: CHANGE_BRANCH
+def changeTarget = env.ghprbTargetBranch ?: CHANGE_TARGET
+
 pipeline {
     agent {
         label 'kie-rhel7 && kie-mem16g'
@@ -9,7 +13,7 @@ pipeline {
         jdk 'kie-jdk11'
     }
     options {
-        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '10', numToKeepStr: '')
         timeout(time: 120, unit: 'MINUTES')
     }
     environment {
@@ -27,7 +31,7 @@ pipeline {
             steps {
                 dir("kogito-runtimes") {
                     script {
-                        githubscm.checkoutIfExists('kogito-runtimes', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET")
+                        githubscm.checkoutIfExists('kogito-runtimes', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
                         maven.runMavenWithSubmarineSettings('clean install', false)
                     }
                 }
@@ -35,9 +39,12 @@ pipeline {
         }
         stage('Build kogito-apps') {
             steps {
-                script {
-                    maven.runMavenWithSubmarineSettings('clean install -Prun-code-coverage', false)
-                    maven.runMavenWithSubmarineSettings('-e -nsu validate -Psonarcloud-analysis', false)
+                dir("kogito-apps") {
+                    script {
+                        githubscm.checkoutIfExists('kogito-apps', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
+                        maven.runMavenWithSubmarineSettings('clean install -Prun-code-coverage', false)
+                        maven.runMavenWithSubmarineSettings('-e -nsu validate -Psonarcloud-analysis', false)
+                    }
                 }
             }
         }
@@ -45,14 +52,14 @@ pipeline {
             steps {
                 dir("kogito-examples") {
                     script {
-                        githubscm.checkoutIfExists('kogito-examples', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET")
+                        githubscm.checkoutIfExists('kogito-examples', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
                         maven.runMavenWithSubmarineSettings('clean install', false)
                     }
                 }
                 // Use a separate dir for persistence to not overwrite the test results
                 dir("kogito-examples-persistence") {
                     script {
-                        githubscm.checkoutIfExists('kogito-examples', "$CHANGE_AUTHOR", "$CHANGE_BRANCH", 'kiegroup', "$CHANGE_TARGET")
+                        githubscm.checkoutIfExists('kogito-examples', changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
                         // Don't run with tests so far, see: https://github.com/quarkusio/quarkus/issues/6885
                         maven.runMavenWithSubmarineSettings('clean install -Ppersistence', true)
                     }
@@ -72,7 +79,7 @@ pipeline {
             }
         }
         always {
-            archiveArtifacts artifacts: 'management-console/target/*-runner.jar, data-index/data-index-service/target/*-runner.jar, jobs-service/target/*-runner.jar', fingerprint: true
+            archiveArtifacts artifacts: 'kogito-apps/management-console/target/*-runner.jar, kogito-apps/data-index/data-index-service/target/*-runner.jar, kogito-apps/jobs-service/target/*-runner.jar', fingerprint: true
             junit '**/**/junit.xml'
             junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
             cleanWs()

@@ -1,20 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {DataList, Bullseye} from '@patternfly/react-core';
+import React, { useEffect, useState } from 'react';
+import { DataList, Bullseye } from '@patternfly/react-core';
 import DataListItemComponent from '../../Molecules/DataListItemComponent/DataListItemComponent';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
-import EmptyStateComponent from '../../Atoms/EmptyStateComponent/EmptyStateComponent';
+import { KogitoEmptyState, KogitoSpinner } from '@kogito-apps/common';
 import '@patternfly/patternfly/patternfly-addons.css';
-import {useGetUserTasksByStatesQuery} from '../.././../graphql/types';
-
-
+import { useGetUserTasksByStatesQuery } from '../../../graphql/types';
 
 interface IOwnProps {
   currentState: string;
 }
 
-const DataListComponentByState: React.FC<IOwnProps> = ({
-  currentState
-}) => {
+const DataListComponentByState: React.FC<IOwnProps> = ({ currentState }) => {
   const {
     loading,
     error,
@@ -37,7 +32,7 @@ const DataListComponentByState: React.FC<IOwnProps> = ({
   if (loading) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading user tasks..." />
+        <KogitoSpinner spinnerText="Loading user tasks..." />
       </Bullseye>
     );
   }
@@ -45,7 +40,7 @@ const DataListComponentByState: React.FC<IOwnProps> = ({
   if (networkStatus === 4) {
     return (
       <Bullseye>
-        <SpinnerComponent spinnerText="Loading user tasks..." />
+        <KogitoSpinner spinnerText="Loading user tasks..." />
       </Bullseye>
     );
   }
@@ -53,7 +48,7 @@ const DataListComponentByState: React.FC<IOwnProps> = ({
   if (error) {
     return (
       <div className=".pf-u-my-xl">
-        <EmptyStateComponent
+        <KogitoEmptyState
           iconType="warningTriangleIcon"
           title="Oops... error while loading"
           body="Try using the refresh action to reload user tasks"
@@ -66,19 +61,19 @@ const DataListComponentByState: React.FC<IOwnProps> = ({
   return (
     <DataList aria-label="User Task list">
       {!loading &&
-      childList !== undefined &&
-      childList.UserTaskInstances.map((item, index) => {
-        return (
-          <DataListItemComponent
-            id={index}
-            key={item.id}
-            userTaskInstanceData={item}
-          />
-        );
-      })}
+        childList !== undefined &&
+        childList.UserTaskInstances.map((item, index) => {
+          return (
+            <DataListItemComponent
+              id={index}
+              key={item.id}
+              userTaskInstanceData={item}
+            />
+          );
+        })}
       {loading && (
         <Bullseye>
-          <SpinnerComponent spinnerText="Loading user tasks..." />
+          <KogitoSpinner spinnerText="Loading user tasks..." />
         </Bullseye>
       )}
     </DataList>

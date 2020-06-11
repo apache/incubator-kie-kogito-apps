@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tooltip } from '@patternfly/react-core';
-import { ProcessInstance } from '../../../graphql/types';
+import { GraphQL } from '@kogito-apps/common';
+import ProcessInstance = GraphQL.ProcessInstance;
 
 interface IOwnProps {
   processInstanceData: ProcessInstance;
