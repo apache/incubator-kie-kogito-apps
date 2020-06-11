@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
-import org.kie.kogito.storage.infinispan.protostream.AbstractMarshaller;
+import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 

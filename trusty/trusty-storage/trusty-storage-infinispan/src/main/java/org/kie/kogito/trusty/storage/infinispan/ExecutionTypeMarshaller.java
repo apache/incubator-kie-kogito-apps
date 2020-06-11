@@ -2,7 +2,7 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.EnumMarshaller;
-import org.kie.kogito.storage.infinispan.protostream.AbstractMarshaller;
+import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 
 public class ExecutionTypeMarshaller extends AbstractMarshaller implements EnumMarshaller<ExecutionTypeEnum> {

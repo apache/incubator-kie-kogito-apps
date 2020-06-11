@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 
 import javax.ws.rs.NotFoundException;
 
-import org.kie.kogito.storage.api.Storage;
-import org.kie.kogito.storage.api.query.Query;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.Query;
 
 public class StorageImplMock<K,V> implements Storage<K, V> {
 
