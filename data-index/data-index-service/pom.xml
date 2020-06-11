@@ -25,7 +25,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-storage-commons-protobuf</artifactId>
+      <artifactId>persistence-commons-protobuf</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

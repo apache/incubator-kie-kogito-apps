@@ -29,7 +29,7 @@ import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.InfinispanServerTestResource;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
-import org.kie.kogito.storage.api.Storage;
+import org.kie.kogito.persistence.api.Storage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.TestUtils.getProcessInstance;

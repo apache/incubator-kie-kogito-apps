@@ -19,17 +19,17 @@ package org.kie.kogito.index.infinispan.schema;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.storage.api.schema.SchemaAcceptor;
-import org.kie.kogito.storage.api.schema.SchemaType;
+import org.kie.kogito.persistence.api.schema.SchemaAcceptor;
+import org.kie.kogito.persistence.api.schema.SchemaType;
 
-import static org.kie.kogito.storage.infinispan.Constants.INFINISPAN_STORAGE;
+import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
 
 @ApplicationScoped
 public class ProtoSchemaAcceptor implements SchemaAcceptor {
 
     public static final String PROTO_SCHEMA_TYPE = "proto";
 
-    @ConfigProperty(name = "kogito.data-index.storage.type")
+    @ConfigProperty(name = "kogito.persistence.type")
     public String storageType;
 
     @Override

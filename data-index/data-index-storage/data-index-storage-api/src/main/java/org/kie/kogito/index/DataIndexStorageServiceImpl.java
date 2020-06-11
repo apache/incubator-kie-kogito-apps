@@ -23,9 +23,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.storage.api.Storage;
-import org.kie.kogito.storage.api.StorageService;
-import org.kie.kogito.storage.protobuf.ProtobufService;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.StorageService;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 @ApplicationScoped
 public class DataIndexStorageServiceImpl implements DataIndexStorageService {
@@ -58,11 +58,12 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     @Override
     public Storage<String, ObjectNode> getDomainModelCache(String processId) {
-        return cacheService.getDomainModelCache(PROCESS_ID_MODEL_CACHE, processId);
+        String rootType = getProcessIdModelCache().get(processId);
+        return rootType == null ? null : cacheService.getCacheWithDataFormat(processId + "_domain", ObjectNode.class, rootType);
     }
 
     @Override
     public Storage<String, String> getProcessIdModelCache() {
-        return cacheService.getModelCacheByType(PROCESS_ID_MODEL_CACHE);
+        return cacheService.getCache(PROCESS_ID_MODEL_CACHE);
     }
 }

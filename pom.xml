@@ -59,11 +59,11 @@
   </dependencyManagement>
 
   <modules>
+    <module>persistence-commons</module>
     <module>jobs-service</module>
     <module>data-index</module>
     <module>management-console</module>
     <module>explainability-service</module>
     <module>trusty</module>
-    <module>kogito-storage-commons</module>
   </modules>
 </project>

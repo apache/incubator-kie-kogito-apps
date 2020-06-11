@@ -18,7 +18,6 @@ package org.kie.kogito.index.infinispan.schema;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -26,11 +25,11 @@ import javax.inject.Inject;
 
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.kie.kogito.index.DataIndexStorageService;
-import org.kie.kogito.storage.api.Storage;
-import org.kie.kogito.storage.api.schema.SchemaDescriptor;
-import org.kie.kogito.storage.api.schema.SchemaRegisteredEvent;
-import org.kie.kogito.storage.api.schema.SchemaRegistrationException;
-import org.kie.kogito.storage.protobuf.ProtobufService;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.schema.SchemaDescriptor;
+import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
+import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

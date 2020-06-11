@@ -25,7 +25,7 @@ import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
-import org.kie.kogito.storage.infinispan.protostream.AbstractMarshaller;
+import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 
 public class ProcessInstanceMarshaller extends AbstractMarshaller implements MessageMarshaller<ProcessInstance> {
 

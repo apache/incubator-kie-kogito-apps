@@ -55,8 +55,8 @@ import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.storage.api.Storage;
-import org.kie.kogito.storage.api.query.Query;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.Query;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ import org.slf4j.LoggerFactory;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
-import static org.kie.kogito.storage.api.query.QueryFilterFactory.equalTo;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
 
 @ApplicationScoped
 public class GraphQLSchemaManager {
