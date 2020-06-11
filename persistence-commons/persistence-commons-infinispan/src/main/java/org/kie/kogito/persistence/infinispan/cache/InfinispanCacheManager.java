@@ -16,15 +16,12 @@
 
 package org.kie.kogito.persistence.infinispan.cache;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.quarkus.runtime.ShutdownEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.infinispan.client.hotrod.DataFormat;
@@ -32,27 +29,19 @@ import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.exceptions.HotRodClientException;
 import org.infinispan.commons.dataconversion.MediaType;
-import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.index.cache.Cache;
-import org.kie.kogito.index.cache.CacheService;
-import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.index.storage.Storage;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.StorageService;
+import org.kie.kogito.persistence.api.factory.StorageQualifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.kie.kogito.index.infinispan.Constants.INFINISPAN_STORAGE;
+import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
 
 @ApplicationScoped
-@Storage(INFINISPAN_STORAGE)
-public class InfinispanCacheManager implements CacheService {
+@StorageQualifier(INFINISPAN_STORAGE)
+public class InfinispanCacheManager implements StorageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanCacheManager.class);
-    private static final String PROCESS_INSTANCES_CACHE = "processinstances";
-    private static final String USER_TASK_INSTANCES_CACHE = "usertaskinstances";
-    private static final String JOBS_CACHE = "jobs";
-    private static final String PROCESS_ID_MODEL_CACHE = "processidmodel";
 
     @Inject
     JsonDataFormatMarshaller marshaller;
@@ -114,32 +103,17 @@ public class InfinispanCacheManager implements CacheService {
     }
 
     @Override
-    public Cache<String, ProcessInstance> getProcessInstancesCache() {
-        return new StorageImpl<>(getOrCreateCache(PROCESS_INSTANCES_CACHE, cacheTemplateName), ProcessInstance.class.getName());
+    public Storage<String, String> getCache(String name){
+        return new StorageImpl<>(manager.administration().getOrCreateCache(name, (String) null), String.class.getName());
     }
 
     @Override
-    public Cache<String, UserTaskInstance> getUserTaskInstancesCache() {
-        return new StorageImpl<>(getOrCreateCache(USER_TASK_INSTANCES_CACHE, cacheTemplateName), UserTaskInstance.class.getName());
+    public <T> Storage<String, T> getCache(String name, Class<T> type) {
+        return new StorageImpl<>(getOrCreateCache(name, cacheTemplateName), type.getName());
     }
 
     @Override
-    public Cache<String, Job> getJobsCache() {
-        return new StorageImpl<>(getOrCreateCache(JOBS_CACHE, cacheTemplateName), Job.class.getName());
-    }
-
-    public Map<String, String> getProtobufCache() {
-        return manager.getCache(ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME);
-    }
-
-    @Override
-    public Cache<String, String> getProcessIdModelCache() {
-        return new StorageImpl<>(manager.administration().getOrCreateCache(PROCESS_ID_MODEL_CACHE, (String) null), String.class.getName());
-    }
-
-    @Override
-    public Cache<String, ObjectNode> getDomainModelCache(String processId) {
-        String rootType = getProcessIdModelCache().get(processId);
-        return rootType == null ? null : new StorageImpl<>(getOrCreateCache(processId + "_domain", cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
+    public <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType){
+        return new StorageImpl<>(getOrCreateCache(name, cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
     }
 }

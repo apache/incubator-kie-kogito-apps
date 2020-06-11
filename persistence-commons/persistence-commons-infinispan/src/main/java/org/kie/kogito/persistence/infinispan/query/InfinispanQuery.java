@@ -22,9 +22,9 @@ import java.util.function.Function;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.Search;
 import org.infinispan.query.dsl.QueryFactory;
-import org.kie.kogito.index.query.AttributeFilter;
-import org.kie.kogito.index.query.AttributeSort;
-import org.kie.kogito.index.query.Query;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
+import org.kie.kogito.persistence.api.query.AttributeSort;
+import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -27,22 +27,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.query.AttributeFilter;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.kie.kogito.index.query.QueryFilterFactory.*;
-import static org.kie.kogito.index.query.SortDirection.ASC;
-import static org.kie.kogito.index.query.SortDirection.DESC;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.*;
+import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
+import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InfinispanQueryTest {
+
+    private static final String rootType = "org.kie.kogito.index.model.ProcessInstance";
 
     @Mock
     QueryFactory factory;
@@ -126,7 +127,7 @@ public class InfinispanQueryTest {
 
     @Test
     public void testNoParameters() {
-        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
 
         query.execute();
 
@@ -136,7 +137,7 @@ public class InfinispanQueryTest {
 
     @Test
     public void testEmptyParameters() {
-        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
         query.filter(emptyList());
         query.sort(emptyList());
 
@@ -148,7 +149,7 @@ public class InfinispanQueryTest {
 
     @Test
     public void testPagination() {
-        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
         query.limit(10);
         query.offset(0);
 
@@ -162,7 +163,7 @@ public class InfinispanQueryTest {
 
     @Test
     public void testOrderBy() {
-        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
         query.sort(asList(orderBy("name", DESC), orderBy("date", ASC)));
 
         query.execute();
@@ -174,7 +175,7 @@ public class InfinispanQueryTest {
     @ParameterizedTest
     @MethodSource("provideFilters")
     public void assertQueryFilters(List<AttributeFilter> filters, String queryString) {
-        InfinispanQuery query = new InfinispanQuery(factory, ProcessInstance.class.getName());
+        InfinispanQuery query = new InfinispanQuery(factory, rootType);
         query.filter(filters);
 
         query.execute();
