@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan;
+package org.kie.kogito.persistence.infinispan;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;

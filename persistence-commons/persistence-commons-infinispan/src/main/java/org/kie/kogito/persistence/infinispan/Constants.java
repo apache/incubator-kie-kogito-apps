@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan;
+package org.kie.kogito.persistence.infinispan;
 
 public class Constants {
 

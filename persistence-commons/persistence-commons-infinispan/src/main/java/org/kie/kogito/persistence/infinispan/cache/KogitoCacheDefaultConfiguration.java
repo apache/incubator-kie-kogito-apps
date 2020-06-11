@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.cache;
+package org.kie.kogito.persistence.infinispan.cache;
 
 import java.io.InputStream;
 import java.util.Scanner;

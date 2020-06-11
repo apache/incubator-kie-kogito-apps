@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.query;
+package org.kie.kogito.persistence.infinispan.query;
 
 import java.util.List;
 import java.util.stream.Stream;

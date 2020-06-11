@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.listener;
+package org.kie.kogito.persistence.infinispan.listener;
 
 import java.util.function.Consumer;
 

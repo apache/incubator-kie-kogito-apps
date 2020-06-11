@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.infinispan.protostream;
+package org.kie.kogito.persistence.infinispan.protostream;
 
 import java.io.IOException;
 import java.time.ZoneOffset;
