@@ -19,9 +19,9 @@ import {
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
-  useGetProcessInstanceByIdQuery,
-  ProcessInstanceState,
-  ProcessDescriptor
+  GraphQL,
+  ProcessDescriptor,
+  KogitoSpinner
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
@@ -29,15 +29,15 @@ import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
 import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
 import './ProcessDetailsPage.css';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
-import ProcessBulkModalComponent from '../../Atoms/ProcessBulkModalComponent/ProcessBulkModalComponent';
+import PageTitle from '../../Molecules/PageTitle/PageTitle';
+import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import {
   handleAbort,
   setTitle,
   isModalOpen,
   modalToggle
 } from '../../../utils/Utils';
+import ProcessInstanceState = GraphQL.ProcessInstanceState;
 
 interface MatchProps {
   instanceID: string;
@@ -55,7 +55,7 @@ const ProcessDetailsPage: React.FC<
   const [isAbortModalOpen, setIsAbortModalOpen] = useState<boolean>(false);
   const currentPage = JSON.parse(window.localStorage.getItem('state'));
 
-  const { loading, error, data } = useGetProcessInstanceByIdQuery({
+  const { loading, error, data } = GraphQL.useGetProcessInstanceByIdQuery({
     variables: { id }
   });
 
@@ -154,7 +154,7 @@ const ProcessDetailsPage: React.FC<
       {!error ? (
         <>
           <PageSection variant="light">
-            <ProcessBulkModalComponent
+            <ProcessListModal
               isModalOpen={isAbortModalOpen}
               handleModalToggle={handleAbortModalToggle}
               checkedArray={data && [data.ProcessInstances[0].state]}
@@ -168,7 +168,7 @@ const ProcessDetailsPage: React.FC<
               completedMessageObj={{}}
               isAbortModalOpen={isAbortModalOpen}
             />
-            <ProcessBulkModalComponent
+            <ProcessListModal
               isModalOpen={isModalOpen(
                 modalTitle,
                 isSkipModalOpen,
@@ -183,7 +183,7 @@ const ProcessDetailsPage: React.FC<
               modalTitle={setTitle(titleType, modalTitle)}
               modalContent={modalContent}
             />
-            <PageTitleComponent title="Process Details" />
+            <PageTitle title="Process Details" />
             {!loading ? (
               <Grid gutter="md" span={12} lg={6} xl={4}>
                 <GridItem span={12}>
@@ -280,7 +280,7 @@ const ProcessDetailsPage: React.FC<
             ) : (
               <Card>
                 <Bullseye>
-                  <SpinnerComponent spinnerText="Loading process details..." />
+                  <KogitoSpinner spinnerText="Loading process details..." />
                 </Bullseye>
               </Card>
             )}

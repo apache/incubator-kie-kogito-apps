@@ -15,9 +15,8 @@ import {
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
-  useGetQueryTypesQuery,
-  useGetQueryFieldsQuery,
-  useGetColumnPickerAttributesQuery
+  GraphQL,
+  KogitoSpinner
 } from '@kogito-apps/common';
 import { FilterIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
@@ -25,9 +24,8 @@ import { Redirect, RouteComponentProps } from 'react-router';
 import './DomainExplorerPage.css';
 import DomainExplorerColumnPicker from '../../Organisms/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
 import DomainExplorerTable from '../../Organisms/DomainExplorerTable/DomainExplorerTable';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
-import SpinnerComponent from '../../Atoms/SpinnerComponent/SpinnerComponent';
-import LoadMoreComponent from '../../Atoms/LoadMoreComponent/LoadMoreComponent';
+import PageTitle from '../../Molecules/PageTitle/PageTitle';
+import LoadMore from '../../Atoms/LoadMore/LoadMore';
 
 interface IOwnProps {
   domains: any;
@@ -100,9 +98,9 @@ const DomainExplorerPage: React.FC<
     return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer', domainName);
   });
 
-  const getQuery = useGetQueryFieldsQuery();
-  const getQueryTypes = useGetQueryTypesQuery();
-  const getPicker = useGetColumnPickerAttributesQuery({
+  const getQuery = GraphQL.useGetQueryFieldsQuery();
+  const getQueryTypes = GraphQL.useGetQueryTypesQuery();
+  const getPicker = GraphQL.useGetColumnPickerAttributesQuery({
     variables: { columnPickerType: domainName }
   });
 
@@ -241,7 +239,7 @@ const DomainExplorerPage: React.FC<
           />
         )}
       <PageSection variant="light">
-        <PageTitleComponent title="Domain Explorer" />
+        <PageTitle title="Domain Explorer" />
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to={'/'}>Home</Link>
@@ -284,7 +282,7 @@ const DomainExplorerPage: React.FC<
                 isLoadingMore={isLoadingMore}
               />
               {!displayEmptyState && (limit === pageSize || isLoadingMore) && (
-                <LoadMoreComponent
+                <LoadMore
                   offset={offset}
                   setOffset={setOffset}
                   getMoreItems={onGetMoreInstances}
@@ -296,7 +294,7 @@ const DomainExplorerPage: React.FC<
           ) : (
             <Card>
               <Bullseye>
-                <SpinnerComponent spinnerText="Loading domain data..." />
+                <KogitoSpinner spinnerText="Loading domain data..." />
               </Bullseye>
             </Card>
           )}
