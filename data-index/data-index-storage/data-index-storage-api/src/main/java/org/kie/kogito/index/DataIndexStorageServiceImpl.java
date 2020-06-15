@@ -38,9 +38,6 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
     @Inject
     StorageService cacheService;
 
-    @Inject
-    ProtobufService protobufService;
-
     @Override
     public Storage<String, ProcessInstance> getProcessInstancesCache() {
         return cacheService.getCache(PROCESS_INSTANCES_CACHE, ProcessInstance.class);
