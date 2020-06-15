@@ -117,10 +117,10 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
         }).collect(Collectors.counting()) == type.getFields().size();
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapRecursiveArgument(String joining, GraphQLQueryParser parser) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapRecursiveArgument(String joining, GraphQLQueryParser parser) {
         return argument -> {
-            Stream<AttributeFilter> stream = ((List) argument).stream().flatMap(args -> parser.apply(args).stream());
-            List<AttributeFilter> filters = stream.collect(toList());
+            Stream<AttributeFilter<?>> stream = ((List) argument).stream().flatMap(args -> parser.apply(args).stream());
+            List<AttributeFilter<?>> filters = stream.collect(toList());
             FilterCondition condition = FilterCondition.fromLabel(joining);
             switch (condition) {
                 case AND:
@@ -133,14 +133,14 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
         };
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapSubEntityArgument(String joining, GraphQLQueryParser parser) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapSubEntityArgument(String joining, GraphQLQueryParser parser) {
         return argument -> parser.apply((Map<String, Object>) argument).stream().map(f -> {
             f.setAttribute(joining + "." + f.getAttribute());
             return f;
         });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapIdArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapIdArgument(String attribute) {
         return argument ->
                 ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
                     FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
@@ -157,7 +157,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                 });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapStringArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapStringArgument(String attribute) {
         return argument ->
                 ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
                     FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
@@ -176,7 +176,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                 });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapDateArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapDateArgument(String attribute) {
         return argument ->
                 ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
                     FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
@@ -202,7 +202,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                 });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapStringArrayArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapStringArrayArgument(String attribute) {
         return argument ->
                 ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
                     FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
@@ -221,7 +221,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                 });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapBooleanArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapBooleanArgument(String attribute) {
         return argument -> ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
             FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
             switch (condition) {
@@ -235,7 +235,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
         });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapNumericArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapNumericArgument(String attribute) {
         return argument -> ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
             FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
             switch (condition) {
@@ -262,7 +262,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
         });
     }
 
-    private Function<Object, Stream<AttributeFilter>> mapEnumArgument(String attribute) {
+    private Function<Object, Stream<AttributeFilter<?>>> mapEnumArgument(String attribute) {
         return argument -> ((Map<String, Object>) argument).entrySet().stream().map(entry -> {
             FilterCondition condition = FilterCondition.fromLabel(entry.getKey());
             switch (condition) {

@@ -90,10 +90,10 @@ public class GraphQLQueryMapperTest {
         state.put("state", singletonMap("equal", 1));
         where.put("and", asList(id, state));
 
-        List<AttributeFilter> filters = processInstanceParser.apply(where);
+        List<AttributeFilter<?>> filters = processInstanceParser.apply(where);
 
         assertThat(filters).hasSize(1);
-        AttributeFilter filter = filters.get(0);
+        AttributeFilter<?> filter = filters.get(0);
         assertThat(filter.getCondition()).isEqualTo(AND);
         assertThat(filter.getValue()).asList().hasSize(3).containsExactly(
                 in("id", asList("adasdasd", "bla")),
@@ -111,7 +111,7 @@ public class GraphQLQueryMapperTest {
         between.put("to", "2020-01-01");
         where.put("end", singletonMap("between", between));
 
-        List<AttributeFilter> filters = processInstanceParser.apply(where);
+        List<AttributeFilter<?>> filters = processInstanceParser.apply(where);
 
         assertThat(filters).hasSize(2);
         assertAttributeFilter("start", EQUAL, filters.get(0), "2019-01-01");
@@ -123,7 +123,7 @@ public class GraphQLQueryMapperTest {
         Map<String, Object> where = new HashMap<>();
         where.put("nodes", singletonMap("name", singletonMap("equal", "StartNode")));
 
-        List<AttributeFilter> filters = processInstanceParser.apply(where);
+        List<AttributeFilter<?>> filters = processInstanceParser.apply(where);
 
         assertThat(filters).hasSize(1);
         assertAttributeFilter("nodes.name", EQUAL, filters.get(0), "StartNode");
@@ -144,7 +144,7 @@ public class GraphQLQueryMapperTest {
         roles.put("containsAny", asList("admin", "kogito"));
         where.put("or", asList(id, state, singletonMap("roles", roles)));
 
-        List<AttributeFilter> filters = processInstanceParser.apply(where);
+        List<AttributeFilter<?>> filters = processInstanceParser.apply(where);
 
         assertThat(filters).hasSize(1).first().extracting(f -> f.getValue()).asList().containsExactly(
                 in("processName", asList("travels")),

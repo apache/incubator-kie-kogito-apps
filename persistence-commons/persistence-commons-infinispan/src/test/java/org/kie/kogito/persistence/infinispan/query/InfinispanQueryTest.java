@@ -174,7 +174,7 @@ class InfinispanQueryTest {
 
     @ParameterizedTest
     @MethodSource("provideFilters")
-    void assertQueryFilters(List<AttributeFilter> filters, String queryString) {
+    void assertQueryFilters(List<AttributeFilter<?>> filters, String queryString) {
         InfinispanQuery query = new InfinispanQuery(factory, rootType);
         query.filter(filters);
 
