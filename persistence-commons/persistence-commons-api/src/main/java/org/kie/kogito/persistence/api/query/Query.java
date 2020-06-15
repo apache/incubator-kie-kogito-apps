@@ -24,7 +24,7 @@ public interface Query<T> {
 
     Query<T> offset(Integer offset);
 
-    Query<T> filter(List<AttributeFilter> filters);
+    Query<T> filter(List<AttributeFilter<?>> filters);
 
     Query<T> sort(List<AttributeSort> sortBy);
     
