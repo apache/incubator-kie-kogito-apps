@@ -1,9 +1,12 @@
 export {
+  default as KogitoSpinner
+} from './src/components/Atoms/KogitoSpinner/KogitoSpinner';
+export {
   default as PageToolbar
 } from './src/components/Molecules/PageToolbar/PageToolbar';
 export {
-  default as PageLayout
-} from './src/components/Templates/PageLayout/PageLayout';
+  default as KogitoPageLayout
+} from './src/components/Templates/KogitoPageLayout/KogitoPageLayout';
 export {
   default as AboutModalBox
 } from './src/components/Molecules/AboutModalBox/AboutModalBox';
@@ -23,5 +26,6 @@ export {
 export {
   default as ProcessDescriptor
 } from './src/components/Molecules/ProcessDescriptor/ProcessDescriptor';
+export * from './src/components/Atoms/KogitoEmptyState/KogitoEmptyState';
 export * from './src/utils/OuiaUtils';
 export * from './src/graphql/types';

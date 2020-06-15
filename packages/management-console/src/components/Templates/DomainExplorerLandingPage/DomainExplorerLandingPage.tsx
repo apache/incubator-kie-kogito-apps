@@ -20,17 +20,14 @@ import {
 } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 import { CubesIcon } from '@patternfly/react-icons';
-import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
+import PageTitle from '../../Molecules/PageTitle/PageTitle';
 
-import {
-  useGetQueryFieldsQuery,
-  ouiaPageTypeAndObjectId
-} from '@kogito-apps/common';
+import { GraphQL, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
 
 const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
   ouiaContext
 }) => {
-  const getQuery = useGetQueryFieldsQuery();
+  const getQuery = GraphQL.useGetQueryFieldsQuery();
   let availableDomains =
     !getQuery.loading && getQuery.data.__type.fields.slice(2);
 
@@ -50,7 +47,7 @@ const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
   return (
     <>
       <PageSection variant="light">
-        <PageTitleComponent title="Domain Explorer" />
+        <PageTitle title="Domain Explorer" />
         <Breadcrumb>
           <BreadcrumbItem>
             <Link to={'/'}>Home</Link>

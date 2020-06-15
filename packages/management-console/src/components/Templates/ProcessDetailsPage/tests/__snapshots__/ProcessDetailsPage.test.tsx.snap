@@ -53,7 +53,7 @@ exports[`Process Details Page component Sample test case 1`] = `
     <section
       className="pf-c-page__main-section pf-m-light"
     >
-      <Modalbox
+      <ProcessListModal
         completedMessageObj={Object {}}
         handleModalToggle={[Function]}
         isAbortModalOpen={false}
@@ -168,8 +168,8 @@ exports[`Process Details Page component Sample test case 1`] = `
             />
           </Portal>
         </Modal>
-      </Modalbox>
-      <Modalbox
+      </ProcessListModal>
+      <ProcessListModal
         modalContent=""
       >
         <Modal
@@ -238,8 +238,8 @@ exports[`Process Details Page component Sample test case 1`] = `
             />
           </Portal>
         </Modal>
-      </Modalbox>
-      <PageTitleComponent
+      </ProcessListModal>
+      <PageTitle
         title="Process Details"
       >
         <Title
@@ -252,7 +252,7 @@ exports[`Process Details Page component Sample test case 1`] = `
             Process Details
           </h1>
         </Title>
-      </PageTitleComponent>
+      </PageTitle>
     </section>
   </PageSection>
   <PageSection>
@@ -267,7 +267,7 @@ exports[`Process Details Page component Sample test case 1`] = `
             <div
               className="pf-l-bullseye"
             >
-              <EmptyStateSpinner
+              <KogitoSpinner
                 spinnerText="Loading process details..."
               >
                 <EmptyState>
@@ -311,7 +311,7 @@ exports[`Process Details Page component Sample test case 1`] = `
                     </Title>
                   </div>
                 </EmptyState>
-              </EmptyStateSpinner>
+              </KogitoSpinner>
             </div>
           </Bullseye>
         </article>
