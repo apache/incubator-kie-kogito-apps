@@ -21,4 +21,6 @@ public class Constants {
 
     // Copied from org.infinispan.query.remote.client.ProtobufMetadataManagerConstants to avoid the import of the entire module.
     public static final String PROTOBUF_METADATA_CACHE_NAME = "___protobuf_metadata";
+
+    private Constants(){}
 }
