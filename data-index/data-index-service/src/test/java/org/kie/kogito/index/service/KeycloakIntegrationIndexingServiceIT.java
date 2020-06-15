@@ -32,18 +32,18 @@ import static io.restassured.RestAssured.given;
 @QuarkusTestResource(InfinispanServerTestResource.class)
 public class KeycloakIntegrationIndexingServiceIT {
 
-    private static final String KEYCLOAK_SERVER_URL = System.getProperty("keycloak.url", "http://localhost:8281/auth");
-    private static final String KEYCLOAK_REALM = "kogito";
-    private static final String KEYCLOAK_CLIENT_ID = "kogito-data-index-service";
+    private static final String KEYCLOAK_SERVER_URL = System.getProperty("quarkus.oidc.auth-server-url", "http://localhost:8281/auth/realms/kogito");
+    private static final String KEYCLOAK_CLIENT_ID = System.getProperty("quarkus.oidc.client-id", "kogito-data-index-service");
+    private static final String KEYCLOAK_CLIENT_SECRET = System.getProperty("quarkus.oidc.credentials.secret", "secret");
 
     @Test
     public void testUnauthorizedUserAccess() {
         //alice only have role User, resource is forbidden
-        given().auth().oauth2(getAccessToken("alice"))
-                .when().get("/graphiql/")
+        given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
+                .auth().oauth2(getAccessToken("alice"))
+                .when().get("/graphql")
                 .then()
-                .statusCode(404);
-
+                .statusCode(403);
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .auth().oauth2(getAccessToken("alice"))
                 .when().get("/graphql")
@@ -53,10 +53,6 @@ public class KeycloakIntegrationIndexingServiceIT {
 
     @Test
     public void testNoTokenProvided() {
-        given().when().get("/graphiql/")
-                .then()
-                .statusCode(404);
-
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .when().get("/graphql")
                 .then()
@@ -67,15 +63,26 @@ public class KeycloakIntegrationIndexingServiceIT {
     public void testAuthorizedUserProvided() {
         //jdoe has role:user and confidential, resource served
         given().auth().oauth2(getAccessToken("jdoe"))
-                .when().get("/graphiql/")
-                .then()
-                .statusCode(404);
-
-        given().auth().oauth2(getAccessToken("jdoe"))
                 .contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200);
+    }
+
+    @Test
+    public void graphiqlLoginOnKeycloakServedTest() {
+        // Returning keycloak login page
+        given().when().get("/graphiql/")
+                .then()
+                .statusCode(200);
+        // Returning keycloak login page
+        given().auth().oauth2(getAccessToken("jdoe"))
+                .when().get("/graphiql/")
+                .then()
+                .statusCode(200);
+        given().when().get("/other/")
+                .then()
+                .statusCode(404);
     }
 
     private String getAccessToken(String userName) {
@@ -84,9 +91,9 @@ public class KeycloakIntegrationIndexingServiceIT {
                 .param("username", userName)
                 .param("password", userName)
                 .param("client_id", KEYCLOAK_CLIENT_ID)
-                .param("client_secret", "secret")
+                .param("client_secret", KEYCLOAK_CLIENT_SECRET)
                 .when()
-                .post(KEYCLOAK_SERVER_URL + "/realms/" + KEYCLOAK_REALM + "/protocol/openid-connect/token")
+                .post(KEYCLOAK_SERVER_URL + "/protocol/openid-connect/token")
                 .as(AccessTokenResponse.class).getToken();
     }
 }
