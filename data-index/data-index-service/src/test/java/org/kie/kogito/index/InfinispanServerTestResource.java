@@ -18,16 +18,10 @@ package org.kie.kogito.index;
 
 import java.util.Collections;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
-import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.ClientIntelligence;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
-import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.FixedHostPortGenericContainer;
@@ -43,7 +37,7 @@ public class InfinispanServerTestResource implements QuarkusTestResourceWithClea
     private static final String SERVER_NAME_INFINISPAN = "infinispan";
     private static final String REALM_DEFAULT = "default";
     private static final String ADMIN = "admin";
-    private static final String INFINISPAN_IMAGE = System.getProperty("container.image.infinispan");
+    private static final String INFINISPAN_IMAGE = System.getProperty("container.image.infinispan", "quay.io/infinispan/server:10.1.8.Final");
     private static final Logger LOGGER = LoggerFactory.getLogger(InfinispanServerTestResource.class);
     private GenericContainer infinispan;
     private RemoteCacheManager cacheManager;
@@ -77,17 +71,17 @@ public class InfinispanServerTestResource implements QuarkusTestResourceWithClea
         if (cacheManager == null) {
             ConfigurationBuilder builder = new ConfigurationBuilder();
             builder
-                .addServer()
-                    .host(LOCALHOST)
-                    .port(PORT)
-                .security()
-                    .authentication()
-                    .username(ADMIN)
-                    .password(ADMIN)
-                    .realm(REALM_DEFAULT)
-                    .serverName(SERVER_NAME_INFINISPAN)
-                    .saslMechanism(SASL_DIGEST_MD5)
-                    .clientIntelligence(ClientIntelligence.BASIC);
+            .addServer()
+            .host(LOCALHOST)
+            .port(PORT)
+            .security()
+            .authentication()
+            .username(ADMIN)
+            .password(ADMIN)
+            .realm(REALM_DEFAULT)
+            .serverName(SERVER_NAME_INFINISPAN)
+            .saslMechanism(SASL_DIGEST_MD5)
+            .clientIntelligence(ClientIntelligence.BASIC);
 
             cacheManager = new RemoteCacheManager(builder.build());
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2019 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.kie.kogito.index;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 public class KeycloakServerTestResource implements QuarkusTestResourceLifecycleManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KeycloakServerTestResource.class);
-    private static final String KEYCLOAK_IMAGE = System.getProperty("container.image.keycloak");
+    private static final String KEYCLOAK_IMAGE = System.getProperty("container.image.keycloak", "quay.io/keycloak/keycloak:10.0.2");
 
     private GenericContainer keycloak;
 
@@ -49,7 +50,7 @@ public class KeycloakServerTestResource implements QuarkusTestResourceLifecycleM
                 .withEnv("KEYCLOAK_IMPORT", "/tmp/realm.json")
                 .withClasspathResourceMapping("kogito-realm.json", "/tmp/realm.json", BindMode.READ_ONLY)
                 .withLogConsumer(new Slf4jLogConsumer(LOGGER))
-                .waitingFor(Wait.forHttp("/auth"));
+                .waitingFor(Wait.forHttp("/auth").withStartupTimeout(Duration.ofMinutes(5)));
         keycloak.start();
         return Collections.emptyMap();
     }

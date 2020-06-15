@@ -18,17 +18,15 @@ package org.kie.kogito.index.auth;
 
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.lenient;
-
 
 @ExtendWith(MockitoExtension.class)
 class MultiTenantResolverTest {
@@ -45,15 +43,16 @@ class MultiTenantResolverTest {
     @InjectMocks
     MultiTenantResolver multiTenantResolver;
 
-    @Before
+    @BeforeEach
     public void setup(){
         lenient().when(routingContextMock.request()).thenReturn(requestMock);
     }
 
     @Test
     void resolveGraphiqlTenantTest() {
+        givenTentantIsConfigured();
         lenient().when(requestMock.path()).thenReturn(GRAPH_UI_PATH);
-        assertThat(GRAPH_UI_TENANT.equals(multiTenantResolver.resolve(routingContextMock)));
+        assertThat(multiTenantResolver.resolve(routingContextMock)).isEqualTo(GRAPH_UI_TENANT);
     }
 
     @Test
@@ -66,5 +65,10 @@ class MultiTenantResolverTest {
     void resolveOtherPathTest() {
         lenient().when(requestMock.path()).thenReturn("/other");
         assertThat(multiTenantResolver.resolve(routingContextMock)).isNull();
+    }
+
+    private void givenTentantIsConfigured() {
+        multiTenantResolver.graphUITenantId = GRAPH_UI_TENANT;
+        multiTenantResolver.graphUIPath = GRAPH_UI_PATH;
     }
 }
