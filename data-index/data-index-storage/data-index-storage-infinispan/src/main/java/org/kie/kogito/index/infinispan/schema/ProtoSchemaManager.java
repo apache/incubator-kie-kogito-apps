@@ -80,7 +80,7 @@ public class ProtoSchemaManager {
                 String errorKey = fname + ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX;
                 final String error = metadataCache.get(errorKey);
                 LOGGER.warn("Found errors in Protobuf schema file: {}\n{}\n", fname, error);
-                errors.add(String.format("Protobuf schema file: %s\n%s\n", fname, error));
+                errors.add(String.format("Protobuf schema file: %s%n%s%n", fname, error));
             }
             return errors;
         } else {

@@ -80,11 +80,11 @@ public final class QueryFilterFactory {
         return new AttributeFilter<>(attribute, FilterCondition.BETWEEN, Arrays.asList(from, to));
     }
 
-    public static AttributeFilter<List<AttributeFilter>> or(List<AttributeFilter> filters) {
-        return new AttributeFilter<>(null, FilterCondition.OR, filters);
+    public static AttributeFilter<List<AttributeFilter>> or(List<AttributeFilter<?>> filters) {
+        return new AttributeFilter(null, FilterCondition.OR, filters);
     }
 
-    public static AttributeFilter<List<AttributeFilter>> and(List<AttributeFilter> filters) {
-        return new AttributeFilter<>(null, FilterCondition.AND, filters);
+    public static AttributeFilter<List<AttributeFilter>> and(List<AttributeFilter<?>> filters) {
+        return new AttributeFilter(null, FilterCondition.AND, filters);
     }
 }

@@ -71,19 +71,19 @@ public class StorageImpl<K, V> implements Storage<K, V> {
     @Override
     public void addObjectCreatedListener(Consumer<V> consumer) {
         LOGGER.debug("Adding new object created listener into Cache: {}", delegate.getName());
-        delegate.addClientListener(new CacheObjectCreatedListener(delegate, consumer));
+        delegate.addClientListener(new CacheObjectCreatedListener<>(delegate, consumer));
     }
 
     @Override
     public void addObjectUpdatedListener(Consumer<V> consumer) {
         LOGGER.debug("Adding new object updated listener into Cache: {}", delegate.getName());
-        delegate.addClientListener(new CacheObjectUpdatedListener(delegate, consumer));
+        delegate.addClientListener(new CacheObjectUpdatedListener<>(delegate, consumer));
     }
 
     @Override
     public void addObjectRemovedListener(Consumer<K> consumer) {
         LOGGER.debug("Adding new object removed listener into Cache: {}", delegate.getName());
-        delegate.addClientListener(new CacheObjectRemovedListener(consumer));
+        delegate.addClientListener(new CacheObjectRemovedListener<>(consumer));
     }
 
     public RemoteCache<K, V> getDelegate() {

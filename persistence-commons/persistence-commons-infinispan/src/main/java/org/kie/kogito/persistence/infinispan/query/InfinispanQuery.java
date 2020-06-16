@@ -41,7 +41,7 @@ public class InfinispanQuery<T> implements Query<T> {
     private QueryFactory qf;
     private Integer limit;
     private Integer offset;
-    private List<AttributeFilter> filters;
+    private List<AttributeFilter<?>> filters;
     private List<AttributeSort> sortBy;
     private String rootType;
 
@@ -71,7 +71,7 @@ public class InfinispanQuery<T> implements Query<T> {
     }
 
     @Override
-    public Query<T> filter(List<AttributeFilter> filters) {
+    public Query<T> filter(List<AttributeFilter<?>> filters) {
         this.filters = filters;
         return this;
     }
@@ -104,7 +104,7 @@ public class InfinispanQuery<T> implements Query<T> {
         return query.list();
     }
 
-    private Function<AttributeFilter, String> filterStringFunction() {
+    private Function<AttributeFilter<?>, String> filterStringFunction() {
         return filter -> {
             switch (filter.getCondition()) {
                 case CONTAINS:
@@ -144,7 +144,7 @@ public class InfinispanQuery<T> implements Query<T> {
         };
     }
 
-    private String getRecursiveString(AttributeFilter filter, String joining) {
-        return ((List<AttributeFilter>) filter.getValue()).stream().map(filterStringFunction()).collect(joining(joining));
+    private String getRecursiveString(AttributeFilter<?> filter, String joining) {
+        return ((List<AttributeFilter<?>>) filter.getValue()).stream().map(filterStringFunction()).collect(joining(joining));
     }
 }
