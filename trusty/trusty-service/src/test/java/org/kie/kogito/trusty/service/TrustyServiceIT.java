@@ -1,7 +1,6 @@
 package org.kie.kogito.trusty.service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -13,13 +12,12 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 
 @QuarkusTest
-@QuarkusTestResource(InfinispanServerTestResource.class)
+@QuarkusTestResource(TrustyInfinispanServerTestResource.class)
 public class TrustyServiceIT {
 
     @Inject

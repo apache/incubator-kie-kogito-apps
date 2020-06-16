@@ -34,7 +34,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.InfinispanServerTestResource;
+import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
@@ -53,7 +53,28 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.hasItems;
-import static org.kie.kogito.index.GraphQLUtils.*;
+import static org.kie.kogito.index.GraphQLUtils.getDealsByTaskId;
+import static org.kie.kogito.index.GraphQLUtils.getJobById;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceById;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndAddon;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndErrorNode;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndNullParentProcessInstanceId;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndNullRootProcessInstanceId;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndParentProcessInstanceId;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndProcessId;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndStart;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndState;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByParentProcessInstanceId;
+import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByRootProcessInstanceId;
+import static org.kie.kogito.index.GraphQLUtils.getTravelsByProcessInstanceId;
+import static org.kie.kogito.index.GraphQLUtils.getTravelsByUserTaskId;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceById;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndActualOwner;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndCompleted;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndPotentialGroups;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndPotentialUsers;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndStarted;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndState;
 import static org.kie.kogito.index.TestUtils.getDealsProtoBufferFile;
 import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
@@ -65,7 +86,7 @@ import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.kie.kogito.index.model.ProcessInstanceState.ERROR;
 
 @QuarkusTest
-@QuarkusTestResource(InfinispanServerTestResource.class)
+@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
 public class IndexingServiceIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexingServiceIT.class);

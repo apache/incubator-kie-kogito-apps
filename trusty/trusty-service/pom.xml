@@ -50,10 +50,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>testcontainers</artifactId>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>persistence-commons-infinispan</artifactId>
+      <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
   <build>
     <plugins>
