@@ -29,4 +29,9 @@ public class ProtostreamProducer {
     MessageMarshaller decisionMarshaller() {
         return new DecisionMarshaller(mapper);
     }
+
+//    @Produces
+//    EnumMarshaller<ExecutionTypeEnum> executionTypeMarshaller(){
+//        return new ExecutionTypeMarshaller();
+//    }
 }
