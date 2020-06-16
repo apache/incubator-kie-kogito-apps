@@ -36,13 +36,13 @@ import static org.kie.kogito.index.TestUtils.getProcessInstance;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanServerTestResource.class)
-class StorageIT {
+public class StorageIT {
 
     @Inject
     DataIndexStorageService cacheService;
 
     @Test
-    void testObjectCreatedListener() throws Exception {
+    public void testObjectCreatedListener() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
@@ -56,7 +56,7 @@ class StorageIT {
     }
 
     @Test
-    void testObjectUpdatedListener() throws Exception {
+    public void testObjectUpdatedListener() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
@@ -71,7 +71,7 @@ class StorageIT {
     }
 
     @Test
-    void testObjectRemovedListener() throws Exception {
+    public void testObjectRemovedListener() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
