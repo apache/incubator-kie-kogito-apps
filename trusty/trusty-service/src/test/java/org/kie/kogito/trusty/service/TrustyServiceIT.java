@@ -66,6 +66,15 @@ public class TrustyServiceIT {
         Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
     }
 
+    @Test
+    public void GivenAnExecution_WhenGetDecisionByIdIsCalled_ThenTheExecutionIsReturned() {
+        String executionId = "myExecution";
+        storeExecution(executionId, 1591692950000L);
+
+        Decision result = trustyService.getDecisionById(executionId);
+        Assertions.assertEquals(executionId, result.getExecutionId());
+    }
+
     private Decision storeExecution(String executionId, Long timestamp){
         Decision decision = new Decision();
         decision.setExecutionId(executionId);

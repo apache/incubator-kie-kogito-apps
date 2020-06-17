@@ -55,7 +55,7 @@ public class TrustyServiceTest {
     }
 
     @Test
-    void GivenADecision_WhenStoreDecisionIsCalledAndRetrieved_ThenTheOriginalObjectIsReturned() {
+    void GivenADecision_WhenADecisionIsStoredAndRetrieved_ThenTheOriginalObjectIsReturned() {
         Decision decision = new Decision();
         decision.setExecutionId("executionId");
 
@@ -77,5 +77,23 @@ public class TrustyServiceTest {
 
         Assertions.assertEquals(1, result.size());
         Assertions.assertEquals(decision.getExecutionId(), result.get(0).getExecutionId());
+    }
+
+    @Test
+    void GivenADecision_WhenADecisionIsStoredAndRetrievedById_ThenTheOriginalObjectIsReturned() {
+        Decision decision = new Decision();
+        decision.setExecutionId("executionId");
+
+        Storage storageMock = mock(Storage.class);
+        when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
+        when(storageMock.get(any(Object.class))).thenReturn(decision);
+
+        when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+
+        trustyService.storeDecision("test", decision);
+
+        Decision result = trustyService.getDecisionById("executionId");
+
+        Assertions.assertEquals("executionId", result.getExecutionId());
     }
 }

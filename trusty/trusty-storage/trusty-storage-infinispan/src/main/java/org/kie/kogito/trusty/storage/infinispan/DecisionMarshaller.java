@@ -26,9 +26,6 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
         result.setSuccess(reader.readBoolean("hasSucceeded"));
         result.setExecutorName(reader.readString("executorName"));
         result.setExecutedModelName(reader.readString("executedModelName"));
-
-        // TODO: Replace with EnumMarshaller that I can't make working :)
-        //result.setExecutionType(reader.readEnum("executionType", ExecutionTypeEnum.class));
         result.setExecutionType(myMapper.readValue(reader.readString("executionType"), ExecutionTypeEnum.class));
 
         return result;
@@ -41,7 +38,6 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
         writer.writeBoolean("hasSucceeded", result.hasSucceeded());
         writer.writeString("executorName", result.getExecutorName() );
         writer.writeString("executedModelName", result.getExecutedModelName() );
-        //writer.writeEnum("executionType", result.getExecutionType());
         writer.writeString("executionType", myMapper.writeValueAsString(result.getExecutionType()));
     }
 
@@ -55,27 +51,3 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
         return getJavaClass().getName();
     }
 }
-
-
-//public class ExecutionTypeMarshaller implements EnumMarshaller<ExecutionTypeEnum> {
-//
-//    @Override
-//    public ExecutionTypeEnum decode(int enumValue) {
-//        return null;
-//    }
-//
-//    @Override
-//    public int encode(ExecutionTypeEnum executionTypeEnum) throws IllegalArgumentException {
-//        return 0;
-//    }
-//
-//    @Override
-//    public Class<? extends ExecutionTypeEnum> getJavaClass() {
-//        return ExecutionTypeEnum.class;
-//    }
-//
-//    @Override
-//    public String getTypeName() {
-//        return getJavaClass().getName();
-//    }
-//}
