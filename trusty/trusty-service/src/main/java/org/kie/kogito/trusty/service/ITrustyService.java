@@ -42,10 +42,18 @@ public interface ITrustyService {
     List<Execution> getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix);
 
     /**
+     * Gets a decision by execution ID.
+     *
+     * @param executionId The execution ID.
+     * @return The decision.
+     */
+    Decision getDecisionById(String executionId);
+
+    /**
      * Stores a decision.
      *
      * @param executionId The unique execution ID
-     * @param decision   The decision object.
+     * @param decision    The decision object.
      * @throws RuntimeException Throws RuntimeException in case the executionId is already present in the system.
      */
     void storeDecision(String executionId, Decision decision);

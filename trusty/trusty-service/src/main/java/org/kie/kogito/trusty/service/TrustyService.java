@@ -47,6 +47,12 @@ public class TrustyService implements ITrustyService {
     }
 
     @Override
+    public Decision getDecisionById(String executionId) {
+        Storage<String, Decision> storage = storageService.getDecisionsStorage();
+        return storage.get(executionId);
+    }
+
+    @Override
     public void storeDecision(String executionId, Decision decision) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         storage.put(executionId, decision);

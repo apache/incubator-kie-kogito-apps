@@ -10,6 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>trusty-storage-mongo</artifactId>
+  <name>Kogito :: Trusty Storage Mongo</name>
 
 
 </project>
