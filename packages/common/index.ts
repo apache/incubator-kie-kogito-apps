@@ -1,6 +1,7 @@
 export { default as KogitoSpinner } from './src/components/Atoms/KogitoSpinner/KogitoSpinner';
 export { default as PageToolbar } from './src/components/Molecules/PageToolbar/PageToolbar';
 export { default as KogitoPageLayout } from './src/components/Templates/KogitoPageLayout/KogitoPageLayout';
+export { default as EndpointLink } from './src/components/Atoms/EndpointLink/EndpointLink';
 export { default as AboutModalBox } from './src/components/Molecules/AboutModalBox/AboutModalBox';
 export { default as BrandLogo } from './src/components/Atoms/BrandLogo/BrandLogo';
 export { default as PageNotFound } from './src/components/Molecules/PageNotFound/PageNotFound';
