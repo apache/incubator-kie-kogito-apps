@@ -71,5 +71,19 @@ module.exports = controller = {
       data[0].state = 'ABORTED';
       res.status(200).send('success');
     }
+  },
+
+  callNodeCancel: (req, res) => {
+    const graphData = require('./graphql');
+    const data = graphData.filter(data => {
+      return data.id === req.params.processInstanceId;
+    });
+    const nodeObject = data[0].nodes.filter(node => node.id === req.params.nodeInstanceId);
+    if (nodeObject[0].exit === null) {
+      nodeObject[0].exit = new Date().toISOString();
+      res.status(200).send(data[0]);
+    } else if (nodeObject[0].exit !== null) {
+      res.status(404).send('The process is already exited')
+    }
   }
 };

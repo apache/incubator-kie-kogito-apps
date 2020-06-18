@@ -53,7 +53,9 @@ app.delete(
   '/management/processes/:processId/instances/:processInstanceId',
   controller.callAbort
 );
-
+app.delete('/management/processes/:processId/instances/:processInstanceId/nodeInstances/:nodeInstanceId',
+  controller.callNodeCancel
+)
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

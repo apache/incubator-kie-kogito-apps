@@ -269,7 +269,6 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
                 processInstanceData,
                 setModalTitle,
                 setTitleType,
-                setModalContent,
                 handleAbortModalToggle
               )
             }
@@ -286,7 +285,6 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
                 processInstanceData,
                 setModalTitle,
                 setTitleType,
-                setModalContent,
                 handleAbortModalToggle
               )
             }

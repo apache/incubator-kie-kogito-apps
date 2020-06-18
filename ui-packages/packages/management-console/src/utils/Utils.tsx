@@ -159,7 +159,6 @@ export const handleAbort = (
   >,
   setModalTitle: (modalTitle: string) => void,
   setTitleType: (titleType: string) => void,
-  setModalContent: (modalContent: string) => void,
   handleAbortModalToggle: () => void
 ) => {
   setModalTitle('Abort operation');
@@ -169,9 +168,6 @@ export const handleAbort = (
     )
     .then(() => {
       setModalTitle('Process aborted');
-      setModalContent(
-        `${processInstanceData.processId} - process execution has been aborted.`
-      );
       setTitleType('success');
       processInstanceData.state = ProcessInstanceState.Aborted;
       handleAbortModalToggle();
@@ -203,4 +199,37 @@ export const modalToggle = (
   } else if (modalTitle === 'Retry operation') {
     return handleRetryModalToggle;
   }
+};
+
+export const handleNodeInstanceCancel = (
+  processInstanceData,
+  nodeObject,
+  setModalTitle,
+  setTitleType,
+  setModalContent,
+  handleModalToggle
+) => {
+  setModalTitle('Node cancel process');
+  axios
+    .delete(
+      `${processInstanceData.serviceUrl}/management/processes/${processInstanceData.processId}/instances/${processInstanceData.id}/nodeInstances/${nodeObject.id}`
+    )
+    .then(() => {
+      setTitleType('success');
+      setModalContent(
+        `The node - ${nodeObject.name} was successfully cancelled`
+      );
+      processInstanceData.nodes.forEach(node => {
+        /* istanbul ignore else */
+        if (node.id === nodeObject.id) {
+          node.exit = new Date().toISOString();
+        }
+      });
+      handleModalToggle();
+    })
+    .catch(() => {
+      setTitleType('failure');
+      setModalContent(`The node - ${nodeObject.name} failed to cancel`);
+      handleModalToggle();
+    });
 };
