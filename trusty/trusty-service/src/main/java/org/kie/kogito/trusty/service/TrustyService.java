@@ -55,6 +55,9 @@ public class TrustyService implements ITrustyService {
     @Override
     public void storeDecision(String executionId, Decision decision) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
+        if (storage.containsKey(executionId)){
+            throw new RuntimeException(String.format("A decision with ID %s is already present in the storage.", executionId));
+        }
         storage.put(executionId, decision);
     }
 }
