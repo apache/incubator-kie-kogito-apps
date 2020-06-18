@@ -79,7 +79,13 @@ public class TrustyServiceIT {
     public void GivenADuplicatedDecision_WhenTheDecisionIsStored_ThenAnExceptionIsRaised() {
         String executionId = "myExecution";
         storeExecution(executionId, 1591692950000L);
-        Assertions.assertThrows(RuntimeException.class, () -> storeExecution(executionId, 1591692950000L));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> storeExecution(executionId, 1591692950000L));
+    }
+
+    @Test
+    public void GivenNoExecutions_WhenADecisionIsRetrieved_ThenAnExceptionIsRaised() {
+        String executionId = "myExecution";
+        Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getDecisionById(executionId));
     }
 
     private Decision storeExecution(String executionId, Long timestamp){

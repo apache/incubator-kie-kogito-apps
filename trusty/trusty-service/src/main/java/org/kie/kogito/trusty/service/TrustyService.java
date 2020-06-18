@@ -49,6 +49,9 @@ public class TrustyService implements ITrustyService {
     @Override
     public Decision getDecisionById(String executionId) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
+        if (storage.containsKey(executionId)){
+            throw new IllegalArgumentException(String.format("A decision with ID %s does not exist in the storage.", executionId));
+        }
         return storage.get(executionId);
     }
 
@@ -56,7 +59,7 @@ public class TrustyService implements ITrustyService {
     public void storeDecision(String executionId, Decision decision) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         if (storage.containsKey(executionId)){
-            throw new RuntimeException(String.format("A decision with ID %s is already present in the storage.", executionId));
+            throw new IllegalArgumentException(String.format("A decision with ID %s is already present in the storage.", executionId));
         }
         storage.put(executionId, decision);
     }

@@ -56,8 +56,9 @@ public class TrustyServiceTest {
 
     @Test
     void GivenADecision_WhenADecisionIsStoredAndRetrieved_ThenTheOriginalObjectIsReturned() {
+        String executionId = "executionId";
         Decision decision = new Decision();
-        decision.setExecutionId("executionId");
+        decision.setExecutionId(executionId);
 
         Query queryMock = mock(Query.class);
         when(queryMock.filter(any(List.class))).thenReturn(queryMock);
@@ -66,12 +67,13 @@ public class TrustyServiceTest {
         when(queryMock.execute()).thenReturn(List.of(decision));
 
         Storage storageMock = mock(Storage.class);
-        when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
+        when(storageMock.put(executionId, any(Object.class))).thenReturn(decision);
+        when(storageMock.containsKey(executionId)).thenReturn(true);
         when(storageMock.query()).thenReturn(queryMock);
 
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
 
-        trustyService.storeDecision("test", decision);
+        trustyService.storeDecision("executionId", decision);
 
         List<Execution> result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
 
@@ -81,19 +83,21 @@ public class TrustyServiceTest {
 
     @Test
     void GivenADecision_WhenADecisionIsStoredAndRetrievedById_ThenTheOriginalObjectIsReturned() {
+        String executionId = "executionId";
         Decision decision = new Decision();
-        decision.setExecutionId("executionId");
+        decision.setExecutionId(executionId);
 
         Storage storageMock = mock(Storage.class);
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
+        when(storageMock.containsKey(executionId)).thenReturn(true);
         when(storageMock.get(any(Object.class))).thenReturn(decision);
 
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
 
-        trustyService.storeDecision("test", decision);
+        trustyService.storeDecision(executionId, decision);
 
-        Decision result = trustyService.getDecisionById("executionId");
+        Decision result = trustyService.getDecisionById(executionId);
 
-        Assertions.assertEquals("executionId", result.getExecutionId());
+        Assertions.assertEquals(executionId, result.getExecutionId());
     }
 }

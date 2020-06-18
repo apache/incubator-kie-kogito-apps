@@ -49,7 +49,13 @@ public class DecisionsApiV1 {
                     schema = @Schema(implementation = String.class)
             ) @PathParam("executionId") String executionId) {
 
-        Decision decision = trustyService.getDecisionById(executionId);
+        Decision decision;
+        try{
+            decision = trustyService.getDecisionById(executionId);
+        }
+        catch (IllegalArgumentException ex){
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), String.format("Execution with ID %s does not exist in the storage.", executionId)).build();
+        }
 
         return Response.ok(ExecutionHeaderResponse.fromExecution(decision)).build();
     }
