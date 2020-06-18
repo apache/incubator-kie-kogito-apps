@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,19 +7,38 @@ import {
   CardBody,
   Grid,
   GridItem,
+  InjectedOuiaProps,
   PageSection,
   withOuiaContext
 } from '@patternfly/react-core';
+import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import PageTitle from '../../Molecules/PageTitle/PageTitle';
+import TaskForm from '../../Organisms/TaskForm/TaskForm';
 import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
-import { Link } from 'react-router-dom';
 import { TaskInfo } from '../../../model/TaskInfo';
-import TaskForm from '../../Organisms/TaskForm/TaskForm';
-import PageTitle from '../../Molecules/PageTitle/PageTitle';
 
-const UserTaskInstanceDetailsPage = props => {
+interface MatchProps {
+  taskID: string;
+}
+
+const UserTaskInstanceDetailsPage: React.FC<
+  RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps
+> = ({ ouiaContext, ...props }) => {
+  const id = props.match.params.taskID;
+
   const context: IContext<TaskInfo> = useContext(TaskConsoleContext);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      props.history.push({ state: { ...props.location.state } });
+    };
+  });
+
+  useEffect(() => {
+    return ouiaPageTypeAndObjectId(ouiaContext, 'user-tasks', id);
+  });
 
   const taskInfo = context.getActiveItem();
 

@@ -33,8 +33,8 @@
   "dependencies": {
     "@kogito-apps/common": "1.0.0",
     "ajv": "6.12.2",
-    "uniforms": "3.0.0-alpha.2",
-    "uniforms-bridge-json-schema": "3.0.0-alpha.2",
+    "uniforms": "3.0.0-alpha.4",
+    "uniforms-bridge-json-schema": "3.0.0-alpha.4",
     "uniforms-patternfly": "0.0.11"
   },
   "jest": {

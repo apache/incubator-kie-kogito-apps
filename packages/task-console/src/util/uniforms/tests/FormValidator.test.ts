@@ -19,13 +19,13 @@ describe('Model Conversion  tests', () => {
       lastName: 'Doe',
       age: 27
     };
-    expect(() => validator.validate(model)).not.toThrow();
+    expect(validator.validate(model)).toBeUndefined();
   });
 
   test('Test model validation with errors', () => {
     const model = {
       age: 10
     };
-    expect(() => validator.validate(model)).toThrow();
+    expect(validator.validate(model)).not.toBeUndefined();
   });
 });

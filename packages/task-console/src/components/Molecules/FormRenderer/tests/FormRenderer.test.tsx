@@ -1,13 +1,13 @@
-import { TaskInfoImpl } from '../../../../model/TaskInfo';
-import { UserTaskInstance } from '../../../../graphql/types';
-import ApplyForVisaForm from './ApplyForVisa';
 import React from 'react';
-import { shallow } from 'enzyme';
-import FormRenderer from '../FormRenderer';
-import { AutoForm } from 'uniforms-patternfly';
+import { mount } from 'enzyme';
 import axios from 'axios';
+import { AutoForm } from 'uniforms-patternfly';
 import FormFooter from '../../../Atoms/FormFooter/FormFooter';
+import { UserTaskInstance } from '../../../../graphql/types';
+import { TaskInfoImpl } from '../../../../model/TaskInfo';
 import { FormActionDescription } from '../../../../model/FormDescription';
+import FormRenderer from '../FormRenderer';
+import ApplyForVisaForm from './ApplyForVisa';
 
 const userTaskInstance: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -39,7 +39,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 let formData;
 let props;
 
-const testSuccessfullRequest = async (
+const testSuccessfulRequest = async (
   action: FormActionDescription,
   expectedPayload
 ) => {
@@ -49,8 +49,7 @@ const testSuccessfullRequest = async (
   };
   mockedAxios.post.mockResolvedValue(response);
 
-  const wrapper = shallow(<FormRenderer {...props} />);
-  expect(wrapper).toMatchSnapshot();
+  const wrapper = mount(<FormRenderer {...props} />);
 
   const form = wrapper.findWhere(node => node.type() === AutoForm);
   expect(form).toHaveLength(1);
@@ -96,7 +95,7 @@ describe('FormRenderer test', () => {
   });
 
   it('Render form with actions', () => {
-    const wrapper = shallow(<FormRenderer {...props} />);
+    const wrapper = mount(<FormRenderer {...props} />);
     expect(wrapper).toMatchSnapshot();
 
     const form = wrapper.findWhere(node => node.type() === AutoForm);
@@ -108,7 +107,7 @@ describe('FormRenderer test', () => {
   it('Render form without actions', () => {
     props.form.actions = [];
 
-    const wrapper = shallow(<FormRenderer {...props} />);
+    const wrapper = mount(<FormRenderer {...props} />);
     expect(wrapper).toMatchSnapshot();
 
     const form = wrapper.findWhere(node => node.type() === AutoForm);
@@ -118,11 +117,11 @@ describe('FormRenderer test', () => {
   });
 
   it('Form Render and successfully submit default endpoint no payload', async () => {
-    await testSuccessfullRequest(props.form.actions[0], {});
+    await testSuccessfulRequest(props.form.actions[0], {});
   });
 
   it('Form Render and successfully submit with phase and payload', async () => {
-    await testSuccessfullRequest(props.form.actions[1], {
+    await testSuccessfulRequest(props.form.actions[1], {
       traveller: formData.traveller
     });
   });
@@ -135,8 +134,7 @@ describe('FormRenderer test', () => {
 
     mockedAxios.post.mockResolvedValue(response);
 
-    const wrapper = shallow(<FormRenderer {...props} />);
-    expect(wrapper).toMatchSnapshot();
+    const wrapper = mount(<FormRenderer {...props} />);
 
     const form = wrapper.findWhere(node => node.type() === AutoForm);
     expect(form).toHaveLength(1);

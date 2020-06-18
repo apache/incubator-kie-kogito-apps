@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import FormFooter from '../FormFooter';
 
 describe('Form Footer test', () => {
@@ -22,7 +22,7 @@ describe('Form Footer test', () => {
       onActionClick: jest.fn()
     };
 
-    const wrapper = shallow(<FormFooter {...props} />);
+    const wrapper = mount(<FormFooter {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -32,17 +32,16 @@ describe('Form Footer test', () => {
       onActionClick: jest.fn()
     };
 
-    const wrapper = shallow(<FormFooter {...props} />);
+    const wrapper = mount(<FormFooter {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('testing showing no actions', () => {
     const props = {
-      actions: [],
       onActionClick: jest.fn()
     };
 
-    const wrapper = shallow(<FormFooter {...props} />);
+    const wrapper = mount(<FormFooter {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -66,7 +65,7 @@ describe('Form Footer test', () => {
       onActionClick: jest.fn()
     };
 
-    const wrapper = shallow(<FormFooter {...props} />);
+    const wrapper = mount(<FormFooter {...props} />);
     expect(wrapper).toMatchSnapshot();
 
     const button1 = wrapper.findWhere(node => node.key() === 'submit-action1');

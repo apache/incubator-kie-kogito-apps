@@ -405,6 +405,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
           "validator": [Function],
         }
       }
+      showInlineError={true}
       validate="onChangeAfterSubmit"
     >
       <Form
@@ -417,20 +418,17 @@ exports[`TaskForm Test Test rendering form 1`] = `
           noValidate={true}
           onSubmit={[Function]}
         >
-          <div>
-            Bla bla
-            <ErrorsField
-              style={
-                Object {
-                  "backgroundColor": "rgba(255, 85, 0, 0.2)",
-                  "border": "1px solid rgb(255, 85, 0)",
-                  "borderRadius": "7px",
-                  "margin": "20px 0px",
-                  "padding": "10px",
-                }
+          <ErrorsField
+            style={
+              Object {
+                "backgroundColor": "rgba(255, 85, 0, 0.2)",
+                "border": "1px solid rgb(255, 85, 0)",
+                "borderRadius": "7px",
+                "margin": "20px 0px",
+                "padding": "10px",
               }
-            />
-          </div>
+            }
+          />
           <AutoFields
             autoField={[Function]}
             element="div"
@@ -510,7 +508,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                       }
                     }
                     required={false}
-                    showInlineError={false}
+                    showInlineError={true}
                     value={
                       Object {
                         "begin": 2020-02-19T22:00:00.000Z,
@@ -577,7 +575,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="City"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value="Boston"
                           >
                             <FormGroup
@@ -676,7 +674,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Country"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value="US"
                           >
                             <FormGroup
@@ -776,7 +774,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Begin"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value={2020-02-19T22:00:00.000Z}
                           >
                             <FormGroup
@@ -873,7 +871,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="End"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value={2020-02-26T22:00:00.000Z}
                           >
                             <FormGroup
@@ -970,7 +968,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Visa required"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value={true}
                           >
                             <div
@@ -1116,7 +1114,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                       }
                     }
                     required={false}
-                    showInlineError={false}
+                    showInlineError={true}
                     value={
                       Object {
                         "address": Object {
@@ -1201,7 +1199,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="First name"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value="Rachel"
                           >
                             <FormGroup
@@ -1300,7 +1298,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Last name"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value="White"
                           >
                             <FormGroup
@@ -1400,7 +1398,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Email"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value="rwhite@gorle.com"
                           >
                             <FormGroup
@@ -1499,7 +1497,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Nationality"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value="Polish"
                           >
                             <FormGroup
@@ -1635,7 +1633,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                               }
                             }
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                             value={
                               Object {
                                 "city": "Zerf",
@@ -1696,7 +1694,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                     onChange={[Function]}
                                     placeholder="Street"
                                     required={false}
-                                    showInlineError={false}
+                                    showInlineError={true}
                                     value="Cabalone"
                                   >
                                     <FormGroup
@@ -1795,7 +1793,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                     onChange={[Function]}
                                     placeholder="City"
                                     required={false}
-                                    showInlineError={false}
+                                    showInlineError={true}
                                     value="Zerf"
                                   >
                                     <FormGroup
@@ -1894,7 +1892,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                     onChange={[Function]}
                                     placeholder="Zip code"
                                     required={false}
-                                    showInlineError={false}
+                                    showInlineError={true}
                                     value="765756"
                                   >
                                     <FormGroup
@@ -1993,7 +1991,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                     onChange={[Function]}
                                     placeholder="Country"
                                     required={false}
-                                    showInlineError={false}
+                                    showInlineError={true}
                                     value="Poland"
                                   >
                                     <FormGroup
@@ -2155,7 +2153,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                       }
                     }
                     required={false}
-                    showInlineError={false}
+                    showInlineError={true}
                     value={Object {}}
                   >
                     <div
@@ -2218,7 +2216,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="First name"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-000z"
@@ -2316,7 +2314,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Last name"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-0011"
@@ -2414,7 +2412,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="City"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-0013"
@@ -2512,7 +2510,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Country"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-0015"
@@ -2610,7 +2608,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Duration"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-0017"
@@ -2708,7 +2706,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Passport number"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-0019"
@@ -2806,7 +2804,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             onChange={[Function]}
                             placeholder="Nationality"
                             required={false}
-                            showInlineError={false}
+                            showInlineError={true}
                           >
                             <FormGroup
                               fieldId="uniforms-0000-001b"

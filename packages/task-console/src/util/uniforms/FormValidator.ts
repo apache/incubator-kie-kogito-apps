@@ -9,9 +9,10 @@ export interface FormValidator {
   /**
    * Validates the given model
    * @param model The model to validate
-   * @throws Should throw an error containing the validation errors
+   * @returns If there are validation errors it should return an error
+   * containing the errors
    */
-  validate(model: any);
+  validate(model: any): any | undefined;
 }
 
 /**
@@ -29,11 +30,11 @@ export class DefaultFormValidator implements FormValidator {
     );
   }
 
-  validate(model: any) {
+  validate(model: any): any | undefined {
     this.validator(model);
 
     if (this.validator.errors && this.validator.errors.length) {
-      throw { details: this.validator.errors };
+      return { details: this.validator.errors };
     }
   }
 }

@@ -1,6 +1,6 @@
-import { FormActionDescription } from '../../../model/FormDescription';
 import React from 'react';
 import { ActionGroup, Button } from '@patternfly/react-core';
+import { FormActionDescription } from '../../../model/FormDescription';
 
 interface IOwnProps {
   actions?: FormActionDescription[];

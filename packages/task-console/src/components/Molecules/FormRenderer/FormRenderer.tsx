@@ -1,15 +1,14 @@
 import React, { useCallback } from 'react';
-
-import { AutoFields, AutoForm, ErrorsField } from 'uniforms-patternfly';
-import ModelConversionTool from '../../../util/uniforms/ModelConversionTool';
+import axios from 'axios';
 import JSONSchemaBridge from 'uniforms-bridge-json-schema';
-import { TaskInfo } from '../../../model/TaskInfo';
+import { AutoFields, AutoForm, ErrorsField } from 'uniforms-patternfly';
+import FormFooter from '../../Atoms/FormFooter/FormFooter';
 import {
   FormActionDescription,
   FormDescription
 } from '../../../model/FormDescription';
-import axios from 'axios';
-import FormFooter from '../../Atoms/FormFooter/FormFooter';
+import { TaskInfo } from '../../../model/TaskInfo';
+import ModelConversionTool from '../../../util/uniforms/ModelConversionTool';
 import { DefaultFormValidator } from '../../../util/uniforms/FormValidator';
 
 interface IOwnProps {
@@ -35,7 +34,7 @@ const FormRenderer: React.FC<IOwnProps> = ({
       formModel,
       form.schema
     );
-    validator.validate(newModel);
+    return validator.validate(newModel);
   });
 
   // Converting Dates that are in string format into JS Dates so they can be correctly bound to the uniforms DateField
