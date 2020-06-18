@@ -32,7 +32,7 @@ public class DecisionApiV1 {
 
     @Test
     void GivenAnInvalidRequest_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
-        Mockito.when(executionService.getDecisionById("executionId")).thenThrow(new RuntimeException("Execution does not exist."));
+        Mockito.when(executionService.getDecisionById("executionId")).thenThrow(new IllegalArgumentException("Execution does not exist."));
 
         given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/executionId").then().statusCode(400);
     }
