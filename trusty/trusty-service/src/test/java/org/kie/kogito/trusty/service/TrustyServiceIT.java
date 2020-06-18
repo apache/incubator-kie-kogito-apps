@@ -75,6 +75,16 @@ public class TrustyServiceIT {
         Assertions.assertEquals(executionId, result.getExecutionId());
     }
 
+    @Test
+    public void GivenADuplicatedDecision_WhenTheDecisionIsStored_ThenAnExceptionIsRaised() {
+        String executionId = "myExecution";
+        storeExecution(executionId, 1591692950000L);
+
+        Assertions.assertThrows(RuntimeException.class, () -> storeExecution(executionId, 1591692950000L));
+        Assertions.assertDoesNotThrow(() -> storeExecution(executionId, 1591692950000L));
+
+    }
+
     private Decision storeExecution(String executionId, Long timestamp){
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
