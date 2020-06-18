@@ -74,10 +74,10 @@ public abstract class InfinispanServerTestResource implements QuarkusTestResourc
         if (cacheManager == null) {
             ConfigurationBuilder builder = new ConfigurationBuilder();
             builder
-                .addServer()
+                    .addServer()
                     .host(LOCALHOST)
                     .port(PORT)
-                .security()
+                    .security()
                     .authentication()
                     .username(ADMIN)
                     .password(ADMIN)
