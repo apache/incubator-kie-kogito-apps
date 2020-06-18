@@ -7,10 +7,8 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.infinispan.protostream.EnumMarshaller;
 import org.infinispan.protostream.FileDescriptorSource;
 import org.infinispan.protostream.MessageMarshaller;
-import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 
 @ApplicationScoped
 public class ProtostreamProducer {

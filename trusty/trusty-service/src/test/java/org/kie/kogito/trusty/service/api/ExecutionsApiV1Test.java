@@ -27,7 +27,6 @@ import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.storage.api.model.Execution;

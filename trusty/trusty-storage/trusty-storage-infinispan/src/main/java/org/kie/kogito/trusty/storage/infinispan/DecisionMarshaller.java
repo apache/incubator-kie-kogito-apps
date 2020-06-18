@@ -3,7 +3,6 @@ package org.kie.kogito.trusty.storage.infinispan;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.infinispan.protostream.EnumMarshaller;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -19,7 +18,7 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
 
     @Override
     public Decision readFrom(ProtoStreamReader reader) throws IOException {
-        Decision result =  new Decision();
+        Decision result = new Decision();
 
         result.setExecutionId(reader.readString("executionId"));
         result.setExecutionTimestamp(reader.readLong("executionTimestamp"));
@@ -33,11 +32,11 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
 
     @Override
     public void writeTo(ProtoStreamWriter writer, Decision result) throws IOException {
-        writer.writeString("executionId", result.getExecutionId() );
-        writer.writeLong("executionTimestamp", result.getExecutionTimestamp() );
+        writer.writeString("executionId", result.getExecutionId());
+        writer.writeLong("executionTimestamp", result.getExecutionTimestamp());
         writer.writeBoolean("hasSucceeded", result.hasSucceeded());
-        writer.writeString("executorName", result.getExecutorName() );
-        writer.writeString("executedModelName", result.getExecutedModelName() );
+        writer.writeString("executorName", result.getExecutorName());
+        writer.writeString("executedModelName", result.getExecutedModelName());
         writer.writeString("executionType", myMapper.writeValueAsString(result.getExecutionType()));
     }
 

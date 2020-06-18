@@ -51,7 +51,7 @@ public class TrustyServiceTest {
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
 
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
-        Assertions.assertDoesNotThrow( () -> trustyService.storeDecision("test", decision));
+        Assertions.assertDoesNotThrow(() -> trustyService.storeDecision("test", decision));
     }
 
     @Test

@@ -1,7 +1,5 @@
 package org.kie.kogito.trusty.service.api;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,7 +16,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.kie.kogito.trusty.service.ITrustyService;
-import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.slf4j.Logger;
@@ -50,10 +47,9 @@ public class DecisionsApiV1 {
             ) @PathParam("executionId") String executionId) {
 
         Decision decision;
-        try{
+        try {
             decision = trustyService.getDecisionById(executionId);
-        }
-        catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), String.format("Execution with ID %s does not exist in the storage.", executionId)).build();
         }
 

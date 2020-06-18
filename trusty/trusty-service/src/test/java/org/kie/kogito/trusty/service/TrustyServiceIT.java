@@ -88,7 +88,7 @@ public class TrustyServiceIT {
         Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getDecisionById(executionId));
     }
 
-    private Decision storeExecution(String executionId, Long timestamp){
+    private Decision storeExecution(String executionId, Long timestamp) {
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
         decision.setExecutionTimestamp(timestamp);
