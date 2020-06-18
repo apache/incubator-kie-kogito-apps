@@ -118,11 +118,6 @@
       <artifactId>vertx-kafka-client</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>persistence-commons-infinispan</artifactId>
-      <type>test-jar</type>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
