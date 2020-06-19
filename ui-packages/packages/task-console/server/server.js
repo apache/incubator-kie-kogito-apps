@@ -48,11 +48,6 @@ app.get(
   controller.getTaskForm
 );
 
-app.get(
-  '/:processId/:taskReferenceName/form',
-  controller.getTaskFormTemplate
-);
-
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
