@@ -2885,19 +2885,16 @@ exports[`TaskForm Test Test rendering form 1`] = `
               Array [
                 Object {
                   "name": "Complete",
-                  "outputs": Array [
-                    "visaApplication",
-                  ],
+                  "onActionClick": [Function],
                   "primary": true,
                 },
                 Object {
                   "name": "Release",
-                  "outputs": Array [],
-                  "phase": "release",
+                  "onActionClick": [Function],
+                  "primary": undefined,
                 },
               ]
             }
-            onActionClick={[Function]}
           >
             <ActionGroup>
               <div

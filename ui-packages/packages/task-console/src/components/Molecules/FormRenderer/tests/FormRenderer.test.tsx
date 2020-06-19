@@ -40,7 +40,7 @@ let formData;
 let props;
 
 const testSuccessfulRequest = async (
-  action: FormActionDescription,
+  formAction: FormActionDescription,
   expectedPayload
 ) => {
   const response = {
@@ -58,7 +58,11 @@ const testSuccessfulRequest = async (
   expect(formFooter).toHaveLength(1);
 
   // clicking on a form action
-  formFooter.props().onActionClick(action);
+  const footerAction = formFooter.props().actions.find(action => {
+    return action.name === formAction.name;
+  });
+
+  footerAction.onActionClick();
 
   // forcing the form submit
   await form.props().onSubmit(formData);
@@ -71,13 +75,82 @@ const testSuccessfulRequest = async (
 
   const expectedEndpoint =
     props.taskInfo.getTaskEndPoint() +
-    (action.phase ? '?phase=' + action.phase : '');
+    (formAction.phase ? '?phase=' + formAction.phase : '');
 
   expect(postParams[0]).toBe(expectedEndpoint);
   expect(postParams[1]).toMatchObject(expectedPayload);
 
   expect(props.successCallback).toBeCalledWith(response.data);
   expect(props.errorCallback).not.toBeCalled();
+};
+
+const testUnSuccessfulRequest = async (response, formAction) => {
+  mockedAxios.post.mockResolvedValue(response);
+
+  const wrapper = mount(<FormRenderer {...props} />);
+
+  const form = wrapper.findWhere(node => node.type() === AutoForm);
+  expect(form).toHaveLength(1);
+
+  const formFooter = wrapper.findWhere(node => node.type() === FormFooter);
+  expect(formFooter).toHaveLength(1);
+
+  // clicking on a form action
+  const footerAction = formFooter.props().actions.find(action => {
+    return action.name === formAction.name;
+  });
+
+  footerAction.onActionClick();
+
+  // forcing the form submit
+  await form.props().onSubmit(formData);
+
+  expect(mockedAxios.post).toBeCalled();
+
+  const expectedMessage = response.data
+    ? response.data
+    : `Unexpected error executing '${formAction.name}'`;
+
+  expect(props.errorCallback).toBeCalledWith(expectedMessage);
+  expect(props.successCallback).not.toBeCalled();
+};
+
+const testUnexpectedRequestError = async (error, formAction) => {
+  mockedAxios.post.mockRejectedValue(error);
+
+  const wrapper = mount(<FormRenderer {...props} />);
+
+  const form = wrapper.findWhere(node => node.type() === AutoForm);
+  expect(form).toHaveLength(1);
+
+  const formFooter = wrapper.findWhere(node => node.type() === FormFooter);
+  expect(formFooter).toHaveLength(1);
+
+  // clicking on a form action
+  const footerAction = formFooter.props().actions.find(action => {
+    return action.name === formAction.name;
+  });
+
+  footerAction.onActionClick();
+
+  // forcing the form submit
+  await form.props().onSubmit(formData);
+
+  expect(mockedAxios.post).toBeCalled();
+
+  let expectedMessage;
+
+  if (error.message) {
+    expectedMessage = error.message;
+  } else {
+    expectedMessage =
+      error.response && error.response.data
+        ? error.response.data
+        : `Unexpected error executing '${formAction.name}'`;
+  }
+
+  expect(props.errorCallback).toBeCalledWith(expectedMessage);
+  expect(props.successCallback).not.toBeCalled();
 };
 
 describe('FormRenderer test', () => {
@@ -126,30 +199,46 @@ describe('FormRenderer test', () => {
     });
   });
 
+  it('Form Render and successfully submit without response data', async () => {
+    const response = {
+      status: 200
+    };
+
+    await testUnSuccessfulRequest(response, props.form.actions[1]);
+  });
+
   it('Form Render and unsuccessfully submit', async () => {
     const response = {
       status: 500,
       data: 'Task cannot be completed'
     };
 
-    mockedAxios.post.mockResolvedValue(response);
+    await testUnSuccessfulRequest(response, props.form.actions[1]);
+  });
 
-    const wrapper = mount(<FormRenderer {...props} />);
+  it('Form Render and unexpected error on submit with full response', async () => {
+    const error = {
+      response: {
+        status: 500,
+        data: 'Task cannot be completed'
+      }
+    };
+    await testUnexpectedRequestError(error, props.form.actions[1]);
+  });
 
-    const form = wrapper.findWhere(node => node.type() === AutoForm);
-    expect(form).toHaveLength(1);
+  it('Form Render and unexpected error on submit with response no data', async () => {
+    const error = {
+      response: {
+        status: 500
+      }
+    };
+    await testUnexpectedRequestError(error, props.form.actions[1]);
+  });
 
-    const formFooter = wrapper.findWhere(node => node.type() === FormFooter);
-    expect(formFooter).toHaveLength(1);
-
-    // clicking on a form action
-    formFooter.props().onActionClick(props.form.actions[1]);
-
-    // forcing the form submit
-    await form.props().onSubmit(formData);
-
-    expect(mockedAxios.post).toBeCalled();
-    expect(props.errorCallback).toBeCalledWith(response.data);
-    expect(props.successCallback).not.toBeCalled();
+  it('Form Render and unexpected error on submit with JS error', async () => {
+    const error = {
+      message: 'something really ugly happened!'
+    };
+    await testUnexpectedRequestError(error, props.form.actions[1]);
   });
 });

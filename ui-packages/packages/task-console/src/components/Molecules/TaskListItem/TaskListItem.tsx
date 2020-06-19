@@ -23,7 +23,7 @@ export interface IOwnProps {
 }
 
 const TaskListItem: React.FC<IOwnProps> = ({ userTaskInstanceData }) => {
-  const [isPiLoaded, setPiLoaded] = useState(false);
+  const [isProcessInstanceLoaded, setProcessInstanceLoaded] = useState(false);
 
   const [
     getProcessInstance,
@@ -34,18 +34,18 @@ const TaskListItem: React.FC<IOwnProps> = ({ userTaskInstanceData }) => {
 
   const context: IContext<TaskInfo> = useContext(TaskConsoleContext);
 
-  if (!isPiLoaded && userTaskInstanceData.state === 'Ready') {
+  if (!isProcessInstanceLoaded && userTaskInstanceData.state === 'Ready') {
     getProcessInstance({
       variables: {
         id: userTaskInstanceData.processInstanceId
       }
     });
-    setPiLoaded(true);
+    setProcessInstanceLoaded(true);
   }
 
   useEffect(() => {
     if (!loading && data !== undefined) {
-      setPiLoaded(true);
+      setProcessInstanceLoaded(true);
     }
   }, [data]);
 

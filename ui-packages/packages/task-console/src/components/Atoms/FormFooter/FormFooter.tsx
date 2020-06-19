@@ -1,13 +1,17 @@
 import React from 'react';
 import { ActionGroup, Button } from '@patternfly/react-core';
-import { FormActionDescription } from '../../../model/FormDescription';
 
-interface IOwnProps {
-  actions?: FormActionDescription[];
-  onActionClick: (action: FormActionDescription) => void;
+export interface IFormAction {
+  name: string;
+  primary?: boolean;
+  onActionClick: () => void;
 }
 
-const FormFooter: React.FC<IOwnProps> = ({ actions, onActionClick }) => {
+interface IOwnProps {
+  actions?: IFormAction[];
+}
+
+const FormFooter: React.FC<IOwnProps> = ({ actions }) => {
   return actions && actions.length > 0 ? (
     <ActionGroup>
       {actions.map(action => {
@@ -16,7 +20,7 @@ const FormFooter: React.FC<IOwnProps> = ({ actions, onActionClick }) => {
             key={'submit-' + action.name}
             type="submit"
             variant={action.primary ? 'primary' : 'secondary'}
-            onClick={() => onActionClick(action)}
+            onClick={action.onActionClick}
           >
             {action.name}
           </Button>

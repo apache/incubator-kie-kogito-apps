@@ -42,6 +42,21 @@ const FormRenderer: React.FC<IOwnProps> = ({
 
   let selectedAction;
 
+  const notifySuccess = (text: string) => {
+    if (successCallback) {
+      successCallback(text);
+    }
+  };
+
+  const notifyError = (formAction: FormActionDescription, text?: string) => {
+    if (errorCallback) {
+      const message = text
+        ? text
+        : `Unexpected error executing '${formAction.name}'`;
+      errorCallback(message);
+    }
+  };
+
   const submitForm = useCallback(
     async (formModel: any, formAction: FormActionDescription) => {
       try {
@@ -69,32 +84,33 @@ const FormRenderer: React.FC<IOwnProps> = ({
         });
 
         if (response.status === 200) {
-          if (successCallback) {
-            successCallback(response.data);
+          if (response.data) {
+            notifySuccess(response.data);
+          } else {
+            notifyError(formAction);
           }
         } else {
-          if (errorCallback) {
-            errorCallback(response.data);
-          }
+          notifyError(formAction, response.data);
         }
       } catch (e) {
-        if (errorCallback) {
-          errorCallback(e.response.data);
-        }
+        const message = e.response ? e.response.data : e.message;
+        notifyError(formAction, message);
       }
     },
     []
   );
 
-  if (!taskInfo) {
-    return null;
-  }
-
   let formActions = [];
 
   // Adding actions if the task isn't completed
   if (taskInfo.task.state !== 'Completed' && form.actions) {
-    formActions = form.actions;
+    formActions = form.actions.map(action => {
+      return {
+        name: action.name,
+        primary: action.primary,
+        onActionClick: () => (selectedAction = action)
+      };
+    });
   }
 
   return (
@@ -108,12 +124,7 @@ const FormRenderer: React.FC<IOwnProps> = ({
     >
       <ErrorsField />
       <AutoFields />
-      <FormFooter
-        actions={form.actions}
-        onActionClick={clickedAction => {
-          selectedAction = clickedAction;
-        }}
-      />
+      <FormFooter actions={formActions} />
     </AutoForm>
   );
 };

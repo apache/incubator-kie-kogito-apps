@@ -1,35 +1,29 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import FormFooter from '../FormFooter';
+import FormFooter, { IFormAction } from '../FormFooter';
 
 describe('Form Footer test', () => {
   it('testing showing actions', () => {
-    const props = {
-      actions: [
-        {
-          name: 'action1',
-          phase: 'action1',
-          outputs: [],
-          primary: true
-        },
-        {
-          name: 'action2',
-          phase: 'action2',
-          outputs: ['output'],
-          primary: false
-        }
-      ],
-      onActionClick: jest.fn()
-    };
+    const actions: IFormAction[] = [
+      {
+        name: 'action1',
+        primary: true,
+        onActionClick: jest.fn()
+      },
+      {
+        name: 'action2',
+        primary: false,
+        onActionClick: jest.fn()
+      }
+    ];
 
-    const wrapper = mount(<FormFooter {...props} />);
+    const wrapper = mount(<FormFooter actions={actions} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('testing showing empty actions', () => {
     const props = {
-      actions: [],
-      onActionClick: jest.fn()
+      actions: []
     };
 
     const wrapper = mount(<FormFooter {...props} />);
@@ -37,32 +31,25 @@ describe('Form Footer test', () => {
   });
 
   it('testing showing no actions', () => {
-    const props = {
-      onActionClick: jest.fn()
-    };
-
-    const wrapper = mount(<FormFooter {...props} />);
+    const wrapper = mount(<FormFooter />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('testing action click', () => {
     const action1 = {
       name: 'action1',
-      phase: 'action1',
-      outputs: [],
-      primary: true
+      primary: true,
+      onActionClick: jest.fn()
     };
 
     const action2 = {
       name: 'action2',
-      phase: 'action2',
-      outputs: ['output'],
-      primary: false
+      primary: false,
+      onActionClick: jest.fn()
     };
 
     const props = {
-      actions: [action1, action2],
-      onActionClick: jest.fn()
+      actions: [action1, action2]
     };
 
     const wrapper = mount(<FormFooter {...props} />);
@@ -71,13 +58,11 @@ describe('Form Footer test', () => {
     const button1 = wrapper.findWhere(node => node.key() === 'submit-action1');
     button1.simulate('click');
 
-    expect(props.onActionClick).toBeCalledTimes(1);
-    expect(props.onActionClick).toBeCalledWith(action1);
+    expect(action1.onActionClick).toBeCalledTimes(1);
 
     const button2 = wrapper.findWhere(node => node.key() === 'submit-action2');
     button2.simulate('click');
 
-    expect(props.onActionClick).toBeCalledTimes(2);
-    expect(props.onActionClick).toBeCalledWith(action2);
+    expect(action2.onActionClick).toBeCalledTimes(1);
   });
 });

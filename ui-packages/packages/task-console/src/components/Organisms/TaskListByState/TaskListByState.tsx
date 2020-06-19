@@ -14,12 +14,7 @@ interface IOwnProps {
 }
 
 const TaskListByState: React.FC<IOwnProps> = ({ currentState }) => {
-  const {
-    loading,
-    error,
-    data,
-    networkStatus
-  } = useGetUserTasksByStatesQuery({
+  const { loading, error, data, networkStatus } = useGetUserTasksByStatesQuery({
     variables: {
       state: [currentState]
     },
