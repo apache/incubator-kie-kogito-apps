@@ -11,6 +11,7 @@ import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.mockito.Mockito;
 
 import static io.restassured.RestAssured.given;
+import static org.mockito.ArgumentMatchers.eq;
 
 @QuarkusTest
 public class DecisionApiV1 {
@@ -23,7 +24,7 @@ public class DecisionApiV1 {
         Decision decision = new Decision();
         decision.setExecutionId("executionId");
         decision.setExecutionTimestamp(1591692950000L);
-        Mockito.when(executionService.getDecisionById("executionId")).thenReturn(decision);
+        Mockito.when(executionService.getDecisionById(eq("executionId"))).thenReturn(decision);
 
         ExecutionHeaderResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/executionId").as(ExecutionHeaderResponse.class);
 
@@ -32,7 +33,7 @@ public class DecisionApiV1 {
 
     @Test
     void GivenAnInvalidRequest_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
-        Mockito.when(executionService.getDecisionById("executionId")).thenThrow(new IllegalArgumentException("Execution does not exist."));
+        Mockito.when(executionService.getDecisionById(eq("executionId"))).thenThrow(new IllegalArgumentException("Execution does not exist."));
 
         given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/executionId").then().statusCode(400);
     }

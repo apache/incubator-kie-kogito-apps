@@ -49,7 +49,7 @@ public class TrustyService implements ITrustyService {
     @Override
     public Decision getDecisionById(String executionId) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
-        if (storage.containsKey(executionId)) {
+        if (!storage.containsKey(executionId)) {
             throw new IllegalArgumentException(String.format("A decision with ID %s does not exist in the storage.", executionId));
         }
         return storage.get(executionId);

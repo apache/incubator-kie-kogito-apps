@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,11 +28,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.persistence.infinispan.cache.StorageImpl;
+import org.kie.kogito.trusty.service.mocks.StorageImplMock;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -67,8 +74,8 @@ public class TrustyServiceTest {
         when(queryMock.execute()).thenReturn(List.of(decision));
 
         Storage storageMock = mock(Storage.class);
-        when(storageMock.put(executionId, any(Object.class))).thenReturn(decision);
-        when(storageMock.containsKey(executionId)).thenReturn(true);
+        when(storageMock.put(eq(executionId), any(Object.class))).thenReturn(decision);
+        when(storageMock.containsKey(eq(executionId))).thenReturn(false);
         when(storageMock.query()).thenReturn(queryMock);
 
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
@@ -87,10 +94,7 @@ public class TrustyServiceTest {
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
 
-        Storage storageMock = mock(Storage.class);
-        when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
-        when(storageMock.containsKey(executionId)).thenReturn(true);
-        when(storageMock.get(any(Object.class))).thenReturn(decision);
+        Storage storageMock = new StorageImplMock(Decision.class);
 
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
 
