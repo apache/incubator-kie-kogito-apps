@@ -8,11 +8,12 @@ import {
   Bullseye
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
-import DomainExplorerColumnPicker from '../../Molecules/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
+// import DomainExplorerColumnPicker from '../../Molecules/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
 import DomainExplorerTable from '../../Molecules/DomainExplorerTable/DomainExplorerTable';
 import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
 import LoadMore from '../../Atoms/LoadMore/LoadMore';
 import ServerErrors from '../../Molecules/ServerErrors/ServerErrors';
+import ManageColumns from '../../Molecules/ManageColumns/ManageColumns';
 import './DomainExplorer.css';
 
 import { GraphQL } from '../../../graphql/types';
@@ -97,7 +98,7 @@ const DomainExplorer: React.FC<IOwnProps> = ({
       /* istanbul ignore else */
       if (item.type.kind !== 'OBJECT') {
         const tempObj = {};
-        selections.push(item.name + key);
+        selections.push(item.name + '/' + key);
         tempObj[`${key}`] = [item.name];
         defaultParams.push(tempObj);
       }
@@ -129,30 +130,57 @@ const DomainExplorer: React.FC<IOwnProps> = ({
           <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
             <DataToolbarGroup>
               {!getPicker.loading && (
-                <DomainExplorerColumnPicker
-                  columnPickerType={columnPickerType}
-                  setColumnFilters={onAddColumnFilters}
-                  setTableLoading={setTableLoading}
-                  getQueryTypes={getQueryTypes}
-                  setDisplayTable={setDisplayTable}
-                  parameters={parameters}
-                  setParameters={setParameters}
-                  selected={selected}
-                  setSelected={setSelected}
-                  data={data}
-                  getPicker={getPicker}
-                  setError={setError}
-                  setDisplayEmptyState={setDisplayEmptyState}
-                  rememberedParams={rememberedParams}
-                  enableCache={enableCache}
-                  setEnableCache={setEnableCache}
-                  pageSize={pageSize}
-                  offsetVal={offset}
-                  setOffsetVal={setOffset}
-                  setPageSize={setPageSize}
-                  setIsLoadingMore={setIsLoadingMore}
-                  isLoadingMore={isLoadingMore}
-                />
+                <>
+                  {/* <DomainExplorerColumnPicker
+                    columnPickerType={columnPickerType}
+                    setColumnFilters={onAddColumnFilters}
+                    setTableLoading={setTableLoading}
+                    getQueryTypes={getQueryTypes}
+                    setDisplayTable={setDisplayTable}
+                    parameters={parameters}
+                    setParameters={setParameters}
+                    selected={selected}
+                    setSelected={setSelected}
+                    data={data}
+                    getPicker={getPicker}
+                    setError={setError}
+                    setDisplayEmptyState={setDisplayEmptyState}
+                    rememberedParams={rememberedParams}
+                    enableCache={enableCache}
+                    setEnableCache={setEnableCache}
+                    pageSize={pageSize}
+                    offsetVal={offset}
+                    setOffsetVal={setOffset}
+                    setPageSize={setPageSize}
+                    setIsLoadingMore={setIsLoadingMore}
+                    isLoadingMore={isLoadingMore}
+                  /> */}
+                  <ManageColumns
+                    columnPickerType={columnPickerType}
+                    setColumnFilters={onAddColumnFilters}
+                    setTableLoading={setTableLoading}
+                    getQueryTypes={getQueryTypes}
+                    setDisplayTable={setDisplayTable}
+                    parameters={parameters}
+                    setParameters={setParameters}
+                    selected={selected}
+                    setSelected={setSelected}
+                    data={data}
+                    getPicker={getPicker}
+                    setError={setError}
+                    setDisplayEmptyState={setDisplayEmptyState}
+                    rememberedParams={rememberedParams}
+                    enableCache={enableCache}
+                    setEnableCache={setEnableCache}
+                    pageSize={pageSize}
+                    offsetVal={offset}
+                    setOffsetVal={setOffset}
+                    setPageSize={setPageSize}
+                    setIsLoadingMore={setIsLoadingMore}
+                    isLoadingMore={isLoadingMore}
+                    metaData={metaData}
+                  />
+                </>
               )}
             </DataToolbarGroup>
           </DataToolbarToggleGroup>

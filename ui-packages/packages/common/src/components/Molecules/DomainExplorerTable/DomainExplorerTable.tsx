@@ -216,8 +216,11 @@ const DomainExplorerTable = ({
         let metaArray = [];
         const metaKeys = [];
         const metaValues = [];
-        const firstKey = Object.keys(item.metadata)[0];
-        metaArray = item.metadata[firstKey];
+        if (item.metadata.hasOwnProperty('processInstances')) {
+          metaArray = item.metadata.processInstances;
+        }
+        // const firstKey = Object.keys(item.metadata)[0];
+        // metaArray = item.metadata[firstKey];
         const tempParents = getKeys(item);
         parentkeys.push(tempParents.tempKeys);
         values.push({
