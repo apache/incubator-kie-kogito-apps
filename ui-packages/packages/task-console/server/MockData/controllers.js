@@ -28,7 +28,7 @@ module.exports = controller = {
       case 'success':
         let successMessage;
 
-        if(phase) {
+        if (phase) {
           successMessage = `Task '${req.params.taskId}' has successfully finished phase '${phase}'`;
         } else {
           successMessage = `Task '${req.params.taskId}' successfully completed.`;
@@ -37,7 +37,7 @@ module.exports = controller = {
         break;
       case 'failed':
         let failedMessage;
-        if(phase) {
+        if (phase) {
           failedMessage = `Task '${req.params.taskId}' couldn't successfully finish phase '${phase}'`;
         } else {
           failedMessage = `Task '${req.params.taskId}' couldn't be completed`;
