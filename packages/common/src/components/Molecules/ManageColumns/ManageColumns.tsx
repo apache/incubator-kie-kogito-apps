@@ -44,6 +44,7 @@ export interface IOwnProps {
   setPageSize: (pageSize: number) => void;
   setIsLoadingMore: (isLoadingMoreVal: boolean) => void;
   isLoadingMore: boolean;
+  metaData: any;
 }
 
 const ManageColumns: React.FC<IOwnProps> = ({
@@ -68,7 +69,8 @@ const ManageColumns: React.FC<IOwnProps> = ({
   setOffsetVal,
   setPageSize,
   setIsLoadingMore,
-  isLoadingMore
+  isLoadingMore,
+  metaData
 }) => {
   // tslint:disable: forin
   // tslint:disable: no-floating-promises
@@ -76,23 +78,48 @@ const ManageColumns: React.FC<IOwnProps> = ({
   const [expanded, setExpanded] = useState([]);
   const [enableRefresh, setEnableRefresh] = useState(true);
   const [selectAll, setSelectAll] = useState(false);
+  const allSelections = [];
 
   const nullTypes = [null, 'String', 'Boolean', 'Int', 'DateTime'];
   const client = useApolloClient();
 
   const selectAllColumns = () => {
-    setSelectAll(!selectAll);
-    return null;
+    setSelectAll(!selectAll);    
   };
 
+  const selectAllOptions = () => {
+    
+    if(selectAll === true) {
+      const selectionArray = allSelections.map(ele => ele.split('/')
+    .map(item => item.charAt(0).toLowerCase() + item.slice(1)) )
+      const finalObj = [];
+    selectionArray.map(arr => {
+      const objValue = arr.shift();
+      const rest = filterColumnSelection(arr, objValue);
+      finalObj.push(rest);
+    })
+    finalObj.push(metaData)
+    setParameters(finalObj);
+    } else {
+      const selectionArray = selected.map(ele => ele.split('/')
+        .map(item => item.charAt(0).toLowerCase() + item.slice(1)) )
+      const finalObj = [];
+      selectionArray.map(arr => {
+      const objValue = arr.shift();
+      const rest = filterColumnSelection(arr, objValue);
+      finalObj.push(rest);
+      })
+      finalObj.push(metaData)
+      setParameters(finalObj)
+    } 
+  }
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const onSave = () => {
-    generateQuery(parameters);
-    setIsModalOpen(!isModalOpen);
-  };
+  useEffect(() => { 
+    selectAllOptions();
+  },[selectAll])
 
   const handleChange = (checked, event) => {
     const target = event.target;
@@ -209,7 +236,9 @@ const ManageColumns: React.FC<IOwnProps> = ({
                   return item;
                 }
               })
-              .map((item, _index) => (
+              .map((item, _index) => {
+              allSelections.push(item.name + '/' + title + '/' + group.name)
+              return (
                 <DataListContent
                   aria-label="Primary Content Details"
                   id="ex-expand1"
@@ -221,7 +250,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
                     <DataListCheck
                       aria-labelledby="table-column-management-item2"
                       name={item.name + '/' + title + '/' + group.name}
-                      isChecked={
+                      checked={
                         selectAll === true
                           ? true
                           : selected.includes(
@@ -242,7 +271,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
                     />
                   </DataListItemRow>
                 </DataListContent>
-              ))}
+              )})}
           </DataListItem>
         );
         return childEle;
@@ -257,13 +286,14 @@ const ManageColumns: React.FC<IOwnProps> = ({
           if (group.type.kind !== 'SCALAR') {
             return group;
           } else {
+            allSelections.push(group.name);
             const rootEle = (
               <DataListItem aria-labelledby={'kie-datalist-item-' + group.name}>
                 <DataListItemRow>
                   <DataListCheck
                     aria-labelledby={'kie-datalist-item-' + group.name}
                     name={group.name}
-                    isChecked={
+                    checked={
                       selectAll === true ? true : selected.includes(group.name)
                     }
                     onChange={handleChange}
@@ -322,7 +352,9 @@ const ManageColumns: React.FC<IOwnProps> = ({
                       }
                     }
                   })
-                  .map((item, _index) => (
+                  .map((item, _index) => {
+                  allSelections.push(item.name + '/' + group.name)
+                  return (
                     <DataListContent
                       aria-label="Primary Content Details"
                       id="ex-expand1"
@@ -336,7 +368,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
                             'kie-datalist-item-' + item.name + '/' + group.name
                           }
                           name={item.name + '/' + group.name}
-                          isChecked={
+                          checked={
                             selectAll === true
                               ? true
                               : selected.includes(item.name + '/' + group.name)
@@ -355,7 +387,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
                         />
                       </DataListItemRow>
                     </DataListContent>
-                  ))}
+                  )})}
             </DataListItem>
           );
           !finalResult.includes(nestedEle) && finalResult.push(nestedEle);
@@ -540,7 +572,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
         }
         onClose={handleModalToggle}
         actions={[
-          <Button key="save" variant="primary" onClick={onSave}>
+          <Button key="save" variant="primary" onClick={() => {onResetQuery(parameters)}}>
             Save
           </Button>,
           <Button key="cancel" variant="secondary" onClick={handleModalToggle}>
@@ -565,6 +597,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
     pageSize = 10;
     generateQuery(_parameters);
     setIsLoadingMore(false);
+    setIsModalOpen(!isModalOpen);
   };
 
   const onRefresh = () => {

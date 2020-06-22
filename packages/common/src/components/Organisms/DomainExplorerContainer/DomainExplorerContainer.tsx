@@ -104,10 +104,9 @@ const DomainExplorerContainer: React.FC<IOwnProps> = ({
       }
     });
   });
-
   selections = selections.slice(0, 5);
   defaultParams = defaultParams.slice(0, 5);
-
+  
   useEffect(() => {
     if (rememberedParams.length > 0) {
       setEnableCache(true);
@@ -178,6 +177,7 @@ const DomainExplorerContainer: React.FC<IOwnProps> = ({
                     setPageSize={setPageSize}
                     setIsLoadingMore={setIsLoadingMore}
                     isLoadingMore={isLoadingMore}
+                    metaData={metaData}
                   />
                 </>
               )}
