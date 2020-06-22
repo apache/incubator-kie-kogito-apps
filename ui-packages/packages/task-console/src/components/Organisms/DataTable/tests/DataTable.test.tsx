@@ -3,8 +3,12 @@ import DataTable from '../DataTable';
 import { gql } from 'apollo-boost';
 import { MockedProvider } from '@apollo/react-testing';
 import { getWrapperAsync } from '@kogito-apps/common';
-
-import { ICell } from '@patternfly/react-table';
+import { Label } from '@patternfly/react-core';
+import {
+  ICell,
+  ITransform,
+  IFormatterValueType
+} from '@patternfly/react-table';
 
 jest.mock('uuid', () => {
   let value = 1;
@@ -59,6 +63,15 @@ const data = [
     referenceName: 'ConfirmTravel'
   }
 ];
+const stateColumnTransformer: ITransform = (value: IFormatterValueType) => {
+  if (!value) {
+    return null;
+  }
+  const { title } = value;
+  return {
+    children: <Label>{title}</Label>
+  };
+};
 const columns: ICell[] = [
   {
     title: 'ProcessId',
@@ -78,7 +91,8 @@ const columns: ICell[] = [
   },
   {
     title: 'State',
-    data: 'state'
+    data: 'state',
+    cellTransforms: [stateColumnTransformer]
   }
 ];
 const GET_USER_TASKS_BY_STATE = gql`
@@ -169,22 +183,88 @@ const mocks = [
     }
   }
 ];
-const props1 = {
-  data,
-  isLoading: false,
-  columns,
-  networkStatus: 1,
-  error: undefined,
-  refetch: jest.fn(),
-  LoadingComponent: undefined,
-  ErrorComponent: undefined
-};
 
 describe('DataTable component tests', () => {
-  it('Snapshot tests', async () => {
+  it('Should render DataTable correctly', async () => {
+    const props = {
+      data,
+      isLoading: false,
+      columns,
+      networkStatus: 1,
+      error: undefined,
+      refetch: jest.fn(),
+      LoadingComponent: undefined,
+      ErrorComponent: undefined
+    };
+
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
-        <DataTable {...props1} />
+        <DataTable {...props} />
+      </MockedProvider>,
+      'DataTable'
+    );
+
+    expect(wrapper.find(DataTable)).toMatchSnapshot();
+  });
+
+  it('Should render ErrorComponent', async () => {
+    const props = {
+      data: undefined,
+      isLoading: false,
+      columns,
+      networkStatus: 1,
+      error: {},
+      refetch: jest.fn(),
+      LoadingComponent: undefined,
+      ErrorComponent: undefined
+    };
+
+    const wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <DataTable {...props} />
+      </MockedProvider>,
+      'DataTable'
+    );
+
+    expect(wrapper.find(DataTable)).toMatchSnapshot();
+  });
+
+  it('Should render LoadingComponent', async () => {
+    const props = {
+      data: undefined,
+      isLoading: true,
+      columns,
+      networkStatus: 1,
+      error: undefined,
+      refetch: jest.fn(),
+      LoadingComponent: undefined,
+      ErrorComponent: undefined
+    };
+
+    const wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <DataTable {...props} />
+      </MockedProvider>,
+      'DataTable'
+    );
+
+    expect(wrapper.find(DataTable)).toMatchSnapshot();
+  });
+
+  it('Should render DataTable correctly even no columns configuration provided', async () => {
+    const props = {
+      data,
+      isLoading: false,
+      networkStatus: 1,
+      error: undefined,
+      refetch: jest.fn(),
+      LoadingComponent: undefined,
+      ErrorComponent: undefined
+    };
+
+    const wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <DataTable {...props} />
       </MockedProvider>,
       'DataTable'
     );
