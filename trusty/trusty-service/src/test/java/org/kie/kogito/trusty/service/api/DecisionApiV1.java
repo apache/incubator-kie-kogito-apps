@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.kie.kogito.trusty.service.api;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -20,7 +36,7 @@ public class DecisionApiV1 {
     ITrustyService executionService;
 
     @Test
-    void GivenAValidRequest_WhenExecutionEndpointIsCalled_ThenTheDefaultValuesAreCorrect() {
+    void givenAValidRequestWhenExecutionEndpointIsCalledThenTheDefaultValuesAreCorrect() {
         Decision decision = new Decision();
         decision.setExecutionId("executionId");
         decision.setExecutionTimestamp(1591692950000L);
@@ -32,7 +48,7 @@ public class DecisionApiV1 {
     }
 
     @Test
-    void GivenAnInvalidRequest_WhenExecutionEndpointIsCalled_ThenBadRequestIsReturned() {
+    void givenAnInvalidRequestWhenExecutionEndpointIsCalledThenBadRequestIsReturned() {
         Mockito.when(executionService.getDecisionById(eq("executionId"))).thenThrow(new IllegalArgumentException("Execution does not exist."));
 
         given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/executionId").then().statusCode(400);

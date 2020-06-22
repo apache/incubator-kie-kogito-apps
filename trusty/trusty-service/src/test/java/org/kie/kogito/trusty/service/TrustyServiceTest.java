@@ -17,7 +17,6 @@
 package org.kie.kogito.trusty.service;
 
 import java.time.OffsetDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,17 +27,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
-import org.kie.kogito.persistence.infinispan.cache.StorageImpl;
 import org.kie.kogito.trusty.service.mocks.StorageImplMock;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -52,7 +47,7 @@ public class TrustyServiceTest {
     TrustyStorageService storageService;
 
     @Test
-    void GivenADecision_WhenStoreDecisionIsCalled_ThenNoExceptionsAreThrown() {
+    void givenADecisionWhenStoreDecisionIsCalledThenNoExceptionsAreThrown() {
         Decision decision = new Decision();
         Storage storageMock = mock(Storage.class);
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
@@ -62,7 +57,7 @@ public class TrustyServiceTest {
     }
 
     @Test
-    void GivenADecision_WhenADecisionIsStoredAndRetrieved_ThenTheOriginalObjectIsReturned() {
+    void givenADecisionWhenADecisionIsStoredAndRetrievedThenTheOriginalObjectIsReturned() {
         String executionId = "executionId";
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
@@ -89,7 +84,7 @@ public class TrustyServiceTest {
     }
 
     @Test
-    void GivenADecision_WhenADecisionIsStoredAndRetrievedById_ThenTheOriginalObjectIsReturned() {
+    void givenADecisionWhenADecisionIsStoredAndRetrievedByIdThenTheOriginalObjectIsReturned() {
         String executionId = "executionId";
         Decision decision = new Decision();
         decision.setExecutionId(executionId);

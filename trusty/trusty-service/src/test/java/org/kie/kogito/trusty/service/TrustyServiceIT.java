@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.kie.kogito.trusty.service;
 
 import java.time.Instant;
@@ -43,7 +59,7 @@ public class TrustyServiceIT {
     }
 
     @Test
-    public void GivenTwoExecutions_WhenTheQueryExcludesOneExecution_ThenOnlyOneExecutionIsReturned() {
+    public void givenTwoExecutionsWhenTheQueryExcludesOneExecutionThenOnlyOneExecutionIsReturned() {
         storeExecution("myExecution", 1591692950000L);
         storeExecution("executionId2", 1591692958000L);
 
@@ -55,7 +71,7 @@ public class TrustyServiceIT {
     }
 
     @Test
-    public void GivenTwoExecutions_WhenThePrefixIsUsed_ThenOnlyOneExecutionIsReturned() {
+    public void givenTwoExecutionsWhenThePrefixIsUsedThenOnlyOneExecutionIsReturned() {
         storeExecution("myExecution", 1591692950000L);
         storeExecution("executionId2", 1591692958000L);
 
@@ -67,7 +83,7 @@ public class TrustyServiceIT {
     }
 
     @Test
-    public void GivenAnExecution_WhenGetDecisionByIdIsCalled_ThenTheExecutionIsReturned() {
+    public void givenAnExecutionWhenGetDecisionByIdIsCalledThenTheExecutionIsReturned() {
         String executionId = "myExecution";
         storeExecution(executionId, 1591692950000L);
 
@@ -76,14 +92,14 @@ public class TrustyServiceIT {
     }
 
     @Test
-    public void GivenADuplicatedDecision_WhenTheDecisionIsStored_ThenAnExceptionIsRaised() {
+    public void givenADuplicatedDecisionWhenTheDecisionIsStoredThenAnExceptionIsRaised() {
         String executionId = "myExecution";
         storeExecution(executionId, 1591692950000L);
         Assertions.assertThrows(IllegalArgumentException.class, () -> storeExecution(executionId, 1591692950000L));
     }
 
     @Test
-    public void GivenNoExecutions_WhenADecisionIsRetrieved_ThenAnExceptionIsRaised() {
+    public void givenNoExecutionsWhenADecisionIsRetrievedThenAnExceptionIsRaised() {
         String executionId = "myExecution";
         Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getDecisionById(executionId));
     }
