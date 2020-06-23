@@ -41,7 +41,7 @@ public class ProtostreamProducer {
     }
 
     @Produces
-    MessageMarshaller<Decision> decisionMarshaller() {
+    MessageMarshaller decisionMarshaller() {
         return new DecisionMarshaller(mapper);
     }
 }

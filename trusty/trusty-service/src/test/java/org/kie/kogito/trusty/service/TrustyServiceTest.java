@@ -20,6 +20,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
@@ -35,15 +36,22 @@ import static org.mockito.Mockito.when;
 
 public class TrustyServiceTest {
 
+    private TrustyStorageService trustyStorageServiceMock;
+    private TrustyService trustyService;
+
+    @BeforeEach
+    void setup(){
+        trustyStorageServiceMock = mock(TrustyStorageService.class);
+        trustyService = new TrustyService(trustyStorageServiceMock);
+    }
+
     @Test
     void givenADecisionWhenStoreDecisionIsCalledThenNoExceptionsAreThrown() {
         Decision decision = new Decision();
         Storage storageMock = mock(Storage.class);
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
-        TrustyStorageService storageService = mock(TrustyStorageService.class);
-        when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
 
-        TrustyService trustyService = new TrustyService(storageService);
         Assertions.assertDoesNotThrow(() -> trustyService.storeDecision("test", decision));
     }
 
@@ -64,10 +72,8 @@ public class TrustyServiceTest {
         when(storageMock.containsKey(eq(executionId))).thenReturn(false);
         when(storageMock.query()).thenReturn(queryMock);
 
-        TrustyStorageService storageService = mock(TrustyStorageService.class);
-        when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
 
-        TrustyService trustyService = new TrustyService(storageService);
         trustyService.storeDecision("executionId", decision);
 
         List<Execution> result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
@@ -84,10 +90,8 @@ public class TrustyServiceTest {
 
         Storage storageMock = new StorageImplMock(Decision.class);
 
-        TrustyStorageService storageService = mock(TrustyStorageService.class);
-        when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
 
-        TrustyService trustyService = new TrustyService(storageService);
         trustyService.storeDecision(executionId, decision);
 
         Decision result = trustyService.getDecisionById(executionId);

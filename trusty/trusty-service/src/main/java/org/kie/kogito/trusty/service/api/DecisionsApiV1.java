@@ -41,8 +41,13 @@ public class DecisionsApiV1 {
     @Inject
     ITrustyService trustyService;
 
+    /**
+     * Gets an execution header by ID.
+     * @param executionId The execution ID.
+     * @return The execution header.
+     */
     @GET
-    @Path("/{key}")
+    @Path("/{executionId}")
     @APIResponses(value = {
             @APIResponse(description = "Gets the decision detail header.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = ExecutionHeaderResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))

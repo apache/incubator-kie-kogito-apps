@@ -28,6 +28,7 @@ import org.mockito.Mockito;
 
 import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @QuarkusTest
 public class DecisionsApiV1Test {
@@ -40,7 +41,7 @@ public class DecisionsApiV1Test {
         Decision decision = new Decision();
         decision.setExecutionId("executionId");
         decision.setExecutionTimestamp(1591692950000L);
-        Mockito.when(executionService.getDecisionById(eq("executionId"))).thenReturn(decision);
+        when(executionService.getDecisionById(eq("executionId"))).thenReturn(decision);
 
         ExecutionHeaderResponse response = given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/executionId").as(ExecutionHeaderResponse.class);
 
@@ -49,7 +50,7 @@ public class DecisionsApiV1Test {
 
     @Test
     void givenAnInvalidRequestWhenExecutionEndpointIsCalledDThenBadRequestIsReturned() {
-        Mockito.when(executionService.getDecisionById(eq("executionId"))).thenThrow(new IllegalArgumentException("Execution does not exist."));
+        when(executionService.getDecisionById(eq("executionId"))).thenThrow(new IllegalArgumentException("Execution does not exist."));
 
         given().contentType(ContentType.JSON).when().get("/v1/executions/decisions/executionId").then().statusCode(400);
     }
