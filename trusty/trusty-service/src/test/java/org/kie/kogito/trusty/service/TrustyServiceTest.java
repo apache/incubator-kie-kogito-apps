@@ -19,10 +19,6 @@ package org.kie.kogito.trusty.service;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
@@ -37,22 +33,17 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@QuarkusTest
 public class TrustyServiceTest {
-
-    @Inject
-    TrustyService trustyService;
-
-    @InjectMock
-    TrustyStorageService storageService;
 
     @Test
     void givenADecisionWhenStoreDecisionIsCalledThenNoExceptionsAreThrown() {
         Decision decision = new Decision();
         Storage storageMock = mock(Storage.class);
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(decision);
-
+        TrustyStorageService storageService = mock(TrustyStorageService.class);
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
+
+        TrustyService trustyService = new TrustyService(storageService);
         Assertions.assertDoesNotThrow(() -> trustyService.storeDecision("test", decision));
     }
 
@@ -73,8 +64,10 @@ public class TrustyServiceTest {
         when(storageMock.containsKey(eq(executionId))).thenReturn(false);
         when(storageMock.query()).thenReturn(queryMock);
 
+        TrustyStorageService storageService = mock(TrustyStorageService.class);
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
 
+        TrustyService trustyService = new TrustyService(storageService);
         trustyService.storeDecision("executionId", decision);
 
         List<Execution> result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
@@ -91,8 +84,10 @@ public class TrustyServiceTest {
 
         Storage storageMock = new StorageImplMock(Decision.class);
 
+        TrustyStorageService storageService = mock(TrustyStorageService.class);
         when(storageService.getDecisionsStorage()).thenReturn(storageMock);
 
+        TrustyService trustyService = new TrustyService(storageService);
         trustyService.storeDecision(executionId, decision);
 
         Decision result = trustyService.getDecisionById(executionId);

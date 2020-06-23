@@ -25,22 +25,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Execution {
 
-    @JsonProperty("executionId")
+    public final static String EXECUTION_ID = "executionId";
+    public final static String EXECUTION_TIMESTAMP = "executionTimestamp";
+    public final static String HAS_SUCCEEDED = "hasSucceeded";
+    public final static String EXECUTOR_NAME = "executorName";
+    public final static String EXECUTED_MODEL_NAME = "executedModelName";
+    public final static String EXECUTION_TYPE = "executionType";
+
+    @JsonProperty(EXECUTION_ID)
     private String executionId;
 
-    @JsonProperty("executionTimestamp")
+    @JsonProperty(EXECUTION_TIMESTAMP)
     private Long executionTimestamp;
 
-    @JsonProperty("hasSucceeded")
+    @JsonProperty(HAS_SUCCEEDED)
     private boolean hasSucceeded;
 
-    @JsonProperty("executorName")
+    @JsonProperty(EXECUTOR_NAME)
     private String executorName;
 
-    @JsonProperty("executedModelName")
+    @JsonProperty(EXECUTED_MODEL_NAME)
     private String executedModelName;
 
-    @JsonProperty("executionType")
+    @JsonProperty(EXECUTION_TYPE)
     private ExecutionTypeEnum executionType;
 
     public Execution() {

@@ -62,7 +62,7 @@ public class DecisionsApiV1 {
         try {
             decision = trustyService.getDecisionById(executionId);
         } catch (IllegalArgumentException ex) {
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), String.format("Execution with ID %s does not exist in the storage.", executionId)).build();
+            return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), ex.getMessage()).build();
         }
 
         return Response.ok(ExecutionHeaderResponse.fromExecution(decision)).build();

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 
 public class DecisionMarshaller extends AbstractMarshaller implements MessageMarshaller<Decision> {
@@ -36,24 +37,23 @@ public class DecisionMarshaller extends AbstractMarshaller implements MessageMar
     public Decision readFrom(ProtoStreamReader reader) throws IOException {
         Decision result = new Decision();
 
-        result.setExecutionId(reader.readString("executionId"));
-        result.setExecutionTimestamp(reader.readLong("executionTimestamp"));
-        result.setSuccess(reader.readBoolean("hasSucceeded"));
-        result.setExecutorName(reader.readString("executorName"));
-        result.setExecutedModelName(reader.readString("executedModelName"));
-        result.setExecutionType(myMapper.readValue(reader.readString("executionType"), ExecutionTypeEnum.class));
-
+        result.setExecutionId(reader.readString(Execution.EXECUTION_ID));
+        result.setExecutionTimestamp(reader.readLong(Execution.EXECUTION_TIMESTAMP));
+        result.setSuccess(reader.readBoolean(Execution.HAS_SUCCEEDED));
+        result.setExecutorName(reader.readString(Execution.EXECUTOR_NAME));
+        result.setExecutedModelName(reader.readString(Execution.EXECUTED_MODEL_NAME));
+        result.setExecutionType(myMapper.readValue(reader.readString(Execution.EXECUTION_TYPE), ExecutionTypeEnum.class));
         return result;
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, Decision result) throws IOException {
-        writer.writeString("executionId", result.getExecutionId());
-        writer.writeLong("executionTimestamp", result.getExecutionTimestamp());
-        writer.writeBoolean("hasSucceeded", result.hasSucceeded());
-        writer.writeString("executorName", result.getExecutorName());
-        writer.writeString("executedModelName", result.getExecutedModelName());
-        writer.writeString("executionType", myMapper.writeValueAsString(result.getExecutionType()));
+        writer.writeString(Execution.EXECUTION_ID, result.getExecutionId());
+        writer.writeLong(Execution.EXECUTION_TIMESTAMP, result.getExecutionTimestamp());
+        writer.writeBoolean(Execution.HAS_SUCCEEDED, result.hasSucceeded());
+        writer.writeString(Execution.EXECUTOR_NAME, result.getExecutorName());
+        writer.writeString(Execution.EXECUTED_MODEL_NAME, result.getExecutedModelName());
+        writer.writeString(Execution.EXECUTION_TYPE, myMapper.writeValueAsString(result.getExecutionType()));
     }
 
     @Override
