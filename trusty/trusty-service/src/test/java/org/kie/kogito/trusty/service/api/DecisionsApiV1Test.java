@@ -30,7 +30,7 @@ import static io.restassured.RestAssured.given;
 import static org.mockito.ArgumentMatchers.eq;
 
 @QuarkusTest
-public class DecisionApiV1 {
+public class DecisionsApiV1Test {
 
     @InjectMock
     ITrustyService executionService;
