@@ -7,7 +7,7 @@ import { UserTaskInstance } from '../../../../graphql/types';
 import { TaskInfoImpl } from '../../../../model/TaskInfo';
 import { FormActionDescription } from '../../../../model/FormDescription';
 import FormRenderer from '../FormRenderer';
-import ApplyForVisaForm from './ApplyForVisa';
+import ApplyForVisaForm from '../../../../util/tests/mocks/ApplyForVisa';
 
 const userTaskInstance: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',

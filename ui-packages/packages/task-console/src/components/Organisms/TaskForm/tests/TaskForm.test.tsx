@@ -1,10 +1,10 @@
+import React from 'react';
 import axios from 'axios';
+import { getWrapperAsync } from '@kogito-apps/common';
+import TaskForm from '../TaskForm';
 import { TaskInfo, TaskInfoImpl } from '../../../../model/TaskInfo';
 import { UserTaskInstance } from '../../../../graphql/types';
-import React from 'react';
-import TaskForm from '../TaskForm';
-import ApplyForVisaForm from './ApplyForVisa';
-import { getWrapperAsync } from '@kogito-apps/common';
+import ApplyForVisaForm from '../../../../util/tests/mocks/ApplyForVisa';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;

@@ -38,21 +38,20 @@ exports[`TaskForm Test Test rendering form 1`] = `
         "actions": Array [
           Object {
             "name": "Complete",
-            "outputs": Array [
-              "visaApplication",
-            ],
+            "outputs": Array [],
             "primary": true,
           },
           Object {
             "name": "Release",
-            "outputs": Array [],
+            "outputs": Array [
+              "traveller",
+            ],
             "phase": "release",
           },
         ],
         "schema": Object {
           "properties": Object {
             "traveller": Object {
-              "disabled": true,
               "properties": Object {
                 "address": Object {
                   "properties": Object {
@@ -85,6 +84,10 @@ exports[`TaskForm Test Test rendering form 1`] = `
                   "type": "string",
                 },
               },
+              "required": Array [
+                "firstName",
+                "lastName",
+              ],
               "type": "object",
             },
             "trip": Object {
@@ -259,10 +262,10 @@ exports[`TaskForm Test Test rendering form 1`] = `
               "isRequired": false,
             },
             "traveller.firstName": Object {
-              "isRequired": false,
+              "isRequired": true,
             },
             "traveller.lastName": Object {
-              "isRequired": false,
+              "isRequired": true,
             },
             "traveller.nationality": Object {
               "isRequired": false,
@@ -316,7 +319,6 @@ exports[`TaskForm Test Test rendering form 1`] = `
           "schema": Object {
             "properties": Object {
               "traveller": Object {
-                "disabled": true,
                 "properties": Object {
                   "address": Object {
                     "properties": Object {
@@ -349,6 +351,10 @@ exports[`TaskForm Test Test rendering form 1`] = `
                     "type": "string",
                   },
                 },
+                "required": Array [
+                  "firstName",
+                  "lastName",
+                ],
                 "type": "object",
               },
               "trip": Object {
@@ -1023,12 +1029,11 @@ exports[`TaskForm Test Test rendering form 1`] = `
                 >
                   <Nest
                     changed={false}
-                    disabled={true}
+                    disabled={false}
                     error={null}
                     errorMessage=""
                     field={
                       Object {
-                        "disabled": true,
                         "properties": Object {
                           "address": Object {
                             "properties": Object {
@@ -1061,6 +1066,10 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             "type": "string",
                           },
                         },
+                        "required": Array [
+                          "firstName",
+                          "lastName",
+                        ],
                         "type": "object",
                       }
                     }
@@ -1113,7 +1122,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                         },
                       }
                     }
-                    required={false}
+                    required={
+                      Array [
+                        "firstName",
+                        "lastName",
+                      ]
+                    }
                     showInlineError={true}
                     value={
                       Object {
@@ -1166,18 +1180,23 @@ exports[`TaskForm Test Test rendering form 1`] = `
                           },
                         }
                       }
-                      required={false}
+                      required={
+                        Array [
+                          "firstName",
+                          "lastName",
+                        ]
+                      }
                     >
                       <label>
                         Traveller
                       </label>
                       <AutoField
-                        isDisabled={true}
+                        isDisabled={false}
                         key="firstName"
                         name="traveller.firstName"
                       >
                         <TextField
-                          isDisabled={true}
+                          isDisabled={false}
                           name="traveller.firstName"
                         >
                           <Text
@@ -1193,12 +1212,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             fieldType={[Function]}
                             fields={Array []}
                             id="uniforms-0000-000f"
-                            isDisabled={true}
+                            isDisabled={false}
                             label="First name"
                             name="traveller.firstName"
                             onChange={[Function]}
                             placeholder="First name"
-                            required={false}
+                            required={true}
                             showInlineError={true}
                             value="Rachel"
                           >
@@ -1228,7 +1247,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                   name="traveller.firstName"
                                   onChange={[Function]}
                                   placeholder="First name"
-                                  required={false}
+                                  required={true}
                                   type="text"
                                   value="Rachel"
                                 >
@@ -1244,7 +1263,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                     name="traveller.firstName"
                                     onChange={[Function]}
                                     placeholder="First name"
-                                    required={false}
+                                    required={true}
                                     type="text"
                                     validated="default"
                                     value="Rachel"
@@ -1271,12 +1290,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                         </TextField>
                       </AutoField>
                       <AutoField
-                        isDisabled={true}
+                        isDisabled={false}
                         key="lastName"
                         name="traveller.lastName"
                       >
                         <TextField
-                          isDisabled={true}
+                          isDisabled={false}
                           name="traveller.lastName"
                         >
                           <Text
@@ -1292,12 +1311,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             fieldType={[Function]}
                             fields={Array []}
                             id="uniforms-0000-000h"
-                            isDisabled={true}
+                            isDisabled={false}
                             label="Last name"
                             name="traveller.lastName"
                             onChange={[Function]}
                             placeholder="Last name"
-                            required={false}
+                            required={true}
                             showInlineError={true}
                             value="White"
                           >
@@ -1327,7 +1346,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                   name="traveller.lastName"
                                   onChange={[Function]}
                                   placeholder="Last name"
-                                  required={false}
+                                  required={true}
                                   type="text"
                                   value="White"
                                 >
@@ -1343,7 +1362,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                                     name="traveller.lastName"
                                     onChange={[Function]}
                                     placeholder="Last name"
-                                    required={false}
+                                    required={true}
                                     type="text"
                                     validated="default"
                                     value="White"
@@ -1370,12 +1389,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                         </TextField>
                       </AutoField>
                       <AutoField
-                        isDisabled={true}
+                        isDisabled={false}
                         key="email"
                         name="traveller.email"
                       >
                         <TextField
-                          isDisabled={true}
+                          isDisabled={false}
                           name="traveller.email"
                         >
                           <Text
@@ -1392,7 +1411,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             fieldType={[Function]}
                             fields={Array []}
                             id="uniforms-0000-000j"
-                            isDisabled={true}
+                            isDisabled={false}
                             label="Email"
                             name="traveller.email"
                             onChange={[Function]}
@@ -1470,12 +1489,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                         </TextField>
                       </AutoField>
                       <AutoField
-                        isDisabled={true}
+                        isDisabled={false}
                         key="nationality"
                         name="traveller.nationality"
                       >
                         <TextField
-                          isDisabled={true}
+                          isDisabled={false}
                           name="traveller.nationality"
                         >
                           <Text
@@ -1491,7 +1510,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                             fieldType={[Function]}
                             fields={Array []}
                             id="uniforms-0000-000l"
-                            isDisabled={true}
+                            isDisabled={false}
                             label="Nationality"
                             name="traveller.nationality"
                             onChange={[Function]}
@@ -1569,12 +1588,12 @@ exports[`TaskForm Test Test rendering form 1`] = `
                         </TextField>
                       </AutoField>
                       <AutoField
-                        isDisabled={true}
+                        isDisabled={false}
                         key="address"
                         name="traveller.address"
                       >
                         <NestField
-                          isDisabled={true}
+                          isDisabled={false}
                           name="traveller.address"
                         >
                           <Nest
@@ -1611,7 +1630,7 @@ exports[`TaskForm Test Test rendering form 1`] = `
                               ]
                             }
                             id="uniforms-0000-000n"
-                            isDisabled={true}
+                            isDisabled={false}
                             label="Address"
                             name="traveller.address"
                             onChange={[Function]}
