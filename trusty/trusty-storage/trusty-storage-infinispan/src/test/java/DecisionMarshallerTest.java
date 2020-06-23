@@ -15,7 +15,10 @@
  */
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
@@ -33,6 +36,8 @@ import static org.mockito.Mockito.when;
 
 public class DecisionMarshallerTest {
 
+    private static final List<Method> decisionSetters = Arrays.stream(Decision.class.getMethods()).filter(x -> x.getName().startsWith("set")).collect(Collectors.toList());
+
     @Test
     public void allPropertiesOfDecisionObjectAreCoveredByTheMarshaller() throws IOException {
         Decision decision = new Decision();
@@ -49,7 +54,7 @@ public class DecisionMarshallerTest {
 
         List<String> usedFields = protoStreamWriter.getWrittenFieldNames();
 
-        Assertions.assertEquals(6, usedFields.size());
+        Assertions.assertEquals(decisionSetters.size(), usedFields.size());
         Assertions.assertTrue(usedFields.contains(Execution.EXECUTION_ID));
         Assertions.assertTrue(usedFields.contains(Execution.EXECUTION_TIMESTAMP));
         Assertions.assertTrue(usedFields.contains(Execution.EXECUTOR_NAME));
@@ -71,12 +76,11 @@ public class DecisionMarshallerTest {
 
         Decision decision = marshaller.readFrom(protoStreamReader);
 
-        Assertions.assertEquals(6, mockingDetails(protoStreamReader).getInvocations().size());
+        Assertions.assertEquals(decisionSetters.size(), mockingDetails(protoStreamReader).getInvocations().size());
         Assertions.assertNotNull(decision.getExecutionId());
         Assertions.assertNotNull(decision.getExecutionTimestamp());
         Assertions.assertNotNull(decision.getExecutedModelName());
         Assertions.assertNotNull(decision.getExecutorName());
         Assertions.assertNotNull(decision.getExecutionType());
-        Assertions.assertNotNull(decision.hasSucceeded());
     }
 }

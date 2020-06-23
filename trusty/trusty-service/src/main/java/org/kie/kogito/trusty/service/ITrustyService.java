@@ -46,6 +46,7 @@ public interface ITrustyService {
      *
      * @param executionId The execution ID.
      * @return The decision.
+     * @throws IllegalArgumentException Throws IllegalArgumentException in case the executionId is not present in the system.
      */
     Decision getDecisionById(String executionId);
 
@@ -54,7 +55,15 @@ public interface ITrustyService {
      *
      * @param executionId The unique execution ID
      * @param decision    The decision object.
-     * @throws RuntimeException Throws RuntimeException in case the executionId is already present in the system.
+     * @throws IllegalArgumentException Throws IllegalArgumentException in case the executionId is already present in the system.
      */
     void storeDecision(String executionId, Decision decision);
+
+    /**
+     * Updates a decision. If the decision is not present in the storage, then it is created.
+     *
+     * @param executionId The execution ID
+     * @param decision    The decision object.
+     */
+    void updateDecision(String executionId, Decision decision);
 }

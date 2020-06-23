@@ -33,9 +33,13 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 @ApplicationScoped
 public class TrustyService implements ITrustyService {
 
-    @Inject
-    TrustyStorageService storageService;
+    private TrustyStorageService storageService;
 
+    TrustyService() {
+        // dummy constructor needed
+    }
+
+    @Inject
     public TrustyService(TrustyStorageService storageService) {
         this.storageService = storageService;
     }
@@ -66,5 +70,10 @@ public class TrustyService implements ITrustyService {
             throw new IllegalArgumentException(String.format("A decision with ID %s is already present in the storage.", executionId));
         }
         storage.put(executionId, decision);
+    }
+
+    @Override
+    public void updateDecision(String executionId, Decision decision) {
+        storageService.getDecisionsStorage().put(executionId, decision);
     }
 }
