@@ -77,6 +77,9 @@ const props2 = {
 };
 
 jest.mock('../../../../graphql/types');
+jest.mock(
+  '../../../Molecules/DomainExplorerFilterOptions/DomainExplorerFilterOptions'
+);
 
 describe('Domain Explorer Container component', () => {
   it('Snapshot test', async () => {
@@ -121,7 +124,21 @@ describe('Domain Explorer Container component', () => {
         __type: {
           fields: [
             {
-              name: 'Travels'
+              name: 'Travels',
+              args: [
+                {
+                  name: 'where',
+                  type: { kind: 'INPUT_OBJECT', name: 'TravelsArgument' }
+                },
+                {
+                  name: 'orderBy',
+                  type: { kind: 'INPUT_OBJECT', name: 'TravelsOrderBy' }
+                },
+                {
+                  name: 'pagination',
+                  type: { kind: 'INPUT_OBJECT', name: 'Pagination' }
+                }
+              ]
             },
             {
               name: 'visaApplication'
@@ -175,7 +192,21 @@ describe('Domain Explorer Container component', () => {
         __type: {
           fields: [
             {
-              name: 'Travels'
+              name: 'Travels',
+              args: [
+                {
+                  name: 'where',
+                  type: { kind: 'INPUT_OBJECT', name: 'TravelsArgument' }
+                },
+                {
+                  name: 'orderBy',
+                  type: { kind: 'INPUT_OBJECT', name: 'TravelsOrderBy' }
+                },
+                {
+                  name: 'pagination',
+                  type: { kind: 'INPUT_OBJECT', name: 'Pagination' }
+                }
+              ]
             },
             {
               name: 'visaApplication'

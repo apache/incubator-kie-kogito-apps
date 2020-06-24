@@ -3,23 +3,26 @@ import {
   DataToolbar,
   DataToolbarContent,
   DataToolbarToggleGroup,
-  DataToolbarGroup,
+  DataToolbarItem,
   Card,
-  Bullseye
+  Bullseye,
+  DataToolbarFilter,
+  DataToolbarGroup
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
-// import DomainExplorerColumnPicker from '../../Molecules/DomainExplorerColumnPicker/DomainExplorerColumnPicker';
 import DomainExplorerTable from '../../Molecules/DomainExplorerTable/DomainExplorerTable';
 import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
 import LoadMore from '../../Atoms/LoadMore/LoadMore';
 import ServerErrors from '../../Molecules/ServerErrors/ServerErrors';
 import ManageColumns from '../../Molecules/ManageColumns/ManageColumns';
+import DomainExplorerFilterOptions from '../../Molecules/DomainExplorerFilterOptions/DomainExplorerFilterOptions';
 import './DomainExplorer.css';
 
 import { GraphQL } from '../../../graphql/types';
 import useGetQueryTypesQuery = GraphQL.useGetQueryTypesQuery;
 import useGetQueryFieldsQuery = GraphQL.useGetQueryFieldsQuery;
 import useGetColumnPickerAttributesQuery = GraphQL.useGetColumnPickerAttributesQuery;
+import useGetInputFieldsFromQueryQuery = GraphQL.useGetInputFieldsFromQueryQuery;
 
 interface IOwnProps {
   domainName: string;
@@ -49,7 +52,21 @@ const DomainExplorer: React.FC<IOwnProps> = ({
   const [error, setError] = useState();
   const [enableCache, setEnableCache] = useState(false);
   const [parameters, setParameters] = useState([metaData]);
-
+  const [enableFilter, setEnableFilter] = useState(false);
+  const [runFilter, setRunFilter] = useState(false);
+  const [queryAttributes, setQueryAttributes] = useState({});
+  const [filterChips, setFilterChips] = useState([
+    'metadata / processInstances / state: ACTIVE'
+  ]);
+  const [finalFilters, setFinalFilters] = useState<any>({
+    metadata: {
+      processInstances: {
+        state: {
+          equal: 'ACTIVE'
+        }
+      }
+    }
+  });
   useEffect(() => {
     /* istanbul ignore else */
     if (domainName) {
@@ -58,6 +75,14 @@ const DomainExplorer: React.FC<IOwnProps> = ({
   }, []);
 
   const getQuery = useGetQueryFieldsQuery();
+  const domainArg =
+    !getQuery.loading &&
+    getQuery.data.__type.fields.find(item => {
+      if (item.name === domainName) {
+        return item;
+      }
+    });
+
   const getQueryTypes = useGetQueryTypesQuery();
   const getPicker = useGetColumnPickerAttributesQuery({
     variables: { columnPickerType: domainName }
@@ -66,7 +91,12 @@ const DomainExplorer: React.FC<IOwnProps> = ({
     setColumnFilters(_columnFilter);
     setLimit(_columnFilter.length);
   };
-
+  const argument = domainArg && domainArg.args[0].type.name;
+  const getSchema = useGetInputFieldsFromQueryQuery({
+    variables: {
+      currentQuery: argument
+    }
+  });
   let data = [];
   const tempArray = [];
   let selections = [];
@@ -119,42 +149,100 @@ const DomainExplorer: React.FC<IOwnProps> = ({
     }
   }, [columnPickerType, selections.length > 0]);
 
+  const deleteKey = (testObj, pathArray) => {
+    const _obj = testObj;
+    const keys = pathArray;
+    keys.reduce((acc, key, index) => {
+      if (index === keys.length - 1) {
+        delete acc[key];
+        return true;
+      }
+      return acc[key];
+    }, _obj);
+    return _obj;
+  };
+  function clearEmpties(o) {
+    for (const k in o) {
+      if (!o[k] || typeof o[k] !== 'object') {
+        continue;
+      }
+      clearEmpties(o[k]);
+      if (Object.keys(o[k]).length === 0) {
+        delete o[k];
+      }
+    }
+    return o;
+  }
+
+  const onDeleteChip = (type = '', id = '') => {
+    if (type) {
+      setFilterChips(prev => prev.filter(item => item !== id));
+      setRunFilter(true);
+      setEnableFilter(true);
+      const chipText = id.split(':');
+      const removeString = chipText[0].split('/');
+      let tempObj = finalFilters;
+      tempObj = deleteKey(tempObj, removeString);
+      const FinalObj = clearEmpties(tempObj);
+      setFinalFilters(FinalObj);
+    } else {
+      setFilterChips([]);
+      setRunFilter(true);
+      setEnableFilter(true);
+    }
+  };
+
   const renderToolbar = () => {
     return (
       <DataToolbar
         id="data-toolbar-with-chip-groups"
         className="pf-m-toggle-group-container"
         collapseListedFiltersBreakpoint="md"
+        clearAllFilters={onDeleteChip}
       >
         <DataToolbarContent>
-          <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
-            <DataToolbarGroup>
-              {!getPicker.loading && (
-                <>
-                  {/* <DomainExplorerColumnPicker
-                    columnPickerType={columnPickerType}
-                    setColumnFilters={onAddColumnFilters}
-                    setTableLoading={setTableLoading}
-                    getQueryTypes={getQueryTypes}
-                    setDisplayTable={setDisplayTable}
-                    parameters={parameters}
-                    setParameters={setParameters}
-                    selected={selected}
-                    setSelected={setSelected}
-                    data={data}
-                    getPicker={getPicker}
-                    setError={setError}
-                    setDisplayEmptyState={setDisplayEmptyState}
-                    rememberedParams={rememberedParams}
-                    enableCache={enableCache}
-                    setEnableCache={setEnableCache}
-                    pageSize={pageSize}
-                    offsetVal={offset}
-                    setOffsetVal={setOffset}
-                    setPageSize={setPageSize}
-                    setIsLoadingMore={setIsLoadingMore}
-                    isLoadingMore={isLoadingMore}
-                  /> */}
+          {!getPicker.loading && (
+            <>
+              <DataToolbarToggleGroup
+                toggleIcon={<FilterIcon />}
+                breakpoint="xl"
+              >
+                {!getQuery.loading && !getQueryTypes.loading && (
+                  <DataToolbarFilter
+                    categoryName="Filters"
+                    chips={filterChips}
+                    deleteChip={onDeleteChip}
+                  >
+                    <DataToolbarItem>
+                      <DomainExplorerFilterOptions
+                        currentDomain={domainName}
+                        getQuery={getQuery}
+                        parameters={parameters}
+                        setColumnFilters={setColumnFilters}
+                        setDisplayTable={setDisplayTable}
+                        setDisplayEmptyState={setDisplayEmptyState}
+                        setTableLoading={setTableLoading}
+                        queryAttributes={queryAttributes}
+                        setQueryAttributes={setQueryAttributes}
+                        enableFilter={enableFilter}
+                        setEnableFilter={setEnableFilter}
+                        setError={setError}
+                        getQueryTypes={getQueryTypes}
+                        filterChips={filterChips}
+                        setFilterChips={setFilterChips}
+                        runFilter={runFilter}
+                        setRunFilter={setRunFilter}
+                        finalFilters={finalFilters}
+                        setFinalFilters={setFinalFilters}
+                        getSchema={getSchema}
+                        argument={argument}
+                      />
+                    </DataToolbarItem>
+                  </DataToolbarFilter>
+                )}
+              </DataToolbarToggleGroup>
+              <DataToolbarGroup>
+                <DataToolbarItem>
                   <ManageColumns
                     columnPickerType={columnPickerType}
                     setColumnFilters={onAddColumnFilters}
@@ -179,11 +267,13 @@ const DomainExplorer: React.FC<IOwnProps> = ({
                     setIsLoadingMore={setIsLoadingMore}
                     isLoadingMore={isLoadingMore}
                     metaData={metaData}
+                    finalFilters={finalFilters}
+                    argument={argument}
                   />
-                </>
-              )}
-            </DataToolbarGroup>
-          </DataToolbarToggleGroup>
+                </DataToolbarItem>
+              </DataToolbarGroup>
+            </>
+          )}
         </DataToolbarContent>
       </DataToolbar>
     );

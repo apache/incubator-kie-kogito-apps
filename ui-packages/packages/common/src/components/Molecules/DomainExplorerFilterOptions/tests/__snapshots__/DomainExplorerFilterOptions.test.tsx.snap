@@ -1,0 +1,903 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Domain explorer filter options component tests Snapshot test with default props 1`] = `
+<Memo(DomainExplorerFilterOptions)
+  currentDomain="Travels"
+  enableFilter={false}
+  filterChips={Array []}
+  finalFilters={Object {}}
+  getQuery={
+    Object {
+      "data": Object {
+        "__type": Object {
+          "fields": Array [
+            Object {
+              "args": Array [
+                Object {
+                  "name": "where",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TravelsArgument",
+                  },
+                },
+                Object {
+                  "name": "orderBy",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "TravelsOrderBy",
+                  },
+                },
+                Object {
+                  "name": "pagination",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "Pagination",
+                  },
+                },
+              ],
+              "name": "Travels",
+              "type": Object {
+                "ofType": Object {
+                  "name": "Travels",
+                },
+              },
+            },
+          ],
+          "name": "Query",
+        },
+      },
+      "loading": false,
+    }
+  }
+  getQueryTypes={
+    Object {
+      "data": Object {
+        "__schema": Object {
+          "queryType": Array [
+            Object {
+              "inputFields": Array [
+                Object {
+                  "name": "city",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "StringArgument",
+                  },
+                },
+                Object {
+                  "name": "country",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "StringArgument",
+                  },
+                },
+                Object {
+                  "name": "street",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "StringArgument",
+                  },
+                },
+                Object {
+                  "name": "zipCode",
+                  "type": Object {
+                    "kind": "INPUT_OBJECT",
+                    "name": "StringArgument",
+                  },
+                },
+              ],
+              "kind": "INPUT_OBJECT",
+              "name": "AddressArgument",
+            },
+            Object {
+              "inputFields": Array [
+                Object {
+                  "name": "id",
+                  "type": Object {
+                    "kind": "LIST",
+                    "name": null,
+                  },
+                },
+                Object {
+                  "name": "equal",
+                  "type": Object {
+                    "kind": "SCALAR",
+                    "name": "String",
+                  },
+                },
+                Object {
+                  "name": "isNull",
+                  "type": Object {
+                    "kind": "SCALAR",
+                    "name": "String",
+                  },
+                },
+              ],
+              "kind": "INPUT_OBJECT",
+              "name": "IdArgument",
+            },
+          ],
+        },
+      },
+      "loading": false,
+    }
+  }
+  parameters={
+    Array [
+      Object {
+        "metadata": Object {
+          "processInstances": Array [
+            "id",
+            "processName",
+            "state",
+            "start",
+            "lastUpdate",
+            "businessKey",
+          ],
+        },
+      },
+    ]
+  }
+  queryAttributes={Object {}}
+  runFilter={false}
+  setColumnFilters={[MockFunction]}
+  setDisplayEmptyState={[MockFunction]}
+  setDisplayTable={[MockFunction]}
+  setEnableFilter={[MockFunction]}
+  setError={[MockFunction]}
+  setFilterChips={[MockFunction]}
+  setFinalFilters={[MockFunction]}
+  setQueryAttributes={[MockFunction]}
+  setRunFilter={[MockFunction]}
+  setTableLoading={[MockFunction]}
+>
+  <Component
+    ariaLabelledBy="Select a field"
+    id="select-field"
+    isExpanded={false}
+    isGrouped={true}
+    maxHeight="60vh"
+    onClear={[Function]}
+    onSelect={[Function]}
+    onToggle={[Function]}
+    placeholderText="Select a field"
+    selections="id"
+    variant="typeahead"
+  >
+    <ComponentWithOuia
+      component={[Function]}
+      componentProps={
+        Object {
+          "ariaLabelledBy": "Select a field",
+          "children": Array [
+            <SelectGroup
+              id=""
+              label=" "
+              value=" "
+            />,
+            <SelectGroup
+              id="flight"
+              label="flight"
+              value="flight"
+            >
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="arrivalflight"
+              >
+                arrival
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="departureflight"
+              >
+                departure
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="flightNumberflight"
+              >
+                flightNumber
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="gateflight"
+              >
+                gate
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="seatflight"
+              >
+                seat
+              </SelectOption>
+            </SelectGroup>,
+            <SelectGroup
+              id="AddressArgument"
+              label="hotel / address"
+              value="hotel / address"
+            >
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="cityhotelAddressArgument"
+              >
+                city
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="countryhotelAddressArgument"
+              >
+                country
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="streethotelAddressArgument"
+              >
+                street
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="zipCodehotelAddressArgument"
+              >
+                zipCode
+              </SelectOption>
+            </SelectGroup>,
+            <SelectGroup
+              id="hotel"
+              label="hotel"
+              value="hotel"
+            >
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="bookingNumberhotel"
+              >
+                bookingNumber
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="namehotel"
+              >
+                name
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="phonehotel"
+              >
+                phone
+              </SelectOption>
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="roomhotel"
+              >
+                room
+              </SelectOption>
+            </SelectGroup>,
+          ],
+          "id": "select-field",
+          "isExpanded": false,
+          "isGrouped": true,
+          "maxHeight": "60vh",
+          "onClear": [Function],
+          "onSelect": [Function],
+          "onToggle": [Function],
+          "placeholderText": "Select a field",
+          "selections": "id",
+          "variant": "typeahead",
+        }
+      }
+      consumerContext={null}
+    >
+      <Select
+        aria-label=""
+        ariaLabelClear="Clear all"
+        ariaLabelRemove="Remove"
+        ariaLabelToggle="Options menu"
+        ariaLabelTypeAhead=""
+        ariaLabelledBy="Select a field"
+        className=""
+        createText="Create"
+        customContent={null}
+        direction="down"
+        hasInlineFilter={false}
+        id="select-field"
+        isCreatable={false}
+        isDisabled={false}
+        isExpanded={false}
+        isGrouped={true}
+        isPlain={false}
+        maxHeight="60vh"
+        noResultsFoundText="No results found"
+        onClear={[Function]}
+        onCreateOption={[Function]}
+        onFilter={null}
+        onSelect={[Function]}
+        onToggle={[Function]}
+        ouiaContext={
+          Object {
+            "isOuia": false,
+            "ouiaId": null,
+          }
+        }
+        placeholderText="Select a field"
+        selections="id"
+        toggleIcon={null}
+        toggleId={null}
+        variant="typeahead"
+        width=""
+      >
+        <div
+          className="pf-c-select"
+          style={
+            Object {
+              "width": "",
+            }
+          }
+        >
+          <SelectToggle
+            ariaLabelToggle="Options menu"
+            ariaLabelledBy="Select a field pf-toggle-id-4"
+            className=""
+            handleTypeaheadKeys={[Function]}
+            hasClearButton={true}
+            id="pf-toggle-id-4"
+            isActive={false}
+            isDisabled={false}
+            isExpanded={false}
+            isFocused={false}
+            isHovered={false}
+            isPlain={false}
+            onClose={[Function]}
+            onEnter={[Function]}
+            onToggle={[Function]}
+            parentRef={
+              Object {
+                "current": <div
+                  class="pf-c-select"
+                >
+                  <div
+                    class="pf-c-select__toggle pf-m-typeahead"
+                  >
+                    <div
+                      class="pf-c-select__toggle-wrapper"
+                    >
+                      <input
+                        aria-label=""
+                        autocomplete="off"
+                        class="pf-c-form-control pf-c-select__toggle-typeahead"
+                        id="pf-toggle-id-4-select-typeahead"
+                        placeholder="Select a field"
+                        type="text"
+                        value="id"
+                      />
+                    </div>
+                    <button
+                      aria-label="Clear all"
+                      class="pf-c-button pf-m-plain pf-c-select__toggle-clear"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style="vertical-align: -0.125em;"
+                        viewBox="0 0 512 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                          transform=""
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="listbox"
+                      aria-label="Options menu"
+                      aria-labelledby="Select a field pf-toggle-id-4"
+                      class="pf-c-button pf-c-select__toggle-button pf-m-plain"
+                      id="pf-toggle-id-4"
+                      type="button"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="pf-c-select__toggle-arrow"
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style="vertical-align: -0.125em;"
+                        viewBox="0 0 320 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                          transform=""
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>,
+              }
+            }
+            type="button"
+            variant="typeahead"
+          >
+            <div
+              className="pf-c-select__toggle pf-m-typeahead"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+            >
+              <div
+                className="pf-c-select__toggle-wrapper"
+              >
+                <input
+                  aria-activedescendant={null}
+                  aria-label=""
+                  autoComplete="off"
+                  className="pf-c-form-control pf-c-select__toggle-typeahead"
+                  disabled={false}
+                  id="pf-toggle-id-4-select-typeahead"
+                  onChange={[Function]}
+                  onClick={[Function]}
+                  onFocus={[Function]}
+                  placeholder="Select a field"
+                  type="text"
+                  value="id"
+                />
+              </div>
+              <button
+                aria-label="Clear all"
+                className="pf-c-button pf-m-plain pf-c-select__toggle-clear"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+              >
+                <TimesCircleIcon
+                  aria-hidden={true}
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                  title={null}
+                >
+                  <svg
+                    aria-hidden={true}
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 512 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                      transform=""
+                    />
+                  </svg>
+                </TimesCircleIcon>
+              </button>
+              <button
+                aria-expanded={false}
+                aria-haspopup="listbox"
+                aria-label="Options menu"
+                aria-labelledby="Select a field pf-toggle-id-4"
+                className="pf-c-button pf-c-select__toggle-button pf-m-plain"
+                disabled={false}
+                id="pf-toggle-id-4"
+                onClick={[Function]}
+                type="button"
+              >
+                <CaretDownIcon
+                  className="pf-c-select__toggle-arrow"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                  title={null}
+                >
+                  <svg
+                    aria-hidden={true}
+                    aria-labelledby={null}
+                    className="pf-c-select__toggle-arrow"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 320 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                      transform=""
+                    />
+                  </svg>
+                </CaretDownIcon>
+              </button>
+            </div>
+          </SelectToggle>
+        </div>
+      </Select>
+    </ComponentWithOuia>
+  </Component>
+  <Component
+    aria-label="Location"
+    className="types-selections"
+    id="select-operator"
+    isExpanded={false}
+    onSelect={[Function]}
+    onToggle={[Function]}
+    placeholderText="Operator"
+    selections="equal"
+  >
+    <ComponentWithOuia
+      component={[Function]}
+      componentProps={
+        Object {
+          "aria-label": "Location",
+          "children": Array [
+            <SelectOption
+              className=""
+              component="button"
+              index={0}
+              isChecked={false}
+              isDisabled={false}
+              isFocused={false}
+              isNoResultsOption={false}
+              isPlaceholder={false}
+              isSelected={false}
+              keyHandler={[Function]}
+              onClick={[Function]}
+              sendRef={[Function]}
+              value="in"
+            />,
+            <SelectOption
+              className=""
+              component="button"
+              index={0}
+              isChecked={false}
+              isDisabled={false}
+              isFocused={false}
+              isNoResultsOption={false}
+              isPlaceholder={false}
+              isSelected={false}
+              keyHandler={[Function]}
+              onClick={[Function]}
+              sendRef={[Function]}
+              value="equal"
+            />,
+            <SelectOption
+              className=""
+              component="button"
+              index={0}
+              isChecked={false}
+              isDisabled={false}
+              isFocused={false}
+              isNoResultsOption={false}
+              isPlaceholder={false}
+              isSelected={false}
+              keyHandler={[Function]}
+              onClick={[Function]}
+              sendRef={[Function]}
+              value="isNull"
+            />,
+          ],
+          "className": "types-selections",
+          "id": "select-operator",
+          "isExpanded": false,
+          "onSelect": [Function],
+          "onToggle": [Function],
+          "placeholderText": "Operator",
+          "selections": "equal",
+        }
+      }
+      consumerContext={null}
+    >
+      <Select
+        aria-label="Location"
+        ariaLabelClear="Clear all"
+        ariaLabelRemove="Remove"
+        ariaLabelToggle="Options menu"
+        ariaLabelTypeAhead=""
+        ariaLabelledBy=""
+        className="types-selections"
+        createText="Create"
+        customContent={null}
+        direction="down"
+        hasInlineFilter={false}
+        id="select-operator"
+        isCreatable={false}
+        isDisabled={false}
+        isExpanded={false}
+        isGrouped={false}
+        isPlain={false}
+        noResultsFoundText="No results found"
+        onClear={[Function]}
+        onCreateOption={[Function]}
+        onFilter={null}
+        onSelect={[Function]}
+        onToggle={[Function]}
+        ouiaContext={
+          Object {
+            "isOuia": false,
+            "ouiaId": null,
+          }
+        }
+        placeholderText="Operator"
+        selections="equal"
+        toggleIcon={null}
+        toggleId={null}
+        variant="single"
+        width=""
+      >
+        <div
+          className="pf-c-select types-selections"
+          style={
+            Object {
+              "width": "",
+            }
+          }
+        >
+          <SelectToggle
+            ariaLabelToggle="Options menu"
+            ariaLabelledBy=" pf-toggle-id-5"
+            className=""
+            handleTypeaheadKeys={[Function]}
+            hasClearButton={false}
+            id="pf-toggle-id-5"
+            isActive={false}
+            isDisabled={false}
+            isExpanded={false}
+            isFocused={false}
+            isHovered={false}
+            isPlain={false}
+            onClose={[Function]}
+            onEnter={[Function]}
+            onToggle={[Function]}
+            parentRef={
+              Object {
+                "current": <div
+                  class="pf-c-select types-selections"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    aria-labelledby=" pf-toggle-id-5"
+                    class="pf-c-select__toggle"
+                    id="pf-toggle-id-5"
+                    type="button"
+                  >
+                    <div
+                      class="pf-c-select__toggle-wrapper"
+                    >
+                      <span
+                        class="pf-c-select__toggle-text"
+                      >
+                        equal
+                      </span>
+                    </div>
+                    <svg
+                      aria-hidden="true"
+                      class="pf-c-select__toggle-arrow"
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 320 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                        transform=""
+                      />
+                    </svg>
+                  </button>
+                </div>,
+              }
+            }
+            type="button"
+            variant="single"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup="listbox"
+              aria-labelledby=" pf-toggle-id-5"
+              className="pf-c-select__toggle"
+              disabled={false}
+              id="pf-toggle-id-5"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              type="button"
+            >
+              <div
+                className="pf-c-select__toggle-wrapper"
+              >
+                <span
+                  className="pf-c-select__toggle-text"
+                >
+                  equal
+                </span>
+              </div>
+              <CaretDownIcon
+                className="pf-c-select__toggle-arrow"
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
+                title={null}
+              >
+                <svg
+                  aria-hidden={true}
+                  aria-labelledby={null}
+                  className="pf-c-select__toggle-arrow"
+                  fill="currentColor"
+                  height="1em"
+                  role="img"
+                  style={
+                    Object {
+                      "verticalAlign": "-0.125em",
+                    }
+                  }
+                  viewBox="0 0 320 512"
+                  width="1em"
+                >
+                  <path
+                    d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+                    transform=""
+                  />
+                </svg>
+              </CaretDownIcon>
+            </button>
+          </SelectToggle>
+        </div>
+      </Select>
+    </ComponentWithOuia>
+  </Component>
+</Memo(DomainExplorerFilterOptions)>
+`;

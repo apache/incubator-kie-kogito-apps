@@ -50,6 +50,8 @@ export interface IOwnProps {
   setIsLoadingMore: (isLoadingMoreVal: boolean) => void;
   isLoadingMore: boolean;
   metaData: any;
+  finalFilters: any;
+  argument: any;
 }
 
 const ManageColumns: React.FC<IOwnProps> = ({
@@ -75,7 +77,9 @@ const ManageColumns: React.FC<IOwnProps> = ({
   setPageSize,
   setIsLoadingMore,
   isLoadingMore,
-  metaData
+  metaData,
+  finalFilters,
+  argument
 }) => {
   // tslint:disable: forin
   // tslint:disable: no-floating-promises
@@ -117,7 +121,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
       setParameters(prevState => [...prevState, rest]);
     }
   };
-  
+
   const filterColumnSelection = (selectionArray, objValue) => {
     let res = {};
     if (selectionArray.length === 0) {
@@ -143,9 +147,9 @@ const ManageColumns: React.FC<IOwnProps> = ({
     const newExpanded =
       index >= 0
         ? [
-          ...expanded.slice(0, index),
-          ...expanded.slice(index + 1, expanded.length)
-        ]
+            ...expanded.slice(0, index),
+            ...expanded.slice(index + 1, expanded.length)
+          ]
         : [...expanded, id];
     tempExpanded.push(newExpanded);
     setExpanded(newExpanded);
@@ -221,11 +225,9 @@ const ManageColumns: React.FC<IOwnProps> = ({
                       <DataListCheck
                         aria-labelledby="table-column-management-item2"
                         name={item.name + '/' + title + '/' + group.name}
-                        checked={
-                          selected.includes(
-                            item.name + '/' + title + '/' + group.name
-                          )
-                        }
+                        checked={selected.includes(
+                          item.name + '/' + title + '/' + group.name
+                        )}
                         onChange={handleChange}
                       />
                       <DataListItemCells
@@ -263,9 +265,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
                   <DataListCheck
                     aria-labelledby={'kie-datalist-item-' + group.name}
                     name={group.name}
-                    checked={
-                      selected.includes(group.name)
-                    }
+                    checked={selected.includes(group.name)}
                     onChange={handleChange}
                   />
                   <DataListItemCells
@@ -341,11 +341,9 @@ const ManageColumns: React.FC<IOwnProps> = ({
                               group.name
                             }
                             name={item.name + '/' + group.name}
-                            checked={
-                              selected.includes(
-                                item.name + '/' + group.name
-                              )
-                            }
+                            checked={selected.includes(
+                              item.name + '/' + group.name
+                            )}
                             onChange={handleChange}
                           />
                           <DataListItemCells
@@ -487,7 +485,8 @@ const ManageColumns: React.FC<IOwnProps> = ({
           pagination: {
             value: { offset: offsetVal, limit: pageSize },
             type: 'Pagination'
-          }
+          },
+          where: { value: finalFilters, type: argument }
         }
       });
       try {
@@ -536,21 +535,23 @@ const ManageColumns: React.FC<IOwnProps> = ({
     const isChecked = allSelected ? true : someChecked;
 
     const onDropDownToggle = isOpen => {
-      setIsDropDownOpen(isOpen)
+      setIsDropDownOpen(isOpen);
     };
 
     const onDropDownSelect = event => {
-      setIsDropDownOpen(!isDropDownOpen)
+      setIsDropDownOpen(!isDropDownOpen);
     };
-    
+
     const handleSelectClick = newState => {
       if (newState === 'none') {
         setSelected([]);
         setParameters([metaData]);
       } else {
-        setSelected(allSelections)
+        setSelected(allSelections);
         const selectionArray = allSelections.map(ele =>
-          ele.split('/').map(item => item.charAt(0).toLowerCase() + item.slice(1))
+          ele
+            .split('/')
+            .map(item => item.charAt(0).toLowerCase() + item.slice(1))
         );
         const finalObj = [];
         selectionArray.map(arr => {
@@ -571,30 +572,36 @@ const ManageColumns: React.FC<IOwnProps> = ({
         Select all
       </DropdownItem>
     ];
-    const bulkSelection = (<Dropdown
-      onSelect={onDropDownSelect}
-      position={DropdownPosition.left}
-      toggle={
-        <DropdownToggle
-          splitButtonItems={[
-            <DropdownToggleCheckbox
-              id="selectAll-dropdown"
-              key="split-checkbox"
-              aria-label={anySelected ? 'Deselect all' : 'Select all'}
-              isChecked={isChecked}
-              onClick={() => {
-                anySelected ? handleSelectClick('none') : handleSelectClick('all');
-              }}
-            />
-          ]}
-          onToggle={onDropDownToggle}
-        >
-          {numSelected !== 0 && <React.Fragment>{numSelected} selected</React.Fragment>}
-        </DropdownToggle>
-      }
-      isOpen={isDropDownOpen}
-      dropdownItems={items}
-    />)
+    const bulkSelection = (
+      <Dropdown
+        onSelect={onDropDownSelect}
+        position={DropdownPosition.left}
+        toggle={
+          <DropdownToggle
+            splitButtonItems={[
+              <DropdownToggleCheckbox
+                id="selectAll-dropdown"
+                key="split-checkbox"
+                aria-label={anySelected ? 'Deselect all' : 'Select all'}
+                isChecked={isChecked}
+                onClick={() => {
+                  anySelected
+                    ? handleSelectClick('none')
+                    : handleSelectClick('all');
+                }}
+              />
+            ]}
+            onToggle={onDropDownToggle}
+          >
+            {numSelected !== 0 && (
+              <React.Fragment>{numSelected} selected</React.Fragment>
+            )}
+          </DropdownToggle>
+        }
+        isOpen={isDropDownOpen}
+        dropdownItems={items}
+      />
+    );
     return (
       <Modal
         title="Manage columns"
@@ -604,7 +611,7 @@ const ManageColumns: React.FC<IOwnProps> = ({
           <TextContent>
             <Text component={TextVariants.p}>
               Selected categories will be displayed in the table.
-            </Text>  
+            </Text>
           </TextContent>
         }
         onClose={handleModalToggle}
