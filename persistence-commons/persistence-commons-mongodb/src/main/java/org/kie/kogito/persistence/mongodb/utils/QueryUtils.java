@@ -18,60 +18,67 @@ package org.kie.kogito.persistence.mongodb.utils;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
+import org.bson.conversions.Bson;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
+import static com.mongodb.client.model.Filters.all;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.exists;
+import static com.mongodb.client.model.Filters.gt;
+import static com.mongodb.client.model.Filters.gte;
+import static com.mongodb.client.model.Filters.in;
+import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.lte;
+import static com.mongodb.client.model.Filters.or;
+import static com.mongodb.client.model.Filters.regex;
+import static java.util.stream.Collectors.toList;
 
 public class QueryUtils {
 
-    public static Function<String, String> FILTER_ATTRIBUTE_FUNCTION = attribute -> format("'%s'", "id".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute);
+    public static Function<String, String> CONVERT_ATTRIBUTE_FUNCTION = attribute -> "id".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
 
-    public static Function<String, String> SORT_ATTRIBUTE_FUNCTION = attribute -> format("%s", "id".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute);
+    public static Optional<Bson> generateQuery(List<AttributeFilter<?>> filters, Function<String, String> filterAttributeFunction) {
 
-    public static BiFunction<String, Object, String> FILTER_VALUE_AS_STRING_FUNCTION = (attribute, value) -> value instanceof String ? "'" + value + "'" : value.toString();
-
-    public static Optional<String> generateQueryString(List<AttributeFilter<?>> filters, Function<String, String> filterAttributeFunction, BiFunction<String, Object, String> filterValueFunction) {
-        return Optional.ofNullable(filters).map(fs -> format("{ %s }", fs.stream().map(f -> generateSingleQueryString(f, filterAttributeFunction, filterValueFunction)).collect(joining(", "))));
+        return Optional.ofNullable(filters).filter(f -> !f.isEmpty()).map(fs -> and(fs.stream().map(f -> generateSingleQuery(f, filterAttributeFunction)).collect(toList())));
     }
 
-    private static <T> String generateSingleQueryString(AttributeFilter<T> filter, Function<String, String> filterAttributeFunction, BiFunction<String, Object, String> filterValueFunction) {
+    private static Bson generateSingleQuery(AttributeFilter<?> filter, Function<String, String> filterAttributeFunction) {
         switch (filter.getCondition()) {
             case CONTAINS:
             case EQUAL:
-                return format("%s: %s", filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), filter.getValue()));
+                return eq(filterAttributeFunction.apply(filter.getAttribute()), filter.getValue());
             case LIKE:
-                return format("%s: { $regex: /^%s$/ }", filterAttributeFunction.apply(filter.getAttribute()), ((String) filter.getValue()).replaceAll("\\*", ".*"));
+                return regex(filterAttributeFunction.apply(filter.getAttribute()), ((String) filter.getValue()).replaceAll("\\*", ".*"));
             case IS_NULL:
-                return format("%s: { $exists: false }", filterAttributeFunction.apply(filter.getAttribute()));
+                return exists(filterAttributeFunction.apply(filter.getAttribute()), false);
             case NOT_NULL:
-                return format("%s: { $exists: true }", filterAttributeFunction.apply(filter.getAttribute()));
+                return exists(filterAttributeFunction.apply(filter.getAttribute()), true);
             case GT:
-                return format("%s: { $gt: %s }", filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), filter.getValue()));
+                return gt(filterAttributeFunction.apply(filter.getAttribute()), filter.getValue());
             case GTE:
-                return format("%s: { $gte: %s }", filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), filter.getValue()));
+                return gte(filterAttributeFunction.apply(filter.getAttribute()), filter.getValue());
             case LT:
-                return format("%s: { $lt: %s }", filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), filter.getValue()));
+                return lt(filterAttributeFunction.apply(filter.getAttribute()), filter.getValue());
             case LTE:
-                return format("%s: { $lte: %s }", filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), filter.getValue()));
+                return lte(filterAttributeFunction.apply(filter.getAttribute()), filter.getValue());
             case BETWEEN:
-                List<Object> value = (List<Object>) filter.getValue();
-                return format("$and: [ { %s: { $gte: %s } }, { %s: { $lte: %s } } ]", filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), value.get(0)),
-                              filterAttributeFunction.apply(filter.getAttribute()), filterValueFunction.apply(filter.getAttribute(), value.get(1)));
+                List<?> value = (List<?>) filter.getValue();
+                return and(gte(filterAttributeFunction.apply(filter.getAttribute()), value.get(0)),
+                           lte(filterAttributeFunction.apply(filter.getAttribute()), value.get(1)));
             case IN:
-                return format("%s: { $in: [ %s ] }", filterAttributeFunction.apply(filter.getAttribute()), ((List) filter.getValue()).stream().map(v -> filterValueFunction.apply(filter.getAttribute(), v)).collect(joining(", ")));
+                return in(filterAttributeFunction.apply(filter.getAttribute()), (List<?>) filter.getValue());
             case CONTAINS_ALL:
-                return format("%s: { $all: [ %s ] }", filterAttributeFunction.apply(filter.getAttribute()), ((List) filter.getValue()).stream().map(v -> filterValueFunction.apply(filter.getAttribute(), v)).collect(joining(", ")));
+                return all(filterAttributeFunction.apply(filter.getAttribute()), (List<?>) filter.getValue());
             case CONTAINS_ANY:
-                return format("$or: [ %s ]", ((List) filter.getValue()).stream().map(v -> filterValueFunction.apply(filter.getAttribute(), v)).map(v -> format("{ %s: { $in: [ %s ] } }", filterAttributeFunction.apply(filter.getAttribute()), v)).collect(joining(", ")));
+                return or(((List<?>) filter.getValue()).stream().map(v -> in(filterAttributeFunction.apply(filter.getAttribute()), v)).collect(toList()));
             case OR:
-                return format("$or: [ %s ]", ((List<AttributeFilter<?>>) filter.getValue()).stream().map(f -> format("{ %s }", generateSingleQueryString(f, filterAttributeFunction, filterValueFunction))).collect(joining(", ")));
+                return or(((List<AttributeFilter<?>>) filter.getValue()).stream().map(f -> generateSingleQuery(f, filterAttributeFunction)).collect(toList()));
             case AND:
-                return format("$and: [ %s ]", ((List<AttributeFilter<?>>) filter.getValue()).stream().map(f -> format("{ %s }", generateSingleQueryString(f, filterAttributeFunction, filterValueFunction))).collect(joining(", ")));
+                return and(((List<AttributeFilter<?>>) filter.getValue()).stream().map(f -> generateSingleQuery(f, filterAttributeFunction)).collect(toList()));
             default:
                 return null;
         }

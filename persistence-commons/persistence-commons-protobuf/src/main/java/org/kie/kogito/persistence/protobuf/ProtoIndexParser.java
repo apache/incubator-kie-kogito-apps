@@ -35,6 +35,8 @@ import org.kie.kogito.persistence.api.schema.AttributeDescriptor;
 import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
 import org.kie.kogito.persistence.api.schema.IndexDescriptor;
 
+import static java.util.stream.Collectors.toSet;
+
 class ProtoIndexParser implements AnnotationMetadataCreator<EntityIndexDescriptor, Descriptor> {
 
     static final String INDEXED_ANNOTATION = "Indexed";
@@ -115,7 +117,7 @@ class ProtoIndexParser implements AnnotationMetadataCreator<EntityIndexDescripto
             EntityIndexDescriptor entityIndex = entityIndexes.get(typeName);
             if (entityIndex != null) {
                 // Add the fields without index
-                Set<String> fieldNames = entityIndex.getAttributeDescriptors().stream().map(AttributeDescriptor::getName).collect(Collectors.toSet());
+                Set<String> fieldNames = entityIndex.getAttributeDescriptors().stream().map(AttributeDescriptor::getName).collect(toSet());
                 mDesc.getFields().stream().filter(fDesc -> !fieldNames.contains(fDesc.getName()))
                         .forEach(fDesc -> entityIndex.getAttributeDescriptors().add(createAttributeDescriptor(fDesc, null)));
             }

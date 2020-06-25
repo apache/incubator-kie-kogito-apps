@@ -30,6 +30,7 @@ import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 
+import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
 import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.documentToJsonNode;
 import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.instantToZonedDateTime;
@@ -85,7 +86,7 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
         instance.setRoles(entity.roles);
         instance.setVariables(documentToJsonNode(entity.variables, JsonNode.class));
         instance.setEndpoint(entity.endpoint);
-        instance.setNodes(Optional.ofNullable(entity.nodes).map(nodes -> nodes.stream().map(NodeInstanceEntity::toNodeInstance).collect(Collectors.toList())).orElse(null));
+        instance.setNodes(Optional.ofNullable(entity.nodes).map(nodes -> nodes.stream().map(NodeInstanceEntity::toNodeInstance).collect(toList())).orElse(null));
         instance.setState(entity.state);
         instance.setStart(instantToZonedDateTime(entity.start));
         instance.setEnd(instantToZonedDateTime(entity.end));
@@ -111,7 +112,7 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
         entity.roles = instance.getRoles();
         entity.variables = jsonNodeToDocument(instance.getVariables());
         entity.endpoint = instance.getEndpoint();
-        entity.nodes = Optional.ofNullable(instance.getNodes()).map(nodes -> nodes.stream().map(NodeInstanceEntity::fromNodeInstance).collect(Collectors.toList())).orElse(null);
+        entity.nodes = Optional.ofNullable(instance.getNodes()).map(nodes -> nodes.stream().map(NodeInstanceEntity::fromNodeInstance).collect(toList())).orElse(null);
         entity.state = instance.getState();
         entity.start = zonedDateTimeToInstant(instance.getStart());
         entity.end = zonedDateTimeToInstant(instance.getEnd());

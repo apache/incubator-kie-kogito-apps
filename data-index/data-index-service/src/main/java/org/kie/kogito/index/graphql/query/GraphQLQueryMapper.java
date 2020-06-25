@@ -231,7 +231,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                 case IS_NULL:
                     return Boolean.TRUE.equals(entry.getValue()) ? isNull(attribute) : notNull(attribute);
                 case EQUAL:
-                    return equalTo(attribute, entry.getValue().toString());
+                    return equalTo(attribute, entry.getValue());
                 default:
                     return null;
             }
@@ -272,7 +272,7 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                 case IN:
                     return in(attribute, (List) entry.getValue());
                 case EQUAL:
-                    return equalTo(attribute, entry.getValue().toString());
+                    return equalTo(attribute, entry.getValue());
                 default:
                     return null;
             }

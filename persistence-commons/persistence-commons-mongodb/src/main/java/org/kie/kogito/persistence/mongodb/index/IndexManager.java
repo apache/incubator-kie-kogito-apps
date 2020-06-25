@@ -22,8 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -44,6 +42,10 @@ import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
 import org.kie.kogito.persistence.api.schema.IndexDescriptor;
 import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @ApplicationScoped
 public class IndexManager {
@@ -94,10 +96,10 @@ public class IndexManager {
         }
 
         List<IndexModel> parsedIndexes = createIndexForEntity("", index);
-        Map<String, IndexModel> indexNameMap = parsedIndexes.stream().collect(Collectors.toMap(ind -> ind.getOptions().getName(), Function.identity()));
+        Map<String, IndexModel> indexNameMap = parsedIndexes.stream().collect(toMap(ind -> ind.getOptions().getName(), identity()));
 
         List<String> indexesExists = StreamSupport.stream(collection.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(Collectors.toList());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toList());
 
         indexesExists.forEach(ind -> {
             if (!indexNameMap.containsKey(ind)) {
@@ -110,7 +112,7 @@ public class IndexManager {
         }
 
         List<IndexModel> indexesToAdd = indexNameMap.entrySet().stream()
-                .filter(entry -> !indexesExists.contains(entry.getKey())).map(Map.Entry::getValue).collect(Collectors.toList());
+                .filter(entry -> !indexesExists.contains(entry.getKey())).map(Map.Entry::getValue).collect(toList());
         if (!indexesToAdd.isEmpty()) {
             collection.createIndexes(indexesToAdd);
         }
@@ -121,7 +123,7 @@ public class IndexManager {
         String prefixUUID = UUID.nameUUIDFromBytes(parentField.getBytes()).toString() + ".";
 
         List<IndexModel> indexesToCreate = entityIndexDescriptor.getIndexDescriptors().parallelStream()
-                .flatMap(indexDescriptor -> createIndex(indexDescriptor, parentField, prefixUUID).stream()).collect(Collectors.toList());
+                .flatMap(indexDescriptor -> createIndex(indexDescriptor, parentField, prefixUUID).stream()).collect(toList());
 
         List<IndexModel> subIndexesToCreate = entityIndexDescriptor.getAttributeDescriptors().parallelStream()
                 .filter(attributeDescriptor -> !attributeDescriptor.isPrimitiveType())
@@ -133,9 +135,9 @@ public class IndexManager {
                         return createIndexForEntity(fieldName, indexes.get(pkg + attributeDescriptor.getTypeName())).stream();
                     }
                     return Stream.empty();
-                }).collect(Collectors.toList());
+                }).collect(toList());
 
-        return Stream.concat(indexesToCreate.stream(), subIndexesToCreate.stream()).collect(Collectors.toList());
+        return Stream.concat(indexesToCreate.stream(), subIndexesToCreate.stream()).collect(toList());
     }
 
     Optional<IndexModel> createIndex(IndexDescriptor indexDescriptor, String parentField, String prefixUUID) {
@@ -143,7 +145,7 @@ public class IndexManager {
 
         List<String> fieldNames = indexDescriptor.getIndexAttributes().stream()
                 .map(attributeName -> parentField.isEmpty() ? attributeName : (parentField + "." + attributeName))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         if (!fieldNames.isEmpty()) {
             return Optional.of(new IndexModel(Indexes.ascending(fieldNames), new IndexOptions().name(indexName).sparse(true)));

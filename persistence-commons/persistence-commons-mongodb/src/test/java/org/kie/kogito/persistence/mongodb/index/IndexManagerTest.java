@@ -54,6 +54,7 @@ import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
 import org.mockito.ArgumentMatchers;
 
 import static io.quarkus.test.junit.QuarkusMock.installMockForType;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -305,8 +306,8 @@ class IndexManagerTest {
     }
 
     private static EntityIndexDescriptor mockErrorIndexes() {
-        List<IndexDescriptor> indexDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new IndexDescriptor("test" + i, Lists.newArrayList("test" + i))).collect(Collectors.toList());
-        List<AttributeDescriptor> attributeDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new AttributeDescriptor("test" + i, "string", true)).collect(Collectors.toList());
+        List<IndexDescriptor> indexDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new IndexDescriptor("test" + i, Lists.newArrayList("test" + i))).collect(toList());
+        List<AttributeDescriptor> attributeDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new AttributeDescriptor("test" + i, "string", true)).collect(toList());
         return new EntityIndexDescriptor("org.acme.travels.travels.Travels", indexDescriptors, attributeDescriptors);
     }
 }

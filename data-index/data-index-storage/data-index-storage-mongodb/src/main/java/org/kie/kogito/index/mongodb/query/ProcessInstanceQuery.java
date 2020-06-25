@@ -16,15 +16,13 @@
 
 package org.kie.kogito.index.mongodb.query;
 
-import java.util.function.BiFunction;
-
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import com.mongodb.client.MongoCollection;
 import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.mongodb.storage.ProcessInstanceStorage;
 import org.kie.kogito.index.mongodb.model.ProcessInstanceEntity;
+import org.kie.kogito.index.mongodb.storage.ProcessInstanceStorage;
 import org.kie.kogito.persistence.mongodb.query.AbstractQuery;
 
 @Dependent
@@ -41,11 +39,5 @@ public class ProcessInstanceQuery extends AbstractQuery<ProcessInstance, Process
     @Override
     protected ProcessInstance mapToModel(ProcessInstanceEntity processInstanceEntity) {
         return ProcessInstanceEntity.toProcessInstance(processInstanceEntity);
-    }
-
-    @Override
-    protected BiFunction<String, Object, String> getFilterValueAsStringFunction() {
-        return (attribute, value) -> "state".equalsIgnoreCase(attribute) ? value.toString()
-                : super.getFilterValueAsStringFunction().apply(attribute, value);
     }
 }

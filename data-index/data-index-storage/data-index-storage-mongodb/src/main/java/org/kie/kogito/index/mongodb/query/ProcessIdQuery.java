@@ -23,11 +23,9 @@ import javax.inject.Inject;
 
 import com.mongodb.client.MongoCollection;
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
-import org.kie.kogito.index.mongodb.storage.ProcessIdStorage;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
+import org.kie.kogito.index.mongodb.storage.ProcessIdStorage;
 import org.kie.kogito.persistence.mongodb.query.AbstractQuery;
-
-import static java.lang.String.format;
 
 @Dependent
 public class ProcessIdQuery extends AbstractQuery<String, ProcessIdEntity> {
@@ -46,12 +44,7 @@ public class ProcessIdQuery extends AbstractQuery<String, ProcessIdEntity> {
     }
 
     @Override
-    protected Function<String, String> getFilterAttributeFunction() {
-        return attribute -> format("'%s'", "processId".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute);
-    }
-
-    @Override
-    protected Function<String, String> getSortAttributeFunction() {
-        return attribute -> format("%s", "processId".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute);
+    protected Function<String, String> convertAttributeFunction() {
+        return attribute -> "processId".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
     }
 }

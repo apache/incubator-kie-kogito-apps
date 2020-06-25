@@ -82,7 +82,7 @@ public class ProtobufService {
 
                 schemaEvent.fire(new SchemaRegisteredEvent(new SchemaDescriptor(name, content, entityIndexDescriptors, null), SCHEMA_TYPE));
             } catch (ProtobufValidationException e) {
-                throw new RuntimeException(e);
+                throw new ProtobufFileRegistrationException(e);
             }
         });
 
