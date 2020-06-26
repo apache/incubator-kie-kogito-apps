@@ -1,7 +1,8 @@
 import React from 'react';
-import PageLayout from '../PageLayout';
-import { getWrapper } from '@kogito-apps/common';
 import { MemoryRouter as Router } from 'react-router-dom';
+import { getWrapper } from '@kogito-apps/common';
+import PageLayout from '../PageLayout';
+import taskConsoleLogo from '../../../../static/taskConsoleLogo.svg';
 
 const props: any = {
   location: {
@@ -10,6 +11,9 @@ const props: any = {
   history: []
 };
 
+jest.mock(
+  '@kogito-apps/common/src/components/Templates/KogitoPageLayout/KogitoPageLayout'
+);
 jest.mock('../../DataListContainerExpandable/DataListContainerExpandable.tsx');
 
 function testRoute(route: string) {
@@ -24,7 +28,16 @@ function testRoute(route: string) {
 
   expect(wrapper).toMatchSnapshot();
 
-  return wrapper;
+  const mockedKogitoPageLayout = wrapper
+    .find('MockedKogitoPageLayout')
+    .getElement();
+
+  expect(mockedKogitoPageLayout).not.toBeNull();
+
+  expect(mockedKogitoPageLayout.props.BrandAltText).toBe('Task Console Logo');
+  expect(mockedKogitoPageLayout.props.BrandSrc).toBe(taskConsoleLogo);
+  expect(mockedKogitoPageLayout.props.PageNav).not.toBeNull();
+  expect(mockedKogitoPageLayout.props.BrandClick).not.toBeNull();
 }
 
 describe('PageLayout tests', () => {
@@ -46,16 +59,5 @@ describe('PageLayout tests', () => {
 
   it('test UserTasksTable route', () => {
     testRoute('/UserTasksTable');
-  });
-
-  it('Brand click testing', () => {
-    const wrapper = testRoute('/');
-    wrapper
-      .find('KogitoPageLayout')
-      .props()
-      [
-        // tslint:disable-next-line
-        'BrandClick'
-      ]();
   });
 });
