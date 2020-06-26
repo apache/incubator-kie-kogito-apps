@@ -16,15 +16,20 @@
 
 package org.kie.kogito.trusty.service.tracing;
 
+import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
+import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
+import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
+import org.kie.kogito.trusty.service.ITrustyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,15 +38,52 @@ public class TraceEventConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
 
+    private final TraceEventConverter converter;
+    private final ITrustyService service;
+
+    @Inject
+    public TraceEventConsumer(ITrustyService service) {
+        this(new TraceEventConverter(), service);
+    }
+
+    public TraceEventConsumer(TraceEventConverter converter, ITrustyService service) {
+        this.converter = converter;
+        this.service = service;
+    }
+
     @Incoming("kogito-tracing-decision")
-    public CompletionStage<Void> handleTraceEventMessage(Message<String> message) {
-        try {
-            CloudEventImpl<TraceEvent> cloudEvent = CloudEventUtils.decode(message.getPayload());
-            LOG.info("New CloudEvent with id {} from {}", cloudEvent.getAttributes().getId(), cloudEvent.getAttributes().getSource());
-        } catch (IllegalStateException e) {
-            LOG.error("Catched IllegalStateException while decoding TraceEvent", e);
-        }
+    public CompletionStage<Void> handleMessage(Message<String> message) {
+        decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
         return message.ack();
     }
 
+    private Optional<CloudEventImpl<TraceEvent>> decodeCloudEvent(String payload) {
+        try {
+            return Optional.of(CloudEventUtils.decode(payload));
+        } catch (IllegalStateException e) {
+            // TODO: implement proper error strategy in case of issues with decoding of the CloudEvent
+            LOG.error("Catched IllegalStateException while decoding CloudEvent", e);
+            return Optional.empty();
+        }
+    }
+
+    private void handleCloudEvent(CloudEventImpl<TraceEvent> cloudEvent) {
+        AttributesImpl attributes = cloudEvent.getAttributes();
+
+        if (cloudEvent.getData().isEmpty()) {
+            LOG.error("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
+            return;
+        }
+
+        LOG.debug("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
+
+        TraceEvent traceEvent = cloudEvent.getData().get();
+        TraceEventType traceEventType = traceEvent.getHeader().getType();
+
+        if (traceEventType == TraceEventType.DMN) {
+            service.storeDecision(attributes.getId(), converter.toDecision(traceEvent));
+        } else {
+            LOG.error("Unsupported TraceEvent type {}", traceEventType);
+        }
+    }
 }

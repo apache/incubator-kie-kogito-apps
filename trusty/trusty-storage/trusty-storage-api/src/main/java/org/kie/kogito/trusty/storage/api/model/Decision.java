@@ -16,9 +16,20 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import java.util.List;
+
 /**
  * A decision.
  */
 public class Decision extends Execution {
 
+    private List<TypedValue> inputs;
+    private List<DecisionOutcome> outcomes;
+
+    public Decision() {
+    }
+
+    public Decision(String executionId, Long executionTimestamp, boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {
+        super(executionId, executionTimestamp, hasSucceeded, executorName, executedModelName, ExecutionTypeEnum.DECISION);
+    }
 }

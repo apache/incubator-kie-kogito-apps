@@ -1,0 +1,103 @@
+/*
+ *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+package org.kie.kogito.trusty.service.tracing;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
+import org.kie.kogito.tracing.decision.event.trace.TraceInputValue;
+import org.kie.kogito.tracing.decision.event.trace.TraceOutputValue;
+import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.Message;
+import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
+import org.kie.kogito.trusty.storage.api.model.TypedValue;
+
+public class TraceEventConverter {
+
+    public Decision toDecision(TraceEvent event) {
+
+        List<TypedValue> inputs = event.getInputs() == null
+                ? null
+                : event.getInputs().stream().map(this::toInput).collect(Collectors.toList());
+
+        List<DecisionOutcome> outcomes = event.getOutputs() == null
+                ? null
+                : event.getOutputs().stream().map(this::toOutcome).collect(Collectors.toList());
+
+        return new Decision(
+                event.getHeader().getExecutionId(),
+                event.getHeader().getStartTimestamp(),
+                true,        // TODO: change this default
+                "John Doe",  // TODO: change this default
+                event.getHeader().getResourceId().getModelName(),
+                inputs,
+                outcomes
+        );
+    }
+
+    public TypedValue toInput(TraceInputValue eventInput) {
+        return new TypedValue(
+                eventInput.getName(),
+                eventInput.getType().getId(),
+                eventInput.getValue(),
+                null
+        );
+    }
+
+    public DecisionOutcome toOutcome(TraceOutputValue eventOutput) {
+        return new DecisionOutcome(
+                eventOutput.getId(),
+                eventOutput.getName(),
+                eventOutput.getStatus(),
+                new TypedValue(eventOutput.getName(), eventOutput.getType().getId(), eventOutput.getValue(), null),
+                null,
+                eventOutput.getMessages() == null ? null : eventOutput.getMessages().stream().map(this::toMessage).collect(Collectors.toList())
+        );
+    }
+
+    public Message toMessage(org.kie.kogito.tracing.decision.event.common.Message eventMessage) {
+        return new Message(
+                toMessageLevel(eventMessage.getLevel()),
+                eventMessage.getCategory() == null ? null : eventMessage.getCategory().name(),
+                eventMessage.getType(),
+                eventMessage.getSourceId(),
+                eventMessage.getText(),
+                toMessageExceptionField(eventMessage.getException())
+        );
+    }
+
+    public MessageExceptionField toMessageExceptionField(org.kie.kogito.tracing.decision.event.common.MessageExceptionField eventException) {
+        return eventException == null
+                ? null
+                : new MessageExceptionField(eventException.getClassName(), eventException.getMessage(), toMessageExceptionField(eventException.getCause()));
+    }
+
+    public Message.Level toMessageLevel(org.kie.api.builder.Message.Level eventLevel) {
+        switch (eventLevel) {
+            case ERROR:
+                return Message.Level.ERROR;
+            case WARNING:
+                return Message.Level.WARNING;
+            case INFO:
+                return Message.Level.INFO;
+            default:
+                return null;
+        }
+    }
+}
