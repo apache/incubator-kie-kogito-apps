@@ -16,20 +16,15 @@
 
 package org.kie.kogito.index.mongodb.model;
 
+import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonId;
-import org.kie.kogito.index.model.UserTaskInstance;
 
 import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.documentToJsonNode;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.zonedDateTimeToInstant;
 
 @MongoEntity(collection = USER_TASK_INSTANCES_STORAGE)
 public class UserTaskInstanceEntity extends PanacheMongoEntityBase {
@@ -77,63 +72,40 @@ public class UserTaskInstanceEntity extends PanacheMongoEntityBase {
 
     public Document outputs;
 
-    public static UserTaskInstance toUserTaskInstance(UserTaskInstanceEntity entity) {
-        if (entity == null) {
-            return null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-
-        UserTaskInstance instance = new UserTaskInstance();
-        instance.setId(entity.id);
-        instance.setDescription(entity.description);
-        instance.setName(entity.name);
-        instance.setPriority(entity.priority);
-        instance.setProcessInstanceId(entity.processInstanceId);
-        instance.setState(entity.state);
-        instance.setActualOwner(entity.actualOwner);
-        instance.setAdminGroups(entity.adminGroups);
-        instance.setAdminUsers(entity.adminUsers);
-        instance.setCompleted(instantToZonedDateTime(entity.completed));
-        instance.setStarted(instantToZonedDateTime(entity.started));
-        instance.setExcludedUsers(entity.excludedUsers);
-        instance.setPotentialGroups(entity.potentialGroups);
-        instance.setPotentialUsers(entity.potentialUsers);
-        instance.setReferenceName(entity.referenceName);
-        instance.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
-        instance.setProcessId(entity.processId);
-        instance.setRootProcessId(entity.rootProcessId);
-        instance.setRootProcessInstanceId(entity.rootProcessInstanceId);
-        instance.setInputs(documentToJsonNode(entity.inputs, JsonNode.class));
-        instance.setOutputs(documentToJsonNode(entity.outputs, JsonNode.class));
-        return instance;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserTaskInstanceEntity that = (UserTaskInstanceEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(priority, that.priority) &&
+                Objects.equals(processInstanceId, that.processInstanceId) &&
+                Objects.equals(state, that.state) &&
+                Objects.equals(actualOwner, that.actualOwner) &&
+                Objects.equals(adminGroups, that.adminGroups) &&
+                Objects.equals(adminUsers, that.adminUsers) &&
+                Objects.equals(completed, that.completed) &&
+                Objects.equals(started, that.started) &&
+                Objects.equals(excludedUsers, that.excludedUsers) &&
+                Objects.equals(potentialGroups, that.potentialGroups) &&
+                Objects.equals(potentialUsers, that.potentialUsers) &&
+                Objects.equals(referenceName, that.referenceName) &&
+                Objects.equals(lastUpdate, that.lastUpdate) &&
+                Objects.equals(processId, that.processId) &&
+                Objects.equals(rootProcessId, that.rootProcessId) &&
+                Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) &&
+                Objects.equals(inputs, that.inputs) &&
+                Objects.equals(outputs, that.outputs);
     }
 
-    public static UserTaskInstanceEntity fromUserTaskInstance(UserTaskInstance instance) {
-        if (instance == null) {
-            return null;
-        }
-
-        UserTaskInstanceEntity entity = new UserTaskInstanceEntity();
-        entity.id = instance.getId();
-        entity.description = instance.getDescription();
-        entity.name = instance.getName();
-        entity.priority = instance.getPriority();
-        entity.processInstanceId = instance.getProcessInstanceId();
-        entity.state = instance.getState();
-        entity.actualOwner = instance.getActualOwner();
-        entity.adminGroups = instance.getAdminGroups();
-        entity.adminUsers = instance.getAdminUsers();
-        entity.completed = zonedDateTimeToInstant(instance.getCompleted());
-        entity.started = zonedDateTimeToInstant(instance.getStarted());
-        entity.excludedUsers = instance.getExcludedUsers();
-        entity.potentialGroups = instance.getPotentialGroups();
-        entity.potentialUsers = instance.getPotentialUsers();
-        entity.referenceName = instance.getReferenceName();
-        entity.lastUpdate = zonedDateTimeToInstant(instance.getLastUpdate());
-        entity.processId = instance.getProcessId();
-        entity.rootProcessId = instance.getRootProcessId();
-        entity.rootProcessInstanceId = instance.getRootProcessInstanceId();
-        entity.inputs = jsonNodeToDocument(instance.getInputs());
-        entity.outputs = jsonNodeToDocument(instance.getOutputs());
-        return entity;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, name, priority, processInstanceId, state, actualOwner, adminGroups, adminUsers, completed, started, excludedUsers, potentialGroups, potentialUsers, referenceName, lastUpdate, processId, rootProcessId, rootProcessInstanceId, inputs, outputs);
     }
 }

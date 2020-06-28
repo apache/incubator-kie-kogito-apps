@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.mongodb;
+package org.kie.kogito.persistence.mongodb.storage;
 
-public class Constants {
+import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-    private Constants() {
-    }
+/**
+ *
+ */
+public interface MongoModelService {
 
-    private static final String DOMAIN_COLLECTON_NAME_AFFIX = "_domain";
-
-    public static String getDomainCollectionName(String processId) {
-        return processId + DOMAIN_COLLECTON_NAME_AFFIX;
-    }
-
-    public static boolean isDomainCollection(String collection) {
-        return collection.endsWith(DOMAIN_COLLECTON_NAME_AFFIX);
-    }
+    /**
+     * @param name
+     * @return
+     */
+    MongoEntityMapper getEntityMapper(String name);
 }

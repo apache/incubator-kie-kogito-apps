@@ -1,0 +1,69 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.kie.kogito.index.mongodb.model;
+
+import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.bson.Document;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.kie.kogito.index.mongodb.model.ModelUtils.MAPPER;
+
+class ModelUtilsTest {
+
+    @Test
+    void testInstantToZonedDateTime() {
+        ZonedDateTime time = ZonedDateTime.now();
+        assertEquals(time.toInstant().toEpochMilli(), ModelUtils.instantToZonedDateTime(time.toInstant().toEpochMilli()).toInstant().toEpochMilli());
+    }
+
+    @Test
+    void testZonedDateTimeToInstant() {
+        ZonedDateTime time = ZonedDateTime.now();
+        assertEquals(time.toInstant().toEpochMilli(), ModelUtils.zonedDateTimeToInstant(time));
+    }
+
+    @Test
+    void testDocumentToJsonNode() {
+        Map<String, String> objectMap = new HashMap<>();
+        objectMap.put("testKey1", "testValue1");
+        objectMap.put("testKey2", "testValue2");
+        ObjectNode object = MAPPER.valueToTree(objectMap);
+
+        Document document = new Document().append("testKey1", "testValue1")
+                .append("testKey2", "testValue2");
+
+        assertEquals(object, ModelUtils.documentToJsonNode(document, ObjectNode.class));
+    }
+
+    @Test
+    void testJsonNodeToDocument() {
+        Map<String, String> objectMap = new HashMap<>();
+        objectMap.put("testKey1", "testValue1");
+        objectMap.put("testKey2", "testValue2");
+        ObjectNode object = MAPPER.valueToTree(objectMap);
+
+        Document document = new Document().append("testKey1", "testValue1")
+                .append("testKey2", "testValue2");
+
+        assertEquals(document, ModelUtils.jsonNodeToDocument(object));
+    }
+}

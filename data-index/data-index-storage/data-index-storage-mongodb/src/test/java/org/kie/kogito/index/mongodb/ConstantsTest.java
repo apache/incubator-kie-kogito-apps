@@ -16,18 +16,22 @@
 
 package org.kie.kogito.index.mongodb;
 
-public class Constants {
+import org.junit.jupiter.api.Test;
 
-    private Constants() {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class ConstantsTest {
+
+    @Test
+    void testGetDomainCollectionName() {
+        assertEquals("test_domain", Constants.getDomainCollectionName("test"));
     }
 
-    private static final String DOMAIN_COLLECTON_NAME_AFFIX = "_domain";
-
-    public static String getDomainCollectionName(String processId) {
-        return processId + DOMAIN_COLLECTON_NAME_AFFIX;
-    }
-
-    public static boolean isDomainCollection(String collection) {
-        return collection.endsWith(DOMAIN_COLLECTON_NAME_AFFIX);
+    @Test
+    void testIsDomainCollection() {
+        assertTrue(Constants.isDomainCollection("test_domain"));
+        assertFalse(Constants.isDomainCollection("test_domain1"));
     }
 }

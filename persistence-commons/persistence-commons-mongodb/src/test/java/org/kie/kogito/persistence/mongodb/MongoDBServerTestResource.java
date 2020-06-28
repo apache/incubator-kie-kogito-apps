@@ -29,17 +29,19 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 public class MongoDBServerTestResource implements QuarkusTestResourceLifecycleManager {
 
-    private static final String MONGODB_VERSION = System.getProperty("mongodb.version");
+    private static final String MONGODB_IMAGE = System.getProperty("container.image.mongodb");
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBServerTestResource.class);
     private GenericContainer mongoDB;
 
     @Override
     public Map<String, String> start() {
-        if (MONGODB_VERSION == null) {
-            throw new RuntimeException("Please define a valid MongoDB image version in system property mongodb.version");
+        if (MONGODB_IMAGE == null) {
+            // Workaround for the well known issue in quarkus https://github.com/quarkusio/quarkus/issues/9854
+            LOGGER.warn("System property container.image.mongodb is not set. The test is started without the mongodb container.");
+            return Collections.emptyMap();
         }
-        LOGGER.info("Using MongoDB image version: {}", MONGODB_VERSION);
-        mongoDB = new FixedHostPortGenericContainer("mongo:" + MONGODB_VERSION)
+        LOGGER.info("Using MongoDB image: {}", MONGODB_IMAGE);
+        mongoDB = new FixedHostPortGenericContainer(MONGODB_IMAGE)
                 .withFixedExposedPort(27017, 27017)
                 .withLogConsumer(new Slf4jLogConsumer(LOGGER))
                 .waitingFor(Wait.forLogMessage(".*build index done.*", 1));

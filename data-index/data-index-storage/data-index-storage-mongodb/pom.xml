@@ -13,7 +13,7 @@
   <name>Kogito :: Data Index Storage MongoDB</name>
 
   <properties>
-    <version.org.mongodb.image>4.0</version.org.mongodb.image>
+    <container.image.mongodb>mongo:4.0</container.image.mongodb>
   </properties>
 
   <dependencies>
@@ -24,7 +24,6 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>persistence-commons-mongodb</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -45,8 +44,7 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>persistence-commons-mongodb</artifactId>
-      <version>${project.version}</version>
-      <classifier>tests</classifier>
+      <type>test-jar</type>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -63,8 +61,23 @@
         <configuration>
           <systemPropertyVariables>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <mongodb.version>${version.org.mongodb.image}</mongodb.version>
-            <quarkus.test.profile>mongodb</quarkus.test.profile>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <systemPropertyVariables>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <container.image.mongodb>${container.image.mongodb}</container.image.mongodb>
           </systemPropertyVariables>
         </configuration>
       </plugin>

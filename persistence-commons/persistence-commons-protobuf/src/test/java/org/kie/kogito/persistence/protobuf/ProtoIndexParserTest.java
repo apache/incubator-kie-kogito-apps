@@ -55,12 +55,10 @@ class ProtoIndexParserTest {
         FileDescriptorSource invalidFileDescriptorSource = FileDescriptorSource.fromString("invalid", "invalid");
         try {
             ctx.registerProtoFiles(invalidFileDescriptorSource);
+            fail("Failed to process invalid proto file");
         } catch (DescriptorParserException ex) {
             // Successfully throw exception
-            return;
         }
-
-        fail("Failed to process invalid proto file");
     }
 
     @Test

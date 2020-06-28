@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.mongodb;
+package org.kie.kogito.persistence.mongodb.mock;
 
-public class Constants {
+import javax.enterprise.context.ApplicationScoped;
 
-    private Constants() {
-    }
+import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
+import org.kie.kogito.persistence.mongodb.storage.MongoModelService;
 
-    private static final String DOMAIN_COLLECTON_NAME_AFFIX = "_domain";
+@ApplicationScoped
+public class MockMongoModelService implements MongoModelService {
 
-    public static String getDomainCollectionName(String processId) {
-        return processId + DOMAIN_COLLECTON_NAME_AFFIX;
-    }
-
-    public static boolean isDomainCollection(String collection) {
-        return collection.endsWith(DOMAIN_COLLECTON_NAME_AFFIX);
+    @Override
+    public MongoEntityMapper getEntityMapper(String name) {
+        return new MockMongoEntityMapper();
     }
 }

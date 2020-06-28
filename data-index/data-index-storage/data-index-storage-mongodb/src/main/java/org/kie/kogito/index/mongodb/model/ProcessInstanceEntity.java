@@ -17,25 +17,15 @@
 package org.kie.kogito.index.mongodb.model;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonId;
-import org.kie.kogito.index.model.NodeInstance;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.ProcessInstanceError;
 
-import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.documentToJsonNode;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.zonedDateTimeToInstant;
 
 @MongoEntity(collection = PROCESS_INSTANCES_STORAGE)
 public class ProcessInstanceEntity extends PanacheMongoEntityBase {
@@ -75,56 +65,37 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
 
     public String businessKey;
 
-    public static ProcessInstance toProcessInstance(ProcessInstanceEntity entity) {
-        if (entity == null) {
-            return null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-
-        ProcessInstance instance = new ProcessInstance();
-        instance.setId(entity.id);
-        instance.setProcessId(entity.processId);
-        instance.setRoles(entity.roles);
-        instance.setVariables(documentToJsonNode(entity.variables, JsonNode.class));
-        instance.setEndpoint(entity.endpoint);
-        instance.setNodes(Optional.ofNullable(entity.nodes).map(nodes -> nodes.stream().map(NodeInstanceEntity::toNodeInstance).collect(toList())).orElse(null));
-        instance.setState(entity.state);
-        instance.setStart(instantToZonedDateTime(entity.start));
-        instance.setEnd(instantToZonedDateTime(entity.end));
-        instance.setRootProcessId(entity.rootProcessId);
-        instance.setRootProcessInstanceId(entity.rootProcessInstanceId);
-        instance.setParentProcessInstanceId(entity.parentProcessInstanceId);
-        instance.setProcessName(entity.processName);
-        instance.setError(Optional.ofNullable(entity.error).map(ProcessInstanceErrorEntity::toProcessInstanceError).orElse(null));
-        instance.setAddons(entity.addons);
-        instance.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
-        instance.setBusinessKey(entity.businessKey);
-        return instance;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ProcessInstanceEntity that = (ProcessInstanceEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(processId, that.processId) &&
+                Objects.equals(roles, that.roles) &&
+                Objects.equals(variables, that.variables) &&
+                Objects.equals(endpoint, that.endpoint) &&
+                Objects.equals(nodes, that.nodes) &&
+                Objects.equals(state, that.state) &&
+                Objects.equals(start, that.start) &&
+                Objects.equals(end, that.end) &&
+                Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) &&
+                Objects.equals(rootProcessId, that.rootProcessId) &&
+                Objects.equals(parentProcessInstanceId, that.parentProcessInstanceId) &&
+                Objects.equals(processName, that.processName) &&
+                Objects.equals(error, that.error) &&
+                Objects.equals(addons, that.addons) &&
+                Objects.equals(lastUpdate, that.lastUpdate) &&
+                Objects.equals(businessKey, that.businessKey);
     }
 
-    public static ProcessInstanceEntity fromProcessInstance(ProcessInstance instance) {
-        if (instance == null) {
-            return null;
-        }
-
-        ProcessInstanceEntity entity = new ProcessInstanceEntity();
-        entity.id = instance.getId();
-        entity.processId = instance.getProcessId();
-        entity.roles = instance.getRoles();
-        entity.variables = jsonNodeToDocument(instance.getVariables());
-        entity.endpoint = instance.getEndpoint();
-        entity.nodes = Optional.ofNullable(instance.getNodes()).map(nodes -> nodes.stream().map(NodeInstanceEntity::fromNodeInstance).collect(toList())).orElse(null);
-        entity.state = instance.getState();
-        entity.start = zonedDateTimeToInstant(instance.getStart());
-        entity.end = zonedDateTimeToInstant(instance.getEnd());
-        entity.rootProcessId = instance.getRootProcessId();
-        entity.rootProcessInstanceId = instance.getRootProcessInstanceId();
-        entity.parentProcessInstanceId = instance.getParentProcessInstanceId();
-        entity.processName = instance.getProcessName();
-        entity.error = Optional.ofNullable(instance.getError()).map(ProcessInstanceErrorEntity::fromProcessInstanceError).orElse(null);
-        entity.addons = instance.getAddons();
-        entity.lastUpdate = zonedDateTimeToInstant(instance.getLastUpdate());
-        entity.businessKey = instance.getBusinessKey();
-        return entity;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, processId, roles, variables, endpoint, nodes, state, start, end, rootProcessInstanceId, rootProcessId, parentProcessInstanceId, processName, error, addons, lastUpdate, businessKey);
     }
 
     public static class NodeInstanceEntity {
@@ -145,36 +116,28 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
 
         public String definitionId;
 
-        static NodeInstance toNodeInstance(NodeInstanceEntity entity) {
-            if (entity == null) {
-                return null;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
             }
-
-            NodeInstance instance = new NodeInstance();
-            instance.setId(entity.id);
-            instance.setName(entity.name);
-            instance.setNodeId(entity.nodeId);
-            instance.setType(entity.type);
-            instance.setEnter(instantToZonedDateTime(entity.enter));
-            instance.setExit(instantToZonedDateTime(entity.exit));
-            instance.setDefinitionId(entity.definitionId);
-            return instance;
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            NodeInstanceEntity that = (NodeInstanceEntity) o;
+            return Objects.equals(_id, that._id) &&
+                    Objects.equals(id, that.id) &&
+                    Objects.equals(name, that.name) &&
+                    Objects.equals(nodeId, that.nodeId) &&
+                    Objects.equals(type, that.type) &&
+                    Objects.equals(enter, that.enter) &&
+                    Objects.equals(exit, that.exit) &&
+                    Objects.equals(definitionId, that.definitionId);
         }
 
-        static NodeInstanceEntity fromNodeInstance(NodeInstance instance) {
-            if (instance == null) {
-                return null;
-            }
-
-            NodeInstanceEntity entity = new NodeInstanceEntity();
-            entity.id = instance.getId();
-            entity.name = instance.getName();
-            entity.nodeId = instance.getNodeId();
-            entity.type = instance.getType();
-            entity.enter = zonedDateTimeToInstant(instance.getEnter());
-            entity.exit = zonedDateTimeToInstant(instance.getExit());
-            entity.definitionId = instance.getDefinitionId();
-            return entity;
+        @Override
+        public int hashCode() {
+            return Objects.hash(_id, id, name, nodeId, type, enter, exit, definitionId);
         }
     }
 
@@ -186,26 +149,23 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
 
         public String message;
 
-        static ProcessInstanceError toProcessInstanceError(ProcessInstanceErrorEntity entity) {
-            if (entity == null) {
-                return null;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
             }
-
-            ProcessInstanceError error = new ProcessInstanceError();
-            error.setNodeDefinitionId(entity.nodeDefinitionId);
-            error.setMessage(entity.message);
-            return error;
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            ProcessInstanceErrorEntity that = (ProcessInstanceErrorEntity) o;
+            return Objects.equals(_id, that._id) &&
+                    Objects.equals(nodeDefinitionId, that.nodeDefinitionId) &&
+                    Objects.equals(message, that.message);
         }
 
-        static ProcessInstanceErrorEntity fromProcessInstanceError(ProcessInstanceError error) {
-            if (error == null) {
-                return null;
-            }
-
-            ProcessInstanceErrorEntity entity = new ProcessInstanceErrorEntity();
-            entity.nodeDefinitionId = error.getNodeDefinitionId();
-            entity.message = error.getMessage();
-            return entity;
+        @Override
+        public int hashCode() {
+            return Objects.hash(_id, nodeDefinitionId, message);
         }
     }
 }

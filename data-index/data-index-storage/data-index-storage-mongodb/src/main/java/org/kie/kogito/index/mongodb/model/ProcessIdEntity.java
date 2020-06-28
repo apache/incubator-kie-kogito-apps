@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.mongodb.model;
 
+import java.util.Objects;
+
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -30,10 +32,21 @@ public class ProcessIdEntity extends PanacheMongoEntityBase {
 
     public String fullTypeName;
 
-    public static ProcessIdEntity fromProcess(String processId, String fullTypeName) {
-        ProcessIdEntity processIdEntity = new ProcessIdEntity();
-        processIdEntity.processId = processId;
-        processIdEntity.fullTypeName = fullTypeName;
-        return processIdEntity;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ProcessIdEntity that = (ProcessIdEntity) o;
+        return Objects.equals(processId, that.processId) &&
+                Objects.equals(fullTypeName, that.fullTypeName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(processId, fullTypeName);
     }
 }

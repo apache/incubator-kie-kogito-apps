@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.kie.kogito.index.model.Job;
@@ -34,14 +35,15 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.persistence.mongodb.utils.JsonUtils;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.singleton;
 
 public class TestUtils {
 
-    public static ProcessInstance createProcessInstance(String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, Integer status) {
+    private static ObjectMapper MAPPER = new ObjectMapper();
+
+    public static ProcessInstance createProcessInstance(String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, Integer status, long timeInterval) {
         ProcessInstance pi = new ProcessInstance();
         pi.setId(processInstanceId);
         pi.setProcessId(processId);
@@ -51,27 +53,27 @@ public class TestUtils {
         pi.setRootProcessId(rootProcessId);
         pi.setRoles(singleton("admin"));
         pi.setVariables(createProcessInstanceVariables());
-        pi.setNodes(createNodeInstances());
+        pi.setNodes(createNodeInstances(timeInterval));
         pi.setState(status);
-        pi.setStart(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC));
-        pi.setEnd(status == ProcessInstanceState.COMPLETED.ordinal() ? Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC).plus(1, ChronoUnit.HOURS) : null);
+        pi.setStart(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
+        pi.setEnd(status == ProcessInstanceState.COMPLETED.ordinal() ? Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC).plus(1, ChronoUnit.HOURS) : null);
         if (ProcessInstanceState.ERROR.ordinal() == status) {
             pi.setError(new ProcessInstanceError("StartEvent_1", "Something went wrong"));
         }
         return pi;
     }
 
-    private static List<NodeInstance> createNodeInstances() {
+    private static List<NodeInstance> createNodeInstances(long timeInterval) {
         final NodeInstance ni1 = new NodeInstance();
         ni1.setId(UUID.randomUUID().toString());
-        ni1.setEnter(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC));
+        ni1.setEnter(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
         ni1.setName("StartProcess");
         ni1.setType("StartNode");
         ni1.setNodeId("1");
         ni1.setDefinitionId("StartEvent_1");
         final NodeInstance ni2 = new NodeInstance();
         ni2.setId(UUID.randomUUID().toString());
-        ni2.setEnter(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC));
+        ni2.setEnter(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
         ni2.setName("End Event 1");
         ni2.setType("EndNode");
         ni2.setNodeId("2");
@@ -104,14 +106,14 @@ public class TestUtils {
         trip.put("city", "Boston");
         trip.put("country", "US");
         json.put("trip", trip);
-        return JsonUtils.getObjectMapper().valueToTree(json);
+        return MAPPER.valueToTree(json);
     }
 
     private static JsonNode createProcessInstanceVariables() {
         return createDomainData(null, "Bar", "Swi");
     }
 
-    public static Job createJob(String jobId, String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, String status) {
+    public static Job createJob(String jobId, String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, String status, long timeInterval) {
         Job job = new Job();
         job.setId(jobId);
         job.setProcessId(processId);
@@ -119,19 +121,19 @@ public class TestUtils {
         job.setRootProcessId(rootProcessId);
         job.setRootProcessInstanceId(rootProcessInstanceId);
         job.setStatus(status);
-        job.setExpirationTime(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC));
+        job.setExpirationTime(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
         job.setPriority(1);
         job.setCallbackEndpoint("http://service");
         job.setRepeatInterval(0L);
         job.setRepeatLimit(-1);
         job.setScheduledId(UUID.randomUUID().toString());
         job.setRetries(10);
-        job.setLastUpdate(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC));
+        job.setLastUpdate(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
         job.setExecutionCounter(2);
         return job;
     }
 
-    public static UserTaskInstance createUserTaskInstance(String taskId, String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, String state) {
+    public static UserTaskInstance createUserTaskInstance(String taskId, String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, String state, long timeInterval) {
         UserTaskInstance task = new UserTaskInstance();
         task.setId(taskId);
         task.setProcessInstanceId(processInstanceId);
@@ -142,8 +144,8 @@ public class TestUtils {
         task.setDescription("TaskDescription");
         task.setState(state);
         task.setPriority("High");
-        task.setStarted(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC));
-        task.setCompleted(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli()).atZone(ZoneOffset.UTC).plus(1, ChronoUnit.HOURS));
+        task.setStarted(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
+        task.setCompleted(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC).plus(1, ChronoUnit.HOURS));
         task.setActualOwner("kogito");
         task.setAdminUsers(singleton("kogito"));
         task.setAdminGroups(singleton("admin"));

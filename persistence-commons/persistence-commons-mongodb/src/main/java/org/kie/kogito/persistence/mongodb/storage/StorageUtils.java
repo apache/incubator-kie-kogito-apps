@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.mongodb;
+package org.kie.kogito.persistence.mongodb.storage;
 
-public class Constants {
+import com.mongodb.client.MongoCollection;
+import io.quarkus.mongodb.panache.runtime.MongoOperations;
 
-    private Constants() {
+public class StorageUtils {
+
+    private StorageUtils() {
     }
 
-    private static final String DOMAIN_COLLECTON_NAME_AFFIX = "_domain";
-
-    public static String getDomainCollectionName(String processId) {
-        return processId + DOMAIN_COLLECTON_NAME_AFFIX;
-    }
-
-    public static boolean isDomainCollection(String collection) {
-        return collection.endsWith(DOMAIN_COLLECTON_NAME_AFFIX);
+    public static <E> MongoCollection<E> getCollection(String collection, Class<E> type) {
+        return MongoOperations.mongoDatabase(type).getCollection(collection, type);
     }
 }

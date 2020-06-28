@@ -16,14 +16,13 @@
 
 package org.kie.kogito.index.mongodb.model;
 
+import java.util.Objects;
+
 import io.quarkus.mongodb.panache.MongoEntity;
 import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
-import org.kie.kogito.index.model.Job;
 
 import static org.kie.kogito.index.Constants.JOBS_STORAGE;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.persistence.mongodb.utils.ModelUtils.zonedDateTimeToInstant;
 
 @MongoEntity(collection = JOBS_STORAGE)
 public class JobEntity extends PanacheMongoEntityBase {
@@ -59,51 +58,34 @@ public class JobEntity extends PanacheMongoEntityBase {
 
     public Integer executionCounter;
 
-    public static Job toJob(JobEntity entity) {
-        if (entity == null) {
-            return null;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-
-        Job job = new Job();
-        job.setId(entity.id);
-        job.setProcessId(entity.processId);
-        job.setProcessInstanceId(entity.processInstanceId);
-        job.setRootProcessId(entity.rootProcessId);
-        job.setRootProcessInstanceId(entity.rootProcessInstanceId);
-        job.setExpirationTime(instantToZonedDateTime(entity.expirationTime));
-        job.setPriority(entity.priority);
-        job.setCallbackEndpoint(entity.callbackEndpoint);
-        job.setRepeatInterval(entity.repeatInterval);
-        job.setRepeatLimit(entity.repeatLimit);
-        job.setScheduledId(entity.scheduledId);
-        job.setRetries(entity.retries);
-        job.setStatus(entity.status);
-        job.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
-        job.setExecutionCounter(entity.executionCounter);
-        return job;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        JobEntity jobEntity = (JobEntity) o;
+        return Objects.equals(id, jobEntity.id) &&
+                Objects.equals(processId, jobEntity.processId) &&
+                Objects.equals(processInstanceId, jobEntity.processInstanceId) &&
+                Objects.equals(rootProcessId, jobEntity.rootProcessId) &&
+                Objects.equals(rootProcessInstanceId, jobEntity.rootProcessInstanceId) &&
+                Objects.equals(expirationTime, jobEntity.expirationTime) &&
+                Objects.equals(priority, jobEntity.priority) &&
+                Objects.equals(callbackEndpoint, jobEntity.callbackEndpoint) &&
+                Objects.equals(repeatInterval, jobEntity.repeatInterval) &&
+                Objects.equals(repeatLimit, jobEntity.repeatLimit) &&
+                Objects.equals(scheduledId, jobEntity.scheduledId) &&
+                Objects.equals(retries, jobEntity.retries) &&
+                Objects.equals(status, jobEntity.status) &&
+                Objects.equals(lastUpdate, jobEntity.lastUpdate) &&
+                Objects.equals(executionCounter, jobEntity.executionCounter);
     }
 
-    public static JobEntity fromJob(Job job) {
-        if (job == null) {
-            return null;
-        }
-
-        JobEntity entity = new JobEntity();
-        entity.id = job.getId();
-        entity.processId = job.getProcessId();
-        entity.processInstanceId = job.getProcessInstanceId();
-        entity.rootProcessId = job.getRootProcessId();
-        entity.rootProcessInstanceId = job.getRootProcessInstanceId();
-        entity.expirationTime = zonedDateTimeToInstant(job.getExpirationTime());
-        entity.priority = job.getPriority();
-        entity.callbackEndpoint = job.getCallbackEndpoint();
-        entity.repeatInterval = job.getRepeatInterval();
-        entity.repeatLimit = job.getRepeatLimit();
-        entity.scheduledId = job.getScheduledId();
-        entity.retries = job.getRetries();
-        entity.status = job.getStatus();
-        entity.lastUpdate = zonedDateTimeToInstant(job.getLastUpdate());
-        entity.executionCounter = job.getExecutionCounter();
-        return entity;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, processId, processInstanceId, rootProcessId, rootProcessInstanceId, expirationTime, priority, callbackEndpoint, repeatInterval, repeatLimit, scheduledId, retries, status, lastUpdate, executionCounter);
     }
 }
