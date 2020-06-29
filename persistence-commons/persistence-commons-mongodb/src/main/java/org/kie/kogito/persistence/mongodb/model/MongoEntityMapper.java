@@ -19,38 +19,38 @@ package org.kie.kogito.persistence.mongodb.model;
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
 
 /**
- *
- * @param <K>
- * @param <V>
- * @param <E>
+ * A mongo entity mapper is responsible for converting between a data model and the corresponding mongo storage entity
+ * @param <K> the type of the data model key
+ * @param <V> the type of the data model
+ * @param <E> the type of the mongo storage entity
  */
 public interface MongoEntityMapper<K, V, E> {
 
     /**
-     *
-     * @return
+     * Get the mongo storage entity class
+     * @return the mongo storage entity class
      */
     Class<E> getEntityClass();
 
     /**
-     *
-     * @param key
-     * @param value
-     * @return
+     * Convert data model to mongo storage entity
+     * @param key the key of the data model
+     * @param value the data model
+     * @return the converted mongo storage entity
      */
     E mapToEntity(K key, V value);
 
     /**
-     *
-     * @param entity
-     * @return
+     * Convert mongo storage entity to data model
+     * @param entity the mongo storage entity
+     * @return the converted data model
      */
     V mapToModel(E entity);
 
     /**
-     *
-     * @param attribute
-     * @return
+     * Convert the data model attribute name to mongo storage attribute name
+     * @param attribute the data model attribute name
+     * @return the corresponding mongo storage attribute name
      */
     default String convertAttribute(String attribute) {
         return "id".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
