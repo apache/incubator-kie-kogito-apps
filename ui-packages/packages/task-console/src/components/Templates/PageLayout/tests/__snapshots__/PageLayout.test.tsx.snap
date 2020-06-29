@@ -15,7 +15,7 @@ exports[`PageLayout tests test TaskDetails route 1`] = `
     }
   }
 >
-  <MockedKogitoPageLayout
+  <KogitoPageLayout
     BrandAltText="Task Console Logo"
     BrandClick={[Function]}
     BrandSrc="taskConsoleLogo.svg"
@@ -52,7 +52,9 @@ exports[`PageLayout tests test TaskDetails route 1`] = `
         </NavList>
       </Unknown>
     }
-  />
+  >
+    <MockedComponent />
+  </KogitoPageLayout>
 </PageLayout>
 `;
 
@@ -71,7 +73,7 @@ exports[`PageLayout tests test UserTasks route 1`] = `
     }
   }
 >
-  <MockedKogitoPageLayout
+  <KogitoPageLayout
     BrandAltText="Task Console Logo"
     BrandClick={[Function]}
     BrandSrc="taskConsoleLogo.svg"
@@ -108,7 +110,9 @@ exports[`PageLayout tests test UserTasks route 1`] = `
         </NavList>
       </Unknown>
     }
-  />
+  >
+    <MockedComponent />
+  </KogitoPageLayout>
 </PageLayout>
 `;
 
@@ -127,7 +131,7 @@ exports[`PageLayout tests test UserTasksFilters route 1`] = `
     }
   }
 >
-  <MockedKogitoPageLayout
+  <KogitoPageLayout
     BrandAltText="Task Console Logo"
     BrandClick={[Function]}
     BrandSrc="taskConsoleLogo.svg"
@@ -164,7 +168,9 @@ exports[`PageLayout tests test UserTasksFilters route 1`] = `
         </NavList>
       </Unknown>
     }
-  />
+  >
+    <MockedComponent />
+  </KogitoPageLayout>
 </PageLayout>
 `;
 
@@ -183,7 +189,7 @@ exports[`PageLayout tests test UserTasksTable route 1`] = `
     }
   }
 >
-  <MockedKogitoPageLayout
+  <KogitoPageLayout
     BrandAltText="Task Console Logo"
     BrandClick={[Function]}
     BrandSrc="taskConsoleLogo.svg"
@@ -220,7 +226,9 @@ exports[`PageLayout tests test UserTasksTable route 1`] = `
         </NavList>
       </Unknown>
     }
-  />
+  >
+    <MockedComponent />
+  </KogitoPageLayout>
 </PageLayout>
 `;
 
@@ -239,7 +247,7 @@ exports[`PageLayout tests test default route 1`] = `
     }
   }
 >
-  <MockedKogitoPageLayout
+  <KogitoPageLayout
     BrandAltText="Task Console Logo"
     BrandClick={[Function]}
     BrandSrc="taskConsoleLogo.svg"
@@ -276,6 +284,8 @@ exports[`PageLayout tests test default route 1`] = `
         </NavList>
       </Unknown>
     }
-  />
+  >
+    <MockedComponent />
+  </KogitoPageLayout>
 </PageLayout>
 `;

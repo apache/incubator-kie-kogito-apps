@@ -11,9 +11,17 @@ const props: any = {
   history: []
 };
 
-jest.mock(
-  '@kogito-apps/common/src/components/Templates/KogitoPageLayout/KogitoPageLayout'
-);
+const MockedComponent = (): React.ReactElement => {
+  return <></>;
+};
+
+jest.mock('@kogito-apps/common', () => ({
+  ...jest.requireActual('@kogito-apps/common'),
+  KogitoPageLayout: () => {
+    return <MockedComponent />;
+  }
+}));
+
 jest.mock('../../DataListContainerExpandable/DataListContainerExpandable.tsx');
 
 function testRoute(route: string) {
@@ -28,9 +36,7 @@ function testRoute(route: string) {
 
   expect(wrapper).toMatchSnapshot();
 
-  const mockedKogitoPageLayout = wrapper
-    .find('MockedKogitoPageLayout')
-    .getElement();
+  const mockedKogitoPageLayout = wrapper.find('KogitoPageLayout').getElement();
 
   expect(mockedKogitoPageLayout).not.toBeNull();
 
