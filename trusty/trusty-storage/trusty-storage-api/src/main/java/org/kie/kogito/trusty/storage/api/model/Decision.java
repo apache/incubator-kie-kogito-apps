@@ -32,4 +32,20 @@ public class Decision extends Execution {
     public Decision(String executionId, Long executionTimestamp, boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {
         super(executionId, executionTimestamp, hasSucceeded, executorName, executedModelName, ExecutionTypeEnum.DECISION);
     }
+
+    public List<TypedValue> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(List<TypedValue> inputs) {
+        this.inputs = inputs;
+    }
+
+    public List<DecisionOutcome> getOutcomes() {
+        return outcomes;
+    }
+
+    public void setOutcomes(List<DecisionOutcome> outcomes) {
+        this.outcomes = outcomes;
+    }
 }

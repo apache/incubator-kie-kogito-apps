@@ -55,8 +55,7 @@ public class TraceEventConverter {
         return new TypedValue(
                 eventInput.getName(),
                 eventInput.getType().getId(),
-                eventInput.getValue(),
-                null
+                eventInput.getValue()
         );
     }
 
@@ -65,7 +64,7 @@ public class TraceEventConverter {
                 eventOutput.getId(),
                 eventOutput.getName(),
                 eventOutput.getStatus(),
-                new TypedValue(eventOutput.getName(), eventOutput.getType().getId(), eventOutput.getValue(), null),
+                new TypedValue(eventOutput.getName(), eventOutput.getType().getId(), eventOutput.getValue()),
                 null,
                 eventOutput.getMessages() == null ? null : eventOutput.getMessages().stream().map(this::toMessage).collect(Collectors.toList())
         );

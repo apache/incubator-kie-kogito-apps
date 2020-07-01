@@ -16,24 +16,23 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class TypedValue {
 
     private String name;
 
     private String typeRef;
 
-    private Object value;
-
-    private Object components;
+    private JsonNode value;
 
     private TypedValue() {
     }
 
-    public TypedValue(String name, String typeRef, Object value, Object components) {
+    public TypedValue(String name, String typeRef, JsonNode value) {
         this.name = name;
         this.typeRef = typeRef;
         this.value = value;
-        this.components = components;
     }
 
     public String getName() {
@@ -44,12 +43,8 @@ public class TypedValue {
         return typeRef;
     }
 
-    public Object getValue() {
+    public JsonNode getValue() {
         return value;
-    }
-
-    public Object getComponents() {
-        return components;
     }
 
 }

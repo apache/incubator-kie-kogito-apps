@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
-import org.kie.kogito.trusty.storage.infinispan.DecisionMarshaller;
+import org.kie.kogito.trusty.storage.infinispan.DecisionModelMarshaller;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -48,7 +48,7 @@ public class DecisionMarshallerTest {
         decision.setExecutionType(ExecutionTypeEnum.DECISION);
         decision.setSuccess(true);
 
-        DecisionMarshaller marshaller = new DecisionMarshaller(new ObjectMapper());
+        DecisionModelMarshaller marshaller = new DecisionModelMarshaller(new ObjectMapper());
         ProtoStreamWriterMock protoStreamWriter = new ProtoStreamWriterMock();
         marshaller.writeTo(protoStreamWriter, decision);
 
@@ -65,13 +65,13 @@ public class DecisionMarshallerTest {
 
     @Test
     public void allPropertiesOfDecisionObjectAreCoveredByTheUnmarshaller() throws IOException {
-        DecisionMarshaller marshaller = new DecisionMarshaller(new ObjectMapper());
+        DecisionModelMarshaller marshaller = new DecisionModelMarshaller(new ObjectMapper());
         MessageMarshaller.ProtoStreamReader protoStreamReader = mock(MessageMarshaller.ProtoStreamReader.class);
         when(protoStreamReader.readString(eq(Execution.EXECUTION_ID))).thenReturn("test");
         when(protoStreamReader.readLong(eq(Execution.EXECUTION_TIMESTAMP))).thenReturn(0L);
         when(protoStreamReader.readString(eq(Execution.EXECUTOR_NAME))).thenReturn("jack");
         when(protoStreamReader.readString(eq(Execution.EXECUTED_MODEL_NAME))).thenReturn("model");
-        when(protoStreamReader.readString(eq(Execution.EXECUTION_TYPE))).thenReturn("\"DECISION\"");
+        when(protoStreamReader.readString(eq(Execution.EXECUTION_TYPE))).thenReturn("DECISION");
         when(protoStreamReader.readBoolean(eq(Execution.HAS_SUCCEEDED))).thenReturn(true);
 
         Decision decision = marshaller.readFrom(protoStreamReader);

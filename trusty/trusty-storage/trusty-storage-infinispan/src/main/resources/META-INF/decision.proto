@@ -22,4 +22,76 @@ message Decision {
 
     /* @Field(store = Store.YES) */
     optional string executionType = 6;
+
+    /* @Field(store = Store.YES) */
+    repeated TypedValue inputs = 7;
+
+    /* @Field(store = Store.YES) */
+    repeated DecisionOutcome outcomes = 8;
+}
+
+/* @Indexed */
+message DecisionOutcome {
+    /* @Field(store = Store.YES) */
+    optional string outcomeId = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string outcomeName = 2;
+
+    /* @Field(store = Store.YES) */
+    optional string evaluationStatus = 3;
+
+    /* @Field(store = Store.YES) */
+    optional TypedValue outcomeResult = 4;
+
+    /* @Field(store = Store.YES) */
+    repeated TypedValue outcomeInputs = 5;
+
+    /* @Field(store = Store.YES) */
+    repeated Message messages = 6;
+}
+
+/* @Indexed */
+message Message {
+    /* @Field(store = Store.YES) */
+    optional string level = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string category = 2;
+
+    /* @Field(store = Store.YES) */
+    optional string type = 3;
+
+    /* @Field(store = Store.YES) */
+    optional string sourceId = 4;
+
+    /* @Field(store = Store.YES) */
+    optional string text = 5;
+
+    /* @Field(store = Store.YES) */
+    optional MessageExceptionField exception = 6;
+}
+
+/* @Indexed */
+message MessageExceptionField {
+    /* @Field(store = Store.YES) */
+    optional string className = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string message = 2;
+
+    /* @Field(store = Store.YES) */
+    optional MessageExceptionField cause = 3;
+}
+
+/* @Indexed */
+message TypedValue {
+    /* @Field(store = Store.YES) */
+    optional string name = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string typeRef = 2;
+
+    /* @Field(store = Store.YES) */
+    optional TypedValue value = 3;
 }

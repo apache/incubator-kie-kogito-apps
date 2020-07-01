@@ -17,6 +17,7 @@
 package org.kie.kogito.persistence.infinispan.protostream;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -42,5 +43,25 @@ public abstract class AbstractMarshaller {
 
     public JsonNode jsonFromString(String value) throws IOException {
         return value == null ? null : mapper.readTree(value);
+    }
+
+    public String stringFromJson(JsonNode value) throws IOException {
+        if (value == null) {
+            return null;
+        }
+        StringWriter writer = new StringWriter();
+        mapper.writeTree(mapper.getFactory().createGenerator(writer), value);
+        return writer.toString();
+    }
+
+    public <T extends Enum<T>> T enumFromString(String value, Class<T> enumClass) throws IOException {
+        return value == null ? null : mapper.readValue(value, enumClass);
+    }
+
+    public <T extends Enum<T>> String stringFromEnum(T value) throws IOException {
+        if (value == null) {
+            return null;
+        }
+        return mapper.writeValueAsString(value);
     }
 }
