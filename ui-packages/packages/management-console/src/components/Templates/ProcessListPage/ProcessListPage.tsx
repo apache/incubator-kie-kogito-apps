@@ -42,7 +42,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
   const [titleType, setTitleType] = useState('');
   const [modalTitle, setModalTitle] = useState('');
   const [limit, setLimit] = useState(defaultPageSize);
-  const [offset, setOffset] = useState(10);
+  const [offset, setOffset] = useState(0);
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [filters, setFilters] = useState({
@@ -344,7 +344,9 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
               )}
               {(!loading || isLoadingMore) &&
                 !isLoading &&
-                initData !== undefined &&
+                initData &&
+                initData.ProcessInstances &&
+                initData.ProcessInstances.length !== 0 &&
                 (limit === pageSize || isLoadingMore) && (
                   <LoadMore
                     offset={offset}
