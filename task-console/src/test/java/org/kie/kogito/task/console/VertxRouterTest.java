@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.taskConsole;
+package org.kie.kogito.task.console;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ import static io.restassured.RestAssured.given;
 public class VertxRouterTest {
 
     @Test
-    public void testHandlePath() {
+    void testHandlePath() {
 
         given().when().get("/UserTasks")
                 .then()

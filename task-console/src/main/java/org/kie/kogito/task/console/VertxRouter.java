@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.taskConsole;
+package org.kie.kogito.task.console;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -56,8 +56,8 @@ public class VertxRouter {
 
     void setupRouter(@Observes Router router) {
         router.route("/").handler(ctx -> ctx.response().putHeader("location", "/UserTasks/").setStatusCode(302).end());
-        router.route("/UserTasks*").handler(ctx -> handle(ctx));
-        router.route("/Task*").handler(ctx -> handle(ctx));
+        router.route("/UserTasks*").handler(this::handle);
+        router.route("/Task*").handler(this::handle);
         router.route().handler(StaticHandler.create());
     }
 

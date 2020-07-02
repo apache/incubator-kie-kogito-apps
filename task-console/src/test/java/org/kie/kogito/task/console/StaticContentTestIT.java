@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito;
+package org.kie.kogito.task.console;
 
 import io.quarkus.test.junit.NativeImageTest;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito;
+package org.kie.kogito.task.console;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-public class StaticContentTest {
+class StaticContentTest {
 
     @TestHTTPResource("index.html")
     URL url;
@@ -45,7 +45,7 @@ public class StaticContentTest {
     }
 
     @Test
-    public void testIndexHtml() throws Exception {
+    void testIndexHtml() throws Exception {
         try (InputStream in = url.openStream()) {
             String contents = readStream(in);
             assertTrue(contents.contains("<title>Kogito - Task Console</title>"));
