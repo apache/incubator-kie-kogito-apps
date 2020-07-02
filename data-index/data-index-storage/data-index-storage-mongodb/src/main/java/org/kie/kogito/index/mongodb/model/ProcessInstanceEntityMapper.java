@@ -19,6 +19,7 @@ package org.kie.kogito.index.mongodb.model;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
@@ -31,6 +32,10 @@ import static org.kie.kogito.index.mongodb.model.ModelUtils.jsonNodeToDocument;
 import static org.kie.kogito.index.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 public class ProcessInstanceEntityMapper implements MongoEntityMapper<String, ProcessInstance, ProcessInstanceEntity> {
+
+    static final String NODES_ID_ATTRIBUTE = "nodes.id";
+
+    static final String MONGO_NODES_ID_ATTRIBUTE = "nodes." + MongoOperations.ID;
 
     @Override
     public Class<ProcessInstanceEntity> getEntityClass() {
@@ -89,6 +94,17 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<String, Pr
         instance.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
         instance.setBusinessKey(entity.businessKey);
         return instance;
+    }
+
+    @Override
+    public String convertAttribute(String attribute) {
+        if (NODES_ID_ATTRIBUTE.equalsIgnoreCase(attribute)) {
+            return MONGO_NODES_ID_ATTRIBUTE;
+        }
+        if (MongoEntityMapper.ID.equals(attribute)) {
+            return MongoOperations.ID;
+        }
+        return attribute;
     }
 
     NodeInstance toNodeInstance(ProcessInstanceEntity.NodeInstanceEntity entity) {

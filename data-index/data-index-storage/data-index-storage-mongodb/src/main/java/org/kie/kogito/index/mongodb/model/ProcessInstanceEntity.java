@@ -84,8 +84,6 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
 
     public static class NodeInstanceEntity {
 
-        public String _id;
-
         public String id;
 
         public String name;
@@ -119,8 +117,6 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
     }
 
     public static class ProcessInstanceErrorEntity {
-
-        public String _id;
 
         public String nodeDefinitionId;
 

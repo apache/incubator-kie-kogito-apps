@@ -102,6 +102,7 @@ public class ProcessInstanceQueryIT extends QueryTestBase<String, ProcessInstanc
         queryAndAssert(assertWithId(), storage, singletonList(and(asList(lessThan("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()), lessThanEqual("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli())))), null, null, null, processInstanceId, subProcessInstanceId);
         queryAndAssert(assertWithId(), storage, singletonList(or(asList(equalTo("rootProcessInstanceId", processInstanceId), equalTo("start", processInstance.getStart().toInstant().toEpochMilli())))), null, null, null, processInstanceId, subProcessInstanceId);
         queryAndAssert(assertWithId(), storage, asList(isNull("roles"), isNull("end"), greaterThan("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()), greaterThanEqual("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli())), null, null, null);
+        queryAndAssert(assertWithId(), storage, singletonList(equalTo("nodes.id", processInstance.getNodes().get(0).getId())), null, null, null, processInstanceId);
 
         queryAndAssert(assertWithIdInOrder(), storage, asList(in("id", asList(processInstanceId, subProcessInstanceId)), in("processId", asList(processId, subProcessId))), singletonList(orderBy("processId", SortDirection.ASC)), 1, 1, subProcessInstanceId);
         queryAndAssert(assertWithIdInOrder(), storage, null, singletonList(orderBy("processId", SortDirection.DESC)), null, null, subProcessInstanceId, processInstanceId);

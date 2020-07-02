@@ -22,11 +22,13 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
+import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
@@ -150,5 +152,16 @@ class ProcessInstanceEntityMapperTest {
     void testMapToModel() {
         ProcessInstance result = processInstanceEntityMapper.mapToModel(processInstanceEntity);
         assertEquals(processInstance, result);
+    }
+
+    @Test
+    void testConvertAttribute() {
+        assertEquals(MongoOperations.ID, processInstanceEntityMapper.convertAttribute(MongoEntityMapper.ID));
+
+        assertEquals(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE,
+                     processInstanceEntityMapper.convertAttribute(ProcessInstanceEntityMapper.NODES_ID_ATTRIBUTE));
+
+        String testAttribute = "testAttribute";
+        assertEquals(testAttribute, processInstanceEntityMapper.convertAttribute(testAttribute));
     }
 }

@@ -26,6 +26,8 @@ import io.quarkus.mongodb.panache.runtime.MongoOperations;
  */
 public interface MongoEntityMapper<K, V, E> {
 
+    String ID = "id";
+
     /**
      * Get the mongo storage entity class
      * @return the mongo storage entity class
@@ -53,6 +55,6 @@ public interface MongoEntityMapper<K, V, E> {
      * @return the corresponding mongo storage attribute name
      */
     default String convertAttribute(String attribute) {
-        return "id".equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
+        return ID.equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
     }
 }
