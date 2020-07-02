@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DataTableContainer component tests Should render DataTableContainer correctly 1`] = `
-<DataTableContainer
+exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTableContainer correctly 1`] = `
+<UserTaskDataTableContainer
   ouiaContext={
     Object {
       "isOuia": false,
@@ -156,12 +156,12 @@ exports[`DataTableContainer component tests Should render DataTableContainer cor
               className="pf-l-grid__item pf-m-12-col"
             >
               <Card
-                className="data-table"
+                className="kogito-task-console--user-task_table-OverFlow"
               >
                 <article
-                  className="pf-c-card data-table"
+                  className="pf-c-card kogito-task-console--user-task_table-OverFlow"
                 >
-                  <MockDataTable
+                  <DataTable
                     LoadingComponent={
                       <Bullseye>
                         <KogitoSpinner
@@ -249,7 +249,9 @@ exports[`DataTableContainer component tests Should render DataTableContainer cor
                     isLoading={false}
                     networkStatus={1}
                     refetch={[MockFunction]}
-                  />
+                  >
+                    <MockedComponent />
+                  </DataTable>
                 </article>
               </Card>
             </div>
@@ -258,11 +260,11 @@ exports[`DataTableContainer component tests Should render DataTableContainer cor
       </Grid>
     </section>
   </PageSection>
-</DataTableContainer>
+</UserTaskDataTableContainer>
 `;
 
-exports[`DataTableContainer component tests Should render DataTableContainer with no data 1`] = `
-<DataTableContainer
+exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTableContainer with no data 1`] = `
+<UserTaskDataTableContainer
   ouiaContext={
     Object {
       "isOuia": false,
@@ -417,12 +419,12 @@ exports[`DataTableContainer component tests Should render DataTableContainer wit
               className="pf-l-grid__item pf-m-12-col"
             >
               <Card
-                className="data-table"
+                className="kogito-task-console--user-task_table-OverFlow"
               >
                 <article
-                  className="pf-c-card data-table"
+                  className="pf-c-card kogito-task-console--user-task_table-OverFlow"
                 >
-                  <MockDataTable
+                  <DataTable
                     LoadingComponent={
                       <Bullseye>
                         <KogitoSpinner
@@ -460,7 +462,9 @@ exports[`DataTableContainer component tests Should render DataTableContainer wit
                     isLoading={false}
                     networkStatus={1}
                     refetch={[MockFunction]}
-                  />
+                  >
+                    <MockedComponent />
+                  </DataTable>
                 </article>
               </Card>
             </div>
@@ -469,5 +473,5 @@ exports[`DataTableContainer component tests Should render DataTableContainer wit
       </Grid>
     </section>
   </PageSection>
-</DataTableContainer>
+</UserTaskDataTableContainer>
 `;
