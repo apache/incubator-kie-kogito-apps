@@ -37,7 +37,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class JobStorageIT {
+public class JobStorageIT extends StorageTestBase<String, Job> {
 
     Storage<String, Job> storage;
 
@@ -58,6 +58,6 @@ public class JobStorageIT {
 
         Job job1 = TestUtils.createJob(jobId, processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "EXPECTED", 0L);
         Job job2 = TestUtils.createJob(jobId, processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "SCHEDULED", 1000L);
-        StorageTestBase.testStorage(storage, jobId, job1, job2);
+        testStorage(storage, jobId, job1, job2);
     }
 }

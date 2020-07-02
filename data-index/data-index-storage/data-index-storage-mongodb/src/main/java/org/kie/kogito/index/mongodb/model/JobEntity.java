@@ -67,25 +67,11 @@ public class JobEntity extends PanacheMongoEntityBase {
             return false;
         }
         JobEntity jobEntity = (JobEntity) o;
-        return Objects.equals(id, jobEntity.id) &&
-                Objects.equals(processId, jobEntity.processId) &&
-                Objects.equals(processInstanceId, jobEntity.processInstanceId) &&
-                Objects.equals(rootProcessId, jobEntity.rootProcessId) &&
-                Objects.equals(rootProcessInstanceId, jobEntity.rootProcessInstanceId) &&
-                Objects.equals(expirationTime, jobEntity.expirationTime) &&
-                Objects.equals(priority, jobEntity.priority) &&
-                Objects.equals(callbackEndpoint, jobEntity.callbackEndpoint) &&
-                Objects.equals(repeatInterval, jobEntity.repeatInterval) &&
-                Objects.equals(repeatLimit, jobEntity.repeatLimit) &&
-                Objects.equals(scheduledId, jobEntity.scheduledId) &&
-                Objects.equals(retries, jobEntity.retries) &&
-                Objects.equals(status, jobEntity.status) &&
-                Objects.equals(lastUpdate, jobEntity.lastUpdate) &&
-                Objects.equals(executionCounter, jobEntity.executionCounter);
+        return Objects.equals(id, jobEntity.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, processId, processInstanceId, rootProcessId, rootProcessInstanceId, expirationTime, priority, callbackEndpoint, repeatInterval, repeatLimit, scheduledId, retries, status, lastUpdate, executionCounter);
+        return Objects.hash(id);
     }
 }

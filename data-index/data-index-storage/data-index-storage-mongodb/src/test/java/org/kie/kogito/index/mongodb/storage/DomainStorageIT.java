@@ -35,7 +35,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class DomainStorageIT {
+public class DomainStorageIT extends StorageTestBase<String, ObjectNode> {
 
     Storage<String, ObjectNode> storage;
 
@@ -54,6 +54,6 @@ public class DomainStorageIT {
         String processInstanceId = UUID.randomUUID().toString();
         ObjectNode node1 = TestUtils.createDomainData(processInstanceId, "John", "Doe");
         ObjectNode node2 = TestUtils.createDomainData(processInstanceId, "Jane", "Toe");
-        StorageTestBase.testStorage(storage, processInstanceId, node1, node2);
+        testStorage(storage, processInstanceId, node1, node2);
     }
 }

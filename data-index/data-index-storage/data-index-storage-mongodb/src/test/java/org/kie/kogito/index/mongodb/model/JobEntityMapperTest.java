@@ -18,6 +18,7 @@ package org.kie.kogito.index.mongodb.model;
 
 import java.time.ZonedDateTime;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.Job;
 
@@ -28,11 +29,12 @@ class JobEntityMapperTest {
 
     JobEntityMapper jobEntityMapper = new JobEntityMapper();
 
-    Job job;
+    static Job job;
 
-    JobEntity jobEntity;
+    static JobEntity jobEntity;
 
-    {
+    @BeforeAll
+    static void setup() {
         String testId = "testId";
         ZonedDateTime time = ZonedDateTime.now();
         String status = "ACTIVE";

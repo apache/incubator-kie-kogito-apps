@@ -32,7 +32,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class ProcessIdStorageIT {
+public class ProcessIdStorageIT extends StorageTestBase<String, String> {
 
     Storage<String, String> storage;
 
@@ -51,6 +51,6 @@ public class ProcessIdStorageIT {
         String processId = "travels";
         String type1 = "org.acme.travels.travels";
         String type2 = "org.acme.travels";
-        StorageTestBase.testStorage(storage, processId, type1, type2);
+        testStorage(storage, processId, type1, type2);
     }
 }

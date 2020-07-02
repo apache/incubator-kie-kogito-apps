@@ -13,27 +13,11 @@
   <packaging>pom</packaging>
   <name>Kogito :: Data Index Storage</name>
 
-  <profiles>
-    <profile>
-      <id>default</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>data-index-storage-api</module>
-        <module>data-index-storage-protobuf</module>
-        <module>data-index-storage-infinispan</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>experimental</id>
-      <modules>
-        <module>data-index-storage-api</module>
-        <module>data-index-storage-protobuf</module>
-        <module>data-index-storage-infinispan</module>
-        <module>data-index-storage-mongodb</module>
-      </modules>
-    </profile>
-  </profiles>
+  <modules>
+    <module>data-index-storage-api</module>
+    <module>data-index-storage-protobuf</module>
+    <module>data-index-storage-infinispan</module>
+    <module>data-index-storage-mongodb</module>
+  </modules>
 
 </project>

@@ -38,9 +38,8 @@ import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithId;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithIdInOrder;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.queryAndAssert;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithId;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithIdInOrder;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.and;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.between;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
@@ -61,7 +60,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class UserTaskInstanceQueryIT {
+public class UserTaskInstanceQueryIT extends QueryTestBase<String, UserTaskInstance> {
 
     Storage<String, UserTaskInstance> storage;
 
@@ -77,7 +76,7 @@ public class UserTaskInstanceQueryIT {
 
     @Test
     void test() {
-        String taskId1 = UUID.randomUUID().toString() + "_task1";
+        String taskId1 = UUID.randomUUID().toString();
         String processInstanceId1 = UUID.randomUUID().toString();
         String taskId2 = UUID.randomUUID().toString();
         String processInstanceId2 = UUID.randomUUID().toString();
@@ -99,7 +98,7 @@ public class UserTaskInstanceQueryIT {
         queryAndAssert(assertWithId(), storage, singletonList(contains("id", taskId1)), null, null, null, taskId1);
         queryAndAssert(assertWithId(), storage, singletonList(containsAny("processInstanceId", asList(processInstanceId1, processInstanceId2))), null, null, null, taskId1, taskId2);
         queryAndAssert(assertWithId(), storage, singletonList(containsAll("processInstanceId", asList(processInstanceId1, processInstanceId2))), null, null, null);
-        queryAndAssert(assertWithId(), storage, singletonList(like("id", "*_task1")), null, null, null, taskId1);
+        queryAndAssert(assertWithId(), storage, singletonList(like("state", "*ss")), null, null, null, taskId1);
         queryAndAssert(assertWithId(), storage, singletonList(and(asList(equalTo("id", taskId1), equalTo("processInstanceId", processInstanceId1)))), null, null, null, taskId1);
         queryAndAssert(assertWithId(), storage, singletonList(or(asList(equalTo("id", taskId1), equalTo("id", taskId2)))), null, null, null, taskId1, taskId2);
         queryAndAssert(assertWithId(), storage, asList(equalTo("id", taskId1), equalTo("processInstanceId", processInstanceId2)), null, null, null);

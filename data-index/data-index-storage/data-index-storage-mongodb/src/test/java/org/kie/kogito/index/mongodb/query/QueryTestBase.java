@@ -19,40 +19,13 @@ package org.kie.kogito.index.mongodb.query;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.AttributeSort;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public class QueryTestBase<K, V> {
 
-class QueryTestBase {
-
-    static <V> BiConsumer<List<V>, String[]> assertWithIdInOrder() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id").containsExactly(ids);
-    }
-
-    static <V> BiConsumer<List<V>, String[]> assertWithId() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id").containsExactlyInAnyOrder(ids);
-    }
-
-    static BiConsumer<List<String>, String[]> assertWithStringInOrder() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).containsExactly(ids);
-    }
-
-    static BiConsumer<List<String>, String[]> assertWithString() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).containsExactlyInAnyOrder(ids);
-    }
-
-    static BiConsumer<List<ObjectNode>, String[]> assertWithObjectNodeInOrder() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting(n -> n.get("id").asText()).containsExactly(ids);
-    }
-
-    static BiConsumer<List<ObjectNode>, String[]> assertWithObjectNode() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting(n -> n.get("id").asText()).containsExactlyInAnyOrder(ids);
-    }
-
-    static <K, V> void queryAndAssert(BiConsumer<List<V>, String[]> assertConsumer, Storage<K, V> storage, List<AttributeFilter<?>> filters, List<AttributeSort> sort, Integer offset, Integer limit, String... ids) {
+    void queryAndAssert(BiConsumer<List<V>, String[]> assertConsumer, Storage<K, V> storage, List<AttributeFilter<?>> filters, List<AttributeSort> sort, Integer offset, Integer limit, String... ids) {
         assertConsumer.accept(storage.query().filter(filters).sort(sort).offset(offset).limit(limit).execute(), ids);
     }
 }

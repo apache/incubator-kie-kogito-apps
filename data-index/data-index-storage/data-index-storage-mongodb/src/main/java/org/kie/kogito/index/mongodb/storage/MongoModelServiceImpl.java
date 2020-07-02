@@ -18,7 +18,6 @@ package org.kie.kogito.index.mongodb.storage;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
@@ -57,14 +56,11 @@ public class MongoModelServiceImpl implements MongoModelService {
     @Inject
     Event<IndexCreateOrUpdateEvent> indexCreateOrUpdateEvent;
 
-    Map<String, Supplier<MongoEntityMapper>> entityMapperMap = new ConcurrentHashMap<>();
-
-    {
-        entityMapperMap.put(JOBS_STORAGE, JobEntityMapper::new);
-        entityMapperMap.put(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntityMapper::new);
-        entityMapperMap.put(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntityMapper::new);
-        entityMapperMap.put(PROCESS_ID_MODEL_STORAGE, ProcessIdEntityMapper::new);
-    }
+    static final Map<String, Supplier<MongoEntityMapper>> ENTITY_MAPPER_MAP = Map.of(
+            JOBS_STORAGE, JobEntityMapper::new,
+            PROCESS_INSTANCES_STORAGE, ProcessInstanceEntityMapper::new,
+            USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntityMapper::new,
+            PROCESS_ID_MODEL_STORAGE, ProcessIdEntityMapper::new);
 
     @PostConstruct
     void init() {
@@ -75,7 +71,7 @@ public class MongoModelServiceImpl implements MongoModelService {
 
     @Override
     public MongoEntityMapper getEntityMapper(String name) {
-        Supplier<MongoEntityMapper> supplier = entityMapperMap.get(name);
+        Supplier<MongoEntityMapper> supplier = ENTITY_MAPPER_MAP.get(name);
         return Optional.ofNullable(supplier).map(Supplier::get).orElseGet(
                 () -> isDomainCollection(name) ? new DomainEntityMapper() : null);
     }

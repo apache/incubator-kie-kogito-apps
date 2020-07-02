@@ -128,7 +128,7 @@ class QueryUtilsTest {
     @Test
     void testGenerateSingleQuery_containsAny() {
         Bson result = QueryUtils.generateSingleQuery(containsAny("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertAttribute);
-        assertEquals(Filters.or(Filters.in("test", "testValue")), result);
+        assertEquals(Filters.or(Filters.eq("test", "testValue")), result);
     }
 
     @Test

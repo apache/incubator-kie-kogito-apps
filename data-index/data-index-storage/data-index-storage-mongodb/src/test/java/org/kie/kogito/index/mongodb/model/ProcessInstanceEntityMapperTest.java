@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -38,11 +39,12 @@ class ProcessInstanceEntityMapperTest {
 
     ProcessInstanceEntityMapper processInstanceEntityMapper = new ProcessInstanceEntityMapper();
 
-    ProcessInstance processInstance;
+    static ProcessInstance processInstance;
 
-    ProcessInstanceEntity processInstanceEntity;
+    static ProcessInstanceEntity processInstanceEntity;
 
-    {
+    @BeforeAll
+    static void setup() {
         String nodeInstanceId = "testNodeInstanceId";
         String nodeInstanceName = "testNodeInstanceName";
         String nodeInstanceNodeId = "testNodeInstanceNodeId";

@@ -36,9 +36,8 @@ import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.Constants.JOBS_STORAGE;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithId;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithIdInOrder;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.queryAndAssert;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithId;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithIdInOrder;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.and;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.between;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
@@ -59,7 +58,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class JobQueryIT {
+public class JobQueryIT extends QueryTestBase<String, Job> {
 
     Storage<String, Job> storage;
 
@@ -75,7 +74,7 @@ public class JobQueryIT {
 
     @Test
     void test() {
-        String jobId1 = UUID.randomUUID().toString() + "_job1";
+        String jobId1 = UUID.randomUUID().toString();
         String processInstanceId1 = UUID.randomUUID().toString();
         String jobId2 = UUID.randomUUID().toString();
         String processInstanceId2 = UUID.randomUUID().toString();
@@ -97,7 +96,7 @@ public class JobQueryIT {
         queryAndAssert(assertWithId(), storage, singletonList(contains("id", jobId1)), null, null, null, jobId1);
         queryAndAssert(assertWithId(), storage, singletonList(containsAny("processInstanceId", asList(processInstanceId1, processInstanceId2))), null, null, null, jobId1, jobId2);
         queryAndAssert(assertWithId(), storage, singletonList(containsAll("processInstanceId", asList(processInstanceId1, processInstanceId2))), null, null, null);
-        queryAndAssert(assertWithId(), storage, singletonList(like("id", "*_job1")), null, null, null, jobId1);
+        queryAndAssert(assertWithId(), storage, singletonList(like("status", "EX*")), null, null, null, jobId1);
         queryAndAssert(assertWithId(), storage, singletonList(and(asList(lessThan("retries", 11), greaterThanEqual("retries", 10)))), null, null, null, jobId1, jobId2);
         queryAndAssert(assertWithId(), storage, singletonList(or(asList(equalTo("id", jobId1), equalTo("id", jobId2)))), null, null, null, jobId1, jobId2);
         queryAndAssert(assertWithId(), storage, asList(equalTo("id", jobId1), equalTo("processInstanceId", processInstanceId2)), null, null, null);

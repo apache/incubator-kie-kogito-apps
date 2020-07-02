@@ -74,28 +74,12 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
             return false;
         }
         ProcessInstanceEntity that = (ProcessInstanceEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(processId, that.processId) &&
-                Objects.equals(roles, that.roles) &&
-                Objects.equals(variables, that.variables) &&
-                Objects.equals(endpoint, that.endpoint) &&
-                Objects.equals(nodes, that.nodes) &&
-                Objects.equals(state, that.state) &&
-                Objects.equals(start, that.start) &&
-                Objects.equals(end, that.end) &&
-                Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) &&
-                Objects.equals(rootProcessId, that.rootProcessId) &&
-                Objects.equals(parentProcessInstanceId, that.parentProcessInstanceId) &&
-                Objects.equals(processName, that.processName) &&
-                Objects.equals(error, that.error) &&
-                Objects.equals(addons, that.addons) &&
-                Objects.equals(lastUpdate, that.lastUpdate) &&
-                Objects.equals(businessKey, that.businessKey);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, processId, roles, variables, endpoint, nodes, state, start, end, rootProcessInstanceId, rootProcessId, parentProcessInstanceId, processName, error, addons, lastUpdate, businessKey);
+        return Objects.hash(id);
     }
 
     public static class NodeInstanceEntity {
@@ -125,19 +109,12 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
                 return false;
             }
             NodeInstanceEntity that = (NodeInstanceEntity) o;
-            return Objects.equals(_id, that._id) &&
-                    Objects.equals(id, that.id) &&
-                    Objects.equals(name, that.name) &&
-                    Objects.equals(nodeId, that.nodeId) &&
-                    Objects.equals(type, that.type) &&
-                    Objects.equals(enter, that.enter) &&
-                    Objects.equals(exit, that.exit) &&
-                    Objects.equals(definitionId, that.definitionId);
+            return Objects.equals(id, that.id);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(_id, id, name, nodeId, type, enter, exit, definitionId);
+            return Objects.hash(id);
         }
     }
 
@@ -158,14 +135,13 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
                 return false;
             }
             ProcessInstanceErrorEntity that = (ProcessInstanceErrorEntity) o;
-            return Objects.equals(_id, that._id) &&
-                    Objects.equals(nodeDefinitionId, that.nodeDefinitionId) &&
+            return Objects.equals(nodeDefinitionId, that.nodeDefinitionId) &&
                     Objects.equals(message, that.message);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(_id, nodeDefinitionId, message);
+            return Objects.hash(nodeDefinitionId, message);
         }
     }
 }

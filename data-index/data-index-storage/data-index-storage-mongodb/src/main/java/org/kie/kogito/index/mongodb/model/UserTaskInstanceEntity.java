@@ -81,31 +81,11 @@ public class UserTaskInstanceEntity extends PanacheMongoEntityBase {
             return false;
         }
         UserTaskInstanceEntity that = (UserTaskInstanceEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(priority, that.priority) &&
-                Objects.equals(processInstanceId, that.processInstanceId) &&
-                Objects.equals(state, that.state) &&
-                Objects.equals(actualOwner, that.actualOwner) &&
-                Objects.equals(adminGroups, that.adminGroups) &&
-                Objects.equals(adminUsers, that.adminUsers) &&
-                Objects.equals(completed, that.completed) &&
-                Objects.equals(started, that.started) &&
-                Objects.equals(excludedUsers, that.excludedUsers) &&
-                Objects.equals(potentialGroups, that.potentialGroups) &&
-                Objects.equals(potentialUsers, that.potentialUsers) &&
-                Objects.equals(referenceName, that.referenceName) &&
-                Objects.equals(lastUpdate, that.lastUpdate) &&
-                Objects.equals(processId, that.processId) &&
-                Objects.equals(rootProcessId, that.rootProcessId) &&
-                Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) &&
-                Objects.equals(inputs, that.inputs) &&
-                Objects.equals(outputs, that.outputs);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, name, priority, processInstanceId, state, actualOwner, adminGroups, adminUsers, completed, started, excludedUsers, potentialGroups, potentialUsers, referenceName, lastUpdate, processId, rootProcessId, rootProcessInstanceId, inputs, outputs);
+        return Objects.hash(id);
     }
 }

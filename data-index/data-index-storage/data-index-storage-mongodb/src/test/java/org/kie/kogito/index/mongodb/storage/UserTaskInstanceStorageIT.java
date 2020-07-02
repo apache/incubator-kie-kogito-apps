@@ -37,7 +37,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class UserTaskInstanceStorageIT {
+public class UserTaskInstanceStorageIT extends StorageTestBase<String, UserTaskInstance> {
 
     Storage<String, UserTaskInstance> storage;
 
@@ -57,6 +57,6 @@ public class UserTaskInstanceStorageIT {
         String processInstanceId = UUID.randomUUID().toString();
         UserTaskInstance userTaskInstance1 = TestUtils.createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "InProgress", 0L);
         UserTaskInstance userTaskInstance2 = TestUtils.createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "Completed", 1000L);
-        StorageTestBase.testStorage(storage, taskId, userTaskInstance1, userTaskInstance2);
+        testStorage(storage, taskId, userTaskInstance1, userTaskInstance2);
     }
 }

@@ -31,9 +31,8 @@ import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithString;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithStringInOrder;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.queryAndAssert;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithString;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithStringInOrder;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.and;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAll;
@@ -48,7 +47,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class ProcessIdQueryIT {
+public class ProcessIdQueryIT extends QueryTestBase<String, String> {
 
     Storage<String, String> storage;
 

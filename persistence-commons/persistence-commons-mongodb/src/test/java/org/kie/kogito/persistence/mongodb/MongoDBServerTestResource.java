@@ -20,37 +20,26 @@ import java.util.Collections;
 import java.util.Map;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.FixedHostPortGenericContainer;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.containers.MongoDBContainer;
+
+import static org.kie.kogito.persistence.mongodb.MongoDBConfigSource.addProperty;
 
 public class MongoDBServerTestResource implements QuarkusTestResourceLifecycleManager {
 
-    private static final String MONGODB_IMAGE = System.getProperty("container.image.mongodb");
-    private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBServerTestResource.class);
-    private GenericContainer mongoDB;
+    private static final String MONGODB_CONNECTION_PROPERTY = "quarkus.mongodb.connection-string";
+
+    private MongoDBContainer mongoDBContainer;
 
     @Override
     public Map<String, String> start() {
-        if (MONGODB_IMAGE == null) {
-            // Workaround for the well known issue in quarkus https://github.com/quarkusio/quarkus/issues/9854
-            LOGGER.warn("System property container.image.mongodb is not set. The test is started without the mongodb container.");
-            return Collections.emptyMap();
-        }
-        LOGGER.info("Using MongoDB image: {}", MONGODB_IMAGE);
-        mongoDB = new FixedHostPortGenericContainer(MONGODB_IMAGE)
-                .withFixedExposedPort(27017, 27017)
-                .withLogConsumer(new Slf4jLogConsumer(LOGGER))
-                .waitingFor(Wait.forLogMessage(".*build index done.*", 1));
-        mongoDB.start();
+        mongoDBContainer = new MongoDBContainer();
+        mongoDBContainer.start();
+        addProperty(MONGODB_CONNECTION_PROPERTY, mongoDBContainer.getReplicaSetUrl());
         return Collections.emptyMap();
     }
 
     @Override
     public void stop() {
-        mongoDB.stop();
+        mongoDBContainer.stop();
     }
 }

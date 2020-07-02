@@ -34,9 +34,8 @@ import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithObjectNode;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.assertWithObjectNodeInOrder;
-import static org.kie.kogito.index.mongodb.query.QueryTestBase.queryAndAssert;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithObjectNode;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithObjectNodeInOrder;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.and;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.between;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
@@ -57,7 +56,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBServerTestResource.class)
-public class DomainQueryIT {
+public class DomainQueryIT extends QueryTestBase<String, ObjectNode> {
 
     Storage<String, ObjectNode> storage;
 
@@ -73,7 +72,7 @@ public class DomainQueryIT {
 
     @Test
     void test() {
-        String processInstanceId1 = UUID.randomUUID().toString() + "_process1";
+        String processInstanceId1 = UUID.randomUUID().toString();
         String processInstanceId2 = UUID.randomUUID().toString();
 
         ObjectNode node1 = TestUtils.createDomainData(processInstanceId1, "John", "Doe");
