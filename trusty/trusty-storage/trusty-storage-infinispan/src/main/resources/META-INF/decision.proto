@@ -93,5 +93,5 @@ message TypedValue {
     optional string typeRef = 2;
 
     /* @Field(store = Store.YES) */
-    optional TypedValue value = 3;
+    optional string value = 3;
 }

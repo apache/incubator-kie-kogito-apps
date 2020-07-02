@@ -31,6 +31,8 @@ public class Decision extends Execution {
 
     public Decision(String executionId, Long executionTimestamp, boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {
         super(executionId, executionTimestamp, hasSucceeded, executorName, executedModelName, ExecutionTypeEnum.DECISION);
+        this.inputs = inputs;
+        this.outcomes = outcomes;
     }
 
     public List<TypedValue> getInputs() {

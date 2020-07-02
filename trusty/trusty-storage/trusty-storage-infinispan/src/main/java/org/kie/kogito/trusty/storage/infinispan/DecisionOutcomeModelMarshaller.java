@@ -24,16 +24,14 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
-/*
-private String outcomeId;
-    private String outcomeName;
-    private String evaluationStatus;
-    private TypedValue outcomeResult;
-    private List<TypedValue> outcomeInputs;
-    private List<Message> messages;
-    private boolean hasErrors;
-*/
 public class DecisionOutcomeModelMarshaller extends AbstractModelMarshaller<DecisionOutcome> {
+
+    public static final String EVALUATION_STATUS_FIELD = "evaluationStatus";
+    public static final String MESSAGES_FIELD = "messages";
+    public static final String OUTCOME_ID_FIELD = "outcomeId";
+    public static final String OUTCOME_INPUTS_FIELD = "outcomeInputs";
+    public static final String OUTCOME_NAME_FIELD = "outcomeName";
+    public static final String OUTCOME_RESULT_FIELD = "outcomeResult";
 
     public DecisionOutcomeModelMarshaller(ObjectMapper mapper) {
         super(mapper, DecisionOutcome.class);
@@ -42,22 +40,22 @@ public class DecisionOutcomeModelMarshaller extends AbstractModelMarshaller<Deci
     @Override
     public DecisionOutcome readFrom(ProtoStreamReader reader) throws IOException {
         return new DecisionOutcome(
-                reader.readString("outcomeId"),
-                reader.readString("outcomeName"),
-                reader.readString("evaluationStatus"),
-                reader.readObject("outcomeResult", TypedValue.class),
-                reader.readCollection("outcomeInputs", new ArrayList<>(), TypedValue.class),
-                reader.readCollection("messages", new ArrayList<>(), Message.class)
+                reader.readString(OUTCOME_ID_FIELD),
+                reader.readString(OUTCOME_NAME_FIELD),
+                reader.readString(EVALUATION_STATUS_FIELD),
+                reader.readObject(OUTCOME_RESULT_FIELD, TypedValue.class),
+                reader.readCollection(OUTCOME_INPUTS_FIELD, new ArrayList<>(), TypedValue.class),
+                reader.readCollection(MESSAGES_FIELD, new ArrayList<>(), Message.class)
         );
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, DecisionOutcome input) throws IOException {
-        writer.writeString("outcomeId", input.getOutcomeId());
-        writer.writeString("outcomeName", input.getOutcomeName());
-        writer.writeString("evaluationStatus", input.getEvaluationStatus());
-        writer.writeObject("outcomeResult", input.getOutcomeResult(), TypedValue.class);
-        writer.writeCollection("outcomeInputs", input.getOutcomeInputs(), TypedValue.class);
-        writer.writeCollection("messages", input.getMessages(), Message.class);
+        writer.writeString(OUTCOME_ID_FIELD, input.getOutcomeId());
+        writer.writeString(OUTCOME_NAME_FIELD, input.getOutcomeName());
+        writer.writeString(EVALUATION_STATUS_FIELD, input.getEvaluationStatus());
+        writer.writeObject(OUTCOME_RESULT_FIELD, input.getOutcomeResult(), TypedValue.class);
+        writer.writeCollection(OUTCOME_INPUTS_FIELD, input.getOutcomeInputs(), TypedValue.class);
+        writer.writeCollection(MESSAGES_FIELD, input.getMessages(), Message.class);
     }
 }

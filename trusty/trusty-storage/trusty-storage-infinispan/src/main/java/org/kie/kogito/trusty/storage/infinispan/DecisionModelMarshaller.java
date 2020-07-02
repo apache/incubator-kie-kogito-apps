@@ -28,6 +28,9 @@ import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 public class DecisionModelMarshaller extends AbstractModelMarshaller<Decision> {
 
+    public static final String INPUTS_FIELD = "inputs";
+    public static final String OUTCOMES_FIELD = "outcomes";
+
     public DecisionModelMarshaller(ObjectMapper mapper) {
         super(mapper, Decision.class);
     }
@@ -41,20 +44,20 @@ public class DecisionModelMarshaller extends AbstractModelMarshaller<Decision> {
         result.setExecutorName(reader.readString(Execution.EXECUTOR_NAME));
         result.setExecutedModelName(reader.readString(Execution.EXECUTED_MODEL_NAME));
         result.setExecutionType(enumFromString(reader.readString(Execution.EXECUTION_TYPE), ExecutionTypeEnum.class));
-        result.setInputs(reader.readCollection("inputs", new ArrayList<>(), TypedValue.class));
-        result.setOutcomes(reader.readCollection("outcomes", new ArrayList<>(), DecisionOutcome.class));
+        result.setInputs(reader.readCollection(INPUTS_FIELD, new ArrayList<>(), TypedValue.class));
+        result.setOutcomes(reader.readCollection(OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class));
         return result;
     }
 
     @Override
-    public void writeTo(ProtoStreamWriter writer, Decision result) throws IOException {
-        writer.writeString(Execution.EXECUTION_ID, result.getExecutionId());
-        writer.writeLong(Execution.EXECUTION_TIMESTAMP, result.getExecutionTimestamp());
-        writer.writeBoolean(Execution.HAS_SUCCEEDED, result.hasSucceeded());
-        writer.writeString(Execution.EXECUTOR_NAME, result.getExecutorName());
-        writer.writeString(Execution.EXECUTED_MODEL_NAME, result.getExecutedModelName());
-        writer.writeString(Execution.EXECUTION_TYPE, stringFromEnum(result.getExecutionType()));
-        writer.writeCollection("inputs", result.getInputs(), TypedValue.class);
-        writer.writeCollection("outcomes", result.getOutcomes(), DecisionOutcome.class);
+    public void writeTo(ProtoStreamWriter writer, Decision input) throws IOException {
+        writer.writeString(Execution.EXECUTION_ID, input.getExecutionId());
+        writer.writeLong(Execution.EXECUTION_TIMESTAMP, input.getExecutionTimestamp());
+        writer.writeBoolean(Execution.HAS_SUCCEEDED, input.hasSucceeded());
+        writer.writeString(Execution.EXECUTOR_NAME, input.getExecutorName());
+        writer.writeString(Execution.EXECUTED_MODEL_NAME, input.getExecutedModelName());
+        writer.writeString(Execution.EXECUTION_TYPE, stringFromEnum(input.getExecutionType()));
+        writer.writeCollection(INPUTS_FIELD, input.getInputs(), TypedValue.class);
+        writer.writeCollection(OUTCOMES_FIELD, input.getOutcomes(), DecisionOutcome.class);
     }
 }
