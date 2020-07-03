@@ -43,6 +43,7 @@ const fallbackUI = onError(({ networkError }: any) => {
     );
   }
 });
+
 const cache = new InMemoryCache();
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,

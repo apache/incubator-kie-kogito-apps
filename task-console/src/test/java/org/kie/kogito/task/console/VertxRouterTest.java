@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-public class VertxRouterTest {
+class VertxRouterTest {
 
     @Test
     void testHandlePath() {
