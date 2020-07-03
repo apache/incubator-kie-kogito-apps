@@ -98,3 +98,28 @@ export const filterColumnSelection = (selectionArray, objValue) => {
   }
   return res;
 };
+
+export const deleteKey = (testObj, pathArray) => {
+  const _obj = testObj;
+  const keys = pathArray;
+  keys.reduce((acc, key, index) => {
+    if (index === keys.length - 1) {
+      delete acc[key];
+      return true;
+    }
+    return acc[key];
+  }, _obj);
+  return _obj;
+};
+export const clearEmpties = o => {
+  for (const k in o) {
+    if (!o[k] || typeof o[k] !== 'object') {
+      continue;
+    }
+    clearEmpties(o[k]);
+    if (Object.keys(o[k]).length === 0) {
+      delete o[k];
+    }
+  }
+  return o;
+};

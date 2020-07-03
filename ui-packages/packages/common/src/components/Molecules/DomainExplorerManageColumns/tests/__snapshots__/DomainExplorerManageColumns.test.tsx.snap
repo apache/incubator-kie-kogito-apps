@@ -2,6 +2,7 @@
 
 exports[`Domain Explorer Manage columns component Snapshot testing with default props 1`] = `
 <DomainExplorerManageColumns
+  argument=""
   columnPickerType="Travels"
   data={
     Array [
@@ -79,6 +80,7 @@ exports[`Domain Explorer Manage columns component Snapshot testing with default 
     ]
   }
   enableCache={false}
+  finalFilters={Object {}}
   getPicker={
     Object {
       "data": Object {},
@@ -196,7 +198,28 @@ exports[`Domain Explorer Manage columns component Snapshot testing with default 
   setDisplayEmptyState={[MockFunction]}
   setDisplayTable={[MockFunction]}
   setEnableCache={[MockFunction]}
-  setError={[MockFunction]}
+  setError={
+    [MockFunction] {
+      "calls": Array [
+        Array [
+          [GraphQLError: Syntax Error: Expected Name, found )],
+        ],
+        Array [
+          [GraphQLError: Syntax Error: Expected Name, found )],
+        ],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    }
+  }
   setIsLoadingMore={[MockFunction]}
   setIsModalOpen={[MockFunction]}
   setOffsetVal={[MockFunction]}

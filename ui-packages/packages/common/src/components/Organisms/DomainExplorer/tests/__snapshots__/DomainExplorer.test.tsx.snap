@@ -955,6 +955,7 @@ exports[`Domain Explorer component Mock query testing 1`] = `
 >
   <DataToolbar
     className="pf-m-toggle-group-container"
+    clearAllFilters={[Function]}
     collapseListedFiltersBreakpoint="md"
     id="data-toolbar-with-chip-groups"
   >
@@ -1099,6 +1100,7 @@ exports[`Domain Explorer component Snapshot test with default prop 1`] = `
 >
   <DataToolbar
     className="pf-m-toggle-group-container"
+    clearAllFilters={[Function]}
     collapseListedFiltersBreakpoint="md"
     id="data-toolbar-with-chip-groups"
   >

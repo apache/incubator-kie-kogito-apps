@@ -4199,7 +4199,7 @@ exports[`Domain Explorer Table Component check null value for process instance a
                     <div
                       className="pf-c-empty-state__body"
                     >
-                      Selected domain has no data to display. Check other domains.
+                      Selected filters has no data to display. Try other filters.
                     </div>
                   </EmptyStateBody>
                 </div>

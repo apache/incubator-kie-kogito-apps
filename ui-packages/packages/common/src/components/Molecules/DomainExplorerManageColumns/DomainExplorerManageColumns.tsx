@@ -53,6 +53,8 @@ export interface IOwnProps {
   metaData: any;
   setIsModalOpen: any;
   isModalOpen: boolean;
+  finalFilters: any;
+  argument: any;
 }
 
 const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
@@ -80,7 +82,9 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
   isLoadingMore,
   metaData,
   setIsModalOpen,
-  isModalOpen
+  isModalOpen,
+  finalFilters,
+  argument
 }) => {
   // tslint:disable: forin
   // tslint:disable: no-floating-promises
@@ -391,7 +395,8 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
           pagination: {
             value: { offset: offsetVal, limit: pageSize },
             type: 'Pagination'
-          }
+          },
+          where: { value: finalFilters, type: argument }
         }
       });
       try {

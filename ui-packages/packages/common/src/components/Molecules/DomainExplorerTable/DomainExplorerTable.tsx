@@ -358,7 +358,7 @@ const DomainExplorerTable = ({
                   No data available
                 </Title>
                 <EmptyStateBody>
-                  Selected domain has no data to display. Check other domains.
+                  Selected filters has no data to display. Try other filters.
                 </EmptyStateBody>
               </EmptyState>
             </Bullseye>

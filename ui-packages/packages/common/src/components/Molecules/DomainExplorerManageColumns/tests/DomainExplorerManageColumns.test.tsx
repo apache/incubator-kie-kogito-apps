@@ -199,7 +199,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const wrapper = mount(<DomainExplorerManageColumns {...props} />);
     wrapper.update();
@@ -375,7 +377,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const event2 = { target: {} } as React.MouseEvent<HTMLInputElement>;
     const wrapper = mount(<DomainExplorerManageColumns {...props} />);
@@ -441,7 +445,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const mGraphQLResponse = {
       data: {
@@ -571,7 +577,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const wrapper = mount(<DomainExplorerManageColumns {...props} />);
     wrapper
@@ -634,7 +642,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const mGraphQLResponse = {
       data: {
@@ -763,7 +773,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const mGraphQLResponse = {
       data: {
@@ -892,7 +904,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const mGraphQLResponse = {
       data: {
@@ -1041,7 +1055,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const mGraphQLResponse = {
       data: {
@@ -1137,7 +1153,9 @@ describe('Domain Explorer Manage columns component', () => {
         ]
       },
       isModalOpen: true,
-      setIsModalOpen: jest.fn()
+      setIsModalOpen: jest.fn(),
+      finalFilters: {},
+      argument: ''
     };
     const mGraphQLResponse = {
       data: {
