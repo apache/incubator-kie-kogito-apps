@@ -322,6 +322,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
                 <ProcessListTable
                   initData={initData}
                   setInitData={setInitData}
+                  setLimit={setLimit}
                   isLoading={isLoading}
                   setIsError={setIsError}
                   checkedArray={checkedArray}
