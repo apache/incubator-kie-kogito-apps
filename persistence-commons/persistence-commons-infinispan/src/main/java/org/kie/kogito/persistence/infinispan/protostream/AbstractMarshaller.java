@@ -55,13 +55,13 @@ public abstract class AbstractMarshaller {
     }
 
     public <T extends Enum<T>> T enumFromString(String value, Class<T> enumClass) throws IOException {
-        return value == null ? null : mapper.readValue(value, enumClass);
+        return value == null ? null : Enum.valueOf(enumClass, value);
     }
 
     public <T extends Enum<T>> String stringFromEnum(T value) throws IOException {
         if (value == null) {
             return null;
         }
-        return mapper.writeValueAsString(value);
+        return value.name();
     }
 }
