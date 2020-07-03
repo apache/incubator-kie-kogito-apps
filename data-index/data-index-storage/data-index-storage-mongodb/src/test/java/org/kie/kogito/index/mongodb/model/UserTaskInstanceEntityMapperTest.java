@@ -28,9 +28,9 @@ import org.kie.kogito.index.model.UserTaskInstance;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.MAPPER;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.zonedDateTimeToInstant;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 class UserTaskInstanceEntityMapperTest {
 

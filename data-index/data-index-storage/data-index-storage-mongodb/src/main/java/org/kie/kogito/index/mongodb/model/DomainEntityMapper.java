@@ -19,11 +19,12 @@ package org.kie.kogito.index.mongodb.model;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
+import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-import static org.kie.kogito.index.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
 
-public class DomainEntityMapper implements MongoEntityMapper<String, ObjectNode, Document> {
+public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Document> {
 
     static String ID = "id";
 

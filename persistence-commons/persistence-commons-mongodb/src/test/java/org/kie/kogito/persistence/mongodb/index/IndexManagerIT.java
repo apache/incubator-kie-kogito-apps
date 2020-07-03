@@ -39,6 +39,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.schema.AttributeDescriptor;
@@ -84,7 +85,8 @@ class IndexManagerIT {
     private static EntityIndexDescriptor hotelEntityIndexDescriptor;
     private static EntityIndexDescriptor errorEntityIndexDescriptor;
 
-    static {
+    @BeforeAll
+    static void setup_all() {
         AttributeDescriptor flightNumber = new AttributeDescriptor("flightNumber", "string", true);
         IndexDescriptor flightNumberIndex = new IndexDescriptor("flightNumber", Lists.newArrayList("flightNumber"));
         flightEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Flight", Lists.newArrayList(flightNumberIndex), Lists.newArrayList(flightNumber));

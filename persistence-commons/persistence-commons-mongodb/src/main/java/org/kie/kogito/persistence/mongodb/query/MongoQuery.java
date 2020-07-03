@@ -42,11 +42,11 @@ public class MongoQuery<V, E> implements Query<V> {
     List<AttributeFilter<?>> filters;
     List<AttributeSort> sortBy;
 
-    MongoEntityMapper<?, V, E> mongoEntityMapper;
+    MongoEntityMapper<V, E> mongoEntityMapper;
 
     MongoCollection<E> mongoCollection;
 
-    public MongoQuery(MongoCollection<E> mongoCollection, MongoEntityMapper<?, V, E> mongoEntityMapper) {
+    public MongoQuery(MongoCollection<E> mongoCollection, MongoEntityMapper<V, E> mongoEntityMapper) {
         this.mongoCollection = mongoCollection;
         this.mongoEntityMapper = mongoEntityMapper;
     }

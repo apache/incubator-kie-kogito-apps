@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
@@ -37,10 +38,17 @@ class MongoStorageManagerIT {
     @StorageQualifier(MONGODB_STORAGE)
     MongoStorageManager mongoStorageManager;
 
+    Storage storage;
+
+    @AfterEach
+    void tearDown() {
+        ((MongoStorage) storage).mongoCollection.drop();
+    }
+
     @Test
     void testGetCache() {
         String storageName = "testCache";
-        Storage storage = mongoStorageManager.getCache(storageName);
+        storage = mongoStorageManager.getCache(storageName);
 
         assertTrue(storage instanceof MongoStorage);
         assertEquals(storageName, ((MongoStorage) storage).mongoCollection.getNamespace().getCollectionName());
@@ -49,7 +57,7 @@ class MongoStorageManagerIT {
     @Test
     void testGetCacheWithClass() {
         String storageName = "testCacheWithClass";
-        Storage storage = mongoStorageManager.getCache(storageName, String.class);
+        storage = mongoStorageManager.getCache(storageName, String.class);
 
         assertTrue(storage instanceof MongoStorage);
         assertEquals(storageName, ((MongoStorage) storage).mongoCollection.getNamespace().getCollectionName());
@@ -58,7 +66,7 @@ class MongoStorageManagerIT {
     @Test
     void getCacheWithDataFormat() {
         String storageName = "testCacheWithDataFormat";
-        Storage storage = mongoStorageManager.getCacheWithDataFormat(storageName, String.class, "type");
+        storage = mongoStorageManager.getCacheWithDataFormat(storageName, String.class, "type");
 
         assertTrue(storage instanceof MongoStorage);
         assertEquals(storageName, ((MongoStorage) storage).mongoCollection.getNamespace().getCollectionName());

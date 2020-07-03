@@ -39,7 +39,7 @@ import static org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper.TEST
 @QuarkusTestResource(MongoDBServerTestResource.class)
 class MongoStorageIT {
 
-    MongoStorage<String, String, Document> storage;
+    MongoStorage<String, Document> storage;
 
     MongoCollection<Document> collection;
 

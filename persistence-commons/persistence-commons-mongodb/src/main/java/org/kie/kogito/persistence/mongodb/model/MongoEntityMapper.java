@@ -20,11 +20,10 @@ import io.quarkus.mongodb.panache.runtime.MongoOperations;
 
 /**
  * A mongo entity mapper is responsible for converting between a data model and the corresponding mongo storage entity
- * @param <K> the type of the data model key
  * @param <V> the type of the data model
  * @param <E> the type of the mongo storage entity
  */
-public interface MongoEntityMapper<K, V, E> {
+public interface MongoEntityMapper<V, E> {
 
     String ID = "id";
 
@@ -40,7 +39,7 @@ public interface MongoEntityMapper<K, V, E> {
      * @param value the data model
      * @return the converted mongo storage entity
      */
-    E mapToEntity(K key, V value);
+    E mapToEntity(String key, V value);
 
     /**
      * Convert mongo storage entity to data model

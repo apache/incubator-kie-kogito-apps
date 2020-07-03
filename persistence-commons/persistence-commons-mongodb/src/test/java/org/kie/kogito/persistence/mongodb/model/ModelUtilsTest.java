@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.mongodb.model;
+package org.kie.kogito.persistence.mongodb.model;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import org.bson.Document;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 
 class ModelUtilsTest {
 

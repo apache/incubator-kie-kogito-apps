@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.Job;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.zonedDateTimeToInstant;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 class JobEntityMapperTest {
 

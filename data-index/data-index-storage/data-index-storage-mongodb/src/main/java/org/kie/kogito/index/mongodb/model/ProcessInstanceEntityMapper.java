@@ -26,12 +26,12 @@ import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.documentToJsonNode;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.zonedDateTimeToInstant;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
-public class ProcessInstanceEntityMapper implements MongoEntityMapper<String, ProcessInstance, ProcessInstanceEntity> {
+public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessInstance, ProcessInstanceEntity> {
 
     static final String NODES_ID_ATTRIBUTE = "nodes.id";
 

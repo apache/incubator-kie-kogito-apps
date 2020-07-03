@@ -19,7 +19,7 @@ package org.kie.kogito.index.mongodb.model;
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-public class ProcessIdEntityMapper implements MongoEntityMapper<String, String, ProcessIdEntity> {
+public class ProcessIdEntityMapper implements MongoEntityMapper<String, ProcessIdEntity> {
 
     static final String PROCESS_ID_ATTRIBUTE = "processId";
 

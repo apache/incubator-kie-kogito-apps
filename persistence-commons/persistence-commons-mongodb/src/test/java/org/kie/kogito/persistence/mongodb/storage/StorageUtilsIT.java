@@ -35,4 +35,13 @@ class StorageUtilsIT {
         assertEquals("kogito", collection.getNamespace().getDatabaseName());
         assertEquals("test", collection.getNamespace().getCollectionName());
     }
+
+    @Test
+    void testGetReactiveCollection() {
+        MongoCollection<Document> collection = StorageUtils.getCollection("test", Document.class);
+        com.mongodb.reactivestreams.client.MongoCollection<Document> reactiveCollection = StorageUtils.getReactiveCollection(collection);
+
+        assertEquals("kogito", reactiveCollection.getNamespace().getDatabaseName());
+        assertEquals("test", reactiveCollection.getNamespace().getCollectionName());
+    }
 }

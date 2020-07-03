@@ -16,15 +16,29 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClients;
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
+
+import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
 
 public class StorageUtils {
 
     private StorageUtils() {
     }
 
+    private static final String MONGODB_CONNECTION_PROPERTY = "quarkus.mongodb.connection-string";
+
     public static <E> MongoCollection<E> getCollection(String collection, Class<E> type) {
         return MongoOperations.mongoDatabase(type).getCollection(collection, type);
+    }
+
+    public static <E> com.mongodb.reactivestreams.client.MongoCollection<E> getReactiveCollection(MongoCollection<E> collection) {
+        String connection = getConfig().getValue(MONGODB_CONNECTION_PROPERTY, String.class);
+        MongoClient mongoClient = MongoClients.create(new ConnectionString(connection));
+        return mongoClient.getDatabase(collection.getNamespace().getDatabaseName())
+                .getCollection(collection.getNamespace().getCollectionName(), collection.getDocumentClass());
     }
 }

@@ -19,10 +19,10 @@ package org.kie.kogito.index.mongodb.model;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-import static org.kie.kogito.index.mongodb.model.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.zonedDateTimeToInstant;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
-public class JobEntityMapper implements MongoEntityMapper<String, Job, JobEntity> {
+public class JobEntityMapper implements MongoEntityMapper<Job, JobEntity> {
 
     @Override
     public Class<JobEntity> getEntityClass() {

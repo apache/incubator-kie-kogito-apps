@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.mongodb.model;
+package org.kie.kogito.persistence.mongodb.model;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -33,7 +33,7 @@ public class ModelUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelUtils.class);
 
-    static ObjectMapper MAPPER = new ObjectMapper();
+    public static ObjectMapper MAPPER = new ObjectMapper();
 
     private ModelUtils() {
     }
@@ -41,15 +41,15 @@ public class ModelUtils {
     private static final JsonWriterSettings jsonWriterSettings = JsonWriterSettings.builder()
             .int64Converter((value, writer) -> writer.writeNumber(value.toString())).build();
 
-    static ZonedDateTime instantToZonedDateTime(Long milli) {
+    public static ZonedDateTime instantToZonedDateTime(Long milli) {
         return Optional.ofNullable(milli).map(time -> Instant.ofEpochMilli(time).atZone(ZoneOffset.UTC)).orElse(null);
     }
 
-    static Long zonedDateTimeToInstant(ZonedDateTime time) {
+    public static Long zonedDateTimeToInstant(ZonedDateTime time) {
         return Optional.ofNullable(time).map(t -> t.toInstant().toEpochMilli()).orElse(null);
     }
 
-    static <T extends JsonNode> T documentToJsonNode(Document document, Class<T> type) {
+    public static <T extends JsonNode> T documentToJsonNode(Document document, Class<T> type) {
         return Optional.ofNullable(document).map(doc -> {
             try {
                 return MAPPER.readValue(doc.toJson(jsonWriterSettings), type);
@@ -60,7 +60,12 @@ public class ModelUtils {
         }).orElse(null);
     }
 
-    static Document jsonNodeToDocument(JsonNode jsonNode) {
+    public static Document jsonNodeToDocument(JsonNode jsonNode) {
         return Optional.ofNullable(jsonNode).map(json -> Document.parse(json.toString())).orElse(null);
+    }
+
+    public static <T> T documentToObject(Document document, Class<T> type) {
+        JsonNode node = documentToJsonNode(document, JsonNode.class);
+        return Optional.ofNullable(node).map(n -> MAPPER.convertValue(n, type)).orElse(null);
     }
 }

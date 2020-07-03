@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.index.mongodb.model.DomainEntityMapper.ID;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 
 class DomainEntityMapperTest {
 

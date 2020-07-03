@@ -20,12 +20,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-import static org.kie.kogito.index.mongodb.model.ModelUtils.documentToJsonNode;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.index.mongodb.model.ModelUtils.zonedDateTimeToInstant;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
-public class UserTaskInstanceEntityMapper implements MongoEntityMapper<String, UserTaskInstance, UserTaskInstanceEntity> {
+public class UserTaskInstanceEntityMapper implements MongoEntityMapper<UserTaskInstance, UserTaskInstanceEntity> {
 
     @Override
     public Class<UserTaskInstanceEntity> getEntityClass() {
