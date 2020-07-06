@@ -1,6 +1,4 @@
 import {
-  Breadcrumb,
-  BreadcrumbItem,
   Card,
   Grid,
   GridItem,
@@ -10,10 +8,8 @@ import {
   Bullseye,
   Label
 } from '@patternfly/react-core';
-import _ from 'lodash';
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import PageTitle from '../../Molecules/PageTitle/PageTitle';
+import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
 import './UserTaskDataTable.css';
 import { useGetUserTasksByStatesQuery } from '../../../graphql/types';
 import {
@@ -90,15 +86,7 @@ const UserTaskDataTableContainer: React.FC<InjectedOuiaProps> = ({
 
   return (
     <React.Fragment>
-      <PageSection variant="light">
-        <PageTitle title="User Tasks" />
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to={'/'}>Home</Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem isActive>User Tasks</BreadcrumbItem>
-        </Breadcrumb>
-      </PageSection>
+      <UserTaskPageHeader />
       <PageSection>
         <Grid gutter="md">
           <GridItem span={12}>
