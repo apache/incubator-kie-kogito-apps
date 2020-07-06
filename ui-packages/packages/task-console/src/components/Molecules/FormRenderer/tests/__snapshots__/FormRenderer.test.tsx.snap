@@ -3,114 +3,108 @@
 exports[`FormRenderer test Render form with actions 1`] = `
 <FormRenderer
   errorCallback={[MockFunction]}
-  form={
+  formSchema={
     Object {
-      "actions": Array [
-        Object {
-          "name": "Complete",
-          "outputs": Array [],
-          "primary": true,
-        },
-        Object {
-          "name": "Release",
-          "outputs": Array [
-            "traveller",
-          ],
-          "phase": "release",
-        },
+      "phases": Array [
+        "complete",
+        "release",
       ],
-      "schema": Object {
-        "properties": Object {
-          "traveller": Object {
-            "properties": Object {
-              "address": Object {
-                "properties": Object {
-                  "city": Object {
-                    "type": "string",
-                  },
-                  "country": Object {
-                    "type": "string",
-                  },
-                  "street": Object {
-                    "type": "string",
-                  },
-                  "zipCode": Object {
-                    "type": "string",
-                  },
+      "properties": Object {
+        "traveller": Object {
+          "properties": Object {
+            "address": Object {
+              "properties": Object {
+                "city": Object {
+                  "type": "string",
                 },
-                "type": "object",
+                "country": Object {
+                  "type": "string",
+                },
+                "street": Object {
+                  "type": "string",
+                },
+                "zipCode": Object {
+                  "type": "string",
+                },
               },
-              "email": Object {
-                "format": "email",
-                "type": "string",
-              },
-              "firstName": Object {
-                "type": "string",
-              },
-              "lastName": Object {
-                "type": "string",
-              },
-              "nationality": Object {
-                "type": "string",
-              },
+              "type": "object",
             },
-            "required": Array [
-              "firstName",
-              "lastName",
-            ],
-            "type": "object",
+            "email": Object {
+              "format": "email",
+              "type": "string",
+            },
+            "firstName": Object {
+              "type": "string",
+            },
+            "lastName": Object {
+              "type": "string",
+            },
+            "nationality": Object {
+              "type": "string",
+            },
           },
-          "trip": Object {
-            "properties": Object {
-              "begin": Object {
-                "format": "date-time",
-                "type": "string",
-              },
-              "city": Object {
-                "type": "string",
-              },
-              "country": Object {
-                "type": "string",
-              },
-              "end": Object {
-                "format": "date-time",
-                "type": "string",
-              },
-              "visaRequired": Object {
-                "type": "boolean",
-              },
+          "required": Array [
+            "firstName",
+            "lastName",
+          ],
+          "type": "object",
+        },
+        "trip": Object {
+          "properties": Object {
+            "begin": Object {
+              "format": "date-time",
+              "type": "string",
             },
-            "type": "object",
+            "city": Object {
+              "type": "string",
+            },
+            "country": Object {
+              "type": "string",
+            },
+            "end": Object {
+              "format": "date-time",
+              "type": "string",
+            },
+            "visaRequired": Object {
+              "type": "boolean",
+            },
           },
-          "visaApplication": Object {
-            "properties": Object {
-              "city": Object {
-                "type": "string",
-              },
-              "country": Object {
-                "type": "string",
-              },
-              "duration": Object {
-                "type": "integer",
-              },
-              "firstName": Object {
-                "type": "string",
-              },
-              "lastName": Object {
-                "type": "string",
-              },
-              "nationality": Object {
-                "type": "string",
-              },
-              "passportNumber": Object {
-                "type": "string",
-              },
-            },
-            "type": "object",
+          "type": "object",
+          "uniforms": Object {
+            "disabled": true,
           },
         },
-        "type": "object",
+        "visaApplication": Object {
+          "properties": Object {
+            "city": Object {
+              "type": "string",
+            },
+            "country": Object {
+              "type": "string",
+            },
+            "duration": Object {
+              "type": "integer",
+            },
+            "firstName": Object {
+              "type": "string",
+            },
+            "lastName": Object {
+              "type": "string",
+            },
+            "nationality": Object {
+              "type": "string",
+            },
+            "passportNumber": Object {
+              "type": "string",
+            },
+          },
+          "type": "object",
+          "uniforms": Object {
+            "disabled": true,
+          },
+        },
       },
+      "type": "object",
     }
   }
   successCallback={[MockFunction]}
@@ -234,6 +228,10 @@ exports[`FormRenderer test Render form with actions 1`] = `
         "getSubfields": [Function],
         "getType": [Function],
         "schema": Object {
+          "phases": Array [
+            "complete",
+            "release",
+          ],
           "properties": Object {
             "traveller": Object {
               "properties": Object {
@@ -295,6 +293,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
                 },
               },
               "type": "object",
+              "uniforms": Object {
+                "disabled": true,
+              },
             },
             "visaApplication": Object {
               "properties": Object {
@@ -321,6 +322,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
                 },
               },
               "type": "object",
+              "uniforms": Object {
+                "disabled": true,
+              },
             },
           },
           "type": "object",
@@ -367,7 +371,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
               >
                 <Nest
                   changed={false}
-                  disabled={false}
+                  disabled={true}
                   error={null}
                   errorMessage=""
                   field={
@@ -392,6 +396,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         },
                       },
                       "type": "object",
+                      "uniforms": Object {
+                        "disabled": true,
+                      },
                     }
                   }
                   fieldType={[Function]}
@@ -463,12 +470,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       Trip
                     </label>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="city"
                       name="trip.city"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="trip.city"
                       >
                         <Text
@@ -484,7 +491,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0003"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="City"
                           name="trip.city"
                           onChange={[Function]}
@@ -561,12 +568,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="country"
                       name="trip.country"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="trip.country"
                       >
                         <Text
@@ -582,7 +589,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0005"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Country"
                           name="trip.country"
                           onChange={[Function]}
@@ -659,12 +666,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="begin"
                       name="trip.begin"
                     >
                       <DateField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="trip.begin"
                       >
                         <Date
@@ -681,7 +688,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0007"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Begin"
                           name="trip.begin"
                           onChange={[Function]}
@@ -755,12 +762,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </DateField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="end"
                       name="trip.end"
                     >
                       <DateField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="trip.end"
                       >
                         <Date
@@ -777,7 +784,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0009"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="End"
                           name="trip.end"
                           onChange={[Function]}
@@ -851,12 +858,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </DateField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="visaRequired"
                       name="trip.visaRequired"
                     >
                       <BoolField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="trip.visaRequired"
                       >
                         <Bool
@@ -873,7 +880,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-000b"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Visa required"
                           name="trip.visaRequired"
                           onChange={[Function]}
@@ -1974,7 +1981,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
               >
                 <Nest
                   changed={false}
-                  disabled={false}
+                  disabled={true}
                   error={null}
                   errorMessage=""
                   field={
@@ -2003,6 +2010,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         },
                       },
                       "type": "object",
+                      "uniforms": Object {
+                        "disabled": true,
+                      },
                     }
                   }
                   fieldType={[Function]}
@@ -2084,12 +2094,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       Visa application
                     </label>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="firstName"
                       name="visaApplication.firstName"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.firstName"
                       >
                         <Text
@@ -2105,7 +2115,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-000z"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="First name"
                           name="visaApplication.firstName"
                           onChange={[Function]}
@@ -2182,12 +2192,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="lastName"
                       name="visaApplication.lastName"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.lastName"
                       >
                         <Text
@@ -2203,7 +2213,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0011"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Last name"
                           name="visaApplication.lastName"
                           onChange={[Function]}
@@ -2280,12 +2290,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="city"
                       name="visaApplication.city"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.city"
                       >
                         <Text
@@ -2301,7 +2311,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0013"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="City"
                           name="visaApplication.city"
                           onChange={[Function]}
@@ -2378,12 +2388,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="country"
                       name="visaApplication.country"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.country"
                       >
                         <Text
@@ -2399,7 +2409,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0015"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Country"
                           name="visaApplication.country"
                           onChange={[Function]}
@@ -2476,12 +2486,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="duration"
                       name="visaApplication.duration"
                     >
                       <NumField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.duration"
                       >
                         <Num
@@ -2497,7 +2507,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0017"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Duration"
                           name="visaApplication.duration"
                           onChange={[Function]}
@@ -2574,12 +2584,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </NumField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="passportNumber"
                       name="visaApplication.passportNumber"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.passportNumber"
                       >
                         <Text
@@ -2595,7 +2605,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0019"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Passport number"
                           name="visaApplication.passportNumber"
                           onChange={[Function]}
@@ -2672,12 +2682,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={false}
+                      isDisabled={true}
                       key="nationality"
                       name="visaApplication.nationality"
                     >
                       <TextField
-                        isDisabled={false}
+                        isDisabled={true}
                         name="visaApplication.nationality"
                       >
                         <Text
@@ -2693,7 +2703,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-001b"
-                          isDisabled={false}
+                          isDisabled={true}
                           label="Nationality"
                           name="visaApplication.nationality"
                           onChange={[Function]}
@@ -2779,14 +2789,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
           actions={
             Array [
               Object {
-                "name": "Complete",
+                "name": "complete",
                 "onActionClick": [Function],
-                "primary": true,
               },
               Object {
-                "name": "Release",
+                "name": "release",
                 "onActionClick": [Function],
-                "primary": undefined,
               },
             ]
           }
@@ -2799,10 +2807,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
                 className="pf-c-form__actions"
               >
                 <Component
-                  key="submit-Complete"
+                  key="submit-complete"
                   onClick={[Function]}
                   type="submit"
-                  variant="primary"
                 >
                   <ComponentWithOuia
                     component={[Function]}
@@ -2811,7 +2818,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         "children": "Complete",
                         "onClick": [Function],
                         "type": "submit",
-                        "variant": "primary",
                       }
                     }
                     consumerContext={null}
@@ -2825,7 +2831,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         }
                       }
                       type="submit"
-                      variant="primary"
                     >
                       <button
                         aria-disabled={null}
@@ -2842,10 +2847,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
                   </ComponentWithOuia>
                 </Component>
                 <Component
-                  key="submit-Release"
+                  key="submit-release"
                   onClick={[Function]}
                   type="submit"
-                  variant="secondary"
                 >
                   <ComponentWithOuia
                     component={[Function]}
@@ -2854,7 +2858,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         "children": "Release",
                         "onClick": [Function],
                         "type": "submit",
-                        "variant": "secondary",
                       }
                     }
                     consumerContext={null}
@@ -2868,12 +2871,11 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         }
                       }
                       type="submit"
-                      variant="secondary"
                     >
                       <button
                         aria-disabled={null}
                         aria-label={null}
-                        className="pf-c-button pf-m-secondary"
+                        className="pf-c-button pf-m-primary"
                         disabled={false}
                         onClick={[Function]}
                         tabIndex={null}
@@ -2897,101 +2899,105 @@ exports[`FormRenderer test Render form with actions 1`] = `
 exports[`FormRenderer test Render form without actions 1`] = `
 <FormRenderer
   errorCallback={[MockFunction]}
-  form={
+  formSchema={
     Object {
-      "actions": Array [],
-      "schema": Object {
-        "properties": Object {
-          "traveller": Object {
-            "properties": Object {
-              "address": Object {
-                "properties": Object {
-                  "city": Object {
-                    "type": "string",
-                  },
-                  "country": Object {
-                    "type": "string",
-                  },
-                  "street": Object {
-                    "type": "string",
-                  },
-                  "zipCode": Object {
-                    "type": "string",
-                  },
+      "phases": Array [],
+      "properties": Object {
+        "traveller": Object {
+          "properties": Object {
+            "address": Object {
+              "properties": Object {
+                "city": Object {
+                  "type": "string",
                 },
-                "type": "object",
+                "country": Object {
+                  "type": "string",
+                },
+                "street": Object {
+                  "type": "string",
+                },
+                "zipCode": Object {
+                  "type": "string",
+                },
               },
-              "email": Object {
-                "format": "email",
-                "type": "string",
-              },
-              "firstName": Object {
-                "type": "string",
-              },
-              "lastName": Object {
-                "type": "string",
-              },
-              "nationality": Object {
-                "type": "string",
-              },
+              "type": "object",
             },
-            "required": Array [
-              "firstName",
-              "lastName",
-            ],
-            "type": "object",
+            "email": Object {
+              "format": "email",
+              "type": "string",
+            },
+            "firstName": Object {
+              "type": "string",
+            },
+            "lastName": Object {
+              "type": "string",
+            },
+            "nationality": Object {
+              "type": "string",
+            },
           },
-          "trip": Object {
-            "properties": Object {
-              "begin": Object {
-                "format": "date-time",
-                "type": "string",
-              },
-              "city": Object {
-                "type": "string",
-              },
-              "country": Object {
-                "type": "string",
-              },
-              "end": Object {
-                "format": "date-time",
-                "type": "string",
-              },
-              "visaRequired": Object {
-                "type": "boolean",
-              },
+          "required": Array [
+            "firstName",
+            "lastName",
+          ],
+          "type": "object",
+        },
+        "trip": Object {
+          "properties": Object {
+            "begin": Object {
+              "format": "date-time",
+              "type": "string",
             },
-            "type": "object",
+            "city": Object {
+              "type": "string",
+            },
+            "country": Object {
+              "type": "string",
+            },
+            "end": Object {
+              "format": "date-time",
+              "type": "string",
+            },
+            "visaRequired": Object {
+              "type": "boolean",
+            },
           },
-          "visaApplication": Object {
-            "properties": Object {
-              "city": Object {
-                "type": "string",
-              },
-              "country": Object {
-                "type": "string",
-              },
-              "duration": Object {
-                "type": "integer",
-              },
-              "firstName": Object {
-                "type": "string",
-              },
-              "lastName": Object {
-                "type": "string",
-              },
-              "nationality": Object {
-                "type": "string",
-              },
-              "passportNumber": Object {
-                "type": "string",
-              },
-            },
-            "type": "object",
+          "type": "object",
+          "uniforms": Object {
+            "disabled": true,
           },
         },
-        "type": "object",
+        "visaApplication": Object {
+          "properties": Object {
+            "city": Object {
+              "type": "string",
+            },
+            "country": Object {
+              "type": "string",
+            },
+            "duration": Object {
+              "type": "integer",
+            },
+            "firstName": Object {
+              "type": "string",
+            },
+            "lastName": Object {
+              "type": "string",
+            },
+            "nationality": Object {
+              "type": "string",
+            },
+            "passportNumber": Object {
+              "type": "string",
+            },
+          },
+          "type": "object",
+          "uniforms": Object {
+            "disabled": true,
+          },
+        },
       },
+      "type": "object",
     }
   }
   successCallback={[MockFunction]}
@@ -3115,6 +3121,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
         "getSubfields": [Function],
         "getType": [Function],
         "schema": Object {
+          "phases": Array [],
           "properties": Object {
             "traveller": Object {
               "properties": Object {
@@ -3176,6 +3183,9 @@ exports[`FormRenderer test Render form without actions 1`] = `
                 },
               },
               "type": "object",
+              "uniforms": Object {
+                "disabled": true,
+              },
             },
             "visaApplication": Object {
               "properties": Object {
@@ -3202,6 +3212,9 @@ exports[`FormRenderer test Render form without actions 1`] = `
                 },
               },
               "type": "object",
+              "uniforms": Object {
+                "disabled": true,
+              },
             },
           },
           "type": "object",
@@ -3273,6 +3286,9 @@ exports[`FormRenderer test Render form without actions 1`] = `
                         },
                       },
                       "type": "object",
+                      "uniforms": Object {
+                        "disabled": true,
+                      },
                     }
                   }
                   fieldType={[Function]}
@@ -4884,6 +4900,9 @@ exports[`FormRenderer test Render form without actions 1`] = `
                         },
                       },
                       "type": "object",
+                      "uniforms": Object {
+                        "disabled": true,
+                      },
                     }
                   }
                   fieldType={[Function]}

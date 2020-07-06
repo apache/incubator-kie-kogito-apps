@@ -3,7 +3,6 @@ import { ActionGroup, Button } from '@patternfly/react-core';
 
 export interface IFormAction {
   name: string;
-  primary?: boolean;
   onActionClick: () => void;
 }
 
@@ -12,6 +11,10 @@ interface IOwnProps {
 }
 
 const FormFooter: React.FC<IOwnProps> = ({ actions }) => {
+  const capitalize = label => {
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  };
+
   return actions && actions.length > 0 ? (
     <ActionGroup>
       {actions.map(action => {
@@ -19,10 +22,9 @@ const FormFooter: React.FC<IOwnProps> = ({ actions }) => {
           <Button
             key={'submit-' + action.name}
             type="submit"
-            variant={action.primary ? 'primary' : 'secondary'}
             onClick={action.onActionClick}
           >
-            {action.name}
+            {capitalize(action.name)}
           </Button>
         );
       })}

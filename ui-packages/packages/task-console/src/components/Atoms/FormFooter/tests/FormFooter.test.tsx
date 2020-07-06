@@ -7,12 +7,10 @@ describe('Form Footer test', () => {
     const actions: IFormAction[] = [
       {
         name: 'action1',
-        primary: true,
         onActionClick: jest.fn()
       },
       {
         name: 'action2',
-        primary: false,
         onActionClick: jest.fn()
       }
     ];
@@ -38,13 +36,11 @@ describe('Form Footer test', () => {
   it('testing action click', () => {
     const action1 = {
       name: 'action1',
-      primary: true,
       onActionClick: jest.fn()
     };
 
     const action2 = {
       name: 'action2',
-      primary: false,
       onActionClick: jest.fn()
     };
 

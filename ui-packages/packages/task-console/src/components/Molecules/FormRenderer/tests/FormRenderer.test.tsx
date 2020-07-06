@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import axios from 'axios';
+import _ from 'lodash';
 import { AutoForm } from 'uniforms-patternfly';
 import FormFooter from '../../../Atoms/FormFooter/FormFooter';
 import { UserTaskInstance } from '../../../../graphql/types';
 import { TaskInfoImpl } from '../../../../model/TaskInfo';
-import { FormActionDescription } from '../../../../model/FormDescription';
 import FormRenderer from '../FormRenderer';
 import ApplyForVisaForm from '../../../../util/tests/mocks/ApplyForVisa';
 
@@ -39,13 +39,9 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 let formData;
 let props;
 
-const testSuccessfulRequest = async (
-  formAction: FormActionDescription,
-  expectedPayload
-) => {
+const testSuccessfulRequest = async (phase: string, expectedPayload) => {
   const response = {
-    status: 200,
-    data: 'Task successfully completed'
+    status: 200
   };
   mockedAxios.post.mockResolvedValue(response);
 
@@ -59,7 +55,7 @@ const testSuccessfulRequest = async (
 
   // clicking on a form action
   const footerAction = formFooter.props().actions.find(action => {
-    return action.name === formAction.name;
+    return action.name === phase;
   });
 
   footerAction.onActionClick();
@@ -74,17 +70,20 @@ const testSuccessfulRequest = async (
   expect(postParams).toHaveLength(3);
 
   const expectedEndpoint =
-    props.taskInfo.getTaskEndPoint() +
-    (formAction.phase ? '?phase=' + formAction.phase : '');
+    props.taskInfo.getTaskEndPoint() + (phase ? '?phase=' + phase : '');
 
   expect(postParams[0]).toBe(expectedEndpoint);
   expect(postParams[1]).toMatchObject(expectedPayload);
 
-  expect(props.successCallback).toBeCalledWith(response.data);
+  expect(props.successCallback).toBeCalledWith(phase);
   expect(props.errorCallback).not.toBeCalled();
 };
 
-const testUnSuccessfulRequest = async (response, formAction) => {
+const testUnSuccessfulRequest = async (
+  response,
+  phase,
+  expecteErrorMessage
+) => {
   mockedAxios.post.mockResolvedValue(response);
 
   const wrapper = mount(<FormRenderer {...props} />);
@@ -97,7 +96,7 @@ const testUnSuccessfulRequest = async (response, formAction) => {
 
   // clicking on a form action
   const footerAction = formFooter.props().actions.find(action => {
-    return action.name === formAction.name;
+    return action.name === phase;
   });
 
   footerAction.onActionClick();
@@ -105,17 +104,15 @@ const testUnSuccessfulRequest = async (response, formAction) => {
   // forcing the form submit
   await form.props().onSubmit(formData);
 
-  expect(mockedAxios.post).toBeCalled();
-
-  const expectedMessage = response.data
-    ? response.data
-    : `Unexpected error executing '${formAction.name}'`;
-
-  expect(props.errorCallback).toBeCalledWith(expectedMessage);
+  expect(props.errorCallback).toBeCalledWith(phase, expecteErrorMessage);
   expect(props.successCallback).not.toBeCalled();
 };
 
-const testUnexpectedRequestError = async (error, formAction) => {
+const testUnexpectedRequestError = async (
+  error,
+  phase,
+  expecteErrorMessage
+) => {
   mockedAxios.post.mockRejectedValue(error);
 
   const wrapper = mount(<FormRenderer {...props} />);
@@ -128,7 +125,7 @@ const testUnexpectedRequestError = async (error, formAction) => {
 
   // clicking on a form action
   const footerAction = formFooter.props().actions.find(action => {
-    return action.name === formAction.name;
+    return action.name === phase;
   });
 
   footerAction.onActionClick();
@@ -138,18 +135,7 @@ const testUnexpectedRequestError = async (error, formAction) => {
 
   expect(mockedAxios.post).toBeCalled();
 
-  let expectedMessage;
-
-  if (error.message) {
-    expectedMessage = error.message;
-  } else {
-    expectedMessage =
-      error.response && error.response.data
-        ? error.response.data
-        : `Unexpected error executing '${formAction.name}'`;
-  }
-
-  expect(props.errorCallback).toBeCalledWith(expectedMessage);
+  expect(props.errorCallback).toBeCalledWith(phase, expecteErrorMessage);
   expect(props.successCallback).not.toBeCalled();
 };
 
@@ -161,7 +147,7 @@ describe('FormRenderer test', () => {
         userTaskInstance,
         'http://localhost:8080/travels'
       ),
-      form: { ...ApplyForVisaForm },
+      formSchema: _.cloneDeep(ApplyForVisaForm),
       successCallback: jest.fn(),
       errorCallback: jest.fn()
     };
@@ -178,7 +164,7 @@ describe('FormRenderer test', () => {
   });
 
   it('Render form without actions', () => {
-    props.form.actions = [];
+    props.formSchema.phases = [];
 
     const wrapper = mount(<FormRenderer {...props} />);
     expect(wrapper).toMatchSnapshot();
@@ -189,22 +175,10 @@ describe('FormRenderer test', () => {
     expect(form.props().disabled).toBe(true);
   });
 
-  it('Form Render and successfully submit default endpoint no payload', async () => {
-    await testSuccessfulRequest(props.form.actions[0], {});
-  });
-
-  it('Form Render and successfully submit with phase and payload', async () => {
-    await testSuccessfulRequest(props.form.actions[1], {
+  it('Form Render and successfully submit', async () => {
+    await testSuccessfulRequest(props.formSchema.phases[1], {
       traveller: formData.traveller
     });
-  });
-
-  it('Form Render and successfully submit without response data', async () => {
-    const response = {
-      status: 200
-    };
-
-    await testUnSuccessfulRequest(response, props.form.actions[1]);
   });
 
   it('Form Render and unsuccessfully submit', async () => {
@@ -213,7 +187,11 @@ describe('FormRenderer test', () => {
       data: 'Task cannot be completed'
     };
 
-    await testUnSuccessfulRequest(response, props.form.actions[1]);
+    await testUnSuccessfulRequest(
+      response,
+      props.formSchema.phases[1],
+      response.data
+    );
   });
 
   it('Form Render and unexpected error on submit with full response', async () => {
@@ -223,7 +201,11 @@ describe('FormRenderer test', () => {
         data: 'Task cannot be completed'
       }
     };
-    await testUnexpectedRequestError(error, props.form.actions[1]);
+    await testUnexpectedRequestError(
+      error,
+      props.formSchema.phases[1],
+      error.response.data
+    );
   });
 
   it('Form Render and unexpected error on submit with response no data', async () => {
@@ -232,13 +214,21 @@ describe('FormRenderer test', () => {
         status: 500
       }
     };
-    await testUnexpectedRequestError(error, props.form.actions[1]);
+    await testUnexpectedRequestError(
+      error,
+      props.formSchema.phases[1],
+      undefined
+    );
   });
 
   it('Form Render and unexpected error on submit with JS error', async () => {
     const error = {
       message: 'something really ugly happened!'
     };
-    await testUnexpectedRequestError(error, props.form.actions[1]);
+    await testUnexpectedRequestError(
+      error,
+      props.formSchema.phases[1],
+      error.message
+    );
   });
 });

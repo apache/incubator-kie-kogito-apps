@@ -3,72 +3,102 @@ import axios from 'axios';
 import JSONSchemaBridge from 'uniforms-bridge-json-schema';
 import { AutoFields, AutoForm, ErrorsField } from 'uniforms-patternfly';
 import FormFooter from '../../Atoms/FormFooter/FormFooter';
-import {
-  FormActionDescription,
-  FormDescription
-} from '../../../model/FormDescription';
+import { FormSchema } from '../../../model/FormSchema';
 import { TaskInfo } from '../../../model/TaskInfo';
 import ModelConversionTool from '../../../util/uniforms/ModelConversionTool';
 import { DefaultFormValidator } from '../../../util/uniforms/FormValidator';
 
 interface IOwnProps {
   taskInfo: TaskInfo;
-  form: FormDescription;
+  formSchema: FormSchema;
   model?: any;
   successCallback?: (result: string) => void;
-  errorCallback?: (errorMessage: string) => void;
+  errorCallback?: (errorMessage: string, error?: string) => void;
+}
+
+interface FormAssignments {
+  inputs: string[];
+  outputs: string[];
 }
 
 const FormRenderer: React.FC<IOwnProps> = ({
   taskInfo,
-  form,
+  formSchema,
   model,
   successCallback,
   errorCallback
 }) => {
-  const validator = new DefaultFormValidator(form.schema);
+  const formInputs = [];
+  const formOutputs = [];
 
-  const bridge = new JSONSchemaBridge(form.schema, formModel => {
+  for (const key of Object.keys(formSchema.properties)) {
+    const property = formSchema.properties[key];
+    if (property.hasOwnProperty('input')) {
+      if (property.input) {
+        formInputs.push(key);
+      }
+      delete property.input;
+    }
+    if (property.hasOwnProperty('output')) {
+      if (property.output) {
+        formOutputs.push(key);
+      }
+      delete property.output;
+    }
+
+    if (!formOutputs.includes(key)) {
+      if (!property.uniforms) {
+        property.uniforms = {};
+      }
+      property.uniforms.disabled = true;
+    }
+  }
+
+  const formAssignments = {
+    inputs: formInputs,
+    outputs: formOutputs
+  };
+
+  const validator = new DefaultFormValidator(formSchema);
+
+  const bridge = new JSONSchemaBridge(formSchema, formModel => {
     // Converting back all the JS Dates into String before validating the model
     const newModel = ModelConversionTool.convertDateToString(
       formModel,
-      form.schema
+      formSchema
     );
     return validator.validate(newModel);
   });
 
   // Converting Dates that are in string format into JS Dates so they can be correctly bound to the uniforms DateField
-  const formData = ModelConversionTool.convertStringToDate(model, form.schema);
+  const formData = ModelConversionTool.convertStringToDate(model, formSchema);
 
-  let selectedAction;
+  let selectedPhase;
 
-  const notifySuccess = (text: string) => {
+  const notifySuccess = (phase: string) => {
     if (successCallback) {
-      successCallback(text);
+      successCallback(phase);
     }
   };
 
-  const notifyError = (formAction: FormActionDescription, text?: string) => {
+  const notifyError = (phase: string, text?: string) => {
     if (errorCallback) {
-      const message = text
-        ? text
-        : `Unexpected error executing '${formAction.name}'`;
-      errorCallback(message);
+      errorCallback(phase, text);
     }
   };
 
   const submitForm = useCallback(
-    async (formModel: any, formAction: FormActionDescription) => {
+    async (formModel: any, phase: string, assignments: FormAssignments) => {
       try {
         const data = {};
 
         let endpoint = taskInfo.getTaskEndPoint();
 
-        if (formAction.phase) {
-          endpoint += '?phase=' + formAction.phase;
+        if (phase) {
+          endpoint += '?phase=' + phase;
         }
 
-        formAction.outputs.forEach(output => {
+        assignments.outputs.forEach(output => {
           if (formModel[output]) {
             data[output] = formModel[output];
           }
@@ -84,17 +114,13 @@ const FormRenderer: React.FC<IOwnProps> = ({
         });
 
         if (response.status === 200) {
-          if (response.data) {
-            notifySuccess(response.data);
-          } else {
-            notifyError(formAction);
-          }
+          notifySuccess(selectedPhase);
         } else {
-          notifyError(formAction, response.data);
+          notifyError(selectedPhase, response.data);
         }
       } catch (e) {
         const message = e.response ? e.response.data : e.message;
-        notifyError(formAction, message);
+        notifyError(selectedPhase, message);
       }
     },
     []
@@ -103,12 +129,13 @@ const FormRenderer: React.FC<IOwnProps> = ({
   let formActions = [];
 
   // Adding actions if the task isn't completed
-  if (taskInfo.task.state !== 'Completed' && form.actions) {
-    formActions = form.actions.map(action => {
+  if (taskInfo.task.state !== 'Completed' && formSchema.phases) {
+    formActions = formSchema.phases.map(phase => {
       return {
-        name: action.name,
-        primary: action.primary,
-        onActionClick: () => (selectedAction = action)
+        name: phase,
+        onActionClick: () => {
+          selectedPhase = phase;
+        }
       };
     });
   }
@@ -120,7 +147,9 @@ const FormRenderer: React.FC<IOwnProps> = ({
       disabled={formActions.length === 0}
       schema={bridge}
       showInlineError={true}
-      onSubmit={formModel => submitForm(formModel, selectedAction)}
+      onSubmit={formModel =>
+        submitForm(formModel, selectedPhase, formAssignments)
+      }
     >
       <ErrorsField />
       <AutoFields />
