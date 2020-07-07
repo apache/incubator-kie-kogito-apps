@@ -5,7 +5,10 @@ import {
   handleRetry,
   handleAbort,
   handleNodeInstanceRetrigger,
-  handleNodeInstanceCancel
+  handleNodeInstanceCancel,
+  handleMultipleAbort,
+  handleMultipleSkip,
+  handleMultipleRetry
 } from '../Utils';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
@@ -243,5 +246,111 @@ describe('uitility function testing', () => {
       expect(onCancelFailure.mock.calls[0][0]).toEqual('"403 error"');
       expect(onCancelFailure).toHaveBeenCalled();
     });
+  });
+});
+
+describe('handle multiple abort click tests', () => {
+  const requiredInstances = {
+    '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
+      id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+      processId: 'trav',
+      serviceUrl: 'http://localhost:4000'
+    }
+  };
+  it('executes multi-abort process successfully', async () => {
+    const onAbortMultiSuccess = jest.fn();
+    const onAbortMultiFailure = jest.fn();
+    mockedAxios.all.mockResolvedValue([
+      mockedAxios.delete.mockResolvedValue({})
+    ]);
+    handleMultipleAbort(
+      requiredInstances,
+      onAbortMultiSuccess,
+      onAbortMultiFailure
+    );
+    await wait(0);
+    expect(onAbortMultiSuccess).toHaveBeenCalled();
+  });
+  it('fails executing multi-abort process', async () => {
+    mockedAxios.all.mockRejectedValue([
+      mockedAxios.delete.mockRejectedValue({})
+    ]);
+    const onAbortMultiSuccess = jest.fn();
+    const onAbortMultiFailure = jest.fn();
+    handleMultipleAbort(
+      requiredInstances,
+      onAbortMultiSuccess,
+      onAbortMultiFailure
+    );
+    await wait(0);
+    expect(onAbortMultiFailure).toHaveBeenCalled();
+  });
+});
+
+describe('handle multiple skip click tests', () => {
+  const requiredInstances = {
+    '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
+      id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+      processId: 'trav',
+      serviceUrl: 'http://localhost:4000'
+    }
+  };
+  it('executes multi-skip process successfully', async () => {
+    const onSkipMultiSuccess = jest.fn();
+    const onSkipMultiFailure = jest.fn();
+    mockedAxios.all.mockResolvedValue([mockedAxios.post.mockResolvedValue({})]);
+    handleMultipleSkip(
+      requiredInstances,
+      onSkipMultiSuccess,
+      onSkipMultiFailure
+    );
+    await wait(0);
+    expect(onSkipMultiSuccess).toHaveBeenCalled();
+  });
+  it('fails executing multi-abort process', async () => {
+    mockedAxios.all.mockRejectedValue([mockedAxios.post.mockRejectedValue({})]);
+    const onSkipMultiSuccess = jest.fn();
+    const onSkipMultiFailure = jest.fn();
+    handleMultipleSkip(
+      requiredInstances,
+      onSkipMultiSuccess,
+      onSkipMultiFailure
+    );
+    await wait(0);
+    expect(onSkipMultiFailure).toHaveBeenCalled();
+  });
+});
+
+describe('handle multiple retry click tests', () => {
+  const requiredInstances = {
+    '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
+      id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+      processId: 'trav',
+      serviceUrl: 'http://localhost:4000'
+    }
+  };
+  it('executes multi-retry process successfully', async () => {
+    const onRetryMultiSuccess = jest.fn();
+    const onRetryMultiFailure = jest.fn();
+    mockedAxios.all.mockResolvedValue([mockedAxios.post.mockResolvedValue({})]);
+    handleMultipleRetry(
+      requiredInstances,
+      onRetryMultiSuccess,
+      onRetryMultiFailure
+    );
+    await wait(0);
+    expect(onRetryMultiSuccess).toHaveBeenCalled();
+  });
+  it('fails executing multi-retry process', async () => {
+    mockedAxios.all.mockRejectedValue([mockedAxios.post.mockRejectedValue({})]);
+    const onRetryMultiSuccess = jest.fn();
+    const onRetryMultiFailure = jest.fn();
+    handleMultipleRetry(
+      requiredInstances,
+      onRetryMultiSuccess,
+      onRetryMultiFailure
+    );
+    await wait(0);
+    expect(onRetryMultiFailure).toHaveBeenCalled();
   });
 });

@@ -180,3 +180,69 @@ export const handleNodeInstanceCancel = (
       onCancelFailure(JSON.stringify(error.message));
     });
 };
+
+export const handleMultipleAbort = (
+  instancesToBeAborted,
+  multiAbortSuccess,
+  multiAbortFailure
+) => {
+  const promiseArray = [];
+  Object.keys(instancesToBeAborted).forEach((id: string) => {
+    promiseArray.push(
+      axios.delete(
+        `${instancesToBeAborted[id].serviceUrl}/management/processes/${instancesToBeAborted[id].processId}/instances/${instancesToBeAborted[id].id}`
+      )
+    );
+  });
+  Promise.all(promiseArray)
+    .then(() => {
+      multiAbortSuccess();
+    })
+    .catch(() => {
+      multiAbortFailure();
+    });
+};
+
+export const handleMultipleSkip = (
+  instancesToBeSkipped,
+  multiSkipSuccess,
+  multiSkipFailure
+) => {
+  const promiseArray = [];
+  Object.keys(instancesToBeSkipped).forEach((id: string) => {
+    promiseArray.push(
+      axios.post(
+        `${instancesToBeSkipped[id].serviceUrl}/management/processes/${instancesToBeSkipped[id].processId}/instances/${instancesToBeSkipped[id].id}/skip`
+      )
+    );
+  });
+  Promise.all(promiseArray)
+    .then(() => {
+      multiSkipSuccess();
+    })
+    .catch(() => {
+      multiSkipFailure();
+    });
+};
+
+export const handleMultipleRetry = (
+  instancesToBeRetried,
+  multiRetrySuccess,
+  multiRetryFailure
+) => {
+  const promiseArray = [];
+  Object.keys(instancesToBeRetried).forEach((id: string) => {
+    promiseArray.push(
+      axios.post(
+        `${instancesToBeRetried[id].serviceUrl}/management/processes/${instancesToBeRetried[id].processId}/instances/${instancesToBeRetried[id].id}/skip`
+      )
+    );
+  });
+  Promise.all(promiseArray)
+    .then(() => {
+      multiRetrySuccess();
+    })
+    .catch(() => {
+      multiRetryFailure();
+    });
+};

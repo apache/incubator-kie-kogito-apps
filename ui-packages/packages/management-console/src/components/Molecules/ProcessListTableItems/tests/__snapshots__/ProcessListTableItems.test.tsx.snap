@@ -3,7 +3,16 @@
 exports[`ProcessListTableItems component tests snapshot tests for no child instances 1`] = `
 <Fragment>
   <ProcessListModal
-    abortedMessageObj={
+    checkedArray={
+      Array [
+        "ACTIVE",
+      ]
+    }
+    handleModalToggle={[Function]}
+    ignoredInstances={Object {}}
+    isModalOpen={false}
+    isSingleAbort={true}
+    requiredInstances={
       Object {
         "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e": Object {
           "addons": Array [],
@@ -59,16 +68,7 @@ exports[`ProcessListTableItems component tests snapshot tests for no child insta
         },
       }
     }
-    checkedArray={
-      Array [
-        "ACTIVE",
-      ]
-    }
-    completedMessageObj={Object {}}
-    handleModalToggle={[Function]}
-    isAbortModalOpen={false}
-    isModalOpen={false}
-    isSingleAbort={true}
+    resetSelected={[Function]}
   />
   <ProcessListModal
     checkedArray={
@@ -337,7 +337,16 @@ exports[`ProcessListTableItems component tests snapshot tests for no child insta
 exports[`ProcessListTableItems component tests snapshot tests with child instances 1`] = `
 <Fragment>
   <ProcessListModal
-    abortedMessageObj={
+    checkedArray={
+      Array [
+        "ACTIVE",
+      ]
+    }
+    handleModalToggle={[Function]}
+    ignoredInstances={Object {}}
+    isModalOpen={false}
+    isSingleAbort={true}
+    requiredInstances={
       Object {
         "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e": Object {
           "addons": Array [],
@@ -446,16 +455,7 @@ exports[`ProcessListTableItems component tests snapshot tests with child instanc
         },
       }
     }
-    checkedArray={
-      Array [
-        "ACTIVE",
-      ]
-    }
-    completedMessageObj={Object {}}
-    handleModalToggle={[Function]}
-    isAbortModalOpen={false}
-    isModalOpen={false}
-    isSingleAbort={true}
+    resetSelected={[Function]}
   />
   <ProcessListModal
     checkedArray={

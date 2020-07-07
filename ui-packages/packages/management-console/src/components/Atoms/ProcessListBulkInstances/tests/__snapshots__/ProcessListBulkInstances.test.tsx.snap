@@ -2,12 +2,10 @@
 
 exports[`ProcessBulkList component tests snapshot testing for a single abort instance 1`] = `
 <Fragment>
-   
   <TextContent>
     <Text
       component="h2"
     >
-       
       The following process was aborted:
     </Text>
     <TextList>
@@ -42,78 +40,6 @@ exports[`ProcessBulkList component tests snapshot testing for a single abort ins
                   "nodeId": "1",
                   "type": "SubProcessNode",
                 },
-                Object {
-                  "definitionId": "UserTask_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": null,
-                  "id": "843bd287-fb6e-4ee7-a304-ba9b430e52d8",
-                  "name": "Confirm travel",
-                  "nodeId": "2",
-                  "type": "HumanTaskNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "fd2e12d5-6a4b-4c75-9f31-028d3f032a95",
-                  "name": "Join",
-                  "nodeId": "3",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "CallActivity_1",
-                  "enter": "2019-10-22T04:43:01.146Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "7f7d74c1-78f7-49be-b5ad-8d132f46a49c",
-                  "name": "Book Hotel",
-                  "nodeId": "4",
-                  "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.146Z",
-                  "id": "af0d984c-4abd-4f5c-83a8-426e6b3d102a",
-                  "name": "Book",
-                  "nodeId": "5",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_2",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "b2761011-3043-4f48-82bd-1395bf651a91",
-                  "name": "Join",
-                  "nodeId": "6",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "a91a2600-d0cd-46ff-a6c6-b3081612d1af",
-                  "name": "is visa required",
-                  "nodeId": "7",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "BusinessRuleTask_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "1baa5de4-47cc-45a8-8323-005388191e4f",
-                  "name": "Visa check",
-                  "nodeId": "8",
-                  "type": "RuleSetNode",
-                },
-                Object {
-                  "definitionId": "StartEvent_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.135Z",
-                  "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                  "name": "StartProcess",
-                  "nodeId": "9",
-                  "type": "StartNode",
-                },
               ],
               "parentProcessInstance": null,
               "parentProcessInstanceId": null,
@@ -141,15 +67,85 @@ exports[`ProcessBulkList component tests snapshot testing for a single abort ins
 </Fragment>
 `;
 
-exports[`ProcessBulkList component tests snapshot testing multi-abort with aborted and skipped instances  1`] = `
+exports[`ProcessBulkList component tests snapshot testing for a skipped instance with 0 success and 1 ignored instances 1`] = `
 <Fragment>
-   
   <TextContent>
     <Text
       component="h2"
     >
        
-      The following processes were aborted:
+      No processes were skipped
+    </Text>
+  </TextContent>
+  <Divider
+    className="pf-u-my-xl"
+    component="div"
+  />
+  <TextContent>
+    <Text
+      component="h2"
+    >
+      The following processes were ignored because they were not in error state:
+    </Text>
+    <TextList>
+      <TextListItem
+        key="cebrr334-6ae4-4aa8-9ec0-e18e19809e0b"
+      >
+        <ProcessDescriptor
+          processInstanceData={
+            Object {
+              "addons": Array [
+                "jobs-management",
+                "prometheus-monitoring",
+                "process-management",
+              ],
+              "businessKey": null,
+              "childProcessInstances": Array [],
+              "end": null,
+              "endpoint": "http://localhost:4000",
+              "error": Object {
+                "message": "Something went wrong",
+                "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
+              },
+              "id": "cebrr334-6ae4-4aa8-9ec0-e18e19809e0b",
+              "lastUpdated": "2019-10-22T03:40:44.089Z",
+              "nodes": Array [
+                Object {
+                  "definitionId": "CallActivity_2",
+                  "enter": "2019-10-22T04:43:01.143Z",
+                  "exit": "2019-10-22T04:43:01.146Z",
+                  "id": "7cdeba99-cd36-4425-980d-e59d44769a3e",
+                  "name": "Book Flight",
+                  "nodeId": "1",
+                  "type": "SubProcessNode",
+                },
+              ],
+              "parentProcessInstance": null,
+              "parentProcessInstanceId": null,
+              "processId": "travels",
+              "processName": "travels",
+              "roles": Array [],
+              "rootProcessInstanceId": null,
+              "serviceUrl": "http://localhost:4000",
+              "start": "2019-10-22T03:40:44.089Z",
+              "state": "ACTIVE",
+              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+            }
+          }
+        />
+      </TextListItem>
+    </TextList>
+  </TextContent>
+</Fragment>
+`;
+
+exports[`ProcessBulkList component tests snapshot testing for a skipped instance with 1 success and 1 ignored instances 1`] = `
+<Fragment>
+  <TextContent>
+    <Text
+      component="h2"
+    >
+       The following processes were skipped:
     </Text>
     <TextList>
       <TextListItem
@@ -183,77 +179,124 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with abort
                   "nodeId": "1",
                   "type": "SubProcessNode",
                 },
+              ],
+              "parentProcessInstance": null,
+              "parentProcessInstanceId": null,
+              "processId": "travels",
+              "processName": "travels",
+              "roles": Array [],
+              "rootProcessInstanceId": null,
+              "serviceUrl": "http://localhost:4000",
+              "start": "2019-10-22T03:40:44.089Z",
+              "state": "ACTIVE",
+              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+            }
+          }
+        />
+      </TextListItem>
+    </TextList>
+  </TextContent>
+  <Divider
+    className="pf-u-my-xl"
+    component="div"
+  />
+  <TextContent>
+    <Text
+      component="h2"
+    >
+      The following processes were ignored because they were not in error state:
+    </Text>
+    <TextList>
+      <TextListItem
+        key="cebrr334-6ae4-4aa8-9ec0-e18e19809e0b"
+      >
+        <ProcessDescriptor
+          processInstanceData={
+            Object {
+              "addons": Array [
+                "jobs-management",
+                "prometheus-monitoring",
+                "process-management",
+              ],
+              "businessKey": null,
+              "childProcessInstances": Array [],
+              "end": null,
+              "endpoint": "http://localhost:4000",
+              "error": Object {
+                "message": "Something went wrong",
+                "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
+              },
+              "id": "cebrr334-6ae4-4aa8-9ec0-e18e19809e0b",
+              "lastUpdated": "2019-10-22T03:40:44.089Z",
+              "nodes": Array [
                 Object {
-                  "definitionId": "UserTask_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": null,
-                  "id": "843bd287-fb6e-4ee7-a304-ba9b430e52d8",
-                  "name": "Confirm travel",
-                  "nodeId": "2",
-                  "type": "HumanTaskNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "fd2e12d5-6a4b-4c75-9f31-028d3f032a95",
-                  "name": "Join",
-                  "nodeId": "3",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "CallActivity_1",
-                  "enter": "2019-10-22T04:43:01.146Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "7f7d74c1-78f7-49be-b5ad-8d132f46a49c",
-                  "name": "Book Hotel",
-                  "nodeId": "4",
-                  "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_1",
+                  "definitionId": "CallActivity_2",
                   "enter": "2019-10-22T04:43:01.143Z",
                   "exit": "2019-10-22T04:43:01.146Z",
-                  "id": "af0d984c-4abd-4f5c-83a8-426e6b3d102a",
-                  "name": "Book",
-                  "nodeId": "5",
-                  "type": "Split",
+                  "id": "7cdeba99-cd36-4425-980d-e59d44769a3e",
+                  "name": "Book Flight",
+                  "nodeId": "1",
+                  "type": "SubProcessNode",
                 },
+              ],
+              "parentProcessInstance": null,
+              "parentProcessInstanceId": null,
+              "processId": "travels",
+              "processName": "travels",
+              "roles": Array [],
+              "rootProcessInstanceId": null,
+              "serviceUrl": "http://localhost:4000",
+              "start": "2019-10-22T03:40:44.089Z",
+              "state": "ACTIVE",
+              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+            }
+          }
+        />
+      </TextListItem>
+    </TextList>
+  </TextContent>
+</Fragment>
+`;
+
+exports[`ProcessBulkList component tests snapshot testing multi-abort with aborted and skipped instances  1`] = `
+<Fragment>
+  <TextContent>
+    <Text
+      component="h2"
+    >
+       The following processes were aborted:
+    </Text>
+    <TextList>
+      <TextListItem
+        key="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+      >
+        <ProcessDescriptor
+          processInstanceData={
+            Object {
+              "addons": Array [
+                "jobs-management",
+                "prometheus-monitoring",
+                "process-management",
+              ],
+              "businessKey": null,
+              "childProcessInstances": Array [],
+              "end": null,
+              "endpoint": "http://localhost:4000",
+              "error": Object {
+                "message": "Something went wrong",
+                "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
+              },
+              "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+              "lastUpdated": "2019-10-22T03:40:44.089Z",
+              "nodes": Array [
                 Object {
-                  "definitionId": "ExclusiveGateway_2",
+                  "definitionId": "CallActivity_2",
                   "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "b2761011-3043-4f48-82bd-1395bf651a91",
-                  "name": "Join",
-                  "nodeId": "6",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "a91a2600-d0cd-46ff-a6c6-b3081612d1af",
-                  "name": "is visa required",
-                  "nodeId": "7",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "BusinessRuleTask_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "1baa5de4-47cc-45a8-8323-005388191e4f",
-                  "name": "Visa check",
-                  "nodeId": "8",
-                  "type": "RuleSetNode",
-                },
-                Object {
-                  "definitionId": "StartEvent_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.135Z",
-                  "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                  "name": "StartProcess",
-                  "nodeId": "9",
-                  "type": "StartNode",
+                  "exit": "2019-10-22T04:43:01.146Z",
+                  "id": "7cdeba99-cd36-4425-980d-e59d44769a3e",
+                  "name": "Book Flight",
+                  "nodeId": "1",
+                  "type": "SubProcessNode",
                 },
               ],
               "parentProcessInstance": null,
@@ -287,7 +330,7 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with abort
     <Text
       component="h2"
     >
-      The following processes were skipped because they were either completed or aborted:
+      The following processes were ignored because they were either completed or aborted:
     </Text>
     <TextList>
       <TextListItem
@@ -317,78 +360,6 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with abort
                   "name": "Book Flight",
                   "nodeId": "1",
                   "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "UserTask_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": null,
-                  "id": "843bd287-fb6e-4ee7-a304-ba9b430e52d8",
-                  "name": "Confirm travel",
-                  "nodeId": "2",
-                  "type": "HumanTaskNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "fd2e12d5-6a4b-4c75-9f31-028d3f032a95",
-                  "name": "Join",
-                  "nodeId": "3",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "CallActivity_1",
-                  "enter": "2019-10-22T04:43:01.146Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "7f7d74c1-78f7-49be-b5ad-8d132f46a49c",
-                  "name": "Book Hotel",
-                  "nodeId": "4",
-                  "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.146Z",
-                  "id": "af0d984c-4abd-4f5c-83a8-426e6b3d102a",
-                  "name": "Book",
-                  "nodeId": "5",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_2",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "b2761011-3043-4f48-82bd-1395bf651a91",
-                  "name": "Join",
-                  "nodeId": "6",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "a91a2600-d0cd-46ff-a6c6-b3081612d1af",
-                  "name": "is visa required",
-                  "nodeId": "7",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "BusinessRuleTask_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "1baa5de4-47cc-45a8-8323-005388191e4f",
-                  "name": "Visa check",
-                  "nodeId": "8",
-                  "type": "RuleSetNode",
-                },
-                Object {
-                  "definitionId": "StartEvent_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.135Z",
-                  "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                  "name": "StartProcess",
-                  "nodeId": "9",
-                  "type": "StartNode",
                 },
               ],
               "parentProcessInstance": null,
@@ -412,7 +383,6 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with abort
 
 exports[`ProcessBulkList component tests snapshot testing multi-abort with no aborted instances and only skipped instances 1`] = `
 <Fragment>
-   
   <TextContent>
     <Text
       component="h2"
@@ -429,7 +399,7 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with no ab
     <Text
       component="h2"
     >
-      The following processes were skipped because they were either completed or aborted:
+      The following processes were ignored because they were either completed or aborted:
     </Text>
     <TextList>
       <TextListItem
@@ -460,78 +430,6 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with no ab
                   "nodeId": "1",
                   "type": "SubProcessNode",
                 },
-                Object {
-                  "definitionId": "UserTask_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": null,
-                  "id": "843bd287-fb6e-4ee7-a304-ba9b430e52d8",
-                  "name": "Confirm travel",
-                  "nodeId": "2",
-                  "type": "HumanTaskNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "fd2e12d5-6a4b-4c75-9f31-028d3f032a95",
-                  "name": "Join",
-                  "nodeId": "3",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "CallActivity_1",
-                  "enter": "2019-10-22T04:43:01.146Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "7f7d74c1-78f7-49be-b5ad-8d132f46a49c",
-                  "name": "Book Hotel",
-                  "nodeId": "4",
-                  "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.146Z",
-                  "id": "af0d984c-4abd-4f5c-83a8-426e6b3d102a",
-                  "name": "Book",
-                  "nodeId": "5",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_2",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "b2761011-3043-4f48-82bd-1395bf651a91",
-                  "name": "Join",
-                  "nodeId": "6",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "a91a2600-d0cd-46ff-a6c6-b3081612d1af",
-                  "name": "is visa required",
-                  "nodeId": "7",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "BusinessRuleTask_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "1baa5de4-47cc-45a8-8323-005388191e4f",
-                  "name": "Visa check",
-                  "nodeId": "8",
-                  "type": "RuleSetNode",
-                },
-                Object {
-                  "definitionId": "StartEvent_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.135Z",
-                  "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                  "name": "StartProcess",
-                  "nodeId": "9",
-                  "type": "StartNode",
-                },
               ],
               "parentProcessInstance": null,
               "parentProcessInstanceId": null,
@@ -554,12 +452,10 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with no ab
 
 exports[`ProcessBulkList component tests snapshot testing multi-abort with no skipped instances 1`] = `
 <Fragment>
-   
   <TextContent>
     <Text
       component="h2"
     >
-       
       The following processes were aborted:
     </Text>
     <TextList>
@@ -593,78 +489,6 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with no sk
                   "name": "Book Flight",
                   "nodeId": "1",
                   "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "UserTask_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": null,
-                  "id": "843bd287-fb6e-4ee7-a304-ba9b430e52d8",
-                  "name": "Confirm travel",
-                  "nodeId": "2",
-                  "type": "HumanTaskNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_2",
-                  "enter": "2019-10-22T04:43:01.148Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "fd2e12d5-6a4b-4c75-9f31-028d3f032a95",
-                  "name": "Join",
-                  "nodeId": "3",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "CallActivity_1",
-                  "enter": "2019-10-22T04:43:01.146Z",
-                  "exit": "2019-10-22T04:43:01.148Z",
-                  "id": "7f7d74c1-78f7-49be-b5ad-8d132f46a49c",
-                  "name": "Book Hotel",
-                  "nodeId": "4",
-                  "type": "SubProcessNode",
-                },
-                Object {
-                  "definitionId": "ParallelGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.146Z",
-                  "id": "af0d984c-4abd-4f5c-83a8-426e6b3d102a",
-                  "name": "Book",
-                  "nodeId": "5",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_2",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "b2761011-3043-4f48-82bd-1395bf651a91",
-                  "name": "Join",
-                  "nodeId": "6",
-                  "type": "Join",
-                },
-                Object {
-                  "definitionId": "ExclusiveGateway_1",
-                  "enter": "2019-10-22T04:43:01.143Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "a91a2600-d0cd-46ff-a6c6-b3081612d1af",
-                  "name": "is visa required",
-                  "nodeId": "7",
-                  "type": "Split",
-                },
-                Object {
-                  "definitionId": "BusinessRuleTask_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.143Z",
-                  "id": "1baa5de4-47cc-45a8-8323-005388191e4f",
-                  "name": "Visa check",
-                  "nodeId": "8",
-                  "type": "RuleSetNode",
-                },
-                Object {
-                  "definitionId": "StartEvent_1",
-                  "enter": "2019-10-22T04:43:01.135Z",
-                  "exit": "2019-10-22T04:43:01.135Z",
-                  "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                  "name": "StartProcess",
-                  "nodeId": "9",
-                  "type": "StartNode",
                 },
               ],
               "parentProcessInstance": null,

@@ -1387,7 +1387,16 @@ exports[`ProcessListTable component tests Snapshot testing with success data 1`]
         setSelectedNumber={[MockFunction]}
       >
         <ProcessListModal
-          abortedMessageObj={
+          checkedArray={
+            Array [
+              "ACTIVE",
+            ]
+          }
+          handleModalToggle={[Function]}
+          ignoredInstances={Object {}}
+          isModalOpen={false}
+          isSingleAbort={true}
+          requiredInstances={
             Object {
               "201a8a42-043e-375a-9f52-57c804b24db4": Object {
                 "addons": Array [
@@ -1508,16 +1517,7 @@ exports[`ProcessListTable component tests Snapshot testing with success data 1`]
               },
             }
           }
-          checkedArray={
-            Array [
-              "ACTIVE",
-            ]
-          }
-          completedMessageObj={Object {}}
-          handleModalToggle={[Function]}
-          isAbortModalOpen={false}
-          isModalOpen={false}
-          isSingleAbort={true}
+          resetSelected={[Function]}
         >
           <Modal
             actions={

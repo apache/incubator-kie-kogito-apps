@@ -14,24 +14,32 @@ interface IOwnProps {
   modalTitle: JSX.Element;
   modalContent?: string;
   handleModalToggle: () => void;
-  abortedMessageObj?: any;
-  completedMessageObj?: any;
+  requiredInstances?: any;
+  ignoredInstances?: any;
   isModalOpen: boolean;
   checkedArray: string[];
-  isAbortModalOpen?: boolean;
   isSingleAbort?: any;
+  resetSelected?: () => void;
+  titleString?: string;
 }
 const ProcessListModal: React.FC<IOwnProps> = ({
   modalContent,
   modalTitle,
-  abortedMessageObj,
-  completedMessageObj,
+  requiredInstances,
+  ignoredInstances,
   isModalOpen,
   checkedArray,
   handleModalToggle,
-  isAbortModalOpen,
-  isSingleAbort
+  isSingleAbort,
+  resetSelected,
+  titleString
 }) => {
+  const onOKClick = () => {
+    handleModalToggle();
+    requiredInstances !== undefined &&
+      ignoredInstances !== undefined &&
+      resetSelected();
+  };
   return (
     <Modal
       isSmall={true}
@@ -44,27 +52,21 @@ const ProcessListModal: React.FC<IOwnProps> = ({
       isOpen={isModalOpen}
       onClose={handleModalToggle}
       actions={[
-        <Button
-          key="confirm-selection"
-          variant="primary"
-          onClick={handleModalToggle}
-        >
+        <Button key="confirm-selection" variant="primary" onClick={onOKClick}>
           OK
         </Button>
       ]}
       isFooterLeftAligned={false}
     >
-      {abortedMessageObj !== undefined &&
-        completedMessageObj !== undefined &&
-        isAbortModalOpen && (
-          <ProcessListBulkInstances
-            abortedMessageObj={abortedMessageObj}
-            completedMessageObj={completedMessageObj}
-            isSingleAbort={isSingleAbort}
-            checkedArray={checkedArray}
-            isAbortModalOpen={isAbortModalOpen}
-          />
-        )}
+      {requiredInstances !== undefined && ignoredInstances !== undefined && (
+        <ProcessListBulkInstances
+          requiredInstances={requiredInstances}
+          ignoredInstances={ignoredInstances}
+          isSingleAbort={isSingleAbort}
+          checkedArray={checkedArray}
+          titleString={titleString}
+        />
+      )}
       <TextContent>
         <Text>
           <strong>{modalContent}</strong>

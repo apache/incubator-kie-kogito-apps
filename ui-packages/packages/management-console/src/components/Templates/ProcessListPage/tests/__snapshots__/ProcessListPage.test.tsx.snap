@@ -9,87 +9,6 @@ exports[`ProcessListPage component tests Snapshot tests 1`] = `
     }
   }
 >
-  <ProcessListModal
-    abortedMessageObj={Object {}}
-    checkedArray={
-      Array [
-        "ACTIVE",
-      ]
-    }
-    completedMessageObj={Object {}}
-    handleModalToggle={[Function]}
-    isAbortModalOpen={false}
-    isModalOpen={false}
-    isSingleAbort={false}
-  >
-    <Modal
-      actions={
-        Array [
-          <Unknown
-            onClick={[Function]}
-            variant="primary"
-          >
-            OK
-          </Unknown>,
-        ]
-      }
-      appendTo={
-        <body>
-          <div />
-        </body>
-      }
-      ariaDescribedById=""
-      className=""
-      header={
-        <Title
-          headingLevel="h1"
-          size="2xl"
-        />
-      }
-      hideTitle={false}
-      isFooterLeftAligned={false}
-      isLarge={false}
-      isOpen={false}
-      isSmall={true}
-      onClose={[Function]}
-      showClose={true}
-      title=""
-    >
-      <Portal
-        containerInfo={<div />}
-      >
-        <ModalContent
-          actions={
-            Array [
-              <Unknown
-                onClick={[Function]}
-                variant="primary"
-              >
-                OK
-              </Unknown>,
-            ]
-          }
-          ariaDescribedById=""
-          className=""
-          header={
-            <Title
-              headingLevel="h1"
-              size="2xl"
-            />
-          }
-          hideTitle={false}
-          id="pf-modal-0"
-          isFooterLeftAligned={false}
-          isLarge={false}
-          isOpen={false}
-          isSmall={true}
-          onClose={[Function]}
-          showClose={true}
-          title=""
-        />
-      </Portal>
-    </Modal>
-  </ProcessListModal>
   <PageSection
     variant="light"
   >
@@ -244,7 +163,6 @@ exports[`ProcessListPage component tests Snapshot tests 1`] = `
                 >
                    
                   <MockedProcessListToolbar
-                    abortedObj={Object {}}
                     checkedArray={
                       Array [
                         "ACTIVE",
@@ -260,18 +178,18 @@ exports[`ProcessListPage component tests Snapshot tests 1`] = `
                       }
                     }
                     getProcessInstances={[Function]}
-                    handleAbortAll={[Function]}
                     initData={Object {}}
                     isAllChecked={false}
                     searchWord=""
+                    selectedInstances={Object {}}
                     selectedNumber={0}
-                    setAbortedObj={[Function]}
                     setCheckedArray={[Function]}
                     setFilters={[Function]}
                     setInitData={[Function]}
                     setIsAllChecked={[Function]}
                     setIsStatusSelected={[Function]}
                     setSearchWord={[Function]}
+                    setSelectedInstances={[Function]}
                     setSelectedNumber={[Function]}
                   />
                   <MockedProcessListTable

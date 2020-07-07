@@ -23,10 +23,6 @@ import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
-import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
-import axios from 'axios';
-import ProcessInstanceState = GraphQL.ProcessInstanceState;
-import { setTitle } from '../../../utils/Utils';
 
 const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
   const [defaultPageSize] = useState(10);
@@ -36,11 +32,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
   const [isError, setIsError] = useState(false);
   const [isStatusSelected, setIsStatusSelected] = useState(true);
   const [abortedObj, setAbortedObj] = useState({});
-  const [isAbortModalOpen, setIsAbortModalOpen] = useState(false);
-  const [abortedMessageObj, setAbortedMessageObj] = useState({});
-  const [completedMessageObj, setCompletedMessageObj] = useState({});
-  const [titleType, setTitleType] = useState('');
-  const [modalTitle, setModalTitle] = useState('');
   const [limit, setLimit] = useState(defaultPageSize);
   const [offset, setOffset] = useState(0);
   const [pageSize, setPageSize] = useState(defaultPageSize);
@@ -75,10 +66,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
     setPageSize(defaultPageSize);
   };
 
-  const handleAbortModalToggle = () => {
-    setIsAbortModalOpen(!isAbortModalOpen);
-  };
-
   useEffect(() => {
     return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances');
   });
@@ -106,8 +93,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
     setIsLoadingMore(false);
     setIsError(false);
     setAbortedObj({});
-    setAbortedMessageObj({});
-    setCompletedMessageObj({});
     setIsStatusSelected(true);
     setIsAllChecked(false);
     setSelectedNumber(0);
@@ -138,8 +123,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
 
   useEffect(() => {
     setAbortedObj({});
-    setAbortedMessageObj({});
-    setCompletedMessageObj({});
     if (isLoadingMore === undefined || !isLoadingMore) {
       setIsLoading(loading);
     }
@@ -163,8 +146,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
 
   useEffect(() => {
     setAbortedObj({});
-    setAbortedMessageObj({});
-    setCompletedMessageObj({});
     if (isLoadingMore === undefined || !isLoadingMore) {
       setIsLoading(getProcessInstancesWithBK.loading);
     }
@@ -196,73 +177,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
     onFilterClick(['ACTIVE']);
   };
 
-  const handleAbortAll = () => {
-    const tempAbortedObj = { ...abortedObj };
-    const completedAndAborted = {};
-    for (const [id, processInstance] of Object.entries(tempAbortedObj)) {
-      initData.ProcessInstances.map(instance => {
-        if (instance.id === id) {
-          if (
-            instance.addons.includes('process-management') &&
-            instance.serviceUrl !== null
-          ) {
-            if (
-              instance.state === ProcessInstanceState.Completed ||
-              instance.state === ProcessInstanceState.Aborted
-            ) {
-              completedAndAborted[id] = processInstance;
-              delete tempAbortedObj[id];
-            } else {
-              instance.state = ProcessInstanceState.Aborted;
-            }
-          }
-        }
-        if (instance.childDataList !== undefined) {
-          instance.childDataList.map(child => {
-            if (child.id === id) {
-              if (
-                instance.addons.includes('process-management') &&
-                instance.serviceUrl !== null
-              ) {
-                if (
-                  child.state === ProcessInstanceState.Completed ||
-                  child.state === ProcessInstanceState.Aborted
-                ) {
-                  completedAndAborted[id] = processInstance;
-                  delete tempAbortedObj[id];
-                } else {
-                  child.state = ProcessInstanceState.Aborted;
-                }
-              }
-            }
-          });
-        }
-      });
-    }
-    const promiseArray = [];
-    Object.keys(tempAbortedObj).forEach((id: string) => {
-      promiseArray.push(
-        axios.delete(
-          `${tempAbortedObj[id].serviceUrl}/management/processes/${tempAbortedObj[id].processId}/instances/${tempAbortedObj[id].id}`
-        )
-      );
-    });
-    setModalTitle('Abort operation');
-    Promise.all(promiseArray)
-      .then(() => {
-        setTitleType('success');
-        setAbortedMessageObj(tempAbortedObj);
-        setCompletedMessageObj(completedAndAborted);
-        handleAbortModalToggle();
-      })
-      .catch(() => {
-        setTitleType('failure');
-        setAbortedMessageObj(tempAbortedObj);
-        setCompletedMessageObj(completedAndAborted);
-        handleAbortModalToggle();
-      });
-  };
-
   if (error || getProcessInstancesWithBK.error) {
     return (
       <ServerErrors error={error ? error : getProcessInstancesWithBK.error} />
@@ -270,16 +184,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
   }
   return (
     <React.Fragment>
-      <ProcessListModal
-        modalTitle={setTitle(titleType, modalTitle)}
-        isModalOpen={isAbortModalOpen}
-        abortedMessageObj={abortedMessageObj}
-        completedMessageObj={completedMessageObj}
-        isAbortModalOpen={isAbortModalOpen}
-        checkedArray={checkedArray}
-        handleModalToggle={handleAbortModalToggle}
-        isSingleAbort={false}
-      />
       <PageSection variant="light">
         <PageTitle title="Process Instances" />
         <Breadcrumb>
@@ -305,9 +209,8 @@ const ProcessListPage: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
                     setFilters={setFilters}
                     initData={initData}
                     setInitData={setInitData}
-                    abortedObj={abortedObj}
-                    setAbortedObj={setAbortedObj}
-                    handleAbortAll={handleAbortAll}
+                    selectedInstances={abortedObj}
+                    setSelectedInstances={setAbortedObj}
                     getProcessInstances={getProcessInstances}
                     setSearchWord={setSearchWord}
                     searchWord={searchWord}

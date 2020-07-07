@@ -16,14 +16,26 @@ import {
   DropdownToggle,
   DropdownToggleCheckbox,
   DropdownItem,
-  DropdownPosition
+  DropdownPosition,
+  OverflowMenuControl,
+  OverflowMenuContent,
+  KebabToggle,
+  OverflowMenu,
+  OverflowMenuItem
 } from '@patternfly/react-core';
 import { FilterIcon, SyncIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
 import './ProcessListToolbar.css';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
-
+import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
+import {
+  handleMultipleAbort,
+  handleMultipleRetry,
+  handleMultipleSkip,
+  setTitle
+} from '../../../utils/Utils';
+/* tslint:disable:no-string-literal */
 interface IOwnProps {
   checkedArray: any;
   filterClick: any;
@@ -33,9 +45,8 @@ interface IOwnProps {
   setFilters: any;
   initData: any;
   setInitData: any;
-  abortedObj: any;
-  setAbortedObj: any;
-  handleAbortAll: any;
+  selectedInstances: any;
+  setSelectedInstances: any;
   getProcessInstances: (options: any) => void;
   setSearchWord: (searchWord: string) => void;
   searchWord: string;
@@ -51,8 +62,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
   filters,
   setFilters,
   setIsStatusSelected,
-  abortedObj,
-  handleAbortAll,
+  selectedInstances,
   getProcessInstances,
   setSearchWord,
   searchWord,
@@ -60,7 +70,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
   initData,
   setInitData,
   setIsAllChecked,
-  setAbortedObj,
+  setSelectedInstances,
   selectedNumber,
   setSelectedNumber
 }) => {
@@ -68,6 +78,24 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
   const [isFilterClicked, setIsFilterClicked] = useState<boolean>(false);
   const [shouldRefresh, setShouldRefresh] = useState<boolean>(true);
   const [isCheckboxDropdownOpen, setisCheckboxDropdownOpen] = useState(false);
+  const [ignoredInstances, setIgnoredInstances] = useState({});
+  const [requiredInstances, setRequiredInstances] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>('');
+  const [titleType, setTitleType] = useState<string>('');
+  const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
+
+  const onProcessManagementButtonSelect = () => {
+    setIsKebabOpen(!isKebabOpen);
+  };
+
+  const onProcessManagementKebabToggle = isOpen => {
+    setIsKebabOpen(isOpen);
+  };
+
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   const onFilterClick = () => {
     if (checkedArray.length === 0) {
@@ -87,6 +115,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     const selection = event.target.id;
     setIsFilterClicked(false);
     setShouldRefresh(false);
+    /* istanbul ignore else */
     if (selection) {
       const index = checkedArray.indexOf(selection);
       if (index === -1) {
@@ -167,6 +196,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
   };
 
   const onRefreshClick = () => {
+    /* istanbul ignore else */
     if (shouldRefresh && checkedArray.length !== 0) {
       filterClick(checkedArray);
     }
@@ -184,6 +214,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     }
   };
   const handleEnterClick = e => {
+    /* istanbul ignore else */
     if (e.key === 'Enter') {
       setShouldRefresh(true);
       filterClick(checkedArray);
@@ -194,30 +225,34 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
   };
 
   const handleCheckboxSelectClick = (selection, isCheckboxClicked) => {
+    /* istanbul ignore else */
+
     if (selection === 'none') {
       setIsAllChecked(false);
       setSelectedNumber(0);
       const copyOfInitData = { ...initData };
-      const copyOfAbortedObj = { ...abortedObj };
+      const copyOfSelectedInstances = { ...selectedInstances };
       copyOfInitData.ProcessInstances.map(instance => {
-        delete copyOfAbortedObj[instance.id];
+        delete copyOfSelectedInstances[instance.id];
         instance.isChecked = false;
+        /* istanbul ignore else */
         if (instance.childDataList !== undefined && instance.isOpen) {
           instance.childDataList.map(child => {
-            delete copyOfAbortedObj[child.id];
+            delete copyOfSelectedInstances[child.id];
             child.isChecked = false;
           });
         }
       });
-      setAbortedObj(copyOfAbortedObj);
+      setSelectedInstances(copyOfSelectedInstances);
       setInitData(copyOfInitData);
     } else if (selection === 'parent') {
       let parentSelectedNumber = 0;
       setIsAllChecked(true);
       const copyOfInitData = { ...initData };
-      let copyOfAbortedObj = { ...abortedObj };
+      let copyOfSelectedInstances = { ...selectedInstances };
       copyOfInitData.ProcessInstances.map(instance => {
         const tempObj = {};
+        /* istanbul ignore else */
         if (
           instance.addons.includes('process-management') &&
           instance.serviceUrl !== null
@@ -226,24 +261,26 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
           tempObj[instance.id] = instance;
           parentSelectedNumber += 1;
         }
+        /* istanbul ignore else */
         if (instance.childDataList !== undefined && instance.isOpen) {
           instance.childDataList.map(child => {
-            delete copyOfAbortedObj[child.id];
+            delete copyOfSelectedInstances[child.id];
             child.isChecked = false;
           });
         }
-        copyOfAbortedObj = { ...copyOfAbortedObj, ...tempObj };
+        copyOfSelectedInstances = { ...copyOfSelectedInstances, ...tempObj };
       });
       setSelectedNumber(parentSelectedNumber);
-      setAbortedObj(copyOfAbortedObj);
+      setSelectedInstances(copyOfSelectedInstances);
       setInitData(copyOfInitData);
     } else if (selection === 'parent&child') {
       let allSelected = 0;
       setIsAllChecked(true);
       const copyOfInitData = { ...initData };
-      let copyOfAbortedObj = { ...abortedObj };
+      let copyOfSelectedInstances = { ...selectedInstances };
       copyOfInitData.ProcessInstances.map(instance => {
         const tempObj = {};
+        /* istanbul ignore else */
         if (
           instance.addons.includes('process-management') &&
           instance.serviceUrl !== null
@@ -252,8 +289,10 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
           tempObj[instance.id] = instance;
           allSelected += 1;
         }
+        /* istanbul ignore else */
         if (instance.childDataList !== undefined && instance.isOpen) {
           instance.childDataList.map(child => {
+            /* istanbul ignore else */
             if (
               child.addons.includes('process-management') &&
               instance.serviceUrl !== null
@@ -264,10 +303,10 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
             }
           });
         }
-        copyOfAbortedObj = { ...copyOfAbortedObj, ...tempObj };
+        copyOfSelectedInstances = { ...copyOfSelectedInstances, ...tempObj };
       });
       setSelectedNumber(allSelected);
-      setAbortedObj(copyOfAbortedObj);
+      setSelectedInstances(copyOfSelectedInstances);
       setInitData(copyOfInitData);
     }
     if (!isCheckboxClicked) {
@@ -276,25 +315,25 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
       if (isAllChecked) {
         setIsAllChecked(false);
         const copyOfInitData = { ...initData };
-        const copyOfAbortedObj = { ...abortedObj };
+        const copyOfSelectedInstances = { ...selectedInstances };
         copyOfInitData.ProcessInstances.map(instance => {
-          delete copyOfAbortedObj[instance.id];
+          delete copyOfSelectedInstances[instance.id];
           instance.isChecked = false;
           if (instance.childDataList !== undefined && instance.isOpen) {
             instance.childDataList.map(child => {
-              delete copyOfAbortedObj[child.id];
+              delete copyOfSelectedInstances[child.id];
               child.isChecked = false;
             });
           }
         });
         setSelectedNumber(0);
-        setAbortedObj(copyOfAbortedObj);
+        setSelectedInstances(copyOfSelectedInstances);
         setInitData(copyOfInitData);
       } else {
         let allSelected = 0;
         setIsAllChecked(true);
         const copyOfInitData = { ...initData };
-        let copyOfAbortedObj = { ...abortedObj };
+        let copyOfSelectedInstances = { ...selectedInstances };
         copyOfInitData.ProcessInstances.map(instance => {
           const tempObj = {};
           if (
@@ -317,13 +356,102 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
               }
             });
           }
-          copyOfAbortedObj = { ...copyOfAbortedObj, ...tempObj };
+          copyOfSelectedInstances = { ...copyOfSelectedInstances, ...tempObj };
         });
         setSelectedNumber(allSelected);
-        setAbortedObj(copyOfAbortedObj);
+        setSelectedInstances(copyOfSelectedInstances);
         setInitData(copyOfInitData);
       }
     }
+  };
+
+  const onShowMessage = (title, type) => {
+    setModalTitle(title);
+    setTitleType(type);
+    handleModalToggle();
+  };
+
+  const handleMultiAbort = () => {
+    const instancesToBeIgnored = {};
+    for (const [id, processInstance] of Object.entries(selectedInstances)) {
+      initData.ProcessInstances.map(instance => {
+        if (instance.id === id) {
+          if (
+            processInstance['state'] === ProcessInstanceState.Aborted ||
+            processInstance['state'] === ProcessInstanceState.Completed
+          ) {
+            instancesToBeIgnored[id] = processInstance;
+            delete selectedInstances[id];
+          } else {
+            instance.state = ProcessInstanceState.Aborted;
+          }
+        }
+        /* istanbul ignore else */
+        if (instance.childDataList && instance.childDataList.length !== 0) {
+          instance.childDataList.map(childData => {
+            if (childData.id === id) {
+              if (
+                processInstance['state'] === ProcessInstanceState.Aborted ||
+                processInstance['state'] === ProcessInstanceState.Completed
+              ) {
+                instancesToBeIgnored[id] = processInstance;
+                delete selectedInstances[id];
+              } else {
+                childData.state = ProcessInstanceState.Aborted;
+              }
+            }
+          });
+        }
+      });
+    }
+    setRequiredInstances(selectedInstances);
+    setIgnoredInstances(instancesToBeIgnored);
+    handleMultipleAbort(
+      selectedInstances,
+      () => onShowMessage('Abort operation', 'success'),
+      () => onShowMessage('Abort operation', 'failure')
+    );
+  };
+
+  const handleMultiRetryOrSkip = operationType => {
+    const instancesToBeIgnored = {};
+    for (const [id, processInstance] of Object.entries(selectedInstances)) {
+      // tslint:disable-next-line
+      if (processInstance['state'] !== ProcessInstanceState.Error) {
+        instancesToBeIgnored[id] = processInstance;
+        delete selectedInstances[id];
+      }
+    }
+    setRequiredInstances(selectedInstances);
+    setIgnoredInstances(instancesToBeIgnored);
+    /* istanbul ignore else */
+    if (operationType === 'Retry') {
+      handleMultipleRetry(
+        selectedInstances,
+        () => onShowMessage('Retry operation', 'success'),
+        () => onShowMessage('Retry operation', 'failure')
+      );
+    } else if (operationType === 'Skip') {
+      handleMultipleSkip(
+        selectedInstances,
+        () => onShowMessage('Skip operation', 'success'),
+        () => onShowMessage('Skip operation', 'failure')
+      );
+    }
+  };
+
+  const resetSelected = () => {
+    initData.ProcessInstances.map(processInstance => {
+      processInstance['isChecked'] = false;
+      processInstance['childDataList'] &&
+        processInstance['childDataList'].length !== 0 &&
+        processInstance['childDataList'].map(
+          child => (child['isChecked'] = false)
+        );
+    });
+    setSelectedInstances({});
+    setSelectedNumber(0);
+    setIsAllChecked(false);
   };
 
   const checkboxItems = [
@@ -357,6 +485,92 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     <SelectOption key="ABORTED" value="ABORTED" />,
     <SelectOption key="SUSPENDED" value="SUSPENDED" />
   ];
+
+  const dropdownItemsProcesManagementButtons = () => {
+    if (Object.keys(selectedInstances).length !== 0) {
+      return [
+        <DropdownItem key="abort" onClick={handleMultiAbort}>
+          Abort selected
+        </DropdownItem>,
+        <DropdownItem key="skip" onClick={() => handleMultiRetryOrSkip('Skip')}>
+          Skip selected
+        </DropdownItem>,
+        <DropdownItem
+          key="retry"
+          onClick={() => handleMultiRetryOrSkip('Retry')}
+        >
+          Retry selected
+        </DropdownItem>
+      ];
+    } else {
+      return [
+        <DropdownItem key="abort" isDisabled>
+          Abort selected
+        </DropdownItem>,
+        <DropdownItem key="skip" isDisabled>
+          Skip selected
+        </DropdownItem>,
+        <DropdownItem key="retry" isDisabled>
+          Retry selected
+        </DropdownItem>
+      ];
+    }
+  };
+
+  const buttonItems = (
+    <OverflowMenu breakpoint="xl">
+      <OverflowMenuContent>
+        <OverflowMenuItem>
+          {Object.keys(selectedInstances).length !== 0 ? (
+            <Button variant="secondary" onClick={handleMultiAbort}>
+              Abort selected
+            </Button>
+          ) : (
+            <Button variant="secondary" isDisabled>
+              Abort selected
+            </Button>
+          )}
+        </OverflowMenuItem>
+        <OverflowMenuItem>
+          {Object.keys(selectedInstances).length !== 0 ? (
+            <Button
+              variant="secondary"
+              onClick={() => handleMultiRetryOrSkip('Skip')}
+            >
+              Skip selected
+            </Button>
+          ) : (
+            <Button variant="secondary" isDisabled>
+              Skip selected
+            </Button>
+          )}
+        </OverflowMenuItem>
+        <OverflowMenuItem>
+          {Object.keys(selectedInstances).length !== 0 ? (
+            <Button
+              variant="secondary"
+              onClick={() => handleMultiRetryOrSkip('Retry')}
+            >
+              Retry selected
+            </Button>
+          ) : (
+            <Button variant="secondary" isDisabled>
+              Retry selected
+            </Button>
+          )}
+        </OverflowMenuItem>
+      </OverflowMenuContent>
+      <OverflowMenuControl>
+        <Dropdown
+          onSelect={onProcessManagementButtonSelect}
+          toggle={<KebabToggle onToggle={onProcessManagementKebabToggle} />}
+          isOpen={isKebabOpen}
+          isPlain
+          dropdownItems={dropdownItemsProcesManagementButtons()}
+        />
+      </OverflowMenuControl>
+    </OverflowMenu>
+  );
 
   const toggleGroupItems = (
     <React.Fragment>
@@ -440,22 +654,6 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     </React.Fragment>
   );
 
-  const buttonItems = (
-    <React.Fragment>
-      <DataToolbarItem>
-        {Object.keys(abortedObj).length !== 0 ? (
-          <Button variant="secondary" onClick={handleAbortAll}>
-            Abort selected
-          </Button>
-        ) : (
-          <Button variant="secondary" isDisabled>
-            Abort selected
-          </Button>
-        )}
-      </DataToolbarItem>
-    </React.Fragment>
-  );
-
   const toolbarItems = (
     <React.Fragment>
       <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
@@ -474,20 +672,35 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
         </DataToolbarItem>
       </DataToolbarGroup>
       <DataToolbarItem variant="separator" />
-      <DataToolbarGroup className="pf-u-ml-md">{buttonItems}</DataToolbarGroup>
+      <DataToolbarGroup className="pf-u-ml-md" id="process-management-buttons">
+        {buttonItems}
+      </DataToolbarGroup>
     </React.Fragment>
   );
 
   return (
-    <DataToolbar
-      id="data-toolbar-with-filter"
-      className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
-      collapseListedFiltersBreakpoint="xl"
-      clearAllFilters={() => clearAll()}
-      clearFiltersButtonText="Reset to default"
-    >
-      <DataToolbarContent>{toolbarItems}</DataToolbarContent>
-    </DataToolbar>
+    <>
+      <ProcessListModal
+        modalTitle={setTitle(titleType, modalTitle)}
+        isModalOpen={isModalOpen}
+        requiredInstances={requiredInstances}
+        ignoredInstances={ignoredInstances}
+        checkedArray={checkedArray}
+        handleModalToggle={handleModalToggle}
+        isSingleAbort={false}
+        resetSelected={resetSelected}
+        titleString={modalTitle}
+      />
+      <DataToolbar
+        id="data-toolbar-with-filter"
+        className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
+        collapseListedFiltersBreakpoint="xl"
+        clearAllFilters={() => clearAll()}
+        clearFiltersButtonText="Reset to default"
+      >
+        <DataToolbarContent>{toolbarItems}</DataToolbarContent>
+      </DataToolbar>
+    </>
   );
 };
 

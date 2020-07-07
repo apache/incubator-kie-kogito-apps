@@ -38,6 +38,7 @@ import {
   stateIconCreator
 } from '../../../utils/Utils';
 import ProcessInstance = GraphQL.ProcessInstance;
+/* tslint:disable:no-empty */
 
 interface IOwnProps {
   id: number;
@@ -326,11 +327,11 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
         checkedArray={checkedArray}
         modalTitle={setTitle(titleType, modalTitle)}
         isSingleAbort={true}
-        abortedMessageObj={{
+        requiredInstances={{
           [processInstanceData.id]: processInstanceData
         }}
-        completedMessageObj={{}}
-        isAbortModalOpen={isAbortModalOpen}
+        ignoredInstances={{}}
+        resetSelected={() => {}}
       />
       <ProcessListModal
         isModalOpen={isModalOpen}

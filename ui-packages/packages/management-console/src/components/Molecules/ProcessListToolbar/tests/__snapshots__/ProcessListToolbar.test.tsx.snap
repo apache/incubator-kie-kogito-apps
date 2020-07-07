@@ -1,108 +1,106 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
-<DataToolbar
-  className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
-  clearAllFilters={[Function]}
-  clearFiltersButtonText="Reset to default"
-  collapseListedFiltersBreakpoint="xl"
-  id="data-toolbar-with-filter"
->
-  <DataToolbarContent
-    breakpointMods={Array []}
-    isExpanded={false}
-    showClearFiltersButton={false}
+<Fragment>
+  <MockedProcessListModal
+    checkedArray={
+      Array [
+        "ACTIVE",
+        "COMPLETED",
+        "ERROR",
+        "ABORTED",
+        "SUSPENDED",
+      ]
+    }
+    handleModalToggle={[Function]}
+    ignoredInstances={Object {}}
+    isModalOpen={false}
+    isSingleAbort={false}
+    requiredInstances={Object {}}
+    resetSelected={[Function]}
+    titleString=""
+  />
+  <DataToolbar
+    className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
+    clearAllFilters={[Function]}
+    clearFiltersButtonText="Reset to default"
+    collapseListedFiltersBreakpoint="xl"
+    id="data-toolbar-with-filter"
   >
-    <DataToolbarToggleGroup
-      breakpoint="xl"
+    <DataToolbarContent
       breakpointMods={Array []}
-      toggleIcon={
-        <FilterIcon
-          color="currentColor"
-          noVerticalAlign={false}
-          size="sm"
-          title={null}
-        />
-      }
+      isExpanded={false}
+      showClearFiltersButton={false}
     >
-      <ForwardRef
-        variant="filter-group"
-      >
-        <DataToolbarItem
-          id="bulk-select"
-          variant="bulk-select"
-        >
-          <Dropdown
-            dropdownItems={
-              Array [
-                <DropdownItem
-                  id="none"
-                  onClick={[Function]}
-                >
-                  Select none
-                </DropdownItem>,
-                <DropdownItem
-                  id="all-parent"
-                  onClick={[Function]}
-                >
-                  Select all parent processes
-                </DropdownItem>,
-                <DropdownItem
-                  id="all-parent-child"
-                  onClick={[Function]}
-                >
-                  Select all processes
-                </DropdownItem>,
-              ]
-            }
-            isOpen={false}
-            position="left"
-            toggle={
-              <DropdownToggle
-                onToggle={[Function]}
-                splitButtonItems={
-                  Array [
-                    <DropdownToggleCheckbox
-                      aria-label="Select all"
-                      className=""
-                      id="select-all-checkbox"
-                      isChecked={true}
-                      isDisabled={false}
-                      isValid={true}
-                      onChange={[Function]}
-                    />,
-                  ]
-                }
-              >
-                
-              </DropdownToggle>
-            }
+      <DataToolbarToggleGroup
+        breakpoint="xl"
+        breakpointMods={Array []}
+        toggleIcon={
+          <FilterIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+            title={null}
           />
-        </DataToolbarItem>
-        <DataToolbarFilter
-          categoryName="Status"
-          chips={
-            Array [
-              "ACTIVE",
-              "COMPLETED",
-              "ERROR",
-              "ABORTED",
-              "SUSPENDED",
-            ]
-          }
-          className="kogito-management-console__state-dropdown-list pf-u-mr-sm"
-          deleteChip={[Function]}
-          id="datatoolbar-filter-status"
-          showToolbarItem={true}
+        }
+      >
+        <ForwardRef
+          variant="filter-group"
         >
-          <Component
-            aria-label="Status"
-            id="status-select"
-            isExpanded={false}
-            onSelect={[Function]}
-            onToggle={[Function]}
-            placeholderText="Status"
-            selections={
+          <DataToolbarItem
+            id="bulk-select"
+            variant="bulk-select"
+          >
+            <Dropdown
+              dropdownItems={
+                Array [
+                  <DropdownItem
+                    id="none"
+                    onClick={[Function]}
+                  >
+                    Select none
+                  </DropdownItem>,
+                  <DropdownItem
+                    id="all-parent"
+                    onClick={[Function]}
+                  >
+                    Select all parent processes
+                  </DropdownItem>,
+                  <DropdownItem
+                    id="all-parent-child"
+                    onClick={[Function]}
+                  >
+                    Select all processes
+                  </DropdownItem>,
+                ]
+              }
+              isOpen={false}
+              position="left"
+              toggle={
+                <DropdownToggle
+                  onToggle={[Function]}
+                  splitButtonItems={
+                    Array [
+                      <DropdownToggleCheckbox
+                        aria-label="Select all"
+                        className=""
+                        id="select-all-checkbox"
+                        isChecked={true}
+                        isDisabled={false}
+                        isValid={true}
+                        onChange={[Function]}
+                      />,
+                    ]
+                  }
+                >
+                  
+                </DropdownToggle>
+              }
+            />
+          </DataToolbarItem>
+          <DataToolbarFilter
+            categoryName="Status"
+            chips={
               Array [
                 "ACTIVE",
                 "COMPLETED",
@@ -111,160 +109,236 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                 "SUSPENDED",
               ]
             }
-            variant="checkbox"
+            className="kogito-management-console__state-dropdown-list pf-u-mr-sm"
+            deleteChip={[Function]}
+            id="datatoolbar-filter-status"
+            showToolbarItem={true}
           >
-            <SelectOption
-              className=""
-              component="button"
-              index={0}
-              isChecked={false}
-              isDisabled={false}
-              isFocused={false}
-              isNoResultsOption={false}
-              isPlaceholder={false}
-              isSelected={false}
-              key="ACTIVE"
-              keyHandler={[Function]}
+            <Component
+              aria-label="Status"
+              id="status-select"
+              isExpanded={false}
+              onSelect={[Function]}
+              onToggle={[Function]}
+              placeholderText="Status"
+              selections={
+                Array [
+                  "ACTIVE",
+                  "COMPLETED",
+                  "ERROR",
+                  "ABORTED",
+                  "SUSPENDED",
+                ]
+              }
+              variant="checkbox"
+            >
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                key="ACTIVE"
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="ACTIVE"
+              />
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                key="COMPLETED"
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="COMPLETED"
+              />
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                key="ERROR"
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="ERROR"
+              />
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                key="ABORTED"
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="ABORTED"
+              />
+              <SelectOption
+                className=""
+                component="button"
+                index={0}
+                isChecked={false}
+                isDisabled={false}
+                isFocused={false}
+                isNoResultsOption={false}
+                isPlaceholder={false}
+                isSelected={false}
+                key="SUSPENDED"
+                keyHandler={[Function]}
+                onClick={[Function]}
+                sendRef={[Function]}
+                value="SUSPENDED"
+              />
+            </Component>
+          </DataToolbarFilter>
+          <DataToolbarFilter
+            categoryName="Business key"
+            chips={
+              Array [
+                "tra",
+              ]
+            }
+            deleteChip={[Function]}
+            id="datatoolbar-filter-businesskey"
+            showToolbarItem={true}
+          >
+            <InputGroup>
+              <ForwardRef
+                aria-label="business key"
+                id="businessKey"
+                isDisabled={false}
+                name="businessKey"
+                onChange={[Function]}
+                onKeyPress={[Function]}
+                placeholder="Filter by business key"
+                type="search"
+                value=""
+              />
+            </InputGroup>
+          </DataToolbarFilter>
+          <DataToolbarItem>
+            <Component
+              id="Apply-filter-button"
               onClick={[Function]}
-              sendRef={[Function]}
-              value="ACTIVE"
-            />
-            <SelectOption
-              className=""
-              component="button"
-              index={0}
-              isChecked={false}
-              isDisabled={false}
-              isFocused={false}
-              isNoResultsOption={false}
-              isPlaceholder={false}
-              isSelected={false}
-              key="COMPLETED"
-              keyHandler={[Function]}
-              onClick={[Function]}
-              sendRef={[Function]}
-              value="COMPLETED"
-            />
-            <SelectOption
-              className=""
-              component="button"
-              index={0}
-              isChecked={false}
-              isDisabled={false}
-              isFocused={false}
-              isNoResultsOption={false}
-              isPlaceholder={false}
-              isSelected={false}
-              key="ERROR"
-              keyHandler={[Function]}
-              onClick={[Function]}
-              sendRef={[Function]}
-              value="ERROR"
-            />
-            <SelectOption
-              className=""
-              component="button"
-              index={0}
-              isChecked={false}
-              isDisabled={false}
-              isFocused={false}
-              isNoResultsOption={false}
-              isPlaceholder={false}
-              isSelected={false}
-              key="ABORTED"
-              keyHandler={[Function]}
-              onClick={[Function]}
-              sendRef={[Function]}
-              value="ABORTED"
-            />
-            <SelectOption
-              className=""
-              component="button"
-              index={0}
-              isChecked={false}
-              isDisabled={false}
-              isFocused={false}
-              isNoResultsOption={false}
-              isPlaceholder={false}
-              isSelected={false}
-              key="SUSPENDED"
-              keyHandler={[Function]}
-              onClick={[Function]}
-              sendRef={[Function]}
-              value="SUSPENDED"
-            />
-          </Component>
-        </DataToolbarFilter>
-        <DataToolbarFilter
-          categoryName="Business key"
-          chips={
-            Array [
-              "tra",
-            ]
-          }
-          deleteChip={[Function]}
-          id="datatoolbar-filter-businesskey"
-          showToolbarItem={true}
-        >
-          <InputGroup>
-            <ForwardRef
-              aria-label="business key"
-              id="businessKey"
-              isDisabled={false}
-              name="businessKey"
-              onChange={[Function]}
-              onKeyPress={[Function]}
-              placeholder="Filter by business key"
-              type="search"
-              value=""
-            />
-          </InputGroup>
-        </DataToolbarFilter>
+              variant="primary"
+            >
+              Apply filter
+            </Component>
+          </DataToolbarItem>
+        </ForwardRef>
+      </DataToolbarToggleGroup>
+      <ForwardRef
+        variant="icon-button-group"
+      >
         <DataToolbarItem>
           <Component
-            id="Apply-filter-button"
+            aria-label="Refresh list"
+            id="refresh-button"
             onClick={[Function]}
-            variant="primary"
+            variant="plain"
           >
-            Apply filter
+            <SyncIcon
+              color="currentColor"
+              noVerticalAlign={false}
+              size="sm"
+              title={null}
+            />
           </Component>
         </DataToolbarItem>
       </ForwardRef>
-    </DataToolbarToggleGroup>
-    <ForwardRef
-      variant="icon-button-group"
-    >
-      <DataToolbarItem>
-        <Component
-          aria-label="Refresh list"
-          id="refresh-button"
-          onClick={[Function]}
-          variant="plain"
+      <DataToolbarItem
+        variant="separator"
+      />
+      <ForwardRef
+        className="pf-u-ml-md"
+        id="process-management-buttons"
+      >
+        <OverflowMenu
+          breakpoint="xl"
         >
-          <SyncIcon
-            color="currentColor"
-            noVerticalAlign={false}
-            size="sm"
-            title={null}
-          />
-        </Component>
-      </DataToolbarItem>
-    </ForwardRef>
-    <DataToolbarItem
-      variant="separator"
-    />
-    <ForwardRef
-      className="pf-u-ml-md"
-    >
-      <DataToolbarItem>
-        <Component
-          onClick={[MockFunction]}
-          variant="secondary"
-        >
-          Abort selected
-        </Component>
-      </DataToolbarItem>
-    </ForwardRef>
-  </DataToolbarContent>
-</DataToolbar>
+          <OverflowMenuContent>
+            <OverflowMenuItem>
+              <Component
+                isDisabled={true}
+                variant="secondary"
+              >
+                Abort selected
+              </Component>
+            </OverflowMenuItem>
+            <OverflowMenuItem>
+              <Component
+                isDisabled={true}
+                variant="secondary"
+              >
+                Skip selected
+              </Component>
+            </OverflowMenuItem>
+            <OverflowMenuItem>
+              <Component
+                isDisabled={true}
+                variant="secondary"
+              >
+                Retry selected
+              </Component>
+            </OverflowMenuItem>
+          </OverflowMenuContent>
+          <OverflowMenuControl>
+            <Dropdown
+              dropdownItems={
+                Array [
+                  <DropdownItem
+                    isDisabled={true}
+                  >
+                    Abort selected
+                  </DropdownItem>,
+                  <DropdownItem
+                    isDisabled={true}
+                  >
+                    Skip selected
+                  </DropdownItem>,
+                  <DropdownItem
+                    isDisabled={true}
+                  >
+                    Retry selected
+                  </DropdownItem>,
+                ]
+              }
+              isOpen={false}
+              isPlain={true}
+              onSelect={[Function]}
+              toggle={
+                <KebabToggle
+                  onToggle={[Function]}
+                />
+              }
+            />
+          </OverflowMenuControl>
+        </OverflowMenu>
+      </ForwardRef>
+    </DataToolbarContent>
+  </DataToolbar>
+</Fragment>
 `;

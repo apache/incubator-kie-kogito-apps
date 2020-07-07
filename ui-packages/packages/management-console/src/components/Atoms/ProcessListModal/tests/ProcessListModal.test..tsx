@@ -4,7 +4,7 @@ import ProcessListModal from '../ProcessListModal';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
-
+/* tslint:disable:no-string-literal */
 const props = {
   modalTitle: (
     <>
@@ -20,7 +20,7 @@ const props = {
   checkedArray: [],
   isAbortModalOpen: true,
   modalContent: '',
-  abortedMessageObj: {
+  requiredInstances: {
     '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
       id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
       processId: 'travels',
@@ -133,7 +133,7 @@ const props = {
       childProcessInstances: []
     }
   },
-  completedMessageObj: {
+  ignoredInstances: {
     'e735128t-6tt7-4aa8-9ec0-e18e19809e0b': {
       id: 'e735128t-6tt7-4aa8-9ec0-e18e19809e0b',
       processId: 'travels',
@@ -240,12 +240,19 @@ const props = {
       ],
       childProcessInstances: []
     }
-  }
+  },
+  resetSelected: jest.fn()
 };
 
 describe('ProcessBulkModal component tests', () => {
   it('snapshot testing', () => {
     const wrapper = shallow(<ProcessListModal {...props} />);
     expect(wrapper).toMatchSnapshot();
+  });
+  it('Ok click test', () => {
+    const wrapper = shallow(<ProcessListModal {...props} />);
+    wrapper.props()['actions'][0]['props']['onClick']();
+    expect(props.resetSelected).toHaveBeenCalled();
+    expect(props.handleModalToggle).toHaveBeenCalled();
   });
 });

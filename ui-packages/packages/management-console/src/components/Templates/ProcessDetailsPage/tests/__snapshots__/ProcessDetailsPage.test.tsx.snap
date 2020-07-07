@@ -160,7 +160,16 @@ exports[`Process Details Page component tests snapshot testing in Active state 1
       className="pf-c-page__main-section pf-m-light"
     >
       <MockedProcessListModal
-        abortedMessageObj={
+        checkedArray={
+          Array [
+            "ACTIVE",
+          ]
+        }
+        handleModalToggle={[Function]}
+        ignoredInstances={Object {}}
+        isModalOpen={false}
+        isSingleAbort={true}
+        requiredInstances={
           Object {
             "8035b580-6ae4-4aa8-9ec0-e18e19809e0b": Object {
               "addons": Array [
@@ -199,16 +208,6 @@ exports[`Process Details Page component tests snapshot testing in Active state 1
             },
           }
         }
-        checkedArray={
-          Array [
-            "ACTIVE",
-          ]
-        }
-        completedMessageObj={Object {}}
-        handleModalToggle={[Function]}
-        isAbortModalOpen={false}
-        isModalOpen={false}
-        isSingleAbort={true}
       />
       <PageTitle
         title="Process Details"
@@ -884,7 +883,16 @@ exports[`Process Details Page component tests snapshot testing in Error state 1`
       className="pf-c-page__main-section pf-m-light"
     >
       <MockedProcessListModal
-        abortedMessageObj={
+        checkedArray={
+          Array [
+            "ERROR",
+          ]
+        }
+        handleModalToggle={[Function]}
+        ignoredInstances={Object {}}
+        isModalOpen={false}
+        isSingleAbort={true}
+        requiredInstances={
           Object {
             "8035b580-6ae4-4aa8-9ec0-e18e19809e0b": Object {
               "addons": Array [],
@@ -921,16 +929,6 @@ exports[`Process Details Page component tests snapshot testing in Error state 1`
             },
           }
         }
-        checkedArray={
-          Array [
-            "ERROR",
-          ]
-        }
-        completedMessageObj={Object {}}
-        handleModalToggle={[Function]}
-        isAbortModalOpen={false}
-        isModalOpen={false}
-        isSingleAbort={true}
       />
       <PageTitle
         title="Process Details"
@@ -1593,7 +1591,16 @@ exports[`Process Details Page component tests snapshot testing in Suspended stat
       className="pf-c-page__main-section pf-m-light"
     >
       <MockedProcessListModal
-        abortedMessageObj={
+        checkedArray={
+          Array [
+            "SUSPENDED",
+          ]
+        }
+        handleModalToggle={[Function]}
+        ignoredInstances={Object {}}
+        isModalOpen={false}
+        isSingleAbort={true}
+        requiredInstances={
           Object {
             "8035b580-6ae4-4aa8-9ec0-e18e19809e0b": Object {
               "addons": Array [
@@ -1632,16 +1639,6 @@ exports[`Process Details Page component tests snapshot testing in Suspended stat
             },
           }
         }
-        checkedArray={
-          Array [
-            "SUSPENDED",
-          ]
-        }
-        completedMessageObj={Object {}}
-        handleModalToggle={[Function]}
-        isAbortModalOpen={false}
-        isModalOpen={false}
-        isSingleAbort={true}
       />
       <PageTitle
         title="Process Details"

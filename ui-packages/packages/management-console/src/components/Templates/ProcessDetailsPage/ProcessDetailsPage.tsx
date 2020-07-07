@@ -144,13 +144,12 @@ const ProcessDetailsPage: React.FC<
               checkedArray={data && [data.ProcessInstances[0].state]}
               modalTitle={setTitle(titleType, modalTitle)}
               isSingleAbort={true}
-              abortedMessageObj={
+              requiredInstances={
                 data && {
                   [data.ProcessInstances[0].id]: data.ProcessInstances[0]
                 }
               }
-              completedMessageObj={{}}
-              isAbortModalOpen={isAbortModalOpen}
+              ignoredInstances={{}}
             />
             <PageTitle title="Process Details" />
             {!loading ? (
