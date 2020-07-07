@@ -1,0 +1,56 @@
+{
+  "executedModelName": "Traffic Violation",
+  "executionId": "82639415-ceb1-411a-b3c8-4832e6a82905",
+  "executionTimestamp": 1594105482568,
+  "executionType": "DECISION",
+  "executorName": "John Doe",
+  "hasSucceeded": true,
+  "inputs": [
+    {
+      "name": "Violation",
+      "typeRef": "_40731093-0642-4588-9183-1660FC55053B",
+      "value": {
+        "Type": "speed",
+        "Actual Speed": 140,
+        "Speed Limit": 100
+      }
+    },
+    {
+      "name": "Driver",
+      "typeRef": "_63824D3F-9173-446D-A940-6A7F0FA056BB",
+      "value": {
+        "Age": 25,
+        "Points": 13
+      }
+    }
+  ],
+  "outcomes": [
+    {
+      "evaluationStatus": "SUCCEEDED",
+      "messages": null,
+      "outcomeId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+      "outcomeInputs": null,
+      "outcomeName": "Fine",
+      "outcomeResult": {
+        "name": "Fine",
+        "typeRef": "_2D4F30EE-21A6-4A78-A524-A5C238D433AE",
+        "value": {
+          "Points": 7,
+          "Amount": 1000
+        }
+      }
+    },
+    {
+      "evaluationStatus": "SUCCEEDED",
+      "messages": null,
+      "outcomeId": "_8A408366-D8E9-4626-ABF3-5F69AA01F880",
+      "outcomeInputs": null,
+      "outcomeName": "Should the driver be suspended?",
+      "outcomeResult": {
+        "name": "Should the driver be suspended?",
+        "typeRef": null,
+        "value": "Yes"
+      }
+    }
+  ]
+}

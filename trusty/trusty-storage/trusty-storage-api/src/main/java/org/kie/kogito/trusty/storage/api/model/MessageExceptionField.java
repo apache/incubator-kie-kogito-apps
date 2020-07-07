@@ -18,9 +18,12 @@ package org.kie.kogito.trusty.storage.api.model;
 
 public class MessageExceptionField {
 
-    private final String className;
-    private final String message;
-    private final MessageExceptionField cause;
+    private String className;
+    private String message;
+    private MessageExceptionField cause;
+
+    public MessageExceptionField() {
+    }
 
     public MessageExceptionField(String className, String message, MessageExceptionField cause) {
         this.className = className;

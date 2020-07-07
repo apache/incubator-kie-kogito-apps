@@ -1,0 +1,87 @@
+{
+  "executedModelName": "Traffic Violation",
+  "executionId": "6f8f5a8b-5477-464c-b5d3-1e3ed399e0da",
+  "executionTimestamp": 1594136494308,
+  "executionType": "DECISION",
+  "executorName": "John Doe",
+  "hasSucceeded": true,
+  "inputs": [
+    {
+      "name": "Violation",
+      "typeRef": "_40731093-0642-4588-9183-1660FC55053B",
+      "value": {
+        "Type": "speed",
+        "Actual Speed": 140,
+        "Speed Limit": 100
+      }
+    },
+    {
+      "name": "Driver",
+      "typeRef": "_63824D3F-9173-446D-A940-6A7F0FA056BB",
+      "value": null
+    }
+  ],
+  "outcomes": [
+    {
+      "evaluationStatus": "SUCCEEDED",
+      "messages": [
+        {
+          "category": "INTERNAL",
+          "exception": {
+            "cause": {
+              "cause": null,
+              "className": "ExceptionCauseClass",
+              "message": "Exception cause message"
+            },
+            "className": "ExceptionClass",
+            "message": "Exception message"
+          },
+          "level": "WARNING",
+          "sourceId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+          "text": "This is a warning test message",
+          "type": "WARNING_TEST_MESSAGE"
+        },
+        {
+          "category": "INTERNAL",
+          "exception": null,
+          "level": "INFO",
+          "sourceId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+          "text": "This is a info test message",
+          "type": "INFO_TEST_MESSAGE"
+        }
+      ],
+      "outcomeId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+      "outcomeInputs": null,
+      "outcomeName": "Fine",
+      "outcomeResult": {
+        "name": "Fine",
+        "typeRef": "_2D4F30EE-21A6-4A78-A524-A5C238D433AE",
+        "value": {
+          "Points": 7,
+          "Amount": 1000
+        }
+      }
+    },
+    {
+      "evaluationStatus": "SKIPPED",
+      "messages": [
+        {
+          "category": "DMN",
+          "exception": null,
+          "level": "ERROR",
+          "sourceId": "_8A408366-D8E9-4626-ABF3-5F69AA01F880",
+          "text": "DMN: Required dependency 'Driver' not found on node 'Should the driver be suspended?' (DMN id: _8A408366-D8E9-4626-ABF3-5F69AA01F880, The referenced node was not found) ",
+          "type": "REQ_NOT_FOUND"
+        }
+      ],
+      "outcomeId": "_8A408366-D8E9-4626-ABF3-5F69AA01F880",
+      "outcomeInputs": null,
+      "outcomeName": "Should the driver be suspended?",
+      "outcomeResult": {
+        "name": "Should the driver be suspended?",
+        "typeRef": null,
+        "value": null
+      }
+    }
+  ]
+}

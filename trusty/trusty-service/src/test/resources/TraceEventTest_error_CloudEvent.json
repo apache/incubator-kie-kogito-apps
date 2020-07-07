@@ -1,0 +1,158 @@
+{
+  "data": {
+    "header": {
+      "type": "DMN",
+      "executionId": "6f8f5a8b-5477-464c-b5d3-1e3ed399e0da",
+      "startTimestamp": 1594136494308,
+      "endTimestamp": 1594136494473,
+      "duration": 165,
+      "resourceId": {
+        "modelNamespace": "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF",
+        "modelName": "Traffic Violation"
+      }
+    },
+    "inputs": [
+      {
+        "id": "_1929CBD5-40E0-442D-B909-49CEDE0101DC",
+        "name": "Violation",
+        "type": {
+          "id": "_40731093-0642-4588-9183-1660FC55053B",
+          "namespace": "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF",
+          "name": "tViolation"
+        },
+        "value": {
+          "Type": "speed",
+          "Actual Speed": 140,
+          "Speed Limit": 100
+        }
+      },
+      {
+        "id": "_1F9350D7-146D-46F1-85D8-15B5B68AF22A",
+        "name": "Driver",
+        "type": {
+          "id": "_63824D3F-9173-446D-A940-6A7F0FA056BB",
+          "namespace": "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF",
+          "name": "tDriver"
+        }
+      }
+    ],
+    "outputs": [
+      {
+        "id": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+        "name": "Fine",
+        "status": "SUCCEEDED",
+        "type": {
+          "id": "_2D4F30EE-21A6-4A78-A524-A5C238D433AE",
+          "namespace": "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF",
+          "name": "tFine"
+        },
+        "value": {
+          "Points": 7,
+          "Amount": 1000
+        },
+        "messages": [
+          {
+            "level": "WARNING",
+            "category": "INTERNAL",
+            "type": "WARNING_TEST_MESSAGE",
+            "sourceId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+            "text": "This is a warning test message",
+            "exception": {
+              "className": "ExceptionClass",
+              "message": "Exception message",
+              "cause": {
+                "className": "ExceptionCauseClass",
+                "message": "Exception cause message",
+                "cause": null
+              }
+            }
+          },
+          {
+            "level": "INFO",
+            "category": "INTERNAL",
+            "type": "INFO_TEST_MESSAGE",
+            "sourceId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+            "text": "This is a info test message",
+            "exception": null
+          }
+        ]
+      },
+      {
+        "id": "_8A408366-D8E9-4626-ABF3-5F69AA01F880",
+        "name": "Should the driver be suspended?",
+        "status": "SKIPPED",
+        "type": {
+          "namespace": "http://www.omg.org/spec/DMN/20180521/FEEL/",
+          "name": "string"
+        },
+        "value": null,
+        "messages": [
+          {
+            "level": "ERROR",
+            "category": "DMN",
+            "type": "REQ_NOT_FOUND",
+            "sourceId": "_8A408366-D8E9-4626-ABF3-5F69AA01F880",
+            "text": "DMN: Required dependency 'Driver' not found on node 'Should the driver be suspended?' (DMN id: _8A408366-D8E9-4626-ABF3-5F69AA01F880, The referenced node was not found) "
+          }
+        ]
+      }
+    ],
+    "executionSteps": [
+      {
+        "type": "DMN_DECISION",
+        "duration": 81,
+        "name": "Fine",
+        "result": {
+          "Points": 7,
+          "Amount": 1000
+        },
+        "additionalData": {
+          "nodeId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929"
+        },
+        "children": [
+          {
+            "type": "DMN_DECISION_TABLE",
+            "duration": 80,
+            "name": "Fine",
+            "additionalData": {
+              "matches": "2",
+              "nodeId": "_4055D956-1C47-479C-B3F4-BAEB61F1C929",
+              "selected": "2"
+            }
+          }
+        ]
+      },
+      {
+        "type": "DMN_DECISION",
+        "duration": 5,
+        "name": "Should the driver be suspended?",
+        "messages": [
+          {
+            "level": "ERROR",
+            "category": "DMN",
+            "type": "REQ_NOT_FOUND",
+            "sourceId": "_8A408366-D8E9-4626-ABF3-5F69AA01F880",
+            "text": "DMN: Required dependency 'Driver' not found on node 'Should the driver be suspended?' (DMN id: _8A408366-D8E9-4626-ABF3-5F69AA01F880, The referenced node was not found) "
+          }
+        ],
+        "additionalData": {
+          "nodeId": "_8A408366-D8E9-4626-ABF3-5F69AA01F880"
+        },
+        "children": [
+          {
+            "type": "DMN_BKM_EVALUATION",
+            "duration": 2,
+            "name": "calculateTotalPoints",
+            "additionalData": {
+              "nodeId": "_AB2593EF-E85F-425B-B5F8-9A29397CA4E9"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "id": "6f8f5a8b-5477-464c-b5d3-1e3ed399e0da",
+  "source": "Traffic+Violation",
+  "specversion": "1.0",
+  "type": "org.kie.kogito.tracing.decision.event.trace.TraceEvent"
+}

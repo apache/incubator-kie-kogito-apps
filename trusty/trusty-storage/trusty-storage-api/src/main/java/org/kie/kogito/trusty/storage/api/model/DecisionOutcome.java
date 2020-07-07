@@ -28,6 +28,9 @@ public class DecisionOutcome {
     private List<Message> messages;
     private boolean hasErrors;
 
+    public DecisionOutcome() {
+    }
+
     public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus, TypedValue outcomeResult, List<TypedValue> outcomeInputs, List<Message> messages) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;

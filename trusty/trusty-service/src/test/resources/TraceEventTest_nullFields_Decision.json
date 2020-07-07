@@ -1,0 +1,10 @@
+{
+  "executedModelName": "Traffic Violation",
+  "executionId": "6f8f5a8b-5477-464c-b5d3-1e3ed399e0da",
+  "executionTimestamp": 1594136494308,
+  "executionType": "DECISION",
+  "executorName": "John Doe",
+  "hasSucceeded": true,
+  "inputs": null,
+  "outcomes": null
+}
