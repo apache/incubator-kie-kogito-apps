@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 public class HealthCheckIT {
 
     @Test

@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.microprofile.config.spi.ConfigSource;
 
-public class MongoDBConfigSource implements ConfigSource {
+public class MongoConfigSource implements ConfigSource {
 
     private static Map<String, String> mongoDBProperties = new ConcurrentHashMap<>();
 

@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
+import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
@@ -36,6 +37,10 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
     static final String NODES_ID_ATTRIBUTE = "nodes.id";
 
     static final String MONGO_NODES_ID_ATTRIBUTE = "nodes." + MongoOperations.ID;
+
+    static final String MILESTONES_ID_ATTRIBUTE = "milestones.id";
+
+    static final String MONGO_MILESTONES_ID_ATTRIBUTE = "milestones." + MongoOperations.ID;
 
     @Override
     public Class<ProcessInstanceEntity> getEntityClass() {
@@ -66,6 +71,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         entity.addons = instance.getAddons();
         entity.lastUpdate = zonedDateTimeToInstant(instance.getLastUpdate());
         entity.businessKey = instance.getBusinessKey();
+        entity.milestones = Optional.ofNullable(instance.getMilestones()).map(milestones -> milestones.stream().map(this::fromMilestone).collect(toList())).orElse(null);
         return entity;
     }
 
@@ -93,18 +99,30 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         instance.setAddons(entity.addons);
         instance.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
         instance.setBusinessKey(entity.businessKey);
+        instance.setMilestones(Optional.ofNullable(entity.milestones).map(milesteons -> milesteons.stream().map(this::toMilestone).collect(toList())).orElse(null));
         return instance;
     }
 
     @Override
-    public String convertAttribute(String attribute) {
-        if (NODES_ID_ATTRIBUTE.equalsIgnoreCase(attribute)) {
+    public String convertToMongoAttribute(String attribute) {
+        if (NODES_ID_ATTRIBUTE.equals(attribute)) {
             return MONGO_NODES_ID_ATTRIBUTE;
         }
-        if (MongoEntityMapper.ID.equals(attribute)) {
-            return MongoOperations.ID;
+        if (MILESTONES_ID_ATTRIBUTE.equals(attribute)) {
+            return MONGO_MILESTONES_ID_ATTRIBUTE;
         }
-        return attribute;
+        return MongoEntityMapper.super.convertToMongoAttribute(attribute);
+    }
+
+    @Override
+    public String convertToModelAttribute(String attribute) {
+        if (MONGO_NODES_ID_ATTRIBUTE.equals(attribute)) {
+            return MongoEntityMapper.ID;
+        }
+        if (MONGO_MILESTONES_ID_ATTRIBUTE.equals(attribute)) {
+            return MongoEntityMapper.ID;
+        }
+        return MongoEntityMapper.super.convertToModelAttribute(attribute);
     }
 
     NodeInstance toNodeInstance(ProcessInstanceEntity.NodeInstanceEntity entity) {
@@ -158,6 +176,30 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         ProcessInstanceEntity.ProcessInstanceErrorEntity entity = new ProcessInstanceEntity.ProcessInstanceErrorEntity();
         entity.nodeDefinitionId = error.getNodeDefinitionId();
         entity.message = error.getMessage();
+        return entity;
+    }
+
+    Milestone toMilestone(ProcessInstanceEntity.MilestoneEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        Milestone milestone = new Milestone();
+        milestone.setId(entity.id);
+        milestone.setName(entity.name);
+        milestone.setStatus(entity.status);
+        return milestone;
+    }
+
+    ProcessInstanceEntity.MilestoneEntity fromMilestone(Milestone milestone) {
+        if (milestone == null) {
+            return null;
+        }
+
+        ProcessInstanceEntity.MilestoneEntity entity = new ProcessInstanceEntity.MilestoneEntity();
+        entity.id = milestone.getId();
+        entity.name = milestone.getName();
+        entity.status = milestone.getStatus();
         return entity;
     }
 }

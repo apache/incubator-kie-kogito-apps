@@ -22,9 +22,9 @@ import java.util.Map;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.MongoDBContainer;
 
-import static org.kie.kogito.persistence.mongodb.MongoDBConfigSource.addProperty;
+import static org.kie.kogito.persistence.mongodb.MongoConfigSource.addProperty;
 
-public class MongoDBServerTestResource implements QuarkusTestResourceLifecycleManager {
+public class MongoServerTestResource implements QuarkusTestResourceLifecycleManager {
 
     private static final String MONGODB_CONNECTION_PROPERTY = "quarkus.mongodb.connection-string";
 

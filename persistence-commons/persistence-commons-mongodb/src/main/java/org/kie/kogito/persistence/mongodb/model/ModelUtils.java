@@ -19,11 +19,16 @@ package org.kie.kogito.persistence.mongodb.model;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bson.Document;
 import org.bson.json.JsonWriterSettings;
 import org.slf4j.Logger;
@@ -64,8 +69,37 @@ public class ModelUtils {
         return Optional.ofNullable(jsonNode).map(json -> Document.parse(json.toString())).orElse(null);
     }
 
-    public static <T> T documentToObject(Document document, Class<T> type) {
-        JsonNode node = documentToJsonNode(document, JsonNode.class);
+    public static <T> T documentToObject(Document document, Class<T> type, Function<String, String> converter) {
+        ObjectNode node = documentToJsonNode(document, ObjectNode.class);
+        node = convertAttributes(node, Optional.empty(), converter);
         return Optional.ofNullable(node).map(n -> MAPPER.convertValue(n, type)).orElse(null);
+    }
+
+    static ObjectNode convertAttributes(ObjectNode node, Optional<String> parentName, Function<String, String> converter) {
+        ObjectNode objectNode = MAPPER.createObjectNode();
+        Iterator<Map.Entry<String, JsonNode>> iterator = node.fields();
+        while (iterator.hasNext()) {
+            Map.Entry<String, JsonNode> entry = iterator.next();
+            String key = parentName.map(p -> p + "." + entry.getKey()).orElse(entry.getKey());
+            String name = converter.apply(key);
+            JsonNode value = entry.getValue();
+            if (value.isObject()) {
+                ObjectNode childNode = convertAttributes((ObjectNode) value, Optional.of(key), converter);
+                objectNode.set(name, childNode);
+            } else if (value.isArray()) {
+                ArrayNode childArray = MAPPER.createArrayNode();
+                for (JsonNode childNode : value) {
+                    if (childNode.isObject()) {
+                        childArray.add(convertAttributes((ObjectNode) childNode, Optional.of(key), converter));
+                    } else {
+                        childArray.add(childNode);
+                    }
+                }
+                objectNode.set(name, childArray);
+            } else {
+                objectNode.set(name, value);
+            }
+        }
+        return objectNode;
     }
 }

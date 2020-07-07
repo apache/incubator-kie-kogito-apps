@@ -65,6 +65,8 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
 
     public String businessKey;
 
+    public List<MilestoneEntity> milestones;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,6 +140,31 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
         @Override
         public int hashCode() {
             return Objects.hash(nodeDefinitionId, message);
+        }
+    }
+
+    public static class MilestoneEntity {
+        public String id;
+
+        public String name;
+
+        public String status;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            MilestoneEntity that = (MilestoneEntity) o;
+            return Objects.equals(id, that.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
         }
     }
 }

@@ -19,10 +19,13 @@ package org.kie.kogito.persistence.mongodb.model;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
@@ -65,5 +68,43 @@ class ModelUtilsTest {
                 .append("testKey2", "testValue2");
 
         assertEquals(document, ModelUtils.jsonNodeToDocument(object));
+    }
+
+    @Test
+    void testDocumentToObject() {
+        Map<String, String> objectMap = new HashMap<>();
+        objectMap.put(MongoEntityMapper.ID, "testId");
+        objectMap.put("testKey1", "testValue1");
+        objectMap.put("testKey2", "testValue2");
+
+        Document document = new Document()
+                .append(MongoOperations.ID, "testId")
+                .append("testKey1", "testValue1")
+                .append("testKey2", "testValue2");
+
+        assertEquals(objectMap, ModelUtils.documentToObject(document, HashMap.class, new MockMongoEntityMapper()::convertToModelAttribute));
+    }
+
+    @Test
+    void testConvertAttributes() {
+        Map<String, String> subMap = new HashMap<>();
+        subMap.put("subTestKey1", "subTestValue1");
+        subMap.put("subTestKey2", "subTestValue2");
+
+        Map objectMap = new HashMap();
+        objectMap.put(MongoOperations.ID, "testId");
+        objectMap.put("testKey1", "testValue1");
+        objectMap.put("testKey2", "testValue2");
+        objectMap.put("subMapKey", subMap);
+        ObjectNode object = MAPPER.valueToTree(objectMap);
+
+        Map expectedMap = new HashMap();
+        expectedMap.put(MongoEntityMapper.ID, "testId");
+        expectedMap.put("testKey1", "testValue1");
+        expectedMap.put("testKey2", "testValue2");
+        expectedMap.put("subMapKey", subMap);
+        ObjectNode expected = MAPPER.valueToTree(expectedMap);
+
+        assertEquals(expected, ModelUtils.convertAttributes(object, Optional.empty(), new MockMongoEntityMapper()::convertToModelAttribute));
     }
 }

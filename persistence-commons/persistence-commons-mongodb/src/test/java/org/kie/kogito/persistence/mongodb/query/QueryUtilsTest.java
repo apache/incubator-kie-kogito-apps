@@ -48,98 +48,98 @@ class QueryUtilsTest {
 
     @Test
     void testGenerateQuery() {
-        Optional<Bson> result = QueryUtils.generateQuery(newArrayList(contains("test", "testValue")), new MockMongoEntityMapper()::convertAttribute);
+        Optional<Bson> result = QueryUtils.generateQuery(newArrayList(contains("test", "testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertTrue(result.isPresent());
         assertEquals(Filters.and(Stream.of(Filters.eq("test", "testValue")).collect(toList())), result.get());
     }
 
     @Test
     void testGenerateSingleQuery_contains() {
-        Bson result = QueryUtils.generateSingleQuery(contains("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(contains("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.eq("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_equalTo() {
-        Bson result = QueryUtils.generateSingleQuery(equalTo("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(equalTo("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.eq("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_like() {
-        Bson result = QueryUtils.generateSingleQuery(like("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(like("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.regex("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_isNull() {
-        Bson result = QueryUtils.generateSingleQuery(isNull("test"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(isNull("test"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.exists("test", false), result);
     }
 
     @Test
     void testGenerateSingleQuery_notNull() {
-        Bson result = QueryUtils.generateSingleQuery(notNull("test"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(notNull("test"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.exists("test", true), result);
     }
 
     @Test
     void testGenerateSingleQuery_greaterThan() {
-        Bson result = QueryUtils.generateSingleQuery(greaterThan("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(greaterThan("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.gt("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_greatThanEqual() {
-        Bson result = QueryUtils.generateSingleQuery(greaterThanEqual("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(greaterThanEqual("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.gte("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_lessThan() {
-        Bson result = QueryUtils.generateSingleQuery(lessThan("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(lessThan("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.lt("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_lessThanEqual() {
-        Bson result = QueryUtils.generateSingleQuery(lessThanEqual("test", "testValue"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(lessThanEqual("test", "testValue"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.lte("test", "testValue"), result);
     }
 
     @Test
     void testGenerateSingleQuery_between() {
-        Bson result = QueryUtils.generateSingleQuery(between("test", "testValue1", "testValue2"), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(between("test", "testValue1", "testValue2"), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.and(Filters.gte("test", "testValue1"), Filters.lte("test", "testValue2")), result);
     }
 
     @Test
     void testGenerateSingleQuery_in() {
-        Bson result = QueryUtils.generateSingleQuery(in("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(in("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.in("test", newArrayList("testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_containsAll() {
-        Bson result = QueryUtils.generateSingleQuery(containsAll("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(containsAll("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.all("test", newArrayList("testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_containsAny() {
-        Bson result = QueryUtils.generateSingleQuery(containsAny("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(containsAny("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.or(Filters.eq("test", "testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_or() {
-        Bson result = QueryUtils.generateSingleQuery(or(newArrayList(contains("test", "testValue"))), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(or(newArrayList(contains("test", "testValue"))), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.or(Filters.eq("test", "testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_and() {
-        Bson result = QueryUtils.generateSingleQuery(and(newArrayList(contains("test", "testValue"))), new MockMongoEntityMapper()::convertAttribute);
+        Bson result = QueryUtils.generateSingleQuery(and(newArrayList(contains("test", "testValue"))), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.and(Filters.eq("test", "testValue")), result);
     }
 }

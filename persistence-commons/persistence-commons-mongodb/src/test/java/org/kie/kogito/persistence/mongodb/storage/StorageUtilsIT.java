@@ -21,12 +21,12 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 class StorageUtilsIT {
 
     @Test

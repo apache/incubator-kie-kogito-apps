@@ -27,11 +27,23 @@ class MongoEntityMapperTest {
     MockMongoEntityMapper mockMongoEntityMapper = new MockMongoEntityMapper();
 
     @Test
-    void testConvertAttribute() {
+    void testConvertToMongoAttribute() {
         String testAttribute = "test";
-        assertEquals(testAttribute, mockMongoEntityMapper.convertAttribute(testAttribute));
+        assertEquals(testAttribute, mockMongoEntityMapper.convertToMongoAttribute(testAttribute));
 
-        String idAttribute = "id";
-        assertEquals(MongoOperations.ID, mockMongoEntityMapper.convertAttribute(idAttribute));
+        String idAttribute = MongoEntityMapper.ID;
+        assertEquals(MongoOperations.ID, mockMongoEntityMapper.convertToMongoAttribute(idAttribute));
+    }
+
+    @Test
+    void testConvertToModelAttribute() {
+        String idAttribute = MongoOperations.ID;
+        assertEquals(MongoEntityMapper.ID, mockMongoEntityMapper.convertToModelAttribute(idAttribute));
+
+        String testAttribute = "nodes";
+        assertEquals(testAttribute, mockMongoEntityMapper.convertToModelAttribute(testAttribute));
+
+        String testSubAttribute = "nodes.name.go";
+        assertEquals("go", mockMongoEntityMapper.convertToModelAttribute(testSubAttribute));
     }
 }

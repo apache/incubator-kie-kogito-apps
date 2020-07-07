@@ -78,7 +78,7 @@ public class MongoQuery<V, E> implements Query<V> {
     @Override
     public List<V> execute() {
         MongoCollection<E> collection = this.mongoCollection;
-        Optional<Bson> query = QueryUtils.generateQuery(this.filters, mongoEntityMapper::convertAttribute);
+        Optional<Bson> query = QueryUtils.generateQuery(this.filters, mongoEntityMapper::convertToMongoAttribute);
         Optional<Bson> sort = this.generateSort();
 
         FindIterable<E> find = query.map(collection::find).orElseGet(collection::find);
@@ -99,8 +99,8 @@ public class MongoQuery<V, E> implements Query<V> {
     private Optional<Bson> generateSort() {
         return Optional.ofNullable(this.sortBy).map(sortBy -> orderBy(sortBy.stream().map(
                 sb -> SortDirection.ASC.equals(sb.getSort()) ?
-                        ascending(mongoEntityMapper.convertAttribute(sb.getAttribute())) :
-                        descending(mongoEntityMapper.convertAttribute(sb.getAttribute())))
+                        ascending(mongoEntityMapper.convertToMongoAttribute(sb.getAttribute())) :
+                        descending(mongoEntityMapper.convertToMongoAttribute(sb.getAttribute())))
                                                                               .collect(toList()))
         );
     }

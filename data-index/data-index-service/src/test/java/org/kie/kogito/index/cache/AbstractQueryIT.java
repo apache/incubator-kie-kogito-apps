@@ -22,13 +22,12 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
 import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 
 import static java.util.Arrays.asList;
@@ -50,9 +49,7 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThan;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThanEqual;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 
-@QuarkusTest
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class QueryIT {
+public abstract class AbstractQueryIT {
 
     @Inject
     DataIndexStorageService cacheService;
@@ -60,6 +57,12 @@ public class QueryIT {
     @BeforeEach
     public void setup() {
         cacheService.getProcessInstancesCache().clear();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        cache.clear();
     }
 
     @Test

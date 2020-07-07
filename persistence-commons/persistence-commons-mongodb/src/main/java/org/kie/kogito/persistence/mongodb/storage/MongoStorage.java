@@ -153,7 +153,7 @@ public class MongoStorage<V, E> implements Storage<String, V> {
                 BsonDocument keyDocument = changeStreamDocument.getDocumentKey();
                 Optional.ofNullable(keyDocument).ifPresent(key -> keyConsumer.accept(key.getString(MongoOperations.ID).getValue()));
             } else {
-                consumer.accept(mongoEntityMapper.mapToModel(documentToObject(changeStreamDocument.getFullDocument(), mongoEntityMapper.getEntityClass())));
+                consumer.accept(mongoEntityMapper.mapToModel(documentToObject(changeStreamDocument.getFullDocument(), mongoEntityMapper.getEntityClass(), mongoEntityMapper::convertToModelAttribute)));
             }
         }
 

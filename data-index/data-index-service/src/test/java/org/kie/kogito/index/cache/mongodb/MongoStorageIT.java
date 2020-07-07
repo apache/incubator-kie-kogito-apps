@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates. 
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.service;
+package org.kie.kogito.index.cache.mongodb;
 
-import io.quarkus.test.junit.NativeImageTest;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.index.cache.AbstractStorageIT;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 
-@NativeImageTest
-public class NativeIndexingServiceIT extends IndexingServiceIT {
+@QuarkusTest
+@QuarkusTestResource(MongoServerTestResource.class)
+public class MongoStorageIT extends AbstractStorageIT {
 
-    // Execute the same tests but in native mode.
 }

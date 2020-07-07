@@ -16,22 +16,15 @@
 
 package org.kie.kogito.index.service;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
-import org.kie.kogito.index.KeycloakServerTestResource;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@QuarkusTest
-@QuarkusTestResource(KeycloakServerTestResource.class)
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class KeycloakIntegrationIndexingServiceIT {
+public abstract class AbstractKeycloakIntegrationIndexingServiceIT {
 
     private static final String KEYCLOAK_SERVER_URL = System.getProperty("quarkus.oidc.auth-server-url", "http://localhost:8281/auth/realms/kogito");
     private static final String KEYCLOAK_CLIENT_ID = System.getProperty("quarkus.oidc.client-id", "kogito-service");
@@ -82,10 +75,11 @@ public class KeycloakIntegrationIndexingServiceIT {
         assertIsNotLoginPage(given().when().get("/graphql"));
     }
 
-    private void assertIsLoginPage (Response response){
+    private void assertIsLoginPage(Response response) {
         assertThat(response.andReturn().body().asString()).contains("<title>Log in to kogito</title>");
     }
-    private void assertIsNotLoginPage (Response response){
+
+    private void assertIsNotLoginPage(Response response) {
         assertThat(response.andReturn().body().asString()).doesNotContain("<title>Log in to kogito</title>");
     }
 

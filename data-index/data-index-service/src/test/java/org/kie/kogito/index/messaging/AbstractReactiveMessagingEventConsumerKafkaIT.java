@@ -24,8 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
@@ -33,7 +31,6 @@ import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
 import org.kie.kogito.index.KafkaTestResource;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 
@@ -41,13 +38,9 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.isA;
-import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 import static org.kie.kogito.index.TestUtils.readFileContent;
 
-@QuarkusTest
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-@QuarkusTestResource(KafkaTestResource.class)
-public class ReactiveMessagingEventConsumerKafkaIT {
+public abstract class AbstractReactiveMessagingEventConsumerKafkaIT {
 
     @Inject
     ProtobufService protobufService;
@@ -78,7 +71,7 @@ public class ReactiveMessagingEventConsumerKafkaIT {
 
         String processInstanceId = "c2fa5c5e-3002-44c7-aef7-bce82297e3fe";
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getTestProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{Travels{ id } }\" }")
                 .when().post("/graphql")
@@ -117,4 +110,6 @@ public class ReactiveMessagingEventConsumerKafkaIT {
         });
         return future;
     }
+
+    protected abstract String getTestProtobufFileContent() throws Exception;
 }

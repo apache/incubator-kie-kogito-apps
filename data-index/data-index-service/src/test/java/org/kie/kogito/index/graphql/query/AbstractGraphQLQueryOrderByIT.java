@@ -30,22 +30,16 @@ import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchemaElement;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
 import org.kie.kogito.index.graphql.GraphQLSchemaManager;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 
-@QuarkusTest
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class GraphQLQueryOrderByIT {
+public abstract class AbstractGraphQLQueryOrderByIT {
 
     @Inject
     GraphQLSchemaManager manager;
@@ -77,12 +71,12 @@ public class GraphQLQueryOrderByIT {
 
     @Test
     public void testTravelsSort() throws Exception {
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getTestProtobufFileContent());
 
         testSortBy("Travels");
     }
 
-    private void testSortBy(String root) {
+    protected void testSortBy(String root) {
         GraphQLObjectType queryType = manager.getGraphQLSchema().getQueryType();
 
         GraphQLFieldDefinition pi = queryType.getFieldDefinition(root);
@@ -119,4 +113,6 @@ public class GraphQLQueryOrderByIT {
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200).body("data." + root, isA(Collection.class));
     }
+
+    protected abstract String getTestProtobufFileContent() throws Exception;
 }

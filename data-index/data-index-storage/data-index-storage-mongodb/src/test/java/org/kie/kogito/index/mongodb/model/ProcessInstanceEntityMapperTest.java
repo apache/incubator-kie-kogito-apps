@@ -155,13 +155,30 @@ class ProcessInstanceEntityMapperTest {
     }
 
     @Test
-    void testConvertAttribute() {
-        assertEquals(MongoOperations.ID, processInstanceEntityMapper.convertAttribute(MongoEntityMapper.ID));
+    void testConvertToMongoAttribute() {
+        assertEquals(MongoOperations.ID, processInstanceEntityMapper.convertToMongoAttribute(MongoEntityMapper.ID));
 
         assertEquals(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE,
-                     processInstanceEntityMapper.convertAttribute(ProcessInstanceEntityMapper.NODES_ID_ATTRIBUTE));
+                     processInstanceEntityMapper.convertToMongoAttribute(ProcessInstanceEntityMapper.NODES_ID_ATTRIBUTE));
+
+        assertEquals(ProcessInstanceEntityMapper.MONGO_MILESTONES_ID_ATTRIBUTE,
+                     processInstanceEntityMapper.convertToMongoAttribute(ProcessInstanceEntityMapper.MILESTONES_ID_ATTRIBUTE));
 
         String testAttribute = "testAttribute";
-        assertEquals(testAttribute, processInstanceEntityMapper.convertAttribute(testAttribute));
+        assertEquals(testAttribute, processInstanceEntityMapper.convertToMongoAttribute(testAttribute));
+    }
+
+    @Test
+    void testConvertToModelAttribute() {
+        assertEquals(MongoEntityMapper.ID, processInstanceEntityMapper.convertToModelAttribute(MongoOperations.ID));
+
+        assertEquals(MongoEntityMapper.ID,
+                     processInstanceEntityMapper.convertToModelAttribute(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE));
+
+        assertEquals(MongoEntityMapper.ID,
+                     processInstanceEntityMapper.convertToModelAttribute(ProcessInstanceEntityMapper.MONGO_MILESTONES_ID_ATTRIBUTE));
+
+        String testAttribute = "test.attribute.go";
+        assertEquals("go", processInstanceEntityMapper.convertToModelAttribute(testAttribute));
     }
 }

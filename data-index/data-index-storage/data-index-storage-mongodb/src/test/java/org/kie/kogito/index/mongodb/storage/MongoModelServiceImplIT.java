@@ -34,7 +34,7 @@ import org.kie.kogito.index.mongodb.model.ProcessInstanceEntityMapper;
 import org.kie.kogito.index.mongodb.model.UserTaskInstanceEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.schema.ProcessDescriptor;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
@@ -47,7 +47,7 @@ import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
 import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 class MongoModelServiceImplIT {
 
     @Inject

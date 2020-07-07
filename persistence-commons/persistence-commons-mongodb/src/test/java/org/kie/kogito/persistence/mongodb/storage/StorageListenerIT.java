@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 public class StorageListenerIT {
 
     @Inject

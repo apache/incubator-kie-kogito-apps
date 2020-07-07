@@ -22,6 +22,7 @@ import org.bson.Document;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
 
 public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Document> {
@@ -50,10 +51,13 @@ public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Documen
             return null;
         }
 
-        ObjectNode node = ModelUtils.documentToJsonNode(entity, ObjectNode.class);
-        node.remove(MongoOperations.ID);
-        String id = entity.getString(MongoOperations.ID);
-        node.put(ID, id);
-        return node;
+        Object idObj = entity.remove(MongoOperations.ID);
+        if (idObj != null) {
+            ObjectNode result = MAPPER.createObjectNode();
+            result.put(ID, idObj.toString());
+            result.setAll(ModelUtils.documentToJsonNode(entity, ObjectNode.class));
+            return result;
+        }
+        return ModelUtils.documentToJsonNode(entity, ObjectNode.class);
     }
 }

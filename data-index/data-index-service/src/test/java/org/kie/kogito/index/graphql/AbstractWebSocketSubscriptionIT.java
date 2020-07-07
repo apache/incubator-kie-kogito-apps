@@ -24,8 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
@@ -33,8 +31,9 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.handler.graphql.ApolloWSMessageType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.TestUtils;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
@@ -49,15 +48,11 @@ import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.DATA;
 import static java.lang.String.format;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.kie.kogito.index.TestUtils.getDealsProtoBufferFile;
 import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
-import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 
-@QuarkusTest
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class WebSocketSubscriptionIT {
+public abstract class AbstractWebSocketSubscriptionIT {
 
     @Inject
     ReactiveMessagingEventConsumer consumer;
@@ -71,14 +66,30 @@ public class WebSocketSubscriptionIT {
     @Inject
     Vertx vertx;
 
+    @Inject
+    DataIndexStorageService cacheService;
+
     private AtomicInteger counter = new AtomicInteger(0);
+
+    @AfterEach
+    public void tearDown() {
+        cacheService.getJobsCache().clear();
+        cacheService.getProcessInstancesCache().clear();
+        cacheService.getUserTaskInstancesCache().clear();
+        if (cacheService.getDomainModelCache("travels") != null) {
+            cacheService.getDomainModelCache("travels").clear();
+        }
+        if (cacheService.getDomainModelCache("deals") != null) {
+            cacheService.getDomainModelCache("deals").clear();
+        }
+    }
 
     @Test
     public void testProcessInstanceSubscription() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         assertProcessInstanceSubscription(processId, processInstanceId, ProcessInstanceState.ACTIVE, "subscription { ProcessInstanceAdded { id, processId, state } }", "ProcessInstanceAdded");
         assertProcessInstanceSubscription(processId, processInstanceId, ProcessInstanceState.COMPLETED, "subscription { ProcessInstanceUpdated { id, processId, state } }", "ProcessInstanceUpdated");
@@ -90,7 +101,7 @@ public class WebSocketSubscriptionIT {
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getDealsProtoBufferFile());
+        protobufService.registerProtoBufferType(getUserTaskProtobufFileContent());
 
         assertUserTaskInstanceSubscription(taskId, processId, processInstanceId, "InProgress", "subscription { UserTaskInstanceAdded { id, processInstanceId, processId, state } }", "UserTaskInstanceAdded");
         assertUserTaskInstanceSubscription(taskId, processId, processInstanceId, "Completed", "subscription { UserTaskInstanceUpdated { id, processInstanceId, processId, state } }", "UserTaskInstanceUpdated");
@@ -111,7 +122,7 @@ public class WebSocketSubscriptionIT {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         assertDomainSubscription(processId, processInstanceId, ProcessInstanceState.ACTIVE, "subscription { TravelsAdded { id, traveller { firstName }, metadata { processInstances { state } } } }", "TravelsAdded");
         assertDomainSubscription(processId, processInstanceId, ProcessInstanceState.COMPLETED, "subscription { TravelsUpdated { id, traveller { firstName }, metadata { processInstances { state } } } }", "TravelsUpdated");
@@ -178,6 +189,10 @@ public class WebSocketSubscriptionIT {
     private void assertJobSubscription(String taskId, String processId, String processInstanceId, String status, String subscription, String subscriptionName) throws Exception {
         CompletableFuture<JsonObject> cf = subscribe(subscription);
 
+        given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Jobs{ id } }\" }")
+                .when().post("/graphql")
+                .then().log().ifValidationFails().statusCode(200).body("data.Jobs", isA(Collection.class));
+
         KogitoJobCloudEvent event = getJobCloudEvent(taskId, processId, processInstanceId, null, null, status);
         consumer.onJobEvent(() -> event);
 
@@ -225,4 +240,8 @@ public class WebSocketSubscriptionIT {
         wsFuture.get(1, TimeUnit.MINUTES);
         return cf;
     }
+
+    protected abstract String getProcessProtobufFileContent() throws Exception;
+
+    protected abstract String getUserTaskProtobufFileContent() throws Exception;
 }

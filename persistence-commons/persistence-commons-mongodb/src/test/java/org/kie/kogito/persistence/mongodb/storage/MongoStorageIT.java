@@ -27,7 +27,7 @@ import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper.TEST_ATTRIBUTE;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 class MongoStorageIT {
 
     MongoStorage<String, Document> storage;

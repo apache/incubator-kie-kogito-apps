@@ -59,10 +59,18 @@ class ProcessIdEntityMapperTest {
     }
 
     @Test
-    void testConvertAttribute() {
-        assertEquals(MongoOperations.ID, processIdEntityMapper.convertAttribute(PROCESS_ID_ATTRIBUTE));
+    void testConvertToMongoAttribute() {
+        assertEquals(MongoOperations.ID, processIdEntityMapper.convertToMongoAttribute(PROCESS_ID_ATTRIBUTE));
 
         String testAttribute = "testAttribute";
-        assertEquals(testAttribute, processIdEntityMapper.convertAttribute(testAttribute));
+        assertEquals(testAttribute, processIdEntityMapper.convertToMongoAttribute(testAttribute));
+    }
+
+    @Test
+    void testConvertToModelAttribute() {
+        assertEquals(PROCESS_ID_ATTRIBUTE, processIdEntityMapper.convertToModelAttribute(MongoOperations.ID));
+
+        String testAttribute = "test.attribute.name";
+        assertEquals("name", processIdEntityMapper.convertToModelAttribute(testAttribute));
     }
 }

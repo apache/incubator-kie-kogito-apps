@@ -29,7 +29,7 @@ import org.kie.kogito.index.mongodb.TestUtils;
 import org.kie.kogito.index.mongodb.model.DomainEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.SortDirection;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static java.util.Arrays.asList;
@@ -55,7 +55,7 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 public class DomainQueryIT extends QueryTestBase<String, ObjectNode> {
 
     Storage<String, ObjectNode> storage;

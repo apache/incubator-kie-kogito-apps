@@ -28,13 +28,12 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
+import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
@@ -80,21 +79,17 @@ import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndPotent
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndPotentialUsers;
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndStarted;
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndState;
-import static org.kie.kogito.index.TestUtils.getDealsProtoBufferFile;
 import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
-import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.kie.kogito.index.model.ProcessInstanceState.ERROR;
 
-@QuarkusTest
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class IndexingServiceIT {
+public abstract class AbstractIndexingServiceIT {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IndexingServiceIT.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIndexingServiceIT.class);
 
     @Inject
     ReactiveMessagingEventConsumer consumer;
@@ -102,9 +97,25 @@ public class IndexingServiceIT {
     @Inject
     ProtobufService protobufService;
 
+    @Inject
+    DataIndexStorageService cacheService;
+
     @BeforeAll
     public static void setup() {
         RestAssured.config = RestAssured.config().encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        cacheService.getJobsCache().clear();
+        cacheService.getProcessInstancesCache().clear();
+        cacheService.getUserTaskInstancesCache().clear();
+        if (cacheService.getDomainModelCache("travels") != null) {
+            cacheService.getDomainModelCache("travels").clear();
+        }
+        if (cacheService.getDomainModelCache("deals") != null) {
+            cacheService.getDomainModelCache("deals").clear();
+        }
     }
 
     private static String formatZonedDateTime(ZonedDateTime time) {
@@ -195,7 +206,7 @@ public class IndexingServiceIT {
         String secondTaskId = UUID.randomUUID().toString();
         String state = "InProgress";
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{Travels{ id } }\" }")
                 .when().post("/graphql")
@@ -438,7 +449,7 @@ public class IndexingServiceIT {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels{ id } }\" }")
                 .when().post("/graphql")
@@ -507,7 +518,7 @@ public class IndexingServiceIT {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels{ id } }\" }")
                 .when().post("/graphql")
@@ -576,7 +587,7 @@ public class IndexingServiceIT {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels{ id } }\" }")
                 .when().post("/graphql")
@@ -626,7 +637,7 @@ public class IndexingServiceIT {
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getTravelsProtoBufferFile());
+        protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels{ id } }\" }")
                 .when().post("/graphql")
@@ -648,7 +659,7 @@ public class IndexingServiceIT {
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200)
                 .body("data.Travels[0].id", is(processInstanceId))
-                .body("data.Travels[0].metadata.lastUpdate", is(formatZonedDateTime(startEvent.getTime().withZoneSameInstant(ZoneOffset.UTC))))                
+                .body("data.Travels[0].metadata.lastUpdate", is(formatZonedDateTime(startEvent.getTime().withZoneSameInstant(ZoneOffset.UTC))))
                 .body("data.Travels[0].metadata.processInstances.size()", is(1))
                 .body("data.Travels[0].metadata.processInstances[0].id", is(processInstanceId))
                 .body("data.Travels[0].metadata.processInstances[0].processId", is(processId))
@@ -718,7 +729,7 @@ public class IndexingServiceIT {
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();
 
-        protobufService.registerProtoBufferType(getDealsProtoBufferFile());
+        protobufService.registerProtoBufferType(getUserTaskProtobufFileContent());
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Deals{ id } }\" }")
                 .when().post("/graphql")
@@ -904,4 +915,8 @@ public class IndexingServiceIT {
                 "}\n" +
                 "\n";
     }
+
+    protected abstract String getProcessProtobufFileContent() throws Exception;
+
+    protected abstract String getUserTaskProtobufFileContent() throws Exception;
 }

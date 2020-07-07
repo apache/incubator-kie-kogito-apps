@@ -30,6 +30,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.kie.kogito.index.model.Job;
+import org.kie.kogito.index.model.Milestone;
+import org.kie.kogito.index.model.MilestoneStatus;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
@@ -38,6 +40,7 @@ import org.kie.kogito.index.model.UserTaskInstance;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 
 public class TestUtils {
 
@@ -60,6 +63,7 @@ public class TestUtils {
         if (ProcessInstanceState.ERROR.ordinal() == status) {
             pi.setError(new ProcessInstanceError("StartEvent_1", "Something went wrong"));
         }
+        pi.setMilestones(singletonList(Milestone.builder().id("testMilestone").name("testMilestone").status(MilestoneStatus.COMPLETED.name()).build()));
         return pi;
     }
 

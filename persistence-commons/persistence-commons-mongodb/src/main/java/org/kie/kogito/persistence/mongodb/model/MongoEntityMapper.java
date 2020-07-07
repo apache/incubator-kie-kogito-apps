@@ -16,6 +16,8 @@
 
 package org.kie.kogito.persistence.mongodb.model;
 
+import java.util.regex.Pattern;
+
 import io.quarkus.mongodb.panache.runtime.MongoOperations;
 
 /**
@@ -26,6 +28,8 @@ import io.quarkus.mongodb.panache.runtime.MongoOperations;
 public interface MongoEntityMapper<V, E> {
 
     String ID = "id";
+
+    String ATTRIBUTE_DELIMITER = ".";
 
     /**
      * Get the mongo storage entity class
@@ -53,7 +57,20 @@ public interface MongoEntityMapper<V, E> {
      * @param attribute the data model attribute name
      * @return the corresponding mongo storage attribute name
      */
-    default String convertAttribute(String attribute) {
-        return ID.equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
+    default String convertToMongoAttribute(String attribute) {
+        return ID.equals(attribute) ? MongoOperations.ID : attribute;
+    }
+
+    /**
+     * Convert mongo storage attribute name to the data model attribute name
+     * @param attribute the mongo storage attribute name
+     * @return the corresponding data model attribute name
+     */
+    default String convertToModelAttribute(String attribute) {
+        if (MongoOperations.ID.equals(attribute)) {
+            return ID;
+        }
+        String[] attributes = attribute.split(Pattern.quote(ATTRIBUTE_DELIMITER));
+        return attributes[attributes.length - 1];
     }
 }

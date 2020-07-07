@@ -42,7 +42,12 @@ public class ProcessIdEntityMapper implements MongoEntityMapper<String, ProcessI
     }
 
     @Override
-    public String convertAttribute(String attribute) {
-        return PROCESS_ID_ATTRIBUTE.equalsIgnoreCase(attribute) ? MongoOperations.ID : attribute;
+    public String convertToMongoAttribute(String attribute) {
+        return PROCESS_ID_ATTRIBUTE.equals(attribute) ? MongoOperations.ID : MongoEntityMapper.super.convertToMongoAttribute(attribute);
+    }
+
+    @Override
+    public String convertToModelAttribute(String attribute) {
+        return MongoOperations.ID.equals(attribute) ? PROCESS_ID_ATTRIBUTE : MongoEntityMapper.super.convertToModelAttribute(attribute);
     }
 }

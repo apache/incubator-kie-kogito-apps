@@ -24,14 +24,14 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
 import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 public class ProcessIdStorageIT extends StorageTestBase<String, String> {
 
     Storage<String, String> storage;

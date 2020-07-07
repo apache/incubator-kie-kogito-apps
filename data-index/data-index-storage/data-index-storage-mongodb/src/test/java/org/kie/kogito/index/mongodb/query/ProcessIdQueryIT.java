@@ -25,7 +25,7 @@ import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.SortDirection;
-import org.kie.kogito.persistence.mongodb.MongoDBServerTestResource;
+import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static java.util.Arrays.asList;
@@ -46,7 +46,7 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
-@QuarkusTestResource(MongoDBServerTestResource.class)
+@QuarkusTestResource(MongoServerTestResource.class)
 public class ProcessIdQueryIT extends QueryTestBase<String, String> {
 
     Storage<String, String> storage;

@@ -22,10 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
 import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
@@ -34,9 +32,7 @@ import org.kie.kogito.persistence.api.Storage;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.TestUtils.getProcessInstance;
 
-@QuarkusTest
-@QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class StorageIT {
+public abstract class AbstractStorageIT {
 
     @Inject
     DataIndexStorageService cacheService;
@@ -49,6 +45,9 @@ public class StorageIT {
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectCreatedListener(pi -> cf.complete(pi));
+        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
+        // Pause the test to wait for the Change Stream to be ready
+        Thread.sleep(1000L);
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
 
         ProcessInstance pi = cf.get(1, TimeUnit.MINUTES);
@@ -63,6 +62,9 @@ public class StorageIT {
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectUpdatedListener(pi -> cf.complete(pi));
+        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
+        // Pause the test to wait for the Change Stream to be ready
+        Thread.sleep(1000L);
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
 
@@ -78,10 +80,19 @@ public class StorageIT {
         CompletableFuture<String> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectRemovedListener(id -> cf.complete(id));
+        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
+        // Pause the test to wait for the Change Stream to be ready
+        Thread.sleep(1000L);
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.remove(processInstanceId);
 
         String id = cf.get(1, TimeUnit.MINUTES);
         assertThat(id).isEqualTo(processInstanceId);
+    }
+
+    @AfterEach
+    void tearDown() {
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        cache.clear();
     }
 }
