@@ -111,7 +111,8 @@
                   <goal>npm</goal>
                 </goals>
                 <configuration>
-                  <arguments>run locktt -- --registry=${env.NPM_REGISTRY_URL}</arguments>
+                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+                  <arguments>run locktt --</arguments>
                 </configuration>
               </execution>
               <execution>
