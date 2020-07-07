@@ -32,6 +32,9 @@ public class DecisionOutcomeResponse {
     private List<MessageResponse> messages;
     private boolean hasErrors;
 
+    private DecisionOutcomeResponse() {
+    }
+
     public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedValueResponse outcomeResult, List<TypedValueResponse> outcomeInputs, List<MessageResponse> messages, boolean hasErrors) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;

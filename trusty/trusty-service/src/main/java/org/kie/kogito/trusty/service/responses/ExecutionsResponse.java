@@ -37,7 +37,7 @@ public class ExecutionsResponse {
     @JsonProperty("headers")
     private List<ExecutionHeaderResponse> headers;
 
-    public ExecutionsResponse() {
+    private ExecutionsResponse() {
     }
 
     public ExecutionsResponse(int total, int returnedRecords, int offset, List<ExecutionHeaderResponse> headers) {

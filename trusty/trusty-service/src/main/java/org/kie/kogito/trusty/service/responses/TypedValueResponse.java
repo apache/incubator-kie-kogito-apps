@@ -25,6 +25,9 @@ public class TypedValueResponse {
     private String typeRef;
     private JsonNode value;
 
+    private TypedValueResponse() {
+    }
+
     public TypedValueResponse(String name, String typeRef, JsonNode value) {
         this.name = name;
         this.typeRef = typeRef;

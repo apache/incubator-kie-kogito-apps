@@ -26,6 +26,9 @@ public class DecisionOutcomesResponse {
     private ExecutionHeaderResponse header;
     private List<DecisionOutcomeResponse> outcomes;
 
+    private DecisionOutcomesResponse() {
+    }
+
     public DecisionOutcomesResponse(ExecutionHeaderResponse header, List<DecisionOutcomeResponse> outcomes) {
         this.header = header;
         this.outcomes = outcomes;

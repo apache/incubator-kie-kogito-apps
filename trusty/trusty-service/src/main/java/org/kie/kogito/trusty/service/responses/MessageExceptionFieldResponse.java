@@ -24,6 +24,9 @@ public class MessageExceptionFieldResponse {
     private String message;
     private MessageExceptionFieldResponse cause;
 
+    private MessageExceptionFieldResponse() {
+    }
+
     public MessageExceptionFieldResponse(String className, String message, MessageExceptionFieldResponse cause) {
         this.className = className;
         this.message = message;

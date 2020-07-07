@@ -26,6 +26,9 @@ public class DecisionStructuredInputsResponse {
 
     private List<TypedValueResponse> inputs;
 
+    private DecisionStructuredInputsResponse() {
+    }
+
     public DecisionStructuredInputsResponse(List<TypedValueResponse> inputs) {
         this.inputs = inputs;
     }

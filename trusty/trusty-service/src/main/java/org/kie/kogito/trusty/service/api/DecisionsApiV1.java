@@ -61,7 +61,7 @@ public class DecisionsApiV1 {
     )
     @Operation(summary = "Gets The decision header with details.", description = "Gets the decision detail header.")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(
+    public Response getExecutionById(
             @Parameter(
                     name = "executionId",
                     description = "The execution ID.",
@@ -131,7 +131,7 @@ public class DecisionsApiV1 {
                     required = true,
                     schema = @Schema(implementation = String.class)
             ) @PathParam("outcomeId") String outcomeId) {
-        return handleDecisionRequest(executionId, decision -> decision.getOutcomes().stream()
+        return handleDecisionRequest(executionId, decision -> decision.getOutcomes() == null ? null : decision.getOutcomes().stream()
                 .filter(outcome -> outcomeId != null && outcomeId.equals(outcome.getOutcomeId()))
                 .findFirst()
                 .map(DecisionOutcomeResponse::from)
