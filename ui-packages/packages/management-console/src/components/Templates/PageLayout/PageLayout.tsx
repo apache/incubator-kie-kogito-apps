@@ -15,6 +15,8 @@ import {
   GraphQL
 } from '@kogito-apps/common';
 import ProcessListPage from '../ProcessListPage/ProcessListPage';
+// import DataListContainer from '../DataListContainer/DataListContainer';
+import ManagementConsoleDashboard from '../ManagementConsoleDashboard/ManagementConsoleDashboard';
 import ProcessDetailsPage from '../ProcessDetailsPage/ProcessDetailsPage';
 import DomainExplorerPage from '../DomainExplorerPage/DomainExplorerPage';
 import DomainExplorerLandingPage from '../DomainExplorerLandingPage/DomainExplorerLandingPage';
@@ -87,6 +89,11 @@ const PageLayout: React.FC<IOwnProps & InjectedOuiaProps> = ({
             render={() => <Redirect to="/ProcessInstances" />}
           />
           <Route exact path="/ProcessInstances" component={ProcessListPage} />
+          <Route
+            exact
+            path="/ManagementConsoleDashboard"
+            component={ManagementConsoleDashboard}
+          />
           <Route
             exact
             path="/Process/:instanceID"

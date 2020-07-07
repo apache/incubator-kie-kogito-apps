@@ -1,0 +1,476 @@
+import React, { useEffect } from 'react';
+import {
+  TextContent,
+  Text,
+  TextVariants,
+  PageSection,
+  Breadcrumb,
+  BreadcrumbItem,
+  Title,
+  Button,
+  EmptyState,
+  EmptyStateVariant,
+  EmptyStateIcon,
+  EmptyStateBody,
+  EmptyStateSecondaryActions,
+  Card,
+  CardBody,
+  InjectedOuiaProps,
+  withOuiaContext,
+  CardHeader,
+  Grid,
+  Gallery
+} from '@patternfly/react-core';
+import { ChartDonut, ChartGroup, ChartVoronoiContainer, ChartArea, ChartContainer, ChartLabel } from '@patternfly/react-charts';
+
+import { Link } from 'react-router-dom';
+import { CubesIcon } from '@patternfly/react-icons';
+import PageTitleComponent from '../../Molecules/PageTitleComponent/PageTitleComponent';
+// import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
+
+// import { useGetQueryFieldsQuery } from '../../../graphql/types';
+import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+
+const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
+  ouiaContext
+}) => {
+  const getQuery = useGetQueryFieldsQuery();
+  let availableDomains =
+    !getQuery.loading && getQuery.data.__type.fields.slice(2);
+
+  availableDomains =
+    availableDomains &&
+    availableDomains.filter(item => {
+      /* istanbul ignore else */
+      if (item.name !== 'Jobs') {
+        return item;
+      }
+    });
+
+  useEffect(() => {
+    return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer');
+  });
+
+  return (
+    <>
+      <PageSection variant="light">
+        <PageTitleComponent title="Dashboard" />
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to={'/'}>Home</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem isActive>Dashboard</BreadcrumbItem>
+        </Breadcrumb>
+      </PageSection>
+      <PageSection>
+        <Grid gutter="md">
+          <Card>
+            <CardHeader><Title headingLevel="h3" size="lg">Processes</Title></CardHeader>
+            <CardBody>
+              <Gallery>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Active processes"
+                  ariaTitle="Active processes"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 35 },
+                    { x: 'hotelbooking', y: 55 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 35' },
+                  //   { name: 'hotelbooking: 55' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="90"
+                  subTitle="Active"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Completed processes"
+                  ariaTitle="Completed processes"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 514 },
+                    { x: 'visaApplications', y: 10 },
+                    { x: 'hotelbooking', y: 238 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 35' },
+                  //   { name: 'visaApplications: 10' },
+                  //   { name: 'hotelbooking: 65' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="762"
+                  subTitle="Completed"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Aborted processes"
+                  ariaTitle="Aborted processes"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 4 },
+                    { x: 'visaApplications', y: 0 },
+                    { x: 'hotelbooking', y: 3 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 4' },
+                  //   { name: 'visaApplications: 0' },
+                  //   { name: 'hotelbooking: 3' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="7"
+                  subTitle="Aborted"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Suspended processes"
+                  ariaTitle="Suspended processes"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 14 },
+                    { x: 'visaApplications', y: 30 },
+                    { x: 'hotelbooking', y: 23 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 14' },
+                  //   { name: 'visaApplications: 30' },
+                  //   { name: 'hotelbooking: 23' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="67"
+                  subTitle="Suspended"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Error processes"
+                  ariaTitle="Error processes"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 1 },
+                    { x: 'visaApplications', y: 10 },
+                    { x: 'hotelbooking', y: 0 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 1' },
+                  //   { name: 'visaApplications: 10' },
+                  //   { name: 'hotelbooking: 0' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="11"
+                  subTitle="Error"
+                  width={350}
+                />
+              </div>
+
+              </Gallery>
+
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader><Title headingLevel="h3"  size="lg">Jobs</Title></CardHeader>
+            <CardBody>
+              <Gallery>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Jobs executed"
+                  ariaTitle="Jobs executed"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 5 },
+                    { x: 'hotelbooking', y: 5 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 35' },
+                  //   { name: 'hotelbooking: 55' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="10"
+                  subTitle="Executed"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Jobs in error"
+                  ariaTitle="Jobs in error"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 2 },
+                    { x: 'visaApplications', y: 3 },
+                    { x: 'hotelbooking', y: 4 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 35' },
+                  //   { name: 'visaApplications: 10' },
+                  //   { name: 'hotelbooking: 65' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="9"
+                  subTitle="Error"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Jobs canceled"
+                  ariaTitle="Jobs canceled"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 2 },
+                    { x: 'visaApplications', y: 0 },
+                    { x: 'hotelbooking', y: 3 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 4' },
+                  //   { name: 'visaApplications: 0' },
+                  //   { name: 'hotelbooking: 3' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="5"
+                  subTitle="Canceled"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Jobs scheduled"
+                  ariaTitle="Jobs scheduled"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 56 },
+                    { x: 'visaApplications', y: 1 },
+                    { x: 'hotelbooking', y: 9 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 14' },
+                  //   { name: 'visaApplications: 30' },
+                  //   { name: 'hotelbooking: 23' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="66"
+                  subTitle="Scheduled"
+                  width={350}
+                />
+              </div>
+
+              <div style={{ height: '230px', width: '350px' }}>
+                <ChartDonut
+                  ariaDesc="Jobs retried"
+                  ariaTitle="Jobs retried"
+                  constrainToVisibleArea={true}
+                  data={[
+                    { x: 'travel', y: 9 },
+                    { x: 'visaApplications', y: 10 },
+                    { x: 'hotelbooking', y: 0 }
+                  ]}
+                  labels={({ datum }) => `${datum.x}: ${datum.y}`}
+                  // legendData={[
+                  //   { name: 'travel: 1' },
+                  //   { name: 'visaApplications: 10' },
+                  //   { name: 'hotelbooking: 0' }
+                  // ]}
+                  // legendOrientation="vertical"
+                  // legendPosition="right"
+                  padding={{
+                    bottom: 20,
+                    left: 20,
+                    right: 20, // Adjusted to accommodate legend
+                    top: 20
+                  }}
+                  title="19"
+                  subTitle="Retry"
+                  width={350}
+                />
+              </div>
+
+              </Gallery>
+
+            </CardBody>
+          </Card>
+
+<Card>
+<div style={{ marginLeft: '50px', marginTop: '50px', height: '135px' }}>
+    <div style={{ height: '100px', width: '400px' }}>
+      <ChartGroup
+        ariaDesc="Average number of pets"
+        ariaTitle="Sparkline chart example"
+        containerComponent={<ChartVoronoiContainer labels={({ datum }) => `${datum.name}: ${datum.y}`} constrainToVisibleArea />}
+        height={100}
+        maxDomain={{y: 50}}
+        padding={0}
+        width={400}
+      >
+        <ChartArea
+          data={[
+            { name: '2001', x: '2001', y: 0 },
+            { name: '2002', x: '2002', y: 0 },
+            { name: '2003', x: '2003', y: 0 },
+            { name: '2006', x: '2006', y: 3 },
+            { name: '2007', x: '2007', y: 4 },
+            { name: 'Cats', x: '2008', y: 8 },
+            { name: 'Cats', x: '2009', y: 50 },
+            { name: 'Cats', x: '2010', y: 4 },
+            { name: 'Cats', x: '2011', y: 8 },
+            { name: 'Cats', x: '2012', y: 3 },
+            { name: 'Cats', x: '2013', y: 4 },
+            { name: 'Cats', x: '2014', y: 8 },
+            { name: 'Cats', x: '2015', y: 13 },
+            { name: 'Cats', x: '2016', y: 4 },
+            { name: 'Cats', x: '2017', y: 8 },
+            { name: 'Cats', x: '2018', y: 6 }
+          ]}
+        />
+      </ChartGroup>
+    </div>
+    <ChartContainer>
+      <ChartLabel text="Executed over time" dy={15}/>
+    </ChartContainer>
+  </div>
+  </Card>
+          <Card>
+            <CardHeader><Title headingLevel="h3"  size="lg">Activity Stream</Title></CardHeader>
+            {/* <ProcessDetailsTimeline
+                      data={data.ProcessInstances[0]}
+                      setModalContent={setModalContent}
+                      setModalTitle={setModalTitle}
+                      setTitleType={setTitleType}
+                      handleSkipModalToggle={handleSkipModalToggle}
+                      handleRetryModalToggle={handleRetryModalToggle}
+                    /> */}
+          </Card>
+          <Card>
+            <CardBody>
+              <EmptyState variant={EmptyStateVariant.full}>
+                <EmptyStateIcon icon={CubesIcon} />
+
+                {availableDomains.length > 0 ? (
+                  <>
+                    <Title headingLevel="h5" size="lg">
+                      This is the new dashboard.
+                    </Title>
+                    <EmptyStateBody>
+                      Put some dashboardy things in here
+                    </EmptyStateBody>
+                    <EmptyStateSecondaryActions>
+                      {!getQuery.loading &&
+                        availableDomains.map((item, index) => {
+                          return (
+                            <Link
+                              to={`/DomainExplorer/${item.name}`}
+                              key={index}
+                            >
+                              <Button variant="link">{item.name}</Button>
+                            </Link>
+                          );
+                        })}
+                    </EmptyStateSecondaryActions>
+                  </>
+                ) : (
+                  <TextContent>
+                    <Text component={TextVariants.h2}>
+                      No domains available
+                    </Text>
+                  </TextContent>
+                )}
+              </EmptyState>
+            </CardBody>
+          </Card>
+        </Grid>
+      </PageSection>
+    </>
+  );
+};
+
+export default withOuiaContext(DomainExplorerLandingPage);
