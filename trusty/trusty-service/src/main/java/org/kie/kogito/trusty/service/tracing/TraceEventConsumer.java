@@ -61,23 +61,23 @@ public class TraceEventConsumer {
         try {
             return Optional.of(CloudEventUtils.decode(payload));
         } catch (IllegalStateException e) {
-            // TODO: implement proper error strategy in case of issues with decoding of the CloudEvent
-            LOG.error("Catched IllegalStateException while decoding CloudEvent", e);
+            LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
             return Optional.empty();
         }
     }
 
     private void handleCloudEvent(CloudEventImpl<TraceEvent> cloudEvent) {
         AttributesImpl attributes = cloudEvent.getAttributes();
+        Optional<TraceEvent> optData = cloudEvent.getData();
 
-        if (cloudEvent.getData().isEmpty()) {
+        if (!optData.isPresent()) {
             LOG.error("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
             return;
         }
 
         LOG.debug("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
 
-        TraceEvent traceEvent = cloudEvent.getData().get();
+        TraceEvent traceEvent = optData.get();
         TraceEventType traceEventType = traceEvent.getHeader().getType();
 
         if (traceEventType == TraceEventType.DMN) {

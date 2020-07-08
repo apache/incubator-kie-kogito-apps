@@ -30,22 +30,22 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class TraceEventConsumerTest {
+class TraceEventConsumerTest {
 
     @Test
-    public void testCorrectCloudEvent() throws IOException {
+    void testCorrectCloudEvent() throws IOException {
         String payload = IOUtils.resourceToString("/TraceEventTest_correct_CloudEvent.json", StandardCharsets.UTF_8);
         doTest(payload, 1);
     }
 
     @Test
-    public void testCloudEventWithoutData() throws IOException {
+    void testCloudEventWithoutData() throws IOException {
         String payload = IOUtils.resourceToString("/TraceEventTest_withoutData_CloudEvent.json", StandardCharsets.UTF_8);
         doTest(payload, 0);
     }
 
     @Test
-    public void testGibberishPayload() throws IOException {
+    void testGibberishPayload() throws IOException {
         String payload = "DefinitelyNotASerializedCloudEvent123456";
         doTest(payload, 0);
     }

@@ -36,20 +36,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class TraceEventConverterTest {
+class TraceEventConverterTest {
 
     @Test
-    public void testCorrectTraceEvent() {
+    void testCorrectTraceEvent() {
         doTest("/TraceEventTest_correct_CloudEvent.json", "/TraceEventTest_correct_Decision.json");
     }
 
     @Test
-    public void testTraceEventWithError() {
+    void testTraceEventWithError() {
         doTest("/TraceEventTest_error_CloudEvent.json", "/TraceEventTest_error_Decision.json");
     }
 
     @Test
-    public void testTraceEventWithNullFields() {
+    void testTraceEventWithNullFields() {
         doTest("/TraceEventTest_nullFields_CloudEvent.json", "/TraceEventTest_nullFields_Decision.json");
     }
 

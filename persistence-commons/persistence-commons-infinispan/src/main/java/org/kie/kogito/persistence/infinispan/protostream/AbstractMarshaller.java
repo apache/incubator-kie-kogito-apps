@@ -54,11 +54,11 @@ public abstract class AbstractMarshaller {
         return writer.toString();
     }
 
-    public <T extends Enum<T>> T enumFromString(String value, Class<T> enumClass) throws IOException {
+    public <T extends Enum<T>> T enumFromString(String value, Class<T> enumClass) {
         return value == null ? null : Enum.valueOf(enumClass, value);
     }
 
-    public <T extends Enum<T>> String stringFromEnum(T value) throws IOException {
+    public <T extends Enum<T>> String stringFromEnum(T value) {
         if (value == null) {
             return null;
         }

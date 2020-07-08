@@ -43,11 +43,12 @@ public class DecisionOutcomesResponse {
     }
 
     public static DecisionOutcomesResponse from(Decision decision) {
-        return decision == null ? null : new DecisionOutcomesResponse(
-                ExecutionHeaderResponse.fromExecution(decision),
-                decision.getOutcomes() == null ? null : decision.getOutcomes().stream()
-                        .map(DecisionOutcomeResponse::from)
-                        .collect(Collectors.toList())
-        );
+        if (decision == null) {
+            return null;
+        }
+        List<DecisionOutcomeResponse> outcomes = decision.getOutcomes() == null ? null : decision.getOutcomes().stream()
+                .map(DecisionOutcomeResponse::from)
+                .collect(Collectors.toList());
+        return new DecisionOutcomesResponse(ExecutionHeaderResponse.fromExecution(decision), outcomes);
     }
 }

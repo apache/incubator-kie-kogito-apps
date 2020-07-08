@@ -64,8 +64,12 @@ public class MessageResponse {
     }
 
     public static MessageResponse from(Message message) {
-        return message == null ? null : new MessageResponse(
-                message.getLevel() == null ? null : message.getLevel().name(),
+        if (message == null) {
+            return null;
+        }
+        String level = message.getLevel() == null ? null : message.getLevel().name();
+        return new MessageResponse(
+                level,
                 message.getCategory(),
                 message.getType(),
                 message.getSourceId(),
