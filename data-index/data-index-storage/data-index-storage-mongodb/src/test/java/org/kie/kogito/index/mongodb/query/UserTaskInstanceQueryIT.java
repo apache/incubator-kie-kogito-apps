@@ -60,7 +60,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class UserTaskInstanceQueryIT extends QueryTestBase<String, UserTaskInstance> {
+class UserTaskInstanceQueryIT extends QueryTestBase<String, UserTaskInstance> {
 
     Storage<String, UserTaskInstance> storage;
 

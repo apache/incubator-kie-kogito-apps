@@ -18,7 +18,7 @@ package org.kie.kogito.persistence.mongodb.query;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.bson.conversions.Bson;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
@@ -41,11 +41,11 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
-    static Optional<Bson> generateQuery(List<AttributeFilter<?>> filters, Function<String, String> filterFunction) {
+    static Optional<Bson> generateQuery(List<AttributeFilter<?>> filters, UnaryOperator<String> filterFunction) {
         return Optional.ofNullable(filters).filter(f -> !f.isEmpty()).map(fs -> and(fs.stream().map(f -> generateSingleQuery(f, filterFunction)).collect(toList())));
     }
 
-    static Bson generateSingleQuery(AttributeFilter<?> filter, Function<String, String> filterFunction) {
+    static Bson generateSingleQuery(AttributeFilter<?> filter, UnaryOperator<String> filterFunction) {
         switch (filter.getCondition()) {
             case CONTAINS:
             case EQUAL:

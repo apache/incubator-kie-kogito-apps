@@ -97,7 +97,7 @@ public class MongoQuery<V, E> implements Query<V> {
     }
 
     private Optional<Bson> generateSort() {
-        return Optional.ofNullable(this.sortBy).map(sortBy -> orderBy(sortBy.stream().map(
+        return Optional.ofNullable(this.sortBy).map(sbList -> orderBy(sbList.stream().map(
                 sb -> SortDirection.ASC.equals(sb.getSort()) ?
                         ascending(mongoEntityMapper.convertToMongoAttribute(sb.getAttribute())) :
                         descending(mongoEntityMapper.convertToMongoAttribute(sb.getAttribute())))

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
-import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
+import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
@@ -156,7 +156,7 @@ class ProcessInstanceEntityMapperTest {
 
     @Test
     void testConvertToMongoAttribute() {
-        assertEquals(MongoOperations.ID, processInstanceEntityMapper.convertToMongoAttribute(MongoEntityMapper.ID));
+        assertEquals(MongoOperations.ID, processInstanceEntityMapper.convertToMongoAttribute(ModelUtils.ID));
 
         assertEquals(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE,
                      processInstanceEntityMapper.convertToMongoAttribute(ProcessInstanceEntityMapper.NODES_ID_ATTRIBUTE));
@@ -170,12 +170,12 @@ class ProcessInstanceEntityMapperTest {
 
     @Test
     void testConvertToModelAttribute() {
-        assertEquals(MongoEntityMapper.ID, processInstanceEntityMapper.convertToModelAttribute(MongoOperations.ID));
+        assertEquals(ModelUtils.ID, processInstanceEntityMapper.convertToModelAttribute(MongoOperations.ID));
 
-        assertEquals(MongoEntityMapper.ID,
+        assertEquals(ModelUtils.ID,
                      processInstanceEntityMapper.convertToModelAttribute(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE));
 
-        assertEquals(MongoEntityMapper.ID,
+        assertEquals(ModelUtils.ID,
                      processInstanceEntityMapper.convertToModelAttribute(ProcessInstanceEntityMapper.MONGO_MILESTONES_ID_ATTRIBUTE));
 
         String testAttribute = "test.attribute.go";

@@ -31,14 +31,14 @@ class MongoEntityMapperTest {
         String testAttribute = "test";
         assertEquals(testAttribute, mockMongoEntityMapper.convertToMongoAttribute(testAttribute));
 
-        String idAttribute = MongoEntityMapper.ID;
+        String idAttribute = ModelUtils.ID;
         assertEquals(MongoOperations.ID, mockMongoEntityMapper.convertToMongoAttribute(idAttribute));
     }
 
     @Test
     void testConvertToModelAttribute() {
         String idAttribute = MongoOperations.ID;
-        assertEquals(MongoEntityMapper.ID, mockMongoEntityMapper.convertToModelAttribute(idAttribute));
+        assertEquals(ModelUtils.ID, mockMongoEntityMapper.convertToModelAttribute(idAttribute));
 
         String testAttribute = "nodes";
         assertEquals(testAttribute, mockMongoEntityMapper.convertToModelAttribute(testAttribute));

@@ -16,11 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
@@ -33,15 +28,17 @@ import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.storage.StorageUtilsIT.TestListener;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
+import static org.kie.kogito.persistence.mongodb.storage.StorageUtilsIT.awaitForChangeStream;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class StorageListenerIT {
+class StorageListenerIT {
 
     @Inject
     @StorageQualifier(MONGODB_STORAGE)
@@ -62,16 +59,14 @@ public class StorageListenerIT {
         TestListener testListener = new TestListener(3);
         Storage<String, String> storage = storageService.getCache("test");
         storage.addObjectCreatedListener(testListener::add);
-        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
-        // Pause the test to wait for the Change Stream to be ready
-        Thread.sleep(1000L);
+        awaitForChangeStream();
         storage.put("testKey_insert_1", "testValue1");
         storage.put("testKey_insert_2", "testValue2");
         storage.put("testKey_insert_3", "testValue3");
 
         testListener.await();
         assertEquals(3, testListener.items.size(), "values: " + testListener.items.keySet());
-        assertTrue(testListener.items.keySet().containsAll(asList("testValue1", "testValue2", "testValue3")), "values: " + testListener.items.keySet());
+        assertTrue(testListener.items.keySet().containsAll(asList("testValue1", "testValue2", "testValue3")));
     }
 
     @Test
@@ -79,9 +74,7 @@ public class StorageListenerIT {
         TestListener testListener = new TestListener(2);
         Storage<String, String> cache = storageService.getCache("test");
         cache.addObjectUpdatedListener(testListener::add);
-        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
-        // Pause the test to wait for the Change Stream to be ready
-        Thread.sleep(1000L);
+        awaitForChangeStream();
         cache.put("testKey_update_1", "testValue1");
         cache.put("testKey_update_1", "testValue2");
         cache.put("testKey_update_2", "testValue3");
@@ -97,9 +90,7 @@ public class StorageListenerIT {
         TestListener testListener = new TestListener(2);
         Storage<String, String> cache = storageService.getCache("test");
         cache.addObjectRemovedListener(testListener::add);
-        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
-        // Pause the test to wait for the Change Stream to be ready
-        Thread.sleep(1000L);
+        awaitForChangeStream();
         cache.put("testKey_remove_1", "testValue1");
         cache.put("testKey_remove_2", "testValue2");
         cache.remove("testKey_remove_1");
@@ -108,24 +99,5 @@ public class StorageListenerIT {
         testListener.await();
         assertEquals(2, testListener.items.size());
         assertTrue(testListener.items.keySet().containsAll(asList("testKey_remove_1", "testKey_remove_2")));
-    }
-
-    class TestListener {
-
-        volatile Map<String, String> items = new ConcurrentHashMap<>();
-        CountDownLatch latch;
-
-        TestListener(int count) {
-            latch = new CountDownLatch(count);
-        }
-
-        void await() throws InterruptedException {
-            latch.await(10L, TimeUnit.SECONDS);
-        }
-
-        void add(String item) {
-            items.put(item, item);
-            latch.countDown();
-        }
     }
 }

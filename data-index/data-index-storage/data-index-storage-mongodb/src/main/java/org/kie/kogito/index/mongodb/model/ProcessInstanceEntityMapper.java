@@ -24,6 +24,7 @@ import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
+import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 import static java.util.stream.Collectors.toList;
@@ -117,10 +118,10 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
     @Override
     public String convertToModelAttribute(String attribute) {
         if (MONGO_NODES_ID_ATTRIBUTE.equals(attribute)) {
-            return MongoEntityMapper.ID;
+            return ModelUtils.ID;
         }
         if (MONGO_MILESTONES_ID_ATTRIBUTE.equals(attribute)) {
-            return MongoEntityMapper.ID;
+            return ModelUtils.ID;
         }
         return MongoEntityMapper.super.convertToModelAttribute(attribute);
     }

@@ -37,7 +37,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class JobStorageIT extends StorageTestBase<String, Job> {
+class JobStorageIT extends StorageTestBase<String, Job> {
 
     Storage<String, Job> storage;
 

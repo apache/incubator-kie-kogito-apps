@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.hasItem;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class HealthCheckIT {
+class HealthCheckIT {
 
     @Test
     void testHealthCheck() {

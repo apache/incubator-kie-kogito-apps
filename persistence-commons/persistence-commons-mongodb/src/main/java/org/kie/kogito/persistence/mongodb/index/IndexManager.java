@@ -50,11 +50,11 @@ import static java.util.stream.Collectors.toMap;
 @ApplicationScoped
 public class IndexManager {
 
-    private static long MAX_INDEX_NUMBER = 63L;
+    private static final long MAX_INDEX_NUMBER = 63L;
 
-    static String INDEX_NAME_FIELD = "name";
+    static final String INDEX_NAME_FIELD = "name";
 
-    static String DEFAULT_INDEX = "_id_";
+    static final String DEFAULT_INDEX = "_id_";
 
     Map<String, EntityIndexDescriptor> indexes = new ConcurrentHashMap<>();
 

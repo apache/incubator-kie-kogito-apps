@@ -73,7 +73,7 @@ class ModelUtilsTest {
     @Test
     void testDocumentToObject() {
         Map<String, String> objectMap = new HashMap<>();
-        objectMap.put(MongoEntityMapper.ID, "testId");
+        objectMap.put(ModelUtils.ID, "testId");
         objectMap.put("testKey1", "testValue1");
         objectMap.put("testKey2", "testValue2");
 
@@ -99,7 +99,7 @@ class ModelUtilsTest {
         ObjectNode object = MAPPER.valueToTree(objectMap);
 
         Map expectedMap = new HashMap();
-        expectedMap.put(MongoEntityMapper.ID, "testId");
+        expectedMap.put(ModelUtils.ID, "testId");
         expectedMap.put("testKey1", "testValue1");
         expectedMap.put("testKey2", "testValue2");
         expectedMap.put("subMapKey", subMap);

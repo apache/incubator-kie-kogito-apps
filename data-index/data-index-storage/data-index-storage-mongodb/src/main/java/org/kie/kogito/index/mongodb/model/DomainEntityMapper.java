@@ -27,7 +27,7 @@ import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocu
 
 public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Document> {
 
-    static String ID = "id";
+    static final String ID = "id";
 
     @Override
     public Class<Document> getEntityClass() {

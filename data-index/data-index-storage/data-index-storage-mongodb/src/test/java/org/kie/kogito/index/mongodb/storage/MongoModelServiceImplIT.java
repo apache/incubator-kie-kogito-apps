@@ -57,7 +57,7 @@ class MongoModelServiceImplIT {
     MongoModelServiceImpl mongoModelServiceImpl;
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         mockIndexCreateOrUpdateEventListener.reset();
     }
 

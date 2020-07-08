@@ -27,10 +27,6 @@ import io.quarkus.mongodb.panache.runtime.MongoOperations;
  */
 public interface MongoEntityMapper<V, E> {
 
-    String ID = "id";
-
-    String ATTRIBUTE_DELIMITER = ".";
-
     /**
      * Get the mongo storage entity class
      * @return the mongo storage entity class
@@ -58,7 +54,7 @@ public interface MongoEntityMapper<V, E> {
      * @return the corresponding mongo storage attribute name
      */
     default String convertToMongoAttribute(String attribute) {
-        return ID.equals(attribute) ? MongoOperations.ID : attribute;
+        return ModelUtils.ID.equals(attribute) ? MongoOperations.ID : attribute;
     }
 
     /**
@@ -68,9 +64,9 @@ public interface MongoEntityMapper<V, E> {
      */
     default String convertToModelAttribute(String attribute) {
         if (MongoOperations.ID.equals(attribute)) {
-            return ID;
+            return ModelUtils.ID;
         }
-        String[] attributes = attribute.split(Pattern.quote(ATTRIBUTE_DELIMITER));
+        String[] attributes = attribute.split(Pattern.quote(ModelUtils.ATTRIBUTE_DELIMITER));
         return attributes[attributes.length - 1];
     }
 }

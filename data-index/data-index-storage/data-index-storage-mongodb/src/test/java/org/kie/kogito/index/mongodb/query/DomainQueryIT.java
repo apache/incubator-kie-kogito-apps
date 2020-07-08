@@ -56,7 +56,7 @@ import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollect
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class DomainQueryIT extends QueryTestBase<String, ObjectNode> {
+class DomainQueryIT extends QueryTestBase<String, ObjectNode> {
 
     Storage<String, ObjectNode> storage;
 

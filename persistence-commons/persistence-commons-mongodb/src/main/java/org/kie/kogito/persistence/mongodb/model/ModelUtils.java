@@ -22,7 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,7 +38,11 @@ public class ModelUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModelUtils.class);
 
-    public static ObjectMapper MAPPER = new ObjectMapper();
+    public static final String ID = "id";
+
+    public static final String ATTRIBUTE_DELIMITER = ".";
+
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
     private ModelUtils() {
     }
@@ -69,13 +73,13 @@ public class ModelUtils {
         return Optional.ofNullable(jsonNode).map(json -> Document.parse(json.toString())).orElse(null);
     }
 
-    public static <T> T documentToObject(Document document, Class<T> type, Function<String, String> converter) {
+    public static <T> T documentToObject(Document document, Class<T> type, UnaryOperator<String> converter) {
         ObjectNode node = documentToJsonNode(document, ObjectNode.class);
-        node = convertAttributes(node, Optional.empty(), converter);
-        return Optional.ofNullable(node).map(n -> MAPPER.convertValue(n, type)).orElse(null);
+        return Optional.ofNullable(node).map(n -> convertAttributes(node, Optional.empty(), converter))
+                .map(n -> MAPPER.convertValue(n, type)).orElse(null);
     }
 
-    static ObjectNode convertAttributes(ObjectNode node, Optional<String> parentName, Function<String, String> converter) {
+    static ObjectNode convertAttributes(ObjectNode node, Optional<String> parentName, UnaryOperator<String> converter) {
         ObjectNode objectNode = MAPPER.createObjectNode();
         Iterator<Map.Entry<String, JsonNode>> iterator = node.fields();
         while (iterator.hasNext()) {
