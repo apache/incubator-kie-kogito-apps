@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.tracing;
+package org.kie.kogito.trusty.service.messaging;
 
 import java.util.Comparator;
 import java.util.List;

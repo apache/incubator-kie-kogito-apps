@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.tracing;
+package org.kie.kogito.trusty.service.messaging;
 
 import java.util.List;
 import java.util.stream.Collectors;

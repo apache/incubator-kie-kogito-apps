@@ -56,7 +56,7 @@ public class DecisionsApiV1Test {
     ITrustyService executionService;
 
     @Test
-    void test_GetExecutionById() throws Exception {
+    void testGetExecutionById() throws Exception {
         assertGetExecutionByIdCorrectResponse(ListStatus.FULL, ListStatus.FULL);
         assertGetExecutionByIdCorrectResponse(ListStatus.FULL, ListStatus.EMPTY);
         assertGetExecutionByIdCorrectResponse(ListStatus.FULL, ListStatus.NULL);
@@ -70,7 +70,7 @@ public class DecisionsApiV1Test {
     }
 
     @Test
-    void test_GetStructuredInputs() throws Exception {
+    void testGetStructuredInputs() throws Exception {
         assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL, ListStatus.FULL);
         assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL, ListStatus.EMPTY);
         assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL, ListStatus.NULL);
@@ -84,7 +84,7 @@ public class DecisionsApiV1Test {
     }
 
     @Test
-    void test_GetOutcomes() throws Exception {
+    void testGetOutcomes() throws Exception {
         assertGetOutcomesCorrectFullResponse(ListStatus.FULL, ListStatus.FULL);
         assertGetOutcomesCorrectEmptyResponse(ListStatus.FULL, ListStatus.EMPTY);
         assertGetOutcomesCorrectNullResponse(ListStatus.FULL, ListStatus.NULL);
@@ -98,7 +98,7 @@ public class DecisionsApiV1Test {
     }
 
     @Test
-    void test_GetOutcomeById() throws Exception {
+    void testGetOutcomeById() throws Exception {
         assertGetOutcomeByIdCorrectResponse(ListStatus.FULL, ListStatus.FULL);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.FULL, ListStatus.EMPTY);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.FULL, ListStatus.NULL);

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.tracing;
+package org.kie.kogito.trusty.service.messaging;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
@@ -61,7 +61,7 @@ public class TraceEventConsumer {
         try {
             return Optional.of(CloudEventUtils.decode(payload));
         } catch (IllegalStateException e) {
-            LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
+            LOG.warn(String.format("Can't decode message to CloudEvent: %s", payload), e);
             return Optional.empty();
         }
     }
@@ -71,7 +71,7 @@ public class TraceEventConsumer {
         Optional<TraceEvent> optData = cloudEvent.getData();
 
         if (!optData.isPresent()) {
-            LOG.error("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
+            LOG.warn("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
             return;
         }
 
@@ -83,7 +83,7 @@ public class TraceEventConsumer {
         if (traceEventType == TraceEventType.DMN) {
             service.storeDecision(attributes.getId(), converter.toDecision(traceEvent));
         } else {
-            LOG.error("Unsupported TraceEvent type {}", traceEventType);
+            LOG.warn("Unsupported TraceEvent type {}", traceEventType);
         }
     }
 }
