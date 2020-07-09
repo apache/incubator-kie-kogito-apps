@@ -35,6 +35,7 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
+import org.kie.kogito.trusty.storage.api.model.MessageLevel;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 import static io.restassured.RestAssured.given;
@@ -201,7 +202,7 @@ public class DecisionsApiV1Test {
                                 new TypedValue("result", "ResType", mapper.readTree("\"The First Outcome\"")),
                                 List.of(),
                                 List.of(new Message(
-                                        Message.Level.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
+                                        MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                                         new MessageExceptionField("TestException", "Test exception message",
                                                 new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
                                         )

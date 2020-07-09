@@ -21,6 +21,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
+import org.kie.kogito.trusty.storage.api.model.MessageLevel;
 
 public class MessageModelMarshaller extends AbstractModelMarshaller<Message> {
 
@@ -38,7 +39,7 @@ public class MessageModelMarshaller extends AbstractModelMarshaller<Message> {
     @Override
     public Message readFrom(ProtoStreamReader reader) throws IOException {
         return new Message(
-                enumFromString(reader.readString(LEVEL_FIELD), Message.Level.class),
+                enumFromString(reader.readString(LEVEL_FIELD), MessageLevel.class),
                 reader.readString(CATEGORY_FIELD),
                 reader.readString(TYPE_FIELD),
                 reader.readString(SOURCE_ID_FIELD),

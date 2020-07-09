@@ -86,7 +86,7 @@ public class DecisionOutcome {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
-        this.hasErrors = messages != null && messages.stream().anyMatch(m -> m.getLevel() == Message.Level.ERROR);
+        this.hasErrors = messages != null && messages.stream().anyMatch(m -> m.getLevel() == MessageLevel.ERROR);
     }
 
     public boolean hasErrors() {

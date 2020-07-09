@@ -26,6 +26,7 @@ import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
+import org.kie.kogito.trusty.storage.api.model.MessageLevel;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 public class TraceEventConverter {
@@ -87,14 +88,14 @@ public class TraceEventConverter {
                 : new MessageExceptionField(eventException.getClassName(), eventException.getMessage(), toMessageExceptionField(eventException.getCause()));
     }
 
-    public Message.Level toMessageLevel(org.kie.api.builder.Message.Level eventLevel) {
+    public MessageLevel toMessageLevel(org.kie.api.builder.Message.Level eventLevel) {
         switch (eventLevel) {
             case ERROR:
-                return Message.Level.ERROR;
+                return MessageLevel.ERROR;
             case WARNING:
-                return Message.Level.WARNING;
+                return MessageLevel.WARNING;
             case INFO:
-                return Message.Level.INFO;
+                return MessageLevel.INFO;
             default:
                 return null;
         }

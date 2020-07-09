@@ -18,13 +18,7 @@ package org.kie.kogito.trusty.storage.api.model;
 
 public class Message {
 
-    public enum Level {
-        ERROR,
-        WARNING,
-        INFO;
-    }
-
-    private Level level;
+    private MessageLevel level;
     private String category;
     private String type;
     private String sourceId;
@@ -34,7 +28,7 @@ public class Message {
     public Message() {
     }
 
-    public Message(Level level, String category, String type, String sourceId, String text, MessageExceptionField exception) {
+    public Message(MessageLevel level, String category, String type, String sourceId, String text, MessageExceptionField exception) {
         this.level = level;
         this.category = category;
         this.type = type;
@@ -43,11 +37,11 @@ public class Message {
         this.exception = exception;
     }
 
-    public Level getLevel() {
+    public MessageLevel getLevel() {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(MessageLevel level) {
         this.level = level;
     }
 
