@@ -10,6 +10,7 @@ const MockedComponent = (): React.ReactElement => {
 // tslint:disable-next-line: no-var-requires
 const mockGraphqlTypes = require('../../../../graphql/types');
 
+jest.mock('../../../Molecules/UserTaskPageHeader/UserTaskPageHeader');
 jest.mock('@kogito-apps/common', () => ({
   ...jest.requireActual('@kogito-apps/common'),
   DataTable: () => {
