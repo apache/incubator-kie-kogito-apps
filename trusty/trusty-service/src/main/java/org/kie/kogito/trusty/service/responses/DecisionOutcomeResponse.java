@@ -20,16 +20,30 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 
 public class DecisionOutcomeResponse {
 
+    @JsonProperty("outcomeId")
     private String outcomeId;
+
+    @JsonProperty("outcomeName")
     private String outcomeName;
+
+    @JsonProperty("evaluationStatus")
     private String evaluationStatus;
+
+    @JsonProperty("outcomeResult")
     private TypedValueResponse outcomeResult;
+
+    @JsonProperty("outcomeInputs")
     private List<TypedValueResponse> outcomeInputs;
+
+    @JsonProperty("messages")
     private List<MessageResponse> messages;
+
+    @JsonProperty("hasErrors")
     private boolean hasErrors;
 
     private DecisionOutcomeResponse() {

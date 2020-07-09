@@ -16,15 +16,27 @@
 
 package org.kie.kogito.trusty.service.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kie.kogito.trusty.storage.api.model.Message;
 
 public class MessageResponse {
 
+    @JsonProperty("level")
     private String level;
+
+    @JsonProperty("category")
     private String category;
+
+    @JsonProperty("type")
     private String type;
+
+    @JsonProperty("sourceId")
     private String sourceId;
+
+    @JsonProperty("text")
     private String text;
+
+    @JsonProperty("exception")
     private MessageExceptionFieldResponse exception;
 
     private MessageResponse() {

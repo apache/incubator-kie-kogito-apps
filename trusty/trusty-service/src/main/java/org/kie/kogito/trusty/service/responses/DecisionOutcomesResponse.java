@@ -19,11 +19,15 @@ package org.kie.kogito.trusty.service.responses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 public class DecisionOutcomesResponse {
 
+    @JsonProperty("header")
     private ExecutionHeaderResponse header;
+
+    @JsonProperty("outcomes")
     private List<DecisionOutcomeResponse> outcomes;
 
     private DecisionOutcomesResponse() {

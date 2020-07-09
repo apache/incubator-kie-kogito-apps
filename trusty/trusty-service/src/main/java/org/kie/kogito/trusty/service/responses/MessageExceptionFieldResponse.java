@@ -16,12 +16,18 @@
 
 package org.kie.kogito.trusty.service.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
 
 public class MessageExceptionFieldResponse {
 
+    @JsonProperty("className")
     private String className;
+
+    @JsonProperty("message")
     private String message;
+
+    @JsonProperty("cause")
     private MessageExceptionFieldResponse cause;
 
     private MessageExceptionFieldResponse() {

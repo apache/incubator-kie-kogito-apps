@@ -16,13 +16,19 @@
 
 package org.kie.kogito.trusty.service.responses;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 public class TypedValueResponse {
 
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("typeRef")
     private String typeRef;
+
+    @JsonProperty("value")
     private JsonNode value;
 
     private TypedValueResponse() {
