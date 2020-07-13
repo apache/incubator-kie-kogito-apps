@@ -30,8 +30,6 @@ import graphql.schema.GraphQLInputObjectField;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchemaElement;
-import graphql.schema.GraphQLType;
-import graphql.schema.GraphQLTypeUtil;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -102,17 +100,15 @@ public class GraphQLQueryOrderByIT {
     private Function<GraphQLSchemaElement, Stream<String>> getAllTypes() {
         return type -> type.getChildren().stream().flatMap(t -> {
             if (t instanceof GraphQLInputObjectType) {
-                String tname = GraphQLTypeUtil.simplePrint(type);
-                return getAllTypes().apply(t).map(s -> format("%s : { %s }", tname, s));
+                return getAllTypes().apply(t).map(s -> format("%s : { %s }", ((GraphQLInputObjectField) type).getName(), s));
             } else if (t instanceof GraphQLInputObjectField) {
-                String tname = GraphQLTypeUtil.simplePrint(t);
-                if (((GraphQLInputObjectField) t).getType() instanceof GraphQLInputObjectType) {
-                    return getAllTypes().apply(((GraphQLInputObjectField) t).getType()).map(s -> format("%s : { %s }", tname, s));
+                GraphQLInputObjectField input = (GraphQLInputObjectField) t;
+                if (input.getType() instanceof GraphQLInputObjectType) {
+                    return getAllTypes().apply(input.getType()).map(s -> format("%s : { %s }", input.getName(), s));
                 }
-                return Stream.of(format("%s : $sort", tname));
+                return Stream.of(format("%s : $sort", input.getName()));
             } else {
-                String tname = GraphQLTypeUtil.simplePrint(type);
-                return Stream.of(format("%s : $sort", tname));
+                return Stream.of(format("%s : $sort", ((GraphQLInputObjectField) type).getName()));
             }
         });
     }

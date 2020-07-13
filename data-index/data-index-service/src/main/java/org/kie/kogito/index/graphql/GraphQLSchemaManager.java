@@ -36,9 +36,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLNamedInputType;
+import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.GraphQLTypeUtil;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
@@ -210,7 +211,7 @@ public class GraphQLSchemaManager {
     }
 
     private <T> List<T> executeAdvancedQueryForCache(Storage<String, T> cache, DataFetchingEnvironment env) {
-        String inputTypeName = GraphQLTypeUtil.simplePrint(env.getFieldDefinition().getArgument("where").getType());
+        String inputTypeName = ((GraphQLNamedType) env.getFieldDefinition().getArgument("where").getType()).getName();
 
         Query<T> query = cache.query();
 

@@ -20,11 +20,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
-import graphql.schema.GraphQLTypeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +60,8 @@ public class GraphQLOrderByTypeMapper extends AbstractInputObjectTypeMapper {
                             break;
                         default:
                             String typeName;
-                            String t = GraphQLTypeUtil.simplePrint(field.getType());
-                            switch (t) {
+                            String name = ((GraphQLNamedType) field.getType()).getName();
+                            switch (name) {
                                 case "Int":
                                 case "String":
                                 case "Boolean":
@@ -69,9 +69,9 @@ public class GraphQLOrderByTypeMapper extends AbstractInputObjectTypeMapper {
                                     typeName = ORDER_BY;
                                     break;
                                 default:
-                                    typeName = t + ORDER_BY;
+                                    typeName = name + ORDER_BY;
                                     if (getSchema().getType(typeName) == null && !getAdditionalTypes().containsKey(typeName)) {
-                                        GraphQLInputObjectType type = new GraphQLOrderByTypeMapper(getSchema(), getAdditionalTypes()).apply((GraphQLObjectType) getAdditionalTypes().get(t));
+                                        GraphQLInputObjectType type = new GraphQLOrderByTypeMapper(getSchema(), getAdditionalTypes()).apply((GraphQLObjectType) getAdditionalTypes().get(name));
                                         getAdditionalTypes().put(typeName, type);
                                     }
                             }
