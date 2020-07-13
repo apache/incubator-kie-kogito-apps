@@ -165,6 +165,7 @@ exports[`Process Details Page component tests snapshot testing in Active state 1
         handleModalToggle={[Function]}
         isModalOpen={false}
         modalContent=""
+        processName="travels"
       />
       <PageTitle
         title="Process Details"
@@ -877,6 +878,7 @@ exports[`Process Details Page component tests snapshot testing in Error state 1`
         handleModalToggle={[Function]}
         isModalOpen={false}
         modalContent=""
+        processName="travels"
       />
       <PageTitle
         title="Process Details"
@@ -1576,6 +1578,7 @@ exports[`Process Details Page component tests snapshot testing in Suspended stat
         handleModalToggle={[Function]}
         isModalOpen={false}
         modalContent=""
+        processName="travels"
       />
       <PageTitle
         title="Process Details"
