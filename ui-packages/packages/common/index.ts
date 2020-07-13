@@ -39,3 +39,4 @@ export {
 } from './src/components/Organisms/DomainExplorerListDomains/DomainExplorerListDomains';
 export * from './src/utils/OuiaUtils';
 export * from './src/graphql/types';
+export { getProcessInstanceDescription } from './src/utils/Utils';

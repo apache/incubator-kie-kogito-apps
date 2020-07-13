@@ -15,6 +15,7 @@ import DataListContainerExpandable from '../DataListContainerExpandable/DataList
 import DataListContainer from '../DataListContainer/DataListContainer';
 import UserTaskDataTableContainer from '../UserTaskDataTableContainer/UserTaskDataTableContainer';
 import { Location, History } from 'history';
+import TaskInbox from '../../Organisms/TaskInbox/TaskInbox';
 
 interface IOwnProps {
   location: Location;
@@ -29,6 +30,18 @@ const PageLayout: React.FC<IOwnProps & InjectedOuiaProps> = ({
   const PageNav = (
     <Nav aria-label="Nav" theme="dark" css="">
       <NavList>
+        <NavItem isActive={pathname === '/TaskInbox'}>
+          <Link
+            to="/TaskInbox"
+            {...ouiaAttribute(
+              ouiaContext,
+              'data-ouia-navigation-name',
+              'task-inbox'
+            )}
+          >
+            Task Inbox
+          </Link>
+        </NavItem>
         <NavItem isActive={pathname === '/UserTasks'}>
           <Link
             to="/UserTasks"
@@ -69,7 +82,8 @@ const PageLayout: React.FC<IOwnProps & InjectedOuiaProps> = ({
       BrandClick={BrandClick}
     >
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/UserTasks" />} />
+        <Route exact path="/" render={() => <Redirect to="/TaskInbox" />} />
+        <Route exact path="/TaskInbox" component={TaskInbox} />
         <Route
           exact
           path="/UserTasks"

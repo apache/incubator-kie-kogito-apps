@@ -35,6 +35,15 @@ exports[`PageLayout tests test TaskDetails route 1`] = `
             isActive={false}
           >
             <Link
+              to="/TaskInbox"
+            >
+              Task Inbox
+            </Link>
+          </NavItem>
+          <NavItem
+            isActive={false}
+          >
+            <Link
               to="/UserTasks"
             >
               User Tasks
@@ -59,6 +68,73 @@ exports[`PageLayout tests test TaskDetails route 1`] = `
 `;
 
 exports[`PageLayout tests test UserTasks route 1`] = `
+<PageLayout
+  history={Array []}
+  location={
+    Object {
+      "pathname": "/TaskInbox",
+    }
+  }
+  ouiaContext={
+    Object {
+      "isOuia": false,
+      "ouiaId": null,
+    }
+  }
+>
+  <KogitoPageLayout
+    BrandAltText="Task Console Logo"
+    BrandClick={[Function]}
+    BrandSrc="taskConsoleLogo.svg"
+    PageNav={
+      <Unknown
+        aria-label="Nav"
+        css=""
+        theme="dark"
+      >
+        <NavList
+          ariaLeftScroll="Scroll left"
+          ariaRightScroll="Scroll right"
+          className=""
+          variant="default"
+        >
+          <NavItem
+            isActive={true}
+          >
+            <Link
+              to="/TaskInbox"
+            >
+              Task Inbox
+            </Link>
+          </NavItem>
+          <NavItem
+            isActive={false}
+          >
+            <Link
+              to="/UserTasks"
+            >
+              User Tasks
+            </Link>
+          </NavItem>
+          <NavItem
+            isActive={false}
+          >
+            <Link
+              to="/UserTasksFilters"
+            >
+              User tasks with filters
+            </Link>
+          </NavItem>
+        </NavList>
+      </Unknown>
+    }
+  >
+    <MockedComponent />
+  </KogitoPageLayout>
+</PageLayout>
+`;
+
+exports[`PageLayout tests test UserTasks route 2`] = `
 <PageLayout
   history={Array []}
   location={
@@ -89,6 +165,15 @@ exports[`PageLayout tests test UserTasks route 1`] = `
           className=""
           variant="default"
         >
+          <NavItem
+            isActive={false}
+          >
+            <Link
+              to="/TaskInbox"
+            >
+              Task Inbox
+            </Link>
+          </NavItem>
           <NavItem
             isActive={true}
           >
@@ -151,6 +236,15 @@ exports[`PageLayout tests test UserTasksFilters route 1`] = `
             isActive={false}
           >
             <Link
+              to="/TaskInbox"
+            >
+              Task Inbox
+            </Link>
+          </NavItem>
+          <NavItem
+            isActive={false}
+          >
+            <Link
               to="/UserTasks"
             >
               User Tasks
@@ -209,6 +303,15 @@ exports[`PageLayout tests test UserTasksTable route 1`] = `
             isActive={false}
           >
             <Link
+              to="/TaskInbox"
+            >
+              Task Inbox
+            </Link>
+          </NavItem>
+          <NavItem
+            isActive={false}
+          >
+            <Link
               to="/UserTasks"
             >
               User Tasks
@@ -263,6 +366,15 @@ exports[`PageLayout tests test default route 1`] = `
           className=""
           variant="default"
         >
+          <NavItem
+            isActive={false}
+          >
+            <Link
+              to="/TaskInbox"
+            >
+              Task Inbox
+            </Link>
+          </NavItem>
           <NavItem
             isActive={false}
           >

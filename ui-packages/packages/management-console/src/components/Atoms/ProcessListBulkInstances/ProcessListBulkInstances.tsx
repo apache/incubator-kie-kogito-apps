@@ -7,7 +7,10 @@ import {
   TextList,
   TextListItem
 } from '@patternfly/react-core';
-import { ItemDescriptor } from '@kogito-apps/common';
+import {
+  ItemDescriptor,
+  getProcessInstanceDescription
+} from '@kogito-apps/common';
 
 interface IOwnProps {
   abortedMessageObj: any;
@@ -40,7 +43,11 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({
                 {Object.entries(abortedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor processInstanceData={process[1]} />
+                      <ItemDescriptor
+                        itemDescription={getProcessInstanceDescription(
+                          process[1]
+                        )}
+                      />
                     </TextListItem>
                   );
                 })}
@@ -68,7 +75,11 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({
                 {Object.entries(completedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor processInstanceData={process[1]} />
+                      <ItemDescriptor
+                        itemDescription={getProcessInstanceDescription(
+                          process[1]
+                        )}
+                      />
                     </TextListItem>
                   );
                 })}
@@ -97,7 +108,11 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({
                 {Object.entries(completedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor processInstanceData={process[1]} />
+                      <ItemDescriptor
+                        itemDescription={getProcessInstanceDescription(
+                          process[1]
+                        )}
+                      />
                     </TextListItem>
                   );
                 })}
@@ -118,7 +133,11 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({
                 {Object.entries(abortedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor processInstanceData={process[1]} />
+                      <ItemDescriptor
+                        itemDescription={getProcessInstanceDescription(
+                          process[1]
+                        )}
+                      />
                     </TextListItem>
                   );
                 })}
@@ -150,7 +169,11 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({
                 {Object.entries(abortedMessageObj).map((process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor processInstanceData={process[1]} />
+                      <ItemDescriptor
+                        itemDescription={getProcessInstanceDescription(
+                          process[1]
+                        )}
+                      />
                     </TextListItem>
                   );
                 })}

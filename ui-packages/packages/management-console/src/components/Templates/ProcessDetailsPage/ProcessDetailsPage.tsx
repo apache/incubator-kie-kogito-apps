@@ -20,8 +20,8 @@ import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
   GraphQL,
-  ItemDescriptor,
-  KogitoSpinner
+  KogitoSpinner,
+  ItemDescriptor
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
@@ -234,7 +234,11 @@ const ProcessDetailsPage: React.FC<
                         className="kogito-management-console--details__title"
                       >
                         <ItemDescriptor
-                          processInstanceData={data.ProcessInstances[0]}
+                          itemDescription={{
+                            id: data.ProcessInstances[0].id,
+                            name: data.ProcessInstances[0].processName,
+                            description: data.ProcessInstances[0].businessKey
+                          }}
                         />
                       </Title>
                     </SplitItem>

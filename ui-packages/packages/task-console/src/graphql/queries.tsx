@@ -95,3 +95,41 @@ const GET_PROCESS_INSTANCE = gql`
     }
   }
 `;
+
+// @ts-ignore
+const GET_TASKS_FOR_USER = gql`
+  query getTaskForUser($user: String, $groups: [String!]) {
+    UserTaskInstances(
+      where: {
+        or: [
+          { actualOwner: { equal: $user } }
+          { potentialUsers: { contains: $user } }
+          { potentialGroups: { containsAny: $groups } }
+        ]
+      }
+    ) {
+      id
+      name
+      referenceName
+      description
+      priority
+      processInstanceId
+      processId
+      rootProcessInstanceId
+      rootProcessId
+      state
+      actualOwner
+      adminGroups
+      adminUsers
+      completed
+      started
+      excludedUsers
+      potentialGroups
+      potentialUsers
+      inputs
+      outputs
+      referenceName
+      lastUpdate
+    }
+  }
+`;

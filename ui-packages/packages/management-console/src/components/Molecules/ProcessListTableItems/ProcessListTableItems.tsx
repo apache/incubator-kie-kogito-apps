@@ -22,7 +22,8 @@ import {
   KogitoSpinner,
   ItemDescriptor,
   ServerErrors,
-  EndpointLink
+  EndpointLink,
+  getProcessInstanceDescription
 } from '@kogito-apps/common';
 import { Link } from 'react-router-dom';
 import { HistoryIcon } from '@patternfly/react-icons';
@@ -375,7 +376,9 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
                   <div>
                     <strong>
                       <ItemDescriptor
-                        processInstanceData={processInstanceData}
+                        itemDescription={getProcessInstanceDescription(
+                          processInstanceData
+                        )}
                       />
                     </strong>
                   </div>

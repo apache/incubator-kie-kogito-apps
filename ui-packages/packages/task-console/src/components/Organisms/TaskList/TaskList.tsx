@@ -7,7 +7,7 @@ import {
   KogitoSpinner
 } from '@kogito-apps/common';
 import '@patternfly/patternfly/patternfly-addons.css';
-import { useGetUserTasksByStatesQuery } from '../.././../graphql/types';
+import { useGetUserTasksByStatesQuery } from '../../../graphql/types';
 
 interface IOwnProps {
   setInitData: any;

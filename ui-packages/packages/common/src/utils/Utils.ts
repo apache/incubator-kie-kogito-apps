@@ -1,6 +1,9 @@
 // tslint:disable: forin
 // tslint:disable: no-floating-promises
 
+import { GraphQL } from '../..';
+import ProcessInstance = GraphQL.ProcessInstance;
+
 const nestedCheck = (ele, valueObj) => {
   for (const key in ele) {
     const temp = ele[key];
@@ -97,4 +100,14 @@ export const filterColumnSelection = (selectionArray, objValue) => {
     }
   }
   return res;
+};
+
+export const getProcessInstanceDescription = (
+  processInstance: ProcessInstance
+) => {
+  return {
+    id: processInstance.id,
+    name: processInstance.processName,
+    description: processInstance.businessKey
+  };
 };

@@ -1,11 +1,19 @@
 import React from 'react';
 import TaskConsoleContext, { DefaultContext } from './TaskConsoleContext';
 import { TaskInfo } from '../../model/TaskInfo';
+import User from '@kogito-apps/common/src/models/User/User';
 
-const TaskConsoleContextProvider: React.FC = props => {
+interface IOwnProps {
+  user: User;
+}
+
+const TaskConsoleContextProvider: React.FC<IOwnProps> = ({
+  user,
+  children
+}) => {
   return (
-    <TaskConsoleContext.Provider value={new DefaultContext<TaskInfo>()}>
-      {props.children}
+    <TaskConsoleContext.Provider value={new DefaultContext<TaskInfo>(user)}>
+      {children}
     </TaskConsoleContext.Provider>
   );
 };
