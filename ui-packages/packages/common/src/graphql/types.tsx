@@ -1035,6 +1035,47 @@ export namespace GraphQL {
     >;
   };
 
+  export type GetTaskForUserQueryVariables = Exact<{
+    user?: Maybe<Scalars['String']>;
+    groups?: Maybe<Array<Scalars['String']>>;
+    offset?: Maybe<Scalars['Int']>;
+    limit?: Maybe<Scalars['Int']>;
+  }>;
+
+  export type GetTaskForUserQuery = { __typename?: 'Query' } & {
+    UserTaskInstances?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'UserTaskInstance' } & Pick<
+            UserTaskInstance,
+            | 'id'
+            | 'name'
+            | 'referenceName'
+            | 'description'
+            | 'priority'
+            | 'processInstanceId'
+            | 'processId'
+            | 'rootProcessInstanceId'
+            | 'rootProcessId'
+            | 'state'
+            | 'actualOwner'
+            | 'adminGroups'
+            | 'adminUsers'
+            | 'completed'
+            | 'started'
+            | 'excludedUsers'
+            | 'potentialGroups'
+            | 'potentialUsers'
+            | 'inputs'
+            | 'outputs'
+            | 'lastUpdate'
+            | 'endpoint'
+          >
+        >
+      >
+    >;
+  };
+
   export const GetProcessInstancesDocument = gql`
     query getProcessInstances(
       $where: ProcessInstanceArgument
@@ -1786,5 +1827,100 @@ export namespace GraphQL {
   export type GetUserTaskByIdQueryResult = ApolloReactCommon.QueryResult<
     GetUserTaskByIdQuery,
     GetUserTaskByIdQueryVariables
+  >;
+  export const GetTaskForUserDocument = gql`
+    query getTaskForUser(
+      $user: String
+      $groups: [String!]
+      $offset: Int
+      $limit: Int
+    ) {
+      UserTaskInstances(
+        where: {
+          or: [
+            { actualOwner: { equal: $user } }
+            { potentialUsers: { contains: $user } }
+            { potentialGroups: { containsAny: $groups } }
+          ]
+        }
+        pagination: { offset: $offset, limit: $limit }
+      ) {
+        id
+        name
+        referenceName
+        description
+        priority
+        processInstanceId
+        processId
+        rootProcessInstanceId
+        rootProcessId
+        state
+        actualOwner
+        adminGroups
+        adminUsers
+        completed
+        started
+        excludedUsers
+        potentialGroups
+        potentialUsers
+        inputs
+        outputs
+        referenceName
+        lastUpdate
+        endpoint
+      }
+    }
+  `;
+
+  /**
+   * __useGetTaskForUserQuery__
+   *
+   * To run a query within a React component, call `useGetTaskForUserQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetTaskForUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * you can use to render your UI.
+   *
+   * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+   *
+   * @example
+   * const { data, loading, error } = useGetTaskForUserQuery({
+   *   variables: {
+   *      user: // value for 'user'
+   *      groups: // value for 'groups'
+   *      offset: // value for 'offset'
+   *      limit: // value for 'limit'
+   *   },
+   * });
+   */
+  export function useGetTaskForUserQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<
+      GetTaskForUserQuery,
+      GetTaskForUserQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useQuery<
+      GetTaskForUserQuery,
+      GetTaskForUserQueryVariables
+    >(GetTaskForUserDocument, baseOptions);
+  }
+  export function useGetTaskForUserLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+      GetTaskForUserQuery,
+      GetTaskForUserQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useLazyQuery<
+      GetTaskForUserQuery,
+      GetTaskForUserQueryVariables
+    >(GetTaskForUserDocument, baseOptions);
+  }
+  export type GetTaskForUserQueryHookResult = ReturnType<
+    typeof useGetTaskForUserQuery
+  >;
+  export type GetTaskForUserLazyQueryHookResult = ReturnType<
+    typeof useGetTaskForUserLazyQuery
+  >;
+  export type GetTaskForUserQueryResult = ApolloReactCommon.QueryResult<
+    GetTaskForUserQuery,
+    GetTaskForUserQueryVariables
   >;
 }
