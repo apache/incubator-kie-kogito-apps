@@ -3,8 +3,8 @@
   "executionId": "82639415-ceb1-411a-b3c8-4832e6a82905",
   "executionTimestamp": 1594105482568,
   "executionType": "DECISION",
-  "executorName": "John Doe",
-  "hasSucceeded": true,
+  "executorName": null,
+  "hasSucceeded": null,
   "inputs": [
     {
       "name": "Violation",

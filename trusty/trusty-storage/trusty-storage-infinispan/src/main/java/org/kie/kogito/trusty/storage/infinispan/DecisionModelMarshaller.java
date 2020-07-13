@@ -28,9 +28,6 @@ import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 public class DecisionModelMarshaller extends AbstractModelMarshaller<Decision> {
 
-    public static final String INPUTS_FIELD = "inputs";
-    public static final String OUTCOMES_FIELD = "outcomes";
-
     public DecisionModelMarshaller(ObjectMapper mapper) {
         super(mapper, Decision.class);
     }
@@ -44,8 +41,8 @@ public class DecisionModelMarshaller extends AbstractModelMarshaller<Decision> {
         result.setExecutorName(reader.readString(Execution.EXECUTOR_NAME));
         result.setExecutedModelName(reader.readString(Execution.EXECUTED_MODEL_NAME));
         result.setExecutionType(enumFromString(reader.readString(Execution.EXECUTION_TYPE), ExecutionTypeEnum.class));
-        result.setInputs(reader.readCollection(INPUTS_FIELD, new ArrayList<>(), TypedValue.class));
-        result.setOutcomes(reader.readCollection(OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class));
+        result.setInputs(reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), TypedValue.class));
+        result.setOutcomes(reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class));
         return result;
     }
 
@@ -57,7 +54,7 @@ public class DecisionModelMarshaller extends AbstractModelMarshaller<Decision> {
         writer.writeString(Execution.EXECUTOR_NAME, input.getExecutorName());
         writer.writeString(Execution.EXECUTED_MODEL_NAME, input.getExecutedModelName());
         writer.writeString(Execution.EXECUTION_TYPE, stringFromEnum(input.getExecutionType()));
-        writer.writeCollection(INPUTS_FIELD, input.getInputs(), TypedValue.class);
-        writer.writeCollection(OUTCOMES_FIELD, input.getOutcomes(), DecisionOutcome.class);
+        writer.writeCollection(Decision.INPUTS_FIELD, input.getInputs(), TypedValue.class);
+        writer.writeCollection(Decision.OUTCOMES_FIELD, input.getOutcomes(), DecisionOutcome.class);
     }
 }

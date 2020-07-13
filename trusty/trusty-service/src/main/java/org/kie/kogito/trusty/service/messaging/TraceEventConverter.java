@@ -44,8 +44,8 @@ public class TraceEventConverter {
         return new Decision(
                 event.getHeader().getExecutionId(),
                 event.getHeader().getStartTimestamp(),
-                true,        // TODO: change this default
-                "John Doe",  // TODO: change this default
+                null,
+                null,
                 event.getHeader().getResourceId().getModelName(),
                 inputs,
                 outcomes
@@ -88,7 +88,7 @@ public class TraceEventConverter {
                 : new MessageExceptionField(eventException.getClassName(), eventException.getMessage(), toMessageExceptionField(eventException.getCause()));
     }
 
-    public MessageLevel toMessageLevel(org.kie.api.builder.Message.Level eventLevel) {
+    public MessageLevel toMessageLevel(org.kie.kogito.tracing.decision.event.common.MessageLevel eventLevel) {
         switch (eventLevel) {
             case ERROR:
                 return MessageLevel.ERROR;

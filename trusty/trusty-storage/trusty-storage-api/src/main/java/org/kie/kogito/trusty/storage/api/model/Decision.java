@@ -23,13 +23,16 @@ import java.util.List;
  */
 public class Decision extends Execution {
 
+    public static final String INPUTS_FIELD = "inputs";
+    public static final String OUTCOMES_FIELD = "outcomes";
+
     private List<TypedValue> inputs;
     private List<DecisionOutcome> outcomes;
 
     public Decision() {
     }
 
-    public Decision(String executionId, Long executionTimestamp, boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {
+    public Decision(String executionId, Long executionTimestamp, Boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {
         super(executionId, executionTimestamp, hasSucceeded, executorName, executedModelName, ExecutionTypeEnum.DECISION);
         this.inputs = inputs;
         this.outcomes = outcomes;

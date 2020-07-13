@@ -39,7 +39,7 @@ public class Execution {
     private Long executionTimestamp;
 
     @JsonProperty(HAS_SUCCEEDED)
-    private boolean hasSucceeded;
+    private Boolean hasSucceeded;
 
     @JsonProperty(EXECUTOR_NAME)
     private String executorName;
@@ -53,7 +53,7 @@ public class Execution {
     public Execution() {
     }
 
-    public Execution(String executionId, Long executionTimestamp, boolean hasSucceeded,
+    public Execution(String executionId, Long executionTimestamp, Boolean hasSucceeded,
                      String executorName, String executedModelName, ExecutionTypeEnum executionType) {
         this.executionId = executionId;
         this.executionTimestamp = executionTimestamp;
@@ -104,7 +104,7 @@ public class Execution {
      *
      * @return true if the execution was successful from an technical point of view, false otherwise.
      */
-    public boolean hasSucceeded() {
+    public Boolean hasSucceeded() {
         return hasSucceeded;
     }
 
@@ -167,7 +167,7 @@ public class Execution {
      *
      * @param hasSucceeded Success value.
      */
-    public void setSuccess(boolean hasSucceeded) {
+    public void setSuccess(Boolean hasSucceeded) {
         this.hasSucceeded = hasSucceeded;
     }
 }
