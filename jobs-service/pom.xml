@@ -23,9 +23,10 @@
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-context-propagation</artifactId>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>mutiny-context-propagation</artifactId>
     </dependency>
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-web</artifactId>
