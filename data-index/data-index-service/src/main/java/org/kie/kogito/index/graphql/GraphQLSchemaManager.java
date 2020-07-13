@@ -38,6 +38,7 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
+import graphql.schema.GraphQLTypeUtil;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
@@ -209,7 +210,7 @@ public class GraphQLSchemaManager {
     }
 
     private <T> List<T> executeAdvancedQueryForCache(Storage<String, T> cache, DataFetchingEnvironment env) {
-        String inputTypeName = env.getFieldDefinition().getArgument("where").getType().getName();
+        String inputTypeName = GraphQLTypeUtil.simplePrint(env.getFieldDefinition().getArgument("where").getType());
 
         Query<T> query = cache.query();
 

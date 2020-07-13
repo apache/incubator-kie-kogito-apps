@@ -26,6 +26,7 @@ import graphql.schema.GraphQLEnumType;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLTypeUtil;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.FilterCondition;
 import org.slf4j.Logger;
@@ -58,13 +59,14 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
 
         type.getFields().forEach(
                 field -> {
-                    LOGGER.debug("Parser type: {}, field = {}:{}", type.getName(), field.getName(), field.getType().getName());
+                    String t = GraphQLTypeUtil.simplePrint(field.getType());
+                    LOGGER.debug("Parser type: {}, field = {}:{}", type.getName(), field.getName(), t);
                     if (isEnumFilterType(field.getType())) {
                         parser.mapAttribute(field.getName(), mapEnumArgument(field.getName()));
-                    } else if ((field.getType() instanceof GraphQLList) || field.getType().getName().equals(type.getName())) {
+                    } else if ((field.getType() instanceof GraphQLList) || t.equals(type.getName())) {
                         parser.mapAttribute(field.getName(), mapRecursiveArgument(field.getName(), parser));
                     } else {
-                        switch (field.getType().getName()) {
+                        switch (t) {
                             case "IdArgument":
                                 parser.mapAttribute(field.getName(), mapIdArgument(field.getName()));
                                 break;

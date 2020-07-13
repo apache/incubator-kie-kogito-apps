@@ -32,6 +32,7 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+import graphql.schema.GraphQLTypeUtil;
 import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
 import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
@@ -72,7 +73,7 @@ public class GraphQLProtoSchemaMapper {
             GraphQLInputObjectType orderByType = new GraphQLOrderByTypeMapper(schema, additionalTypes).apply(rootType);
             additionalTypes.put(orderByType.getName(), orderByType);
             Set<GraphQLType> newTypes = additionalTypes.entrySet().stream().map(entry -> entry.getValue()).collect(toSet());
-            newTypes.addAll(schema.getAdditionalTypes().stream().filter(type -> additionalTypes.containsKey(type.getName()) == false).collect(toSet()));
+            newTypes.addAll(schema.getAdditionalTypes().stream().filter(type -> additionalTypes.containsKey(GraphQLTypeUtil.simplePrint(type)) == false).collect(toSet()));
             LOGGER.debug("New GraphQL types: {}", newTypes);
             builder.additionalTypes(newTypes);
 
@@ -82,7 +83,7 @@ public class GraphQLProtoSchemaMapper {
             query = query.transform(qBuilder -> {
                 if (qBuilder.hasField(rootType.getName())) {
                     qBuilder.clearFields();
-                    qBuilder.fields(schema.getQueryType().getFieldDefinitions().stream().filter(field -> rootType.getName().equals(field.getName()) == false).collect(toList()));
+                    qBuilder.fields(schema.getQueryType().getFieldDefinitions().stream().filter(field -> rootType.getName().equals(GraphQLTypeUtil.simplePrint(field)) == false).collect(toList()));
                 }
 
                 GraphQLQueryParserRegistry.get().registerParser(whereArgumentType);

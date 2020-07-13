@@ -27,6 +27,7 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+import graphql.schema.GraphQLTypeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +78,8 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
     }
 
     private GraphQLInputType getInputTypeByField(GraphQLFieldDefinition field) {
-        switch (field.getType().getName()) {
+        String t = GraphQLTypeUtil.simplePrint(field.getType());
+        switch (t) {
             case "Int":
                 return getInputObjectType("NumericArgument");
             case "String":
@@ -87,10 +89,10 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
             case "DateTime":
                 return getInputObjectType("DateArgument");
             default:
-                String typeName = field.getType().getName() + ARGUMENT;
+                String typeName = t + ARGUMENT;
                 GraphQLType schemaType = getExistingType(typeName);
                 if (schemaType == null) {
-                    GraphQLInputObjectType type = new GraphQLInputObjectTypeMapper(getSchema(), getAdditionalTypes(), false).apply((GraphQLObjectType) getAdditionalTypes().get(field.getType().getName()));
+                    GraphQLInputObjectType type = new GraphQLInputObjectTypeMapper(getSchema(), getAdditionalTypes(), false).apply((GraphQLObjectType) getAdditionalTypes().get(t));
                     getAdditionalTypes().put(typeName, type);
                     return type;
                 } else {
