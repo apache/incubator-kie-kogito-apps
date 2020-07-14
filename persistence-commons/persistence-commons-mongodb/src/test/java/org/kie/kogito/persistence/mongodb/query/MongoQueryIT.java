@@ -31,7 +31,6 @@ import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.storage.StorageUtils;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
@@ -66,8 +65,8 @@ class MongoQueryIT {
 
         mongoQuery.limit(1);
         mongoQuery.offset(1);
-        mongoQuery.sort(newArrayList(orderBy(TEST_ATTRIBUTE, ASC)));
-        mongoQuery.filter(newArrayList(QueryFilterFactory.in(TEST_ATTRIBUTE, newArrayList("2", "5", "7"))));
+        mongoQuery.sort(List.of(orderBy(TEST_ATTRIBUTE, ASC)));
+        mongoQuery.filter(List.of(QueryFilterFactory.in(TEST_ATTRIBUTE, List.of("2", "5", "7"))));
 
         List<String> results = mongoQuery.execute();
         assertEquals(1, results.size());

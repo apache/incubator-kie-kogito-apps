@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.persistence.mongodb.index;
+package org.kie.kogito.persistence.infinispan.cache;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 
+import io.quarkus.runtime.ShutdownEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.persistence.api.schema.SchemaAcceptor;
-import org.kie.kogito.persistence.api.schema.SchemaType;
+import org.kie.kogito.persistence.api.StorageService;
 
 import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;
-import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
+import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
 
 @ApplicationScoped
-public class IndexSchemaAcceptor implements SchemaAcceptor {
+public class InfinispanCacheShutdownObserver {
 
     @ConfigProperty(name = PERSISTENCE_TYPE_PROPERTY)
     String storageType;
 
-    @Override
-    public boolean accept(SchemaType type) {
-        return MONGODB_STORAGE.equals(storageType);
+    @Inject
+    StorageService cacheService;
+
+    public void stop(@Observes ShutdownEvent event) {
+        if (INFINISPAN_STORAGE.equals(storageType) && cacheService instanceof InfinispanCacheManager) {
+            ((InfinispanCacheManager) cacheService).destroy();
+        }
     }
 }

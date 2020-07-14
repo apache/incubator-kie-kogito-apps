@@ -23,7 +23,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
 import org.infinispan.protostream.AnnotationMetadataCreator;
 import org.infinispan.protostream.config.Configuration;
 import org.infinispan.protostream.descriptors.AnnotationElement;
@@ -102,7 +101,7 @@ class ProtoIndexParser implements AnnotationMetadataCreator<EntityIndexDescripto
                 fields.add(createAttributeDescriptor(fd, fieldName));
 
                 if (isIndexed) {
-                    indexes.add(new IndexDescriptor(fieldName, Lists.newArrayList(fieldName)));
+                    indexes.add(new IndexDescriptor(fieldName, List.of(fieldName)));
                 }
             }
         }

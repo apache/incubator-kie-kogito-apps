@@ -26,7 +26,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.UserTaskInstance;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
@@ -49,12 +48,12 @@ class UserTaskInstanceEntityMapperTest {
         String processInstanceId = "testProcessInstanceId";
         String state = "testState";
         String actualOwner = "testActualOwner";
-        Set<String> adminGroups = newHashSet("testAdminGroups");
-        Set<String> adminUsers = newHashSet("testAdminUsers");
+        Set<String> adminGroups = Set.of("testAdminGroups");
+        Set<String> adminUsers = Set.of("testAdminUsers");
         ZonedDateTime time = ZonedDateTime.now();
-        Set<String> excludedUsers = newHashSet("testExcludedUsers");
-        Set<String> potentialGroups = newHashSet("testPotentialGroups");
-        Set<String> potentialUsers = newHashSet("testPotentialUsers");
+        Set<String> excludedUsers = Set.of("testExcludedUsers");
+        Set<String> potentialGroups = Set.of("testPotentialGroups");
+        Set<String> potentialUsers = Set.of("testPotentialUsers");
         String referenceName = "testReferenceName";
         String processId = "testProcessId";
         String rootProcessId = "testRootProcessId";

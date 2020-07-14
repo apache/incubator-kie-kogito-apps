@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
 import org.infinispan.protostream.FileDescriptorSource;
 import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.config.Configuration;
@@ -94,28 +93,28 @@ public class TestUtils {
 
     static Map<String, EntityIndexDescriptor> getValidEntityIndexDescriptors(boolean includeUnindexedAttribute) {
         AttributeDescriptor flightNumber = new AttributeDescriptor("flightNumber", "string", true);
-        IndexDescriptor flightNumberIndex = new IndexDescriptor("flightNumber", Lists.newArrayList("flightNumber"));
+        IndexDescriptor flightNumberIndex = new IndexDescriptor("flightNumber", List.of("flightNumber"));
         EntityIndexDescriptor flightEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Flight",
-                                                                                      Lists.newArrayList(flightNumberIndex), Lists.newArrayList(flightNumber));
+                                                                                      List.of(flightNumberIndex), List.of(flightNumber));
 
         AttributeDescriptor hotelName = new AttributeDescriptor("name", "string", true);
         AttributeDescriptor hotelRoom = new AttributeDescriptor("room", "string", true);
-        IndexDescriptor hotelNameIndex = new IndexDescriptor("name", Lists.newArrayList("name"));
+        IndexDescriptor hotelNameIndex = new IndexDescriptor("name", List.of("name"));
         EntityIndexDescriptor hotelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Hotel",
-                                                                                     Lists.newArrayList(hotelNameIndex),
-                                                                                     includeUnindexedAttribute ? Lists.newArrayList(hotelName, hotelRoom) : Lists.newArrayList(hotelName));
+                                                                                     List.of(hotelNameIndex),
+                                                                                     includeUnindexedAttribute ? List.of(hotelName, hotelRoom) : List.of(hotelName));
 
         AttributeDescriptor flight = new AttributeDescriptor("flight", "Flight", false);
         AttributeDescriptor hotel = new AttributeDescriptor("hotel", "Hotel", false);
         AttributeDescriptor id = new AttributeDescriptor("id", "string", true);
         AttributeDescriptor metadata = new AttributeDescriptor("metadata", "string", true);
-        IndexDescriptor flightIndex = new IndexDescriptor("flight", Lists.newArrayList("flight"));
-        IndexDescriptor hotelIndex = new IndexDescriptor("hotel", Lists.newArrayList("hotel"));
-        IndexDescriptor idIndex = new IndexDescriptor("id", Lists.newArrayList("id"));
-        IndexDescriptor metadataIndex = new IndexDescriptor("metadata", Lists.newArrayList("metadata"));
+        IndexDescriptor flightIndex = new IndexDescriptor("flight", List.of("flight"));
+        IndexDescriptor hotelIndex = new IndexDescriptor("hotel", List.of("hotel"));
+        IndexDescriptor idIndex = new IndexDescriptor("id", List.of("id"));
+        IndexDescriptor metadataIndex = new IndexDescriptor("metadata", List.of("metadata"));
         EntityIndexDescriptor travelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Travels",
-                                                                                      Lists.newArrayList(flightIndex, hotelIndex, idIndex, metadataIndex),
-                                                                                      Lists.newArrayList(flight, hotel, id, metadata));
+                                                                                      List.of(flightIndex, hotelIndex, idIndex, metadataIndex),
+                                                                                      List.of(flight, hotel, id, metadata));
 
         Map<String, EntityIndexDescriptor> entityIndexDescriptorMap = new HashMap<>();
         entityIndexDescriptorMap.put(flightEntityIndexDescriptor.getName(), flightEntityIndexDescriptor);

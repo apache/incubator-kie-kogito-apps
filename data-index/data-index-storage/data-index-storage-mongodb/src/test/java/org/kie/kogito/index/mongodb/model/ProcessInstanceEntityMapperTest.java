@@ -18,6 +18,7 @@ package org.kie.kogito.index.mongodb.model;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,8 +31,6 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
@@ -58,7 +57,7 @@ class ProcessInstanceEntityMapperTest {
 
         String testId = "testId";
         String processId = "testProcessId";
-        Set<String> roles = newHashSet("testRoles");
+        Set<String> roles = Set.of("testRoles");
         Map<String, String> object = new HashMap<>();
         object.put("test", "testValue");
         JsonNode variables = MAPPER.valueToTree(object);
@@ -69,7 +68,7 @@ class ProcessInstanceEntityMapperTest {
         String rootProcessInstanceId = "testRootProcessInstanceId";
         String parentProcessInstanceId = "testParentProcessInstanceId";
         String processName = "testProcessName";
-        Set<String> addons = newHashSet("testAddons");
+        Set<String> addons = Set.of("testAddons");
         String businessKey = "testBusinessKey";
 
         NodeInstance nodeInstance = new NodeInstance();
@@ -91,7 +90,7 @@ class ProcessInstanceEntityMapperTest {
         processInstance.setRoles(roles);
         processInstance.setVariables(variables);
         processInstance.setEndpoint(endpoint);
-        processInstance.setNodes(newArrayList(nodeInstance));
+        processInstance.setNodes(List.of(nodeInstance));
         processInstance.setState(state);
         processInstance.setStart(time);
         processInstance.setEnd(time);
@@ -123,7 +122,7 @@ class ProcessInstanceEntityMapperTest {
         processInstanceEntity.roles = roles;
         processInstanceEntity.variables = jsonNodeToDocument(variables);
         processInstanceEntity.endpoint = endpoint;
-        processInstanceEntity.nodes = newArrayList(nodeInstanceEntity);
+        processInstanceEntity.nodes = List.of(nodeInstanceEntity);
         processInstanceEntity.state = state;
         processInstanceEntity.start = zonedDateTimeToInstant(time);
         processInstanceEntity.end = zonedDateTimeToInstant(time);

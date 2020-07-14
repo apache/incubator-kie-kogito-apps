@@ -29,7 +29,6 @@ import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.IndexModel;
 import com.mongodb.client.model.IndexOptions;
@@ -88,25 +87,25 @@ class IndexManagerIT {
     @BeforeAll
     static void setup_all() {
         AttributeDescriptor flightNumber = new AttributeDescriptor("flightNumber", "string", true);
-        IndexDescriptor flightNumberIndex = new IndexDescriptor("flightNumber", Lists.newArrayList("flightNumber"));
-        flightEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Flight", Lists.newArrayList(flightNumberIndex), Lists.newArrayList(flightNumber));
+        IndexDescriptor flightNumberIndex = new IndexDescriptor("flightNumber", List.of("flightNumber"));
+        flightEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Flight", List.of(flightNumberIndex), List.of(flightNumber));
 
         AttributeDescriptor hotelName = new AttributeDescriptor("name", "string", true);
         AttributeDescriptor hotelRoom = new AttributeDescriptor("room", "string", true);
-        IndexDescriptor hotelNameIndex = new IndexDescriptor("name", Lists.newArrayList("name"));
-        hotelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Hotel", Lists.newArrayList(hotelNameIndex), Lists.newArrayList(hotelName, hotelRoom));
+        IndexDescriptor hotelNameIndex = new IndexDescriptor("name", List.of("name"));
+        hotelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Hotel", List.of(hotelNameIndex), List.of(hotelName, hotelRoom));
 
         AttributeDescriptor flight = new AttributeDescriptor("flight", "Flight", false);
         AttributeDescriptor hotel = new AttributeDescriptor("hotel", "org.acme.travels.travels.Hotel", false);
         AttributeDescriptor id = new AttributeDescriptor("id", "string", true);
         AttributeDescriptor metadata = new AttributeDescriptor("metadata", "string", true);
-        IndexDescriptor flightIndex = new IndexDescriptor("flight", Lists.newArrayList("flight"));
-        IndexDescriptor hotelIndex = new IndexDescriptor("hotel", Lists.newArrayList("hotel"));
-        IndexDescriptor idIndex = new IndexDescriptor("id", Lists.newArrayList("id"));
-        IndexDescriptor metadataIndex = new IndexDescriptor("metadata", Lists.newArrayList("metadata"));
+        IndexDescriptor flightIndex = new IndexDescriptor("flight", List.of("flight"));
+        IndexDescriptor hotelIndex = new IndexDescriptor("hotel", List.of("hotel"));
+        IndexDescriptor idIndex = new IndexDescriptor("id", List.of("id"));
+        IndexDescriptor metadataIndex = new IndexDescriptor("metadata", List.of("metadata"));
         travelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Travels",
-                                                                Lists.newArrayList(flightIndex, hotelIndex, idIndex, metadataIndex),
-                                                                Lists.newArrayList(flight, hotel, id, metadata));
+                                                                List.of(flightIndex, hotelIndex, idIndex, metadataIndex),
+                                                                List.of(flight, hotel, id, metadata));
 
         errorEntityIndexDescriptor = mockErrorIndexes();
     }
@@ -173,7 +172,7 @@ class IndexManagerIT {
         indexManager.getCollectionIndexMapping().put("test1", travelEntityIndexDescriptor.getName());
         indexManager.getCollectionIndexMapping().put("test2", travelEntityIndexDescriptor.getName());
 
-        indexManager.updateIndexes(Lists.newArrayList(travelEntityIndexDescriptor, hotelEntityIndexDescriptor, flightEntityIndexDescriptor));
+        indexManager.updateIndexes(List.of(travelEntityIndexDescriptor, hotelEntityIndexDescriptor, flightEntityIndexDescriptor));
 
         MongoCollection<Document> testCollection1 = indexManager.getCollection("test1");
         MongoCollection<Document> testCollection2 = indexManager.getCollection("test2");
@@ -226,19 +225,19 @@ class IndexManagerIT {
     @Test
     void testCreateSingleIndex() {
         String fieldName = "id";
-        IndexDescriptor id = new IndexDescriptor(fieldName, Lists.newArrayList(fieldName));
+        IndexDescriptor id = new IndexDescriptor(fieldName, List.of(fieldName));
         String parentField = "";
         String prefixUUID = UUID.randomUUID().toString() + ".";
 
         Optional<IndexModel> index = indexManager.createIndex(id, parentField, prefixUUID);
 
-        assertTrue(equalsIndexModels(Lists.newArrayList(index.get()), Lists.newArrayList(new IndexModel(Indexes.ascending(fieldName), new IndexOptions().name(prefixUUID + fieldName).sparse(true)))));
+        assertTrue(equalsIndexModels(List.of(index.get()), List.of(new IndexModel(Indexes.ascending(fieldName), new IndexOptions().name(prefixUUID + fieldName).sparse(true)))));
     }
 
     @Test
     void testCreateNoIndex() {
         String fieldName = "id";
-        IndexDescriptor id = new IndexDescriptor(fieldName, Lists.newArrayList());
+        IndexDescriptor id = new IndexDescriptor(fieldName, List.of());
         String parentField = "";
         String prefixUUID = UUID.randomUUID().toString() + ".";
 
@@ -250,14 +249,14 @@ class IndexManagerIT {
     @Test
     void testCreateCompoundIndex() {
         String indexName = "test";
-        IndexDescriptor id = new IndexDescriptor(indexName, Lists.newArrayList("test1", "test2"));
+        IndexDescriptor id = new IndexDescriptor(indexName, List.of("test1", "test2"));
         String parentField = "test";
         String prefixUUID = UUID.randomUUID().toString() + ".";
 
         Optional<IndexModel> index = indexManager.createIndex(id, parentField, prefixUUID);
 
-        assertTrue(equalsIndexModels(Lists.newArrayList(index.get()),
-                                     Lists.newArrayList(new IndexModel(Indexes.ascending(indexName + ".test1", indexName + ".test2"), new IndexOptions().name(prefixUUID + indexName).sparse(true)))));
+        assertTrue(equalsIndexModels(List.of(index.get()),
+                                     List.of(new IndexModel(Indexes.ascending(indexName + ".test1", indexName + ".test2"), new IndexOptions().name(prefixUUID + indexName).sparse(true)))));
     }
 
     @Test
@@ -287,7 +286,7 @@ class IndexManagerIT {
     }
 
     private List<IndexModel> getTestIndexModels() {
-        return Lists.newArrayList(
+        return List.of(
                 new IndexModel(Indexes.ascending("flight"), new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.flight").sparse(true)),
                 new IndexModel(Indexes.ascending("flight.flightNumber"), new IndexOptions().name("e325b16a-a10b-32b0-a574-2595902073cb.flightNumber").sparse(true)),
                 new IndexModel(Indexes.ascending("hotel"), new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.hotel").sparse(true)),
@@ -311,7 +310,7 @@ class IndexManagerIT {
     }
 
     private static EntityIndexDescriptor mockErrorIndexes() {
-        List<IndexDescriptor> indexDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new IndexDescriptor("test" + i, Lists.newArrayList("test" + i))).collect(toList());
+        List<IndexDescriptor> indexDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new IndexDescriptor("test" + i, List.of("test" + i))).collect(toList());
         List<AttributeDescriptor> attributeDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new AttributeDescriptor("test" + i, "string", true)).collect(toList());
         return new EntityIndexDescriptor("org.acme.travels.travels.Travels", indexDescriptors, attributeDescriptors);
     }

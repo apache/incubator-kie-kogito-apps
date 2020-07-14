@@ -38,7 +38,6 @@ import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 
@@ -82,7 +81,7 @@ public class TestUtils {
         ni2.setType("EndNode");
         ni2.setNodeId("2");
         ni2.setDefinitionId("EndEvent_1");
-        return newArrayList(ni1, ni2);
+        return List.of(ni1, ni2);
     }
 
     public static ObjectNode createDomainData(String id, String firstName, String lastName) {

@@ -16,16 +16,12 @@
 
 package org.kie.kogito.persistence.mongodb;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
@@ -33,18 +29,15 @@ class HealthCheckIT {
 
     @Test
     void testHealthCheck() {
-        Map<String, Object> expectedBodyChecksData = new HashMap<>();
-        expectedBodyChecksData.put("default", "admin, config, local");
-        Map<String, Object> expectedBodyChecks = new HashMap<>();
-        expectedBodyChecks.put("name", "MongoDB connection health check");
-        expectedBodyChecks.put("status", "UP");
-        expectedBodyChecks.put("data", expectedBodyChecksData);
+        String status = "UP";
+        String connection = "MongoDB connection health check";
 
         given()
                 .when().get("/health/ready")
                 .then()
                 .statusCode(200)
-                .body("status", equalTo("UP"))
-                .body("checks", hasItem(expectedBodyChecks));
+                .body("status", equalTo(status))
+                .body("checks[0].name", equalTo(connection))
+                .body("checks[0].status", equalTo(status));
     }
 }

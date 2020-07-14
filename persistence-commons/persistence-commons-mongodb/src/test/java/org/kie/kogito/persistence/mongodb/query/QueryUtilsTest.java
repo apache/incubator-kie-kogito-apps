@@ -16,6 +16,7 @@
 
 package org.kie.kogito.persistence.mongodb.query;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -24,7 +25,6 @@ import org.bson.conversions.Bson;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,7 +48,7 @@ class QueryUtilsTest {
 
     @Test
     void testGenerateQuery() {
-        Optional<Bson> result = QueryUtils.generateQuery(newArrayList(contains("test", "testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
+        Optional<Bson> result = QueryUtils.generateQuery(List.of(contains("test", "testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertTrue(result.isPresent());
         assertEquals(Filters.and(Stream.of(Filters.eq("test", "testValue")).collect(toList())), result.get());
     }
@@ -115,31 +115,31 @@ class QueryUtilsTest {
 
     @Test
     void testGenerateSingleQuery_in() {
-        Bson result = QueryUtils.generateSingleQuery(in("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
-        assertEquals(Filters.in("test", newArrayList("testValue")), result);
+        Bson result = QueryUtils.generateSingleQuery(in("test", List.of("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
+        assertEquals(Filters.in("test", List.of("testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_containsAll() {
-        Bson result = QueryUtils.generateSingleQuery(containsAll("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
-        assertEquals(Filters.all("test", newArrayList("testValue")), result);
+        Bson result = QueryUtils.generateSingleQuery(containsAll("test", List.of("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
+        assertEquals(Filters.all("test", List.of("testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_containsAny() {
-        Bson result = QueryUtils.generateSingleQuery(containsAny("test", newArrayList("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
+        Bson result = QueryUtils.generateSingleQuery(containsAny("test", List.of("testValue")), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.or(Filters.eq("test", "testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_or() {
-        Bson result = QueryUtils.generateSingleQuery(or(newArrayList(contains("test", "testValue"))), new MockMongoEntityMapper()::convertToMongoAttribute);
+        Bson result = QueryUtils.generateSingleQuery(or(List.of(contains("test", "testValue"))), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.or(Filters.eq("test", "testValue")), result);
     }
 
     @Test
     void testGenerateSingleQuery_and() {
-        Bson result = QueryUtils.generateSingleQuery(and(newArrayList(contains("test", "testValue"))), new MockMongoEntityMapper()::convertToMongoAttribute);
+        Bson result = QueryUtils.generateSingleQuery(and(List.of(contains("test", "testValue"))), new MockMongoEntityMapper()::convertToMongoAttribute);
         assertEquals(Filters.and(Filters.eq("test", "testValue")), result);
     }
 }

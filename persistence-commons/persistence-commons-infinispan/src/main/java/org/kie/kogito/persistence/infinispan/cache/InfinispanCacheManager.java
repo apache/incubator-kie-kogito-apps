@@ -19,11 +19,8 @@ package org.kie.kogito.persistence.infinispan.cache;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.inject.Provider;
 
-import io.quarkus.runtime.ShutdownEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.infinispan.client.hotrod.DataFormat;
 import org.infinispan.client.hotrod.RemoteCache;
@@ -53,38 +50,23 @@ public class InfinispanCacheManager implements StorageService {
     @ConfigProperty(name = "kogito.cache.domain.template", defaultValue = "kogito-template")
     String cacheTemplateName;
 
-    @ConfigProperty(name = "kogito.persistence.type")
-    String storageType;
-
     @Inject
-    Provider<RemoteCacheManager> remoteCacheManagerProvider;
-
     RemoteCacheManager manager;
 
     @PostConstruct
     public void init() {
         jsonDataFormat = DataFormat.builder().valueType(MediaType.APPLICATION_JSON).valueMarshaller(marshaller).build();
-        // Not initialize RemoteCacheManager if not using infinispan to avoid connection error
-        if (INFINISPAN_STORAGE.equals(storageType)) {
-            manager = remoteCacheManagerProvider.get();
-            manager.start();
-        }
+        manager.start();
     }
 
     @PreDestroy
     public void destroy() {
-        if (manager != null) {
-            manager.stop();
-            try {
-                manager.close();
-            } catch (Exception ex) {
-                LOGGER.warn("Error trying to close Infinispan remote cache manager", ex);
-            }
+        manager.stop();
+        try {
+            manager.close();
+        } catch (Exception ex) {
+            LOGGER.warn("Error trying to close Infinispan remote cache manager", ex);
         }
-    }
-
-    public void stop(@Observes ShutdownEvent event) {
-        destroy();
     }
 
     /**
@@ -115,7 +97,7 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public Storage<String, String> getCache(String name){
+    public Storage<String, String> getCache(String name) {
         return new StorageImpl<>(manager.administration().getOrCreateCache(name, (String) null), String.class.getName());
     }
 
@@ -125,7 +107,7 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType){
+    public <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType) {
         return new StorageImpl<>(getOrCreateCache(name, cacheTemplateName).withDataFormat(jsonDataFormat), rootType);
     }
 }
