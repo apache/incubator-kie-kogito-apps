@@ -16,18 +16,26 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import java.util.Collection;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A decision.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Decision extends Execution {
 
     public static final String INPUTS_FIELD = "inputs";
     public static final String OUTCOMES_FIELD = "outcomes";
 
-    private List<TypedValue> inputs;
-    private List<DecisionOutcome> outcomes;
+    @JsonProperty(INPUTS_FIELD)
+    private Collection<TypedValue> inputs;
+
+    @JsonProperty(OUTCOMES_FIELD)
+    private Collection<DecisionOutcome> outcomes;
 
     public Decision() {
     }
@@ -38,19 +46,19 @@ public class Decision extends Execution {
         this.outcomes = outcomes;
     }
 
-    public List<TypedValue> getInputs() {
+    public Collection<TypedValue> getInputs() {
         return inputs;
     }
 
-    public void setInputs(List<TypedValue> inputs) {
+    public void setInputs(Collection<TypedValue> inputs) {
         this.inputs = inputs;
     }
 
-    public List<DecisionOutcome> getOutcomes() {
+    public Collection<DecisionOutcome> getOutcomes() {
         return outcomes;
     }
 
-    public void setOutcomes(List<DecisionOutcome> outcomes) {
+    public void setOutcomes(Collection<DecisionOutcome> outcomes) {
         this.outcomes = outcomes;
     }
 }

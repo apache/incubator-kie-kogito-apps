@@ -145,7 +145,7 @@ public class DecisionsApiV1Test {
         mockServiceWithDecision(inputsStatus, outcomesStatus);
         DecisionOutcomesResponse response = get("/outcomes").as(DecisionOutcomesResponse.class);
         assertSame(1, response.getOutcomes().size());
-        assertEquals("ONE", response.getOutcomes().get(0).getOutcomeName());
+        assertTrue(response.getOutcomes().stream().anyMatch(o -> "ONE".equals(o.getOutcomeName())));
     }
 
     private void assertGetOutcomesCorrectNullResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
@@ -164,8 +164,8 @@ public class DecisionsApiV1Test {
         mockServiceWithDecision(inputsStatus, outcomesStatus);
         DecisionStructuredInputsResponse response = get("/structuredInputs").as(DecisionStructuredInputsResponse.class);
         assertSame(2, response.getInputs().size());
-        assertEquals("first", response.getInputs().get(0).getName());
-        assertEquals("second", response.getInputs().get(1).getName());
+        assertTrue(response.getInputs().stream().anyMatch(i -> "first".equals(i.getName())));
+        assertTrue(response.getInputs().stream().anyMatch(i -> "second".equals(i.getName())));
     }
 
     private Decision buildValidDecision(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {

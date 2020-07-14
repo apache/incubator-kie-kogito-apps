@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.service.responses;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,20 +26,20 @@ import org.kie.kogito.trusty.storage.api.model.TypedValue;
 public class DecisionStructuredInputsResponse {
 
     @JsonProperty("inputs")
-    private List<TypedValueResponse> inputs;
+    private Collection<TypedValueResponse> inputs;
 
     private DecisionStructuredInputsResponse() {
     }
 
-    public DecisionStructuredInputsResponse(List<TypedValueResponse> inputs) {
+    public DecisionStructuredInputsResponse(Collection<TypedValueResponse> inputs) {
         this.inputs = inputs;
     }
 
-    public List<TypedValueResponse> getInputs() {
+    public Collection<TypedValueResponse> getInputs() {
         return inputs;
     }
 
-    public static DecisionStructuredInputsResponse from(List<TypedValue> inputs) {
+    public static DecisionStructuredInputsResponse from(Collection<TypedValue> inputs) {
         return inputs == null ? null : new DecisionStructuredInputsResponse(inputs.stream().map(TypedValueResponse::from).collect(Collectors.toList()));
     }
 

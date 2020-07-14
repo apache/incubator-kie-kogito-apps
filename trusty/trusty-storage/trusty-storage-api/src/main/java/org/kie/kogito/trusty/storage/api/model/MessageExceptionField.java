@@ -16,10 +16,23 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageExceptionField {
 
+    public static final String CAUSE_FIELD = "cause";
+    public static final String CLASS_NAME_FIELD = "className";
+    public static final String MESSAGE_FIELD = "message";
+
+    @JsonProperty(CLASS_NAME_FIELD)
     private String className;
+
+    @JsonProperty(MESSAGE_FIELD)
     private String message;
+
+    @JsonProperty(CAUSE_FIELD)
     private MessageExceptionField cause;
 
     public MessageExceptionField() {
@@ -35,12 +48,24 @@ public class MessageExceptionField {
         return className;
     }
 
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public MessageExceptionField getCause() {
         return cause;
+    }
+
+    public void setCause(MessageExceptionField cause) {
+        this.cause = cause;
     }
 
     public static MessageExceptionField from(Throwable throwable) {

@@ -16,22 +16,45 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
-import java.util.List;
+import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DecisionOutcome {
 
+    public static final String EVALUATION_STATUS_FIELD = "evaluationStatus";
+    public static final String MESSAGES_FIELD = "messages";
+    public static final String OUTCOME_ID_FIELD = "outcomeId";
+    public static final String OUTCOME_INPUTS_FIELD = "outcomeInputs";
+    public static final String OUTCOME_NAME_FIELD = "outcomeName";
+    public static final String OUTCOME_RESULT_FIELD = "outcomeResult";
+
+    @JsonProperty(OUTCOME_ID_FIELD)
     private String outcomeId;
+
+    @JsonProperty(OUTCOME_NAME_FIELD)
     private String outcomeName;
+
+    @JsonProperty(EVALUATION_STATUS_FIELD)
     private String evaluationStatus;
+
+    @JsonProperty(OUTCOME_RESULT_FIELD)
     private TypedValue outcomeResult;
-    private List<TypedValue> outcomeInputs;
-    private List<Message> messages;
+
+    @JsonProperty(OUTCOME_INPUTS_FIELD)
+    private Collection<TypedValue> outcomeInputs;
+
+    @JsonProperty(MESSAGES_FIELD)
+    private Collection<Message> messages;
+
     private boolean hasErrors;
 
     public DecisionOutcome() {
     }
 
-    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus, TypedValue outcomeResult, List<TypedValue> outcomeInputs, List<Message> messages) {
+    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus, TypedValue outcomeResult, Collection<TypedValue> outcomeInputs, Collection<Message> messages) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
         this.evaluationStatus = evaluationStatus;
@@ -72,19 +95,19 @@ public class DecisionOutcome {
         this.outcomeResult = outcomeResult;
     }
 
-    public List<TypedValue> getOutcomeInputs() {
+    public Collection<TypedValue> getOutcomeInputs() {
         return outcomeInputs;
     }
 
-    public void setOutcomeInputs(List<TypedValue> outcomeInputs) {
+    public void setOutcomeInputs(Collection<TypedValue> outcomeInputs) {
         this.outcomeInputs = outcomeInputs;
     }
 
-    public List<Message> getMessages() {
+    public Collection<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(Collection<Message> messages) {
         this.messages = messages;
         this.hasErrors = messages != null && messages.stream().anyMatch(m -> m.getLevel() == MessageLevel.ERROR);
     }
@@ -92,5 +115,4 @@ public class DecisionOutcome {
     public boolean hasErrors() {
         return hasErrors;
     }
-
 }

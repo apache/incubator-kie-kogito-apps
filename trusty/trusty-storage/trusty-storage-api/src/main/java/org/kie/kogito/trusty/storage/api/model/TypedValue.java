@@ -16,17 +16,27 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TypedValue {
 
+    public static final String NAME_FIELD = "name";
+    public static final String TYPE_REF_FIELD = "typeRef";
+    public static final String VALUE_FIELD = "value";
+
+    @JsonProperty(NAME_FIELD)
     private String name;
 
+    @JsonProperty(TYPE_REF_FIELD)
     private String typeRef;
 
+    @JsonProperty(VALUE_FIELD)
     private JsonNode value;
 
-    private TypedValue() {
+    public TypedValue() {
     }
 
     public TypedValue(String name, String typeRef, JsonNode value) {
@@ -39,12 +49,23 @@ public class TypedValue {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getTypeRef() {
         return typeRef;
+    }
+
+    public void setTypeRef(String typeRef) {
+        this.typeRef = typeRef;
     }
 
     public JsonNode getValue() {
         return value;
     }
 
+    public void setValue(JsonNode value) {
+        this.value = value;
+    }
 }

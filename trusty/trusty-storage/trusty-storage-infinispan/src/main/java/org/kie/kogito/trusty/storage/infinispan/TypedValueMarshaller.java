@@ -21,30 +21,26 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
-public class TypedValueModelMarshaller extends AbstractModelMarshaller<TypedValue> {
+public class TypedValueMarshaller extends AbstractModelMarshaller<TypedValue> {
 
-    public static final String NAME_FIELD = "name";
-    public static final String TYPE_REF_FIELD = "typeRef";
-    public static final String VALUE_FIELD = "value";
-
-    public TypedValueModelMarshaller(ObjectMapper mapper) {
+    public TypedValueMarshaller(ObjectMapper mapper) {
         super(mapper, TypedValue.class);
     }
 
     @Override
     public TypedValue readFrom(ProtoStreamReader reader) throws IOException {
         return new TypedValue(
-                reader.readString(NAME_FIELD),
-                reader.readString(TYPE_REF_FIELD),
-                jsonFromString(reader.readString(VALUE_FIELD))
+                reader.readString(TypedValue.NAME_FIELD),
+                reader.readString(TypedValue.TYPE_REF_FIELD),
+                jsonFromString(reader.readString(TypedValue.VALUE_FIELD))
         );
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, TypedValue input) throws IOException {
-        writer.writeString(NAME_FIELD, input.getName());
-        writer.writeString(TYPE_REF_FIELD, input.getTypeRef());
-        writer.writeString(VALUE_FIELD, stringFromJson(input.getValue()));
+        writer.writeString(TypedValue.NAME_FIELD, input.getName());
+        writer.writeString(TypedValue.TYPE_REF_FIELD, input.getTypeRef());
+        writer.writeString(TypedValue.VALUE_FIELD, stringFromJson(input.getValue()));
     }
 
 }

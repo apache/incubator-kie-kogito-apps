@@ -16,13 +16,35 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Message {
 
+    public static final String CATEGORY_FIELD = "category";
+    public static final String EXCEPTION_FIELD = "exception";
+    public static final String LEVEL_FIELD = "level";
+    public static final String SOURCE_ID_FIELD = "sourceId";
+    public static final String TEXT_FIELD = "text";
+    public static final String TYPE_FIELD = "type";
+
+    @JsonProperty(LEVEL_FIELD)
     private MessageLevel level;
+
+    @JsonProperty(CATEGORY_FIELD)
     private String category;
+
+    @JsonProperty(TYPE_FIELD)
     private String type;
+
+    @JsonProperty(SOURCE_ID_FIELD)
     private String sourceId;
+
+    @JsonProperty(TEXT_FIELD)
     private String text;
+
+    @JsonProperty(EXCEPTION_FIELD)
     private MessageExceptionField exception;
 
     public Message() {

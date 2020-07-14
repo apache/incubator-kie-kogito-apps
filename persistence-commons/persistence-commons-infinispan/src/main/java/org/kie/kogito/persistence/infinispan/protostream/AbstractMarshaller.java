@@ -42,10 +42,18 @@ public abstract class AbstractMarshaller {
     }
 
     public JsonNode jsonFromString(String value) throws IOException {
-        return value == null ? null : mapper.readTree(value);
+        return jsonFromString(mapper, value);
     }
 
     public String stringFromJson(JsonNode value) throws IOException {
+        return stringFromJson(mapper, value);
+    }
+
+    public static JsonNode jsonFromString(ObjectMapper mapper, String value) throws IOException {
+        return value == null ? null : mapper.readTree(value);
+    }
+
+    public static String stringFromJson(ObjectMapper mapper, JsonNode value) throws IOException {
         if (value == null) {
             return null;
         }
@@ -54,11 +62,11 @@ public abstract class AbstractMarshaller {
         return writer.toString();
     }
 
-    public <T extends Enum<T>> T enumFromString(String value, Class<T> enumClass) {
+    public static <T extends Enum<T>> T enumFromString(String value, Class<T> enumClass) {
         return value == null ? null : Enum.valueOf(enumClass, value);
     }
 
-    public <T extends Enum<T>> String stringFromEnum(T value) {
+    public static <T extends Enum<T>> String stringFromEnum(T value) {
         if (value == null) {
             return null;
         }

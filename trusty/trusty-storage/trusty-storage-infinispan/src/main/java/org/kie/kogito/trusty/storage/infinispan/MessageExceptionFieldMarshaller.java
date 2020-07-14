@@ -21,29 +21,25 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
 
-public class MessageExceptionFieldModelMarshaller extends AbstractModelMarshaller<MessageExceptionField> {
+public class MessageExceptionFieldMarshaller extends AbstractModelMarshaller<MessageExceptionField> {
 
-    public static final String CAUSE_FIELD = "cause";
-    public static final String CLASS_NAME_FIELD = "className";
-    public static final String MESSAGE_FIELD = "message";
-
-    public MessageExceptionFieldModelMarshaller(ObjectMapper mapper) {
+    public MessageExceptionFieldMarshaller(ObjectMapper mapper) {
         super(mapper, MessageExceptionField.class);
     }
 
     @Override
     public MessageExceptionField readFrom(ProtoStreamReader reader) throws IOException {
         return new MessageExceptionField(
-                reader.readString(CLASS_NAME_FIELD),
-                reader.readString(MESSAGE_FIELD),
-                reader.readObject(CAUSE_FIELD, MessageExceptionField.class)
+                reader.readString(MessageExceptionField.CLASS_NAME_FIELD),
+                reader.readString(MessageExceptionField.MESSAGE_FIELD),
+                reader.readObject(MessageExceptionField.CAUSE_FIELD, MessageExceptionField.class)
         );
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, MessageExceptionField input) throws IOException {
-        writer.writeString(CLASS_NAME_FIELD, input.getClassName());
-        writer.writeString(MESSAGE_FIELD, input.getMessage());
-        writer.writeObject(CAUSE_FIELD, input.getCause(), MessageExceptionField.class);
+        writer.writeString(MessageExceptionField.CLASS_NAME_FIELD, input.getClassName());
+        writer.writeString(MessageExceptionField.MESSAGE_FIELD, input.getMessage());
+        writer.writeObject(MessageExceptionField.CAUSE_FIELD, input.getCause(), MessageExceptionField.class);
     }
 }

@@ -16,9 +16,11 @@
 
 package org.kie.kogito.trusty.service.messaging;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.json.Json;
@@ -84,7 +86,7 @@ class TraceEventConverterTest {
         assertList(expected.getMessages(), actual.getMessages(), this::assertMessage, this::compareMessage);
     }
 
-    private <T> void assertList(List<T> expected, List<T> actual, BiConsumer<T, T> itemAssertor, Comparator<? super T> comparator) {
+    private <T> void assertList(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor, Comparator<? super T> comparator) {
         if (expected == null && actual == null) {
             return;
         }
@@ -93,11 +95,11 @@ class TraceEventConverterTest {
         }
         assertSame(expected.size(), actual.size());
 
-        expected.sort(comparator);
-        actual.sort(comparator);
+        List<T> sortedExpected = expected.stream().sorted(comparator).collect(Collectors.toList());
+        List<T> sortedActual = actual.stream().sorted(comparator).collect(Collectors.toList());
 
-        for (int i = 0; i < expected.size(); i++) {
-            itemAssertor.accept(expected.get(0), actual.get(0));
+        for (int i = 0; i < sortedExpected.size(); i++) {
+            itemAssertor.accept(sortedExpected.get(0), sortedActual.get(0));
         }
     }
 

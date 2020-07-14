@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.service.responses;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,10 +38,10 @@ public class DecisionOutcomeResponse {
     private TypedValueResponse outcomeResult;
 
     @JsonProperty("outcomeInputs")
-    private List<TypedValueResponse> outcomeInputs;
+    private Collection<TypedValueResponse> outcomeInputs;
 
     @JsonProperty("messages")
-    private List<MessageResponse> messages;
+    private Collection<MessageResponse> messages;
 
     @JsonProperty("hasErrors")
     private boolean hasErrors;
@@ -49,7 +49,7 @@ public class DecisionOutcomeResponse {
     private DecisionOutcomeResponse() {
     }
 
-    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedValueResponse outcomeResult, List<TypedValueResponse> outcomeInputs, List<MessageResponse> messages, boolean hasErrors) {
+    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedValueResponse outcomeResult, Collection<TypedValueResponse> outcomeInputs, Collection<MessageResponse> messages, boolean hasErrors) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
         this.evaluationStatus = evaluationStatus;
@@ -75,11 +75,11 @@ public class DecisionOutcomeResponse {
         return outcomeResult;
     }
 
-    public List<TypedValueResponse> getOutcomeInputs() {
+    public Collection<TypedValueResponse> getOutcomeInputs() {
         return outcomeInputs;
     }
 
-    public List<MessageResponse> getMessages() {
+    public Collection<MessageResponse> getMessages() {
         return messages;
     }
 
@@ -99,7 +99,7 @@ public class DecisionOutcomeResponse {
         );
     }
 
-    public static <T,U> List<U> from(List<T> input, Function<T,U> mapper) {
+    public static <T, U> Collection<U> from(Collection<T> input, Function<T, U> mapper) {
         return input == null ? null : input.stream().map(mapper).collect(Collectors.toList());
     }
 }

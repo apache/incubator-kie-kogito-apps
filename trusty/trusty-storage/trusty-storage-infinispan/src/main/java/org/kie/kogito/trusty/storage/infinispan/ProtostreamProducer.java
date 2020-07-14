@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.FileDescriptorSource;
-import org.infinispan.protostream.MessageMarshaller;
 
 @ApplicationScoped
 public class ProtostreamProducer {
@@ -40,27 +39,27 @@ public class ProtostreamProducer {
     }
 
     @Produces
-    MessageMarshaller decisionModelMarshaller() {
-        return new DecisionModelMarshaller(mapper);
+    org.infinispan.protostream.MessageMarshaller decisionModelMarshaller() {
+        return new DecisionMarshaller(mapper);
     }
 
     @Produces
-    MessageMarshaller decisionOutcomeModelMarshaller() {
-        return new DecisionOutcomeModelMarshaller(mapper);
+    org.infinispan.protostream.MessageMarshaller decisionOutcomeModelMarshaller() {
+        return new DecisionOutcomeMarshaller(mapper);
     }
 
     @Produces
-    MessageMarshaller messageExceptionFieldModelMarshaller() {
-        return new MessageExceptionFieldModelMarshaller(mapper);
+    org.infinispan.protostream.MessageMarshaller messageExceptionFieldModelMarshaller() {
+        return new MessageExceptionFieldMarshaller(mapper);
     }
 
     @Produces
-    MessageMarshaller messageModelMarshaller() {
-        return new MessageModelMarshaller(mapper);
+    org.infinispan.protostream.MessageMarshaller messageModelMarshaller() {
+        return new MessageMarshaller(mapper);
     }
 
     @Produces
-    MessageMarshaller typedValueModelMarshaller() {
-        return new TypedValueModelMarshaller(mapper);
+    org.infinispan.protostream.MessageMarshaller typedValueModelMarshaller() {
+        return new TypedValueMarshaller(mapper);
     }
 }

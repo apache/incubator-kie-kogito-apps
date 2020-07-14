@@ -26,34 +26,35 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
-public class DecisionModelMarshaller extends AbstractModelMarshaller<Decision> {
+public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
 
-    public DecisionModelMarshaller(ObjectMapper mapper) {
+    public DecisionMarshaller(ObjectMapper mapper) {
         super(mapper, Decision.class);
     }
 
     @Override
     public Decision readFrom(ProtoStreamReader reader) throws IOException {
-        Decision result = new Decision();
-        result.setExecutionId(reader.readString(Execution.EXECUTION_ID));
-        result.setExecutionTimestamp(reader.readLong(Execution.EXECUTION_TIMESTAMP));
-        result.setSuccess(reader.readBoolean(Execution.HAS_SUCCEEDED));
-        result.setExecutorName(reader.readString(Execution.EXECUTOR_NAME));
-        result.setExecutedModelName(reader.readString(Execution.EXECUTED_MODEL_NAME));
-        result.setExecutionType(enumFromString(reader.readString(Execution.EXECUTION_TYPE), ExecutionTypeEnum.class));
-        result.setInputs(reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), TypedValue.class));
-        result.setOutcomes(reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class));
+        Decision result = new Decision(
+                reader.readString(Execution.EXECUTION_ID_FIELD),
+                reader.readLong(Execution.EXECUTION_TIMESTAMP_FIELD),
+                reader.readBoolean(Execution.HAS_SUCCEEDED_FIELD),
+                reader.readString(Execution.EXECUTOR_NAME_FIELD),
+                reader.readString(Execution.EXECUTED_MODEL_NAME_FIELD),
+                reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), TypedValue.class),
+                reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class)
+        );
+        result.setExecutionType(enumFromString(reader.readString(Execution.EXECUTION_TYPE_FIELD), ExecutionTypeEnum.class));
         return result;
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, Decision input) throws IOException {
-        writer.writeString(Execution.EXECUTION_ID, input.getExecutionId());
-        writer.writeLong(Execution.EXECUTION_TIMESTAMP, input.getExecutionTimestamp());
-        writer.writeBoolean(Execution.HAS_SUCCEEDED, input.hasSucceeded());
-        writer.writeString(Execution.EXECUTOR_NAME, input.getExecutorName());
-        writer.writeString(Execution.EXECUTED_MODEL_NAME, input.getExecutedModelName());
-        writer.writeString(Execution.EXECUTION_TYPE, stringFromEnum(input.getExecutionType()));
+        writer.writeString(Execution.EXECUTION_ID_FIELD, input.getExecutionId());
+        writer.writeLong(Execution.EXECUTION_TIMESTAMP_FIELD, input.getExecutionTimestamp());
+        writer.writeBoolean(Execution.HAS_SUCCEEDED_FIELD, input.hasSucceeded());
+        writer.writeString(Execution.EXECUTOR_NAME_FIELD, input.getExecutorName());
+        writer.writeString(Execution.EXECUTED_MODEL_NAME_FIELD, input.getExecutedModelName());
+        writer.writeString(Execution.EXECUTION_TYPE_FIELD, stringFromEnum(input.getExecutionType()));
         writer.writeCollection(Decision.INPUTS_FIELD, input.getInputs(), TypedValue.class);
         writer.writeCollection(Decision.OUTCOMES_FIELD, input.getOutcomes(), DecisionOutcome.class);
     }

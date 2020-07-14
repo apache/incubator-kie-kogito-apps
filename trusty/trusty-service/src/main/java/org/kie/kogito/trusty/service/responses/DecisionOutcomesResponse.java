@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.service.responses;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,12 +28,12 @@ public class DecisionOutcomesResponse {
     private ExecutionHeaderResponse header;
 
     @JsonProperty("outcomes")
-    private List<DecisionOutcomeResponse> outcomes;
+    private Collection<DecisionOutcomeResponse> outcomes;
 
     private DecisionOutcomesResponse() {
     }
 
-    public DecisionOutcomesResponse(ExecutionHeaderResponse header, List<DecisionOutcomeResponse> outcomes) {
+    public DecisionOutcomesResponse(ExecutionHeaderResponse header, Collection<DecisionOutcomeResponse> outcomes) {
         this.header = header;
         this.outcomes = outcomes;
     }
@@ -42,7 +42,7 @@ public class DecisionOutcomesResponse {
         return header;
     }
 
-    public List<DecisionOutcomeResponse> getOutcomes() {
+    public Collection<DecisionOutcomeResponse> getOutcomes() {
         return outcomes;
     }
 
@@ -50,7 +50,7 @@ public class DecisionOutcomesResponse {
         if (decision == null) {
             return null;
         }
-        List<DecisionOutcomeResponse> outcomes = decision.getOutcomes() == null ? null : decision.getOutcomes().stream()
+        Collection<DecisionOutcomeResponse> outcomes = decision.getOutcomes() == null ? null : decision.getOutcomes().stream()
                 .map(DecisionOutcomeResponse::from)
                 .collect(Collectors.toList());
         return new DecisionOutcomesResponse(ExecutionHeaderResponse.fromExecution(decision), outcomes);
