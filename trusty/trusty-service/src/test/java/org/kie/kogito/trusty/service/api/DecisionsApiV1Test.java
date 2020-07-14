@@ -25,6 +25,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.tracing.decision.event.common.MessageLevel;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.responses.DecisionOutcomeResponse;
 import org.kie.kogito.trusty.service.responses.DecisionOutcomesResponse;
@@ -35,7 +36,6 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
-import org.kie.kogito.trusty.storage.api.model.MessageLevel;
 import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 import static io.restassured.RestAssured.given;
