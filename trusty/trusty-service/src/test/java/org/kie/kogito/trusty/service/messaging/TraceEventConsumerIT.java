@@ -69,7 +69,14 @@ class TraceEventConsumerIT {
     @Test
     void testCorrectCloudEvent() throws Exception {
         sendToKafkaAndRun(IOUtils.resourceToString("/TraceEventTest_correct_CloudEvent.json", StandardCharsets.UTF_8), () ->
-            assertNotNull(trustyService.getDecisionById("82639415-ceb1-411a-b3c8-4832e6a82905"))
+                assertNotNull(trustyService.getDecisionById("82639415-ceb1-411a-b3c8-4832e6a82905"))
+        );
+    }
+
+    @Test
+    void testCloudEventWithErrors() throws Exception {
+        sendToKafkaAndRun(IOUtils.resourceToString("/TraceEventTest_error_CloudEvent.json", StandardCharsets.UTF_8), () ->
+                assertNotNull(trustyService.getDecisionById("6f8f5a8b-5477-464c-b5d3-1e3ed399e0da"))
         );
     }
 
