@@ -1822,7 +1822,7 @@ exports[`ProcessListTable component tests Snapshot testing with success data 1`]
                         >
                           <div>
                             <strong>
-                              <ProcessDescriptor
+                              <ItemDescriptor
                                 processInstanceData={
                                   Object {
                                     "addons": Array [
@@ -2046,7 +2046,7 @@ exports[`ProcessListTable component tests Snapshot testing with success data 1`]
                             >
                               <div>
                                 <strong>
-                                  <ProcessDescriptor
+                                  <ItemDescriptor
                                     processInstanceData={
                                       Object {
                                         "addons": Array [
@@ -2302,7 +2302,7 @@ exports[`ProcessListTable component tests Snapshot testing with success data 1`]
                                         </Portal>
                                       </PopoverBase>
                                     </Tooltip>
-                                  </ProcessDescriptor>
+                                  </ItemDescriptor>
                                 </strong>
                               </div>
                             </a>

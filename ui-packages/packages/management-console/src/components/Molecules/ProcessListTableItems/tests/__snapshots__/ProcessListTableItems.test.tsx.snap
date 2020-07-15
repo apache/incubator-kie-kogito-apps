@@ -164,7 +164,7 @@ exports[`ProcessListTableItems component tests snapshot tests for no child insta
               >
                 <div>
                   <strong>
-                    <ProcessDescriptor
+                    <ItemDescriptor
                       processInstanceData={
                         Object {
                           "addons": Array [],
@@ -604,7 +604,7 @@ exports[`ProcessListTableItems component tests snapshot tests with child instanc
               >
                 <div>
                   <strong>
-                    <ProcessDescriptor
+                    <ItemDescriptor
                       processInstanceData={
                         Object {
                           "addons": Array [],

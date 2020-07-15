@@ -24,8 +24,8 @@ export {
   default as ServerErrors
 } from './src/components/Molecules/ServerErrors/ServerErrors';
 export {
-  default as ProcessDescriptor
-} from './src/components/Molecules/ProcessDescriptor/ProcessDescriptor';
+  default as ItemDescriptor
+} from './src/components/Molecules/ItemDescriptor/ItemDescriptor';
 export * from './src/components/Atoms/KogitoEmptyState/KogitoEmptyState';
 export { default as LoadMore } from './src/components/Atoms/LoadMore/LoadMore';
 export {
