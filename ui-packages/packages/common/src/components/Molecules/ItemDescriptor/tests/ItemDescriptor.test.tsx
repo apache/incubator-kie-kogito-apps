@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import ItemDescriptor from '../ItemDescriptor';
 import { GraphQL } from '../../../../graphql/types';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
+import { getProcessInstanceDescription } from '../../../../..';
 
 const processInstanceData1 = {
   id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
@@ -24,7 +25,7 @@ const processInstanceData1 = {
   },
   addons: [],
   variables:
-    '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
+      '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
   nodes: [
     {
       nodeId: '1',
@@ -77,7 +78,7 @@ const processInstanceData2 = {
   },
   addons: [],
   variables:
-    '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
+      '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
   nodes: [
     {
       nodeId: '1',
@@ -112,13 +113,17 @@ const processInstanceData2 = {
 describe('ItemDescriptor component tests', () => {
   it('snapshot testing for business key available', () => {
     const wrapper = shallow(
-      <ItemDescriptor processInstanceData={processInstanceData1} />
+        <ItemDescriptor
+            itemDescription={getProcessInstanceDescription(processInstanceData1)}
+        />
     );
     expect(wrapper).toMatchSnapshot();
   });
   it('snapshot testing for buisness key null', () => {
     const wrapper = shallow(
-      <ItemDescriptor processInstanceData={processInstanceData2} />
+        <ItemDescriptor
+            itemDescription={getProcessInstanceDescription(processInstanceData2)}
+        />
     );
     expect(wrapper).toMatchSnapshot();
   });
