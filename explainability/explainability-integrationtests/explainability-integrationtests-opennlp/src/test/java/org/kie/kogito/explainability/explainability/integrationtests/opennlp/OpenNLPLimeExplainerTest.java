@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kie.kogito.explainability.explainability.integrationtests.opennlp;
 
 import java.io.IOException;
@@ -8,7 +23,7 @@ import java.util.List;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Model;
+import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -17,7 +32,7 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.kie.kogito.explainability.utils.ExplainabilityUtils;
+import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import opennlp.tools.langdetect.Language;
 import opennlp.tools.langdetect.LanguageDetector;
@@ -52,7 +67,7 @@ public class OpenNLPLimeExplainerTest {
         Prediction prediction = new Prediction(input, output);
 
         LimeExplainer limeExplainer = new LimeExplainer(100, 2);
-        Model model = new Model() {
+        BlackBoxModel model = new BlackBoxModel() {
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
                 List<PredictionOutput> results = new LinkedList<>();
@@ -90,7 +105,7 @@ public class OpenNLPLimeExplainerTest {
         };
         Saliency saliency = limeExplainer.explain(prediction, model);
         assertNotNull(saliency);
-        double i1 = ExplainabilityUtils.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
+        double i1 = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
         assertTrue(i1 > 0);
     }
 }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kie.kogito.explainability;
 
 import java.net.URI;
@@ -16,7 +31,7 @@ import java.util.Map;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Model;
+import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -35,8 +50,8 @@ public class TestUtils {
         random.setSeed(4);
     }
 
-    public static Model getFeaturePassModel(int featureIndex) {
-        return new Model() {
+    public static BlackBoxModel getFeaturePassModel(int featureIndex) {
+        return new BlackBoxModel() {
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
                 List<PredictionOutput> predictionOutputs = new LinkedList<>();
@@ -72,8 +87,8 @@ public class TestUtils {
         };
     }
 
-    public static Model getSumSkipModel(int skipFeatureIndex) {
-        return new Model() {
+    public static BlackBoxModel getSumSkipModel(int skipFeatureIndex) {
+        return new BlackBoxModel() {
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
                 List<PredictionOutput> predictionOutputs = new LinkedList<>();
@@ -113,8 +128,8 @@ public class TestUtils {
         };
     }
 
-    public static Model getEvenFeatureModel(int featureIndex) {
-        return new Model() {
+    public static BlackBoxModel getEvenFeatureModel(int featureIndex) {
+        return new BlackBoxModel() {
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
                 List<PredictionOutput> predictionOutputs = new LinkedList<>();
@@ -150,8 +165,8 @@ public class TestUtils {
         };
     }
 
-    public static Model getEvenSumModel(int skipFeatureIndex) {
-        return new Model() {
+    public static BlackBoxModel getEvenSumModel(int skipFeatureIndex) {
+        return new BlackBoxModel() {
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
                 List<PredictionOutput> predictionOutputs = new LinkedList<>();
@@ -191,8 +206,8 @@ public class TestUtils {
         };
     }
 
-    public static Model getDummyTextClassifier() {
-        return new Model() {
+    public static BlackBoxModel getDummyTextClassifier() {
+        return new BlackBoxModel() {
             private final List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
