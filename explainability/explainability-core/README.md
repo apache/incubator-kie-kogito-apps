@@ -1,6 +1,6 @@
-# explainability-lib project
+# explainability-core project
 
-The explainability-lib project is a pure Java library for _Explainability_ (aka _XAI_ or _Explainable AI_).
+The explainability-core project is a pure Java library for _Explainability_ (aka _XAI_ or _Explainable AI_).
 
 It provides implementation of the following algorithms:
 
