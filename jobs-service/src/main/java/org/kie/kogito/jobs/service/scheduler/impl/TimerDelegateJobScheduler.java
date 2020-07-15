@@ -30,11 +30,10 @@ import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.service.executor.HttpJobExecutor;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.refactoring.job.HttpJob;
-import org.kie.kogito.jobs.service.refactoring.job.HttpJobContext;
-import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
-import org.kie.kogito.jobs.service.refactoring.job.ManageableJobHandle;
-import org.kie.kogito.jobs.service.refactoring.vertx.VertxTimerServiceScheduler;
+import org.kie.kogito.jobs.service.model.job.HttpJob;
+import org.kie.kogito.jobs.service.model.job.HttpJobContext;
+import org.kie.kogito.jobs.service.model.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.ManageableJobHandle;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.scheduler.BaseTimerJobScheduler;
 import org.kie.kogito.jobs.service.stream.AvailableStreams;
@@ -116,6 +115,11 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
         LOGGER.debug("Success received to be processed {}", response);
         return ErrorHandling.skipErrorPublisherBuilder(this::handleJobExecutionSuccess, response)
                 .findFirst()
-                .run();
+                .run()
+                .thenApply(Optional::isPresent)
+                .exceptionally(e -> {
+                    LOGGER.error("Error handling error {}", response, e);
+                    return false;
+                });
     }
 }

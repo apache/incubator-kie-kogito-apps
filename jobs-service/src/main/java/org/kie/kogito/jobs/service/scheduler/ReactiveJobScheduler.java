@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.reactivestreams.Publisher;
 
 public interface ReactiveJobScheduler extends JobScheduler<Publisher<JobDetails>, CompletionStage<JobDetails>> {

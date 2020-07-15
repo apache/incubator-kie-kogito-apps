@@ -27,7 +27,7 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -22,10 +22,10 @@
 //
 //import org.junit.Ignore;
 //import org.junit.jupiter.api.Test;
-//import org.kie.kogito.jobs.service.refactoring.job.HttpJob;
-//import org.kie.kogito.jobs.service.refactoring.job.HttpJobContext;
-//import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
-//import org.kie.kogito.jobs.service.refactoring.vertx.VertxTimerServiceScheduler;
+//import org.kie.kogito.jobs.service.model.job.HttpJob;
+//import org.kie.kogito.jobs.service.model.job.HttpJobContext;
+//import org.kie.kogito.jobs.service.model.job.JobDetails;
+//import org.kie.kogito.jobs.service.scheduler.impl.VertxTimerServiceScheduler;
 //import org.kie.kogito.timer.TimerService;
 //import org.kie.kogito.timer.impl.CronTrigger;
 //import org.kie.kogito.timer.impl.IntervalTrigger;

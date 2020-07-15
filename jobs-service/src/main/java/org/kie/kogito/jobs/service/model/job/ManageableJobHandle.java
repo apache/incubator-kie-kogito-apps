@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.jobs.service.refactoring.job;
+package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;

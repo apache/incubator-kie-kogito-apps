@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.jobs.service.refactoring.job;
+package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -37,7 +37,6 @@ public class JobDetails <T> {
     private Integer retries;
     private Integer priority;
     private Integer executionCounter;//number of times the job was executed
-    //may be used to build the jobḦandle
     private String scheduledId;//the execution control on the scheduler (id on vertx.setTimer, quartzId...)
 
     private T payload;//process, rule, decision
@@ -45,7 +44,7 @@ public class JobDetails <T> {
     private Trigger trigger;//when/how it should be executed
     private Type type;
 
-    enum Type {
+    public enum Type {
 
         HTTP(HttpJob.class);
 
@@ -145,9 +144,8 @@ public class JobDetails <T> {
                 Objects.equals(getRetries(), that.getRetries()) &&
                 Objects.equals(getExecutionCounter(), that.getExecutionCounter()) &&
                 Objects.equals(getScheduledId(), that.getScheduledId()) &&
-                Objects.equals(getPayload(), that.getPayload()) &&
                 Objects.equals(getRecipient(), that.getRecipient()) &&
-                Objects.equals(getTrigger(), that.getTrigger()) &&
+                Objects.equals(getTrigger().hasNextFireTime(), that.getTrigger().hasNextFireTime()) &&
                 getType() == that.getType();
     }
 

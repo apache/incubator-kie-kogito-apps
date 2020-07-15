@@ -18,7 +18,7 @@ package org.kie.kogito.jobs.service.executor;
 
 import java.util.concurrent.CompletionStage;
 
-import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.JobDetails;
 
 public interface JobExecutor {
 

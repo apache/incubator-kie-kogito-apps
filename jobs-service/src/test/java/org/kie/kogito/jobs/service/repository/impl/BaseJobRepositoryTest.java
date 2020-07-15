@@ -25,11 +25,10 @@ import java.util.stream.IntStream;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
-import org.kie.kogito.jobs.service.refactoring.job.Recipient;
+import org.kie.kogito.jobs.service.model.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -82,7 +81,7 @@ public abstract class BaseJobRepositoryTest {
         job = JobDetails.builder()
                 .id(id)
                 .trigger(new PointInTimeTrigger(System.currentTimeMillis(), null, null))//
-                //.priority(1)
+                .priority(1)
                 .recipient(new Recipient.HTTPRecipient("url"))
                 .build();
         tested().save(job);
@@ -118,8 +117,9 @@ public abstract class BaseJobRepositoryTest {
                         .status(JobStatus.SCHEDULED)
                         .id(String.valueOf(id))
                         .priority(id)
+                        .payload("payload")
                         .trigger(new PointInTimeTrigger(DateUtil.now().plusMinutes(id).toInstant().toEpochMilli(), null, null))
-                        //.priority(id)
+                        .priority(id)
                         .build())
                 .peek(tested()::save)
                 .collect(Collectors.toList());
@@ -175,6 +175,6 @@ public abstract class BaseJobRepositoryTest {
         JobDetails merged = tested().merge(id, toMerge).toCompletableFuture().get();
         assertThat(merged.getRecipient()).isEqualTo(recipient);
         assertThat(merged.getId()).isEqualTo(job.getId());
-        assertThat(merged.getTrigger()).isEqualTo(job.getTrigger());
+        assertThat(merged.getTrigger().hasNextFireTime()).isEqualTo(job.getTrigger().hasNextFireTime());
     }
 }

@@ -27,7 +27,6 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
-import io.vertx.core.Vertx;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -35,8 +34,8 @@ import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
-import org.kie.kogito.jobs.service.refactoring.vertx.VertxTimerServiceScheduler;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
+import org.kie.kogito.jobs.service.scheduler.impl.VertxTimerServiceScheduler;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import static io.restassured.RestAssured.given;
@@ -65,9 +64,8 @@ public class JobResourceIT {
                 .statusCode(200)
                 .extract()
                 .as(ScheduledJob.class);
-        //assertEquals(job, response);
-        //TODO
-        assertEquals(job.getId(), response.getId());    }
+        assertEquals(job, response);
+    }
 
     private ValidatableResponse create(String body) {
         return given()
@@ -105,9 +103,7 @@ public class JobResourceIT {
                 .contentType(ContentType.JSON)
                 .extract()
                 .as(ScheduledJob.class);
-        //assertEquals(job, response);
-        //TODO
-        assertEquals(job.getId(), response.getId());
+        assertEquals(job, response);
     }
 
     @Test

@@ -26,32 +26,29 @@ import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 import org.kie.kogito.jobs.service.resource.InfinispanServerTestResource;
-import org.kie.kogito.jobs.service.stream.JobStreams;
 
-import static org.mockito.Mockito.mock;
+@QuarkusTest
+@QuarkusTestResource(InfinispanServerTestResource.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class InfinispanJobRepositoryIT extends BaseJobRepositoryTest {
 
-//@QuarkusTest
-//@QuarkusTestResource(InfinispanServerTestResource.class)
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//class InfinispanJobRepositoryIT extends BaseJobRepositoryTest {
-//
-//    private InfinispanJobRepository tested;
-//
-//    @Inject
-//    RemoteCacheManager remoteCacheManager;
-//
-//    @BeforeEach
-//    public void setUp() {
-//        remoteCacheManager
-//                .administration()
-//                .getOrCreateCache(InfinispanConfiguration.Caches.SCHEDULED_JOBS, (String) null)
-//                .clear();
-//        tested = new InfinispanJobRepository(mockVertx(), mockJobStreams(), remoteCacheManager);
-//        super.setUp();
-//    }
-//
-//    @Override
-//    public ReactiveJobRepository tested() {
-//        return tested;
-//    }
-//}
+    private InfinispanJobRepository tested;
+
+    @Inject
+    RemoteCacheManager remoteCacheManager;
+
+    @BeforeEach
+    public void setUp() {
+        remoteCacheManager
+                .administration()
+                .getOrCreateCache(InfinispanConfiguration.Caches.JOB_DETAILS, (String) null)
+                .clear();
+        tested = new InfinispanJobRepository(mockVertx(), mockJobStreams(), remoteCacheManager);
+        super.setUp();
+    }
+
+    @Override
+    public ReactiveJobRepository tested() {
+        return tested;
+    }
+}

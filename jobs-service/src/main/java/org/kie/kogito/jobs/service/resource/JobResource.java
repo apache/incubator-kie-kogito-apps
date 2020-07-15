@@ -37,7 +37,7 @@ import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.model.ScheduledJob.ScheduledJobBuilder;
-import org.kie.kogito.jobs.service.refactoring.job.ScheduledJobAdapter;
+import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.slf4j.Logger;

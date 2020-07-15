@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.jobs.service.refactoring.job;
+package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -28,8 +28,6 @@ import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
-import static org.kie.kogito.jobs.service.model.JobStatus.SCHEDULED;
-
 public class ScheduledJobAdapter {
 
     public static ScheduledJob of(JobDetails jobDetails) {
@@ -37,7 +35,10 @@ public class ScheduledJobAdapter {
                 .job(new JobBuilder()
                              .id(jobDetails.getId())
                              .priority(jobDetails.getPriority())
-                             .expirationTime(DateUtil.fromDate(jobDetails.getTrigger().hasNextFireTime()))
+                             .expirationTime(Optional.ofNullable(jobDetails.getTrigger())
+                                                     .map(Trigger::hasNextFireTime)
+                                                     .map(DateUtil::fromDate)
+                                                     .orElse(null))
                              .callbackEndpoint(Optional.ofNullable(jobDetails.getRecipient())
                                                        .map(Recipient.HTTPRecipient.class::cast)
                                                        .map(Recipient.HTTPRecipient::getEndpoint)

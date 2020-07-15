@@ -19,8 +19,7 @@ package org.kie.kogito.jobs.service.scheduler;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-import org.kie.kogito.jobs.api.Job;
-import org.kie.kogito.jobs.service.refactoring.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.JobDetails;
 
 public interface JobScheduler<T, C> {
 
