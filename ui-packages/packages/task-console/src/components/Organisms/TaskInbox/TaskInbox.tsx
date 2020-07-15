@@ -24,13 +24,13 @@ import {
   Bullseye,
   Label
 } from '@patternfly/react-core';
-import React, { useContext, useEffect } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
 import './TaskInbox.css';
 import {
   ouiaPageTypeAndObjectId,
   KogitoSpinner,
-  DataTable
+  DataTable, LoadMore
 } from '@kogito-apps/common';
 import {
   ICell,
@@ -41,7 +41,7 @@ import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
 import {
-  useGetTaskForUserQuery,
+  useGetTaskForUserLazyQuery,
   UserTaskInstance
 } from '../../../graphql/types';
 import Moment from 'react-moment';
@@ -65,21 +65,32 @@ const stateColumnTransformer: ITransform = (value: IFormatterValueType) => {
 };
 
 const TaskInbox: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
+  const [defaultPageSize] = useState<number>(10);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [limit, setLimit] = useState<number>(defaultPageSize);
+  const [queryOffset, setOffset] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [tableData, setTableData] = useState<any[]>([]);
+
   const context: IContext<TaskInfo> = useContext(TaskConsoleContext);
 
-  const {
-    loading,
-    error,
-    data,
-    refetch,
-    networkStatus
-  } = useGetTaskForUserQuery({
+  const [
+    getUserTasks,
+    { loading,
+      error,
+      data,
+      refetch,
+      networkStatus }
+  ] = useGetTaskForUserLazyQuery({
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
     variables: {
       user: context.getUser().id,
-      groups: context.getUser().groups
-    },
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true
+      groups: context.getUser().groups,
+      offset: queryOffset,
+      limit: pageSize
+    }
   });
 
   const taskNameColumnTransformer: ITransform = (
@@ -91,7 +102,7 @@ const TaskInbox: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
     }
 
     // @ts-ignore
-    const task: UserTaskInstance = data.UserTaskInstances[extra.rowIndex];
+    const task: UserTaskInstance = tableData[extra.rowIndex];
 
     return {
       children: <TaskDescriptionColumn task={task} />
@@ -139,10 +150,48 @@ const TaskInbox: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
     }
   ];
 
+  const onGetMoreInstances = (_queryOffset, _pageSize) => {
+    setIsLoadingMore(true);
+
+    if(_queryOffset !== queryOffset) {
+      setOffset(_queryOffset)
+    }
+
+    if(_pageSize !== pageSize) {
+      setPageSize(_pageSize);
+    }
+
+    getUserTasks({
+      variables: {
+        user: context.getUser().id,
+        groups: context.getUser().groups,
+        offset: _queryOffset,
+        limit: _pageSize
+      }
+    });
+  };
+
   useEffect(() => {
     return ouiaPageTypeAndObjectId(ouiaContext, 'task-inbox');
   });
 
+  useEffect(() => {
+    onGetMoreInstances(queryOffset, pageSize);
+  }, [])
+
+  useEffect(() => {
+    if (isLoadingMore === undefined || !isLoadingMore) {
+      setIsLoading(loading);
+    }
+    if (!loading && data !== undefined) {
+      const newData = tableData.concat(data.UserTaskInstances)
+      setTableData(newData);
+      setLimit(tableData.length);
+      if (queryOffset > 0 && tableData.length > 0) {
+        setIsLoadingMore(false);
+      }
+    }
+  }, [data]);
   return (
     <React.Fragment>
       <UserTaskPageHeader />
@@ -151,7 +200,7 @@ const TaskInbox: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
           <GridItem span={12}>
             <Card className="kogito-task-console-task-inbox_table-OverFlow">
               <DataTable
-                data={data ? data.UserTaskInstances : undefined}
+                data={tableData}
                 isLoading={loading}
                 columns={columns}
                 networkStatus={networkStatus}
@@ -159,6 +208,19 @@ const TaskInbox: React.FC<InjectedOuiaProps> = ({ ouiaContext }) => {
                 refetch={refetch}
                 LoadingComponent={UserTaskLoadingComponent}
               />
+
+              {(!loading || isLoadingMore) &&
+              !isLoading &&
+                  tableData.length > 0 &&
+              (limit === pageSize || isLoadingMore) && (
+                  <LoadMore
+                      offset={queryOffset}
+                      setOffset={setOffset}
+                      getMoreItems={onGetMoreInstances}
+                      pageSize={pageSize}
+                      isLoadingMore={false}
+                  />
+              )}
             </Card>
           </GridItem>
         </Grid>

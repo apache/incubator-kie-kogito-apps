@@ -98,7 +98,7 @@ const GET_PROCESS_INSTANCE = gql`
 
 // @ts-ignore
 const GET_TASKS_FOR_USER = gql`
-  query getTaskForUser($user: String, $groups: [String!]) {
+  query getTaskForUser($user: String, $groups: [String!], $offset: Int, $limit: Int) {
     UserTaskInstances(
       where: {
         or: [
@@ -107,6 +107,7 @@ const GET_TASKS_FOR_USER = gql`
           { potentialGroups: { containsAny: $groups } }
         ]
       }
+      pagination: { offset: $offset, limit: $limit }
     ) {
       id
       name

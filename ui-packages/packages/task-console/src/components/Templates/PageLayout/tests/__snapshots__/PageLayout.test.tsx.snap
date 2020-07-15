@@ -49,15 +49,6 @@ exports[`PageLayout tests test TaskDetails route 1`] = `
               User Tasks
             </Link>
           </NavItem>
-          <NavItem
-            isActive={false}
-          >
-            <Link
-              to="/UserTasksFilters"
-            >
-              User tasks with filters
-            </Link>
-          </NavItem>
         </NavList>
       </Unknown>
     }
@@ -67,7 +58,7 @@ exports[`PageLayout tests test TaskDetails route 1`] = `
 </PageLayout>
 `;
 
-exports[`PageLayout tests test UserTasks route 1`] = `
+exports[`PageLayout tests test TaskInbox route 1`] = `
 <PageLayout
   history={Array []}
   location={
@@ -116,15 +107,6 @@ exports[`PageLayout tests test UserTasks route 1`] = `
               User Tasks
             </Link>
           </NavItem>
-          <NavItem
-            isActive={false}
-          >
-            <Link
-              to="/UserTasksFilters"
-            >
-              User tasks with filters
-            </Link>
-          </NavItem>
         </NavList>
       </Unknown>
     }
@@ -134,7 +116,7 @@ exports[`PageLayout tests test UserTasks route 1`] = `
 </PageLayout>
 `;
 
-exports[`PageLayout tests test UserTasks route 2`] = `
+exports[`PageLayout tests test UserTasks route 1`] = `
 <PageLayout
   history={Array []}
   location={
@@ -181,15 +163,6 @@ exports[`PageLayout tests test UserTasks route 2`] = `
               to="/UserTasks"
             >
               User Tasks
-            </Link>
-          </NavItem>
-          <NavItem
-            isActive={false}
-          >
-            <Link
-              to="/UserTasksFilters"
-            >
-              User tasks with filters
             </Link>
           </NavItem>
         </NavList>
@@ -250,15 +223,6 @@ exports[`PageLayout tests test UserTasksFilters route 1`] = `
               User Tasks
             </Link>
           </NavItem>
-          <NavItem
-            isActive={true}
-          >
-            <Link
-              to="/UserTasksFilters"
-            >
-              User tasks with filters
-            </Link>
-          </NavItem>
         </NavList>
       </Unknown>
     }
@@ -317,15 +281,6 @@ exports[`PageLayout tests test UserTasksTable route 1`] = `
               User Tasks
             </Link>
           </NavItem>
-          <NavItem
-            isActive={false}
-          >
-            <Link
-              to="/UserTasksFilters"
-            >
-              User tasks with filters
-            </Link>
-          </NavItem>
         </NavList>
       </Unknown>
     }
@@ -382,15 +337,6 @@ exports[`PageLayout tests test default route 1`] = `
               to="/UserTasks"
             >
               User Tasks
-            </Link>
-          </NavItem>
-          <NavItem
-            isActive={false}
-          >
-            <Link
-              to="/UserTasksFilters"
-            >
-              User tasks with filters
             </Link>
           </NavItem>
         </NavList>

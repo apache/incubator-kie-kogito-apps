@@ -534,45 +534,161 @@ exports[`Process Details Page component tests snapshot testing in Active state 1
                           className="pf-c-title pf-m-4xl kogito-management-console--details__title"
                         >
                           <ItemDescriptor
-                            processInstanceData={
+                            itemDescription={
                               Object {
-                                "addons": Array [
-                                  "process-management",
-                                ],
-                                "businessKey": null,
-                                "childProcessInstances": Array [],
-                                "end": null,
-                                "endpoint": "http://localhost:4000",
-                                "error": Object {
-                                  "message": "Something went wrong",
-                                  "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
-                                },
+                                "description": null,
                                 "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                                "lastUpdate": "2019-10-22T03:40:44.089Z",
-                                "nodes": Array [
-                                  Object {
-                                    "definitionId": "StartEvent_1",
-                                    "enter": "2019-10-22T04:43:01.135Z",
-                                    "exit": "2019-10-22T04:43:01.135Z",
-                                    "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                                    "name": "StartProcess",
-                                    "nodeId": "9",
-                                    "type": "StartNode",
-                                  },
-                                ],
-                                "parentProcessInstance": null,
-                                "parentProcessInstanceId": null,
-                                "processId": "Travels",
-                                "processName": "travels",
-                                "roles": Array [],
-                                "serviceUrl": "http://localhost:4000",
-                                "start": "2019-10-22T03:40:44.089Z",
-                                "state": "ACTIVE",
-                                "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                                "name": "travels",
                               }
                             }
                           >
-                            <MockedComponent />
+                            <Tooltip
+                              appendTo={[Function]}
+                              aria="describedby"
+                              boundary="window"
+                              className=""
+                              content="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+                              distance={15}
+                              enableFlip={true}
+                              entryDelay={500}
+                              exitDelay={500}
+                              flipBehavior={
+                                Array [
+                                  "top",
+                                  "right",
+                                  "bottom",
+                                  "left",
+                                  "top",
+                                  "right",
+                                  "bottom",
+                                ]
+                              }
+                              id=""
+                              isAppLauncher={false}
+                              isContentLeftAligned={false}
+                              isVisible={false}
+                              maxWidth="18.75rem"
+                              position="top"
+                              tippyProps={Object {}}
+                              trigger="mouseenter focus"
+                              zIndex={9999}
+                            >
+                              <PopoverBase
+                                appendTo={[Function]}
+                                aria="describedby"
+                                arrow={true}
+                                boundary="window"
+                                content={
+                                  <div
+                                    className=""
+                                    id=""
+                                    role="tooltip"
+                                  >
+                                    <TooltipContent
+                                      isLeftAligned={false}
+                                    >
+                                      8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                    </TooltipContent>
+                                  </div>
+                                }
+                                delay={
+                                  Array [
+                                    500,
+                                    500,
+                                  ]
+                                }
+                                distance={15}
+                                flip={true}
+                                flipBehavior={
+                                  Array [
+                                    "top",
+                                    "right",
+                                    "bottom",
+                                    "left",
+                                    "top",
+                                    "right",
+                                    "bottom",
+                                  ]
+                                }
+                                isVisible={false}
+                                lazy={true}
+                                maxWidth="18.75rem"
+                                onCreate={[Function]}
+                                placement="top"
+                                popperOptions={
+                                  Object {
+                                    "modifiers": Object {
+                                      "hide": Object {
+                                        "enabled": true,
+                                      },
+                                      "preventOverflow": Object {
+                                        "enabled": true,
+                                      },
+                                    },
+                                  }
+                                }
+                                theme="pf-tooltip"
+                                trigger="mouseenter focus"
+                                zIndex={9999}
+                              >
+                                <span>
+                                  travels
+                                   
+                                  <TextContent
+                                    className="pf-u-display-inline"
+                                  >
+                                    <div
+                                      className="pf-c-content pf-u-display-inline"
+                                    >
+                                      <Text
+                                        className="pf-u-display-inline"
+                                        component="small"
+                                      >
+                                        <small
+                                          className="pf-u-display-inline"
+                                          data-pf-content={true}
+                                        >
+                                          8035b
+                                        </small>
+                                      </Text>
+                                    </div>
+                                  </TextContent>
+                                </span>
+                                <Portal
+                                  containerInfo={
+                                    <div>
+                                      <div
+                                        class=""
+                                        id=""
+                                        role="tooltip"
+                                      >
+                                        <div
+                                          class="pf-c-tooltip__content"
+                                        >
+                                          8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                        </div>
+                                      </div>
+                                    </div>
+                                  }
+                                >
+                                  <div
+                                    className=""
+                                    id=""
+                                    role="tooltip"
+                                  >
+                                    <TooltipContent
+                                      isLeftAligned={false}
+                                    >
+                                      <div
+                                        className="pf-c-tooltip__content"
+                                      >
+                                        8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                      </div>
+                                    </TooltipContent>
+                                  </div>
+                                </Portal>
+                              </PopoverBase>
+                            </Tooltip>
                           </ItemDescriptor>
                         </h2>
                       </Title>
@@ -1251,43 +1367,161 @@ exports[`Process Details Page component tests snapshot testing in Error state 1`
                           className="pf-c-title pf-m-4xl kogito-management-console--details__title"
                         >
                           <ItemDescriptor
-                            processInstanceData={
+                            itemDescription={
                               Object {
-                                "addons": Array [],
-                                "businessKey": null,
-                                "childProcessInstances": Array [],
-                                "end": null,
-                                "endpoint": "http://localhost:4000",
-                                "error": Object {
-                                  "message": "Something went wrong",
-                                  "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
-                                },
+                                "description": null,
                                 "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                                "lastUpdate": "2019-10-22T03:40:44.089Z",
-                                "nodes": Array [
-                                  Object {
-                                    "definitionId": "StartEvent_1",
-                                    "enter": "2019-10-22T04:43:01.135Z",
-                                    "exit": "2019-10-22T04:43:01.135Z",
-                                    "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                                    "name": "StartProcess",
-                                    "nodeId": "9",
-                                    "type": "StartNode",
-                                  },
-                                ],
-                                "parentProcessInstance": null,
-                                "parentProcessInstanceId": null,
-                                "processId": "Travels",
-                                "processName": "travels",
-                                "roles": Array [],
-                                "serviceUrl": null,
-                                "start": "2019-10-22T03:40:44.089Z",
-                                "state": "ERROR",
-                                "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                                "name": "travels",
                               }
                             }
                           >
-                            <MockedComponent />
+                            <Tooltip
+                              appendTo={[Function]}
+                              aria="describedby"
+                              boundary="window"
+                              className=""
+                              content="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+                              distance={15}
+                              enableFlip={true}
+                              entryDelay={500}
+                              exitDelay={500}
+                              flipBehavior={
+                                Array [
+                                  "top",
+                                  "right",
+                                  "bottom",
+                                  "left",
+                                  "top",
+                                  "right",
+                                  "bottom",
+                                ]
+                              }
+                              id=""
+                              isAppLauncher={false}
+                              isContentLeftAligned={false}
+                              isVisible={false}
+                              maxWidth="18.75rem"
+                              position="top"
+                              tippyProps={Object {}}
+                              trigger="mouseenter focus"
+                              zIndex={9999}
+                            >
+                              <PopoverBase
+                                appendTo={[Function]}
+                                aria="describedby"
+                                arrow={true}
+                                boundary="window"
+                                content={
+                                  <div
+                                    className=""
+                                    id=""
+                                    role="tooltip"
+                                  >
+                                    <TooltipContent
+                                      isLeftAligned={false}
+                                    >
+                                      8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                    </TooltipContent>
+                                  </div>
+                                }
+                                delay={
+                                  Array [
+                                    500,
+                                    500,
+                                  ]
+                                }
+                                distance={15}
+                                flip={true}
+                                flipBehavior={
+                                  Array [
+                                    "top",
+                                    "right",
+                                    "bottom",
+                                    "left",
+                                    "top",
+                                    "right",
+                                    "bottom",
+                                  ]
+                                }
+                                isVisible={false}
+                                lazy={true}
+                                maxWidth="18.75rem"
+                                onCreate={[Function]}
+                                placement="top"
+                                popperOptions={
+                                  Object {
+                                    "modifiers": Object {
+                                      "hide": Object {
+                                        "enabled": true,
+                                      },
+                                      "preventOverflow": Object {
+                                        "enabled": true,
+                                      },
+                                    },
+                                  }
+                                }
+                                theme="pf-tooltip"
+                                trigger="mouseenter focus"
+                                zIndex={9999}
+                              >
+                                <span>
+                                  travels
+                                   
+                                  <TextContent
+                                    className="pf-u-display-inline"
+                                  >
+                                    <div
+                                      className="pf-c-content pf-u-display-inline"
+                                    >
+                                      <Text
+                                        className="pf-u-display-inline"
+                                        component="small"
+                                      >
+                                        <small
+                                          className="pf-u-display-inline"
+                                          data-pf-content={true}
+                                        >
+                                          8035b
+                                        </small>
+                                      </Text>
+                                    </div>
+                                  </TextContent>
+                                </span>
+                                <Portal
+                                  containerInfo={
+                                    <div>
+                                      <div
+                                        class=""
+                                        id=""
+                                        role="tooltip"
+                                      >
+                                        <div
+                                          class="pf-c-tooltip__content"
+                                        >
+                                          8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                        </div>
+                                      </div>
+                                    </div>
+                                  }
+                                >
+                                  <div
+                                    className=""
+                                    id=""
+                                    role="tooltip"
+                                  >
+                                    <TooltipContent
+                                      isLeftAligned={false}
+                                    >
+                                      <div
+                                        className="pf-c-tooltip__content"
+                                      >
+                                        8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                      </div>
+                                    </TooltipContent>
+                                  </div>
+                                </Portal>
+                              </PopoverBase>
+                            </Tooltip>
                           </ItemDescriptor>
                         </h2>
                       </Title>
@@ -1955,45 +2189,161 @@ exports[`Process Details Page component tests snapshot testing in Suspended stat
                           className="pf-c-title pf-m-4xl kogito-management-console--details__title"
                         >
                           <ItemDescriptor
-                            processInstanceData={
+                            itemDescription={
                               Object {
-                                "addons": Array [
-                                  "process-management",
-                                ],
-                                "businessKey": null,
-                                "childProcessInstances": Array [],
-                                "end": null,
-                                "endpoint": "http://localhost:4000",
-                                "error": Object {
-                                  "message": "Something went wrong",
-                                  "nodeDefinitionId": "a1e139d5-4e77-48c9-84ae-3459188e90433n",
-                                },
+                                "description": null,
                                 "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                                "lastUpdate": "2019-10-22T03:40:44.089Z",
-                                "nodes": Array [
-                                  Object {
-                                    "definitionId": "StartEvent_1",
-                                    "enter": "2019-10-22T04:43:01.135Z",
-                                    "exit": "2019-10-22T04:43:01.135Z",
-                                    "id": "90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3",
-                                    "name": "StartProcess",
-                                    "nodeId": "9",
-                                    "type": "StartNode",
-                                  },
-                                ],
-                                "parentProcessInstance": null,
-                                "parentProcessInstanceId": null,
-                                "processId": "Travels",
-                                "processName": "travels",
-                                "roles": Array [],
-                                "serviceUrl": "http://localhost:4000",
-                                "start": "2019-10-22T03:40:44.089Z",
-                                "state": "SUSPENDED",
-                                "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+                                "name": "travels",
                               }
                             }
                           >
-                            <MockedComponent />
+                            <Tooltip
+                              appendTo={[Function]}
+                              aria="describedby"
+                              boundary="window"
+                              className=""
+                              content="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+                              distance={15}
+                              enableFlip={true}
+                              entryDelay={500}
+                              exitDelay={500}
+                              flipBehavior={
+                                Array [
+                                  "top",
+                                  "right",
+                                  "bottom",
+                                  "left",
+                                  "top",
+                                  "right",
+                                  "bottom",
+                                ]
+                              }
+                              id=""
+                              isAppLauncher={false}
+                              isContentLeftAligned={false}
+                              isVisible={false}
+                              maxWidth="18.75rem"
+                              position="top"
+                              tippyProps={Object {}}
+                              trigger="mouseenter focus"
+                              zIndex={9999}
+                            >
+                              <PopoverBase
+                                appendTo={[Function]}
+                                aria="describedby"
+                                arrow={true}
+                                boundary="window"
+                                content={
+                                  <div
+                                    className=""
+                                    id=""
+                                    role="tooltip"
+                                  >
+                                    <TooltipContent
+                                      isLeftAligned={false}
+                                    >
+                                      8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                    </TooltipContent>
+                                  </div>
+                                }
+                                delay={
+                                  Array [
+                                    500,
+                                    500,
+                                  ]
+                                }
+                                distance={15}
+                                flip={true}
+                                flipBehavior={
+                                  Array [
+                                    "top",
+                                    "right",
+                                    "bottom",
+                                    "left",
+                                    "top",
+                                    "right",
+                                    "bottom",
+                                  ]
+                                }
+                                isVisible={false}
+                                lazy={true}
+                                maxWidth="18.75rem"
+                                onCreate={[Function]}
+                                placement="top"
+                                popperOptions={
+                                  Object {
+                                    "modifiers": Object {
+                                      "hide": Object {
+                                        "enabled": true,
+                                      },
+                                      "preventOverflow": Object {
+                                        "enabled": true,
+                                      },
+                                    },
+                                  }
+                                }
+                                theme="pf-tooltip"
+                                trigger="mouseenter focus"
+                                zIndex={9999}
+                              >
+                                <span>
+                                  travels
+                                   
+                                  <TextContent
+                                    className="pf-u-display-inline"
+                                  >
+                                    <div
+                                      className="pf-c-content pf-u-display-inline"
+                                    >
+                                      <Text
+                                        className="pf-u-display-inline"
+                                        component="small"
+                                      >
+                                        <small
+                                          className="pf-u-display-inline"
+                                          data-pf-content={true}
+                                        >
+                                          8035b
+                                        </small>
+                                      </Text>
+                                    </div>
+                                  </TextContent>
+                                </span>
+                                <Portal
+                                  containerInfo={
+                                    <div>
+                                      <div
+                                        class=""
+                                        id=""
+                                        role="tooltip"
+                                      >
+                                        <div
+                                          class="pf-c-tooltip__content"
+                                        >
+                                          8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                        </div>
+                                      </div>
+                                    </div>
+                                  }
+                                >
+                                  <div
+                                    className=""
+                                    id=""
+                                    role="tooltip"
+                                  >
+                                    <TooltipContent
+                                      isLeftAligned={false}
+                                    >
+                                      <div
+                                        className="pf-c-tooltip__content"
+                                      >
+                                        8035b580-6ae4-4aa8-9ec0-e18e19809e0b
+                                      </div>
+                                    </TooltipContent>
+                                  </div>
+                                </Portal>
+                              </PopoverBase>
+                            </Tooltip>
                           </ItemDescriptor>
                         </h2>
                       </Title>

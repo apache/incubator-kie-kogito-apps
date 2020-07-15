@@ -12,7 +12,6 @@ import taskConsoleLogo from '../../../static/taskConsoleLogo.svg';
 
 import UserTaskInstanceDetailsPage from '../UserTaskInstanceDetailsPage/UserTaskInstanceDetailsPage';
 import DataListContainerExpandable from '../DataListContainerExpandable/DataListContainerExpandable';
-import DataListContainer from '../DataListContainer/DataListContainer';
 import UserTaskDataTableContainer from '../UserTaskDataTableContainer/UserTaskDataTableContainer';
 import { Location, History } from 'history';
 import TaskInbox from '../../Organisms/TaskInbox/TaskInbox';
@@ -54,18 +53,6 @@ const PageLayout: React.FC<IOwnProps & InjectedOuiaProps> = ({
             User Tasks
           </Link>
         </NavItem>
-        <NavItem isActive={pathname === '/UserTasksFilters'}>
-          <Link
-            to="/UserTasksFilters"
-            {...ouiaAttribute(
-              ouiaContext,
-              'data-ouia-navigation-name',
-              'user-tasks-filters'
-            )}
-          >
-            User tasks with filters
-          </Link>
-        </NavItem>
       </NavList>
     </Nav>
   );
@@ -89,7 +76,6 @@ const PageLayout: React.FC<IOwnProps & InjectedOuiaProps> = ({
           path="/UserTasks"
           component={DataListContainerExpandable}
         />
-        <Route exact path="/UserTasksFilters" component={DataListContainer} />
         <Route
           exact
           path="/Task/:taskId"
