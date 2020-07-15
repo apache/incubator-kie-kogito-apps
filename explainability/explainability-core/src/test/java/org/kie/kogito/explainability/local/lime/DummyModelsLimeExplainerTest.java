@@ -106,7 +106,7 @@ public class DummyModelsLimeExplainerTest {
         List<PredictionOutput> outputs = model.predict(List.of(input));
         Prediction prediction = new Prediction(input, outputs.get(0));
 
-        LimeExplainer limeExplainer = new LimeExplainer(1000, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
         Saliency saliency = limeExplainer.explain(prediction, model);
 
         assertNotNull(saliency);
