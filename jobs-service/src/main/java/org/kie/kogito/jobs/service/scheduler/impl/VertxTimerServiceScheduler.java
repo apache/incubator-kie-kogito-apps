@@ -30,7 +30,6 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.InternalSchedulerService;
 import org.kie.kogito.timer.Job;
 import org.kie.kogito.timer.JobContext;
-import org.kie.kogito.timer.JobHandle;
 import org.kie.kogito.timer.TimerService;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.DefaultTimerJobFactoryManager;
@@ -47,6 +46,10 @@ public class VertxTimerServiceScheduler implements TimerService<ManageableJobHan
 
     public VertxTimerServiceScheduler() {
         vertx = Vertx.vertx();
+    }
+
+    public VertxTimerServiceScheduler(Vertx vertx) {
+        this.vertx = vertx;
     }
 
     @Override
@@ -102,32 +105,31 @@ public class VertxTimerServiceScheduler implements TimerService<ManageableJobHan
 
     @Override
     public void internalSchedule(TimerJobInstance timerJobInstance) {
-        Trigger trigger = timerJobInstance.getTrigger();
+        final Trigger trigger = timerJobInstance.getTrigger();
         if (trigger.hasNextFireTime() == null) {
             return;
         }
-        long then = trigger.hasNextFireTime().getTime();
-        ZonedDateTime now = DateUtil.now();
-        //TODO: in the past
-        long delay = Optional.of(now)
-                .map(ChronoZonedDateTime::toInstant)
-                .map(Instant::toEpochMilli)
-                .filter(n -> then >= n)
-                .map(n -> then - n)
-                .orElse(1l);
-
-        JobHandle handle = timerJobInstance.getJobHandle();
-
-        long id = vertx.setTimer(delay, i -> {
+        final long then = trigger.hasNextFireTime().getTime();
+        final ZonedDateTime now = DateUtil.now();
+        final long delay = calculateDelay(then, now);
+        final ManageableJobHandle handle = (ManageableJobHandle) timerJobInstance.getJobHandle();
+        long scheduledId = vertx.setTimer(delay, i -> {
             timerJobInstance.getJob().execute(timerJobInstance.getJobContext());
             if (handle.isCancel()) {
                 return;
             }
         });
+        handle.setId(scheduledId);
+        handle.setScheduledTime(now);
+    }
 
-        ManageableJobHandle jobHandle = (ManageableJobHandle) handle;
-        jobHandle.setId(id);
-        jobHandle.setScheduledTime(now);
+    private Long calculateDelay(long then, ZonedDateTime now) {
+        return Optional.of(now)
+                .map(ChronoZonedDateTime::toInstant)
+                .map(Instant::toEpochMilli)
+                .filter(n -> then >= n)
+                .map(n -> then - n)
+                .orElse(1l);
     }
 
     public Vertx getVertx() {
