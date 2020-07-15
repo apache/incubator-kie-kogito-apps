@@ -23,11 +23,13 @@ import java.util.function.Function;
 import org.infinispan.protostream.MessageMarshaller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public abstract class AbstractTestField<M, T> {
-    private final String fieldName;
-    private final T fieldValue;
+
+    protected final String fieldName;
+    protected final T fieldValue;
     private final Function<M, T> getter;
     private final BiConsumer<M, T> setter;
 
@@ -51,8 +53,14 @@ public abstract class AbstractTestField<M, T> {
     }
 
     public void mockReader(MessageMarshaller.ProtoStreamReader mock) throws IOException {
-        when(doMockReader(mock, fieldName)).thenReturn(fieldValue);
+        when(callMockReaderMethod(mock)).thenReturn(fieldValue);
     }
 
-    protected abstract T doMockReader(MessageMarshaller.ProtoStreamReader mock, String fieldName) throws IOException;
+    protected abstract T callMockReaderMethod(MessageMarshaller.ProtoStreamReader mock) throws IOException;
+
+    public void verifyWriter(MessageMarshaller.ProtoStreamWriter mock) throws IOException {
+        callVerifyWriterMethod(verify(mock));
+    }
+
+    protected abstract void callVerifyWriterMethod(MessageMarshaller.ProtoStreamWriter mock) throws IOException;
 }

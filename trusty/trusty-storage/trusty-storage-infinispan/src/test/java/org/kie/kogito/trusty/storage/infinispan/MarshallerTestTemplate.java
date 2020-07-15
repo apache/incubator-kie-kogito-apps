@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockingDetails;
 
@@ -43,14 +42,14 @@ abstract class MarshallerTestTemplate<T> {
         T object = buildEmptyObject();
         list.forEach(td -> td.setValue(object));
 
+        MessageMarshaller.ProtoStreamWriter protoStreamWriter = mock(MessageMarshaller.ProtoStreamWriter.class);
         MessageMarshaller<T> marshaller = buildMarshaller();
-        ProtoStreamWriterMock protoStreamWriter = new ProtoStreamWriterMock();
         marshaller.writeTo(protoStreamWriter, object);
 
-        List<String> usedFields = protoStreamWriter.getWrittenFieldNames();
-
-        assertEquals(list.size(), usedFields.size());
-        list.forEach(td -> assertTrue(usedFields.contains(td.getFieldName())));
+        assertEquals(list.size(), mockingDetails(protoStreamWriter).getInvocations().size());
+        for (AbstractTestField<T, ?> td : list) {
+            td.verifyWriter(protoStreamWriter);
+        }
     }
 
     @Test
@@ -58,7 +57,7 @@ abstract class MarshallerTestTemplate<T> {
         List<AbstractTestField<T, ?>> list = getTestFieldList();
 
         MessageMarshaller.ProtoStreamReader protoStreamReader = mock(MessageMarshaller.ProtoStreamReader.class);
-        for(AbstractTestField<T, ?> td : list) {
+        for (AbstractTestField<T, ?> td : list) {
             td.mockReader(protoStreamReader);
         }
 

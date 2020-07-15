@@ -24,13 +24,19 @@ import org.infinispan.protostream.MessageMarshaller;
 
 import static org.mockito.ArgumentMatchers.eq;
 
-public class BooleanTestField<M> extends AbstractTestField<M,Boolean> {
-    public BooleanTestField(String fieldName, Boolean fieldValue, Function<M,Boolean> getter, BiConsumer<M, Boolean> setter) {
+public class BooleanTestField<M> extends AbstractTestField<M, Boolean> {
+
+    public BooleanTestField(String fieldName, Boolean fieldValue, Function<M, Boolean> getter, BiConsumer<M, Boolean> setter) {
         super(fieldName, fieldValue, getter, setter);
     }
 
     @Override
-    protected Boolean doMockReader(MessageMarshaller.ProtoStreamReader mock, String fieldName) throws IOException {
+    protected Boolean callMockReaderMethod(MessageMarshaller.ProtoStreamReader mock) throws IOException {
         return mock.readBoolean(eq(fieldName));
+    }
+
+    @Override
+    protected void callVerifyWriterMethod(MessageMarshaller.ProtoStreamWriter mock) throws IOException {
+        mock.writeBoolean(eq(fieldName), eq(fieldValue));
     }
 }

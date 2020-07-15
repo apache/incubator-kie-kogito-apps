@@ -35,7 +35,12 @@ public class CollectionTestField<M, T> extends AbstractTestField<M, Collection<T
     }
 
     @Override
-    protected Collection<T> doMockReader(MessageMarshaller.ProtoStreamReader mock, String fieldName) throws IOException {
+    protected Collection<T> callMockReaderMethod(MessageMarshaller.ProtoStreamReader mock) throws IOException {
         return mock.readCollection(eq(fieldName), anyCollection(), eq(elementClass));
+    }
+
+    @Override
+    protected void callVerifyWriterMethod(MessageMarshaller.ProtoStreamWriter mock) throws IOException {
+        mock.writeCollection(eq(fieldName), eq(fieldValue), eq(elementClass));
     }
 }

@@ -33,7 +33,12 @@ public class ObjectTestField<M, T> extends AbstractTestField<M, T> {
     }
 
     @Override
-    protected T doMockReader(MessageMarshaller.ProtoStreamReader mock, String fieldName) throws IOException {
+    protected T callMockReaderMethod(MessageMarshaller.ProtoStreamReader mock) throws IOException {
         return mock.readObject(eq(fieldName), eq(fieldClass));
+    }
+
+    @Override
+    protected void callVerifyWriterMethod(MessageMarshaller.ProtoStreamWriter mock) throws IOException {
+        mock.writeObject(eq(fieldName), eq(fieldValue), eq(fieldClass));
     }
 }
