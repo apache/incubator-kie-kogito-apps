@@ -21,20 +21,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.LinearModel;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Encoder algorithm to transform perturbed inputs and outputs into a training set that the {@link LinearModel} can use.
  * The target inputs and output are needed in order to distinguish when the value of a certain feature corresponds or
  * is close to the one of the prediction to be explained.
- *
  */
 class DatasetEncoder {
 
@@ -53,6 +52,7 @@ class DatasetEncoder {
 
     /**
      * get the input and output predictions transformed into a numerical training set
+     *
      * @return a numerical training set
      */
     List<Pair<double[], Double>> getEncodedTrainingSet() {
@@ -96,35 +96,33 @@ class DatasetEncoder {
         List<List<Double>> columnData = new LinkedList<>();
 
         for (int t = 0; t < featureTypes.size(); t++) {
-            if (!Type.NUMBER.equals(featureTypes.get(t))) {
-                // convert values for this feature into numbers
-                Feature originalFeature = targetInput.getFeatures().get(t);
-                switch (featureTypes.get(t)) {
-                    case TEXT:
-                        encodeText(perturbedInputs, columnData, t, originalFeature);
-                        break;
-                    case CATEGORICAL:
-                    case BINARY:
-                    case TIME:
-                    case URI:
-                    case DURATION:
-                    case VECTOR:
-                    case CURRENCY:
-                        encodeEquals(perturbedInputs, columnData, t, originalFeature);
-                        break;
-                    case BOOLEAN:
-                        // boolean are automatically encoded as 1s or 0s
-                        List<Double> featureValues = new LinkedList<>();
-                        for (PredictionInput pi : perturbedInputs) {
-                            featureValues.add(pi.getFeatures().get(t).getValue().asNumber());
-                        }
-                        columnData.add(featureValues);
-                        break;
-                    case UNDEFINED:
-                        break;
-                }
-            } else {
-                encodeNumbers(perturbedInputs, targetInput, columnData, t);
+            Feature originalFeature = targetInput.getFeatures().get(t);
+            switch (featureTypes.get(t)) {
+                case NUMBER:
+                    encodeNumbers(perturbedInputs, targetInput, columnData, t);
+                    break;
+                case TEXT:
+                    encodeText(perturbedInputs, columnData, t, originalFeature);
+                    break;
+                case CATEGORICAL:
+                case BINARY:
+                case TIME:
+                case URI:
+                case DURATION:
+                case VECTOR:
+                case CURRENCY:
+                    encodeEquals(perturbedInputs, columnData, t, originalFeature);
+                    break;
+                case BOOLEAN:
+                    // boolean are automatically encoded as 1s or 0s
+                    List<Double> featureValues = new LinkedList<>();
+                    for (PredictionInput pi : perturbedInputs) {
+                        featureValues.add(pi.getFeatures().get(t).getValue().asNumber());
+                    }
+                    columnData.add(featureValues);
+                    break;
+                case UNDEFINED:
+                    break;
             }
         }
         return columnData;

@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Saliency;
@@ -69,15 +70,16 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    public void testFidelity() {
+    void testFidelity() throws Exception {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(100, 1);
         BlackBoxModel model = TestUtils.getDummyTextClassifier();
         for (int i = 0; i < 10; i++) {
             List<Feature> features = new LinkedList<>();
             for (int j = 0; j < 4; j++) {
-                features.add(TestUtils.getRandomFeature());
+                features.add(FeatureFactory.newTextFeature("f-" + j, TestUtils.randomString()));
             }
+            features.add(FeatureFactory.newTextFeature("f-5", "money"));
             PredictionInput input = new PredictionInput(features);
             Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
             pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));

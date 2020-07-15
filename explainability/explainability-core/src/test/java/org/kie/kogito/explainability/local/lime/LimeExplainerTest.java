@@ -15,27 +15,25 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kie.kogito.explainability.model.Feature;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.kie.kogito.explainability.TestUtils;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 public class LimeExplainerTest {
-
-    private final static SecureRandom random = new SecureRandom();
 
     @BeforeAll
     public static void setUpBefore() {
@@ -43,7 +41,7 @@ public class LimeExplainerTest {
     }
 
     @Test
-    void testEmptyPrediction() {
+    void testEmptyPrediction() throws Exception {
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionOutput output = mock(PredictionOutput.class);
         PredictionInput input = mock(PredictionInput.class);
@@ -54,7 +52,7 @@ public class LimeExplainerTest {
     }
 
     @Test
-    void testNonEmptyInput() {
+    void testNonEmptyInput() throws Exception {
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionOutput output = mock(PredictionOutput.class);
         List<Feature> features = new LinkedList<>();
@@ -69,12 +67,13 @@ public class LimeExplainerTest {
     }
 
     @Test
-    void testNonEmptyInputAndOutputWithTextClassifier() {
+    void testNonEmptyInputAndOutputWithTextClassifier() throws Exception {
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         List<Feature> features = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
             features.add(TestUtils.getRandomFeature());
         }
+        features.add(FeatureFactory.newTextFeature("f-5", "money"));
         PredictionInput input = new PredictionInput(features);
         BlackBoxModel model = TestUtils.getDummyTextClassifier();
         Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));

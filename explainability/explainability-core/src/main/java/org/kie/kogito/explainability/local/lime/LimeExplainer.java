@@ -22,9 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.kie.kogito.explainability.local.LocalExplainer;
+import org.kie.kogito.explainability.local.LocalExplanationException;
+import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -33,8 +36,6 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.LinearModel;
-import org.kie.kogito.explainability.local.LocalExplainer;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
     }
 
     @Override
-    public Saliency explain(Prediction prediction, BlackBoxModel model) {
+    public Saliency explain(Prediction prediction, BlackBoxModel model) throws LocalExplanationException {
 
         long start = System.currentTimeMillis();
 
@@ -119,7 +120,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                 }
             }
             if (!separableDataset) {
-                logger.warn("the perturbed inputs / outputs dataset is not (easily) separable: {}", rawClassesBalance);
+                throw new DatasetNotSeparableException(rawClassesBalance);
             }
             List<Output> predictedOutputs = new LinkedList<>();
             for (int i = 0; i < perturbedInputs.size(); i++) {
@@ -146,11 +147,9 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
             saliencies.add(featureImportance);
         }
         long end = System.currentTimeMillis();
-        logger.info("explanation time: {}ms", (end - start));
+        logger.debug("explanation time: {}ms", (end - start));
         return new Saliency(saliencies);
     }
-
-
 
     private List<PredictionInput> getPerturbedInputs(PredictionInput predictionInput, int noOfFeatures, int noOfSamples) {
         List<PredictionInput> perturbedInputs = new LinkedList<>();

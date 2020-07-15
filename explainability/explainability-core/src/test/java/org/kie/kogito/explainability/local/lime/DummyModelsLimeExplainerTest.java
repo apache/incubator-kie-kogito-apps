@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DummyModelsLimeExplainerTest {
+class DummyModelsLimeExplainerTest {
 
     @BeforeAll
     public static void setUpBefore() {
@@ -46,7 +46,7 @@ public class DummyModelsLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testMapOneFeatureToOutputRegression() {
+    void testMapOneFeatureToOutputRegression() throws Exception {
         int idx = 1;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
@@ -70,7 +70,7 @@ public class DummyModelsLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testUnusedFeatureRegression() {
+    void testUnusedFeatureRegression() throws Exception {
         int idx = 2;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
@@ -95,7 +95,7 @@ public class DummyModelsLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testMapOneFeatureToOutputClassification() {
+    void testMapOneFeatureToOutputClassification() throws Exception {
         int idx = 1;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 3));
@@ -115,7 +115,7 @@ public class DummyModelsLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testTextSpamClassification() {
+    void testTextSpamClassification() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f1","we go here and there"));
         features.add(FeatureFactory.newTextFeature("f2", "please give me some money"));
@@ -136,7 +136,7 @@ public class DummyModelsLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testUnusedFeatureClassification() {
+    void testUnusedFeatureClassification() throws Exception {
         int idx = 2;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1",6));

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.explainability.model.dmn;
+package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,7 +44,7 @@ import org.kie.kogito.decision.DecisionModel;
 /**
  * {@link BlackBoxModel} implementation based on a Kogito {@link DecisionModel}.
  */
-public class DecisionModelWrapper implements BlackBoxModel {
+class DecisionModelWrapper implements BlackBoxModel {
 
     private final DecisionModel decisionModel;
 

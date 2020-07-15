@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.explainability.local;
+package org.kie.kogito.explainability.local.lime;
 
-import org.kie.kogito.explainability.model.BlackBoxModel;
-import org.kie.kogito.explainability.model.Prediction;
+import java.util.Map;
+
+import org.kie.kogito.explainability.local.LocalExplanationException;
 
 /**
- * A local explainability method
- * @param <T>
+ * Exception for when a dataset encoded for LIME is not (linearly) separable.
  */
-public interface LocalExplainer<T> {
+public class DatasetNotSeparableException extends LocalExplanationException {
 
-    T explain(Prediction prediction, BlackBoxModel model) throws LocalExplanationException;
+    public DatasetNotSeparableException(Map<Double, Long> classBalance) {
+        super("LIME dataset not easily separable (" + classBalance + ")");
+    }
 }

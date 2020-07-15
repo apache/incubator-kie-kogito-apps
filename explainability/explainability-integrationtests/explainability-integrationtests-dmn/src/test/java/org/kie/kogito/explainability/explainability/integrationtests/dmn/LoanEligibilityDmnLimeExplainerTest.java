@@ -29,7 +29,6 @@ import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.model.dmn.DecisionModelWrapper;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.junit.jupiter.api.RepeatedTest;
 import org.kie.dmn.api.core.DMNRuntime;
@@ -44,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class LoanEligibilityDmnLimeExplainerTest {
 
     @RepeatedTest(10)
-    public void testLoanEligibilityDMNExplanation() {
+    public void testLoanEligibilityDMNExplanation() throws Exception {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
@@ -53,15 +52,15 @@ public class LoanEligibilityDmnLimeExplainerTest {
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
 
         final Map<String, Object> client = new HashMap<>();
-        client.put("age", 43);
-        client.put("salary", 1950);
-        client.put("existing payments", 100);
+        client.put("Age", 43);
+        client.put("Salary", 1950);
+        client.put("Existing payments", 100);
         final Map<String, Object> loan = new HashMap<>();
-        loan.put("duration", 15);
-        loan.put("installment", 100);
+        loan.put("Duration", 15);
+        loan.put("Installment", 100);
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("client", client);
-        contextVariables.put("loan", loan);
+        contextVariables.put("Client", client);
+        contextVariables.put("Loan", loan);
 
         BlackBoxModel model = new DecisionModelWrapper(decisionModel);
         List<Feature> features = new LinkedList<>();

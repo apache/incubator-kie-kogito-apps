@@ -59,7 +59,7 @@ public class PmmlLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testPMMLRegression() {
+    public void testPMMLRegression() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("sepalLength", 6.9));
         features.add(FeatureFactory.newNumericalFeature("sepalWidth", 3.1));
@@ -111,7 +111,7 @@ public class PmmlLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testPMMLRegressionCategorical() {
+    public void testPMMLRegressionCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
         features.add(FeatureFactory.newTextFeature("mapY", "classB"));
@@ -158,7 +158,7 @@ public class PmmlLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testPMMLScorecardCategorical() {
+    public void testPMMLScorecardCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));
@@ -214,7 +214,7 @@ public class PmmlLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testPMMLCompoundScorecard() {
+    public void testPMMLCompoundScorecard() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("input1", -50));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));

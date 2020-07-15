@@ -41,13 +41,13 @@ public class LimeStabilityTest {
     private static final SecureRandom random = new SecureRandom();
 
     @BeforeAll
-    public static void setUpBefore() {
+    static void setUpBefore() {
         DataUtils.seed(4);
         random.setSeed(4);
     }
 
     @Test
-    public void testStabilityWithNumericData() {
+    void testStabilityWithNumericData() throws Exception {
         BlackBoxModel sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
@@ -73,12 +73,13 @@ public class LimeStabilityTest {
     }
 
     @Test
-    public void testStabilityWithTextData() {
+    void testStabilityWithTextData() throws Exception {
         BlackBoxModel sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             featureList.add(FeatureFactory.newTextFeature("f-" + i, TestUtils.randomString()));
         }
+        featureList.add(FeatureFactory.newTextFeature("f-5", "money"));
         PredictionInput input = new PredictionInput(featureList);
         List<PredictionOutput> predictionOutputs = sumSkipModel.predict(List.of(input));
         Prediction prediction = new Prediction(input, predictionOutputs.get(0));

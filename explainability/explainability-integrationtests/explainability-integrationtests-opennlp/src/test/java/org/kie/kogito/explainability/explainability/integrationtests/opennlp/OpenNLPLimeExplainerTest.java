@@ -52,7 +52,7 @@ public class OpenNLPLimeExplainerTest {
     }
 
     @RepeatedTest(10)
-    public void testOpenNLPLangDetect() throws IOException {
+    public void testOpenNLPLangDetect() throws Exception {
         InputStream is = getClass().getResourceAsStream("/opennlp/langdetect-183.bin");
         LanguageDetectorModel languageDetectorModel = new LanguageDetectorModel(is);
         String inputText = "italiani, spaghetti pizza mandolino";

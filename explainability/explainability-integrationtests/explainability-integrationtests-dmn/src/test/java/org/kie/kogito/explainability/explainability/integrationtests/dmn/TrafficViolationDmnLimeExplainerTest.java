@@ -29,7 +29,6 @@ import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.model.dmn.DecisionModelWrapper;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.junit.jupiter.api.RepeatedTest;
 import org.kie.dmn.api.core.DMNRuntime;
@@ -44,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TrafficViolationDmnLimeExplainerTest {
 
     @RepeatedTest(10)
-    public void testTrafficViolationDMNExplanation() {
+    public void testTrafficViolationDMNExplanation() throws Exception {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
