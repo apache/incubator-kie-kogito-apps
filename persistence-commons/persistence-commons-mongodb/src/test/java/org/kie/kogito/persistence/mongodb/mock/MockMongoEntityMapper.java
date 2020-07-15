@@ -16,9 +16,10 @@
 
 package org.kie.kogito.persistence.mongodb.mock;
 
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
+
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 public class MockMongoEntityMapper implements MongoEntityMapper<String, Document> {
 
@@ -31,7 +32,7 @@ public class MockMongoEntityMapper implements MongoEntityMapper<String, Document
 
     @Override
     public Document mapToEntity(String key, String value) {
-        return new Document(MongoOperations.ID, key).append(TEST_ATTRIBUTE, value);
+        return new Document(MONGO_ID, key).append(TEST_ATTRIBUTE, value);
     }
 
     @Override

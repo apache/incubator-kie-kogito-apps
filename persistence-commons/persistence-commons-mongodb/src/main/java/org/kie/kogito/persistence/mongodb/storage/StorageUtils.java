@@ -18,14 +18,11 @@ package org.kie.kogito.persistence.mongodb.storage;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
-import com.mongodb.reactivestreams.client.MongoClient;
-import com.mongodb.reactivestreams.client.MongoClients;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
+import com.mongodb.reactivestreams.client.MongoCollection;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -36,32 +33,27 @@ import org.reactivestreams.Subscription;
 import static com.mongodb.client.model.Aggregates.match;
 import static com.mongodb.client.model.changestream.FullDocument.UPDATE_LOOKUP;
 import static java.util.Collections.singletonList;
-import static org.eclipse.microprofile.config.ConfigProvider.getConfig;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToObject;
 
 public class StorageUtils {
 
     private StorageUtils() {
+
     }
 
-    private static MongoClient mongoClient;
-
-    static {
-        String mongoConnectionProperty = "quarkus.mongodb.connection-string";
-        String connection = getConfig().getValue(mongoConnectionProperty, String.class);
-        mongoClient = MongoClients.create(new ConnectionString(connection));
-    }
-
-    public static <E> MongoCollection<E> getCollection(String collection, Class<E> type) {
-        return MongoOperations.mongoDatabase(type).getCollection(collection, type);
-    }
-
-    public static <V, E> void watchCollection(MongoCollection<E> collection, Bson operationType,
+    public static <V, E> void watchCollection(MongoCollection<E> reactiveMongoCollection, Bson operationType,
                                               BiConsumer<String, V> consumer, MongoEntityMapper<V, E> mongoEntityMapper) {
-        com.mongodb.reactivestreams.client.MongoCollection<E> reactiveMongoCollection = mongoClient.getDatabase(collection.getNamespace().getDatabaseName())
-                .getCollection(collection.getNamespace().getCollectionName(), collection.getDocumentClass());
         reactiveMongoCollection.watch(singletonList(match(operationType)))
                 .fullDocument(UPDATE_LOOKUP).subscribe(new ObjectListenerSubscriber<>(consumer, mongoEntityMapper));
+
+        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
+        // Pause the execution to wait for the Change Stream to be ready
+        try {
+            TimeUnit.MILLISECONDS.sleep(1500L);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private static class ObjectListenerSubscriber<V, E> implements Subscriber<ChangeStreamDocument<Document>> {
@@ -85,7 +77,7 @@ public class StorageUtils {
         public void onNext(ChangeStreamDocument<Document> changeStreamDocument) {
             BsonDocument keyDocument = changeStreamDocument.getDocumentKey();
             Document document = changeStreamDocument.getFullDocument();
-            consumer.accept(Optional.ofNullable(keyDocument).map(key -> key.getString(MongoOperations.ID).getValue()).orElse(null),
+            consumer.accept(Optional.ofNullable(keyDocument).map(key -> key.getString(MONGO_ID).getValue()).orElse(null),
                             Optional.ofNullable(document).map(doc -> mongoEntityMapper.mapToModel(documentToObject(doc, mongoEntityMapper.getEntityClass(), mongoEntityMapper::convertToModelAttribute))).orElse(null));
         }
 

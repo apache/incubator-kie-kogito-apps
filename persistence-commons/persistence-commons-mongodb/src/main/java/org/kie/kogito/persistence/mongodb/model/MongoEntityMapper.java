@@ -18,7 +18,7 @@ package org.kie.kogito.persistence.mongodb.model;
 
 import java.util.regex.Pattern;
 
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 /**
  * A mongo entity mapper is responsible for converting between a data model and the corresponding mongo storage entity
@@ -54,7 +54,7 @@ public interface MongoEntityMapper<V, E> {
      * @return the corresponding mongo storage attribute name
      */
     default String convertToMongoAttribute(String attribute) {
-        return ModelUtils.ID.equals(attribute) ? MongoOperations.ID : attribute;
+        return ModelUtils.ID.equals(attribute) ? MONGO_ID : attribute;
     }
 
     /**
@@ -63,7 +63,7 @@ public interface MongoEntityMapper<V, E> {
      * @return the corresponding data model attribute name
      */
     default String convertToModelAttribute(String attribute) {
-        if (MongoOperations.ID.equals(attribute)) {
+        if (MONGO_ID.equals(attribute)) {
             return ModelUtils.ID;
         }
         String[] attributes = attribute.split(Pattern.quote(ModelUtils.ATTRIBUTE_DELIMITER));

@@ -22,8 +22,6 @@ import java.util.Map;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.MongoDBContainer;
 
-import static org.kie.kogito.persistence.mongodb.MongoConfigSource.addProperty;
-
 public class MongoServerTestResource implements QuarkusTestResourceLifecycleManager {
 
     private static final String MONGODB_CONNECTION_PROPERTY = "quarkus.mongodb.connection-string";
@@ -34,7 +32,7 @@ public class MongoServerTestResource implements QuarkusTestResourceLifecycleMana
     public Map<String, String> start() {
         mongoDBContainer = new MongoDBContainer();
         mongoDBContainer.start();
-        addProperty(MONGODB_CONNECTION_PROPERTY, mongoDBContainer.getReplicaSetUrl());
+        System.setProperty(MONGODB_CONNECTION_PROPERTY, mongoDBContainer.getReplicaSetUrl());
         return Collections.emptyMap();
     }
 

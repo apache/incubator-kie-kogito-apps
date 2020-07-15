@@ -18,6 +18,8 @@ package org.kie.kogito.index.mongodb.query;
 
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -31,6 +33,7 @@ import org.kie.kogito.index.mongodb.model.JobEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.SortDirection;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static java.util.Arrays.asList;
@@ -54,17 +57,21 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 class JobQueryIT extends QueryTestBase<String, Job> {
 
+    @Inject
+    MongoClientManager mongoClientManager;
+
     Storage<String, Job> storage;
 
     @BeforeEach
     void setUp() {
-        this.storage = new MongoStorage<>(getCollection(JOBS_STORAGE, JobEntity.class), Job.class.getName(), new JobEntityMapper());
+        this.storage = new MongoStorage<>(mongoClientManager.getCollection(JOBS_STORAGE, JobEntity.class),
+                                          mongoClientManager.getReactiveCollection(JOBS_STORAGE, JobEntity.class),
+                                          Job.class.getName(), new JobEntityMapper());
     }
 
     @AfterEach

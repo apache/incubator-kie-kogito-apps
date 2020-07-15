@@ -16,11 +16,11 @@
 
 package org.kie.kogito.persistence.mongodb.model;
 
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 class MongoEntityMapperTest {
 
@@ -32,12 +32,12 @@ class MongoEntityMapperTest {
         assertEquals(testAttribute, mockMongoEntityMapper.convertToMongoAttribute(testAttribute));
 
         String idAttribute = ModelUtils.ID;
-        assertEquals(MongoOperations.ID, mockMongoEntityMapper.convertToMongoAttribute(idAttribute));
+        assertEquals(MONGO_ID, mockMongoEntityMapper.convertToMongoAttribute(idAttribute));
     }
 
     @Test
     void testConvertToModelAttribute() {
-        String idAttribute = MongoOperations.ID;
+        String idAttribute = MONGO_ID;
         assertEquals(ModelUtils.ID, mockMongoEntityMapper.convertToModelAttribute(idAttribute));
 
         String testAttribute = "nodes";

@@ -18,9 +18,10 @@ package org.kie.kogito.persistence.mongodb.storage;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
@@ -28,16 +29,21 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper.TEST_ATTRIBUTE;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 class MongoStorageIT {
+
+    @Inject
+    MongoClientManager mongoClientManager;
 
     MongoStorage<String, Document> storage;
 
@@ -45,8 +51,9 @@ class MongoStorageIT {
 
     @BeforeEach
     void setup() {
-        collection = StorageUtils.getCollection("test", Document.class);
-        storage = new MongoStorage(collection, String.class.getName(), new MockMongoEntityMapper());
+        collection = mongoClientManager.getCollection("test", Document.class);
+        storage = new MongoStorage(collection, mongoClientManager.getReactiveCollection("test", Document.class),
+                                   String.class.getName(), new MockMongoEntityMapper());
     }
 
     @AfterEach
@@ -57,7 +64,7 @@ class MongoStorageIT {
     @Test
     void testContainsKey() {
         String testId = "testContains";
-        collection.insertOne(new Document(MongoOperations.ID, testId));
+        collection.insertOne(new Document(MONGO_ID, testId));
         assertTrue(storage.containsKey(testId));
     }
 
@@ -65,7 +72,7 @@ class MongoStorageIT {
     void testGet() {
         String testId = "testGet";
         String testValue = "testValue";
-        collection.insertOne(new Document(MongoOperations.ID, testId).append(TEST_ATTRIBUTE, testValue));
+        collection.insertOne(new Document(MONGO_ID, testId).append(TEST_ATTRIBUTE, testValue));
         assertEquals(testValue, storage.get(testId));
     }
 
@@ -74,7 +81,7 @@ class MongoStorageIT {
         String testId = "testPut";
         String testValue = "testValue";
         storage.put(testId, testValue);
-        FindIterable<Document> findIterable = collection.find(new Document(MongoOperations.ID, testId));
+        FindIterable<Document> findIterable = collection.find(new Document(MONGO_ID, testId));
         Document document = findIterable.first();
         assertTrue(Objects.nonNull(document));
         assertEquals(testValue, document.get(TEST_ATTRIBUTE));
@@ -84,7 +91,7 @@ class MongoStorageIT {
     void testClear() {
         String testId = "testClear";
         String testValue = "testValue";
-        collection.insertOne(new Document(MongoOperations.ID, testId).append(TEST_ATTRIBUTE, testValue));
+        collection.insertOne(new Document(MONGO_ID, testId).append(TEST_ATTRIBUTE, testValue));
         storage.clear();
         FindIterable<Document> findIterable = collection.find();
         assertFalse(findIterable.iterator().hasNext());
@@ -94,9 +101,9 @@ class MongoStorageIT {
     void testRemove() {
         String testId = "testRemove";
         String testValue = "testValue";
-        collection.insertOne(new Document(MongoOperations.ID, testId).append(TEST_ATTRIBUTE, testValue));
+        collection.insertOne(new Document(MONGO_ID, testId).append(TEST_ATTRIBUTE, testValue));
         storage.remove(testId);
-        FindIterable<Document> findIterable = collection.find(new Document(MongoOperations.ID, testId));
+        FindIterable<Document> findIterable = collection.find(new Document(MONGO_ID, testId));
         assertFalse(findIterable.iterator().hasNext());
     }
 }

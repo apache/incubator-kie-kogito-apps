@@ -40,6 +40,8 @@ public class ModelUtils {
 
     public static final String ID = "id";
 
+    public static final String MONGO_ID = "_id";
+
     public static final String ATTRIBUTE_DELIMITER = ".";
 
     public static final ObjectMapper MAPPER = new ObjectMapper();

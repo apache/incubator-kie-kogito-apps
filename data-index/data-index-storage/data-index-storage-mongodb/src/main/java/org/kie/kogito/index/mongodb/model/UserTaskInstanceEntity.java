@@ -19,15 +19,10 @@ package org.kie.kogito.index.mongodb.model;
 import java.util.Objects;
 import java.util.Set;
 
-import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonId;
 
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-
-@MongoEntity(collection = USER_TASK_INSTANCES_STORAGE)
-public class UserTaskInstanceEntity extends PanacheMongoEntityBase {
+public class UserTaskInstanceEntity {
 
     @BsonId
     public String id;

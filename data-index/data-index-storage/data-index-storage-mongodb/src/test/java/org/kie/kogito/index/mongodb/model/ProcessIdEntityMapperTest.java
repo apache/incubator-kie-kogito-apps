@@ -16,11 +16,11 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper.PROCESS_ID_ATTRIBUTE;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 class ProcessIdEntityMapperTest {
 
@@ -60,7 +60,7 @@ class ProcessIdEntityMapperTest {
 
     @Test
     void testConvertToMongoAttribute() {
-        assertEquals(MongoOperations.ID, processIdEntityMapper.convertToMongoAttribute(PROCESS_ID_ATTRIBUTE));
+        assertEquals(MONGO_ID, processIdEntityMapper.convertToMongoAttribute(PROCESS_ID_ATTRIBUTE));
 
         String testAttribute = "testAttribute";
         assertEquals(testAttribute, processIdEntityMapper.convertToMongoAttribute(testAttribute));
@@ -68,7 +68,7 @@ class ProcessIdEntityMapperTest {
 
     @Test
     void testConvertToModelAttribute() {
-        assertEquals(PROCESS_ID_ATTRIBUTE, processIdEntityMapper.convertToModelAttribute(MongoOperations.ID));
+        assertEquals(PROCESS_ID_ATTRIBUTE, processIdEntityMapper.convertToModelAttribute(MONGO_ID));
 
         String testAttribute = "test.attribute.name";
         assertEquals("name", processIdEntityMapper.convertToModelAttribute(testAttribute));

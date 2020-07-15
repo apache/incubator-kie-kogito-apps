@@ -17,12 +17,12 @@
 package org.kie.kogito.index.mongodb.model;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
 
 public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Document> {
@@ -42,7 +42,7 @@ public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Documen
 
         ObjectNode n = value.deepCopy();
         n.remove(ID);
-        return jsonNodeToDocument(n).append(MongoOperations.ID, key);
+        return jsonNodeToDocument(n).append(MONGO_ID, key);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Documen
             return null;
         }
 
-        Object idObj = entity.remove(MongoOperations.ID);
+        Object idObj = entity.remove(MONGO_ID);
         if (idObj != null) {
             ObjectNode result = MAPPER.createObjectNode();
             result.put(ID, idObj.toString());

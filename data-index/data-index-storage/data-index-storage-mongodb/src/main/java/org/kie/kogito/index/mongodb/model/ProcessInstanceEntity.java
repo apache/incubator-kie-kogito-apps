@@ -20,15 +20,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonId;
 
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-
-@MongoEntity(collection = PROCESS_INSTANCES_STORAGE)
-public class ProcessInstanceEntity extends PanacheMongoEntityBase {
+public class ProcessInstanceEntity {
 
     @BsonId
     public String id;
@@ -144,6 +139,7 @@ public class ProcessInstanceEntity extends PanacheMongoEntityBase {
     }
 
     public static class MilestoneEntity {
+
         public String id;
 
         public String name;

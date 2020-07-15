@@ -20,6 +20,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -33,6 +35,7 @@ import org.kie.kogito.index.mongodb.model.UserTaskInstanceEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.SortDirection;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static java.util.Arrays.asList;
@@ -56,17 +59,21 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 class UserTaskInstanceQueryIT extends QueryTestBase<String, UserTaskInstance> {
 
+    @Inject
+    MongoClientManager mongoClientManager;
+
     Storage<String, UserTaskInstance> storage;
 
     @BeforeEach
     void setUp() {
-        this.storage = new MongoStorage<>(getCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class), UserTaskInstance.class.getName(), new UserTaskInstanceEntityMapper());
+        this.storage = new MongoStorage<>(mongoClientManager.getCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class),
+                                          mongoClientManager.getReactiveCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class),
+                                          UserTaskInstance.class.getName(), new UserTaskInstanceEntityMapper());
     }
 
     @AfterEach

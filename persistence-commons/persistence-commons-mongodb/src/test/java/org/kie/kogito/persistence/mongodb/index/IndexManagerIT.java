@@ -112,9 +112,6 @@ class IndexManagerIT {
 
     @BeforeEach
     void setup() {
-        indexManager.getCollectionIndexMapping().clear();
-        indexManager.getIndexes().clear();
-
         indexManager.getIndexes().put(flightEntityIndexDescriptor.getName(), flightEntityIndexDescriptor);
         indexManager.getIndexes().put(hotelEntityIndexDescriptor.getName(), hotelEntityIndexDescriptor);
         indexManager.getIndexes().put(travelEntityIndexDescriptor.getName(), travelEntityIndexDescriptor);
@@ -128,6 +125,11 @@ class IndexManagerIT {
 
     @AfterEach
     void tearDown() {
+        mockProcessIndexEventListener.reset();
+
+        indexManager.getCollectionIndexMapping().clear();
+        indexManager.getIndexes().clear();
+
         collections.forEach(MongoCollection::drop);
         collections.clear();
     }

@@ -28,17 +28,20 @@ import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.storage.StorageUtilsIT.TestListener;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtilsIT.awaitForChangeStream;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 class StorageListenerIT {
+
+    @Inject
+    MongoClientManager mongoClientManager;
 
     @Inject
     @StorageQualifier(MONGODB_STORAGE)
@@ -46,12 +49,12 @@ class StorageListenerIT {
 
     @BeforeEach
     void setup() {
-        StorageUtils.getCollection("test", Document.class).insertOne(new Document("test", "test"));
+        mongoClientManager.getCollection("test", Document.class).insertOne(new Document("test", "test"));
     }
 
     @AfterEach
     void tearDown() {
-        StorageUtils.getCollection("test", Document.class).drop();
+        mongoClientManager.getCollection("test", Document.class).drop();
     }
 
     @Test
@@ -59,7 +62,6 @@ class StorageListenerIT {
         TestListener testListener = new TestListener(3);
         Storage<String, String> storage = storageService.getCache("test");
         storage.addObjectCreatedListener(testListener::add);
-        awaitForChangeStream();
         storage.put("testKey_insert_1", "testValue1");
         storage.put("testKey_insert_2", "testValue2");
         storage.put("testKey_insert_3", "testValue3");
@@ -74,7 +76,6 @@ class StorageListenerIT {
         TestListener testListener = new TestListener(2);
         Storage<String, String> cache = storageService.getCache("test");
         cache.addObjectUpdatedListener(testListener::add);
-        awaitForChangeStream();
         cache.put("testKey_update_1", "testValue1");
         cache.put("testKey_update_1", "testValue2");
         cache.put("testKey_update_2", "testValue3");
@@ -90,7 +91,6 @@ class StorageListenerIT {
         TestListener testListener = new TestListener(2);
         Storage<String, String> cache = storageService.getCache("test");
         cache.addObjectRemovedListener(testListener::add);
-        awaitForChangeStream();
         cache.put("testKey_remove_1", "testValue1");
         cache.put("testKey_remove_2", "testValue2");
         cache.remove("testKey_remove_1");

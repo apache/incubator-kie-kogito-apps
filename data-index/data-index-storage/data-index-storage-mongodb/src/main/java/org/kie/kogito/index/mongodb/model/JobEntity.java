@@ -18,14 +18,9 @@ package org.kie.kogito.index.mongodb.model;
 
 import java.util.Objects;
 
-import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 
-import static org.kie.kogito.index.Constants.JOBS_STORAGE;
-
-@MongoEntity(collection = JOBS_STORAGE)
-public class JobEntity extends PanacheMongoEntityBase {
+public class JobEntity {
 
     @BsonId
     public String id;

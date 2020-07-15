@@ -21,15 +21,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import com.mongodb.client.MongoCollection;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.awaitility.Awaitility;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
@@ -37,67 +38,62 @@ import static com.mongodb.client.model.Filters.eq;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 import static org.kie.kogito.persistence.mongodb.storage.MongoStorage.OPERATION_TYPE;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 class StorageUtilsIT {
 
+    @Inject
+    MongoClientManager mongoClientManager;
+
     @AfterEach
     void tearDown() {
-        MongoCollection<Document> collection = MongoOperations.mongoDatabase(Document.class).getCollection("test", Document.class);
+        MongoCollection<Document> collection = mongoClientManager.getCollection("test");
         collection.drop();
     }
 
     @Test
-    void testGetCollection() {
-        MongoCollection<Document> collection = StorageUtils.getCollection("test", Document.class);
-        assertEquals("kogito", collection.getNamespace().getDatabaseName());
-        assertEquals("test", collection.getNamespace().getCollectionName());
-    }
-
-    @Test
     void testWatchCollection_insert() throws Exception {
-        MongoCollection<Document> mongoCollection = MongoOperations.mongoDatabase(Document.class).getCollection("test", Document.class);
+        com.mongodb.reactivestreams.client.MongoCollection<Document> reactiveMongoCollection = mongoClientManager.getReactiveCollection("test");
         MongoEntityMapper<String, Document> mongoEntityMapper = new MockMongoEntityMapper();
 
         TestListener testListenerInsert1 = new TestListener(2);
-        StorageUtils.watchCollection(mongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerInsert1.add(v), mongoEntityMapper);
-        awaitForChangeStream();
+        StorageUtils.watchCollection(reactiveMongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerInsert1.add(v), mongoEntityMapper);
 
         TestListener testListenerInsert2 = new TestListener(2);
-        StorageUtils.watchCollection(mongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerInsert2.add(v), mongoEntityMapper);
-        awaitForChangeStream();
+        StorageUtils.watchCollection(reactiveMongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerInsert2.add(v), mongoEntityMapper);
 
+        MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey1", "testValue1"));
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey2", "testValue2"));
 
         testListenerInsert1.await();
         testListenerInsert2.await();
-        assertEquals(2, testListenerInsert1.items.size(), "values: " + testListenerInsert1.items.keySet());
+        assertEquals(2, testListenerInsert1.items.size());
         assertTrue(testListenerInsert1.items.keySet().containsAll(asList("testValue1", "testValue2")));
-        assertEquals(2, testListenerInsert2.items.size(), "values: " + testListenerInsert2.items.keySet());
+        assertEquals(2, testListenerInsert2.items.size());
         assertTrue(testListenerInsert2.items.keySet().containsAll(asList("testValue1", "testValue2")));
     }
 
     @Test
     void testWatchCollection_update() throws Exception {
-        MongoCollection<Document> mongoCollection = MongoOperations.mongoDatabase(Document.class).getCollection("test", Document.class);
+        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoReactiveCollection = mongoClientManager.getReactiveCollection("test");
         MongoEntityMapper<String, Document> mongoEntityMapper = new MockMongoEntityMapper();
 
         TestListener testListenerUpdate1 = new TestListener(2);
-        StorageUtils.watchCollection(mongoCollection, eq(OPERATION_TYPE, "replace"), (k, v) -> testListenerUpdate1.add(v), mongoEntityMapper);
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "replace"), (k, v) -> testListenerUpdate1.add(v), mongoEntityMapper);
+
         TestListener testListenerUpdate2 = new TestListener(2);
-        awaitForChangeStream();
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "replace"), (k, v) -> testListenerUpdate2.add(v), mongoEntityMapper);
 
-        StorageUtils.watchCollection(mongoCollection, eq(OPERATION_TYPE, "replace"), (k, v) -> testListenerUpdate2.add(v), mongoEntityMapper);
-        awaitForChangeStream();
-
+        MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey1", "testValue1"));
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey2", "testValue2"));
 
-        mongoCollection.replaceOne(new Document(MongoOperations.ID, "testKey1"), mongoEntityMapper.mapToEntity("testKey1", "testValue3"));
-        mongoCollection.replaceOne(new Document(MongoOperations.ID, "testKey2"), mongoEntityMapper.mapToEntity("testKey2", "testValue4"));
+        mongoCollection.replaceOne(new Document(MONGO_ID, "testKey1"), mongoEntityMapper.mapToEntity("testKey1", "testValue3"));
+        mongoCollection.replaceOne(new Document(MONGO_ID, "testKey2"), mongoEntityMapper.mapToEntity("testKey2", "testValue4"));
 
         testListenerUpdate1.await();
         testListenerUpdate2.await();
@@ -109,22 +105,21 @@ class StorageUtilsIT {
 
     @Test
     void testWatchCollection_delete() throws Exception {
-        MongoCollection<Document> mongoCollection = MongoOperations.mongoDatabase(Document.class).getCollection("test", Document.class);
+        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoReactiveCollection = mongoClientManager.getReactiveCollection("test");
         MongoEntityMapper<String, Document> mongoEntityMapper = new MockMongoEntityMapper();
 
         TestListener testListenerRemove1 = new TestListener(2);
-        StorageUtils.watchCollection(mongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerRemove1.add(k), mongoEntityMapper);
-        awaitForChangeStream();
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerRemove1.add(k), mongoEntityMapper);
 
         TestListener testListenerRemove2 = new TestListener(2);
-        StorageUtils.watchCollection(mongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerRemove2.add(k), mongoEntityMapper);
-        awaitForChangeStream();
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerRemove2.add(k), mongoEntityMapper);
 
+        MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey1", "testValue1"));
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey2", "testValue2"));
 
-        mongoCollection.deleteOne(new Document(MongoOperations.ID, "testKey1"));
-        mongoCollection.deleteOne(new Document(MongoOperations.ID, "testKey2"));
+        mongoCollection.deleteOne(new Document(MONGO_ID, "testKey1"));
+        mongoCollection.deleteOne(new Document(MONGO_ID, "testKey2"));
 
         testListenerRemove1.await();
         testListenerRemove2.await();
@@ -151,11 +146,5 @@ class StorageUtilsIT {
             items.put(item, item);
             latch.countDown();
         }
-    }
-
-    static void awaitForChangeStream() {
-        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
-        // Pause the test to wait for the Change Stream to be ready
-        Awaitility.await().pollDelay(1500L, TimeUnit.MILLISECONDS).until(() -> true);
     }
 }

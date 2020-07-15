@@ -28,6 +28,7 @@ import java.util.stream.StreamSupport;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -36,12 +37,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.IndexModel;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
 import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
 import org.kie.kogito.persistence.api.schema.IndexDescriptor;
 import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
@@ -65,6 +66,9 @@ public class IndexManager {
 
     @Inject
     Event<ProcessIndexEvent> processIndexEvent;
+
+    @Inject
+    Instance<MongoClientManager> mongoClientManager;
 
     public void onSchemaRegisteredEvent(@Observes SchemaRegisteredEvent event) {
         if (schemaAcceptor.accept(event.getSchemaType())) {
@@ -159,7 +163,7 @@ public class IndexManager {
     }
 
     MongoCollection<Document> getCollection(String collection) {
-        return MongoOperations.mongoDatabase(Document.class).getCollection(collection);
+        return mongoClientManager.get().getCollection(collection);
     }
 
     Map<String, EntityIndexDescriptor> getIndexes() {

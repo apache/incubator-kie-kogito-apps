@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.awaitility.Awaitility;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.DataIndexStorageService;
@@ -46,7 +45,6 @@ public abstract class AbstractStorageIT {
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectCreatedListener(pi -> cf.complete(pi));
-        awaitForListenerReady();
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
 
         ProcessInstance pi = cf.get(1, TimeUnit.MINUTES);
@@ -61,7 +59,6 @@ public abstract class AbstractStorageIT {
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectUpdatedListener(pi -> cf.complete(pi));
-        awaitForListenerReady();
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
 
@@ -77,7 +74,6 @@ public abstract class AbstractStorageIT {
         CompletableFuture<String> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectRemovedListener(id -> cf.complete(id));
-        awaitForListenerReady();
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.remove(processInstanceId);
 
@@ -89,11 +85,5 @@ public abstract class AbstractStorageIT {
     void tearDown() {
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.clear();
-    }
-
-    static void awaitForListenerReady() {
-        // There is no way to check if MongoDB Change Stream is ready https://jira.mongodb.org/browse/NODE-2247
-        // Pause the test to wait for the Change Stream to be ready
-        Awaitility.await().pollDelay(1500L, TimeUnit.MILLISECONDS).until(() -> true);
     }
 }

@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.NodeInstance;
@@ -33,6 +32,7 @@ import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
@@ -155,7 +155,7 @@ class ProcessInstanceEntityMapperTest {
 
     @Test
     void testConvertToMongoAttribute() {
-        assertEquals(MongoOperations.ID, processInstanceEntityMapper.convertToMongoAttribute(ModelUtils.ID));
+        assertEquals(MONGO_ID, processInstanceEntityMapper.convertToMongoAttribute(ModelUtils.ID));
 
         assertEquals(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE,
                      processInstanceEntityMapper.convertToMongoAttribute(ProcessInstanceEntityMapper.NODES_ID_ATTRIBUTE));
@@ -169,7 +169,7 @@ class ProcessInstanceEntityMapperTest {
 
     @Test
     void testConvertToModelAttribute() {
-        assertEquals(ModelUtils.ID, processInstanceEntityMapper.convertToModelAttribute(MongoOperations.ID));
+        assertEquals(ModelUtils.ID, processInstanceEntityMapper.convertToModelAttribute(MONGO_ID));
 
         assertEquals(ModelUtils.ID,
                      processInstanceEntityMapper.convertToModelAttribute(ProcessInstanceEntityMapper.MONGO_NODES_ID_ATTRIBUTE));

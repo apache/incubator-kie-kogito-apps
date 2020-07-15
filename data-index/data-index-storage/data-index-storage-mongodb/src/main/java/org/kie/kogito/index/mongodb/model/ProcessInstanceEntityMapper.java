@@ -19,7 +19,6 @@ package org.kie.kogito.index.mongodb.model;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -28,6 +27,7 @@ import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
@@ -37,11 +37,11 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
 
     static final String NODES_ID_ATTRIBUTE = "nodes.id";
 
-    static final String MONGO_NODES_ID_ATTRIBUTE = "nodes." + MongoOperations.ID;
+    static final String MONGO_NODES_ID_ATTRIBUTE = "nodes." + MONGO_ID;
 
     static final String MILESTONES_ID_ATTRIBUTE = "milestones.id";
 
-    static final String MONGO_MILESTONES_ID_ATTRIBUTE = "milestones." + MongoOperations.ID;
+    static final String MONGO_MILESTONES_ID_ATTRIBUTE = "milestones." + MONGO_ID;
 
     @Override
     public Class<ProcessInstanceEntity> getEntityClass() {

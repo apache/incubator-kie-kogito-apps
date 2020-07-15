@@ -18,14 +18,9 @@ package org.kie.kogito.index.mongodb.model;
 
 import java.util.Objects;
 
-import io.quarkus.mongodb.panache.MongoEntity;
-import io.quarkus.mongodb.panache.PanacheMongoEntityBase;
 import org.bson.codecs.pojo.annotations.BsonId;
 
-import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
-
-@MongoEntity(collection = PROCESS_ID_MODEL_STORAGE)
-public class ProcessIdEntity extends PanacheMongoEntityBase {
+public class ProcessIdEntity {
 
     @BsonId
     public String processId;

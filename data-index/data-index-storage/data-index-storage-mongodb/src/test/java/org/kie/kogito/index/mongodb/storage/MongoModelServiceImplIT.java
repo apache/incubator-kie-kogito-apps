@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -28,23 +29,17 @@ import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.mongodb.mock.MockIndexCreateOrUpdateEventListener;
 import org.kie.kogito.index.mongodb.model.DomainEntityMapper;
 import org.kie.kogito.index.mongodb.model.JobEntityMapper;
-import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
 import org.kie.kogito.index.mongodb.model.ProcessInstanceEntityMapper;
 import org.kie.kogito.index.mongodb.model.UserTaskInstanceEntityMapper;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.schema.ProcessDescriptor;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
-import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
-import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.index.Constants.JOBS_STORAGE;
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
 import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
@@ -56,26 +51,16 @@ class MongoModelServiceImplIT {
     @Inject
     MongoModelServiceImpl mongoModelServiceImpl;
 
-    @AfterEach
-    void tearDown() {
+    @BeforeEach
+    void setup() {
+        // Make sure MongoModelServiceImpl is initialized
+        assertNotNull(mongoModelServiceImpl.getEntityMapper(PROCESS_INSTANCES_STORAGE));
         mockIndexCreateOrUpdateEventListener.reset();
     }
 
-    @Test
-    void onProcessIndexEvent() {
-        String processId = "testProcess";
-        String processType = "testProcessType";
-
-        ProcessDescriptor processDescriptor = new ProcessDescriptor(processId, processType);
-        ProcessIndexEvent processIndexEvent = new ProcessIndexEvent(processDescriptor);
-
-        mongoModelServiceImpl.onProcessIndexEvent(processIndexEvent);
-
-        Storage<String, String> processIdStorage = new MongoStorage<>(getCollection(PROCESS_ID_MODEL_STORAGE, ProcessIdEntity.class), String.class.getName(), new ProcessIdEntityMapper());
-        assertTrue(processIdStorage.containsKey(processId));
-        assertEquals(processType, processIdStorage.get(processId));
-
-        mockIndexCreateOrUpdateEventListener.assertFire("testProcess_domain", processType);
+    @AfterEach
+    void tearDown() {
+        mockIndexCreateOrUpdateEventListener.reset();
     }
 
     @Test

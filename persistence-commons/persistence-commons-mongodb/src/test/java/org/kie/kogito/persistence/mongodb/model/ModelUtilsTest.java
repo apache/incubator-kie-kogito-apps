@@ -22,13 +22,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 class ModelUtilsTest {
 
@@ -78,7 +78,7 @@ class ModelUtilsTest {
         objectMap.put("testKey2", "testValue2");
 
         Document document = new Document()
-                .append(MongoOperations.ID, "testId")
+                .append(MONGO_ID, "testId")
                 .append("testKey1", "testValue1")
                 .append("testKey2", "testValue2");
 
@@ -92,7 +92,7 @@ class ModelUtilsTest {
         subMap.put("subTestKey2", "subTestValue2");
 
         Map objectMap = new HashMap();
-        objectMap.put(MongoOperations.ID, "testId");
+        objectMap.put(MONGO_ID, "testId");
         objectMap.put("testKey1", "testValue1");
         objectMap.put("testKey2", "testValue2");
         objectMap.put("subMapKey", subMap);

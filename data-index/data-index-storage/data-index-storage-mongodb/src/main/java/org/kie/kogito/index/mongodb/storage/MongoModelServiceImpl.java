@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.kie.kogito.index.model.Job;
@@ -31,24 +30,18 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.mongodb.model.DomainEntityMapper;
 import org.kie.kogito.index.mongodb.model.JobEntityMapper;
-import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
 import org.kie.kogito.index.mongodb.model.ProcessInstanceEntityMapper;
 import org.kie.kogito.index.mongodb.model.UserTaskInstanceEntityMapper;
-import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;
-import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.storage.MongoModelService;
-import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static org.kie.kogito.index.Constants.JOBS_STORAGE;
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
 import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-import static org.kie.kogito.index.mongodb.Constants.getDomainCollectionName;
 import static org.kie.kogito.index.mongodb.Constants.isDomainCollection;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @ApplicationScoped
 public class MongoModelServiceImpl implements MongoModelService {
@@ -74,15 +67,5 @@ public class MongoModelServiceImpl implements MongoModelService {
         Supplier<MongoEntityMapper> supplier = ENTITY_MAPPER_MAP.get(name);
         return Optional.ofNullable(supplier).map(Supplier::get).orElseGet(
                 () -> isDomainCollection(name) ? new DomainEntityMapper() : null);
-    }
-
-    public void onProcessIndexEvent(@Observes ProcessIndexEvent event) {
-        String processId = event.getProcessDescriptor().getProcessId();
-        String processType = event.getProcessDescriptor().getProcessType();
-        Storage<String, String> processIdStorage = new MongoStorage<>(getCollection(PROCESS_ID_MODEL_STORAGE, ProcessIdEntity.class),
-                                                                      String.class.getName(), new ProcessIdEntityMapper());
-        processIdStorage.put(processId, processType);
-
-        indexCreateOrUpdateEvent.fire(new IndexCreateOrUpdateEvent(getDomainCollectionName(processId), processType));
     }
 }

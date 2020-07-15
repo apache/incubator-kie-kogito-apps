@@ -18,6 +18,8 @@ package org.kie.kogito.index.mongodb.storage;
 
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -31,20 +33,25 @@ import org.kie.kogito.index.mongodb.model.ProcessInstanceEntity;
 import org.kie.kogito.index.mongodb.model.ProcessInstanceEntityMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.getCollection;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 class ProcessInstanceStorageIT extends StorageTestBase<String, ProcessInstance> {
 
+    @Inject
+    MongoClientManager mongoClientManager;
+
     Storage<String, ProcessInstance> storage;
 
     @BeforeEach
     void setUp() {
-        this.storage = new MongoStorage<>(getCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class), ProcessInstance.class.getName(), new ProcessInstanceEntityMapper());
+        this.storage = new MongoStorage<>(mongoClientManager.getCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class),
+                                          mongoClientManager.getReactiveCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class),
+                                          ProcessInstance.class.getName(), new ProcessInstanceEntityMapper());
     }
 
     @AfterEach

@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.index.mongodb.model.DomainEntityMapper.ID;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 class DomainEntityMapperTest {
 
@@ -46,7 +46,7 @@ class DomainEntityMapperTest {
         objectMap.put("testKey", "testValue");
         ObjectNode object = MAPPER.valueToTree(objectMap);
 
-        Document document = new Document(MongoOperations.ID, testId).append("testKey", "testValue");
+        Document document = new Document(MONGO_ID, testId).append("testKey", "testValue");
 
         Document result = domainEntityMapper.mapToEntity(testId, object);
         assertEquals(document, result);
@@ -61,7 +61,7 @@ class DomainEntityMapperTest {
         objectMap.put("testKey", "testValue");
         ObjectNode object = MAPPER.valueToTree(objectMap);
 
-        Document document = new Document(MongoOperations.ID, testId).append("testKey", "testValue");
+        Document document = new Document(MONGO_ID, testId).append("testKey", "testValue");
 
         ObjectNode result = domainEntityMapper.mapToModel(document);
         assertEquals(object, result);

@@ -16,8 +16,9 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import io.quarkus.mongodb.panache.runtime.MongoOperations;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
+
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 public class ProcessIdEntityMapper implements MongoEntityMapper<String, ProcessIdEntity> {
 
@@ -43,11 +44,11 @@ public class ProcessIdEntityMapper implements MongoEntityMapper<String, ProcessI
 
     @Override
     public String convertToMongoAttribute(String attribute) {
-        return PROCESS_ID_ATTRIBUTE.equals(attribute) ? MongoOperations.ID : MongoEntityMapper.super.convertToMongoAttribute(attribute);
+        return PROCESS_ID_ATTRIBUTE.equals(attribute) ? MONGO_ID : MongoEntityMapper.super.convertToMongoAttribute(attribute);
     }
 
     @Override
     public String convertToModelAttribute(String attribute) {
-        return MongoOperations.ID.equals(attribute) ? PROCESS_ID_ATTRIBUTE : MongoEntityMapper.super.convertToModelAttribute(attribute);
+        return MONGO_ID.equals(attribute) ? PROCESS_ID_ATTRIBUTE : MongoEntityMapper.super.convertToModelAttribute(attribute);
     }
 }
