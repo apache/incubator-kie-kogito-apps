@@ -48,11 +48,16 @@ message DecisionOutcome {
     repeated TypedValue outcomeInputs = 5;
 
     /* @Field(store = Store.YES) */
-    repeated Message messages = 6;
+    repeated ExecutionMessage messages = 6;
 }
 
+/*
+  This definition corresponds to org.kie.kogito.trusty.storage.api.model.Message model,
+  but it's not named Message as a workaround for an error in infinispan protostream library:
+  using the Message name throws an exception during serialization.
+ */
 /* @Indexed */
-message Message {
+message ExecutionMessage {
     /* @Field(store = Store.YES) */
     optional string level = 1;
 

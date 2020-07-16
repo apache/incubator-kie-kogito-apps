@@ -50,4 +50,14 @@ public class MessageMarshaller extends AbstractModelMarshaller<Message> {
         writer.writeString(Message.TEXT_FIELD, input.getText());
         writer.writeObject(Message.EXCEPTION_FIELD, input.getException(), MessageExceptionField.class);
     }
+
+    @Override
+    public String getTypeName() {
+        /*
+          The org.kie.kogito.trusty.storage.api.model.Message model is mapped to the ExecutionMessage
+          protobuf definition as a workaround for an error in infinispan protostream library:
+          using the Message name throws an exception during serialization.
+         */
+        return String.format("%s.%s", getJavaClass().getPackageName(), "ExecutionMessage");
+    }
 }
