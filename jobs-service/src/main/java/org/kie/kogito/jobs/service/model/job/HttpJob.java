@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpJob implements Job<HttpJobContext> {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(HttpJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpJob.class);
 
     private Optional<HttpJobExecutor> executor;
 

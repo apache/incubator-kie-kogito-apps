@@ -84,7 +84,7 @@ class VertxTimerServiceSchedulerTest {
                 .atMost(2, TimeUnit.SECONDS)
                 .untilAsserted(() -> verify(executor).execute(jobCaptor.capture()));
         assertThat(jobCaptor.getValue().toCompletableFuture().getNow(null)).isEqualTo(jobDetails);
-        assertThat(handle.getId()).isNotNull();
+        assertThat(handle.isCancel()).isFalse();
         assertThat(handle.getScheduledTime()).isNotNull();
     }
 }

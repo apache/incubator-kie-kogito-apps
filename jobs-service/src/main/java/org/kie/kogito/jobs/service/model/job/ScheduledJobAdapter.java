@@ -30,6 +30,9 @@ import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
 public class ScheduledJobAdapter {
 
+    private ScheduledJobAdapter() {
+    }
+
     public static ScheduledJob of(JobDetails jobDetails) {
         return ScheduledJob.builder()
                 .job(new JobBuilder()
@@ -63,8 +66,7 @@ public class ScheduledJobAdapter {
     }
 
     public static JobDetails to(ScheduledJob scheduledJob) {
-
-        JobDetails jobDetails = new JobDetailsBuilder()
+        return new JobDetailsBuilder()
                 .id(scheduledJob.getId())
                 .correlationId(scheduledJob.getId())
                 .executionCounter(scheduledJob.getExecutionCounter())
@@ -78,7 +80,6 @@ public class ScheduledJobAdapter {
                 .trigger(triggerAdapter(scheduledJob))
                 .priority(scheduledJob.getPriority())
                 .build();
-        return jobDetails;
     }
 
     public static Trigger triggerAdapter(ScheduledJob scheduledJob) {

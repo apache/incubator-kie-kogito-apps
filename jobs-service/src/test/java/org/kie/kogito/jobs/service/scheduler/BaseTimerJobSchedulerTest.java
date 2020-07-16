@@ -58,6 +58,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("java:S5786")
 public abstract class BaseTimerJobSchedulerTest {
 
     public static final String JOB_ID = UUID.randomUUID().toString();
@@ -339,8 +340,7 @@ public abstract class BaseTimerJobSchedulerTest {
     void testScheduled() {
         testExistingJob(false, SCHEDULED);
         Optional<ZonedDateTime> scheduled = tested().scheduled(JOB_ID);
-        assertThat(scheduled).isNotNull();
-        assertThat(scheduled.isPresent()).isTrue();
+        assertThat(scheduled).isNotNull().isPresent();
     }
 
     private Disposable subscribeOn(Publisher<JobDetails> schedule) {

@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.quarkus.runtime.StartupEvent;
-import io.vertx.axle.core.Vertx;
+import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;

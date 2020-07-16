@@ -25,7 +25,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-web</artifactId>
@@ -35,23 +34,17 @@
       <artifactId>quarkus-vertx</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web-client</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.smallrye.reactive</groupId>
-      <artifactId>smallrye-axle-web-client</artifactId>
+      <artifactId>smallrye-mutiny-vertx-web-client</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jackson</artifactId>
     </dependency>
-
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>

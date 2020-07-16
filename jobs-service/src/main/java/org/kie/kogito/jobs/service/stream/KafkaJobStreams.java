@@ -74,7 +74,6 @@ public class KafkaJobStreams {
                     JobDataEvent event = JobDataEvent
                             .builder()
                             .source(url + JobResource.JOBS_PATH)
-                            //TODO: jobdetails
                             .data(ScheduledJobAdapter.of(job))
                             .build();
                     return emitter.send(FunctionsUtil.unchecked(objectMapper::writeValueAsString).apply(event));

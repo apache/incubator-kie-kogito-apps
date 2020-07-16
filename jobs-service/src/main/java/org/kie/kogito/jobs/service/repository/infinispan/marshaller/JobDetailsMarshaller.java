@@ -50,11 +50,6 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         writer.writeInt("priority", job.getPriority());
         writer.writeInt("executionCounter", job.getExecutionCounter());
         writer.writeString("scheduledId", job.getScheduledId());
-        writer.writeString("payloadClass",
-                           Optional.ofNullable(job.getPayload())
-                                   .map(Object::getClass)
-                                   .map(Class::getName)
-                                   .orElse(null));
         writer.writeString("payload", String.valueOf(job.getPayload()));
         writer.writeObject("recipient", job.getRecipient(), getInterface(job.getRecipient()));
         writer.writeObject("trigger", job.getTrigger(), getInterface(job.getTrigger()));
@@ -79,7 +74,6 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         Integer priority = reader.readInt("priority");
         Integer executionCounter = reader.readInt("executionCounter");
         String scheduledId = reader.readString("scheduledId");
-        String payloadClass = reader.readString("payloadClass");
         String payload = reader.readString("payload");//serialize payload
         Recipient recipient = reader.readObject("recipient", Recipient.class);
         Trigger trigger = reader.readObject("trigger", Trigger.class);

@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.vertx.axle.core.Vertx;
+import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
@@ -67,7 +67,6 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
                                      long backoffRetryMillis,
                                      long maxIntervalLimitToRetryMillis) {
         super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis);
-        this.vertx = vertx;
     }
 
     @Override
@@ -97,7 +96,7 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
 
     @Incoming(AvailableStreams.JOB_ERROR_EVENTS)
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public CompletionStage jobErrorProcessor(JobExecutionResponse response) {
+    public CompletionStage<Boolean> jobErrorProcessor(JobExecutionResponse response) {
         LOGGER.warn("Error received {}", response);
         return ErrorHandling.skipErrorPublisherBuilder(this::handleJobExecutionError, response)
                 .findFirst()
@@ -111,7 +110,7 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
 
     @Incoming(AvailableStreams.JOB_SUCCESS_EVENTS)
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public CompletionStage jobSuccessProcessor(JobExecutionResponse response) {
+    public CompletionStage<Boolean> jobSuccessProcessor(JobExecutionResponse response) {
         LOGGER.debug("Success received to be processed {}", response);
         return ErrorHandling.skipErrorPublisherBuilder(this::handleJobExecutionSuccess, response)
                 .findFirst()

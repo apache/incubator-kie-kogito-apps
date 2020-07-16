@@ -24,11 +24,12 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.vertx.axle.core.Vertx;
-import io.vertx.axle.core.buffer.Buffer;
-import io.vertx.axle.ext.web.client.HttpRequest;
-import io.vertx.axle.ext.web.client.HttpResponse;
-import io.vertx.axle.ext.web.client.WebClient;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.core.buffer.Buffer;
+import io.vertx.mutiny.ext.web.client.HttpRequest;
+import io.vertx.mutiny.ext.web.client.HttpResponse;
+import io.vertx.mutiny.ext.web.client.WebClient;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.api.URIBuilder;
@@ -36,7 +37,7 @@ import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
+import org.kie.kogito.jobs.service.model.job.Recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ public class HttpJobExecutor implements JobExecutor {
         this.client = WebClient.create(vertx);
     }
 
-    private CompletionStage<HttpResponse<Buffer>> executeCallback(HTTPRequestCallback request) {
+    private Uni<HttpResponse<Buffer>> executeCallback(HTTPRequestCallback request) {
         LOGGER.debug("Executing callback {}", request);
         final URI uri = URIBuilder.toURI(request.getUrl());
         final HttpRequest<Buffer> clientRequest = client.request(httpConverters.convertHttpMethod(request.getMethod()),
@@ -112,9 +113,9 @@ public class HttpJobExecutor implements JobExecutor {
                     //Using just POST method for now
                     String callbackEndpoint =
                             Optional.ofNullable(job.getRecipient())
-                                    .filter(Recipient.HTTPRecipient.class::isInstance)
-                                    .map(Recipient.HTTPRecipient.HTTPRecipient.class::cast)
-                                    .map(Recipient.HTTPRecipient::getEndpoint)
+                                    .filter(HTTPRecipient.class::isInstance)
+                                    .map(HTTPRecipient.class::cast)
+                                    .map(HTTPRecipient::getEndpoint)
                                     .orElse("");
                     String limit = Optional.ofNullable(job.getTrigger())
                             .filter(IntervalTrigger.class::isInstance)
@@ -129,7 +130,7 @@ public class HttpJobExecutor implements JobExecutor {
                             .addQueryParam("limit", limit)
                             .build();
 
-                    return ReactiveStreams.fromCompletionStage(executeCallback(callback))
+                    return ReactiveStreams.fromPublisher(executeCallback(callback).convert().toPublisher())
                             .map(response -> JobExecutionResponse.builder()
                                     .message(response.statusMessage())
                                     .code(getResponseCode(response))

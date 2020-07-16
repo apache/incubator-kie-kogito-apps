@@ -20,13 +20,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import io.vertx.axle.core.MultiMap;
-import io.vertx.axle.core.Vertx;
-import io.vertx.axle.core.buffer.Buffer;
-import io.vertx.axle.ext.web.client.HttpRequest;
-import io.vertx.axle.ext.web.client.HttpResponse;
-import io.vertx.axle.ext.web.client.WebClient;
+import io.smallrye.mutiny.Uni;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.mutiny.core.MultiMap;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.core.buffer.Buffer;
+import io.vertx.mutiny.ext.web.client.HttpRequest;
+import io.vertx.mutiny.ext.web.client.HttpResponse;
+import io.vertx.mutiny.ext.web.client.WebClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
@@ -86,8 +87,7 @@ class HttpJobExecutorTest {
                         .executionCounter(1).build();
 
         Map queryParams = assertExecuteAndReturnQueryParams(request, params, scheduledJob, false);
-        assertThat(queryParams.size()).isEqualTo(1);
-        assertThat(queryParams.get("limit")).isEqualTo("8");
+        assertThat(queryParams).hasSize(1).containsEntry("limit","8");
     }
 
     private Map assertExecuteAndReturnQueryParams(@Mock HttpRequest<Buffer> request, @Mock MultiMap params,
@@ -96,7 +96,7 @@ class HttpJobExecutorTest {
         when(request.queryParams()).thenReturn(params);
         HttpResponse response = mock(HttpResponse.class);
         when(response.statusCode()).thenReturn(mockError ? 500 : 200);
-        when(request.send()).thenReturn(CompletableFuture.completedFuture(response));
+        when(request.send()).thenReturn(Uni.createFrom().item(response));
 
         ArgumentCaptor<Map> mapCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<JobExecutionResponse> responseCaptor = ArgumentCaptor.forClass(JobExecutionResponse.class);
@@ -120,7 +120,7 @@ class HttpJobExecutorTest {
         JobDetails job = createSimpleJob();
 
         Map queryParams = assertExecuteAndReturnQueryParams(request, params, job, false);
-        assertThat(queryParams.size()).isEqualTo(0);
+        assertThat(queryParams).isEmpty();
     }
 
     @Test
@@ -128,7 +128,7 @@ class HttpJobExecutorTest {
         JobDetails job = createSimpleJob();
 
         Map queryParams = assertExecuteAndReturnQueryParams(request, params, job, true);
-        assertThat(queryParams.size()).isEqualTo(0);
+        assertThat(queryParams).isEmpty();
     }
 
     private JobDetails createSimpleJob() {

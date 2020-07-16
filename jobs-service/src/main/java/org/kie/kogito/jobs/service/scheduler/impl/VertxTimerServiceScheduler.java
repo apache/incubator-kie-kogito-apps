@@ -59,6 +59,7 @@ public class VertxTimerServiceScheduler implements TimerService<ManageableJobHan
 
     @Override
     public void reset() {
+        //no action is required
     }
 
     @Override

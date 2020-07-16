@@ -26,9 +26,8 @@ import org.kie.kogito.timer.Trigger;
 
 /**
  * Represents a Job Instance on the Job Service. This instance may be persisted and loaded at any point in time.
- * @param <T>
  */
-public class JobDetails <T> {
+public class JobDetails {
 
     private String id;//the unique id internally on the job service
     private String correlationId; //the job id on the runtimes, for instance
@@ -39,7 +38,7 @@ public class JobDetails <T> {
     private Integer executionCounter;//number of times the job was executed
     private String scheduledId;//the execution control on the scheduler (id on vertx.setTimer, quartzId...)
 
-    private T payload;//process, rule, decision
+    private Object payload;//process, rule, decision
     private Recipient recipient;//http callback, event topic
     private Trigger trigger;//when/how it should be executed
     private Type type;
@@ -59,8 +58,9 @@ public class JobDetails <T> {
         }
     }
 
-    public JobDetails(String id, String correlationId, JobStatus status, ZonedDateTime lastUpdate, Integer retries,
-                      Integer executionCounter, String scheduledId, T payload, Recipient recipient, Trigger trigger,
+    @SuppressWarnings("java:S107")
+    protected JobDetails(String id, String correlationId, JobStatus status, ZonedDateTime lastUpdate, Integer retries,
+                      Integer executionCounter, String scheduledId, Object payload, Recipient recipient, Trigger trigger,
                       Type type, Integer priority) {
         this.id = id;
         this.correlationId = correlationId;
@@ -104,7 +104,7 @@ public class JobDetails <T> {
         return scheduledId;
     }
 
-    public T getPayload() {
+    public Object getPayload() {
         return payload;
     }
 
@@ -124,8 +124,8 @@ public class JobDetails <T> {
         return priority;
     }
 
-    public static <T>JobDetailsBuilder<T> builder(){
-        return new JobDetailsBuilder<>();
+    public static JobDetailsBuilder builder() {
+        return new JobDetailsBuilder();
     }
 
     @Override
@@ -136,7 +136,7 @@ public class JobDetails <T> {
         if (!(o instanceof JobDetails)) {
             return false;
         }
-        JobDetails<?> that = (JobDetails<?>) o;
+        JobDetails that = (JobDetails) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getCorrelationId(), that.getCorrelationId()) &&
                 getStatus() == that.getStatus() &&

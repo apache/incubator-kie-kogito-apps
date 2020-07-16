@@ -19,11 +19,7 @@ package org.kie.kogito.jobs.service.model.job;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import org.kie.kogito.timer.Job;
-
 public interface Recipient {
-
-    JobDetails.Type forType();
 
     class HTTPRecipient implements Recipient {
 
@@ -35,11 +31,6 @@ public interface Recipient {
 
         public String getEndpoint() {
             return endpoint;
-        }
-
-        @Override
-        public JobDetails.Type forType() {
-            return JobDetails.Type.HTTP;
         }
 
         @Override

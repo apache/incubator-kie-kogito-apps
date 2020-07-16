@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import io.quarkus.runtime.StartupEvent;
-import io.vertx.axle.core.Vertx;
+import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

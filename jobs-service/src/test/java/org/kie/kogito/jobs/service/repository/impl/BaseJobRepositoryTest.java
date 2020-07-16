@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -39,12 +40,14 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
+@SuppressWarnings("java:S5786")
 public abstract class BaseJobRepositoryTest {
 
     public static final String ID = UUID.randomUUID().toString();
 
     private JobDetails job;
 
+    @BeforeEach
     public void setUp() {
         createAndSaveJob(ID);
     }
@@ -147,7 +150,7 @@ public abstract class BaseJobRepositoryTest {
                 .toCompletableFuture()
                 .get();
 
-        assertThat(fetchedNotFound.size()).isEqualTo(0);
+        assertThat(fetchedNotFound.size()).isZero();
 
         fetchedNotFound = tested().findByStatusBetweenDatesOrderByPriority(DateUtil.now().plusDays(1),
                                                                            DateUtil.now().plusDays(2),
@@ -157,7 +160,7 @@ public abstract class BaseJobRepositoryTest {
                 .toCompletableFuture()
                 .get();
 
-        assertThat(fetchedNotFound.size()).isEqualTo(0);
+        assertThat(fetchedNotFound.size()).isZero();
     }
 
     @Test

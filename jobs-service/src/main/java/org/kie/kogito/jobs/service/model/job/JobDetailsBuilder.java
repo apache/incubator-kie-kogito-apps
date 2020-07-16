@@ -22,7 +22,7 @@ import java.util.Optional;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.timer.Trigger;
 
-public class JobDetailsBuilder<T> {
+public class JobDetailsBuilder {
 
     private String id;
     private String correlationId;
@@ -31,7 +31,7 @@ public class JobDetailsBuilder<T> {
     private Integer retries = 0;
     private Integer executionCounter = 0;
     private String scheduledId;
-    private T payload;
+    private Object payload;
     private Recipient recipient;
     private Trigger trigger;
     private JobDetails.Type type;
@@ -72,7 +72,7 @@ public class JobDetailsBuilder<T> {
         return this;
     }
 
-    public JobDetailsBuilder payload(T payload) {
+    public JobDetailsBuilder payload(Object payload) {
         this.payload = payload;
         return this;
     }
@@ -117,18 +117,18 @@ public class JobDetailsBuilder<T> {
                 .priority(jobDetails.getPriority());
     }
 
-    public JobDetailsBuilder<T> incrementRetries() {
+    public JobDetailsBuilder incrementRetries() {
         this.retries++;
         return this;
     }
 
-    public JobDetailsBuilder<T> incrementExecutionCounter() {
+    public JobDetailsBuilder incrementExecutionCounter() {
         this.executionCounter++;
         return this;
     }
 
 
-    public JobDetailsBuilder<T> merge(JobDetails jobDetails) {
+    public JobDetailsBuilder merge(JobDetails jobDetails) {
         final Optional<JobDetails> j = Optional.ofNullable(jobDetails);
         return  scheduledId(j.map(JobDetails::getScheduledId).orElse(scheduledId))
                 .retries(j.map(JobDetails::getRetries).orElse(retries))

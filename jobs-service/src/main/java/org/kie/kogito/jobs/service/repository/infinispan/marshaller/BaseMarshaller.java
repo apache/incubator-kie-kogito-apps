@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.infinispan.protostream.MessageMarshaller;
-import org.kie.kogito.jobs.service.model.JobStatus;
 
 public abstract class BaseMarshaller<T> implements MessageMarshaller<T> {
 
