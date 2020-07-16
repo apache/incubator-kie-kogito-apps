@@ -106,7 +106,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                     logger.debug("raw samples per class: {}", rawClassesBalance);
 
                     if (rawClassesBalance.size() > 1) {
-                        Long max = rawClassesBalance.values().stream().max(Long::compareTo).get();
+                        Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
                         if ((double) max / (double) perturbed.size() < 0.99) {
                             separableDataset = true;
                             classification = rawClassesBalance.size() == 2;

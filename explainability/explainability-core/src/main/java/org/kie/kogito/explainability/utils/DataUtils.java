@@ -421,23 +421,23 @@ public class DataUtils {
     }
 
     public static double hammingDistance(double[] x, double[] y) {
-        int h = 0;
+        double h = 0;
         for (int i = 0; i < Math.min(x.length, y.length); i++) {
             if (x[i] != y[i]) {
                 h++;
             }
         }
-        return h + (x.length - y.length);
+        return h + (double) (x.length - y.length);
     }
 
     public static double hammingDistance(String x, String y) {
-        int h = 0;
+        double h = 0;
         for (int i = 0; i < Math.min(x.length(), y.length()); i++) {
             if (x.charAt(i) != y.charAt(i)) {
                 h++;
             }
         }
-        return h + (x.length() - y.length());
+        return h + (double) (x.length() - y.length());
     }
 
     public static double euclideanDistance(double[] x, double[] y) {
