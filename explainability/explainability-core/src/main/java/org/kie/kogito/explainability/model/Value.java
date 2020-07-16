@@ -30,11 +30,7 @@ public class Value<S> {
     }
 
     public String asString() {
-        if (underlyingObject == null) {
-            return "";
-        } else {
-            return String.valueOf(underlyingObject);
-        }
+        return String.valueOf(underlyingObject);
     }
 
     public double asNumber() {

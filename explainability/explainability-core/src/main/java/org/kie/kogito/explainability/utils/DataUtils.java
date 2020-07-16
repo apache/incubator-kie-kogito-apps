@@ -190,6 +190,7 @@ public class DataUtils {
         PredictionInput perturbedInput = new PredictionInput(newFeatures);
         int perturbationSize = Math.min(noOfPerturbations, originalFeatures.size());
         int[] indexesToBePerturbed = random.ints(0, perturbedInput.getFeatures().size()).distinct().limit(perturbationSize).toArray();
+        // TODO : perturbing a composite / nested feature must be done by considering to only perturb #noOfPerturbations features
         for (int value : indexesToBePerturbed) {
             perturbedInput.getFeatures().set(value, perturbFeature(
                     perturbedInput.getFeatures().get(value), noOfSamples));
@@ -237,9 +238,19 @@ public class DataUtils {
                 break;
             case NUMBER:
                 double ov = feature.getValue().asNumber();
+                boolean intValue = ov % 1 == 0;
+                if (intValue) {
+                    ov = (int) ov;
+                }
                 // sample from normal distribution and center around feature value
                 int pickIdx = random.nextInt(noOfSamples - 1);
-                double v = DataUtils.generateData(0, 1, noOfSamples)[pickIdx] * ov + ov;
+                double v = DataUtils.generateData(0, 1, noOfSamples)[pickIdx];
+                if (ov != 0) {
+                    v = v * ov + ov;
+                }
+                if (intValue) {
+                    v = (int) v;
+                }
                 f = FeatureFactory.newNumericalFeature(featureName, v);
                 break;
             case BOOLEAN:

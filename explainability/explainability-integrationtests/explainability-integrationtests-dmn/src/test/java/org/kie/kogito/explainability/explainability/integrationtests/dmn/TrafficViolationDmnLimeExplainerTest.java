@@ -54,12 +54,11 @@ public class TrafficViolationDmnLimeExplainerTest {
         driver.put("Points", 10);
         final Map<String, Object> violation = new HashMap<>();
         violation.put("Type", "speed");
-        violation.put("Actual Speed", 105);
-        violation.put("Speed Limit", 100);
+        violation.put("Actual Speed", 150);
+        violation.put("Speed Limit", 130);
         final Map<String, Object> contextVariables = new HashMap<>();
         contextVariables.put("Driver", driver);
         contextVariables.put("Violation", violation);
-
 
         BlackBoxModel model = new DecisionModelWrapper(decisionModel);
         List<Feature> features = new LinkedList<>();
@@ -71,7 +70,7 @@ public class TrafficViolationDmnLimeExplainerTest {
         Saliency saliency = limeExplainer.explain(prediction, model);
 
         assertNotNull(saliency);
-        List<String> strings = saliency.getTopFeatures(2).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
+        List<String> strings = saliency.getTopFeatures(3).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
         assertTrue(strings.contains("Actual Speed") || strings.contains("Speed Limit"));
     }
 }

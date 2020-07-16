@@ -52,15 +52,15 @@ public class LoanEligibilityDmnLimeExplainerTest {
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
 
         final Map<String, Object> client = new HashMap<>();
-        client.put("Age", 43);
-        client.put("Salary", 1950);
-        client.put("Existing payments", 100);
+        client.put("age", 43);
+        client.put("salary", 1950);
+        client.put("existing payments", 100);
         final Map<String, Object> loan = new HashMap<>();
-        loan.put("Duration", 15);
-        loan.put("Installment", 100);
+        loan.put("duration", 15);
+        loan.put("installment", 100);
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Client", client);
-        contextVariables.put("Loan", loan);
+        contextVariables.put("client", client);
+        contextVariables.put("loan", loan);
 
         BlackBoxModel model = new DecisionModelWrapper(decisionModel);
         List<Feature> features = new LinkedList<>();
@@ -72,7 +72,7 @@ public class LoanEligibilityDmnLimeExplainerTest {
         Saliency saliency = limeExplainer.explain(prediction, model);
 
         assertNotNull(saliency);
-        List<String> strings = saliency.getTopFeatures(4).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
+        List<String> strings = saliency.getTopFeatures(2).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
         assertTrue(strings.contains("installment") || strings.contains("duration"));
     }
 }

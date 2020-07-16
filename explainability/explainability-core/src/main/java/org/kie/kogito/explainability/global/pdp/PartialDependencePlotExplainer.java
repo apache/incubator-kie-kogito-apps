@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<DataSeries>> {
 
-    private static final int TABLE_SIZE = 100;
+    private static final int SERIES_LENGTH = 100;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -56,12 +56,12 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
             for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
                 for (int outputIndex = 0; outputIndex < model.getOutputShape().getOutputs().size(); outputIndex++) {
                     double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
-                                                                         featureDistributions.get(featureIndex).getMax(), TABLE_SIZE);
+                                                                         featureDistributions.get(featureIndex).getMax(), SERIES_LENGTH);
 
-                    double[][] trainingData = new double[noOfFeatures][TABLE_SIZE];
+                    double[][] trainingData = new double[noOfFeatures][SERIES_LENGTH];
                     for (int i = 0; i < noOfFeatures; i++) {
                         double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
-                                                                      featureDistributions.get(i).getStdDev(), TABLE_SIZE);
+                                                                      featureDistributions.get(i).getStdDev(), SERIES_LENGTH);
                         trainingData[i] = featureData;
                     }
 
@@ -71,7 +71,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                         double xs = featureXSvalues[i];
                         double[] inputs = new double[noOfFeatures];
                         inputs[featureIndex] = xs;
-                        for (int j = 0; j < TABLE_SIZE; j++) {
+                        for (int j = 0; j < SERIES_LENGTH; j++) {
                             for (int f = 0; f < noOfFeatures; f++) {
                                 if (f != featureIndex) {
                                     inputs[f] = trainingData[f][j];
@@ -84,7 +84,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                         // prediction requests are batched per value of feature 'Xs' under analysis
                         for (PredictionOutput predictionOutput : model.predict(predictionInputs)) {
                             Output output = predictionOutput.getOutputs().get(outputIndex);
-                            marginalImpacts[i] += output.getScore() / (double) TABLE_SIZE;
+                            marginalImpacts[i] += output.getScore() / (double) SERIES_LENGTH;
                         }
                     }
                     DataSeries dataSeries = new DataSeries(model.getInputShape().getFeatures().get(featureIndex),
@@ -96,7 +96,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
             throw new RuntimeException(e);
         }
         long end = System.currentTimeMillis();
-        logger.info("explanation time: {}ms", (end - start));
+        logger.debug("explanation time: {}ms", (end - start));
         return pdps;
     }
 }

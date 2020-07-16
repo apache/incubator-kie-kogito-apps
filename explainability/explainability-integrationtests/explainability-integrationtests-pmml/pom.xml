@@ -7,7 +7,7 @@
     <version>8.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>explanation-integrationtests-pmml</artifactId>
+  <artifactId>explainability-integrationtests-pmml</artifactId>
   <name>Kogito :: Explainability Integration Tests PMML</name>
   <properties>
     <org.kie.version>7.40.0-SNAPSHOT</org.kie.version>

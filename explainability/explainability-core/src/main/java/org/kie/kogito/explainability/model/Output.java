@@ -33,6 +33,14 @@ public class Output {
     }
 
     /**
+     * get the output name
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * get the score (confidence) associated to this output
      * @return the score
      */
@@ -54,5 +62,15 @@ public class Output {
      */
     public Value getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return "Output{" +
+                "value=" + value +
+                ", type=" + type +
+                ", score=" + score +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
