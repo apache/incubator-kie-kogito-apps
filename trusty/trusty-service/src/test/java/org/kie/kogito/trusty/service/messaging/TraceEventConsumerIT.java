@@ -16,7 +16,6 @@
 
 package org.kie.kogito.trusty.service.messaging;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +27,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
@@ -37,6 +35,11 @@ import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
 
 @QuarkusTest
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
@@ -68,15 +71,15 @@ class TraceEventConsumerIT {
 
     @Test
     void testCorrectCloudEvent() throws Exception {
-        sendToKafkaAndRun(IOUtils.resourceToString("/TraceEventTest_correct_CloudEvent.json", StandardCharsets.UTF_8), () ->
-                assertNotNull(trustyService.getDecisionById("82639415-ceb1-411a-b3c8-4832e6a82905"))
+        sendToKafkaAndRun(buildCloudEventJsonString(buildCorrectTraceEvent()), () ->
+                assertNotNull(trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID))
         );
     }
 
     @Test
     void testCloudEventWithErrors() throws Exception {
-        sendToKafkaAndRun(IOUtils.resourceToString("/TraceEventTest_error_CloudEvent.json", StandardCharsets.UTF_8), () ->
-                assertNotNull(trustyService.getDecisionById("6f8f5a8b-5477-464c-b5d3-1e3ed399e0da"))
+        sendToKafkaAndRun(buildCloudEventJsonString(buildTraceEventWithErrors()), () ->
+                assertNotNull(trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID))
         );
     }
 

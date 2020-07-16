@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.cloudevents.json.Json;
-import io.cloudevents.v1.CloudEventImpl;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -37,30 +34,31 @@ import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilde
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithNullFields;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithNullFields;
 
 class TraceEventConverterTest {
 
     @Test
     void testCorrectTraceEvent() {
-        doTest("/TraceEventTest_correct_CloudEvent.json", "/TraceEventTest_correct_Decision.json");
+        doTest(buildCorrectTraceEvent(), buildCorrectDecision());
     }
 
     @Test
     void testTraceEventWithError() {
-        doTest("/TraceEventTest_error_CloudEvent.json", "/TraceEventTest_error_Decision.json");
+        doTest(buildTraceEventWithErrors(), buildDecisionWithErrors());
     }
 
     @Test
     void testTraceEventWithNullFields() {
-        doTest("/TraceEventTest_nullFields_CloudEvent.json", "/TraceEventTest_nullFields_Decision.json");
+        doTest(buildTraceEventWithNullFields(), buildDecisionWithNullFields());
     }
 
-    private void doTest(String cloudEventResource, String decisionResource) {
-        TraceEvent traceEvent = readCloudEventFromResource(cloudEventResource)
-                .getData()
-                .orElseThrow(IllegalStateException::new);
-        Decision expectedDecision = readDecisionFromResource(decisionResource);
-
+    private void doTest(TraceEvent traceEvent, Decision expectedDecision) {
         TraceEventConverter converter = new TraceEventConverter();
         Decision actualDecision = converter.toDecision(traceEvent);
 
@@ -152,14 +150,5 @@ class TraceEventConverterTest {
                 .append(expected.getTypeRef(), actual.getTypeRef())
                 .append(expected.getName(), actual.getName())
                 .toComparison();
-    }
-
-    private CloudEventImpl<TraceEvent> readCloudEventFromResource(String resourceName) {
-        return Json.fromInputStream(TraceEventConverterTest.class.getResourceAsStream(resourceName), new TypeReference<>() {
-        });
-    }
-
-    private Decision readDecisionFromResource(String resourceName) {
-        return Json.fromInputStream(TraceEventConverterTest.class.getResourceAsStream(resourceName), Decision.class);
     }
 }

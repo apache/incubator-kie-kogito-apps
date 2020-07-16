@@ -16,14 +16,13 @@
 
 package org.kie.kogito.trusty.service.messaging;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.io.IOUtils;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyService;
 
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventWithoutDataJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -33,19 +32,19 @@ import static org.mockito.Mockito.when;
 class TraceEventConsumerTest {
 
     @Test
-    void testCorrectCloudEvent() throws IOException {
-        String payload = IOUtils.resourceToString("/TraceEventTest_correct_CloudEvent.json", StandardCharsets.UTF_8);
+    void testCorrectCloudEvent() {
+        String payload = buildCloudEventJsonString(buildCorrectTraceEvent());
         doTest(payload, 1);
     }
 
     @Test
-    void testCloudEventWithoutData() throws IOException {
-        String payload = IOUtils.resourceToString("/TraceEventTest_withoutData_CloudEvent.json", StandardCharsets.UTF_8);
+    void testCloudEventWithoutData() {
+        String payload = buildCloudEventWithoutDataJsonString();
         doTest(payload, 0);
     }
 
     @Test
-    void testGibberishPayload() throws IOException {
+    void testGibberishPayload() {
         String payload = "DefinitelyNotASerializedCloudEvent123456";
         doTest(payload, 0);
     }
