@@ -18,9 +18,9 @@ package org.kie.kogito.explainability.local.lime;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Utility class to generate weights for the LIME encoded training set, given a prediction.

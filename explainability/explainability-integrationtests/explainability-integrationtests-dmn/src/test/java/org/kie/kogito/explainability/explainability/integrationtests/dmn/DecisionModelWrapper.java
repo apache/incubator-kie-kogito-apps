@@ -48,7 +48,7 @@ class DecisionModelWrapper implements BlackBoxModel {
 
     private final DecisionModel decisionModel;
 
-    public DecisionModelWrapper(DecisionModel decisionModel) {
+    DecisionModelWrapper(DecisionModel decisionModel) {
         this.decisionModel = decisionModel;
     }
 

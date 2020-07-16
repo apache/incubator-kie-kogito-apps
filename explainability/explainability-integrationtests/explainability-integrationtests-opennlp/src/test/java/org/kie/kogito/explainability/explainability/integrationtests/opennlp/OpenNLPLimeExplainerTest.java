@@ -15,15 +15,21 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.opennlp;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import opennlp.tools.langdetect.Language;
+import opennlp.tools.langdetect.LanguageDetector;
+import opennlp.tools.langdetect.LanguageDetectorME;
+import opennlp.tools.langdetect.LanguageDetectorModel;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -33,26 +39,19 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import opennlp.tools.langdetect.Language;
-import opennlp.tools.langdetect.LanguageDetector;
-import opennlp.tools.langdetect.LanguageDetectorME;
-import opennlp.tools.langdetect.LanguageDetectorModel;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.RepeatedTest;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class OpenNLPLimeExplainerTest {
+class OpenNLPLimeExplainerTest {
 
     @BeforeAll
-    public static void setUpBefore() {
+    static void setUpBefore() {
         DataUtils.seed(4);
     }
 
-    @RepeatedTest(10)
-    public void testOpenNLPLangDetect() throws Exception {
+    @Test
+    void testOpenNLPLangDetect() throws Exception {
         InputStream is = getClass().getResourceAsStream("/opennlp/langdetect-183.bin");
         LanguageDetectorModel languageDetectorModel = new LanguageDetectorModel(is);
         String inputText = "italiani, spaghetti pizza mandolino";

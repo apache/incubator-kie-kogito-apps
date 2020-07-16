@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LinearModel {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(LinearModel.class);
 
     private final double[] weights;
     private final boolean classification;

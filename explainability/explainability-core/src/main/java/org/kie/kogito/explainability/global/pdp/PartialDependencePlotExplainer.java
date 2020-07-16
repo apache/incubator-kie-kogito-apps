@@ -19,15 +19,16 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kie.kogito.explainability.model.DataDistribution;
-import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.global.GlobalExplainer;
+import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.DataSeries;
+import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.DataSeries;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +42,10 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
 
     private static final int SERIES_LENGTH = 100;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
 
     @Override
-    public Collection<DataSeries> explain(BlackBoxModel model) {
+    public Collection<DataSeries> explain(BlackBoxModel model) throws GlobalExplanationException {
         long start = System.currentTimeMillis();
 
         Collection<DataSeries> pdps = new LinkedList<>();
@@ -93,7 +94,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new GlobalExplanationException(e);
         }
         long end = System.currentTimeMillis();
         logger.debug("explanation time: {}ms", (end - start));

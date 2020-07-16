@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LimeExplainer implements LocalExplainer<Saliency> {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(LimeExplainer.class);
 
     /**
      * no. of samples to be generated for the local linear model training

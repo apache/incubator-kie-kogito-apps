@@ -22,7 +22,6 @@ public class DataSeries {
     private final Feature feature;
 
     public DataSeries(Feature feature, double[] x, double[] y) {
-        assert x.length == y.length : "x and y lengths do not match";
         this.feature = feature;
         this.x = x;
         this.y = y;

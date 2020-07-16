@@ -15,13 +15,12 @@
  */
 package org.kie.kogito.explainability.global;
 
-import org.kie.kogito.explainability.model.BlackBoxModel;
-
 /**
- * A global explainability method
- * @param <T>
+ * Exception representing errors happened during the process of generating a global explanation.
  */
-public interface GlobalExplainer<T> {
+public class GlobalExplanationException extends Exception {
 
-    T explain(BlackBoxModel model) throws GlobalExplanationException;
+    public GlobalExplanationException(Exception e) {
+        super(e);
+    }
 }

@@ -36,7 +36,7 @@ import org.kie.kogito.explainability.utils.DataUtils;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LimeStabilityTest {
+class LimeStabilityTest {
 
     private static final SecureRandom random = new SecureRandom();
 

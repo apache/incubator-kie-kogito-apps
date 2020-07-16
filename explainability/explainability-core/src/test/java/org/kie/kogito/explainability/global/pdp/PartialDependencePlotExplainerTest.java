@@ -29,10 +29,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PartialDependencePlotExplainerTest {
+class PartialDependencePlotExplainerTest {
 
     @Test
-    public void testPdpTextClassifier() throws FileNotFoundException {
+    void testPdpTextClassifier() throws Exception {
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
         BlackBoxModel modelInfo = TestUtils.getDummyTextClassifier();
         Collection<DataSeries> pdps = partialDependencePlotProvider.explain(modelInfo);

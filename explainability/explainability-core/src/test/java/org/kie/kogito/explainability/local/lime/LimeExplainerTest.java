@@ -33,10 +33,10 @@ import org.kie.kogito.explainability.utils.DataUtils;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
-public class LimeExplainerTest {
+class LimeExplainerTest {
 
     @BeforeAll
-    public static void setUpBefore() {
+    static void setUpBefore() {
         DataUtils.seed(4);
     }
 

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -43,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.explainability.explainability.integrationtests.pmml.AbstractPMMLTest.getPMMLRuntime;
 
-public class PmmlLimeExplainerTest {
+class PmmlLimeExplainerTest {
 
     private static PMMLRuntime logisticRegressionIris;
     private static PMMLRuntime categoricalVariableRegression;
@@ -51,7 +52,7 @@ public class PmmlLimeExplainerTest {
     private static PMMLRuntime compoundScoreCard;
 
     @BeforeAll
-    public static void setUpBefore() {
+    static void setUpBefore() {
         DataUtils.seed(4);
         logisticRegressionIris = getPMMLRuntime("LogisticRegressionIrisData");
         categoricalVariableRegression = getPMMLRuntime("categoricalVariables_Model");
@@ -59,8 +60,8 @@ public class PmmlLimeExplainerTest {
         compoundScoreCard = getPMMLRuntime("CompoundNestedPredicateScorecard");
     }
 
-    @RepeatedTest(10)
-    public void testPMMLRegression() throws Exception {
+    @Test
+    void testPMMLRegression() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("sepalLength", 6.9));
         features.add(FeatureFactory.newNumericalFeature("sepalWidth", 3.1));
@@ -112,7 +113,7 @@ public class PmmlLimeExplainerTest {
     }
 
     @Disabled
-    public void testPMMLRegressionCategorical() throws Exception {
+    void testPMMLRegressionCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
         features.add(FeatureFactory.newTextFeature("mapY", "classB"));
@@ -159,7 +160,7 @@ public class PmmlLimeExplainerTest {
     }
 
     @Disabled()
-    public void testPMMLScorecardCategorical() throws Exception {
+    void testPMMLScorecardCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));
@@ -212,8 +213,8 @@ public class PmmlLimeExplainerTest {
         assertTrue(strings.contains("classA (input1)"));
     }
 
-    @RepeatedTest(10)
-    public void testPMMLCompoundScorecard() throws Exception {
+    @Test
+    void testPMMLCompoundScorecard() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("input1", -50));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));

@@ -19,19 +19,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.FeatureImportance;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.TestUtils;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.RepeatedTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -41,11 +41,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class DummyModelsLimeExplainerTest {
 
     @BeforeAll
-    public static void setUpBefore() {
+    static void setUpBefore() {
         DataUtils.seed(4);
     }
 
-    @RepeatedTest(10)
+    @Test
     void testMapOneFeatureToOutputRegression() throws Exception {
         int idx = 1;
         List<Feature> features = new LinkedList<>();
@@ -69,7 +69,7 @@ class DummyModelsLimeExplainerTest {
         assertTrue(v > 0);
     }
 
-    @RepeatedTest(10)
+    @Test
     void testUnusedFeatureRegression() throws Exception {
         int idx = 2;
         List<Feature> features = new LinkedList<>();
@@ -94,7 +94,7 @@ class DummyModelsLimeExplainerTest {
         assertTrue(v > 0);
     }
 
-    @RepeatedTest(10)
+    @Test
     void testMapOneFeatureToOutputClassification() throws Exception {
         int idx = 1;
         List<Feature> features = new LinkedList<>();
@@ -115,7 +115,7 @@ class DummyModelsLimeExplainerTest {
         assertEquals(features.get(idx).getName(), topFeatures.get(0).getFeature().getName());
     }
 
-    @RepeatedTest(10)
+    @Test
     void testTextSpamClassification() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f1","we go here and there"));
@@ -136,7 +136,7 @@ class DummyModelsLimeExplainerTest {
         assertTrue(v > 0);
     }
 
-    @RepeatedTest(10)
+    @Test
     void testUnusedFeatureClassification() throws Exception {
         int idx = 2;
         List<Feature> features = new LinkedList<>();

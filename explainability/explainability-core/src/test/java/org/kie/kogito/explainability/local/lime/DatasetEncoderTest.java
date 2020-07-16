@@ -38,7 +38,7 @@ class DatasetEncoderTest {
     private final static SecureRandom random = new SecureRandom();
 
     @Test
-    public void testEmptyDatasetEncoding() {
+    void testEmptyDatasetEncoding() {
         List<PredictionInput> inputs = new LinkedList<>();
         List<Output> outputs = new LinkedList<>();
         List<Feature> features = new LinkedList<>();
@@ -51,7 +51,7 @@ class DatasetEncoderTest {
     }
 
     @Test
-    public void testDatasetEncodingWithNumericData() {
+    void testDatasetEncodingWithNumericData() {
         List<PredictionInput> perturbedInputs = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
             List<Feature> inputFeatures = new LinkedList<>();
