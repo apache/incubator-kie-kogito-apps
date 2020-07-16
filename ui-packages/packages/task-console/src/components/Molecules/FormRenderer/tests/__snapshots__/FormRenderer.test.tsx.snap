@@ -2,7 +2,6 @@
 
 exports[`FormRenderer test Render form with actions 1`] = `
 <FormRenderer
-  errorCallback={[MockFunction]}
   formSchema={
     Object {
       "phases": Array [
@@ -70,9 +69,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
             },
           },
           "type": "object",
-          "uniforms": Object {
-            "disabled": true,
-          },
         },
         "visaApplication": Object {
           "properties": Object {
@@ -99,40 +95,66 @@ exports[`FormRenderer test Render form with actions 1`] = `
             },
           },
           "type": "object",
-          "uniforms": Object {
-            "disabled": true,
-          },
         },
       },
       "type": "object",
     }
   }
-  successCallback={[MockFunction]}
-  taskInfo={
-    TaskInfoImpl {
-      "processInstanceEndPoint": "http://localhost:8080/travels",
-      "task": Object {
-        "actualOwner": null,
-        "adminGroups": Array [],
-        "adminUsers": Array [],
-        "completed": null,
-        "description": null,
-        "excludedUsers": Array [],
-        "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
-        "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-        "lastUpdate": "2020-02-19T11:11:56.282Z",
-        "name": "Apply for visa",
-        "outputs": "{}",
-        "potentialGroups": Array [],
-        "potentialUsers": Array [],
-        "priority": "1",
-        "processId": "travels",
-        "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
-        "referenceName": "VisaApplication",
-        "rootProcessId": null,
-        "rootProcessInstanceId": null,
-        "started": "2020-02-19T11:11:56.282Z",
-        "state": "Ready",
+  formSubmitHandler={
+    Object {
+      "doSubmit": [MockFunction],
+      "getActions": [MockFunction] {
+        "calls": Array [
+          Array [],
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Array [
+              Object {
+                "execute": [MockFunction],
+                "name": "complete",
+                "primary": false,
+              },
+            ],
+          },
+          Object {
+            "type": "return",
+            "value": Array [
+              Object {
+                "execute": [MockFunction],
+                "name": "complete",
+                "primary": false,
+              },
+            ],
+          },
+        ],
+      },
+    }
+  }
+  model={
+    Object {
+      "NodeName": "Apply for visa",
+      "Priority": "1",
+      "Skippable": "true",
+      "TaskName": "VisaApplication",
+      "traveller": Object {
+        "address": Object {
+          "city": "Zerf",
+          "country": "Poland",
+          "street": "Cabalone",
+          "zipCode": "765756",
+        },
+        "email": "rwhite@gorle.com",
+        "firstName": "Rachel",
+        "lastName": "White",
+        "nationality": "Polish",
+      },
+      "trip": Object {
+        "city": "Boston",
+        "country": "US",
+        "visaRequired": true,
       },
     }
   }
@@ -143,7 +165,31 @@ exports[`FormRenderer test Render form with actions 1`] = `
     disabled={false}
     error={null}
     label={true}
-    model={Object {}}
+    model={
+      Object {
+        "NodeName": "Apply for visa",
+        "Priority": "1",
+        "Skippable": "true",
+        "TaskName": "VisaApplication",
+        "traveller": Object {
+          "address": Object {
+            "city": "Zerf",
+            "country": "Poland",
+            "street": "Cabalone",
+            "zipCode": "765756",
+          },
+          "email": "rwhite@gorle.com",
+          "firstName": "Rachel",
+          "lastName": "White",
+          "nationality": "Polish",
+        },
+        "trip": Object {
+          "city": "Boston",
+          "country": "US",
+          "visaRequired": true,
+        },
+      }
+    }
     noValidate={true}
     onSubmit={[Function]}
     onValidate={[Function]}
@@ -293,9 +339,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                 },
               },
               "type": "object",
-              "uniforms": Object {
-                "disabled": true,
-              },
             },
             "visaApplication": Object {
               "properties": Object {
@@ -322,9 +365,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                 },
               },
               "type": "object",
-              "uniforms": Object {
-                "disabled": true,
-              },
             },
           },
           "type": "object",
@@ -371,7 +411,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
               >
                 <Nest
                   changed={false}
-                  disabled={true}
+                  disabled={false}
                   error={null}
                   errorMessage=""
                   field={
@@ -396,9 +436,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         },
                       },
                       "type": "object",
-                      "uniforms": Object {
-                        "disabled": true,
-                      },
                     }
                   }
                   fieldType={[Function]}
@@ -439,7 +476,13 @@ exports[`FormRenderer test Render form with actions 1`] = `
                   }
                   required={false}
                   showInlineError={true}
-                  value={Object {}}
+                  value={
+                    Object {
+                      "city": "Boston",
+                      "country": "US",
+                      "visaRequired": true,
+                    }
+                  }
                 >
                   <div
                     id="uniforms-0000-0001"
@@ -470,12 +513,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       Trip
                     </label>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="city"
                       name="trip.city"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="trip.city"
                       >
                         <Text
@@ -491,13 +534,14 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0003"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="City"
                           name="trip.city"
                           onChange={[Function]}
                           placeholder="City"
                           required={false}
                           showInlineError={true}
+                          value="Boston"
                         >
                           <FormGroup
                             fieldId="uniforms-0000-0003"
@@ -527,7 +571,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                 placeholder="City"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="Boston"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -544,7 +588,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="Boston"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -558,7 +602,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="Boston"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -568,12 +612,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="country"
                       name="trip.country"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="trip.country"
                       >
                         <Text
@@ -589,13 +633,14 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0005"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Country"
                           name="trip.country"
                           onChange={[Function]}
                           placeholder="Country"
                           required={false}
                           showInlineError={true}
+                          value="US"
                         >
                           <FormGroup
                             fieldId="uniforms-0000-0005"
@@ -625,7 +670,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                 placeholder="Country"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="US"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -642,7 +687,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="US"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -656,7 +701,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="US"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -666,12 +711,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="begin"
                       name="trip.begin"
                     >
                       <DateField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="trip.begin"
                       >
                         <Date
@@ -688,7 +733,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0007"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Begin"
                           name="trip.begin"
                           onChange={[Function]}
@@ -762,12 +807,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </DateField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="end"
                       name="trip.end"
                     >
                       <DateField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="trip.end"
                       >
                         <Date
@@ -784,7 +829,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0009"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="End"
                           name="trip.end"
                           onChange={[Function]}
@@ -858,12 +903,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </DateField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="visaRequired"
                       name="trip.visaRequired"
                     >
                       <BoolField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="trip.visaRequired"
                       >
                         <Bool
@@ -880,13 +925,14 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-000b"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Visa required"
                           name="trip.visaRequired"
                           onChange={[Function]}
                           placeholder="Visa required"
                           required={false}
                           showInlineError={true}
+                          value={true}
                         >
                           <div
                             appearance="checkbox"
@@ -895,7 +941,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                             <Checkbox
                               className=""
                               id="uniforms-0000-000b"
-                              isChecked={false}
+                              isChecked={true}
                               isDisabled={false}
                               isValid={true}
                               label="Visa required"
@@ -907,7 +953,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                               >
                                 <input
                                   aria-invalid={false}
-                                  checked={false}
+                                  checked={true}
                                   className="pf-c-check__input"
                                   disabled={false}
                                   id="uniforms-0000-000b"
@@ -939,7 +985,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                 name="traveller"
               >
                 <Nest
-                  changed={true}
+                  changed={false}
                   disabled={false}
                   error={null}
                   errorMessage=""
@@ -1040,7 +1086,20 @@ exports[`FormRenderer test Render form with actions 1`] = `
                     ]
                   }
                   showInlineError={true}
-                  value={Object {}}
+                  value={
+                    Object {
+                      "address": Object {
+                        "city": "Zerf",
+                        "country": "Poland",
+                        "street": "Cabalone",
+                        "zipCode": "765756",
+                      },
+                      "email": "rwhite@gorle.com",
+                      "firstName": "Rachel",
+                      "lastName": "White",
+                      "nationality": "Polish",
+                    }
+                  }
                 >
                   <div
                     id="uniforms-0000-000d"
@@ -1117,6 +1176,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           placeholder="First name"
                           required={true}
                           showInlineError={true}
+                          value="Rachel"
                         >
                           <FormGroup
                             fieldId="uniforms-0000-000f"
@@ -1146,7 +1206,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                 placeholder="First name"
                                 required={true}
                                 type="text"
-                                value=""
+                                value="Rachel"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -1163,7 +1223,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   required={true}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="Rachel"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -1177,7 +1237,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="Rachel"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -1215,6 +1275,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           placeholder="Last name"
                           required={true}
                           showInlineError={true}
+                          value="White"
                         >
                           <FormGroup
                             fieldId="uniforms-0000-000h"
@@ -1244,7 +1305,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                 placeholder="Last name"
                                 required={true}
                                 type="text"
-                                value=""
+                                value="White"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -1261,7 +1322,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   required={true}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="White"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -1275,7 +1336,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="White"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -1314,6 +1375,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           placeholder="Email"
                           required={false}
                           showInlineError={true}
+                          value="rwhite@gorle.com"
                         >
                           <FormGroup
                             fieldId="uniforms-0000-000j"
@@ -1343,7 +1405,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                 placeholder="Email"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="rwhite@gorle.com"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -1360,7 +1422,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="rwhite@gorle.com"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -1374,7 +1436,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="rwhite@gorle.com"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -1412,6 +1474,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           placeholder="Nationality"
                           required={false}
                           showInlineError={true}
+                          value="Polish"
                         >
                           <FormGroup
                             fieldId="uniforms-0000-000l"
@@ -1441,7 +1504,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                 placeholder="Nationality"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="Polish"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -1458,7 +1521,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="Polish"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -1472,7 +1535,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="Polish"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -1547,7 +1610,14 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           }
                           required={false}
                           showInlineError={true}
-                          value={Object {}}
+                          value={
+                            Object {
+                              "city": "Zerf",
+                              "country": "Poland",
+                              "street": "Cabalone",
+                              "zipCode": "765756",
+                            }
+                          }
                         >
                           <div
                             id="uniforms-0000-000n"
@@ -1601,6 +1671,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   placeholder="Street"
                                   required={false}
                                   showInlineError={true}
+                                  value="Cabalone"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0000-000p"
@@ -1630,7 +1701,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                         placeholder="Street"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="Cabalone"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -1647,7 +1718,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="Cabalone"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -1661,7 +1732,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="Cabalone"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -1699,6 +1770,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   placeholder="City"
                                   required={false}
                                   showInlineError={true}
+                                  value="Zerf"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0000-000r"
@@ -1728,7 +1800,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                         placeholder="City"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="Zerf"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -1745,7 +1817,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="Zerf"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -1759,7 +1831,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="Zerf"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -1797,6 +1869,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   placeholder="Zip code"
                                   required={false}
                                   showInlineError={true}
+                                  value="765756"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0000-000t"
@@ -1826,7 +1899,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                         placeholder="Zip code"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="765756"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -1843,7 +1916,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="765756"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -1857,7 +1930,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="765756"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -1895,6 +1968,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                   placeholder="Country"
                                   required={false}
                                   showInlineError={true}
+                                  value="Poland"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0000-000v"
@@ -1924,7 +1998,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                         placeholder="Country"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="Poland"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -1941,7 +2015,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="Poland"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -1955,7 +2029,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="Poland"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -1981,7 +2055,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
               >
                 <Nest
                   changed={false}
-                  disabled={true}
+                  disabled={false}
                   error={null}
                   errorMessage=""
                   field={
@@ -2010,9 +2084,6 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         },
                       },
                       "type": "object",
-                      "uniforms": Object {
-                        "disabled": true,
-                      },
                     }
                   }
                   fieldType={[Function]}
@@ -2094,12 +2165,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       Visa application
                     </label>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="firstName"
                       name="visaApplication.firstName"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.firstName"
                       >
                         <Text
@@ -2115,7 +2186,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-000z"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="First name"
                           name="visaApplication.firstName"
                           onChange={[Function]}
@@ -2192,12 +2263,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="lastName"
                       name="visaApplication.lastName"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.lastName"
                       >
                         <Text
@@ -2213,7 +2284,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0011"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Last name"
                           name="visaApplication.lastName"
                           onChange={[Function]}
@@ -2290,12 +2361,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="city"
                       name="visaApplication.city"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.city"
                       >
                         <Text
@@ -2311,7 +2382,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0013"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="City"
                           name="visaApplication.city"
                           onChange={[Function]}
@@ -2388,12 +2459,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="country"
                       name="visaApplication.country"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.country"
                       >
                         <Text
@@ -2409,7 +2480,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0015"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Country"
                           name="visaApplication.country"
                           onChange={[Function]}
@@ -2486,12 +2557,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="duration"
                       name="visaApplication.duration"
                     >
                       <NumField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.duration"
                       >
                         <Num
@@ -2507,7 +2578,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0017"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Duration"
                           name="visaApplication.duration"
                           onChange={[Function]}
@@ -2584,12 +2655,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </NumField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="passportNumber"
                       name="visaApplication.passportNumber"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.passportNumber"
                       >
                         <Text
@@ -2605,7 +2676,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-0019"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Passport number"
                           name="visaApplication.passportNumber"
                           onChange={[Function]}
@@ -2682,12 +2753,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
                       </TextField>
                     </AutoField>
                     <AutoField
-                      isDisabled={true}
+                      isDisabled={false}
                       key="nationality"
                       name="visaApplication.nationality"
                     >
                       <TextField
-                        isDisabled={true}
+                        isDisabled={false}
                         name="visaApplication.nationality"
                       >
                         <Text
@@ -2703,7 +2774,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                           fieldType={[Function]}
                           fields={Array []}
                           id="uniforms-0000-001b"
-                          isDisabled={true}
+                          isDisabled={false}
                           label="Nationality"
                           name="visaApplication.nationality"
                           onChange={[Function]}
@@ -2789,12 +2860,9 @@ exports[`FormRenderer test Render form with actions 1`] = `
           actions={
             Array [
               Object {
+                "execute": [MockFunction],
                 "name": "complete",
-                "onActionClick": [Function],
-              },
-              Object {
-                "name": "release",
-                "onActionClick": [Function],
+                "primary": false,
               },
             ]
           }
@@ -2810,6 +2878,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                   key="submit-complete"
                   onClick={[Function]}
                   type="submit"
+                  variant="secondary"
                 >
                   <ComponentWithOuia
                     component={[Function]}
@@ -2818,6 +2887,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         "children": "Complete",
                         "onClick": [Function],
                         "type": "submit",
+                        "variant": "secondary",
                       }
                     }
                     consumerContext={null}
@@ -2831,57 +2901,18 @@ exports[`FormRenderer test Render form with actions 1`] = `
                         }
                       }
                       type="submit"
+                      variant="secondary"
                     >
                       <button
                         aria-disabled={null}
                         aria-label={null}
-                        className="pf-c-button pf-m-primary"
+                        className="pf-c-button pf-m-secondary"
                         disabled={false}
                         onClick={[Function]}
                         tabIndex={null}
                         type="submit"
                       >
                         Complete
-                      </button>
-                    </Button>
-                  </ComponentWithOuia>
-                </Component>
-                <Component
-                  key="submit-release"
-                  onClick={[Function]}
-                  type="submit"
-                >
-                  <ComponentWithOuia
-                    component={[Function]}
-                    componentProps={
-                      Object {
-                        "children": "Release",
-                        "onClick": [Function],
-                        "type": "submit",
-                      }
-                    }
-                    consumerContext={null}
-                  >
-                    <Button
-                      onClick={[Function]}
-                      ouiaContext={
-                        Object {
-                          "isOuia": false,
-                          "ouiaId": null,
-                        }
-                      }
-                      type="submit"
-                    >
-                      <button
-                        aria-disabled={null}
-                        aria-label={null}
-                        className="pf-c-button pf-m-primary"
-                        disabled={false}
-                        onClick={[Function]}
-                        tabIndex={null}
-                        type="submit"
-                      >
-                        Release
                       </button>
                     </Button>
                   </ComponentWithOuia>
@@ -2898,10 +2929,12 @@ exports[`FormRenderer test Render form with actions 1`] = `
 
 exports[`FormRenderer test Render form without actions 1`] = `
 <FormRenderer
-  errorCallback={[MockFunction]}
   formSchema={
     Object {
-      "phases": Array [],
+      "phases": Array [
+        "complete",
+        "release",
+      ],
       "properties": Object {
         "traveller": Object {
           "properties": Object {
@@ -2963,9 +2996,6 @@ exports[`FormRenderer test Render form without actions 1`] = `
             },
           },
           "type": "object",
-          "uniforms": Object {
-            "disabled": true,
-          },
         },
         "visaApplication": Object {
           "properties": Object {
@@ -2992,40 +3022,54 @@ exports[`FormRenderer test Render form without actions 1`] = `
             },
           },
           "type": "object",
-          "uniforms": Object {
-            "disabled": true,
-          },
         },
       },
       "type": "object",
     }
   }
-  successCallback={[MockFunction]}
-  taskInfo={
-    TaskInfoImpl {
-      "processInstanceEndPoint": "http://localhost:8080/travels",
-      "task": Object {
-        "actualOwner": null,
-        "adminGroups": Array [],
-        "adminUsers": Array [],
-        "completed": null,
-        "description": null,
-        "excludedUsers": Array [],
-        "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
-        "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-        "lastUpdate": "2020-02-19T11:11:56.282Z",
-        "name": "Apply for visa",
-        "outputs": "{}",
-        "potentialGroups": Array [],
-        "potentialUsers": Array [],
-        "priority": "1",
-        "processId": "travels",
-        "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
-        "referenceName": "VisaApplication",
-        "rootProcessId": null,
-        "rootProcessInstanceId": null,
-        "started": "2020-02-19T11:11:56.282Z",
-        "state": "Ready",
+  formSubmitHandler={
+    Object {
+      "doSubmit": [MockFunction],
+      "getActions": [MockFunction] {
+        "calls": Array [
+          Array [],
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Array [],
+          },
+          Object {
+            "type": "return",
+            "value": Array [],
+          },
+        ],
+      },
+    }
+  }
+  model={
+    Object {
+      "NodeName": "Apply for visa",
+      "Priority": "1",
+      "Skippable": "true",
+      "TaskName": "VisaApplication",
+      "traveller": Object {
+        "address": Object {
+          "city": "Zerf",
+          "country": "Poland",
+          "street": "Cabalone",
+          "zipCode": "765756",
+        },
+        "email": "rwhite@gorle.com",
+        "firstName": "Rachel",
+        "lastName": "White",
+        "nationality": "Polish",
+      },
+      "trip": Object {
+        "city": "Boston",
+        "country": "US",
+        "visaRequired": true,
       },
     }
   }
@@ -3036,7 +3080,31 @@ exports[`FormRenderer test Render form without actions 1`] = `
     disabled={true}
     error={null}
     label={true}
-    model={Object {}}
+    model={
+      Object {
+        "NodeName": "Apply for visa",
+        "Priority": "1",
+        "Skippable": "true",
+        "TaskName": "VisaApplication",
+        "traveller": Object {
+          "address": Object {
+            "city": "Zerf",
+            "country": "Poland",
+            "street": "Cabalone",
+            "zipCode": "765756",
+          },
+          "email": "rwhite@gorle.com",
+          "firstName": "Rachel",
+          "lastName": "White",
+          "nationality": "Polish",
+        },
+        "trip": Object {
+          "city": "Boston",
+          "country": "US",
+          "visaRequired": true,
+        },
+      }
+    }
     noValidate={true}
     onSubmit={[Function]}
     onValidate={[Function]}
@@ -3121,7 +3189,10 @@ exports[`FormRenderer test Render form without actions 1`] = `
         "getSubfields": [Function],
         "getType": [Function],
         "schema": Object {
-          "phases": Array [],
+          "phases": Array [
+            "complete",
+            "release",
+          ],
           "properties": Object {
             "traveller": Object {
               "properties": Object {
@@ -3183,9 +3254,6 @@ exports[`FormRenderer test Render form without actions 1`] = `
                 },
               },
               "type": "object",
-              "uniforms": Object {
-                "disabled": true,
-              },
             },
             "visaApplication": Object {
               "properties": Object {
@@ -3212,9 +3280,6 @@ exports[`FormRenderer test Render form without actions 1`] = `
                 },
               },
               "type": "object",
-              "uniforms": Object {
-                "disabled": true,
-              },
             },
           },
           "type": "object",
@@ -3286,9 +3351,6 @@ exports[`FormRenderer test Render form without actions 1`] = `
                         },
                       },
                       "type": "object",
-                      "uniforms": Object {
-                        "disabled": true,
-                      },
                     }
                   }
                   fieldType={[Function]}
@@ -3329,7 +3391,13 @@ exports[`FormRenderer test Render form without actions 1`] = `
                   }
                   required={false}
                   showInlineError={true}
-                  value={Object {}}
+                  value={
+                    Object {
+                      "city": "Boston",
+                      "country": "US",
+                      "visaRequired": true,
+                    }
+                  }
                 >
                   <div
                     id="uniforms-0001-0001"
@@ -3388,6 +3456,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="City"
                           required={false}
                           showInlineError={true}
+                          value="Boston"
                         >
                           <FormGroup
                             fieldId="uniforms-0001-0003"
@@ -3417,7 +3486,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                 placeholder="City"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="Boston"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -3434,7 +3503,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="Boston"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -3448,7 +3517,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="Boston"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -3486,6 +3555,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="Country"
                           required={false}
                           showInlineError={true}
+                          value="US"
                         >
                           <FormGroup
                             fieldId="uniforms-0001-0005"
@@ -3515,7 +3585,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                 placeholder="Country"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="US"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -3532,7 +3602,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="US"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -3546,7 +3616,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="US"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -3777,6 +3847,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="Visa required"
                           required={false}
                           showInlineError={true}
+                          value={true}
                         >
                           <div
                             appearance="checkbox"
@@ -3785,7 +3856,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                             <Checkbox
                               className=""
                               id="uniforms-0001-000b"
-                              isChecked={false}
+                              isChecked={true}
                               isDisabled={true}
                               isValid={true}
                               label="Visa required"
@@ -3797,7 +3868,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                               >
                                 <input
                                   aria-invalid={false}
-                                  checked={false}
+                                  checked={true}
                                   className="pf-c-check__input"
                                   disabled={true}
                                   id="uniforms-0001-000b"
@@ -3829,7 +3900,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                 name="traveller"
               >
                 <Nest
-                  changed={true}
+                  changed={false}
                   disabled={true}
                   error={null}
                   errorMessage=""
@@ -3930,7 +4001,20 @@ exports[`FormRenderer test Render form without actions 1`] = `
                     ]
                   }
                   showInlineError={true}
-                  value={Object {}}
+                  value={
+                    Object {
+                      "address": Object {
+                        "city": "Zerf",
+                        "country": "Poland",
+                        "street": "Cabalone",
+                        "zipCode": "765756",
+                      },
+                      "email": "rwhite@gorle.com",
+                      "firstName": "Rachel",
+                      "lastName": "White",
+                      "nationality": "Polish",
+                    }
+                  }
                 >
                   <div
                     id="uniforms-0001-000d"
@@ -4007,6 +4091,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="First name"
                           required={true}
                           showInlineError={true}
+                          value="Rachel"
                         >
                           <FormGroup
                             fieldId="uniforms-0001-000f"
@@ -4036,7 +4121,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                 placeholder="First name"
                                 required={true}
                                 type="text"
-                                value=""
+                                value="Rachel"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -4053,7 +4138,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   required={true}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="Rachel"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -4067,7 +4152,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="Rachel"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -4105,6 +4190,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="Last name"
                           required={true}
                           showInlineError={true}
+                          value="White"
                         >
                           <FormGroup
                             fieldId="uniforms-0001-000h"
@@ -4134,7 +4220,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                 placeholder="Last name"
                                 required={true}
                                 type="text"
-                                value=""
+                                value="White"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -4151,7 +4237,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   required={true}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="White"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -4165,7 +4251,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="White"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -4204,6 +4290,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="Email"
                           required={false}
                           showInlineError={true}
+                          value="rwhite@gorle.com"
                         >
                           <FormGroup
                             fieldId="uniforms-0001-000j"
@@ -4233,7 +4320,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                 placeholder="Email"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="rwhite@gorle.com"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -4250,7 +4337,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="rwhite@gorle.com"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -4264,7 +4351,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="rwhite@gorle.com"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -4302,6 +4389,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           placeholder="Nationality"
                           required={false}
                           showInlineError={true}
+                          value="Polish"
                         >
                           <FormGroup
                             fieldId="uniforms-0001-000l"
@@ -4331,7 +4419,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                 placeholder="Nationality"
                                 required={false}
                                 type="text"
-                                value=""
+                                value="Polish"
                               >
                                 <TextInputBase
                                   aria-label={null}
@@ -4348,7 +4436,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   required={false}
                                   type="text"
                                   validated="default"
-                                  value=""
+                                  value="Polish"
                                 >
                                   <input
                                     aria-invalid={false}
@@ -4362,7 +4450,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                     readOnly={false}
                                     required={false}
                                     type="text"
-                                    value=""
+                                    value="Polish"
                                   />
                                 </TextInputBase>
                               </ForwardRef>
@@ -4437,7 +4525,14 @@ exports[`FormRenderer test Render form without actions 1`] = `
                           }
                           required={false}
                           showInlineError={true}
-                          value={Object {}}
+                          value={
+                            Object {
+                              "city": "Zerf",
+                              "country": "Poland",
+                              "street": "Cabalone",
+                              "zipCode": "765756",
+                            }
+                          }
                         >
                           <div
                             id="uniforms-0001-000n"
@@ -4491,6 +4586,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   placeholder="Street"
                                   required={false}
                                   showInlineError={true}
+                                  value="Cabalone"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0001-000p"
@@ -4520,7 +4616,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                         placeholder="Street"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="Cabalone"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -4537,7 +4633,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="Cabalone"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -4551,7 +4647,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="Cabalone"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -4589,6 +4685,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   placeholder="City"
                                   required={false}
                                   showInlineError={true}
+                                  value="Zerf"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0001-000r"
@@ -4618,7 +4715,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                         placeholder="City"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="Zerf"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -4635,7 +4732,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="Zerf"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -4649,7 +4746,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="Zerf"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -4687,6 +4784,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   placeholder="Zip code"
                                   required={false}
                                   showInlineError={true}
+                                  value="765756"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0001-000t"
@@ -4716,7 +4814,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                         placeholder="Zip code"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="765756"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -4733,7 +4831,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="765756"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -4747,7 +4845,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="765756"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -4785,6 +4883,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                   placeholder="Country"
                                   required={false}
                                   showInlineError={true}
+                                  value="Poland"
                                 >
                                   <FormGroup
                                     fieldId="uniforms-0001-000v"
@@ -4814,7 +4913,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                         placeholder="Country"
                                         required={false}
                                         type="text"
-                                        value=""
+                                        value="Poland"
                                       >
                                         <TextInputBase
                                           aria-label={null}
@@ -4831,7 +4930,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                           required={false}
                                           type="text"
                                           validated="default"
-                                          value=""
+                                          value="Poland"
                                         >
                                           <input
                                             aria-invalid={false}
@@ -4845,7 +4944,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
                                             readOnly={false}
                                             required={false}
                                             type="text"
-                                            value=""
+                                            value="Poland"
                                           />
                                         </TextInputBase>
                                       </ForwardRef>
@@ -4900,9 +4999,6 @@ exports[`FormRenderer test Render form without actions 1`] = `
                         },
                       },
                       "type": "object",
-                      "uniforms": Object {
-                        "disabled": true,
-                      },
                     }
                   }
                   fieldType={[Function]}

@@ -8,12 +8,13 @@ import {
   KogitoSpinner
 } from '@kogito-apps/common';
 import { TaskInfo } from '../../../model/TaskInfo';
-import { FormSchema } from '../../../model/FormSchema';
 import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
 import FormNotification from '../../Atoms/FormNotification/FormNotification';
 import FormRenderer from '../../Molecules/FormRenderer/FormRenderer';
+import { TaskFormSubmitHandler } from '../../../util/uniforms/TaskFormSubmitHandler/TaskFormSubmitHandler';
+import { FormSchema } from '../../../util/uniforms/FormSchema';
 
 interface IOwnProps {
   taskInfo?: TaskInfo;
@@ -97,6 +98,28 @@ const TaskForm: React.FC<IOwnProps> = ({
     }
 
     if (taskFormSchema) {
+
+      const notifySuccess = (phase: string) => {
+        const message = `Task '${taskInfo.task.id}' successfully transitioned to phase '${phase}'.`;
+        showAlertMessage(message, successCallback);
+      };
+
+      const notifyError = (phase: string, error?: string) => {
+        let message = `Task '${taskInfo.task.id}' couldn't transition to phase '${phase}'.`;
+
+        if (error) {
+          message += ` Error: '${error}'`;
+        }
+
+        showAlertMessage(message, errorCallback);
+      };
+
+      const formSubmitHandler = new TaskFormSubmitHandler(
+        userTaskInfo,
+        taskFormSchema,
+        phase => notifySuccess(phase),
+      (phase, errorMessage) => notifyError(phase, errorMessage));
+
       const outputs = JSON.parse(userTaskInfo.task.outputs);
       const formData = !isEmpty(outputs)
         ? outputs
@@ -111,21 +134,9 @@ const TaskForm: React.FC<IOwnProps> = ({
             />
           )}
           <FormRenderer
-            taskInfo={taskInfo}
             formSchema={taskFormSchema}
             model={formData}
-            successCallback={phase => {
-              const message = `Task '${taskInfo.task.id}' successfully transitioned to phase '${phase}'.`;
-              showAlertMessage(message, successCallback);
-            }}
-            errorCallback={(phase, error) => {
-              let message = `Task '${taskInfo.task.id}' couldn't transition to phase '${phase}'.`;
-
-              if (error) {
-                message += ` Error: '${error}'`;
-              }
-              showAlertMessage(message, errorCallback);
-            }}
+            formSubmitHandler={formSubmitHandler}
           />
         </React.Fragment>
       );

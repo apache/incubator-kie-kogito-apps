@@ -5,12 +5,12 @@ exports[`Form Footer test testing action click 1`] = `
   actions={
     Array [
       Object {
+        "execute": [MockFunction],
         "name": "action1",
-        "onActionClick": [MockFunction],
       },
       Object {
+        "execute": [MockFunction],
         "name": "action2",
-        "onActionClick": [MockFunction],
       },
     ]
   }
@@ -24,22 +24,24 @@ exports[`Form Footer test testing action click 1`] = `
       >
         <Component
           key="submit-action1"
-          onClick={[MockFunction]}
+          onClick={[Function]}
           type="submit"
+          variant="primary"
         >
           <ComponentWithOuia
             component={[Function]}
             componentProps={
               Object {
                 "children": "Action1",
-                "onClick": [MockFunction],
+                "onClick": [Function],
                 "type": "submit",
+                "variant": "primary",
               }
             }
             consumerContext={null}
           >
             <Button
-              onClick={[MockFunction]}
+              onClick={[Function]}
               ouiaContext={
                 Object {
                   "isOuia": false,
@@ -47,13 +49,14 @@ exports[`Form Footer test testing action click 1`] = `
                 }
               }
               type="submit"
+              variant="primary"
             >
               <button
                 aria-disabled={null}
                 aria-label={null}
                 className="pf-c-button pf-m-primary"
                 disabled={false}
-                onClick={[MockFunction]}
+                onClick={[Function]}
                 tabIndex={null}
                 type="submit"
               >
@@ -64,22 +67,24 @@ exports[`Form Footer test testing action click 1`] = `
         </Component>
         <Component
           key="submit-action2"
-          onClick={[MockFunction]}
+          onClick={[Function]}
           type="submit"
+          variant="primary"
         >
           <ComponentWithOuia
             component={[Function]}
             componentProps={
               Object {
                 "children": "Action2",
-                "onClick": [MockFunction],
+                "onClick": [Function],
                 "type": "submit",
+                "variant": "primary",
               }
             }
             consumerContext={null}
           >
             <Button
-              onClick={[MockFunction]}
+              onClick={[Function]}
               ouiaContext={
                 Object {
                   "isOuia": false,
@@ -87,13 +92,14 @@ exports[`Form Footer test testing action click 1`] = `
                 }
               }
               type="submit"
+              variant="primary"
             >
               <button
                 aria-disabled={null}
                 aria-label={null}
                 className="pf-c-button pf-m-primary"
                 disabled={false}
-                onClick={[MockFunction]}
+                onClick={[Function]}
                 tabIndex={null}
                 type="submit"
               >
@@ -113,12 +119,13 @@ exports[`Form Footer test testing showing actions 1`] = `
   actions={
     Array [
       Object {
+        "execute": [MockFunction],
         "name": "action1",
-        "onActionClick": [MockFunction],
+        "primary": true,
       },
       Object {
+        "execute": [MockFunction],
         "name": "action2",
-        "onActionClick": [MockFunction],
       },
     ]
   }
@@ -132,22 +139,24 @@ exports[`Form Footer test testing showing actions 1`] = `
       >
         <Component
           key="submit-action1"
-          onClick={[MockFunction]}
+          onClick={[Function]}
           type="submit"
+          variant="primary"
         >
           <ComponentWithOuia
             component={[Function]}
             componentProps={
               Object {
                 "children": "Action1",
-                "onClick": [MockFunction],
+                "onClick": [Function],
                 "type": "submit",
+                "variant": "primary",
               }
             }
             consumerContext={null}
           >
             <Button
-              onClick={[MockFunction]}
+              onClick={[Function]}
               ouiaContext={
                 Object {
                   "isOuia": false,
@@ -155,13 +164,14 @@ exports[`Form Footer test testing showing actions 1`] = `
                 }
               }
               type="submit"
+              variant="primary"
             >
               <button
                 aria-disabled={null}
                 aria-label={null}
                 className="pf-c-button pf-m-primary"
                 disabled={false}
-                onClick={[MockFunction]}
+                onClick={[Function]}
                 tabIndex={null}
                 type="submit"
               >
@@ -172,22 +182,24 @@ exports[`Form Footer test testing showing actions 1`] = `
         </Component>
         <Component
           key="submit-action2"
-          onClick={[MockFunction]}
+          onClick={[Function]}
           type="submit"
+          variant="primary"
         >
           <ComponentWithOuia
             component={[Function]}
             componentProps={
               Object {
                 "children": "Action2",
-                "onClick": [MockFunction],
+                "onClick": [Function],
                 "type": "submit",
+                "variant": "primary",
               }
             }
             consumerContext={null}
           >
             <Button
-              onClick={[MockFunction]}
+              onClick={[Function]}
               ouiaContext={
                 Object {
                   "isOuia": false,
@@ -195,13 +207,14 @@ exports[`Form Footer test testing showing actions 1`] = `
                 }
               }
               type="submit"
+              variant="primary"
             >
               <button
                 aria-disabled={null}
                 aria-label={null}
                 className="pf-c-button pf-m-primary"
                 disabled={false}
-                onClick={[MockFunction]}
+                onClick={[Function]}
                 tabIndex={null}
                 type="submit"
               >

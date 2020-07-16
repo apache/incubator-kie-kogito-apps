@@ -8,6 +8,7 @@ import ApplyForVisaForm from '../../../../util/tests/mocks/ApplyForVisa';
 import FormRenderer from '../../../Molecules/FormRenderer/FormRenderer';
 import { act } from 'react-dom/test-utils';
 import FormNotification from '../../../Atoms/FormNotification/FormNotification';
+import { TaskFormSubmitHandler } from '../../../../util/uniforms/TaskFormSubmitHandler/TaskFormSubmitHandler';
 
 jest.mock('../../../Atoms/FormNotification/FormNotification');
 jest.mock('../../../Molecules/FormRenderer/FormRenderer');
@@ -176,7 +177,7 @@ describe('TaskForm Test', () => {
     expect(renderer).not.toBeNull();
 
     expect(renderer.props().formSchema).toBe(ApplyForVisaForm);
-    expect(renderer.props().taskInfo).not.toBeNull();
+    expect(renderer.props().formSubmitHandler).toBeInstanceOf(TaskFormSubmitHandler);
     expect(renderer.props().model).toStrictEqual(
       JSON.parse(userTaskInstance.inputs)
     );
