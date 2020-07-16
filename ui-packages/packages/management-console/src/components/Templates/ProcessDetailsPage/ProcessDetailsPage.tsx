@@ -271,7 +271,7 @@ const ProcessDetailsPage: React.FC<
           </PageSection>
         </>
       ) : (
-        <ServerErrors error={error} />
+        <ServerErrors error={error} variant="large" />
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   DataList,
@@ -22,75 +22,52 @@ import {
 import { SyncIcon } from '@patternfly/react-icons';
 import '../../styles.css';
 import _ from 'lodash';
-import gql from 'graphql-tag';
-import { query } from 'gql-query-builder';
-import { useApolloClient } from 'react-apollo';
-import { validateResponse, filterColumnSelection } from '../../../utils/Utils';
+import { filterColumnSelection, removeDuplicates } from '../../../utils/Utils';
 
 export interface IOwnProps {
   columnPickerType: any;
-  setColumnFilters: any;
-  setTableLoading: any;
   getQueryTypes: any;
-  setDisplayTable: any;
-  parameters: any;
   setParameters: any;
   selected: any;
   setSelected: any;
   data: any;
   getPicker: any;
-  setError: any;
-  setDisplayEmptyState: any;
-  rememberedParams: any;
-  enableCache: boolean;
-  setEnableCache: any;
-  offsetVal: number;
-  pageSize: number;
   setOffsetVal: (offsetVal: number) => void;
   setPageSize: (pageSize: number) => void;
-  setIsLoadingMore: (isLoadingMoreVal: boolean) => void;
-  isLoadingMore: boolean;
   metaData: any;
   setIsModalOpen: any;
   isModalOpen: boolean;
+  setRunQuery: any;
+  setEnableRefresh: any;
+  enableRefresh: any;
+  setReset: any;
 }
 
 const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
   columnPickerType,
-  setColumnFilters,
-  setTableLoading,
-  getQueryTypes,
-  setDisplayTable,
-  parameters,
-  setParameters,
-  selected,
-  setSelected,
   data,
+  enableRefresh,
   getPicker,
-  setError,
-  setDisplayEmptyState,
-  rememberedParams,
-  enableCache,
-  setEnableCache,
-  pageSize,
-  offsetVal,
-  setOffsetVal,
-  setPageSize,
-  setIsLoadingMore,
-  isLoadingMore,
+  getQueryTypes,
+  isModalOpen,
   metaData,
+  selected,
+  setEnableRefresh,
   setIsModalOpen,
-  isModalOpen
+  setOffsetVal,
+  setParameters,
+  setPageSize,
+  setReset,
+  setRunQuery,
+  setSelected
 }) => {
   // tslint:disable: forin
   // tslint:disable: no-floating-promises
   const [expanded, setExpanded] = useState([]);
-  const [enableRefresh, setEnableRefresh] = useState(true);
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const allSelections = [];
 
   const nullTypes = [null, 'String', 'Boolean', 'Int', 'DateTime'];
-  const client = useApolloClient();
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
@@ -204,7 +181,7 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
                     id={'kie-datalist-content-' + itemName}
                     isHidden={!expanded.includes(label.replace(/\,/g, ''))}
                     className="kogito-common--manage-columns__data-list-content"
-                    key={Math.random()}
+                    key={itemName + _index}
                   >
                     <DataListItemRow>
                       <DataListCheck
@@ -353,85 +330,6 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
   finalResult = finalResult.flat();
   finalResult.unshift(rootElements);
 
-  function getAllChilds(arr, comp) {
-    const unique = arr
-      .map(e => e[comp])
-      .map((e, i, final) => final.indexOf(e) === i && i)
-      .filter(e => arr[e])
-      .map(e => arr[e]);
-
-    return unique;
-  }
-
-  useEffect(() => {
-    /* istanbul ignore else */
-    if (isLoadingMore) {
-      generateQuery(parameters);
-    }
-  }, [isLoadingMore]);
-
-  useEffect(() => {
-    /* istanbul ignore else */
-    if (
-      (rememberedParams.length === 0 && parameters.length !== 1) ||
-      rememberedParams.length > 0
-    ) {
-      generateQuery(parameters);
-    }
-  }, [parameters.length > 1]);
-
-  async function generateQuery(paramFields) {
-    setTableLoading(true);
-    setEnableRefresh(true);
-    if (columnPickerType && paramFields.length > 1) {
-      const Query = query({
-        operation: columnPickerType,
-        fields: paramFields,
-        variables: {
-          pagination: {
-            value: { offset: offsetVal, limit: pageSize },
-            type: 'Pagination'
-          }
-        }
-      });
-      try {
-        const response = await client.query({
-          query: gql`
-            ${Query.query}
-          `,
-          variables: Query.variables,
-          fetchPolicy: enableCache ? 'cache-first' : 'network-only'
-        });
-        const firstKey = Object.keys(response.data)[0];
-        if (response.data[firstKey].length > 0) {
-          const resp = response.data;
-          const respKeys = Object.keys(resp)[0];
-          const tableContent = resp[respKeys];
-          const finalResp = [];
-          tableContent.map(content => {
-            const finalObject = validateResponse(content, paramFields);
-            finalResp.push(finalObject);
-          });
-          setColumnFilters(finalResp);
-          setTableLoading(false);
-          setDisplayTable(true);
-          setEnableCache(false);
-          setIsLoadingMore(false);
-        } else {
-          setTableLoading(false);
-          setDisplayEmptyState(true);
-          setEnableCache(false);
-        }
-      } catch (error) {
-        setError(error);
-      }
-    } else {
-      setTableLoading(false);
-      setDisplayEmptyState(false);
-      setDisplayTable(false);
-    }
-  }
-
   const renderModal = () => {
     const numSelected = selected.length;
     const allSelected = numSelected === allSelections.length;
@@ -525,7 +423,7 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
             key="save"
             variant="primary"
             onClick={() => {
-              onResetQuery(parameters);
+              onRunQuery();
             }}
             id="save-columns"
           >
@@ -544,31 +442,25 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
           className="kogito-common--manage-columns__data-list"
           isCompact
         >
-          {getAllChilds(finalResult, 'props')}
+          {removeDuplicates(finalResult, 'props')}
         </DataList>
       </Modal>
     );
   };
 
-  const onResetQuery = _parameters => {
+  const onRunQuery = () => {
     setOffsetVal(0);
-    offsetVal = 0;
     setPageSize(10);
-    pageSize = 10;
-    generateQuery(_parameters);
-    setIsLoadingMore(false);
+    setRunQuery(true);
     setIsModalOpen(!isModalOpen);
   };
 
-  const onRefresh = _parameters => {
+  const onRefresh = () => {
     /* istanbul ignore else */
-    if (enableRefresh && parameters.length > 1) {
+    if (enableRefresh) {
       setOffsetVal(0);
-      offsetVal = 0;
       setPageSize(10);
-      pageSize = 10;
-      generateQuery(_parameters);
-      setIsLoadingMore(false);
+      setRunQuery(true);
     }
   };
 
@@ -585,9 +477,8 @@ const DomainExplorerManageColumns: React.FC<IOwnProps> = ({
       <Button
         variant="plain"
         onClick={() => {
-          onRefresh(parameters);
+          onRefresh();
         }}
-        className="pf-u-m-md"
         id="refresh-button"
         aria-label={'Refresh list'}
       >

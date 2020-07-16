@@ -2283,6 +2283,7 @@ exports[`ProcessListTable component tests Snapshot testing with wrong query para
 }
 , variables: {"state":["ACTIVE"],"offset":0,"limit":10}]
     }
+    variant="large"
   >
     <ServerErrors
       error={
@@ -2344,6 +2345,7 @@ exports[`ProcessListTable component tests Snapshot testing with wrong query para
           "url": "/",
         }
       }
+      variant="large"
     >
       <PageSection
         variant="light"

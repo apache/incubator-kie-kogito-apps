@@ -501,7 +501,7 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
               <KogitoSpinner spinnerText="Loading process instances..." />
             </Bullseye>
           )}
-          {error && <ServerErrors error={error} />}
+          {error && <ServerErrors error={error} variant="large" />}
         </DataListContent>
       </DataListItem>
     </React.Fragment>
