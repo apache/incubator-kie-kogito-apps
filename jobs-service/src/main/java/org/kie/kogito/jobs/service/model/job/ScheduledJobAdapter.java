@@ -17,10 +17,11 @@
 package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -28,12 +29,17 @@ import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
+import static org.kie.kogito.jobs.service.utils.DateUtil.toDate;
+
 public class ScheduledJobAdapter {
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private ScheduledJobAdapter() {
     }
 
     public static ScheduledJob of(JobDetails jobDetails) {
+        final ProcessPayload payload = payloadDeserialize(String.valueOf(jobDetails.getPayload()));
         return ScheduledJob.builder()
                 .job(new JobBuilder()
                              .id(jobDetails.getId())
@@ -56,6 +62,10 @@ public class ScheduledJobAdapter {
                                                      .map(IntervalTrigger.class::cast)
                                                      .map(IntervalTrigger::getPeriod)
                                                      .orElse(null))
+                             .rootProcessId(payload.getRootProcessId())
+                             .rootProcessInstanceId(payload.getRootProcessInstanceId())
+                             .processId(payload.getProcessId())
+                             .processInstanceId(payload.getProcessInstanceId())
                              .build())
                 .scheduledId(jobDetails.getScheduledId())
                 .status(jobDetails.getStatus())
@@ -79,6 +89,7 @@ public class ScheduledJobAdapter {
                 .type(JobDetails.Type.HTTP)
                 .trigger(triggerAdapter(scheduledJob))
                 .priority(scheduledJob.getPriority())
+                .payload(payloadSerialize(scheduledJob))
                 .build();
     }
 
@@ -87,7 +98,7 @@ public class ScheduledJobAdapter {
                 .filter(job -> Objects.nonNull(job.getExpirationTime()))
                 .map(job -> job.hasInterval()
                         .<Trigger>map(interval -> new IntervalTrigger(0l,
-                                                                      new Date(scheduledJob.getExpirationTime().toInstant().toEpochMilli()),
+                                                                      toDate(scheduledJob.getExpirationTime()),
                                                                       null,
                                                                       scheduledJob.getRepeatLimit(),
                                                                       0,
@@ -100,6 +111,60 @@ public class ScheduledJobAdapter {
     }
 
     public static IntervalTrigger intervalTrigger(ZonedDateTime start, int repeatLimit, int intervalMillis) {
-        return new IntervalTrigger(0, DateUtil.toDate(start), null, repeatLimit, 0, intervalMillis, null, null);
+        return new IntervalTrigger(0, toDate(start), null, repeatLimit, 0, intervalMillis, null, null);
+    }
+
+    public static String payloadSerialize(ScheduledJob scheduledJob) {
+        try {
+            return OBJECT_MAPPER.writeValueAsString(new ProcessPayload(scheduledJob.getProcessInstanceId(),
+                                                                       scheduledJob.getRootProcessInstanceId(),
+                                                                       scheduledJob.getProcessId(),
+                                                                       scheduledJob.getRootProcessId()));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ProcessPayload payloadDeserialize(String payload) {
+        try {
+            return OBJECT_MAPPER.readValue(payload, ProcessPayload.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    final static class ProcessPayload {
+
+        private String processInstanceId;
+        private String rootProcessInstanceId;
+        private String processId;
+        private String rootProcessId;
+
+        private ProcessPayload() {
+            //needed by jackson
+        }
+
+        public ProcessPayload(String processInstanceId, String rootProcessInstanceId, String processId, String rootProcessId) {
+            this.processInstanceId = processInstanceId;
+            this.rootProcessInstanceId = rootProcessInstanceId;
+            this.processId = processId;
+            this.rootProcessId = rootProcessId;
+        }
+
+        public String getProcessInstanceId() {
+            return processInstanceId;
+        }
+
+        public String getRootProcessInstanceId() {
+            return rootProcessInstanceId;
+        }
+
+        public String getProcessId() {
+            return processId;
+        }
+
+        public String getRootProcessId() {
+            return rootProcessId;
+        }
     }
 }
