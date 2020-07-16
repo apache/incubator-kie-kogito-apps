@@ -461,8 +461,8 @@ public class DataUtils {
     }
 
     public static FeatureDistribution getFeatureDistribution(double[] doubles) {
-        double min = DoubleStream.of(doubles).min().getAsDouble();
-        double max = DoubleStream.of(doubles).max().getAsDouble();
+        double min = DoubleStream.of(doubles).min().orElse(0);
+        double max = DoubleStream.of(doubles).max().orElse(0);
         double mean = getMean(doubles);
         double stdDev = getStdDev(doubles, mean);
         return new FeatureDistribution(min, max, mean, stdDev);
