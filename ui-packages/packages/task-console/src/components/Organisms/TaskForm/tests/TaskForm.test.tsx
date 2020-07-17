@@ -91,8 +91,8 @@ const testSubmitCallbacks = async (mode: Mode) => {
   // since the FormRenderer is mocked we are forcing the form submit callback
   const callback =
     mode === Mode.SUCCESS
-      ? renderer.getElement().props.successCallback
-      : renderer.getElement().props.errorCallback;
+      ? renderer.getElement().props.formSubmitHandler.successCallback
+      : renderer.getElement().props.formSubmitHandler.errorCallback;
 
   expect(callback).not.toBeNull();
 
