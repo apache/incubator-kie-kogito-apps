@@ -16,24 +16,10 @@
 
 package org.kie.kogito.trusty.service.messaging;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
-import org.kie.kogito.trusty.storage.api.model.Message;
-import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
-import org.kie.kogito.trusty.storage.api.model.TypedValue;
-import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
@@ -58,97 +44,8 @@ class TraceEventConverterTest {
         doTest(buildTraceEventWithNullFields(), buildDecisionWithNullFields());
     }
 
-    private void doTest(TraceEvent traceEvent, Decision expectedDecision) {
-        TraceEventConverter converter = new TraceEventConverter();
-        Decision actualDecision = converter.toDecision(traceEvent);
-
-        assertDecision(expectedDecision, actualDecision);
-    }
-
-    private void assertDecision(Decision expected, Decision actual) {
-        assertEquals(expected.getExecutionId(), actual.getExecutionId());
-        assertSame(expected.getExecutionType(), actual.getExecutionType());
-        assertEquals(expected.getExecutionTimestamp(), actual.getExecutionTimestamp());
-        assertEquals(expected.getExecutedModelName(), actual.getExecutedModelName());
-        assertEquals(expected.getExecutorName(), actual.getExecutorName());
-        assertList(expected.getInputs(), actual.getInputs(), this::assertTypedValue, this::compareTypedValue);
-        assertList(expected.getOutcomes(), actual.getOutcomes(), this::assertDecisionOutcome, this::compareDecisionOutcome);
-    }
-
-    private void assertDecisionOutcome(DecisionOutcome expected, DecisionOutcome actual) {
-        assertEquals(expected.getOutcomeId(), actual.getOutcomeId());
-        assertEquals(expected.getOutcomeName(), actual.getOutcomeName());
-        assertTypedValue(expected.getOutcomeResult(), actual.getOutcomeResult());
-        assertEquals(expected.getEvaluationStatus(), actual.getEvaluationStatus());
-        assertList(expected.getOutcomeInputs(), actual.getOutcomeInputs(), this::assertTypedValue, this::compareTypedValue);
-        assertList(expected.getMessages(), actual.getMessages(), this::assertMessage, this::compareMessage);
-    }
-
-    private <T> void assertList(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor, Comparator<? super T> comparator) {
-        if (expected == null && actual == null) {
-            return;
-        }
-        if (expected == null || actual == null) {
-            fail();
-        }
-        assertSame(expected.size(), actual.size());
-
-        List<T> sortedExpected = expected.stream().sorted(comparator).collect(Collectors.toList());
-        List<T> sortedActual = actual.stream().sorted(comparator).collect(Collectors.toList());
-
-        for (int i = 0; i < sortedExpected.size(); i++) {
-            itemAssertor.accept(sortedExpected.get(0), sortedActual.get(0));
-        }
-    }
-
-    private void assertMessage(Message expected, Message actual) {
-        assertSame(expected.getLevel(), actual.getLevel());
-        assertEquals(expected.getCategory(), actual.getCategory());
-        assertEquals(expected.getType(), actual.getType());
-        assertEquals(expected.getSourceId(), actual.getSourceId());
-        assertEquals(expected.getText(), actual.getText());
-        assertMessageExceptionField(expected.getException(), actual.getException());
-    }
-
-    private void assertMessageExceptionField(MessageExceptionField expected, MessageExceptionField actual) {
-        if (expected == null && actual == null) {
-            return;
-        }
-        if (expected == null || actual == null) {
-            fail();
-        }
-        assertEquals(expected.getMessage(), actual.getMessage());
-        assertEquals(expected.getClassName(), actual.getClassName());
-        assertMessageExceptionField(expected.getCause(), actual.getCause());
-    }
-
-    private void assertTypedValue(TypedValue expected, TypedValue actual) {
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getTypeRef(), actual.getTypeRef());
-        assertEquals(expected.getValue(), actual.getValue());
-    }
-
-    private int compareDecisionOutcome(DecisionOutcome expected, DecisionOutcome actual) {
-        return new CompareToBuilder()
-                .append(expected.getOutcomeId(), actual.getOutcomeId())
-                .append(expected.getOutcomeName(), actual.getOutcomeName())
-                .append(expected.getEvaluationStatus(), actual.getEvaluationStatus())
-                .toComparison();
-    }
-
-    private int compareMessage(Message expected, Message actual) {
-        return new CompareToBuilder()
-                .append(expected.getLevel(), actual.getLevel())
-                .append(expected.getCategory(), actual.getCategory())
-                .append(expected.getType(), actual.getType())
-                .append(expected.getText(), actual.getText())
-                .toComparison();
-    }
-
-    private int compareTypedValue(TypedValue expected, TypedValue actual) {
-        return new CompareToBuilder()
-                .append(expected.getTypeRef(), actual.getTypeRef())
-                .append(expected.getName(), actual.getName())
-                .toComparison();
+    private static void doTest(TraceEvent traceEvent, Decision expectedDecision) {
+        Decision actualDecision = TraceEventConverter.toDecision(traceEvent);
+        TraceEventTestUtils.assertDecision(expectedDecision, actualDecision);
     }
 }

@@ -38,16 +38,10 @@ public class TraceEventConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
 
-    private final TraceEventConverter converter;
     private final ITrustyService service;
 
     @Inject
     public TraceEventConsumer(ITrustyService service) {
-        this(new TraceEventConverter(), service);
-    }
-
-    public TraceEventConsumer(TraceEventConverter converter, ITrustyService service) {
-        this.converter = converter;
         this.service = service;
     }
 
@@ -81,7 +75,7 @@ public class TraceEventConsumer {
         TraceEventType traceEventType = traceEvent.getHeader().getType();
 
         if (traceEventType == TraceEventType.DMN) {
-            service.storeDecision(attributes.getId(), converter.toDecision(traceEvent));
+            service.storeDecision(attributes.getId(), TraceEventConverter.toDecision(traceEvent));
         } else {
             LOG.warn("Unsupported TraceEvent type {}", traceEventType);
         }

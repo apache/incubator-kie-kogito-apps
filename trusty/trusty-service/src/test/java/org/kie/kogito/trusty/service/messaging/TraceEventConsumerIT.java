@@ -33,12 +33,15 @@ import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.service.TrustyKafkaTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
 
 @QuarkusTest
@@ -71,16 +74,20 @@ class TraceEventConsumerIT {
 
     @Test
     void testCorrectCloudEvent() throws Exception {
-        sendToKafkaAndRun(buildCloudEventJsonString(buildCorrectTraceEvent()), () ->
-                assertNotNull(trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID))
-        );
+        sendToKafkaAndRun(buildCloudEventJsonString(buildCorrectTraceEvent()), () -> {
+            Decision storedDecision = trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID);
+            assertNotNull(storedDecision);
+            TraceEventTestUtils.assertDecision(buildCorrectDecision(), storedDecision);
+        });
     }
 
     @Test
     void testCloudEventWithErrors() throws Exception {
-        sendToKafkaAndRun(buildCloudEventJsonString(buildTraceEventWithErrors()), () ->
-                assertNotNull(trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID))
-        );
+        sendToKafkaAndRun(buildCloudEventJsonString(buildTraceEventWithErrors()), () -> {
+            Decision storedDecision = trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID);
+            assertNotNull(storedDecision);
+            TraceEventTestUtils.assertDecision(buildDecisionWithErrors(), storedDecision);
+        });
     }
 
     private CompletableFuture<Void> sendToKafka(String payload) {

@@ -49,19 +49,17 @@ class TraceEventConsumerTest {
         doTest(payload, 0);
     }
 
-    private void doTest(String payload, int wantedNumberOfServiceAndConverterInvocations) {
-        TraceEventConverter converter = mock(TraceEventConverter.class);
+    private void doTest(String payload, int wantedNumberOfServiceInvocations) {
         TrustyService service = mock(TrustyService.class);
 
-        TraceEventConsumer consumer = new TraceEventConsumer(converter, service);
+        TraceEventConsumer consumer = new TraceEventConsumer(service);
 
         Message<String> message = mock(Message.class);
         when(message.getPayload()).thenReturn(payload);
 
         consumer.handleMessage(message);
 
-        verify(converter, times(wantedNumberOfServiceAndConverterInvocations)).toDecision(any());
-        verify(service, times(wantedNumberOfServiceAndConverterInvocations)).storeDecision(any(), any());
+        verify(service, times(wantedNumberOfServiceInvocations)).storeDecision(any(), any());
         verify(message, times(1)).ack();
     }
 

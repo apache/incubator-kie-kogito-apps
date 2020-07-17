@@ -30,15 +30,15 @@ import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 public class TraceEventConverter {
 
-    public Decision toDecision(TraceEvent event) {
+    public static Decision toDecision(TraceEvent event) {
 
         List<TypedValue> inputs = event.getInputs() == null
                 ? null
-                : event.getInputs().stream().map(this::toInput).collect(Collectors.toList());
+                : event.getInputs().stream().map(TraceEventConverter::toInput).collect(Collectors.toList());
 
         List<DecisionOutcome> outcomes = event.getOutputs() == null
                 ? null
-                : event.getOutputs().stream().map(this::toOutcome).collect(Collectors.toList());
+                : event.getOutputs().stream().map(TraceEventConverter::toOutcome).collect(Collectors.toList());
 
         return new Decision(
                 event.getHeader().getExecutionId(),
@@ -51,7 +51,7 @@ public class TraceEventConverter {
         );
     }
 
-    public TypedValue toInput(TraceInputValue eventInput) {
+    public static TypedValue toInput(TraceInputValue eventInput) {
         return new TypedValue(
                 eventInput.getName(),
                 eventInput.getType().getId(),
@@ -59,18 +59,18 @@ public class TraceEventConverter {
         );
     }
 
-    public DecisionOutcome toOutcome(TraceOutputValue eventOutput) {
+    public static DecisionOutcome toOutcome(TraceOutputValue eventOutput) {
         return new DecisionOutcome(
                 eventOutput.getId(),
                 eventOutput.getName(),
                 eventOutput.getStatus(),
                 new TypedValue(eventOutput.getName(), eventOutput.getType().getId(), eventOutput.getValue()),
                 null,
-                eventOutput.getMessages() == null ? null : eventOutput.getMessages().stream().map(this::toMessage).collect(Collectors.toList())
+                eventOutput.getMessages() == null ? null : eventOutput.getMessages().stream().map(TraceEventConverter::toMessage).collect(Collectors.toList())
         );
     }
 
-    public Message toMessage(org.kie.kogito.tracing.decision.event.common.Message eventMessage) {
+    public static Message toMessage(org.kie.kogito.tracing.decision.event.common.Message eventMessage) {
         return new Message(
                 eventMessage.getLevel(),
                 eventMessage.getCategory() == null ? null : eventMessage.getCategory().name(),
@@ -81,9 +81,12 @@ public class TraceEventConverter {
         );
     }
 
-    public MessageExceptionField toMessageExceptionField(org.kie.kogito.tracing.decision.event.common.MessageExceptionField eventException) {
+    public static MessageExceptionField toMessageExceptionField(org.kie.kogito.tracing.decision.event.common.MessageExceptionField eventException) {
         return eventException == null
                 ? null
                 : new MessageExceptionField(eventException.getClassName(), eventException.getMessage(), toMessageExceptionField(eventException.getCause()));
+    }
+
+    private TraceEventConverter() {
     }
 }
