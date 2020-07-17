@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -48,7 +48,7 @@ class LimeStabilityTest {
 
     @Test
     void testStabilityWithNumericData() throws Exception {
-        BlackBoxModel sumSkipModel = TestUtils.getSumSkipModel(0);
+        PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
             featureList.add(FeatureFactory.newNumericalFeature("f-" + i, random.nextFloat()));
@@ -74,7 +74,7 @@ class LimeStabilityTest {
 
     @Test
     void testStabilityWithTextData() throws Exception {
-        BlackBoxModel sumSkipModel = TestUtils.getDummyTextClassifier();
+        PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
             featureList.add(FeatureFactory.newTextFeature("f-" + i, TestUtils.randomString()));

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -36,7 +36,6 @@ import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.RepeatedTest;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.pmml.evaluator.api.executor.PMMLRuntime;
 
@@ -70,37 +69,19 @@ class PmmlLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
 
         LimeExplainer limeExplainer = new LimeExplainer(100, 2);
-        BlackBoxModel model = new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> outputs = new LinkedList<>();
-                for (PredictionInput input : inputs) {
-                    List<Feature> features = input.getFeatures();
-                    LogisticRegressionIrisDataExecutor pmmlModel = new LogisticRegressionIrisDataExecutor(
-                            features.get(0).getValue().asNumber(), features.get(1).getValue().asNumber(),
-                            features.get(2).getValue().asNumber(), features.get(3).getValue().asNumber());
-                    PMML4Result result = pmmlModel.execute(logisticRegressionIris);
-                    String species = result.getResultVariables().get("Species").toString();
-                    PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("species", Type.TEXT, new Value<>(species), 1d)));
-                    outputs.add(predictionOutput);
-                }
-                return outputs;
+        PredictionProvider model = inputs -> {
+            List<PredictionOutput> outputs = new LinkedList<>();
+            for (PredictionInput input1 : inputs) {
+                List<Feature> features1 = input1.getFeatures();
+                LogisticRegressionIrisDataExecutor pmmlModel = new LogisticRegressionIrisDataExecutor(
+                        features1.get(0).getValue().asNumber(), features1.get(1).getValue().asNumber(),
+                        features1.get(2).getValue().asNumber(), features1.get(3).getValue().asNumber());
+                PMML4Result result = pmmlModel.execute(logisticRegressionIris);
+                String species = result.getResultVariables().get("Species").toString();
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("species", Type.TEXT, new Value<>(species), 1d)));
+                outputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return null;
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                return null;
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return null;
-            }
+            return outputs;
         };
         PredictionOutput output = model.predict(List.of(input)).get(0);
         Prediction prediction = new Prediction(input, output);
@@ -108,7 +89,7 @@ class PmmlLimeExplainerTest {
         assertNotNull(saliency);
         List<String> strings = saliency.getPositiveFeatures(2).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
         assertTrue(strings.contains("petalWidth"));
-        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
+        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getPositiveFeatures(1));
         assertTrue(v > 0);
     }
 
@@ -120,36 +101,18 @@ class PmmlLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
 
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
-        BlackBoxModel model = new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> outputs = new LinkedList<>();
-                for (PredictionInput input : inputs) {
-                    List<Feature> features = input.getFeatures();
-                    CategoricalVariablesRegressionExecutor pmmlModel = new CategoricalVariablesRegressionExecutor(
-                            features.get(0).getValue().asString(), features.get(1).getValue().asString());
-                    PMML4Result result = pmmlModel.execute(categoricalVariableRegression);
-                    String score = result.getResultVariables().get("result").toString();
-                    PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("result", Type.NUMBER, new Value<>(score), 1d)));
-                    outputs.add(predictionOutput);
-                }
-                return outputs;
+        PredictionProvider model = inputs -> {
+            List<PredictionOutput> outputs = new LinkedList<>();
+            for (PredictionInput input1 : inputs) {
+                List<Feature> features1 = input1.getFeatures();
+                CategoricalVariablesRegressionExecutor pmmlModel = new CategoricalVariablesRegressionExecutor(
+                        features1.get(0).getValue().asString(), features1.get(1).getValue().asString());
+                PMML4Result result = pmmlModel.execute(categoricalVariableRegression);
+                String score = result.getResultVariables().get("result").toString();
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("result", Type.NUMBER, new Value<>(score), 1d)));
+                outputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return null;
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                return null;
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return null;
-            }
+            return outputs;
         };
         PredictionOutput output = model.predict(List.of(input)).get(0);
         Prediction prediction = new Prediction(input, output);
@@ -167,42 +130,24 @@ class PmmlLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
 
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
-        BlackBoxModel model = new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> outputs = new LinkedList<>();
-                for (PredictionInput input : inputs) {
-                    List<Feature> features = input.getFeatures();
-                    SimpleScorecardCategoricalExecutor pmmlModel = new SimpleScorecardCategoricalExecutor(
-                            features.get(0).getValue().asString(), features.get(1).getValue().asString());
-                    PMML4Result result = pmmlModel.execute(scorecardCategorical);
-                    String score = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.TARGET_FIELD);
-                    String reason1 = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.REASON_CODE1_FIELD);
-                    String reason2 = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.REASON_CODE2_FIELD);
-                    PredictionOutput predictionOutput = new PredictionOutput(List.of(
-                            new Output("score", Type.TEXT, new Value<>(score), 1d),
-                            new Output("reason1", Type.TEXT, new Value<>(reason1), 1d),
-                            new Output("reason2", Type.TEXT, new Value<>(reason2), 1d)
-                    ));
-                    outputs.add(predictionOutput);
-                }
-                return outputs;
+        PredictionProvider model = inputs -> {
+            List<PredictionOutput> outputs = new LinkedList<>();
+            for (PredictionInput input1 : inputs) {
+                List<Feature> features1 = input1.getFeatures();
+                SimpleScorecardCategoricalExecutor pmmlModel = new SimpleScorecardCategoricalExecutor(
+                        features1.get(0).getValue().asString(), features1.get(1).getValue().asString());
+                PMML4Result result = pmmlModel.execute(scorecardCategorical);
+                String score = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.TARGET_FIELD);
+                String reason1 = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.REASON_CODE1_FIELD);
+                String reason2 = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.REASON_CODE2_FIELD);
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(
+                        new Output("score", Type.TEXT, new Value<>(score), 1d),
+                        new Output("reason1", Type.TEXT, new Value<>(reason1), 1d),
+                        new Output("reason2", Type.TEXT, new Value<>(reason2), 1d)
+                ));
+                outputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return null;
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                return null;
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return null;
-            }
+            return outputs;
         };
 
         PredictionOutput output = model.predict(List.of(input)).get(0);
@@ -221,40 +166,22 @@ class PmmlLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
 
         LimeExplainer limeExplainer = new LimeExplainer(100, 2);
-        BlackBoxModel model = new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> outputs = new LinkedList<>();
-                for (PredictionInput input : inputs) {
-                    List<Feature> features = input.getFeatures();
-                    CompoundNestedPredicateScorecardExecutor pmmlModel = new CompoundNestedPredicateScorecardExecutor(
-                            features.get(0).getValue().asNumber(), features.get(1).getValue().asString());
-                    PMML4Result result = pmmlModel.execute(compoundScoreCard);
-                    String score = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.TARGET_FIELD);
-                    String reason1 = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.REASON_CODE1_FIELD);
-                    PredictionOutput predictionOutput = new PredictionOutput(List.of(
-                            new Output("score", Type.TEXT, new Value<>(score), 1d),
-                            new Output("reason1", Type.TEXT, new Value<>(reason1), 1d)
-                    ));
-                    outputs.add(predictionOutput);
-                }
-                return outputs;
+        PredictionProvider model = inputs -> {
+            List<PredictionOutput> outputs = new LinkedList<>();
+            for (PredictionInput input1 : inputs) {
+                List<Feature> features1 = input1.getFeatures();
+                CompoundNestedPredicateScorecardExecutor pmmlModel = new CompoundNestedPredicateScorecardExecutor(
+                        features1.get(0).getValue().asNumber(), features1.get(1).getValue().asString());
+                PMML4Result result = pmmlModel.execute(compoundScoreCard);
+                String score = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.TARGET_FIELD);
+                String reason1 = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.REASON_CODE1_FIELD);
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(
+                        new Output("score", Type.TEXT, new Value<>(score), 1d),
+                        new Output("reason1", Type.TEXT, new Value<>(reason1), 1d)
+                ));
+                outputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return null;
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                return null;
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return null;
-            }
+            return outputs;
         };
         PredictionOutput output = model.predict(List.of(input)).get(0);
         Prediction prediction = new Prediction(input, output);

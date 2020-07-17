@@ -31,7 +31,7 @@ import java.util.Map;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -50,164 +50,76 @@ public class TestUtils {
         random.setSeed(4);
     }
 
-    public static BlackBoxModel getFeaturePassModel(int featureIndex) {
-        return new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> predictionOutputs = new LinkedList<>();
-                for (PredictionInput predictionInput : inputs) {
-                    List<Feature> features = predictionInput.getFeatures();
-                    Feature feature = features.get(featureIndex);
-                    PredictionOutput predictionOutput = new PredictionOutput(
-                            List.of(new Output("feature-" + featureIndex, feature.getType(), feature.getValue(),
-                                               1d)));
-                    predictionOutputs.add(predictionOutput);
-                }
-                return predictionOutputs;
+    public static PredictionProvider getFeaturePassModel(int featureIndex) {
+        return inputs -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                Feature feature = features.get(featureIndex);
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("feature-" + featureIndex, feature.getType(), feature.getValue(),
+                                           1d)));
+                predictionOutputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return DataUtils.generateRandomDataDistribution(featureIndex + 1);
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                List<Feature> features = new LinkedList<>();
-                features.add(FeatureFactory.newNumericalFeature("f1", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f2", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f3", Double.NaN));
-                return new PredictionInput(features);
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return new PredictionOutput(List.of(new Output("feature-" + featureIndex, Type.NUMBER, new Value<>(Double.NaN), 1d)));
-            }
+            return predictionOutputs;
         };
     }
 
-    public static BlackBoxModel getSumSkipModel(int skipFeatureIndex) {
-        return new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> predictionOutputs = new LinkedList<>();
-                for (PredictionInput predictionInput : inputs) {
-                    List<Feature> features = predictionInput.getFeatures();
-                    double result = 0;
-                    for (int i = 0; i < features.size(); i++) {
-                        if (skipFeatureIndex != i) {
-                            result += features.get(i).getValue().asNumber();
-                        }
+    public static PredictionProvider getSumSkipModel(int skipFeatureIndex) {
+        return inputs -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                double result = 0;
+                for (int i = 0; i < features.size(); i++) {
+                    if (skipFeatureIndex != i) {
+                        result += features.get(i).getValue().asNumber();
                     }
-                    PredictionOutput predictionOutput = new PredictionOutput(
-                            List.of(new Output("sum-but" + skipFeatureIndex, Type.NUMBER, new Value<>(result), 1d)));
-                    predictionOutputs.add(predictionOutput);
                 }
-                return predictionOutputs;
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("sum-but" + skipFeatureIndex, Type.NUMBER, new Value<>(result), 1d)));
+                predictionOutputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return DataUtils.generateRandomDataDistribution(skipFeatureIndex + 1);
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                List<Feature> features = new LinkedList<>();
-                features.add(FeatureFactory.newNumericalFeature("f1", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f2", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f3", Double.NaN));
-                return new PredictionInput(features);
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return new PredictionOutput(List.of(new Output("o", Type.NUMBER, new Value<>(Double.NaN), 1d)));
-            }
+            return predictionOutputs;
         };
     }
 
-    public static BlackBoxModel getEvenFeatureModel(int featureIndex) {
-        return new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> predictionOutputs = new LinkedList<>();
-                for (PredictionInput predictionInput : inputs) {
-                    List<Feature> features = predictionInput.getFeatures();
-                    Feature feature = features.get(featureIndex);
-                    double v = feature.getValue().asNumber();
-                    PredictionOutput predictionOutput = new PredictionOutput(
-                            List.of(new Output("feature-" + featureIndex, Type.BOOLEAN, new Value<>(v % 2 == 0), 1d)));
-                    predictionOutputs.add(predictionOutput);
-                }
-                return predictionOutputs;
+    public static PredictionProvider getEvenFeatureModel(int featureIndex) {
+        return inputs -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                Feature feature = features.get(featureIndex);
+                double v = feature.getValue().asNumber();
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("feature-" + featureIndex, Type.BOOLEAN, new Value<>(v % 2 == 0), 1d)));
+                predictionOutputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return DataUtils.generateRandomDataDistribution(featureIndex + 1);
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                List<Feature> features = new LinkedList<>();
-                features.add(FeatureFactory.newNumericalFeature("f1", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f2", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f3", Double.NaN));
-                return new PredictionInput(features);
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return new PredictionOutput(List.of(new Output("o", Type.NUMBER, new Value<>(Double.NaN), 1d)));
-            }
+            return predictionOutputs;
         };
     }
 
-    public static BlackBoxModel getEvenSumModel(int skipFeatureIndex) {
-        return new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> predictionOutputs = new LinkedList<>();
-                for (PredictionInput predictionInput : inputs) {
-                    List<Feature> features = predictionInput.getFeatures();
-                    double result = 0;
-                    for (int i = 0; i < features.size(); i++) {
-                        if (skipFeatureIndex != i) {
-                            result += features.get(i).getValue().asNumber();
-                        }
+    public static PredictionProvider getEvenSumModel(int skipFeatureIndex) {
+        return inputs -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                double result = 0;
+                for (int i = 0; i < features.size(); i++) {
+                    if (skipFeatureIndex != i) {
+                        result += features.get(i).getValue().asNumber();
                     }
-                    PredictionOutput predictionOutput = new PredictionOutput(
-                            List.of(new Output("sum-even-but" + skipFeatureIndex, Type.BOOLEAN, new Value<>(((int) result) % 2 == 0), 1d)));
-                    predictionOutputs.add(predictionOutput);
                 }
-                return predictionOutputs;
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("sum-even-but" + skipFeatureIndex, Type.BOOLEAN, new Value<>(((int) result) % 2 == 0), 1d)));
+                predictionOutputs.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return DataUtils.generateRandomDataDistribution(skipFeatureIndex + 1);
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                List<Feature> features = new LinkedList<>();
-                features.add(FeatureFactory.newNumericalFeature("f1", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f2", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f3", Double.NaN));
-                return new PredictionInput(features);
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return new PredictionOutput(List.of(new Output("o", Type.NUMBER, new Value<>(Double.NaN), 1d)));
-            }
+            return predictionOutputs;
         };
     }
 
-    public static BlackBoxModel getDummyTextClassifier() {
-        return new BlackBoxModel() {
+    public static PredictionProvider getDummyTextClassifier() {
+        return new PredictionProvider() {
             private final List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
@@ -226,29 +138,10 @@ public class TestUtils {
                             }
                         }
                     }
-                    Output output = new Output("spam-classification", Type.BOOLEAN, new Value<>(spam), 1d);
+                    Output output = new Output("spam", Type.BOOLEAN, new Value<>(spam), 1d);
                     outputs.add(new PredictionOutput(List.of(output)));
                 }
                 return outputs;
-            }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return DataUtils.generateRandomDataDistribution(3);
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                List<Feature> features = new LinkedList<>();
-                features.add(FeatureFactory.newNumericalFeature("f1", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f2", Double.NaN));
-                features.add(FeatureFactory.newNumericalFeature("f3", Double.NaN));
-                return new PredictionInput(features);
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return new PredictionOutput(List.of(new Output("o", Type.NUMBER, new Value<>(Double.NaN), 1d)));
             }
         };
     }

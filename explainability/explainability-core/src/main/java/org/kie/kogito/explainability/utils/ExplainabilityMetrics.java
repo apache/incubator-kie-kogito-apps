@@ -19,13 +19,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 
@@ -58,7 +58,7 @@ public class ExplainabilityMetrics {
      * @param topFeatures the list of important features that should be dropped
      * @return the saliency impact
      */
-    public static double saliencyImpact(BlackBoxModel model, Prediction prediction, List<FeatureImportance> topFeatures) {
+    public static double saliencyImpact(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) {
         String[] importantFeatureNames = topFeatures.stream().map(f -> f.getFeature().getName()).toArray(String[]::new);
 
         List<Feature> newFeatures = new LinkedList<>();

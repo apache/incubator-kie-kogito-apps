@@ -10,6 +10,10 @@
   <artifactId>explainability-integrationtests-opennlp</artifactId>
   <name>Kogito :: Explainability Integration Tests OpenNLP</name>
 
+  <properties>
+    <opennlp.version>1.9.2</opennlp.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -27,7 +31,7 @@
     <dependency>
       <groupId>org.apache.opennlp</groupId>
       <artifactId>opennlp-tools</artifactId>
-      <version>1.9.2</version>
+      <version>${opennlp.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

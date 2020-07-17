@@ -28,7 +28,7 @@ import org.kie.kogito.decision.DecisionModel;
 import org.kie.kogito.dmn.DMNKogito;
 import org.kie.kogito.dmn.DmnDecisionModel;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
@@ -60,7 +60,7 @@ class TrafficViolationDmnLimeExplainerTest {
         contextVariables.put("Driver", driver);
         contextVariables.put("Violation", violation);
 
-        BlackBoxModel model = new DecisionModelWrapper(decisionModel);
+        PredictionProvider model = new DecisionModelWrapper(decisionModel);
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);

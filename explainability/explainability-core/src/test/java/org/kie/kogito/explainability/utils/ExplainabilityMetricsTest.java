@@ -15,29 +15,28 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ExplainabilityMetricsTest {
 
-    private static final SecureRandom random = new SecureRandom();
-
     @Test
-    public void testExplainabilityNoExplanation() {
+    void testExplainabilityNoExplanation() {
         double v = ExplainabilityMetrics.quantifyExplainability(0, 0, 0);
         assertFalse(Double.isNaN(v));
         assertFalse(Double.isInfinite(v));
@@ -45,7 +44,7 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    public void testExplainabilityNoExplanationWithInteraction() {
+    void testExplainabilityNoExplanationWithInteraction() {
         double v = ExplainabilityMetrics.quantifyExplainability(0, 0, 1);
         assertFalse(Double.isNaN(v));
         assertFalse(Double.isInfinite(v));
@@ -53,32 +52,42 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    public void testExplainabilityRandomchunksNoInteraction() {
-        double v = ExplainabilityMetrics.quantifyExplainability(random.nextInt(), random.nextInt(), 1d /
-                random.nextInt(100));
+    void testExplainabilitySameIOChunksNoInteraction() {
+        double v = ExplainabilityMetrics.quantifyExplainability(10, 10, 0);
         assertFalse(Double.isNaN(v));
         assertFalse(Double.isInfinite(v));
         assertTrue(v >= 0 && v <= 1);
     }
 
     @Test
-    public void testExplainabilityRandom() {
-        double v = ExplainabilityMetrics.quantifyExplainability(random.nextInt(), random.nextInt(), random.nextDouble());
-        assertFalse(Double.isNaN(v));
-        assertFalse(Double.isInfinite(v));
-        assertTrue(v >= 0 && v <= 1);
+    void testExplainabilitySameIOChunksWithInteraction() {
+        double v = ExplainabilityMetrics.quantifyExplainability(10, 10, 0.5);
+        assertEquals(0.2331, v, 1e-5);
+    }
+
+    @Test
+    void testExplainabilityDifferentIOChunksNoInteraction() {
+        double v = ExplainabilityMetrics.quantifyExplainability(3, 9, 0);
+        assertEquals(0.481, v, 1e-5);
+    }
+
+    @Test
+    void testExplainabilityDifferentIOChunksInteraction() {
+        double v = ExplainabilityMetrics.quantifyExplainability(3, 9, 0.5);
+        assertEquals(0.3145, v, 1e-5);
     }
 
     @Test
     void testFidelity() throws Exception {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(100, 1);
-        BlackBoxModel model = TestUtils.getDummyTextClassifier();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
         for (int i = 0; i < 10; i++) {
             List<Feature> features = new LinkedList<>();
-            for (int j = 0; j < 4; j++) {
-                features.add(FeatureFactory.newTextFeature("f-" + j, TestUtils.randomString()));
-            }
+            features.add(FeatureFactory.newTextFeature("f-1", "foo bar"));
+            features.add(FeatureFactory.newTextFeature("f-2", "bar foo"));
+            features.add(FeatureFactory.newTextFeature("f-3", "brow fox"));
+            features.add(FeatureFactory.newTextFeature("f-4", "lazy dog"));
             features.add(FeatureFactory.newTextFeature("f-5", "money"));
             PredictionInput input = new PredictionInput(features);
             Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));

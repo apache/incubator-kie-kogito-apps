@@ -21,13 +21,14 @@ import java.util.List;
 
 import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.global.GlobalExplanationException;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.DataDistribution;
-import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderMetadata;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,17 +46,17 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
     private static final Logger logger = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
 
     @Override
-    public Collection<PartialDependenceGraph> explain(BlackBoxModel model) throws GlobalExplanationException {
+    public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws GlobalExplanationException {
         long start = System.currentTimeMillis();
 
         Collection<PartialDependenceGraph> pdps = new LinkedList<>();
         try {
-            DataDistribution dataDistribution = model.getDataDistribution();
-            int noOfFeatures = model.getInputShape().getFeatures().size();
+            DataDistribution dataDistribution = metadata.getDataDistribution();
+            int noOfFeatures = metadata.getInputShape().getFeatures().size();
 
             List<FeatureDistribution> featureDistributions = dataDistribution.getFeatureDistributions();
             for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
-                for (int outputIndex = 0; outputIndex < model.getOutputShape().getOutputs().size(); outputIndex++) {
+                for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
                     double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
                                                                          featureDistributions.get(featureIndex).getMax(), SERIES_LENGTH);
 
@@ -88,7 +89,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                             marginalImpacts[i] += output.getScore() / (double) SERIES_LENGTH;
                         }
                     }
-                    PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(model.getInputShape().getFeatures().get(featureIndex),
+                    PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),
                                                                                                featureXSvalues, marginalImpacts);
                     pdps.add(partialDependenceGraph);
                 }

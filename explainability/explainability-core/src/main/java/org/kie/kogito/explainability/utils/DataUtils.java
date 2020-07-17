@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -37,9 +36,7 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 
 /**
@@ -75,10 +72,7 @@ public class DataUtils {
             data[i] = g;
         }
 
-        // get the mean
         double m = getMean(data);
-
-        // get the standard deviation
         double d = getStdDev(data, m);
 
         // force desired standard deviation
@@ -86,6 +80,7 @@ public class DataUtils {
         for (int i = 0; i < size; i++) {
             data[i] *= d1;
         }
+
         // get the new mean
         double m1 = m * stdDeviation / d;
 
@@ -93,6 +88,7 @@ public class DataUtils {
         for (int i = 0; i < size; i++) {
             data[i] += mean - m1;
         }
+
         return data;
     }
 
@@ -134,50 +130,8 @@ public class DataUtils {
         return data;
     }
 
-    public static double[] perturbDrop(double[] data) {
-        double[] perturbed = new double[data.length];
-        System.arraycopy(data, 0, perturbed, 0, data.length);
-        for (int j = 0; j < random.nextInt(data.length / 2); j++) {
-            perturbed[random.nextInt(data.length)] = 0;
-        }
-        return perturbed;
-    }
-
-    public static PredictionInput inputFrom(double[] doubles) {
-        List<Feature> features = new ArrayList<>(doubles.length);
-        for (double d : doubles) {
-            Feature f = FeatureFactory.newNumericalFeature("", d);
-            features.add(f);
-        }
-        return new PredictionInput(features);
-    }
-
-    public static double[] toNumbers(PredictionInput input) {
-        double[] doubles = new double[input.getFeatures().size()];
-        int i = 0;
-        for (Feature f : input.getFeatures()) {
-            doubles[i] = f.getValue().asNumber();
-            i++;
-        }
-        return doubles;
-    }
-
-    public static double[] toNumbers(PredictionOutput output) {
-        double[] doubles = new double[output.getOutputs().size()];
-        int i = 0;
-        for (Output o : output.getOutputs()) {
-            doubles[i] = o.getValue().asNumber();
-            i++;
-        }
-        return doubles;
-    }
-
     public static List<Feature> doublesToFeatures(double[] inputs) {
         return DoubleStream.of(inputs).mapToObj(DataUtils::doubleToFeature).collect(Collectors.toList());
-    }
-
-    public static List<BigDecimal> doublesToBigDecimals(double... doubles) {
-        return DoubleStream.of(doubles).mapToObj(BigDecimal::new).collect(Collectors.toList());
     }
 
     public static Feature doubleToFeature(double d) {
@@ -239,9 +193,7 @@ public class DataUtils {
             case NUMBER:
                 double ov = feature.getValue().asNumber();
                 boolean intValue = ov % 1 == 0;
-                if (intValue) {
-                    ov = (int) ov;
-                }
+
                 // sample from normal distribution and center around feature value
                 int pickIdx = random.nextInt(noOfSamples - 1);
                 double v = DataUtils.generateData(0, 1, noOfSamples)[pickIdx];
@@ -250,6 +202,9 @@ public class DataUtils {
                 }
                 if (intValue) {
                     v = (int) v;
+                    if (v == ov) {
+                        v = (int) v * 10;
+                    }
                 }
                 f = FeatureFactory.newNumericalFeature(featureName, v);
                 break;

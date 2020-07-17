@@ -15,7 +15,8 @@
  */
 package org.kie.kogito.explainability.global;
 
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderMetadata;
 
 /**
  * A global explainability method.
@@ -24,5 +25,5 @@ import org.kie.kogito.explainability.model.BlackBoxModel;
  */
 public interface GlobalExplainer<T> {
 
-    T explain(BlackBoxModel model) throws GlobalExplanationException;
+    T explain(PredictionProvider model, PredictionProviderMetadata metadata) throws GlobalExplanationException;
 }

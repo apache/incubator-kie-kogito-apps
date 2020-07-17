@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.LocalExplanationException;
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
@@ -67,7 +67,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
     }
 
     @Override
-    public Saliency explain(Prediction prediction, BlackBoxModel model) throws LocalExplanationException {
+    public Saliency explain(Prediction prediction, PredictionProvider model) throws LocalExplanationException {
 
         long start = System.currentTimeMillis();
 

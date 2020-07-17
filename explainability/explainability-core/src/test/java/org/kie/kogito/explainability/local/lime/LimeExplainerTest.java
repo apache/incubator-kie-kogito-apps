@@ -21,7 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
@@ -46,7 +46,7 @@ class LimeExplainerTest {
         PredictionOutput output = mock(PredictionOutput.class);
         PredictionInput input = mock(PredictionInput.class);
         Prediction prediction = new Prediction(input, output);
-        BlackBoxModel model = mock(BlackBoxModel.class);
+        PredictionProvider model = mock(PredictionProvider.class);
         Saliency saliency = limeExplainer.explain(prediction, model);
         assertNotNull(saliency);
     }
@@ -61,7 +61,7 @@ class LimeExplainerTest {
         }
         PredictionInput input = new PredictionInput(features);
         Prediction prediction = new Prediction(input, output);
-        BlackBoxModel model = mock(BlackBoxModel.class);
+        PredictionProvider model = mock(PredictionProvider.class);
         Saliency saliency = limeExplainer.explain(prediction, model);
         assertNotNull(saliency);
     }
@@ -75,7 +75,7 @@ class LimeExplainerTest {
         }
         features.add(FeatureFactory.newTextFeature("f-5", "money"));
         PredictionInput input = new PredictionInput(features);
-        BlackBoxModel model = TestUtils.getDummyTextClassifier();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
         Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
         Saliency saliency = limeExplainer.explain(prediction, model);
         assertNotNull(saliency);

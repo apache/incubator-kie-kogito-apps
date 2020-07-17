@@ -15,17 +15,26 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.DoubleStream;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.kie.kogito.explainability.model.BlackBoxModel;
-import org.kie.kogito.explainability.model.PartialDependenceGraph;
-import org.kie.kogito.explainability.TestUtils;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PartialDependenceGraph;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderMetadata;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
+import org.kie.kogito.explainability.utils.DataUtils;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PartialDependencePlotExplainerTest {
@@ -33,42 +42,35 @@ class PartialDependencePlotExplainerTest {
     @Test
     void testPdpTextClassifier() throws Exception {
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
-        BlackBoxModel modelInfo = TestUtils.getDummyTextClassifier();
-        Collection<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo);
-        assertNotNull(pdps);
-        for (PartialDependenceGraph partialDependenceGraph : pdps) {
-            writeAsciiGraph(partialDependenceGraph, new PrintWriter(new File("target/pdp" + partialDependenceGraph.getFeature().getName() + ".txt")));
-        }
-    }
-
-    private void writeAsciiGraph(PartialDependenceGraph partialDependenceGraph, PrintWriter out) {
-        double[] outputs = partialDependenceGraph.getY();
-        double max = DoubleStream.of(outputs).max().getAsDouble();
-        double min = DoubleStream.of(outputs).min().getAsDouble();
-        outputs = Arrays.stream(outputs).map(d -> d * max / min).toArray();
-        double curMax = 1 + DoubleStream.of(outputs).max().getAsDouble();
-        ;
-        int tempIdx = -1;
-        for (int k = 0; k < partialDependenceGraph.getX().length; k++) {
-            double tempMax = -Integer.MAX_VALUE;
-            for (int j = 0; j < outputs.length; j++) {
-                double v = outputs[j];
-                if ((int) v < (int) curMax && (int) v > (int) tempMax && tempIdx != j) {
-                    tempMax = v;
-                    tempIdx = j;
-                }
+        PredictionProvider modelInfo = TestUtils.getDummyTextClassifier();
+        PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
+            @Override
+            public DataDistribution getDataDistribution() {
+                return DataUtils.generateRandomDataDistribution(100);
             }
-            writeDot(partialDependenceGraph, tempIdx, out);
-            curMax = tempMax;
+
+            @Override
+            public PredictionInput getInputShape() {
+                List<Feature> features = new LinkedList<>();
+                features.add(FeatureFactory.newTextFeature("text", ""));
+                return new PredictionInput(features);
+            }
+
+            @Override
+            public PredictionOutput getOutputShape() {
+                List<Output> outputs = new LinkedList<>();
+                outputs.add(new Output("spam", Type.BOOLEAN, new Value<>(null), 0d));
+                return new PredictionOutput(outputs);
+            }
+        };
+        Collection<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo, metadata);
+        assertNotNull(pdps);
+        for (PartialDependenceGraph pdp : pdps) {
+            assertNotNull(pdp.getFeature());
+            assertNotNull(pdp.getX());
+            assertNotNull(pdp.getY());
+            assertEquals(pdp.getX().length, pdp.getY().length);
         }
-        out.flush();
-        out.close();
     }
 
-    private void writeDot(PartialDependenceGraph data, int i, PrintWriter out) {
-        for (int j = 0; j < data.getX()[i]; j++) {
-            out.print(" ");
-        }
-        out.println("*");
-    }
 }

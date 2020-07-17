@@ -26,7 +26,7 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -66,41 +66,23 @@ class OpenNLPLimeExplainerTest {
         Prediction prediction = new Prediction(input, output);
 
         LimeExplainer limeExplainer = new LimeExplainer(100, 2);
-        BlackBoxModel model = new BlackBoxModel() {
-            @Override
-            public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-                List<PredictionOutput> results = new LinkedList<>();
-                for (PredictionInput predictionInput : inputs) {
-                    StringBuilder builder = new StringBuilder();
-                    for (Feature f : predictionInput.getFeatures()) {
-                        if (Type.TEXT.equals(f.getType())) {
-                            if (builder.length() > 0) {
-                                builder.append(' ');
-                            }
-                            builder.append(f.getValue().asString());
+        PredictionProvider model = inputs -> {
+            List<PredictionOutput> results = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                StringBuilder builder = new StringBuilder();
+                for (Feature f : predictionInput.getFeatures()) {
+                    if (Type.TEXT.equals(f.getType())) {
+                        if (builder.length() > 0) {
+                            builder.append(' ');
                         }
+                        builder.append(f.getValue().asString());
                     }
-                    Language language = languageDetector.predictLanguage(builder.toString());
-                    PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value<>(language.getLang()), language.getConfidence())));
-                    results.add(predictionOutput);
                 }
-                return results;
+                Language language = languageDetector.predictLanguage(builder.toString());
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value<>(language.getLang()), language.getConfidence())));
+                results.add(predictionOutput);
             }
-
-            @Override
-            public DataDistribution getDataDistribution() {
-                return null;
-            }
-
-            @Override
-            public PredictionInput getInputShape() {
-                return null;
-            }
-
-            @Override
-            public PredictionOutput getOutputShape() {
-                return null;
-            }
+            return results;
         };
         Saliency saliency = limeExplainer.explain(prediction, model);
         assertNotNull(saliency);

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.BlackBoxModel;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.FeatureImportance;
@@ -53,7 +53,7 @@ class DummyModelsLimeExplainerTest {
         features.add(FeatureFactory.newNumericalFeature("f2", 20));
         features.add(FeatureFactory.newNumericalFeature("f3", 0.1));
         PredictionInput input = new PredictionInput(features);
-        BlackBoxModel model = TestUtils.getFeaturePassModel(idx);
+        PredictionProvider model = TestUtils.getFeaturePassModel(idx);
         List<PredictionOutput> outputs = model.predict(List.of(input));
         Prediction prediction = new Prediction(input, outputs.get(0));
 
@@ -76,7 +76,7 @@ class DummyModelsLimeExplainerTest {
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
         features.add(FeatureFactory.newNumericalFeature("f2", 20));
         features.add(FeatureFactory.newNumericalFeature("f3", 10));
-        BlackBoxModel model = TestUtils.getSumSkipModel(idx);
+        PredictionProvider model = TestUtils.getSumSkipModel(idx);
         PredictionInput input = new PredictionInput(features);
         List<PredictionOutput> outputs = model.predict(List.of(input));
         Prediction prediction = new Prediction(input, outputs.get(0));
@@ -102,7 +102,7 @@ class DummyModelsLimeExplainerTest {
         features.add(FeatureFactory.newNumericalFeature("f2", 2));
         features.add(FeatureFactory.newNumericalFeature("f3", 7));
         PredictionInput input = new PredictionInput(features);
-        BlackBoxModel model = TestUtils.getEvenFeatureModel(idx);
+        PredictionProvider model = TestUtils.getEvenFeatureModel(idx);
         List<PredictionOutput> outputs = model.predict(List.of(input));
         Prediction prediction = new Prediction(input, outputs.get(0));
 
@@ -122,7 +122,7 @@ class DummyModelsLimeExplainerTest {
         features.add(FeatureFactory.newTextFeature("f2", "please give me some money"));
         features.add(FeatureFactory.newTextFeature("f3", "dear friend, please reply"));
         PredictionInput input = new PredictionInput(features);
-        BlackBoxModel model = TestUtils.getDummyTextClassifier();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
         List<PredictionOutput> outputs = model.predict(List.of(input));
         Prediction prediction = new Prediction(input, outputs.get(0));
 
@@ -143,7 +143,7 @@ class DummyModelsLimeExplainerTest {
         features.add(FeatureFactory.newNumericalFeature("f1",6));
         features.add(FeatureFactory.newNumericalFeature("f2",3));
         features.add(FeatureFactory.newNumericalFeature("f3",5));
-        BlackBoxModel model = TestUtils.getEvenSumModel(idx);
+        PredictionProvider model = TestUtils.getEvenSumModel(idx);
         PredictionInput input = new PredictionInput(features);
         List<PredictionOutput> outputs = model.predict(List.of(input));
         Prediction prediction = new Prediction(input, outputs.get(0));

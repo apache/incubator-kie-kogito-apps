@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.explainability.local;
 
-import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionProvider;
 
 /**
  * A local explainability method.
@@ -25,5 +25,5 @@ import org.kie.kogito.explainability.model.Prediction;
  */
 public interface LocalExplainer<T> {
 
-    T explain(Prediction prediction, BlackBoxModel model) throws LocalExplanationException;
+    T explain(Prediction prediction, PredictionProvider model) throws LocalExplanationException;
 }

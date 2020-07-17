@@ -15,27 +15,23 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionInput;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.utils.DataUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DataUtilsTest {
 
-    private final static SecureRandom random = new SecureRandom();
-
     @Test
     public void testDataGeneration() {
-        double mean = 1d / (1d + random.nextInt(10));
-        double stdDeviation = Math.abs(1d / (1d + random.nextInt(10)));
-        int size = random.nextInt(100);
+        double mean = 0.5;
+        double stdDeviation = 0.1;
+        int size = 100;
         double[] data = DataUtils.generateData(mean, stdDeviation, size);
         // check the sum of deviations from mean is zero
         double sum = 0;
@@ -84,22 +80,55 @@ class DataUtilsTest {
     }
 
     @Test
-    public void testPerturbDrop() {
+    public void testPerturbDropZero() {
         List<Feature> features = new LinkedList<>();
-        for (int i = 0; i < 3; i++) {
-            features.add(FeatureFactory.newNumericalFeature("f" + random.nextInt(), random.nextInt()));
-        }
+        features.add(FeatureFactory.newNumericalFeature("f0", 1));
+        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
+        features.add(FeatureFactory.newNumericalFeature("f2", 5));
         PredictionInput input = new PredictionInput(features);
-        int noOfPerturbations = random.nextInt(3);
+        assertPerturbDrop(input, 0);
+    }
+
+    @Test
+    public void testPerturbDropOne() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newNumericalFeature("f0", 1));
+        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
+        features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDrop(input, 1);
+    }
+
+    @Test
+    public void testPerturbDropTwo() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newNumericalFeature("f0", 1));
+        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
+        features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDrop(input, 2);
+    }
+
+    @Test
+    public void testPerturbDropThree() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newNumericalFeature("f0", 1));
+        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
+        features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDrop(input, 3);
+    }
+
+    private void assertPerturbDrop(PredictionInput input, int noOfPerturbations) {
         PredictionInput perturbedInput = DataUtils.perturbDrop(input, 10, noOfPerturbations);
         int changedFeatures = 0;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < input.getFeatures().size(); i++) {
             double v = input.getFeatures().get(i).getValue().asNumber();
             double pv = perturbedInput.getFeatures().get(i).getValue().asNumber();
             if (v != pv) {
                 changedFeatures++;
             }
         }
-        assertEquals(changedFeatures, noOfPerturbations);
+        assertEquals(noOfPerturbations, changedFeatures);
     }
 }

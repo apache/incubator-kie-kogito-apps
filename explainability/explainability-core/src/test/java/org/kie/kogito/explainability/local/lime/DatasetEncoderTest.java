@@ -56,7 +56,7 @@ class DatasetEncoderTest {
         for (int i = 0; i < 10; i++) {
             List<Feature> inputFeatures = new LinkedList<>();
             for (int j = 0; j < 3; j++) {
-                inputFeatures.add(FeatureFactory.newNumericalFeature("f" + random.nextInt(), random.nextInt()));
+                inputFeatures.add(FeatureFactory.newNumericalFeature("f" + j, random.nextInt()));
             }
             perturbedInputs.add(new PredictionInput(inputFeatures));
         }
