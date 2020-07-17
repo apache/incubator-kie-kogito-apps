@@ -55,7 +55,7 @@ public class TraceEventConsumer {
         try {
             return Optional.of(CloudEventUtils.decode(payload));
         } catch (IllegalStateException e) {
-            LOG.warn(String.format("Can't decode message to CloudEvent: %s", payload), e);
+            LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
             return Optional.empty();
         }
     }
@@ -65,7 +65,7 @@ public class TraceEventConsumer {
         Optional<TraceEvent> optData = cloudEvent.getData();
 
         if (!optData.isPresent()) {
-            LOG.warn("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
+            LOG.error("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
             return;
         }
 
@@ -77,7 +77,7 @@ public class TraceEventConsumer {
         if (traceEventType == TraceEventType.DMN) {
             service.storeDecision(attributes.getId(), TraceEventConverter.toDecision(traceEvent));
         } else {
-            LOG.warn("Unsupported TraceEvent type {}", traceEventType);
+            LOG.error("Unsupported TraceEvent type {}", traceEventType);
         }
     }
 }
