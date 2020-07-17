@@ -48,8 +48,6 @@ public class HttpJob implements Job<HttpJobContext> {
     @Override
     public void execute(HttpJobContext ctx) {
         LOGGER.info("Executing for context {}", ctx.getJobDetails());
-        //load job
-        //use adapter
         executor.ifPresent(e -> e.execute(CompletableFuture.completedFuture(ctx.getJobDetails())).thenAccept(j -> LOGGER.debug("Executed {}", j)));
     }
 }
