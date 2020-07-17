@@ -16,6 +16,8 @@
 
 package org.kie.kogito.jobs.service.scheduler.impl;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +44,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -72,19 +75,54 @@ class VertxTimerServiceSchedulerTest {
 
     @Test
     void testScheduleJob() {
-        final long timestamp = DateUtil.now().plusSeconds(1).toInstant().toEpochMilli();
-        trigger = new PointInTimeTrigger(timestamp, null, null);
-        jobDetails = JobDetails.builder().build();
-        context = new HttpJobContext(jobDetails);
-        job = new HttpJob(executor);
-        final ManageableJobHandle handle = tested.scheduleJob(job, context, trigger);
+        ZonedDateTime time = DateUtil.now().plusSeconds(1);
+        final ManageableJobHandle handle = schedule(time);
         verify(vertx).setTimer(timeCaptor.capture(), any());
-        assertThat(timeCaptor.getValue()).isGreaterThan(timestamp - System.currentTimeMillis());
+        assertThat(timeCaptor.getValue()).isGreaterThan(time.toInstant().minusMillis(System.currentTimeMillis()).toEpochMilli());
         given().await()
                 .atMost(2, TimeUnit.SECONDS)
                 .untilAsserted(() -> verify(executor).execute(jobCaptor.capture()));
         assertThat(jobCaptor.getValue().toCompletableFuture().getNow(null)).isEqualTo(jobDetails);
         assertThat(handle.isCancel()).isFalse();
         assertThat(handle.getScheduledTime()).isNotNull();
+    }
+
+    @Test
+    void testRemoveScheduleJob() {
+        final ManageableJobHandle handle = schedule(DateUtil.now().plusHours(1));
+        verify(vertx).setTimer(timeCaptor.capture(), any());
+        given().await()
+                .atMost(1, TimeUnit.SECONDS)
+                .untilAsserted(() -> {
+                    assertThat(handle.isCancel()).isFalse();
+                    assertThat(handle.getScheduledTime()).isNotNull();
+                });
+        assertThat(tested.removeJob(handle)).isTrue();
+    }
+
+    private ManageableJobHandle schedule(ZonedDateTime time) {
+        final long timestamp = time.toInstant().toEpochMilli();
+        trigger = new PointInTimeTrigger(timestamp, null, null);
+        jobDetails = JobDetails.builder().build();
+        context = new HttpJobContext(jobDetails);
+        job = new HttpJob(executor);
+        return tested.scheduleJob(job, context, trigger);
+    }
+
+    @Test
+    void testLifeCycle() {
+        assertThat(System.currentTimeMillis())
+                .isLessThanOrEqualTo(tested.getCurrentTime())
+                .isLessThanOrEqualTo(System.currentTimeMillis());
+
+        assertThat(tested.getTimeToNextJob()).isZero();
+
+        assertThat(tested.getTimerJobInstances(0)).isEmpty();
+
+        tested.reset();
+        verify(vertx, never()).close();
+
+        tested.shutdown();
+        verify(vertx).close();
     }
 }

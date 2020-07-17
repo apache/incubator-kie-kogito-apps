@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.vertx.mutiny.core.Vertx;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
@@ -51,22 +51,29 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TimerDelegateJobScheduler.class);
 
-    @Inject
-    Vertx vertx;
+    private HttpJobExecutor httpJobExecutor;
 
-    @Inject
-    HttpJobExecutor httpJobExecutor;
-
-    @Inject
-    VertxTimerServiceScheduler delegate;
+    private VertxTimerServiceScheduler delegate;
 
     protected TimerDelegateJobScheduler() {
     }
 
+    @Inject
     public TimerDelegateJobScheduler(ReactiveJobRepository jobRepository,
-                                     long backoffRetryMillis,
-                                     long maxIntervalLimitToRetryMillis) {
-        super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis);
+                                     @ConfigProperty(name = "kogito.jobs-service.backoffRetryMillis")
+                                             long backoffRetryMillis,
+                                     @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis")
+                                             long maxIntervalLimitToRetryMillis,
+                                     @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes")
+                                             long schedulerChunkInMinutes,
+                                     @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs")
+                                             Boolean forceExecuteExpiredJobs,
+                                     HttpJobExecutor httpJobExecutor,
+                                     VertxTimerServiceScheduler delegate
+    ) {
+        super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis, schedulerChunkInMinutes, forceExecuteExpiredJobs);
+        this.httpJobExecutor = httpJobExecutor;
+        this.delegate = delegate;
     }
 
     @Override

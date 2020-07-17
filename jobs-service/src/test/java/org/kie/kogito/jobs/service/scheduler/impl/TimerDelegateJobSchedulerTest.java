@@ -17,12 +17,15 @@
 package org.kie.kogito.jobs.service.scheduler.impl;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import io.reactivex.Flowable;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
+import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.job.HttpJob;
 import org.kie.kogito.jobs.service.model.job.HttpJobContext;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
@@ -33,16 +36,16 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Job;
 import org.kie.kogito.timer.JobContext;
 import org.kie.kogito.timer.Trigger;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivestreams.Publisher;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -56,9 +59,6 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
 
     @Mock
     private VertxTimerServiceScheduler timer;
-
-    @Captor
-    private ArgumentCaptor<ManageableJobHandle> timeCaptor;
 
     @BeforeEach
     public void setUp() {
@@ -93,5 +93,50 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
                 tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(null).build());
         Flowable.fromPublisher(cancel).subscribe(dummyCallback(), dummyCallback());
         verify(timer, never()).removeJob(any(ManageableJobHandle.class));
+    }
+
+    @Test
+    void testJobSuccessProcessor() {
+        JobExecutionResponse response = getJobResponse();
+        doReturn(ReactiveStreams.of(JobDetails.builder().build()))
+                .when(tested).handleJobExecutionSuccess(response);
+        tested.jobSuccessProcessor(response).thenAccept(r -> assertThat(r).isTrue());
+        verify(tested).handleJobExecutionSuccess(response);
+    }
+
+    @Test
+    void testJobSuccessProcessorFail() {
+        JobExecutionResponse response = getJobResponse();
+        doReturn(ReactiveStreams.failed(new RuntimeException()))
+                .when(tested).handleJobExecutionSuccess(response);
+        tested.jobSuccessProcessor(response).thenAccept(r -> assertThat(r).isFalse());
+        verify(tested).handleJobExecutionSuccess(response);
+    }
+
+    @Test
+    void testJobErrorProcessor() {
+        JobExecutionResponse response = getJobResponse();
+        doReturn(ReactiveStreams.of(JobDetails.builder().build()))
+                .when(tested).handleJobExecutionError(response);
+        tested.jobErrorProcessor(response).thenAccept(r -> assertThat(r).isTrue());
+        verify(tested).handleJobExecutionError(response);
+    }
+
+    @Test
+    void testJobErrorProcessorFail() {
+        JobExecutionResponse response = getJobResponse();
+        doReturn(ReactiveStreams.failed(new RuntimeException()))
+                .when(tested).handleJobExecutionError(response);
+        tested.jobErrorProcessor(response).thenAccept(r -> assertThat(r).isFalse());
+        verify(tested).handleJobExecutionError(response);
+    }
+
+    private JobExecutionResponse getJobResponse() {
+        return JobExecutionResponse.builder()
+                .jobId(UUID.randomUUID().toString())
+                .message("Processing job")
+                .code("123")
+                .now()
+                .build();
     }
 }

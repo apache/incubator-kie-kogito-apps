@@ -27,9 +27,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
@@ -53,42 +50,41 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseTimerJobScheduler.class);
 
-    @ConfigProperty(name = "kogito.jobs-service.backoffRetryMillis")
     long backoffRetryMillis;
 
-    @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis")
     long maxIntervalLimitToRetryMillis;
 
     /**
      * Flag to allow and force a job with expirationTime in the past to be executed immediately. If false an
      * exception will be thrown.
      */
-    @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs")
     Optional<Boolean> forceExecuteExpiredJobs;
 
     /**
      * The current chunk size  in minutes the scheduler handles, it is used to keep a limit number of jobs scheduled
      * in the in-memory scheduler.
      */
-    @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes")
     long schedulerChunkInMinutes;
 
-    @Inject
-    ReactiveJobRepository jobRepository;
+    private ReactiveJobRepository jobRepository;
 
     private final Map<String, ZonedDateTime> schedulerControl;
 
     protected BaseTimerJobScheduler() {
-        this(null, 0, 0);
+        this(null, 0, 0, 0, null);
     }
 
     public BaseTimerJobScheduler(ReactiveJobRepository jobRepository,
                                  long backoffRetryMillis,
-                                 long maxIntervalLimitToRetryMillis) {
+                                 long maxIntervalLimitToRetryMillis,
+                                 long schedulerChunkInMinutes,
+                                 Boolean forceExecuteExpiredJobs) {
         this.jobRepository = jobRepository;
         this.backoffRetryMillis = backoffRetryMillis;
         this.maxIntervalLimitToRetryMillis = maxIntervalLimitToRetryMillis;
         this.schedulerControl = new ConcurrentHashMap<>();
+        this.schedulerChunkInMinutes = schedulerChunkInMinutes;
+        this.forceExecuteExpiredJobs = Optional.ofNullable(forceExecuteExpiredJobs);
     }
 
     @Override
