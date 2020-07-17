@@ -9,10 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>explainability-integrationtests-pmml</artifactId>
   <name>Kogito :: Explainability Integration Tests PMML</name>
-  <properties>
-    <org.kie.version>7.40.0-SNAPSHOT</org.kie.version>
-  </properties>
-
+  
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -28,55 +25,55 @@
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-evaluator-assembler</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-evaluator-core</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-regression-model</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-regression-compiler</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-regression-evaluator</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-drools-common</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-drools-scorecard-model</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-drools-scorecard-compiler</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-models-drools-scorecard-evaluator</artifactId>
-      <version>${org.kie.version}</version>
+      <version>${version.org.kie7}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
