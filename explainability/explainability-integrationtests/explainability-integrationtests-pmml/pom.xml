@@ -22,6 +22,7 @@
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- TODO : move dependencies below to kogito-pmml once DROOLS-5491 is fixed -->
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-pmml-evaluator-assembler</artifactId>
