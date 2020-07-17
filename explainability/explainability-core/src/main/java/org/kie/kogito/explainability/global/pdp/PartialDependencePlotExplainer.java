@@ -41,9 +41,28 @@ import org.slf4j.LoggerFactory;
  */
 public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<PartialDependenceGraph>> {
 
-    private static final int SERIES_LENGTH = 100;
-
     private static final Logger logger = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
+    public static final int DEFAULT_SERIES_LENGTH = 100;
+
+    private final int seriesLength;
+
+    /**
+     * Create a PDP provider.
+     *
+     * @param seriesLength the no. of data points sampled for each given feature.
+     */
+    public PartialDependencePlotExplainer(int seriesLength) {
+        this.seriesLength = seriesLength;
+    }
+
+    /**
+     * Create a PDP provider.
+     *
+     * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
+     */
+    public PartialDependencePlotExplainer() {
+        this(DEFAULT_SERIES_LENGTH);
+    }
 
     @Override
     public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) {
@@ -58,12 +77,12 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
             for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
                 for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
                     double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
-                                                                         featureDistributions.get(featureIndex).getMax(), SERIES_LENGTH);
+                                                                         featureDistributions.get(featureIndex).getMax(), seriesLength);
 
-                    double[][] trainingData = new double[noOfFeatures][SERIES_LENGTH];
+                    double[][] trainingData = new double[noOfFeatures][seriesLength];
                     for (int i = 0; i < noOfFeatures; i++) {
                         double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
-                                                                      featureDistributions.get(i).getStdDev(), SERIES_LENGTH);
+                                                                      featureDistributions.get(i).getStdDev(), seriesLength);
                         trainingData[i] = featureData;
                     }
 
@@ -73,7 +92,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                         double xs = featureXSvalues[i];
                         double[] inputs = new double[noOfFeatures];
                         inputs[featureIndex] = xs;
-                        for (int j = 0; j < SERIES_LENGTH; j++) {
+                        for (int j = 0; j < seriesLength; j++) {
                             for (int f = 0; f < noOfFeatures; f++) {
                                 if (f != featureIndex) {
                                     inputs[f] = trainingData[f][j];
@@ -86,7 +105,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                         // prediction requests are batched per value of feature 'Xs' under analysis
                         for (PredictionOutput predictionOutput : model.predict(predictionInputs)) {
                             Output output = predictionOutput.getOutputs().get(outputIndex);
-                            marginalImpacts[i] += output.getScore() / (double) SERIES_LENGTH;
+                            marginalImpacts[i] += output.getScore() / (double) seriesLength;
                         }
                     }
                     PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),
