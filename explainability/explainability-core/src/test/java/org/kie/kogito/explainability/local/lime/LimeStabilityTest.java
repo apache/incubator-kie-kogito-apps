@@ -47,7 +47,7 @@ class LimeStabilityTest {
     }
 
     @Test
-    void testStabilityWithNumericData() throws Exception {
+    void testStabilityWithNumericData() {
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
@@ -73,7 +73,7 @@ class LimeStabilityTest {
     }
 
     @Test
-    void testStabilityWithTextData() throws Exception {
+    void testStabilityWithTextData() {
         PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 4; i++) {

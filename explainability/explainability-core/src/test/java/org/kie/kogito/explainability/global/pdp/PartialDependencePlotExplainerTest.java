@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class PartialDependencePlotExplainerTest {
 
     @Test
-    void testPdpTextClassifier() throws Exception {
+    void testPdpTextClassifier() {
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
         PredictionProvider modelInfo = TestUtils.getDummyTextClassifier();
         PredictionProviderMetadata metadata = new PredictionProviderMetadata() {

@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TrafficViolationDmnLimeExplainerTest {
 
     @Test
-    void testTrafficViolationDMNExplanation() throws Exception {
+    void testTrafficViolationDMNExplanation() {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 

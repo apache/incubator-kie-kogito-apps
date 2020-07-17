@@ -46,7 +46,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testMapOneFeatureToOutputRegression() throws Exception {
+    void testMapOneFeatureToOutputRegression() {
         int idx = 1;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
@@ -70,7 +70,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testUnusedFeatureRegression() throws Exception {
+    void testUnusedFeatureRegression() {
         int idx = 2;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
@@ -95,7 +95,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testMapOneFeatureToOutputClassification() throws Exception {
+    void testMapOneFeatureToOutputClassification() {
         int idx = 1;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 3));
@@ -116,7 +116,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testTextSpamClassification() throws Exception {
+    void testTextSpamClassification() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f1","we go here and there"));
         features.add(FeatureFactory.newTextFeature("f2", "please give me some money"));
@@ -137,7 +137,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testUnusedFeatureClassification() throws Exception {
+    void testUnusedFeatureClassification() {
         int idx = 2;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1",6));

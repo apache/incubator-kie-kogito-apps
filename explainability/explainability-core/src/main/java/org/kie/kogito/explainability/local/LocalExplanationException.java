@@ -18,10 +18,13 @@ package org.kie.kogito.explainability.local;
 /**
  * Exception representing errors happened during the process of generating a local explanation.
  */
-public class LocalExplanationException extends Exception {
+public class LocalExplanationException extends RuntimeException {
 
     public LocalExplanationException(String message) {
         super(message);
     }
 
+    public LocalExplanationException(Exception e) {
+        super(e);
+    }
 }

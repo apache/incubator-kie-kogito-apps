@@ -41,7 +41,7 @@ class LimeExplainerTest {
     }
 
     @Test
-    void testEmptyPrediction() throws Exception {
+    void testEmptyPrediction() {
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionOutput output = mock(PredictionOutput.class);
         PredictionInput input = mock(PredictionInput.class);
@@ -52,7 +52,7 @@ class LimeExplainerTest {
     }
 
     @Test
-    void testNonEmptyInput() throws Exception {
+    void testNonEmptyInput() {
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionOutput output = mock(PredictionOutput.class);
         List<Feature> features = new LinkedList<>();
@@ -67,7 +67,7 @@ class LimeExplainerTest {
     }
 
     @Test
-    void testNonEmptyInputAndOutputWithTextClassifier() throws Exception {
+    void testNonEmptyInputAndOutputWithTextClassifier() {
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         List<Feature> features = new LinkedList<>();
         for (int i = 0; i < 4; i++) {

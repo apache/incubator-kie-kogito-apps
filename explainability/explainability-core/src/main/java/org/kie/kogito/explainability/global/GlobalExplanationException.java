@@ -18,7 +18,7 @@ package org.kie.kogito.explainability.global;
 /**
  * Exception representing errors happened during the process of generating a global explanation.
  */
-public class GlobalExplanationException extends Exception {
+public class GlobalExplanationException extends RuntimeException {
 
     public GlobalExplanationException(Exception e) {
         super(e);

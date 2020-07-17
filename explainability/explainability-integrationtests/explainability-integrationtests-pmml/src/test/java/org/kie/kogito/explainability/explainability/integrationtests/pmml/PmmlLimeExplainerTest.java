@@ -60,7 +60,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLRegression() throws Exception {
+    void testPMMLRegression() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("sepalLength", 6.9));
         features.add(FeatureFactory.newNumericalFeature("sepalWidth", 3.1));
@@ -94,7 +94,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled
-    void testPMMLRegressionCategorical() throws Exception {
+    void testPMMLRegressionCategorical() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
         features.add(FeatureFactory.newTextFeature("mapY", "classB"));
@@ -123,7 +123,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled()
-    void testPMMLScorecardCategorical() throws Exception {
+    void testPMMLScorecardCategorical() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));
@@ -159,7 +159,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLCompoundScorecard() throws Exception {
+    void testPMMLCompoundScorecard() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("input1", -50));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));

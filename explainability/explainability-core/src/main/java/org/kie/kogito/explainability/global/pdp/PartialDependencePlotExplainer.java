@@ -46,7 +46,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
     private static final Logger logger = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
 
     @Override
-    public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws GlobalExplanationException {
+    public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) {
         long start = System.currentTimeMillis();
 
         Collection<PartialDependenceGraph> pdps = new LinkedList<>();

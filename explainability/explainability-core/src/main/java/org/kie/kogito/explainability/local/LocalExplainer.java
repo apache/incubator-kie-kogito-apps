@@ -25,5 +25,5 @@ import org.kie.kogito.explainability.model.PredictionProvider;
  */
 public interface LocalExplainer<T> {
 
-    T explain(Prediction prediction, PredictionProvider model) throws LocalExplanationException;
+    T explain(Prediction prediction, PredictionProvider model);
 }

@@ -67,89 +67,93 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
     }
 
     @Override
-    public Saliency explain(Prediction prediction, PredictionProvider model) throws LocalExplanationException {
+    public Saliency explain(Prediction prediction, PredictionProvider model) {
 
         long start = System.currentTimeMillis();
 
         List<FeatureImportance> saliencies = new LinkedList<>();
-        PredictionInput originalInput = prediction.getInput();
-        List<Feature> inputFeatures = originalInput.getFeatures();
-        PredictionInput targetInput = DataUtils.linearizeInputs(List.of(originalInput)).get(0);
-        List<Feature> linearizedTargetInputFeatures = targetInput.getFeatures();
-        List<Output> actualOutputs = prediction.getOutput().getOutputs();
-        int noOfInputFeatures = inputFeatures.size();
-        int noOfOutputFeatures = linearizedTargetInputFeatures.size();
-        double[] weights = new double[noOfOutputFeatures];
+        try {
+            PredictionInput originalInput = prediction.getInput();
+            List<Feature> inputFeatures = originalInput.getFeatures();
+            PredictionInput targetInput = DataUtils.linearizeInputs(List.of(originalInput)).get(0);
+            List<Feature> linearizedTargetInputFeatures = targetInput.getFeatures();
+            List<Output> actualOutputs = prediction.getOutput().getOutputs();
+            int noOfInputFeatures = inputFeatures.size();
+            int noOfOutputFeatures = linearizedTargetInputFeatures.size();
+            double[] weights = new double[noOfOutputFeatures];
 
-        for (int o = 0; o < actualOutputs.size(); o++) {
-            boolean separableDataset = false;
+            for (int o = 0; o < actualOutputs.size(); o++) {
+                boolean separableDataset = false;
 
-            List<PredictionInput> perturbedInputs = new LinkedList<>();
-            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+                List<PredictionInput> perturbedInputs = new LinkedList<>();
+                List<PredictionOutput> predictionOutputs = new LinkedList<>();
 
-            boolean classification = false;
-            Output currentOutput = actualOutputs.get(o);
-            if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
-                Map<Double, Long> rawClassesBalance = new HashMap<>();
-                int tries = 3;
-                while (!separableDataset && tries > 0) {
-                    List<PredictionInput> perturbed = getPerturbedInputs(originalInput, noOfInputFeatures, noOfSamples);
-                    List<PredictionOutput> perturbedOutputs = model.predict(perturbed);
+                boolean classification = false;
+                Output currentOutput = actualOutputs.get(o);
+                if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
+                    Map<Double, Long> rawClassesBalance = new HashMap<>();
+                    int tries = 3;
+                    while (!separableDataset && tries > 0) {
+                        List<PredictionInput> perturbed = getPerturbedInputs(originalInput, noOfInputFeatures, noOfSamples);
+                        List<PredictionOutput> perturbedOutputs = model.predict(perturbed);
 
-                    Value<?> fv = currentOutput.getValue();
+                        Value<?> fv = currentOutput.getValue();
 
-                    int finalO = o;
-                    rawClassesBalance = perturbedOutputs.stream().map(p -> p.getOutputs().get(finalO)).map(output -> (Type.NUMBER
-                            .equals(output.getType())) ? output.getValue().asNumber() : (((output.getValue().getUnderlyingObject() == null
-                            && fv.getUnderlyingObject() == null) || (output.getValue().getUnderlyingObject() != null && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
-                            .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting()));
-                    logger.debug("raw samples per class: {}", rawClassesBalance);
+                        int finalO = o;
+                        rawClassesBalance = perturbedOutputs.stream().map(p -> p.getOutputs().get(finalO)).map(output -> (Type.NUMBER
+                                .equals(output.getType())) ? output.getValue().asNumber() : (((output.getValue().getUnderlyingObject() == null
+                                && fv.getUnderlyingObject() == null) || (output.getValue().getUnderlyingObject() != null && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
+                                .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting()));
+                        logger.debug("raw samples per class: {}", rawClassesBalance);
 
-                    if (rawClassesBalance.size() > 1) {
-                        Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
-                        if ((double) max / (double) perturbed.size() < 0.99) {
-                            separableDataset = true;
-                            classification = rawClassesBalance.size() == 2;
+                        if (rawClassesBalance.size() > 1) {
+                            Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
+                            if ((double) max / (double) perturbed.size() < 0.99) {
+                                separableDataset = true;
+                                classification = rawClassesBalance.size() == 2;
+                            } else {
+                                tries--;
+                            }
                         } else {
                             tries--;
                         }
-                    } else {
-                        tries--;
+                        if (tries == 0 || separableDataset) {
+                            perturbedInputs.addAll(perturbed);
+                            predictionOutputs.addAll(perturbedOutputs);
+                        }
                     }
-                    if (tries == 0 || separableDataset) {
-                        perturbedInputs.addAll(perturbed);
-                        predictionOutputs.addAll(perturbedOutputs);
+                    if (!separableDataset) {
+                        throw new DatasetNotSeparableException(currentOutput, rawClassesBalance);
                     }
-                }
-                if (!separableDataset) {
-                    throw new DatasetNotSeparableException(currentOutput, rawClassesBalance);
-                }
-                List<Output> predictedOutputs = new LinkedList<>();
-                for (int i = 0; i < perturbedInputs.size(); i++) {
-                    Output output = predictionOutputs.get(i).getOutputs().get(o);
-                    predictedOutputs.add(output);
-                }
+                    List<Output> predictedOutputs = new LinkedList<>();
+                    for (int i = 0; i < perturbedInputs.size(); i++) {
+                        Output output = predictionOutputs.get(i).getOutputs().get(o);
+                        predictedOutputs.add(output);
+                    }
 
-                Output originalOutput = prediction.getOutput().getOutputs().get(o);
+                    Output originalOutput = prediction.getOutput().getOutputs().get(o);
 
-                DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, predictedOutputs, targetInput, originalOutput);
-                Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
+                    DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, predictedOutputs, targetInput, originalOutput);
+                    Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
-                double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
+                    double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
 
-                LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), classification);
-                linearModel.fit(trainingSet, sampleWeights);
-                for (int i = 0; i < weights.length; i++) {
-                    weights[i] += linearModel.getWeights()[i] / (double) actualOutputs.size();
+                    LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), classification);
+                    linearModel.fit(trainingSet, sampleWeights);
+                    for (int i = 0; i < weights.length; i++) {
+                        weights[i] += linearModel.getWeights()[i] / (double) actualOutputs.size();
+                    }
+                    logger.debug("weights updated for output {}", currentOutput);
+                } else {
+                    logger.debug("skipping explanation of empty output {}", currentOutput);
                 }
-                logger.debug("weights updated for output {}", currentOutput);
-            } else {
-                logger.debug("skipping explanation of empty output {}", currentOutput);
             }
-        }
-        for (int i = 0; i < weights.length; i++) {
-            FeatureImportance featureImportance = new FeatureImportance(linearizedTargetInputFeatures.get(i), weights[i]);
-            saliencies.add(featureImportance);
+            for (int i = 0; i < weights.length; i++) {
+                FeatureImportance featureImportance = new FeatureImportance(linearizedTargetInputFeatures.get(i), weights[i]);
+                saliencies.add(featureImportance);
+            }
+        } catch (Exception e) {
+            throw new LocalExplanationException(e);
         }
         long end = System.currentTimeMillis();
         logger.debug("explanation time: {}ms", (end - start));

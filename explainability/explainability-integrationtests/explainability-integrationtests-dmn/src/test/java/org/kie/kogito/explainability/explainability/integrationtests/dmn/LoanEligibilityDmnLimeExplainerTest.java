@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class LoanEligibilityDmnLimeExplainerTest {
 
     @Test
-    void testLoanEligibilityDMNExplanation() throws Exception {
+    void testLoanEligibilityDMNExplanation() {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 

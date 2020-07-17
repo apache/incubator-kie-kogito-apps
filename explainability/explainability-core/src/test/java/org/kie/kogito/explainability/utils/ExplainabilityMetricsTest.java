@@ -78,7 +78,7 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    void testFidelity() throws Exception {
+    void testFidelity() {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(100, 1);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
