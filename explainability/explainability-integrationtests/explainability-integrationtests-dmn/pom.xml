@@ -25,7 +25,7 @@
     <!-- DMN testing -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-scenario-simulation</artifactId>
+      <artifactId>kogito-dmn</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
