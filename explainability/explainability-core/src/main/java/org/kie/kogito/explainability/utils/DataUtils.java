@@ -197,7 +197,7 @@ public class DataUtils {
                 // sample from normal distribution and center around feature value
                 int pickIdx = random.nextInt(noOfSamples - 1);
                 double v = DataUtils.generateData(0, 1, noOfSamples)[pickIdx];
-                if (ov != 0) {
+                if (ov != 0d) {
                     v = v * ov + ov;
                 }
                 if (intValue) {
