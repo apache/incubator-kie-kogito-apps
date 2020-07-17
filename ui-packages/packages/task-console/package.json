@@ -35,7 +35,7 @@
     "ajv": "6.12.2",
     "uniforms": "3.0.0-alpha.4",
     "uniforms-bridge-json-schema": "3.0.0-alpha.4",
-    "uniforms-patternfly": "0.0.11"
+    "uniforms-patternfly": "0.1.4"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
