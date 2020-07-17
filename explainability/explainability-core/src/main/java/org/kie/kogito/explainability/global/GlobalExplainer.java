@@ -18,8 +18,9 @@ package org.kie.kogito.explainability.global;
 import org.kie.kogito.explainability.model.BlackBoxModel;
 
 /**
- * A global explainability method
- * @param <T>
+ * A global explainability method.
+ *
+ * @param <T> the type of global explanation generated
  */
 public interface GlobalExplainer<T> {
 

@@ -16,14 +16,13 @@
 package org.kie.kogito.explainability.global.pdp;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.DoubleStream;
 
 import org.kie.kogito.explainability.model.BlackBoxModel;
-import org.kie.kogito.explainability.model.DataSeries;
+import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -35,22 +34,22 @@ class PartialDependencePlotExplainerTest {
     void testPdpTextClassifier() throws Exception {
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
         BlackBoxModel modelInfo = TestUtils.getDummyTextClassifier();
-        Collection<DataSeries> pdps = partialDependencePlotProvider.explain(modelInfo);
+        Collection<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo);
         assertNotNull(pdps);
-        for (DataSeries dataSeries : pdps) {
-            writeAsciiGraph(dataSeries, new PrintWriter(new File("target/pdp" + dataSeries.getFeature().getName() + ".txt")));
+        for (PartialDependenceGraph partialDependenceGraph : pdps) {
+            writeAsciiGraph(partialDependenceGraph, new PrintWriter(new File("target/pdp" + partialDependenceGraph.getFeature().getName() + ".txt")));
         }
     }
 
-    private void writeAsciiGraph(DataSeries dataSeries, PrintWriter out) {
-        double[] outputs = dataSeries.getY();
+    private void writeAsciiGraph(PartialDependenceGraph partialDependenceGraph, PrintWriter out) {
+        double[] outputs = partialDependenceGraph.getY();
         double max = DoubleStream.of(outputs).max().getAsDouble();
         double min = DoubleStream.of(outputs).min().getAsDouble();
         outputs = Arrays.stream(outputs).map(d -> d * max / min).toArray();
         double curMax = 1 + DoubleStream.of(outputs).max().getAsDouble();
         ;
         int tempIdx = -1;
-        for (int k = 0; k < dataSeries.getX().length; k++) {
+        for (int k = 0; k < partialDependenceGraph.getX().length; k++) {
             double tempMax = -Integer.MAX_VALUE;
             for (int j = 0; j < outputs.length; j++) {
                 double v = outputs[j];
@@ -59,14 +58,14 @@ class PartialDependencePlotExplainerTest {
                     tempIdx = j;
                 }
             }
-            writeDot(dataSeries, tempIdx, out);
+            writeDot(partialDependenceGraph, tempIdx, out);
             curMax = tempMax;
         }
         out.flush();
         out.close();
     }
 
-    private void writeDot(DataSeries data, int i, PrintWriter out) {
+    private void writeDot(PartialDependenceGraph data, int i, PrintWriter out) {
         for (int j = 0; j < data.getX()[i]; j++) {
             out.print(" ");
         }

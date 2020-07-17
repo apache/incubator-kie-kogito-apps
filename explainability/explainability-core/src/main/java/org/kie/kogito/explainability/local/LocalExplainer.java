@@ -19,8 +19,9 @@ import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.Prediction;
 
 /**
- * A local explainability method
- * @param <T>
+ * A local explainability method.
+ *
+ * @param <T> the type of local explanation generated
  */
 public interface LocalExplainer<T> {
 

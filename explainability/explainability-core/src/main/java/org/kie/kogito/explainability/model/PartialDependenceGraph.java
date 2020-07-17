@@ -15,13 +15,16 @@
  */
 package org.kie.kogito.explainability.model;
 
-public class DataSeries {
+/**
+ * A series of two dimensional points explaining partial dependency between a {@link Feature} and a model output.
+ */
+public class PartialDependenceGraph {
 
     private final double[] x;
     private final double[] y;
     private final Feature feature;
 
-    public DataSeries(Feature feature, double[] x, double[] y) {
+    public PartialDependenceGraph(Feature feature, double[] x, double[] y) {
         this.feature = feature;
         this.x = x;
         this.y = y;

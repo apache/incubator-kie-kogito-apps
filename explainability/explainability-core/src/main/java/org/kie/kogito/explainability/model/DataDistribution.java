@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Information about distribution of data used for training a model
+ * Information about distribution of data used for training a model.
  */
 public class DataDistribution {
 

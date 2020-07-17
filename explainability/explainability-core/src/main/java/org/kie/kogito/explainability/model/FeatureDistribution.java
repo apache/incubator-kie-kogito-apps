@@ -16,7 +16,7 @@
 package org.kie.kogito.explainability.model;
 
 /**
- * the data distribution for a given feature
+ * The data distribution for a given feature.
  */
 public class FeatureDistribution {
 

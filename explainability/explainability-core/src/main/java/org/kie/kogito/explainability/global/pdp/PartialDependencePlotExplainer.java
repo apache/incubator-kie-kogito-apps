@@ -23,7 +23,7 @@ import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.BlackBoxModel;
 import org.kie.kogito.explainability.model.DataDistribution;
-import org.kie.kogito.explainability.model.DataSeries;
+import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -38,17 +38,17 @@ import org.slf4j.LoggerFactory;
  * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
  * stdDev).
  */
-public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<DataSeries>> {
+public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<PartialDependenceGraph>> {
 
     private static final int SERIES_LENGTH = 100;
 
     private static final Logger logger = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
 
     @Override
-    public Collection<DataSeries> explain(BlackBoxModel model) throws GlobalExplanationException {
+    public Collection<PartialDependenceGraph> explain(BlackBoxModel model) throws GlobalExplanationException {
         long start = System.currentTimeMillis();
 
-        Collection<DataSeries> pdps = new LinkedList<>();
+        Collection<PartialDependenceGraph> pdps = new LinkedList<>();
         try {
             DataDistribution dataDistribution = model.getDataDistribution();
             int noOfFeatures = model.getInputShape().getFeatures().size();
@@ -88,9 +88,9 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                             marginalImpacts[i] += output.getScore() / (double) SERIES_LENGTH;
                         }
                     }
-                    DataSeries dataSeries = new DataSeries(model.getInputShape().getFeatures().get(featureIndex),
-                                                           featureXSvalues, marginalImpacts);
-                    pdps.add(dataSeries);
+                    PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(model.getInputShape().getFeatures().get(featureIndex),
+                                                                                               featureXSvalues, marginalImpacts);
+                    pdps.add(partialDependenceGraph);
                 }
             }
         } catch (Exception e) {

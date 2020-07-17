@@ -16,7 +16,7 @@
 package org.kie.kogito.explainability.model;
 
 /**
- * Allowed data types
+ * Allowed data types.
  */
 public enum Type {
 

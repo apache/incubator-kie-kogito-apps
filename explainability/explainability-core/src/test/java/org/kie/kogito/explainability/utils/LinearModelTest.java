@@ -33,7 +33,7 @@ class LinearModelTest {
     private final static SecureRandom random = new SecureRandom();
 
     @Test
-    public void testEmptyFitClassificationDoesNothing() {
+    void testEmptyFitClassificationDoesNothing() {
         int size = 10;
         LinearModel linearModel = new LinearModel(size, true);
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
@@ -42,7 +42,7 @@ class LinearModelTest {
     }
 
     @Test
-    public void testEmptyFitRegressionDoesNothing() {
+    void testEmptyFitRegressionDoesNothing() {
         int size = 10;
         LinearModel linearModel = new LinearModel(size, false);
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
@@ -51,7 +51,7 @@ class LinearModelTest {
     }
 
     @Test
-    public void testRegressionFit() {
+    void testRegressionFit() {
         int size = 10;
         LinearModel linearModel = new LinearModel(size, false);
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
@@ -67,7 +67,7 @@ class LinearModelTest {
     }
 
     @Test
-    public void testClassificationFit() {
+    void testClassificationFit() {
         int size = 10;
         LinearModel linearModel = new LinearModel(size, true);
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();

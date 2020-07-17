@@ -51,7 +51,7 @@ class DatasetEncoder {
     }
 
     /**
-     * get the input and output predictions transformed into a numerical training set
+     * Get the input and output predictions transformed into a numerical training set.
      *
      * @return a numerical training set
      */
