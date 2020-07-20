@@ -30,6 +30,7 @@ import org.kie.kogito.trusty.storage.api.model.TypedValue;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -55,12 +56,14 @@ public class TraceEventTestUtils {
     }
 
     public static <T> void assertList(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor, Comparator<? super T> comparator) {
-        if (expected == null && actual == null) {
+        if (expected == null && actual == null
+                || expected == null && actual.isEmpty()
+                || actual == null && expected.isEmpty()) {
             return;
         }
-        if (expected == null || actual == null) {
-            fail();
-        }
+
+        assertNotNull(expected);
+        assertNotNull(actual);
         assertSame(expected.size(), actual.size());
 
         List<T> sortedExpected = expected.stream().sorted(comparator).collect(Collectors.toList());
