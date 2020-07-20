@@ -11,7 +11,7 @@ import {
 import { SearchIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import ExecutionStatus from '../../Atoms/ExecutionStatus/ExecutionStatus';
 import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
-import skeletonRows from '../../Molecules/SkeletonRows/SkeletonRows';
+import skeletonRows from '../../Molecules/skeletonRows/skeletonRows';
 import { IExecution, IExecutions, RemoteData } from '../../../types';
 
 type ExecutionTableProps = {

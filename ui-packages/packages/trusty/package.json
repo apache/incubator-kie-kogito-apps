@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@kogito-apps/common": "1.0.0",
+    "@testing-library/react": "^10.4.7",
     "date-fns": "^2.14.0",
     "flatpickr": "^4.6.3",
     "sass": "^1.26.10",

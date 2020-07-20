@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Audit top toolbar renders correctly 1`] = `
+<DataToolbar
+  id="audit-overview-top-toolbar"
+>
+  <DataToolbarContent
+    breakpointMods={Array []}
+    isExpanded={false}
+    showClearFiltersButton={false}
+  >
+    <DataToolbarItem
+      variant="label"
+    >
+      Search
+    </DataToolbarItem>
+    <DataToolbarItem>
+      <InputGroup>
+        <ForwardRef
+          aria-label="search executions"
+          id="audit-search-input"
+          name="audit-search-input"
+          onKeyDown={[Function]}
+          placeholder="Search by ID"
+          type="search"
+        />
+        <Component
+          aria-label="search button for search input"
+          id="audit-search"
+          onClick={[Function]}
+          variant="control"
+        >
+          <SearchIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+            title={null}
+          />
+        </Component>
+      </InputGroup>
+    </DataToolbarItem>
+    <DataToolbarItem
+      variant="label"
+    >
+      From
+    </DataToolbarItem>
+    <DataToolbarItem>
+      <DatePicker
+        fromDate="2020-01-01"
+        id="audit-from-date"
+        label="Starting date"
+        maxDate="2020-02-01"
+        onDateUpdate={[MockFunction]}
+        value="2020-01-01"
+      />
+    </DataToolbarItem>
+    <DataToolbarItem
+      variant="label"
+    >
+      To
+    </DataToolbarItem>
+    <DataToolbarItem>
+      <DatePicker
+        id="audit-to-date"
+        label="Ending date"
+        minDate="2020-01-01"
+        onDateUpdate={[MockFunction]}
+        value="2020-02-01"
+      />
+    </DataToolbarItem>
+    <DataToolbarItem>
+      <DataToolbarItem>
+        <Component
+          aria-label="Refresh"
+          id="executions-refresh"
+          onClick={[Function]}
+          title="Refresh"
+          variant="plain"
+        >
+          <SyncIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+            title={null}
+          />
+        </Component>
+      </DataToolbarItem>
+    </DataToolbarItem>
+    <DataToolbarItem
+      variant="pagination"
+    >
+      <PaginationContainer
+        onSetPage={[MockFunction]}
+        onSetPageSize={[MockFunction]}
+        page={1}
+        pageSize={10}
+        paginationId="audit-overview-top-pagination"
+        total={20}
+      />
+    </DataToolbarItem>
+  </DataToolbarContent>
+</DataToolbar>
+`;

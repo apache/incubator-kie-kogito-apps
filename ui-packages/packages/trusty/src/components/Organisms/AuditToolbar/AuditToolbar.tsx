@@ -106,6 +106,7 @@ export const AuditToolbarTop = (props: AuditToolbarCompleteProps) => {
         <DataToolbarItem>
           <DataToolbarItem>
             <Button
+              id="executions-refresh"
               variant="plain"
               title="Refresh"
               aria-label="Refresh"
