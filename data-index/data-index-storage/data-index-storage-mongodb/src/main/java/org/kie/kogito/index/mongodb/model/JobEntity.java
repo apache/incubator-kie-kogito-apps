@@ -23,35 +23,155 @@ import org.bson.codecs.pojo.annotations.BsonId;
 public class JobEntity {
 
     @BsonId
-    public String id;
+    String id;
 
-    public String processId;
+    String processId;
 
-    public String processInstanceId;
+    String processInstanceId;
 
-    public String rootProcessId;
+    String rootProcessId;
 
-    public String rootProcessInstanceId;
+    String rootProcessInstanceId;
 
-    public Long expirationTime;
+    Long expirationTime;
 
-    public Integer priority;
+    Integer priority;
 
-    public String callbackEndpoint;
+    String callbackEndpoint;
 
-    public Long repeatInterval;
+    Long repeatInterval;
 
-    public Integer repeatLimit;
+    Integer repeatLimit;
 
-    public String scheduledId;
+    String scheduledId;
 
-    public Integer retries;
+    Integer retries;
 
-    public String status;
+    String status;
 
-    public Long lastUpdate;
+    Long lastUpdate;
 
-    public Integer executionCounter;
+    Integer executionCounter;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getRootProcessId() {
+        return rootProcessId;
+    }
+
+    public void setRootProcessId(String rootProcessId) {
+        this.rootProcessId = rootProcessId;
+    }
+
+    public String getRootProcessInstanceId() {
+        return rootProcessInstanceId;
+    }
+
+    public void setRootProcessInstanceId(String rootProcessInstanceId) {
+        this.rootProcessInstanceId = rootProcessInstanceId;
+    }
+
+    public Long getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(Long expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public String getCallbackEndpoint() {
+        return callbackEndpoint;
+    }
+
+    public void setCallbackEndpoint(String callbackEndpoint) {
+        this.callbackEndpoint = callbackEndpoint;
+    }
+
+    public Long getRepeatInterval() {
+        return repeatInterval;
+    }
+
+    public void setRepeatInterval(Long repeatInterval) {
+        this.repeatInterval = repeatInterval;
+    }
+
+    public Integer getRepeatLimit() {
+        return repeatLimit;
+    }
+
+    public void setRepeatLimit(Integer repeatLimit) {
+        this.repeatLimit = repeatLimit;
+    }
+
+    public String getScheduledId() {
+        return scheduledId;
+    }
+
+    public void setScheduledId(String scheduledId) {
+        this.scheduledId = scheduledId;
+    }
+
+    public Integer getRetries() {
+        return retries;
+    }
+
+    public void setRetries(Integer retries) {
+        this.retries = retries;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Integer getExecutionCounter() {
+        return executionCounter;
+    }
+
+    public void setExecutionCounter(Integer executionCounter) {
+        this.executionCounter = executionCounter;
+    }
 
     @Override
     public boolean equals(Object o) {

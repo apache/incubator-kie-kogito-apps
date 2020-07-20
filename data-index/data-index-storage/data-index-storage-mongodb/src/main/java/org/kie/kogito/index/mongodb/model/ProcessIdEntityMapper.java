@@ -32,14 +32,14 @@ public class ProcessIdEntityMapper implements MongoEntityMapper<String, ProcessI
     @Override
     public ProcessIdEntity mapToEntity(String key, String value) {
         ProcessIdEntity processIdEntity = new ProcessIdEntity();
-        processIdEntity.processId = key;
-        processIdEntity.fullTypeName = value;
+        processIdEntity.setProcessId(key);
+        processIdEntity.setFullTypeName(value);
         return processIdEntity;
     }
 
     @Override
     public String mapToModel(ProcessIdEntity entity) {
-        return entity.fullTypeName;
+        return entity.getFullTypeName();
     }
 
     @Override

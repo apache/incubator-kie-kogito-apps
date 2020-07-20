@@ -25,6 +25,7 @@ import java.util.Set;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
@@ -55,6 +56,10 @@ class ProcessInstanceEntityMapperTest {
         String processInstanceErrorMessage = "testProcessInstanceErrorMessage";
         String processInstanceErrorNodeDefinitionId = "testProcessInstanceErrorNodeDefinitionId";
 
+        String milestoneId = "testMilestone";
+        String milestoneName = "testMilestoneName";
+        String milestoneStatus = "testMilestoneStatus";
+
         String testId = "testId";
         String processId = "testProcessId";
         Set<String> roles = Set.of("testRoles");
@@ -84,6 +89,11 @@ class ProcessInstanceEntityMapperTest {
         processInstanceError.setMessage(processInstanceErrorMessage);
         processInstanceError.setNodeDefinitionId(processInstanceErrorNodeDefinitionId);
 
+        Milestone milestone = new Milestone();
+        milestone.setId(milestoneId);
+        milestone.setName(milestoneName);
+        milestone.setStatus(milestoneStatus);
+
         processInstance = new ProcessInstance();
         processInstance.setId(testId);
         processInstance.setProcessId(processId);
@@ -102,38 +112,45 @@ class ProcessInstanceEntityMapperTest {
         processInstance.setAddons(addons);
         processInstance.setLastUpdate(time);
         processInstance.setBusinessKey(businessKey);
+        processInstance.setMilestones(List.of(milestone));
 
         ProcessInstanceEntity.NodeInstanceEntity nodeInstanceEntity = new ProcessInstanceEntity.NodeInstanceEntity();
-        nodeInstanceEntity.id = nodeInstanceId;
-        nodeInstanceEntity.definitionId = nodeInstanceDefinitionId;
-        nodeInstanceEntity.enter = zonedDateTimeToInstant(time);
-        nodeInstanceEntity.exit = zonedDateTimeToInstant(time);
-        nodeInstanceEntity.name = nodeInstanceName;
-        nodeInstanceEntity.nodeId = nodeInstanceNodeId;
-        nodeInstanceEntity.type = nodeInstanceType;
+        nodeInstanceEntity.setId(nodeInstanceId);
+        nodeInstanceEntity.setDefinitionId(nodeInstanceDefinitionId);
+        nodeInstanceEntity.setEnter(zonedDateTimeToInstant(time));
+        nodeInstanceEntity.setExit(zonedDateTimeToInstant(time));
+        nodeInstanceEntity.setName(nodeInstanceName);
+        nodeInstanceEntity.setNodeId(nodeInstanceNodeId);
+        nodeInstanceEntity.setType(nodeInstanceType);
 
         ProcessInstanceEntity.ProcessInstanceErrorEntity processInstanceErrorEntity = new ProcessInstanceEntity.ProcessInstanceErrorEntity();
-        processInstanceErrorEntity.message = processInstanceErrorMessage;
-        processInstanceErrorEntity.nodeDefinitionId = processInstanceErrorNodeDefinitionId;
+        processInstanceErrorEntity.setMessage(processInstanceErrorMessage);
+        processInstanceErrorEntity.setNodeDefinitionId(processInstanceErrorNodeDefinitionId);
+
+        ProcessInstanceEntity.MilestoneEntity milestoneEntity = new ProcessInstanceEntity.MilestoneEntity();
+        milestoneEntity.setId(milestoneId);
+        milestoneEntity.setName(milestoneName);
+        milestoneEntity.setStatus(milestoneStatus);
 
         processInstanceEntity = new ProcessInstanceEntity();
-        processInstanceEntity.id = testId;
-        processInstanceEntity.processId = processId;
-        processInstanceEntity.roles = roles;
-        processInstanceEntity.variables = jsonNodeToDocument(variables);
-        processInstanceEntity.endpoint = endpoint;
-        processInstanceEntity.nodes = List.of(nodeInstanceEntity);
-        processInstanceEntity.state = state;
-        processInstanceEntity.start = zonedDateTimeToInstant(time);
-        processInstanceEntity.end = zonedDateTimeToInstant(time);
-        processInstanceEntity.rootProcessId = rootProcessId;
-        processInstanceEntity.rootProcessInstanceId = rootProcessInstanceId;
-        processInstanceEntity.parentProcessInstanceId = parentProcessInstanceId;
-        processInstanceEntity.processName = processName;
-        processInstanceEntity.error = processInstanceErrorEntity;
-        processInstanceEntity.addons = addons;
-        processInstanceEntity.lastUpdate = zonedDateTimeToInstant(time);
-        processInstanceEntity.businessKey = businessKey;
+        processInstanceEntity.setId(testId);
+        processInstanceEntity.setProcessId(processId);
+        processInstanceEntity.setRoles(roles);
+        processInstanceEntity.setVariables(jsonNodeToDocument(variables));
+        processInstanceEntity.setEndpoint(endpoint);
+        processInstanceEntity.setNodes(List.of(nodeInstanceEntity));
+        processInstanceEntity.setState(state);
+        processInstanceEntity.setStart(zonedDateTimeToInstant(time));
+        processInstanceEntity.setEnd(zonedDateTimeToInstant(time));
+        processInstanceEntity.setRootProcessId(rootProcessId);
+        processInstanceEntity.setRootProcessInstanceId(rootProcessInstanceId);
+        processInstanceEntity.setParentProcessInstanceId(parentProcessInstanceId);
+        processInstanceEntity.setProcessName(processName);
+        processInstanceEntity.setError(processInstanceErrorEntity);
+        processInstanceEntity.setAddons(addons);
+        processInstanceEntity.setLastUpdate(zonedDateTimeToInstant(time));
+        processInstanceEntity.setBusinessKey(businessKey);
+        processInstanceEntity.setMilestones(List.of(milestoneEntity));
     }
 
     @Test

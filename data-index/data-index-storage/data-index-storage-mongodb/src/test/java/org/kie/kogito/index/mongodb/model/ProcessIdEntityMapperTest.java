@@ -38,8 +38,8 @@ class ProcessIdEntityMapperTest {
         ProcessIdEntity result = processIdEntityMapper.mapToEntity(testId, testValue);
 
         ProcessIdEntity processIdEntity = new ProcessIdEntity();
-        processIdEntity.processId = testId;
-        processIdEntity.fullTypeName = testValue;
+        processIdEntity.setProcessId(testId);
+        processIdEntity.setFullTypeName(testValue);
 
         assertEquals(processIdEntity, result);
     }
@@ -50,8 +50,8 @@ class ProcessIdEntityMapperTest {
         String testValue = "testProcessType";
 
         ProcessIdEntity processIdEntity = new ProcessIdEntity();
-        processIdEntity.processId = testId;
-        processIdEntity.fullTypeName = testValue;
+        processIdEntity.setProcessId(testId);
+        processIdEntity.setFullTypeName(testValue);
 
         String result = processIdEntityMapper.mapToModel(processIdEntity);
 

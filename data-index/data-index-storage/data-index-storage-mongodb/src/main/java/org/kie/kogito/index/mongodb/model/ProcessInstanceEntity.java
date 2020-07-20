@@ -26,41 +26,185 @@ import org.bson.codecs.pojo.annotations.BsonId;
 public class ProcessInstanceEntity {
 
     @BsonId
-    public String id;
+    String id;
 
-    public String processId;
+    String processId;
 
-    public Set<String> roles;
+    Set<String> roles;
 
-    public Document variables;
+    Document variables;
 
-    public String endpoint;
+    String endpoint;
 
-    public List<NodeInstanceEntity> nodes;
+    List<NodeInstanceEntity> nodes;
 
-    public Integer state;
+    Integer state;
 
-    public Long start;
+    Long start;
 
-    public Long end;
+    Long end;
 
-    public String rootProcessInstanceId;
+    String rootProcessInstanceId;
 
-    public String rootProcessId;
+    String rootProcessId;
 
-    public String parentProcessInstanceId;
+    String parentProcessInstanceId;
 
-    public String processName;
+    String processName;
 
-    public ProcessInstanceErrorEntity error;
+    ProcessInstanceErrorEntity error;
 
-    public Set<String> addons;
+    Set<String> addons;
 
-    public Long lastUpdate;
+    Long lastUpdate;
 
-    public String businessKey;
+    String businessKey;
 
-    public List<MilestoneEntity> milestones;
+    List<MilestoneEntity> milestones;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
+    public Document getVariables() {
+        return variables;
+    }
+
+    public void setVariables(Document variables) {
+        this.variables = variables;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public List<NodeInstanceEntity> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<NodeInstanceEntity> nodes) {
+        this.nodes = nodes;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Long getStart() {
+        return start;
+    }
+
+    public void setStart(Long start) {
+        this.start = start;
+    }
+
+    public Long getEnd() {
+        return end;
+    }
+
+    public void setEnd(Long end) {
+        this.end = end;
+    }
+
+    public String getRootProcessInstanceId() {
+        return rootProcessInstanceId;
+    }
+
+    public void setRootProcessInstanceId(String rootProcessInstanceId) {
+        this.rootProcessInstanceId = rootProcessInstanceId;
+    }
+
+    public String getRootProcessId() {
+        return rootProcessId;
+    }
+
+    public void setRootProcessId(String rootProcessId) {
+        this.rootProcessId = rootProcessId;
+    }
+
+    public String getParentProcessInstanceId() {
+        return parentProcessInstanceId;
+    }
+
+    public void setParentProcessInstanceId(String parentProcessInstanceId) {
+        this.parentProcessInstanceId = parentProcessInstanceId;
+    }
+
+    public String getProcessName() {
+        return processName;
+    }
+
+    public void setProcessName(String processName) {
+        this.processName = processName;
+    }
+
+    public ProcessInstanceErrorEntity getError() {
+        return error;
+    }
+
+    public void setError(ProcessInstanceErrorEntity error) {
+        this.error = error;
+    }
+
+    public Set<String> getAddons() {
+        return addons;
+    }
+
+    public void setAddons(Set<String> addons) {
+        this.addons = addons;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getBusinessKey() {
+        return businessKey;
+    }
+
+    public void setBusinessKey(String businessKey) {
+        this.businessKey = businessKey;
+    }
+
+    public List<MilestoneEntity> getMilestones() {
+        return milestones;
+    }
+
+    public void setMilestones(List<MilestoneEntity> milestones) {
+        this.milestones = milestones;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -81,19 +225,75 @@ public class ProcessInstanceEntity {
 
     public static class NodeInstanceEntity {
 
-        public String id;
+        String id;
 
-        public String name;
+        String name;
 
-        public String nodeId;
+        String nodeId;
 
-        public String type;
+        String type;
 
-        public Long enter;
+        Long enter;
 
-        public Long exit;
+        Long exit;
 
-        public String definitionId;
+        String definitionId;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getNodeId() {
+            return nodeId;
+        }
+
+        public void setNodeId(String nodeId) {
+            this.nodeId = nodeId;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public Long getEnter() {
+            return enter;
+        }
+
+        public void setEnter(Long enter) {
+            this.enter = enter;
+        }
+
+        public Long getExit() {
+            return exit;
+        }
+
+        public void setExit(Long exit) {
+            this.exit = exit;
+        }
+
+        public String getDefinitionId() {
+            return definitionId;
+        }
+
+        public void setDefinitionId(String definitionId) {
+            this.definitionId = definitionId;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -115,9 +315,25 @@ public class ProcessInstanceEntity {
 
     public static class ProcessInstanceErrorEntity {
 
-        public String nodeDefinitionId;
+        String nodeDefinitionId;
 
-        public String message;
+        String message;
+
+        public String getNodeDefinitionId() {
+            return nodeDefinitionId;
+        }
+
+        public void setNodeDefinitionId(String nodeDefinitionId) {
+            this.nodeDefinitionId = nodeDefinitionId;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -140,11 +356,35 @@ public class ProcessInstanceEntity {
 
     public static class MilestoneEntity {
 
-        public String id;
+        String id;
 
-        public String name;
+        String name;
 
-        public String status;
+        String status;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
 
         @Override
         public boolean equals(Object o) {

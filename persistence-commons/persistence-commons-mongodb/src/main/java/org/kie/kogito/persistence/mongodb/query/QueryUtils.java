@@ -51,7 +51,7 @@ public class QueryUtils {
             case EQUAL:
                 return eq(filterFunction.apply(filter.getAttribute()), filter.getValue());
             case LIKE:
-                return regex(filterFunction.apply(filter.getAttribute()), ((String) filter.getValue()).replaceAll("\\*", ".*"));
+                return regex(filterFunction.apply(filter.getAttribute()), ((String) filter.getValue()).replace("*", ".*"));
             case IS_NULL:
                 return exists(filterFunction.apply(filter.getAttribute()), false);
             case NOT_NULL:

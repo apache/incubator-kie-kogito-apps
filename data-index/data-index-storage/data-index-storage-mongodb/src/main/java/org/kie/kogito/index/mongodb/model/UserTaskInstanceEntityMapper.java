@@ -39,27 +39,27 @@ public class UserTaskInstanceEntityMapper implements MongoEntityMapper<UserTaskI
         }
 
         UserTaskInstanceEntity entity = new UserTaskInstanceEntity();
-        entity.id = instance.getId();
-        entity.description = instance.getDescription();
-        entity.name = instance.getName();
-        entity.priority = instance.getPriority();
-        entity.processInstanceId = instance.getProcessInstanceId();
-        entity.state = instance.getState();
-        entity.actualOwner = instance.getActualOwner();
-        entity.adminGroups = instance.getAdminGroups();
-        entity.adminUsers = instance.getAdminUsers();
-        entity.completed = zonedDateTimeToInstant(instance.getCompleted());
-        entity.started = zonedDateTimeToInstant(instance.getStarted());
-        entity.excludedUsers = instance.getExcludedUsers();
-        entity.potentialGroups = instance.getPotentialGroups();
-        entity.potentialUsers = instance.getPotentialUsers();
-        entity.referenceName = instance.getReferenceName();
-        entity.lastUpdate = zonedDateTimeToInstant(instance.getLastUpdate());
-        entity.processId = instance.getProcessId();
-        entity.rootProcessId = instance.getRootProcessId();
-        entity.rootProcessInstanceId = instance.getRootProcessInstanceId();
-        entity.inputs = jsonNodeToDocument(instance.getInputs());
-        entity.outputs = jsonNodeToDocument(instance.getOutputs());
+        entity.setId(instance.getId());
+        entity.setDescription(instance.getDescription());
+        entity.setName(instance.getName());
+        entity.setPriority(instance.getPriority());
+        entity.setProcessInstanceId(instance.getProcessInstanceId());
+        entity.setState(instance.getState());
+        entity.setActualOwner(instance.getActualOwner());
+        entity.setAdminGroups(instance.getAdminGroups());
+        entity.setAdminUsers(instance.getAdminUsers());
+        entity.setCompleted(zonedDateTimeToInstant(instance.getCompleted()));
+        entity.setStarted(zonedDateTimeToInstant(instance.getStarted()));
+        entity.setExcludedUsers(instance.getExcludedUsers());
+        entity.setPotentialGroups(instance.getPotentialGroups());
+        entity.setPotentialUsers(instance.getPotentialUsers());
+        entity.setReferenceName(instance.getReferenceName());
+        entity.setLastUpdate(zonedDateTimeToInstant(instance.getLastUpdate()));
+        entity.setProcessId(instance.getProcessId());
+        entity.setRootProcessId(instance.getRootProcessId());
+        entity.setRootProcessInstanceId(instance.getRootProcessInstanceId());
+        entity.setInputs(jsonNodeToDocument(instance.getInputs()));
+        entity.setOutputs(jsonNodeToDocument(instance.getOutputs()));
         return entity;
     }
 
@@ -70,27 +70,27 @@ public class UserTaskInstanceEntityMapper implements MongoEntityMapper<UserTaskI
         }
 
         UserTaskInstance instance = new UserTaskInstance();
-        instance.setId(entity.id);
-        instance.setDescription(entity.description);
-        instance.setName(entity.name);
-        instance.setPriority(entity.priority);
-        instance.setProcessInstanceId(entity.processInstanceId);
-        instance.setState(entity.state);
-        instance.setActualOwner(entity.actualOwner);
-        instance.setAdminGroups(entity.adminGroups);
-        instance.setAdminUsers(entity.adminUsers);
-        instance.setCompleted(instantToZonedDateTime(entity.completed));
-        instance.setStarted(instantToZonedDateTime(entity.started));
-        instance.setExcludedUsers(entity.excludedUsers);
-        instance.setPotentialGroups(entity.potentialGroups);
-        instance.setPotentialUsers(entity.potentialUsers);
-        instance.setReferenceName(entity.referenceName);
-        instance.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
-        instance.setProcessId(entity.processId);
-        instance.setRootProcessId(entity.rootProcessId);
-        instance.setRootProcessInstanceId(entity.rootProcessInstanceId);
-        instance.setInputs(documentToJsonNode(entity.inputs, JsonNode.class));
-        instance.setOutputs(documentToJsonNode(entity.outputs, JsonNode.class));
+        instance.setId(entity.getId());
+        instance.setDescription(entity.getDescription());
+        instance.setName(entity.getName());
+        instance.setPriority(entity.getPriority());
+        instance.setProcessInstanceId(entity.getProcessInstanceId());
+        instance.setState(entity.getState());
+        instance.setActualOwner(entity.getActualOwner());
+        instance.setAdminGroups(entity.getAdminGroups());
+        instance.setAdminUsers(entity.getAdminUsers());
+        instance.setCompleted(instantToZonedDateTime(entity.getCompleted()));
+        instance.setStarted(instantToZonedDateTime(entity.getStarted()));
+        instance.setExcludedUsers(entity.getExcludedUsers());
+        instance.setPotentialGroups(entity.getPotentialGroups());
+        instance.setPotentialUsers(entity.getPotentialUsers());
+        instance.setReferenceName(entity.getReferenceName());
+        instance.setLastUpdate(instantToZonedDateTime(entity.getLastUpdate()));
+        instance.setProcessId(entity.getProcessId());
+        instance.setRootProcessId(entity.getRootProcessId());
+        instance.setRootProcessInstanceId(entity.getRootProcessInstanceId());
+        instance.setInputs(documentToJsonNode(entity.getInputs(), JsonNode.class));
+        instance.setOutputs(documentToJsonNode(entity.getOutputs(), JsonNode.class));
         return instance;
     }
 }

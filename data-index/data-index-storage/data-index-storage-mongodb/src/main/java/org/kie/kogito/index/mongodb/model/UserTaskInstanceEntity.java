@@ -25,47 +25,215 @@ import org.bson.codecs.pojo.annotations.BsonId;
 public class UserTaskInstanceEntity {
 
     @BsonId
-    public String id;
+    String id;
 
-    public String description;
+    String description;
 
-    public String name;
+    String name;
 
-    public String priority;
+    String priority;
 
-    public String processInstanceId;
+    String processInstanceId;
 
-    public String state;
+    String state;
 
-    public String actualOwner;
+    String actualOwner;
 
-    public Set<String> adminGroups;
+    Set<String> adminGroups;
 
-    public Set<String> adminUsers;
+    Set<String> adminUsers;
 
-    public Long completed;
+    Long completed;
 
-    public Long started;
+    Long started;
 
-    public Set<String> excludedUsers;
+    Set<String> excludedUsers;
 
-    public Set<String> potentialGroups;
+    Set<String> potentialGroups;
 
-    public Set<String> potentialUsers;
+    Set<String> potentialUsers;
 
-    public String referenceName;
+    String referenceName;
 
-    public Long lastUpdate;
+    Long lastUpdate;
 
-    public String processId;
+    String processId;
 
-    public String rootProcessId;
+    String rootProcessId;
 
-    public String rootProcessInstanceId;
+    String rootProcessInstanceId;
 
-    public Document inputs;
+    Document inputs;
 
-    public Document outputs;
+    Document outputs;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getActualOwner() {
+        return actualOwner;
+    }
+
+    public void setActualOwner(String actualOwner) {
+        this.actualOwner = actualOwner;
+    }
+
+    public Set<String> getAdminGroups() {
+        return adminGroups;
+    }
+
+    public void setAdminGroups(Set<String> adminGroups) {
+        this.adminGroups = adminGroups;
+    }
+
+    public Set<String> getAdminUsers() {
+        return adminUsers;
+    }
+
+    public void setAdminUsers(Set<String> adminUsers) {
+        this.adminUsers = adminUsers;
+    }
+
+    public Long getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Long completed) {
+        this.completed = completed;
+    }
+
+    public Long getStarted() {
+        return started;
+    }
+
+    public void setStarted(Long started) {
+        this.started = started;
+    }
+
+    public Set<String> getExcludedUsers() {
+        return excludedUsers;
+    }
+
+    public void setExcludedUsers(Set<String> excludedUsers) {
+        this.excludedUsers = excludedUsers;
+    }
+
+    public Set<String> getPotentialGroups() {
+        return potentialGroups;
+    }
+
+    public void setPotentialGroups(Set<String> potentialGroups) {
+        this.potentialGroups = potentialGroups;
+    }
+
+    public Set<String> getPotentialUsers() {
+        return potentialUsers;
+    }
+
+    public void setPotentialUsers(Set<String> potentialUsers) {
+        this.potentialUsers = potentialUsers;
+    }
+
+    public String getReferenceName() {
+        return referenceName;
+    }
+
+    public void setReferenceName(String referenceName) {
+        this.referenceName = referenceName;
+    }
+
+    public Long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public String getRootProcessId() {
+        return rootProcessId;
+    }
+
+    public void setRootProcessId(String rootProcessId) {
+        this.rootProcessId = rootProcessId;
+    }
+
+    public String getRootProcessInstanceId() {
+        return rootProcessInstanceId;
+    }
+
+    public void setRootProcessInstanceId(String rootProcessInstanceId) {
+        this.rootProcessInstanceId = rootProcessInstanceId;
+    }
+
+    public Document getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(Document inputs) {
+        this.inputs = inputs;
+    }
+
+    public Document getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(Document outputs) {
+        this.outputs = outputs;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -68,21 +68,21 @@ class JobEntityMapperTest {
         job.setExecutionCounter(executionCounter);
 
         jobEntity = new JobEntity();
-        jobEntity.id = testId;
-        jobEntity.status = status;
-        jobEntity.lastUpdate = zonedDateTimeToInstant(time);
-        jobEntity.processId = processId;
-        jobEntity.processInstanceId = processInstanceId;
-        jobEntity.rootProcessId = rootProcessId;
-        jobEntity.rootProcessInstanceId = rootProcessInstanceId;
-        jobEntity.expirationTime = zonedDateTimeToInstant(time);
-        jobEntity.priority = priority;
-        jobEntity.callbackEndpoint = callbackEndpoint;
-        jobEntity.repeatInterval = repeatInterval;
-        jobEntity.repeatLimit = repeatLimit;
-        jobEntity.scheduledId = scheduledId;
-        jobEntity.retries = retries;
-        jobEntity.executionCounter = executionCounter;
+        jobEntity.setId(testId);
+        jobEntity.setStatus(status);
+        jobEntity.setLastUpdate(zonedDateTimeToInstant(time));
+        jobEntity.setProcessId(processId);
+        jobEntity.setProcessInstanceId(processInstanceId);
+        jobEntity.setRootProcessId(rootProcessId);
+        jobEntity.setRootProcessInstanceId(rootProcessInstanceId);
+        jobEntity.setExpirationTime(zonedDateTimeToInstant(time));
+        jobEntity.setPriority(priority);
+        jobEntity.setCallbackEndpoint(callbackEndpoint);
+        jobEntity.setRepeatInterval(repeatInterval);
+        jobEntity.setRepeatLimit(repeatLimit);
+        jobEntity.setScheduledId(scheduledId);
+        jobEntity.setRetries(retries);
+        jobEntity.setExecutionCounter(executionCounter);
     }
 
     @Test

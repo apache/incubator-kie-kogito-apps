@@ -87,27 +87,27 @@ class UserTaskInstanceEntityMapperTest {
         userTaskInstance.setOutputs(outputs);
 
         userTaskInstanceEntity = new UserTaskInstanceEntity();
-        userTaskInstanceEntity.id = testId;
-        userTaskInstanceEntity.description = description;
-        userTaskInstanceEntity.name = name;
-        userTaskInstanceEntity.priority = priority;
-        userTaskInstanceEntity.processInstanceId = processInstanceId;
-        userTaskInstanceEntity.state = state;
-        userTaskInstanceEntity.actualOwner = actualOwner;
-        userTaskInstanceEntity.adminGroups = adminGroups;
-        userTaskInstanceEntity.adminUsers = adminUsers;
-        userTaskInstanceEntity.completed = zonedDateTimeToInstant(time);
-        userTaskInstanceEntity.started = zonedDateTimeToInstant(time);
-        userTaskInstanceEntity.excludedUsers = excludedUsers;
-        userTaskInstanceEntity.potentialGroups = potentialGroups;
-        userTaskInstanceEntity.potentialUsers = potentialUsers;
-        userTaskInstanceEntity.referenceName = referenceName;
-        userTaskInstanceEntity.lastUpdate = zonedDateTimeToInstant(time);
-        userTaskInstanceEntity.processId = processId;
-        userTaskInstanceEntity.rootProcessId = rootProcessId;
-        userTaskInstanceEntity.rootProcessInstanceId = rootProcessInstanceId;
-        userTaskInstanceEntity.inputs = jsonNodeToDocument(inputs);
-        userTaskInstanceEntity.outputs = jsonNodeToDocument(outputs);
+        userTaskInstanceEntity.setId(testId);
+        userTaskInstanceEntity.setDescription(description);
+        userTaskInstanceEntity.setName(name);
+        userTaskInstanceEntity.setPriority(priority);
+        userTaskInstanceEntity.setProcessInstanceId(processInstanceId);
+        userTaskInstanceEntity.setState(state);
+        userTaskInstanceEntity.setActualOwner(actualOwner);
+        userTaskInstanceEntity.setAdminGroups(adminGroups);
+        userTaskInstanceEntity.setAdminUsers(adminUsers);
+        userTaskInstanceEntity.setCompleted(zonedDateTimeToInstant(time));
+        userTaskInstanceEntity.setStarted(zonedDateTimeToInstant(time));
+        userTaskInstanceEntity.setExcludedUsers(excludedUsers);
+        userTaskInstanceEntity.setPotentialGroups(potentialGroups);
+        userTaskInstanceEntity.setPotentialUsers(potentialUsers);
+        userTaskInstanceEntity.setReferenceName(referenceName);
+        userTaskInstanceEntity.setLastUpdate(zonedDateTimeToInstant(time));
+        userTaskInstanceEntity.setProcessId(processId);
+        userTaskInstanceEntity.setRootProcessId(rootProcessId);
+        userTaskInstanceEntity.setRootProcessInstanceId(rootProcessInstanceId);
+        userTaskInstanceEntity.setInputs(jsonNodeToDocument(inputs));
+        userTaskInstanceEntity.setOutputs(jsonNodeToDocument(outputs));
     }
 
     @Test

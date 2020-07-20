@@ -36,21 +36,21 @@ public class JobEntityMapper implements MongoEntityMapper<Job, JobEntity> {
         }
 
         JobEntity entity = new JobEntity();
-        entity.id = job.getId();
-        entity.processId = job.getProcessId();
-        entity.processInstanceId = job.getProcessInstanceId();
-        entity.rootProcessId = job.getRootProcessId();
-        entity.rootProcessInstanceId = job.getRootProcessInstanceId();
-        entity.expirationTime = zonedDateTimeToInstant(job.getExpirationTime());
-        entity.priority = job.getPriority();
-        entity.callbackEndpoint = job.getCallbackEndpoint();
-        entity.repeatInterval = job.getRepeatInterval();
-        entity.repeatLimit = job.getRepeatLimit();
-        entity.scheduledId = job.getScheduledId();
-        entity.retries = job.getRetries();
-        entity.status = job.getStatus();
-        entity.lastUpdate = zonedDateTimeToInstant(job.getLastUpdate());
-        entity.executionCounter = job.getExecutionCounter();
+        entity.setId(job.getId());
+        entity.setProcessId(job.getProcessId());
+        entity.setProcessInstanceId(job.getProcessInstanceId());
+        entity.setRootProcessId(job.getRootProcessId());
+        entity.setRootProcessInstanceId(job.getRootProcessInstanceId());
+        entity.setExpirationTime(zonedDateTimeToInstant(job.getExpirationTime()));
+        entity.setPriority(job.getPriority());
+        entity.setCallbackEndpoint(job.getCallbackEndpoint());
+        entity.setRepeatInterval(job.getRepeatInterval());
+        entity.setRepeatLimit(job.getRepeatLimit());
+        entity.setScheduledId(job.getScheduledId());
+        entity.setRetries(job.getRetries());
+        entity.setStatus(job.getStatus());
+        entity.setLastUpdate(zonedDateTimeToInstant(job.getLastUpdate()));
+        entity.setExecutionCounter(job.getExecutionCounter());
         return entity;
     }
 
@@ -61,21 +61,21 @@ public class JobEntityMapper implements MongoEntityMapper<Job, JobEntity> {
         }
 
         Job job = new Job();
-        job.setId(entity.id);
-        job.setProcessId(entity.processId);
-        job.setProcessInstanceId(entity.processInstanceId);
-        job.setRootProcessId(entity.rootProcessId);
-        job.setRootProcessInstanceId(entity.rootProcessInstanceId);
-        job.setExpirationTime(instantToZonedDateTime(entity.expirationTime));
-        job.setPriority(entity.priority);
-        job.setCallbackEndpoint(entity.callbackEndpoint);
-        job.setRepeatInterval(entity.repeatInterval);
-        job.setRepeatLimit(entity.repeatLimit);
-        job.setScheduledId(entity.scheduledId);
-        job.setRetries(entity.retries);
-        job.setStatus(entity.status);
-        job.setLastUpdate(instantToZonedDateTime(entity.lastUpdate));
-        job.setExecutionCounter(entity.executionCounter);
+        job.setId(entity.getId());
+        job.setProcessId(entity.getProcessId());
+        job.setProcessInstanceId(entity.getProcessInstanceId());
+        job.setRootProcessId(entity.getRootProcessId());
+        job.setRootProcessInstanceId(entity.getRootProcessInstanceId());
+        job.setExpirationTime(instantToZonedDateTime(entity.getExpirationTime()));
+        job.setPriority(entity.getPriority());
+        job.setCallbackEndpoint(entity.getCallbackEndpoint());
+        job.setRepeatInterval(entity.getRepeatInterval());
+        job.setRepeatLimit(entity.getRepeatLimit());
+        job.setScheduledId(entity.getScheduledId());
+        job.setRetries(entity.getRetries());
+        job.setStatus(entity.getStatus());
+        job.setLastUpdate(instantToZonedDateTime(entity.getLastUpdate()));
+        job.setExecutionCounter(entity.getExecutionCounter());
         return job;
     }
 }
