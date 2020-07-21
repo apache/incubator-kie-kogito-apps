@@ -22,11 +22,13 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
+import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
 import org.kie.kogito.trusty.service.ITrustyService;
@@ -38,7 +40,10 @@ public class TraceEventConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
 
-    private final ITrustyService service;
+    private static final TypeReference<CloudEventImpl<TraceEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
+    };
+
+    private final ITrustyService service;/**/
 
     @Inject
     public TraceEventConsumer(ITrustyService service) {
@@ -53,7 +58,7 @@ public class TraceEventConsumer {
 
     private Optional<CloudEventImpl<TraceEvent>> decodeCloudEvent(String payload) {
         try {
-            return Optional.of(CloudEventUtils.decode(payload));
+            return Optional.of(CloudEventUtils.decode(payload, CLOUD_EVENT_TYPE_REF));
         } catch (IllegalStateException e) {
             LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
             return Optional.empty();
