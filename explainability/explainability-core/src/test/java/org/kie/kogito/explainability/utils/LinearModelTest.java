@@ -24,6 +24,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -60,7 +61,7 @@ class LinearModelTest {
             Double y = DoubleStream.of(x).sum();
             trainingSet.add(new ImmutablePair<>(x, y));
         }
-        assertTrue(linearModel.fit(trainingSet) < 1d);
+        assertThat(linearModel.fit(trainingSet)).isLessThan(1d);
     }
 
     @Test
@@ -76,6 +77,6 @@ class LinearModelTest {
             Double y = i % 2 == 0 ? 1d : 0d;
             trainingSet.add(new ImmutablePair<>(x, y));
         }
-        assertTrue(linearModel.fit(trainingSet) < 1d);
+        assertThat(linearModel.fit(trainingSet)).isLessThan(1d);
     }
 }

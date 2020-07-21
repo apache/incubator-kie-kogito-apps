@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -29,11 +30,17 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ExplainabilityMetricsTest {
+
+    @BeforeAll
+    static void setUpBefore() {
+        DataUtils.seed(4);
+    }
 
     @Test
     void testExplainabilityNoExplanation() {
@@ -56,7 +63,7 @@ class ExplainabilityMetricsTest {
         double v = ExplainabilityMetrics.quantifyExplainability(10, 10, 0);
         assertFalse(Double.isNaN(v));
         assertFalse(Double.isInfinite(v));
-        assertTrue(v >= 0 && v <= 1);
+        assertThat(v).isBetween(0d, 1d);
     }
 
     @Test
@@ -94,6 +101,6 @@ class ExplainabilityMetricsTest {
             pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));
         }
         double v = ExplainabilityMetrics.classificationFidelity(pairs);
-        assertTrue(v > 0);
+        assertThat(v).isGreaterThanOrEqualTo(0);
     }
 }
