@@ -38,14 +38,14 @@ class LimeStabilityTest {
     void testStabilityWithNumericData() {
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             featureList.add(TestUtils.getMockedNumericFeature(i));
         }
         PredictionInput input = new PredictionInput(featureList);
         List<PredictionOutput> predictionOutputs = sumSkipModel.predict(List.of(input));
         Prediction prediction = new Prediction(input, predictionOutputs.get(0));
         List<Saliency> saliencies = new LinkedList<>();
-        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         for (int i = 0; i < 100; i++) {
             Saliency saliency = limeExplainer.explain(prediction, sumSkipModel);
             saliencies.add(saliency);
