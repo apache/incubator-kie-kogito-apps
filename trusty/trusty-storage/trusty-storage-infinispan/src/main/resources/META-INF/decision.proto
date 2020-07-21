@@ -6,22 +6,22 @@ option indexed_by_default = true;
 message Decision {
 
     /* @Field(store = Store.YES) */
-    optional string executionId = 1;
+    optional string executionType = 1;
 
     /* @Field(store = Store.YES) */
-    optional int64 executionTimestamp = 2;
+    optional string executionId = 2;
 
     /* @Field(store = Store.YES) */
-    optional bool hasSucceeded = 3;
+    optional int64 executionTimestamp = 3;
 
     /* @Field(store = Store.YES) */
-    optional string executorName = 4;
+    optional bool hasSucceeded = 4;
 
     /* @Field(store = Store.YES) */
-    optional string executedModelName = 5;
+    optional string executorName = 5;
 
     /* @Field(store = Store.YES) */
-    optional string executionType = 6;
+    optional string executedModelName = 6;
 
     /* @Field(store = Store.YES) */
     repeated TypedValue inputs = 7;

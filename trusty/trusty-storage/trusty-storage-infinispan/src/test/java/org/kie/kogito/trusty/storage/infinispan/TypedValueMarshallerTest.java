@@ -37,6 +37,10 @@ public class TypedValueMarshallerTest extends MarshallerTestTemplate<TypedValue>
             new JsonNodeTestField<>(VALUE_FIELD, null, TypedValue::getValue, TypedValue::setValue)
     );
 
+    public TypedValueMarshallerTest() {
+        super(TypedValue.class);
+    }
+
     @Override
     protected TypedValue buildEmptyObject() {
         return new TypedValue();

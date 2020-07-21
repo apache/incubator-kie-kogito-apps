@@ -47,6 +47,10 @@ public class DecisionOutcomeMarshallerTest extends MarshallerTestTemplate<Decisi
             new CollectionTestField<>(MESSAGES_FIELD, Collections.emptyList(), DecisionOutcome::getMessages, DecisionOutcome::setMessages, Message.class)
     );
 
+    public DecisionOutcomeMarshallerTest() {
+        super(DecisionOutcome.class);
+    }
+
     @Override
     protected DecisionOutcome buildEmptyObject() {
         return new DecisionOutcome();

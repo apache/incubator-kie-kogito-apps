@@ -17,8 +17,14 @@
 package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.infinispan.protostream.MessageMarshaller;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
@@ -28,6 +34,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockingDetails;
 
 abstract class MarshallerTestTemplate<T> {
+
+    protected final Class<T> modelClass;
+
+    protected MarshallerTestTemplate(Class<T> modelClass) {
+        this.modelClass = modelClass;
+    }
 
     protected abstract T buildEmptyObject();
 
@@ -66,5 +78,31 @@ abstract class MarshallerTestTemplate<T> {
 
         assertEquals(list.size(), mockingDetails(protoStreamReader).getInvocations().size());
         list.forEach(td -> td.assertValue(output));
+    }
+
+    @Test
+    void noUncoveredProperties() throws IOException {
+        List<String> testFieldNameList = getTestFieldList().stream()
+                .map(AbstractTestField::getFieldName)
+                .collect(Collectors.toList());
+
+        streamAllNonStaticFields(modelClass).forEach(field -> {
+            String serializedFieldName = field.isAnnotationPresent(JsonProperty.class)
+                    ? field.getAnnotation(JsonProperty.class).value()
+                    : field.getName();
+
+            long matches = testFieldNameList.stream().filter(n -> n.equals(serializedFieldName)).count();
+            assertEquals(1, matches, () -> String.format("Field \"%s\" of %s model is not handled properly in the corresponding test", serializedFieldName, modelClass.getSimpleName()));
+        });
+    }
+
+    private static Stream<Field> streamAllNonStaticFields(Class<?> type) {
+        if (type == null || Object.class.equals(type)) {
+            return Stream.empty();
+        }
+        return Stream.concat(
+                Arrays.stream(type.getDeclaredFields()).filter(f -> (f.getModifiers() & Modifier.STATIC) == 0),
+                streamAllNonStaticFields(type.getSuperclass())
+        );
     }
 }

@@ -50,8 +50,6 @@ public class DecisionOutcome {
     @JsonProperty(MESSAGES_FIELD)
     private Collection<Message> messages;
 
-    private boolean hasErrors;
-
     public DecisionOutcome() {
     }
 
@@ -61,7 +59,7 @@ public class DecisionOutcome {
         this.evaluationStatus = evaluationStatus;
         this.outcomeResult = outcomeResult;
         this.outcomeInputs = outcomeInputs;
-        setMessages(messages);
+        this.messages = messages;
     }
 
     public String getOutcomeId() {
@@ -110,10 +108,9 @@ public class DecisionOutcome {
 
     public void setMessages(Collection<Message> messages) {
         this.messages = messages;
-        this.hasErrors = messages != null && messages.stream().anyMatch(m -> m.getLevel() == MessageLevel.ERROR);
     }
 
     public boolean hasErrors() {
-        return hasErrors;
+        return messages != null && messages.stream().anyMatch(m -> m.getLevel() == MessageLevel.ERROR);
     }
 }

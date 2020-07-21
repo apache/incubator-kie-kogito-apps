@@ -38,6 +38,7 @@ public class Decision extends Execution {
     private Collection<DecisionOutcome> outcomes;
 
     public Decision() {
+        super(ExecutionTypeEnum.DECISION);
     }
 
     public Decision(String executionId, Long executionTimestamp, Boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {

@@ -53,6 +53,10 @@ public class Execution {
     public Execution() {
     }
 
+    public Execution(ExecutionTypeEnum executionType) {
+        this.executionType = executionType;
+    }
+
     public Execution(String executionId, Long executionTimestamp, Boolean hasSucceeded,
                      String executorName, String executedModelName, ExecutionTypeEnum executionType) {
         this.executionId = executionId;

@@ -34,7 +34,11 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
 
     @Override
     public Decision readFrom(ProtoStreamReader reader) throws IOException {
-        Decision result = new Decision(
+        ExecutionTypeEnum executionType = enumFromString(reader.readString(Execution.EXECUTION_TYPE_FIELD), ExecutionTypeEnum.class);
+        if (executionType != ExecutionTypeEnum.DECISION) {
+            throw new IllegalStateException("Unsupported execution type: " + executionType);
+        }
+        return new Decision(
                 reader.readString(Execution.EXECUTION_ID_FIELD),
                 reader.readLong(Execution.EXECUTION_TIMESTAMP_FIELD),
                 reader.readBoolean(Execution.HAS_SUCCEEDED_FIELD),
@@ -43,18 +47,16 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
                 reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), TypedValue.class),
                 reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class)
         );
-        result.setExecutionType(enumFromString(reader.readString(Execution.EXECUTION_TYPE_FIELD), ExecutionTypeEnum.class));
-        return result;
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, Decision input) throws IOException {
+        writer.writeString(Execution.EXECUTION_TYPE_FIELD, stringFromEnum(input.getExecutionType()));
         writer.writeString(Execution.EXECUTION_ID_FIELD, input.getExecutionId());
         writer.writeLong(Execution.EXECUTION_TIMESTAMP_FIELD, input.getExecutionTimestamp());
         writer.writeBoolean(Execution.HAS_SUCCEEDED_FIELD, input.hasSucceeded());
         writer.writeString(Execution.EXECUTOR_NAME_FIELD, input.getExecutorName());
         writer.writeString(Execution.EXECUTED_MODEL_NAME_FIELD, input.getExecutedModelName());
-        writer.writeString(Execution.EXECUTION_TYPE_FIELD, stringFromEnum(input.getExecutionType()));
         writer.writeCollection(Decision.INPUTS_FIELD, input.getInputs(), TypedValue.class);
         writer.writeCollection(Decision.OUTCOMES_FIELD, input.getOutcomes(), DecisionOutcome.class);
     }

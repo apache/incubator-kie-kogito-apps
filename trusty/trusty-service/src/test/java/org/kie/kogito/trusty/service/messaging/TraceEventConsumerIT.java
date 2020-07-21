@@ -55,8 +55,10 @@ class TraceEventConsumerIT {
 
     @Inject
     TraceEventConsumer traceEventConsumer;
+
     @Inject
     TrustyService trustyService;
+
     @Inject
     TrustyStorageService trustyStorageService;
 

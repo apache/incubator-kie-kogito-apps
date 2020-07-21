@@ -37,6 +37,10 @@ public class MessageExceptionFieldMarshallerTest extends MarshallerTestTemplate<
             new ObjectTestField<>(CAUSE_FIELD, new MessageExceptionField("cause", "cause message", null), MessageExceptionField::getCause, MessageExceptionField::setCause, MessageExceptionField.class)
     );
 
+    public MessageExceptionFieldMarshallerTest() {
+        super(MessageExceptionField.class);
+    }
+
     @Override
     protected MessageExceptionField buildEmptyObject() {
         return new MessageExceptionField();
