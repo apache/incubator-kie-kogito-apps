@@ -121,6 +121,7 @@ public class TestUtils {
     public static PredictionProvider getDummyTextClassifier() {
         return new PredictionProvider() {
             private final List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
+
             @Override
             public List<PredictionOutput> predict(List<PredictionInput> inputs) {
                 List<PredictionOutput> outputs = new LinkedList<>();
@@ -147,15 +148,7 @@ public class TestUtils {
     }
 
     public static Feature getMockedNumericFeature() {
-        Feature f = mock(Feature.class);
-        when(f.getType()).thenReturn(Type.NUMBER);
-        when(f.getName()).thenReturn("f-num");
-        Value<Double> value = mock(Value.class);
-        when(value.getUnderlyingObject()).thenReturn(1d);
-        when(value.asNumber()).thenReturn(1d);
-        when(value.asString()).thenReturn("1");
-        when(f.getValue()).thenReturn(value);
-        return f;
+        return getMockedNumericFeature(1d);
     }
 
     public static Feature getRandomFeature() {
@@ -204,5 +197,29 @@ public class TestUtils {
 
     public static String randomString() {
         return RandomStringUtils.random(random.nextInt(5));
+    }
+
+    public static Feature getMockedTextFeature(String s) {
+        Feature f = mock(Feature.class);
+        when(f.getType()).thenReturn(Type.TEXT);
+        when(f.getName()).thenReturn("f-text");
+        Value<String> value = mock(Value.class);
+        when(value.getUnderlyingObject()).thenReturn(s);
+        when(value.asNumber()).thenReturn(Double.NaN);
+        when(value.asString()).thenReturn(s);
+        when(f.getValue()).thenReturn(value);
+        return f;
+    }
+
+    public static Feature getMockedNumericFeature(double d) {
+        Feature f = mock(Feature.class);
+        when(f.getType()).thenReturn(Type.NUMBER);
+        when(f.getName()).thenReturn("f-num");
+        Value<Double> value = mock(Value.class);
+        when(value.getUnderlyingObject()).thenReturn(d);
+        when(value.asNumber()).thenReturn(d);
+        when(value.asString()).thenReturn(String.valueOf(d));
+        when(f.getValue()).thenReturn(value);
+        return f;
     }
 }
