@@ -15,15 +15,14 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
@@ -34,8 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatasetEncoderTest {
-
-    private final static SecureRandom random = new SecureRandom();
 
     @Test
     void testEmptyDatasetEncoding() {
@@ -56,20 +53,20 @@ class DatasetEncoderTest {
         for (int i = 0; i < 10; i++) {
             List<Feature> inputFeatures = new LinkedList<>();
             for (int j = 0; j < 3; j++) {
-                inputFeatures.add(FeatureFactory.newNumericalFeature("f" + j, random.nextInt()));
+                inputFeatures.add(TestUtils.getMockedNumericFeature());
             }
             perturbedInputs.add(new PredictionInput(inputFeatures));
         }
         List<Output> outputs = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
-            outputs.add(new Output("o", Type.NUMBER, new Value<>(random.nextBoolean()), 1d));
+            outputs.add(new Output("o", Type.NUMBER, new Value<>(i % 2 == 0 ? 1d : 0d), 1d));
         }
         List<Feature> features = new LinkedList<>();
         for (int i = 0; i < 3; i++) {
-            features.add(FeatureFactory.newNumericalFeature("f" + random.nextInt(), random.nextInt()));
+            features.add(TestUtils.getMockedNumericFeature());
         }
         PredictionInput originalInput = new PredictionInput(features);
-        Output originalOutput = new Output("o", Type.BOOLEAN, new Value<>(random.nextBoolean()), 1d);
+        Output originalOutput = new Output("o", Type.BOOLEAN, new Value<>(1d), 1d);
         DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, outputs, originalInput, originalOutput);
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
         assertNotNull(trainingSet);
