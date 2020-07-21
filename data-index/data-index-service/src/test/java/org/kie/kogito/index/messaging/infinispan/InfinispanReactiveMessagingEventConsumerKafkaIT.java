@@ -27,7 +27,7 @@ import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 @QuarkusTest
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
 @QuarkusTestResource(KafkaTestResource.class)
-public class InfinispanReactiveMessagingEventConsumerKafkaIT extends AbstractReactiveMessagingEventConsumerKafkaIT {
+class InfinispanReactiveMessagingEventConsumerKafkaIT extends AbstractReactiveMessagingEventConsumerKafkaIT {
 
     @Override
     protected String getTestProtobufFileContent() throws Exception {

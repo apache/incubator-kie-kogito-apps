@@ -25,7 +25,7 @@ import static org.kie.kogito.index.TestUtils.readFileContent;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class MongoGraphQLQueryOrderByIT extends AbstractGraphQLQueryOrderByIT {
+class MongoGraphQLQueryOrderByIT extends AbstractGraphQLQueryOrderByIT {
 
     @Override
     protected String getTestProtobufFileContent() throws Exception {

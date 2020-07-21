@@ -23,6 +23,6 @@ import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class MongoStorageIT extends AbstractStorageIT {
+class MongoStorageIT extends AbstractStorageIT {
 
 }

@@ -25,7 +25,7 @@ import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 
 @QuarkusTest
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class InfinispanGraphQLQueryOrderByIT extends AbstractGraphQLQueryOrderByIT {
+class InfinispanGraphQLQueryOrderByIT extends AbstractGraphQLQueryOrderByIT {
 
     @Override
     protected String getTestProtobufFileContent() throws Exception {

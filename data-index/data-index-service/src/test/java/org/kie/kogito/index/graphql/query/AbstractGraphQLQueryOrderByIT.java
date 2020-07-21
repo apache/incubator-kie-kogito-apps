@@ -48,35 +48,35 @@ public abstract class AbstractGraphQLQueryOrderByIT {
     ProtobufService protobufService;
 
     @Test
-    public void testProcessInstancesSort() {
+    void testProcessInstancesSort() {
         testSortBy("ProcessInstances");
     }
 
     @Test
-    public void testProcessInstancesSortByMultipleFields() {
+    void testProcessInstancesSortByMultipleFields() {
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances(orderBy: {start: ASC, processId: DESC}){ id } }\" }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200).body("data.ProcessInstances", isA(Collection.class));
     }
 
     @Test
-    public void testUserTaskInstancesSort() {
+    void testUserTaskInstancesSort() {
         testSortBy("UserTaskInstances");
     }
 
     @Test
-    public void testJobsSort() {
+    void testJobsSort() {
         testSortBy("Jobs");
     }
 
     @Test
-    public void testTravelsSort() throws Exception {
+    void testTravelsSort() throws Exception {
         protobufService.registerProtoBufferType(getTestProtobufFileContent());
 
         testSortBy("Travels");
     }
 
-    protected void testSortBy(String root) {
+    private void testSortBy(String root) {
         GraphQLObjectType queryType = manager.getGraphQLSchema().getQueryType();
 
         GraphQLFieldDefinition pi = queryType.getFieldDefinition(root);

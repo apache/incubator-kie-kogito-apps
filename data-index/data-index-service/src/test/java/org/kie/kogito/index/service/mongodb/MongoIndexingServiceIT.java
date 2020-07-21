@@ -25,7 +25,7 @@ import static org.kie.kogito.index.TestUtils.readFileContent;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class MongoIndexingServiceIT extends AbstractIndexingServiceIT {
+class MongoIndexingServiceIT extends AbstractIndexingServiceIT {
 
     @Override
     protected String getProcessProtobufFileContent() throws Exception {

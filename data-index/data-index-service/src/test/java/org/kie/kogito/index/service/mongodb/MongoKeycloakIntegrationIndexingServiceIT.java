@@ -25,6 +25,6 @@ import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 @QuarkusTest
 @QuarkusTestResource(KeycloakServerTestResource.class)
 @QuarkusTestResource(MongoServerTestResource.class)
-public class MongoKeycloakIntegrationIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
+class MongoKeycloakIntegrationIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
 
 }

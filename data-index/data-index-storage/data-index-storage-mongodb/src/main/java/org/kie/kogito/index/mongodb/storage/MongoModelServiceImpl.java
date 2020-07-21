@@ -17,7 +17,7 @@
 package org.kie.kogito.index.mongodb.storage;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
@@ -49,7 +49,7 @@ public class MongoModelServiceImpl implements MongoModelService {
     @Inject
     Event<IndexCreateOrUpdateEvent> indexCreateOrUpdateEvent;
 
-    static final Map<String, Supplier<MongoEntityMapper>> ENTITY_MAPPER_MAP = Map.of(
+    static final Map<String, Supplier<MongoEntityMapper<?, ?>>> ENTITY_MAPPER_MAP = Map.of(
             JOBS_STORAGE, JobEntityMapper::new,
             PROCESS_INSTANCES_STORAGE, ProcessInstanceEntityMapper::new,
             USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntityMapper::new,
@@ -62,10 +62,15 @@ public class MongoModelServiceImpl implements MongoModelService {
         indexCreateOrUpdateEvent.fire(new IndexCreateOrUpdateEvent(JOBS_STORAGE, Job.class.getName()));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public MongoEntityMapper getEntityMapper(String name) {
-        Supplier<MongoEntityMapper> supplier = ENTITY_MAPPER_MAP.get(name);
-        return Optional.ofNullable(supplier).map(Supplier::get).orElseGet(
-                () -> isDomainCollection(name) ? new DomainEntityMapper() : null);
+    public <V, E> MongoEntityMapper<V, E> getEntityMapper(String name) {
+        Supplier<MongoEntityMapper<?, ?>> supplier = ENTITY_MAPPER_MAP.get(name);
+        if (Objects.nonNull(supplier)) {
+            return (MongoEntityMapper<V, E>) supplier.get();
+        } else if (isDomainCollection(name)) {
+            return (MongoEntityMapper<V, E>) new DomainEntityMapper();
+        }
+        return null;
     }
 }

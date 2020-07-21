@@ -72,7 +72,7 @@ public abstract class AbstractWebSocketSubscriptionIT {
     private AtomicInteger counter = new AtomicInteger(0);
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         cacheService.getJobsCache().clear();
         cacheService.getProcessInstancesCache().clear();
         cacheService.getUserTaskInstancesCache().clear();
@@ -85,7 +85,7 @@ public abstract class AbstractWebSocketSubscriptionIT {
     }
 
     @Test
-    public void testProcessInstanceSubscription() throws Exception {
+    void testProcessInstanceSubscription() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
@@ -96,7 +96,7 @@ public abstract class AbstractWebSocketSubscriptionIT {
     }
 
     @Test
-    public void testUserTaskInstanceSubscription() throws Exception {
+    void testUserTaskInstanceSubscription() throws Exception {
         String taskId = UUID.randomUUID().toString();
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();
@@ -108,7 +108,7 @@ public abstract class AbstractWebSocketSubscriptionIT {
     }
 
     @Test
-    public void testJobSubscription() throws Exception {
+    void testJobSubscription() throws Exception {
         String jobId = UUID.randomUUID().toString();
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();
@@ -118,7 +118,7 @@ public abstract class AbstractWebSocketSubscriptionIT {
     }
 
     @Test
-    public void testDomainSubscription() throws Exception {
+    void testDomainSubscription() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 

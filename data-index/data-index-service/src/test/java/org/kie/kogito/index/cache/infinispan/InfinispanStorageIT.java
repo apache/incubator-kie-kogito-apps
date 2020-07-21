@@ -23,6 +23,6 @@ import org.kie.kogito.index.cache.AbstractStorageIT;
 
 @QuarkusTest
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class InfinispanStorageIT extends AbstractStorageIT {
+class InfinispanStorageIT extends AbstractStorageIT {
 
 }

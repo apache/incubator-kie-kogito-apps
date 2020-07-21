@@ -28,5 +28,5 @@ public interface MongoModelService {
      * @param name the name of the data model
      * @return the entity mapper for the given data model
      */
-    MongoEntityMapper getEntityMapper(String name);
+    <V, E> MongoEntityMapper<V, E> getEntityMapper(String name);
 }

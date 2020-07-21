@@ -25,6 +25,6 @@ import org.kie.kogito.index.service.AbstractKeycloakIntegrationIndexingServiceIT
 @QuarkusTest
 @QuarkusTestResource(KeycloakServerTestResource.class)
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class InfinispanKeycloakIntegrationIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
+class InfinispanKeycloakIntegrationIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
 
 }

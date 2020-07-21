@@ -55,18 +55,18 @@ public abstract class AbstractQueryIT {
     DataIndexStorageService cacheService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         cacheService.getProcessInstancesCache().clear();
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.clear();
     }
 
     @Test
-    public void testProcessInstanceQueries() {
+    void testProcessInstanceQueries() {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
         String subProcessId = processId + "_sub";

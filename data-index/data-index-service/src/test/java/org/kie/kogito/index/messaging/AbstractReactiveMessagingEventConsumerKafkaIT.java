@@ -48,7 +48,7 @@ public abstract class AbstractReactiveMessagingEventConsumerKafkaIT {
     KafkaProducer<String, String> producer;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         String kafka = System.getProperty(KafkaTestResource.KAFKA_BOOTSTRAP_SERVERS, "localhost:9092");
         Map<String, String> config = new HashMap<>();
         config.put("bootstrap.servers", kafka);
@@ -59,14 +59,14 @@ public abstract class AbstractReactiveMessagingEventConsumerKafkaIT {
     }
 
     @AfterEach
-    public void close() {
+    void close() {
         if (producer != null) {
             producer.close();
         }
     }
 
     @Test
-    public void testProcessInstanceEvent() throws Exception {
+    void testProcessInstanceEvent() throws Exception {
         sendProcessInstanceEvent().get(1, TimeUnit.MINUTES);
 
         String processInstanceId = "c2fa5c5e-3002-44c7-aef7-bce82297e3fe";

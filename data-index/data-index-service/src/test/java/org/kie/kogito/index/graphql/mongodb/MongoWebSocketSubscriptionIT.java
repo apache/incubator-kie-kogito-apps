@@ -25,7 +25,7 @@ import static org.kie.kogito.index.TestUtils.readFileContent;
 
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
-public class MongoWebSocketSubscriptionIT extends AbstractWebSocketSubscriptionIT {
+class MongoWebSocketSubscriptionIT extends AbstractWebSocketSubscriptionIT {
 
     @Override
     protected String getProcessProtobufFileContent() throws Exception {

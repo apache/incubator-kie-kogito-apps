@@ -26,7 +26,7 @@ import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 
 @QuarkusTest
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class InfinispanWebSocketSubscriptionIT extends AbstractWebSocketSubscriptionIT {
+class InfinispanWebSocketSubscriptionIT extends AbstractWebSocketSubscriptionIT {
 
     @Override
     protected String getProcessProtobufFileContent() throws Exception {

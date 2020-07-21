@@ -27,7 +27,7 @@ import static org.kie.kogito.index.TestUtils.readFileContent;
 @QuarkusTest
 @QuarkusTestResource(MongoServerTestResource.class)
 @QuarkusTestResource(KafkaTestResource.class)
-public class MongoReactiveMessagingEventConsumerKafkaIT extends AbstractReactiveMessagingEventConsumerKafkaIT {
+class MongoReactiveMessagingEventConsumerKafkaIT extends AbstractReactiveMessagingEventConsumerKafkaIT {
 
     @Override
     protected String getTestProtobufFileContent() throws Exception {

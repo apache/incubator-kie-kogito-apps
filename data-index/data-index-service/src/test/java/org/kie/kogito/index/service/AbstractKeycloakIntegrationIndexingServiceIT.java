@@ -31,7 +31,7 @@ public abstract class AbstractKeycloakIntegrationIndexingServiceIT {
     private static final String KEYCLOAK_CLIENT_SECRET = System.getProperty("quarkus.oidc.credentials.secret", "secret");
 
     @Test
-    public void testUnauthorizedUserAccess() {
+    void testUnauthorizedUserAccess() {
         //alice only have role User, resource is forbidden
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .auth().oauth2(getAccessToken("alice"))
@@ -41,7 +41,7 @@ public abstract class AbstractKeycloakIntegrationIndexingServiceIT {
     }
 
     @Test
-    public void testNoTokenProvided() {
+    void testNoTokenProvided() {
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .when().get("/graphql")
                 .then()
@@ -49,7 +49,7 @@ public abstract class AbstractKeycloakIntegrationIndexingServiceIT {
     }
 
     @Test
-    public void testAuthorizedUserProvided() {
+    void testAuthorizedUserProvided() {
         //jdoe has role:user and confidential, resource served
         given().auth().oauth2(getAccessToken("jdoe"))
                 .contentType(ContentType.JSON)
@@ -59,7 +59,7 @@ public abstract class AbstractKeycloakIntegrationIndexingServiceIT {
     }
 
     @Test
-    public void graphiqlLoginOnKeycloakServedTest() {
+    void graphiqlLoginOnKeycloakServedTest() {
         // Returning keycloak login page
         given().when().get("/graphiql/")
                 .then()

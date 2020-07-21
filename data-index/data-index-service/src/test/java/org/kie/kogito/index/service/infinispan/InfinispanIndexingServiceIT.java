@@ -26,7 +26,7 @@ import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 
 @QuarkusTest
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-public class InfinispanIndexingServiceIT extends AbstractIndexingServiceIT {
+class InfinispanIndexingServiceIT extends AbstractIndexingServiceIT {
 
     @Override
     protected String getProcessProtobufFileContent() throws Exception {

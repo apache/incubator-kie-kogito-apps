@@ -19,6 +19,6 @@ package org.kie.kogito.index.service.mongodb;
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest
-public class MongoNativeIndexingServiceIT extends MongoIndexingServiceIT {
+class MongoNativeIndexingServiceIT extends MongoIndexingServiceIT {
 
 }

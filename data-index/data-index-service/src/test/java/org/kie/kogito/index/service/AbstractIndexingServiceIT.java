@@ -101,12 +101,12 @@ public abstract class AbstractIndexingServiceIT {
     DataIndexStorageService cacheService;
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         RestAssured.config = RestAssured.config().encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false));
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         cacheService.getJobsCache().clear();
         cacheService.getProcessInstancesCache().clear();
         cacheService.getUserTaskInstancesCache().clear();
@@ -123,7 +123,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testAddBrokenProtoFile() {
+    void testAddBrokenProtoFile() {
         try {
             protobufService.registerProtoBufferType(getBrokenProtoBufferFile());
             fail("Registering broken proto file should fail");
@@ -133,7 +133,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testAddProtoFileMissingModel() {
+    void testAddProtoFileMissingModel() {
         try {
             protobufService.registerProtoBufferType(getProtoBufferFileWithoutModel());
             fail("Registering broken proto file should fail");
@@ -143,7 +143,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testAddProtoFileMissingId() {
+    void testAddProtoFileMissingId() {
         try {
             protobufService.registerProtoBufferType(getProtoBufferFileWithoutId());
             fail("Registering broken proto file should fail");
@@ -153,7 +153,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testAddProtoFileMissingModelType() {
+    void testAddProtoFileMissingModelType() {
         try {
             protobufService.registerProtoBufferType(getProtoBufferFileWithoutModelType());
             fail("Registering broken proto file should fail");
@@ -163,7 +163,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test //Reproducer for KOGITO-172
-    public void testAddProtoFileTwice() throws Exception {
+    void testAddProtoFileTwice() throws Exception {
         protobufService.registerProtoBufferType(getProtoBufferFileV1());
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{Game{ player, id, name, metadata { processInstances { id } } } }\" }")
                 .when().post("/graphql")
@@ -182,7 +182,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test //Reproducer for KOGITO-334
-    public void testDefaultGraphqlTypes() {
+    void testDefaultGraphqlTypes() {
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200).body("data.ProcessInstances", isA(Collection.class));
@@ -197,7 +197,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testAddProtoFile() throws Exception {
+    void testAddProtoFile() throws Exception {
         String processId = "travels";
         String subProcessId = processId + "_sub";
         String processInstanceId = UUID.randomUUID().toString();
@@ -443,7 +443,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testIndexingDomainUsingUserTaskEventFirst() throws Exception {
+    void testIndexingDomainUsingUserTaskEventFirst() throws Exception {
         String taskId = UUID.randomUUID().toString();
         String state = "InProgress";
         String processId = "travels";
@@ -512,7 +512,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testIndexingDomainUsingProcessEventFirst() throws Exception {
+    void testIndexingDomainUsingProcessEventFirst() throws Exception {
         String taskId = UUID.randomUUID().toString();
         String state = "InProgress";
         String processId = "travels";
@@ -581,7 +581,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testIndexingDomainParallelEvents() throws Exception {
+    void testIndexingDomainParallelEvents() throws Exception {
         String taskId = UUID.randomUUID().toString();
         String state = "InProgress";
         String processId = "travels";
@@ -631,7 +631,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testProcessInstanceIndex() throws Exception {
+    void testProcessInstanceIndex() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
         String subProcessId = processId + "_sub";
@@ -723,7 +723,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testUserTaskInstanceIndex() throws Exception {
+    void testUserTaskInstanceIndex() throws Exception {
         String taskId = UUID.randomUUID().toString();
         String state = "InProgress";
         String processId = "deals";
@@ -795,7 +795,7 @@ public abstract class AbstractIndexingServiceIT {
     }
 
     @Test
-    public void testJobIndex() throws Exception {
+    void testJobIndex() throws Exception {
         String jobId = UUID.randomUUID().toString();
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();

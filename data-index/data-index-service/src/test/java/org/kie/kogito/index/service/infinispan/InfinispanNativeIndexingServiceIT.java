@@ -19,7 +19,7 @@ package org.kie.kogito.index.service.infinispan;
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest
-public class InfinispanNativeIndexingServiceIT extends InfinispanIndexingServiceIT {
+class InfinispanNativeIndexingServiceIT extends InfinispanIndexingServiceIT {
 
     // Execute the same tests but in native mode.
 }
