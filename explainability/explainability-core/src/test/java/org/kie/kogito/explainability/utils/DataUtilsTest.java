@@ -15,15 +15,23 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DataUtilsTest {
 
@@ -131,4 +139,63 @@ class DataUtilsTest {
         }
         assertEquals(noOfPerturbations, changedFeatures);
     }
+
+    @Test
+    void testDoublesToFeatures() {
+        double[] inputs = new double[10];
+        for (int i = 0; i < 10; i++) {
+            inputs[i] = i % 2 == 0 ? 1 : 0;
+        }
+        List<Feature> features = DataUtils.doublesToFeatures(inputs);
+        assertNotNull(features);
+        assertEquals(10, features.size());
+        for (Feature f : features) {
+            assertNotNull(f);
+            assertNotNull(f.getName());
+            assertEquals(Type.NUMBER, f.getType());
+            assertNotNull(f.getValue());
+        }
+    }
+
+    @Test
+    void testDoubleToFeature() {
+        double d = 0.5;
+        Feature f = DataUtils.doubleToFeature(d);
+        assertNotNull(f);
+        assertNotNull(f.getName());
+        assertEquals(Type.NUMBER, f.getType());
+        assertNotNull(f.getValue());
+    }
+
+    @Test
+    void testRandomDistributionGeneration() {
+        DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(10);
+        assertNotNull(dataDistribution);
+        assertNotNull(dataDistribution.getFeatureDistributions());
+        for (FeatureDistribution featureDistribution : dataDistribution.getFeatureDistributions()) {
+            assertNotNull(featureDistribution);
+        }
+    }
+
+    @Test
+    void testGetFeatureDistribution() {
+        double[] doubles = new double[10];
+        Arrays.fill(doubles, 1);
+        FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
+        assertNotNull(featureDistribution);
+    }
+
+    @Test
+    void testGetLinearizedFeatures() {
+        List<Feature> features = new LinkedList<>();
+        Feature f = mock(Feature.class);
+        Value<?> value = mock(Value.class);
+        when(f.getValue()).thenReturn(value);
+        when(f.getName()).thenReturn("name");
+        when(f.getType()).thenReturn(Type.NUMBER);
+        features.add(f);
+        List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(features);
+        assertEquals(features.size(), linearizedFeatures.size());
+    }
+
 }
