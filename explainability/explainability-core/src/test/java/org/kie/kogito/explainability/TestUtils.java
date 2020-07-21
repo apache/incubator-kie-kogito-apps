@@ -28,19 +28,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.kie.kogito.explainability.model.DataDistribution;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.utils.DataUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestUtils {
 
@@ -144,6 +144,18 @@ public class TestUtils {
                 return outputs;
             }
         };
+    }
+
+    public static Feature getMockedNumericFeature() {
+        Feature f = mock(Feature.class);
+        when(f.getType()).thenReturn(Type.NUMBER);
+        when(f.getName()).thenReturn("f-num");
+        Value<Double> value = mock(Value.class);
+        when(value.getUnderlyingObject()).thenReturn(1d);
+        when(value.asNumber()).thenReturn(1d);
+        when(value.asString()).thenReturn("1");
+        when(f.getValue()).thenReturn(value);
+        return f;
     }
 
     public static Feature getRandomFeature() {

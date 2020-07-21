@@ -22,17 +22,18 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -66,7 +67,7 @@ class DummyModelsLimeExplainerTest {
         assertTrue(topFeatures.get(1).getScore() < topFeatures.get(0).getScore() * 10);
         assertTrue(topFeatures.get(2).getScore() < topFeatures.get(0).getScore() * 10);
         double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
-        assertTrue(v > 0);
+        assertThat(v).isGreaterThanOrEqualTo(0);
     }
 
     @Test
@@ -91,7 +92,7 @@ class DummyModelsLimeExplainerTest {
         assertTrue(perFeatureImportance.get(1).getScore() > 0);
         assertEquals(features.get(idx).getName(), perFeatureImportance.get(2).getFeature().getName());
         double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
-        assertTrue(v > 0);
+        assertThat(v).isGreaterThanOrEqualTo(0);
     }
 
     @Test
@@ -113,6 +114,8 @@ class DummyModelsLimeExplainerTest {
         List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(1);
         assertFalse(topFeatures.isEmpty());
         assertEquals(features.get(idx).getName(), topFeatures.get(0).getFeature().getName());
+        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
+        assertThat(v).isGreaterThanOrEqualTo(0);
     }
 
     @Test
@@ -133,7 +136,7 @@ class DummyModelsLimeExplainerTest {
         List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(1);
         assertEquals("money (f2)", topFeatures.get(0).getFeature().getName());
         double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
-        assertTrue(v > 0);
+        assertThat(v).isGreaterThanOrEqualTo(0);
     }
 
     @Test
@@ -154,7 +157,7 @@ class DummyModelsLimeExplainerTest {
         List<FeatureImportance> perFeatureImportance = saliency.getNegativeFeatures(3);
         assertFalse(perFeatureImportance.stream().map(fi -> fi.getFeature().getName()).collect(Collectors.toList()).contains(features.get(idx).getName()));
         double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getNegativeFeatures(2));
-        assertTrue(v >= 0);
+        assertThat(v).isGreaterThanOrEqualTo(0);
     }
 
 }

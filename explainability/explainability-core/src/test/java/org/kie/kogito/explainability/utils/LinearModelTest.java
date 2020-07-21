@@ -15,22 +15,19 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.stream.DoubleStream;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.utils.LinearModel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LinearModelTest {
-
-    private final static SecureRandom random = new SecureRandom();
 
     @Test
     void testEmptyFitClassificationDoesNothing() {
@@ -58,9 +55,9 @@ class LinearModelTest {
         for (int i = 0; i < 100; i++) {
             double[] x = new double[size];
             for (int j = 0; j < size; j++) {
-                x[j] = random.nextDouble();
+                x[j] = (double) i / (1d * j + i);
             }
-            Double y = random.nextDouble();
+            Double y = DoubleStream.of(x).sum();
             trainingSet.add(new ImmutablePair<>(x, y));
         }
         assertTrue(linearModel.fit(trainingSet) < 1d);
@@ -74,9 +71,9 @@ class LinearModelTest {
         for (int i = 0; i < 100; i++) {
             double[] x = new double[size];
             for (int j = 0; j < size; j++) {
-                x[j] = random.nextDouble();
+                x[j] = (double) i / (1d * j + i);
             }
-            Double y = (double) (random.nextBoolean() ? 1 : 0);
+            Double y = i % 2 == 0 ? 1d : 0d;
             trainingSet.add(new ImmutablePair<>(x, y));
         }
         assertTrue(linearModel.fit(trainingSet) < 1d);

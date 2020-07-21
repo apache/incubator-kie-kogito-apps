@@ -47,13 +47,13 @@ public class LinearModel {
     }
 
     public double fit(Collection<Pair<double[], Double>> trainingSet, double[] sampleWeights) {
-        double floss = 1d;
+        double finalLoss = Double.NaN;
         if (trainingSet.isEmpty()) {
             logger.warn("fitting an empty training set");
         } else {
             double lr = 0.01;
             int e = 0;
-            while (floss > 0.1 && e < 15) {
+            while ((Double.isNaN(finalLoss) || finalLoss > 0.1) && e < 15) {
                 double loss = 0;
                 int i = 0;
                 for (Pair<double[], Double> sample : trainingSet) {
@@ -77,12 +77,12 @@ public class LinearModel {
                 }
                 lr *= (1d / (1d + 0.01 * e)); // learning rate decay
 
-                floss = loss;
+                finalLoss = loss;
                 e++;
                 logger.debug("epoch {}, loss: {}", e, loss);
             }
         }
-        return floss;
+        return finalLoss;
     }
 
     private double checkFinite(double diff) {

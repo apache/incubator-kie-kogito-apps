@@ -139,11 +139,13 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                     double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
 
                     LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), classification);
-                    linearModel.fit(trainingSet, sampleWeights);
-                    for (int i = 0; i < weights.length; i++) {
-                        weights[i] += linearModel.getWeights()[i] / (double) actualOutputs.size();
+                    double loss = linearModel.fit(trainingSet, sampleWeights);
+                    if (!Double.isNaN(loss)) {
+                        for (int i = 0; i < weights.length; i++) {
+                            weights[i] += linearModel.getWeights()[i] / (double) actualOutputs.size();
+                        }
+                        logger.debug("weights updated for output {}", currentOutput);
                     }
-                    logger.debug("weights updated for output {}", currentOutput);
                 } else {
                     logger.debug("skipping explanation of empty output {}", currentOutput);
                 }

@@ -18,27 +18,19 @@ package org.kie.kogito.explainability.local.lime;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.utils.DataUtils;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 class LimeExplainerTest {
-
-    @BeforeAll
-    static void setUpBefore() {
-        DataUtils.seed(4);
-    }
 
     @Test
     void testEmptyPrediction() {
@@ -57,7 +49,7 @@ class LimeExplainerTest {
         PredictionOutput output = mock(PredictionOutput.class);
         List<Feature> features = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
-            features.add(TestUtils.getRandomFeature());
+            features.add(TestUtils.getMockedNumericFeature());
         }
         PredictionInput input = new PredictionInput(features);
         Prediction prediction = new Prediction(input, output);
@@ -66,18 +58,4 @@ class LimeExplainerTest {
         assertNotNull(saliency);
     }
 
-    @Test
-    void testNonEmptyInputAndOutputWithTextClassifier() {
-        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
-        List<Feature> features = new LinkedList<>();
-        for (int i = 0; i < 4; i++) {
-            features.add(TestUtils.getRandomFeature());
-        }
-        features.add(FeatureFactory.newTextFeature("f-5", "money"));
-        PredictionInput input = new PredictionInput(features);
-        PredictionProvider model = TestUtils.getDummyTextClassifier();
-        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
-        Saliency saliency = limeExplainer.explain(prediction, model);
-        assertNotNull(saliency);
-    }
 }
