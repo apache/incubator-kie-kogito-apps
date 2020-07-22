@@ -29,6 +29,10 @@ import org.slf4j.LoggerFactory;
 public class LinearModel {
 
     private static final Logger logger = LoggerFactory.getLogger(LinearModel.class);
+    private static final double GOOD_LOSS_THRESHOLD = 0.1;
+    private static final int MAX_NO_EPOCHS = 15;
+    private static final double INITIAL_LEARNING_RATE = 0.01;
+    private static final double DECAY_RATE = 0.01;
 
     private final double[] weights;
     private final boolean classification;
@@ -51,9 +55,9 @@ public class LinearModel {
         if (trainingSet.isEmpty()) {
             logger.warn("fitting an empty training set");
         } else {
-            double lr = 0.01;
+            double lr = INITIAL_LEARNING_RATE;
             int e = 0;
-            while ((Double.isNaN(finalLoss) || finalLoss > 0.1) && e < 15) {
+            while ((Double.isNaN(finalLoss) || finalLoss > GOOD_LOSS_THRESHOLD) && e < MAX_NO_EPOCHS) {
                 double loss = 0;
                 int i = 0;
                 for (Pair<double[], Double> sample : trainingSet) {
@@ -75,7 +79,7 @@ public class LinearModel {
                     }
                     i++;
                 }
-                lr *= (1d / (1d + 0.01 * e)); // learning rate decay
+                lr *= (1d / (1d + DECAY_RATE * e)); // learning rate decay
 
                 finalLoss = loss;
                 e++;
