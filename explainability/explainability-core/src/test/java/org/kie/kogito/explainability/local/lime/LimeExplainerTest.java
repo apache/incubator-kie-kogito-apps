@@ -21,6 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -30,6 +31,7 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.DataUtils;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 class LimeExplainerTest {
@@ -46,8 +48,12 @@ class LimeExplainerTest {
         PredictionInput input = mock(PredictionInput.class);
         Prediction prediction = new Prediction(input, output);
         PredictionProvider model = mock(PredictionProvider.class);
-        Saliency saliency = limeExplainer.explain(prediction, model);
-        assertNotNull(saliency);
+        try {
+            limeExplainer.explain(prediction, model);
+            fail("explaining an empty prediction should throw an exception");
+        } catch (LocalExplanationException e) {
+            // do nothing
+        }
     }
 
     @Test
@@ -64,5 +70,4 @@ class LimeExplainerTest {
         Saliency saliency = limeExplainer.explain(prediction, model);
         assertNotNull(saliency);
     }
-
 }

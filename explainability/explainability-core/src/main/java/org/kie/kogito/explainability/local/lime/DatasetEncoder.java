@@ -92,12 +92,11 @@ class DatasetEncoder {
     }
 
     private List<List<Double>> getColumnData(List<PredictionInput> perturbedInputs) {
-        List<Type> featureTypes = targetInput.getFeatures().stream().map(Feature::getType).collect(Collectors.toList());
         List<List<Double>> columnData = new LinkedList<>();
 
-        for (int t = 0; t < featureTypes.size(); t++) {
+        for (int t = 0; t < targetInput.getFeatures().size(); t++) {
             Feature originalFeature = targetInput.getFeatures().get(t);
-            switch (featureTypes.get(t)) {
+            switch (originalFeature.getType()) {
                 case NUMBER:
                     encodeNumbers(perturbedInputs, targetInput, columnData, t);
                     break;
