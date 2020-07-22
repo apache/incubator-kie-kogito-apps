@@ -50,21 +50,9 @@ public enum Type {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     @Override
     public String toString() {
         return String.valueOf(value);
     }
 
-    public static Type fromValue(String text) {
-        for (Type b : Type.values()) {
-            if (String.valueOf(b.value).equals(text)) {
-                return b;
-            }
-        }
-        return null;
-    }
 }

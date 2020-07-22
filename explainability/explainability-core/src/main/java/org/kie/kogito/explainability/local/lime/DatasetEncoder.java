@@ -102,7 +102,7 @@ class DatasetEncoder {
                     encodeNumbers(perturbedInputs, targetInput, columnData, t);
                     break;
                 case TEXT:
-                    encodeText(perturbedInputs, columnData, t, originalFeature);
+                    encodeText(perturbedInputs, columnData, originalFeature);
                     break;
                 case CATEGORICAL:
                 case BINARY:
@@ -149,7 +149,7 @@ class DatasetEncoder {
         columnData.add(featureValues);
     }
 
-    private static void encodeText(List<PredictionInput> predictionInputs, List<List<Double>> columnData, int t, Feature originalFeature) {
+    private static void encodeText(List<PredictionInput> predictionInputs, List<List<Double>> columnData, Feature originalFeature) {
         String originalString = originalFeature.getValue().asString();
         String[] words = originalString.split(" ");
         for (String word : words) {

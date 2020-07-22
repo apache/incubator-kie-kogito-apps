@@ -26,11 +26,6 @@ public class Saliency {
 
     private final List<FeatureImportance> perFeatureImportance;
 
-    public Saliency(List<FeatureImportance> perFeatureImportance, int k) {
-        this.perFeatureImportance = perFeatureImportance.stream().sorted((f0, f1) -> Double.compare(
-                Math.abs(f1.getScore()), Math.abs(f0.getScore()))).limit(k).collect(Collectors.toList());
-    }
-
     public Saliency(List<FeatureImportance> perFeatureImportance) {
         this.perFeatureImportance = perFeatureImportance;
     }
