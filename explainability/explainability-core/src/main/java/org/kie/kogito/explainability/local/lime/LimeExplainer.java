@@ -54,18 +54,30 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
     private static final Logger logger = LoggerFactory.getLogger(LimeExplainer.class);
 
     /**
-     * no. of samples to be generated for the local linear model training
+     * No. of samples to be generated for the local linear model training
      */
     private final int noOfSamples;
 
     /**
-     * no. of perturbations to perform on a prediction
+     * No. of perturbations to perform on a prediction
      */
     private final int noOfPerturbations;
+
+    /**
+     * No. of retries while trying to find a (linearly) separable dataset
+     */
+    private final int noOfRetries;
+
+    public LimeExplainer(int noOfSamples, int noOfPerturbations, int noOfRetries) {
+        this.noOfSamples = noOfSamples;
+        this.noOfPerturbations = noOfPerturbations;
+        this.noOfRetries = noOfRetries;
+    }
 
     public LimeExplainer(int noOfSamples, int noOfPerturbations) {
         this.noOfSamples = noOfSamples;
         this.noOfPerturbations = noOfPerturbations;
+        this.noOfRetries = 3;
     }
 
     @Override
@@ -98,7 +110,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                         List<PredictionOutput> trainingOutputs = new LinkedList<>();
 
                         Output currentOutput = actualOutputs.get(o);
-
+                        int runs = noOfRetries;
                         // do not explain the current output if it is 'null'
                         if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
                             Map<Double, Long> rawClassesBalance = new HashMap<>();
@@ -110,8 +122,8 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                              */
 
                             boolean classification = false;
-                            int tries = 3; // in case of failure in separating the dataset, retry with newly perturbed inputs
-                            while (!separableDataset && tries > 0) {
+                            // in case of failure in separating the dataset, retry with newly perturbed inputs
+                            while (!separableDataset && runs > 0) {
                                 // perturb the inputs
                                 List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput, noOfInputFeatures);
 
@@ -134,12 +146,12 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                                         separableDataset = true;
                                         classification = rawClassesBalance.size() == 2;
                                     } else {
-                                        tries--;
+                                        runs--;
                                     }
                                 } else {
-                                    tries--;
+                                    runs--;
                                 }
-                                if (tries == 0 || separableDataset) {
+                                if (runs == 0 || separableDataset) {
                                     // if dataset creation process succeeds use it to train the linear model
                                     trainingInputs.addAll(perturbedInputs);
                                     trainingOutputs.addAll(perturbedOutputs);
