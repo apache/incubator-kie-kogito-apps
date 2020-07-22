@@ -17,13 +17,9 @@ const FormattedDate = (props: FormattedDateProps) => {
     position = 'auto',
     fullDateAndTime = false
   } = props;
-  const difference = differenceInDays(new Date(date), new Date());
+  const difference = differenceInDays(new Date(date), Date.now());
   const fullFormattedDate = format(new Date(date), 'PPpp');
   let formattedDate;
-
-  if (fullDateAndTime) {
-    return <span>{fullFormattedDate}</span>;
-  }
 
   if (difference === 0) {
     formattedDate = `${formatDistanceToNowStrict(new Date(date))} ago`;
@@ -33,15 +29,21 @@ const FormattedDate = (props: FormattedDateProps) => {
   }
 
   return (
-    <Tooltip
-      content={fullFormattedDate}
-      entryDelay={200}
-      exitDelay={100}
-      distance={5}
-      position={position}
-    >
-      <span>{formattedDate}</span>
-    </Tooltip>
+    <>
+      {fullDateAndTime ? (
+        <span>{fullFormattedDate}</span>
+      ) : (
+        <Tooltip
+          content={fullFormattedDate}
+          entryDelay={200}
+          exitDelay={100}
+          distance={5}
+          position={position}
+        >
+          <span>{formattedDate}</span>
+        </Tooltip>
+      )}
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IRow, Table, TableBody, TableHeader } from '@patternfly/react-table';
 import {
@@ -11,14 +11,55 @@ import {
 import { SearchIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import ExecutionStatus from '../../Atoms/ExecutionStatus/ExecutionStatus';
 import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
-import skeletonRows from '../../Molecules/skeletonRows/skeletonRows';
+import skeletonRows from '../../../utils/skeletonRows/skeletonRows';
 import { IExecution, IExecutions, RemoteData } from '../../../types';
 
 type ExecutionTableProps = {
   data: RemoteData<Error, IExecutions>;
 };
 
-const prepareExecutionTableRows = (rowData: IExecution[]) => {
+const ExecutionTable = (props: ExecutionTableProps) => {
+  const { data } = props;
+  const columns = ['ID', 'Description', 'Executor', 'Date', 'Execution Status'];
+  const [rows, setRows] = useState<IRow[]>(prepareRows(columns.length, data));
+
+  useEffect(() => {
+    setRows(prepareRows(columns.length, data));
+  }, [data.status]);
+
+  return (
+    <Table cells={columns} rows={rows} aria-label="Executions list">
+      <TableHeader />
+      <TableBody rowKey="executionKey" />
+    </Table>
+  );
+};
+
+const prepareRows = (
+  columnsNumber: number,
+  data: RemoteData<Error, IExecutions>
+) => {
+  let rows;
+  switch (data.status) {
+    case 'NOT_ASKED':
+    case 'LOADING':
+      rows = skeletonRows(columnsNumber, 10, 'executionKey');
+      break;
+    case 'SUCCESS':
+      if (data.data.headers.length > 0) {
+        rows = prepareExecutionsRows(data.data.headers);
+      } else {
+        rows = noExecutions(columnsNumber);
+      }
+      break;
+    case 'FAILURE':
+      rows = loadingError(columnsNumber);
+      break;
+  }
+  return rows;
+};
+
+const prepareExecutionsRows = (rowData: IExecution[]) => {
   const rows: IRow[] = [];
 
   rowData.forEach(item => {
@@ -44,7 +85,7 @@ const prepareExecutionTableRows = (rowData: IExecution[]) => {
       title: <ExecutionStatus result={item.executionSucceeded} />
     });
     row.cells = cells;
-    row.decisionKey = 'key-' + item.executionId;
+    row.executionKey = 'key-' + item.executionId;
     rows.push(row);
   });
   return rows;
@@ -54,7 +95,7 @@ const noExecutions = (colSpan: number) => {
   return [
     {
       heightAuto: true,
-      decisionKey: 'no-results',
+      executionKey: 'no-results',
       cells: [
         {
           props: { colSpan },
@@ -82,7 +123,7 @@ const loadingError = (colSpan: number) => {
   return [
     {
       heightAuto: true,
-      decisionKey: 'no-results',
+      executionKey: 'no-results',
       cells: [
         {
           props: { colSpan },
@@ -103,56 +144,6 @@ const loadingError = (colSpan: number) => {
       ]
     }
   ];
-};
-
-const ExecutionTable = (props: ExecutionTableProps) => {
-  const { data } = props;
-  const columns = ['ID', 'Description', 'Executor', 'Date', 'Execution Status'];
-
-  return (
-    <>
-      {(data.status === 'LOADING' || data.status === 'NOT_ASKED') && (
-        <Table
-          cells={columns}
-          rows={skeletonRows(columns.length, 10, 'decisionKey')}
-          aria-label="Executions list"
-        >
-          <TableHeader />
-          <TableBody rowKey="decisionKey" />
-        </Table>
-      )}
-      {data.status === 'SUCCESS' && data.data.headers.length > 0 && (
-        <Table
-          cells={columns}
-          rows={prepareExecutionTableRows(data.data.headers)}
-          aria-label="Executions list"
-        >
-          <TableHeader />
-          <TableBody rowKey="decisionKey" />
-        </Table>
-      )}
-      {data.status === 'SUCCESS' && data.data.headers.length === 0 && (
-        <Table
-          cells={columns}
-          rows={noExecutions(columns.length)}
-          aria-label="Executions list"
-        >
-          <TableHeader />
-          <TableBody rowKey="decisionKey" />
-        </Table>
-      )}
-      {data.status === 'FAILURE' && (
-        <Table
-          cells={columns}
-          rows={loadingError(columns.length)}
-          aria-label="Executions list"
-        >
-          <TableHeader />
-          <TableBody rowKey="decisionKey" />
-        </Table>
-      )}
-    </>
-  );
 };
 
 export default ExecutionTable;

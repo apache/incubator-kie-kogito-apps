@@ -51,10 +51,9 @@ describe('Execution table', () => {
           }
         ]
       }
-    };
-    const wrapper = shallow(
-      <ExecutionTable data={data as RemoteData<Error, IExecutions>} />
-    );
+    } as RemoteData<Error, IExecutions>;
+    const wrapper = shallow(<ExecutionTable data={data} />);
+
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -67,10 +66,9 @@ describe('Execution table', () => {
         offset: 0,
         headers: []
       }
-    };
-    const wrapper = shallow(
-      <ExecutionTable data={data as RemoteData<Error, IExecutions>} />
-    );
+    } as RemoteData<Error, IExecutions>;
+    const wrapper = shallow(<ExecutionTable data={data} />);
+
     expect(wrapper).toMatchSnapshot();
   });
 });

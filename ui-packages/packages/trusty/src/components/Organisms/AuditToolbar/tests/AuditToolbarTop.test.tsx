@@ -2,16 +2,32 @@ import React from 'react';
 import { AuditToolbarTop } from '../AuditToolbar';
 import { mount, shallow } from 'enzyme';
 
+const defaultProps = {
+  setSearchString: jest.fn(),
+  fromDate: '2020-01-01',
+  setFromDate: jest.fn(),
+  toDate: '2020-02-01',
+  setToDate: jest.fn(),
+  total: 20,
+  page: 1,
+  pageSize: 10,
+  setPage: jest.fn(),
+  setPageSize: jest.fn(),
+  onRefresh: jest.fn()
+};
+
 describe('Audit top toolbar', () => {
   test('renders correctly', () => {
-    const wrapper = renderAuditToolbarTop('shallow');
+    const wrapper = shallow(<AuditToolbarTop {...defaultProps} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   test('allows search by ID', () => {
     const setSearchString = jest.fn();
     const searchString = '12345';
-    const wrapper = renderAuditToolbarTop('mount', { setSearchString });
+    const wrapper = mount(
+      <AuditToolbarTop {...{ ...defaultProps, setSearchString }} />
+    );
     const searchInput = wrapper.find('input#audit-search-input');
     const searchButton = wrapper.find('button#audit-search');
     const inputNode = searchInput.getDOMNode<HTMLInputElement>();
@@ -32,7 +48,9 @@ describe('Audit top toolbar', () => {
   test('handles from date filter', () => {
     const setFromDate = jest.fn();
     const fromDate = '2020-02-01';
-    const wrapper = renderAuditToolbarTop('mount', { setFromDate });
+    const wrapper = mount(
+      <AuditToolbarTop {...{ ...defaultProps, setFromDate }} />
+    );
 
     wrapper.props().setFromDate(fromDate);
 
@@ -43,7 +61,9 @@ describe('Audit top toolbar', () => {
   test('handles to date filter', () => {
     const setToDate = jest.fn();
     const toDate = '2020-04-01';
-    const wrapper = renderAuditToolbarTop('mount', { setToDate });
+    const wrapper = mount(
+      <AuditToolbarTop {...{ ...defaultProps, setToDate }} />
+    );
 
     wrapper.props().setToDate(toDate);
 
@@ -56,10 +76,9 @@ describe('Audit top toolbar', () => {
     const setPageSize = jest.fn();
     const page = 2;
     const pageSize = 50;
-    const wrapper = renderAuditToolbarTop('mount', {
-      setPage,
-      setPageSize
-    });
+    const wrapper = mount(
+      <AuditToolbarTop {...{ ...defaultProps, setPage, setPageSize }} />
+    );
 
     wrapper.props().setPage(page);
     wrapper.props().setPageSize(pageSize);
@@ -72,32 +91,12 @@ describe('Audit top toolbar', () => {
 
   test('handles data refresh', () => {
     const onRefresh = jest.fn();
-    const wrapper = renderAuditToolbarTop('mount', { onRefresh });
+    const wrapper = mount(
+      <AuditToolbarTop {...{ ...defaultProps, onRefresh }} />
+    );
 
     wrapper.find('button#executions-refresh').simulate('click');
 
     expect(onRefresh).toBeCalledTimes(1);
   });
 });
-
-const renderAuditToolbarTop = (method: 'shallow' | 'mount', props?: object) => {
-  const defaultProps = {
-    setSearchString: jest.fn(),
-    fromDate: '2020-01-01',
-    setFromDate: jest.fn(),
-    toDate: '2020-02-01',
-    setToDate: jest.fn(),
-    total: 20,
-    page: 1,
-    pageSize: 10,
-    setPage: jest.fn(),
-    setPageSize: jest.fn(),
-    onRefresh: jest.fn(),
-    ...props
-  };
-  if (method === 'shallow') {
-    return shallow(<AuditToolbarTop {...defaultProps} />);
-  } else {
-    return mount(<AuditToolbarTop {...defaultProps} />);
-  }
-};

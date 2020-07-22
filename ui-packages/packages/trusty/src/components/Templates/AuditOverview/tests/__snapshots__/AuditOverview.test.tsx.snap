@@ -15,7 +15,7 @@ exports[`Audit overview renders correctly a list of executions 1`] = `
       <Text
         component="p"
       >
-        Here you can retrieve all the available information about past cases
+        Here you can retrieve all the available information about past cases.
       </Text>
     </TextContent>
   </PageSection>

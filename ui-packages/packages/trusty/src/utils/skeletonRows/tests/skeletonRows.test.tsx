@@ -1,7 +1,7 @@
 import React from 'react';
 import skeletonRows from '../skeletonRows';
 import { shallow, mount } from 'enzyme';
-import SkeletonStripe from '../../../Atoms/SkeletonStripe/SkeletonStripe';
+import SkeletonStripe from '../../../components/Atoms/SkeletonStripe/SkeletonStripe';
 import { Table, TableBody, TableHeader } from '@patternfly/react-table';
 
 describe('skeletonRows', () => {

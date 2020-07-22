@@ -57,7 +57,8 @@ const AuditOverview = (props: AuditOverviewProps) => {
             Audit Investigation
           </Title>
           <Text component="p">
-            Here you can retrieve all the available information about past cases
+            Here you can retrieve all the available information about past
+            cases.
           </Text>
         </TextContent>
       </PageSection>

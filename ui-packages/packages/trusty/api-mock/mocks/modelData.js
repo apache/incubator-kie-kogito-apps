@@ -1,4 +1,4 @@
-const executionIdBase = require("./executionIdBase");
+const executionIdBase = require('./executionIdBase');
 const DMN_1 = `
   <dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/_84627CF5-6B15-47D8-A943-40555270CCEC" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" id="_66A7B1AB-61EF-4E13-B41E-46C928698EE2" name="example" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_84627CF5-6B15-47D8-A943-40555270CCEC">
     <dmn:extensionElements/>
@@ -160,144 +160,144 @@ const PMML_3 = `
 const modelData = [
   {
     executionId: executionIdBase + 1000,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "myMortgage",
-    namespace: "modelNameSpace",
-    type: "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'myMortgage',
+    namespace: 'modelNameSpace',
+    type: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: DMN_1,
+    model: DMN_1
   },
   {
     executionId: executionIdBase + 1001,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "myMortgage",
-    namespace: "modelNameSpace",
-    type: "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'myMortgage',
+    namespace: 'modelNameSpace',
+    type: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: DMN_1,
+    model: DMN_1
   },
   {
     executionId: executionIdBase + 1002,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "myMortgage",
-    namespace: "modelNameSpace",
-    type: "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'myMortgage',
+    namespace: 'modelNameSpace',
+    type: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: DMN_1,
+    model: DMN_1
   },
   {
     executionId: executionIdBase + 1003,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "myMortgage",
-    namespace: "modelNameSpace",
-    type: "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'myMortgage',
+    namespace: 'modelNameSpace',
+    type: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: DMN_1,
+    model: DMN_1
   },
   {
     executionId: executionIdBase + 1004,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "myMortgage",
-    namespace: "modelNameSpace",
-    type: "http://www.omg.org/spec/DMN/20151101/dmn.xsd",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'myMortgage',
+    namespace: 'modelNameSpace',
+    type: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: DMN_1,
+    model: DMN_1
   },
   {
     executionId: executionIdBase + 1005,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "fraud-scoring",
-    namespace: "modelNameSpace",
-    type: "http://www.dmg.org/PMML-4_4",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'fraud-scoring',
+    namespace: 'modelNameSpace',
+    type: 'http://www.dmg.org/PMML-4_4',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: PMML_1,
+    model: PMML_1
   },
   {
     executionId: executionIdBase + 1006,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "fraud-scoring",
-    namespace: "modelNameSpace",
-    type: "http://www.dmg.org/PMML-4_4",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'fraud-scoring',
+    namespace: 'modelNameSpace',
+    type: 'http://www.dmg.org/PMML-4_4',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: PMML_2,
+    model: PMML_2
   },
   {
     executionId: executionIdBase + 1007,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "fraud-scoring",
-    namespace: "modelNameSpace",
-    type: "http://www.dmg.org/PMML-4_4",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'fraud-scoring',
+    namespace: 'modelNameSpace',
+    type: 'http://www.dmg.org/PMML-4_4',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: PMML_3,
+    model: PMML_3
   },
   {
     executionId: executionIdBase + 1008,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "fraud-scoring",
-    namespace: "modelNameSpace",
-    type: "http://www.dmg.org/PMML-4_4",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'fraud-scoring',
+    namespace: 'modelNameSpace',
+    type: 'http://www.dmg.org/PMML-4_4',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: PMML_1,
+    model: PMML_1
   },
   {
     executionId: executionIdBase + 1009,
-    deploymentDate: "01012020",
-    modelId: "1234567890",
-    name: "fraud-scoring",
-    namespace: "modelNameSpace",
-    type: "http://www.dmg.org/PMML-4_4",
+    deploymentDate: '01012020',
+    modelId: '1234567890',
+    name: 'fraud-scoring',
+    namespace: 'modelNameSpace',
+    type: 'http://www.dmg.org/PMML-4_4',
     serviceIdentifier: {
-      groupId: "groupId",
-      artifactId: "artifacrtId",
-      version: "version",
+      groupId: 'groupId',
+      artifactId: 'artifacrtId',
+      version: 'version'
     },
-    model: PMML_2,
-  },
+    model: PMML_2
+  }
 ];
 
 module.exports = modelData;

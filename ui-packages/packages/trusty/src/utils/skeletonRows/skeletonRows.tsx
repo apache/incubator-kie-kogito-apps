@@ -1,6 +1,6 @@
 import React from 'react';
 import { IRow } from '@patternfly/react-table';
-import SkeletonStripe from './../../Atoms/SkeletonStripe/SkeletonStripe';
+import SkeletonStripe from '../../components/Atoms/SkeletonStripe/SkeletonStripe';
 
 /*
  * Based on a number of rows and columns, this function creates an array specifically intended

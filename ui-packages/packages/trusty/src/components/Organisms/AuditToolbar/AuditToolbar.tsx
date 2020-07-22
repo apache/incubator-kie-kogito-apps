@@ -13,24 +13,24 @@ import { SearchIcon, SyncIcon } from '@patternfly/react-icons';
 import PaginationContainer from '../PaginationContainer/PaginationContainer';
 import DatePicker from '../../Molecules/DatePicker/DatePicker';
 
-interface AuditToolbarBaseProps {
+type toolbarBaseProps = {
   page: number;
   pageSize: number;
   setPage: (page: number) => void;
   setPageSize: (pageSize: number) => void;
   total: number;
-}
+};
 
-interface AuditToolbarCompleteProps extends AuditToolbarBaseProps {
+type topToolbarProps = {
   setSearchString: (searchString: string) => void;
   fromDate: string;
   setFromDate: (fromDate: string) => void;
   toDate: string;
   setToDate: (toDate: string) => void;
   onRefresh: () => void;
-}
+};
 
-export const AuditToolbarTop = (props: AuditToolbarCompleteProps) => {
+export const AuditToolbarTop = (props: toolbarBaseProps & topToolbarProps) => {
   const {
     setSearchString,
     fromDate,
@@ -131,7 +131,7 @@ export const AuditToolbarTop = (props: AuditToolbarCompleteProps) => {
   );
 };
 
-export const AuditToolbarBottom = (props: AuditToolbarBaseProps) => {
+export const AuditToolbarBottom = (props: toolbarBaseProps) => {
   const { total, pageSize, page, setPage, setPageSize } = props;
   return (
     <DataToolbar id="audit-overview-bottom-toolbar">

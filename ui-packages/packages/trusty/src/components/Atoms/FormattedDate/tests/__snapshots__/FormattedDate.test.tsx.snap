@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormattedDate displays a formatted date 1`] = `
+<Fragment>
+  <Tooltip
+    appendTo={[Function]}
+    aria="describedby"
+    boundary="window"
+    className=""
+    content="Jan 1, 2020, 1:00:00 AM"
+    distance={5}
+    enableFlip={true}
+    entryDelay={200}
+    exitDelay={100}
+    flipBehavior={
+      Array [
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "top",
+        "right",
+        "bottom",
+      ]
+    }
+    id=""
+    isAppLauncher={false}
+    isContentLeftAligned={false}
+    isVisible={false}
+    maxWidth="18.75rem"
+    position="auto"
+    tippyProps={Object {}}
+    trigger="mouseenter focus"
+    zIndex={9999}
+  >
+    <span>
+      Jan 1, 2020
+    </span>
+  </Tooltip>
+</Fragment>
+`;
+
+exports[`FormattedDate displays a relative timestamp if the date is in the last 24h 1`] = `
+<Fragment>
+  <Tooltip
+    appendTo={[Function]}
+    aria="describedby"
+    boundary="window"
+    className=""
+    content="Jan 1, 2020, 1:00:00 AM"
+    distance={5}
+    enableFlip={true}
+    entryDelay={200}
+    exitDelay={100}
+    flipBehavior={
+      Array [
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "top",
+        "right",
+        "bottom",
+      ]
+    }
+    id=""
+    isAppLauncher={false}
+    isContentLeftAligned={false}
+    isVisible={false}
+    maxWidth="18.75rem"
+    position="auto"
+    tippyProps={Object {}}
+    trigger="mouseenter focus"
+    zIndex={9999}
+  >
+    <span>
+      0 seconds ago
+    </span>
+  </Tooltip>
+</Fragment>
+`;
+
+exports[`FormattedDate displays full date and time when fullDateAndTime prop is passed 1`] = `
+<Fragment>
+  <span>
+    Jan 1, 2020, 1:00:00 AM
+  </span>
+</Fragment>
+`;
+
+exports[`FormattedDate displays the "on" preposition before the date when preposition prop is passed 1`] = `
+<Fragment>
+  <Tooltip
+    appendTo={[Function]}
+    aria="describedby"
+    boundary="window"
+    className=""
+    content="Jan 1, 2020, 1:00:00 AM"
+    distance={5}
+    enableFlip={true}
+    entryDelay={200}
+    exitDelay={100}
+    flipBehavior={
+      Array [
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "top",
+        "right",
+        "bottom",
+      ]
+    }
+    id=""
+    isAppLauncher={false}
+    isContentLeftAligned={false}
+    isVisible={false}
+    maxWidth="18.75rem"
+    position="auto"
+    tippyProps={Object {}}
+    trigger="mouseenter focus"
+    zIndex={9999}
+  >
+    <span>
+      on Jan 1, 2020
+    </span>
+  </Tooltip>
+</Fragment>
+`;
+
+exports[`FormattedDate renders a tooltip with the complete date and time info 1`] = `
+<Fragment>
+  <Tooltip
+    appendTo={[Function]}
+    aria="describedby"
+    boundary="window"
+    className=""
+    content="Jan 1, 2020, 1:00:00 AM"
+    distance={5}
+    enableFlip={true}
+    entryDelay={200}
+    exitDelay={100}
+    flipBehavior={
+      Array [
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "top",
+        "right",
+        "bottom",
+      ]
+    }
+    id=""
+    isAppLauncher={false}
+    isContentLeftAligned={false}
+    isVisible={false}
+    maxWidth="18.75rem"
+    position="auto"
+    tippyProps={Object {}}
+    trigger="mouseenter focus"
+    zIndex={9999}
+  >
+    <span>
+      Jan 1, 2020
+    </span>
+  </Tooltip>
+</Fragment>
+`;
