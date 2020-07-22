@@ -111,6 +111,7 @@ class DatasetEncoder {
                 case DURATION:
                 case VECTOR:
                 case CURRENCY:
+                case UNDEFINED:
                     encodeEquals(perturbedInputs, columnData, t, originalFeature);
                     break;
                 case BOOLEAN:
@@ -120,8 +121,6 @@ class DatasetEncoder {
                         featureValues.add(pi.getFeatures().get(t).getValue().asNumber());
                     }
                     columnData.add(featureValues);
-                    break;
-                case UNDEFINED:
                     break;
             }
         }

@@ -34,7 +34,6 @@ import static org.mockito.Mockito.mock;
 
 class LimeExplainerTest {
 
-
     @BeforeAll
     static void setUpBefore() {
         DataUtils.seed(4);
