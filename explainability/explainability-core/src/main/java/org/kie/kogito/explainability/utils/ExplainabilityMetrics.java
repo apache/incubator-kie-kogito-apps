@@ -53,8 +53,8 @@ public class ExplainabilityMetrics {
      * Calculate the impact of dropping the most important features (given by {@link Saliency#getTopFeatures(int)} from the input.
      * Highly important features would have rather high impact.
      *
-     * @param model      the model to be explained
-     * @param prediction a prediction
+     * @param model       the model to be explained
+     * @param prediction  a prediction
      * @param topFeatures the list of important features that should be dropped
      * @return the saliency impact
      */
@@ -81,7 +81,7 @@ public class ExplainabilityMetrics {
     }
 
     /**
-     * calculate fidelity of boolean classification outputs using saliency predictor function = sign(sum(saliency.scores))
+     * calculate fidelity (accuracy) of boolean classification outputs using saliency predictor function = sign(sum(saliency.scores))
      * see papers:
      * - Guidotti Riccardo, et al. "A survey of methods for explaining black box models." ACM computing surveys (2018).
      * - Bodria, Francesco, et al. "Explainability Methods for Natural Language Processing: Applications to Sentiment Analysis (Discussion Paper)."
@@ -100,14 +100,13 @@ public class ExplainabilityMetrics {
                 if (Type.BOOLEAN.equals(type)) {
                     double predictorOutput = saliency.getPerFeatureImportance().stream().map(FeatureImportance::getScore).mapToDouble(d -> d).sum();
                     double v = output.getValue().asNumber();
-                    boolean match = (v >= 0 && predictorOutput >= 0) || (v < 0 && predictorOutput < 0);
-                    if (match) {
+                    if ((v >= 0 && predictorOutput >= 0) || (v < 0 && predictorOutput < 0)) {
                         acc++;
                     }
                     evals++;
                 }
             }
         }
-        return acc / evals;
+        return evals == 0 ? 0 : acc / evals;
     }
 }
