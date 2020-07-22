@@ -160,8 +160,13 @@ class DatasetEncoder {
                 if (feature != null && feature.getName().equals(originalFeature.getName())) {
                     String perturbedString = feature.getValue().asString();
                     String[] perturbedWords = perturbedString.split(" ");
-                    Arrays.sort(perturbedWords);
-                    featureValue = Arrays.binarySearch(perturbedWords, word) >= 0 ? 1d : 0d;
+                    featureValue = 0d;
+                    for (String w : perturbedWords) {
+                        if (w.equals(word)) {
+                            featureValue = 1d;
+                            break;
+                        }
+                    }
                 } else {
                     featureValue = 0d;
                 }
