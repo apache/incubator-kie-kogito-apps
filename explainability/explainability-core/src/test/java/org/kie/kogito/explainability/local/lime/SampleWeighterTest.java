@@ -43,7 +43,7 @@ class SampleWeighterTest {
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
         List<Feature> features = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
-            features.add(TestUtils.getRandomFeature());
+            features.add(TestUtils.getMockedNumericFeature());
         }
         // create a dataset whose samples values decrease as the dataset grows (starting from 1)
         for (int i = 0; i < 10; i++) {
