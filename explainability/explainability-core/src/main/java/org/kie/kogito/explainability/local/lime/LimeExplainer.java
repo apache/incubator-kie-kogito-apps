@@ -151,7 +151,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                                 } else {
                                     runs--;
                                 }
-                                if (runs == 0 || separableDataset) {
+                                if (separableDataset) {
                                     // if dataset creation process succeeds use it to train the linear model
                                     trainingInputs.addAll(perturbedInputs);
                                     trainingOutputs.addAll(perturbedOutputs);
