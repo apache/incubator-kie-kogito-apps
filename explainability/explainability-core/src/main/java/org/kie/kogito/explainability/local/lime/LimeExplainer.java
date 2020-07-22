@@ -77,30 +77,46 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
         try {
             PredictionInput originalInput = prediction.getInput();
             List<Feature> inputFeatures = originalInput.getFeatures();
+
+            // in case of composite / nested features, "linearize" the features
             PredictionInput targetInput = DataUtils.linearizeInputs(List.of(originalInput)).get(0);
             List<Feature> linearizedTargetInputFeatures = targetInput.getFeatures();
+
             List<Output> actualOutputs = prediction.getOutput().getOutputs();
             int noOfInputFeatures = inputFeatures.size();
             int noOfOutputFeatures = linearizedTargetInputFeatures.size();
             double[] weights = new double[noOfOutputFeatures];
 
+            // iterate through the different outputs in the prediction and explain each one separately
             for (int o = 0; o < actualOutputs.size(); o++) {
                 boolean separableDataset = false;
 
-                List<PredictionInput> perturbedInputs = new LinkedList<>();
-                List<PredictionOutput> predictionOutputs = new LinkedList<>();
+                List<PredictionInput> trainingInputs = new LinkedList<>();
+                List<PredictionOutput> trainingOutputs = new LinkedList<>();
 
                 boolean classification = false;
                 Output currentOutput = actualOutputs.get(o);
+
+                // do not explain the current output if it is 'null'
                 if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
                     Map<Double, Long> rawClassesBalance = new HashMap<>();
-                    int tries = 3;
+
+                    /*
+                    perturb the inputs so that the perturbed dataset contains more than just one output class, otherwise
+                    it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
+                    feature importance scores.
+                     */
+
+                    int tries = 3; // in case of failure in separating the dataset, retry with newly perturbed inputs
                     while (!separableDataset && tries > 0) {
-                        List<PredictionInput> perturbed = getPerturbedInputs(originalInput, noOfInputFeatures, noOfSamples);
-                        List<PredictionOutput> perturbedOutputs = model.predict(perturbed);
+                        // perturb the inputs
+                        List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput, noOfInputFeatures);
 
+                        // perform predictions on the perturbed inputs
+                        List<PredictionOutput> perturbedOutputs = model.predict(perturbedInputs);
+
+                        // calculate the no. of samples belonging to each output class
                         Value<?> fv = currentOutput.getValue();
-
                         int finalO = o;
                         rawClassesBalance = perturbedOutputs.stream().map(p -> p.getOutputs().get(finalO)).map(output -> (Type.NUMBER
                                 .equals(output.getType())) ? output.getValue().asNumber() : (((output.getValue().getUnderlyingObject() == null
@@ -108,9 +124,10 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                                 .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting()));
                         logger.debug("raw samples per class: {}", rawClassesBalance);
 
+                        // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
                         if (rawClassesBalance.size() > 1) {
                             Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
-                            if ((double) max / (double) perturbed.size() < 0.99) {
+                            if ((double) max / (double) perturbedInputs.size() < 0.99) {
                                 separableDataset = true;
                                 classification = rawClassesBalance.size() == 2;
                             } else {
@@ -120,29 +137,37 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                             tries--;
                         }
                         if (tries == 0 || separableDataset) {
-                            perturbedInputs.addAll(perturbed);
-                            predictionOutputs.addAll(perturbedOutputs);
+                            // if dataset creation process succeeds use it to train the linear model
+                            trainingInputs.addAll(perturbedInputs);
+                            trainingOutputs.addAll(perturbedOutputs);
                         }
                     }
-                    if (!separableDataset) {
+                    if (!separableDataset) { // fail the explanation if the dataset is not separable
                         throw new DatasetNotSeparableException(currentOutput, rawClassesBalance);
                     }
+
+                    // only fetch the single output to explain in the generated prediction outputs
                     List<Output> predictedOutputs = new LinkedList<>();
-                    for (int i = 0; i < perturbedInputs.size(); i++) {
-                        Output output = predictionOutputs.get(i).getOutputs().get(o);
+                    for (PredictionOutput trainingOutput : trainingOutputs) {
+                        Output output = trainingOutput.getOutputs().get(o);
                         predictedOutputs.add(output);
                     }
 
                     Output originalOutput = prediction.getOutput().getOutputs().get(o);
 
-                    DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, predictedOutputs, targetInput, originalOutput);
+                    // encode the training data so that it can be fed into the linear model
+                    DatasetEncoder datasetEncoder = new DatasetEncoder(trainingInputs, predictedOutputs, targetInput, originalOutput);
                     Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
+                    // weights the training samples based on the proximity to the target input to explain
                     double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
 
+                    // fit the linear model
                     LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), classification);
                     double loss = linearModel.fit(trainingSet, sampleWeights);
+
                     if (!Double.isNaN(loss)) {
+                        // update (and average) the weights of each feature using the corresponding linear model weight
                         for (int i = 0; i < weights.length; i++) {
                             weights[i] += linearModel.getWeights()[i] / (double) actualOutputs.size();
                         }
@@ -152,6 +177,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                     logger.debug("skipping explanation of empty output {}", currentOutput);
                 }
             }
+            // create the output saliency
             for (int i = 0; i < weights.length; i++) {
                 FeatureImportance featureImportance = new FeatureImportance(linearizedTargetInputFeatures.get(i), weights[i]);
                 saliencies.add(featureImportance);
@@ -164,8 +190,9 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
         return new Saliency(saliencies);
     }
 
-    private List<PredictionInput> getPerturbedInputs(PredictionInput predictionInput, int noOfFeatures, int noOfSamples) {
+    private List<PredictionInput> getPerturbedInputs(PredictionInput predictionInput, int noOfFeatures) {
         List<PredictionInput> perturbedInputs = new LinkedList<>();
+        // as per LIME paper, the dataset size should be at least |features|^2
         double perturbedDataSize = Math.max(noOfSamples, Math.pow(2, noOfFeatures));
         for (int i = 0; i < perturbedDataSize; i++) {
             perturbedInputs.add(DataUtils.perturbDrop(predictionInput, noOfSamples, noOfPerturbations));
