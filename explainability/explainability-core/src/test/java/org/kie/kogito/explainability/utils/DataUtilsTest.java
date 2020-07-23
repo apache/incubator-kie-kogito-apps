@@ -226,7 +226,7 @@ class DataUtilsTest {
 
     @Test
     void testRandomDistributionGeneration() {
-        DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(10);
+        DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(10, 10);
         assertNotNull(dataDistribution);
         assertNotNull(dataDistribution.getFeatureDistributions());
         for (FeatureDistribution featureDistribution : dataDistribution.getFeatureDistributions()) {

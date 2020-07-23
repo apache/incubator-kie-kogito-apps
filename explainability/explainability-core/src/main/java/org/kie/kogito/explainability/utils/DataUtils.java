@@ -427,10 +427,10 @@ public class DataUtils {
         return new FeatureDistribution(min, max, mean, stdDev);
     }
 
-    public static DataDistribution generateRandomDataDistribution(int size) {
+    public static DataDistribution generateRandomDataDistribution(int noOfFeatures, int distirbutionSize) {
         List<FeatureDistribution> featureDistributions = new LinkedList<>();
-        for (int i = 0; i < size; i++) {
-            double[] doubles = generateData(random.nextDouble(), random.nextDouble(), 1000);
+        for (int i = 0; i < noOfFeatures; i++) {
+            double[] doubles = generateData(random.nextDouble(), random.nextDouble(), distirbutionSize);
             FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
             featureDistributions.add(featureDistribution);
         }

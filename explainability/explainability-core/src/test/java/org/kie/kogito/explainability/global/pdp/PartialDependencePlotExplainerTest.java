@@ -46,7 +46,7 @@ class PartialDependencePlotExplainerTest {
         PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
             @Override
             public DataDistribution getDataDistribution() {
-                return DataUtils.generateRandomDataDistribution(100);
+                return DataUtils.generateRandomDataDistribution(10, 100);
             }
 
             @Override
