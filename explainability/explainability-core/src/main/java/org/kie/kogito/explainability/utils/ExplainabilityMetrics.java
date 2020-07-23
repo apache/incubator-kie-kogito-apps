@@ -36,7 +36,7 @@ import org.kie.kogito.explainability.model.Type;
 public class ExplainabilityMetrics {
 
     /**
-     * measure the explainability of an explanation as per paper "Towards Quantification of Explainability in Explainable
+     * Measure the explainability of an explanation as per paper "Towards Quantification of Explainability in Explainable
      * Artificial Intelligence Methods" by Islam et al.
      *
      * @param inputCognitiveChunks  the no. of cognitive chunks (pieces of information) required to generate the
@@ -82,7 +82,7 @@ public class ExplainabilityMetrics {
     }
 
     /**
-     * calculate fidelity (accuracy) of boolean classification outputs using saliency predictor function = sign(sum(saliency.scores))
+     * Calculate fidelity (accuracy) of boolean classification outputs using saliency predictor function = sign(sum(saliency.scores))
      * see papers:
      * - Guidotti Riccardo, et al. "A survey of methods for explaining black box models." ACM computing surveys (2018).
      * - Bodria, Francesco, et al. "Explainability Methods for Natural Language Processing: Applications to Sentiment Analysis (Discussion Paper)."
