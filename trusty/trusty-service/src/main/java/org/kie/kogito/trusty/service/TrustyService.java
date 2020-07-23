@@ -26,12 +26,18 @@ import javax.inject.Inject;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
+import org.kie.kogito.trusty.api.ExplainabilityRequestDto;
+import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
 @ApplicationScoped
 public class TrustyService implements ITrustyService {
+
+    @Inject
+    ExplainabilityRequestProducer explainabilityRequestProducer;
 
     private TrustyStorageService storageService;
 
@@ -72,8 +78,21 @@ public class TrustyService implements ITrustyService {
         storage.put(executionId, decision);
     }
 
+
+
     @Override
     public void updateDecision(String executionId, Decision decision) {
         storageService.getDecisionsStorage().put(executionId, decision);
+    }
+
+    @Override
+    public void processDecision(String executionId, Decision decision) {
+        storeDecision(executionId, decision);
+        explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto());
+    }
+
+    @Override
+    public void storeExplainability(String executionId, ExplainabilityResult result) {
+        // TODO: Store it
     }
 }

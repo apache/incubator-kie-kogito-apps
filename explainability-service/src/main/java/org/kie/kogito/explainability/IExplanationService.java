@@ -16,6 +16,9 @@
 
 package org.kie.kogito.explainability;
 
+import org.kie.kogito.explainability.models.ExplainabilityRequest;
+
 public interface IExplanationService {
 
+    void processExplainability(ExplainabilityRequest request);
 }

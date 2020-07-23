@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
@@ -75,7 +75,7 @@ public class TraceEventConsumer {
         TraceEventType traceEventType = traceEvent.getHeader().getType();
 
         if (traceEventType == TraceEventType.DMN) {
-            service.storeDecision(attributes.getId(), TraceEventConverter.toDecision(traceEvent));
+            service.processDecision(attributes.getId(), TraceEventConverter.toDecision(traceEvent));
         } else {
             LOG.error("Unsupported TraceEvent type {}", traceEventType);
         }

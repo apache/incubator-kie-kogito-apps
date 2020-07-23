@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
 /**
  * The trusty service interface.
@@ -66,4 +67,12 @@ public interface ITrustyService {
      * @param decision    The decision object.
      */
     void updateDecision(String executionId, Decision decision);
+
+    void processDecision(String executionId, Decision decision);
+
+    /**
+     * Store the explainability result.
+     * @param executionId The execution ID.
+     */
+    void storeExplainability(String executionId, ExplainabilityResult result);
 }

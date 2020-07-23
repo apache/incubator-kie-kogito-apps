@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.messaging;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
+import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConverter;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;

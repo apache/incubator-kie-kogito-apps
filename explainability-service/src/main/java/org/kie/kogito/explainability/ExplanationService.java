@@ -16,6 +16,21 @@
 
 package org.kie.kogito.explainability;
 
-public class ExplanationService {
+import javax.inject.Inject;
 
+import org.kie.kogito.explainability.messaging.outgoing.ExplainabilityResultProducer;
+import org.kie.kogito.explainability.models.ExplainabilityRequest;
+import org.kie.kogito.trusty.api.ExplainabilityResultDto;
+
+public class ExplanationService implements IExplanationService{
+
+    @Inject
+    ExplainabilityResultProducer explainabilityResultProducer;
+
+    @Override
+    public void processExplainability(ExplainabilityRequest request) {
+        // TODO: get explainability from expl library
+
+        explainabilityResultProducer.sendEvent(new ExplainabilityResultDto());
+    }
 }

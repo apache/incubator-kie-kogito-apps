@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.service.TrustyKafkaTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConsumer;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.slf4j.Logger;

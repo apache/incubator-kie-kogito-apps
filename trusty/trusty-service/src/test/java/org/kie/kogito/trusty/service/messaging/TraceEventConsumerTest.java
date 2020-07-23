@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service.messaging;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConsumer;
 
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventWithoutDataJsonString;
