@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -179,9 +180,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
 
                             if (!Double.isNaN(loss)) {
                                 // update (and average) the weights of each feature using the corresponding linear model weight
-                                for (int i = 0; i < weights.length; i++) {
-                                    weights[i] += linearModel.getWeights()[i] / (double) actualOutputs.size();
-                                }
+                                weights = Arrays.stream(linearModel.getWeights()).map(x -> x / actualOutputs.size()).toArray();
                                 logger.debug("weights updated for output {}", currentOutput);
                             }
                         } else {
