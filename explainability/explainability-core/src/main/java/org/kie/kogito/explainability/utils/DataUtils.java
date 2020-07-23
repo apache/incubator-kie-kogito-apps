@@ -138,7 +138,7 @@ public class DataUtils {
         return FeatureFactory.newNumericalFeature(String.valueOf(d), d);
     }
 
-    public static PredictionInput perturbDrop(PredictionInput input, int noOfSamples, int noOfPerturbations) {
+    public static PredictionInput perturbFeatures(PredictionInput input, int noOfSamples, int noOfPerturbations) {
         List<Feature> originalFeatures = input.getFeatures();
         List<Feature> newFeatures = new ArrayList<>(originalFeatures);
         PredictionInput perturbedInput = new PredictionInput(newFeatures);

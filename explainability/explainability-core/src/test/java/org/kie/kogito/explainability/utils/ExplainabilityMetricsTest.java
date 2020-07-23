@@ -86,13 +86,11 @@ class ExplainabilityMetricsTest {
     @Test
     void testFidelityWithTextClassifier() {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
-        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(1000, 1);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
         List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f-1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f-2", "bar foo"));
-        features.add(FeatureFactory.newTextFeature("f-3", "brown fox"));
-        features.add(FeatureFactory.newTextFeature("f-4", "money"));
+        features.add(FeatureFactory.newTextFeature("f-0", "brown fox"));
+        features.add(FeatureFactory.newTextFeature("f-1", "money"));
         PredictionInput input = new PredictionInput(features);
         Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
         pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));

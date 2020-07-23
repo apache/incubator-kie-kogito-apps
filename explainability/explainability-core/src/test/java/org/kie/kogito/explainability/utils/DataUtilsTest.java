@@ -30,12 +30,10 @@ import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class DataUtilsTest {
 
@@ -181,7 +179,7 @@ class DataUtilsTest {
     }
 
     private void assertPerturbDropNumeric(PredictionInput input, int noOfPerturbations) {
-        PredictionInput perturbedInput = DataUtils.perturbDrop(input, 10, noOfPerturbations);
+        PredictionInput perturbedInput = DataUtils.perturbFeatures(input, 10, noOfPerturbations);
         int changedFeatures = 0;
         for (int i = 0; i < input.getFeatures().size(); i++) {
             double v = input.getFeatures().get(i).getValue().asNumber();
@@ -194,7 +192,7 @@ class DataUtilsTest {
     }
 
     private void assertPerturbDropString(PredictionInput input, int noOfPerturbations) {
-        PredictionInput perturbedInput = DataUtils.perturbDrop(input, 10, noOfPerturbations);
+        PredictionInput perturbedInput = DataUtils.perturbFeatures(input, 10, noOfPerturbations);
         int changedFeatures = 0;
         for (int i = 0; i < input.getFeatures().size(); i++) {
             String v = input.getFeatures().get(i).getValue().asString();
