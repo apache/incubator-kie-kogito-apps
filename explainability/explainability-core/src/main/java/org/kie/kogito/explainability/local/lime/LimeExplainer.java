@@ -110,7 +110,6 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                         List<PredictionOutput> trainingOutputs = new LinkedList<>();
 
                         Output currentOutput = actualOutputs.get(o);
-                        int runs = noOfRetries;
                         // do not explain the current output if it is 'null'
                         if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
                             Map<Double, Long> rawClassesBalance = new HashMap<>();
@@ -122,8 +121,9 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                              */
 
                             boolean classification = false;
+
                             // in case of failure in separating the dataset, retry with newly perturbed inputs
-                            while (!separableDataset && runs > 0) {
+                            for (int tries = this.noOfRetries; tries > 0; tries--){
                                 // perturb the inputs
                                 List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput, noOfInputFeatures);
 
@@ -145,16 +145,12 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                                     if ((double) max / (double) perturbedInputs.size() < 0.99) {
                                         separableDataset = true;
                                         classification = rawClassesBalance.size() == 2;
-                                    } else {
-                                        runs--;
+
+                                        // if dataset creation process succeeds use it to train the linear model
+                                        trainingInputs.addAll(perturbedInputs);
+                                        trainingOutputs.addAll(perturbedOutputs);
+                                        break;
                                     }
-                                } else {
-                                    runs--;
-                                }
-                                if (separableDataset) {
-                                    // if dataset creation process succeeds use it to train the linear model
-                                    trainingInputs.addAll(perturbedInputs);
-                                    trainingOutputs.addAll(perturbedOutputs);
                                 }
                             }
                             if (!separableDataset) { // fail the explanation if the dataset is not separable

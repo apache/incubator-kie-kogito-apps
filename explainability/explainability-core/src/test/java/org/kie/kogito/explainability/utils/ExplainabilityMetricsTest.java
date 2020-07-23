@@ -93,7 +93,7 @@ class ExplainabilityMetricsTest {
             List<Feature> features = new LinkedList<>();
             features.add(FeatureFactory.newTextFeature("f-1", "foo bar"));
             features.add(FeatureFactory.newTextFeature("f-2", "bar foo"));
-            features.add(FeatureFactory.newTextFeature("f-3", "brow fox"));
+            features.add(FeatureFactory.newTextFeature("f-3", "brown fox"));
             features.add(FeatureFactory.newTextFeature("f-4", "lazy dog"));
             features.add(FeatureFactory.newTextFeature("f-5", "money"));
             PredictionInput input = new PredictionInput(features);
