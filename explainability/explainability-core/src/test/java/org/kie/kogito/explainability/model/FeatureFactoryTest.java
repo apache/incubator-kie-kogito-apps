@@ -20,11 +20,17 @@ import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Currency;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -36,7 +42,16 @@ class FeatureFactoryTest {
         assertNotNull(feature.getType());
         assertEquals(type, feature.getType());
         assertNotNull(feature.getValue());
-        assertEquals(object, feature.getValue().getUnderlyingObject());
+        assertNotNull(feature.getValue().getUnderlyingObject());
+        if (Type.COMPOSITE.equals(type)) {
+            Collection<Feature> objectCollection = (Collection<Feature>) object;
+            Collection<Feature> featureCollection = (Collection<Feature>) feature.getValue().getUnderlyingObject();
+            for (Feature f : objectCollection) {
+                assertThat(f).isIn(featureCollection);
+            }
+        } else {
+            assertEquals(object, feature.getValue().getUnderlyingObject());
+        }
     }
 
     @Test
@@ -125,5 +140,27 @@ class FeatureFactoryTest {
         Object object = new Object();
         Feature feature = FeatureFactory.newObjectFeature(name, object);
         assertFeature(Type.UNDEFINED, object, feature);
+    }
+
+    @Test
+    void testNestedCompositeFeature() {
+        Map<String, Object> map = new HashMap<>();
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newObjectFeature("f1", new Object()));
+        features.add(FeatureFactory.newTextFeature("f2", "hola"));
+        features.add(FeatureFactory.newTextFeature("f3", "foo bar"));
+        features.add(FeatureFactory.newNumericalFeature("f4", 131));
+        features.add(FeatureFactory.newBooleanFeature("f5", false));
+        features.add(FeatureFactory.newDurationFeature("f6", Duration.ofDays(2)));
+        Map<String, Object> nestedMap = new HashMap<>();
+        nestedMap.put("nf-1", "nested text");
+        nestedMap.put("nf-2", ByteBuffer.allocate(1024));
+        features.add(FeatureFactory.newCompositeFeature("f7", nestedMap));
+        for (Feature f : features) {
+            map.put(f.getName(), f.getValue().getUnderlyingObject());
+        }
+        String name = "some-name";
+        Feature feature = FeatureFactory.newCompositeFeature(name, map);
+        assertFeature(Type.COMPOSITE, features, feature);
     }
 }

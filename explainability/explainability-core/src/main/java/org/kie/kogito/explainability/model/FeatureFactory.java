@@ -79,36 +79,51 @@ public class FeatureFactory {
     public static Feature newCompositeFeature(String name, Map<String, Object> map) {
         List<Feature> features = new LinkedList<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            Object value = entry.getValue();
-            String featureName = entry.getKey();
-            Feature feature;
-            if (value instanceof Map) {
-                feature = newCompositeFeature(featureName, (Map<String, Object>) value);
-            } else if (value instanceof double[]) {
-                feature = newVectorFeature(featureName, (double[]) value);
-            } else if (value instanceof LocalTime) {
-                feature = newTimeFeature(featureName, (LocalTime) value);
-            } else if (value instanceof Duration) {
-                feature = newDurationFeature(featureName, (Duration) value);
-            } else if (value instanceof URI) {
-                feature = newURIFeature(featureName, (URI) value);
-            } else if (value instanceof ByteBuffer) {
-                feature = newBinaryFeature(featureName, (ByteBuffer) value);
-            } else if (value instanceof Currency) {
-                feature = newCurrencyFeature(featureName, (Currency) value);
-            } else if (value instanceof Boolean) {
-                feature = newBooleanFeature(featureName, (Boolean) value);
-            } else if (value instanceof Number) {
-                feature = newNumericalFeature(featureName, (Number) value);
-            } else if (value instanceof String) {
-                feature = newTextFeature(featureName, (String) value);
-            } else if (value instanceof Feature) {
-                feature = (Feature) value;
-            } else {
+            parseFeatureValue(features, entry);
+        }
+        return newCompositeFeature(name, features);
+    }
+
+    public static Feature newCompositeFeature(String name, List<Feature> features) {
+        return new Feature(name, Type.COMPOSITE, new Value<>(features));
+    }
+
+    private static void parseFeatureValue(List<Feature> features, Map.Entry<String, Object> entry) {
+        Object value = entry.getValue();
+        String featureName = entry.getKey();
+        Feature feature;
+        if (value instanceof Map) {
+            feature = newCompositeFeature(featureName, (Map<String, Object>) value);
+        } else if (value instanceof double[]) {
+            feature = newVectorFeature(featureName, (double[]) value);
+        } else if (value instanceof LocalTime) {
+            feature = newTimeFeature(featureName, (LocalTime) value);
+        } else if (value instanceof Duration) {
+            feature = newDurationFeature(featureName, (Duration) value);
+        } else if (value instanceof URI) {
+            feature = newURIFeature(featureName, (URI) value);
+        } else if (value instanceof ByteBuffer) {
+            feature = newBinaryFeature(featureName, (ByteBuffer) value);
+        } else if (value instanceof Currency) {
+            feature = newCurrencyFeature(featureName, (Currency) value);
+        } else if (value instanceof Boolean) {
+            feature = newBooleanFeature(featureName, (Boolean) value);
+        } else if (value instanceof Number) {
+            feature = newNumericalFeature(featureName, (Number) value);
+        } else if (value instanceof String) {
+            feature = newTextFeature(featureName, (String) value);
+        } else if (value instanceof Feature) {
+            feature = (Feature) value;
+        } else if (value instanceof List) {
+            try {
+                List<Feature> featureList = (List<Feature>) value;
+                feature = newCompositeFeature(featureName, featureList);
+            } catch (ClassCastException cce) {
                 feature = newObjectFeature(featureName, value);
             }
-            features.add(feature);
+        } else {
+            feature = newObjectFeature(featureName, value);
         }
-        return new Feature(name, Type.COMPOSITE, new Value<>(features));
+        features.add(feature);
     }
 }

@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.model;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Wrapper class for any kind of value part of a prediction input or output.
@@ -70,5 +71,22 @@ public class Value<S> {
             }
         }
         return doubles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Value<?> value = (Value<?>) o;
+        return Objects.equals(underlyingObject, value.underlyingObject);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(underlyingObject);
     }
 }

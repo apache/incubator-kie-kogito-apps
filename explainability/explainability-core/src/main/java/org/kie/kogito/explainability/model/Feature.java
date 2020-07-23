@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.util.Objects;
+
 /**
  * A feature represents fixed portions of an input, having a name, a {@link Type} and an associated {@link Value}.
  */
@@ -64,5 +66,24 @@ public class Feature {
                 ", type=" + type +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Feature feature = (Feature) o;
+        return Objects.equals(name, feature.name) &&
+                type == feature.type &&
+                Objects.equals(value, feature.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type, value);
     }
 }
