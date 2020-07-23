@@ -353,11 +353,14 @@ public class DataUtils {
                     // randomly set a non zero value to zero (or decrease it by 1)
                     double[] values = feature.getValue().asVector();
                     if (values.length > 0) {
-                        int idx = random.nextInt(values.length - 1);
-                        if (values[idx] != 0) {
-                            values[idx] = 0;
-                        } else {
-                            values[idx]--;
+                        for (int idx = 0; idx < values.length; idx++) {
+                            if (random.nextBoolean()) {
+                                if (values[idx] != 0) {
+                                    values[idx] = 0;
+                                } else {
+                                    values[idx]--;
+                                }
+                            }
                         }
                     }
                     f = FeatureFactory.newVectorFeature(featureName, values);
