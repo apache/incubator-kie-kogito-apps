@@ -33,7 +33,6 @@ import org.kie.kogito.explainability.model.Saliency;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ExplainabilityMetricsTest {
 
@@ -85,22 +84,36 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    void testFidelity() {
+    void testFidelityWithTextClassifier() {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(100, 1);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
-        for (int i = 0; i < 10; i++) {
-            List<Feature> features = new LinkedList<>();
-            features.add(FeatureFactory.newTextFeature("f-1", "foo bar"));
-            features.add(FeatureFactory.newTextFeature("f-2", "bar foo"));
-            features.add(FeatureFactory.newTextFeature("f-3", "brown fox"));
-            features.add(FeatureFactory.newTextFeature("f-4", "lazy dog"));
-            features.add(FeatureFactory.newTextFeature("f-5", "money"));
-            PredictionInput input = new PredictionInput(features);
-            Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
-            pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));
-        }
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newTextFeature("f-1", "foo bar"));
+        features.add(FeatureFactory.newTextFeature("f-2", "bar foo"));
+        features.add(FeatureFactory.newTextFeature("f-3", "brown fox"));
+        features.add(FeatureFactory.newTextFeature("f-4", "money"));
+        PredictionInput input = new PredictionInput(features);
+        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
+        pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));
         double v = ExplainabilityMetrics.classificationFidelity(pairs);
-        assertThat(v).isGreaterThanOrEqualTo(0);
+        assertEquals(1d, v);
+    }
+
+    @Test
+    void testFidelityWithEvenSumModel() {
+        List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
+        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+        PredictionProvider model = TestUtils.getEvenSumModel(0);
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1));
+        features.add(FeatureFactory.newNumericalFeature("f-2", 2));
+        features.add(FeatureFactory.newNumericalFeature("f-3", 3));
+        features.add(FeatureFactory.newNumericalFeature("f-4", 4));
+        PredictionInput input = new PredictionInput(features);
+        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
+        pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));
+        double v = ExplainabilityMetrics.classificationFidelity(pairs);
+        assertEquals(1d, v);
     }
 }
