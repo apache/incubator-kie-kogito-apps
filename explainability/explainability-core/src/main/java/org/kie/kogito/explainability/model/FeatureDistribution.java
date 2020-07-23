@@ -33,7 +33,7 @@ public class FeatureDistribution {
     }
 
     /**
-     * get minimum value for this feature
+     * Get minimum value for this feature
      *
      * @return the min value
      */
@@ -42,7 +42,7 @@ public class FeatureDistribution {
     }
 
     /**
-     * get the maximum value for this feature
+     * Get the maximum value for this feature
      *
      * @return the max value
      */
@@ -51,7 +51,7 @@ public class FeatureDistribution {
     }
 
     /**
-     * get the mean value for this feature
+     * Get the mean value for this feature
      *
      * @return the mean value
      */
@@ -60,7 +60,7 @@ public class FeatureDistribution {
     }
 
     /**
-     * get the standard deviation for this feature
+     * Get the standard deviation for this feature
      *
      * @return the standard deviation
      */
