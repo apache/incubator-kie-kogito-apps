@@ -170,7 +170,7 @@ public class DataUtils {
                 f = FeatureFactory.newCompositeFeature(featureName, featuresMap);
                 break;
             case TEXT:
-                String newStringValue;
+                String newStringValue = "";
                 // randomly drop entire string or parts of it
                 if (random.nextBoolean()) {
                     String stringValue = feature.getValue().asString();
@@ -182,11 +182,7 @@ public class DataUtils {
                             words.remove(dropIdx);
                         }
                         newStringValue = String.join(" ", words);
-                    } else {
-                        newStringValue = "";
                     }
-                } else {
-                    newStringValue = "";
                 }
                 f = FeatureFactory.newTextFeature(featureName, newStringValue);
                 break;
