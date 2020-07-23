@@ -88,7 +88,7 @@ class PmmlLimeExplainerTest {
         assertNotNull(saliency);
         List<String> strings = saliency.getPositiveFeatures(2).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
         assertTrue(strings.contains("petalWidth"));
-        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getPositiveFeatures(1));
+        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(2));
         assertTrue(v > 0);
     }
 
@@ -188,7 +188,7 @@ class PmmlLimeExplainerTest {
         assertNotNull(saliency);
         List<String> strings = saliency.getPositiveFeatures(1).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
         assertTrue(strings.contains("classB (input2)"));
-        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
+        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(2));
         assertTrue(v > 0);
     }
 }

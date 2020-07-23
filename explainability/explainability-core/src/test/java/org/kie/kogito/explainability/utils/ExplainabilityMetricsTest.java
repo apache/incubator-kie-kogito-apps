@@ -86,7 +86,7 @@ class ExplainabilityMetricsTest {
     @Test
     void testFidelityWithTextClassifier() {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
-        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f-1", "foo bar"));
@@ -103,13 +103,12 @@ class ExplainabilityMetricsTest {
     @Test
     void testFidelityWithEvenSumModel() {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
-        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
-        PredictionProvider model = TestUtils.getEvenSumModel(0);
+        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
+        PredictionProvider model = TestUtils.getEvenSumModel(1);
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f-1", 1));
         features.add(FeatureFactory.newNumericalFeature("f-2", 2));
         features.add(FeatureFactory.newNumericalFeature("f-3", 3));
-        features.add(FeatureFactory.newNumericalFeature("f-4", 4));
         PredictionInput input = new PredictionInput(features);
         Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
         pairs.add(Pair.of(limeExplainer.explain(prediction, model), prediction));

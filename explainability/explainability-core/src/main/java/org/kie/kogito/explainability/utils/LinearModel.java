@@ -64,7 +64,7 @@ public class LinearModel {
                     double[] doubles = sample.getLeft();
                     double predictedOutput = predict(doubles);
                     double targetOutput = sample.getRight();
-                    double diff = checkFinite(targetOutput - predictedOutput);
+                    double diff = finiteOrZero(targetOutput - predictedOutput);
                     if (diff != 0) { // avoid null updates to save computation
                         loss += Math.abs(diff) / trainingSet.size();
                         for (int j = 0; j < weights.length; j++) {
@@ -72,7 +72,7 @@ public class LinearModel {
                             if (trainingSet.size() == sampleWeights.length) {
                                 v *= sampleWeights[i];
                             }
-                            v = checkFinite(v);
+                            v = finiteOrZero(v);
                             weights[j] += v;
                             bias += lr * diff * sampleWeights[i];
                         }
@@ -89,7 +89,7 @@ public class LinearModel {
         return finalLoss;
     }
 
-    private double checkFinite(double diff) {
+    private double finiteOrZero(double diff) {
         if (Double.isNaN(diff) || Double.isInfinite(diff)) {
             diff = 0;
         }

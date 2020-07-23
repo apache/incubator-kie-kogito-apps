@@ -302,37 +302,28 @@ public class DataUtils {
                 break;
             case BOOLEAN:
                 if (names.contains(featureName)) {
-                    // flip the boolean value
-                    f = FeatureFactory.newBooleanFeature(featureName, !Boolean.getBoolean(feature.getValue().asString()));
+                    f = FeatureFactory.newBooleanFeature(featureName, null);
                 }
                 break;
             case TIME:
                 if (names.contains(featureName)) {
-                    // set to midnight
-                    f = FeatureFactory.newTimeFeature(featureName, LocalTime.MIDNIGHT);
+                    f = FeatureFactory.newTimeFeature(featureName, null);
                 }
                 break;
             case DURATION:
                 if (names.contains(featureName)) {
-                    // set the duration to 0
-                    f = FeatureFactory.newDurationFeature(featureName, Duration.of(0, ChronoUnit.SECONDS));
+                    f = FeatureFactory.newDurationFeature(featureName, null);
                 }
                 break;
             case CURRENCY:
                 if (names.contains(featureName)) {
-                    // set the currency to EUR
-                    f = FeatureFactory.newCurrencyFeature(featureName, Currency.getInstance(Locale.getDefault()));
+                    f = FeatureFactory.newCurrencyFeature(featureName, null);
                 }
                 break;
             case CATEGORICAL:
                 if (names.contains(featureName)) {
                     String category = feature.getValue().asString();
-                    if (!"0".equals(category)) {
-                        category = "0";
-                    } else {
-                        category = "1";
-                    }
-                    f = FeatureFactory.newCategoricalFeature(featureName, category);
+                    f = FeatureFactory.newCategoricalFeature(featureName, "");
                 }
                 break;
             case BINARY:
@@ -350,24 +341,19 @@ public class DataUtils {
                 break;
             case VECTOR:
                 if (names.contains(featureName)) {
-                    // randomly set a non zero value to zero (or decrease it by 1)
                     double[] values = feature.getValue().asVector();
                     if (values.length > 0) {
-                        for (int idx = 0; idx < values.length; idx++) {
-                            if (random.nextBoolean()) {
-                                if (values[idx] != 0) {
-                                    values[idx] = 0;
-                                } else {
-                                    values[idx]--;
-                                }
-                            }
-                        }
+                        Arrays.fill(values, 0);
                     }
                     f = FeatureFactory.newVectorFeature(featureName, values);
                 }
                 break;
             case UNDEFINED:
-                f = dropFeature((Feature) feature.getValue().getUnderlyingObject(), names);
+                if (feature.getValue().getUnderlyingObject() instanceof Feature) {
+                    f = dropFeature((Feature) feature.getValue().getUnderlyingObject(), names);
+                } else {
+                    f = FeatureFactory.newObjectFeature(featureName, null);
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);

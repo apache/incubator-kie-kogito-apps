@@ -70,12 +70,12 @@ public class ExplainabilityMetrics {
         PredictionInput predictionInput = new PredictionInput(newFeatures);
         List<PredictionOutput> predictionOutputs = model.predict(List.of(predictionInput));
         PredictionOutput predictionOutput = predictionOutputs.get(0);
-        double impact = 0;
+        double impact = 0d;
         double size = predictionOutput.getOutputs().size();
         for (int i = 0; i < size; i++) {
             Output original = prediction.getOutput().getOutputs().get(i);
             Output modified = predictionOutput.getOutputs().get(i);
-            impact += DataUtils.euclideanDistance(new double[]{original.getScore()}, new double[]{modified.getScore()});
+            impact += 0.5 * DataUtils.euclideanDistance(new double[]{original.getScore()}, new double[]{modified.getScore()});
             impact += DataUtils.hammingDistance(original.getValue().asString(), modified.getValue().asString());
         }
         return impact / size;
