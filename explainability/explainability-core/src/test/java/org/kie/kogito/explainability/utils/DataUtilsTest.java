@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
@@ -37,6 +38,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class DataUtilsTest {
+
+    @BeforeAll
+    static void setupBefore() {
+        DataUtils.setSeed(4);
+    }
 
     @Test
     void testDataGeneration() {
