@@ -81,7 +81,7 @@ public class Value<S> {
                 doubles = new double[1];
                 doubles[0] = v;
             }
-            // TODO : handle parsing of different underlyingObject types as vectors (e.g. ByteBuffer, etc.)
+            // FAI-234 : handle parsing of different underlyingObject types as vectors (e.g. ByteBuffer, etc.)
         }
         return doubles;
     }
