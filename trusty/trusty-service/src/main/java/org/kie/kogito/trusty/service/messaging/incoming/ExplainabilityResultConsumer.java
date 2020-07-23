@@ -71,7 +71,7 @@ public class ExplainabilityResultConsumer {
             return;
         }
 
-        LOGGER.debug("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
+        LOGGER.info("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
 
         ExplainabilityResultDto explainabilityResult = optData.get();
 

@@ -24,5 +24,10 @@ public class ExplainabilityResultDto {
     @JsonProperty("executionId")
     public String executionId;
 
+    public ExplainabilityResultDto(){}
+
+    public ExplainabilityResultDto(String executionId){
+        this.executionId = executionId;
+    }
     // TODO: add properties
 }

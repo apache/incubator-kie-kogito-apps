@@ -17,6 +17,7 @@
 package org.kie.kogito.explainability.messaging.incoming;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -72,7 +73,7 @@ public class ExplainabilityRequestConsumer {
             return;
         }
 
-        LOGGER.debug("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
+        LOGGER.info("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
 
         ExplainabilityRequestDto explainabilityResult = optData.get();
 

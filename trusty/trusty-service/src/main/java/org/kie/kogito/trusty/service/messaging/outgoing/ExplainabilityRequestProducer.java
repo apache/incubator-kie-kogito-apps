@@ -41,6 +41,7 @@ public class ExplainabilityRequestProducer {
     private final PublishSubject<String> eventSubject = PublishSubject.create();
 
     public void sendEvent(ExplainabilityRequestDto request) {
+        LOGGER.info("Sending explainability request with id " + request.executionId);
         String payload = CloudEventUtils.encode(
                 CloudEventUtils.build(request.executionId,
                               URI_PRODUCER,

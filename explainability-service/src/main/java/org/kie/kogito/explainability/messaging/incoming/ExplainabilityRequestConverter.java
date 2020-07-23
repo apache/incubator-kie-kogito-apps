@@ -21,6 +21,6 @@ import org.kie.kogito.trusty.api.ExplainabilityRequestDto;
 
 public class ExplainabilityRequestConverter {
     public static ExplainabilityRequest toRequest(ExplainabilityRequestDto explainabilityRequestDto){
-        return new ExplainabilityRequest();
+        return new ExplainabilityRequest(explainabilityRequestDto.executionId);
     }
 }

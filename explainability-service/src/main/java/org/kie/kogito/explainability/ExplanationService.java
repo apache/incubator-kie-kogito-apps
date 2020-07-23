@@ -16,12 +16,14 @@
 
 package org.kie.kogito.explainability;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.kie.kogito.explainability.messaging.outgoing.ExplainabilityResultProducer;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 
+@ApplicationScoped
 public class ExplanationService implements IExplanationService{
 
     @Inject
@@ -31,6 +33,6 @@ public class ExplanationService implements IExplanationService{
     public void processExplainability(ExplainabilityRequest request) {
         // TODO: get explainability from expl library
 
-        explainabilityResultProducer.sendEvent(new ExplainabilityResultDto());
+        explainabilityResultProducer.sendEvent(new ExplainabilityResultDto(request.executionId));
     }
 }

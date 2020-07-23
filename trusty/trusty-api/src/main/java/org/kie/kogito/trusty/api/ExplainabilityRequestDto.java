@@ -25,5 +25,13 @@ public class ExplainabilityRequestDto {
     @JsonProperty("executionId")
     public String executionId;
 
+    public ExplainabilityRequestDto(){
+
+    }
+
+    public ExplainabilityRequestDto(String executionId){
+        this.executionId = executionId;
+    }
+
     // TODO: add properties
 }

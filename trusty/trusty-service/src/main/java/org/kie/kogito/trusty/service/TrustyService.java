@@ -19,10 +19,13 @@ package org.kie.kogito.trusty.service;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import io.quarkus.runtime.Startup;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
@@ -88,7 +91,7 @@ public class TrustyService implements ITrustyService {
     @Override
     public void processDecision(String executionId, Decision decision) {
         storeDecision(executionId, decision);
-        explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto());
+        explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(UUID.randomUUID().toString()));
     }
 
     @Override
