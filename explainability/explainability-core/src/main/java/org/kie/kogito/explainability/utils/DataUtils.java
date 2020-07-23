@@ -189,22 +189,22 @@ public class DataUtils {
                 f = FeatureFactory.newTextFeature(featureName, newStringValue);
                 break;
             case NUMBER:
-                double ov = feature.getValue().asNumber();
-                boolean intValue = ov % 1 == 0;
+                double originalFeatureValue = feature.getValue().asNumber();
+                boolean intValue = originalFeatureValue % 1 == 0;
 
                 // sample from normal distribution and center around feature value
                 int pickIdx = random.nextInt(noOfSamples - 1);
-                double v = DataUtils.generateData(0, 1, noOfSamples)[pickIdx];
-                if (ov != 0d) {
-                    v = v * ov + ov;
+                double normalDistributionSample = DataUtils.generateData(0, 1, noOfSamples)[pickIdx];
+                if (originalFeatureValue != 0d) {
+                    normalDistributionSample = normalDistributionSample * originalFeatureValue + originalFeatureValue;
                 }
                 if (intValue) {
-                    v = (int) v;
-                    if (v == ov) {
-                        v = (int) v * 10;
+                    normalDistributionSample = (int) normalDistributionSample;
+                    if (normalDistributionSample == originalFeatureValue) {
+                        normalDistributionSample = (int) normalDistributionSample * 10;
                     }
                 }
-                f = FeatureFactory.newNumericalFeature(featureName, v);
+                f = FeatureFactory.newNumericalFeature(featureName, normalDistributionSample);
                 break;
             case BOOLEAN:
                 // flip the boolean value
