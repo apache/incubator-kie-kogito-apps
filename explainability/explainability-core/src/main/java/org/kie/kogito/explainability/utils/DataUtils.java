@@ -254,8 +254,11 @@ public class DataUtils {
                 f = FeatureFactory.newVectorFeature(featureName, values);
                 break;
             case UNDEFINED:
-                // do nothing
-                f = perturbFeature((Feature) feature.getValue().getUnderlyingObject(), noOfSamples);
+                if (feature.getValue().getUnderlyingObject() instanceof Feature) {
+                    f = perturbFeature((Feature) feature.getValue().getUnderlyingObject(), noOfSamples);
+                } else {
+                    f = feature;
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + type);
