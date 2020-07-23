@@ -6,7 +6,7 @@ package org.kie.kogito.explainability.model;
 public interface PredictionProviderMetadata {
 
     /**
-     * fetch the data distribution associated to this model
+     * Fetch the data distribution associated to this model
      *
      * @return the data distribution
      */
