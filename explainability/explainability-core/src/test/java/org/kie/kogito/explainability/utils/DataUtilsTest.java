@@ -15,11 +15,14 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
@@ -243,16 +246,37 @@ class DataUtilsTest {
     }
 
     @Test
-    void testGetLinearizedFeatures() {
+    void testLinearizedNumericFeatures() {
         List<Feature> features = new LinkedList<>();
-        Feature f = mock(Feature.class);
-        Value<?> value = mock(Value.class);
-        when(f.getValue()).thenReturn(value);
-        when(f.getName()).thenReturn("name");
-        when(f.getType()).thenReturn(Type.NUMBER);
+        Feature f = TestUtils.getMockedNumericFeature();
         features.add(f);
         List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(features);
         assertEquals(features.size(), linearizedFeatures.size());
+    }
+
+    @Test
+    void testLinearizedTextFeatures() {
+        List<Feature> features = new LinkedList<>();
+        Feature f = TestUtils.getMockedTextFeature("foo bar ");
+        features.add(f);
+        List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(features);
+        assertEquals(2, linearizedFeatures.size());
+    }
+
+    @Test
+    void testCompositeLinearizedFeatures() {
+        List<Feature> features = new LinkedList<>();
+        List<Feature> list = new LinkedList<>();
+        list.add(FeatureFactory.newTextFeature("f0", "foo bar"));
+        list.add(FeatureFactory.newCategoricalFeature("f0", "1"));
+        list.add(FeatureFactory.newBooleanFeature("f1", true));
+        list.add(FeatureFactory.newNumericalFeature("f2", 13));
+        list.add(FeatureFactory.newDurationFeature("f3", Duration.ofDays(13)));
+        list.add(FeatureFactory.newTimeFeature("f4", LocalTime.now()));
+        Feature f = FeatureFactory.newCompositeFeature("name", list);
+        features.add(f);
+        List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(features);
+        assertEquals(7, linearizedFeatures.size());
     }
 
 }
