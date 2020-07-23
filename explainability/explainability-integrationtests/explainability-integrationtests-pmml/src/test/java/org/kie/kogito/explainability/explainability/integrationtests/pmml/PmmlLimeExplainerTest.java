@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -52,7 +51,7 @@ class PmmlLimeExplainerTest {
 
     @BeforeAll
     static void setUpBefore() {
-        DataUtils.seed(4);
+        DataUtils.setSeed(4);
         logisticRegressionIris = getPMMLRuntime("LogisticRegressionIrisData");
         categoricalVariableRegression = getPMMLRuntime("categoricalVariables_Model");
         scorecardCategorical = getPMMLRuntime("SimpleScorecardCategorical");

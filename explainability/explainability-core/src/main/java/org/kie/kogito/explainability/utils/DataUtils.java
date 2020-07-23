@@ -46,7 +46,7 @@ public class DataUtils {
 
     private final static SecureRandom random = new SecureRandom();
 
-    public static void seed(long seed) {
+    public static void setSeed(long seed) {
         random.setSeed(seed);
     }
 

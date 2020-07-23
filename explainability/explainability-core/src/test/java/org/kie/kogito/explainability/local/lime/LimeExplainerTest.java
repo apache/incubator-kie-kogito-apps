@@ -38,7 +38,7 @@ class LimeExplainerTest {
 
     @BeforeAll
     static void setUpBefore() {
-        DataUtils.seed(4);
+        DataUtils.setSeed(4);
     }
 
     @Test
