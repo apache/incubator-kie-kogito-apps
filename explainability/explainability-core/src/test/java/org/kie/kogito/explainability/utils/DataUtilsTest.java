@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 class DataUtilsTest {
 
     @Test
-    public void testDataGeneration() {
+    void testDataGeneration() {
         double mean = 0.5;
         double stdDeviation = 0.1;
         int size = 100;
@@ -50,14 +50,14 @@ class DataUtilsTest {
     }
 
     @Test
-    public void testGaussianKernel() {
+    void testGaussianKernel() {
         double x = 0.218;
         double k = DataUtils.gaussianKernel(x);
         assertEquals(0.551, k, 1e-3);
     }
 
     @Test
-    public void testEuclideanDistance() {
+    void testEuclideanDistance() {
         double[] x = new double[]{1, 1};
         double[] y = new double[]{2, 3};
         double distance = DataUtils.euclideanDistance(x, y);
@@ -65,7 +65,7 @@ class DataUtilsTest {
     }
 
     @Test
-    public void testGowerDistance() {
+    void testGowerDistance() {
         double[] x = new double[]{2, 1};
         double[] y = new double[]{2, 3};
         double distance = DataUtils.gowerDistance(x, y, 0.5);
@@ -73,7 +73,7 @@ class DataUtilsTest {
     }
 
     @Test
-    public void testHammingDistance() {
+    void testHammingDistance() {
         double[] x = new double[]{2, 1};
         double[] y = new double[]{2, 3};
         double distance = DataUtils.hammingDistance(x, y);
@@ -81,59 +81,116 @@ class DataUtilsTest {
     }
 
     @Test
-    public void testExponentialSmoothingKernel() {
+    void testExponentialSmoothingKernel() {
         double x = 0.218;
         double k = DataUtils.exponentialSmoothingKernel(x, 2);
         assertEquals(0.994, k, 1e-3);
     }
 
     @Test
-    public void testPerturbDropZero() {
+    void testPerturbDropNumericZero() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f0", 1));
         features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
         features.add(FeatureFactory.newNumericalFeature("f2", 5));
         PredictionInput input = new PredictionInput(features);
-        assertPerturbDrop(input, 0);
+        assertPerturbDropNumeric(input, 0);
     }
 
     @Test
-    public void testPerturbDropOne() {
+    void testPerturbDropNumericOne() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f0", 1));
         features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
         features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
         PredictionInput input = new PredictionInput(features);
-        assertPerturbDrop(input, 1);
+        assertPerturbDropNumeric(input, 1);
     }
 
     @Test
-    public void testPerturbDropTwo() {
+    void testPerturbDropNumericTwo() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f0", 1));
         features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
         features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
         PredictionInput input = new PredictionInput(features);
-        assertPerturbDrop(input, 2);
+        assertPerturbDropNumeric(input, 2);
     }
 
     @Test
-    public void testPerturbDropThree() {
+    void testPerturbDropNumericThree() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f0", 1));
         features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
         features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
         PredictionInput input = new PredictionInput(features);
-        assertPerturbDrop(input, 3);
+        assertPerturbDropNumeric(input, 3);
     }
 
-    private void assertPerturbDrop(PredictionInput input, int noOfPerturbations) {
+    @Test
+    void testPerturbDropStringZero() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newTextFeature("f0", "foo"));
+        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
+        features.add(FeatureFactory.newTextFeature("f2", " "));
+        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDropString(input, 0);
+    }
+
+    @Test
+    void testPerturbDropStringOne() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newTextFeature("f0", "foo"));
+        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
+        features.add(FeatureFactory.newTextFeature("f2", " "));
+        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDropString(input, 1);
+    }
+
+    @Test
+    void testPerturbDropStringTwo() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newTextFeature("f0", "foo"));
+        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
+        features.add(FeatureFactory.newTextFeature("f2", " "));
+        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDropString(input, 2);
+    }
+
+    @Test
+    void testPerturbDropStringThree() {
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newTextFeature("f0", "foo"));
+        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
+        features.add(FeatureFactory.newTextFeature("f2", " "));
+        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
+        PredictionInput input = new PredictionInput(features);
+        assertPerturbDropString(input, 3);
+    }
+
+    private void assertPerturbDropNumeric(PredictionInput input, int noOfPerturbations) {
         PredictionInput perturbedInput = DataUtils.perturbDrop(input, 10, noOfPerturbations);
         int changedFeatures = 0;
         for (int i = 0; i < input.getFeatures().size(); i++) {
             double v = input.getFeatures().get(i).getValue().asNumber();
             double pv = perturbedInput.getFeatures().get(i).getValue().asNumber();
             if (v != pv) {
+                changedFeatures++;
+            }
+        }
+        assertEquals(noOfPerturbations, changedFeatures);
+    }
+
+    private void assertPerturbDropString(PredictionInput input, int noOfPerturbations) {
+        PredictionInput perturbedInput = DataUtils.perturbDrop(input, 10, noOfPerturbations);
+        int changedFeatures = 0;
+        for (int i = 0; i < input.getFeatures().size(); i++) {
+            String v = input.getFeatures().get(i).getValue().asString();
+            String pv = perturbedInput.getFeatures().get(i).getValue().asString();
+            if (!v.equals(pv)) {
                 changedFeatures++;
             }
         }
