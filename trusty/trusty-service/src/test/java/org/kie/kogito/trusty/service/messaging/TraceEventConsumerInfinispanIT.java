@@ -16,17 +16,11 @@
 
 package org.kie.kogito.trusty.service.messaging;
 
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
-import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
@@ -34,8 +28,6 @@ import org.kie.kogito.trusty.service.TrustyKafkaTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
@@ -52,8 +44,6 @@ import static org.kie.kogito.trusty.service.messaging.KafkaUtils.sendToKafkaAndW
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
 @QuarkusTestResource(TrustyKafkaTestResource.class)
 class TraceEventConsumerInfinispanIT {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumerInfinispanIT.class);
 
     @Inject
     TrustyService trustyService;
