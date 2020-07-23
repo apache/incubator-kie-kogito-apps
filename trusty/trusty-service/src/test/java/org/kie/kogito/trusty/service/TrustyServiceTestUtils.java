@@ -119,9 +119,9 @@ public class TrustyServiceTestUtils {
         return CloudEventUtils.encode(buildCloudEventWithoutData());
     }
 
-    public static TraceEvent buildCorrectTraceEvent() {
+    public static TraceEvent buildCorrectTraceEvent(String cloudEventId) {
         return new TraceEvent(
-                buildHeader(CORRECT_CLOUDEVENT_ID, CORRECT_CLOUDEVENT_START_TS, CORRECT_CLOUDEVENT_START_TS + CORRECT_CLOUDEVENT_DURATION, CORRECT_CLOUDEVENT_DURATION, null),
+                buildHeader(cloudEventId, CORRECT_CLOUDEVENT_START_TS, CORRECT_CLOUDEVENT_START_TS + CORRECT_CLOUDEVENT_DURATION, CORRECT_CLOUDEVENT_DURATION, null),
                 List.of(
                         buildInputViolation(INPUT_VIOLATION_JSON, null),
                         buildInputDriver(INPUT_DRIVER_JSON, null)
@@ -192,9 +192,9 @@ public class TrustyServiceTestUtils {
         );
     }
 
-    public static Decision buildCorrectDecision() {
+    public static Decision buildCorrectDecision(String cloudEventId) {
         return new Decision(
-                CORRECT_CLOUDEVENT_ID, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME,
+                cloudEventId, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME,
                 List.of(
                         new TypedValue(INPUT_VIOLATION_NODE_NAME, TYPE_VIOLATION_NODE_ID, toJsonNode(INPUT_VIOLATION_JSON)),
                         new TypedValue(INPUT_DRIVER_NODE_NAME, TYPE_DRIVER_NODE_ID, toJsonNode(INPUT_DRIVER_JSON))

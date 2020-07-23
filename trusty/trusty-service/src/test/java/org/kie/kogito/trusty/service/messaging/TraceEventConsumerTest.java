@@ -20,6 +20,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyService;
 
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventWithoutDataJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
@@ -33,7 +34,7 @@ class TraceEventConsumerTest {
 
     @Test
     void testCorrectCloudEvent() {
-        String payload = buildCloudEventJsonString(buildCorrectTraceEvent());
+        String payload = buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID));
         doTest(payload, 1);
     }
 
