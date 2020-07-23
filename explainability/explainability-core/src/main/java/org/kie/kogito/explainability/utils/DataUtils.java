@@ -219,7 +219,7 @@ public class DataUtils {
                 f = FeatureFactory.newDurationFeature(featureName, Duration.of(0, ChronoUnit.SECONDS));
                 break;
             case CURRENCY:
-                // set the currency to EUR
+                // set the currency to machine default locale
                 f = FeatureFactory.newCurrencyFeature(featureName, Currency.getInstance(Locale.getDefault()));
                 break;
             case CATEGORICAL:
