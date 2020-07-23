@@ -211,8 +211,8 @@ public class DataUtils {
                 f = FeatureFactory.newBooleanFeature(featureName, !Boolean.getBoolean(feature.getValue().asString()));
                 break;
             case TIME:
-                // set to midnight
-                f = FeatureFactory.newTimeFeature(featureName, LocalTime.MIDNIGHT);
+                LocalTime featureValue = (LocalTime) feature.getValue().getUnderlyingObject();
+                f = FeatureFactory.newTimeFeature(featureName, featureValue.minusHours(random.nextInt(24)));
                 break;
             case DURATION:
                 // set the duration to 0
@@ -263,8 +263,7 @@ public class DataUtils {
         return f;
     }
 
-    public static Feature dropFeature(Feature feature, String... names) {
-        Arrays.sort(names);
+    public static Feature dropFeature(Feature feature, List<String> names) {
         Type type = feature.getType();
         Feature f = feature;
         String featureName = feature.getName();
@@ -278,13 +277,13 @@ public class DataUtils {
                 f = FeatureFactory.newCompositeFeature(featureName, featuresMap);
                 break;
             case TEXT:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     f = FeatureFactory.newTextFeature(featureName, "");
                 } else {
                     String stringValue = feature.getValue().asString();
                     if (stringValue.indexOf(' ') != -1) {
                         List<String> words = new ArrayList<>(Arrays.asList(stringValue.split(" ")));
-                        List<String> matchingWords = Arrays.stream(names).map(n -> n.contains(" (") ? n.substring(0, n.indexOf(" (")) : "").filter(words::contains).collect(Collectors.toList());
+                        List<String> matchingWords = names.stream().map(n -> n.contains(" (") ? n.substring(0, n.indexOf(" (")) : "").filter(words::contains).collect(Collectors.toList());
                         if (words.removeAll(matchingWords)) {
                             stringValue = String.join(" ", words);
                         }
@@ -293,7 +292,7 @@ public class DataUtils {
                 }
                 break;
             case NUMBER:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     if (feature.getValue().asNumber() == 0) {
                         f = FeatureFactory.newNumericalFeature(featureName, Double.NaN);
                     } else {
@@ -302,31 +301,31 @@ public class DataUtils {
                 }
                 break;
             case BOOLEAN:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // flip the boolean value
                     f = FeatureFactory.newBooleanFeature(featureName, !Boolean.getBoolean(feature.getValue().asString()));
                 }
                 break;
             case TIME:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // set to midnight
                     f = FeatureFactory.newTimeFeature(featureName, LocalTime.MIDNIGHT);
                 }
                 break;
             case DURATION:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // set the duration to 0
                     f = FeatureFactory.newDurationFeature(featureName, Duration.of(0, ChronoUnit.SECONDS));
                 }
                 break;
             case CURRENCY:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // set the currency to EUR
                     f = FeatureFactory.newCurrencyFeature(featureName, Currency.getInstance(Locale.getDefault()));
                 }
                 break;
             case CATEGORICAL:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     String category = feature.getValue().asString();
                     if (!"0".equals(category)) {
                         category = "0";
@@ -337,20 +336,20 @@ public class DataUtils {
                 }
                 break;
             case BINARY:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // set an empty buffer
                     ByteBuffer byteBuffer = ByteBuffer.allocate(0);
                     f = FeatureFactory.newBinaryFeature(featureName, byteBuffer);
                 }
                 break;
             case URI:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // set an empty URI
                     f = FeatureFactory.newURIFeature(featureName, URI.create(""));
                 }
                 break;
             case VECTOR:
-                if (Arrays.binarySearch(names, feature.getName()) >= 0) {
+                if (names.contains(featureName)) {
                     // randomly set a non zero value to zero (or decrease it by 1)
                     double[] values = feature.getValue().asVector();
                     if (values.length > 0) {

@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.utils;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
@@ -59,7 +60,7 @@ public class ExplainabilityMetrics {
      * @return the saliency impact
      */
     public static double saliencyImpact(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) {
-        String[] importantFeatureNames = topFeatures.stream().map(f -> f.getFeature().getName()).toArray(String[]::new);
+        List<String> importantFeatureNames = topFeatures.stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
 
         List<Feature> newFeatures = new LinkedList<>();
         for (Feature feature : prediction.getInput().getFeatures()) {
