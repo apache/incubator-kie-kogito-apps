@@ -17,9 +17,13 @@ package org.kie.kogito.explainability.model;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.Predicate;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Wrapper class for any kind of value part of a prediction input or output.
+ *
  * @param <S>
  */
 public class Value<S> {
@@ -31,12 +35,16 @@ public class Value<S> {
     }
 
     public String asString() {
-        return String.valueOf(underlyingObject);
+        return ArrayUtils.toString(underlyingObject);
     }
 
     public double asNumber() {
         if (underlyingObject != null) {
-            return underlyingObject instanceof Boolean ? (Boolean) underlyingObject ? 1d : 0d : Double.parseDouble(asString());
+            try {
+                return underlyingObject instanceof Boolean ? (Boolean) underlyingObject ? 1d : 0d : Double.parseDouble(asString());
+            } catch (NumberFormatException nfe) {
+                return Double.NaN;
+            }
         } else {
             return Double.NaN;
         }
@@ -53,22 +61,27 @@ public class Value<S> {
 
     public double[] asVector() {
         double[] doubles;
-        try {
+        if (underlyingObject instanceof double[]) {
             doubles = (double[]) underlyingObject;
-        } catch (ClassCastException cce) {
+        } else {
             if (underlyingObject instanceof String) {
-                int noOfWords = ((String) underlyingObject).split(" ").length;
+                String[] tokens = ((String) underlyingObject).split(",?\\s+");
+                int noOfWords = tokens.length;
                 doubles = new double[noOfWords];
-                Arrays.fill(doubles, 1);
-            } else {
-                try {
-                    double v = asNumber();
-                    doubles = new double[1];
-                    doubles[0] = v;
-                } catch (Exception e) {
-                    doubles = new double[0];
+                // parse string encoded vector
+                if (Arrays.stream(tokens).allMatch(s -> s.matches("-?\\d+(\\.\\d+)?"))) {
+                    for (int i = 0; i < tokens.length; i++) {
+                        doubles[i] = Double.parseDouble(tokens[i]);
+                    }
+                } else { // or make a vector of 1s
+                    Arrays.fill(doubles, 1);
                 }
+            } else {
+                double v = asNumber();
+                doubles = new double[1];
+                doubles[0] = v;
             }
+            // TODO : handle parsing of different underlyingObject types as vectors (e.g. ByteBuffer, etc.)
         }
         return doubles;
     }
