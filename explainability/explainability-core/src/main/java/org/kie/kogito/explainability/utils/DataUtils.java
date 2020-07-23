@@ -97,7 +97,7 @@ public class DataUtils {
         for (double datum : data) {
             m += datum;
         }
-        m = m / (double) data.length;
+        m = m / data.length;
         return m;
     }
 
@@ -408,7 +408,7 @@ public class DataUtils {
     }
 
     public static double gaussianKernel(double x) {
-        return Math.exp(-Math.pow(x, 2) / 2) / Math.sqrt(3.14);
+        return Math.exp(-Math.pow(x, 2) / 2) / Math.sqrt(Math.PI);
     }
 
     public static double exponentialSmoothingKernel(double x, double sigma) {
