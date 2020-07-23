@@ -47,7 +47,6 @@ public class TraceEventConsumer {
 
     @Incoming("kogito-tracing")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        LOG.info("RECEIVED");
         try {
             decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
         }
