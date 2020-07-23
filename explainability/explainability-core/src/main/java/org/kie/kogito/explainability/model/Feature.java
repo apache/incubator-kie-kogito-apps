@@ -31,7 +31,7 @@ public class Feature {
     }
 
     /**
-     * the name of the feature
+     * The name of the feature
      *
      * @return this feature name
      */
@@ -40,7 +40,7 @@ public class Feature {
     }
 
     /**
-     * the type of the feature
+     * The type of the feature
      *
      * @return this feature type
      */
@@ -49,7 +49,7 @@ public class Feature {
     }
 
     /**
-     * the value of the feature
+     * The value of the feature
      *
      * @return the feature value
      */
