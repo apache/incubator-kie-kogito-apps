@@ -57,7 +57,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
 
     /**
      * Create a PDP provider.
-     *
+     * <p>
      * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
      */
     public PartialDependencePlotExplainer() {
@@ -69,52 +69,48 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
         long start = System.currentTimeMillis();
 
         Collection<PartialDependenceGraph> pdps = new LinkedList<>();
-        try {
-            DataDistribution dataDistribution = metadata.getDataDistribution();
-            int noOfFeatures = metadata.getInputShape().getFeatures().size();
+        DataDistribution dataDistribution = metadata.getDataDistribution();
+        int noOfFeatures = metadata.getInputShape().getFeatures().size();
 
-            List<FeatureDistribution> featureDistributions = dataDistribution.getFeatureDistributions();
-            for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
-                for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
-                    double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
-                                                                         featureDistributions.get(featureIndex).getMax(), seriesLength);
+        List<FeatureDistribution> featureDistributions = dataDistribution.getFeatureDistributions();
+        for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
+            for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
+                double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
+                                                                     featureDistributions.get(featureIndex).getMax(), seriesLength);
 
-                    double[][] trainingData = new double[noOfFeatures][seriesLength];
-                    for (int i = 0; i < noOfFeatures; i++) {
-                        double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
-                                                                      featureDistributions.get(i).getStdDev(), seriesLength);
-                        trainingData[i] = featureData;
-                    }
-
-                    double[] marginalImpacts = new double[featureXSvalues.length];
-                    for (int i = 0; i < featureXSvalues.length; i++) {
-                        List<PredictionInput> predictionInputs = new LinkedList<>();
-                        double xs = featureXSvalues[i];
-                        double[] inputs = new double[noOfFeatures];
-                        inputs[featureIndex] = xs;
-                        for (int j = 0; j < seriesLength; j++) {
-                            for (int f = 0; f < noOfFeatures; f++) {
-                                if (f != featureIndex) {
-                                    inputs[f] = trainingData[f][j];
-                                }
-                            }
-                            PredictionInput input = new PredictionInput(DataUtils.doublesToFeatures(inputs));
-                            predictionInputs.add(input);
-                        }
-
-                        // prediction requests are batched per value of feature 'Xs' under analysis
-                        for (PredictionOutput predictionOutput : model.predict(predictionInputs)) {
-                            Output output = predictionOutput.getOutputs().get(outputIndex);
-                            marginalImpacts[i] += output.getScore() / (double) seriesLength;
-                        }
-                    }
-                    PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),
-                                                                                               featureXSvalues, marginalImpacts);
-                    pdps.add(partialDependenceGraph);
+                double[][] trainingData = new double[noOfFeatures][seriesLength];
+                for (int i = 0; i < noOfFeatures; i++) {
+                    double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
+                                                                  featureDistributions.get(i).getStdDev(), seriesLength);
+                    trainingData[i] = featureData;
                 }
+
+                double[] marginalImpacts = new double[featureXSvalues.length];
+                for (int i = 0; i < featureXSvalues.length; i++) {
+                    List<PredictionInput> predictionInputs = new LinkedList<>();
+                    double xs = featureXSvalues[i];
+                    double[] inputs = new double[noOfFeatures];
+                    inputs[featureIndex] = xs;
+                    for (int j = 0; j < seriesLength; j++) {
+                        for (int f = 0; f < noOfFeatures; f++) {
+                            if (f != featureIndex) {
+                                inputs[f] = trainingData[f][j];
+                            }
+                        }
+                        PredictionInput input = new PredictionInput(DataUtils.doublesToFeatures(inputs));
+                        predictionInputs.add(input);
+                    }
+
+                    // prediction requests are batched per value of feature 'Xs' under analysis
+                    for (PredictionOutput predictionOutput : model.predict(predictionInputs)) {
+                        Output output = predictionOutput.getOutputs().get(outputIndex);
+                        marginalImpacts[i] += output.getScore() / (double) seriesLength;
+                    }
+                }
+                PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),
+                                                                                           featureXSvalues, marginalImpacts);
+                pdps.add(partialDependenceGraph);
             }
-        } catch (Exception e) {
-            throw new GlobalExplanationException(e);
         }
         long end = System.currentTimeMillis();
         logger.debug("explanation time: {}ms", (end - start));
