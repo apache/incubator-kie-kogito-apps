@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
  * While a strict PD implementation would need the whole training set used to train the model, this implementation seeks
  * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
  * stdDev).
+ *
+ * see also https://christophm.github.io/interpretable-ml-book/pdp.html
  */
 public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<PartialDependenceGraph>> {
 
