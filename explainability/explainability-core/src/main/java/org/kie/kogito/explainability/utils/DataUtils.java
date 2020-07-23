@@ -457,7 +457,11 @@ public class DataUtils {
 
     static void linearizeFeature(List<Feature> flattenedFeatures, Feature f) {
         if (Type.UNDEFINED.equals(f.getType())) {
-            linearizeFeature(flattenedFeatures, (Feature) f.getValue().getUnderlyingObject());
+            if (f.getValue().getUnderlyingObject() instanceof Feature) {
+                linearizeFeature(flattenedFeatures, (Feature) f.getValue().getUnderlyingObject());
+            } else {
+                flattenedFeatures.add(f);
+            }
         } else if (Type.COMPOSITE.equals(f.getType())) {
             List<Feature> features = (List<Feature>) f.getValue().getUnderlyingObject();
             for (Feature feature : features) {

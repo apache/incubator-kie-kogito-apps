@@ -273,10 +273,12 @@ class DataUtilsTest {
         list.add(FeatureFactory.newNumericalFeature("f2", 13));
         list.add(FeatureFactory.newDurationFeature("f3", Duration.ofDays(13)));
         list.add(FeatureFactory.newTimeFeature("f4", LocalTime.now()));
+        list.add(FeatureFactory.newObjectFeature("f5", new float[]{0.4f, 0.4f}));
+        list.add(FeatureFactory.newObjectFeature("f6", FeatureFactory.newObjectFeature("nf-0", new Object())));
         Feature f = FeatureFactory.newCompositeFeature("name", list);
         features.add(f);
         List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(features);
-        assertEquals(7, linearizedFeatures.size());
+        assertEquals(9, linearizedFeatures.size());
     }
 
 }
