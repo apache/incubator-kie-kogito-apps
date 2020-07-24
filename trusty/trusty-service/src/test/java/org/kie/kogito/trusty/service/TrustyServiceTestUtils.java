@@ -104,20 +104,37 @@ public class TrustyServiceTestUtils {
     private static final TraceType tFineType = new TraceType(TYPE_FINE_NODE_ID, MODEL_NAMESPACE, "tFine");
     private static final TraceType tViolationType = new TraceType(TYPE_VIOLATION_NODE_ID, MODEL_NAMESPACE, "tViolation");
 
-    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vDriver = new StructureVariable("tDriver", Map.of(
+    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vEventDriver = new StructureVariable("tDriver", Map.of(
             "Age", new UnitVariable("number", toJsonNode("25")),
             "Points", new UnitVariable("number", toJsonNode("13"))
     ));
-    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vViolation = new StructureVariable("tViolation", Map.of(
+    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vEventDriverNull = new StructureVariable("tDriver", null);
+    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vEventViolation = new StructureVariable("tViolation", Map.of(
             "Type", new UnitVariable("string", toJsonNode("\"speed\"")),
             "Actual Speed", new UnitVariable("number", toJsonNode("140")),
             "Speed Limit", new UnitVariable("number", toJsonNode("100"))
     ));
-    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vFine = new StructureVariable("tFine", Map.of(
+    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vEventFine = new StructureVariable("tFine", Map.of(
             "Amount", new UnitVariable("number", toJsonNode("1000")),
             "Points", new UnitVariable("number", toJsonNode("7"))
     ));
-    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vSuspended = new UnitVariable("string", toJsonNode("\"Yes\""));
+    private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vEventSuspended = new UnitVariable("string", toJsonNode("\"Yes\""));
+
+    private static final TypedVariable vDecisionDriver = TypedVariable.withComponents(INPUT_DRIVER_NODE_NAME, "tDriver", List.of(
+            TypedVariable.withValue("Age", "number", toJsonNode("25")),
+            TypedVariable.withValue("Points", "number", toJsonNode("13"))
+    ));
+    private static final TypedVariable vDecisionDriverNull = TypedVariable.withComponents(INPUT_DRIVER_NODE_NAME, "tDriver", null);
+    private static final TypedVariable vDecisionViolation = TypedVariable.withComponents(INPUT_VIOLATION_NODE_NAME, "tViolation", List.of(
+            TypedVariable.withValue("Type", "string", toJsonNode("\"speed\"")),
+            TypedVariable.withValue("Actual Speed", "number", toJsonNode("140")),
+            TypedVariable.withValue("Speed Limit", "number", toJsonNode("100"))
+    ));
+    private static final TypedVariable vDecisionFine = TypedVariable.withComponents(OUTPUT_FINE_NODE_NAME, "tFine", List.of(
+            TypedVariable.withValue("Amount", "number", toJsonNode("1000")),
+            TypedVariable.withValue("Points", "number", toJsonNode("7"))
+    ));
+    private static final TypedVariable vDecisionSuspended = TypedVariable.withValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, "string", toJsonNode("\"Yes\""));
 
     public static CloudEventImpl<TraceEvent> buildCloudEvent(TraceEvent traceEvent) {
         return CloudEventUtils.build(
@@ -226,19 +243,19 @@ public class TrustyServiceTestUtils {
         return new Decision(
                 cloudEventId, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
-                        TypedVariable.withValue(INPUT_VIOLATION_NODE_NAME, TYPE_VIOLATION_NODE_ID, toJsonNode(INPUT_VIOLATION_JSON)),
-                        TypedVariable.withValue(INPUT_DRIVER_NODE_NAME, TYPE_DRIVER_NODE_ID, toJsonNode(INPUT_DRIVER_JSON))
+                        vDecisionViolation,
+                        vDecisionDriver
                 ),
                 List.of(
                         new DecisionOutcome(
                                 OUTPUT_FINE_NODE_ID, OUTPUT_FINE_NODE_NAME, EVALUATION_STATUS_SUCCEEDED,
-                                TypedVariable.withValue(OUTPUT_FINE_NODE_NAME, TYPE_FINE_NODE_ID, toJsonNode(OUTPUT_FINE_JSON)),
-                                null, null
+                                vDecisionFine,
+                                List.of(vDecisionViolation), null
                         ),
                         new DecisionOutcome(
                                 OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_ID, OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, EVALUATION_STATUS_SUCCEEDED,
-                                TypedVariable.withValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, null, toJsonNode(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_JSON)),
-                                null, null
+                                vDecisionSuspended,
+                                List.of(vDecisionDriver, vDecisionFine), null
                         )
                 )
         );
@@ -334,14 +351,14 @@ public class TrustyServiceTestUtils {
         return new Decision(
                 CLOUDEVENT_WITH_ERRORS_ID, CLOUDEVENT_WITH_ERRORS_START_TS, null, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
-                        TypedVariable.withValue(INPUT_VIOLATION_NODE_NAME, TYPE_VIOLATION_NODE_ID, toJsonNode(INPUT_VIOLATION_JSON)),
-                        TypedVariable.withValue(INPUT_DRIVER_NODE_NAME, TYPE_DRIVER_NODE_ID, null)
+                        vDecisionViolation,
+                        vDecisionDriverNull
                 ),
                 List.of(
                         new DecisionOutcome(
                                 OUTPUT_FINE_NODE_ID, OUTPUT_FINE_NODE_NAME, EVALUATION_STATUS_SUCCEEDED,
-                                TypedVariable.withValue(OUTPUT_FINE_NODE_NAME, TYPE_FINE_NODE_ID, toJsonNode(OUTPUT_FINE_JSON)),
-                                null,
+                                vDecisionFine,
+                                List.of(vDecisionViolation),
                                 List.of(
                                         new org.kie.kogito.trusty.storage.api.model.Message(
                                                 MessageLevel.WARNING, MESSAGE_WARNING_CATEGORY.name(), MESSAGE_WARNING_TYPE,
@@ -362,8 +379,8 @@ public class TrustyServiceTestUtils {
                         ),
                         new DecisionOutcome(
                                 OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_ID, OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, EVALUATION_STATUS_SUCCEEDED,
-                                TypedVariable.withValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, null, toJsonNode(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_JSON)),
-                                null,
+                                vDecisionSuspended,
+                                List.of(vDecisionDriverNull, vDecisionFine),
                                 List.of(
                                         new org.kie.kogito.trusty.storage.api.model.Message(
                                                 MessageLevel.ERROR, MESSAGE_ERROR_CATEGORY.name(), MESSAGE_ERROR_TYPE,
@@ -397,19 +414,19 @@ public class TrustyServiceTestUtils {
     }
 
     private static TraceInputValue buildInputDriver(String value, List<Message> messages) {
-        return new TraceInputValue(INPUT_DRIVER_NODE_ID, INPUT_DRIVER_NODE_NAME, value == null ? null : vDriver, messages);
+        return new TraceInputValue(INPUT_DRIVER_NODE_ID, INPUT_DRIVER_NODE_NAME, value == null ? vEventDriverNull : vEventDriver, messages);
     }
 
     private static TraceInputValue buildInputViolation(String value, List<Message> messages) {
-        return new TraceInputValue(INPUT_VIOLATION_NODE_ID, INPUT_VIOLATION_NODE_NAME, vViolation, messages);
+        return new TraceInputValue(INPUT_VIOLATION_NODE_ID, INPUT_VIOLATION_NODE_NAME, vEventViolation, messages);
     }
 
     private static TraceOutputValue buildOutputFine(String value, List<Message> messages) {
-        return new TraceOutputValue(OUTPUT_FINE_NODE_ID, OUTPUT_FINE_NODE_NAME, EVALUATION_STATUS_SUCCEEDED, vFine, Map.of(INPUT_VIOLATION_NODE_NAME, vViolation), messages);
+        return new TraceOutputValue(OUTPUT_FINE_NODE_ID, OUTPUT_FINE_NODE_NAME, EVALUATION_STATUS_SUCCEEDED, vEventFine, Map.of(INPUT_VIOLATION_NODE_NAME, vEventViolation), messages);
     }
 
     private static TraceOutputValue buildOutputShouldTheDriverBeSuspended(String status, String value, List<Message> messages) {
-        return new TraceOutputValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_ID, OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, status, value == null ? null : vSuspended, value == null ? Map.of(OUTPUT_FINE_NODE_NAME, vFine) : Map.of(INPUT_DRIVER_NODE_NAME, vDriver, OUTPUT_FINE_NODE_NAME, vFine), messages);
+        return new TraceOutputValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_ID, OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, status, value == null ? null : vEventSuspended, value == null ? Map.of("Fine", vEventFine) : Map.of("Driver", vEventDriver, "Fine", vEventFine), messages);
     }
 
     private static JsonNode toJsonNode(String serializedJson) {

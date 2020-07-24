@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
@@ -60,22 +61,31 @@ public class TraceEventConverter {
     }
 
     public static TypedVariable toTypedVariable(String name, org.kie.kogito.tracing.decision.event.variable.TypedVariable typedVariable) {
+        if (typedVariable == null) {
+            return TypedVariable.withValue(name, null, null);
+        }
         switch (typedVariable.getKind()) {
             case STRUCTURE:
                 return TypedVariable.withComponents(
                         name,
                         typedVariable.getType(),
-                        typedVariable.toStructure().getValue().entrySet().stream()
-                                .map(e -> toTypedVariable(e.getKey(), e.getValue()))
-                                .collect(Collectors.toList())
+                        Optional.ofNullable(typedVariable.toStructure().getValue())
+                                .map(v -> v.entrySet().stream()
+                                        .map(e -> toTypedVariable(e.getKey(), e.getValue()))
+                                        .collect(Collectors.toList())
+                                )
+                                .orElse(null)
                 );
             case COLLECTION:
                 return TypedVariable.withComponents(
                         name,
                         typedVariable.getType(),
-                        typedVariable.toCollection().getValue().stream()
-                                .map(v -> toTypedVariable(null, v))
-                                .collect(Collectors.toList())
+                        Optional.ofNullable(typedVariable.toCollection().getValue())
+                                .map(v -> v.stream()
+                                        .map(x -> toTypedVariable(null, x))
+                                        .collect(Collectors.toList())
+                                )
+                                .orElse(null)
                 );
             case UNIT:
                 return TypedVariable.withValue(
@@ -93,7 +103,7 @@ public class TraceEventConverter {
                 eventOutput.getName(),
                 eventOutput.getStatus(),
                 toTypedVariable(eventOutput.getName(), eventOutput.getValue()),
-                null,
+                eventOutput.getInputs().entrySet().stream().map(e -> toTypedVariable(e.getKey(), e.getValue())).collect(Collectors.toList()),
                 eventOutput.getMessages() == null ? null : eventOutput.getMessages().stream().map(TraceEventConverter::toMessage).collect(Collectors.toList())
         );
     }
