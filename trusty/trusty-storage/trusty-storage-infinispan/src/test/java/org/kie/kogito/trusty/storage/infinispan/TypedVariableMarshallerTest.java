@@ -21,13 +21,16 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
+import org.kie.kogito.tracing.decision.event.variable.TypedVariable.Kind;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.CollectionTestField;
+import org.kie.kogito.trusty.storage.infinispan.testfield.EnumTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.JsonNodeTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import static org.kie.kogito.trusty.storage.api.model.TypedVariable.COMPONENTS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.TypedVariable.KIND_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.TypedVariable.NAME_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.TypedVariable.TYPE_REF_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.TypedVariable.VALUE_FIELD;
@@ -35,6 +38,7 @@ import static org.kie.kogito.trusty.storage.api.model.TypedVariable.VALUE_FIELD;
 public class TypedVariableMarshallerTest extends MarshallerTestTemplate<TypedVariable> {
 
     private static final List<AbstractTestField<TypedVariable, ?>> TEST_FIELD_LIST = List.of(
+            new EnumTestField<>(KIND_FIELD, Kind.UNIT, TypedVariable::getKind, TypedVariable::setKind, Kind.class),
             new StringTestField<>(NAME_FIELD, "testName", TypedVariable::getName, TypedVariable::setName),
             new StringTestField<>(TYPE_REF_FIELD, "testTypeRef", TypedVariable::getTypeRef, TypedVariable::setTypeRef),
             new JsonNodeTestField<>(VALUE_FIELD, null, TypedVariable::getValue, TypedVariable::setValue),

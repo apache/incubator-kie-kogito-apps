@@ -95,14 +95,17 @@ message MessageExceptionField {
 /* @Indexed */
 message TypedVariable {
     /* @Field(store = Store.YES) */
-    optional string name = 1;
+    optional string kind = 1;
 
     /* @Field(store = Store.YES) */
-    optional string typeRef = 2;
+    optional string name = 2;
 
     /* @Field(store = Store.YES) */
-    optional string value = 3;
+    optional string typeRef = 3;
 
     /* @Field(store = Store.YES) */
-    repeated TypedVariable components = 4;
+    optional string value = 4;
+
+    /* @Field(store = Store.YES) */
+    repeated TypedVariable components = 5;
 }

@@ -185,8 +185,8 @@ public class DecisionsApiV1IT {
 
             case FULL:
                 decision.setInputs(List.of(
-                        TypedVariable.withValue("first", "FirstInput", mapper.readTree("\"Hello\"")),
-                        TypedVariable.withValue("second", "SecondInput", mapper.readTree("12345"))
+                        TypedVariable.buildUnit("first", "FirstInput", mapper.readTree("\"Hello\"")),
+                        TypedVariable.buildUnit("second", "SecondInput", mapper.readTree("12345"))
                 ));
         }
 
@@ -199,7 +199,7 @@ public class DecisionsApiV1IT {
                 decision.setOutcomes(List.of(
                         new DecisionOutcome(
                                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                                TypedVariable.withValue("result", "ResType", mapper.readTree("\"The First Outcome\"")),
+                                TypedVariable.buildUnit("result", "ResType", mapper.readTree("\"The First Outcome\"")),
                                 List.of(),
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",

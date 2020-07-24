@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.kie.kogito.tracing.decision.event.variable.TypedVariable.Kind;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 public class TypedVariableMarshaller extends AbstractModelMarshaller<TypedVariable> {
@@ -31,6 +32,7 @@ public class TypedVariableMarshaller extends AbstractModelMarshaller<TypedVariab
     @Override
     public TypedVariable readFrom(ProtoStreamReader reader) throws IOException {
         return new TypedVariable(
+                enumFromString(reader.readString(TypedVariable.KIND_FIELD), Kind.class),
                 reader.readString(TypedVariable.NAME_FIELD),
                 reader.readString(TypedVariable.TYPE_REF_FIELD),
                 jsonFromString(reader.readString(TypedVariable.VALUE_FIELD)),
@@ -40,6 +42,7 @@ public class TypedVariableMarshaller extends AbstractModelMarshaller<TypedVariab
 
     @Override
     public void writeTo(ProtoStreamWriter writer, TypedVariable input) throws IOException {
+        writer.writeString(TypedVariable.KIND_FIELD, stringFromEnum(input.getKind()));
         writer.writeString(TypedVariable.NAME_FIELD, input.getName());
         writer.writeString(TypedVariable.TYPE_REF_FIELD, input.getTypeRef());
         writer.writeString(TypedVariable.VALUE_FIELD, stringFromJson(input.getValue()));

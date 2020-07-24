@@ -21,14 +21,19 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.kie.kogito.tracing.decision.event.variable.TypedVariable.Kind;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TypedVariable {
 
+    public static final String KIND_FIELD = "kind";
     public static final String NAME_FIELD = "name";
     public static final String TYPE_REF_FIELD = "typeRef";
     public static final String VALUE_FIELD = "value";
     public static final String COMPONENTS_FIELD = "components";
+
+    @JsonProperty(NAME_FIELD)
+    private Kind kind;
 
     @JsonProperty(NAME_FIELD)
     private String name;
@@ -45,15 +50,24 @@ public class TypedVariable {
     public TypedVariable() {
     }
 
-    public TypedVariable(String name, String typeRef, JsonNode value, Collection<TypedVariable> components) {
+    public TypedVariable(Kind kind, String name, String typeRef, JsonNode value, Collection<TypedVariable> components) {
+        this.kind = kind;
         this.name = name;
         this.typeRef = typeRef;
         this.value = value;
         this.components = components;
     }
 
+    public Kind getKind() {
+        return kind;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setKind(Kind kind) {
+        this.kind = kind;
     }
 
     public void setName(String name) {
@@ -84,11 +98,15 @@ public class TypedVariable {
         this.components = components;
     }
 
-    public static TypedVariable withValue(String name, String typeRef, JsonNode value) {
-        return new TypedVariable(name, typeRef, value, null);
+    public static TypedVariable buildCollection(String name, String typeRef, Collection<TypedVariable> components) {
+        return new TypedVariable(Kind.COLLECTION, name, typeRef, null, components);
     }
 
-    public static TypedVariable withComponents(String name, String typeRef, Collection<TypedVariable> components) {
-        return new TypedVariable(name, typeRef, null, components);
+    public static TypedVariable buildStructure(String name, String typeRef, Collection<TypedVariable> components) {
+        return new TypedVariable(Kind.STRUCTURE, name, typeRef, null, components);
+    }
+
+    public static TypedVariable buildUnit(String name, String typeRef, JsonNode value) {
+        return new TypedVariable(Kind.UNIT, name, typeRef, value, null);
     }
 }

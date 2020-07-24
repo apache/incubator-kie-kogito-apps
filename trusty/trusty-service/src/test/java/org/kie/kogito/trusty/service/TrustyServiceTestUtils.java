@@ -120,21 +120,21 @@ public class TrustyServiceTestUtils {
     ));
     private static final org.kie.kogito.tracing.decision.event.variable.TypedVariable vEventSuspended = new UnitVariable("string", toJsonNode("\"Yes\""));
 
-    private static final TypedVariable vDecisionDriver = TypedVariable.withComponents(INPUT_DRIVER_NODE_NAME, "tDriver", List.of(
-            TypedVariable.withValue("Age", "number", toJsonNode("25")),
-            TypedVariable.withValue("Points", "number", toJsonNode("13"))
+    private static final TypedVariable vDecisionDriver = TypedVariable.buildStructure(INPUT_DRIVER_NODE_NAME, "tDriver", List.of(
+            TypedVariable.buildUnit("Age", "number", toJsonNode("25")),
+            TypedVariable.buildUnit("Points", "number", toJsonNode("13"))
     ));
-    private static final TypedVariable vDecisionDriverNull = TypedVariable.withComponents(INPUT_DRIVER_NODE_NAME, "tDriver", null);
-    private static final TypedVariable vDecisionViolation = TypedVariable.withComponents(INPUT_VIOLATION_NODE_NAME, "tViolation", List.of(
-            TypedVariable.withValue("Type", "string", toJsonNode("\"speed\"")),
-            TypedVariable.withValue("Actual Speed", "number", toJsonNode("140")),
-            TypedVariable.withValue("Speed Limit", "number", toJsonNode("100"))
+    private static final TypedVariable vDecisionDriverNull = TypedVariable.buildStructure(INPUT_DRIVER_NODE_NAME, "tDriver", null);
+    private static final TypedVariable vDecisionViolation = TypedVariable.buildStructure(INPUT_VIOLATION_NODE_NAME, "tViolation", List.of(
+            TypedVariable.buildUnit("Type", "string", toJsonNode("\"speed\"")),
+            TypedVariable.buildUnit("Actual Speed", "number", toJsonNode("140")),
+            TypedVariable.buildUnit("Speed Limit", "number", toJsonNode("100"))
     ));
-    private static final TypedVariable vDecisionFine = TypedVariable.withComponents(OUTPUT_FINE_NODE_NAME, "tFine", List.of(
-            TypedVariable.withValue("Amount", "number", toJsonNode("1000")),
-            TypedVariable.withValue("Points", "number", toJsonNode("7"))
+    private static final TypedVariable vDecisionFine = TypedVariable.buildStructure(OUTPUT_FINE_NODE_NAME, "tFine", List.of(
+            TypedVariable.buildUnit("Amount", "number", toJsonNode("1000")),
+            TypedVariable.buildUnit("Points", "number", toJsonNode("7"))
     ));
-    private static final TypedVariable vDecisionSuspended = TypedVariable.withValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, "string", toJsonNode("\"Yes\""));
+    private static final TypedVariable vDecisionSuspended = TypedVariable.buildUnit(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME, "string", toJsonNode("\"Yes\""));
 
     public static CloudEventImpl<TraceEvent> buildCloudEvent(TraceEvent traceEvent) {
         return CloudEventUtils.build(

@@ -62,11 +62,11 @@ public class TraceEventConverter {
 
     public static TypedVariable toTypedVariable(String name, org.kie.kogito.tracing.decision.event.variable.TypedVariable typedVariable) {
         if (typedVariable == null) {
-            return TypedVariable.withValue(name, null, null);
+            return TypedVariable.buildUnit(name, null, null);
         }
         switch (typedVariable.getKind()) {
             case STRUCTURE:
-                return TypedVariable.withComponents(
+                return TypedVariable.buildStructure(
                         name,
                         typedVariable.getType(),
                         Optional.ofNullable(typedVariable.toStructure().getValue())
@@ -77,7 +77,7 @@ public class TraceEventConverter {
                                 .orElse(null)
                 );
             case COLLECTION:
-                return TypedVariable.withComponents(
+                return TypedVariable.buildCollection(
                         name,
                         typedVariable.getType(),
                         Optional.ofNullable(typedVariable.toCollection().getValue())
@@ -88,7 +88,7 @@ public class TraceEventConverter {
                                 .orElse(null)
                 );
             case UNIT:
-                return TypedVariable.withValue(
+                return TypedVariable.buildUnit(
                         name,
                         typedVariable.getType(),
                         typedVariable.toUnit().getValue()
