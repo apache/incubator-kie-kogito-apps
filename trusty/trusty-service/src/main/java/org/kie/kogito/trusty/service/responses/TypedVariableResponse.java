@@ -16,11 +16,14 @@
 
 package org.kie.kogito.trusty.service.responses;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.kie.kogito.trusty.storage.api.model.TypedValue;
+import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
-public class TypedValueResponse {
+public class TypedVariableResponse {
 
     @JsonProperty("name")
     private String name;
@@ -31,17 +34,17 @@ public class TypedValueResponse {
     @JsonProperty("value")
     private JsonNode value;
 
-    private TypedValueResponse() {
+    @JsonProperty("components")
+    private List<TypedVariableResponse> components;
+
+    private TypedVariableResponse() {
     }
 
-    public TypedValueResponse(String name, String typeRef, JsonNode value) {
+    public TypedVariableResponse(String name, String typeRef, JsonNode value, List<TypedVariableResponse> components) {
         this.name = name;
         this.typeRef = typeRef;
         this.value = value;
-    }
-
-    public static TypedValueResponse from(TypedValue value) {
-        return value == null ? null : new TypedValueResponse(value.getName(), value.getTypeRef(), value.getValue());
+        this.components = components;
     }
 
     public String getName() {
@@ -54,5 +57,21 @@ public class TypedValueResponse {
 
     public JsonNode getValue() {
         return value;
+    }
+
+    public List<TypedVariableResponse> getComponents() {
+        return components;
+    }
+
+    public static TypedVariableResponse from(TypedVariable value) {
+        if (value == null) {
+            return null;
+        }
+
+        List<TypedVariableResponse> components = value.getComponents() == null
+                ? null
+                : value.getComponents().stream().map(TypedVariableResponse::from).collect(Collectors.toList());
+
+        return new TypedVariableResponse(value.getName(), value.getTypeRef(), value.getValue(), components);
     }
 }

@@ -24,7 +24,7 @@ message Decision {
     optional string executedModelName = 6;
 
     /* @Field(store = Store.YES) */
-    repeated TypedValue inputs = 7;
+    repeated TypedVariable inputs = 7;
 
     /* @Field(store = Store.YES) */
     repeated DecisionOutcome outcomes = 8;
@@ -45,10 +45,10 @@ message DecisionOutcome {
     optional string evaluationStatus = 3;
 
     /* @Field(store = Store.YES) */
-    optional TypedValue outcomeResult = 4;
+    optional TypedVariable outcomeResult = 4;
 
     /* @Field(store = Store.YES) */
-    repeated TypedValue outcomeInputs = 5;
+    repeated TypedVariable outcomeInputs = 5;
 
     /* @Field(store = Store.YES) */
     repeated ExecutionMessage messages = 6;
@@ -93,7 +93,7 @@ message MessageExceptionField {
 }
 
 /* @Indexed */
-message TypedValue {
+message TypedVariable {
     /* @Field(store = Store.YES) */
     optional string name = 1;
 
@@ -102,4 +102,7 @@ message TypedValue {
 
     /* @Field(store = Store.YES) */
     optional string value = 3;
+
+    /* @Field(store = Store.YES) */
+    repeated TypedVariable components = 4;
 }

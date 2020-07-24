@@ -25,7 +25,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.tracing.decision.event.common.MessageLevel;
+import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.responses.DecisionOutcomeResponse;
 import org.kie.kogito.trusty.service.responses.DecisionOutcomesResponse;
@@ -36,7 +36,7 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
-import org.kie.kogito.trusty.storage.api.model.TypedValue;
+import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -185,8 +185,8 @@ public class DecisionsApiV1IT {
 
             case FULL:
                 decision.setInputs(List.of(
-                        new TypedValue("first", "FirstInput", mapper.readTree("\"Hello\"")),
-                        new TypedValue("second", "SecondInput", mapper.readTree("12345"))
+                        TypedVariable.withValue("first", "FirstInput", mapper.readTree("\"Hello\"")),
+                        TypedVariable.withValue("second", "SecondInput", mapper.readTree("12345"))
                 ));
         }
 
@@ -199,12 +199,12 @@ public class DecisionsApiV1IT {
                 decision.setOutcomes(List.of(
                         new DecisionOutcome(
                                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                                new TypedValue("result", "ResType", mapper.readTree("\"The First Outcome\"")),
+                                TypedVariable.withValue("result", "ResType", mapper.readTree("\"The First Outcome\"")),
                                 List.of(),
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                                         new MessageExceptionField("TestException", "Test exception message",
-                                                                  new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
+                                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
                                         )
                                 ))
                         )

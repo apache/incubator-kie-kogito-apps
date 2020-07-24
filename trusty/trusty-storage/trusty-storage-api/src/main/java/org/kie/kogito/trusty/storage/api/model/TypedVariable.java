@@ -16,16 +16,19 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import java.util.Collection;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TypedValue {
+public class TypedVariable {
 
     public static final String NAME_FIELD = "name";
     public static final String TYPE_REF_FIELD = "typeRef";
     public static final String VALUE_FIELD = "value";
+    public static final String COMPONENTS_FIELD = "components";
 
     @JsonProperty(NAME_FIELD)
     private String name;
@@ -36,13 +39,17 @@ public class TypedValue {
     @JsonProperty(VALUE_FIELD)
     private JsonNode value;
 
-    public TypedValue() {
+    @JsonProperty(COMPONENTS_FIELD)
+    private Collection<TypedVariable> components;
+
+    public TypedVariable() {
     }
 
-    public TypedValue(String name, String typeRef, JsonNode value) {
+    public TypedVariable(String name, String typeRef, JsonNode value, Collection<TypedVariable> components) {
         this.name = name;
         this.typeRef = typeRef;
         this.value = value;
+        this.components = components;
     }
 
     public String getName() {
@@ -67,5 +74,21 @@ public class TypedValue {
 
     public void setValue(JsonNode value) {
         this.value = value;
+    }
+
+    public Collection<TypedVariable> getComponents() {
+        return components;
+    }
+
+    public void setComponents(Collection<TypedVariable> components) {
+        this.components = components;
+    }
+
+    public static TypedVariable withValue(String name, String typeRef, JsonNode value) {
+        return new TypedVariable(name, typeRef, value, null);
+    }
+
+    public static TypedVariable withComponents(String name, String typeRef, Collection<TypedVariable> components) {
+        return new TypedVariable(name, typeRef, null, components);
     }
 }

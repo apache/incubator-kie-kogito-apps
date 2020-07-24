@@ -26,7 +26,7 @@ import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
-import org.kie.kogito.trusty.storage.api.model.TypedValue;
+import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,16 +42,16 @@ public class TraceEventTestUtils {
         assertEquals(expected.getExecutionTimestamp(), actual.getExecutionTimestamp());
         assertEquals(expected.getExecutedModelName(), actual.getExecutedModelName());
         assertEquals(expected.getExecutorName(), actual.getExecutorName());
-        assertList(expected.getInputs(), actual.getInputs(), TraceEventTestUtils::assertTypedValue, TraceEventTestUtils::compareTypedValue);
+        assertList(expected.getInputs(), actual.getInputs(), TraceEventTestUtils::assertTypedVariable, TraceEventTestUtils::compareTypedVariable);
         assertList(expected.getOutcomes(), actual.getOutcomes(), TraceEventTestUtils::assertDecisionOutcome, TraceEventTestUtils::compareDecisionOutcome);
     }
 
     public static void assertDecisionOutcome(DecisionOutcome expected, DecisionOutcome actual) {
         assertEquals(expected.getOutcomeId(), actual.getOutcomeId());
         assertEquals(expected.getOutcomeName(), actual.getOutcomeName());
-        assertTypedValue(expected.getOutcomeResult(), actual.getOutcomeResult());
+        assertTypedVariable(expected.getOutcomeResult(), actual.getOutcomeResult());
         assertEquals(expected.getEvaluationStatus(), actual.getEvaluationStatus());
-        assertList(expected.getOutcomeInputs(), actual.getOutcomeInputs(), TraceEventTestUtils::assertTypedValue, TraceEventTestUtils::compareTypedValue);
+        assertList(expected.getOutcomeInputs(), actual.getOutcomeInputs(), TraceEventTestUtils::assertTypedVariable, TraceEventTestUtils::compareTypedVariable);
         assertList(expected.getMessages(), actual.getMessages(), TraceEventTestUtils::assertMessage, TraceEventTestUtils::compareMessage);
     }
 
@@ -95,7 +95,7 @@ public class TraceEventTestUtils {
         assertMessageExceptionField(expected.getCause(), actual.getCause());
     }
 
-    public static void assertTypedValue(TypedValue expected, TypedValue actual) {
+    public static void assertTypedVariable(TypedVariable expected, TypedVariable actual) {
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getTypeRef(), actual.getTypeRef());
         assertEquals(expected.getValue(), actual.getValue());
@@ -118,7 +118,7 @@ public class TraceEventTestUtils {
                 .toComparison();
     }
 
-    public static int compareTypedValue(TypedValue expected, TypedValue actual) {
+    public static int compareTypedVariable(TypedVariable expected, TypedVariable actual) {
         return new CompareToBuilder()
                 .append(expected.getTypeRef(), actual.getTypeRef())
                 .append(expected.getName(), actual.getName())
