@@ -20,11 +20,6 @@ import ApplyForVisaForm from '../../../tests/mocks/ApplyForVisa';
 import { UserTaskInstance } from '../../../../graphql/types';
 import { TaskInfoImpl } from '../../../../model/TaskInfo';
 import { TaskFormSubmitHandler } from '../TaskFormSubmitHandler';
-/*import { mount } from 'enzyme';
-import FormRenderer from '../../../../components/Molecules/FormRenderer/FormRenderer';
-import { AutoForm } from 'uniforms-patternfly';
-import FormFooter from '../../../../components/Atoms/FormFooter/FormFooter';
-import React from 'react';*/
 
 const userTaskInstance: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -54,7 +49,7 @@ const userTaskInstance: UserTaskInstance = {
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-const taskInfo =  new TaskInfoImpl(
+const taskInfo = new TaskInfoImpl(
   userTaskInstance,
   'http://localhost:8080/travels'
 );
@@ -64,7 +59,6 @@ let handler;
 let formSchema;
 let successCallback;
 let errorCallback;
-
 
 const testSuccessfulRequest = async (phase: string, expectedPayload) => {
   const response = {
@@ -81,7 +75,8 @@ const testSuccessfulRequest = async (phase: string, expectedPayload) => {
 
   expect(postParams).toHaveLength(3);
 
-  const expectedEndpoint = taskInfo.getTaskEndPoint() + (phase ? '?phase=' + phase : '');
+  const expectedEndpoint =
+    taskInfo.getTaskEndPoint() + (phase ? '?phase=' + phase : '');
 
   expect(postParams[0]).toBe(expectedEndpoint);
   expect(postParams[1]).toMatchObject(expectedPayload);
@@ -121,28 +116,37 @@ const testUnexpectedRequestError = async (
 };
 
 describe('TaskFormSubmitHandler tests', () => {
-
   beforeEach(() => {
     formData = JSON.parse(userTaskInstance.inputs);
 
     formSchema = _.cloneDeep(ApplyForVisaForm);
-      successCallback = jest.fn();
-      errorCallback = jest.fn();
+    successCallback = jest.fn();
+    errorCallback = jest.fn();
 
-      handler = new TaskFormSubmitHandler(taskInfo, formSchema, successCallback, errorCallback);
-  })
+    handler = new TaskFormSubmitHandler(
+      taskInfo,
+      formSchema,
+      successCallback,
+      errorCallback
+    );
+  });
 
-  test("Submit without selected phase", () => {
+  test('Submit without selected phase', () => {
     handler.doSubmit({});
 
     expect(successCallback).not.toBeCalled();
     expect(errorCallback).not.toBeCalled();
-  })
+  });
 
-  test("Submit without actions", () => {
+  test('Submit without actions', () => {
     delete formSchema.phase;
 
-    handler = new TaskFormSubmitHandler(taskInfo, formSchema, successCallback, errorCallback);
+    handler = new TaskFormSubmitHandler(
+      taskInfo,
+      formSchema,
+      successCallback,
+      errorCallback
+    );
     handler.doSubmit({});
 
     expect(successCallback).not.toBeCalled();
@@ -188,11 +192,7 @@ describe('TaskFormSubmitHandler tests', () => {
         status: 500
       }
     };
-    await testUnexpectedRequestError(
-      error,
-      formSchema.phases[1],
-      undefined
-    );
+    await testUnexpectedRequestError(error, formSchema.phases[1], undefined);
   });
 
   it('Unexpected error on submit with JS error', async () => {
@@ -205,4 +205,4 @@ describe('TaskFormSubmitHandler tests', () => {
       error.message
     );
   });
-})
+});
