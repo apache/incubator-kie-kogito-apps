@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -192,6 +193,16 @@ public class TrustyServiceTestUtils {
         );
     }
 
+
+    public static TraceEvent buildTraceEventWithNullType(String cloudEventId) {
+        return new TraceEvent(
+                buildNullTypeHeader(cloudEventId, CORRECT_CLOUDEVENT_START_TS, CORRECT_CLOUDEVENT_START_TS + CORRECT_CLOUDEVENT_DURATION, CORRECT_CLOUDEVENT_DURATION, null),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
     public static Decision buildCorrectDecision(String cloudEventId) {
         return new Decision(
                 cloudEventId, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME,
@@ -356,6 +367,10 @@ public class TrustyServiceTestUtils {
 
     public static Decision buildDecisionWithNullFields() {
         return new Decision(CLOUDEVENT_WITH_NULL_FIELDS_ID, CLOUDEVENT_WITH_NULL_FIELDS_START_TS, null, null, MODEL_NAME, null, null);
+    }
+
+    private static TraceHeader buildNullTypeHeader(String executionId, Long startTs, Long endTs, Long duration, List<Message> messages) {
+        return new TraceHeader(null, executionId, startTs, endTs, duration, trafficViolationResourceId, messages);
     }
 
     private static TraceHeader buildHeader(String executionId, Long startTs, Long endTs, Long duration, List<Message> messages) {
