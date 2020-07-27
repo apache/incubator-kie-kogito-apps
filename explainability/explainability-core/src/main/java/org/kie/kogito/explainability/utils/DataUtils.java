@@ -201,7 +201,7 @@ public class DataUtils {
                 if (intValue) {
                     normalDistributionSample = (int) normalDistributionSample;
                     if (normalDistributionSample == originalFeatureValue) {
-                        normalDistributionSample = (int) normalDistributionSample * 10;
+                        normalDistributionSample = (int) normalDistributionSample * 10d;
                     }
                 }
                 f = FeatureFactory.newNumericalFeature(featureName, normalDistributionSample);
