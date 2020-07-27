@@ -3,12 +3,15 @@
 exports[`LoadMore component tests with isLoading false snapshot testing 1`] = `
 <DataList
   aria-label="Simple data list example"
+  data-ouia-component-id="load-more-ouia-id"
+  data-ouia-component-type="load-more"
+  data-ouia-safe={true}
 >
   <DataListItem
     aria-labelledby="kie-datalist-item"
   >
     <DataListCell
-      className="kogito-management-console__load-more"
+      className="kogito-common__load-more"
     >
       <Component
         id="load10"
@@ -49,12 +52,15 @@ exports[`LoadMore component tests with isLoading false snapshot testing 1`] = `
 exports[`LoadMore component tests with isLoading true snapshot testing 1`] = `
 <DataList
   aria-label="Simple data list example"
+  data-ouia-component-id="load-more-ouia-id"
+  data-ouia-component-type="load-more"
+  data-ouia-safe={false}
 >
   <DataListItem
     aria-labelledby="kie-datalist-item"
   >
     <DataListCell
-      className="kogito-management-console__load-more"
+      className="kogito-common__load-more"
     >
       <Component
         id="loading"

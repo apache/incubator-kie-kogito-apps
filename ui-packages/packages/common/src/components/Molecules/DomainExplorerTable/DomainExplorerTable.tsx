@@ -26,8 +26,8 @@ import {
 } from '@patternfly/react-icons';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
-import './DomainExplorerTable.css';
-import ProcessDescriptor from '../ProcessDescriptor/ProcessDescriptor';
+import '../../styles.css';
+import ItemDescriptor from '../ItemDescriptor/ItemDescriptor';
 import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
 import EndpointLink from '../../Atoms/EndpointLink/EndpointLink';
 import { GraphQL } from '../../../graphql/types';
@@ -169,7 +169,7 @@ const DomainExplorerTable = ({
                         }}
                       >
                         <strong>
-                          <ProcessDescriptor processInstanceData={tempObj} />
+                          <ItemDescriptor processInstanceData={tempObj} />
                         </strong>
                       </Link>
                       <div>
@@ -257,7 +257,7 @@ const DomainExplorerTable = ({
                     variant={TableVariant.compact}
                     cells={finalMetaKeys}
                     rows={metaValues}
-                    className="kogito-management-console__embedded-table"
+                    className="kogito-common__embedded-table"
                   >
                     <TableHeader />
                     <TableBody />
@@ -316,7 +316,7 @@ const DomainExplorerTable = ({
           cells={columns}
           rows={rows}
           aria-label="Domain Explorer Table"
-          className="kogito-management-console--domain-explorer__table"
+          className="kogito-common--domain-explorer__table"
           onCollapse={onCollapse}
         >
           <TableHeader />

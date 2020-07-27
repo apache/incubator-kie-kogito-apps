@@ -6,7 +6,8 @@ import {
   DataListCell,
   Spinner
 } from '@patternfly/react-core';
-import './LoadMore.css';
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
+import '../../styles.css';
 
 interface IOwnProps {
   offset: number;
@@ -16,12 +17,14 @@ interface IOwnProps {
   isLoadingMore: boolean;
 }
 
-const LoadMore: React.FC<IOwnProps> = ({
+const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
   offset,
   setOffset,
   getMoreItems,
   pageSize,
-  isLoadingMore
+  isLoadingMore,
+  ouiaId,
+  ouiaSafe
 }) => {
   const loadMore = newPageSize => {
     const newOffset = offset + pageSize;
@@ -43,9 +46,16 @@ const LoadMore: React.FC<IOwnProps> = ({
   };
 
   return (
-    <DataList aria-label="Simple data list example">
+    <DataList
+      aria-label="Simple data list example"
+      {...componentOuiaProps(
+        ouiaId,
+        'load-more',
+        ouiaSafe ? ouiaSafe : !isLoadingMore
+      )}
+    >
       <DataListItem aria-labelledby="kie-datalist-item">
-        <DataListCell className="kogito-management-console__load-more">
+        <DataListCell className="kogito-common__load-more">
           {!isLoadingMore ? (
             <>
               <Button onClick={load10More} variant="secondary" id="load10">

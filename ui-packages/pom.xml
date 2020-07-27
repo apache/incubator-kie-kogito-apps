@@ -31,6 +31,28 @@
   </properties>
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/common/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/management-console/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/task-console/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/trusty/node_modules</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
       <!-- frontend related plugins-->
       <plugin>
         <groupId>com.github.eirslett</groupId>
@@ -81,13 +103,13 @@
                 </configuration>
               </execution>
               <execution>
-                <id>yarn install</id>
+                <id>npm install lock-treatment-tool</id>
                 <goals>
-                  <goal>yarn</goal>
+                  <goal>npm</goal>
                 </goals>
                 <configuration>
                   <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>install --fetch-retry-mintimeout=100000 --fetch-retries=10</arguments>
+                  <arguments>install lock-treatment-tool --global-style --no-package-lock --no-save</arguments>
                 </configuration>
               </execution>
             </executions>
@@ -107,13 +129,23 @@
             <artifactId>frontend-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>yarn init</id>
+                <id>lock-treatment-tool execution</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+                <configuration>
+                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+                  <arguments>run locktt --</arguments>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn install</id>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
                   <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>run init</arguments>
+                  <arguments>install --fetch-retry-mintimeout=100000 --fetch-retries=10</arguments>
                 </configuration>
               </execution>
             </executions>
@@ -136,7 +168,7 @@
             <artifactId>frontend-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>yarn run build</id>
+                <id>yarn build</id>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
@@ -146,6 +178,17 @@
                   <environmentVariables>
                     <KOGITO_APP_VERSION>${project.version}</KOGITO_APP_VERSION>
                 </environmentVariables>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn test</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <phase>test</phase>
+                <configuration>
+                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+                  <arguments>run test</arguments>
                 </configuration>
               </execution>
             </executions>

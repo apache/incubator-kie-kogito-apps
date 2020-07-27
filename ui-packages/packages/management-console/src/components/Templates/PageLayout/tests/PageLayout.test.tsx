@@ -3,6 +3,7 @@ import PageLayout from '../PageLayout';
 import { MockedProvider } from '@apollo/react-testing';
 import { getWrapper, GraphQL } from '@kogito-apps/common';
 import { MemoryRouter as Router } from 'react-router-dom';
+import useGetQueryFieldsQuery = GraphQL.useGetQueryFieldsQuery;
 
 const props: any = {
   location: {
@@ -16,9 +17,21 @@ const mocks = [];
 jest.mock('../../ProcessListPage/ProcessListPage.tsx');
 
 jest.mock('@kogito-apps/common/src/graphql/types');
+const MockedComponent = (): React.ReactElement => {
+  return <></>;
+};
+jest.mock('@kogito-apps/common', () => ({
+  ...jest.requireActual('@kogito-apps/common'),
+  KogitoPageLayout: () => {
+    return <MockedComponent />;
+  },
+  GraphQL: {
+    useGetQueryFieldsQuery: jest.fn()
+  }
+}));
 describe('PageLayout tests', () => {
   // @ts-ignore
-  GraphQL.useGetQueryFieldsQuery.mockReturnValue({
+  useGetQueryFieldsQuery.mockReturnValue({
     loading: false,
     data: {
       __type: {
