@@ -1113,7 +1113,6 @@ export namespace GraphQL {
       GetProcessInstancesQueryVariables
     >(GetProcessInstancesDocument, baseOptions);
   }
-
   export function useGetProcessInstancesLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetProcessInstancesQuery,
@@ -1125,7 +1124,6 @@ export namespace GraphQL {
       GetProcessInstancesQueryVariables
     >(GetProcessInstancesDocument, baseOptions);
   }
-
   export type GetProcessInstancesQueryHookResult = ReturnType<
     typeof useGetProcessInstancesQuery
   >;
@@ -1201,7 +1199,6 @@ export namespace GraphQL {
       GetProcessInstancesWithBusinessKeyQueryVariables
     >(GetProcessInstancesWithBusinessKeyDocument, baseOptions);
   }
-
   export function useGetProcessInstancesWithBusinessKeyLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetProcessInstancesWithBusinessKeyQuery,
@@ -1213,7 +1210,6 @@ export namespace GraphQL {
       GetProcessInstancesWithBusinessKeyQueryVariables
     >(GetProcessInstancesWithBusinessKeyDocument, baseOptions);
   }
-
   export type GetProcessInstancesWithBusinessKeyQueryHookResult = ReturnType<
     typeof useGetProcessInstancesWithBusinessKeyQuery
   >;
@@ -1276,7 +1272,6 @@ export namespace GraphQL {
       GetChildInstancesQueryVariables
     >(GetChildInstancesDocument, baseOptions);
   }
-
   export function useGetChildInstancesLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetChildInstancesQuery,
@@ -1288,7 +1283,6 @@ export namespace GraphQL {
       GetChildInstancesQueryVariables
     >(GetChildInstancesDocument, baseOptions);
   }
-
   export type GetChildInstancesQueryHookResult = ReturnType<
     typeof useGetChildInstancesQuery
   >;
@@ -1371,7 +1365,6 @@ export namespace GraphQL {
       GetProcessInstanceByIdQueryVariables
     >(GetProcessInstanceByIdDocument, baseOptions);
   }
-
   export function useGetProcessInstanceByIdLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetProcessInstanceByIdQuery,
@@ -1383,7 +1376,6 @@ export namespace GraphQL {
       GetProcessInstanceByIdQueryVariables
     >(GetProcessInstanceByIdDocument, baseOptions);
   }
-
   export type GetProcessInstanceByIdQueryHookResult = ReturnType<
     typeof useGetProcessInstanceByIdQuery
   >;
@@ -1443,7 +1435,6 @@ export namespace GraphQL {
       GetColumnPickerAttributesQueryVariables
     >(GetColumnPickerAttributesDocument, baseOptions);
   }
-
   export function useGetColumnPickerAttributesLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetColumnPickerAttributesQuery,
@@ -1455,7 +1446,6 @@ export namespace GraphQL {
       GetColumnPickerAttributesQueryVariables
     >(GetColumnPickerAttributesDocument, baseOptions);
   }
-
   export type GetColumnPickerAttributesQueryHookResult = ReturnType<
     typeof useGetColumnPickerAttributesQuery
   >;
@@ -1517,7 +1507,6 @@ export namespace GraphQL {
       GetQueryTypesQueryVariables
     >(GetQueryTypesDocument, baseOptions);
   }
-
   export function useGetQueryTypesLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetQueryTypesQuery,
@@ -1529,7 +1518,6 @@ export namespace GraphQL {
       GetQueryTypesQueryVariables
     >(GetQueryTypesDocument, baseOptions);
   }
-
   export type GetQueryTypesQueryHookResult = ReturnType<
     typeof useGetQueryTypesQuery
   >;
@@ -1589,7 +1577,6 @@ export namespace GraphQL {
       GetQueryFieldsQueryVariables
     >(GetQueryFieldsDocument, baseOptions);
   }
-
   export function useGetQueryFieldsLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetQueryFieldsQuery,
@@ -1601,7 +1588,6 @@ export namespace GraphQL {
       GetQueryFieldsQueryVariables
     >(GetQueryFieldsDocument, baseOptions);
   }
-
   export type GetQueryFieldsQueryHookResult = ReturnType<
     typeof useGetQueryFieldsQuery
   >;
@@ -1660,7 +1646,6 @@ export namespace GraphQL {
       GetInputFieldsFromQueryQueryVariables
     >(GetInputFieldsFromQueryDocument, baseOptions);
   }
-
   export function useGetInputFieldsFromQueryLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetInputFieldsFromQueryQuery,
@@ -1672,7 +1657,6 @@ export namespace GraphQL {
       GetInputFieldsFromQueryQueryVariables
     >(GetInputFieldsFromQueryDocument, baseOptions);
   }
-
   export type GetInputFieldsFromQueryQueryHookResult = ReturnType<
     typeof useGetInputFieldsFromQueryQuery
   >;
@@ -1725,7 +1709,6 @@ export namespace GraphQL {
       GetInputFieldsFromTypeQueryVariables
     >(GetInputFieldsFromTypeDocument, baseOptions);
   }
-
   export function useGetInputFieldsFromTypeLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetInputFieldsFromTypeQuery,
@@ -1737,7 +1720,6 @@ export namespace GraphQL {
       GetInputFieldsFromTypeQueryVariables
     >(GetInputFieldsFromTypeDocument, baseOptions);
   }
-
   export type GetInputFieldsFromTypeQueryHookResult = ReturnType<
     typeof useGetInputFieldsFromTypeQuery
   >;
@@ -1803,7 +1785,6 @@ export namespace GraphQL {
       GetUserTasksByStatesQueryVariables
     >(GetUserTasksByStatesDocument, baseOptions);
   }
-
   export function useGetUserTasksByStatesLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetUserTasksByStatesQuery,
@@ -1815,7 +1796,6 @@ export namespace GraphQL {
       GetUserTasksByStatesQueryVariables
     >(GetUserTasksByStatesDocument, baseOptions);
   }
-
   export type GetUserTasksByStatesQueryHookResult = ReturnType<
     typeof useGetUserTasksByStatesQuery
   >;
@@ -1881,7 +1861,6 @@ export namespace GraphQL {
       GetUserTaskByIdQueryVariables
     >(GetUserTaskByIdDocument, baseOptions);
   }
-
   export function useGetUserTaskByIdLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
       GetUserTaskByIdQuery,
@@ -1893,7 +1872,6 @@ export namespace GraphQL {
       GetUserTaskByIdQueryVariables
     >(GetUserTaskByIdDocument, baseOptions);
   }
-
   export type GetUserTaskByIdQueryHookResult = ReturnType<
     typeof useGetUserTaskByIdQuery
   >;
