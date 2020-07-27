@@ -1926,7 +1926,7 @@
     ajv "6.12.2"
     uniforms "3.0.0-alpha.4"
     uniforms-bridge-json-schema "3.0.0-alpha.4"
-    uniforms-patternfly "0.0.11"
+    uniforms-patternfly "0.1.4"
 
 "@kwsites/file-exists@^1.1.1":
   version "1.1.1"
@@ -17772,10 +17772,10 @@ uniforms-bridge-json-schema@3.0.0-alpha.4:
     tslib "^1.10.0"
     uniforms "^3.0.0-alpha.4"
 
-uniforms-patternfly@0.0.11:
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/uniforms-patternfly/-/uniforms-patternfly-0.0.11.tgz#1274cd92a88d8c14cdd7742834c70feba4236c67"
-  integrity sha512-gqGE3B+nApuM8Ld2qSqqPvMWfhHmMvjVLTQSMWp8RBSIQ1KiPctGSH2RndXMESm7Zl6hUgldA7z1Rcex3TejhQ==
+uniforms-patternfly@0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/uniforms-patternfly/-/uniforms-patternfly-0.1.4.tgz#4c9f641d27ee0ab4f397d0b9129c9a353abce1fb"
+  integrity sha512-cMC9bFLzcCcBLc0d9Nfvri0U/X+ZWupuXvLdFudipOG1lUvjQfQSO3TWs88Kx/tRMCDveV+be5lv5In1di+u8w==
   dependencies:
     "@patternfly/react-core" "3.151.0"
     "@patternfly/react-icons" "^3.15.14"
