@@ -24,7 +24,4 @@ public class LocalExplanationException extends RuntimeException {
         super(message);
     }
 
-    public LocalExplanationException(Exception e) {
-        super(e);
-    }
 }
