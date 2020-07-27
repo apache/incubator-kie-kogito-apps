@@ -28,7 +28,6 @@ import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
 import org.kie.kogito.trusty.service.ITrustyService;
@@ -43,7 +42,7 @@ public class TraceEventConsumer {
     private static final TypeReference<CloudEventImpl<TraceEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
     };
 
-    private final ITrustyService service;/**/
+    private final ITrustyService service;
 
     @Inject
     public TraceEventConsumer(ITrustyService service) {
