@@ -18,7 +18,6 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>explainability-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>
