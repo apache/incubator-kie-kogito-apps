@@ -472,11 +472,11 @@ public class DataUtils {
      * Calculate exponentially smoothed kernel of a given value (e.g. distance between two points).
      *
      * @param x     value to smooth
-     * @param sigma variance
+     * @param width kernel width
      * @return the exponentially smoothed value
      */
-    public static double exponentialSmoothingKernel(double x, double sigma) {
-        return Math.sqrt(Math.exp(-(Math.pow(x, 2)) / Math.pow(sigma, 2)));
+    public static double exponentialSmoothingKernel(double x, double width) {
+        return Math.sqrt(Math.exp(-(Math.pow(x, 2)) / Math.pow(width, 2)));
     }
 
     /**
