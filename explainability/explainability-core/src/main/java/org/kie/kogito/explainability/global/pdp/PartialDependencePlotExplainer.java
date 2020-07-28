@@ -20,7 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.kie.kogito.explainability.global.GlobalExplainer;
-import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
@@ -43,8 +42,8 @@ import org.slf4j.LoggerFactory;
  */
 public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<PartialDependenceGraph>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
-    public static final int DEFAULT_SERIES_LENGTH = 100;
+    private static final Logger LOGGER = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
+    private static final int DEFAULT_SERIES_LENGTH = 100;
 
     private final int seriesLength;
 
@@ -115,7 +114,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
             }
         }
         long end = System.currentTimeMillis();
-        logger.debug("explanation time: {}ms", (end - start));
+        LOGGER.debug("explanation time: {}ms", (end - start));
         return pdps;
     }
 }
