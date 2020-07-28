@@ -14,8 +14,8 @@ import {
 import React from 'react';
 import { LevelDownAltIcon, LevelUpAltIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
-import { ProcessDescriptor, GraphQL, EndpointLink } from '@kogito-apps/common';
-import { stateIconCreator } from '../../../utils/Utils';
+import { ItemDescriptor, GraphQL, EndpointLink } from '@kogito-apps/common';
+import { getProcessInstanceDescription, stateIconCreator } from '../../../utils/Utils';
 import ProcessInstance = GraphQL.ProcessInstance;
 
 interface IOwnProps {
@@ -132,9 +132,9 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
                     content={data.ProcessInstances[0].parentProcessInstance.id}
                   >
                     <Button variant="link" icon={<LevelUpAltIcon />}>
-                      <ProcessDescriptor
-                        processInstanceData={
-                          data.ProcessInstances[0].parentProcessInstance
+                      <ItemDescriptor
+                        itemDescription={
+                          getProcessInstanceDescription(data.ProcessInstances[0].parentProcessInstance)
                         }
                       />
                     </Button>
@@ -154,7 +154,9 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
                     >
                       <Tooltip content={child.id}>
                         <Button variant="link" icon={<LevelDownAltIcon />}>
-                          <ProcessDescriptor processInstanceData={child} />
+                          <ItemDescriptor
+                            itemDescription={getProcessInstanceDescription(child)}
+                          />
                         </Button>
                       </Tooltip>
                     </Link>

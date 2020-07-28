@@ -19,7 +19,7 @@ import {
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
-  ProcessDescriptor,
+  ItemDescriptor,
   KogitoSpinner,
   GraphQL
 } from '@kogito-apps/common';
@@ -43,9 +43,8 @@ enum TitleType {
   FAILURE = 'failure'
 }
 
-const ProcessDetailsPage: React.FC<
-  RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps
-> = ({ ouiaContext, ...props }) => {
+const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
+  InjectedOuiaProps> = ({ ouiaContext, ...props }) => {
   const id = props.match.params.instanceID;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>('');
@@ -80,8 +79,8 @@ const ProcessDetailsPage: React.FC<
     setModalContent(content);
     handleModalToggle();
   };
-  const onAbortClick = () => {
-    handleAbort(
+  const onAbortClick = async () => {
+    await handleAbort(
       data.ProcessInstances[0],
       () =>
         onShowMessage(
@@ -162,11 +161,6 @@ const ProcessDetailsPage: React.FC<
             <ProcessListModal
               isModalOpen={isModalOpen}
               handleModalToggle={handleModalToggle}
-              checkedArray={
-                data &&
-                data.ProcessInstances &&
-                data.ProcessInstances[0] && [data.ProcessInstances[0].state]
-              }
               modalTitle={setTitle(titleType, modalTitle)}
               modalContent={modalContent}
             />
@@ -233,9 +227,14 @@ const ProcessDetailsPage: React.FC<
                         size="4xl"
                         className="kogito-management-console--details__title"
                       >
-                        <ProcessDescriptor
-                          processInstanceData={data.ProcessInstances[0]}
+                        <ItemDescriptor
+                          itemDescription={{
+                            id: data.ProcessInstances[0].id,
+                            name: data.ProcessInstances[0].processName,
+                            description: data.ProcessInstances[0].businessKey
+                          }}
                         />
+
                       </Title>
                     </SplitItem>
                     <SplitItem>

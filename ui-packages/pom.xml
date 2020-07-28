@@ -31,6 +31,28 @@
   </properties>
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/common/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/management-console/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/task-console/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/trusty/node_modules</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
       <!-- frontend related plugins-->
       <plugin>
         <groupId>com.github.eirslett</groupId>
@@ -146,7 +168,7 @@
             <artifactId>frontend-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>yarn run build</id>
+                <id>yarn build</id>
                 <goals>
                   <goal>yarn</goal>
                 </goals>
@@ -156,6 +178,17 @@
                   <environmentVariables>
                     <KOGITO_APP_VERSION>${project.version}</KOGITO_APP_VERSION>
                 </environmentVariables>
+                </configuration>
+              </execution>
+              <execution>
+                <id>yarn test</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <phase>test</phase>
+                <configuration>
+                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+                  <arguments>run test</arguments>
                 </configuration>
               </execution>
             </executions>
