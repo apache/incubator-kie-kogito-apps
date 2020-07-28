@@ -37,7 +37,7 @@ describe('FormattedDate', () => {
 
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('Tooltip').length).toBe(0);
-    expect(wrapper.find('span').text()).toMatch('Jan 1, 2020, 1:00:00 AM');
+    expect(wrapper.find('span').text()).toMatch('Jan 1, 2020, 12:00:00 AM');
   });
 
   test('displays a relative timestamp if the date is in the last 24h', () => {

@@ -32,6 +32,7 @@
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
+    "globalSetup": "../../config/Jest-config/global-setup.js",
     "setupFiles": [
       "../../config/Jest-config/test-shim.js",
       "../../config/Jest-config/test-setup.js"

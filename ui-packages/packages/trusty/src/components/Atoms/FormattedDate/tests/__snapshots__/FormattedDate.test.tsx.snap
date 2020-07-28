@@ -7,7 +7,7 @@ exports[`FormattedDate displays a formatted date 1`] = `
     aria="describedby"
     boundary="window"
     className=""
-    content="Jan 1, 2020, 1:00:00 AM"
+    content="Jan 1, 2020, 12:00:00 AM"
     distance={5}
     enableFlip={true}
     entryDelay={200}
@@ -47,7 +47,7 @@ exports[`FormattedDate displays a relative timestamp if the date is in the last 
     aria="describedby"
     boundary="window"
     className=""
-    content="Jan 1, 2020, 1:00:00 AM"
+    content="Jan 1, 2020, 12:00:00 AM"
     distance={5}
     enableFlip={true}
     entryDelay={200}
@@ -83,7 +83,7 @@ exports[`FormattedDate displays a relative timestamp if the date is in the last 
 exports[`FormattedDate displays full date and time when fullDateAndTime prop is passed 1`] = `
 <Fragment>
   <span>
-    Jan 1, 2020, 1:00:00 AM
+    Jan 1, 2020, 12:00:00 AM
   </span>
 </Fragment>
 `;
@@ -95,7 +95,7 @@ exports[`FormattedDate displays the "on" preposition before the date when prepos
     aria="describedby"
     boundary="window"
     className=""
-    content="Jan 1, 2020, 1:00:00 AM"
+    content="Jan 1, 2020, 12:00:00 AM"
     distance={5}
     enableFlip={true}
     entryDelay={200}
@@ -135,7 +135,7 @@ exports[`FormattedDate renders a tooltip with the complete date and time info 1`
     aria="describedby"
     boundary="window"
     className=""
-    content="Jan 1, 2020, 1:00:00 AM"
+    content="Jan 1, 2020, 12:00:00 AM"
     distance={5}
     enableFlip={true}
     entryDelay={200}
