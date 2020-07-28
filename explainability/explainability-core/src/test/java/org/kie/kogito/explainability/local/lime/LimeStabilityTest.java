@@ -48,6 +48,10 @@ class LimeStabilityTest {
         for (int i = 0; i < 5; i++) {
             featureList.add(TestUtils.getMockedNumericFeature(i));
         }
+        assertStable(sumSkipModel, featureList);
+    }
+
+    private void assertStable(PredictionProvider sumSkipModel, List<Feature> featureList) {
         PredictionInput input = new PredictionInput(featureList);
         List<PredictionOutput> predictionOutputs = sumSkipModel.predict(List.of(input));
         Prediction prediction = new Prediction(input, predictionOutputs.get(0));
@@ -75,22 +79,6 @@ class LimeStabilityTest {
             featureList.add(TestUtils.getMockedTextFeature("foo "+i));
         }
         featureList.add(TestUtils.getMockedTextFeature("money"));
-        PredictionInput input = new PredictionInput(featureList);
-        List<PredictionOutput> predictionOutputs = sumSkipModel.predict(List.of(input));
-        Prediction prediction = new Prediction(input, predictionOutputs.get(0));
-        List<Saliency> saliencies = new LinkedList<>();
-        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
-        for (int i = 0; i < 100; i++) {
-            Saliency saliency = limeExplainer.explain(prediction, sumSkipModel);
-            saliencies.add(saliency);
-        }
-        List<String> names = new LinkedList<>();
-        saliencies.stream().map(s -> s.getPositiveFeatures(1)).forEach(f -> names.add(f.get(0).getFeature().getName()));
-        Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        boolean topFeature = false;
-        for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
-            topFeature = entry.getValue() >= 0.9;
-        }
-        assertTrue(topFeature);
+        assertStable(sumSkipModel, featureList);
     }
 }
