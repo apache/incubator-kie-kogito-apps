@@ -469,7 +469,7 @@ public class DataUtils {
     }
 
     /**
-     * Calculate exponentially smoothed kernel of a given value.
+     * Calculate exponentially smoothed kernel of a given value (e.g. distance between two points).
      *
      * @param x     value to smooth
      * @param sigma variance

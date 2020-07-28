@@ -34,8 +34,9 @@ class SampleWeighter {
         double[] x = new double[noOfFeatures];
         Arrays.fill(x, 1);
 
-        return training.stream().map(Pair::getLeft).map(
-                d -> DataUtils.euclideanDistance(x, d)).map(d -> DataUtils.exponentialSmoothingKernel(d, SIGMA *
-                Math.sqrt(noOfFeatures))).mapToDouble(Double::doubleValue).toArray();
+        return training.stream().map(Pair::getLeft)
+                .map(d -> DataUtils.euclideanDistance(x, d)) // calculate euclidean distance between target and sample points
+                .map(d -> DataUtils.exponentialSmoothingKernel(d, SIGMA * Math.sqrt(noOfFeatures))) // transform distance into proximity using an exponential smoothing kernel
+                .mapToDouble(Double::doubleValue).toArray(); // output to an array
     }
 }
