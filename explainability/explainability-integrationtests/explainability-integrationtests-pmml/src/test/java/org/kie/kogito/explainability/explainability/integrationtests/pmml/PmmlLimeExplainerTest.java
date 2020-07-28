@@ -88,7 +88,7 @@ class PmmlLimeExplainerTest {
         assertNotNull(saliency);
         List<String> strings = saliency.getPositiveFeatures(2).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
         assertTrue(strings.contains("petalWidth"));
-        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(2));
+        double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getPositiveFeatures(2));
         assertTrue(v > 0);
     }
 

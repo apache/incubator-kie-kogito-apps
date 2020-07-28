@@ -130,14 +130,35 @@ public class DataUtils {
         return data;
     }
 
+    /**
+     * Transform an array of double into a list of numerical features.
+     *
+     * @param inputs an array of double numbers
+     * @return a list of numerical features
+     */
     public static List<Feature> doublesToFeatures(double[] inputs) {
         return DoubleStream.of(inputs).mapToObj(DataUtils::doubleToFeature).collect(Collectors.toList());
     }
 
-    public static Feature doubleToFeature(double d) {
+    /**
+     * Transform a double into a numerical feature.
+     *
+     * @param d the double value
+     * @return a numerical feature
+     */
+    static Feature doubleToFeature(double d) {
         return FeatureFactory.newNumericalFeature(String.valueOf(d), d);
     }
 
+    /**
+     * Perform perturbations on a fixed number of features in the given input.
+     * Which feature will be perturbed is non deterministic.
+     *
+     * @param input             the input whose features need to be perturbed
+     * @param noOfSamples       the no. of samples that need to be generated when perturbing numeric features
+     * @param noOfPerturbations the no. of features to be perturbed
+     * @return a new input with perturbed features
+     */
     public static PredictionInput perturbFeatures(PredictionInput input, int noOfSamples, int noOfPerturbations) {
         List<Feature> originalFeatures = input.getFeatures();
         List<Feature> newFeatures = new ArrayList<>(originalFeatures);
@@ -266,6 +287,13 @@ public class DataUtils {
         return f;
     }
 
+    /**
+     * Drop the value of a given feature if its name matches any of the given names.
+     *
+     * @param feature an input feature
+     * @param names   a list of feature names
+     * @return the same feature or its copy with the 'dropped' value
+     */
     public static Feature dropFeature(Feature feature, List<String> names) {
         Type type = feature.getType();
         Feature f = feature;
@@ -364,6 +392,15 @@ public class DataUtils {
         return f;
     }
 
+    /**
+     * Calculate the Hamming distance between two points.
+     * <p>
+     * see https://en.wikipedia.org/wiki/Hamming_distance
+     *
+     * @param x first point
+     * @param y second point
+     * @return the Hamming distance
+     */
     public static double hammingDistance(double[] x, double[] y) {
         if (x.length != y.length) {
             return Double.NaN;
@@ -378,16 +415,36 @@ public class DataUtils {
         }
     }
 
+    /**
+     * Calculate the Hamming distance between two text strings.
+     * <p>
+     * see https://en.wikipedia.org/wiki/Hamming_distance
+     *
+     * @param x first string
+     * @param y second string
+     * @return the Hamming distance
+     */
     public static double hammingDistance(String x, String y) {
-        double h = 0;
-        for (int i = 0; i < Math.min(x.length(), y.length()); i++) {
-            if (x.charAt(i) != y.charAt(i)) {
-                h++;
+        if (x.length() != y.length()) {
+            return Double.NaN;
+        } else {
+            double h = 0;
+            for (int i = 0; i < Math.min(x.length(), y.length()); i++) {
+                if (x.charAt(i) != y.charAt(i)) {
+                    h++;
+                }
             }
+            return h;
         }
-        return h + (double) (x.length() - y.length());
     }
 
+    /**
+     * Calculate the Euclidean distance between two points.
+     *
+     * @param x first point
+     * @param y second point
+     * @return the Euclidean distance
+     */
     public static double euclideanDistance(double[] x, double[] y) {
         double e = 0;
         for (int i = 0; i < Math.min(x.length, y.length); i++) {
@@ -396,18 +453,35 @@ public class DataUtils {
         return Math.sqrt(e);
     }
 
-    public static double gowerDistance(double[] x, double[] y, double lambda) {
-        return euclideanDistance(x, y) + lambda * hammingDistance(x, y);
+    /**
+     * Calculate the Gaussian kernel of a given value.
+     *
+     * @param x     Gaussian kernel input value
+     * @param mu    mean
+     * @param sigma variance
+     * @return the Gaussian filtered value
+     */
+    public static double gaussianKernel(double x, double mu, double sigma) {
+        return Math.exp(-Math.pow((x - mu) / sigma, 2) / 2) / (sigma * Math.sqrt(2d * Math.PI));
     }
 
-    public static double gaussianKernel(double x) {
-        return Math.exp(-Math.pow(x, 2) / 2) / Math.sqrt(Math.PI);
-    }
-
+    /**
+     * Calculate exponentially smoothed kernel of a given value.
+     *
+     * @param x     value to smooth
+     * @param sigma variance
+     * @return the exponentially smoothed value
+     */
     public static double exponentialSmoothingKernel(double x, double sigma) {
         return Math.sqrt(Math.exp(-(Math.pow(x, 2)) / Math.pow(sigma, 2)));
     }
 
+    /**
+     * Calculate distribution statistics for an array of numbers.
+     *
+     * @param doubles an array of numbers
+     * @return feature distribution statistics
+     */
     public static FeatureDistribution getFeatureDistribution(double[] doubles) {
         double min = DoubleStream.of(doubles).min().orElse(0);
         double max = DoubleStream.of(doubles).max().orElse(0);
@@ -416,16 +490,29 @@ public class DataUtils {
         return new FeatureDistribution(min, max, mean, stdDev);
     }
 
-    public static DataDistribution generateRandomDataDistribution(int noOfFeatures, int distirbutionSize) {
+    /**
+     * Generate a random data distribution.
+     *
+     * @param noOfFeatures     number of features
+     * @param distributionSize number of samples for each feature
+     * @return a data distribution
+     */
+    public static DataDistribution generateRandomDataDistribution(int noOfFeatures, int distributionSize) {
         List<FeatureDistribution> featureDistributions = new LinkedList<>();
         for (int i = 0; i < noOfFeatures; i++) {
-            double[] doubles = generateData(random.nextDouble(), random.nextDouble(), distirbutionSize);
+            double[] doubles = generateData(random.nextDouble(), random.nextDouble(), distributionSize);
             FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
             featureDistributions.add(featureDistribution);
         }
         return new DataDistribution(featureDistributions);
     }
 
+    /**
+     * Transform a list of prediction inputs into another list of the same prediction inputs but having linearized features.
+     *
+     * @param predictionInputs a list of prediction inputs
+     * @return a list of prediction inputs with linearized features
+     */
     public static List<PredictionInput> linearizeInputs(List<PredictionInput> predictionInputs) {
         List<PredictionInput> newInputs = new LinkedList<>();
         for (PredictionInput predictionInput : predictionInputs) {
@@ -436,6 +523,12 @@ public class DataUtils {
         return newInputs;
     }
 
+    /**
+     * Transform a list of eventually composite / nested features into a flat list of non composite / non nested features.
+     *
+     * @param originalFeatures a list of features
+     * @return a flat list of features
+     */
     public static List<Feature> getLinearizedFeatures(List<Feature> originalFeatures) {
         List<Feature> flattenedFeatures = new LinkedList<>();
         for (Feature f : originalFeatures) {
@@ -444,7 +537,7 @@ public class DataUtils {
         return flattenedFeatures;
     }
 
-    static void linearizeFeature(List<Feature> flattenedFeatures, Feature f) {
+    private static void linearizeFeature(List<Feature> flattenedFeatures, Feature f) {
         if (Type.UNDEFINED.equals(f.getType())) {
             if (f.getValue().getUnderlyingObject() instanceof Feature) {
                 linearizeFeature(flattenedFeatures, (Feature) f.getValue().getUnderlyingObject());

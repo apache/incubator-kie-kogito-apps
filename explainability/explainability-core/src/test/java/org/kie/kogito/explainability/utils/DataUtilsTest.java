@@ -59,8 +59,8 @@ class DataUtilsTest {
     @Test
     void testGaussianKernel() {
         double x = 0.218;
-        double k = DataUtils.gaussianKernel(x);
-        assertEquals(0.551, k, 1e-3);
+        double k = DataUtils.gaussianKernel(x, 0, 1);
+        assertEquals(0.389, k, 1e-3);
     }
 
     @Test
@@ -69,14 +69,6 @@ class DataUtilsTest {
         double[] y = new double[]{2, 3};
         double distance = DataUtils.euclideanDistance(x, y);
         assertEquals(2.236, distance, 1e-3);
-    }
-
-    @Test
-    void testGowerDistance() {
-        double[] x = new double[]{2, 1};
-        double[] y = new double[]{2, 3};
-        double distance = DataUtils.gowerDistance(x, y, 0.5);
-        assertEquals(2.5, distance, 1e-2);
     }
 
     @Test

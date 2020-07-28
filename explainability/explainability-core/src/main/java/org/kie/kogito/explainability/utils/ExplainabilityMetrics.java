@@ -76,7 +76,13 @@ public class ExplainabilityMetrics {
             Output original = prediction.getOutput().getOutputs().get(i);
             Output modified = predictionOutput.getOutputs().get(i);
             impact += 0.5 * DataUtils.euclideanDistance(new double[]{original.getScore()}, new double[]{modified.getScore()});
-            impact += DataUtils.hammingDistance(original.getValue().asString(), modified.getValue().asString());
+            String x = original.getValue().asString();
+            String y = modified.getValue().asString();
+            if (x.length() == y.length()) {
+                impact += DataUtils.hammingDistance(x, y);
+            } else {
+                impact += 1d;
+            }
         }
         return impact / size;
     }
