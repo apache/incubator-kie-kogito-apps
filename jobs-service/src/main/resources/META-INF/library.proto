@@ -1,9 +1,9 @@
 package job.service;
 
 message JobDetails {
-  required string id = 1;
+  optional string id = 1;
   optional string correlationId = 2;
-  required string status = 3;//enum
+  optional string status = 3;//enum
   optional int64 lastUpdate = 4;
   optional int32 retries = 5;
   optional int32 priority = 6;
@@ -20,7 +20,7 @@ message Recipient {
 }
 
 message Trigger {
-  required string classType = 1;//indicates the java class to instantiate
+  optional string classType = 1;//indicates the java class to instantiate
   optional int64 startTime = 2;
   optional int64 endTime = 3;
   optional int32 repeatLimit = 4;

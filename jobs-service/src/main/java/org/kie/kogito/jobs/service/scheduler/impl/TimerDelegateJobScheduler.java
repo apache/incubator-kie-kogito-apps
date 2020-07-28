@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,17 +60,11 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
 
     @Inject
     public TimerDelegateJobScheduler(ReactiveJobRepository jobRepository,
-                                     @ConfigProperty(name = "kogito.jobs-service.backoffRetryMillis")
-                                             long backoffRetryMillis,
-                                     @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis")
-                                             long maxIntervalLimitToRetryMillis,
-                                     @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes")
-                                             long schedulerChunkInMinutes,
-                                     @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs")
-                                             Boolean forceExecuteExpiredJobs,
-                                     HttpJobExecutor httpJobExecutor,
-                                     VertxTimerServiceScheduler delegate
-    ) {
+                                     @ConfigProperty(name = "kogito.jobs-service.backoffRetryMillis") long backoffRetryMillis,
+                                     @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis") long maxIntervalLimitToRetryMillis,
+                                     @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes") long schedulerChunkInMinutes,
+                                     @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs") boolean forceExecuteExpiredJobs,
+                                     HttpJobExecutor httpJobExecutor, VertxTimerServiceScheduler delegate) {
         super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis, schedulerChunkInMinutes, forceExecuteExpiredJobs);
         this.httpJobExecutor = httpJobExecutor;
         this.delegate = delegate;
