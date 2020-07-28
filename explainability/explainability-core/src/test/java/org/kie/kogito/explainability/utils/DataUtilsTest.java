@@ -48,12 +48,38 @@ class DataUtilsTest {
         double stdDeviation = 0.1;
         int size = 100;
         double[] data = DataUtils.generateData(mean, stdDeviation, size);
+
+        assertEquals(mean, DataUtils.getMean(data), 1e-2);
+        assertEquals(stdDeviation, DataUtils.getStdDev(data, mean), 1e-2);
+
         // check the sum of deviations from mean is zero
         double sum = 0;
         for (double d : data) {
             sum += d - mean;
         }
         assertEquals(0, sum, 1e-4);
+    }
+
+    @Test
+    void testGetMean() {
+        double[] data = new double[5];
+        data[0] = 2;
+        data[1] = 4;
+        data[2] = 3;
+        data[3] = 5;
+        data[4] = 1;
+        assertEquals(3, DataUtils.getMean(data), 1e-6);
+    }
+
+    @Test
+    void testGetStdDev() {
+        double[] data = new double[5];
+        data[0] = 2;
+        data[1] = 4;
+        data[2] = 3;
+        data[3] = 5;
+        data[4] = 1;
+        assertEquals(1.41, DataUtils.getStdDev(data, 3), 1e-2);
     }
 
     @Test

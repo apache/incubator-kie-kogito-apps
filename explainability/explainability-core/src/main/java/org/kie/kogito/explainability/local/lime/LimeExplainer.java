@@ -47,12 +47,13 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Differences with respect to the original (python) implementation:
  * - the linear (interpretable) model is based on a perceptron algorithm instead of Lasso + Ridge regression
- * - perturbing numerical features is done by sampling from a normal distribution centered around the value of the feature value associated with the prediction to be explained
+ * - perturbing numerical features is done by sampling from a standard normal distribution centered around the value of the feature value associated with the prediction to be explained
  * - numerical features are max-min scaled and clustered via a gaussian kernel
  */
 public class LimeExplainer implements LocalExplainer<Saliency> {
 
-    private static final Logger logger = LoggerFactory.getLogger(LimeExplainer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LimeExplainer.class);
+    private static final double SEPARABLE_DATASET_RATIO = 0.99;
 
     /**
      * No. of samples to be generated for the local linear model training
@@ -114,11 +115,11 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                     if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
                         Map<Double, Long> rawClassesBalance = new HashMap<>();
 
-                            /*
-                            perturb the inputs so that the perturbed dataset contains more than just one output class, otherwise
-                            it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
-                            feature importance scores.
-                             */
+                        /*
+                        perturb the inputs so that the perturbed dataset contains more than just one output class, otherwise
+                        it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
+                        feature importance scores.
+                         */
 
                         boolean classification = false;
 
@@ -137,12 +138,12 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                                     .equals(output.getType())) ? output.getValue().asNumber() : (((output.getValue().getUnderlyingObject() == null
                                     && fv.getUnderlyingObject() == null) || (output.getValue().getUnderlyingObject() != null && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
                                     .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting()));
-                            logger.debug("raw samples per class: {}", rawClassesBalance);
+                            LOGGER.debug("raw samples per class: {}", rawClassesBalance);
 
                             // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
                             if (rawClassesBalance.size() > 1) {
                                 Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
-                                if ((double) max / (double) perturbedInputs.size() < 0.99) {
+                                if ((double) max / (double) perturbedInputs.size() < SEPARABLE_DATASET_RATIO) {
                                     separableDataset = true;
                                     classification = rawClassesBalance.size() == 2;
 
@@ -180,10 +181,10 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                         if (!Double.isNaN(loss)) {
                             // update (and average) the weights of each feature using the corresponding linear model weight
                             weights = Arrays.stream(linearModel.getWeights()).map(x -> x / actualOutputs.size()).toArray();
-                            logger.debug("weights updated for output {}", currentOutput);
+                            LOGGER.debug("weights updated for output {}", currentOutput);
                         }
                     } else {
-                        logger.debug("skipping explanation of empty output {}", currentOutput);
+                        LOGGER.debug("skipping explanation of empty output {}", currentOutput);
                     }
                 }
                 // create the output saliency
@@ -198,7 +199,7 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
             throw new LocalExplanationException("cannot explain a prediction whose input is empty");
         }
         long end = System.currentTimeMillis();
-        logger.debug("explanation time: {}ms", (end - start));
+        LOGGER.debug("explanation time: {}ms", (end - start));
         return new Saliency(saliencies);
     }
 

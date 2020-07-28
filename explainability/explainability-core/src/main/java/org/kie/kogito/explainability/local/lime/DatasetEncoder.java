@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ import java.util.stream.DoubleStream;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -36,6 +36,8 @@ import org.kie.kogito.explainability.utils.LinearModel;
  * is close to the one of the prediction to be explained.
  */
 class DatasetEncoder {
+
+    private static final double CLUSTER_THRESHOLD = 1e-3;
 
     private final List<PredictionInput> perturbedInputs;
     private final List<Output> predictedOutputs;
@@ -121,6 +123,8 @@ class DatasetEncoder {
                     }
                     columnData.add(featureValues);
                     break;
+                default:
+                    throw new LocalExplanationException("could not encoded features of type " + originalFeature.getType());
             }
         }
         return columnData;
@@ -143,8 +147,8 @@ class DatasetEncoder {
         // feature scaling + kernel based clustering
         double threshold = DataUtils.gaussianKernel((originalValue - min) / (max - min), 0, 1);
         List<Double> featureValues = DoubleStream.of(doubles).map(d -> (d - min) / (max - min))
-                .map(d -> Double.isNaN(d) ? 1 : d).boxed().map(d -> DataUtils.gaussianKernel(d, 0,1))
-                .map(d -> (d - threshold < 1e-3) ? 1d : 0d).collect(Collectors.toList());
+                .map(d -> Double.isNaN(d) ? 1 : d).boxed().map(d -> DataUtils.gaussianKernel(d, 0, 1))
+                .map(d -> (d - threshold < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
         columnData.add(featureValues);
     }
 

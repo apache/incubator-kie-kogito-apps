@@ -68,7 +68,7 @@ public class DataUtils {
         double[] data = new double[size];
         // generate random data
         for (int i = 0; i < size; i++) {
-            double g = 1d / (1d + random.nextInt(10));
+            double g = 1d / (1d + random.nextInt(100));
             data[i] = g;
         }
 
@@ -92,7 +92,7 @@ public class DataUtils {
         return data;
     }
 
-    private static double getMean(double[] data) {
+    static double getMean(double[] data) {
         double m = 0;
         for (double datum : data) {
             m += datum;
@@ -101,7 +101,7 @@ public class DataUtils {
         return m;
     }
 
-    private static double getStdDev(double[] data, double mean) {
+    static double getStdDev(double[] data, double mean) {
         double d = 0;
         for (double datum : data) {
             d += Math.pow(datum - mean, 2);
@@ -213,9 +213,8 @@ public class DataUtils {
                 double originalFeatureValue = feature.getValue().asNumber();
                 boolean intValue = originalFeatureValue % 1 == 0;
 
-                // sample from normal distribution and center around feature value
-                int pickIdx = random.nextInt(noOfSamples - 1);
-                double normalDistributionSample = DataUtils.generateData(0, 1, noOfSamples)[pickIdx];
+                // sample from a standard normal distribution and center around feature value
+                double normalDistributionSample = random.nextGaussian();
                 if (originalFeatureValue != 0d) {
                     normalDistributionSample = normalDistributionSample * originalFeatureValue + originalFeatureValue;
                 }
@@ -406,7 +405,7 @@ public class DataUtils {
             return Double.NaN;
         } else {
             double h = 0d;
-            for (int i = 0; i < Math.min(x.length, y.length); i++) {
+            for (int i = 0; i < x.length; i++) {
                 if (x[i] != y[i]) {
                     h++;
                 }
@@ -446,11 +445,15 @@ public class DataUtils {
      * @return the Euclidean distance
      */
     public static double euclideanDistance(double[] x, double[] y) {
-        double e = 0;
-        for (int i = 0; i < Math.min(x.length, y.length); i++) {
-            e += Math.pow(x[i] - y[i], 2);
+        if (x.length != y.length) {
+            return Double.NaN;
+        } else {
+            double e = 0;
+            for (int i = 0; i < Math.min(x.length, y.length); i++) {
+                e += Math.pow(x[i] - y[i], 2);
+            }
+            return Math.sqrt(e);
         }
-        return Math.sqrt(e);
     }
 
     /**
