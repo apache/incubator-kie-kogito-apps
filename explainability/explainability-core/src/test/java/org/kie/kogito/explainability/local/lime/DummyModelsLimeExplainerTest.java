@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
@@ -65,8 +64,8 @@ class DummyModelsLimeExplainerTest {
         assertNotNull(saliency);
         List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);
         assertEquals(topFeatures.get(0).getFeature().getName(), features.get(idx).getName());
-        assertTrue(topFeatures.get(1).getScore() < topFeatures.get(0).getScore() * 10);
-        assertTrue(topFeatures.get(2).getScore() < topFeatures.get(0).getScore() * 10);
+        assertTrue(topFeatures.get(1).getScore() < topFeatures.get(0).getScore() / 2);
+        assertTrue(topFeatures.get(2).getScore() < topFeatures.get(0).getScore() / 2);
         double v = ExplainabilityMetrics.saliencyImpact(model, prediction, saliency.getTopFeatures(1));
         assertThat(v).isGreaterThan(0);
     }
