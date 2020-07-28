@@ -134,10 +134,15 @@ public class LimeExplainer implements LocalExplainer<Saliency> {
                             // calculate the no. of samples belonging to each output class
                             Value<?> fv = currentOutput.getValue();
                             int finalO = o;
-                            rawClassesBalance = perturbedOutputs.stream().map(p -> p.getOutputs().get(finalO)).map(output -> (Type.NUMBER
-                                    .equals(output.getType())) ? output.getValue().asNumber() : (((output.getValue().getUnderlyingObject() == null
-                                    && fv.getUnderlyingObject() == null) || (output.getValue().getUnderlyingObject() != null && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
-                                    .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting()));
+                            rawClassesBalance = perturbedOutputs.stream()
+                                    .map(p -> p.getOutputs().get(finalO)) // get the (perturbed) output value corresponding to the one to be explained
+                                    .map(output -> (Type.NUMBER.equals(output.getType())) ?
+                                            output.getValue().asNumber() : // if numeric use it as it is
+                                            (((output.getValue().getUnderlyingObject() == null // otherwise check if target and perturbed outputs are both null
+                                                    && fv.getUnderlyingObject() == null)
+                                                    || (output.getValue().getUnderlyingObject() != null  // if not null, check for underlying value equality
+                                                    && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
+                                    .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting())); // then group-count distinct output values
                             LOGGER.debug("raw samples per class: {}", rawClassesBalance);
 
                             // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
