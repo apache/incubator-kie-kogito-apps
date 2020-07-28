@@ -28,11 +28,13 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({ operationResult }) => {
                 (process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor
-                        itemDescription={getProcessInstanceDescription(
-                          process[1]
-                        )}
-                      />
+                      <strong>
+                        <ItemDescriptor
+                          itemDescription={getProcessInstanceDescription(
+                            process[1]
+                          )}
+                        />
+                      </strong>
                     </TextListItem>
                   );
                 }
@@ -70,11 +72,13 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({ operationResult }) => {
                 (process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor
-                        itemDescription={getProcessInstanceDescription(
-                          process[1]
-                        )}
-                      />
+                      <strong>
+                        <ItemDescriptor
+                          itemDescription={getProcessInstanceDescription(
+                            process[1]
+                          )}
+                        />
+                      </strong>
                     </TextListItem>
                   );
                 }
@@ -93,11 +97,14 @@ const ProcessListBulkInstances: React.FC<IOwnProps> = ({ operationResult }) => {
                 (process: any) => {
                   return (
                     <TextListItem key={process[0]}>
-                      <ItemDescriptor
-                        itemDescription={getProcessInstanceDescription(
-                          process[1]
-                        )}
-                      />
+                      <strong>
+                        <ItemDescriptor
+                          itemDescription={getProcessInstanceDescription(
+                            process[1]
+                          )}
+                        />
+                      </strong>{' '}
+                      -{process[1].errorMessage}
                     </TextListItem>
                   );
                 }
