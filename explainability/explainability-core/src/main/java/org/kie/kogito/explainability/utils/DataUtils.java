@@ -51,8 +51,9 @@ public class DataUtils {
     }
 
     /**
-     * Generate a dataset of a certain size, given mean and standard deviation.
-     * Samples are generated randomly, actual mean {@code m} and standard deviation {@code d} are calculated.
+     * Generate a dataset of a certain size, sampled from a normal distribution, given mean and standard deviation.
+     * Samples are generated from a normal distribution, multiplied by {@code stdDeviation} and summed to {@code mean},
+     * actual mean {@code m} and standard deviation {@code d} are calculated.
      * Then all numbers are multiplied by the same number so that the standard deviation also gets
      * multiplied by the same number, hence we multiply each random number by {@code stdDeviation / d}.
      * The resultant set has standard deviation {@code stdDeviation} and mean {@code m1=m*stdDeviation/d}.
@@ -65,11 +66,11 @@ public class DataUtils {
      * @return the generated data
      */
     public static double[] generateData(double mean, double stdDeviation, int size) {
+
+        // generate random data from a normal (gaussian) distribution
         double[] data = new double[size];
-        // generate random data
         for (int i = 0; i < size; i++) {
-            double g = 1d / (1d + random.nextInt(100));
-            data[i] = g;
+            data[i] = random.nextGaussian() * stdDeviation + mean;
         }
 
         double m = getMean(data);
