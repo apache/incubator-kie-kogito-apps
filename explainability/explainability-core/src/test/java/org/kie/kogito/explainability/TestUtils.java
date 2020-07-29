@@ -140,6 +140,14 @@ public class TestUtils {
         return getMockedNumericFeature(1d);
     }
 
+    public static Feature getMockedFeature(Type type, Value<?> v) {
+        Feature f = mock(Feature.class);
+        when(f.getType()).thenReturn(type);
+        when(f.getName()).thenReturn("f-" + type.name());
+        when(f.getValue()).thenReturn(v);
+        return f;
+    }
+
     public static Feature getMockedTextFeature(String s) {
         Feature f = mock(Feature.class);
         when(f.getType()).thenReturn(Type.TEXT);

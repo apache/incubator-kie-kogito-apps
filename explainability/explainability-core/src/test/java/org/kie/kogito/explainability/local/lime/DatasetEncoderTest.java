@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +30,7 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,6 +51,91 @@ class DatasetEncoderTest {
     }
 
     @Test
+    void testDatasetEncodingWithBinaryData() {
+        List<PredictionInput> perturbedInputs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            List<Feature> inputFeatures = new LinkedList<>();
+            for (int j = 0; j < 3; j++) {
+                ByteBuffer byteBuffer = ByteBuffer.wrap((i + "" + j).getBytes(Charset.defaultCharset()));
+                inputFeatures.add(TestUtils.getMockedFeature(Type.BINARY, new Value<>(byteBuffer)));
+            }
+            perturbedInputs.add(new PredictionInput(inputFeatures));
+        }
+
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 3; i++) {
+            ByteBuffer byteBuffer = ByteBuffer.wrap((i + "" + i).getBytes(Charset.defaultCharset()));
+            features.add(TestUtils.getMockedFeature(Type.BINARY, new Value<>(byteBuffer)));
+        }
+        PredictionInput originalInput = new PredictionInput(features);
+        assertEncode(perturbedInputs, originalInput);
+    }
+
+    @Test
+    void testDatasetEncodingWithVectorData() {
+        List<PredictionInput> perturbedInputs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            List<Feature> inputFeatures = new LinkedList<>();
+            for (int j = 0; j < 3; j++) {
+                double[] doubles = new double[2];
+                doubles[0] = i;
+                doubles[1] = j;
+                inputFeatures.add(TestUtils.getMockedFeature(Type.VECTOR, new Value<>(doubles)));
+            }
+            perturbedInputs.add(new PredictionInput(inputFeatures));
+        }
+
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 3; i++) {
+            double[] doubles = new double[2];
+            doubles[0] = i;
+            doubles[1] = i;
+            features.add(TestUtils.getMockedFeature(Type.BINARY, new Value<>(doubles)));
+        }
+        PredictionInput originalInput = new PredictionInput(features);
+        assertEncode(perturbedInputs, originalInput);
+    }
+
+    @Test
+    void testDatasetEncodingWithCategoricalData() {
+        List<PredictionInput> perturbedInputs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            List<Feature> inputFeatures = new LinkedList<>();
+            for (int j = 0; j < 3; j++) {
+                double[] doubles = new double[2];
+                inputFeatures.add(TestUtils.getMockedFeature(Type.CATEGORICAL, new Value<>(i + "" + j)));
+            }
+            perturbedInputs.add(new PredictionInput(inputFeatures));
+        }
+
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 3; i++) {
+            features.add(TestUtils.getMockedFeature(Type.CATEGORICAL, new Value<>(i + "" + i)));
+        }
+        PredictionInput originalInput = new PredictionInput(features);
+        assertEncode(perturbedInputs, originalInput);
+    }
+
+    @Test
+    void testDatasetEncodingWithBooleanData() {
+        List<PredictionInput> perturbedInputs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            List<Feature> inputFeatures = new LinkedList<>();
+            for (int j = 0; j < 3; j++) {
+                inputFeatures.add(TestUtils.getMockedFeature(Type.BOOLEAN, new Value<>(j % 2 == 0)));
+            }
+            perturbedInputs.add(new PredictionInput(inputFeatures));
+        }
+
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 3; i++) {
+            features.add(TestUtils.getMockedFeature(Type.BOOLEAN, new Value<>(i % 2 == 0)));
+        }
+        PredictionInput originalInput = new PredictionInput(features);
+        assertEncode(perturbedInputs, originalInput);
+    }
+
+    @Test
     void testDatasetEncodingWithNumericData() {
         List<PredictionInput> perturbedInputs = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
@@ -57,19 +145,48 @@ class DatasetEncoderTest {
             }
             perturbedInputs.add(new PredictionInput(inputFeatures));
         }
-        List<Output> outputs = new LinkedList<>();
-        for (int i = 0; i < 10; i++) {
-            outputs.add(new Output("o", Type.NUMBER, new Value<>(i % 2 == 0 ? 1d : 0d), 1d));
-        }
+
         List<Feature> features = new LinkedList<>();
         for (int i = 0; i < 3; i++) {
             features.add(TestUtils.getMockedNumericFeature());
         }
         PredictionInput originalInput = new PredictionInput(features);
+        assertEncode(perturbedInputs, originalInput);
+    }
+
+    @Test
+    void testDatasetEncodingWithTextData() {
+        List<PredictionInput> perturbedInputs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            List<Feature> inputFeatures = new LinkedList<>();
+            for (int j = 0; j < 3; j++) {
+                inputFeatures.add(TestUtils.getMockedTextFeature(i + " " + j));
+            }
+            perturbedInputs.add(new PredictionInput(inputFeatures));
+        }
+
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 3; i++) {
+            features.add(TestUtils.getMockedTextFeature(i + " " + i));
+        }
+        PredictionInput originalInput = new PredictionInput(features);
+        assertEncode(perturbedInputs, originalInput);
+    }
+
+    private void assertEncode(List<PredictionInput> perturbedInputs, PredictionInput originalInput) {
+        List<Output> outputs = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            outputs.add(new Output("o", Type.NUMBER, new Value<>(i % 2 == 0 ? 1d : 0d), 1d));
+        }
         Output originalOutput = new Output("o", Type.BOOLEAN, new Value<>(1d), 1d);
         DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, outputs, originalInput, originalOutput);
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
         assertNotNull(trainingSet);
         assertEquals(10, trainingSet.size());
+        for (Pair<double[], Double> pair : trainingSet) {
+            assertNotNull(pair.getKey());
+            assertNotNull(pair.getValue());
+            assertThat(pair.getValue()).isBetween(0d, 1d);
+        }
     }
 }
