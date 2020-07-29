@@ -33,7 +33,6 @@ import org.kie.kogito.explainability.model.Type;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
 class DataUtilsTest {
 

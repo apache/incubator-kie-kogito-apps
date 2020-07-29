@@ -19,27 +19,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.DoubleStream;
 
-import org.kie.kogito.explainability.model.DataDistribution;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.DMNResult;
-import org.kie.dmn.api.core.DMNType;
-import org.kie.dmn.api.core.ast.DecisionNode;
-import org.kie.dmn.api.core.ast.InputDataNode;
-import org.kie.dmn.model.api.Decision;
 import org.kie.kogito.decision.DecisionModel;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 
 /**
  * {@link PredictionProvider} implementation based on a Kogito {@link DecisionModel}.
