@@ -22,6 +22,7 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -38,6 +39,9 @@ public class TraceEventConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
 
+    private static final TypeReference<CloudEventImpl<TraceEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
+    };
+
     private final ITrustyService service;
 
     @Inject
@@ -47,13 +51,17 @@ public class TraceEventConsumer {
 
     @Incoming("kogito-tracing")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
+        try {
+            decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
+        } catch (Exception e) {
+            LOG.error("Something unexpected happened during the processing of a TraceEvent. The event is discarded.", e);
+        }
         return message.ack();
     }
 
     private Optional<CloudEventImpl<TraceEvent>> decodeCloudEvent(String payload) {
         try {
-            return Optional.of(CloudEventUtils.decode(payload));
+            return Optional.of(CloudEventUtils.decode(payload, CLOUD_EVENT_TYPE_REF));
         } catch (IllegalStateException e) {
             LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
             return Optional.empty();

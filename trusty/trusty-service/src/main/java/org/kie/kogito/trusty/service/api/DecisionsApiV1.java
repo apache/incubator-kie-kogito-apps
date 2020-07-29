@@ -49,6 +49,7 @@ public class DecisionsApiV1 {
 
     /**
      * Gets an execution header by ID.
+     *
      * @param executionId The execution ID.
      * @return The execution header.
      */

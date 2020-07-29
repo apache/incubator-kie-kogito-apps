@@ -72,6 +72,7 @@ public interface ITrustyService {
 
     /**
      * Store the explainability result.
+     *
      * @param executionId The execution ID.
      */
     void storeExplainability(String executionId, ExplainabilityResult result);

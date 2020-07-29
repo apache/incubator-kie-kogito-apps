@@ -204,7 +204,7 @@ public class DecisionsApiV1Test {
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                                         new MessageExceptionField("TestException", "Test exception message",
-                                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
+                                                                  new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
                                         )
                                 ))
                         )

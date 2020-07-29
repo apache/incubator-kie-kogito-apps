@@ -20,7 +20,7 @@ public class Test {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response test(){
+    public Response test() {
         explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(UUID.randomUUID().toString()));
         return Response.ok().build();
     }

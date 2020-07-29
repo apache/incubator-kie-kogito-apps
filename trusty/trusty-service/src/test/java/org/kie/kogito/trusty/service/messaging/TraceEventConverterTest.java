@@ -21,6 +21,7 @@ import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConverter;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
@@ -30,9 +31,14 @@ import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEve
 
 class TraceEventConverterTest {
 
+    private static void doTest(TraceEvent traceEvent, Decision expectedDecision) {
+        Decision actualDecision = TraceEventConverter.toDecision(traceEvent);
+        TraceEventTestUtils.assertDecision(expectedDecision, actualDecision);
+    }
+
     @Test
     void testCorrectTraceEvent() {
-        doTest(buildCorrectTraceEvent(), buildCorrectDecision());
+        doTest(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID), buildCorrectDecision(CORRECT_CLOUDEVENT_ID));
     }
 
     @Test
@@ -43,10 +49,5 @@ class TraceEventConverterTest {
     @Test
     void testTraceEventWithNullFields() {
         doTest(buildTraceEventWithNullFields(), buildDecisionWithNullFields());
-    }
-
-    private static void doTest(TraceEvent traceEvent, Decision expectedDecision) {
-        Decision actualDecision = TraceEventConverter.toDecision(traceEvent);
-        TraceEventTestUtils.assertDecision(expectedDecision, actualDecision);
     }
 }

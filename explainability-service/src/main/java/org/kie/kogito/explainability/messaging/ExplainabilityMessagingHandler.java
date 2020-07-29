@@ -37,7 +37,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.explainability.IExplanationService;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
-import org.kie.kogito.trusty.api.CloudEventUtils;
+import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.api.ExplainabilityRequestDto;
 import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 import org.reactivestreams.Publisher;

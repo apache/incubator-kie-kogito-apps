@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.quarkus.runtime.Startup;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
@@ -80,8 +78,6 @@ public class TrustyService implements ITrustyService {
         }
         storage.put(executionId, decision);
     }
-
-
 
     @Override
     public void updateDecision(String executionId, Decision decision) {

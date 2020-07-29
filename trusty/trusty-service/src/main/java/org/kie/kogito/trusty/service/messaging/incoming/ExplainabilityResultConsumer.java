@@ -27,7 +27,7 @@ import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.kie.kogito.trusty.api.CloudEventUtils;
+import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
@@ -39,7 +39,8 @@ public class ExplainabilityResultConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
 
-    private static final TypeReference<CloudEventImpl<ExplainabilityResultDto>> CLOUD_EVENT_TYPE =  new TypeReference<>() {};
+    private static final TypeReference<CloudEventImpl<ExplainabilityResultDto>> CLOUD_EVENT_TYPE = new TypeReference<>() {
+    };
 
     private final ITrustyService service;
 

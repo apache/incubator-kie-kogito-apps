@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +104,8 @@ public class TrustyServiceTestUtils {
         return CloudEventUtils.build(
                 traceEvent.getHeader().getExecutionId(),
                 URI.create(URLEncoder.encode(traceEvent.getHeader().getResourceId().getModelName(), StandardCharsets.UTF_8)),
-                traceEvent
+                traceEvent,
+                TraceEvent.class
         );
     }
 
@@ -112,16 +114,16 @@ public class TrustyServiceTestUtils {
     }
 
     public static CloudEventImpl<TraceEvent> buildCloudEventWithoutData() {
-        return CloudEventUtils.build(CLOUDEVENT_WITHOUT_DATA_ID, URI.create(URLEncoder.encode(MODEL_NAME, StandardCharsets.UTF_8)), null);
+        return CloudEventUtils.build(CLOUDEVENT_WITHOUT_DATA_ID, URI.create(URLEncoder.encode(MODEL_NAME, StandardCharsets.UTF_8)), null, TraceEvent.class);
     }
 
     public static String buildCloudEventWithoutDataJsonString() {
         return CloudEventUtils.encode(buildCloudEventWithoutData());
     }
 
-    public static TraceEvent buildCorrectTraceEvent() {
+    public static TraceEvent buildCorrectTraceEvent(String cloudEventId) {
         return new TraceEvent(
-                buildHeader(CORRECT_CLOUDEVENT_ID, CORRECT_CLOUDEVENT_START_TS, CORRECT_CLOUDEVENT_START_TS + CORRECT_CLOUDEVENT_DURATION, CORRECT_CLOUDEVENT_DURATION, null),
+                buildHeader(cloudEventId, CORRECT_CLOUDEVENT_START_TS, CORRECT_CLOUDEVENT_START_TS + CORRECT_CLOUDEVENT_DURATION, CORRECT_CLOUDEVENT_DURATION, null),
                 List.of(
                         buildInputViolation(INPUT_VIOLATION_JSON, null),
                         buildInputDriver(INPUT_DRIVER_JSON, null)
@@ -192,9 +194,18 @@ public class TrustyServiceTestUtils {
         );
     }
 
-    public static Decision buildCorrectDecision() {
+    public static TraceEvent buildTraceEventWithNullType(String cloudEventId) {
+        return new TraceEvent(
+                buildNullTypeHeader(cloudEventId, CORRECT_CLOUDEVENT_START_TS, CORRECT_CLOUDEVENT_START_TS + CORRECT_CLOUDEVENT_DURATION, CORRECT_CLOUDEVENT_DURATION, null),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
+    public static Decision buildCorrectDecision(String cloudEventId) {
         return new Decision(
-                CORRECT_CLOUDEVENT_ID, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME,
+                cloudEventId, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME,
                 List.of(
                         new TypedValue(INPUT_VIOLATION_NODE_NAME, TYPE_VIOLATION_NODE_ID, toJsonNode(INPUT_VIOLATION_JSON)),
                         new TypedValue(INPUT_DRIVER_NODE_NAME, TYPE_DRIVER_NODE_ID, toJsonNode(INPUT_DRIVER_JSON))
@@ -358,6 +369,10 @@ public class TrustyServiceTestUtils {
         return new Decision(CLOUDEVENT_WITH_NULL_FIELDS_ID, CLOUDEVENT_WITH_NULL_FIELDS_START_TS, null, null, MODEL_NAME, null, null);
     }
 
+    private static TraceHeader buildNullTypeHeader(String executionId, Long startTs, Long endTs, Long duration, List<Message> messages) {
+        return new TraceHeader(null, executionId, startTs, endTs, duration, trafficViolationResourceId, messages);
+    }
+
     private static TraceHeader buildHeader(String executionId, Long startTs, Long endTs, Long duration, List<Message> messages) {
         return new TraceHeader(TraceEventType.DMN, executionId, startTs, endTs, duration, trafficViolationResourceId, messages);
     }
@@ -388,5 +403,4 @@ public class TrustyServiceTestUtils {
             return null;
         }
     }
-
 }

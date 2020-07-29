@@ -40,7 +40,7 @@ public class TrustyServiceTest {
     private TrustyService trustyService;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         trustyStorageServiceMock = mock(TrustyStorageService.class);
         trustyService = new TrustyService(trustyStorageServiceMock);
     }

@@ -30,6 +30,9 @@ import org.kie.kogito.trusty.storage.api.model.TypedValue;
 
 public class TraceEventConverter {
 
+    private TraceEventConverter() {
+    }
+
     public static Decision toDecision(TraceEvent event) {
 
         List<TypedValue> inputs = event.getInputs() == null
@@ -85,8 +88,5 @@ public class TraceEventConverter {
         return eventException == null
                 ? null
                 : new MessageExceptionField(eventException.getClassName(), eventException.getMessage(), toMessageExceptionField(eventException.getCause()));
-    }
-
-    private TraceEventConverter() {
     }
 }
