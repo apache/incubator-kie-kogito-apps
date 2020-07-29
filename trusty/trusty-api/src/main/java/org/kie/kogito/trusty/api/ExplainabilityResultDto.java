@@ -30,4 +30,5 @@ public class ExplainabilityResultDto {
         this.executionId = executionId;
     }
     // TODO: add properties
+
 }

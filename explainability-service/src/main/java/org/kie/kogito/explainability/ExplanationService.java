@@ -16,23 +16,25 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.concurrent.CompletableFuture;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.kie.kogito.explainability.messaging.outgoing.ExplainabilityResultProducer;
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 
 @ApplicationScoped
-public class ExplanationService implements IExplanationService{
+public class ExplanationService implements IExplanationService {
 
     @Inject
-    ExplainabilityResultProducer explainabilityResultProducer;
+    ManagedExecutor executor;
 
     @Override
-    public void processExplainability(ExplainabilityRequest request) {
+    public CompletableFuture<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
         // TODO: get explainability from expl library
 
-        explainabilityResultProducer.sendEvent(new ExplainabilityResultDto(request.executionId));
+        return CompletableFuture.supplyAsync(ExplainabilityResultDto::new, executor);
     }
 }

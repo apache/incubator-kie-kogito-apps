@@ -30,6 +30,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.trusty.api.CloudEventUtils;
 import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +76,7 @@ public class ExplainabilityResultConsumer {
 
         ExplainabilityResultDto explainabilityResult = optData.get();
 
-        service.storeExplainability(attributes.getId(), ExplainabilityResultConverter.toResult(explainabilityResult));
+        service.storeExplainability(attributes.getId(), ExplainabilityResult.from(explainabilityResult));
     }
 }
 
