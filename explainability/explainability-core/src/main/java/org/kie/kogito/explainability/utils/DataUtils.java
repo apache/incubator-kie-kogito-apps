@@ -169,12 +169,12 @@ public class DataUtils {
         // TODO : perturbing a composite / nested feature must be done by considering to only perturb #noOfPerturbations features
         for (int value : indexesToBePerturbed) {
             perturbedInput.getFeatures().set(value, perturbFeature(
-                    perturbedInput.getFeatures().get(value), noOfSamples));
+                    perturbedInput.getFeatures().get(value)));
         }
         return perturbedInput;
     }
 
-    private static Feature perturbFeature(Feature feature, int noOfSamples) {
+    private static Feature perturbFeature(Feature feature) {
         Type type = feature.getType();
         Feature f;
         String featureName = feature.getName();
@@ -184,7 +184,7 @@ public class DataUtils {
                 Map<String, Object> featuresMap = new HashMap<>();
                 for (Feature cf : composite) {
                     if (random.nextBoolean()) {
-                        featuresMap.put(cf.getName(), perturbFeature(cf, noOfSamples));
+                        featuresMap.put(cf.getName(), perturbFeature(cf));
                     } else {
                         featuresMap.put(cf.getName(), cf);
                     }
@@ -276,7 +276,7 @@ public class DataUtils {
                 break;
             case UNDEFINED:
                 if (feature.getValue().getUnderlyingObject() instanceof Feature) {
-                    f = perturbFeature((Feature) feature.getValue().getUnderlyingObject(), noOfSamples);
+                    f = perturbFeature((Feature) feature.getValue().getUnderlyingObject());
                 } else {
                     f = feature;
                 }
@@ -429,7 +429,7 @@ public class DataUtils {
             return Double.NaN;
         } else {
             double h = 0;
-            for (int i = 0; i < Math.min(x.length(), y.length()); i++) {
+            for (int i = 0; i < x.length(); i++) {
                 if (x.charAt(i) != y.charAt(i)) {
                     h++;
                 }
@@ -450,7 +450,7 @@ public class DataUtils {
             return Double.NaN;
         } else {
             double e = 0;
-            for (int i = 0; i < Math.min(x.length, y.length); i++) {
+            for (int i = 0; i < x.length; i++) {
                 e += Math.pow(x[i] - y[i], 2);
             }
             return Math.sqrt(e);
