@@ -16,7 +16,6 @@ const useExecutions = (parameters: useExecutionsParameters) => {
   const [executions, setExecutions] = useState<RemoteData<Error, Executions>>({
     status: 'NOT_ASKED'
   });
-
   const loadExecutions = useCallback(() => {
     let isMounted = true;
     setExecutions({ status: 'LOADING' });

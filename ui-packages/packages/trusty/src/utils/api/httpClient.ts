@@ -7,7 +7,6 @@ const httpClient = axios.create({
 });
 
 let call: CancelTokenSource;
-
 const callOnce = (config: AxiosRequestConfig) => {
   if (call) {
     call.cancel('Request superseded');
