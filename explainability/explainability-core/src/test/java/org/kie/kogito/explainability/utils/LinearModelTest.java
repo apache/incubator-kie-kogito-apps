@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LinearModelTest {
@@ -35,7 +36,7 @@ class LinearModelTest {
         LinearModel linearModel = new LinearModel(size, true);
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
         linearModel.fit(trainingSet);
-        assertEquals(Arrays.toString(new double[size]), Arrays.toString(linearModel.getWeights()));
+        assertArrayEquals(new double[size], linearModel.getWeights());
     }
 
     @Test
@@ -44,7 +45,7 @@ class LinearModelTest {
         LinearModel linearModel = new LinearModel(size, false);
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
         linearModel.fit(trainingSet);
-        assertEquals(Arrays.toString(new double[size]), Arrays.toString(linearModel.getWeights()));
+        assertArrayEquals(new double[size], linearModel.getWeights());
     }
 
     @Test
