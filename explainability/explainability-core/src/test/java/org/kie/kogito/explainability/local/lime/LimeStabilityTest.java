@@ -66,7 +66,10 @@ class LimeStabilityTest {
         Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         boolean topFeature = false;
         for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
-            topFeature = entry.getValue() >= 0.9;
+            if (entry.getValue() >= 0.9) {
+                topFeature = true;
+                break;
+            }
         }
         assertTrue(topFeature);
     }
