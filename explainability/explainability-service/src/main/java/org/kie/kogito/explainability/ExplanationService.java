@@ -22,8 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.context.ManagedExecutor;
+import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
-import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 
 @ApplicationScoped
 public class ExplanationService implements IExplanationService {
@@ -33,7 +33,7 @@ public class ExplanationService implements IExplanationService {
 
     @Override
     public CompletableFuture<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
-        // TODO: get explainability from expl library
+        // TODO: get explainability from expl library https://issues.redhat.com/browse/KOGITO-2920
 
         return CompletableFuture.supplyAsync(ExplainabilityResultDto::new, executor);
     }

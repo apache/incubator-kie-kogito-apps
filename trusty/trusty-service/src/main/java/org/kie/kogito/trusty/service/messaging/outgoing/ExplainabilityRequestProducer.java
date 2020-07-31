@@ -25,8 +25,8 @@ import javax.enterprise.context.ApplicationScoped;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.subjects.PublishSubject;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
+import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.trusty.api.ExplainabilityRequestDto;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,11 +39,7 @@ public class ExplainabilityRequestProducer {
     private static final URI URI_PRODUCER = URI.create("trustyService/ExplainabilityRequestProducer");
 
     private final PublishSubject<String> eventSubject = PublishSubject.create();
-
-    private static String urlEncode(String input) {
-        return URLEncoder.encode(input, StandardCharsets.UTF_8);
-    }
-
+    
     public void sendEvent(ExplainabilityRequestDto request) {
         LOGGER.info("Sending explainability request with id " + request.executionId);
         String payload = CloudEventUtils.encode(

@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>explainability-api</module>
     <module>explainability-core</module>
     <module>explainability-integrationtests</module>
     <module>explainability-service</module>

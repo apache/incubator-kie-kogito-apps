@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
@@ -50,6 +51,7 @@ public class TraceEventConsumer {
     }
 
     @Incoming("kogito-tracing")
+    @Blocking
     public CompletionStage<Void> handleMessage(Message<String> message) {
         try {
             decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);

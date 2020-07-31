@@ -31,15 +31,16 @@ import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.subjects.PublishSubject;
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.explainability.IExplanationService;
+import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.trusty.api.ExplainabilityRequestDto;
-import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +51,9 @@ public class ExplainabilityMessagingHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMessagingHandler.class);
 
     private static final URI URI_PRODUCER = URI.create("explainabilityService/ExplainabilityMessagingHandler");
-
-    private final PublishSubject<String> eventSubject = PublishSubject.create();
-
     private static final TypeReference<CloudEventImpl<ExplainabilityRequestDto>> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
-
+    private final PublishSubject<String> eventSubject = PublishSubject.create();
     private final IExplanationService service;
 
     @Inject
@@ -68,14 +66,16 @@ public class ExplainabilityMessagingHandler {
 
     // Incoming
     @Incoming("trusty-explainability-request")
+    @Blocking
     public CompletionStage<Void> handleMessage(Message<String> message) {
         Optional<CloudEventImpl<ExplainabilityRequestDto>> cloudEventOpt = decodeCloudEvent(message.getPayload());
-        if (!cloudEventOpt.isPresent()){
+        if (!cloudEventOpt.isPresent()) {
             return message.ack();
         }
 
         CloudEventImpl<ExplainabilityRequestDto> cloudEvent = cloudEventOpt.get();
-        return CompletableFuture.supplyAsync(() -> handleCloudEvent(cloudEvent))
+        return CompletableFuture
+                .supplyAsync(() -> handleCloudEvent(cloudEvent))
                 .thenAccept(x -> message.ack());
     }
 
@@ -101,7 +101,8 @@ public class ExplainabilityMessagingHandler {
 
         ExplainabilityRequestDto explainabilityResult = optData.get();
 
-        return service.explainAsync(ExplainabilityRequest.from(explainabilityResult))
+        return service
+                .explainAsync(ExplainabilityRequest.from(explainabilityResult))
                 .thenAcceptAsync(this::sendEvent, executor);
     }
 
@@ -121,9 +122,5 @@ public class ExplainabilityMessagingHandler {
     @Outgoing("trusty-explainability-result")
     public Publisher<String> getEventPublisher() {
         return eventSubject.toFlowable(BackpressureStrategy.BUFFER);
-    }
-
-    private static String urlEncode(String input) {
-        return URLEncoder.encode(input, StandardCharsets.UTF_8);
     }
 }

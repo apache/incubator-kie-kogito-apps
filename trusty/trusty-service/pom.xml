@@ -51,7 +51,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-api</artifactId>
+      <artifactId>explainability-api</artifactId>
     </dependency>
 
     <dependency>

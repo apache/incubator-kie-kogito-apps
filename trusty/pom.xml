@@ -15,7 +15,6 @@
   <modules>
     <module>trusty-service</module>
     <module>trusty-storage</module>
-    <module>trusty-api</module>
   </modules>
 
 </project>

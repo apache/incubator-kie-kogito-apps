@@ -25,10 +25,11 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
+import io.smallrye.reactive.messaging.annotations.Blocking;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.trusty.api.ExplainabilityResultDto;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
@@ -50,6 +51,7 @@ public class ExplainabilityResultConsumer {
     }
 
     @Incoming("trusty-explainability-result")
+    @Blocking
     public CompletionStage<Void> handleMessage(Message<String> message) {
         decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
         return message.ack();
