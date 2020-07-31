@@ -28,47 +28,37 @@ import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelType;
-import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.trusty.service.ITrustyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class ModelEventConsumer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ModelEventConsumer.class);
+public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
 
     private static final TypeReference<CloudEventImpl<ModelEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
     };
 
-    private final ITrustyService service;
+    public ModelEventConsumer() {
+        //CDI proxy
+    }
 
     @Inject
     public ModelEventConsumer(final ITrustyService service) {
-        this.service = service;
+        super(service);
     }
 
+    @Override
     @Incoming("kogito-tracing-model")
     public CompletionStage<Void> handleMessage(final Message<String> message) {
-        try {
-            decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
-        } catch (Exception e) {
-            LOG.error("Something unexpected happened during the processing of a ModelEvent. The event is discarded.", e);
-        }
-        return message.ack();
+        return super.handleMessage(message);
     }
 
-    private Optional<CloudEventImpl<ModelEvent>> decodeCloudEvent(final String payload) {
-        try {
-            return Optional.of(CloudEventUtils.decode(payload, CLOUD_EVENT_TYPE_REF));
-        } catch (IllegalStateException e) {
-            LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
-            return Optional.empty();
-        }
+    @Override
+    protected TypeReference<CloudEventImpl<ModelEvent>> getCloudEventType() {
+        return CLOUD_EVENT_TYPE_REF;
     }
 
-    private void handleCloudEvent(final CloudEventImpl<ModelEvent> cloudEvent) {
+    @Override
+    protected void handleCloudEvent(final CloudEventImpl<ModelEvent> cloudEvent) {
         final AttributesImpl attributes = cloudEvent.getAttributes();
         final Optional<ModelEvent> optData = cloudEvent.getData();
 

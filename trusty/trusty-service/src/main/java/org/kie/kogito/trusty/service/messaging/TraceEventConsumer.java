@@ -27,49 +27,38 @@ import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
 import org.kie.kogito.trusty.service.ITrustyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class TraceEventConsumer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
+public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
 
     private static final TypeReference<CloudEventImpl<TraceEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
     };
 
-    private final ITrustyService service;
+    public TraceEventConsumer() {
+        //CDI proxy
+    }
 
     @Inject
     public TraceEventConsumer(ITrustyService service) {
-        this.service = service;
+        super(service);
     }
 
+    @Override
     @Incoming("kogito-tracing")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        try {
-            decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
-        }
-        catch(Exception e){
-            LOG.error("Something unexpected happened during the processing of a TraceEvent. The event is discarded.", e);
-        }
-        return message.ack();
+        return super.handleMessage(message);
     }
 
-    private Optional<CloudEventImpl<TraceEvent>> decodeCloudEvent(String payload) {
-        try {
-            return Optional.of(CloudEventUtils.decode(payload, CLOUD_EVENT_TYPE_REF));
-        } catch (IllegalStateException e) {
-            LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
-            return Optional.empty();
-        }
+    @Override
+    protected TypeReference<CloudEventImpl<TraceEvent>> getCloudEventType() {
+        return CLOUD_EVENT_TYPE_REF;
     }
 
-    private void handleCloudEvent(CloudEventImpl<TraceEvent> cloudEvent) {
+    @Override
+    protected void handleCloudEvent(CloudEventImpl<TraceEvent> cloudEvent) {
         AttributesImpl attributes = cloudEvent.getAttributes();
         Optional<TraceEvent> optData = cloudEvent.getData();
 
