@@ -64,7 +64,6 @@ public class ExplainabilityMessagingHandler {
 
     // Incoming
     @Incoming("trusty-explainability-request")
-    @Blocking
     public CompletionStage<Void> handleMessage(Message<String> message) {
         Optional<CloudEventImpl<ExplainabilityRequestDto>> cloudEventOpt = decodeCloudEvent(message.getPayload());
         if (!cloudEventOpt.isPresent()) {
