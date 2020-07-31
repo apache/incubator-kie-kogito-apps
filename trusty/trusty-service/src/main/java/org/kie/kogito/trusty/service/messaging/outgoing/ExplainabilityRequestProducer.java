@@ -39,7 +39,7 @@ public class ExplainabilityRequestProducer {
     private static final URI URI_PRODUCER = URI.create("trustyService/ExplainabilityRequestProducer");
 
     private final PublishSubject<String> eventSubject = PublishSubject.create();
-    
+
     public void sendEvent(ExplainabilityRequestDto request) {
         LOGGER.info("Sending explainability request with id " + request.executionId);
         String payload = CloudEventUtils.encode(

@@ -75,7 +75,7 @@ public class ExplainabilityMessagingHandler {
 
         CloudEventImpl<ExplainabilityRequestDto> cloudEvent = cloudEventOpt.get();
         return CompletableFuture
-                .supplyAsync(() -> handleCloudEvent(cloudEvent))
+                .supplyAsync(() -> handleCloudEvent(cloudEvent), executor)
                 .thenAccept(x -> message.ack());
     }
 
