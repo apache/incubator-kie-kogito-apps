@@ -29,7 +29,6 @@ import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.subjects.PublishSubject;
-import io.smallrye.reactive.messaging.annotations.Blocking;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
