@@ -22,13 +22,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExplainabilityResultDto {
     @JsonProperty("executionId")
-    public String executionId;
+    private String executionId;
+
+    // TODO: add properties
 
     public ExplainabilityResultDto(){}
 
     public ExplainabilityResultDto(String executionId){
         this.executionId = executionId;
     }
-    // TODO: add properties
 
+    public String getExecutionId(){
+        return this.executionId;
+    }
 }

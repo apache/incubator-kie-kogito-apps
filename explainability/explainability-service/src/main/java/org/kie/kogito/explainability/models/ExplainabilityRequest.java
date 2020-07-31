@@ -4,7 +4,7 @@ import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 
 public class ExplainabilityRequest {
 
-    public String executionId;
+    private String executionId;
 
     public ExplainabilityRequest(String executionId) {
         this.executionId = executionId;
@@ -12,5 +12,9 @@ public class ExplainabilityRequest {
 
     public static ExplainabilityRequest from(ExplainabilityRequestDto explainabilityRequestDto) {
         return new ExplainabilityRequest(explainabilityRequestDto.executionId);
+    }
+
+    public String getExecutionId(){
+        return this.executionId;
     }
 }

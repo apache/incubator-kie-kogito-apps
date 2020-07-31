@@ -38,6 +38,6 @@ public class ExplanationService implements IExplanationService {
         // TODO: get explainability from expl library https://issues.redhat.com/browse/KOGITO-2920
         // LIME_EXPLAINER.explain(prediction, modelProvider);
 
-        return CompletableFuture.supplyAsync(ExplainabilityResultDto::new, executor);
+        return CompletableFuture.supplyAsync(() -> new ExplainabilityResultDto(request.getExecutionId()), executor);
     }
 }

@@ -105,9 +105,9 @@ public class ExplainabilityMessagingHandler {
 
     // Outgoing
     public CompletableFuture<Void> sendEvent(ExplainabilityResultDto result) {
-        LOGGER.info("Explainability service emits explainability for execution with ID " + result.executionId);
+        LOGGER.info("Explainability service emits explainability for execution with ID " + result.getExecutionId());
         String payload = CloudEventUtils.encode(
-                CloudEventUtils.build(result.executionId,
+                CloudEventUtils.build(result.getExecutionId(),
                                       URI_PRODUCER,
                                       result,
                                       ExplainabilityResultDto.class)

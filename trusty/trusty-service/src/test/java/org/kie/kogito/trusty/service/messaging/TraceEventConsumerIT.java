@@ -41,6 +41,8 @@ import static org.mockito.Mockito.verify;
 @QuarkusTestResource(TrustyKafkaTestResource.class)
 public class TraceEventConsumerIT {
 
+    private static final String TOPIC = "trusty-service-test";
+
     @InjectMock
     TrustyService trustyService;
 
@@ -55,12 +57,12 @@ public class TraceEventConsumerIT {
     public void eventLoopIsNotStoppedWithException() throws Exception {
         String executionIdException = "idException";
         String executionIdNoException = "idNoException";
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(eq(executionIdException), any(Decision.class));
-        doNothing().when(trustyService).storeDecision(eq(executionIdNoException), any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException), any(Decision.class));
+        doNothing().when(trustyService).processDecision(eq(executionIdNoException), any(Decision.class));
 
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)), producer);
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)), producer);
+        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)), producer, TOPIC);
+        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)), producer, TOPIC);
 
-        verify(trustyService, times(2)).storeDecision(any(String.class), any(Decision.class));
+        verify(trustyService, times(2)).processDecision(any(String.class), any(Decision.class));
     }
 }

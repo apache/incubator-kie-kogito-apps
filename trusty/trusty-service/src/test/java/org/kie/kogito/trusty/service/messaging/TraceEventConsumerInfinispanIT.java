@@ -45,6 +45,8 @@ import static org.kie.kogito.trusty.service.messaging.KafkaUtils.sendToKafkaAndW
 @QuarkusTestResource(TrustyKafkaTestResource.class)
 class TraceEventConsumerInfinispanIT {
 
+    private static final String TOPIC = "trusty-service-test";
+
     @Inject
     TrustyService trustyService;
 
@@ -61,7 +63,7 @@ class TraceEventConsumerInfinispanIT {
 
     @Test
     void testCorrectCloudEvent() throws Exception {
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)), producer);
+        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)), producer, TOPIC);
         Decision storedDecision = trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID);
         assertNotNull(storedDecision);
         TraceEventTestUtils.assertDecision(buildCorrectDecision(CORRECT_CLOUDEVENT_ID), storedDecision);
@@ -69,7 +71,7 @@ class TraceEventConsumerInfinispanIT {
 
     @Test
     void testCloudEventWithErrors() throws Exception {
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildTraceEventWithErrors()), producer);
+        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildTraceEventWithErrors()), producer, TOPIC);
         Decision storedDecision = trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID);
         assertNotNull(storedDecision);
         TraceEventTestUtils.assertDecision(buildDecisionWithErrors(), storedDecision);

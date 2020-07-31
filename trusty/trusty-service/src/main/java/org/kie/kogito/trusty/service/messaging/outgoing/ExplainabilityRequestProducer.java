@@ -17,8 +17,6 @@
 package org.kie.kogito.trusty.service.messaging.outgoing;
 
 import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import javax.enterprise.context.ApplicationScoped;
 
