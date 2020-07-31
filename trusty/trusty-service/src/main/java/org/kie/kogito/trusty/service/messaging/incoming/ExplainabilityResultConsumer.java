@@ -51,7 +51,6 @@ public class ExplainabilityResultConsumer {
     }
 
     @Incoming("trusty-explainability-result")
-    @Blocking
     public CompletionStage<Void> handleMessage(Message<String> message) {
         decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
         return message.ack();
