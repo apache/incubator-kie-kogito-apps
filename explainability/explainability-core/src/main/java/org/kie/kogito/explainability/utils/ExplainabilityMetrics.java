@@ -41,6 +41,8 @@ public class ExplainabilityMetrics {
      */
     private static final double CONFIDENCE_DROP_RATIO = 0.2d;
 
+    private ExplainabilityMetrics() {}
+
     /**
      * Measure the explainability of an explanation.
      * See paper: "Towards Quantification of Explainability in Explainable Artificial Intelligence Methods" by Islam et al.
