@@ -37,7 +37,7 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     private static final TypeReference<CloudEventImpl<TraceEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
     };
 
-    public TraceEventConsumer() {
+    private TraceEventConsumer() {
         //CDI proxy
     }
 

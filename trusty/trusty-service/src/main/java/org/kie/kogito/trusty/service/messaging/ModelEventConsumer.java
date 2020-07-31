@@ -37,7 +37,7 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     private static final TypeReference<CloudEventImpl<ModelEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
     };
 
-    public ModelEventConsumer() {
+    private  ModelEventConsumer() {
         //CDI proxy
     }
 
