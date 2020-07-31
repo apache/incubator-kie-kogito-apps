@@ -17,7 +17,6 @@ package org.kie.kogito.explainability.utils;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -29,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -44,7 +44,7 @@ import org.kie.kogito.explainability.model.Type;
  */
 public class DataUtils {
 
-    private final static SecureRandom random = new SecureRandom();
+    private final static Random random = new Random();
 
     public static void setSeed(long seed) {
         random.setSeed(seed);
