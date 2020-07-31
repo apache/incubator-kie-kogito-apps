@@ -12,10 +12,10 @@ import { SearchIcon, ExclamationCircleIcon } from '@patternfly/react-icons';
 import ExecutionStatus from '../../Atoms/ExecutionStatus/ExecutionStatus';
 import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
 import skeletonRows from '../../../utils/skeletonRows/skeletonRows';
-import { IExecution, IExecutions, RemoteData } from '../../../types';
+import { Execution, Executions, RemoteData } from '../../../types';
 
 type ExecutionTableProps = {
-  data: RemoteData<Error, IExecutions>;
+  data: RemoteData<Error, Executions>;
 };
 
 const ExecutionTable = (props: ExecutionTableProps) => {
@@ -37,7 +37,7 @@ const ExecutionTable = (props: ExecutionTableProps) => {
 
 const prepareRows = (
   columnsNumber: number,
-  data: RemoteData<Error, IExecutions>
+  data: RemoteData<Error, Executions>
 ) => {
   let rows;
   switch (data.status) {
@@ -59,36 +59,33 @@ const prepareRows = (
   return rows;
 };
 
-const prepareExecutionsRows = (rowData: IExecution[]) => {
-  const rows: IRow[] = [];
-
-  rowData.forEach(item => {
-    const row: IRow = {};
-    const cells = [];
-    cells.push({
-      title: (
-        <Link
-          to={`/audit/${item.executionType.toLocaleLowerCase()}/${
-            item.executionId
-          }`}
-        >
-          {'#' + item.executionId.toUpperCase()}
-        </Link>
-      )
-    });
-    cells.push(item.executedModelName);
-    cells.push(item.executorName);
-    cells.push({
-      title: <FormattedDate date={item.executionDate} />
-    });
-    cells.push({
-      title: <ExecutionStatus result={item.executionSucceeded} />
-    });
-    row.cells = cells;
-    row.executionKey = 'key-' + item.executionId;
-    rows.push(row);
-  });
-  return rows;
+const prepareExecutionsRows = (rowData: Execution[]) => {
+  return rowData.map(item => ({
+    executionKey: 'key-' + item.executionId,
+    cells: [
+      {
+        title: (
+          <Link
+            to={`/audit/${item.executionType.toLocaleLowerCase()}/${
+              item.executionId
+            }`}
+          >
+            {'#' + item.executionId.toUpperCase()}
+          </Link>
+        )
+      },
+      item.executedModelName,
+      item.executorName,
+      { title: <FormattedDate date={item.executionDate} /> },
+      {
+        title: (
+          <ExecutionStatus
+            result={item.executionSucceeded ? 'success' : 'failure'}
+          />
+        )
+      }
+    ]
+  }));
 };
 
 const noExecutions = (colSpan: number) => {

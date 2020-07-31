@@ -13,13 +13,7 @@ export const getExecutions = (
   const config: AxiosRequestConfig = {
     url: EXECUTIONS_PATH,
     method: 'get',
-    params: {
-      search: searchString,
-      from,
-      to,
-      limit,
-      offset
-    }
+    params: { search: searchString, from, to, limit, offset }
   };
   return callOnce(config);
 };

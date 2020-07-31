@@ -64,8 +64,16 @@ describe('useExecutions', () => {
 
     // @ts-ignore
     apiMock.mockImplementation(() => Promise.resolve(executionsResponse));
-    // tslint:disable-next-line:react-hooks-nesting
-    const { result } = renderHook(() => useExecutions('', '', '', 10, 0));
+    const { result } = renderHook(() => {
+      // tslint:disable-next-line:react-hooks-nesting
+      return useExecutions({
+        searchString: '',
+        from: '',
+        to: '',
+        limit: 10,
+        offset: 0
+      });
+    });
     expect(result.current.executions).toStrictEqual({ status: 'LOADING' });
 
     await act(async () => {
@@ -92,10 +100,17 @@ describe('useExecutions', () => {
   });
 
   it('returns a loading error when APIs call fails', async () => {
-    // @ts-ignore
     apiMock.mockImplementation(() => Promise.reject('error'));
-    // tslint:disable-next-line:react-hooks-nesting
-    const { result } = renderHook(() => useExecutions('', '', '', 10, 0));
+    const { result } = renderHook(() => {
+      // tslint:disable-next-line:react-hooks-nesting
+      return useExecutions({
+        searchString: '',
+        from: '',
+        to: '',
+        limit: 10,
+        offset: 0
+      });
+    });
     expect(result.current.executions).toStrictEqual({ status: 'LOADING' });
 
     await act(async () => {

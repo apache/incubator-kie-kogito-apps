@@ -1,17 +1,17 @@
 import React from 'react';
 import ExecutionTable from '../ExecutionTable';
 import { shallow } from 'enzyme';
-import { IExecutions, RemoteData } from '../../../../types';
+import { Executions, RemoteData } from '../../../../types';
 
 describe('Execution table', () => {
   test('renders loading skeletons when the data is not yet fetching', () => {
-    const data = { status: 'NOT_ASKED' } as RemoteData<Error, IExecutions>;
+    const data = { status: 'NOT_ASKED' } as RemoteData<Error, Executions>;
     const wrapper = shallow(<ExecutionTable data={data} />);
     expect(wrapper).toMatchSnapshot();
   });
 
   test('renders loading skeletons when the data is loading', () => {
-    const data = { status: 'LOADING' } as RemoteData<Error, IExecutions>;
+    const data = { status: 'LOADING' } as RemoteData<Error, Executions>;
     const wrapper = shallow(<ExecutionTable data={data} />);
     expect(wrapper).toMatchSnapshot();
   });
@@ -20,7 +20,7 @@ describe('Execution table', () => {
     const data = {
       status: 'FAILURE',
       error: { name: '', message: '' }
-    } as RemoteData<Error, IExecutions>;
+    } as RemoteData<Error, Executions>;
     const wrapper = shallow(<ExecutionTable data={data} />);
     expect(wrapper).toMatchSnapshot();
   });
@@ -51,7 +51,7 @@ describe('Execution table', () => {
           }
         ]
       }
-    } as RemoteData<Error, IExecutions>;
+    } as RemoteData<Error, Executions>;
     const wrapper = shallow(<ExecutionTable data={data} />);
 
     expect(wrapper).toMatchSnapshot();
@@ -66,7 +66,7 @@ describe('Execution table', () => {
         offset: 0,
         headers: []
       }
-    } as RemoteData<Error, IExecutions>;
+    } as RemoteData<Error, Executions>;
     const wrapper = shallow(<ExecutionTable data={data} />);
 
     expect(wrapper).toMatchSnapshot();

@@ -25,23 +25,23 @@ const AuditOverview = (props: AuditOverviewProps) => {
   const { dateRangePreset } = props;
   const toPreset = dateRangePreset
     ? dateRangePreset.toDate
-    : formatISO(new Date(), { representation: 'date' });
+    : formatISO(Date.now(), { representation: 'date' });
   const fromPreset = dateRangePreset
     ? dateRangePreset.fromDate
-    : formatISO(sub(new Date(), { months: 1 }), { representation: 'date' });
+    : formatISO(sub(Date.now(), { months: 1 }), { representation: 'date' });
   const [searchString, setSearchString] = useState('');
   const [fromDate, setFromDate] = useState(fromPreset);
   const [toDate, setToDate] = useState(toPreset);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
-  const { loadExecutions, executions } = useExecutions(
+  const { loadExecutions, executions } = useExecutions({
     searchString,
-    fromDate,
-    toDate,
-    pageSize,
-    pageSize * (page - 1)
-  );
+    from: fromDate,
+    to: toDate,
+    limit: pageSize,
+    offset: pageSize * (page - 1)
+  });
 
   useEffect(() => {
     if (executions.status === 'SUCCESS') {

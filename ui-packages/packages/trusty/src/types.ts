@@ -4,7 +4,7 @@ export type RemoteData<E, D> =
   | { status: 'FAILURE'; error: E }
   | { status: 'SUCCESS'; data: D };
 
-export interface IExecution {
+export interface Execution {
   executionId: string;
   executionDate: string;
   executedModelName: string;
@@ -13,7 +13,7 @@ export interface IExecution {
   executorName: string;
 }
 
-export interface IExecutions {
-  headers: IExecution[];
+export interface Executions {
+  headers: Execution[];
   total: number;
 }

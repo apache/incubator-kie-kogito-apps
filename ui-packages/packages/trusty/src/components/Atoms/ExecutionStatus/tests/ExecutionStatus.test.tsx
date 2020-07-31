@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 
 describe('Execution status', () => {
   test('renders a positive outcome', () => {
-    const wrapper = shallow(<ExecutionStatus result={true} />);
+    const wrapper = shallow(<ExecutionStatus result="success" />);
     const icon = wrapper.find('CheckCircleIcon');
 
     expect(wrapper).toMatchSnapshot();
@@ -16,7 +16,7 @@ describe('Execution status', () => {
   });
 
   test('renders a negative outcome', () => {
-    const wrapper = shallow(<ExecutionStatus result={false} />);
+    const wrapper = shallow(<ExecutionStatus result="failure" />);
     const icon = wrapper.find('ErrorCircleOIcon');
 
     expect(wrapper).toMatchSnapshot();

@@ -45,7 +45,7 @@ export const AuditToolbarTop = (props: toolbarBaseProps & topToolbarProps) => {
     onRefresh
   } = props;
 
-  const searchField = useRef<HTMLInputElement>(null);
+  const searchField = useRef<HTMLInputElement>();
   const onSearchSubmit = (): void => {
     if (searchField && searchField.current) {
       setSearchString(searchField.current.value);

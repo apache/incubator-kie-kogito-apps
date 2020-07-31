@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './SkeletonStripe.scss';
 
 type SkeletonStripeProps = {
@@ -9,11 +9,9 @@ type SkeletonStripeProps = {
 
 const SkeletonStripe = (props: SkeletonStripeProps) => {
   const { isInline = false, size = 'sm', customStyle } = props;
-  const stripeDefaultStyle = {};
-  const stripeStyle = customStyle
-    ? Object.assign(customStyle, stripeDefaultStyle)
-    : stripeDefaultStyle;
+  const stripeStyle = useMemo(() => customStyle || {}, [customStyle]);
   let cssClasses = 'skeleton__stripe';
+
   if (isInline) {
     cssClasses += ' skeleton__stripe--inline';
   }

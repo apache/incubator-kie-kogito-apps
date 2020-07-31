@@ -63,18 +63,25 @@ describe('Audit overview', () => {
       mockLoadExecutions,
       executions
     });
+    const fixedDate = '2020-05-01T00:00:00.000Z';
+
+    jest
+      .spyOn(global.Date, 'now')
+      .mockImplementation(() => new Date(fixedDate).getTime());
 
     const wrapper = mount(
       <MemoryRouter>
         <AuditOverview />
       </MemoryRouter>
     );
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    const fromDate = oneMonthAgo.toISOString().substr(0, 10);
-    const toDate = new Date().toISOString().substr(0, 10);
 
-    expect(useExecutions).toHaveBeenCalledWith('', fromDate, toDate, 10, 0);
+    expect(useExecutions).toHaveBeenCalledWith({
+      searchString: '',
+      from: '2020-04-01',
+      to: '2020-05-01',
+      limit: 10,
+      offset: 0
+    });
     expect(wrapper.find('ExecutionTable').props().data).toStrictEqual(
       executions
     );

@@ -1,16 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getExecutions } from '../../../utils/api/auditApi';
 import { isCancelledRequest } from '../../../utils/api/httpClient';
-import { RemoteData, IExecutions } from '../../../types';
+import { RemoteData, Executions } from '../../../types';
 
-const useExecutions = (
-  searchString: string,
-  from: string,
-  to: string,
-  limit: number,
-  offset: number
-) => {
-  const [executions, setExecutions] = useState<RemoteData<Error, IExecutions>>({
+type useExecutionsParameters = {
+  searchString: string;
+  from: string;
+  to: string;
+  limit: number;
+  offset: number;
+};
+
+const useExecutions = (parameters: useExecutionsParameters) => {
+  const { searchString, from, to, limit, offset } = parameters;
+  const [executions, setExecutions] = useState<RemoteData<Error, Executions>>({
     status: 'NOT_ASKED'
   });
 
