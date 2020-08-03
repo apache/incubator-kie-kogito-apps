@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service;
+package org.kie.kogito.messaging.commons;
 
 import java.time.Duration;
 import java.util.Map;
@@ -27,11 +27,11 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 import static java.util.Collections.singletonMap;
 
-public class TrustyKafkaTestResource implements QuarkusTestResourceLifecycleManager {
+public class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
 
     public static final String KAFKA_BOOTSTRAP_SERVERS = "kafka.bootstrap.servers";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrustyKafkaTestResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaTestResource.class);
     private static final KafkaContainer KAFKA = new KafkaContainer()
             .withLogConsumer(new Slf4jLogConsumer(LOGGER))
             .withStartupTimeout(Duration.ofSeconds(120));

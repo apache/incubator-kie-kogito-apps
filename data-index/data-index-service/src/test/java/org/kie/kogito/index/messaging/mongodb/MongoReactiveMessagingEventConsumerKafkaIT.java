@@ -18,8 +18,8 @@ package org.kie.kogito.index.messaging.mongodb;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.kie.kogito.index.KafkaTestResource;
 import org.kie.kogito.index.messaging.AbstractReactiveMessagingEventConsumerKafkaIT;
+import org.kie.kogito.messaging.commons.KafkaTestResource;
 import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 
 import static org.kie.kogito.index.TestUtils.readFileContent;

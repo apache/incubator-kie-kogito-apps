@@ -23,13 +23,15 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.messaging.commons.KafkaTestResource;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
-import org.kie.kogito.trusty.service.TrustyKafkaTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
+import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
@@ -37,12 +39,10 @@ import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectD
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
-import static org.kie.kogito.trusty.service.messaging.KafkaUtils.generateProducer;
-import static org.kie.kogito.trusty.service.messaging.KafkaUtils.sendToKafkaAndWaitForCompletion;
 
 @QuarkusTest
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
-@QuarkusTestResource(TrustyKafkaTestResource.class)
+@QuarkusTestResource(KafkaTestResource.class)
 class TraceEventConsumerInfinispanIT {
 
     private static final String TOPIC = "trusty-service-test";

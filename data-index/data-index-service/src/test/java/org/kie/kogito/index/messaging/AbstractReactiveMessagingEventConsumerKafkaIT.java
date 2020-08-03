@@ -31,7 +31,7 @@ import io.vertx.kafka.client.producer.KafkaProducerRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.KafkaTestResource;
+import org.kie.kogito.messaging.commons.KafkaTestResource;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 import static io.restassured.RestAssured.given;

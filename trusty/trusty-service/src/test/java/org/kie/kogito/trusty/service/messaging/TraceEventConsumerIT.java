@@ -22,14 +22,14 @@ import io.quarkus.test.junit.mockito.InjectMock;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.trusty.service.TrustyKafkaTestResource;
+import org.kie.kogito.messaging.commons.KafkaTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
+import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
+import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
-import static org.kie.kogito.trusty.service.messaging.KafkaUtils.generateProducer;
-import static org.kie.kogito.trusty.service.messaging.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -38,7 +38,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @QuarkusTest
-@QuarkusTestResource(TrustyKafkaTestResource.class)
+@QuarkusTestResource(KafkaTestResource.class)
 public class TraceEventConsumerIT {
 
     private static final String TOPIC = "trusty-service-test";

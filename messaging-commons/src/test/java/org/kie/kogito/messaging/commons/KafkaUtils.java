@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.messaging.commons;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 import io.vertx.core.Vertx;
 import io.vertx.kafka.client.producer.KafkaProducer;
 import io.vertx.kafka.client.producer.KafkaProducerRecord;
-import org.kie.kogito.trusty.service.TrustyKafkaTestResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +50,7 @@ public class KafkaUtils {
 
     public static KafkaProducer<String, String> generateProducer() {
         return KafkaProducer.create(Vertx.vertx(), Map.of(
-                "bootstrap.servers", System.getProperty(TrustyKafkaTestResource.KAFKA_BOOTSTRAP_SERVERS, "localhost:9092"),
+                "bootstrap.servers", System.getProperty(KafkaTestResource.KAFKA_BOOTSTRAP_SERVERS, "localhost:9092"),
                 "key.serializer", "org.apache.kafka.common.serialization.StringSerializer",
                 "value.serializer", "org.apache.kafka.common.serialization.StringSerializer",
                 "acks", "all"
