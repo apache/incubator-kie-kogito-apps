@@ -26,6 +26,8 @@ import {
 import TaskConsoleContext, { DefaultContext } from '../../../../context/TaskConsoleContext/TaskConsoleContext';
 import { TaskInfo } from '../../../../model/TaskInfo';
 
+Date.now = jest.fn(() => 1595109600000); // UTC 2020-07-19 00:00:00
+
 const userTaskInstance: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
   description: null,
