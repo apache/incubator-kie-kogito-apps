@@ -16,7 +16,7 @@
 
 package org.kie.kogito.explainability.rest;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -53,9 +53,9 @@ public class ExplainabilityApiV1 {
     @Operation(summary = "Retrieve the explainability for a given decision.", description = "Retrieve the explainability for a given decision.")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Response> test(ExplainabilityRequestDto request) {
+    public Uni<Response> explain(ExplainabilityRequestDto request) {
 
-        CompletableFuture<Response> result = explanationService.explainAsync(ExplainabilityRequest.from(request))
+        CompletionStage<Response> result = explanationService.explainAsync(ExplainabilityRequest.from(request))
                 .thenApply(x -> Response.ok(x).build());
 
         return Uni.createFrom().completionStage(result);
