@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ExplainabilityRequestDto {
 
     @JsonProperty("executionId")
-    public String executionId;
+    private String executionId;
 
     public ExplainabilityRequestDto(){
 
@@ -31,6 +31,10 @@ public class ExplainabilityRequestDto {
 
     public ExplainabilityRequestDto(String executionId){
         this.executionId = executionId;
+    }
+
+    public String getExecutionId(){
+        return this.executionId;
     }
 
     // TODO: add properties

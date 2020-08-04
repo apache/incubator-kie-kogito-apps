@@ -16,12 +16,12 @@
 
 package org.kie.kogito.explainability;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
 public interface IExplanationService {
 
-    CompletableFuture<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request);
+    CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request);
 }

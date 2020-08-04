@@ -11,7 +11,8 @@ public class ExplainabilityRequest {
     }
 
     public static ExplainabilityRequest from(ExplainabilityRequestDto explainabilityRequestDto) {
-        return new ExplainabilityRequest(explainabilityRequestDto.executionId);
+        // TODO: Update the converter with all the properties in ExplainabilityRequestDto when they will be defined. https://issues.redhat.com/browse/KOGITO-2944
+        return new ExplainabilityRequest(explainabilityRequestDto.getExecutionId());
     }
 
     public String getExecutionId(){

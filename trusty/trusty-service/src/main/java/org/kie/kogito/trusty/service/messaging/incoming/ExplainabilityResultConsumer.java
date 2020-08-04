@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
-import io.smallrye.reactive.messaging.annotations.Blocking;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
@@ -43,12 +42,8 @@ public class ExplainabilityResultConsumer {
     private static final TypeReference<CloudEventImpl<ExplainabilityResultDto>> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
-    private final ITrustyService service;
-
     @Inject
-    public ExplainabilityResultConsumer(ITrustyService service) {
-        this.service = service;
-    }
+    ITrustyService trustyService;
 
     @Incoming("trusty-explainability-result")
     public CompletionStage<Void> handleMessage(Message<String> message) {
@@ -78,7 +73,7 @@ public class ExplainabilityResultConsumer {
 
         ExplainabilityResultDto explainabilityResult = optData.get();
 
-        service.storeExplainability(attributes.getId(), ExplainabilityResult.from(explainabilityResult));
+        trustyService.storeExplainability(attributes.getId(), ExplainabilityResult.from(explainabilityResult));
     }
 }
 

@@ -17,6 +17,7 @@
 package org.kie.kogito.explainability;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -34,7 +35,7 @@ public class ExplanationService implements IExplanationService {
     ManagedExecutor executor;
 
     @Override
-    public CompletableFuture<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
+    public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
         // TODO: get explainability from expl library https://issues.redhat.com/browse/KOGITO-2920
         // LIME_EXPLAINER.explain(prediction, modelProvider);
 

@@ -51,15 +51,12 @@ public class ExplainabilityMessagingHandler {
     private static final TypeReference<CloudEventImpl<ExplainabilityRequestDto>> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
     private final PublishSubject<String> eventSubject = PublishSubject.create();
-    private final IExplanationService service;
 
     @Inject
     ManagedExecutor executor;
 
     @Inject
-    public ExplainabilityMessagingHandler(IExplanationService service) {
-        this.service = service;
-    }
+    IExplanationService explanationService;
 
     // Incoming
     @Incoming("trusty-explainability-request")
@@ -84,7 +81,7 @@ public class ExplainabilityMessagingHandler {
         }
     }
 
-    private CompletableFuture<Void> handleCloudEvent(CloudEventImpl<ExplainabilityRequestDto> cloudEvent) {
+    private CompletionStage<Void> handleCloudEvent(CloudEventImpl<ExplainabilityRequestDto> cloudEvent) {
         AttributesImpl attributes = cloudEvent.getAttributes();
         Optional<ExplainabilityRequestDto> optData = cloudEvent.getData();
 
@@ -97,13 +94,13 @@ public class ExplainabilityMessagingHandler {
 
         ExplainabilityRequestDto explainabilityResult = optData.get();
 
-        return service
+        return explanationService
                 .explainAsync(ExplainabilityRequest.from(explainabilityResult))
                 .thenAcceptAsync(this::sendEvent, executor);
     }
 
     // Outgoing
-    public CompletableFuture<Void> sendEvent(ExplainabilityResultDto result) {
+    public CompletionStage<Void> sendEvent(ExplainabilityResultDto result) {
         LOGGER.info("Explainability service emits explainability for execution with ID " + result.getExecutionId());
         String payload = CloudEventUtils.encode(
                 CloudEventUtils.build(result.getExecutionId(),
