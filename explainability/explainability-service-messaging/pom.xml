@@ -27,7 +27,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-tracing-decision-api</artifactId>
+      <artifactId>tracing-decision-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -44,11 +44,22 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-mockito</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>kafka</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-service</artifactId>
+      <artifactId>messaging-commons</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
     </dependency>
   </dependencies>
-
 
   <build>
     <plugins>
@@ -62,6 +73,29 @@
           <execution>
             <goals>
               <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/Native*IT.java</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default</id>
+            <goals>
+              <goal>integration-test</goal>tracing-decision-api
+            </goals>
+          </execution>
+          <execution>
+            <id>verify</id>
+            <goals>
+              <goal>verify</goal>
             </goals>
           </execution>
         </executions>
