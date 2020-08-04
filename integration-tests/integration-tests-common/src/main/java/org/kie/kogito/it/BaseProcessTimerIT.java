@@ -16,7 +16,19 @@
 package org.kie.kogito.it;
 
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -27,6 +39,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.awaitility.Awaitility.with;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -41,11 +54,31 @@ public abstract class BaseProcessTimerIT {
     }
 
     public static void beforeAll(Supplier<Integer> httpPortSupplier) {
+        httpPort = httpPortSupplier.get();
+        System.setProperty("kogito.service.url",
+                           getHostAddress()
+                                   .map(localAddress -> "http://" + localAddress + ":" + httpPort)
+                                   .orElseThrow());
+    }
+
+    private static Optional<String> getHostAddress() {
         try {
-            httpPort = httpPortSupplier.get();
-            System.setProperty("kogito.service.url", "http://" + InetAddress.getLocalHost().getHostAddress() + ":" + httpPort);
+            return NetworkInterface.networkInterfaces()
+                    .filter(networkInterface -> {
+                        try {
+                            return !networkInterface.isLoopback() && networkInterface.isUp();
+                        } catch (SocketException e) {
+                            return false;
+                        }
+                    })
+                    .map(NetworkInterface::getInterfaceAddresses)
+                    .flatMap(List::stream)
+                    .filter(ia -> Objects.nonNull(ia.getBroadcast()))
+                    .map(InterfaceAddress::getAddress)
+                    .map(InetAddress::getHostAddress)
+                    .findFirst();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new NoSuchElementException(e.getMessage());
         }
     }
 
