@@ -28,9 +28,13 @@ import org.slf4j.LoggerFactory;
 
 public class KafkaUtils {
 
+    public static final String KOGITO_TRACING_TOPIC = "kogito-tracing-test";
+
+    public static final String KOGITO_TRACING_MODEL_TOPIC = "kogito-tracing-model-test";
+
     private static final Logger LOG = LoggerFactory.getLogger(KafkaUtils.class);
 
-    public static CompletableFuture<Void> sendToKafka(String payload, KafkaProducer<String, String> producer, String topic) {
+    public static CompletableFuture<Void> sendToKafka(String topic, String payload, KafkaProducer<String, String> producer) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         producer.write(KafkaProducerRecord.create(topic, payload), event -> {
             if (event.succeeded()) {
@@ -42,8 +46,8 @@ public class KafkaUtils {
         return future;
     }
 
-    public static void sendToKafkaAndWaitForCompletion(String payload, KafkaProducer<String, String> producer, String topic) throws Exception {
-        sendToKafka(payload, producer, topic)
+    public static void sendToKafkaAndWaitForCompletion(String topic, String payload, KafkaProducer<String, String> producer) throws Exception {
+        sendToKafka(topic, payload, producer)
                 .thenRunAsync(() -> LOG.info("Sent payload to Kafka (length: {})", payload.length()), CompletableFuture.delayedExecutor(2L, TimeUnit.SECONDS))
                 .get(15L, TimeUnit.SECONDS);
     }

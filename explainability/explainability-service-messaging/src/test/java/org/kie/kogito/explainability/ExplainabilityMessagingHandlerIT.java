@@ -56,12 +56,12 @@ public class ExplainabilityMessagingHandlerIT {
     }
 
     @Test
-    public void eventLoopIsNotStoppedWithException() throws Exception {
+    public void explainabilityRequestIsProcessed() throws Exception {
         String executionId = "idException";
         ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId);
         when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId)));
 
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(request), producer, TOPIC);
+        sendToKafkaAndWaitForCompletion(TOPIC, buildCloudEventJsonString(request), producer);
 
         verify(explanationService, times(1)).explainAsync(any(ExplainabilityRequest.class));
     }

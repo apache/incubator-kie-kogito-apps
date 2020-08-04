@@ -23,7 +23,8 @@ import io.vertx.kafka.client.producer.KafkaProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.messaging.commons.KafkaTestResource;
-import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.messaging.commons.KafkaUtils;
+import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
@@ -41,10 +42,8 @@ import static org.mockito.Mockito.verify;
 @QuarkusTestResource(KafkaTestResource.class)
 public class TraceEventConsumerIT {
 
-    private static final String TOPIC = "trusty-service-test";
-
     @InjectMock
-    TrustyService trustyService;
+    ITrustyService trustyService;
 
     KafkaProducer<String, String> producer;
 
@@ -60,8 +59,12 @@ public class TraceEventConsumerIT {
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException), any(Decision.class));
         doNothing().when(trustyService).processDecision(eq(executionIdNoException), any(Decision.class));
 
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)), producer, TOPIC);
-        sendToKafkaAndWaitForCompletion(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)), producer, TOPIC);
+        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
+                                        buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)),
+                                        producer);
+        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
+                                        buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)),
+                                        producer);
 
         verify(trustyService, times(2)).processDecision(any(String.class), any(Decision.class));
     }

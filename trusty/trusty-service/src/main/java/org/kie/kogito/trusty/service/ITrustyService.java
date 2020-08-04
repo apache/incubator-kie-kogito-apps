@@ -68,6 +68,12 @@ public interface ITrustyService {
      */
     void updateDecision(String executionId, Decision decision);
 
+    /**
+     * Process a decision. Stores the decision and then send an explainability request if it is enabled.
+     *
+     * @param executionId The execution ID
+     * @param decision    The decision object.
+     */
     void processDecision(String executionId, Decision decision);
 
     /**
@@ -76,4 +82,26 @@ public interface ITrustyService {
      * @param executionId The execution ID.
      */
     void storeExplainability(String executionId, ExplainabilityResult result);
+
+    /**
+     * Stores a Model definition.
+     *
+     * @param groupId    The Maven Group Id coordinate of the model.
+     * @param artifactId The Maven Artifact Id coordinate of the model.
+     * @param version    The Maven version coordinate of the model.
+     * @param name       The name of the model of the model.
+     * @param namespace  The namespace of the model.
+     * @param definition The definition of the model.
+     * @throws IllegalArgumentException Throws IllegalArgumentException in case the model is already present in the system.
+     */
+    void storeModel(String groupId, String artifactId, String version, String name, String namespace, String definition);
+
+    /**
+     * Gets a model by model ID.
+     *
+     * @param modelId The model ID.
+     * @return The model definition.
+     * @throws IllegalArgumentException Throws IllegalArgumentException in case the modelId is not present in the system.
+     */
+    String getModelById(String modelId);
 }

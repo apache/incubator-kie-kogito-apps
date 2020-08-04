@@ -28,25 +28,18 @@ import org.kie.kogito.messaging.commons.KafkaUtils;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
-import org.kie.kogito.trusty.storage.api.model.Decision;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
 import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
 
 @QuarkusTest
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
 @QuarkusTestResource(KafkaTestResource.class)
-class TraceEventConsumerInfinispanIT {
-
-    private static final String TOPIC = "trusty-service-test";
+class ModelEventConsumerInfinispanIT {
 
     @Inject
     ITrustyService trustyService;
@@ -64,21 +57,11 @@ class TraceEventConsumerInfinispanIT {
 
     @Test
     void testCorrectCloudEvent() throws Exception {
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)),
+        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_MODEL_TOPIC,
+                                        buildCloudEventJsonString(buildCorrectModelEvent()),
                                         producer);
-        Decision storedDecision = trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID);
-        assertNotNull(storedDecision);
-        TraceEventTestUtils.assertDecision(buildCorrectDecision(CORRECT_CLOUDEVENT_ID), storedDecision);
-    }
-
-    @Test
-    void testCloudEventWithErrors() throws Exception {
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
-                                        buildCloudEventJsonString(buildTraceEventWithErrors()),
-                                        producer);
-        Decision storedDecision = trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID);
-        assertNotNull(storedDecision);
-        TraceEventTestUtils.assertDecision(buildDecisionWithErrors(), storedDecision);
+        String storedDefinition = trustyService.getModelById("name:namespace");
+        assertNotNull(storedDefinition);
+        assertEquals("definition", storedDefinition);
     }
 }

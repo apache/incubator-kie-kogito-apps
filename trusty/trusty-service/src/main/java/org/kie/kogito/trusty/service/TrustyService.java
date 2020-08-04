@@ -28,6 +28,7 @@ import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
+import org.kie.kogito.trusty.service.messaging.incoming.ModelIdCreator;
 import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -99,5 +100,23 @@ public class TrustyService implements ITrustyService {
     @Override
     public void storeExplainability(String executionId, ExplainabilityResult result) {
         // TODO: Store it https://issues.redhat.com/browse/KOGITO-2945
+    }
+
+    public void storeModel(String groupId, String artifactId, String version, String name, String namespace, String definition) {
+        final String identifier = ModelIdCreator.makeIdentifier(groupId, artifactId, version, name, namespace);
+        final Storage<String, String> storage = storageService.getModelStorage();
+        if (storage.containsKey(identifier)) {
+            throw new IllegalArgumentException(String.format("A model with ID %s is already present in the storage.", identifier));
+        }
+        storage.put(identifier, definition);
+    }
+
+    @Override
+    public String getModelById(String modelId) {
+        final Storage<String, String> storage = storageService.getModelStorage();
+        if (!storage.containsKey(modelId)) {
+            throw new IllegalArgumentException(String.format("A model with ID %s does not exist in the storage.", modelId));
+        }
+        return storage.get(modelId);
     }
 }
