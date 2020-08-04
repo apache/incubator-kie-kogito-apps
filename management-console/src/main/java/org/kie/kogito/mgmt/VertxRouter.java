@@ -38,7 +38,7 @@ public class VertxRouter {
     String authKeycloakUrl;
 
     @Inject
-    @ConfigProperty(name = "kogito.auth.keycloak.client.id", defaultValue = "kogito-quarkus-console")
+    @ConfigProperty(name = "kogito.auth.keycloak.client.id", defaultValue = "kogito-console-quarkus")
     String authKeycloakClientId;
 
     @Inject

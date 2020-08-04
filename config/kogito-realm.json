@@ -744,7 +744,7 @@
       }
     },
     {
-      "clientId": "kogito-console",
+      "clientId": "kogito-console-react",
       "rootUrl": "http://localhost:9000",
       "adminUrl": "http://localhost:9000/",
       "baseUrl": "http://localhost:9000/",
@@ -801,7 +801,7 @@
       ]
     },
     {
-      "clientId": "kogito-quarkus-console",
+      "clientId": "kogito-console-quarkus",
       "rootUrl": "http://localhost:8380",
       "adminUrl": "http://localhost:8380/",
       "baseUrl": "http://localhost:8380/",

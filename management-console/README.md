@@ -251,7 +251,7 @@ To change any of this client configuration access to http://localhost:8280/auth/
 
 ### Starting Kogito Management Console in dev mode
 
-Start the management console at port 8380, (the keycloak client 'kogito-quarkus-console' is configured to use that port )
+Start the management console at port 8380, (the keycloak client 'kogito-console-quarkus' is configured to use that port )
 and enabling auth:
 
 ```
