@@ -92,7 +92,7 @@ public class TrustyService implements ITrustyService {
     public void processDecision(String executionId, Decision decision) {
         storeDecision(executionId, decision);
         // TODO: Create a proper ExplainabilityRequestDto when all the properties will be defined and available. https://issues.redhat.com/browse/KOGITO-2944
-        if (isExplainabilityEnabled) {
+        if (Boolean.TRUE.equals(isExplainabilityEnabled)) {
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(executionId));
         }
     }
