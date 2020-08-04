@@ -31,6 +31,7 @@ import org.infinispan.client.hotrod.Flag;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.Search;
+import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 import org.infinispan.query.dsl.SortOrder;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -89,36 +90,36 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
 
     @Override
     public PublisherBuilder<ScheduledJob> findAll() {
+        Query<ScheduledJob> query = queryFactory.from(ScheduledJob.class)
+                .build();
         return ReactiveStreams
-                .fromIterable(queryFactory.from(ScheduledJob.class)
-                                      .build()
-                                      .list());
+                .fromIterable(query.list());
     }
 
     @Override
     public PublisherBuilder<ScheduledJob> findByStatus(JobStatus... status) {
-        return ReactiveStreams.fromIterable(queryFactory.from(ScheduledJob.class)
-                                                    .having("status")
-                                                    .in(Arrays.stream(status)
-                                                                .map(JobStatus::name)
-                                                                .collect(Collectors.toList()))
-                                                    .build()
-                                                    .list());
+        Query<ScheduledJob> query = queryFactory.from(ScheduledJob.class)
+                .having("status")
+                .in(Arrays.stream(status)
+                            .map(JobStatus::name)
+                            .collect(Collectors.toList()))
+                .build();
+        return ReactiveStreams.fromIterable(query.list());
     }
 
     public PublisherBuilder<ScheduledJob> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to,
                                                                                   JobStatus... status) {
-        return ReactiveStreams.fromIterable(queryFactory.from(ScheduledJob.class)
-                                                    .having("status")
-                                                    .in(Arrays.stream(status)
-                                                                .map(JobStatus::name)
-                                                                .collect(Collectors.toList()))
-                                                    .and()
-                                                    .having("expirationTime")
-                                                    .between(DateUtil.zonedDateTimeToInstant(from),
-                                                             DateUtil.zonedDateTimeToInstant(to))
-                                                    .orderBy("priority", SortOrder.DESC)
-                                                    .build()
-                                                    .list());
+        Query<ScheduledJob> query = queryFactory.from(ScheduledJob.class)
+                .having("status")
+                .in(Arrays.stream(status)
+                            .map(JobStatus::name)
+                            .collect(Collectors.toList()))
+                .and()
+                .having("expirationTime")
+                .between(DateUtil.zonedDateTimeToInstant(from),
+                         DateUtil.zonedDateTimeToInstant(to))
+                .orderBy("priority", SortOrder.DESC)
+                .build();
+        return ReactiveStreams.fromIterable(query.list());
     }
 }
