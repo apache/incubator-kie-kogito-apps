@@ -89,7 +89,7 @@
           <execution>
             <id>default</id>
             <goals>
-              <goal>integration-test</goal>tracing-decision-api
+              <goal>integration-test</goal>
             </goals>
           </execution>
           <execution>
