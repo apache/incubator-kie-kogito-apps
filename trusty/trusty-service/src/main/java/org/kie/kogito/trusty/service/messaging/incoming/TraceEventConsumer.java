@@ -49,7 +49,7 @@ public class TraceEventConsumer {
         this.service = service;
     }
 
-    @Incoming("kogito-tracing")
+    @Incoming("kogito-tracing-decision")
     public CompletionStage<Void> handleMessage(Message<String> message) {
         try {
             decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
