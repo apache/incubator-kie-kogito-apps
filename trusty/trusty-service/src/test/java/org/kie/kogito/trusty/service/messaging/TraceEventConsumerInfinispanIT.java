@@ -20,19 +20,21 @@ import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.kafka.client.producer.KafkaProducer;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
-import org.kie.kogito.messaging.commons.KafkaUtils;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
-import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
@@ -43,10 +45,11 @@ import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEve
 
 @QuarkusTest
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 class TraceEventConsumerInfinispanIT {
 
-    private static final String TOPIC = "trusty-service-test";
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @Inject
     ITrustyService trustyService;
@@ -54,29 +57,37 @@ class TraceEventConsumerInfinispanIT {
     @Inject
     TrustyStorageService trustyStorageService;
 
-    KafkaProducer<String, String> producer;
+    KafkaClient kafkaClient;
 
     @BeforeEach
     public void setup() {
         trustyStorageService.getDecisionsStorage().clear();
-        producer = generateProducer();
+        kafkaClient = new KafkaClient(kafkaBootstrapServers);
     }
 
     @Test
-    void testCorrectCloudEvent() throws Exception {
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)),
-                                        producer);
+    void testCorrectCloudEvent() {
+        kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)),
+                            KafkaConstants.KOGITO_TRACING_TOPIC);
+
+        await()
+                .atMost(5, SECONDS)
+                .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID)));
+
         Decision storedDecision = trustyService.getDecisionById(CORRECT_CLOUDEVENT_ID);
         assertNotNull(storedDecision);
         TraceEventTestUtils.assertDecision(buildCorrectDecision(CORRECT_CLOUDEVENT_ID), storedDecision);
     }
 
     @Test
-    void testCloudEventWithErrors() throws Exception {
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
-                                        buildCloudEventJsonString(buildTraceEventWithErrors()),
-                                        producer);
+    void testCloudEventWithErrors() {
+        kafkaClient.produce(buildCloudEventJsonString(buildTraceEventWithErrors()),
+                            KafkaConstants.KOGITO_TRACING_TOPIC);
+
+        await()
+                .atMost(5, SECONDS)
+                .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID)));
+
         Decision storedDecision = trustyService.getDecisionById(CLOUDEVENT_WITH_ERRORS_ID);
         assertNotNull(storedDecision);
         TraceEventTestUtils.assertDecision(buildDecisionWithErrors(), storedDecision);

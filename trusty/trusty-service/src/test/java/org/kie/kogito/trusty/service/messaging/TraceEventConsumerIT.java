@@ -19,53 +19,50 @@ package org.kie.kogito.trusty.service.messaging;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import io.vertx.kafka.client.producer.KafkaProducer;
-import org.junit.jupiter.api.BeforeEach;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
-import org.kie.kogito.messaging.commons.KafkaUtils;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
-import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
-import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @QuarkusTest
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class TraceEventConsumerIT {
+
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @InjectMock
     ITrustyService trustyService;
 
-    KafkaProducer<String, String> producer;
-
-    @BeforeEach
-    public void setup() {
-        producer = generateProducer();
-    }
+    KafkaClient kafkaClient;
 
     @Test
-    public void eventLoopIsNotStoppedWithException() throws Exception {
+    public void eventLoopIsNotStoppedWithException() {
+        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+
         String executionIdException = "idException";
         String executionIdNoException = "idNoException";
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException), any(Decision.class));
         doNothing().when(trustyService).processDecision(eq(executionIdNoException), any(Decision.class));
 
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)),
-                                        producer);
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)),
-                                        producer);
+        kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)),
+                            KafkaConstants.KOGITO_TRACING_TOPIC);
 
-        verify(trustyService, times(2)).processDecision(any(String.class), any(Decision.class));
+        kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)),
+                            KafkaConstants.KOGITO_TRACING_TOPIC);
+
+        verify(trustyService, timeout(3000).times(2)).processDecision(any(String.class), any(Decision.class));
     }
 }

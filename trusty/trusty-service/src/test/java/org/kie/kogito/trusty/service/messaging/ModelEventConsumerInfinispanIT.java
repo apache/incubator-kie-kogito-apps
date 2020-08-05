@@ -20,26 +20,30 @@ import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.kafka.client.producer.KafkaProducer;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
-import org.kie.kogito.messaging.commons.KafkaUtils;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
-import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
 
 @QuarkusTest
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 class ModelEventConsumerInfinispanIT {
+
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @Inject
     ITrustyService trustyService;
@@ -47,19 +51,23 @@ class ModelEventConsumerInfinispanIT {
     @Inject
     TrustyStorageService trustyStorageService;
 
-    KafkaProducer<String, String> producer;
+    KafkaClient kafkaClient;
 
     @BeforeEach
     public void setup() {
-        trustyStorageService.getDecisionsStorage().clear();
-        producer = generateProducer();
+        trustyStorageService.getModelStorage().clear();
     }
 
     @Test
-    void testCorrectCloudEvent() throws Exception {
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_MODEL_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectModelEvent()),
-                                        producer);
+    void testCorrectCloudEvent() {
+        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+
+        kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
+                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+        await()
+                .atMost(5, SECONDS)
+                .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getModelById("name:namespace")));
+
         String storedDefinition = trustyService.getModelById("name:namespace");
         assertNotNull(storedDefinition);
         assertEquals("definition", storedDefinition);

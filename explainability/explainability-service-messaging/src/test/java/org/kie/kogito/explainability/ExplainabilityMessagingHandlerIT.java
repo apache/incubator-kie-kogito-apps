@@ -23,47 +23,44 @@ import io.cloudevents.v1.CloudEventImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import io.vertx.kafka.client.producer.KafkaProducer;
-import org.junit.jupiter.api.BeforeEach;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 
-import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
-import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class ExplainabilityMessagingHandlerIT {
 
     private static final String TOPIC = "trusty-explainability-request-test";
 
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
+
     @InjectMock
     IExplanationService explanationService;
 
-    KafkaProducer<String, String> producer;
-
-    @BeforeEach
-    public void setup() {
-        producer = generateProducer();
-    }
-
     @Test
     public void explainabilityRequestIsProcessed() throws Exception {
+        KafkaClient kafkaClient = new KafkaClient(kafkaBootstrapServers);
+
         String executionId = "idException";
         ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId);
         when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId)));
 
-        sendToKafkaAndWaitForCompletion(TOPIC, buildCloudEventJsonString(request), producer);
+        kafkaClient.produce(buildCloudEventJsonString(request), TOPIC);
 
-        verify(explanationService, times(1)).explainAsync(any(ExplainabilityRequest.class));
+        verify(explanationService, timeout(1000).times(1)).explainAsync(any(ExplainabilityRequest.class));
     }
 
     private CloudEventImpl<ExplainabilityRequestDto> buildCloudEvent(ExplainabilityRequestDto request) {

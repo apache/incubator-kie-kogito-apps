@@ -19,50 +19,46 @@ package org.kie.kogito.trusty.service.messaging;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import io.vertx.kafka.client.producer.KafkaProducer;
-import org.junit.jupiter.api.BeforeEach;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
-import org.kie.kogito.messaging.commons.KafkaUtils;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.ITrustyService;
 
-import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
-import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @QuarkusTest
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class ModelEventConsumerIT {
+
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @InjectMock
     ITrustyService trustyService;
 
-    KafkaProducer<String, String> producer;
-
-    @BeforeEach
-    public void setup() {
-        producer = generateProducer();
-    }
+    KafkaClient kafkaClient;
 
     @Test
-    public void eventLoopIsNotStoppedWithException() throws Exception {
+    public void eventLoopIsNotStoppedWithException() {
+        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+
         doThrow(new RuntimeException("Something really bad"))
                 .when(trustyService)
                 .storeModel(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
 
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_MODEL_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectModelEvent()),
-                                        producer);
-        sendToKafkaAndWaitForCompletion(KafkaUtils.KOGITO_TRACING_MODEL_TOPIC,
-                                        buildCloudEventJsonString(buildCorrectModelEvent()),
-                                        producer);
+        kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
+                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+        kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
+                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
 
-        verify(trustyService, times(2))
+        verify(trustyService, timeout(3000).times(2))
                 .storeModel(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
     }
 }

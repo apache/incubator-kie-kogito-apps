@@ -20,13 +20,13 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.kie.kogito.index.DataIndexInfinispanServerTestResource;
 import org.kie.kogito.index.messaging.AbstractReactiveMessagingEventConsumerKafkaIT;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
 import static org.kie.kogito.index.TestUtils.getTravelsProtoBufferFile;
 
 @QuarkusTest
 @QuarkusTestResource(DataIndexInfinispanServerTestResource.class)
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 class InfinispanReactiveMessagingEventConsumerKafkaIT extends AbstractReactiveMessagingEventConsumerKafkaIT {
 
     @Override

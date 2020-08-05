@@ -22,48 +22,45 @@ import io.cloudevents.v1.CloudEventImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-import io.vertx.kafka.client.producer.KafkaProducer;
-import org.junit.jupiter.api.BeforeEach;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.messaging.commons.KafkaTestResource;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
-import static org.kie.kogito.messaging.commons.KafkaUtils.generateProducer;
-import static org.kie.kogito.messaging.commons.KafkaUtils.sendToKafkaAndWaitForCompletion;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @QuarkusTest
-@QuarkusTestResource(KafkaTestResource.class)
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class ExplainabilityResultConsumerIT {
 
-    private static final String TOPIC = "trusty-explainability-result-test";
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @InjectMock
     ITrustyService trustyService;
 
-    KafkaProducer<String, String> producer;
-
-    @BeforeEach
-    public void setup() {
-        producer = generateProducer();
-    }
+    KafkaClient kafkaClient;
 
     @Test
-    public void explainabilityResultIsProcessedAndStored() throws Exception {
+    public void explainabilityResultIsProcessedAndStored() {
+        kafkaClient = new KafkaClient(kafkaBootstrapServers);
         String executionId = "executionId";
 
         doNothing().when(trustyService).storeExplainability(eq(executionId), any(ExplainabilityResult.class));
 
-        sendToKafkaAndWaitForCompletion(TOPIC, buildCloudEventJsonString(new ExplainabilityResultDto(executionId)), producer);
+        kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId)),
+                                        KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
 
-        verify(trustyService, times(1)).storeExplainability(any(String.class), any(ExplainabilityResult.class));
+        verify(trustyService, timeout(3000).times(1)).storeExplainability(any(String.class), any(ExplainabilityResult.class));
     }
 
     public static CloudEventImpl<ExplainabilityResultDto> buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
