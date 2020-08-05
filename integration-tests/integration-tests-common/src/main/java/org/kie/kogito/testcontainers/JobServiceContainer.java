@@ -39,6 +39,7 @@ public class JobServiceContainer extends GenericContainer<JobServiceContainer> i
 
     public JobServiceContainer() {
         addExposedPort(PORT);
+        withNetworkMode("bridge");
         withLogConsumer(new Slf4jLogConsumer(LOGGER));
         waitingFor(Wait.forLogMessage(".*Listening on:.*", 1));
         setDockerImageName(getImageName());
