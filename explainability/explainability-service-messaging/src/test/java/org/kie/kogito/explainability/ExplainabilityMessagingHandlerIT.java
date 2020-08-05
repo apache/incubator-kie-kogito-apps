@@ -18,7 +18,13 @@ package org.kie.kogito.explainability;
 
 import java.net.URI;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.v1.CloudEventImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -31,7 +37,12 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
+import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
@@ -42,7 +53,10 @@ import static org.mockito.Mockito.when;
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class ExplainabilityMessagingHandlerIT {
 
-    private static final String TOPIC = "trusty-explainability-request-test";
+    private static Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMessagingHandlerIT.class);
+
+    private static final String TOPIC_REQUEST = "trusty-explainability-request-test";
+    private static final String TOPIC_RESULT = "trusty-explainability-result-test";
 
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     private String kafkaBootstrapServers;
@@ -50,17 +64,37 @@ public class ExplainabilityMessagingHandlerIT {
     @InjectMock
     IExplanationService explanationService;
 
+    @Inject
+    private ObjectMapper objectMapper;
+
     @Test
-    public void explainabilityRequestIsProcessed() throws Exception {
+    public void explainabilityRequestIsProcessedAndAResultMessageIsSent() throws Exception {
         KafkaClient kafkaClient = new KafkaClient(kafkaBootstrapServers);
 
         String executionId = "idException";
         ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId);
         when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId)));
 
-        kafkaClient.produce(buildCloudEventJsonString(request), TOPIC);
+        kafkaClient.produce(buildCloudEventJsonString(request), TOPIC_REQUEST);
 
         verify(explanationService, timeout(1000).times(1)).explainAsync(any(ExplainabilityRequest.class));
+
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
+
+        kafkaClient.consume(TOPIC_RESULT,  s -> {
+            LOGGER.info("Received from kafka: {}", s);
+            try {
+                ExplainabilityResultDto event = objectMapper.readValue(s, ExplainabilityResultDto.class);
+                assertNotNull(event);
+                countDownLatch.countDown();
+            } catch (JsonProcessingException e) {
+                LOGGER.error("Error parsing {}", s, e);
+                throw new RuntimeException(e);
+            }
+        });
+
+        countDownLatch.await(5, TimeUnit.SECONDS);
+        assertEquals(countDownLatch.getCount(), 0);
     }
 
     private CloudEventImpl<ExplainabilityRequestDto> buildCloudEvent(ExplainabilityRequestDto request) {
