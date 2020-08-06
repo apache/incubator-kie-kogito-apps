@@ -17,10 +17,7 @@
   <description>Processes and common classes for integration tests</description>
 
   <properties>
-    <sonar.exclusions>
-      **/it/**,
-      **/test**
-    </sonar.exclusions>
+    <sonar.exclusions>**/it/*.java,**/testcontainers/*.java</sonar.exclusions>
   </properties>
 
   <dependencies>
