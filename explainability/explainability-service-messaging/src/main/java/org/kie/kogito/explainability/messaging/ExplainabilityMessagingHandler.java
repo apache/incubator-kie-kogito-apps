@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -52,24 +53,38 @@ public class ExplainabilityMessagingHandler {
     };
     private final PublishSubject<String> eventSubject = PublishSubject.create();
 
-    @Inject
-    ManagedExecutor executor;
+    Executor executor;
 
     @Inject
     IExplanationService explanationService;
 
+    @Inject
+    public ExplainabilityMessagingHandler(ManagedExecutor executor){
+        this.executor = executor;
+    }
+
+    public ExplainabilityMessagingHandler(IExplanationService explanationService, Executor executor) {
+        this.explanationService = explanationService;
+        this.executor = executor;
+    }
+
     // Incoming
     @Incoming("trusty-explainability-request")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        Optional<CloudEventImpl<ExplainabilityRequestDto>> cloudEventOpt = decodeCloudEvent(message.getPayload());
-        if (!cloudEventOpt.isPresent()) {
-            return message.ack();
-        }
+        try {
+            Optional<CloudEventImpl<ExplainabilityRequestDto>> cloudEventOpt = decodeCloudEvent(message.getPayload());
+            if (!cloudEventOpt.isPresent()) {
+                return message.ack();
+            }
 
-        CloudEventImpl<ExplainabilityRequestDto> cloudEvent = cloudEventOpt.get();
-        return CompletableFuture
-                .supplyAsync(() -> handleCloudEvent(cloudEvent), executor)
-                .thenAccept(x -> message.ack());
+            CloudEventImpl<ExplainabilityRequestDto> cloudEvent = cloudEventOpt.get();
+            return CompletableFuture
+                    .supplyAsync(() -> handleCloudEvent(cloudEvent), executor)
+                    .thenAccept(x -> message.ack());
+        } catch (Exception e) {
+            LOGGER.error("Something unexpected happened during the processing of an Event. The event is discarded.", e);
+        }
+        return message.ack();
     }
 
     private Optional<CloudEventImpl<ExplainabilityRequestDto>> decodeCloudEvent(String payload) {
@@ -101,7 +116,7 @@ public class ExplainabilityMessagingHandler {
 
     // Outgoing
     public CompletionStage<Void> sendEvent(ExplainabilityResultDto result) {
-        LOGGER.info("Explainability service emits explainability for execution with ID " + result.getExecutionId());
+        LOGGER.info(String.format("Explainability service emits explainability for execution with ID %s", result.getExecutionId()));
         String payload = CloudEventUtils.encode(
                 CloudEventUtils.build(result.getExecutionId(),
                                       URI_PRODUCER,

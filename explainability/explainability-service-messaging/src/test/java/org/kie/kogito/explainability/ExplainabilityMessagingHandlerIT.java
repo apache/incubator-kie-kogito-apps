@@ -16,7 +16,6 @@
 
 package org.kie.kogito.explainability;
 
-import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +24,6 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cloudevents.v1.CloudEventImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -36,7 +34,6 @@ import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +70,7 @@ public class ExplainabilityMessagingHandlerIT {
         ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId);
         when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId)));
 
-        kafkaClient.produce(buildCloudEventJsonString(request), TOPIC_REQUEST);
+        kafkaClient.produce(ExplainabilityCloudEventBuilder.buildCloudEventJsonString(request), TOPIC_REQUEST);
 
         verify(explanationService, timeout(1000).times(1)).explainAsync(any(ExplainabilityRequest.class));
 
@@ -94,18 +91,4 @@ public class ExplainabilityMessagingHandlerIT {
         countDownLatch.await(5, TimeUnit.SECONDS);
         assertEquals(countDownLatch.getCount(), 0);
     }
-
-    private CloudEventImpl<ExplainabilityRequestDto> buildCloudEvent(ExplainabilityRequestDto request) {
-        return CloudEventUtils.build(
-                request.getExecutionId(),
-                URI.create("trustyService/test"),
-                request,
-                ExplainabilityRequestDto.class
-        );
-    }
-
-    public String buildCloudEventJsonString(ExplainabilityRequestDto request) {
-        return CloudEventUtils.encode(buildCloudEvent(request));
-    }
-
 }

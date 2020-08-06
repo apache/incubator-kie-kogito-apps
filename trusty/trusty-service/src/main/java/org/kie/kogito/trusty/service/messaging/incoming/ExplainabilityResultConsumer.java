@@ -29,38 +29,43 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
+import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class ExplainabilityResultConsumer {
+public class ExplainabilityResultConsumer extends BaseEventConsumer<ExplainabilityResultDto> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
 
     private static final TypeReference<CloudEventImpl<ExplainabilityResultDto>> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
-    @Inject
-    ITrustyService trustyService;
+    private ExplainabilityResultConsumer() {
+        //CDI proxy
+    }
 
+    @Inject
+    public ExplainabilityResultConsumer(ITrustyService service) {
+        super(service);
+    }
+
+    @Override
     @Incoming("trusty-explainability-result")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        decodeCloudEvent(message.getPayload()).ifPresent(this::handleCloudEvent);
-        return message.ack();
+        return super.handleMessage(message);
     }
 
-    private Optional<CloudEventImpl<ExplainabilityResultDto>> decodeCloudEvent(String payload) {
-        try {
-            return Optional.of(CloudEventUtils.decode(payload, CLOUD_EVENT_TYPE));
-        } catch (IllegalStateException e) {
-            LOGGER.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
-            return Optional.empty();
-        }
+    @Override
+    protected TypeReference<CloudEventImpl<ExplainabilityResultDto>> getCloudEventType() {
+        return CLOUD_EVENT_TYPE;
     }
 
-    private void handleCloudEvent(CloudEventImpl<ExplainabilityResultDto> cloudEvent) {
+    @Override
+    protected void handleCloudEvent(CloudEventImpl<ExplainabilityResultDto> cloudEvent) {
         AttributesImpl attributes = cloudEvent.getAttributes();
         Optional<ExplainabilityResultDto> optData = cloudEvent.getData();
 
@@ -73,7 +78,7 @@ public class ExplainabilityResultConsumer {
 
         ExplainabilityResultDto explainabilityResult = optData.get();
 
-        trustyService.storeExplainability(attributes.getId(), ExplainabilityResult.from(explainabilityResult));
+        service.storeExplainability(attributes.getId(), ExplainabilityResult.from(explainabilityResult));
     }
 }
 
