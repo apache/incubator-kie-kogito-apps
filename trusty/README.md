@@ -6,7 +6,7 @@ Within the TrustyAI initiative, the trusty service is the main service that aims
 
 The architecture looks like the following: 
 
-![trusty_architecture](https://user-images.githubusercontent.com/18282531/88435474-8c75ac80-ce02-11ea-973c-41d578e0595d.png)
+![trusty-architecture_enterprise](https://user-images.githubusercontent.com/18282531/89585961-167c3700-d83f-11ea-8fdc-ab840442bb62.png)
 
 In particular we have: 
 1) A kogito-runtime application with the `tracing` addon activated.
@@ -52,7 +52,6 @@ Enviroment variables can be used to set the information needed to connect to kaf
 ```bash
 export KAFKA_BOOTSTRAP_SERVERS=localhost:9092
 export QUARKUS_INFINISPAN_CLIENT_SERVER_LIST=localhost:11222
-export KAFKA_BOOTSTRAP_SERVERS=localhost:9092
 export QUARKUS_INFINISPAN_CLIENT_AUTH_USERNAME=myuser
 export QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD=mypassword
 ```
@@ -61,9 +60,9 @@ export QUARKUS_INFINISPAN_CLIENT_AUTH_PASSWORD=mypassword
 
 The explainability service provides local and global explaination. 
 - The local explaination aims to find the most relevant features that contributed to take that particular decision. In order to do that, the explainability service interacts with the kogito-runtime application to re-execute the decision with perturbed features. At the moment, the communication between explainability service and the kogito application is performed via HTTP calls. 
-- The global explainability aims to provide.. TODO. 
+- The global explainability is still under development. 
 
-As a consequence, the dependencies of the explainability service are kafka and the availability of the kogito application. 
+As a consequence, the dependencies of the explainability service are Kafka and the availability of the kogito application. 
 
 ## An example project
 
