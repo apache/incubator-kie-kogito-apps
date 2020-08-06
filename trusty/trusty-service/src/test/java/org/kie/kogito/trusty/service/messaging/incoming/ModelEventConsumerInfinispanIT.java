@@ -14,50 +14,62 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
+
+import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
 
 @QuarkusTest
+@QuarkusTestResource(TrustyInfinispanServerTestResource.class)
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
-public class ModelEventConsumerIT {
+class ModelEventConsumerInfinispanIT {
 
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     private String kafkaBootstrapServers;
 
-    @InjectMock
+    @Inject
     TrustyService trustyService;
+
+    @Inject
+    TrustyStorageService trustyStorageService;
 
     KafkaClient kafkaClient;
 
+    @BeforeEach
+    public void setup() {
+        trustyStorageService.getModelStorage().clear();
+    }
+
     @Test
-    public void eventLoopIsNotStoppedWithException() {
+    void testCorrectCloudEvent() {
         kafkaClient = new KafkaClient(kafkaBootstrapServers);
 
-        doThrow(new RuntimeException("Something really bad"))
-                .when(trustyService)
-                .storeModel(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
-
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
                             KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
-        kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
-                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+        await()
+                .atMost(5, SECONDS)
+                .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getModelById("name:namespace")));
 
-        verify(trustyService, timeout(3000).times(2))
-                .storeModel(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
+        String storedDefinition = trustyService.getModelById("name:namespace");
+        assertNotNull(storedDefinition);
+        assertEquals("definition", storedDefinition);
     }
 }

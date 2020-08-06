@@ -14,30 +14,32 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
+import java.net.URI;
+
+import io.cloudevents.v1.CloudEventImpl;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.service.TrustyService;
-import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
-public class TraceEventConsumerIT {
+public class ExplainabilityResultConsumerIT {
 
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     private String kafkaBootstrapServers;
@@ -48,20 +50,28 @@ public class TraceEventConsumerIT {
     KafkaClient kafkaClient;
 
     @Test
-    public void eventLoopIsNotStoppedWithException() {
+    public void explainabilityResultIsProcessedAndStored() {
         kafkaClient = new KafkaClient(kafkaBootstrapServers);
+        String executionId = "executionId";
 
-        String executionIdException = "idException";
-        String executionIdNoException = "idNoException";
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException), any(Decision.class));
-        doNothing().when(trustyService).processDecision(eq(executionIdNoException), any(Decision.class));
+        doNothing().when(trustyService).storeExplainability(eq(executionId), any(ExplainabilityResult.class));
 
-        kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)),
-                            KafkaConstants.KOGITO_TRACING_TOPIC);
+        kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId)),
+                                        KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
 
-        kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)),
-                            KafkaConstants.KOGITO_TRACING_TOPIC);
+        verify(trustyService, timeout(3000).times(1)).storeExplainability(any(String.class), any(ExplainabilityResult.class));
+    }
 
-        verify(trustyService, timeout(3000).times(2)).processDecision(any(String.class), any(Decision.class));
+    public static CloudEventImpl<ExplainabilityResultDto> buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
+        return CloudEventUtils.build(
+                resultDto.getExecutionId(),
+                URI.create("explainabilityResult/test"),
+                resultDto,
+                ExplainabilityResultDto.class
+        );
+    }
+
+    public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
+        return CloudEventUtils.encode(buildExplainabilityCloudEvent(resultDto));
     }
 }

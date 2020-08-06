@@ -14,11 +14,10 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
-import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConverter;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;

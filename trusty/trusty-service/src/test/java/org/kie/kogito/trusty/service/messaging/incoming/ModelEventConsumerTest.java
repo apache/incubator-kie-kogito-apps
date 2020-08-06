@@ -14,19 +14,19 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyService;
-import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventWithoutDataJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithNullType;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,20 +36,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class TraceEventConsumerTest {
+class ModelEventConsumerTest {
 
     private TrustyService trustyService;
-    private TraceEventConsumer consumer;
+    private ModelEventConsumer consumer;
 
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new TraceEventConsumer(trustyService);
+        consumer = new ModelEventConsumer(trustyService);
     }
 
     @Test
     void testCorrectCloudEvent() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)));
+        Message<String> message = mockMessage(buildCloudEventJsonString(buildCorrectModelEvent()));
         testNumberOfInvocations(message, 1);
     }
 
@@ -85,9 +85,10 @@ class TraceEventConsumerTest {
         return message;
     }
 
-    private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) {
+    private void testNumberOfInvocations(final Message<String> message,
+                                         final int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
-        verify(trustyService, times(wantedNumberOfServiceInvocations)).processDecision(any(), any());
+        verify(trustyService, times(wantedNumberOfServiceInvocations)).storeModel(any(), any(), any(), any(), any(), any());
         verify(message, times(1)).ack();
     }
 }

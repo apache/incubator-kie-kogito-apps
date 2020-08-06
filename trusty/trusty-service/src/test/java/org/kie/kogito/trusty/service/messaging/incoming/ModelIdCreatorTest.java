@@ -14,14 +14,13 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.kie.kogito.trusty.service.messaging.incoming.ModelIdCreator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

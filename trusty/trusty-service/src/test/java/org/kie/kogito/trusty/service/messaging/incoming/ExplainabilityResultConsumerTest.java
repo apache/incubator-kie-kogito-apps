@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.net.URI;
 
@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.service.TrustyService;
-import org.kie.kogito.trusty.service.messaging.incoming.ExplainabilityResultConsumer;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
 import static org.mockito.ArgumentMatchers.any;

@@ -102,6 +102,7 @@ public class TrustyServiceImpl implements TrustyService {
         // TODO: Store it https://issues.redhat.com/browse/KOGITO-2945
     }
 
+    @Override
     public void storeModel(String groupId, String artifactId, String version, String name, String namespace, String definition) {
         final String identifier = ModelIdCreator.makeIdentifier(groupId, artifactId, version, name, namespace);
         final Storage<String, String> storage = storageService.getModelStorage();

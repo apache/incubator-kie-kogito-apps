@@ -14,10 +14,9 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.trusty.service.messaging.incoming.ModelEventConverter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;

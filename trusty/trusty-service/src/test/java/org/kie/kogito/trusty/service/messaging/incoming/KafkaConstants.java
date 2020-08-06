@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.messaging;
+package org.kie.kogito.trusty.service.messaging.incoming;
 
 public class KafkaConstants {
     public static final String KOGITO_TRACING_TOPIC = "kogito-tracing-test";
