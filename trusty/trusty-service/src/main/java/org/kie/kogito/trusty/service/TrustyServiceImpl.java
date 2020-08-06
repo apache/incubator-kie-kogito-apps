@@ -36,7 +36,7 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
 @ApplicationScoped
-public class TrustyServiceImpl implements ITrustyService {
+public class TrustyServiceImpl implements TrustyService {
 
     @ConfigProperty(name = "trusty.explainability.enabled")
     Boolean isExplainabilityEnabled;

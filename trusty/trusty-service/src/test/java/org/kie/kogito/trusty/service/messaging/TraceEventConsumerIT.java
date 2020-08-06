@@ -20,11 +20,10 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
@@ -44,7 +43,7 @@ public class TraceEventConsumerIT {
     private String kafkaBootstrapServers;
 
     @InjectMock
-    ITrustyService trustyService;
+    TrustyService trustyService;
 
     KafkaClient kafkaClient;
 

@@ -34,7 +34,7 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
-import org.kie.kogito.explainability.IExplanationService;
+import org.kie.kogito.explainability.ExplanationService;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
@@ -55,15 +55,15 @@ public class ExplainabilityMessagingHandler {
 
     private Executor executor;
 
-    private IExplanationService explanationService;
+    private ExplanationService explanationService;
 
     @Inject
-    public ExplainabilityMessagingHandler(IExplanationService explanationService, ManagedExecutor executor) {
+    public ExplainabilityMessagingHandler(ExplanationService explanationService, ManagedExecutor executor) {
         this.explanationService = explanationService;
         this.executor = executor;
     }
 
-    public ExplainabilityMessagingHandler(IExplanationService explanationService, Executor executor) {
+    public ExplainabilityMessagingHandler(ExplanationService explanationService, Executor executor) {
         this.explanationService = explanationService;
         this.executor = executor;
     }

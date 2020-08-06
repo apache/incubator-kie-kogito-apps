@@ -28,7 +28,7 @@ import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +45,7 @@ public class ExplainabilityResultConsumerIT {
     private String kafkaBootstrapServers;
 
     @InjectMock
-    ITrustyService trustyService;
+    TrustyService trustyService;
 
     KafkaClient kafkaClient;
 

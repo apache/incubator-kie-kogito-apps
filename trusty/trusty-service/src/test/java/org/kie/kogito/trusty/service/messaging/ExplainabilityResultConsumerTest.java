@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.incoming.ExplainabilityResultConsumer;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
@@ -39,12 +39,12 @@ import static org.mockito.Mockito.when;
 
 public class ExplainabilityResultConsumerTest {
 
-    private ITrustyService trustyService;
+    private TrustyService trustyService;
     private ExplainabilityResultConsumer consumer;
 
     @BeforeEach
     void setup() {
-        trustyService = mock(ITrustyService.class);
+        trustyService = mock(TrustyService.class);
         consumer = new ExplainabilityResultConsumer(trustyService);
     }
 

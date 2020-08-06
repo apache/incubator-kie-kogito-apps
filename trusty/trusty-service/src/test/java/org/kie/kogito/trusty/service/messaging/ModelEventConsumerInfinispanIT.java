@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 
@@ -46,7 +46,7 @@ class ModelEventConsumerInfinispanIT {
     private String kafkaBootstrapServers;
 
     @Inject
-    ITrustyService trustyService;
+    TrustyService trustyService;
 
     @Inject
     TrustyStorageService trustyStorageService;

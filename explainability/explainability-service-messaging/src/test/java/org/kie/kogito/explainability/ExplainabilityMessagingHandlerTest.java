@@ -37,12 +37,12 @@ import static org.mockito.Mockito.when;
 
 public class ExplainabilityMessagingHandlerTest {
 
-    private IExplanationService explanationService;
+    private ExplanationService explanationService;
     private ExplainabilityMessagingHandler handler;
 
     @BeforeEach
     void setup() {
-        explanationService = mock(IExplanationService.class);
+        explanationService = mock(ExplanationService.class);
         handler = new ExplainabilityMessagingHandler(explanationService, Executors.newFixedThreadPool(2));
     }
 

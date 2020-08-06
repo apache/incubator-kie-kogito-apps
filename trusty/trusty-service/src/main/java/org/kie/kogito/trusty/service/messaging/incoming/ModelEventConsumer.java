@@ -29,7 +29,7 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelType;
 import org.kie.kogito.tracing.decision.event.model.ModelEvent;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 
 @ApplicationScoped
@@ -43,7 +43,7 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     }
 
     @Inject
-    public ModelEventConsumer(final ITrustyService service) {
+    public ModelEventConsumer(final TrustyService service) {
         super(service);
     }
 

@@ -20,7 +20,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.incoming.TraceEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
@@ -38,12 +38,12 @@ import static org.mockito.Mockito.when;
 
 class TraceEventConsumerTest {
 
-    private ITrustyService trustyService;
+    private TrustyService trustyService;
     private TraceEventConsumer consumer;
 
     @BeforeEach
     void setup() {
-        trustyService = mock(ITrustyService.class);
+        trustyService = mock(TrustyService.class);
         consumer = new TraceEventConsumer(trustyService);
     }
 

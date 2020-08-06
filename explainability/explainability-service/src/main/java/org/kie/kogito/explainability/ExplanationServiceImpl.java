@@ -27,7 +27,7 @@ import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
 @ApplicationScoped
-public class ExplanationServiceImpl implements IExplanationService {
+public class ExplanationServiceImpl implements ExplanationService {
 
     @Inject
     ManagedExecutor executor;

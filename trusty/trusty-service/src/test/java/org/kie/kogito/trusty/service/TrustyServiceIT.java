@@ -37,7 +37,7 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 public class TrustyServiceIT {
 
     @Inject
-    ITrustyService trustyService;
+    TrustyService trustyService;
 
     @Inject
     TrustyStorageService trustyStorageService;

@@ -53,7 +53,7 @@ public class ExplainabilityMessagingHandlerIT {
     private static Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMessagingHandlerIT.class);
 
     @InjectMock
-    IExplanationService explanationService;
+    ExplanationService explanationService;
 
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     private String kafkaBootstrapServers;

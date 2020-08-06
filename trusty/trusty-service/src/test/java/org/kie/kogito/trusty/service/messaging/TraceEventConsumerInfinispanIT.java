@@ -21,12 +21,11 @@ import javax.inject.Inject;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.TrustyInfinispanServerTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -52,7 +51,7 @@ class TraceEventConsumerInfinispanIT {
     private String kafkaBootstrapServers;
 
     @Inject
-    ITrustyService trustyService;
+    TrustyService trustyService;
 
     @Inject
     TrustyStorageService trustyStorageService;

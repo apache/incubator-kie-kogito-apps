@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 public class TrustyServiceTest {
 
     private TrustyStorageService trustyStorageServiceMock;
-    private ITrustyService trustyService;
+    private TrustyService trustyService;
 
     @BeforeEach
     void setup() {

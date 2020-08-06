@@ -33,7 +33,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-import org.kie.kogito.explainability.IExplanationService;
+import org.kie.kogito.explainability.ExplanationService;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
@@ -41,7 +41,7 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 public class ExplainabilityApiV1 {
 
     @Inject
-    IExplanationService explanationService;
+    ExplanationService explanationService;
 
     @POST
     @Path("/explain")

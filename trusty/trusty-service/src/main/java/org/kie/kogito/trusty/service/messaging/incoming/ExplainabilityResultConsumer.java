@@ -28,7 +28,7 @@ import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
     }
 
     @Inject
-    public ExplainabilityResultConsumer(ITrustyService service) {
+    public ExplainabilityResultConsumer(TrustyService service) {
         super(service);
     }
 

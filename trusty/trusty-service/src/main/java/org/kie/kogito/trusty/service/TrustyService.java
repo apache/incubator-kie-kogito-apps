@@ -28,7 +28,7 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
  * <p>
  * The service exposes the api to CRUD the executions.
  */
-public interface ITrustyService {
+public interface TrustyService {
 
     /**
      * Gets all the headers of the executions that were evaluated within a specified time range.
