@@ -53,13 +53,13 @@ public class ExplainabilityMessagingHandler {
     };
     private final PublishSubject<String> eventSubject = PublishSubject.create();
 
-    Executor executor;
+    private Executor executor;
+
+    private IExplanationService explanationService;
 
     @Inject
-    IExplanationService explanationService;
-
-    @Inject
-    public ExplainabilityMessagingHandler(ManagedExecutor executor) {
+    public ExplainabilityMessagingHandler(IExplanationService explanationService, ManagedExecutor executor) {
+        this.explanationService = explanationService;
         this.executor = executor;
     }
 
