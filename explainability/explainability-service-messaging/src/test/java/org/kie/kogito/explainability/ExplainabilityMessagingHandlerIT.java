@@ -48,17 +48,13 @@ import static org.mockito.Mockito.when;
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class ExplainabilityMessagingHandlerIT {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMessagingHandlerIT.class);
-
     private static final String TOPIC_REQUEST = "trusty-explainability-request-test";
     private static final String TOPIC_RESULT = "trusty-explainability-result-test";
-
-    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
-    private String kafkaBootstrapServers;
-
+    private static Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMessagingHandlerIT.class);
     @InjectMock
     IExplanationService explanationService;
-
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
     @Inject
     private ObjectMapper objectMapper;
 
@@ -76,7 +72,7 @@ public class ExplainabilityMessagingHandlerIT {
 
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        kafkaClient.consume(TOPIC_RESULT,  s -> {
+        kafkaClient.consume(TOPIC_RESULT, s -> {
             LOGGER.info("Received from kafka: {}", s);
             try {
                 ExplainabilityResultDto event = objectMapper.readValue(s, ExplainabilityResultDto.class);

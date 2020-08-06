@@ -31,7 +31,7 @@ public class ExplainabilityRequest {
         return new ExplainabilityRequest(explainabilityRequestDto.getExecutionId());
     }
 
-    public String getExecutionId(){
+    public String getExecutionId() {
         return this.executionId;
     }
 }

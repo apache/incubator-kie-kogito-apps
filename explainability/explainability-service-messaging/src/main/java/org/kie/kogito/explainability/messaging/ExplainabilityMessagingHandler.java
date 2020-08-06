@@ -59,7 +59,7 @@ public class ExplainabilityMessagingHandler {
     IExplanationService explanationService;
 
     @Inject
-    public ExplainabilityMessagingHandler(ManagedExecutor executor){
+    public ExplainabilityMessagingHandler(ManagedExecutor executor) {
         this.executor = executor;
     }
 

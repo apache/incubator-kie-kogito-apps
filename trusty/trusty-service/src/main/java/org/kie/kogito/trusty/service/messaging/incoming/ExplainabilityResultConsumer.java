@@ -28,8 +28,6 @@ import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.trusty.service.ITrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;

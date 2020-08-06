@@ -23,6 +23,7 @@ import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 
 public class ExplainabilityCloudEventBuilder {
+
     public static CloudEventImpl<ExplainabilityRequestDto> buildCloudEvent(ExplainabilityRequestDto request) {
         return CloudEventUtils.build(
                 request.getExecutionId(),

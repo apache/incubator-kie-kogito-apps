@@ -19,13 +19,6 @@ package org.kie.kogito.explainability;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
-import javax.inject.Inject;
-
-import io.quarkus.smallrye.context.runtime.SmallRyeContextPropagationProvider;
-import io.quarkus.test.junit.QuarkusMock;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +79,7 @@ public class ExplainabilityMessagingHandlerTest {
         verify(message, times(1)).ack();
     }
 
-    private String buildCorrectExplainabilityRequestEvent(){
+    private String buildCorrectExplainabilityRequestEvent() {
         return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test"));
     }
 }
