@@ -38,12 +38,4 @@ public class JobServiceQuarkusTestResource extends ConditionalQuarkusTestResourc
     protected String getKogitoPropertyValue() {
         return "http://localhost:" + getTestResource().getMappedPort();
     }
-
-    public static class Conditional extends JobServiceQuarkusTestResource {
-
-        public Conditional() {
-            super();
-            enableConditional();
-        }
-    }
 }

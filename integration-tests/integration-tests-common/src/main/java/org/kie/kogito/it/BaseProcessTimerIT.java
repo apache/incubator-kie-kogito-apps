@@ -15,14 +15,6 @@
  */
 package org.kie.kogito.it;
 
-import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import io.restassured.RestAssured;
@@ -50,34 +42,13 @@ public abstract class BaseProcessTimerIT {
 
     public static void beforeAll(Supplier<Integer> httpPortSupplier) {
         httpPort = httpPortSupplier.get();
+        //Container should have access the host port where the test is running
+        //It should be called be fore the container is instantiated
         Testcontainers.exposeHostPorts(httpPort);
+        //the hostname for the container to access the host is "host.testcontainers.internal"
+        //https://www.testcontainers.org/features/networking/#exposing-host-ports-to-the-container
         System.setProperty("kogito.service.url",
-                           getHostAddress()
-                                   .map(localAddress -> "http://" + localAddress + ":" + httpPort)
-                                   .orElseThrow());
-    }
-
-    private static Optional<String> getHostAddress() {
-        try {
-            return NetworkInterface.networkInterfaces()
-                    .filter(networkInterface -> {
-                        try {
-                            return !networkInterface.isLoopback()
-                                    && networkInterface.isUp()
-                                    && Objects.nonNull(networkInterface.getHardwareAddress());
-                        } catch (SocketException e) {
-                            return false;
-                        }
-                    })
-                    .map(NetworkInterface::getInterfaceAddresses)
-                    .flatMap(List::stream)
-                    .filter(ia -> Objects.nonNull(ia.getBroadcast()))
-                    .map(InterfaceAddress::getAddress)
-                    .map(InetAddress::getHostAddress)
-                    .findFirst();
-        } catch (Exception e) {
-            throw new NoSuchElementException(e.getMessage());
-        }
+                           "http://host.testcontainers.internal:" + httpPort);
     }
 
     @BeforeEach
