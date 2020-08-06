@@ -37,7 +37,6 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
-import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +44,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
