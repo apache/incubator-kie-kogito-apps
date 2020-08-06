@@ -28,6 +28,7 @@ const ProcessListModal: React.FC<IOwnProps> = ({
   operationResult,
   processName
 }) => {
+
   const onOkClick = () => {
     handleModalToggle();
     operationResult && resetSelected();

@@ -240,6 +240,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
                           }}
                         />
                       </Title>
+
                     </SplitItem>
                     <SplitItem>
                       <OverflowMenu breakpoint="lg">
