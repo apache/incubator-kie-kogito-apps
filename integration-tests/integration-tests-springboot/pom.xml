@@ -11,6 +11,10 @@
   <artifactId>integration-tests-springboot</artifactId>
   <name>Kogito Apps :: Integration Tests :: Spring Boot</name>
 
+  <properties>
+    <sonar.exclusions>**/KogitoApplication.java</sonar.exclusions>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
