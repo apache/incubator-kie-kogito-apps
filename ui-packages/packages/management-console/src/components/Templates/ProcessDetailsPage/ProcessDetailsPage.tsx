@@ -239,8 +239,8 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
                             description: data.ProcessInstances[0].businessKey
                           }}
                         />
-                      </Title>
 
+                      </Title>
                     </SplitItem>
                     <SplitItem>
                       <OverflowMenu breakpoint="lg">
