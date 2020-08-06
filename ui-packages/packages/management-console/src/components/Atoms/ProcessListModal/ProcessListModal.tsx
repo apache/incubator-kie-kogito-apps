@@ -47,7 +47,7 @@ const ProcessListModal: React.FC<IOwnProps> = ({
       </span>
     );
   };
-
+  
   return (
     <Modal
       isSmall={true}
