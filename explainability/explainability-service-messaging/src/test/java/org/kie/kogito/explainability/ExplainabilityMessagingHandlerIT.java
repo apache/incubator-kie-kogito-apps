@@ -51,10 +51,13 @@ public class ExplainabilityMessagingHandlerIT {
     private static final String TOPIC_REQUEST = "trusty-explainability-request-test";
     private static final String TOPIC_RESULT = "trusty-explainability-result-test";
     private static Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMessagingHandlerIT.class);
+
     @InjectMock
     IExplanationService explanationService;
+
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     private String kafkaBootstrapServers;
+
     @Inject
     private ObjectMapper objectMapper;
 
