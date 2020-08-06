@@ -29,16 +29,12 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 @ApplicationScoped
 public class ExplanationService implements IExplanationService {
 
-    // private static final LimeExplainer LIME_EXPLAINER = new LimeExplainer(0, 0, 0);
-
     @Inject
     ManagedExecutor executor;
 
     @Override
     public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
         // TODO: get explainability from expl library https://issues.redhat.com/browse/KOGITO-2920
-        // LIME_EXPLAINER.explain(prediction, modelProvider);
-
         return CompletableFuture.supplyAsync(() -> new ExplainabilityResultDto(request.getExecutionId()), executor);
     }
 }
