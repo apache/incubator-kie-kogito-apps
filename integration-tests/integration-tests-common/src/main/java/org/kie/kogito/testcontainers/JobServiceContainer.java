@@ -35,14 +35,15 @@ public class JobServiceContainer extends GenericContainer<JobServiceContainer> i
     public static final String NAME = "jobs-service";
     public static final int PORT = 8080;
     public static final String KOGITO_SERVICE_PORT = "kogito.service.port";
-    private static final int HOST_PORT =
-            Optional.ofNullable(System.getProperty(KOGITO_SERVICE_PORT)).map(Integer::parseInt).orElse(PORT);
     public static final String IMAGE = "container.image." + NAME;
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceContainer.class);
 
     public JobServiceContainer() {
         //allow access to the host using hostname "host.testcontainers.internal"
-        Testcontainers.exposeHostPorts(HOST_PORT);
+        final Integer hostPort = Optional.ofNullable(System.getProperty(KOGITO_SERVICE_PORT))
+                .map(Integer::parseInt)
+                .orElse(PORT);
+        Testcontainers.exposeHostPorts(hostPort);
         addExposedPort(PORT);
         withLogConsumer(new Slf4jLogConsumer(LOGGER));
         waitingFor(Wait.forLogMessage(".*Listening on:.*", 1));

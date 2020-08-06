@@ -15,12 +15,11 @@
  */
 package org.kie.kogito.it;
 
-import java.util.function.Supplier;
+import java.util.function.IntSupplier;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.Testcontainers;
 
@@ -29,37 +28,34 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.with;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.kie.kogito.testcontainers.JobServiceContainer.KOGITO_SERVICE_PORT;
 
 public abstract class BaseProcessTimerIT {
 
-    public static Integer httpPort;
     public static final String TIMERS = "timers";
     public static final String TIMERS_CYCLE = "timerscycle";
     public static final String TIMERS_ON_TASK = "timersOnTask";
+    static Integer httpPort;
 
     public BaseProcessTimerIT() {
     }
 
-    public static void beforeAll(Supplier<Integer> httpPortSupplier) {
-        httpPort = httpPortSupplier.get();
+    public static void beforeAll(IntSupplier httpPortSupplier) {
+        httpPort = httpPortSupplier.getAsInt();
         //Container should have access the host port where the test is running
         //It should be called be fore the container is instantiated
         Testcontainers.exposeHostPorts(httpPort);
         //the hostname for the container to access the host is "host.testcontainers.internal"
         //https://www.testcontainers.org/features/networking/#exposing-host-ports-to-the-container
-        System.setProperty("kogito.service.url",
-                           "http://host.testcontainers.internal:" + httpPort);
-    }
-
-    @BeforeEach
-    public void beforeEach() {
+        System.setProperty("kogito.service.url", "http://host.testcontainers.internal:" + httpPort);
+        System.setProperty(KOGITO_SERVICE_PORT, String.valueOf(httpPort));
         RestAssured.port = httpPort;
     }
 
     //Timers Tests
     @Test
     public void testTimers() {
-        String id = createTimer(new Delay("PT02S"), TIMERS);
+        String id = createTimer(new RequestPayload("PT02S"), TIMERS);
         Object id2 = getTimerById(id, TIMERS);
         assertThat(id).isEqualTo(id2);
         with().pollDelay(2, SECONDS)
@@ -69,7 +65,7 @@ public abstract class BaseProcessTimerIT {
 
     @Test
     public void testCancelTimer() {
-        String id = createTimer(new Delay("PT030S"), TIMERS);
+        String id = createTimer(new RequestPayload("PT030S"), TIMERS);
         Object id2 = deleteTimer(id, TIMERS);
         assertThat(id).isEqualTo(id2);
         getTimerWithStatusCode(id, 204, TIMERS);
@@ -78,7 +74,7 @@ public abstract class BaseProcessTimerIT {
     //Cycle Timers Tests
     @Test
     public void testTimerCycle() {
-        String id = createTimer(new Delay("R2/PT1S"), TIMERS_CYCLE);
+        String id = createTimer(new RequestPayload("R2/PT1S"), TIMERS_CYCLE);
         String id2 = getTimerById(id, TIMERS_CYCLE);
         assertThat(id).isEqualTo(id2);
         with().pollDelay(2, SECONDS)
@@ -88,7 +84,7 @@ public abstract class BaseProcessTimerIT {
 
     @Test
     public void testDeleteTimerCycle() {
-        String id = createTimer(new Delay("R20/PT1S"), TIMERS_CYCLE);
+        String id = createTimer(new RequestPayload("R20/PT1S"), TIMERS_CYCLE);
         String id2 = getTimerById(id, TIMERS_CYCLE);
         assertThat(id).isEqualTo(id2);
         deleteTimer(id, TIMERS_CYCLE);
@@ -97,7 +93,7 @@ public abstract class BaseProcessTimerIT {
     //Boundary Timers Tests
     @Test
     public void testBoundaryTimersOnTask() {
-        String id = createTimer(new Delay("PT02S"), TIMERS_ON_TASK);
+        String id = createTimer(new RequestPayload("PT02S"), TIMERS_ON_TASK);
         String id2 = getTimerById(id, TIMERS_ON_TASK);
         assertThat(id).isEqualTo(id2);
         with().pollDelay(2, SECONDS)
@@ -107,7 +103,7 @@ public abstract class BaseProcessTimerIT {
 
     @Test
     public void testDeleteBoundaryTimersOnTask() {
-        String id = createTimer(new Delay("PT030S"), TIMERS_ON_TASK);
+        String id = createTimer(new RequestPayload("PT030S"), TIMERS_ON_TASK);
         String id2 = getTimerById(id, TIMERS_ON_TASK);
         assertThat(id).isEqualTo(id2);
         deleteTimer(id, TIMERS_ON_TASK);
@@ -122,7 +118,7 @@ public abstract class BaseProcessTimerIT {
                 .statusCode(code);
     }
 
-    private String createTimer(Delay delay, String path) {
+    private String createTimer(RequestPayload delay, String path) {
         return given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
@@ -158,11 +154,11 @@ public abstract class BaseProcessTimerIT {
     /**
      * Simple bean class to send as body on the requests
      */
-    private class Delay {
+    private class RequestPayload {
 
         private String delay;
 
-        public Delay(String delay) {
+        public RequestPayload(String delay) {
             this.delay = delay;
         }
 

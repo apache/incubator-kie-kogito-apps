@@ -16,6 +16,13 @@
   <name>Kogito Apps :: Integration Tests :: Common</name>
   <description>Processes and common classes for integration tests</description>
 
+  <properties>
+    <sonar.exclusions>
+      **/it/**,
+      **/test**
+    </sonar.exclusions>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.testcontainers</groupId>
