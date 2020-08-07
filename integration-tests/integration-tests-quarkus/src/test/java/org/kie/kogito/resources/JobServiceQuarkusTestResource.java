@@ -23,7 +23,7 @@ import org.kie.kogito.testcontainers.JobServiceContainer;
  */
 public class JobServiceQuarkusTestResource extends ConditionalQuarkusTestResource {
 
-    public static final String CONFIG_PROPERTY_TO_EXPOSE = "kogito.jobs-service.url";
+    public static final String JOBS_SERVICE_URL = "kogito.jobs-service.url";
 
     public JobServiceQuarkusTestResource() {
         super(new JobServiceContainer());
@@ -31,7 +31,7 @@ public class JobServiceQuarkusTestResource extends ConditionalQuarkusTestResourc
 
     @Override
     protected String getKogitoProperty() {
-        return CONFIG_PROPERTY_TO_EXPOSE;
+        return JOBS_SERVICE_URL;
     }
 
     @Override

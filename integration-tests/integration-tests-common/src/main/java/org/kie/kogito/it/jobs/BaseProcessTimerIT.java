@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.kie.kogito.it;
+package org.kie.kogito.it.jobs;
 
 import java.util.function.IntSupplier;
 
@@ -35,10 +35,8 @@ public abstract class BaseProcessTimerIT {
     public static final String TIMERS = "timers";
     public static final String TIMERS_CYCLE = "timerscycle";
     public static final String TIMERS_ON_TASK = "timersOnTask";
+    public static final String KOGITO_SERVICE_URL = "kogito.service.url";
     static Integer httpPort;
-
-    public BaseProcessTimerIT() {
-    }
 
     public static void beforeAll(IntSupplier httpPortSupplier) {
         httpPort = httpPortSupplier.getAsInt();
@@ -47,7 +45,7 @@ public abstract class BaseProcessTimerIT {
         Testcontainers.exposeHostPorts(httpPort);
         //the hostname for the container to access the host is "host.testcontainers.internal"
         //https://www.testcontainers.org/features/networking/#exposing-host-ports-to-the-container
-        System.setProperty("kogito.service.url", "http://host.testcontainers.internal:" + httpPort);
+        System.setProperty(KOGITO_SERVICE_URL, "http://host.testcontainers.internal:" + httpPort);
         System.setProperty(KOGITO_SERVICE_PORT, String.valueOf(httpPort));
         RestAssured.port = httpPort;
     }

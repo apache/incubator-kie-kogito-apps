@@ -23,7 +23,7 @@ import org.kie.kogito.testcontainers.JobServiceContainer;
  */
 public class JobServiceSpringBootTestResource extends ConditionalSpringBootTestResource {
 
-    public static final String KOGITO_INFINISPAN_PROPERTY = "kogito.jobs-service.url";
+    public static final String JOBS_SERVICE_URL = "kogito.jobs-service.url";
 
     public JobServiceSpringBootTestResource() {
         super(new JobServiceContainer());
@@ -31,7 +31,7 @@ public class JobServiceSpringBootTestResource extends ConditionalSpringBootTestR
 
     @Override
     protected String getKogitoProperty() {
-        return KOGITO_INFINISPAN_PROPERTY;
+        return JOBS_SERVICE_URL;
     }
 
     @Override

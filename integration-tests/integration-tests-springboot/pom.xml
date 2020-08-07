@@ -6,7 +6,6 @@
     <groupId>org.kie.kogito</groupId>
     <artifactId>integration-tests</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>integration-tests-springboot</artifactId>
   <name>Kogito Apps :: Integration Tests :: Spring Boot</name>
@@ -52,16 +51,6 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -117,34 +106,6 @@
           <!-- this is necessary to scan the .bpmn files from external resources, that are not on src/main/resources -->
           <kieSourcesDirectory>${project.basedir}/target/classes</kieSourcesDirectory>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>io.openapitools.swagger</groupId>
-        <artifactId>swagger-maven-plugin</artifactId>
-        <configuration>
-          <resourcePackages>
-            <resourcePackage>org.acme.travels</resourcePackage>
-          </resourcePackages>
-          <outputDirectory>${basedir}/target/classes/static/</outputDirectory>
-          <outputFilename>swagger</outputFilename>
-          <outputFormats>JSON,YAML</outputFormats>
-          <prettyPrint>true</prettyPrint>
-          <swaggerConfig>
-            <info>
-              <title>${project.description}</title>
-              <version>${project.version}</version>
-            </info>
-          </swaggerConfig>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

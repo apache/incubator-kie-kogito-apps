@@ -13,25 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.kie.kogito.it;
+package org.kie.kogito.it.jobs;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.it.BaseProcessTimerIT;
-import org.kie.kogito.resources.JobServiceQuarkusTestResource;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.kie.kogito.KogitoApplication;
+import org.kie.kogito.resources.JobServiceSpringBootTestResource;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.util.SocketUtils;
 
-@QuarkusTest
-@QuarkusTestResource(JobServiceQuarkusTestResource.class)
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = {KogitoApplication.class})
+@ContextConfiguration(initializers = JobServiceSpringBootTestResource.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ProcessTimerIT extends BaseProcessTimerIT {
 
     @BeforeAll
     public static void beforeAll() {
-        BaseProcessTimerIT.beforeAll(() -> ConfigProvider.getConfig().getValue("quarkus.http.test-port",
-                                                                               Integer.class));
+        beforeAll(() -> SocketUtils.findAvailableTcpPort());
+        System.setProperty("server.port", String.valueOf(httpPort));
     }
 }
