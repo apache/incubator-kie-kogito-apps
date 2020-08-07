@@ -5,8 +5,8 @@ import {
   BreadcrumbItem,
   Card,
   CardBody,
-  InjectedOuiaProps,
-  withOuiaContext
+  OUIAProps,
+  getOUIAProps
 } from '@patternfly/react-core';
 import {
   DomainExplorerListDomains,
@@ -15,14 +15,17 @@ import {
 import { Link } from 'react-router-dom';
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
 
-const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
-  ouiaContext
+const DomainExplorerLandingPage: React.FC<OUIAProps> = ({
+  ouiaId,
+  ouiaSafe
 }) => {
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer');
+    return ouiaPageTypeAndObjectId('domain-explorer');
   });
   return (
-    <>
+    <div
+        {...getOUIAProps('DataListExplorerLandingPage', ouiaId, ouiaSafe)}
+      >
       <PageSection variant="light">
         <PageTitle title="Domain Explorer" />
         <Breadcrumb>
@@ -39,8 +42,8 @@ const DomainExplorerLandingPage: React.FC<InjectedOuiaProps> = ({
           </CardBody>
         </Card>
       </PageSection>
-    </>
+    </div>
   );
 };
 
-export default withOuiaContext(DomainExplorerLandingPage);
+export default DomainExplorerLandingPage;

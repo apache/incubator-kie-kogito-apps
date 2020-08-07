@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-  DataToolbar,
-  DataToolbarItem,
-  DataToolbarContent,
-  DataToolbarFilter,
-  DataToolbarToggleGroup,
-  DataToolbarGroup,
+  Toolbar,
+  ToolbarItem,
+  ToolbarContent,
+  ToolbarFilter,
+  ToolbarToggleGroup,
+  ToolbarGroup,
   Button,
   Select,
   SelectOption,
@@ -281,8 +281,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     filterClick(statusArray);
   };
 
-  const onSelect = (event): void => {
-    const selection = event.target.id;
+  const onSelect = (event,selection): void => {
     setShouldRefresh(false);
     if (selection) {
       const index = statusArray.indexOf(selection);
@@ -635,8 +634,8 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
 
   const toggleGroupItems = (
     <React.Fragment>
-      <DataToolbarGroup variant="filter-group">
-        <DataToolbarItem variant="bulk-select" id="bulk-select">
+      <ToolbarGroup variant="filter-group">
+        <ToolbarItem variant="bulk-select" id="bulk-select">
           <Dropdown
             position={DropdownPosition.left}
             toggle={
@@ -660,9 +659,9 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
             dropdownItems={checkboxItems}
             isOpen={isCheckboxDropdownOpen}
           />
-        </DataToolbarItem>
+        </ToolbarItem>
 
-        <DataToolbarFilter
+        <ToolbarFilter
           chips={filters.status}
           deleteChip={onDelete}
           className="kogito-management-console__state-dropdown-list pf-u-mr-sm"
@@ -675,14 +674,14 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
             onToggle={onStatusToggle}
             onSelect={onSelect}
             selections={statusArray}
-            isExpanded={isExpanded}
+            isOpen={isExpanded}
             placeholderText="Status"
             id="status-select"
           >
             {statusMenuItems}
           </Select>
-        </DataToolbarFilter>
-        <DataToolbarFilter
+        </ToolbarFilter>
+        <ToolbarFilter
           chips={filters.businessKey}
           deleteChip={onDelete}
           categoryName="Business key"
@@ -701,8 +700,8 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
               isDisabled={statusArray.length === 0}
             />
           </InputGroup>
-        </DataToolbarFilter>
-        <DataToolbarItem>
+        </ToolbarFilter>
+        <ToolbarItem>
           <Button
             variant="primary"
             onClick={onFilterClick}
@@ -711,18 +710,18 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
           >
             Apply filter
           </Button>
-        </DataToolbarItem>
-      </DataToolbarGroup>
+        </ToolbarItem>
+      </ToolbarGroup>
     </React.Fragment>
   );
 
   const toolbarItems = (
     <React.Fragment>
-      <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
+      <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
         {toggleGroupItems}
-      </DataToolbarToggleGroup>
-      <DataToolbarGroup variant="icon-button-group">
-        <DataToolbarItem>
+      </ToolbarToggleGroup>
+      <ToolbarGroup variant="icon-button-group">
+        <ToolbarItem>
           <Button
             variant="plain"
             onClick={onRefreshClick}
@@ -732,12 +731,12 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
           >
             <SyncIcon />
           </Button>
-        </DataToolbarItem>
-      </DataToolbarGroup>
-      <DataToolbarItem variant="separator" />
-      <DataToolbarGroup className="pf-u-ml-md" id="process-management-buttons">
+        </ToolbarItem>
+      </ToolbarGroup>
+      <ToolbarItem variant="separator" />
+      <ToolbarGroup className="pf-u-ml-md" id="process-management-buttons">
         {buttonItems}
-      </DataToolbarGroup>
+      </ToolbarGroup>
     </React.Fragment>
   );
 
@@ -750,15 +749,15 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
         handleModalToggle={handleModalToggle}
         resetSelected={resetSelected}
       />
-      <DataToolbar
+      <Toolbar
         id="data-toolbar-with-filter"
         className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
         collapseListedFiltersBreakpoint="xl"
         clearAllFilters={() => clearAll()}
         clearFiltersButtonText="Reset to default"
       >
-        <DataToolbarContent>{toolbarItems}</DataToolbarContent>
-      </DataToolbar>
+        <ToolbarContent>{toolbarItems}</ToolbarContent>
+      </Toolbar>
     </>
   );
 };

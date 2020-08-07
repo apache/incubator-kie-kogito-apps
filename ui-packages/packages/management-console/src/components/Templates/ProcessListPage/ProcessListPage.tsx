@@ -2,11 +2,11 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Card,
+  getOUIAProps,
   Grid,
   GridItem,
-  InjectedOuiaProps,
-  PageSection,
-  withOuiaContext
+  OUIAProps,
+  PageSection
 } from '@patternfly/react-core';
 import {
   GraphQL,
@@ -23,6 +23,7 @@ import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListTo
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
 
+
 type filterType = {
   status: GraphQL.ProcessInstanceState[];
   businessKey: string[];
@@ -35,9 +36,9 @@ interface LocationProps {
   filters?: filterType;
 }
 
-const ProcessListPage: React.FC<InjectedOuiaProps &
+const ProcessListPage: React.FC<OUIAProps &
   RouteComponentProps<MatchProps, {}, LocationProps>> = ({
-  ouiaContext,
+  ouiaId,
   ...props
 }) => {
   const [defaultPageSize] = useState<number>(10);
@@ -100,7 +101,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
   };
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances');
+    return ouiaPageTypeAndObjectId('process-instances');
   });
 
   const onFilterClick = (arr = filters.status) => {
@@ -221,6 +222,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
   }
   return (
     <React.Fragment>
+      <div {...getOUIAProps('ProcessListPage', ouiaId)}>
       <PageSection variant="light">
         <PageTitle title="Process Instances" />
         <Breadcrumb>
@@ -231,7 +233,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
         </Breadcrumb>
       </PageSection>
       <PageSection>
-        <Grid gutter="md">
+        <Grid hasGutter md={1}>
           <GridItem span={12}>
             <Card className="dataList">
               {!isError && (
@@ -297,8 +299,9 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
           </GridItem>
         </Grid>
       </PageSection>
+      </div>
     </React.Fragment>
   );
 };
 
-export default withOuiaContext(ProcessListPage);
+export default ProcessListPage;

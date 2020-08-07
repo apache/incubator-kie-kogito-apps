@@ -3,8 +3,8 @@ import {
   PageSection,
   Breadcrumb,
   BreadcrumbItem,
-  InjectedOuiaProps,
-  withOuiaContext
+  OUIAProps,
+  getOUIAProps
 } from '@patternfly/react-core';
 import { DomainExplorer, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
 import { Link } from 'react-router-dom';
@@ -30,7 +30,7 @@ interface LocationProps {
 
 const DomainExplorerPage: React.FC<IOwnProps &
   RouteComponentProps<MatchProps, {}, LocationProps> &
-  InjectedOuiaProps> = ({ ouiaContext, ...props }) => {
+  OUIAProps> = ({ ouiaId, ...props }) => {
   const rememberedParams =
     (props.location.state && props.location.state.parameters) || [];
   const rememberedSelections =
@@ -77,10 +77,12 @@ const DomainExplorerPage: React.FC<IOwnProps &
   };
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer', domainName);
+    return ouiaPageTypeAndObjectId('domain-explorer', domainName);
   });
   return (
-    <>
+    <div
+      {...getOUIAProps('DataExplorerPage', ouiaId)}
+    >
       {!props.loadingState &&
         !props.domains.includes(domainName) &&
         !props.domains.includes(pathName) && (
@@ -133,8 +135,8 @@ const DomainExplorerPage: React.FC<IOwnProps &
           defaultFilter={defaultFilter}
         />
       </PageSection>
-    </>
+    </div>
   );
 };
 
-export default React.memo(withOuiaContext(DomainExplorerPage));
+export default React.memo(DomainExplorerPage);

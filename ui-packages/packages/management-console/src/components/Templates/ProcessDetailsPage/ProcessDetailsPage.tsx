@@ -1,6 +1,7 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
+  getOUIAProps,
   Grid,
   GridItem,
   PageSection,
@@ -13,8 +14,7 @@ import {
   OverflowMenu,
   OverflowMenuContent,
   OverflowMenuGroup,
-  InjectedOuiaProps,
-  withOuiaContext
+  OUIAProps
 } from '@patternfly/react-core';
 import {
   ServerErrors,
@@ -44,7 +44,7 @@ enum TitleType {
 }
 
 const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
-  InjectedOuiaProps> = ({ ouiaContext, ...props }) => {
+  OUIAProps> = ({ ouiaId,ouiaSafe , ...props }) => {
   const id = props.match.params.instanceID;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>('');
@@ -66,7 +66,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
   });
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances', id);
+    return ouiaPageTypeAndObjectId( 'process-instances', id);
   });
 
   const onShowMessage = (
@@ -154,7 +154,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
   }
 
   return (
-    <>
+    <div {...getOUIAProps('ProcessDetailsPage', ouiaId, ouiaSafe)}>
       {!error ? (
         <>
           <PageSection variant="light">
@@ -171,7 +171,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
             />
             <PageTitle title="Process Details" />
             {!loading ? (
-              <Grid gutter="md" span={12} lg={6} xl={4}>
+              <Grid hasGutter md={1} span={12} lg={6} xl={4}>
                 <GridItem span={12}>
                   <Breadcrumb>
                     <BreadcrumbItem>
@@ -219,10 +219,10 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
           </PageSection>
           <PageSection>
             {!loading ? (
-              <Grid gutter="md" span={12} lg={6} xl={4}>
+              <Grid hasGutter md={1}span={12} lg={6} xl={4}>
                 <GridItem span={12}>
                   <Split
-                    gutter={'md'}
+                    hasGutter={true}
                     component={'div'}
                     className="pf-u-align-items-center"
                   >
@@ -277,8 +277,8 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
       ) : (
         <ServerErrors error={error} variant="large" />
       )}
-    </>
+    </div>
   );
 };
 
-export default withOuiaContext(ProcessDetailsPage);
+export default ProcessDetailsPage;
