@@ -1,12 +1,10 @@
 import {
   Card,
-  getOUIAProps,
   Grid,
   GridItem,
   PageSection,
   Bullseye,
   Label,
-  OUIAProps
 } from '@patternfly/react-core';
 import React, { useEffect } from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
@@ -16,7 +14,9 @@ import {
   KogitoSpinner,
   DataTableColumn,
   DataTable,
-  GraphQL
+  GraphQL,
+  OUIAProps,
+  componentOuiaProps
 } from '@kogito-apps/common';
 
 const UserTaskLoadingComponent = (
@@ -37,7 +37,8 @@ const stateColumnTransformer = (value, rowDataObj) => {
 };
 
 const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
-  ouiaId
+  ouiaId,
+  ouiaSafe
 }) => {
   const {
     loading,
@@ -84,7 +85,7 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
   return (
     <React.Fragment>
       <div
-        {...getOUIAProps('UserTaskDataTableContainer', ouiaId)}
+        {...componentOuiaProps(ouiaId, 'UserTaskDataTableContainer', ouiaSafe)}
       >
       <UserTaskPageHeader />
       <PageSection>

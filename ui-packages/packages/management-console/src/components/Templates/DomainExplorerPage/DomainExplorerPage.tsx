@@ -2,11 +2,14 @@ import React, { useEffect } from 'react';
 import {
   PageSection,
   Breadcrumb,
-  BreadcrumbItem,
-  OUIAProps,
-  getOUIAProps
+  BreadcrumbItem
 } from '@patternfly/react-core';
-import { DomainExplorer, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import {
+  componentOuiaProps,
+  DomainExplorer,
+  ouiaPageTypeAndObjectId,
+  OUIAProps
+} from '@kogito-apps/common';
 import { Link } from 'react-router-dom';
 import { Redirect, RouteComponentProps } from 'react-router';
 import './DomainExplorerPage.css';
@@ -30,7 +33,11 @@ interface LocationProps {
 
 const DomainExplorerPage: React.FC<IOwnProps &
   RouteComponentProps<MatchProps, {}, LocationProps> &
-  OUIAProps> = ({ ouiaId, ...props }) => {
+  OUIAProps> = ({
+    ouiaId,
+    ouiaSafe,
+    ...props
+  }) => {
   const rememberedParams =
     (props.location.state && props.location.state.parameters) || [];
   const rememberedSelections =
@@ -81,7 +88,7 @@ const DomainExplorerPage: React.FC<IOwnProps &
   });
   return (
     <div
-      {...getOUIAProps('DataExplorerPage', ouiaId)}
+      {...componentOuiaProps(ouiaId, 'DataExplorerPage', ouiaSafe)}
     >
       {!props.loadingState &&
         !props.domains.includes(domainName) &&

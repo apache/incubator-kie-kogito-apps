@@ -5,12 +5,12 @@ import {
   BreadcrumbItem,
   Card,
   CardBody,
-  OUIAProps,
-  getOUIAProps
 } from '@patternfly/react-core';
 import {
+  componentOuiaProps,
   DomainExplorerListDomains,
-  ouiaPageTypeAndObjectId
+  ouiaPageTypeAndObjectId,
+  OUIAProps
 } from '@kogito-apps/common';
 import { Link } from 'react-router-dom';
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
@@ -24,7 +24,7 @@ const DomainExplorerLandingPage: React.FC<OUIAProps> = ({
   });
   return (
     <div
-        {...getOUIAProps('DataListExplorerLandingPage', ouiaId, ouiaSafe)}
+        {...componentOuiaProps(ouiaId, 'DomainExplorerLandingPage', ouiaSafe)}
       >
       <PageSection variant="light">
         <PageTitle title="Domain Explorer" />

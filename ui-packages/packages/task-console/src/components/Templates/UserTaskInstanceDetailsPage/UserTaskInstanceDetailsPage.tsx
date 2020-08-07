@@ -5,13 +5,15 @@ import {
   BreadcrumbItem,
   Card,
   CardBody,
-  getOUIAProps,
   Grid,
   GridItem,
-  OUIAProps,
   PageSection
 } from '@patternfly/react-core';
-import { ouiaPageTypeAndObjectId, GraphQL } from '@kogito-apps/common';
+import {
+  ouiaPageTypeAndObjectId,
+  GraphQL,
+  componentOuiaProps, OUIAProps
+} from '@kogito-apps/common';
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import TaskForm from '../../Organisms/TaskForm/TaskForm';
 import TaskConsoleContext, {
@@ -28,7 +30,11 @@ const UserTaskInstanceDetailsPage: React.FC<RouteComponentProps<
   {},
   {}
 > &
-  OUIAProps> = ({ ouiaId, ...props }) => {
+  OUIAProps> = ({
+    ouiaId,
+    ouiaSafe,
+    ...props
+  }) => {
   const id = props.match.params.taskID;
 
   const context: IContext<UserTaskInstance> = useContext(TaskConsoleContext);
@@ -48,7 +54,7 @@ const UserTaskInstanceDetailsPage: React.FC<RouteComponentProps<
   return (
     <React.Fragment>
       <div
-        {...getOUIAProps('UserTaskInstanceDetails', ouiaId)}
+        {...componentOuiaProps(ouiaId, 'UserTaskInstanceDetails', ouiaSafe)}
       >
       <PageSection variant="light">
         <PageTitle title="Task Details" />

@@ -4,17 +4,20 @@ import {
   GridItem,
   PageSection,
   ExpandableSection,
-  OUIAProps,
-  getOUIAProps
 } from '@patternfly/react-core';
 import React, { useState, useEffect } from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
 import './DataListExpandable.css';
 import TaskListByState from '../../Organisms/TaskListByState/TaskListByState';
-import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import {
+  componentOuiaProps,
+  ouiaPageTypeAndObjectId,
+  OUIAProps
+} from '@kogito-apps/common';
 
 const DataListContainerExpandable: React.FC<OUIAProps> = ({
-  ouiaId
+  ouiaId,
+  ouiaSafe
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -29,7 +32,7 @@ const DataListContainerExpandable: React.FC<OUIAProps> = ({
   return (
     <React.Fragment>
       <div
-        {...getOUIAProps('DataListContainerExpandable', ouiaId)}
+        {...componentOuiaProps(ouiaId, 'DataListContainerExpandable', ouiaSafe)}
       >
       <UserTaskPageHeader />
       <PageSection>

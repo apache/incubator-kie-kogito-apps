@@ -3,8 +3,7 @@
 exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTableContainer correctly 1`] = `
 <UserTaskDataTableContainer>
   <div
-    data-ouia-component-id={0}
-    data-ouia-component-type="PF4/UserTaskDataTableContainer"
+    data-ouia-component-type="UserTaskDataTableContainer"
     data-ouia-safe={true}
   >
     <MockUserTaskPageHeader />
@@ -30,7 +29,7 @@ exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTa
                 >
                   <article
                     className="pf-c-card kogito-task-console--user-task_table-OverFlow"
-                    data-ouia-component-id={1}
+                    data-ouia-component-id={0}
                     data-ouia-component-type="PF4/Card"
                     data-ouia-safe={true}
                   >
@@ -140,8 +139,7 @@ exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTa
 exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTableContainer with no data 1`] = `
 <UserTaskDataTableContainer>
   <div
-    data-ouia-component-id={2}
-    data-ouia-component-type="PF4/UserTaskDataTableContainer"
+    data-ouia-component-type="UserTaskDataTableContainer"
     data-ouia-safe={true}
   >
     <MockUserTaskPageHeader />
@@ -167,7 +165,7 @@ exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTa
                 >
                   <article
                     className="pf-c-card kogito-task-console--user-task_table-OverFlow"
-                    data-ouia-component-id={3}
+                    data-ouia-component-id={1}
                     data-ouia-component-type="PF4/Card"
                     data-ouia-safe={true}
                   >

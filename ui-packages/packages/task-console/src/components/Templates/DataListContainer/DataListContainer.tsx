@@ -3,8 +3,6 @@ import {
   Grid,
   GridItem,
   PageSection,
-  OUIAProps,
-  getOUIAProps,
 } from '@patternfly/react-core';
 import React, { useState, useEffect } from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
@@ -15,10 +13,12 @@ import {
   ouiaPageTypeAndObjectId,
   KogitoEmptyState,
   KogitoEmptyStateType,
-  GraphQL
+  GraphQL,
+  OUIAProps,
+  componentOuiaProps,
 } from '@kogito-apps/common';
 
-const DataListContainer: React.FC<OUIAProps> = ({ ouiaId }) => {
+const DataListContainer: React.FC<OUIAProps> = ({ ouiaId,  ouiaSafe}) => {
   const [initData, setInitData] = useState<any>([]);
   const [checkedArray, setCheckedArray] = useState<any>(['Ready']);
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +56,7 @@ const DataListContainer: React.FC<OUIAProps> = ({ ouiaId }) => {
   return (
     <React.Fragment>
       <div
-        {...getOUIAProps('DataListContainer', ouiaId)}
+        {...componentOuiaProps(ouiaId, 'DataListContainer', ouiaSafe)}
       >
       <UserTaskPageHeader />
       <PageSection>

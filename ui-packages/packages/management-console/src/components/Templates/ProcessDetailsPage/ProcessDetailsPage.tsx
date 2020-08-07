@@ -1,7 +1,6 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  getOUIAProps,
   Grid,
   GridItem,
   PageSection,
@@ -14,14 +13,14 @@ import {
   OverflowMenu,
   OverflowMenuContent,
   OverflowMenuGroup,
-  OUIAProps
 } from '@patternfly/react-core';
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
   ItemDescriptor,
   KogitoSpinner,
-  GraphQL
+  GraphQL,
+  componentOuiaProps, OUIAProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
@@ -154,7 +153,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
   }
 
   return (
-    <div {...getOUIAProps('ProcessDetailsPage', ouiaId, ouiaSafe)}>
+    <div {...componentOuiaProps(ouiaId, 'ProcessDetailsPage', ouiaSafe)}>
       {!error ? (
         <>
           <PageSection variant="light">

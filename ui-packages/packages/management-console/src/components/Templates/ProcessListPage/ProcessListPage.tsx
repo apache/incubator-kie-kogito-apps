@@ -2,10 +2,8 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Card,
-  getOUIAProps,
   Grid,
   GridItem,
-  OUIAProps,
   PageSection
 } from '@patternfly/react-core';
 import {
@@ -14,7 +12,8 @@ import {
   KogitoEmptyStateType,
   ouiaPageTypeAndObjectId,
   ServerErrors,
-  LoadMore
+  LoadMore,
+  componentOuiaProps, OUIAProps
 } from '@kogito-apps/common';
 import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -39,6 +38,7 @@ interface LocationProps {
 const ProcessListPage: React.FC<OUIAProps &
   RouteComponentProps<MatchProps, {}, LocationProps>> = ({
   ouiaId,
+  ouiaSafe,
   ...props
 }) => {
   const [defaultPageSize] = useState<number>(10);
@@ -222,7 +222,7 @@ const ProcessListPage: React.FC<OUIAProps &
   }
   return (
     <React.Fragment>
-      <div {...getOUIAProps('ProcessListPage', ouiaId)}>
+      <div {...componentOuiaProps(ouiaId, 'ProcessListPage', ouiaSafe)}>
       <PageSection variant="light">
         <PageTitle title="Process Instances" />
         <Breadcrumb>
