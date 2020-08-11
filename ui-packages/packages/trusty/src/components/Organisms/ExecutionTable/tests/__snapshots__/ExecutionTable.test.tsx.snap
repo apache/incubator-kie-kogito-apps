@@ -1,8 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Execution table renders a list of executions 1`] = `
-<Component
+<Table
   aria-label="Executions list"
+  borders={true}
+  canSelectAll={true}
   cells={
     Array [
       "ID",
@@ -12,6 +14,16 @@ exports[`Execution table renders a list of executions 1`] = `
       "Execution Status",
     ]
   }
+  className=""
+  contentId="expanded-content"
+  dropdownDirection="down"
+  dropdownPosition="right"
+  expandId="expandable-toggle"
+  gridBreakPoint="grid-md"
+  isStickyHeader={false}
+  ouiaSafe={true}
+  role="grid"
+  rowLabeledBy="simple-node"
   rows={
     Array [
       Object {
@@ -64,17 +76,20 @@ exports[`Execution table renders a list of executions 1`] = `
       },
     ]
   }
+  variant={null}
 >
   <TableHeader />
-  <TableBody
+  <Component
     rowKey="executionKey"
   />
-</Component>
+</Table>
 `;
 
 exports[`Execution table renders a loading error message when data loading fails 1`] = `
-<Component
+<Table
   aria-label="Executions list"
+  borders={true}
+  canSelectAll={true}
   cells={
     Array [
       "ID",
@@ -84,6 +99,16 @@ exports[`Execution table renders a loading error message when data loading fails
       "Execution Status",
     ]
   }
+  className=""
+  contentId="expanded-content"
+  dropdownDirection="down"
+  dropdownPosition="right"
+  expandId="expandable-toggle"
+  gridBreakPoint="grid-md"
+  isStickyHeader={false}
+  ouiaSafe={true}
+  role="grid"
+  rowLabeledBy="simple-node"
   rows={
     Array [
       Object {
@@ -116,17 +141,20 @@ exports[`Execution table renders a loading error message when data loading fails
       },
     ]
   }
+  variant={null}
 >
   <TableHeader />
-  <TableBody
+  <Component
     rowKey="executionKey"
   />
-</Component>
+</Table>
 `;
 
 exports[`Execution table renders loading skeletons when the data is loading 1`] = `
-<Component
+<Table
   aria-label="Executions list"
+  borders={true}
+  canSelectAll={true}
   cells={
     Array [
       "ID",
@@ -136,6 +164,16 @@ exports[`Execution table renders loading skeletons when the data is loading 1`] 
       "Execution Status",
     ]
   }
+  className=""
+  contentId="expanded-content"
+  dropdownDirection="down"
+  dropdownPosition="right"
+  expandId="expandable-toggle"
+  gridBreakPoint="grid-md"
+  isStickyHeader={false}
+  ouiaSafe={true}
+  role="grid"
+  rowLabeledBy="simple-node"
   rows={
     Array [
       Object {
@@ -440,17 +478,20 @@ exports[`Execution table renders loading skeletons when the data is loading 1`] 
       },
     ]
   }
+  variant={null}
 >
   <TableHeader />
-  <TableBody
+  <Component
     rowKey="executionKey"
   />
-</Component>
+</Table>
 `;
 
 exports[`Execution table renders loading skeletons when the data is not yet fetching 1`] = `
-<Component
+<Table
   aria-label="Executions list"
+  borders={true}
+  canSelectAll={true}
   cells={
     Array [
       "ID",
@@ -460,6 +501,16 @@ exports[`Execution table renders loading skeletons when the data is not yet fetc
       "Execution Status",
     ]
   }
+  className=""
+  contentId="expanded-content"
+  dropdownDirection="down"
+  dropdownPosition="right"
+  expandId="expandable-toggle"
+  gridBreakPoint="grid-md"
+  isStickyHeader={false}
+  ouiaSafe={true}
+  role="grid"
+  rowLabeledBy="simple-node"
   rows={
     Array [
       Object {
@@ -764,17 +815,20 @@ exports[`Execution table renders loading skeletons when the data is not yet fetc
       },
     ]
   }
+  variant={null}
 >
   <TableHeader />
-  <TableBody
+  <Component
     rowKey="executionKey"
   />
-</Component>
+</Table>
 `;
 
 exports[`Execution table renders no result message if no executions are found 1`] = `
-<Component
+<Table
   aria-label="Executions list"
+  borders={true}
+  canSelectAll={true}
   cells={
     Array [
       "ID",
@@ -784,6 +838,16 @@ exports[`Execution table renders no result message if no executions are found 1`
       "Execution Status",
     ]
   }
+  className=""
+  contentId="expanded-content"
+  dropdownDirection="down"
+  dropdownPosition="right"
+  expandId="expandable-toggle"
+  gridBreakPoint="grid-md"
+  isStickyHeader={false}
+  ouiaSafe={true}
+  role="grid"
+  rowLabeledBy="simple-node"
   rows={
     Array [
       Object {
@@ -815,10 +879,11 @@ exports[`Execution table renders no result message if no executions are found 1`
       },
     ]
   }
+  variant={null}
 >
   <TableHeader />
-  <TableBody
+  <Component
     rowKey="executionKey"
   />
-</Component>
+</Table>
 `;

@@ -7,7 +7,6 @@ exports[`Execution status renders a negative outcome 1`] = `
     color="currentColor"
     noVerticalAlign={false}
     size="sm"
-    title={null}
   />
   <span>
     Error
@@ -22,7 +21,6 @@ exports[`Execution status renders a positive outcome 1`] = `
     color="currentColor"
     noVerticalAlign={false}
     size="sm"
-    title={null}
   />
   <span>
     Completed

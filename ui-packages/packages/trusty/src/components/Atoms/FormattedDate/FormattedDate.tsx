@@ -37,7 +37,6 @@ const FormattedDate = (props: FormattedDateProps) => {
           content={fullFormattedDate}
           entryDelay={200}
           exitDelay={100}
-          distance={5}
           position={position}
         >
           <span>{formattedDate}</span>

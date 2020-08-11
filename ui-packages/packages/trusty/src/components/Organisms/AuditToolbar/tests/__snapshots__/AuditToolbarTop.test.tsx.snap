@@ -1,20 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Audit top toolbar renders correctly 1`] = `
-<DataToolbar
+<Toolbar
   id="audit-overview-top-toolbar"
 >
-  <DataToolbarContent
-    breakpointMods={Array []}
+  <ToolbarContent
     isExpanded={false}
     showClearFiltersButton={false}
   >
-    <DataToolbarItem
+    <ToolbarItem
       variant="label"
     >
       Search
-    </DataToolbarItem>
-    <DataToolbarItem>
+    </ToolbarItem>
+    <ToolbarItem>
       <InputGroup>
         <ForwardRef
           aria-label="search executions"
@@ -24,7 +23,7 @@ exports[`Audit top toolbar renders correctly 1`] = `
           placeholder="Search by ID"
           type="search"
         />
-        <Component
+        <Button
           aria-label="search button for search input"
           id="audit-search"
           onClick={[Function]}
@@ -34,17 +33,16 @@ exports[`Audit top toolbar renders correctly 1`] = `
             color="currentColor"
             noVerticalAlign={false}
             size="sm"
-            title={null}
           />
-        </Component>
+        </Button>
       </InputGroup>
-    </DataToolbarItem>
-    <DataToolbarItem
+    </ToolbarItem>
+    <ToolbarItem
       variant="label"
     >
       From
-    </DataToolbarItem>
-    <DataToolbarItem>
+    </ToolbarItem>
+    <ToolbarItem>
       <DatePicker
         fromDate="2020-01-01"
         id="audit-from-date"
@@ -53,13 +51,13 @@ exports[`Audit top toolbar renders correctly 1`] = `
         onDateUpdate={[MockFunction]}
         value="2020-01-01"
       />
-    </DataToolbarItem>
-    <DataToolbarItem
+    </ToolbarItem>
+    <ToolbarItem
       variant="label"
     >
       To
-    </DataToolbarItem>
-    <DataToolbarItem>
+    </ToolbarItem>
+    <ToolbarItem>
       <DatePicker
         id="audit-to-date"
         label="Ending date"
@@ -67,10 +65,10 @@ exports[`Audit top toolbar renders correctly 1`] = `
         onDateUpdate={[MockFunction]}
         value="2020-02-01"
       />
-    </DataToolbarItem>
-    <DataToolbarItem>
-      <DataToolbarItem>
-        <Component
+    </ToolbarItem>
+    <ToolbarItem>
+      <ToolbarItem>
+        <Button
           aria-label="Refresh"
           id="executions-refresh"
           onClick={[Function]}
@@ -81,12 +79,11 @@ exports[`Audit top toolbar renders correctly 1`] = `
             color="currentColor"
             noVerticalAlign={false}
             size="sm"
-            title={null}
           />
-        </Component>
-      </DataToolbarItem>
-    </DataToolbarItem>
-    <DataToolbarItem
+        </Button>
+      </ToolbarItem>
+    </ToolbarItem>
+    <ToolbarItem
       variant="pagination"
     >
       <PaginationContainer
@@ -97,7 +94,7 @@ exports[`Audit top toolbar renders correctly 1`] = `
         paginationId="audit-overview-top-pagination"
         total={20}
       />
-    </DataToolbarItem>
-  </DataToolbarContent>
-</DataToolbar>
+    </ToolbarItem>
+  </ToolbarContent>
+</Toolbar>
 `;

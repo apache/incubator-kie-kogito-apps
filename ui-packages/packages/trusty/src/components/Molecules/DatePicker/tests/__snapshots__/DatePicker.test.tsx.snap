@@ -33,7 +33,6 @@ exports[`DatePicker renders correctly 1`] = `
           isDisabled={false}
           isReadOnly={false}
           isRequired={false}
-          isValid={true}
           name="datepicker"
           onChange={[Function]}
           type="date"
