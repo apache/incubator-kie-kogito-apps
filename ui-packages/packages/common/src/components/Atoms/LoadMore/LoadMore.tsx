@@ -15,6 +15,7 @@ interface IOwnProps {
   getMoreItems: (initval: number, pageSize: number) => void;
   pageSize: number;
   isLoadingMore: boolean;
+  setLoadMoreClicked?: (loadMoreClicked: boolean) => void;
 }
 
 const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
@@ -23,10 +24,12 @@ const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
   getMoreItems,
   pageSize,
   isLoadingMore,
+  setLoadMoreClicked,
   ouiaId,
   ouiaSafe
 }) => {
   const loadMore = newPageSize => {
+    setLoadMoreClicked && setLoadMoreClicked(true);
     const newOffset = offset + pageSize;
     setOffset(newOffset);
     getMoreItems(newOffset, newPageSize);

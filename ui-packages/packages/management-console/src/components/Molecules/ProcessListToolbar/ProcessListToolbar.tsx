@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import {
-  DataToolbar,
-  DataToolbarItem,
-  DataToolbarContent,
-  DataToolbarFilter,
-  DataToolbarToggleGroup,
-  DataToolbarGroup,
+  Toolbar,
+  ToolbarItem,
+  ToolbarContent,
+  ToolbarFilter,
+  ToolbarToggleGroup,
+  ToolbarGroup,
   Button,
   Select,
   SelectOption,
@@ -28,7 +28,7 @@ import _ from 'lodash';
 import './ProcessListToolbar.css';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
-import { performMultipleAbort, setTitle } from '../../../utils/Utils';
+import { performMultipleAction, setTitle } from '../../../utils/Utils';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 /* tslint:disable:no-string-literal */
 interface IOwnProps {
@@ -39,7 +39,6 @@ interface IOwnProps {
   setInitData: (initData) => void;
   selectedInstances: ProcessInstanceBulkList;
   setSelectedInstances: (selectedInstances: ProcessInstanceBulkList) => void;
-  getProcessInstances: (options: any) => void;
   setSearchWord: (searchWord: string) => void;
   searchWord: string;
   isAllChecked: boolean;
@@ -55,8 +54,10 @@ type filterType = {
   businessKey: string[];
 };
 
-enum OperationType {
-  ABORT = 'ABORT'
+export enum OperationType {
+  ABORT = 'ABORT',
+  SKIP = 'SKIP',
+  RETRY = 'RETRY'
 }
 
 export interface ProcessInstanceBulkList {
@@ -98,7 +99,6 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
   filters,
   setFilters,
   selectedInstances,
-  getProcessInstances,
   setSearchWord,
   searchWord,
   isAllChecked,
@@ -126,8 +126,19 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
       successInstances: {},
       failedInstances: {},
       ignoredInstances: {}
+    },
+    SKIP: {
+      successInstances: {},
+      failedInstances: {},
+      ignoredInstances: {}
+    },
+    RETRY: {
+      successInstances: {},
+      failedInstances: {},
+      ignoredInstances: {}
     }
   });
+
   const operations: IOperations = {
     ABORT: {
       results: operationResults[OperationType.ABORT],
@@ -156,7 +167,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
               delete selectedInstances[id];
             }
           }
-          await performMultipleAbort(
+          await performMultipleAction(
             selectedInstances,
             (successInstances, failedInstances) => {
               onShowMessage(
@@ -166,12 +177,84 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
                 instancesToBeIgnored,
                 OperationType.ABORT
               );
+            },
+            OperationType.ABORT
+          );
+        }
+      }
+    },
+    SKIP: {
+      results: operationResults[OperationType.SKIP],
+      messages: {
+        successMessage: 'Skipped process: ',
+        noProcessMessage: 'No processes were skipped',
+        ignoredMessage:
+          'These processes were ignored because they were not in error state.'
+      },
+      functions: {
+        perform: async () => {
+          const instancesToBeIgnored = {};
+          for (const [id, processInstance] of Object.entries(
+            selectedInstances
+          )) {
+            if (processInstance['state'] !== ProcessInstanceState.Error) {
+              instancesToBeIgnored[id] = processInstance;
+              delete selectedInstances[id];
             }
+          }
+          await performMultipleAction(
+            selectedInstances,
+            (successInstances, failedInstances) => {
+              onShowMessage(
+                'Skip operation',
+                successInstances,
+                failedInstances,
+                instancesToBeIgnored,
+                OperationType.SKIP
+              );
+            },
+            OperationType.SKIP
+          );
+        }
+      }
+    },
+    RETRY: {
+      results: operationResults[OperationType.RETRY],
+      messages: {
+        successMessage: 'Retried process: ',
+        noProcessMessage: 'No processes were retried',
+        ignoredMessage:
+          'These processes were ignored because they were not in error state.'
+      },
+      functions: {
+        perform: async () => {
+          const instancesToBeIgnored = {};
+          for (const [id, processInstance] of Object.entries(
+            selectedInstances
+          )) {
+            if (processInstance['state'] !== ProcessInstanceState.Error) {
+              instancesToBeIgnored[id] = processInstance;
+              delete selectedInstances[id];
+            }
+          }
+          await performMultipleAction(
+            selectedInstances,
+            (successInstances, failedInstances) => {
+              onShowMessage(
+                'Retry operation',
+                successInstances,
+                failedInstances,
+                instancesToBeIgnored,
+                OperationType.RETRY
+              );
+            },
+            OperationType.RETRY
           );
         }
       }
     }
   };
+
   const onProcessManagementButtonSelect = () => {
     setIsKebabOpen(!isKebabOpen);
   };
@@ -196,8 +279,7 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     filterClick(statusArray);
   };
 
-  const onSelect = (event): void => {
-    const selection = event.target.id;
+  const onSelect = (event,selection): void => {
     setShouldRefresh(false);
     if (selection) {
       const index = statusArray.indexOf(selection);
@@ -241,13 +323,6 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
     setStatusArray([ProcessInstanceState.Active]);
     filters.businessKey = [];
     filterClick([ProcessInstanceState.Active]);
-    getProcessInstances({
-      variables: {
-        state: ProcessInstanceState.Active,
-        offset: 0,
-        limit: 10
-      }
-    });
   };
 
   const onRefreshClick = (): void => {
@@ -487,6 +562,20 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
         isDisabled={Object.keys(selectedInstances).length === 0}
       >
         Abort selected
+      </DropdownItem>,
+      <DropdownItem
+        key="skip"
+        onClick={operations[OperationType.SKIP].functions.perform}
+        isDisabled={Object.keys(selectedInstances).length === 0}
+      >
+        Skip selected
+      </DropdownItem>,
+      <DropdownItem
+        key="retry"
+        onClick={operations[OperationType.RETRY].functions.perform}
+        isDisabled={Object.keys(selectedInstances).length === 0}
+      >
+        Retry selected
       </DropdownItem>
     ];
   };
@@ -501,6 +590,24 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
             isDisabled={Object.keys(selectedInstances).length === 0}
           >
             Abort selected
+          </Button>
+        </OverflowMenuItem>
+        <OverflowMenuItem>
+          <Button
+            variant="secondary"
+            onClick={operations[OperationType.SKIP].functions.perform}
+            isDisabled={Object.keys(selectedInstances).length === 0}
+          >
+            Skip selected
+          </Button>
+        </OverflowMenuItem>
+        <OverflowMenuItem>
+          <Button
+            variant="secondary"
+            onClick={operations[OperationType.RETRY].functions.perform}
+            isDisabled={Object.keys(selectedInstances).length === 0}
+          >
+            Retry selected
           </Button>
         </OverflowMenuItem>
       </OverflowMenuContent>
@@ -518,8 +625,8 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
 
   const toggleGroupItems = (
     <React.Fragment>
-      <DataToolbarGroup variant="filter-group">
-        <DataToolbarItem variant="bulk-select" id="bulk-select">
+      <ToolbarGroup variant="filter-group">
+        <ToolbarItem variant="bulk-select" id="bulk-select">
           <Dropdown
             position={DropdownPosition.left}
             toggle={
@@ -543,9 +650,9 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
             dropdownItems={checkboxItems}
             isOpen={isCheckboxDropdownOpen}
           />
-        </DataToolbarItem>
+        </ToolbarItem>
 
-        <DataToolbarFilter
+        <ToolbarFilter
           chips={filters.status}
           deleteChip={onDelete}
           className="kogito-management-console__state-dropdown-list pf-u-mr-sm"
@@ -558,14 +665,14 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
             onToggle={onStatusToggle}
             onSelect={onSelect}
             selections={statusArray}
-            isExpanded={isExpanded}
+            isOpen={isExpanded}
             placeholderText="Status"
             id="status-select"
           >
             {statusMenuItems}
           </Select>
-        </DataToolbarFilter>
-        <DataToolbarFilter
+        </ToolbarFilter>
+        <ToolbarFilter
           chips={filters.businessKey}
           deleteChip={onDelete}
           categoryName="Business key"
@@ -584,8 +691,8 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
               isDisabled={statusArray.length === 0}
             />
           </InputGroup>
-        </DataToolbarFilter>
-        <DataToolbarItem>
+        </ToolbarFilter>
+        <ToolbarItem>
           <Button
             variant="primary"
             onClick={onFilterClick}
@@ -594,18 +701,18 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
           >
             Apply filter
           </Button>
-        </DataToolbarItem>
-      </DataToolbarGroup>
+        </ToolbarItem>
+      </ToolbarGroup>
     </React.Fragment>
   );
 
   const toolbarItems = (
     <React.Fragment>
-      <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
+      <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
         {toggleGroupItems}
-      </DataToolbarToggleGroup>
-      <DataToolbarGroup variant="icon-button-group">
-        <DataToolbarItem>
+      </ToolbarToggleGroup>
+      <ToolbarGroup variant="icon-button-group">
+        <ToolbarItem>
           <Button
             variant="plain"
             onClick={onRefreshClick}
@@ -615,12 +722,12 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
           >
             <SyncIcon />
           </Button>
-        </DataToolbarItem>
-      </DataToolbarGroup>
-      <DataToolbarItem variant="separator" />
-      <DataToolbarGroup className="pf-u-ml-md" id="process-management-buttons">
+        </ToolbarItem>
+      </ToolbarGroup>
+      <ToolbarItem variant="separator" />
+      <ToolbarGroup className="pf-u-ml-md" id="process-management-buttons">
         {buttonItems}
-      </DataToolbarGroup>
+      </ToolbarGroup>
     </React.Fragment>
   );
 
@@ -633,15 +740,15 @@ const ProcessListToolbar: React.FC<IOwnProps> = ({
         handleModalToggle={handleModalToggle}
         resetSelected={resetSelected}
       />
-      <DataToolbar
+      <Toolbar
         id="data-toolbar-with-filter"
         className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
         collapseListedFiltersBreakpoint="xl"
         clearAllFilters={() => clearAll()}
         clearFiltersButtonText="Reset to default"
       >
-        <DataToolbarContent>{toolbarItems}</DataToolbarContent>
-      </DataToolbar>
+        <ToolbarContent>{toolbarItems}</ToolbarContent>
+      </Toolbar>
     </>
   );
 };

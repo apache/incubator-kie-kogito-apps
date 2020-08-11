@@ -4,9 +4,7 @@ import {
   Card,
   Grid,
   GridItem,
-  InjectedOuiaProps,
-  PageSection,
-  withOuiaContext
+  PageSection
 } from '@patternfly/react-core';
 import {
   GraphQL,
@@ -14,7 +12,8 @@ import {
   KogitoEmptyStateType,
   ouiaPageTypeAndObjectId,
   ServerErrors,
-  LoadMore
+  LoadMore,
+  componentOuiaProps, OUIAProps
 } from '@kogito-apps/common';
 import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -22,6 +21,7 @@ import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
+
 
 type filterType = {
   status: GraphQL.ProcessInstanceState[];
@@ -35,9 +35,10 @@ interface LocationProps {
   filters?: filterType;
 }
 
-const ProcessListPage: React.FC<InjectedOuiaProps &
+const ProcessListPage: React.FC<OUIAProps &
   RouteComponentProps<MatchProps, {}, LocationProps>> = ({
-  ouiaContext,
+  ouiaId,
+  ouiaSafe,
   ...props
 }) => {
   const [defaultPageSize] = useState<number>(10);
@@ -48,6 +49,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
   const [offset, setOffset] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [businessKeysArray, setBusinessKeysArray] = useState([]);
   const [filters, setFilters] = useState<filterType>(
     props.location.state
       ? { ...props.location.state.filters }
@@ -72,14 +74,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
     notifyOnNetworkStatusChange: true
   });
 
-  const [
-    getProcessInstancesWithBusinessKey,
-    getProcessInstancesWithBK
-  ] = GraphQL.useGetProcessInstancesWithBusinessKeyLazyQuery({
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true
-  });
-
   useEffect(() => {
     window.history.pushState(null, '');
   }, []);
@@ -100,8 +94,23 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
   };
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances');
+    return ouiaPageTypeAndObjectId('process-instances');
   });
+
+  const queryVariableGenerator = (_searchWordsArray, _statusArray) => {
+    if (_searchWordsArray.length === 0) {
+      return {
+        parentProcessInstanceId: { isNull: true },
+        state: { in: _statusArray }
+      };
+    } else {
+      return {
+        parentProcessInstanceId: { isNull: true },
+        state: { in: _statusArray },
+        or: _searchWordsArray
+      };
+    }
+  };
 
   const onFilterClick = (arr = filters.status) => {
     resetPagination();
@@ -125,27 +134,25 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
     setIsAllChecked(false);
     setSelectedNumber(0);
     setInitData({});
-    if (searchWordsArray.length === 0) {
-      getProcessInstances({
-        variables: { state: arr, offset: 0, limit: defaultPageSize }
-      });
-    } else {
-      getProcessInstancesWithBusinessKey({
-        variables: {
-          state: arr,
-          offset: 0,
-          limit: defaultPageSize,
-          businessKeys: searchWordsArray
-        }
-      });
-    }
+    setBusinessKeysArray(searchWordsArray);
+    getProcessInstances({
+      variables: {
+        where: queryVariableGenerator(searchWordsArray, arr),
+        offset: 0,
+        limit: defaultPageSize
+      }
+    });
   };
 
   const onGetMoreInstances = (initVal, _pageSize) => {
     setIsLoadingMore(true);
     setPageSize(_pageSize);
     getProcessInstances({
-      variables: { state: filters.status, offset: initVal, limit: _pageSize }
+      variables: {
+        where: queryVariableGenerator(businessKeysArray, statusArray),
+        offset: initVal,
+        limit: _pageSize
+      }
     });
   };
 
@@ -172,34 +179,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
     }
   }, [data]);
 
-  useEffect(() => {
-    setSelectedInstances({});
-    if (isLoadingMore === undefined || !isLoadingMore) {
-      setIsLoading(getProcessInstancesWithBK.loading);
-    }
-    setSearchWord('');
-    if (
-      !getProcessInstancesWithBK.loading &&
-      getProcessInstancesWithBK.data !== undefined
-    ) {
-      getProcessInstancesWithBK.data.ProcessInstances.forEach(
-        (instance: any) => {
-          instance.isChecked = false;
-          instance.isOpen = false;
-        }
-      );
-      setLimit(getProcessInstancesWithBK.data.ProcessInstances.length);
-      if (offset > 0 && initData.ProcessInstances.length > 0) {
-        setIsLoadingMore(false);
-        initData.ProcessInstances = initData.ProcessInstances.concat(
-          getProcessInstancesWithBK.data.ProcessInstances
-        );
-      } else {
-        setInitData(getProcessInstancesWithBK.data);
-      }
-    }
-  }, [getProcessInstancesWithBK.data]);
-
   const resetClick = () => {
     setSearchWord('');
     setStatusArray([GraphQL.ProcessInstanceState.Active]);
@@ -211,13 +190,12 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
     onFilterClick([GraphQL.ProcessInstanceState.Active]);
   };
 
-  if (error || getProcessInstancesWithBK.error) {
-    return (
-      <ServerErrors error={error ? error : getProcessInstancesWithBK.error} />
-    );
+  if (error) {
+    return <ServerErrors error={error} variant="large" />;
   }
   return (
     <React.Fragment>
+      <div {...componentOuiaProps(ouiaId, 'ProcessListPage', ouiaSafe)}>
       <PageSection variant="light">
         <PageTitle title="Process Instances" />
         <Breadcrumb>
@@ -228,7 +206,7 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
         </Breadcrumb>
       </PageSection>
       <PageSection>
-        <Grid gutter="md">
+        <Grid hasGutter md={1}>
           <GridItem span={12}>
             <Card className="dataList">
               {!isError && (
@@ -242,7 +220,6 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
                     setInitData={setInitData}
                     selectedInstances={selectedInstances}
                     setSelectedInstances={setSelectedInstances}
-                    getProcessInstances={getProcessInstances}
                     setSearchWord={setSearchWord}
                     searchWord={searchWord}
                     isAllChecked={isAllChecked}
@@ -294,8 +271,9 @@ const ProcessListPage: React.FC<InjectedOuiaProps &
           </GridItem>
         </Grid>
       </PageSection>
+      </div>
     </React.Fragment>
   );
 };
 
-export default withOuiaContext(ProcessListPage);
+export default ProcessListPage;

@@ -13,15 +13,14 @@ import {
   OverflowMenu,
   OverflowMenuContent,
   OverflowMenuGroup,
-  InjectedOuiaProps,
-  withOuiaContext
 } from '@patternfly/react-core';
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
   ItemDescriptor,
   KogitoSpinner,
-  GraphQL
+  GraphQL,
+  componentOuiaProps, OUIAProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
@@ -44,7 +43,7 @@ enum TitleType {
 }
 
 const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
-  InjectedOuiaProps> = ({ ouiaContext, ...props }) => {
+  OUIAProps> = ({ ouiaId,ouiaSafe , ...props }) => {
   const id = props.match.params.instanceID;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>('');
@@ -66,7 +65,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
   });
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances', id);
+    return ouiaPageTypeAndObjectId( 'process-instances', id);
   });
 
   const onShowMessage = (
@@ -154,7 +153,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
   }
 
   return (
-    <>
+    <div {...componentOuiaProps(ouiaId, 'ProcessDetailsPage', ouiaSafe)}>
       {!error ? (
         <>
           <PageSection variant="light">
@@ -163,10 +162,15 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
               handleModalToggle={handleModalToggle}
               modalTitle={setTitle(titleType, modalTitle)}
               modalContent={modalContent}
+              processName={
+                data &&
+                data.ProcessInstances &&
+                data.ProcessInstances[0].processName
+              }
             />
             <PageTitle title="Process Details" />
             {!loading ? (
-              <Grid gutter="md" span={12} lg={6} xl={4}>
+              <Grid hasGutter md={1} span={12} lg={6} xl={4}>
                 <GridItem span={12}>
                   <Breadcrumb>
                     <BreadcrumbItem>
@@ -214,10 +218,10 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
           </PageSection>
           <PageSection>
             {!loading ? (
-              <Grid gutter="md" span={12} lg={6} xl={4}>
+              <Grid hasGutter md={1}span={12} lg={6} xl={4}>
                 <GridItem span={12}>
                   <Split
-                    gutter={'md'}
+                    hasGutter={true}
                     component={'div'}
                     className="pf-u-align-items-center"
                   >
@@ -228,8 +232,13 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
                         className="kogito-management-console--details__title"
                       >
                         <ItemDescriptor
-                          processInstanceData={data.ProcessInstances[0]}
+                          itemDescription={{
+                            id: data.ProcessInstances[0].id,
+                            name: data.ProcessInstances[0].processName,
+                            description: data.ProcessInstances[0].businessKey
+                          }}
                         />
+
                       </Title>
                     </SplitItem>
                     <SplitItem>
@@ -265,10 +274,10 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
           </PageSection>
         </>
       ) : (
-        <ServerErrors error={error} />
+        <ServerErrors error={error} variant="large" />
       )}
-    </>
+    </div>
   );
 };
 
-export default withOuiaContext(ProcessDetailsPage);
+export default ProcessDetailsPage;

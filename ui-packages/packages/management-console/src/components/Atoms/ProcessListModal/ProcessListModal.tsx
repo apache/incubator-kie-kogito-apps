@@ -2,11 +2,10 @@ import React from 'react';
 import {
   Modal,
   Title,
-  TitleLevel,
-  BaseSizes,
   Button,
   TextContent,
-  Text
+  Text,
+  TitleSizes
 } from '@patternfly/react-core';
 import ProcessListBulkInstances from '../ProcessListBulkInstances/ProcessListBulkInstances';
 import { IOperation } from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
@@ -17,6 +16,7 @@ interface IOwnProps {
   isModalOpen: boolean;
   resetSelected?: () => void;
   operationResult?: IOperation;
+  processName?: string;
 }
 const ProcessListModal: React.FC<IOwnProps> = ({
   modalContent,
@@ -24,19 +24,35 @@ const ProcessListModal: React.FC<IOwnProps> = ({
   isModalOpen,
   handleModalToggle,
   resetSelected,
-  operationResult
+  operationResult,
+  processName
 }) => {
+
   const onOkClick = () => {
     handleModalToggle();
     operationResult && resetSelected();
   };
 
+  const createBoldText = (text: string, shouldBeBold: string): JSX.Element => {
+    const textArray = text.split(shouldBeBold);
+    return (
+      <span>
+        {textArray.map((item, index) => (
+          <React.Fragment key={index}>
+            {item}
+            {index !== textArray.length - 1 && <b>{shouldBeBold}</b>}
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  };
+  
   return (
     <Modal
-      isSmall={true}
+      variant="small"
       title=""
       header={
-        <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
+        <Title headingLevel="h1" size={TitleSizes['2xl']}>
           {modalTitle}
         </Title>
       }
@@ -47,14 +63,15 @@ const ProcessListModal: React.FC<IOwnProps> = ({
           OK
         </Button>
       ]}
-      isFooterLeftAligned={false}
     >
       {operationResult !== undefined && (
         <ProcessListBulkInstances operationResult={operationResult} />
       )}
       <TextContent>
         <Text>
-          <strong>{modalContent}</strong>
+          {modalContent &&
+            processName &&
+            createBoldText(modalContent, processName)}
         </Text>
       </TextContent>
     </Modal>

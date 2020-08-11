@@ -30,6 +30,7 @@ import ErrorPopover from '../../Atoms/ErrorPopover/ErrorPopover';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import DisablePopup from '../DisablePopup/DisablePopup';
 import {
+  getProcessInstanceDescription,
   handleAbort,
   handleRetry,
   handleSkip,
@@ -112,8 +113,8 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
     setModalContent(content);
     handleModalToggle();
   };
-  const onSkipClick = () => {
-    handleSkip(
+  const onSkipClick = async () => {
+    await handleSkip(
       processInstanceData,
       () =>
         onShowMessage(
@@ -129,8 +130,8 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
         )
     );
   };
-  const onRetryClick = () => {
-    handleRetry(
+  const onRetryClick = async () => {
+    await handleRetry(
       processInstanceData,
       () =>
         onShowMessage(
@@ -325,6 +326,7 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
         handleModalToggle={handleModalToggle}
         modalTitle={setTitle(titleType, modalTitle)}
         modalContent={modalContent}
+        processName={processInstanceData && processInstanceData.processName}
       />
       <DataListItem
         aria-labelledby={'kie-datalist-item-' + processInstanceData.id}
@@ -377,7 +379,9 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
                   <div>
                     <strong>
                       <ItemDescriptor
-                        processInstanceData={processInstanceData}
+                        itemDescription={getProcessInstanceDescription(
+                          processInstanceData
+                        )}
                       />
                     </strong>
                   </div>
@@ -503,7 +507,7 @@ const ProcessListTableItems: React.FC<IOwnProps> = ({
               <KogitoSpinner spinnerText="Loading process instances..." />
             </Bullseye>
           )}
-          {error && <ServerErrors error={error} />}
+          {error && <ServerErrors error={error} variant="large" />}
         </DataListContent>
       </DataListItem>
     </React.Fragment>

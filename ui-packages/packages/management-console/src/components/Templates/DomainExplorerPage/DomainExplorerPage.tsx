@@ -2,18 +2,21 @@ import React, { useEffect } from 'react';
 import {
   PageSection,
   Breadcrumb,
-  BreadcrumbItem,
-  InjectedOuiaProps,
-  withOuiaContext
+  BreadcrumbItem
 } from '@patternfly/react-core';
-import { DomainExplorer, ouiaPageTypeAndObjectId } from '@kogito-apps/common';
+import {
+  componentOuiaProps,
+  DomainExplorer,
+  ouiaPageTypeAndObjectId,
+  OUIAProps
+} from '@kogito-apps/common';
 import { Link } from 'react-router-dom';
 import { Redirect, RouteComponentProps } from 'react-router';
 import './DomainExplorerPage.css';
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
 
 interface IOwnProps {
-  domains: any;
+  domains: string[];
   loadingState: boolean;
 }
 
@@ -22,17 +25,27 @@ interface MatchProps {
 }
 
 interface LocationProps {
-  parameters?: any[];
-  selected?: any[];
+  parameters?: object[];
+  selected?: string[];
+  finalFilters?: object;
+  filterChips?: string[];
 }
 
 const DomainExplorerPage: React.FC<IOwnProps &
   RouteComponentProps<MatchProps, {}, LocationProps> &
-  InjectedOuiaProps> = ({ ouiaContext, ...props }) => {
+  OUIAProps> = ({
+    ouiaId,
+    ouiaSafe,
+    ...props
+  }) => {
   const rememberedParams =
     (props.location.state && props.location.state.parameters) || [];
   const rememberedSelections =
     (props.location.state && props.location.state.selected) || [];
+  const rememberedFilters =
+    (props.location.state && props.location.state.finalFilters) || [];
+  const rememberedChips =
+    (props.location.state && props.location.state.filterChips) || [];
   const domainName = props.match.params.domainName;
   let BreadCrumb = props.location.pathname.split('/');
   BreadCrumb = BreadCrumb.filter(item => {
@@ -58,11 +71,25 @@ const DomainExplorerPage: React.FC<IOwnProps &
     ]
   };
 
+  const defaultChip = ['metadata / processInstances / state: ACTIVE'];
+
+  const defaultFilter = {
+    metadata: {
+      processInstances: {
+        state: {
+          equal: 'ACTIVE'
+        }
+      }
+    }
+  };
+
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'domain-explorer', domainName);
+    return ouiaPageTypeAndObjectId('domain-explorer', domainName);
   });
   return (
-    <>
+    <div
+      {...componentOuiaProps(ouiaId, 'DataExplorerPage', ouiaSafe)}
+    >
       {!props.loadingState &&
         !props.domains.includes(domainName) &&
         !props.domains.includes(pathName) && (
@@ -107,12 +134,16 @@ const DomainExplorerPage: React.FC<IOwnProps &
         <DomainExplorer
           rememberedParams={rememberedParams}
           rememberedSelections={rememberedSelections}
+          rememberedFilters={rememberedFilters}
+          rememberedChips={rememberedChips}
           domainName={domainName}
           metaData={metaData}
+          defaultChip={defaultChip}
+          defaultFilter={defaultFilter}
         />
       </PageSection>
-    </>
+    </div>
   );
 };
 
-export default React.memo(withOuiaContext(DomainExplorerPage));
+export default React.memo(DomainExplorerPage);

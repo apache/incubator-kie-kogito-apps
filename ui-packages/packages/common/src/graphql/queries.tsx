@@ -2,50 +2,12 @@ import gql from 'graphql-tag';
 
 const GET_PROCESS_INSTANCES = gql`
   query getProcessInstances(
-    $state: [ProcessInstanceState!]
+    $where: ProcessInstanceArgument
     $offset: Int
     $limit: Int
   ) {
     ProcessInstances(
-      where: {
-        parentProcessInstanceId: { isNull: true }
-        state: { in: $state }
-      }
-      pagination: { offset: $offset, limit: $limit }
-    ) {
-      id
-      processId
-      processName
-      parentProcessInstanceId
-      rootProcessInstanceId
-      roles
-      state
-      start
-      lastUpdate
-      addons
-      businessKey
-      serviceUrl
-      error {
-        nodeDefinitionId
-        message
-      }
-    }
-  }
-`;
-
-const GET_PROCESS_INSTANCES_WITH_BUSINESSKEY = gql`
-  query getProcessInstancesWithBusinessKey(
-    $state: [ProcessInstanceState!]
-    $offset: Int
-    $limit: Int
-    $businessKeys: [ProcessInstanceArgument!]
-  ) {
-    ProcessInstances(
-      where: {
-        parentProcessInstanceId: { isNull: true }
-        state: { in: $state }
-        or: $businessKeys
-      }
+      where: $where
       pagination: { offset: $offset, limit: $limit }
     ) {
       id
@@ -238,8 +200,74 @@ const GET_INPUT_FIELDS_FROM_TYPES = gql`
         type {
           name
           kind
+          enumValues {
+            name
+          }
+          ofType {
+            kind
+            name
+            enumValues {
+              name
+            }
+          }
         }
       }
+    }
+  }
+`;
+
+const GET_USER_TASKS_BY_STATES = gql`
+  query getUserTasksByStates($state: [String!]) {
+    UserTaskInstances(where: { state: { in: $state } }) {
+      id
+      description
+      name
+      priority
+      processInstanceId
+      processId
+      rootProcessInstanceId
+      rootProcessId
+      state
+      actualOwner
+      adminGroups
+      adminUsers
+      completed
+      started
+      excludedUsers
+      potentialGroups
+      potentialUsers
+      inputs
+      outputs
+      referenceName
+      endpoint
+    }
+  }
+`;
+
+const GET_USER_TASK = gql`
+  query getUserTaskById($id: String) {
+    UserTaskInstances(where: { id: { equal: $id } }) {
+      id
+      description
+      name
+      priority
+      processInstanceId
+      processId
+      rootProcessInstanceId
+      rootProcessId
+      state
+      actualOwner
+      adminGroups
+      adminUsers
+      completed
+      started
+      excludedUsers
+      potentialGroups
+      potentialUsers
+      inputs
+      outputs
+      referenceName
+      endpoint
     }
   }
 `;

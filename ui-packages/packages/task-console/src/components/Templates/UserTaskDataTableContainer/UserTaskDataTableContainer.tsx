@@ -3,25 +3,21 @@ import {
   Grid,
   GridItem,
   PageSection,
-  InjectedOuiaProps,
-  withOuiaContext,
   Bullseye,
-  Label
+  Label,
 } from '@patternfly/react-core';
 import React, { useEffect } from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
 import './UserTaskDataTable.css';
-import { useGetUserTasksByStatesQuery } from '../../../graphql/types';
 import {
   ouiaPageTypeAndObjectId,
   KogitoSpinner,
-  DataTable
+  DataTableColumn,
+  DataTable,
+  GraphQL,
+  OUIAProps,
+  componentOuiaProps
 } from '@kogito-apps/common';
-import {
-  ICell,
-  ITransform,
-  IFormatterValueType
-} from '@patternfly/react-table';
 
 const UserTaskLoadingComponent = (
   <Bullseye>
@@ -29,7 +25,8 @@ const UserTaskLoadingComponent = (
   </Bullseye>
 );
 
-const stateColumnTransformer: ITransform = (value: IFormatterValueType) => {
+const stateColumnTransformer = (value, rowDataObj) => {
+  // rowDataObj is the original data object to render the row
   if (!value) {
     return null;
   }
@@ -39,8 +36,9 @@ const stateColumnTransformer: ITransform = (value: IFormatterValueType) => {
   };
 };
 
-const UserTaskDataTableContainer: React.FC<InjectedOuiaProps> = ({
-  ouiaContext
+const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
+  ouiaId,
+  ouiaSafe
 }) => {
   const {
     loading,
@@ -48,7 +46,7 @@ const UserTaskDataTableContainer: React.FC<InjectedOuiaProps> = ({
     data,
     refetch,
     networkStatus
-  } = useGetUserTasksByStatesQuery({
+  } = GraphQL.useGetUserTasksByStatesQuery({
     variables: {
       state: ['Ready'] // FIXME: state should not be hard-coded.
     },
@@ -56,39 +54,42 @@ const UserTaskDataTableContainer: React.FC<InjectedOuiaProps> = ({
     notifyOnNetworkStatusChange: true
   });
 
-  const columns: ICell[] = [
+  const columns: DataTableColumn[] = [
     {
-      title: 'ProcessId',
-      data: 'processId'
+      label: 'ProcessId',
+      path: '$.processId'
     },
     {
-      title: 'Name',
-      data: 'name'
+      label: 'Name',
+      path: '$.name'
     },
     {
-      title: 'Priority',
-      data: 'priority'
+      label: 'Priority',
+      path: '$.priority'
     },
     {
-      title: 'ProcessInstanceId',
-      data: 'processInstanceId'
+      label: 'ProcessInstanceId',
+      path: '$.processInstanceId'
     },
     {
-      title: 'State',
-      data: 'state',
-      cellTransforms: [stateColumnTransformer]
+      label: 'State',
+      path: '$.state',
+      bodyCellTransformer: stateColumnTransformer
     }
   ];
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'user-tasks');
+    return ouiaPageTypeAndObjectId( 'user-tasks');
   });
 
   return (
     <React.Fragment>
+      <div
+        {...componentOuiaProps(ouiaId, 'UserTaskDataTableContainer', ouiaSafe)}
+      >
       <UserTaskPageHeader />
       <PageSection>
-        <Grid gutter="md">
+        <Grid hasGutter md={1}>
           <GridItem span={12}>
             <Card className="kogito-task-console--user-task_table-OverFlow">
               <DataTable
@@ -104,8 +105,9 @@ const UserTaskDataTableContainer: React.FC<InjectedOuiaProps> = ({
           </GridItem>
         </Grid>
       </PageSection>
+      </div>
     </React.Fragment>
   );
 };
 
-export default withOuiaContext(UserTaskDataTableContainer);
+export default UserTaskDataTableContainer;

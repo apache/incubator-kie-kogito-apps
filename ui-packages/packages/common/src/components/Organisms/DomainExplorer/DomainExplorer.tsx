@@ -1,55 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import {
-  DataToolbar,
-  DataToolbarContent,
-  DataToolbarToggleGroup,
-  DataToolbarGroup,
   Card,
-  Bullseye
+  Bullseye,
+  ToolbarGroup,
+  ToolbarContent,
+  ToolbarToggleGroup,
+  Toolbar,
+  ToolbarItem,
+  ToolbarFilter
 } from '@patternfly/react-core';
 import { FilterIcon } from '@patternfly/react-icons';
+import { useApolloClient } from 'react-apollo';
+import DomainExplorerFilterOptions from '../../Molecules/DomainExplorerFilterOptions/DomainExplorerFilterOptions';
 import DomainExplorerManageColumns from '../../Molecules/DomainExplorerManageColumns/DomainExplorerManageColumns';
 import DomainExplorerTable from '../../Molecules/DomainExplorerTable/DomainExplorerTable';
 import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
 import LoadMore from '../../Atoms/LoadMore/LoadMore';
 import ServerErrors from '../../Molecules/ServerErrors/ServerErrors';
 import '../../styles.css';
-
+import gql from 'graphql-tag';
+import {
+  validateResponse,
+  deleteKey,
+  clearEmpties
+} from '../../../utils/Utils';
+import { query } from 'gql-query-builder';
 import { GraphQL } from '../../../graphql/types';
 import useGetQueryTypesQuery = GraphQL.useGetQueryTypesQuery;
 import useGetQueryFieldsQuery = GraphQL.useGetQueryFieldsQuery;
 import useGetColumnPickerAttributesQuery = GraphQL.useGetColumnPickerAttributesQuery;
-
+import useGetInputFieldsFromQueryQuery = GraphQL.useGetInputFieldsFromQueryQuery;
 interface IOwnProps {
   domainName: string;
-  rememberedParams: any;
-  rememberedSelections: any;
-  metaData: any;
+  rememberedParams: object[];
+  rememberedSelections: string[];
+  metaData: object;
+  rememberedFilters: object;
+  rememberedChips: string[];
+  defaultChip: string[];
+  defaultFilter: object;
 }
 
 const DomainExplorer: React.FC<IOwnProps> = ({
   domainName,
   rememberedParams,
   rememberedSelections,
-  metaData
+  rememberedFilters,
+  rememberedChips,
+  metaData,
+  defaultChip,
+  defaultFilter
 }) => {
-  const [defaultPageSize] = useState(10);
+  const client = useApolloClient();
   const [columnPickerType, setColumnPickerType] = useState('');
-  const [columnFilters, setColumnFilters] = useState({});
+  const [columnFilters, setColumnFilters] = useState([]);
   const [tableLoading, setTableLoading] = useState(true);
   const [displayTable, setDisplayTable] = useState(false);
   const [displayEmptyState, setDisplayEmptyState] = useState(false);
   const [selected, setSelected] = useState([]);
-  const [limit, setLimit] = useState(defaultPageSize);
+  const [limit, setLimit] = useState(10);
   const [offset, setOffset] = useState(0);
-  const [pageSize, setPageSize] = useState(defaultPageSize);
+  const [pageSize, setPageSize] = useState(10);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [rows, setRows] = useState([]);
-  const [error, setError] = useState();
   const [enableCache, setEnableCache] = useState(false);
   const [parameters, setParameters] = useState([metaData]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [runQuery, setRunQuery] = useState(false);
+  const [filterChips, setFilterChips] = useState([...defaultChip]);
+  const [finalFilters, setFinalFilters] = useState<any>(defaultFilter);
+  const [filterError, setFilterError] = useState('');
+  const [reset, setReset] = useState(false);
+  const [enableRefresh, setEnableRefresh] = useState(true);
+  const [loadMoreClicked, setLoadMoreClicked] = useState(false);
   useEffect(() => {
     /* istanbul ignore else */
     if (domainName) {
@@ -57,7 +80,25 @@ const DomainExplorer: React.FC<IOwnProps> = ({
     }
   }, []);
 
+  useEffect(() => {
+    /* istanbul ignore else */
+    if (isLoadingMore) {
+      setRunQuery(true);
+    }
+  }, [isLoadingMore]);
+
+  useEffect(() => {
+    /* istanbul ignore else */
+    if (
+      (rememberedParams.length === 0 && parameters.length !== 1) ||
+      rememberedParams.length > 0
+    ) {
+      setRunQuery(true);
+    }
+  }, [parameters.length > 1]);
+
   const getQuery = useGetQueryFieldsQuery();
+
   const getQueryTypes = useGetQueryTypesQuery();
   const getPicker = useGetColumnPickerAttributesQuery({
     variables: { columnPickerType: domainName }
@@ -66,6 +107,21 @@ const DomainExplorer: React.FC<IOwnProps> = ({
     setColumnFilters(_columnFilter);
     setLimit(_columnFilter.length);
   };
+  const domainArg =
+    !getQuery.loading &&
+    getQuery.data &&
+    getQuery.data.__type.fields.find(item => {
+      if (item.name === domainName) {
+        return item;
+      }
+    });
+
+  const argument = domainArg && domainArg.args[0].type.name;
+  const getSchema = useGetInputFieldsFromQueryQuery({
+    variables: {
+      currentQuery: argument
+    }
+  });
 
   let data = [];
   const tempArray = [];
@@ -104,7 +160,6 @@ const DomainExplorer: React.FC<IOwnProps> = ({
       }
     });
   });
-
   selections = selections.slice(0, 5);
   defaultParams = defaultParams.slice(0, 5);
 
@@ -113,68 +168,186 @@ const DomainExplorer: React.FC<IOwnProps> = ({
       setEnableCache(true);
       setParameters(rememberedParams);
       setSelected(rememberedSelections);
+      setFinalFilters(rememberedFilters);
+      setFilterChips(rememberedChips);
     } else {
       setParameters(prev => [...defaultParams, ...prev]);
       setSelected(selections);
     }
   }, [columnPickerType, selections.length > 0]);
 
+  const onDeleteChip = (type = '', id = '') => {
+    if (type) {
+      setFilterChips(prev => prev.filter(item => item !== id));
+      const chipText = id.split(':');
+      let removeString = chipText[0].split('/');
+      removeString = removeString.map(stringEle => stringEle.trim());
+      let tempObj = finalFilters;
+      tempObj = deleteKey(tempObj, removeString);
+      const FinalObj = clearEmpties(tempObj);
+      setFinalFilters(FinalObj);
+      setRunQuery(true);
+    } else {
+      setOffset(0);
+      setFinalFilters({ ...defaultFilter });
+      setFilterChips(defaultChip);
+      setReset(true);
+    }
+  };
+
+  const domainQuery = query({
+    operation: domainName,
+    variables: {
+      pagination: {
+        value: { offset, limit: pageSize },
+        type: 'Pagination'
+      },
+      where: { value: finalFilters, type: argument }
+    },
+    fields: parameters
+  });
+
+  async function generateFilterQuery() {
+    setTableLoading(true);
+    setEnableRefresh(true);
+    // parameters(selected columns) length must always above 1 and filters length must be above zero else empty state is displayed
+    if (
+      parameters.length > 1 &&
+      finalFilters &&
+      Object.keys(finalFilters).length > 0
+    ) {
+      try {
+        const response = await client.query({
+          query: gql`
+            ${domainQuery.query}
+          `,
+          variables: domainQuery.variables,
+          fetchPolicy: enableCache ? 'cache-first' : 'network-only'
+        });
+        const firstKey = Object.keys(response.data)[0];
+        if (
+          Object.keys(response.data).length === 1 &&
+          response.data[firstKey].length > 0
+        ) {
+          setFilterError('');
+          const resp = response.data;
+          const respKeys = Object.keys(resp)[0];
+          const tableContent = resp[respKeys];
+          const finalResp = [];
+          tableContent.map(content => {
+            const finalObject = validateResponse(content, parameters);
+            finalResp.push(finalObject);
+          });
+          onAddColumnFilters(finalResp);
+          setDisplayTable(true);
+          setTableLoading(false);
+          setDisplayEmptyState(false);
+        } else {
+          if (loadMoreClicked) {
+            setDisplayTable(true);
+            setTableLoading(false);
+            setLoadMoreClicked(false);
+          } else {
+            setDisplayEmptyState(true);
+            setDisplayTable(false);
+            setTableLoading(false);
+          }
+        }
+      } catch (error) {
+        setFilterError(error);
+        setTableLoading(false);
+        setDisplayTable(false);
+        setDisplayEmptyState(false);
+      }
+    } else {
+      setTableLoading(false);
+      setDisplayEmptyState(false);
+      setDisplayTable(false);
+    }
+    setRunQuery(false);
+    setReset(false);
+    setIsLoadingMore(false);
+  }
+
   const renderToolbar = () => {
     return (
-      <DataToolbar
+      <Toolbar
         id="data-toolbar-with-chip-groups"
         className="pf-m-toggle-group-container"
         collapseListedFiltersBreakpoint="md"
+        clearAllFilters={onDeleteChip}
+        clearFiltersButtonText="Reset to default"
       >
-        <DataToolbarContent>
-          <DataToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="md">
-            <DataToolbarGroup>
-              {!getPicker.loading && (
-                <DomainExplorerManageColumns
-                  columnPickerType={columnPickerType}
-                  setColumnFilters={onAddColumnFilters}
-                  setTableLoading={setTableLoading}
-                  getQueryTypes={getQueryTypes}
-                  setDisplayTable={setDisplayTable}
-                  parameters={parameters}
-                  setParameters={setParameters}
-                  selected={selected}
-                  setSelected={setSelected}
-                  data={data}
-                  getPicker={getPicker}
-                  setError={setError}
-                  setDisplayEmptyState={setDisplayEmptyState}
-                  rememberedParams={rememberedParams}
-                  enableCache={enableCache}
-                  setEnableCache={setEnableCache}
-                  pageSize={pageSize}
-                  offsetVal={offset}
-                  setOffsetVal={setOffset}
-                  setPageSize={setPageSize}
-                  setIsLoadingMore={setIsLoadingMore}
-                  isLoadingMore={isLoadingMore}
-                  metaData={metaData}
-                  setIsModalOpen={setIsModalOpen}
-                  isModalOpen={isModalOpen}
-                />
-              )}
-            </DataToolbarGroup>
-          </DataToolbarToggleGroup>
-        </DataToolbarContent>
-      </DataToolbar>
+        <ToolbarContent>
+          {!getPicker.loading && (
+            <>
+              <ToolbarToggleGroup
+                toggleIcon={<FilterIcon />}
+                breakpoint="xl"
+              >
+                {!getQuery.loading && !getQueryTypes.loading && (
+                  <ToolbarFilter
+                    categoryName="Filters"
+                    chips={filterChips}
+                    deleteChip={onDeleteChip}
+                  >
+                    <ToolbarItem>
+                      <DomainExplorerFilterOptions
+                        filterChips={filterChips}
+                        finalFilters={finalFilters}
+                        getQueryTypes={getQueryTypes}
+                        getSchema={getSchema}
+                        reset={reset}
+                        runQuery={runQuery}
+                        setFilterChips={setFilterChips}
+                        setFinalFilters={setFinalFilters}
+                        setOffset={setOffset}
+                        setReset={setReset}
+                        setRunQuery={setRunQuery}
+                        generateFilterQuery={generateFilterQuery}
+                      />
+                    </ToolbarItem>
+                  </ToolbarFilter>
+                )}
+              </ToolbarToggleGroup>
+              <ToolbarGroup>
+                <ToolbarItem>
+                  <DomainExplorerManageColumns
+                    columnPickerType={columnPickerType}
+                    getQueryTypes={getQueryTypes}
+                    setParameters={setParameters}
+                    selected={selected}
+                    setSelected={setSelected}
+                    data={data}
+                    getPicker={getPicker}
+                    setOffsetVal={setOffset}
+                    setPageSize={setPageSize}
+                    metaData={metaData}
+                    setIsModalOpen={setIsModalOpen}
+                    isModalOpen={isModalOpen}
+                    setRunQuery={setRunQuery}
+                    enableRefresh={enableRefresh}
+                    setEnableRefresh={setEnableRefresh}
+                  />
+                </ToolbarItem>
+              </ToolbarGroup>
+            </>
+          )}
+        </ToolbarContent>
+      </Toolbar>
     );
   };
 
   if (!getQuery.loading && getQuery.error) {
-    return <ServerErrors error={getQuery.error} />;
+    return <ServerErrors error={getQuery.error} variant="large" />;
   }
 
   if (!getQueryTypes.loading && getQueryTypes.error) {
-    return <ServerErrors error={getQueryTypes.error} />;
+    return <ServerErrors error={getQueryTypes.error} variant="large" />;
   }
 
   if (!getPicker.loading && getPicker.error) {
-    return <ServerErrors error={getPicker.error} />;
+    return <ServerErrors error={getPicker.error} variant="large" />;
   }
 
   const onGetMoreInstances = (initVal, _pageSize) => {
@@ -185,48 +358,51 @@ const DomainExplorer: React.FC<IOwnProps> = ({
   const handleRetry = () => {
     setIsModalOpen(true);
   };
+
   return (
     <>
-      {!error ? (
-        <>
-          {renderToolbar()}
-
-          {!tableLoading || isLoadingMore ? (
-            <div className="kogito-common--domain-explorer__table-OverFlow">
-              <DomainExplorerTable
-                columnFilters={columnFilters}
-                tableLoading={tableLoading}
-                displayTable={displayTable}
-                displayEmptyState={displayEmptyState}
-                parameters={parameters}
-                selected={selected}
-                offset={offset}
-                setRows={setRows}
-                rows={rows}
-                isLoadingMore={isLoadingMore}
-                handleRetry={handleRetry}
-              />
-              {!displayEmptyState && (limit === pageSize || isLoadingMore) && (
+      {renderToolbar()}
+      <Card className="kogito-common--domain-explorer__table-OverFlow">
+        {!tableLoading || isLoadingMore ? (
+          <>
+            <DomainExplorerTable
+              columnFilters={columnFilters}
+              tableLoading={tableLoading}
+              displayTable={displayTable}
+              displayEmptyState={displayEmptyState}
+              parameters={parameters}
+              selected={selected}
+              offset={offset}
+              setRows={setRows}
+              rows={rows}
+              isLoadingMore={isLoadingMore}
+              handleRetry={handleRetry}
+              filterError={filterError}
+              finalFilters={finalFilters}
+              filterChips={filterChips}
+              onDeleteChip={onDeleteChip}
+            />
+            {displayTable &&
+              !displayEmptyState &&
+              !filterError &&
+              filterChips.length > 0 &&
+              (limit === pageSize || isLoadingMore) && (
                 <LoadMore
                   offset={offset}
                   setOffset={setOffset}
                   getMoreItems={onGetMoreInstances}
                   pageSize={pageSize}
                   isLoadingMore={isLoadingMore}
+                  setLoadMoreClicked={setLoadMoreClicked}
                 />
               )}
-            </div>
-          ) : (
-            <Card>
-              <Bullseye>
-                <KogitoSpinner spinnerText="Loading domain data..." />
-              </Bullseye>
-            </Card>
-          )}
-        </>
-      ) : (
-        <ServerErrors error={error} />
-      )}
+          </>
+        ) : (
+          <Bullseye>
+            <KogitoSpinner spinnerText="Loading domain data..." />
+          </Bullseye>
+        )}
+      </Card>
     </>
   );
 };
