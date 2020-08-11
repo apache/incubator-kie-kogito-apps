@@ -1699,7 +1699,9 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                                   </svg>
                                 </FastForwardIcon>
                               </span>
-                              Skipped
+                              <span>
+                                Skipped
+                              </span>
                             </span>
                           </span>
                         </Component>

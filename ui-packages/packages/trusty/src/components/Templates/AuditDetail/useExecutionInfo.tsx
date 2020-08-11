@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getExecution } from '../../../utils/api/auditApi';
-import { RemoteData, IExecution } from '../../../types';
+import { RemoteData, Execution } from '../../../types';
 
 const useExecutionInfo = (executionId: string) => {
-  const [execution, setExecution] = useState<RemoteData<Error, IExecution>>({
+  const [execution, setExecution] = useState<RemoteData<Error, Execution>>({
     status: 'NOT_ASKED'
   });
 

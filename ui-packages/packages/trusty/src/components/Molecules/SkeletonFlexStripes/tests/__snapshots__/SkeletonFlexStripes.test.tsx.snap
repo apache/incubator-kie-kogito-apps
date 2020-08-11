@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SkeletonFlexStripes renders a list of three stripes 1`] = `
+<Component
+  className="skeleton skeleton--padded"
+>
+  <Component
+    key="skeleton-0"
+  >
+    <SkeletonStripe
+      customStyle={
+        Object {
+          "height": "1em",
+          "width": "200px",
+        }
+      }
+    />
+  </Component>
+  <Component
+    key="skeleton-1"
+  >
+    <SkeletonStripe
+      customStyle={
+        Object {
+          "height": "1em",
+          "width": "200px",
+        }
+      }
+    />
+  </Component>
+  <Component
+    key="skeleton-2"
+  >
+    <SkeletonStripe
+      customStyle={
+        Object {
+          "height": "1em",
+          "width": "200px",
+        }
+      }
+    />
+  </Component>
+</Component>
+`;
+
+exports[`SkeletonFlexStripes renders a padded list of stripes 1`] = `
+<Component
+  className="skeleton skeleton--padded"
+>
+  <Component
+    key="skeleton-0"
+  >
+    <SkeletonStripe
+      customStyle={
+        Object {
+          "height": "1em",
+          "width": "200px",
+        }
+      }
+    />
+  </Component>
+  <Component
+    key="skeleton-1"
+  >
+    <SkeletonStripe
+      customStyle={
+        Object {
+          "height": "1em",
+          "width": "200px",
+        }
+      }
+    />
+  </Component>
+</Component>
+`;

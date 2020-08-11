@@ -153,7 +153,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
       <CardBody>
         {outcome.evaluationStatus !== undefined &&
           outcome.evaluationStatus !== 'SUCCEEDED' && (
-            <EvaluationStatus status={outcome.evaluationStatus} />
+              <EvaluationStatus status={outcome.evaluationStatus} />
           )}
         {children}
       </CardBody>

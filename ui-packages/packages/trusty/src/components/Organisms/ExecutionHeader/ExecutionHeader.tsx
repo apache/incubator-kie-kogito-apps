@@ -3,11 +3,11 @@ import { Flex, FlexItem, Title, Tooltip } from '@patternfly/react-core';
 import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import ExecutionStatus from '../../Atoms/ExecutionStatus/ExecutionStatus';
 import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
-import { RemoteData, IExecution } from '../../../types';
+import { RemoteData, Execution } from '../../../types';
 import './ExecutionHeader.scss';
 
 type ExecutionHeaderProps = {
-  execution: RemoteData<Error, IExecution>;
+  execution: RemoteData<Error, Execution>;
 };
 
 const ExecutionHeader = (props: ExecutionHeaderProps) => {
@@ -58,7 +58,11 @@ const ExecutionHeader = (props: ExecutionHeaderProps) => {
               }
             >
               <div>
-                <ExecutionStatus result={execution.data.executionSucceeded} />
+                <ExecutionStatus
+                  result={
+                    execution.data.executionSucceeded ? 'success' : 'failure'
+                  }
+                />
               </div>
             </Tooltip>
           )}

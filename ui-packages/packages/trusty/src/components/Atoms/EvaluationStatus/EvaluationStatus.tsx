@@ -17,40 +17,37 @@ type EvaluationStatusProps = {
 const EvaluationStatus = (props: EvaluationStatusProps) => {
   const { status } = props;
   const label = evaluationStatus[status];
+  let evaluationIcon;
+  let evaluationColor;
+
   switch (status) {
     case 'EVALUATING':
-      return (
-        <Label color="orange" icon={<HourglassHalfIcon />}>
-          {label}
-        </Label>
-      );
+      evaluationIcon = <HourglassHalfIcon />;
+      evaluationColor = 'orange';
+      break;
     case 'FAILED':
-      return (
-        <Label color="red" icon={<ErrorCircleOIcon />}>
-          {label}
-        </Label>
-      );
+      evaluationIcon = <ErrorCircleOIcon />;
+      evaluationColor = 'red';
+      break;
     case 'SKIPPED':
-      return (
-        <Label color="red" icon={<FastForwardIcon />}>
-          {label}
-        </Label>
-      );
+      evaluationIcon = <FastForwardIcon />;
+      evaluationColor = 'red';
+      break;
     case 'NOT_EVALUATED':
-      return (
-        <Label color="red" icon={<MinusCircleIcon />}>
-          {label}
-        </Label>
-      );
+      evaluationIcon = <MinusCircleIcon />;
+      evaluationColor = 'red';
+      break;
     case 'SUCCEEDED':
-      return (
-        <Label color="green" icon={<CheckCircleIcon />}>
-          {label}
-        </Label>
-      );
-    default:
-      return <span>{label}</span>;
+      evaluationIcon = <CheckCircleIcon />;
+      evaluationColor = 'green';
+      break;
   }
+
+  return (
+    <Label color={evaluationColor} icon={evaluationIcon}>
+      <span>{label}</span>
+    </Label>
+  );
 };
 
 export default EvaluationStatus;
