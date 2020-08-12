@@ -5,7 +5,7 @@ exports[`DatePicker renders correctly 1`] = `
   id="datepicker"
   onDateUpdate={[MockFunction]}
 >
-  <Component>
+  <InputGroup>
     <div
       className="pf-c-input-group"
     >
@@ -53,6 +53,6 @@ exports[`DatePicker renders correctly 1`] = `
         </TextInputBase>
       </ForwardRef>
     </div>
-  </Component>
+  </InputGroup>
 </DatePicker>
 `;

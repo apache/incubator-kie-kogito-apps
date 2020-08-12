@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SkeletonCards renders a list of cards 1`] = `
-<Component
+<Gallery
   className="skeleton-cards"
   hasGutter={true}
 >
-  <Component
+  <GalleryItem
     key="0"
   >
     <div
@@ -31,8 +31,8 @@ exports[`SkeletonCards renders a list of cards 1`] = `
         key="2"
       />
     </div>
-  </Component>
-  <Component
+  </GalleryItem>
+  <GalleryItem
     key="3"
   >
     <div
@@ -58,8 +58,8 @@ exports[`SkeletonCards renders a list of cards 1`] = `
         key="5"
       />
     </div>
-  </Component>
-  <Component
+  </GalleryItem>
+  <GalleryItem
     key="6"
   >
     <div
@@ -85,6 +85,6 @@ exports[`SkeletonCards renders a list of cards 1`] = `
         key="8"
       />
     </div>
-  </Component>
-</Component>
+  </GalleryItem>
+</Gallery>
 `;

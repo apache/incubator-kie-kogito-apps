@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SkeletonFlexStripes renders a list of three stripes 1`] = `
-<Component
+<Flex
   className="skeleton skeleton--padded"
 >
-  <Component
+  <FlexItem
     key="skeleton-0"
   >
     <SkeletonStripe
@@ -15,8 +15,8 @@ exports[`SkeletonFlexStripes renders a list of three stripes 1`] = `
         }
       }
     />
-  </Component>
-  <Component
+  </FlexItem>
+  <FlexItem
     key="skeleton-1"
   >
     <SkeletonStripe
@@ -27,8 +27,8 @@ exports[`SkeletonFlexStripes renders a list of three stripes 1`] = `
         }
       }
     />
-  </Component>
-  <Component
+  </FlexItem>
+  <FlexItem
     key="skeleton-2"
   >
     <SkeletonStripe
@@ -39,15 +39,15 @@ exports[`SkeletonFlexStripes renders a list of three stripes 1`] = `
         }
       }
     />
-  </Component>
-</Component>
+  </FlexItem>
+</Flex>
 `;
 
 exports[`SkeletonFlexStripes renders a padded list of stripes 1`] = `
-<Component
+<Flex
   className="skeleton skeleton--padded"
 >
-  <Component
+  <FlexItem
     key="skeleton-0"
   >
     <SkeletonStripe
@@ -58,8 +58,8 @@ exports[`SkeletonFlexStripes renders a padded list of stripes 1`] = `
         }
       }
     />
-  </Component>
-  <Component
+  </FlexItem>
+  <FlexItem
     key="skeleton-1"
   >
     <SkeletonStripe
@@ -70,6 +70,6 @@ exports[`SkeletonFlexStripes renders a padded list of stripes 1`] = `
         }
       }
     />
-  </Component>
-</Component>
+  </FlexItem>
+</Flex>
 `;

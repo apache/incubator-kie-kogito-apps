@@ -2,24 +2,24 @@
 
 exports[`Audit overview renders correctly a list of executions 1`] = `
 <Fragment>
-  <Component
+  <PageSection
     variant="light"
   >
-    <Component>
-      <Component
+    <TextContent>
+      <Title
         headingLevel="h2"
         size="3xl"
       >
         Audit Investigation
-      </Component>
-      <Component
+      </Title>
+      <Text
         component="p"
       >
         Here you can retrieve all the available information about past cases.
-      </Component>
-    </Component>
-  </Component>
-  <Component
+      </Text>
+    </TextContent>
+  </PageSection>
+  <PageSection
     isFilled={true}
   >
     <Component
@@ -63,6 +63,6 @@ exports[`Audit overview renders correctly a list of executions 1`] = `
       setPageSize={[Function]}
       total={0}
     />
-  </Component>
+  </PageSection>
 </Fragment>
 `;

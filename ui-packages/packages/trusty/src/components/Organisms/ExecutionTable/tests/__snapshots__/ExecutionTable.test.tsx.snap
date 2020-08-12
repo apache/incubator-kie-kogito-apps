@@ -117,23 +117,23 @@ exports[`Execution table renders a loading error message when data loading fails
             "props": Object {
               "colSpan": 5,
             },
-            "title": <Unknown>
-              <Unknown>
-                <Unknown
+            "title": <Bullseye>
+              <EmptyState>
+                <EmptyStateIcon
                   color="#C9190B"
                   icon={[Function]}
                 />
-                <Unknown
+                <Title
                   headingLevel="h5"
                   size="lg"
                 >
                   Loading Error
-                </Unknown>
-                <Unknown>
+                </Title>
+                <EmptyStateBody>
                   We are unable to load data right now. Try again later.
-                </Unknown>
-              </Unknown>
-            </Unknown>,
+                </EmptyStateBody>
+              </EmptyState>
+            </Bullseye>,
           },
         ],
         "executionKey": "no-results",
@@ -856,22 +856,22 @@ exports[`Execution table renders no result message if no executions are found 1`
             "props": Object {
               "colSpan": 5,
             },
-            "title": <Unknown>
-              <Unknown>
-                <Unknown
+            "title": <Bullseye>
+              <EmptyState>
+                <EmptyStateIcon
                   icon={[Function]}
                 />
-                <Unknown
+                <Title
                   headingLevel="h5"
                   size="lg"
                 >
                   No executions found
-                </Unknown>
-                <Unknown>
+                </Title>
+                <EmptyStateBody>
                   No results match the filter criteria. Try removing all filters.
-                </Unknown>
-              </Unknown>
-            </Unknown>,
+                </EmptyStateBody>
+              </EmptyState>
+            </Bullseye>,
           },
         ],
         "executionKey": "no-results",

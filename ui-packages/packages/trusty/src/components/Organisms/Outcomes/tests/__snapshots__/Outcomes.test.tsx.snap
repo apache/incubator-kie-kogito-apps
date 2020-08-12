@@ -38,14 +38,14 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
   <section
     className="outcomes"
   >
-    <Component
+    <Gallery
       className="outcome-cards"
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
-        <Component
+        <GalleryItem
           key="0"
         >
           <div>
@@ -67,18 +67,21 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                 }
               }
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={0}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Title
                         className="outcome-cards__card__title"
                         headingLevel="h4"
                         size="xl"
@@ -88,10 +91,10 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         >
                           Mortgage Approval
                         </h4>
-                      </Component>
+                      </Title>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -122,27 +125,26 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         </div>
                       </OutcomeProperty>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={1}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -172,15 +174,15 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
-        <Component
+        </GalleryItem>
+        <GalleryItem
           key="1"
         >
           <div>
@@ -202,18 +204,21 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                 }
               }
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={2}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Title
                         className="outcome-cards__card__title"
                         headingLevel="h4"
                         size="xl"
@@ -223,10 +228,10 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         >
                           Risk Score
                         </h4>
-                      </Component>
+                      </Title>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -257,27 +262,26 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         </div>
                       </OutcomeProperty>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={3}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -307,16 +311,16 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
+        </GalleryItem>
       </div>
-    </Component>
+    </Gallery>
   </section>
 </Outcomes>
 `;
@@ -435,14 +439,14 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
   <section
     className="outcomes"
   >
-    <Component
+    <Gallery
       className="outcome-cards"
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
-        <Component
+        <GalleryItem
           key="19"
         >
           <div>
@@ -554,18 +558,21 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
               }
               titleAsLabel={true}
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={12}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Label
                         className="outcome-cards__card__label"
                         color="blue"
                       >
@@ -578,10 +585,10 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             Recommended Loan Products
                           </span>
                         </span>
-                      </Component>
+                      </Label>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -633,14 +640,14 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           ]
                         }
                       >
-                        <Component
+                        <Split
                           className="outcome__property"
                           key="21"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -650,8 +657,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Product
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -668,17 +675,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="22"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -688,8 +695,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Recommendation
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -706,17 +713,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="23"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -726,8 +733,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Note Amount
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -744,17 +751,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="24"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -764,8 +771,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Interest Rate
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -782,17 +789,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="25"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -802,8 +809,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Monthly Payment
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -820,17 +827,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="26"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -840,8 +847,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Cash to Close
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -858,17 +865,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="27"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -878,8 +885,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Required Credit Score
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -896,32 +903,31 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
+                        </Split>
                       </OutcomeSubList>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={13}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -951,15 +957,15 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
-        <Component
+        </GalleryItem>
+        <GalleryItem
           key="20"
         >
           <div>
@@ -1071,18 +1077,21 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
               }
               titleAsLabel={true}
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={14}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Label
                         className="outcome-cards__card__label"
                         color="blue"
                       >
@@ -1095,10 +1104,10 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             Recommended Loan Products
                           </span>
                         </span>
-                      </Component>
+                      </Label>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -1150,14 +1159,14 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           ]
                         }
                       >
-                        <Component
+                        <Split
                           className="outcome__property"
                           key="28"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1167,8 +1176,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Product
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1185,17 +1194,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="29"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1205,8 +1214,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Recommendation
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1223,17 +1232,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="30"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1243,8 +1252,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Note Amount
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1261,17 +1270,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="31"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1281,8 +1290,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Interest Rate
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1299,17 +1308,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="32"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1319,8 +1328,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Monthly Payment
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1337,17 +1346,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="33"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1357,8 +1366,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Cash to Close
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1375,17 +1384,17 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
-                        <Component
+                        </Split>
+                        <Split
                           className="outcome__property"
                           key="34"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -1395,8 +1404,8 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                 Required Credit Score
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -1413,32 +1422,31 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
+                        </Split>
                       </OutcomeSubList>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={15}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -1468,16 +1476,16 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
+        </GalleryItem>
       </div>
-    </Component>
+    </Gallery>
   </section>
 </Outcomes>
 `;
@@ -1508,14 +1516,17 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
     <LightCard
       key="52"
     >
-      <Component
+      <Card
         className=""
         isHoverable={false}
       >
         <article
           className="pf-c-card"
+          data-ouia-component-id={20}
+          data-ouia-component-type="PF4/Card"
+          data-ouia-safe={true}
         >
-          <Component>
+          <CardBody>
             <div
               className="pf-c-card__body"
             >
@@ -1531,14 +1542,14 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
                   }
                 }
               >
-                <Component
+                <Split
                   className="outcome__property"
                   key="53"
                 >
                   <div
                     className="pf-l-split outcome__property"
                   >
-                    <Component
+                    <SplitItem
                       className="outcome__property__name"
                       key="property-name"
                     >
@@ -1548,8 +1559,8 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
                         Mortgage Approval
                         :
                       </div>
-                    </Component>
-                    <Component
+                    </SplitItem>
+                    <SplitItem
                       className="outcome__property__value"
                       key="property-value"
                     >
@@ -1566,14 +1577,14 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
                           </span>
                         </FormattedValue>
                       </div>
-                    </Component>
+                    </SplitItem>
                   </div>
-                </Component>
+                </Split>
               </OutcomeProperty>
             </div>
-          </Component>
+          </CardBody>
         </article>
-      </Component>
+      </Card>
     </LightCard>
   </section>
 </Outcomes>
@@ -1599,14 +1610,14 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
   <section
     className="outcomes"
   >
-    <Component
+    <Gallery
       className="outcome-cards"
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
-        <Component
+        <GalleryItem
           key="51"
         >
           <div>
@@ -1623,18 +1634,21 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                 }
               }
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={18}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Title
                         className="outcome-cards__card__title"
                         headingLevel="h4"
                         size="xl"
@@ -1644,17 +1658,17 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                         >
                           Bank Score
                         </h4>
-                      </Component>
+                      </Title>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
                       <EvaluationStatus
                         status="SKIPPED"
                       >
-                        <Component
+                        <Label
                           color="red"
                           icon={
                             <FastForwardIcon
@@ -1704,31 +1718,30 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                               </span>
                             </span>
                           </span>
-                        </Component>
+                        </Label>
                       </EvaluationStatus>
                       <span />
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={19}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -1758,16 +1771,16 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
+        </GalleryItem>
       </div>
-    </Component>
+    </Gallery>
   </section>
 </Outcomes>
 `;
@@ -1861,14 +1874,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
   <section
     className="outcomes"
   >
-    <Component
+    <Gallery
       className="outcome-cards"
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
-        <Component
+        <GalleryItem
           key="35"
         >
           <div>
@@ -1954,18 +1967,21 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                 }
               }
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={16}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Title
                         className="outcome-cards__card__title"
                         headingLevel="h4"
                         size="xl"
@@ -1975,10 +1991,10 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                         >
                           Client Ratings
                         </h4>
-                      </Component>
+                      </Title>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -2139,14 +2155,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       }
                                     }
                                   >
-                                    <Component
+                                    <Split
                                       className="outcome__property"
                                       key="41"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
                                       >
-                                        <Component
+                                        <SplitItem
                                           className="outcome__property__name"
                                           key="property-name"
                                         >
@@ -2156,8 +2172,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             Loan Amount
                                             :
                                           </div>
-                                        </Component>
-                                        <Component
+                                        </SplitItem>
+                                        <SplitItem
                                           className="outcome__property__value"
                                           key="property-value"
                                         >
@@ -2174,9 +2190,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </span>
                                             </FormattedValue>
                                           </div>
-                                        </Component>
+                                        </SplitItem>
                                       </div>
-                                    </Component>
+                                    </Split>
                                   </OutcomeProperty>
                                 </div>
                                 <div
@@ -2195,14 +2211,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       }
                                     }
                                   >
-                                    <Component
+                                    <Split
                                       className="outcome__property"
                                       key="42"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
                                       >
-                                        <Component
+                                        <SplitItem
                                           className="outcome__property__name"
                                           key="property-name"
                                         >
@@ -2212,8 +2228,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             Repayment Rate
                                             :
                                           </div>
-                                        </Component>
-                                        <Component
+                                        </SplitItem>
+                                        <SplitItem
                                           className="outcome__property__value"
                                           key="property-value"
                                         >
@@ -2230,9 +2246,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </span>
                                             </FormattedValue>
                                           </div>
-                                        </Component>
+                                        </SplitItem>
                                       </div>
-                                    </Component>
+                                    </Split>
                                   </OutcomeProperty>
                                 </div>
                                 <div
@@ -2251,14 +2267,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       }
                                     }
                                   >
-                                    <Component
+                                    <Split
                                       className="outcome__property"
                                       key="43"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
                                       >
-                                        <Component
+                                        <SplitItem
                                           className="outcome__property__name"
                                           key="property-name"
                                         >
@@ -2268,8 +2284,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             Loan Eligibility
                                             :
                                           </div>
-                                        </Component>
-                                        <Component
+                                        </SplitItem>
+                                        <SplitItem
                                           className="outcome__property__value"
                                           key="property-value"
                                         >
@@ -2286,9 +2302,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </span>
                                             </FormattedValue>
                                           </div>
-                                        </Component>
+                                        </SplitItem>
                                       </div>
-                                    </Component>
+                                    </Split>
                                   </OutcomeProperty>
                                 </div>
                               </div>
@@ -2373,14 +2389,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       }
                                     }
                                   >
-                                    <Component
+                                    <Split
                                       className="outcome__property"
                                       key="46"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
                                       >
-                                        <Component
+                                        <SplitItem
                                           className="outcome__property__name"
                                           key="property-name"
                                         >
@@ -2390,8 +2406,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             Loan amount
                                             :
                                           </div>
-                                        </Component>
-                                        <Component
+                                        </SplitItem>
+                                        <SplitItem
                                           className="outcome__property__value"
                                           key="property-value"
                                         >
@@ -2408,9 +2424,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </span>
                                             </FormattedValue>
                                           </div>
-                                        </Component>
+                                        </SplitItem>
                                       </div>
-                                    </Component>
+                                    </Split>
                                   </OutcomeProperty>
                                 </div>
                                 <div
@@ -2429,14 +2445,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       }
                                     }
                                   >
-                                    <Component
+                                    <Split
                                       className="outcome__property"
                                       key="47"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
                                       >
-                                        <Component
+                                        <SplitItem
                                           className="outcome__property__name"
                                           key="property-name"
                                         >
@@ -2446,8 +2462,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             Repayment rate
                                             :
                                           </div>
-                                        </Component>
-                                        <Component
+                                        </SplitItem>
+                                        <SplitItem
                                           className="outcome__property__value"
                                           key="property-value"
                                         >
@@ -2464,9 +2480,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </span>
                                             </FormattedValue>
                                           </div>
-                                        </Component>
+                                        </SplitItem>
                                       </div>
-                                    </Component>
+                                    </Split>
                                   </OutcomeProperty>
                                 </div>
                                 <div
@@ -2529,14 +2545,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             }
                                           }
                                         >
-                                          <Component
+                                          <Split
                                             className="outcome__property"
                                             key="49"
                                           >
                                             <div
                                               className="pf-l-split outcome__property"
                                             >
-                                              <Component
+                                              <SplitItem
                                                 className="outcome__property__name"
                                                 key="property-name"
                                               >
@@ -2546,8 +2562,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                                   Loan amount
                                                   :
                                                 </div>
-                                              </Component>
-                                              <Component
+                                              </SplitItem>
+                                              <SplitItem
                                                 className="outcome__property__value"
                                                 key="property-value"
                                               >
@@ -2564,9 +2580,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                                     </span>
                                                   </FormattedValue>
                                                 </div>
-                                              </Component>
+                                              </SplitItem>
                                             </div>
-                                          </Component>
+                                          </Split>
                                         </OutcomeProperty>
                                       </div>
                                       <div
@@ -2585,14 +2601,14 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                             }
                                           }
                                         >
-                                          <Component
+                                          <Split
                                             className="outcome__property"
                                             key="50"
                                           >
                                             <div
                                               className="pf-l-split outcome__property"
                                             >
-                                              <Component
+                                              <SplitItem
                                                 className="outcome__property__name"
                                                 key="property-name"
                                               >
@@ -2602,8 +2618,8 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                                   Repayment rate
                                                   :
                                                 </div>
-                                              </Component>
-                                              <Component
+                                              </SplitItem>
+                                              <SplitItem
                                                 className="outcome__property__value"
                                                 key="property-value"
                                               >
@@ -2620,9 +2636,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                                     </span>
                                                   </FormattedValue>
                                                 </div>
-                                              </Component>
+                                              </SplitItem>
                                             </div>
-                                          </Component>
+                                          </Split>
                                         </OutcomeProperty>
                                       </div>
                                     </div>
@@ -2634,27 +2650,26 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                         </div>
                       </OutcomeComposed>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={17}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -2684,16 +2699,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
+        </GalleryItem>
       </div>
-    </Component>
+    </Gallery>
   </section>
 </Outcomes>
 `;
@@ -2736,14 +2751,14 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
   <section
     className="outcomes"
   >
-    <Component
+    <Gallery
       className="outcome-cards"
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
-        <Component
+        <GalleryItem
           key="4"
         >
           <div>
@@ -2778,18 +2793,21 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                 }
               }
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={8}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Title
                         className="outcome-cards__card__title"
                         headingLevel="h4"
                         size="xl"
@@ -2799,10 +2817,10 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                         >
                           Last Transaction
                         </h4>
-                      </Component>
+                      </Title>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -2862,14 +2880,14 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                 }
                               }
                             >
-                              <Component
+                              <Split
                                 className="outcome__property"
                                 key="7"
                               >
                                 <div
                                   className="pf-l-split outcome__property"
                                 >
-                                  <Component
+                                  <SplitItem
                                     className="outcome__property__name"
                                     key="property-name"
                                   >
@@ -2879,8 +2897,8 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                       Auth Code
                                       :
                                     </div>
-                                  </Component>
-                                  <Component
+                                  </SplitItem>
+                                  <SplitItem
                                     className="outcome__property__value"
                                     key="property-value"
                                   >
@@ -2897,9 +2915,9 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                         </span>
                                       </FormattedValue>
                                     </div>
-                                  </Component>
+                                  </SplitItem>
                                 </div>
-                              </Component>
+                              </Split>
                             </OutcomeProperty>
                           </div>
                           <div
@@ -2918,14 +2936,14 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                 }
                               }
                             >
-                              <Component
+                              <Split
                                 className="outcome__property"
                                 key="8"
                               >
                                 <div
                                   className="pf-l-split outcome__property"
                                 >
-                                  <Component
+                                  <SplitItem
                                     className="outcome__property__name"
                                     key="property-name"
                                   >
@@ -2935,8 +2953,8 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                       Amount
                                       :
                                     </div>
-                                  </Component>
-                                  <Component
+                                  </SplitItem>
+                                  <SplitItem
                                     className="outcome__property__value"
                                     key="property-value"
                                   >
@@ -2953,35 +2971,34 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                         </span>
                                       </FormattedValue>
                                     </div>
-                                  </Component>
+                                  </SplitItem>
                                 </div>
-                              </Component>
+                              </Split>
                             </OutcomeProperty>
                           </div>
                         </div>
                       </OutcomeComposed>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={9}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -3011,16 +3028,16 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
+        </GalleryItem>
       </div>
-    </Component>
+    </Gallery>
   </section>
 </Outcomes>
 `;
@@ -3054,14 +3071,14 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
   <section
     className="outcomes"
   >
-    <Component
+    <Gallery
       className="outcome-cards"
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
-        <Component
+        <GalleryItem
           key="9"
         >
           <div>
@@ -3087,18 +3104,21 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                 }
               }
             >
-              <Component
+              <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
                 isHoverable={true}
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id={10}
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
                 >
-                  <Component>
+                  <CardHeader>
                     <div
                       className="pf-c-card__header"
                     >
-                      <Component
+                      <Title
                         className="outcome-cards__card__title"
                         headingLevel="h4"
                         size="xl"
@@ -3108,10 +3128,10 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                         >
                           Merchant Blacklist
                         </h4>
-                      </Component>
+                      </Title>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardHeader>
+                  <CardBody>
                     <div
                       className="pf-c-card__body"
                     >
@@ -3131,14 +3151,14 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                           }
                         }
                       >
-                        <Component
+                        <Split
                           className="outcome__property"
                           key="10"
                         >
                           <div
                             className="pf-l-split outcome__property"
                           >
-                            <Component
+                            <SplitItem
                               className="outcome__property__name"
                               key="property-name"
                             >
@@ -3148,8 +3168,8 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                                 Result
                                 :
                               </div>
-                            </Component>
-                            <Component
+                            </SplitItem>
+                            <SplitItem
                               className="outcome__property__value"
                               key="property-value"
                             >
@@ -3227,32 +3247,31 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                                   </span>
                                 </FormattedValue>
                               </div>
-                            </Component>
+                            </SplitItem>
                           </div>
-                        </Component>
+                        </Split>
                       </OutcomeProperty>
                     </div>
-                  </Component>
-                  <Component>
+                  </CardBody>
+                  <CardFooter>
                     <div
                       className="pf-c-card__footer"
                     >
-                      <Component
+                      <Button
                         className="outcome-cards__card__explanation-link"
                         isInline={true}
                         onClick={[Function]}
                         variant="link"
                       >
                         <button
-                          aria-disabled={null}
+                          aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={null}
+                          data-ouia-component-id={11}
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
-                          tabIndex={null}
                           type="button"
                         >
                           View Details 
@@ -3282,16 +3301,16 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                             </svg>
                           </LongArrowAltRightIcon>
                         </button>
-                      </Component>
+                      </Button>
                     </div>
-                  </Component>
+                  </CardFooter>
                 </article>
-              </Component>
+              </Card>
             </OutcomeCard>
           </div>
-        </Component>
+        </GalleryItem>
       </div>
-    </Component>
+    </Gallery>
   </section>
 </Outcomes>
 `;

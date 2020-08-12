@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Evaluation status renders a failed status 1`] = `
-<Component
+<Label
   color="red"
   icon={
     <ErrorCircleOIcon
@@ -14,11 +14,11 @@ exports[`Evaluation status renders a failed status 1`] = `
   <span>
     Failed
   </span>
-</Component>
+</Label>
 `;
 
 exports[`Evaluation status renders a not evaluated status 1`] = `
-<Component
+<Label
   color="red"
   icon={
     <MinusCircleIcon
@@ -31,11 +31,11 @@ exports[`Evaluation status renders a not evaluated status 1`] = `
   <span>
     Not evaluated
   </span>
-</Component>
+</Label>
 `;
 
 exports[`Evaluation status renders a skipped status 1`] = `
-<Component
+<Label
   color="red"
   icon={
     <FastForwardIcon
@@ -48,11 +48,11 @@ exports[`Evaluation status renders a skipped status 1`] = `
   <span>
     Skipped
   </span>
-</Component>
+</Label>
 `;
 
 exports[`Evaluation status renders a succeeded status 1`] = `
-<Component
+<Label
   color="green"
   icon={
     <CheckCircleIcon
@@ -65,11 +65,11 @@ exports[`Evaluation status renders a succeeded status 1`] = `
   <span>
     Succeeded
   </span>
-</Component>
+</Label>
 `;
 
 exports[`Evaluation status renders an evaluating status 1`] = `
-<Component
+<Label
   color="orange"
   icon={
     <HourglassHalfIcon
@@ -82,5 +82,5 @@ exports[`Evaluation status renders an evaluating status 1`] = `
   <span>
     Evaluating
   </span>
-</Component>
+</Label>
 `;
