@@ -12,7 +12,7 @@ import {
   SplitItem,
   OverflowMenu,
   OverflowMenuContent,
-  OverflowMenuGroup,
+  OverflowMenuGroup
 } from '@patternfly/react-core';
 import {
   ServerErrors,
@@ -20,7 +20,8 @@ import {
   ItemDescriptor,
   KogitoSpinner,
   GraphQL,
-  componentOuiaProps, OUIAProps
+  componentOuiaProps,
+  OUIAProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
@@ -32,6 +33,7 @@ import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import { handleAbort, setTitle } from '../../../utils/Utils';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
+import ProcessDetailsNodeRetrigger from '../../Organisms/ProcessDetailsNodeRetrigger/ProcessDetailsNodeRetrigger';
 
 interface MatchProps {
   instanceID: string;
@@ -43,7 +45,7 @@ enum TitleType {
 }
 
 const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
-  OUIAProps> = ({ ouiaId,ouiaSafe , ...props }) => {
+  OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
   const id = props.match.params.instanceID;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>('');
@@ -65,7 +67,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
   });
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId( 'process-instances', id);
+    return ouiaPageTypeAndObjectId('process-instances', id);
   });
 
   const onShowMessage = (
@@ -218,7 +220,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
           </PageSection>
           <PageSection>
             {!loading ? (
-              <Grid hasGutter md={1}span={12} lg={6} xl={4}>
+              <Grid hasGutter md={1} span={12} lg={6} xl={4}>
                 <GridItem span={12}>
                   <Split
                     hasGutter={true}
@@ -256,11 +258,16 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
                     <ProcessDetails data={data} from={currentPage} />
                   </GridItem>
                 )}
-                <GridItem>
+                <GridItem rowSpan={5}>
                   <ProcessDetailsProcessVariables data={data} />
                 </GridItem>
                 <GridItem>
                   <ProcessDetailsTimeline data={data.ProcessInstances[0]} />
+                </GridItem>
+                <GridItem rowSpan={8}>
+                  <ProcessDetailsNodeRetrigger
+                    processInstanceData={data.ProcessInstances[0]}
+                  />
                 </GridItem>
               </Grid>
             ) : (

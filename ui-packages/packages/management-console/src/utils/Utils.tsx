@@ -233,3 +233,19 @@ export const getProcessInstanceDescription = (
     description: processInstance.businessKey
   };
 };
+
+export const handleNodeTrigger = async (
+  processInstance: Pick<ProcessInstance, 'id' | 'serviceUrl' | 'processId'>,
+  node: Pick<GraphQL.NodeInstance, 'nodeId' | 'id'>,
+  onTriggerSuccess,
+  onTriggerFailure
+) => {
+  try {
+    await axios.post(
+      `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/nodeInstances/${node.id}`
+    );
+    onTriggerSuccess();
+  } catch (error) {
+    onTriggerFailure(JSON.stringify(error.message));
+  }
+};
