@@ -25,12 +25,13 @@
     <version.maven-remote-resources-plugin>1.7.0</version.maven-remote-resources-plugin>
 
     <version.org.infinispan>10.1.5.Final</version.org.infinispan>
-    <version.org.infinispan.image>10.1.5.Final</version.org.infinispan.image>
     <version.org.infinispan.protostream>4.3.2.Final</version.org.infinispan.protostream>
 
+    <version.org.keycloak>11.0.0</version.org.keycloak>
+
     <!-- containers used for testing -->
-    <container.image.infinispan>quay.io/infinispan/server:${version.org.infinispan.image}</container.image.infinispan>
-    <container.image.keycloak>quay.io/keycloak/keycloak:${version.org.keycloak.image}</container.image.keycloak>
+    <container.image.infinispan>quay.io/infinispan/server:${version.org.infinispan}</container.image.infinispan>
+    <container.image.keycloak>quay.io/keycloak/keycloak:${version.org.keycloak}</container.image.keycloak>
     <container.image.jobs-service>org.kie.kogito/jobs-service:${project.version}</container.image.jobs-service>
   </properties>
 
