@@ -17,7 +17,6 @@ describe('FormattedDate', () => {
     const tooltip = wrapper.find('Tooltip');
     const fullDate = format(new Date(initialDate), 'PPpp');
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('span').text()).toMatch('Jan 1, 2020');
     expect(tooltip.length).toBe(1);
     expect(tooltip.props().content).toMatch(fullDate);
@@ -26,7 +25,6 @@ describe('FormattedDate', () => {
   test('displays the "on" preposition before the date when preposition prop is passed', () => {
     const wrapper = shallow(<FormattedDate date="2020-01-01" preposition />);
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('span').text()).toMatch('on Jan 1, 2020');
   });
 
@@ -35,7 +33,6 @@ describe('FormattedDate', () => {
       <FormattedDate date="2020-01-01" fullDateAndTime />
     );
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('Tooltip').length).toBe(0);
     expect(wrapper.find('span').text()).toMatch('Jan 1, 2020, 12:00:00 AM');
   });
@@ -47,7 +44,6 @@ describe('FormattedDate', () => {
       .mockImplementation(() => new Date(fixedDate).getTime());
     const wrapper = shallow(<FormattedDate date={fixedDate} />);
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('span').text()).toMatch('0 seconds ago');
   });
 });

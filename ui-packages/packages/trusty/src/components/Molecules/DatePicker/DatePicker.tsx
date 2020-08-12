@@ -65,6 +65,8 @@ export const datePickerSetup = () => {
   flatpickr.l10ns.en.weekdays.shorthand.forEach((day, index, daysArray) => {
     if (daysArray[index] === 'Thu' || daysArray[index] === 'Th') {
       daysArray[index] = 'Th';
+    } else if (daysArray[index] === 'Sat' || daysArray[index] === 'Sa') {
+      daysArray[index] = 'Sa';
     } else {
       daysArray[index] = daysArray[index].charAt(0);
     }
