@@ -1,79 +1,179 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProcessVariables component tests snapshot testing with variables 1`] = `
-<Card>
-  <CardHeader>
-    <Title
-      headingLevel="h3"
-      size="xl"
+<Memo(ProcessDetailsProcessVariables)
+  displayLabel={true}
+  displaySuccess={true}
+  setDisplayLabel={[MockFunction]}
+  setUpdateJson={[MockFunction]}
+  updateJson={
+    Object {
+      "trip": Object {
+        "begin": "2019-10-22T22:00:00Z[UTC]",
+        "city": "Berlin",
+        "country": "Germany",
+        "end": "2019-10-30T22:00:00Z[UTC]",
+        "visaRequired": false,
+      },
+    }
+  }
+>
+  <Card>
+    <article
+      className="pf-c-card"
+      data-ouia-component-id={0}
+      data-ouia-component-type="PF4/Card"
+      data-ouia-safe={true}
     >
-      Process Variables
-    </Title>
-  </CardHeader>
-  <CardBody>
-    <TextContent>
-      <div
-        key="0"
-      >
-        <t
-          collapseStringsAfterLength={false}
-          collapsed={false}
-          defaultValue={null}
-          displayDataTypes={true}
-          displayObjectSize={true}
-          enableClipboard={true}
-          groupArraysAfterLength={100}
-          iconStyle="triangle"
-          indentWidth={4}
-          name="root"
-          onAdd={false}
-          onDelete={false}
-          onEdit={false}
-          onSelect={false}
-          shouldCollapse={false}
-          sortKeys={false}
-          src={
-            Object {
-              "hotel": Object {
-                "address": Object {
-                  "city": "Berlin",
-                  "country": "Germany",
-                  "street": "street",
-                  "zipCode": "12345",
-                },
-                "bookingNumber": "XX-012345",
-                "name": "Perfect hotel",
-                "phone": "09876543",
-              },
-              "traveller": Object {
-                "address": Object {
-                  "city": "Karkow",
-                  "country": "Poland",
-                  "street": "palna",
-                  "zipCode": "200300",
-                },
-                "email": "rob@redhat.com",
-                "firstName": "Rob",
-                "lastName": "Rob",
-                "nationality": "Polish",
-              },
-              "trip": Object {
-                "begin": "2019-10-22T22:00:00Z[UTC]",
-                "city": "Berlin",
-                "country": "Germany",
-                "end": "2019-10-30T22:00:00Z[UTC]",
-                "visaRequired": false,
-              },
+      <CardHeader>
+        <div
+          className="pf-c-card__header"
+        >
+          <Title
+            headingLevel="h3"
+            size="xl"
+          >
+            <h3
+              className="pf-c-title pf-m-xl"
+            >
+              Process Variables
+            </h3>
+          </Title>
+          <Label
+            color="orange"
+            icon={
+              <InfoCircleIcon
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
+              />
             }
-          }
-          style={Object {}}
-          theme="rjv-default"
-          validationMessage="Validation Error"
-        />
-      </div>
-    </TextContent>
-  </CardBody>
-</Card>
+          >
+            <span
+              className="pf-c-label pf-m-orange"
+            >
+              <span
+                className="pf-c-label__content"
+              >
+                <span
+                  className="pf-c-label__icon"
+                >
+                  <InfoCircleIcon
+                    color="currentColor"
+                    noVerticalAlign={false}
+                    size="sm"
+                  >
+                    <svg
+                      aria-hidden={true}
+                      aria-labelledby={null}
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style={
+                        Object {
+                          "verticalAlign": "-0.125em",
+                        }
+                      }
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                        transform=""
+                      />
+                    </svg>
+                  </InfoCircleIcon>
+                </span>
+                 
+                Changes are not saved yet
+              </span>
+            </span>
+          </Label>
+          <Label
+            className="kogito-management-console--variables__label-fadeIn"
+            color="green"
+            icon={
+              <InfoCircleIcon
+                color="currentColor"
+                noVerticalAlign={false}
+                size="sm"
+              />
+            }
+          >
+            <span
+              className="pf-c-label pf-m-green kogito-management-console--variables__label-fadeIn"
+            >
+              <span
+                className="pf-c-label__content"
+              >
+                <span
+                  className="pf-c-label__icon"
+                >
+                  <InfoCircleIcon
+                    color="currentColor"
+                    noVerticalAlign={false}
+                    size="sm"
+                  >
+                    <svg
+                      aria-hidden={true}
+                      aria-labelledby={null}
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style={
+                        Object {
+                          "verticalAlign": "-0.125em",
+                        }
+                      }
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                        transform=""
+                      />
+                    </svg>
+                  </InfoCircleIcon>
+                </span>
+                 
+                Changes are saved
+              </span>
+            </span>
+          </Label>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div
+          className="pf-c-card__body"
+        >
+          <TextContent>
+            <div
+              className="pf-c-content"
+            >
+              <div>
+                <mockConstructor
+                  name={false}
+                  onEdit={[Function]}
+                  src={
+                    Object {
+                      "trip": Object {
+                        "begin": "2019-10-22T22:00:00Z[UTC]",
+                        "city": "Berlin",
+                        "country": "Germany",
+                        "end": "2019-10-30T22:00:00Z[UTC]",
+                        "visaRequired": false,
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </TextContent>
+        </div>
+      </CardBody>
+    </article>
+  </Card>
+</Memo(ProcessDetailsProcessVariables)>
 `;
 
 exports[`ProcessVariables component tests snapshot testing without variables 1`] = `
@@ -85,9 +185,41 @@ exports[`ProcessVariables component tests snapshot testing without variables 1`]
     >
       Process Variables
     </Title>
+    <Label
+      className="kogito-management-console--variables__label-fadeOut"
+      color="green"
+      icon={
+        <InfoCircleIcon
+          color="currentColor"
+          noVerticalAlign={false}
+          size="sm"
+        />
+      }
+    >
+       
+      Changes are saved
+    </Label>
   </CardHeader>
   <CardBody>
-    <TextContent />
+    <TextContent>
+      <div>
+        <mockConstructor
+          name={false}
+          onEdit={[Function]}
+          src={
+            Object {
+              "trip": Object {
+                "begin": "2019-10-22T22:00:00Z[UTC]",
+                "city": "Berlin",
+                "country": "Germany",
+                "end": "2019-10-30T22:00:00Z[UTC]",
+                "visaRequired": false,
+              },
+            }
+          }
+        />
+      </div>
+    </TextContent>
   </CardBody>
 </Card>
 `;
