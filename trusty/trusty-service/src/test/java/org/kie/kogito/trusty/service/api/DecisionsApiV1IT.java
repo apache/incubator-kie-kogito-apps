@@ -223,7 +223,7 @@ public class DecisionsApiV1IT {
                 .filter(new ResponseLoggingFilter())
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/v1/executions/decisions/" + TEST_EXECUTION_ID + endpoint);
+                .get("/executions/decisions/" + TEST_EXECUTION_ID + endpoint);
     }
 
     private void mockServiceWithDecision(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {

@@ -24,13 +24,13 @@ message Decision {
     optional string executedModelName = 6;
 
     /* @Field(store = Store.YES) */
-    repeated TypedVariable inputs = 7;
+    optional string executedModelNamespace = 7;
 
     /* @Field(store = Store.YES) */
-    repeated DecisionOutcome outcomes = 8;
+    repeated TypedVariable inputs = 8;
 
     /* @Field(store = Store.YES) */
-    optional string executedModelNamespace = 9;
+    repeated DecisionOutcome outcomes = 9;
 }
 
 /* @Indexed */

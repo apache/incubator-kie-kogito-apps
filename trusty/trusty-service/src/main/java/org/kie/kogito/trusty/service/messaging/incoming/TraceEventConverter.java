@@ -103,7 +103,7 @@ public class TraceEventConverter {
                 eventOutput.getName(),
                 eventOutput.getStatus(),
                 toTypedVariable(eventOutput.getName(), eventOutput.getValue()),
-                eventOutput.getInputs().entrySet().stream().map(e -> toTypedVariable(e.getKey(), e.getValue())).collect(Collectors.toList()),
+                eventOutput.getInputs() == null ? null : eventOutput.getInputs().entrySet().stream().map(e -> toTypedVariable(e.getKey(), e.getValue())).collect(Collectors.toList()),
                 eventOutput.getMessages() == null ? null : eventOutput.getMessages().stream().map(TraceEventConverter::toMessage).collect(Collectors.toList())
         );
     }
