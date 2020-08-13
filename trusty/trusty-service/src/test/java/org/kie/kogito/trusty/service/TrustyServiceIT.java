@@ -19,7 +19,6 @@ package org.kie.kogito.trusty.service;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,9 +27,9 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.trusty.service.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.Execution;
 
 @QuarkusTest
 @QuarkusTestResource(TrustyInfinispanServerTestResource.class)
@@ -54,9 +53,9 @@ public class TrustyServiceIT {
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692957000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692959000L), ZoneOffset.UTC);
-        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals("myExecution", result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
@@ -66,9 +65,9 @@ public class TrustyServiceIT {
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692940000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692955000L), ZoneOffset.UTC);
-        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals("myExecution", result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
@@ -78,9 +77,9 @@ public class TrustyServiceIT {
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692940000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692959000L), ZoneOffset.UTC);
-        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "my");
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(from, to, 100, 0, "my");
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals("myExecution", result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
