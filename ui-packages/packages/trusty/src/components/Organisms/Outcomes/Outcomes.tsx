@@ -17,20 +17,20 @@ import EvaluationStatus from '../../Atoms/EvaluationStatus/EvaluationStatus';
 import FormattedValue from '../../Atoms/FormattedValue/FormattedValue';
 import { LongArrowAltRightIcon } from '@patternfly/react-icons';
 import {
-  IOutcome,
-  IItemObject,
-  isIItemObjectArray,
-  isIItemObjectMultiArray
+  Outcome,
+  ItemObject,
+  isItemObjectArray,
+  isItemObjectMultiArray
 } from '../../../types';
 import './Outcomes.scss';
 
 type OutcomesProps =
   | {
-      outcomes: IOutcome[];
+      outcomes: Outcome[];
       listView: true;
       onExplanationClick: (outcomeId: string) => void;
     }
-  | { outcomes: IOutcome[]; listView?: false };
+  | { outcomes: Outcome[]; listView?: false };
 
 const Outcomes = (props: OutcomesProps) => {
   if (props.listView) {
@@ -53,7 +53,7 @@ const Outcomes = (props: OutcomesProps) => {
         if (
           item.outcomeResult !== null &&
           item.outcomeResult.components !== null &&
-          isIItemObjectMultiArray(item.outcomeResult.components)
+          isItemObjectMultiArray(item.outcomeResult.components)
         ) {
           return (
             <Gallery className="outcome-cards" hasGutter key={uuid()}>
@@ -82,7 +82,7 @@ const Outcomes = (props: OutcomesProps) => {
 export default Outcomes;
 
 const renderCard = (
-  outcome: IOutcome,
+  outcome: Outcome,
   onExplanation: (outcomeId: string) => void
 ) => {
   if (outcome.evaluationStatus !== 'SUCCEEDED') {
@@ -97,7 +97,7 @@ const renderCard = (
   if (
     outcome.outcomeResult !== null &&
     outcome.outcomeResult.components !== null &&
-    isIItemObjectMultiArray(outcome.outcomeResult.components)
+    isItemObjectMultiArray(outcome.outcomeResult.components)
   ) {
     return outcome.outcomeResult.components.map(item => (
       <GalleryItem key={uuid()}>
@@ -123,7 +123,7 @@ const renderCard = (
 
 type OutcomeCardProps = {
   children: React.ReactNode;
-  outcome: IOutcome;
+  outcome: Outcome;
   onExplanation: (outcomeId: string) => void;
   titleAsLabel?: boolean;
 };
@@ -153,7 +153,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
       <CardBody>
         {outcome.evaluationStatus !== undefined &&
           outcome.evaluationStatus !== 'SUCCEEDED' && (
-              <EvaluationStatus status={outcome.evaluationStatus} />
+            <EvaluationStatus status={outcome.evaluationStatus} />
           )}
         {children}
       </CardBody>
@@ -176,7 +176,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
 };
 
 const renderOutcome = (
-  outcomeData: IItemObject,
+  outcomeData: ItemObject,
   name: string,
   compact = true,
   hidePropertyName = false
@@ -193,7 +193,7 @@ const renderOutcome = (
     );
   }
   if (outcomeData.components.length) {
-    if (isIItemObjectArray(outcomeData.components)) {
+    if (isItemObjectArray(outcomeData.components)) {
       renderItems.push(
         <OutcomeComposed
           outcome={outcomeData}
@@ -202,7 +202,7 @@ const renderOutcome = (
           name={name}
         />
       );
-    } else if (isIItemObjectMultiArray(outcomeData.components)) {
+    } else if (isItemObjectMultiArray(outcomeData.components)) {
       outcomeData.components.forEach(item => {
         renderItems.push(<OutcomeSubList subListItem={item} />);
       });
@@ -217,7 +217,7 @@ const renderOutcome = (
 };
 
 const OutcomeProperty = (props: {
-  property: IItemObject;
+  property: ItemObject;
   hidePropertyName: boolean;
 }) => {
   const { property, hidePropertyName } = props;
@@ -246,14 +246,14 @@ const OutcomeProperty = (props: {
 };
 
 const OutcomeComposed = (props: {
-  outcome: IItemObject;
+  outcome: ItemObject;
   compact: boolean;
   name: string;
 }) => {
   const { outcome, compact, name } = props;
   const renderItems: JSX.Element[] = [];
 
-  for (const subItem of outcome.components as IItemObject[]) {
+  for (const subItem of outcome.components as ItemObject[]) {
     renderItems.push(
       <div className="outcome-item" key={subItem.name}>
         {renderOutcome(subItem, name, compact)}
@@ -273,7 +273,7 @@ const OutcomeComposed = (props: {
 };
 
 type OutcomeSubListProps = {
-  subListItem: IItemObject[];
+  subListItem: ItemObject[];
 };
 const OutcomeSubList = (props: OutcomeSubListProps) => {
   const { subListItem } = props;

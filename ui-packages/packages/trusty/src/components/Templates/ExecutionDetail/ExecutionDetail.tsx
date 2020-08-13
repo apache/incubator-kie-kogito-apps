@@ -3,11 +3,11 @@ import { useHistory } from 'react-router-dom';
 import { PageSection, Stack, StackItem, Title } from '@patternfly/react-core';
 import Outcomes from '../../Organisms/Outcomes/Outcomes';
 import SkeletonCards from '../../Molecules/SkeletonCards/SkeletonCards';
-import { RemoteData, IOutcome } from '../../../types';
+import { RemoteData, Outcome } from '../../../types';
 import './ExecutionDetail.scss';
 
 type ExecutionDetailProps = {
-  outcome: RemoteData<Error, IOutcome[]>;
+  outcome: RemoteData<Error, Outcome[]>;
 };
 
 const ExecutionDetail = (props: ExecutionDetailProps) => {

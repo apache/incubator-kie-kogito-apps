@@ -17,20 +17,20 @@ import {
   useParams,
   useRouteMatch
 } from 'react-router-dom';
-import { IExecutionRouteParams } from '../../../types';
+import { ExecutionRouteParams } from '../../../types';
 import SkeletonFlexStripes from '../../Molecules/SkeletonFlexStripes/SkeletonFlexStripes';
 import useExecutionInfo from './useExecutionInfo';
 import ExecutionHeader from '../../Organisms/ExecutionHeader/ExecutionHeader';
 import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import SkeletonCards from '../../Molecules/SkeletonCards/SkeletonCards';
 import ExecutionDetail from '../ExecutionDetail/ExecutionDetail';
-import './AuditDetail.scss';
 import useDecisionOutcomes from './useDecisionOutcomes';
+import './AuditDetail.scss';
 
 const AuditDetail = () => {
   const { path, url } = useRouteMatch();
   const location = useLocation();
-  const { executionId } = useParams<IExecutionRouteParams>();
+  const { executionId } = useParams<ExecutionRouteParams>();
   const execution = useExecutionInfo(executionId);
   const outcomes = useDecisionOutcomes(executionId);
 

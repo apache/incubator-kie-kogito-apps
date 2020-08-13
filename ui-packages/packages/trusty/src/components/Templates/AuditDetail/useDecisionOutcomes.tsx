@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getDecisionOutcome } from '../../../utils/api/auditApi';
-import { RemoteData, IOutcome } from '../../../types';
+import { RemoteData, Outcome } from '../../../types';
 
 const useDecisionOutcomes = (executionId: string) => {
-  const [outcomes, setOutcomes] = useState<RemoteData<Error, IOutcome[]>>({
+  const [outcomes, setOutcomes] = useState<RemoteData<Error, Outcome[]>>({
     status: 'NOT_ASKED'
   });
 

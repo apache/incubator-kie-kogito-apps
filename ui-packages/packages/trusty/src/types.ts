@@ -18,27 +18,25 @@ export interface Executions {
   total: number;
 }
 
-export interface IExecutionRouteParams {
+export interface ExecutionRouteParams {
   executionId: string;
   executionType: string;
 }
 
-export interface IItemObject {
+export interface ItemObject {
   name: string;
   typeRef: string;
   value: string | number | boolean | object | null;
-  components: (IItemObject | IItemObject[])[];
+  components: (ItemObject | ItemObject[])[];
   impact?: boolean | number;
   score?: number;
 }
 
-export function isIItemObjectArray(object: any): object is IItemObject[] {
+export function isItemObjectArray(object: any): object is ItemObject[] {
   return typeof object[0].name === 'string';
 }
 
-export function isIItemObjectMultiArray(
-  object: any
-): object is IItemObject[][] {
+export function isItemObjectMultiArray(object: any): object is ItemObject[][] {
   return Array.isArray(object[0]);
 }
 
@@ -52,11 +50,11 @@ export enum evaluationStatus {
 
 export type evaluationStatusStrings = keyof typeof evaluationStatus;
 
-export interface IOutcome {
+export interface Outcome {
   outcomeId: string;
   outcomeName: string;
   evaluationStatus: evaluationStatusStrings;
   hasErrors: boolean;
   messages: string[];
-  outcomeResult: IItemObject;
+  outcomeResult: ItemObject;
 }

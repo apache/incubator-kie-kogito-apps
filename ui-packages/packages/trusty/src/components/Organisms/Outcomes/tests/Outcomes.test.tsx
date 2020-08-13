@@ -1,7 +1,7 @@
 import React from 'react';
 import Outcomes from '../Outcomes';
 import { mount } from 'enzyme';
-import { IOutcome, IItemObject } from '../../../../types';
+import { Outcome, ItemObject } from '../../../../types';
 
 jest.mock('uuid', () => {
   let value = 0;
@@ -289,7 +289,7 @@ const outcomesProps = {
       messages: [],
       hasErrors: false
     }
-  ] as IOutcome[],
+  ] as Outcome[],
   onExplanationClick: jest.fn(),
   listView: true
 };
@@ -398,7 +398,7 @@ const outcomesRecommendationProps = {
         ]
       }
     }
-  ] as IOutcome[],
+  ] as Outcome[],
   onExplanationClick: jest.fn(),
   listView: true
 };
@@ -482,7 +482,7 @@ const outcomeComposedProps = {
         ]
       }
     }
-  ] as IOutcome[],
+  ] as Outcome[],
   onExplanationClick: jest.fn(),
   listView: true
 };
@@ -493,10 +493,10 @@ const outcomeSkippedProps = {
       outcomeId: '_1CFF8C35-4EB2-351E-874C-DB27A2A424C0',
       outcomeName: 'Bank Score',
       evaluationStatus: 'SKIPPED',
-      outcomeResult: {} as IItemObject,
+      outcomeResult: {} as ItemObject,
       messages: [],
       hasErrors: false
-    } as IOutcome
+    } as Outcome
   ],
   onExplanationClick: jest.fn(),
   listView: true
@@ -525,7 +525,7 @@ const outcomeMultiplePropertiesProps = {
         ]
       }
     }
-  ] as IOutcome[],
+  ] as Outcome[],
   onExplanationClick: jest.fn(),
   listView: true
 };
@@ -545,7 +545,7 @@ const outcomeValuesArrayProps = {
         components: []
       }
     }
-  ] as IOutcome[],
+  ] as Outcome[],
   onExplanationClick: jest.fn(),
   listView: true
 };
@@ -565,5 +565,5 @@ const outcomeDetailProps = {
       messages: [],
       hasErrors: false
     }
-  ] as IOutcome[]
+  ] as Outcome[]
 };
