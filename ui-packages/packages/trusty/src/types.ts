@@ -40,6 +40,15 @@ export function isItemObjectMultiArray(object: any): object is ItemObject[][] {
   return Array.isArray(object[0]);
 }
 
+export interface InputRow {
+  inputLabel: string;
+  inputValue?: string | number | boolean | object | null;
+  hasEffect?: boolean | number;
+  score?: number;
+  key: string;
+  category: string;
+}
+
 export enum evaluationStatus {
   EVALUATING = 'Evaluating',
   FAILED = 'Failed',
@@ -57,4 +66,9 @@ export interface Outcome {
   hasErrors: boolean;
   messages: string[];
   outcomeResult: ItemObject;
+}
+
+export interface FeatureScores {
+  featureName: string;
+  featureScore: number;
 }

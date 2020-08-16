@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getDecisionOutcome } from '../../../utils/api/auditApi';
+import { EXECUTIONS_PATH, httpClient } from '../../../utils/api/httpClient';
 import { RemoteData, Outcome } from '../../../types';
+import { AxiosRequestConfig } from 'axios';
 
 const useDecisionOutcomes = (executionId: string) => {
   const [outcomes, setOutcomes] = useState<RemoteData<Error, Outcome[]>>({
@@ -9,8 +10,13 @@ const useDecisionOutcomes = (executionId: string) => {
 
   useEffect(() => {
     let isMounted = true;
+    const config: AxiosRequestConfig = {
+      url: `${EXECUTIONS_PATH}/decision/${executionId}/outcomes`,
+      method: 'get'
+    };
+
     setOutcomes({ status: 'LOADING' });
-    getDecisionOutcome(executionId)
+    httpClient(config)
       .then(response => {
         if (isMounted) {
           setOutcomes({ status: 'SUCCESS', data: response.data.outcomes });

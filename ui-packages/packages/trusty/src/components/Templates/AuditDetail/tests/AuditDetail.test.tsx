@@ -115,7 +115,7 @@ describe('AuditDetail', () => {
           hasErrors: false
         }
       ] as Outcome[]
-    };
+    } as RemoteData<Error, Outcome[]>;
 
     (useExecutionInfo as jest.Mock).mockReturnValue(execution);
     (useDecisionOutcomes as jest.Mock).mockReturnValue(outcomes);
@@ -156,7 +156,7 @@ describe('AuditDetail', () => {
       '/audit/decision/b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000/outcomes'
     );
     expect(wrapper.find('ExecutionDetail')).toHaveLength(1);
-    expect(wrapper.find('ExecutionDetail').prop('outcome')).toStrictEqual(
+    expect(wrapper.find('ExecutionDetail').prop('outcomes')).toStrictEqual(
       outcomes
     );
   });

@@ -25,6 +25,7 @@ import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import SkeletonCards from '../../Molecules/SkeletonCards/SkeletonCards';
 import ExecutionDetail from '../ExecutionDetail/ExecutionDetail';
 import useDecisionOutcomes from './useDecisionOutcomes';
+import Explanation from '../Explanation/Explanation';
 import './AuditDetail.scss';
 
 const AuditDetail = () => {
@@ -89,11 +90,11 @@ const AuditDetail = () => {
         {/*  <ExplanationView />*/}
         {/*</Route>*/}
         <Route path={`${path}/outcomes`}>
-          <ExecutionDetail outcome={outcomes} />
+          <ExecutionDetail outcomes={outcomes} />
         </Route>
-        {/*<Route path={`${path}/outcomes-details`}>*/}
-        {/*  <ExplanationView />*/}
-        {/*</Route>*/}
+        <Route path={`${path}/outcomes-details`}>
+          <Explanation outcomes={outcomes} />
+        </Route>
         <Route exact path={`${path}/`}>
           {outcomes.status === 'SUCCESS' && outcomes.data.length === 1 && (
             <Redirect

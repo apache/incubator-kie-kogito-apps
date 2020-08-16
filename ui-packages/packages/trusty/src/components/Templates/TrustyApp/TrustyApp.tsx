@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   NavLink,
   Redirect,
@@ -20,8 +20,9 @@ import {
 import AuditOverview from '../AuditOverview/AuditOverview';
 import kogitoLogo from '../../../../static/images/kogitoLogo.svg';
 import AuditDetail from '../AuditDetail/AuditDetail';
-import './TrustyApp.scss';
 import imgAvatar from '../../../../static/images/user.svg';
+import Breadcrumbs from '../../Organisms/Breadcrumbs/Breadcrumbs';
+import './TrustyApp.scss';
 
 const TrustyApp = () => {
   const location = useLocation();
@@ -37,7 +38,10 @@ const TrustyApp = () => {
     setIsNavOpenMobile(!isNavOpenMobile);
   };
 
-  const handlePageResize = (props: { windowSize: number; mobileView: boolean }) => {
+  const handlePageResize = (props: {
+    windowSize: number;
+    mobileView: boolean;
+  }) => {
     // closing sidebar menu when resolution is < 1200
     if (props.windowSize < 1200) {
       if (!isMobileView) setIsMobileView(true);
@@ -62,7 +66,13 @@ const TrustyApp = () => {
     </Nav>
   );
 
-  const Sidebar = <PageSidebar nav={PageNav} isNavOpen={isMobileView ? isNavOpenMobile : isNavOpenDesktop} theme="dark" />;
+  const Sidebar = (
+    <PageSidebar
+      nav={PageNav}
+      isNavOpen={isMobileView ? isNavOpenMobile : isNavOpenDesktop}
+      theme="dark"
+    />
+  );
 
   const Header = (
     <PageHeader
@@ -82,7 +92,12 @@ const TrustyApp = () => {
   );
 
   return (
-    <Page header={Header} sidebar={Sidebar} onPageResize={handlePageResize}>
+    <Page
+      header={Header}
+      sidebar={Sidebar}
+      breadcrumb={<Breadcrumbs />}
+      onPageResize={handlePageResize}
+    >
       <Switch>
         <Route exact path="/">
           <Redirect to="/audit" />

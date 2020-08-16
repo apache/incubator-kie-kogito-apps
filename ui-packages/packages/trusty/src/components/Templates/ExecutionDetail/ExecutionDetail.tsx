@@ -7,11 +7,11 @@ import { RemoteData, Outcome } from '../../../types';
 import './ExecutionDetail.scss';
 
 type ExecutionDetailProps = {
-  outcome: RemoteData<Error, Outcome[]>;
+  outcomes: RemoteData<Error, Outcome[]>;
 };
 
 const ExecutionDetail = (props: ExecutionDetailProps) => {
-  const { outcome } = props;
+  const { outcomes } = props;
   const history = useHistory();
   const goToExplanation = useCallback(
     (outcomeId: string) => {
@@ -33,10 +33,10 @@ const ExecutionDetail = (props: ExecutionDetailProps) => {
             </Title>
           </StackItem>
           <StackItem>
-            {outcome.status === 'LOADING' && <SkeletonCards quantity={2} />}
-            {outcome.status === 'SUCCESS' && (
+            {outcomes.status === 'LOADING' && <SkeletonCards quantity={2} />}
+            {outcomes.status === 'SUCCESS' && (
               <Outcomes
-                outcomes={outcome.data}
+                outcomes={outcomes.data}
                 onExplanationClick={goToExplanation}
                 listView
               />

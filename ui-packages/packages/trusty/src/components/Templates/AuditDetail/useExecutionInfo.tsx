@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getExecution } from '../../../utils/api/auditApi';
 import { RemoteData, Execution } from '../../../types';
+import { AxiosRequestConfig } from 'axios';
+import { EXECUTIONS_PATH, httpClient } from '../../../utils/api/httpClient';
 
 const useExecutionInfo = (executionId: string) => {
   const [execution, setExecution] = useState<RemoteData<Error, Execution>>({
@@ -9,8 +10,12 @@ const useExecutionInfo = (executionId: string) => {
 
   useEffect(() => {
     let isMounted = true;
+    const config: AxiosRequestConfig = {
+      url: `${EXECUTIONS_PATH}/decision/${executionId}`,
+      method: 'get'
+    };
     setExecution({ status: 'LOADING' });
-    getExecution(executionId)
+    httpClient(config)
       .then(response => {
         if (isMounted) {
           setExecution({ status: 'SUCCESS', data: response.data });

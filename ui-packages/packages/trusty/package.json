@@ -17,7 +17,8 @@
     "flatpickr": "^4.6.3",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
-    "typescript": "~3.8.3"
+    "typescript": "~3.8.3",
+    "use-react-router-breadcrumbs": "^1.0.4"
   },
   "scripts": {
     "start": "webpack-dev-server --hot --color --progress --info=true --config webpack.dev.js",
