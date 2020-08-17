@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
@@ -29,6 +30,7 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 
 /**
  * Utility class providing different methods to evaluate explainability.
@@ -41,7 +43,8 @@ public class ExplainabilityMetrics {
      */
     private static final double CONFIDENCE_DROP_RATIO = 0.2d;
 
-    private ExplainabilityMetrics() {}
+    private ExplainabilityMetrics() {
+    }
 
     /**
      * Measure the explainability of an explanation.
@@ -70,14 +73,42 @@ public class ExplainabilityMetrics {
      * @return the saliency impact
      */
     public static double impactScore(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) {
-        List<String> importantFeatureNames = topFeatures.stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
 
-        List<Feature> newFeatures = new LinkedList<>();
-        for (Feature feature : prediction.getInput().getFeatures()) {
-            Feature newFeature = DataUtils.dropFeature(feature, importantFeatureNames);
-            newFeatures.add(newFeature);
+        List<Feature> copy = List.copyOf(prediction.getInput().getFeatures());
+
+        for (FeatureImportance featureImportance : topFeatures) {
+            Feature topFeature = featureImportance.getFeature();
+            String name = topFeature.getName();
+            Value<?> value = topFeature.getValue();
+            Feature droppedFeature = null;
+            for (Feature feature : copy) {
+                if (name.equals(feature.getName())) {
+                    if (value.equals(feature.getValue())) {
+                        droppedFeature = FeatureFactory.copyOf(feature, feature.getType().drop(value));
+                    } else {
+                        List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(List.of(feature));
+                        int i = 0;
+                        for (Feature linearizedFeature : linearizedFeatures) {
+                            if (value.equals(linearizedFeature.getValue())) {
+                                Feature e = linearizedFeatures.get(i);
+                                linearizedFeatures.set(i, FeatureFactory.copyOf(e, e.getType().drop(value)));
+                                droppedFeature = FeatureFactory.newCompositeFeature(name, linearizedFeatures);
+                                break;
+                            } else {
+                                i++;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            if (droppedFeature != null) {
+                Feature finalDroppedFeature = droppedFeature;
+                copy = copy.stream().map(f -> f.getName().equals(finalDroppedFeature.getName())? finalDroppedFeature : f).collect(Collectors.toList());
+            }
         }
-        PredictionInput predictionInput = new PredictionInput(newFeatures);
+
+        PredictionInput predictionInput = new PredictionInput(copy);
         List<PredictionOutput> predictionOutputs = model.predict(List.of(predictionInput));
         PredictionOutput predictionOutput = predictionOutputs.get(0);
         double impact = 0d;
