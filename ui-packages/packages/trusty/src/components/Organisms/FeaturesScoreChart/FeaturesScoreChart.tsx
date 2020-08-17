@@ -8,26 +8,12 @@ import {
   ChartLegend,
   ChartTooltip
 } from '@patternfly/react-charts';
+import { ChartTooltipProps } from '@patternfly/react-charts/src/components/ChartTooltip/ChartTooltip';
 import { Selection } from 'victory';
 import { maxBy } from 'lodash';
 import formattedScore from '../../../utils/formattedScore/formattedScore';
 import { FeatureScores } from '../../../types';
 import './FeaturesScoreChart.scss';
-
-const CustomLabel = (props: any) => {
-  return (
-    <ChartTooltip
-      {...props}
-      text={(data: any) => {
-        return data.datum.featureName + '\n' + data.datum.featureScore;
-      }}
-      pointerWidth={10}
-      orientation={'bottom'}
-      dy={25}
-      dx={0}
-    />
-  );
-};
 
 type FeaturesScoreChartProps = {
   featuresScore: FeatureScores[];
@@ -223,6 +209,21 @@ const FeaturesScoreChart = (props: FeaturesScoreChartProps) => {
         y={10}
       />
     </Chart>
+  );
+};
+
+const CustomLabel = (props: ChartTooltipProps) => {
+  return (
+    <ChartTooltip
+      {...props}
+      text={data => {
+        return data.datum.featureName + '\n' + data.datum.featureScore;
+      }}
+      pointerWidth={10}
+      orientation={'bottom'}
+      dy={25}
+      dx={0}
+    />
   );
 };
 

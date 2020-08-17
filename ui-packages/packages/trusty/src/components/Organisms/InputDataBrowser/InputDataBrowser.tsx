@@ -114,7 +114,10 @@ const InputDataBrowser = ({ inputData }: InputDataBrowserProps) => {
               </SplitItem>
             </Split>
           </div>
-          <DataList aria-label="Input Data">
+          <DataList
+            aria-label="Input Data"
+            className="input-browser__data-list"
+          >
             <DataListItem
               aria-labelledby="header"
               key="header"
@@ -310,7 +313,7 @@ const InputValue = (props: InputRow) => {
 let itemCategory = '';
 
 const renderItem = (item: ItemObject, category?: string): JSX.Element => {
-  const renderItems: JSX.Element[] = [];
+  const renderedItems: JSX.Element[] = [];
 
   if (item.value !== null) {
     return (
@@ -333,11 +336,11 @@ const renderItem = (item: ItemObject, category?: string): JSX.Element => {
     if (item.components) {
       if (isItemObjectArray(item.components)) {
         for (const subItem of item.components) {
-          renderItems.push(renderItem(subItem, subItem.name));
+          renderedItems.push(renderItem(subItem, subItem.name));
         }
       } else if (isItemObjectMultiArray(item.components)) {
         for (const subItem of item.components) {
-          renderItems.push(<ItemsSubList itemsList={subItem} key={uuid()} />);
+          renderedItems.push(<ItemsSubList itemsList={subItem} key={uuid()} />);
         }
       }
       return (
@@ -348,7 +351,7 @@ const renderItem = (item: ItemObject, category?: string): JSX.Element => {
               key={`category-${categoryLabel}`}
             />
           </div>
-          {renderItems.map((element: JSX.Element) => element)}
+          {renderedItems}
         </React.Fragment>
       );
     }

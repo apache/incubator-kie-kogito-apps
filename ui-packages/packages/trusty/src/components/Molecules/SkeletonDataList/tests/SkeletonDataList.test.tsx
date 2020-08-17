@@ -14,6 +14,11 @@ describe('SkeletonDatalist', () => {
       <SkeletonDataList rowsNumber={2} colsNumber={2} hasHeader />
     );
 
-    expect(wrapper.find('.skeleton-datalist__header')).toHaveLength(1);
+    expect(
+      wrapper
+        .find('DataListItemRow')
+        .at(0)
+        .hasClass('skeleton-datalist__header')
+    ).toBeTruthy();
   });
 });

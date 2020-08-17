@@ -21,7 +21,6 @@ const ExplanationSwitch = (props: ExplanationSwitchProps) => {
   const [selected, setSelected] = useState<string | SelectOptionObject>(
     currentExplanationId
   );
-  const direction = SelectDirection.down;
 
   const onToggle = (openStatus: boolean) => {
     setIsOpen(openStatus);
@@ -45,7 +44,7 @@ const ExplanationSwitch = (props: ExplanationSwitchProps) => {
         onSelect={onSelect}
         selections={selected}
         isOpen={isOpen}
-        direction={direction}
+        direction={SelectDirection.down}
       >
         {outcomesList.map((item, index) => (
           <SelectOption key={index} value={item.outcomeId}>

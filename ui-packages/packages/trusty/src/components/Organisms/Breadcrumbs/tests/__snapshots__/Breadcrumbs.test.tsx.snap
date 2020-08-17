@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AppBreadcrumbs renders correctly 1`] = `<Breadcrumbs />`;
+exports[`Breadcrumbs renders correctly 1`] = `<Breadcrumbs />`;
 
-exports[`AppBreadcrumbs renders outcome details breadcrumbs links 1`] = `
+exports[`Breadcrumbs renders outcome details breadcrumbs links 1`] = `
 <Breadcrumbs>
   <Breadcrumb>
     <nav

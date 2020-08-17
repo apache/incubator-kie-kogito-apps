@@ -86,9 +86,9 @@ const AuditDetail = () => {
       </PageSection>
 
       <Switch>
-        {/*<Route path={`${path}/single-outcome`}>*/}
-        {/*  <ExplanationView />*/}
-        {/*</Route>*/}
+        <Route path={`${path}/single-outcome`}>
+          <Explanation outcomes={outcomes} />
+        </Route>
         <Route path={`${path}/outcomes`}>
           <ExecutionDetail outcomes={outcomes} />
         </Route>

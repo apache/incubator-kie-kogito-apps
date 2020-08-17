@@ -5,7 +5,7 @@ exports[`SkeletonDatalist renders a 2x2 data list 1`] = `
   aria-label="Loading content"
 >
   <DataListItem
-    aria-labelledby="Loading content"
+    aria-labelledby=""
   >
     <DataListItemRow
       key="skeleton-row-0"

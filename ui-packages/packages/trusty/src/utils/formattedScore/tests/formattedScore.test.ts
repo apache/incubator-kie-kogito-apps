@@ -1,4 +1,4 @@
-import formattedScore from './formattedScore';
+import formattedScore from '../formattedScore';
 
 describe('format scores', () => {
   test('greater then 0.01', () => {

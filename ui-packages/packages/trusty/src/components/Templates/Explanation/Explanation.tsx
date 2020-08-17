@@ -107,7 +107,10 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
           />
         </PageSection>
       )}
-      <PageSection variant="default" className="explanation-view__section">
+      <PageSection
+        variant="default"
+        className="explanation-view__section explanation-view__outcome"
+      >
         <div className="container">
           <Stack hasGutter>
             <StackItem>

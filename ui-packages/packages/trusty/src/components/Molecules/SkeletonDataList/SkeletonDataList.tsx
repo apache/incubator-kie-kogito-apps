@@ -38,7 +38,7 @@ const SkeletonDataList = (props: SkeletonDataListProps) => {
 
   return (
     <DataList aria-label="Loading content">
-      <DataListItem aria-labelledby="Loading content">
+      <DataListItem aria-labelledby="">
         {rows.map((item, index) => {
           let headerClass;
           if (hasHeader && index === 0) {

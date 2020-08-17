@@ -3,7 +3,7 @@ import Breadcrumbs from '../Breadcrumbs';
 import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 
-describe('AppBreadcrumbs', () => {
+describe('Breadcrumbs', () => {
   test('renders correctly', () => {
     const wrapper = mount(
       <MemoryRouter initialEntries={['/audit']}>
