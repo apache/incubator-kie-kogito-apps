@@ -37,7 +37,7 @@ public class ExecutionHeaderResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private OffsetDateTime executionDate;
 
-    @JsonProperty("hasSucceeded")
+    @JsonProperty("executionSucceeded")
     private Boolean hasSucceeded;
 
     @JsonProperty("executorName")

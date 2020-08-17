@@ -44,10 +44,12 @@ public class TraceEventConverter {
                 ? null
                 : event.getOutputs().stream().map(TraceEventConverter::toOutcome).collect(Collectors.toList());
 
+        boolean hasSucceeded = event.getOutputs() != null && event.getOutputs().stream().noneMatch(o -> "failed".equalsIgnoreCase(o.getStatus()));
+
         return new Decision(
                 event.getHeader().getExecutionId(),
                 event.getHeader().getStartTimestamp(),
-                null,
+                hasSucceeded,
                 null,
                 event.getHeader().getResourceId().getModelName(),
                 event.getHeader().getResourceId().getModelNamespace(),
