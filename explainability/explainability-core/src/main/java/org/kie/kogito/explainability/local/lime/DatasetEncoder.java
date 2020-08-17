@@ -103,8 +103,7 @@ class DatasetEncoder {
         for (int t = 0; t < targetInput.getFeatures().size(); t++) {
             Feature originalFeature = targetInput.getFeatures().get(t);
             int finalT = t;
-            List<Value> values = perturbedInputs.stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).collect(Collectors.toList());
-            List<double[]> encode = originalFeature.getType().encode(originalFeature.getValue(), values.toArray(new Value<?>[0]));
+            List<double[]> encode = originalFeature.getType().encode(originalFeature.getValue(), perturbedInputs.stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).toArray(Value<?>[]::new));
             columnData.add(encode);
         }
         return columnData;

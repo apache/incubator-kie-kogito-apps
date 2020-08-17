@@ -311,8 +311,7 @@ public enum Type {
             List<List<double[]>> multiColumns = new LinkedList<>();
             for (Feature f : composite) {
                 int finalI = i;
-                List<Value> subValues = Arrays.stream(values).map(v -> (List<Feature>) v.getUnderlyingObject()).map(l -> l.get(finalI).getValue()).collect(Collectors.toList());
-                List<double[]> subColumn = f.getType().encode(f.getValue(), subValues.toArray(new Value<?>[0]));
+                List<double[]> subColumn = f.getType().encode(f.getValue(), Arrays.stream(values).map(v -> (List<Feature>) v.getUnderlyingObject()).map(l -> l.get(finalI).getValue()).toArray(Value<?>[]::new));
                 multiColumns.add(subColumn);
                 i++;
             }
