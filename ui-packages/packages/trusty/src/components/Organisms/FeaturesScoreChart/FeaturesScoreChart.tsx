@@ -6,9 +6,9 @@ import {
   ChartGroup,
   ChartLabel,
   ChartLegend,
-  ChartTooltip
+  ChartTooltip,
+  ChartTooltipProps
 } from '@patternfly/react-charts';
-import { ChartTooltipProps } from '@patternfly/react-charts/src/components/ChartTooltip/ChartTooltip';
 import { Selection } from 'victory';
 import { maxBy } from 'lodash';
 import formattedScore from '../../../utils/formattedScore/formattedScore';
