@@ -26,6 +26,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.kie.kogito.explainability.utils.DataUtils;
 
 /**
  * Allowed data types.
@@ -92,6 +96,8 @@ public enum Type {
     },
 
     NUMBER("number") {
+        private static final double CLUSTER_THRESHOLD = 1e-3;
+
         @Override
         public Value<?> drop(Value<?> value) {
             if (value.asNumber() == 0) {
@@ -123,7 +129,24 @@ public enum Type {
 
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
-            return encodeEquals(target, values);
+            // find maximum and minimum values
+            double[] doubles = new double[values.length + 1];
+            int i = 0;
+            for (Value<?> v : values) {
+                doubles[i] = v.asNumber();
+                i++;
+            }
+            double originalValue = target.asNumber();
+            doubles[i] = originalValue;
+            double min = DoubleStream.of(doubles).min().orElse(Double.MIN_VALUE);
+            double max = DoubleStream.of(doubles).max().orElse(Double.MAX_VALUE);
+            // feature scaling + kernel based clustering
+            double threshold = DataUtils.gaussianKernel((originalValue - min) / (max - min), 0, 1);
+            List<Double> encodedValues = DoubleStream.of(doubles).map(d -> (d - min) / (max - min))
+                    .map(d -> Double.isNaN(d) ? 1 : d).boxed().map(d -> DataUtils.gaussianKernel(d, 0, 1))
+                    .map(d -> (d - threshold < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
+
+            return encodedValues.stream().map(d -> new double[]{d}).collect(Collectors.toList());
         }
     },
 
@@ -170,7 +193,7 @@ public enum Type {
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
             LocalTime featureValue = LocalTime.parse(value.asString());
-            return new Value<>(featureValue.minusHours(1 + perturbationContext.getRandom().nextInt(23)));
+            return new Value<>(featureValue.minusHours(1L + perturbationContext.getRandom().nextInt(23)));
         }
 
         @Override
@@ -297,9 +320,8 @@ public enum Type {
             for (int j = 0; j < values().length; j++) {
                 List<Double> vector = new LinkedList<>();
                 for (List<double[]> multiColumn : multiColumns) {
-                    for (double d : multiColumn.get(i)) {
-                        vector.add(d);
-                    }
+                    double[] doubles = multiColumn.get(i);
+                    vector.addAll(Arrays.asList(ArrayUtils.toObject(doubles)));
                 }
                 double[] doubles = new double[vector.size()];
                 for (int d = 0; d < doubles.length; d++) {
