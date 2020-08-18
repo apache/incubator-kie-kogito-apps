@@ -10,15 +10,11 @@ import {
   EmptyStateBody,
   EmptyStateIcon,
   EmptyStateVariant,
-  Grid,
-  GridItem,
   Split,
   SplitItem,
   Title
 } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
-import FeatureDistributionBoxPlot from '../../Molecules/FeatureDistributionBoxPlot/FeatureDistributionBoxPlot';
-import FeatureDistributionStackedChart from '../../Molecules/FeatureDistributionStackedChart/FeatureDistributionStakedChart';
 import SkeletonDataList from '../../Molecules/SkeletonDataList/SkeletonDataList';
 import FormattedValue from '../../Atoms/FormattedValue/FormattedValue';
 import SkeletonFlexStripes from '../../Molecules/SkeletonFlexStripes/SkeletonFlexStripes';
@@ -126,14 +122,14 @@ const InputDataBrowser = ({ inputData }: InputDataBrowserProps) => {
               <DataListItemRow>
                 <DataListItemCells
                   dataListCells={[
-                    <DataListCell width={2} key="Input Data">
+                    <DataListCell width={3} key="Input Data">
                       <span>Input Data</span>
                     </DataListCell>,
-                    <DataListCell width={2} key="Value">
+                    <DataListCell width={3} key="Value">
                       <span>Value</span>
                     </DataListCell>,
-                    <DataListCell width={5} key="Distribution">
-                      <span>Distribution</span>
+                    <DataListCell width={3} key="Distribution">
+                      <></>
                     </DataListCell>
                   ]}
                 />
@@ -149,17 +145,18 @@ const InputDataBrowser = ({ inputData }: InputDataBrowserProps) => {
           <Title headingLevel="h5" size="lg">
             No input data
           </Title>
-          <EmptyStateBody>
-            No inputs are present in this node (or model)
-          </EmptyStateBody>
+          <EmptyStateBody>No inputs available to display.</EmptyStateBody>
         </EmptyState>
       )}
     </div>
   );
 };
 
-const ItemsSubList = (props: { itemsList: ItemObject[] }) => {
-  const { itemsList } = props;
+const ItemsSubList = (props: {
+  itemsList: ItemObject[];
+  listCategory: string;
+}) => {
+  const { itemsList, listCategory } = props;
 
   return (
     <DataListItem aria-labelledby="" className={'category__sublist'}>
@@ -171,7 +168,7 @@ const ItemsSubList = (props: { itemsList: ItemObject[] }) => {
             hasEffect={item.impact}
             score={item.score}
             key={item.name}
-            category={itemCategory}
+            category={listCategory}
           />
         ))}
       </DataList>
@@ -208,95 +205,24 @@ const InputValue = (props: InputRow) => {
     : 'input-data--ignored';
   const dataListCells = [];
   dataListCells.push(
-    <DataListCell width={2} key="primary content" className="input-data__wrap">
+    <DataListCell width={3} key="primary content" className="input-data__wrap">
       <span>{inputLabel}</span>
       <span className="input-data__wrap__desc">{category}</span>
     </DataListCell>
   );
   dataListCells.push(
-    <DataListCell width={2} key="secondary content">
+    <DataListCell width={3} key="secondary content">
       <span>
         <FormattedValue value={inputValue} />
       </span>
     </DataListCell>
   );
+  dataListCells.push(
+    <DataListCell width={3} key="distribution">
+      <span />
+    </DataListCell>
+  );
 
-  if (typeof inputValue === 'number') {
-    const mean =
-      Math.floor(
-        (inputValue - Math.floor((inputValue / 4) * Math.random())) * 100
-      ) / 100;
-    const stdMean =
-      Math.floor(Math.floor((inputValue / 12) * Math.random()) * 100) / 100;
-    const high =
-      Math.floor(inputValue + Math.floor(inputValue * Math.random()) * 100) /
-      100;
-    const avg =
-      Math.floor(
-        (inputValue - Math.floor((inputValue / 2) * Math.random())) * 100
-      ) / 100;
-    dataListCells.push(
-      <DataListCell width={5} key="dist 5">
-        <Grid className="input-browser__distribution">
-          <GridItem span={2} className="input-data__wrap">
-            <span>{mean}</span>
-            <span className="input-data__wrap__desc">Mean</span>
-          </GridItem>
-          <GridItem span={2} className="input-data__wrap">
-            <span>{stdMean}</span>
-            <span className="input-data__wrap__desc">Std Mean</span>
-          </GridItem>
-          <GridItem span={2} className="input-data__wrap">
-            <span>{high}</span>
-            <span className="input-data__wrap__desc">High</span>
-          </GridItem>
-          <GridItem span={2} className="input-data__wrap">
-            <span>{avg}</span>
-            <span className="input-data__wrap__desc">Avg</span>
-          </GridItem>
-          <GridItem
-            span={4}
-            className="input-data__wrap input-browser__distribution__chart"
-          >
-            <FeatureDistributionBoxPlot />
-          </GridItem>
-        </Grid>
-      </DataListCell>
-    );
-  } else if (typeof inputValue === 'string') {
-    dataListCells.push(
-      <DataListCell width={5} key="dist 5">
-        <Grid className="input-browser__distribution">
-          <GridItem span={2} className="input-data__wrap">
-            <span>15</span>
-            <span className="input-data__wrap__desc">Unique</span>
-          </GridItem>
-          <GridItem span={4} className="input-data__wrap">
-            <span>Some Long Value</span>
-            <span className="input-data__wrap__desc">Top</span>
-          </GridItem>
-          <GridItem span={2} className="input-data__wrap">
-            <span>154</span>
-            <span className="input-data__wrap__desc">Top Freq</span>
-          </GridItem>
-          <GridItem
-            span={4}
-            className="input-data__wrap input-browser__distribution__chart"
-          >
-            <FeatureDistributionStackedChart />
-          </GridItem>
-        </Grid>
-      </DataListCell>
-    );
-  } else {
-    dataListCells.push(
-      <DataListCell width={5} key="dist 5">
-        <span>
-          <em>No data available</em>
-        </span>
-      </DataListCell>
-    );
-  }
   return (
     <DataListItem
       aria-labelledby={'Input columns'}
@@ -312,51 +238,67 @@ const InputValue = (props: InputRow) => {
 
 let itemCategory = '';
 
-const renderItem = (item: ItemObject, category?: string): JSX.Element => {
+const renderItem = (
+  singleItem: ItemObject,
+  categoryName?: string
+): JSX.Element => {
   const renderedItems: JSX.Element[] = [];
 
-  if (item.value !== null) {
-    return (
-      <InputValue
-        inputLabel={item.name}
-        inputValue={item.value}
-        hasEffect={item.impact}
-        score={item.score}
-        category={itemCategory}
-        key={item.name}
-      />
-    );
-  }
-
-  if (item.components.length) {
-    itemCategory = category ? `${itemCategory} / ${category}` : item.name;
-    const categoryLabel =
-      itemCategory.length > 0 ? `${itemCategory}` : item.name;
-
-    if (item.components) {
-      if (isItemObjectArray(item.components)) {
-        for (const subItem of item.components) {
-          renderedItems.push(renderItem(subItem, subItem.name));
-        }
-      } else if (isItemObjectMultiArray(item.components)) {
-        for (const subItem of item.components) {
-          renderedItems.push(<ItemsSubList itemsList={subItem} key={uuid()} />);
-        }
-      }
+  const elaborateRender = (
+    item: ItemObject,
+    category?: string
+  ): JSX.Element => {
+    if (item.value !== null) {
       return (
-        <React.Fragment key={categoryLabel}>
-          <div className="category">
-            <CategoryLine
-              categoryLabel={categoryLabel}
-              key={`category-${categoryLabel}`}
-            />
-          </div>
-          {renderedItems}
-        </React.Fragment>
+        <InputValue
+          inputLabel={item.name}
+          inputValue={item.value}
+          hasEffect={item.impact}
+          score={item.score}
+          category={itemCategory}
+          key={item.name}
+        />
       );
     }
-  }
-  return <></>;
+
+    if (item.components.length) {
+      itemCategory = category ? `${itemCategory} / ${category}` : item.name;
+      const categoryLabel =
+        itemCategory.length > 0 ? `${itemCategory}` : item.name;
+
+      if (item.components) {
+        if (isItemObjectArray(item.components)) {
+          for (const subItem of item.components) {
+            renderedItems.push(renderItem(subItem, subItem.name));
+          }
+        } else if (isItemObjectMultiArray(item.components)) {
+          for (const subItem of item.components) {
+            renderedItems.push(
+              <ItemsSubList
+                itemsList={subItem}
+                key={uuid()}
+                listCategory={categoryLabel}
+              />
+            );
+          }
+        }
+        return (
+          <React.Fragment key={categoryLabel}>
+            <div className="category">
+              <CategoryLine
+                categoryLabel={categoryLabel}
+                key={`category-${categoryLabel}`}
+              />
+            </div>
+            {renderedItems}
+          </React.Fragment>
+        );
+      }
+    }
+    return <></>;
+  };
+
+  return elaborateRender(singleItem, categoryName);
 };
 
 export default InputDataBrowser;
