@@ -35,7 +35,7 @@ public class TraceEventConverter {
     private TraceEventConverter() {
     }
 
-    public static Decision toDecision(TraceEvent event) {
+    public static Decision toDecision(TraceEvent event, String sourceUrl) {
 
         List<TypedVariable> inputs = event.getInputs() == null
                 ? null
@@ -47,6 +47,7 @@ public class TraceEventConverter {
 
         return new Decision(
                 event.getHeader().getExecutionId(),
+                sourceUrl,
                 event.getHeader().getStartTimestamp(),
                 decisionHasSucceeded(event.getOutputs()),
                 null,

@@ -37,9 +37,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class TraceEventTestUtils {
 
     public static void assertDecision(Decision expected, Decision actual) {
-        assertEquals(expected.getExecutionId(), actual.getExecutionId());
         assertSame(expected.getExecutionType(), actual.getExecutionType());
+        assertEquals(expected.getExecutionId(), actual.getExecutionId());
+        assertEquals(expected.getSourceUrl(), actual.getSourceUrl());
         assertEquals(expected.getExecutionTimestamp(), actual.getExecutionTimestamp());
+        assertEquals(expected.hasSucceeded(), actual.hasSucceeded());
         assertEquals(expected.getExecutedModelName(), actual.getExecutedModelName());
         assertEquals(expected.getExecutorName(), actual.getExecutorName());
         assertList(expected.getInputs(), actual.getInputs(), TraceEventTestUtils::assertTypedVariable, TraceEventTestUtils::compareTypedVariable);

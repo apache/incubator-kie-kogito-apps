@@ -41,10 +41,11 @@ public class Decision extends Execution {
         super(ExecutionTypeEnum.DECISION);
     }
 
-    public Decision(String executionId, Long executionTimestamp, Boolean hasSucceeded,
+    public Decision(String executionId, String sourceUrl, Long executionTimestamp, Boolean hasSucceeded,
                     String executorName, String executedModelName, String executedModelNamespace,
                     List<TypedVariable> inputs, List<DecisionOutcome> outcomes) {
-        super(executionId, executionTimestamp, hasSucceeded, executorName, executedModelName, executedModelNamespace, ExecutionTypeEnum.DECISION);
+        super(executionId, sourceUrl, executionTimestamp, hasSucceeded, executorName,
+                executedModelName, executedModelNamespace, ExecutionTypeEnum.DECISION);
         this.inputs = inputs;
         this.outcomes = outcomes;
     }

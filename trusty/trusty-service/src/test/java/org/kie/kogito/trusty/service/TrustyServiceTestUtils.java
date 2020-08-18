@@ -51,6 +51,8 @@ import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 public class TrustyServiceTestUtils {
 
+    public static final String CLOUDEVENT_SOURCE = "http://localhost:8080/Traffic+Violation";
+
     public static final String CORRECT_CLOUDEVENT_ID = "82639415-ceb1-411a-b3c8-4832e6a82905";
     public static final String CLOUDEVENT_WITH_ERRORS_ID = "6f8f5a8b-5477-464c-b5d3-1e3ed399e0da";
     public static final String CLOUDEVENT_WITH_NULL_FIELDS_ID = "03c3db32-5b93-473f-a83d-39e661e2462e";
@@ -66,6 +68,7 @@ public class TrustyServiceTestUtils {
     private static final String EVALUATION_STATUS_SKIPPED = "SKIPPED";
     private static final String EVALUATION_STATUS_SUCCEEDED = "SUCCEEDED";
 
+    private static final String SERVICE_URL = "http://localhost:8080";
     private static final String MODEL_NAME = "Traffic Violation";
     private static final String MODEL_NAMESPACE = "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF";
 
@@ -98,7 +101,7 @@ public class TrustyServiceTestUtils {
     private static final String TYPE_FINE_NODE_ID = "_2D4F30EE-21A6-4A78-A524-A5C238D433AE";
     private static final String TYPE_VIOLATION_NODE_ID = "_40731093-0642-4588-9183-1660FC55053B";
 
-    private static final TraceResourceId trafficViolationResourceId = new TraceResourceId(MODEL_NAMESPACE, MODEL_NAME);
+    private static final TraceResourceId trafficViolationResourceId = new TraceResourceId(SERVICE_URL, MODEL_NAMESPACE, MODEL_NAME);
     private static final TraceType stringType = new TraceType(null, "http://www.omg.org/spec/DMN/20180521/FEEL/", "string");
     private static final TraceType tDriverType = new TraceType(TYPE_DRIVER_NODE_ID, MODEL_NAMESPACE, "tDriver");
     private static final TraceType tFineType = new TraceType(TYPE_FINE_NODE_ID, MODEL_NAMESPACE, "tFine");
@@ -139,7 +142,7 @@ public class TrustyServiceTestUtils {
     public static CloudEventImpl<TraceEvent> buildCloudEvent(TraceEvent traceEvent) {
         return CloudEventUtils.build(
                 traceEvent.getHeader().getExecutionId(),
-                URI.create(URLEncoder.encode(traceEvent.getHeader().getResourceId().getModelName(), StandardCharsets.UTF_8)),
+                URI.create(CLOUDEVENT_SOURCE),
                 traceEvent,
                 TraceEvent.class
         );
@@ -241,7 +244,7 @@ public class TrustyServiceTestUtils {
 
     public static Decision buildCorrectDecision(String cloudEventId) {
         return new Decision(
-                cloudEventId, CORRECT_CLOUDEVENT_START_TS, null, null, MODEL_NAME, MODEL_NAMESPACE,
+                cloudEventId, CLOUDEVENT_SOURCE, CORRECT_CLOUDEVENT_START_TS, true, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
                         vDecisionViolation,
                         vDecisionDriver
@@ -349,7 +352,7 @@ public class TrustyServiceTestUtils {
 
     public static Decision buildDecisionWithErrors() {
         return new Decision(
-                CLOUDEVENT_WITH_ERRORS_ID, CLOUDEVENT_WITH_ERRORS_START_TS, null, null, MODEL_NAME, MODEL_NAMESPACE,
+                CLOUDEVENT_WITH_ERRORS_ID, CLOUDEVENT_SOURCE, CLOUDEVENT_WITH_ERRORS_START_TS, false, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
                         vDecisionViolation,
                         vDecisionDriverNull
@@ -402,7 +405,7 @@ public class TrustyServiceTestUtils {
     }
 
     public static Decision buildDecisionWithNullFields() {
-        return new Decision(CLOUDEVENT_WITH_NULL_FIELDS_ID, CLOUDEVENT_WITH_NULL_FIELDS_START_TS, null, null, MODEL_NAME, MODEL_NAMESPACE, null, null);
+        return new Decision(CLOUDEVENT_WITH_NULL_FIELDS_ID, CLOUDEVENT_SOURCE, CLOUDEVENT_WITH_NULL_FIELDS_START_TS, false, null, MODEL_NAME, MODEL_NAMESPACE, null, null);
     }
 
     private static TraceHeader buildNullTypeHeader(String executionId, Long startTs, Long endTs, Long duration, List<Message> messages) {

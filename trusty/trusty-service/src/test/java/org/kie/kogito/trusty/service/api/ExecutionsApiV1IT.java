@@ -88,7 +88,7 @@ class ExecutionsApiV1IT {
 
     @Test
     void givenARequestWhenExecutionEndpointIsCalledThenTheExecutionHeaderIsReturned() throws ParseException {
-        Execution execution = new Execution("test1",
+        Execution execution = new Execution("test1", "http://localhost:8081/model",
                                             OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
                                             true, "name", "model", "namespace", ExecutionTypeEnum.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class))).thenReturn(List.of(execution));

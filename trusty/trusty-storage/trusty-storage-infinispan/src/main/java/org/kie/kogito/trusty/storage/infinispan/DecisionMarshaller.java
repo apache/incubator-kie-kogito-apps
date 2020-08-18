@@ -40,6 +40,7 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
         }
         return new Decision(
                 reader.readString(Execution.EXECUTION_ID_FIELD),
+                reader.readString(Execution.SOURCE_URL_FIELD),
                 reader.readLong(Execution.EXECUTION_TIMESTAMP_FIELD),
                 reader.readBoolean(Execution.HAS_SUCCEEDED_FIELD),
                 reader.readString(Execution.EXECUTOR_NAME_FIELD),
@@ -54,6 +55,7 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
     public void writeTo(ProtoStreamWriter writer, Decision input) throws IOException {
         writer.writeString(Execution.EXECUTION_TYPE_FIELD, stringFromEnum(input.getExecutionType()));
         writer.writeString(Execution.EXECUTION_ID_FIELD, input.getExecutionId());
+        writer.writeString(Execution.SOURCE_URL_FIELD, input.getSourceUrl());
         writer.writeLong(Execution.EXECUTION_TIMESTAMP_FIELD, input.getExecutionTimestamp());
         writer.writeBoolean(Execution.HAS_SUCCEEDED_FIELD, input.hasSucceeded());
         writer.writeString(Execution.EXECUTOR_NAME_FIELD, input.getExecutorName());

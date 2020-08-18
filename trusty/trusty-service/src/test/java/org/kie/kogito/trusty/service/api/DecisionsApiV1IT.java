@@ -72,12 +72,12 @@ public class DecisionsApiV1IT {
 
     @Test
     void testGetStructuredInputs() throws Exception {
-        assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL, ListStatus.FULL);
-        assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL, ListStatus.EMPTY);
-        assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL, ListStatus.NULL);
-        assertGetStructuredInputsCorrectEmptyResponse(ListStatus.EMPTY, ListStatus.FULL);
-        assertGetStructuredInputsCorrectEmptyResponse(ListStatus.EMPTY, ListStatus.EMPTY);
-        assertGetStructuredInputsCorrectEmptyResponse(ListStatus.EMPTY, ListStatus.NULL);
+        assertGetStructuredInputsCorrectFullResponse(ListStatus.FULL);
+        assertGetStructuredInputsCorrectFullResponse(ListStatus.EMPTY);
+        assertGetStructuredInputsCorrectFullResponse(ListStatus.NULL);
+        assertGetStructuredInputsCorrectEmptyResponse(ListStatus.FULL);
+        assertGetStructuredInputsCorrectEmptyResponse(ListStatus.EMPTY);
+        assertGetStructuredInputsCorrectEmptyResponse(ListStatus.NULL);
         assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.FULL);
         assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.EMPTY);
         assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.NULL);
@@ -86,27 +86,27 @@ public class DecisionsApiV1IT {
 
     @Test
     void testGetOutcomes() throws Exception {
-        assertGetOutcomesCorrectFullResponse(ListStatus.FULL, ListStatus.FULL);
-        assertGetOutcomesCorrectEmptyResponse(ListStatus.FULL, ListStatus.EMPTY);
-        assertGetOutcomesCorrectNullResponse(ListStatus.FULL, ListStatus.NULL);
-        assertGetOutcomesCorrectFullResponse(ListStatus.EMPTY, ListStatus.FULL);
-        assertGetOutcomesCorrectEmptyResponse(ListStatus.EMPTY, ListStatus.EMPTY);
-        assertGetOutcomesCorrectNullResponse(ListStatus.EMPTY, ListStatus.NULL);
-        assertGetOutcomesCorrectFullResponse(ListStatus.NULL, ListStatus.FULL);
-        assertGetOutcomesCorrectEmptyResponse(ListStatus.NULL, ListStatus.EMPTY);
-        assertGetOutcomesCorrectNullResponse(ListStatus.NULL, ListStatus.NULL);
+        assertGetOutcomesCorrectFullResponse(ListStatus.FULL);
+        assertGetOutcomesCorrectEmptyResponse(ListStatus.FULL);
+        assertGetOutcomesCorrectNullResponse(ListStatus.FULL);
+        assertGetOutcomesCorrectFullResponse(ListStatus.EMPTY);
+        assertGetOutcomesCorrectEmptyResponse(ListStatus.EMPTY);
+        assertGetOutcomesCorrectNullResponse(ListStatus.EMPTY);
+        assertGetOutcomesCorrectFullResponse(ListStatus.NULL);
+        assertGetOutcomesCorrectEmptyResponse(ListStatus.NULL);
+        assertGetOutcomesCorrectNullResponse(ListStatus.NULL);
         assertBadRequestWithoutDecision("/structuredInputs");
     }
 
     @Test
     void testGetOutcomeById() throws Exception {
-        assertGetOutcomeByIdCorrectResponse(ListStatus.FULL, ListStatus.FULL);
+        assertGetOutcomeByIdCorrectResponse(ListStatus.FULL);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.FULL, ListStatus.EMPTY);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.FULL, ListStatus.NULL);
-        assertGetOutcomeByIdCorrectResponse(ListStatus.EMPTY, ListStatus.FULL);
+        assertGetOutcomeByIdCorrectResponse(ListStatus.EMPTY);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.EMPTY, ListStatus.EMPTY);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.EMPTY, ListStatus.NULL);
-        assertGetOutcomeByIdCorrectResponse(ListStatus.NULL, ListStatus.FULL);
+        assertGetOutcomeByIdCorrectResponse(ListStatus.NULL);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.NULL, ListStatus.EMPTY);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.NULL, ListStatus.NULL);
         assertBadRequestWithoutDecision("/structuredInputs");
@@ -129,39 +129,39 @@ public class DecisionsApiV1IT {
         assertTrue(response.hasSucceeded());
     }
 
-    private void assertGetOutcomeByIdCorrectResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        mockServiceWithDecision(inputsStatus, outcomesStatus);
+    private void assertGetOutcomeByIdCorrectResponse(ListStatus inputsStatus) throws Exception {
+        mockServiceWithDecision(inputsStatus, ListStatus.FULL);
         DecisionOutcomeResponse response = get("/outcomes/" + TEST_OUTCOME_ID).as(DecisionOutcomeResponse.class);
         assertEquals(TEST_OUTCOME_ID, response.getOutcomeId());
     }
 
-    private void assertGetOutcomesCorrectEmptyResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        mockServiceWithDecision(inputsStatus, outcomesStatus);
+    private void assertGetOutcomesCorrectEmptyResponse(ListStatus inputsStatus) throws Exception {
+        mockServiceWithDecision(inputsStatus, ListStatus.EMPTY);
         DecisionOutcomesResponse response = get("/outcomes").as(DecisionOutcomesResponse.class);
         assertSame(0, response.getOutcomes().size());
     }
 
-    private void assertGetOutcomesCorrectFullResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        mockServiceWithDecision(inputsStatus, outcomesStatus);
+    private void assertGetOutcomesCorrectFullResponse(ListStatus inputsStatus) throws Exception {
+        mockServiceWithDecision(inputsStatus, ListStatus.FULL);
         DecisionOutcomesResponse response = get("/outcomes").as(DecisionOutcomesResponse.class);
         assertSame(1, response.getOutcomes().size());
         assertTrue(response.getOutcomes().stream().anyMatch(o -> "ONE".equals(o.getOutcomeName())));
     }
 
-    private void assertGetOutcomesCorrectNullResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        mockServiceWithDecision(inputsStatus, outcomesStatus);
+    private void assertGetOutcomesCorrectNullResponse(ListStatus inputsStatus) throws Exception {
+        mockServiceWithDecision(inputsStatus, ListStatus.NULL);
         DecisionOutcomesResponse response = get("/outcomes").as(DecisionOutcomesResponse.class);
         assertNull(response.getOutcomes());
     }
 
-    private void assertGetStructuredInputsCorrectEmptyResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        mockServiceWithDecision(inputsStatus, outcomesStatus);
+    private void assertGetStructuredInputsCorrectEmptyResponse(ListStatus outcomesStatus) throws Exception {
+        mockServiceWithDecision(ListStatus.EMPTY, outcomesStatus);
         DecisionStructuredInputsResponse response = get("/structuredInputs").as(DecisionStructuredInputsResponse.class);
         assertSame(0, response.getInputs().size());
     }
 
-    private void assertGetStructuredInputsCorrectFullResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        mockServiceWithDecision(inputsStatus, outcomesStatus);
+    private void assertGetStructuredInputsCorrectFullResponse(ListStatus outcomesStatus) throws Exception {
+        mockServiceWithDecision(ListStatus.FULL, outcomesStatus);
         DecisionStructuredInputsResponse response = get("/structuredInputs").as(DecisionStructuredInputsResponse.class);
         assertSame(2, response.getInputs().size());
         assertTrue(response.getInputs().stream().anyMatch(i -> "first".equals(i.getName())));
