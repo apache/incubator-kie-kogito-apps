@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.model;
 
 import java.nio.ByteBuffer;
+import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -192,7 +193,12 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            LocalTime featureValue = LocalTime.parse(value.asString());
+            LocalTime featureValue;
+            try {
+                featureValue = LocalTime.parse(value.asString());
+            } catch (DateTimeException dateTimeException) {
+                featureValue = LocalTime.now();
+            }
             return new Value<>(featureValue.minusHours(1L + perturbationContext.getRandom().nextInt(23)));
         }
 
@@ -270,6 +276,8 @@ public enum Type {
                 Type type = underlyingObject.getType();
                 Value<?> perturbedValue = type.perturb(underlyingObject.getValue(), perturbationContext);
                 value = new Value<>(FeatureFactory.copyOf(underlyingObject, perturbedValue));
+            } else {
+                value = new Value<>(null);
             }
             return value;
         }
@@ -283,7 +291,7 @@ public enum Type {
     COMPOSITE("composite") {
         @Override
         public Value<?> drop(Value<?> value) {
-            List<Feature> composite = (List<Feature>) value.getUnderlyingObject();
+            List<Feature> composite = getFeatures(value);
             List<Feature> newFeatures = new ArrayList<>(composite.size());
             for (Feature f : composite) {
                 newFeatures.add(FeatureFactory.copyOf(f, f.getType().drop(f.getValue())));
@@ -291,22 +299,34 @@ public enum Type {
             return new Value<>(newFeatures);
         }
 
+        private List<Feature> getFeatures(Value<?> value) {
+            List<Feature> features;
+            try {
+                features = (List<Feature>) value.getUnderlyingObject();
+            } catch (ClassCastException cce) {
+                features = new LinkedList<>();
+            }
+            return features;
+        }
+
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            List<Feature> composite = (List<Feature>) value.getUnderlyingObject();
+            List<Feature> composite = getFeatures(value);
             List<Feature> newList = new ArrayList<>(List.copyOf(composite));
-            int[] indexesToBePerturbed = perturbationContext.getRandom().ints(0, composite.size()).distinct().limit(perturbationContext.getNoOfPerturbations()).toArray();
-            for (int index : indexesToBePerturbed) {
-                Feature cf = composite.get(index);
-                Feature f = FeatureFactory.copyOf(cf, cf.getType().perturb(cf.getValue(), perturbationContext));
-                newList.set(index, f);
+            if (!newList.isEmpty()) {
+                int[] indexesToBePerturbed = perturbationContext.getRandom().ints(0, composite.size()).distinct().limit(perturbationContext.getNoOfPerturbations()).toArray();
+                for (int index : indexesToBePerturbed) {
+                    Feature cf = composite.get(index);
+                    Feature f = FeatureFactory.copyOf(cf, cf.getType().perturb(cf.getValue(), perturbationContext));
+                    newList.set(index, f);
+                }
             }
             return new Value<>(newList);
         }
 
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
-            List<Feature> composite = (List<Feature>) target.getUnderlyingObject();
+            List<Feature> composite = getFeatures(target);
             int i = 0;
             List<List<double[]>> multiColumns = new LinkedList<>();
             for (Feature f : composite) {
@@ -374,9 +394,34 @@ public enum Type {
         return String.valueOf(value);
     }
 
+    /**
+     * Drop a given {@code Value}. Implementations of this method should generate a new {@code Value} whose
+     * {@code Value#getUnderlyingObject} should represent a non existent/empty/void/dropped {@code Type}-specific instance.
+     *
+     * @param value the value to drop
+     * @return the dropped value
+     */
     public abstract Value<?> drop(Value<?> value);
 
+    /**
+     * Perturb a {@code Value}. Implementations of this method should generate a new {@code Value} whose
+     * {@code Value#getUnderlyingObject} should represent a perturbed/changed copy of the original value.
+     *
+     * @param value               the value to perturb
+     * @param perturbationContext the context holding metadata about how perturbations should be performed
+     * @return the perturbed value
+     */
     public abstract Value<?> perturb(Value<?> value, PerturbationContext perturbationContext);
 
+    /**
+     * Encode some {@code Value}s with respect to a target value. Implementations of this method should generate a list
+     * of vectors for each value. The target value represents the "encoding reference" to be used to decide how to encode
+     * each value, e.g. values that are equals to the target one might get encoded as {@code double[1]{1d}} whereas
+     * different values (wrt to {@code target}) might get encoded as {@code double[1]{0d}}.
+     *
+     * @param target the target reference value
+     * @param values the values to be encoded
+     * @return a list of vectors
+     */
     public abstract List<double[]> encode(Value<?> target, Value<?>... values);
 }

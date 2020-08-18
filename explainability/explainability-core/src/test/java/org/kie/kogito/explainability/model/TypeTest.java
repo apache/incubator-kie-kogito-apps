@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -141,6 +143,24 @@ class TypeTest {
         assertNotEquals(value, perturbedValue);
     }
 
+    @ParameterizedTest
+    @EnumSource
+    void testDrop(Type type) {
+        Value<?> v = new Value<>(1.0);
+        Value<?> dropped = type.drop(v);
+        assertNotEquals(v, dropped);
+    }
 
-
+    @ParameterizedTest
+    @EnumSource
+    void testPerturb(Type type) {
+        for (int seed = 0; seed < 5; seed++) {
+            Value<?> v = new Value<>(1.0);
+            Random random = new Random();
+            random.setSeed(seed);
+            PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+            Value<?> perturbed = type.perturb(v, perturbationContext);
+            assertNotEquals(v, perturbed, type.name());
+        }
+    }
 }
