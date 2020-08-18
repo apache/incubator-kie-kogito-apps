@@ -27,6 +27,7 @@ import SkeletonTornadoChart from '../../Molecules/SkeletonTornadoChart/SkeletonT
 import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import useFeaturesScores from './useFeaturesScores';
 import useOutcomeDetail from './useOutcomeDetail';
+import ExplanationUnavailable from '../../Molecules/ExplanationUnavailable/ExplanationUnavailable';
 import { ExecutionRouteParams, Outcome, RemoteData } from '../../../types';
 import './Explanation.scss';
 
@@ -141,97 +142,104 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
               </Title>
             </StackItem>
             <StackItem>
-              <Grid hasGutter>
-                <GridItem span={8}>
-                  <Card>
-                    <CardHeader>
-                      {topFeaturesScores.length ? (
-                        <Title headingLevel="h4" size="xl">
-                          Top Features Score Chart
-                        </Title>
-                      ) : (
-                        <Title headingLevel="h4" size="xl">
-                          Features Score Chart
-                        </Title>
-                      )}
-                    </CardHeader>
-
-                    <CardBody>
-                      {featuresScores.status === 'LOADING' && (
-                        <SkeletonTornadoChart valuesCount={10} height={400} />
-                      )}
-                      {featuresScores.status === 'SUCCESS' &&
-                        topFeaturesScores.length === 0 && (
-                          <div className="explanation-view__chart">
-                            <FeaturesScoreChart
-                              featuresScore={featuresScores.data}
-                            />
-                          </div>
+              {(featuresScores.status === 'LOADING' ||
+                (featuresScores.status === 'SUCCESS' &&
+                  featuresScores.data.length > 0)) && (
+                <Grid hasGutter>
+                  <GridItem span={8}>
+                    <Card>
+                      <CardHeader>
+                        {topFeaturesScores.length ? (
+                          <Title headingLevel="h4" size="xl">
+                            Top Features Score Chart
+                          </Title>
+                        ) : (
+                          <Title headingLevel="h4" size="xl">
+                            Features Score Chart
+                          </Title>
                         )}
-                      {featuresScores.status === 'SUCCESS' &&
-                        topFeaturesScores.length > 0 && (
+                      </CardHeader>
+                      <CardBody>
+                        {featuresScores.status === 'LOADING' && (
+                          <SkeletonTornadoChart valuesCount={10} height={400} />
+                        )}
+                        {featuresScores.status === 'SUCCESS' && (
                           <>
-                            <div className="explanation-view__chart">
-                              <FeaturesScoreChart
-                                featuresScore={topFeaturesScores}
-                              />
-                            </div>
-                            <Button
-                              variant="secondary"
-                              type="button"
-                              className="all-features-opener"
-                              onClick={handleModalToggle}
-                            >
-                              View Complete Chart
-                            </Button>
-                            <Modal
-                              width={'80%'}
-                              title="All Features Score Chart"
-                              isOpen={isModalOpen}
-                              onClose={handleModalToggle}
-                              actions={[
-                                <Button key="close" onClick={handleModalToggle}>
-                                  Close
+                            {topFeaturesScores.length === 0 && (
+                              <div className="explanation-view__chart">
+                                <FeaturesScoreChart
+                                  featuresScore={featuresScores.data}
+                                />
+                              </div>
+                            )}
+                            {topFeaturesScores.length > 0 && (
+                              <>
+                                <div className="explanation-view__chart">
+                                  <FeaturesScoreChart
+                                    featuresScore={topFeaturesScores}
+                                  />
+                                </div>
+                                <Button
+                                  variant="secondary"
+                                  type="button"
+                                  className="all-features-opener"
+                                  onClick={handleModalToggle}
+                                >
+                                  View Complete Chart
                                 </Button>
-                              ]}
-                            >
-                              <FeaturesScoreChart
-                                featuresScore={featuresScores.data}
-                                large={true}
-                              />
-                            </Modal>
+                                <Modal
+                                  width={'80%'}
+                                  title="All Features Score Chart"
+                                  isOpen={isModalOpen}
+                                  onClose={handleModalToggle}
+                                  actions={[
+                                    <Button
+                                      key="close"
+                                      onClick={handleModalToggle}
+                                    >
+                                      Close
+                                    </Button>
+                                  ]}
+                                >
+                                  <FeaturesScoreChart
+                                    featuresScore={featuresScores.data}
+                                    large={true}
+                                  />
+                                </Modal>
+                              </>
+                            )}
                           </>
                         )}
-                    </CardBody>
-                  </Card>
-                </GridItem>
-                <GridItem span={4}>
-                  <Card className="explanation-view__score-table">
-                    <CardHeader>
-                      <Title headingLevel={'h4'} size={'lg'}>
-                        Features Weight
-                      </Title>
-                    </CardHeader>
-                    <CardBody>
-                      {featuresScores.status === 'LOADING' && (
-                        <SkeletonGrid colsNumber={2} rowsNumber={4} />
-                      )}
-                      {featuresScores.status === 'SUCCESS' &&
-                        topFeaturesScores.length === 0 && (
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                  <GridItem span={4}>
+                    <Card className="explanation-view__score-table">
+                      <CardHeader>
+                        <Title headingLevel={'h4'} size={'lg'}>
+                          Features Weight
+                        </Title>
+                      </CardHeader>
+                      <CardBody>
+                        {featuresScores.status === 'LOADING' && (
+                          <SkeletonGrid colsNumber={2} rowsNumber={4} />
+                        )}
+                        {featuresScores.status === 'SUCCESS' && (
                           <FeaturesScoreTable
-                            featuresScore={featuresScores.data}
+                            featuresScore={
+                              topFeaturesScores.length > 0
+                                ? topFeaturesScores
+                                : featuresScores.data
+                            }
                           />
                         )}
-                      {featuresScores.status === 'SUCCESS' &&
-                        topFeaturesScores.length > 0 && (
-                          <FeaturesScoreTable
-                            featuresScore={topFeaturesScores}
-                          />
-                        )}
-                    </CardBody>
-                  </Card>
-                </GridItem>
-              </Grid>
+                      </CardBody>
+                    </Card>
+                  </GridItem>
+                </Grid>
+              )}
+              {featuresScores.status === 'SUCCESS' &&
+                featuresScores.data.length === 0 && <ExplanationUnavailable />}
             </StackItem>
           </Stack>
         </div>
@@ -248,7 +256,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                     <div>
                       This section displays all the input that contributed to
                       this specific decision outcome. They can include model
-                      inputs (or a subset) or other sub-decisions
+                      inputs (or a subset) or other sub-decisions.
                     </div>
                   }
                 >

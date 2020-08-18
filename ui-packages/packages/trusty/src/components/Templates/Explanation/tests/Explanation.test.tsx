@@ -28,21 +28,20 @@ jest.mock('react-router-dom', () => ({
 
 describe('Explanation', () => {
   test('renders animations while fetching data', () => {
-    const outcomes = {
+    const loadingOutcomes = {
       status: 'LOADING'
     } as RemoteData<Error, Outcome[]>;
-    const outcomeDetail = {
+    const loadingOutcomeDetail = {
       status: 'LOADING'
     } as RemoteData<Error, ItemObject[]>;
-    const featuresScores = {
+    const loadingFeaturesScores = {
       status: 'LOADING'
     } as RemoteData<Error, FeatureScores[]>;
-    const topFeaturesScores = [];
 
-    (useOutcomeDetail as jest.Mock).mockReturnValue(outcomeDetail);
+    (useOutcomeDetail as jest.Mock).mockReturnValue(loadingOutcomeDetail);
     (useFeaturesScores as jest.Mock).mockReturnValue({
-      featuresScores,
-      topFeaturesScores
+      featuresScores: loadingFeaturesScores,
+      topFeaturesScores: []
     });
 
     const wrapper = mount(
@@ -54,7 +53,7 @@ describe('Explanation', () => {
           }
         ]}
       >
-        <Explanation outcomes={outcomes} />
+        <Explanation outcomes={loadingOutcomes} />
       </MemoryRouter>
     );
 
@@ -76,73 +75,10 @@ describe('Explanation', () => {
   });
 
   test('renders correctly the details of an outcome', () => {
-    const outcomes = {
-      status: 'SUCCESS',
-      data: [
-        {
-          outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
-          outcomeName: 'Mortgage Approval',
-          evaluationStatus: 'SUCCEEDED',
-          outcomeResult: {
-            name: 'Mortgage Approval',
-            typeRef: 'boolean',
-            value: true,
-            components: []
-          },
-          messages: [],
-          hasErrors: false
-        },
-        {
-          outcomeId: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
-          outcomeName: 'Risk Score',
-          evaluationStatus: 'SUCCEEDED',
-          outcomeResult: {
-            name: 'Risk Score',
-            typeRef: 'number',
-            value: 21.7031851958099,
-            components: []
-          },
-          messages: [],
-          hasErrors: false
-        }
-      ]
-    } as RemoteData<Error, Outcome[]>;
-    const outcomeDetail = {
-      status: 'SUCCESS',
-      data: [
-        {
-          name: 'Asset Score',
-          typeRef: 'number',
-          value: 738,
-          components: []
-        },
-        {
-          name: 'Asset Amount',
-          typeRef: 'number',
-          value: 70000,
-          components: []
-        }
-      ]
-    } as RemoteData<Error, ItemObject[]>;
-    const featuresScores = {
-      status: 'SUCCESS',
-      data: [
-        {
-          featureName: 'Lender Ratings',
-          featureScore: -0.08937896629080377
-        },
-        {
-          featureName: 'Liabilities',
-          featureScore: 0.6780527129423648
-        }
-      ]
-    } as RemoteData<Error, FeatureScores[]>;
-    const topFeaturesScores = [];
-
     (useOutcomeDetail as jest.Mock).mockReturnValue(outcomeDetail);
     (useFeaturesScores as jest.Mock).mockReturnValue({
       featuresScores,
-      topFeaturesScores
+      topFeaturesScores: []
     });
 
     const wrapper = mount(
@@ -181,4 +117,95 @@ describe('Explanation', () => {
       outcomeDetail
     );
   });
+
+  test('renders an outcome with no explanation info', () => {
+    const noFeatures = { status: 'SUCCESS', data: [] } as RemoteData<
+      Error,
+      FeatureScores[]
+    >;
+    (useOutcomeDetail as jest.Mock).mockReturnValue(outcomeDetail);
+    (useFeaturesScores as jest.Mock).mockReturnValue({
+      featuresScores: noFeatures,
+      topFeaturesScores: []
+    });
+
+    const wrapper = mount(
+      <MemoryRouter
+        initialEntries={[
+          {
+            pathname: `/audit/decision/${executionId}/outcomes-details`,
+            key: 'outcomes-detail'
+          }
+        ]}
+      >
+        <Explanation outcomes={outcomes} />
+      </MemoryRouter>
+    );
+
+    expect(wrapper.find('FeaturesScoreChart')).toHaveLength(0);
+    expect(wrapper.find('FeaturesScoreTable')).toHaveLength(0);
+    expect(wrapper.find('ExplanationUnavailable')).toHaveLength(1);
+  });
 });
+
+const outcomes = {
+  status: 'SUCCESS',
+  data: [
+    {
+      outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
+      outcomeName: 'Mortgage Approval',
+      evaluationStatus: 'SUCCEEDED',
+      outcomeResult: {
+        name: 'Mortgage Approval',
+        typeRef: 'boolean',
+        value: true,
+        components: []
+      },
+      messages: [],
+      hasErrors: false
+    },
+    {
+      outcomeId: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
+      outcomeName: 'Risk Score',
+      evaluationStatus: 'SUCCEEDED',
+      outcomeResult: {
+        name: 'Risk Score',
+        typeRef: 'number',
+        value: 21.7031851958099,
+        components: []
+      },
+      messages: [],
+      hasErrors: false
+    }
+  ]
+} as RemoteData<Error, Outcome[]>;
+const outcomeDetail = {
+  status: 'SUCCESS',
+  data: [
+    {
+      name: 'Asset Score',
+      typeRef: 'number',
+      value: 738,
+      components: []
+    },
+    {
+      name: 'Asset Amount',
+      typeRef: 'number',
+      value: 70000,
+      components: []
+    }
+  ]
+} as RemoteData<Error, ItemObject[]>;
+const featuresScores = {
+  status: 'SUCCESS',
+  data: [
+    {
+      featureName: 'Lender Ratings',
+      featureScore: -0.08937896629080377
+    },
+    {
+      featureName: 'Liabilities',
+      featureScore: 0.6780527129423648
+    }
+  ]
+} as RemoteData<Error, FeatureScores[]>;

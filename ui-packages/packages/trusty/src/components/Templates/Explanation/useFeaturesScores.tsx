@@ -25,19 +25,23 @@ const useFeaturesScores = (executionId: string) => {
     httpClient(config)
       .then(response => {
         if (isMounted) {
-          const sortedFeatures = orderBy(
-            response.data.featureImportance,
-            item => Math.abs(item.featureScore),
-            'asc'
-          );
-          setFeaturesScores({
-            status: 'SUCCESS',
-            data: sortedFeatures
-          });
-          if (sortedFeatures.length > 10) {
-            setTopFeaturesScores(
-              sortedFeatures.slice(sortedFeatures.length - 10)
+          if (response.data.featureImportance) {
+            const sortedFeatures = orderBy(
+              response.data.featureImportance,
+              item => Math.abs(item.featureScore),
+              'asc'
             );
+            setFeaturesScores({
+              status: 'SUCCESS',
+              data: sortedFeatures
+            });
+            if (sortedFeatures.length > 10) {
+              setTopFeaturesScores(
+                sortedFeatures.slice(sortedFeatures.length - 10)
+              );
+            }
+          } else {
+            setFeaturesScores({ status: 'SUCCESS', data: [] });
           }
         }
       })
