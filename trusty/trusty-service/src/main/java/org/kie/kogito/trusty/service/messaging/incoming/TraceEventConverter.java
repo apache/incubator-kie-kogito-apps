@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceInputValue;
 import org.kie.kogito.tracing.decision.event.trace.TraceOutputValue;
@@ -44,12 +45,10 @@ public class TraceEventConverter {
                 ? null
                 : event.getOutputs().stream().map(TraceEventConverter::toOutcome).collect(Collectors.toList());
 
-        boolean hasSucceeded = event.getOutputs() != null && event.getOutputs().stream().noneMatch(o -> "failed".equalsIgnoreCase(o.getStatus()));
-
         return new Decision(
                 event.getHeader().getExecutionId(),
                 event.getHeader().getStartTimestamp(),
-                hasSucceeded,
+                decisionHasSucceeded(event.getOutputs()),
                 null,
                 event.getHeader().getResourceId().getModelName(),
                 event.getHeader().getResourceId().getModelNamespace(),
@@ -125,5 +124,13 @@ public class TraceEventConverter {
         return eventException == null
                 ? null
                 : new MessageExceptionField(eventException.getClassName(), eventException.getMessage(), toMessageExceptionField(eventException.getCause()));
+    }
+
+    public static boolean decisionHasSucceeded(List<TraceOutputValue> outputs) {
+        return outputs != null && outputs.stream().noneMatch(o -> "failed".equalsIgnoreCase(o.getStatus()) || messageListHasErrors(o.getMessages()));
+    }
+
+    private static boolean messageListHasErrors(List<org.kie.kogito.tracing.decision.event.message.Message> messages) {
+        return messages != null && messages.stream().anyMatch(m -> m.getLevel() == MessageLevel.ERROR);
     }
 }
