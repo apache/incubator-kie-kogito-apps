@@ -72,39 +72,9 @@ public class ExplainabilityMetrics {
      * @return the saliency impact
      */
     public static double impactScore(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) {
-
         List<Feature> copy = List.copyOf(prediction.getInput().getFeatures());
-
         for (FeatureImportance featureImportance : topFeatures) {
-            Feature topFeature = featureImportance.getFeature();
-            String name = topFeature.getName();
-            Value<?> value = topFeature.getValue();
-            Feature droppedFeature = null;
-            for (Feature feature : copy) {
-                if (name.equals(feature.getName())) {
-                    if (value.equals(feature.getValue())) {
-                        droppedFeature = FeatureFactory.copyOf(feature, feature.getType().drop(value));
-                    } else {
-                        List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(List.of(feature));
-                        int i = 0;
-                        for (Feature linearizedFeature : linearizedFeatures) {
-                            if (value.equals(linearizedFeature.getValue())) {
-                                Feature e = linearizedFeatures.get(i);
-                                linearizedFeatures.set(i, FeatureFactory.copyOf(e, e.getType().drop(value)));
-                                droppedFeature = FeatureFactory.newCompositeFeature(name, linearizedFeatures);
-                                break;
-                            } else {
-                                i++;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-            if (droppedFeature != null) {
-                Feature finalDroppedFeature = droppedFeature;
-                copy = copy.stream().map(f -> f.getName().equals(finalDroppedFeature.getName())? finalDroppedFeature : f).collect(Collectors.toList());
-            }
+            copy = DataUtils.dropFeature(copy, featureImportance.getFeature());
         }
 
         PredictionInput predictionInput = new PredictionInput(copy);

@@ -100,9 +100,11 @@ class DatasetEncoder {
         List<List<double[]>> columnData = new LinkedList<>();
 
         for (int t = 0; t < targetInput.getFeatures().size(); t++) {
-            Feature originalFeature = targetInput.getFeatures().get(t);
+            Feature targetFeature = targetInput.getFeatures().get(t);
             int finalT = t;
-            List<double[]> encode = originalFeature.getType().encode(originalFeature.getValue(), perturbedInputs.stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).toArray(Value<?>[]::new));
+            // encode all inputs with respect to the target, based on their type
+            List<double[]> encode = targetFeature.getType().encode(targetFeature.getValue(), perturbedInputs
+                    .stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).toArray(Value<?>[]::new));
             columnData.add(encode);
         }
         return columnData;

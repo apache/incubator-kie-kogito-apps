@@ -26,9 +26,11 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 
 /**
  * Utility methods to handle and manipulate data.
@@ -161,6 +163,45 @@ public class DataUtils {
         return perturbedInput;
     }
 
+    /**
+     * Drop a given feature by a list of existing feature.
+     *
+     * @param features the existing features
+     * @param target   the feature to drop
+     * @return a new list of features having the target feature dropped
+     */
+    public static List<Feature> dropFeature(List<Feature> features, Feature target) {
+        String name = target.getName();
+        Value<?> value = target.getValue();
+        Feature droppedFeature = null;
+        for (Feature feature : features) {
+            if (name.equals(feature.getName())) {
+                if (value.equals(feature.getValue())) {
+                    droppedFeature = FeatureFactory.copyOf(feature, feature.getType().drop(value));
+                } else {
+                    List<Feature> linearizedFeatures = DataUtils.getLinearizedFeatures(List.of(feature));
+                    int i = 0;
+                    for (Feature linearizedFeature : linearizedFeatures) {
+                        if (value.equals(linearizedFeature.getValue())) {
+                            Feature e = linearizedFeatures.get(i);
+                            linearizedFeatures.set(i, FeatureFactory.copyOf(e, e.getType().drop(value)));
+                            droppedFeature = FeatureFactory.newCompositeFeature(name, linearizedFeatures);
+                            break;
+                        } else {
+                            i++;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        List<Feature> copy = List.copyOf(features);
+        if (droppedFeature != null) {
+            Feature finalDroppedFeature = droppedFeature;
+            copy = copy.stream().map(f -> f.getName().equals(finalDroppedFeature.getName()) ? finalDroppedFeature : f).collect(Collectors.toList());
+        }
+        return copy;
+    }
 
     /**
      * Calculate the Hamming distance between two points.
