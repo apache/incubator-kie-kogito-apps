@@ -120,7 +120,7 @@ public class ExecutionHeaderResponse {
      *
      * @return true if the execution was successful from an technical point of view, false otherwise.
      */
-    public boolean hasSucceeded() {
+    public Boolean hasSucceeded() {
         return hasSucceeded;
     }
 
