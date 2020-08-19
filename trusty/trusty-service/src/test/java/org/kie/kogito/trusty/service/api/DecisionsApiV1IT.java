@@ -222,7 +222,6 @@ public class DecisionsApiV1IT {
         assertNotNull(actual);
         assertSame(expected.getExecutionType(), actual.getExecutionType());
         assertEquals(expected.getExecutionId(), actual.getExecutionId());
-        assertEquals(expected.getSourceUrl(), actual.getSourceUrl());
         assertEquals(expected.getExecutionDate(), actual.getExecutionDate());
         assertEquals(expected.getExecutorName(), actual.getExecutorName());
         assertEquals(expected.hasSucceeded(), actual.hasSucceeded());
@@ -353,7 +352,6 @@ public class DecisionsApiV1IT {
     private ExecutionHeaderResponse buildExecutionHeaderResponse() {
         return new ExecutionHeaderResponse(
                 TEST_EXECUTION_ID,
-                TEST_SOURCE_URL,
                 TEST_EXECUTION_DATE,
                 true,
                 null,

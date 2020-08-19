@@ -33,9 +33,6 @@ public class ExecutionHeaderResponse {
     @JsonProperty("executionId")
     private String executionId;
 
-    @JsonProperty("sourceUrl")
-    private String sourceUrl;
-
     @JsonProperty("executionDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private OffsetDateTime executionDate;
@@ -59,7 +56,6 @@ public class ExecutionHeaderResponse {
     }
 
     public ExecutionHeaderResponse(String executionId,
-                                   String sourceUrl,
                                    OffsetDateTime executionDate,
                                    Boolean hasSucceeded,
                                    String executorName,
@@ -67,7 +63,6 @@ public class ExecutionHeaderResponse {
                                    String executedModelNamespace,
                                    ExecutionTypeEnum executionType) {
         this.executionId = executionId;
-        this.sourceUrl = sourceUrl;
         this.executionDate = executionDate;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
@@ -79,7 +74,6 @@ public class ExecutionHeaderResponse {
     public static ExecutionHeaderResponse fromExecution(Execution execution) {
         OffsetDateTime ldt = OffsetDateTime.ofInstant((Instant.ofEpochMilli(execution.getExecutionTimestamp())), ZoneOffset.UTC);
         return new ExecutionHeaderResponse(execution.getExecutionId(),
-                                           execution.getSourceUrl(),
                                            ldt,
                                            execution.hasSucceeded(),
                                            execution.getExecutorName(),
@@ -95,15 +89,6 @@ public class ExecutionHeaderResponse {
      */
     public String getExecutionId() {
         return executionId;
-    }
-
-    /**
-     * Gets the source URL of the service where the execution happened.
-     *
-     * @return The service URL.
-     */
-    public String getSourceUrl() {
-        return sourceUrl;
     }
 
     /**
