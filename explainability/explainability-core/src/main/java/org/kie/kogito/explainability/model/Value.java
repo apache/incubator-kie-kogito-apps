@@ -36,10 +36,12 @@ public class Value<S> {
     }
 
     public String asString() {
-        try {
-            List<Feature> composite = (List<Feature>) underlyingObject;
-            return composite.stream().map(f -> f.getValue().asString()).collect(Collectors.joining(" "));
-        } catch (ClassCastException ignored) {
+        if (underlyingObject instanceof List) {
+            try {
+                List<Feature> composite = (List<Feature>) underlyingObject;
+                return composite.stream().map(f -> f.getValue().asString()).collect(Collectors.joining(" "));
+            } catch (ClassCastException ignored) {
+            }
         }
         return ArrayUtils.toString(underlyingObject);
     }

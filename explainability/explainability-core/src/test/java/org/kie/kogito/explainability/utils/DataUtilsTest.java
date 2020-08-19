@@ -32,8 +32,10 @@ import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class DataUtilsTest {
@@ -307,4 +309,17 @@ class DataUtilsTest {
         assertEquals(10, linearizedFeatures.size());
     }
 
+    @Test
+    void testDropFeature() {
+        for (Type t : Type.values()) {
+            Feature target = TestUtils.getMockedFeature(t, new Value<>(1d));
+            List<Feature> features = new LinkedList<>();
+            features.add(TestUtils.getMockedNumericFeature());
+            features.add(target);
+            features.add(TestUtils.getMockedTextFeature("foo bar"));
+            features.add(TestUtils.getMockedNumericFeature());
+            List<Feature> newFeatures = DataUtils.dropFeature(features, target);
+            assertNotEquals(features, newFeatures);
+        }
+    }
 }

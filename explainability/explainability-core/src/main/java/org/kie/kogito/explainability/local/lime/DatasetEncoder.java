@@ -15,14 +15,13 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -37,8 +36,6 @@ import org.kie.kogito.explainability.utils.LinearModel;
  * is close to the one of the prediction to be explained.
  */
 class DatasetEncoder {
-
-    private static final double CLUSTER_THRESHOLD = 1e-3;
 
     private final List<PredictionInput> perturbedInputs;
     private final List<Output> predictedOutputs;
@@ -70,9 +67,7 @@ class DatasetEncoder {
                 List<Double> x = new LinkedList<>();
                 for (List<double[]> column : columnData) {
                     double[] doubles = column.get(pi);
-                    for (double d : doubles) {
-                        x.add(d);
-                    }
+                    x.addAll(Arrays.asList(ArrayUtils.toObject(doubles)));
                 }
                 double y;
                 if (Type.NUMBER.equals(originalOutput.getType()) || Type.BOOLEAN.equals(originalOutput.getType())) {
@@ -105,13 +100,13 @@ class DatasetEncoder {
         List<List<double[]>> columnData = new LinkedList<>();
 
         for (int t = 0; t < targetInput.getFeatures().size(); t++) {
-            Feature originalFeature = targetInput.getFeatures().get(t);
+            Feature targetFeature = targetInput.getFeatures().get(t);
             int finalT = t;
-            List<Value> values = perturbedInputs.stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).collect(Collectors.toList());
-            List<double[]> encode = originalFeature.getType().encode(originalFeature.getValue(), values.toArray(new Value<?>[0]));
+            // encode all inputs with respect to the target, based on their type
+            List<double[]> encode = targetFeature.getType().encode(targetFeature.getValue(), perturbedInputs
+                    .stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).toArray(Value<?>[]::new));
             columnData.add(encode);
         }
         return columnData;
     }
-
 }

@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -73,7 +74,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     private final PerturbationContext perturbationContext;
 
     public LimeExplainer(int noOfSamples, int noOfPerturbations) {
-        this(noOfSamples, new PerturbationContext(new Random(), noOfPerturbations));
+        this(noOfSamples, new PerturbationContext(new SecureRandom(), noOfPerturbations));
     }
 
     public LimeExplainer(int noOfSamples, int noOfPerturbations, Random random) {

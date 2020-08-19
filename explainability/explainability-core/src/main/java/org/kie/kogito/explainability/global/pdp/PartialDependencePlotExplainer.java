@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
      * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
      */
     public PartialDependencePlotExplainer() {
-        this(DEFAULT_SERIES_LENGTH, new Random());
+        this(DEFAULT_SERIES_LENGTH, new SecureRandom());
     }
 
     @Override
