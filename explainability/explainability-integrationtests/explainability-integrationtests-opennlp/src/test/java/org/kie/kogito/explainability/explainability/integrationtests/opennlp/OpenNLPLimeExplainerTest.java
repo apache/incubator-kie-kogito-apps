@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.explainability.integrationtests.opennlp;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import opennlp.tools.langdetect.Language;
@@ -40,7 +41,6 @@ import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OpenNLPLimeExplainerTest {
 
@@ -79,10 +79,12 @@ class OpenNLPLimeExplainerTest {
                 }
                 return results;
             };
-            Saliency saliency = limeExplainer.explain(prediction, model);
-            assertNotNull(saliency);
-            double i1 = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(3));
-            assertEquals( 1d, i1);
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+            for (Saliency saliency : saliencyMap.values()) {
+                assertNotNull(saliency);
+                double i1 = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(3));
+                assertEquals(1d, i1);
+            }
         }
     }
 }
