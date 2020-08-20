@@ -14,35 +14,32 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.explainability.api;
+package org.kie.kogito.explainability.api.typedvalue;
 
-import java.util.Map;
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExplainabilityResultDto {
+public class CollectionValue extends TypedValue {
 
-    @JsonProperty("executionId")
-    private String executionId;
+    @JsonProperty("value")
+    private Collection<TypedValue> value;
 
-    @JsonProperty("saliency")
-    private Map<String, Map<String, Double>> saliency;
-
-    public ExplainabilityResultDto() {
+    private CollectionValue() {
     }
 
-    public ExplainabilityResultDto(String executionId, Map<String, Map<String, Double>> saliency) {
-        this.executionId = executionId;
-        this.saliency = saliency;
+    public CollectionValue(String type) {
+        super(Kind.COLLECTION, type);
     }
 
-    public String getExecutionId() {
-        return executionId;
+    public CollectionValue(String type, Collection<TypedValue> value) {
+        super(Kind.COLLECTION, type);
+        this.value = value;
     }
 
-    public Map<String, Map<String, Double>> getSaliency() {
-        return saliency;
+    public Collection<TypedValue> getValue() {
+        return value;
     }
 }

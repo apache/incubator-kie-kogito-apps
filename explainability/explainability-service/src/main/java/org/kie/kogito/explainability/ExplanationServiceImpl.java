@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -35,6 +36,6 @@ public class ExplanationServiceImpl implements ExplanationService {
     @Override
     public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
         // TODO: get explainability from expl library https://issues.redhat.com/browse/KOGITO-2920
-        return CompletableFuture.supplyAsync(() -> new ExplainabilityResultDto(request.getExecutionId()), executor);
+        return CompletableFuture.supplyAsync(() -> new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap()), executor);
     }
 }

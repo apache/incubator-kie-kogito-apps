@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
@@ -80,6 +81,6 @@ public class ExplainabilityMessagingHandlerTest {
     }
 
     private String buildCorrectExplainabilityRequestEvent() {
-        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test"));
+        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", Collections.emptyList(), Collections.emptyList()));
     }
 }

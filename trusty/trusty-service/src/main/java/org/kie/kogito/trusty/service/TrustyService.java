@@ -72,9 +72,10 @@ public interface TrustyService {
      * Process a decision. Stores the decision and then send an explainability request if it is enabled.
      *
      * @param executionId The execution ID
+     * @param serviceUrl  The service URL
      * @param decision    The decision object.
      */
-    void processDecision(String executionId, Decision decision);
+    void processDecision(String executionId, String serviceUrl, Decision decision);
 
     /**
      * Store the explainability result.
