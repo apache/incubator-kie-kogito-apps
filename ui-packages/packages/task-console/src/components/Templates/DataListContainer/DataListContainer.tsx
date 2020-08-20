@@ -1,9 +1,4 @@
-import {
-  Card,
-  Grid,
-  GridItem,
-  PageSection,
-} from '@patternfly/react-core';
+import { Card, Grid, GridItem, PageSection } from '@patternfly/react-core';
 import React, { useState, useEffect } from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
 import DataToolbarComponent from '../../Molecules/DataListToolbar/DataListToolbar';
@@ -15,10 +10,10 @@ import {
   KogitoEmptyStateType,
   GraphQL,
   OUIAProps,
-  componentOuiaProps,
+  componentOuiaProps
 } from '@kogito-apps/common';
 
-const DataListContainer: React.FC<OUIAProps> = ({ ouiaId,  ouiaSafe}) => {
+const DataListContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [initData, setInitData] = useState<any>([]);
   const [checkedArray, setCheckedArray] = useState<any>(['Ready']);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,44 +50,42 @@ const DataListContainer: React.FC<OUIAProps> = ({ ouiaId,  ouiaSafe}) => {
 
   return (
     <React.Fragment>
-      <div
-        {...componentOuiaProps(ouiaId, 'DataListContainer', ouiaSafe)}
-      >
-      <UserTaskPageHeader />
-      <PageSection>
-        <Grid hasGutter md={1}>
-          <GridItem span={12}>
-            <Card className="dataList">
-              {!isError && (
-                <DataToolbarComponent
-                  checkedArray={checkedArray}
-                  filterClick={onFilterClick}
-                  setCheckedArray={setCheckedArray}
-                  setIsStatusSelected={setIsStatusSelected}
-                  filters={filters}
-                  setFilters={setFilters}
-                />
-              )}
-              {isStatusSelected ? (
-                <TaskList
-                  initData={initData}
-                  setInitData={setInitData}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
-                  setIsError={setIsError}
-                />
-              ) : (
-                <KogitoEmptyState
-                  type={KogitoEmptyStateType.Reset}
-                  title="No status is selected"
-                  body="Try selecting at least one status to see results"
-                  onClick={resetClick}
-                />
-              )}
-            </Card>
-          </GridItem>
-        </Grid>
-      </PageSection>
+      <div {...componentOuiaProps(ouiaId, 'DataListContainer', ouiaSafe)}>
+        <UserTaskPageHeader />
+        <PageSection>
+          <Grid hasGutter md={1}>
+            <GridItem span={12}>
+              <Card className="dataList">
+                {!isError && (
+                  <DataToolbarComponent
+                    checkedArray={checkedArray}
+                    filterClick={onFilterClick}
+                    setCheckedArray={setCheckedArray}
+                    setIsStatusSelected={setIsStatusSelected}
+                    filters={filters}
+                    setFilters={setFilters}
+                  />
+                )}
+                {isStatusSelected ? (
+                  <TaskList
+                    initData={initData}
+                    setInitData={setInitData}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    setIsError={setIsError}
+                  />
+                ) : (
+                  <KogitoEmptyState
+                    type={KogitoEmptyStateType.Reset}
+                    title="No status is selected"
+                    body="Try selecting at least one status to see results"
+                    onClick={resetClick}
+                  />
+                )}
+              </Card>
+            </GridItem>
+          </Grid>
+        </PageSection>
       </div>
     </React.Fragment>
   );

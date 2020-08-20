@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Nav,
-  NavList,
-  NavItem, OUIAProps,
-} from '@patternfly/react-core';
+import { Nav, NavList, NavItem, OUIAProps } from '@patternfly/react-core';
 import { KogitoPageLayout, ouiaAttribute } from '@kogito-apps/common';
 import { Redirect, Route, Link, Switch } from 'react-router-dom';
 import taskConsoleLogo from '../../../static/taskConsoleLogo.svg';
@@ -18,10 +14,7 @@ interface IOwnProps {
   location: Location;
   history: History;
 }
-const PageLayout: React.FC<IOwnProps & OUIAProps> = ({
-  ouiaId,
-  ...props
-}) => {
+const PageLayout: React.FC<IOwnProps & OUIAProps> = ({ ouiaId, ...props }) => {
   const { pathname } = props.location;
 
   const PageNav = (
@@ -30,10 +23,7 @@ const PageLayout: React.FC<IOwnProps & OUIAProps> = ({
         <NavItem isActive={pathname === '/UserTasks'}>
           <Link
             to="/UserTasks"
-            {...ouiaAttribute(
-              'data-ouia-navigation-name',
-              'user-tasks'
-            )}
+            {...ouiaAttribute('data-ouia-navigation-name', 'user-tasks')}
           >
             User Tasks
           </Link>

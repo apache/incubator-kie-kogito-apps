@@ -8,11 +8,16 @@ import { Nav, NavList, NavItem } from '@patternfly/react-core';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { appRenderWithAxiosInterceptorConfig, getToken, isAuthEnabled, ServerUnavailable } from '@kogito-apps/common';
+import {
+  appRenderWithAxiosInterceptorConfig,
+  getToken,
+  isAuthEnabled,
+  ServerUnavailable
+} from '@kogito-apps/common';
 import PageLayout from './components/Templates/PageLayout/PageLayout';
 import TaskConsoleContextProvider from './context/TaskConsoleContext/TaskConsoleContextProvider';
 import taskConsoleLogo from './static/taskConsoleLogo.svg';
-import { setContext } from "apollo-link-context";
+import { setContext } from 'apollo-link-context';
 
 const httpLink = new HttpLink({
   // @ts-ignore
