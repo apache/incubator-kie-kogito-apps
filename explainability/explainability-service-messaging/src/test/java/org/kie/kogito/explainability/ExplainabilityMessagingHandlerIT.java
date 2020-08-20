@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -66,8 +67,9 @@ public class ExplainabilityMessagingHandlerIT {
         KafkaClient kafkaClient = new KafkaClient(kafkaBootstrapServers);
 
         String executionId = "idException";
-        ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId);
-        when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId)));
+        String serviceUrl = "http://localhost:8080";
+        ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, Collections.emptyList(), Collections.emptyList());
+        when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId, Collections.emptyMap())));
 
         kafkaClient.produce(ExplainabilityCloudEventBuilder.buildCloudEventJsonString(request), TOPIC_REQUEST);
 

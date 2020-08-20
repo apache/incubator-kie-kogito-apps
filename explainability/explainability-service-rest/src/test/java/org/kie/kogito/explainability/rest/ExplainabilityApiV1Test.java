@@ -16,6 +16,8 @@
 
 package org.kie.kogito.explainability.rest;
 
+import java.util.Collections;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
@@ -35,7 +37,8 @@ public class ExplainabilityApiV1Test {
     @Test
     public void testEndpointWithRequest() throws JsonProcessingException {
         String executionId = "test";
-        String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId));
+        String serviceUrl = "http://localhost:8080";
+        String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId, serviceUrl, Collections.emptyList(), Collections.emptyList()));
 
         ExplainabilityResultDto result = given()
                 .contentType(ContentType.JSON)

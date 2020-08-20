@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.net.URI;
+import java.util.Collections;
 
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -49,7 +50,7 @@ public class ExplainabilityResultConsumerTest {
 
     @Test
     void testCorrectCloudEvent() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test")));
+        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", Collections.emptyMap())));
         doNothing().when(trustyService).storeExplainability(any(String.class), any(ExplainabilityResult.class));
 
         testNumberOfInvocations(message, 1);
@@ -63,7 +64,7 @@ public class ExplainabilityResultConsumerTest {
 
     @Test
     void testExceptionsAreCatched() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test")));
+        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", Collections.emptyMap())));
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainability(any(String.class), any(ExplainabilityResult.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));

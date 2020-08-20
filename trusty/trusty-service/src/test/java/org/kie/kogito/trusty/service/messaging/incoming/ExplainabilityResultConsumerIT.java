@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.net.URI;
+import java.util.Collections;
 
 import io.cloudevents.v1.CloudEventImpl;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -56,8 +57,8 @@ public class ExplainabilityResultConsumerIT {
 
         doNothing().when(trustyService).storeExplainability(eq(executionId), any(ExplainabilityResult.class));
 
-        kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId)),
-                                        KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
+        kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId, Collections.emptyMap())),
+                KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
 
         verify(trustyService, timeout(3000).times(1)).storeExplainability(any(String.class), any(ExplainabilityResult.class));
     }

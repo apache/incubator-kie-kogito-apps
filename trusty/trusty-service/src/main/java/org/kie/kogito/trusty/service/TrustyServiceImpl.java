@@ -18,20 +18,25 @@ package org.kie.kogito.trusty.service;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.typedvalue.TypedValue;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
+import org.kie.kogito.trusty.service.messaging.MessagingUtils;
 import org.kie.kogito.trusty.service.messaging.incoming.ModelIdCreator;
 import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
@@ -89,11 +94,20 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public void processDecision(String executionId, Decision decision) {
+    public void processDecision(String executionId, String serviceUrl, Decision decision) {
         storeDecision(executionId, decision);
         // TODO: Create a proper ExplainabilityRequestDto when all the properties will be defined and available. https://issues.redhat.com/browse/KOGITO-2944
         if (Boolean.TRUE.equals(isExplainabilityEnabled)) {
-            explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(executionId));
+            Collection<TypedValue> inputs = decision.getInputs().stream()
+                    .map(MessagingUtils::modelVariableToTypedValue)
+                    .collect(Collectors.toList());
+
+            Collection<TypedValue> outputs = decision.getOutcomes().stream()
+                    .map(DecisionOutcome::getOutcomeResult)
+                    .map(MessagingUtils::modelVariableToTypedValue)
+                    .collect(Collectors.toList());
+
+            explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(executionId, serviceUrl, inputs, outputs));
         }
     }
 
