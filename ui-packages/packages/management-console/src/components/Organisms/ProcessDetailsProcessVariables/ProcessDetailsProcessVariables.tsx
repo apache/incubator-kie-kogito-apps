@@ -26,7 +26,7 @@ const ProcessDetailsProcessVariables: React.FC<IOwnProps> = ({
   setUpdateJson,
   updateJson
 }) => {
-  const onEdit = e => {
+  const handleCUD = e => {
     setUpdateJson({ ...updateJson, ...e.updated_src });
     setDisplayLabel(true);
   };
@@ -59,7 +59,13 @@ const ProcessDetailsProcessVariables: React.FC<IOwnProps> = ({
       <CardBody>
         <TextContent>
           <div>
-            <ReactJson src={updateJson} name={false} onEdit={onEdit} />
+            <ReactJson
+              src={updateJson}
+              name={false}
+              onEdit={handleCUD}
+              onAdd={handleCUD}
+              onDelete={handleCUD}
+            />
           </div>
         </TextContent>
       </CardBody>
