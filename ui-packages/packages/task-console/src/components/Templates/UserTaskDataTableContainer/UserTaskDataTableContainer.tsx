@@ -4,9 +4,9 @@ import {
   GridItem,
   PageSection,
   Bullseye,
-  Label,
+  Label
 } from '@patternfly/react-core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import UserTaskPageHeader from '../../Molecules/UserTaskPageHeader/UserTaskPageHeader';
 import './UserTaskDataTable.css';
 import {
@@ -18,6 +18,7 @@ import {
   OUIAProps,
   componentOuiaProps
 } from '@kogito-apps/common';
+import _ from 'lodash';
 
 const UserTaskLoadingComponent = (
   <Bullseye>
@@ -40,6 +41,9 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
+  const [sortBy, setSortBy] = useState({});
+  const [orderByObj, setOrderByObj] = useState({});
+
   const {
     loading,
     error,
@@ -48,12 +52,14 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
     networkStatus
   } = GraphQL.useGetUserTasksByStatesQuery({
     variables: {
-      state: ['Ready'] // FIXME: state should not be hard-coded.
+      state: ['Ready'], // FIXME: state should not be hard-coded.
+      orderBy: { state: GraphQL.OrderBy.Asc }
     },
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true
   });
 
+  // In current implementation, 'state', 'actualOwner', 'description', 'name', 'priority', 'completed', 'started', 'referenceName', and 'lastUpdate' fileds are sortable.
   const columns: DataTableColumn[] = [
     {
       label: 'ProcessId',
@@ -61,7 +67,8 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
     },
     {
       label: 'Name',
-      path: '$.name'
+      path: '$.name',
+      isSortable: true
     },
     {
       label: 'Priority',
@@ -74,12 +81,23 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
     {
       label: 'State',
       path: '$.state',
-      bodyCellTransformer: stateColumnTransformer
+      bodyCellTransformer: stateColumnTransformer,
+      isSortable: true
     }
   ];
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId( 'user-tasks');
+    if (!_.isEmpty(orderByObj)) {
+      // tslint:disable-next-line:no-floating-promises
+      refetch({
+        state: ['Ready'], // FIXME: state should not be hard-coded.
+        orderBy: orderByObj
+      });
+    }
+  }, [orderByObj]);
+
+  useEffect(() => {
+    return ouiaPageTypeAndObjectId('user-tasks');
   });
 
   return (
@@ -87,24 +105,27 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
       <div
         {...componentOuiaProps(ouiaId, 'UserTaskDataTableContainer', ouiaSafe)}
       >
-      <UserTaskPageHeader />
-      <PageSection>
-        <Grid hasGutter md={1}>
-          <GridItem span={12}>
-            <Card className="kogito-task-console--user-task_table-OverFlow">
-              <DataTable
-                data={data ? data.UserTaskInstances : undefined}
-                isLoading={loading}
-                columns={columns}
-                networkStatus={networkStatus}
-                error={error}
-                refetch={refetch}
-                LoadingComponent={UserTaskLoadingComponent}
-              />
-            </Card>
-          </GridItem>
-        </Grid>
-      </PageSection>
+        <UserTaskPageHeader />
+        <PageSection>
+          <Grid hasGutter md={1}>
+            <GridItem span={12}>
+              <Card className="kogito-task-console--user-task_table-OverFlow">
+                <DataTable
+                  data={data ? data.UserTaskInstances : undefined}
+                  isLoading={loading}
+                  columns={columns}
+                  networkStatus={networkStatus}
+                  error={error}
+                  refetch={refetch}
+                  LoadingComponent={UserTaskLoadingComponent}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  setOrderByObj={setOrderByObj}
+                />
+              </Card>
+            </GridItem>
+          </Grid>
+        </PageSection>
       </div>
     </React.Fragment>
   );
