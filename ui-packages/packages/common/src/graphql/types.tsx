@@ -963,6 +963,7 @@ export namespace GraphQL {
 
   export type GetUserTasksByStatesQueryVariables = Exact<{
     state?: Maybe<Array<Scalars['String']>>;
+    orderBy?: Maybe<UserTaskInstanceOrderBy>;
   }>;
 
   export type GetUserTasksByStatesQuery = { __typename?: 'Query' } & {
@@ -1636,8 +1637,11 @@ export namespace GraphQL {
     GetInputFieldsFromTypeQueryVariables
   >;
   export const GetUserTasksByStatesDocument = gql`
-    query getUserTasksByStates($state: [String!]) {
-      UserTaskInstances(where: { state: { in: $state } }) {
+    query getUserTasksByStates(
+      $state: [String!]
+      $orderBy: UserTaskInstanceOrderBy
+    ) {
+      UserTaskInstances(where: { state: { in: $state } }, orderBy: $orderBy) {
         id
         description
         name

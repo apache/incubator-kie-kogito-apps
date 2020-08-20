@@ -6,7 +6,8 @@ import {
   TableBody,
   IRow,
   ITransform,
-  ICell
+  ICell,
+  sortable
 } from '@patternfly/react-table';
 import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
 import {
@@ -22,6 +23,7 @@ export interface DataTableColumn {
   path: string;
   label: string;
   bodyCellTransformer?: (value: any, rowDataObj: object) => any;
+  isSortable?: boolean;
 }
 interface IOwnProps {
   data: any[];
@@ -32,6 +34,9 @@ interface IOwnProps {
   refetch: () => void;
   LoadingComponent?: React.ReactNode;
   ErrorComponent?: React.ReactNode;
+  setSortBy: (sortBy: object) => void;
+  setOrderByObj: (orderObj: object) => void;
+  sortBy: object;
 }
 
 const getCellData = (dataObj: object, path: string) => {
@@ -59,7 +64,8 @@ const getColumns = (data: any[], columns: DataTableColumn[]) => {
                     return column.bodyCellTransformer(value, rowDataObj);
                   }) as ITransform
                 ]
-              : undefined
+              : undefined,
+            transforms: column.isSortable ? [sortable] : undefined
           } as ICell;
         })
       : _.filter(_.keys(_.sample(data)), key => key !== '__typename').map(
@@ -99,7 +105,10 @@ const DataTable: React.FC<IOwnProps> = ({
   error,
   LoadingComponent,
   ErrorComponent,
-  refetch
+  refetch,
+  sortBy,
+  setSortBy,
+  setOrderByObj
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
   const [columnList, setColumnList] = useState<ICell[]>([]);
@@ -115,6 +124,12 @@ const DataTable: React.FC<IOwnProps> = ({
       setRows(getRows(data, columnList));
     }
   }, [columnList]);
+
+  const onSort = (event, index, direction) => {
+    const sortingColumn = event.target.innerText.toLowerCase();
+    setSortBy({ index, direction }); // This is required by PF4 Table Component
+    setOrderByObj(_.set({}, sortingColumn, direction.toUpperCase()));
+  };
 
   if (isLoading) {
     return LoadingComponent ? (
@@ -157,7 +172,13 @@ const DataTable: React.FC<IOwnProps> = ({
         !isLoading &&
         rows.length > 0 &&
         columnList.length > 0 && (
-          <Table aria-label="Data Table" cells={columnList} rows={rows}>
+          <Table
+            aria-label="Data Table"
+            cells={columnList}
+            rows={rows}
+            sortBy={sortBy}
+            onSort={onSort}
+          >
             <TableHeader />
             <TableBody rowKey="rowKey" />
           </Table>
