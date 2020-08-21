@@ -26,6 +26,13 @@ public class KogitoServiceRandomPortQuarkusTestResource extends ConditionalQuark
     }
 
     @Override
+    public int order() {
+        //Guarantee it will be executed before other test resources that depends on this to set the
+        //Testcontainers.exposeHostPorts(httpPort), see KogitoServiceRandomPortTestResource.start()
+        return Integer.MIN_VALUE;
+    }
+
+    @Override
     protected String getKogitoProperty() {
         return QUARKUS_SERVICE_HTTP_PORT;
     }
@@ -34,5 +41,4 @@ public class KogitoServiceRandomPortQuarkusTestResource extends ConditionalQuark
     protected String getKogitoPropertyValue() {
         return String.valueOf(getTestResource().getMappedPort());
     }
-
 }

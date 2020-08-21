@@ -36,11 +36,13 @@ public class JobServiceContainer extends GenericContainer<JobServiceContainer> i
     public static final String IMAGE = "container.image." + NAME;
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceContainer.class);
 
-    public JobServiceContainer() {
+    @Override
+    public void start() {
         addExposedPort(PORT);
         withLogConsumer(new Slf4jLogConsumer(LOGGER));
         waitingFor(Wait.forLogMessage(".*Listening on:.*", 1));
         setDockerImageName(getImageName());
+        super.start();
     }
 
     @Override
@@ -54,7 +56,8 @@ public class JobServiceContainer extends GenericContainer<JobServiceContainer> i
     }
 
     private String getImageName() {
-        return Optional.ofNullable(System.getProperty(IMAGE)).filter(StringUtils::isNotBlank)
-                       .orElseThrow(() -> new IllegalArgumentException(IMAGE + " property should be set in pom.xml"));
+        return Optional.ofNullable(System.getProperty(IMAGE))
+                .filter(StringUtils::isNotBlank)
+                .orElseThrow(() -> new IllegalArgumentException(IMAGE + " property should be set in pom.xml"));
     }
 }
