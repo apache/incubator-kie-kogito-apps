@@ -14,9 +14,9 @@ exports[`InputDataBrowser renders a loading animation while fetching data 1`] = 
     />
   </div>
   <SkeletonDataList
-    colsNumber={6}
+    colsCount={6}
     hasHeader={true}
-    rowsNumber={4}
+    rowsCount={4}
   />
 </div>
 `;

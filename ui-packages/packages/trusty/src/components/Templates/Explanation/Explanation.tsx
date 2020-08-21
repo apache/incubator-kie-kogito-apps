@@ -123,7 +123,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
               {outcomeData === null ? (
                 <Card>
                   <CardBody>
-                    <SkeletonGrid rowsNumber={2} colsNumber={2} />
+                    <SkeletonGrid rowsCount={2} colsDefinition={2} />
                   </CardBody>
                 </Card>
               ) : (
@@ -222,7 +222,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                       </CardHeader>
                       <CardBody>
                         {featuresScores.status === 'LOADING' && (
-                          <SkeletonGrid colsNumber={2} rowsNumber={4} />
+                          <SkeletonGrid rowsCount={4} colsDefinition={2} />
                         )}
                         {featuresScores.status === 'SUCCESS' && (
                           <FeaturesScoreTable

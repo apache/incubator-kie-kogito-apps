@@ -10,18 +10,18 @@ import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import './SkeletonDataList.scss';
 
 type SkeletonDataListProps = {
-  rowsNumber: number;
-  colsNumber: number;
+  rowsCount: number;
+  colsCount: number;
   hasHeader?: boolean;
 };
 
 const SkeletonDataList = (props: SkeletonDataListProps) => {
-  const { rowsNumber, colsNumber, hasHeader } = props;
+  const { rowsCount, colsCount, hasHeader } = props;
 
   const rows = [];
-  for (let i = 0; i < rowsNumber; i++) {
+  for (let i = 0; i < rowsCount; i++) {
     const row = [];
-    for (let j = 0; j < colsNumber; j++) {
+    for (let j = 0; j < colsCount; j++) {
       const size = (i + j) % 2 ? 'lg' : 'md';
       row.push(
         <DataListCell key={`content-${j}`}>

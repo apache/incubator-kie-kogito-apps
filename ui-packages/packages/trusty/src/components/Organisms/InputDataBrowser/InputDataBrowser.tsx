@@ -83,7 +83,7 @@ const InputDataBrowser = ({ inputData }: InputDataBrowserProps) => {
               stripesHeight={'1.5em'}
             />
           </div>
-          <SkeletonDataList rowsNumber={4} colsNumber={6} hasHeader={true} />
+          <SkeletonDataList rowsCount={4} colsCount={6} hasHeader={true} />
         </>
       )}
       {inputData.status === 'SUCCESS' && inputData.data.length > 0 && (
