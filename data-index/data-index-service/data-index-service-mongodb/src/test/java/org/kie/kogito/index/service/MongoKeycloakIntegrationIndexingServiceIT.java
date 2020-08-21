@@ -19,14 +19,14 @@ package org.kie.kogito.index.service;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.common.ResourceArg;
 import io.quarkus.test.junit.QuarkusTest;
-import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 import static org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource.KOGITO_OIDC_TENANTS;
 
 @QuarkusTest
 @QuarkusTestResource(value = KeycloakQuarkusTestResource.class, initArgs = {@ResourceArg(name = KOGITO_OIDC_TENANTS, value = "web-app-tenant")})
-@QuarkusTestResource(MongoServerTestResource.class)
+@QuarkusTestResource(MongoDBQuarkusTestResource.class)
 class MongoKeycloakIntegrationIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
 
 }

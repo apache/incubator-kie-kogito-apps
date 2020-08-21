@@ -19,10 +19,10 @@ package org.kie.kogito.index.service;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.kie.kogito.index.TestUtils;
-import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 @QuarkusTest
-@QuarkusTestResource(MongoServerTestResource.class)
+@QuarkusTestResource(MongoDBQuarkusTestResource.class)
 class MongoIndexingServiceIT extends AbstractIndexingServiceIT {
 
     @Override

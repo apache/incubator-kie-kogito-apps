@@ -19,11 +19,11 @@ package org.kie.kogito.index.messaging;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.kie.kogito.index.TestUtils;
-import org.kie.kogito.persistence.mongodb.MongoServerTestResource;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 @QuarkusTest
-@QuarkusTestResource(MongoServerTestResource.class)
+@QuarkusTestResource(MongoDBQuarkusTestResource.class)
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
 class MongoReactiveMessagingEventConsumerKafkaIT extends AbstractReactiveMessagingEventConsumerKafkaIT {
 
