@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.LocalExplainer;
+import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -102,9 +103,15 @@ public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<Strin
     @Override
     public CompletableFuture<Map<String, Saliency>> explain(Prediction prediction, PredictionProvider model) {
         PredictionInput originalInput = prediction.getInput();
+        if (originalInput.getFeatures().isEmpty()) {
+            throw new LocalExplanationException("cannot explain a prediction whose input is empty");
+        }
         List<PredictionInput> linearizedInputs = DataUtils.linearizeInputs(List.of(originalInput));
         PredictionInput targetInput = linearizedInputs.get(0);
         List<Feature> linearizedTargetInputFeatures = targetInput.getFeatures();
+        if (linearizedTargetInputFeatures.isEmpty()) {
+            throw new LocalExplanationException("input features linearization failed");
+        }
         List<Output> actualOutputs = prediction.getOutput().getOutputs();
         List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures());
 
