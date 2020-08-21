@@ -18,27 +18,28 @@ package org.kie.kogito.trusty.service;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
-import org.kie.kogito.explainability.api.typedvalue.TypedValue;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
-import org.kie.kogito.trusty.service.messaging.MessagingUtils;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.messaging.incoming.ModelIdCreator;
 import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+
+import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
 
 @ApplicationScoped
 public class TrustyServiceImpl implements TrustyService {
@@ -98,14 +99,10 @@ public class TrustyServiceImpl implements TrustyService {
         storeDecision(executionId, decision);
         // TODO: Create a proper ExplainabilityRequestDto when all the properties will be defined and available. https://issues.redhat.com/browse/KOGITO-2944
         if (Boolean.TRUE.equals(isExplainabilityEnabled)) {
-            Collection<TypedValue> inputs = decision.getInputs().stream()
-                    .map(MessagingUtils::modelVariableToTypedValue)
-                    .collect(Collectors.toList());
+            Map<String, TypedValue> inputs = Collections.emptyMap();
 
-            Collection<TypedValue> outputs = decision.getOutcomes().stream()
-                    .map(DecisionOutcome::getOutcomeResult)
-                    .map(MessagingUtils::modelVariableToTypedValue)
-                    .collect(Collectors.toList());
+            Map<String, TypedValue> outputs = decision.getOutcomes().stream()
+                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeId(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll);
 
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(executionId, serviceUrl, inputs, outputs));
         }

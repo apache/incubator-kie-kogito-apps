@@ -16,11 +16,11 @@
 
 package org.kie.kogito.explainability.api;
 
-import java.util.Collection;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.kie.kogito.explainability.api.typedvalue.TypedValue;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExplainabilityRequestDto {
@@ -32,15 +32,15 @@ public class ExplainabilityRequestDto {
     private String serviceUrl;
 
     @JsonProperty("inputs")
-    private Collection<TypedValue> inputs;
+    private Map<String, TypedValue> inputs;
 
     @JsonProperty("outputs")
-    private Collection<TypedValue> outputs;
+    private Map<String, TypedValue> outputs;
 
     private ExplainabilityRequestDto() {
     }
 
-    public ExplainabilityRequestDto(String executionId, String serviceUrl, Collection<TypedValue> inputs, Collection<TypedValue> outputs) {
+    public ExplainabilityRequestDto(String executionId, String serviceUrl, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         this.executionId = executionId;
         this.serviceUrl = serviceUrl;
         this.inputs = inputs;
@@ -55,11 +55,11 @@ public class ExplainabilityRequestDto {
         return serviceUrl;
     }
 
-    public Collection<TypedValue> getInputs() {
+    public Map<String, TypedValue> getInputs() {
         return inputs;
     }
 
-    public Collection<TypedValue> getOutputs() {
+    public Map<String, TypedValue> getOutputs() {
         return outputs;
     }
 }

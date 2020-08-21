@@ -24,6 +24,7 @@ import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceInputValue;
 import org.kie.kogito.tracing.decision.event.trace.TraceOutputValue;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Message;
@@ -62,7 +63,7 @@ public class TraceEventConverter {
         return toTypedVariable(eventInput.getName(), eventInput.getValue());
     }
 
-    public static TypedVariable toTypedVariable(String name, org.kie.kogito.tracing.decision.event.variable.TypedVariable typedVariable) {
+    public static TypedVariable toTypedVariable(String name, TypedValue typedVariable) {
         if (typedVariable == null) {
             return TypedVariable.buildUnit(name, null, null);
         }
