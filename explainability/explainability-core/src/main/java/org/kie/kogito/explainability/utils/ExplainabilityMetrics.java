@@ -15,7 +15,9 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
@@ -75,17 +77,23 @@ public class ExplainabilityMetrics {
         }
 
         PredictionInput predictionInput = new PredictionInput(copy);
-        List<PredictionOutput> predictionOutputs = model.predict(List.of(predictionInput));
-        PredictionOutput predictionOutput = predictionOutputs.get(0);
-        double impact = 0d;
-        double size = predictionOutput.getOutputs().size();
-        for (int i = 0; i < size; i++) {
-            Output original = prediction.getOutput().getOutputs().get(i);
-            Output modified = predictionOutput.getOutputs().get(i);
-            impact += (!original.getValue().asString().equals(modified.getValue().asString())
-                    || modified.getScore() < original.getScore() * CONFIDENCE_DROP_RATIO) ? 1d : 0d;
+        List<PredictionOutput> predictionOutputs;
+        try {
+            predictionOutputs = model.predict(List.of(predictionInput)).get();
+        } catch (InterruptedException | ExecutionException e) {
+            predictionOutputs = Collections.emptyList();
         }
-        return impact / size;
+        double impact = 0d;
+        for (PredictionOutput predictionOutput : predictionOutputs) {
+            double size = predictionOutput.getOutputs().size();
+            for (int i = 0; i < size; i++) {
+                Output original = prediction.getOutput().getOutputs().get(i);
+                Output modified = predictionOutput.getOutputs().get(i);
+                impact += (!original.getValue().asString().equals(modified.getValue().asString())
+                        || modified.getScore() < original.getScore() * CONFIDENCE_DROP_RATIO) ? 1d / size : 0d;
+            }
+        }
+        return impact;
     }
 
     /**

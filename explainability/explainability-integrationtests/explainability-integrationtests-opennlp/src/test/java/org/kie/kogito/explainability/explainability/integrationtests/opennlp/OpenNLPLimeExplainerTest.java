@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 import opennlp.tools.langdetect.Language;
 import opennlp.tools.langdetect.LanguageDetector;
@@ -63,7 +64,7 @@ class OpenNLPLimeExplainerTest {
                                                                               bestLanguage.getConfidence())));
             Prediction prediction = new Prediction(input, output);
 
-            PredictionProvider model = inputs -> {
+            PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
                 List<PredictionOutput> results = new LinkedList<>();
                 for (PredictionInput predictionInput : inputs) {
                     StringBuilder builder = new StringBuilder();
@@ -78,8 +79,8 @@ class OpenNLPLimeExplainerTest {
                     results.add(predictionOutput);
                 }
                 return results;
-            };
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+            });
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 double i1 = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(3));

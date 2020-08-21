@@ -16,9 +16,11 @@
 package org.kie.kogito.explainability.utils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -81,7 +83,7 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    void testFidelityWithTextClassifier() {
+    void testFidelityWithTextClassifier() throws ExecutionException, InterruptedException {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
@@ -89,8 +91,8 @@ class ExplainabilityMetricsTest {
         features.add(FeatureFactory.newFulltextFeature("f-0", "brown fox", s -> Arrays.asList(s.split(" "))));
         features.add(FeatureFactory.newTextFeature("f-1", "money"));
         PredictionInput input = new PredictionInput(features);
-        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get().get(0));
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
         for (Saliency saliency : saliencyMap.values()) {
             pairs.add(Pair.of(saliency, prediction));
         }
@@ -100,7 +102,7 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    void testFidelityWithEvenSumModel() {
+    void testFidelityWithEvenSumModel() throws ExecutionException, InterruptedException {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionProvider model = TestUtils.getEvenSumModel(1);
@@ -109,8 +111,8 @@ class ExplainabilityMetricsTest {
         features.add(FeatureFactory.newNumericalFeature("f-2", 2));
         features.add(FeatureFactory.newNumericalFeature("f-3", 3));
         PredictionInput input = new PredictionInput(features);
-        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get(0));
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get().get(0));
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
         for (Saliency saliency : saliencyMap.values()) {
             pairs.add(Pair.of(saliency, prediction));
         }

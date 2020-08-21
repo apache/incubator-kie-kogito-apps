@@ -19,6 +19,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -60,7 +62,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLRegression() {
+    void testPMMLRegression() throws ExecutionException, InterruptedException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -72,7 +74,7 @@ class PmmlLimeExplainerTest {
             features.add(FeatureFactory.newNumericalFeature("petalWidth", 2.3));
             PredictionInput input = new PredictionInput(features);
 
-            PredictionProvider model = inputs -> {
+            PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
                 List<PredictionOutput> outputs = new LinkedList<>();
                 for (PredictionInput input1 : inputs) {
                     List<Feature> features1 = input1.getFeatures();
@@ -85,10 +87,10 @@ class PmmlLimeExplainerTest {
                     outputs.add(predictionOutput);
                 }
                 return outputs;
-            };
-            PredictionOutput output = model.predict(List.of(input)).get(0);
+            });
+            PredictionOutput output = model.predict(List.of(input)).get().get(0);
             Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(2));
@@ -98,14 +100,14 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled
-    void testPMMLRegressionCategorical() {
+    void testPMMLRegressionCategorical() throws ExecutionException, InterruptedException {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
         features.add(FeatureFactory.newTextFeature("mapY", "classB"));
         PredictionInput input = new PredictionInput(features);
 
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
-        PredictionProvider model = inputs -> {
+        PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput input1 : inputs) {
                 List<Feature> features1 = input1.getFeatures();
@@ -117,10 +119,10 @@ class PmmlLimeExplainerTest {
                 outputs.add(predictionOutput);
             }
             return outputs;
-        };
-        PredictionOutput output = model.predict(List.of(input)).get(0);
+        });
+        PredictionOutput output = model.predict(List.of(input)).get().get(0);
         Prediction prediction = new Prediction(input, output);
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             List<String> strings = saliency.getPositiveFeatures(1).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
@@ -129,14 +131,14 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled()
-    void testPMMLScorecardCategorical() {
+    void testPMMLScorecardCategorical() throws ExecutionException, InterruptedException {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));
         PredictionInput input = new PredictionInput(features);
 
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
-        PredictionProvider model = inputs -> {
+        PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput input1 : inputs) {
                 List<Feature> features1 = input1.getFeatures();
@@ -154,11 +156,11 @@ class PmmlLimeExplainerTest {
                 outputs.add(predictionOutput);
             }
             return outputs;
-        };
+        });
 
-        PredictionOutput output = model.predict(List.of(input)).get(0);
+        PredictionOutput output = model.predict(List.of(input)).get().get(0);
         Prediction prediction = new Prediction(input, output);
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             List<String> strings = saliency.getPositiveFeatures(1).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
@@ -167,7 +169,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLCompoundScorecard() {
+    void testPMMLCompoundScorecard() throws ExecutionException, InterruptedException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -177,7 +179,7 @@ class PmmlLimeExplainerTest {
             features.add(FeatureFactory.newTextFeature("input2", "classB"));
             PredictionInput input = new PredictionInput(features);
 
-            PredictionProvider model = inputs -> {
+            PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
                 List<PredictionOutput> outputs = new LinkedList<>();
                 for (PredictionInput input1 : inputs) {
                     List<Feature> features1 = input1.getFeatures();
@@ -193,10 +195,10 @@ class PmmlLimeExplainerTest {
                     outputs.add(predictionOutput);
                 }
                 return outputs;
-            };
-            PredictionOutput output = model.predict(List.of(input)).get(0);
+            });
+            PredictionOutput output = model.predict(List.of(input)).get().get(0);
             Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));

@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.model;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A provider of predictions.
@@ -28,6 +29,6 @@ public interface PredictionProvider {
      * @param inputs the input batch
      * @return a batch of prediction outputs
      */
-    List<PredictionOutput> predict(List<PredictionInput> inputs);
+    CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs);
 
 }

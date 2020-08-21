@@ -16,10 +16,12 @@
 package org.kie.kogito.explainability.local.lime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -53,41 +55,53 @@ class LimeStabilityTest {
             random.setSeed(seed);
             LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
             PredictionInput input = new PredictionInput(featureList);
-            List<PredictionOutput> predictionOutputs = model.predict(List.of(input));
-            Prediction prediction = new Prediction(input, predictionOutputs.get(0));
-            List<Saliency> saliencies = new LinkedList<>();
-            for (int i = 0; i < 100; i++) {
-                Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model);
-                saliencies.addAll(saliencyMap.values());
+            List<PredictionOutput> predictionOutputs;
+            try {
+                predictionOutputs = model.predict(List.of(input)).get();
+            } catch (InterruptedException | ExecutionException e) {
+                predictionOutputs = Collections.emptyList();
             }
-            // check that the topmost important feature is stable
-            List<String> names = new LinkedList<>();
-            saliencies.stream().map(s -> s.getPositiveFeatures(1)).forEach(f -> names.add(f.get(0).getFeature().getName()));
-            Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-            boolean topFeature = false;
-            for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
-                if (entry.getValue() >= 0.9) {
-                    topFeature = true;
-                    break;
+            for (PredictionOutput predictionOutput : predictionOutputs) {
+                Prediction prediction = new Prediction(input, predictionOutput);
+                List<Saliency> saliencies = new LinkedList<>();
+                for (int i = 0; i < 100; i++) {
+                    Map<String, Saliency> saliencyMap = null;
+                    try {
+                        saliencyMap = limeExplainer.explain(prediction, model).get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        saliencyMap = Collections.emptyMap();
+                    }
+                    saliencies.addAll(saliencyMap.values());
                 }
-            }
-            assertTrue(topFeature);
+                // check that the topmost important feature is stable
+                List<String> names = new LinkedList<>();
+                saliencies.stream().map(s -> s.getPositiveFeatures(1)).forEach(f -> names.add(f.get(0).getFeature().getName()));
+                Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                boolean topFeature = false;
+                for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
+                    if (entry.getValue() >= 0.9) {
+                        topFeature = true;
+                        break;
+                    }
+                }
+                assertTrue(topFeature);
 
-            // check that the impact is stable
-            List<Double> impacts = new ArrayList<>(saliencies.size());
-            for (Saliency saliency : saliencies) {
-                double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
-                impacts.add(v);
-            }
-            Map<Double, Long> impactMap = impacts.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-            boolean topImpact = false;
-            for (Map.Entry<Double, Long> entry : impactMap.entrySet()) {
-                if (entry.getValue() >= 0.9) {
-                    topImpact = true;
-                    break;
+                // check that the impact is stable
+                List<Double> impacts = new ArrayList<>(saliencies.size());
+                for (Saliency saliency : saliencies) {
+                    double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
+                    impacts.add(v);
                 }
+                Map<Double, Long> impactMap = impacts.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                boolean topImpact = false;
+                for (Map.Entry<Double, Long> entry : impactMap.entrySet()) {
+                    if (entry.getValue() >= 0.9) {
+                        topImpact = true;
+                        break;
+                    }
+                }
+                assertTrue(topImpact);
             }
-            assertTrue(topImpact);
         }
     }
 
