@@ -48,7 +48,7 @@ class LimeExplainerTest {
             PredictionProvider model = TestUtils.getSumSkipModel(0);
             PredictionOutput output = model.predict(List.of(input)).get().get(0);
             Prediction prediction = new Prediction(input, output);
-            Assertions.assertThrows(ExecutionException.class, () -> limeExplainer.explain(prediction, model).get());
+            Assertions.assertThrows(LocalExplanationException.class, () -> limeExplainer.explain(prediction, model).get());
         }
     }
 
