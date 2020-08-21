@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.cloudevents.json.Json;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
-import static org.kie.kogito.tracing.decision.event.variable.TypedVariable.Kind.STRUCTURE;
+import static org.kie.kogito.tracing.typedvalue.TypedValue.Kind.STRUCTURE;
 
 public class TypedVariableResponse {
 
