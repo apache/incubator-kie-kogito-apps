@@ -17,16 +17,18 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.security.SecureRandom;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.LocalExplainer;
-import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -52,7 +54,7 @@ import org.slf4j.LoggerFactory;
  * - perturbing numerical features is done by sampling from a standard normal distribution centered around the value of the feature value associated with the prediction to be explained
  * - numerical features are max-min scaled and clustered via a gaussian kernel
  */
-public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
+public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<String, Saliency>>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LimeExplainer.class);
     private static final double SEPARABLE_DATASET_RATIO = 0.99;
@@ -98,137 +100,134 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     }
 
     @Override
-    public Map<String, Saliency> explain(Prediction prediction, PredictionProvider model) {
-
-        long start = System.currentTimeMillis();
-
+    public CompletableFuture<Map<String, Saliency>> explain(Prediction prediction, PredictionProvider model) {
         PredictionInput originalInput = prediction.getInput();
-        List<Feature> inputFeatures = originalInput.getFeatures();
+        List<PredictionInput> linearizedInputs = DataUtils.linearizeInputs(List.of(originalInput));
+        PredictionInput targetInput = linearizedInputs.get(0);
+        List<Feature> linearizedTargetInputFeatures = targetInput.getFeatures();
+        List<Output> actualOutputs = prediction.getOutput().getOutputs();
+        List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures());
+
+        return model.predict(perturbedInputs)
+                .thenApply(getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs))
+                .thenApply(limeInputsList -> getSaliencies(targetInput, linearizedTargetInputFeatures, actualOutputs, limeInputsList));
+    }
+
+    private Map<String, Saliency> getSaliencies(PredictionInput targetInput, List<Feature> linearizedTargetInputFeatures, List<Output> actualOutputs, List<LimeInputs> limeInputsList) {
         Map<String, Saliency> result = new HashMap<>();
-        if (inputFeatures.size() > 0) {
-            // in case of composite / nested features, "linearize" the features
-            List<PredictionInput> linearizedInputs = DataUtils.linearizeInputs(List.of(originalInput));
-            if (linearizedInputs.size() > 0) {
-                PredictionInput targetInput = linearizedInputs.get(0);
-                List<Feature> linearizedTargetInputFeatures = targetInput.getFeatures();
+        for (int o = 0; o < actualOutputs.size(); o++) {
+            LimeInputs limeInputs = limeInputsList.get(o);
+            Output originalOutput = actualOutputs.get(o);
 
-                List<Output> actualOutputs = prediction.getOutput().getOutputs();
-                int noOfInputFeatures = inputFeatures.size();
-                int noOfOutputFeatures = linearizedTargetInputFeatures.size();
-                double[] weights = new double[noOfOutputFeatures];
-
-                // iterate through the different outputs in the prediction and explain each one separately
-                for (int o = 0; o < actualOutputs.size(); o++) {
-                    List<FeatureImportance> featureImportanceList = new LinkedList<>();
-                    boolean separableDataset = false;
-
-                    List<PredictionInput> trainingInputs = new LinkedList<>();
-                    List<PredictionOutput> trainingOutputs = new LinkedList<>();
-
-                    Output currentOutput = actualOutputs.get(o);
-                    // do not explain the current output if it is 'null'
-                    if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
-                        Map<Double, Long> rawClassesBalance = new HashMap<>();
-
-                        /*
-                        perturb the inputs so that the perturbed dataset contains more than just one output class, otherwise
-                        it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
-                        feature importance scores.
-                         */
-
-                        boolean classification = false;
-
-                        // in case of failure in separating the dataset, retry with newly perturbed inputs
-                        for (int tries = this.noOfRetries; tries > 0; tries--) {
-                            // perturb the inputs
-                            List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput, noOfInputFeatures);
-
-                            // perform predictions on the perturbed inputs
-                            List<PredictionOutput> perturbedOutputs = model.predict(perturbedInputs);
-
-                            // calculate the no. of samples belonging to each output class
-                            Value<?> fv = currentOutput.getValue();
-                            int finalO = o;
-                            rawClassesBalance = perturbedOutputs.stream()
-                                    .map(p -> p.getOutputs().get(finalO)) // get the (perturbed) output value corresponding to the one to be explained
-                                    .map(output -> (Type.NUMBER.equals(output.getType())) ?
-                                            output.getValue().asNumber() : // if numeric use it as it is
-                                            (((output.getValue().getUnderlyingObject() == null // otherwise check if target and perturbed outputs are both null
-                                                    && fv.getUnderlyingObject() == null)
-                                                    || (output.getValue().getUnderlyingObject() != null  // if not null, check for underlying value equality
-                                                    && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
-                                    .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting())); // then group-count distinct output values
-                            LOGGER.debug("raw samples per class: {}", rawClassesBalance);
-
-                            // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
-                            if (rawClassesBalance.size() > 1) {
-                                Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
-                                if ((double) max / (double) perturbedInputs.size() < SEPARABLE_DATASET_RATIO) {
-                                    separableDataset = true;
-                                    classification = rawClassesBalance.size() == 2;
-
-                                    // if dataset creation process succeeds use it to train the linear model
-                                    trainingInputs.addAll(perturbedInputs);
-                                    trainingOutputs.addAll(perturbedOutputs);
-                                    break;
-                                }
-                            }
-                        }
-                        if (!separableDataset) { // fail the explanation if the dataset is not separable
-                            throw new DatasetNotSeparableException(currentOutput, rawClassesBalance);
-                        }
-
-                        // only fetch the single output to explain in the generated prediction outputs
-                        List<Output> predictedOutputs = new LinkedList<>();
-                        for (PredictionOutput trainingOutput : trainingOutputs) {
-                            Output output = trainingOutput.getOutputs().get(o);
-                            predictedOutputs.add(output);
-                        }
-
-                        Output originalOutput = prediction.getOutput().getOutputs().get(o);
-
-                        // encode the training data so that it can be fed into the linear model
-                        DatasetEncoder datasetEncoder = new DatasetEncoder(trainingInputs, predictedOutputs, targetInput, originalOutput);
-                        Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
-
-                        // weight the training samples based on the proximity to the target input to explain
-                        double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
-
-                        // fit the linear model
-                        LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), classification);
-                        double loss = linearModel.fit(trainingSet, sampleWeights);
-
-                        if (!Double.isNaN(loss)) {
-                            // create the output saliency
-                            for (int i = 0; i < weights.length; i++) {
-                                FeatureImportance featureImportance = new FeatureImportance(linearizedTargetInputFeatures.get(i), linearModel.getWeights()[i]);
-                                featureImportanceList.add(featureImportance);
-                            }
-                            Saliency saliency = new Saliency(currentOutput, featureImportanceList);
-                            result.put(currentOutput.getName(), saliency);
-                            LOGGER.debug("weights added for output {}", currentOutput);
-                        }
-                    } else {
-                        LOGGER.debug("skipping explanation of empty output {}", currentOutput);
-                    }
-                }
-            } else {
-                throw new LocalExplanationException("input features linearization failed");
-            }
-        } else {
-            throw new LocalExplanationException("cannot explain a prediction whose input is empty");
+            getSaliency(targetInput, linearizedTargetInputFeatures, result, limeInputs, originalOutput);
+            LOGGER.debug("weights set for output {}", originalOutput);
         }
-        long end = System.currentTimeMillis();
-        LOGGER.debug("explanation time: {}ms", (end - start));
         return result;
     }
 
-    private List<PredictionInput> getPerturbedInputs(PredictionInput predictionInput, int noOfFeatures) {
+    private Function<List<PredictionOutput>, List<LimeInputs>> getLimeInputs(List<Feature> linearizedTargetInputFeatures,
+                                                                             List<Output> actualOutputs,
+                                                                             List<PredictionInput> perturbedInputs) {
+        return predictionOutputs -> {
+            List<LimeInputs> limeInputsList = new LinkedList<>();
+            for (int o = 0; o < actualOutputs.size(); o++) {
+                Output currentOutput = actualOutputs.get(o);
+                LimeInputs limeInputs = prepareInputs(perturbedInputs, predictionOutputs, linearizedTargetInputFeatures,
+                                                      o, currentOutput);
+                limeInputsList.add(limeInputs);
+            }
+            return limeInputsList;
+        };
+    }
+
+    private void getSaliency(PredictionInput targetInput, List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result, LimeInputs limeInputs, Output originalOutput) {
+        List<FeatureImportance> featureImportanceList = new LinkedList<>();
+
+        // encode the training data so that it can be fed into the linear model
+        DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
+                                                           limeInputs.getPerturbedOutputs(),
+                                                           targetInput, originalOutput);
+        Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
+
+        // weight the training samples based on the proximity to the target input to explain
+        double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
+        LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
+        double loss = linearModel.fit(trainingSet, sampleWeights);
+        if (!Double.isNaN(loss)) {
+            // create the output saliency
+            int i = 0;
+            for (Feature linearizedFeature : linearizedTargetInputFeatures) {
+                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]);
+                featureImportanceList.add(featureImportance);
+                i++;
+            }
+        }
+        Saliency saliency = new Saliency(originalOutput, featureImportanceList);
+        result.put(originalOutput.getName(), saliency);
+    }
+
+    /**
+     * Perturb the inputs so that the perturbed dataset contains more than just one output class, otherwise
+     * it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
+     * feature importance scores.
+     */
+    private LimeInputs prepareInputs(List<PredictionInput> perturbedInputs, List<PredictionOutput> perturbedOutputs,
+                                     List<Feature> linearizedTargetInputFeatures, int o,
+                                     Output currentOutput) {
+        LimeInputs limeInputs = null;
+        if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
+            boolean classification;
+            boolean separableDataset = false;
+
+            Map<Double, Long> rawClassesBalance;
+
+            // calculate the no. of samples belonging to each output class
+            Value<?> fv = currentOutput.getValue();
+            rawClassesBalance = getClassBalance(perturbedOutputs, fv, o);
+
+            // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
+            if (rawClassesBalance.size() > 1) {
+                Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
+                if ((double) max / (double) perturbedInputs.size() < SEPARABLE_DATASET_RATIO) {
+                    separableDataset = true;
+                    classification = rawClassesBalance.size() == 2;
+
+                    List<Output> outputs = perturbedOutputs.stream().map(po -> po.getOutputs().get(o)).collect(Collectors.toList());
+
+                    // if dataset creation process succeeds use it to train the linear model
+                    limeInputs = new LimeInputs(classification, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
+                }
+            }
+            if (!separableDataset) { // fail the explanation if the dataset is not separable
+                throw new DatasetNotSeparableException(currentOutput, rawClassesBalance);
+            }
+        } else {
+            limeInputs = new LimeInputs(false, linearizedTargetInputFeatures, currentOutput, Collections.emptyList(), Collections.emptyList());
+        }
+        return limeInputs;
+    }
+
+    private Map<Double, Long> getClassBalance(List<PredictionOutput> perturbedOutputs, Value<?> fv, int finalO) {
+        Map<Double, Long> rawClassesBalance;
+        rawClassesBalance = perturbedOutputs.stream()
+                .map(p -> p.getOutputs().get(finalO)) // get the (perturbed) output value corresponding to the one to be explained
+                .map(output -> (Type.NUMBER.equals(output.getType())) ?
+                        output.getValue().asNumber() : // if numeric use it as it is
+                        (((output.getValue().getUnderlyingObject() == null // otherwise check if target and perturbed outputs are both null
+                                && fv.getUnderlyingObject() == null)
+                                || (output.getValue().getUnderlyingObject() != null  // if not null, check for underlying value equality
+                                && output.getValue().asString().equals(fv.asString()))) ? 1d : 0d))
+                .collect(Collectors.groupingBy(Double::doubleValue, Collectors.counting())); // then group-count distinct output values
+        LOGGER.debug("raw samples per class: {}", rawClassesBalance);
+        return rawClassesBalance;
+    }
+
+    private List<PredictionInput> getPerturbedInputs(List<Feature> features) {
         List<PredictionInput> perturbedInputs = new LinkedList<>();
         // as per LIME paper, the dataset size should be at least |features|^2
-        double perturbedDataSize = Math.max(noOfSamples, Math.pow(2, noOfFeatures));
+        double perturbedDataSize = Math.max(noOfSamples, Math.pow(2, features.size()));
         for (int i = 0; i < perturbedDataSize; i++) {
-            perturbedInputs.add(DataUtils.perturbFeatures(predictionInput, perturbationContext));
+            perturbedInputs.add(DataUtils.perturbFeatures(features, perturbationContext));
         }
         return perturbedInputs;
     }

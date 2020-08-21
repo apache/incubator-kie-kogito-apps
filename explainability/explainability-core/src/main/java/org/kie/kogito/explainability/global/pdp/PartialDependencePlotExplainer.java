@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.global.pdp;
 
 import java.security.SecureRandom;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -109,7 +110,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                     }
 
                     // prediction requests are batched per value of feature 'Xs' under analysis
-                    for (PredictionOutput predictionOutput : model.predict(predictionInputs)) {
+                    for (PredictionOutput predictionOutput : model.predict(predictionInputs).getNow(Collections.emptyList())) {
                         Output output = predictionOutput.getOutputs().get(outputIndex);
                         marginalImpacts[i] += output.getScore() / (double) seriesLength;
                     }

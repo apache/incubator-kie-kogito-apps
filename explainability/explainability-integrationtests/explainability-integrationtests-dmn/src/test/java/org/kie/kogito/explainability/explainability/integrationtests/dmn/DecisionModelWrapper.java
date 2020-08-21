@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNDecisionResult;
@@ -44,21 +45,23 @@ class DecisionModelWrapper implements PredictionProvider {
     }
 
     @Override
-    public List<PredictionOutput> predict(List<PredictionInput> inputs) {
-        List<PredictionOutput> predictionOutputs = new LinkedList<>();
-        for (PredictionInput input : inputs) {
-            Map<String, Object> contextVariables = toMap(input.getFeatures());
-            final DMNContext context = decisionModel.newContext(contextVariables);
-            DMNResult dmnResult = decisionModel.evaluateAll(context);
-            List<Output> outputs = new LinkedList<>();
-            for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
-                Output output = new Output(decisionResult.getDecisionName(), Type.TEXT, new Value<>(decisionResult.getResult()), 1d);
-                outputs.add(output);
+    public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput input : inputs) {
+                Map<String, Object> contextVariables = toMap(input.getFeatures());
+                final DMNContext context = decisionModel.newContext(contextVariables);
+                DMNResult dmnResult = decisionModel.evaluateAll(context);
+                List<Output> outputs = new LinkedList<>();
+                for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
+                    Output output = new Output(decisionResult.getDecisionName(), Type.TEXT, new Value<>(decisionResult.getResult()), 1d);
+                    outputs.add(output);
+                }
+                PredictionOutput predictionOutput = new PredictionOutput(outputs);
+                predictionOutputs.add(predictionOutput);
             }
-            PredictionOutput predictionOutput = new PredictionOutput(outputs);
-            predictionOutputs.add(predictionOutput);
-        }
-        return predictionOutputs;
+            return predictionOutputs;
+        });
     }
 
     private Map<String, Object> toMap(List<Feature> features) {
