@@ -28,6 +28,7 @@ import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import useFeaturesScores from './useFeaturesScores';
 import useOutcomeDetail from './useOutcomeDetail';
 import ExplanationUnavailable from '../../Molecules/ExplanationUnavailable/ExplanationUnavailable';
+import EvaluationStatus from '../../Atoms/EvaluationStatus/EvaluationStatus';
 import { ExecutionRouteParams, Outcome, RemoteData } from '../../../types';
 import './Explanation.scss';
 
@@ -61,15 +62,9 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
 
   useEffect(() => {
     if (outcomes.status === 'SUCCESS') {
-      const defaultOutcome = outcomes.data[0];
       setOutcomesList(outcomes.data);
-      if (!outcomeId) {
-        history.replace({
-          search: `outcomeId=${defaultOutcome.outcomeId}`
-        });
-      }
     }
-  }, [executionId, outcomeId, history, outcomes]);
+  }, [outcomes]);
 
   useEffect(() => {
     const query = queryString.parse(location.search);
@@ -83,6 +78,15 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
       }
     }
   }, [location.search, outcomesList]);
+
+  useEffect(() => {
+    if (!outcomeId && outcomesList) {
+      const defaultOutcome = outcomesList[0];
+      history.replace({
+        search: `outcomeId=${defaultOutcome.outcomeId}`
+      });
+    }
+  }, [outcomeId, history, outcomesList]);
 
   return (
     <section className="explanation-view">
@@ -120,14 +124,30 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
               </Title>
             </StackItem>
             <StackItem>
-              {outcomeData === null ? (
+              {outcomeData === null && (
                 <Card>
                   <CardBody>
                     <SkeletonGrid rowsCount={2} colsDefinition={2} />
                   </CardBody>
                 </Card>
-              ) : (
-                <Outcomes outcomes={[outcomeData]} />
+              )}
+              {outcomeData !== null && (
+                <>
+                  {outcomeData.evaluationStatus === 'SUCCEEDED' ? (
+                    <Outcomes outcomes={[outcomeData]} />
+                  ) : (
+                    <Card>
+                      <CardBody>
+                        <span className="explanation-view__outcome-not-successful">
+                          Evaluation Status
+                        </span>
+                        <EvaluationStatus
+                          status={outcomeData.evaluationStatus}
+                        />
+                      </CardBody>
+                    </Card>
+                  )}
+                </>
               )}
             </StackItem>
           </Stack>
