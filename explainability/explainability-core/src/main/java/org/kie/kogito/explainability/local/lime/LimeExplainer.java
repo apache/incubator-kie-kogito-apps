@@ -113,6 +113,11 @@ public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<Strin
             throw new LocalExplanationException("input features linearization failed");
         }
         List<Output> actualOutputs = prediction.getOutput().getOutputs();
+        /*
+         TODO : restore retrying mechanism, so that when the dataset is not separable this tries to get newly perturbed
+          inputs and outputs until a linearly separable dataset is found or the no. of retries has gone to 0.
+          see https://github.com/kiegroup/kogito-apps/blob/master/explainability/explainability-core/src/main/java/org/kie/kogito/explainability/local/lime/LimeExplainer.java#L141-L179
+         */
         List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures());
 
         return model.predict(perturbedInputs)
