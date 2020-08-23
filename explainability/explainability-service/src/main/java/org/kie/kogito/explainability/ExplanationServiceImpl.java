@@ -17,15 +17,23 @@
 package org.kie.kogito.explainability;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.context.ManagedExecutor;
+import org.eclipse.microprofile.context.ThreadContext;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 @ApplicationScoped
 public class ExplanationServiceImpl implements ExplanationService {
@@ -35,7 +43,26 @@ public class ExplanationServiceImpl implements ExplanationService {
 
     @Override
     public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
-        // TODO: get explainability from expl library https://issues.redhat.com/browse/KOGITO-2920
-        return CompletableFuture.supplyAsync(() -> new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap()), executor);
+        RemoteKogitoPredictionProvider provider = new RemoteKogitoPredictionProvider(request, Vertx.vertx(), ThreadContext.builder().build());
+        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+        Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
+        return CompletableFuture.supplyAsync(() -> limeExplainer.explain(prediction, provider)).thenApplyAsync(
+                saliencies -> new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap()), executor);
+    }
+
+    private Prediction getPrediction(Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
+        PredictionInput input = getPredictionInput(inputs);
+        PredictionOutput output = getPredictionOutput(outputs);
+        return new Prediction(input, output);
+    }
+
+    private PredictionInput getPredictionInput(Map<String, TypedValue> inputs) {
+        // TODO : convert inputs to a PredictionInput
+        return null;
+    }
+
+    private PredictionOutput getPredictionOutput(Map<String, TypedValue> outputs) {
+        // TODO: convert outputs to a PredictionOutput
+        return null;
     }
 }
