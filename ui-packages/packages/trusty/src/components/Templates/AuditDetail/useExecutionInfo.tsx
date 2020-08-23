@@ -11,7 +11,7 @@ const useExecutionInfo = (executionId: string) => {
   useEffect(() => {
     let isMounted = true;
     const config: AxiosRequestConfig = {
-      url: `${EXECUTIONS_PATH}/decision/${executionId}`,
+      url: `${EXECUTIONS_PATH}/decisions/${executionId}`,
       method: 'get'
     };
     setExecution({ status: 'LOADING' });

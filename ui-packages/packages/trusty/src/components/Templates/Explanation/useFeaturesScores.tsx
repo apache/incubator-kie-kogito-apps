@@ -17,7 +17,7 @@ const useFeaturesScores = (executionId: string) => {
   useEffect(() => {
     let isMounted = true;
     const config: AxiosRequestConfig = {
-      url: `${EXECUTIONS_PATH}/decision/${executionId}/featureImportance`,
+      url: `${EXECUTIONS_PATH}/decisions/${executionId}/featureImportance`,
       method: 'get'
     };
 

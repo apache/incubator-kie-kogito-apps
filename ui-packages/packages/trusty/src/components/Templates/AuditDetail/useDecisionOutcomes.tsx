@@ -11,7 +11,7 @@ const useDecisionOutcomes = (executionId: string) => {
   useEffect(() => {
     let isMounted = true;
     const config: AxiosRequestConfig = {
-      url: `${EXECUTIONS_PATH}/decision/${executionId}/outcomes`,
+      url: `${EXECUTIONS_PATH}/decisions/${executionId}/outcomes`,
       method: 'get'
     };
 

@@ -14,7 +14,7 @@ const useOutcomeDetail = (executionId: string, outcomeId: string | null) => {
     let isMounted = true;
     if (executionId && outcomeId) {
       const config: AxiosRequestConfig = {
-        url: `${EXECUTIONS_PATH}/decision/${executionId}/outcomes/${outcomeId}`,
+        url: `${EXECUTIONS_PATH}/decisions/${executionId}/outcomes/${outcomeId}`,
         method: 'get'
       };
       setOutcomeDetail({ status: 'LOADING' });
