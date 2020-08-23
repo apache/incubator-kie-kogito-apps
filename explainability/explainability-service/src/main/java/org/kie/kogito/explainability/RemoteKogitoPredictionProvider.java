@@ -38,8 +38,7 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
     public RemoteKogitoPredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext) {
 
         this.request = request;
-        String serviceUrl = "http://localhost:8080";
-//        String serviceUrl = request.getServiceUrl();
+        String serviceUrl = request.getServiceUrl();
         URI uri = URI.create(serviceUrl);
         this.client = WebClient.create(vertx, new WebClientOptions().setDefaultHost(uri.getHost()).setDefaultPort(
                 uri.getPort()).setSsl("https".equalsIgnoreCase(uri.getScheme())));
