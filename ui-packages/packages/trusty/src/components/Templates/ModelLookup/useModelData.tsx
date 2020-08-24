@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios';
 import { EXECUTIONS_PATH, httpClient } from '../../../utils/api/httpClient';
 
 const useModelData = (executionId: string) => {
-  const [modelData, setModelData] = useState<RemoteData<Error, ModelData[]>>({
+  const [modelData, setModelData] = useState<RemoteData<Error, ModelData>>({
     status: 'NOT_ASKED'
   });
 
