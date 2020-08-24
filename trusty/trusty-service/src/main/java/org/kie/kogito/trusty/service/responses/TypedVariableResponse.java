@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.cloudevents.json.Json;
+import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import static org.kie.kogito.tracing.typedvalue.TypedValue.Kind.STRUCTURE;
@@ -65,6 +66,10 @@ public class TypedVariableResponse {
 
     public List<JsonNode> getComponents() {
         return components;
+    }
+
+    public static TypedVariableResponse from(DecisionInput input) {
+        return input != null ? from(input.getValue()) : null;
     }
 
     public static TypedVariableResponse from(TypedVariable value) {

@@ -44,6 +44,11 @@ public class ProtostreamProducer {
     }
 
     @Produces
+    org.infinispan.protostream.MessageMarshaller decisionInputModelMarshaller() {
+        return new DecisionInputMarshaller(mapper);
+    }
+
+    @Produces
     org.infinispan.protostream.MessageMarshaller decisionOutcomeModelMarshaller() {
         return new DecisionOutcomeMarshaller(mapper);
     }

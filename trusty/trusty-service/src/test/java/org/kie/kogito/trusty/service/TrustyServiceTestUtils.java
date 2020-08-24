@@ -47,6 +47,7 @@ import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
@@ -247,8 +248,8 @@ public class TrustyServiceTestUtils {
         return new Decision(
                 cloudEventId, CLOUDEVENT_SOURCE, CORRECT_CLOUDEVENT_START_TS, true, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
-                        vDecisionViolation,
-                        vDecisionDriver
+                        new DecisionInput("1", INPUT_VIOLATION_NODE_NAME, vDecisionViolation),
+                        new DecisionInput("2", INPUT_DRIVER_NODE_NAME, vDecisionDriver)
                 ),
                 List.of(
                         new DecisionOutcome(
@@ -355,8 +356,8 @@ public class TrustyServiceTestUtils {
         return new Decision(
                 CLOUDEVENT_WITH_ERRORS_ID, CLOUDEVENT_SOURCE, CLOUDEVENT_WITH_ERRORS_START_TS, false, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
-                        vDecisionViolation,
-                        vDecisionDriverNull
+                        new DecisionInput("1", INPUT_VIOLATION_NODE_NAME, vDecisionViolation),
+                        new DecisionInput("2", INPUT_DRIVER_NODE_NAME, vDecisionDriverNull)
                 ),
                 List.of(
                         new DecisionOutcome(
