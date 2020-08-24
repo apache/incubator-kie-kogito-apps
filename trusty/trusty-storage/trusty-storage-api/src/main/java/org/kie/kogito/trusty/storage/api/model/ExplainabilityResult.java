@@ -16,26 +16,34 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import java.util.Map;
+
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 
 public class ExplainabilityResult {
 
     private String executionId;
 
-    // TODO: add the properties.
+    // TODO: implement this in a better way
+    private Map<String, Map<String, Double>> saliency;
 
     public ExplainabilityResult() {
     }
 
-    public ExplainabilityResult(String executionId) {
+    public ExplainabilityResult(String executionId, Map<String, Map<String, Double>> saliency) {
         this.executionId = executionId;
+        this.saliency = saliency;
     }
 
-    public static ExplainabilityResult from(ExplainabilityResultDto explainabilityResultDto) {
-        return new ExplainabilityResult(explainabilityResultDto.getExecutionId());
+    public static ExplainabilityResult from(ExplainabilityResultDto input) {
+        return new ExplainabilityResult(input.getExecutionId(), input.getSaliency());
     }
 
     public String getExecutionId() {
         return this.executionId;
+    }
+
+    public Map<String, Map<String, Double>> getSaliency() {
+        return saliency;
     }
 }

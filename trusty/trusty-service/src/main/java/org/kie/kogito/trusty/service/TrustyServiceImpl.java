@@ -38,11 +38,15 @@ import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
 
 @ApplicationScoped
 public class TrustyServiceImpl implements TrustyService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TrustyService.class);
 
     @ConfigProperty(name = "trusty.explainability.enabled")
     Boolean isExplainabilityEnabled;
@@ -99,10 +103,15 @@ public class TrustyServiceImpl implements TrustyService {
         storeDecision(executionId, decision);
         // TODO: Create a proper ExplainabilityRequestDto when all the properties will be defined and available. https://issues.redhat.com/browse/KOGITO-2944
         if (Boolean.TRUE.equals(isExplainabilityEnabled)) {
-            Map<String, TypedValue> inputs = Collections.emptyMap();
+            Map<String, TypedValue> inputs = decision.getInputs() != null
+                    ? decision.getInputs().stream()
+                    .collect(HashMap::new, (m, v) -> m.put(v.getId(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
+                    : Collections.emptyMap();
 
-            Map<String, TypedValue> outputs = decision.getOutcomes().stream()
-                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeId(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll);
+            Map<String, TypedValue> outputs = decision.getOutcomes() != null
+                    ? decision.getOutcomes().stream()
+                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeId(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
+                    : Collections.emptyMap();
 
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(executionId, serviceUrl, inputs, outputs));
         }
@@ -111,6 +120,14 @@ public class TrustyServiceImpl implements TrustyService {
     @Override
     public void storeExplainability(String executionId, ExplainabilityResult result) {
         // TODO: Store it https://issues.redhat.com/browse/KOGITO-2945
+        LOG.info("*** storeExplainability called ***");
+        LOG.info("executionId: {}", executionId);
+        LOG.info("result.....: {} [executionID]", result.getExecutionId());
+        result.getSaliency().forEach((output, features) -> {
+            LOG.info("result.....: {}", output);
+            features.forEach((input, score) -> LOG.info("result.....: - {}: {}", input, score));
+        });
+        LOG.info("**********************************");
     }
 
     @Override
