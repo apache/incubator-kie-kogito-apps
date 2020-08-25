@@ -22,9 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -42,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class DummyModelsLimeExplainerTest {
 
     @Test
-    void testMapOneFeatureToOutputRegression() throws ExecutionException, InterruptedException {
+    void testMapOneFeatureToOutputRegression() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -53,11 +55,13 @@ class DummyModelsLimeExplainerTest {
             features.add(FeatureFactory.newNumericalFeature("f3", 0.1));
             PredictionInput input = new PredictionInput(features);
             PredictionProvider model = TestUtils.getFeaturePassModel(idx);
-            List<PredictionOutput> outputs = model.predict(List.of(input)).get();
+            List<PredictionOutput> outputs = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
 
             LimeExplainer limeExplainer = new LimeExplainer(100, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);
@@ -68,7 +72,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testUnusedFeatureRegression() throws ExecutionException, InterruptedException {
+    void testUnusedFeatureRegression() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -79,10 +83,12 @@ class DummyModelsLimeExplainerTest {
             features.add(FeatureFactory.newNumericalFeature("f3", 10));
             PredictionProvider model = TestUtils.getSumSkipModel(idx);
             PredictionInput input = new PredictionInput(features);
-            List<PredictionOutput> outputs = model.predict(List.of(input)).get();
+            List<PredictionOutput> outputs = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
             LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).getNow(Collections.emptyMap());
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);
@@ -93,7 +99,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testMapOneFeatureToOutputClassification() throws ExecutionException, InterruptedException {
+    void testMapOneFeatureToOutputClassification() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -104,11 +110,13 @@ class DummyModelsLimeExplainerTest {
             features.add(FeatureFactory.newNumericalFeature("f3", 3));
             PredictionInput input = new PredictionInput(features);
             PredictionProvider model = TestUtils.getEvenFeatureModel(idx);
-            List<PredictionOutput> outputs = model.predict(List.of(input)).get();
+            List<PredictionOutput> outputs = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
 
             LimeExplainer limeExplainer = new LimeExplainer(1000, 2, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);
@@ -119,7 +127,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testTextSpamClassification() throws ExecutionException, InterruptedException {
+    void testTextSpamClassification() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -130,11 +138,13 @@ class DummyModelsLimeExplainerTest {
             features.add(FeatureFactory.newFulltextFeature("f3", "dear friend, please reply", tokenizer));
             PredictionInput input = new PredictionInput(features);
             PredictionProvider model = TestUtils.getDummyTextClassifier();
-            List<PredictionOutput> outputs = model.predict(List.of(input)).get();
+            List<PredictionOutput> outputs = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
 
             LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(1);
@@ -145,7 +155,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testUnusedFeatureClassification() throws ExecutionException, InterruptedException {
+    void testUnusedFeatureClassification() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -156,10 +166,12 @@ class DummyModelsLimeExplainerTest {
             features.add(FeatureFactory.newNumericalFeature("f3", 5));
             PredictionProvider model = TestUtils.getEvenSumModel(idx);
             PredictionInput input = new PredictionInput(features);
-            List<PredictionOutput> outputs = model.predict(List.of(input)).get();
+            List<PredictionOutput> outputs = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
             LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);

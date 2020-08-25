@@ -21,7 +21,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.FeatureDistribution;
@@ -109,8 +112,15 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                         predictionInputs.add(input);
                     }
 
+                    List<PredictionOutput> predictionOutputs;
+                    try {
+                        predictionOutputs = model.predict(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                        LOGGER.error("Impossible to obtain prediction " + e.getMessage(), e);
+                        throw new IllegalStateException("Impossible to obtain prediction " + e.getMessage(), e);
+                    }
                     // prediction requests are batched per value of feature 'Xs' under analysis
-                    for (PredictionOutput predictionOutput : model.predict(predictionInputs).getNow(Collections.emptyList())) {
+                    for (PredictionOutput predictionOutput : predictionOutputs) {
                         Output output = predictionOutput.getOutputs().get(outputIndex);
                         marginalImpacts[i] += output.getScore() / (double) seriesLength;
                     }

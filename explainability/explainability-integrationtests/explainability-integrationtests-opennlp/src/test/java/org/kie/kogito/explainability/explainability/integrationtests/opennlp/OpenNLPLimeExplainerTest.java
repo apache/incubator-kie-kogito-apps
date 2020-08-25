@@ -15,18 +15,22 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.opennlp;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import opennlp.tools.langdetect.Language;
 import opennlp.tools.langdetect.LanguageDetector;
 import opennlp.tools.langdetect.LanguageDetectorME;
 import opennlp.tools.langdetect.LanguageDetectorModel;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -46,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class OpenNLPLimeExplainerTest {
 
     @Test
-    void testOpenNLPLangDetect() throws Exception {
+    void testOpenNLPLangDetect() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -80,7 +84,8 @@ class OpenNLPLimeExplainerTest {
                 }
                 return results;
             });
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 double i1 = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(3));

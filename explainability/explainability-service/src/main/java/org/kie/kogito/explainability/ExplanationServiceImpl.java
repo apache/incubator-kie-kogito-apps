@@ -71,7 +71,7 @@ public class ExplanationServiceImpl implements ExplanationService {
                     LOG.error("Exception thrown during explainAsync [1]", throwable);
                     return CompletableFuture.failedFuture(throwable);
                 })
-                .thenApplyAsync(inputFuture -> createResultDto(inputFuture, request.getExecutionId()))
+                .thenApply(inputFuture -> createResultDto(inputFuture, request.getExecutionId()))
                 .exceptionally((throwable) -> {
                     LOG.error("Exception thrown during explainAsync [2]", throwable);
                     return new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap());
@@ -100,6 +100,7 @@ public class ExplanationServiceImpl implements ExplanationService {
             return new ExplainabilityResultDto(executionId, Collections.emptyMap());
         }
         try {
+            // FIXME this is wrong, the mapping should be applied as additional step of CompletableFuture
             Map<String, SaliencyDto> saliencies = inputFuture.get().entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getKey,
                     e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()

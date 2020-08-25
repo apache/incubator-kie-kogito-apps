@@ -21,12 +21,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -62,7 +64,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLRegression() throws ExecutionException, InterruptedException {
+    void testPMMLRegression() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -88,9 +90,12 @@ class PmmlLimeExplainerTest {
                 }
                 return outputs;
             });
-            PredictionOutput output = model.predict(List.of(input)).get().get(0);
+            PredictionOutput output = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                    .get(0);
             Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(2));
@@ -100,7 +105,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled
-    void testPMMLRegressionCategorical() throws ExecutionException, InterruptedException {
+    void testPMMLRegressionCategorical() throws ExecutionException, InterruptedException, TimeoutException {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
         features.add(FeatureFactory.newTextFeature("mapY", "classB"));
@@ -120,9 +125,12 @@ class PmmlLimeExplainerTest {
             }
             return outputs;
         });
-        PredictionOutput output = model.predict(List.of(input)).get().get(0);
+        PredictionOutput output = model.predict(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                .get(0);
         Prediction prediction = new Prediction(input, output);
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             List<String> strings = saliency.getPositiveFeatures(1).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
@@ -131,7 +139,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled()
-    void testPMMLScorecardCategorical() throws ExecutionException, InterruptedException {
+    void testPMMLScorecardCategorical() throws ExecutionException, InterruptedException, TimeoutException {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));
@@ -158,9 +166,12 @@ class PmmlLimeExplainerTest {
             return outputs;
         });
 
-        PredictionOutput output = model.predict(List.of(input)).get().get(0);
+        PredictionOutput output = model.predict(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                .get(0);
         Prediction prediction = new Prediction(input, output);
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             List<String> strings = saliency.getPositiveFeatures(1).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
@@ -169,7 +180,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLCompoundScorecard() throws ExecutionException, InterruptedException {
+    void testPMMLCompoundScorecard() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -196,9 +207,12 @@ class PmmlLimeExplainerTest {
                 }
                 return outputs;
             });
-            PredictionOutput output = model.predict(List.of(input)).get().get(0);
+            PredictionOutput output = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                    .get(0);
             Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));

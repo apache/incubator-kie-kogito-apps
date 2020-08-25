@@ -15,11 +15,8 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import org.apache.commons.lang3.tuple.Pair;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -29,11 +26,19 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Utility class providing different methods to evaluate explainability.
  */
 public class ExplainabilityMetrics {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExplainabilityMetrics.class);
 
     /**
      * Drop in confidence score threshold for impact score calculation.
@@ -79,9 +84,10 @@ public class ExplainabilityMetrics {
         PredictionInput predictionInput = new PredictionInput(copy);
         List<PredictionOutput> predictionOutputs;
         try {
-            predictionOutputs = model.predict(List.of(predictionInput)).get();
-        } catch (InterruptedException | ExecutionException e) {
-            predictionOutputs = Collections.emptyList();
+            predictionOutputs = model.predict(List.of(predictionInput)).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOGGER.error("Impossible to obtain prediction " + e.getMessage(), e);
+            throw new IllegalStateException("Impossible to obtain prediction " + e.getMessage(), e);
         }
         double impact = 0d;
         for (PredictionOutput predictionOutput : predictionOutputs) {

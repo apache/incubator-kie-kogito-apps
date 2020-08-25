@@ -15,23 +15,19 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
+import org.kie.dmn.api.core.DMNContext;
+import org.kie.dmn.api.core.DMNDecisionResult;
+import org.kie.dmn.api.core.DMNResult;
+import org.kie.kogito.decision.DecisionModel;
+import org.kie.kogito.explainability.model.*;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.kie.dmn.api.core.DMNContext;
-import org.kie.dmn.api.core.DMNDecisionResult;
-import org.kie.dmn.api.core.DMNResult;
-import org.kie.kogito.decision.DecisionModel;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * {@link PredictionProvider} implementation based on a Kogito {@link DecisionModel}.
@@ -46,24 +42,23 @@ class DecisionModelWrapper implements PredictionProvider {
 
     @Override
     public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
-        return CompletableFuture.supplyAsync(() -> {
-            List<PredictionOutput> predictionOutputs = new LinkedList<>();
-            for (PredictionInput input : inputs) {
-                Map<String, Object> contextVariables = toMap(input.getFeatures());
-                final DMNContext context = decisionModel.newContext(contextVariables);
-                DMNResult dmnResult = decisionModel.evaluateAll(context);
-                List<Output> outputs = new LinkedList<>();
-                for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
-                    Output output = new Output(decisionResult.getDecisionName(), Type.TEXT, new Value<>(decisionResult.getResult()), 1d);
-                    outputs.add(output);
-                }
-                PredictionOutput predictionOutput = new PredictionOutput(outputs);
-                predictionOutputs.add(predictionOutput);
+        List<PredictionOutput> predictionOutputs = new LinkedList<>();
+        for (PredictionInput input : inputs) {
+            Map<String, Object> contextVariables = toMap(input.getFeatures());
+            final DMNContext context = decisionModel.newContext(contextVariables);
+            DMNResult dmnResult = decisionModel.evaluateAll(context);
+            List<Output> outputs = new LinkedList<>();
+            for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
+                Output output = new Output(decisionResult.getDecisionName(), Type.TEXT, new Value<>(decisionResult.getResult()), 1d);
+                outputs.add(output);
             }
-            return predictionOutputs;
-        });
+            PredictionOutput predictionOutput = new PredictionOutput(outputs);
+            predictionOutputs.add(predictionOutput);
+        }
+        return completedFuture(predictionOutputs);
     }
 
+    @SuppressWarnings("unchecked")
     private Map<String, Object> toMap(List<Feature> features) {
         Map<String, Object> map = new HashMap<>();
         for (Feature f : features) {

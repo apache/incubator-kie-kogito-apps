@@ -22,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
  * A provider of predictions.
  * This can be any model, service or function, like (local / remote) DMN, PMML services or any other ML model.
  */
+@FunctionalInterface
 public interface PredictionProvider {
 
     /**
@@ -30,5 +31,4 @@ public interface PredictionProvider {
      * @return a batch of prediction outputs
      */
     CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs);
-
 }

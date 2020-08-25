@@ -21,10 +21,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
@@ -83,7 +85,7 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    void testFidelityWithTextClassifier() throws ExecutionException, InterruptedException {
+    void testFidelityWithTextClassifier() throws ExecutionException, InterruptedException, TimeoutException {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
@@ -91,8 +93,13 @@ class ExplainabilityMetricsTest {
         features.add(FeatureFactory.newFulltextFeature("f-0", "brown fox", s -> Arrays.asList(s.split(" "))));
         features.add(FeatureFactory.newTextFeature("f-1", "money"));
         PredictionInput input = new PredictionInput(features);
-        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get().get(0));
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+        Prediction prediction = new Prediction(
+                input,
+                model.predict(List.of(input))
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                        .get(0));
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             pairs.add(Pair.of(saliency, prediction));
         }
@@ -102,7 +109,7 @@ class ExplainabilityMetricsTest {
     }
 
     @Test
-    void testFidelityWithEvenSumModel() throws ExecutionException, InterruptedException {
+    void testFidelityWithEvenSumModel() throws ExecutionException, InterruptedException, TimeoutException {
         List<Pair<Saliency, Prediction>> pairs = new LinkedList<>();
         LimeExplainer limeExplainer = new LimeExplainer(10, 1);
         PredictionProvider model = TestUtils.getEvenSumModel(1);
@@ -111,8 +118,13 @@ class ExplainabilityMetricsTest {
         features.add(FeatureFactory.newNumericalFeature("f-2", 2));
         features.add(FeatureFactory.newNumericalFeature("f-3", 3));
         PredictionInput input = new PredictionInput(features);
-        Prediction prediction = new Prediction(input, model.predict(List.of(input)).get().get(0));
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+        Prediction prediction = new Prediction(
+                input,
+                model.predict(List.of(input))
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                        .get(0));
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             pairs.add(Pair.of(saliency, prediction));
         }

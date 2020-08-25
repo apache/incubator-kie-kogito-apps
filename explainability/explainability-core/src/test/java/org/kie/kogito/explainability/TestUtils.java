@@ -28,13 +28,14 @@ import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
+import static java.util.concurrent.CompletableFuture.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class TestUtils {
 
     public static PredictionProvider getFeaturePassModel(int featureIndex) {
-        return inputs -> CompletableFuture.supplyAsync(() -> {
+        return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
             for (PredictionInput predictionInput : inputs) {
                 List<Feature> features = predictionInput.getFeatures();
@@ -49,7 +50,7 @@ public class TestUtils {
     }
 
     public static PredictionProvider getSumSkipModel(int skipFeatureIndex) {
-        return inputs -> CompletableFuture.supplyAsync(() -> {
+        return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
             for (PredictionInput predictionInput : inputs) {
                 List<Feature> features = predictionInput.getFeatures();
@@ -68,7 +69,7 @@ public class TestUtils {
     }
 
     public static PredictionProvider getEvenFeatureModel(int featureIndex) {
-        return inputs -> CompletableFuture.supplyAsync(() -> {
+        return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
             for (PredictionInput predictionInput : inputs) {
                 List<Feature> features = predictionInput.getFeatures();
@@ -83,7 +84,7 @@ public class TestUtils {
     }
 
     public static PredictionProvider getEvenSumModel(int skipFeatureIndex) {
-        return inputs -> CompletableFuture.supplyAsync(() -> {
+        return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
             for (PredictionInput predictionInput : inputs) {
                 List<Feature> features = predictionInput.getFeatures();
@@ -102,34 +103,28 @@ public class TestUtils {
     }
 
     public static PredictionProvider getDummyTextClassifier() {
-        return new PredictionProvider() {
-            private final List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
-
-            @Override
-            public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
-                return CompletableFuture.supplyAsync(() -> {
-                    List<PredictionOutput> outputs = new LinkedList<>();
-                    for (PredictionInput input : inputs) {
-                        boolean spam = false;
-                        for (Feature f : input.getFeatures()) {
-                            if (!spam) {
-                                String s = f.getValue().asString();
-                                String[] words = s.split(" ");
-                                for (String w : words) {
-                                    if (blackList.contains(w)) {
-                                        spam = true;
-                                        break;
-                                    }
-                                }
+        List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> outputs = new LinkedList<>();
+            for (PredictionInput input : inputs) {
+                boolean spam = false;
+                for (Feature f : input.getFeatures()) {
+                    if (!spam) {
+                        String s = f.getValue().asString();
+                        String[] words = s.split(" ");
+                        for (String w : words) {
+                            if (blackList.contains(w)) {
+                                spam = true;
+                                break;
                             }
                         }
-                        Output output = new Output("spam", Type.BOOLEAN, new Value<>(spam), 1d);
-                        outputs.add(new PredictionOutput(List.of(output)));
                     }
-                    return outputs;
-                });
+                }
+                Output output = new Output("spam", Type.BOOLEAN, new Value<>(spam), 1d);
+                outputs.add(new PredictionOutput(List.of(output)));
             }
-        };
+            return outputs;
+        });
     }
 
     public static Feature getMockedNumericFeature() {

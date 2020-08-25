@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.kogito.decision.DecisionModel;
 import org.kie.kogito.dmn.DMNKogito;
 import org.kie.kogito.dmn.DmnDecisionModel;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -44,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TrafficViolationDmnLimeExplainerTest {
 
     @Test
-    void testTrafficViolationDMNExplanation() throws ExecutionException, InterruptedException {
+    void testTrafficViolationDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
@@ -65,10 +67,12 @@ class TrafficViolationDmnLimeExplainerTest {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
-        List<PredictionOutput> predictionOutputs = model.predict(List.of(predictionInput)).get();
+        List<PredictionOutput> predictionOutputs = model.predict(List.of(predictionInput))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         LimeExplainer limeExplainer = new LimeExplainer(100, 1);
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             List<String> strings = saliency.getTopFeatures(3).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());

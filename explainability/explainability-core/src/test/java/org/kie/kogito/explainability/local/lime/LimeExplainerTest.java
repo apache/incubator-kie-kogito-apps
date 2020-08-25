@@ -15,15 +15,9 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
@@ -33,27 +27,38 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
 
 class LimeExplainerTest {
 
     @Test
-    void testEmptyPrediction() throws ExecutionException, InterruptedException {
+    void testEmptyPrediction() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
             LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
             PredictionInput input = new PredictionInput(Collections.emptyList());
             PredictionProvider model = TestUtils.getSumSkipModel(0);
-            PredictionOutput output = model.predict(List.of(input)).get().get(0);
+            PredictionOutput output = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                    .get(0);
             Prediction prediction = new Prediction(input, output);
-            Assertions.assertThrows(LocalExplanationException.class, () -> limeExplainer.explain(prediction, model).get());
+            Assertions.assertThrows(LocalExplanationException.class,
+                    () -> limeExplainer.explain(prediction, model)
+                            .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()));
         }
     }
 
     @Test
-    void testNonEmptyInput() throws ExecutionException, InterruptedException {
+    void testNonEmptyInput() throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -64,9 +69,12 @@ class LimeExplainerTest {
             }
             PredictionInput input = new PredictionInput(features);
             PredictionProvider model = TestUtils.getSumSkipModel(0);
-            PredictionOutput output = model.predict(List.of(input)).get().get(0);
+            PredictionOutput output = model.predict(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                    .get(0);
             Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model).get();
+            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             assertNotNull(saliencyMap);
         }
     }
