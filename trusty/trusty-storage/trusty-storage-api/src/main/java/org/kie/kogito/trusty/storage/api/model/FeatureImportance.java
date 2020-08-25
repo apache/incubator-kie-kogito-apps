@@ -14,35 +14,44 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.explainability.api;
-
-import java.util.Map;
+package org.kie.kogito.trusty.storage.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExplainabilityResultDto {
+public class FeatureImportance {
 
-    @JsonProperty("executionId")
-    private String executionId;
+    public static final String FEATURE_ID_FIELD = "featureId";
+    public static final String SCORE_FIELD = "score";
 
-    @JsonProperty("saliency")
-    private Map<String, SaliencyDto> saliencies;
+    @JsonProperty(FEATURE_ID_FIELD)
+    private String featureId;
 
-    private ExplainabilityResultDto() {
+    @JsonProperty(SCORE_FIELD)
+    private Double score;
+
+    public FeatureImportance() {
     }
 
-    public ExplainabilityResultDto(String executionId, Map<String, SaliencyDto> saliencies) {
-        this.executionId = executionId;
-        this.saliencies = saliencies;
+    public FeatureImportance(String featureId, Double score) {
+        this.featureId = featureId;
+        this.score = score;
     }
 
-    public String getExecutionId() {
-        return executionId;
+    public String getFeatureId() {
+        return featureId;
     }
 
-    public Map<String, SaliencyDto> getSaliencies() {
-        return saliencies;
+    public void setFeatureId(String featureId) {
+        this.featureId = featureId;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 }

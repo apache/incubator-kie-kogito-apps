@@ -248,8 +248,8 @@ public class TrustyServiceTestUtils {
         return new Decision(
                 cloudEventId, CLOUDEVENT_SOURCE, CORRECT_CLOUDEVENT_START_TS, true, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
-                        new DecisionInput("1", INPUT_VIOLATION_NODE_NAME, vDecisionViolation),
-                        new DecisionInput("2", INPUT_DRIVER_NODE_NAME, vDecisionDriver)
+                        new DecisionInput(INPUT_VIOLATION_NODE_ID, INPUT_VIOLATION_NODE_NAME, vDecisionViolation),
+                        new DecisionInput(INPUT_DRIVER_NODE_ID, INPUT_DRIVER_NODE_NAME, vDecisionDriver)
                 ),
                 List.of(
                         new DecisionOutcome(
@@ -356,8 +356,8 @@ public class TrustyServiceTestUtils {
         return new Decision(
                 CLOUDEVENT_WITH_ERRORS_ID, CLOUDEVENT_SOURCE, CLOUDEVENT_WITH_ERRORS_START_TS, false, null, MODEL_NAME, MODEL_NAMESPACE,
                 List.of(
-                        new DecisionInput("1", INPUT_VIOLATION_NODE_NAME, vDecisionViolation),
-                        new DecisionInput("2", INPUT_DRIVER_NODE_NAME, vDecisionDriverNull)
+                        new DecisionInput(INPUT_VIOLATION_NODE_ID, INPUT_VIOLATION_NODE_NAME, vDecisionViolation),
+                        new DecisionInput(INPUT_DRIVER_NODE_ID, INPUT_DRIVER_NODE_NAME, vDecisionDriverNull)
                 ),
                 List.of(
                         new DecisionOutcome(

@@ -16,33 +16,31 @@
 
 package org.kie.kogito.explainability.api;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExplainabilityResultDto {
+public class FeatureImportanceDto {
 
-    @JsonProperty("executionId")
-    private String executionId;
+    @JsonProperty("featureId")
+    private String featureId;
 
-    @JsonProperty("saliency")
-    private Map<String, SaliencyDto> saliencies;
+    @JsonProperty("score")
+    private Double score;
 
-    private ExplainabilityResultDto() {
+    private FeatureImportanceDto() {
     }
 
-    public ExplainabilityResultDto(String executionId, Map<String, SaliencyDto> saliencies) {
-        this.executionId = executionId;
-        this.saliencies = saliencies;
+    public FeatureImportanceDto(String featureId, Double score) {
+        this.featureId = featureId;
+        this.score = score;
     }
 
-    public String getExecutionId() {
-        return executionId;
+    public String getFeatureId() {
+        return featureId;
     }
 
-    public Map<String, SaliencyDto> getSaliencies() {
-        return saliencies;
+    public Double getScore() {
+        return score;
     }
 }

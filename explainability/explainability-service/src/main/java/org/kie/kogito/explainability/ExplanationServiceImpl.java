@@ -33,6 +33,8 @@ import javax.inject.Inject;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.FeatureImportanceDto;
+import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -98,14 +100,14 @@ public class ExplanationServiceImpl implements ExplanationService {
             return new ExplainabilityResultDto(executionId, Collections.emptyMap());
         }
         try {
-            Map<String, Map<String, Double>> saliency = inputFuture.get().entrySet().stream().collect(Collectors.toMap(
+            Map<String, SaliencyDto> saliencies = inputFuture.get().entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getKey,
-                    e -> e.getValue().getPerFeatureImportance().stream().collect(Collectors.toMap(
-                            v -> v.getFeature().getName(),
-                            FeatureImportance::getScore
-                    ))
+                    e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
+                            .map(fi -> new FeatureImportanceDto(fi.getFeature().getName(), fi.getScore()))
+                            .collect(Collectors.toList())
+                    )
             ));
-            return new ExplainabilityResultDto(executionId, saliency);
+            return new ExplainabilityResultDto(executionId, saliencies);
         } catch (ExecutionException | InterruptedException e) {
             LOG.error("Exception on createResultDto", e);
             throw new RuntimeException(e);

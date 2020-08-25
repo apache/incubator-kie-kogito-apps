@@ -123,9 +123,9 @@ public class TrustyServiceImpl implements TrustyService {
         LOG.info("*** storeExplainability called ***");
         LOG.info("executionId: {}", executionId);
         LOG.info("result.....: {} [executionID]", result.getExecutionId());
-        result.getSaliency().forEach((output, features) -> {
+        result.getSaliencies().forEach((output, saliency) -> {
             LOG.info("result.....: {}", output);
-            features.forEach((input, score) -> LOG.info("result.....: - {}: {}", input, score));
+            saliency.getFeatureImportance().forEach(fi -> LOG.info("result.....: - {}: {}", fi.getFeatureId(), fi.getScore()));
         });
         LOG.info("**********************************");
     }
