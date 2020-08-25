@@ -17,17 +17,23 @@
 package org.kie.kogito.explainability;
 
 import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.messaging.ExplainabilityMessagingHandler;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -48,14 +54,15 @@ public class ExplainabilityMessagingHandlerTest {
     }
 
     @Test
-    void testCorrectCloudEvent() {
+    void testCorrectCloudEvent() throws InterruptedException, ExecutionException, TimeoutException {
         Message<String> message = mockMessage(buildCorrectExplainabilityRequestEvent());
-        when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(null));
+        when(explanationService.explainAsync(any(ExplainabilityRequest.class)))
+                .thenReturn(completedFuture(mockExplainabilityResultDto()));
         testNumberOfInvocations(message, 1);
     }
 
     @Test
-    void testMalformedCloudEvent() {
+    void testMalformedCloudEvent() throws InterruptedException, ExecutionException, TimeoutException {
         Message<String> message = mockMessage("I'm a malformed cloud event");
         testNumberOfInvocations(message, 0);
     }
@@ -71,16 +78,24 @@ public class ExplainabilityMessagingHandlerTest {
     private Message<String> mockMessage(String payload) {
         Message<String> message = mock(Message.class);
         when(message.getPayload()).thenReturn(payload);
+        when(message.ack()).thenReturn(completedFuture(null));
         return message;
     }
 
-    private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) {
-        handler.handleMessage(message);
+    private ExplainabilityResultDto mockExplainabilityResultDto() {
+        return new ExplainabilityResultDto(UUID.randomUUID().toString(), Collections.emptyMap());
+    }
+
+    private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) throws InterruptedException, ExecutionException, TimeoutException {
+        handler.handleMessage(message)
+                .toCompletableFuture()
+                .get(1, TimeUnit.SECONDS);
         verify(explanationService, timeout(3000).times(wantedNumberOfServiceInvocations)).explainAsync(any(ExplainabilityRequest.class));
         verify(message, times(1)).ack();
     }
 
     private String buildCorrectExplainabilityRequestEvent() {
-        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", null, null, Collections.emptyMap(), Collections.emptyMap()));
+        ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
+        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
     }
 }

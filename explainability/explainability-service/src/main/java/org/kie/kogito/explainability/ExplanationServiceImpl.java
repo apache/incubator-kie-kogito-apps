@@ -58,11 +58,19 @@ public class ExplanationServiceImpl implements ExplanationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExplanationServiceImpl.class);
 
-    @ConfigProperty(name = "trusty.explainability.mockExplanation")
+    @ConfigProperty(name = "trusty.explainability.mockExplanation", defaultValue = "true")
     Boolean mockExplanation;
 
     @Inject
     ManagedExecutor executor;
+
+    @Inject
+    Vertx vertx;
+
+    @Inject
+    ThreadContext threadContext;
+
+    private final LimeExplainer limeExplainer = new LimeExplainer(100, 1);
 
     @Override
     public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
@@ -73,7 +81,7 @@ public class ExplanationServiceImpl implements ExplanationService {
                 : this::explanationOf;
 
         return explanationFunction.apply(request)
-                .thenApplyAsync(input -> createResultDto(input, request.getExecutionId()), executor)
+                .thenApply(input -> createResultDto(input, request.getExecutionId()))
                 .exceptionally((throwable) -> {
                     LOG.error("Exception thrown during explainAsync", throwable);
                     return new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap());
@@ -81,12 +89,9 @@ public class ExplanationServiceImpl implements ExplanationService {
     }
 
     private CompletableFuture<Map<String, Saliency>> explanationOf(ExplainabilityRequest request) {
-        return CompletableFuture.completedFuture(getPrediction(request.getInputs(), request.getOutputs()))
-                .thenComposeAsync(prediction -> {
-                    RemoteKogitoPredictionProvider provider = new RemoteKogitoPredictionProvider(request, Vertx.vertx(), ThreadContext.builder().build(), executor);
-                    LimeExplainer limeExplainer = new LimeExplainer(100, 1);
-                    return limeExplainer.explain(prediction, provider);
-                }, executor);
+        RemoteKogitoPredictionProvider provider = new RemoteKogitoPredictionProvider(request, vertx, threadContext, executor);
+        Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
+        return limeExplainer.explain(prediction, provider);
     }
 
     private CompletableFuture<Map<String, Saliency>> mockedExplanationOf(ExplainabilityRequest request) {

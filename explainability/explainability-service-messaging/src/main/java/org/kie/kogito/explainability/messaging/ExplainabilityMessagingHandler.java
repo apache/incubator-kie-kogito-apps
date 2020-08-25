@@ -16,15 +16,6 @@
 
 package org.kie.kogito.explainability.messaging;
 
-import java.net.URI;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.Executor;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
@@ -42,6 +33,14 @@ import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.net.URI;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 
 @ApplicationScoped
 public class ExplainabilityMessagingHandler {
@@ -78,8 +77,7 @@ public class ExplainabilityMessagingHandler {
             }
 
             CloudEventImpl<ExplainabilityRequestDto> cloudEvent = cloudEventOpt.get();
-            return CompletableFuture
-                    .supplyAsync(() -> handleCloudEvent(cloudEvent), executor)
+            return handleCloudEvent(cloudEvent)
                     .thenAccept(x -> message.ack());
         } catch (Exception e) {
             LOGGER.error("Something unexpected happened during the processing of an Event. The event is discarded.", e);

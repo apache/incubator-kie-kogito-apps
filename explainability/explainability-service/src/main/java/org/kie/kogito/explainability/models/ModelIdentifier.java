@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.kie.kogito.explainability.api.ModelIdentifierDto;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ModelIdentifier {
@@ -51,5 +52,12 @@ public class ModelIdentifier {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
+    }
+
+    public static ModelIdentifier from(ModelIdentifierDto dto) {
+        return new ModelIdentifier(
+                dto.getResourceType(),
+                dto.getResourceId()
+        );
     }
 }

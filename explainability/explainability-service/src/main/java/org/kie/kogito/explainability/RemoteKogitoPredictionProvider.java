@@ -1,15 +1,5 @@
 package org.kie.kogito.explainability;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.stream.Stream;
-
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
@@ -29,8 +19,15 @@ import org.kie.kogito.explainability.models.PredictInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.Collections.emptyList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+
+import static java.util.stream.Collectors.toList;
 
 public class RemoteKogitoPredictionProvider implements PredictionProvider {
 
@@ -42,7 +39,6 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
     private final WebClient client;
 
     public RemoteKogitoPredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext, Executor asyncExecutor) {
-
         this.request = request;
         URI uri = URI.create(request.getServiceUrl());
         this.client = WebClient.create(vertx, new WebClientOptions()
@@ -57,16 +53,7 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
 
     @Override
     public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
-        String[] namespaceAndName = Stream.of(
-                request.getModelNamespace(),
-                request.getModelName()
-        ).toArray(String[]::new);
-
-        return inputs.stream()
-                .map(input -> sendPredictRequest(input, namespaceAndName))
-                .reduce(completedFuture(emptyList()),
-                        (cf1, cf2) -> cf1.thenCombine(cf2, this::addElement),
-                        (cf1, cf2) -> cf1.thenCombine(cf2, this::merge));
+        return sendPredictRequest(inputs, request.getModelIdentifier());
     }
 
     private PredictionOutput toPredictionOutput(JsonObject json) {
@@ -78,44 +65,27 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
         return new PredictionOutput(outputs);
     }
 
-    private List<PredictionOutput> addElement(List<PredictionOutput> l1, PredictionOutput elem) {
-        List<PredictionOutput> result = new ArrayList<>(l1);
-        result.add(elem);
-        return result;
-    }
-
-    private List<PredictionOutput> merge(List<PredictionOutput> l1, List<PredictionOutput> l2) {
-        List<PredictionOutput> result = new ArrayList<>();
-        result.addAll(l1);
-        result.addAll(l2);
-        return result;
-    }
-
-    private CompletableFuture<PredictionOutput> sendPredictRequest(PredictionInput input, String[] namespaceAndName) {
-        ModelIdentifier modelIdentifier = new ModelIdentifier("dmn", String.join(":", namespaceAndName));
-        PredictInput pi = new PredictInput(modelIdentifier, toMap(input.getFeatures()));
-        List<PredictInput> piList = List.of(pi);
+    private CompletableFuture<List<PredictionOutput>> sendPredictRequest(List<PredictionInput> inputs, ModelIdentifier modelIdentifier) {
+        List<PredictInput> piList = inputs.stream()
+                .map(input -> new PredictInput(modelIdentifier, toMap(input.getFeatures())))
+                .collect(toList());
 
         LOG.warn(Json.encodePrettily(piList));
 
-        return client.post("/predict")
+        return threadContext.withContextCapture(client.post("/predict")
                 .sendJson(piList)
-                .subscribeAsCompletionStage()
+                .subscribeAsCompletionStage())
                 .thenApplyAsync(r -> {
                     r.headers().forEach(entry -> LOG.warn("[HEADER] {}: {}", entry.getKey(), entry.getValue()));
                     LOG.warn("[BODY] {}", r.bodyAsString());
-                    return toPredictionOutput(r.bodyAsJsonObject());
+                    // FIXME handle parsing errors
+                    return r.bodyAsJsonObject().stream()
+                            .map(json -> toPredictionOutput((JsonObject) json))
+                            .collect(toList());
                 }, asyncExecutor);
     }
 
-    private String[] extractNamespaceAndName(String resourceId) {
-        int index = resourceId.lastIndexOf(ModelIdentifier.RESOURCE_ID_SEPARATOR);
-        if (index < 0 || index == resourceId.length()) {
-            throw new IllegalArgumentException("Malformed resourceId " + resourceId);
-        }
-        return new String[]{resourceId.substring(0, index), resourceId.substring(index + 1)};
-    }
-
+    @SuppressWarnings("unchecked")
     private Map<String, Object> toMap(List<Feature> features) {
         Map<String, Object> map = new HashMap<>();
         for (Feature f : features) {

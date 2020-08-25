@@ -16,13 +16,6 @@
 
 package org.kie.kogito.explainability;
 
-import java.util.Collections;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -32,11 +25,18 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -68,7 +68,9 @@ public class ExplainabilityMessagingHandlerIT {
 
         String executionId = "idException";
         String serviceUrl = "http://localhost:8080";
-        ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, null, null, Collections.emptyMap(), Collections.emptyMap());
+        ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
+
+        ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap());
         when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId, Collections.emptyMap())));
 
         kafkaClient.produce(ExplainabilityCloudEventBuilder.buildCloudEventJsonString(request), TOPIC_REQUEST);

@@ -31,11 +31,8 @@ public class ExplainabilityRequestDto {
     @JsonProperty("serviceUrl")
     private String serviceUrl;
 
-    @JsonProperty("modelName")
-    private String modelName;
-
-    @JsonProperty("modelNamespace")
-    private String modelNamespace;
+    @JsonProperty("modelIdentifier")
+    private ModelIdentifierDto modelIdentifier;
 
     @JsonProperty("inputs")
     private Map<String, TypedValue> inputs;
@@ -46,11 +43,10 @@ public class ExplainabilityRequestDto {
     private ExplainabilityRequestDto() {
     }
 
-    public ExplainabilityRequestDto(String executionId, String serviceUrl, String modelName, String modelNamespace, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
+    public ExplainabilityRequestDto(String executionId, String serviceUrl, ModelIdentifierDto modelIdentifier, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         this.executionId = executionId;
         this.serviceUrl = serviceUrl;
-        this.modelName = modelName;
-        this.modelNamespace = modelNamespace;
+        this.modelIdentifier = modelIdentifier;
         this.inputs = inputs;
         this.outputs = outputs;
     }
@@ -63,12 +59,8 @@ public class ExplainabilityRequestDto {
         return serviceUrl;
     }
 
-    public String getModelName() {
-        return modelName;
-    }
-
-    public String getModelNamespace() {
-        return modelNamespace;
+    public ModelIdentifierDto getModelIdentifier() {
+        return modelIdentifier;
     }
 
     public Map<String, TypedValue> getInputs() {

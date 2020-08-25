@@ -28,6 +28,7 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
@@ -116,8 +117,7 @@ public class TrustyServiceImpl implements TrustyService {
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(
                     executionId,
                     serviceUrl,
-                    decision.getExecutedModelName(),
-                    decision.getExecutedModelNamespace(),
+                    createDecisionModelIdentifierDto(decision),
                     inputs,
                     outputs
             ));
@@ -169,5 +169,12 @@ public class TrustyServiceImpl implements TrustyService {
             throw new IllegalArgumentException(String.format("A model with ID %s does not exist in the storage.", modelId));
         }
         return storage.get(modelId);
+    }
+
+    private ModelIdentifierDto createDecisionModelIdentifierDto(Decision decision) {
+        String resourceId = decision.getExecutedModelNamespace() +
+                ModelIdentifierDto.RESOURCE_ID_SEPARATOR +
+                decision.getExecutedModelName();
+        return new ModelIdentifierDto("dmn", resourceId);
     }
 }
