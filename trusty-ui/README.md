@@ -65,7 +65,7 @@ mvn package -Dui -Dnative
 
 ## Working with trusty-ui features
 
-# TODO 
+# TODO https://issues.redhat.com/browse/KOGITO-3183
 
 ### Starting Kogito Trusty UI in dev mode
 
