@@ -173,7 +173,7 @@ class ExecutionsApiV1IT {
     private List<Execution> generateExecutions(int size) {
         ArrayList<Execution> executions = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            executions.add(new Execution(String.format("test-%d", i),
+            executions.add(new Execution(String.format("test-%d", i), "test",
                                          OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).plusDays(i).toInstant().toEpochMilli(),
                                          true, "name", "model", "namespace", ExecutionTypeEnum.DECISION));
         }
