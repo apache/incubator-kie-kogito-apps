@@ -7,12 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Stream;
 
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.core.buffer.Buffer;
-import io.vertx.mutiny.ext.web.client.HttpRequest;
 import io.vertx.mutiny.ext.web.client.WebClient;
 import org.eclipse.microprofile.context.ThreadContext;
 import org.kie.kogito.explainability.model.Feature;
@@ -25,29 +26,41 @@ import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.explainability.models.ModelIdentifier;
 import org.kie.kogito.explainability.models.PredictInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.util.Collections.emptyList;
 import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class RemoteKogitoPredictionProvider implements PredictionProvider {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RemoteKogitoPredictionProvider.class);
+
     private final ExplainabilityRequest request;
     private final ThreadContext threadContext;
+    private final Executor asyncExecutor;
     private final WebClient client;
 
-    public RemoteKogitoPredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext) {
+    public RemoteKogitoPredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext, Executor asyncExecutor) {
 
         this.request = request;
-        String serviceUrl = request.getServiceUrl();
-        URI uri = URI.create(serviceUrl);
-        this.client = WebClient.create(vertx, new WebClientOptions().setDefaultHost(uri.getHost()).setDefaultPort(
-                uri.getPort()).setSsl("https".equalsIgnoreCase(uri.getScheme())));
+        URI uri = URI.create(request.getServiceUrl());
+        this.client = WebClient.create(vertx, new WebClientOptions()
+                .setDefaultHost(uri.getHost())
+                .setDefaultPort(uri.getPort())
+                .setSsl("https".equalsIgnoreCase(uri.getScheme()))
+                .setLogActivity(true)
+        );
         this.threadContext = threadContext;
+        this.asyncExecutor = asyncExecutor;
     }
 
     @Override
     public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
-        String[] namespaceAndName = extractNamespaceAndName(request.getExecutionId());
+        String[] namespaceAndName = Stream.of(
+                request.getModelNamespace(),
+                request.getModelName()
+        ).toArray(String[]::new);
 
         return inputs.stream()
                 .map(input -> sendPredictRequest(input, namespaceAndName))
@@ -79,13 +92,20 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
     }
 
     private CompletableFuture<PredictionOutput> sendPredictRequest(PredictionInput input, String[] namespaceAndName) {
-        HttpRequest<Buffer> post = client.post("/predict");
-        Map<String, Object> map = toMap(input.getFeatures());
-        PredictInput pi = new PredictInput();
-        pi.setRequest(map);
-        pi.setModelIdentifier(new ModelIdentifier(namespaceAndName[0], namespaceAndName[1]));
-        return threadContext.withContextCapture(post.sendJson(pi).subscribeAsCompletionStage())
-                .thenApply(r -> toPredictionOutput(r.bodyAsJsonObject()));
+        ModelIdentifier modelIdentifier = new ModelIdentifier("dmn", String.join(":", namespaceAndName));
+        PredictInput pi = new PredictInput(modelIdentifier, toMap(input.getFeatures()));
+        List<PredictInput> piList = List.of(pi);
+
+        LOG.warn(Json.encodePrettily(piList));
+
+        return client.post("/predict")
+                .sendJson(piList)
+                .subscribeAsCompletionStage()
+                .thenApplyAsync(r -> {
+                    r.headers().forEach(entry -> LOG.warn("[HEADER] {}: {}", entry.getKey(), entry.getValue()));
+                    LOG.warn("[BODY] {}", r.bodyAsString());
+                    return toPredictionOutput(r.bodyAsJsonObject());
+                }, asyncExecutor);
     }
 
     private String[] extractNamespaceAndName(String resourceId) {

@@ -28,7 +28,7 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 public class TrustyStorageServiceImpl implements TrustyStorageService {
 
     private static final String DECISIONS_STORAGE = "decisions";
-
+    private static final String EXPLAINABILITY_RESULTS_STORAGE = "explainability-results";
     private static final String MODELS_STORAGE = "models";
 
     @Inject
@@ -41,7 +41,7 @@ public class TrustyStorageServiceImpl implements TrustyStorageService {
 
     @Override
     public Storage<String, ExplainabilityResult> getExplainabilityResultStorage() {
-        return storageService.getCache(DECISIONS_STORAGE, ExplainabilityResult.class);
+        return storageService.getCache(EXPLAINABILITY_RESULTS_STORAGE, ExplainabilityResult.class);
     }
 
     @Override

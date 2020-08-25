@@ -81,6 +81,6 @@ public class ExplainabilityMessagingHandlerTest {
     }
 
     private String buildCorrectExplainabilityRequestEvent() {
-        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", Collections.emptyMap(), Collections.emptyMap()));
+        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", null, null, Collections.emptyMap(), Collections.emptyMap()));
     }
 }

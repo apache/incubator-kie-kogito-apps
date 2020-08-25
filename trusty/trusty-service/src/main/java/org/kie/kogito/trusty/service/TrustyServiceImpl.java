@@ -113,7 +113,14 @@ public class TrustyServiceImpl implements TrustyService {
                     .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeId(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
                     : Collections.emptyMap();
 
-            explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(executionId, serviceUrl, inputs, outputs));
+            explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(
+                    executionId,
+                    serviceUrl,
+                    decision.getExecutedModelName(),
+                    decision.getExecutedModelNamespace(),
+                    inputs,
+                    outputs
+            ));
         }
     }
 

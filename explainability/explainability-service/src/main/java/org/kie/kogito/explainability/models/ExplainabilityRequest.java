@@ -24,25 +24,35 @@ import org.kie.kogito.tracing.typedvalue.TypedValue;
 public class ExplainabilityRequest {
 
     private final String executionId;
+    private final String serviceUrl;
+    private final String modelName;
+    private final String modelNamespace;
     private final Map<String, TypedValue> inputs;
     private final Map<String, TypedValue> outputs;
-    private final String serviceUrl;
 
-    public ExplainabilityRequest(String executionId, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs,
-                                 String serviceUrl) {
+    public ExplainabilityRequest(String executionId, String serviceUrl, String modelName, String modelNamespace, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         this.executionId = executionId;
+        this.serviceUrl = serviceUrl;
+        this.modelName = modelName;
+        this.modelNamespace = modelNamespace;
         this.inputs = inputs;
         this.outputs = outputs;
-        this.serviceUrl = serviceUrl;
-    }
-
-    public static ExplainabilityRequest from(ExplainabilityRequestDto explainabilityRequestDto) {
-        return new ExplainabilityRequest(explainabilityRequestDto.getExecutionId(), explainabilityRequestDto.getInputs(),
-                                         explainabilityRequestDto.getOutputs(), explainabilityRequestDto.getServiceUrl());
     }
 
     public String getExecutionId() {
         return this.executionId;
+    }
+
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
+    public String getModelNamespace() {
+        return modelNamespace;
     }
 
     public Map<String, TypedValue> getInputs() {
@@ -53,7 +63,14 @@ public class ExplainabilityRequest {
         return outputs;
     }
 
-    public String getServiceUrl() {
-        return serviceUrl;
+    public static ExplainabilityRequest from(ExplainabilityRequestDto dto) {
+        return new ExplainabilityRequest(
+                dto.getExecutionId(),
+                dto.getServiceUrl(),
+                dto.getModelName(),
+                dto.getModelNamespace(),
+                dto.getInputs(),
+                dto.getOutputs()
+        );
     }
 }

@@ -38,7 +38,7 @@ public class ExplainabilityApiV1Test {
     public void testEndpointWithRequest() throws JsonProcessingException {
         String executionId = "test";
         String serviceUrl = "http://localhost:8080";
-        String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId, serviceUrl, Collections.emptyMap(), Collections.emptyMap()));
+        String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId, serviceUrl, null, null, Collections.emptyMap(), Collections.emptyMap()));
 
         ExplainabilityResultDto result = given()
                 .contentType(ContentType.JSON)

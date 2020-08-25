@@ -68,7 +68,7 @@ public class ExplainabilityMessagingHandlerIT {
 
         String executionId = "idException";
         String serviceUrl = "http://localhost:8080";
-        ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, Collections.emptyMap(), Collections.emptyMap());
+        ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, null, null, Collections.emptyMap(), Collections.emptyMap());
         when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId, Collections.emptyMap())));
 
         kafkaClient.produce(ExplainabilityCloudEventBuilder.buildCloudEventJsonString(request), TOPIC_REQUEST);

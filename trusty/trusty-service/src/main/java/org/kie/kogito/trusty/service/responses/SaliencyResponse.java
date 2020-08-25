@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SaliencyResponse {
 
-    @JsonProperty("featureName")
+    @JsonProperty("outcomeId")
     private String outcomeId;
 
     @JsonProperty("featureImportance")

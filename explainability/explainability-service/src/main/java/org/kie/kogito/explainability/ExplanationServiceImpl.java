@@ -23,18 +23,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.vertx.mutiny.core.Vertx;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
+import org.eclipse.microprofile.context.ThreadContext;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -54,35 +58,43 @@ public class ExplanationServiceImpl implements ExplanationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExplanationServiceImpl.class);
 
+    @ConfigProperty(name = "trusty.explainability.mockExplanation")
+    Boolean mockExplanation;
+
     @Inject
     ManagedExecutor executor;
 
     @Override
     public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
-        LOG.info("** explainAsync called ***");
-        // TODO: restore limeExplainer when loop works and fix triggered exceptions
-//        RemoteKogitoPredictionProvider provider = new RemoteKogitoPredictionProvider(request, Vertx.vertx(), ThreadContext.builder().build());
-//        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
-        Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
-        return CompletableFuture
-                // .supplyAsync(() -> limeExplainer.explain(prediction, provider))
-                .supplyAsync(() -> mockedExplainationOf(prediction))
+        boolean mockExplanation = Boolean.TRUE.equals(this.mockExplanation);
+
+        Function<ExplainabilityRequest, CompletableFuture<Map<String, Saliency>>> explanationFunction = mockExplanation
+                ? this::mockedExplanationOf
+                : this::explanationOf;
+
+        return explanationFunction.apply(request)
+                .thenApplyAsync(input -> createResultDto(input, request.getExecutionId()), executor)
                 .exceptionally((throwable) -> {
-                    LOG.error("Exception thrown during explainAsync [1]", throwable);
-                    return CompletableFuture.failedFuture(throwable);
-                })
-                .thenApply(inputFuture -> createResultDto(inputFuture, request.getExecutionId()))
-                .exceptionally((throwable) -> {
-                    LOG.error("Exception thrown during explainAsync [2]", throwable);
+                    LOG.error("Exception thrown during explainAsync", throwable);
                     return new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap());
                 });
-        // .thenApplyAsync(saliencies -> new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap()), executor);
     }
 
-    private static CompletableFuture<Map<String, Saliency>> mockedExplainationOf(Prediction prediction) {
-        return CompletableFuture.completedFuture(
-                prediction.getOutput().getOutputs().stream()
-                        .collect(HashMap::new, (m, v) -> m.put(v.getName(), mockedSaliencyOf(prediction.getInput(), v)), HashMap::putAll)
+    private CompletableFuture<Map<String, Saliency>> explanationOf(ExplainabilityRequest request) {
+        return CompletableFuture.completedFuture(getPrediction(request.getInputs(), request.getOutputs()))
+                .thenComposeAsync(prediction -> {
+                    RemoteKogitoPredictionProvider provider = new RemoteKogitoPredictionProvider(request, Vertx.vertx(), ThreadContext.builder().build(), executor);
+                    LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+                    return limeExplainer.explain(prediction, provider);
+                }, executor);
+    }
+
+    private CompletableFuture<Map<String, Saliency>> mockedExplanationOf(ExplainabilityRequest request) {
+        Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
+        return CompletableFuture.supplyAsync(
+                () -> prediction.getOutput().getOutputs().stream()
+                        .collect(HashMap::new, (m, v) -> m.put(v.getName(), mockedSaliencyOf(prediction.getInput(), v)), HashMap::putAll),
+                executor
         );
     }
 
@@ -90,29 +102,22 @@ public class ExplanationServiceImpl implements ExplanationService {
         return new Saliency(
                 output,
                 input.getFeatures().stream()
-                        .map(f -> new FeatureImportance(f, 1.0))
+                        .map(f -> new FeatureImportance(f, Math.random() * 2.0 - 1.0))
                         .collect(Collectors.toList())
         );
     }
 
-    private static ExplainabilityResultDto createResultDto(CompletableFuture<Map<String, Saliency>> inputFuture, String executionId) {
-        if (!inputFuture.isDone() || inputFuture.isCompletedExceptionally() || inputFuture.isCancelled()) {
-            return new ExplainabilityResultDto(executionId, Collections.emptyMap());
-        }
-        try {
-            // FIXME this is wrong, the mapping should be applied as additional step of CompletableFuture
-            Map<String, SaliencyDto> saliencies = inputFuture.get().entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getKey,
-                    e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
-                            .map(fi -> new FeatureImportanceDto(fi.getFeature().getName(), fi.getScore()))
-                            .collect(Collectors.toList())
-                    )
-            ));
-            return new ExplainabilityResultDto(executionId, saliencies);
-        } catch (ExecutionException | InterruptedException e) {
-            LOG.error("Exception on createResultDto", e);
-            throw new RuntimeException(e);
-        }
+    private static ExplainabilityResultDto createResultDto(Map<String, Saliency> saliencies, String executionId) {
+        return new ExplainabilityResultDto(
+                executionId,
+                saliencies.entrySet().stream().collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
+                                .map(fi -> new FeatureImportanceDto(fi.getFeature().getName(), fi.getScore()))
+                                .collect(Collectors.toList())
+                        )
+                ))
+        );
     }
 
     private static Prediction getPrediction(Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
