@@ -118,7 +118,16 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public void storeExplainability(String executionId, ExplainabilityResult result) {
+    public ExplainabilityResult getExplainabilityResultById(String executionId) {
+        Storage<String, ExplainabilityResult> storage = storageService.getExplainabilityResultStorage();
+        if (!storage.containsKey(executionId)) {
+            throw new IllegalArgumentException(String.format("A explainability result with ID %s does not exist in the storage.", executionId));
+        }
+        return storage.get(executionId);
+    }
+
+    @Override
+    public void storeExplainabilityResult(String executionId, ExplainabilityResult result) {
         // TODO: Store it https://issues.redhat.com/browse/KOGITO-2945
         LOG.info("*** storeExplainability called ***");
         LOG.info("executionId: {}", executionId);
@@ -128,6 +137,12 @@ public class TrustyServiceImpl implements TrustyService {
             saliency.getFeatureImportance().forEach(fi -> LOG.info("result.....: - {}: {}", fi.getFeatureId(), fi.getScore()));
         });
         LOG.info("**********************************");
+
+        Storage<String, ExplainabilityResult> storage = storageService.getExplainabilityResultStorage();
+        if (storage.containsKey(executionId)) {
+            throw new IllegalArgumentException(String.format("A explainability result with ID %s is already present in the storage.", executionId));
+        }
+        storage.put(executionId, result);
     }
 
     @Override

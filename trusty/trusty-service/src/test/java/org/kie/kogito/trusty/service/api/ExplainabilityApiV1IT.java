@@ -14,6 +14,6 @@ public class ExplainabilityApiV1IT {
         // TODO: implement this
         given().filter(new ResponseLoggingFilter())
                 .when().get("/executions/decisions/ID/featureImportance")
-                .then().statusCode(200);
+                .then().statusCode(404);
     }
 }

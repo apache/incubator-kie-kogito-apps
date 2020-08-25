@@ -55,12 +55,12 @@ public class ExplainabilityResultConsumerIT {
         kafkaClient = new KafkaClient(kafkaBootstrapServers);
         String executionId = "executionId";
 
-        doNothing().when(trustyService).storeExplainability(eq(executionId), any(ExplainabilityResult.class));
+        doNothing().when(trustyService).storeExplainabilityResult(eq(executionId), any(ExplainabilityResult.class));
 
         kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId, Collections.emptyMap())),
                 KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
 
-        verify(trustyService, timeout(3000).times(1)).storeExplainability(any(String.class), any(ExplainabilityResult.class));
+        verify(trustyService, timeout(3000).times(1)).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
     }
 
     public static CloudEventImpl<ExplainabilityResultDto> buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {

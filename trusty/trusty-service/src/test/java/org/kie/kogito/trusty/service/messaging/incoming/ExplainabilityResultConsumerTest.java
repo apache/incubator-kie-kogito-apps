@@ -51,7 +51,7 @@ public class ExplainabilityResultConsumerTest {
     @Test
     void testCorrectCloudEvent() {
         Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", Collections.emptyMap())));
-        doNothing().when(trustyService).storeExplainability(any(String.class), any(ExplainabilityResult.class));
+        doNothing().when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
 
         testNumberOfInvocations(message, 1);
     }
@@ -66,7 +66,7 @@ public class ExplainabilityResultConsumerTest {
     void testExceptionsAreCatched() {
         Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", Collections.emptyMap())));
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainability(any(String.class), any(ExplainabilityResult.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
     }
 
@@ -78,7 +78,7 @@ public class ExplainabilityResultConsumerTest {
 
     private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
-        verify(trustyService, times(wantedNumberOfServiceInvocations)).storeExplainability(any(), any());
+        verify(trustyService, times(wantedNumberOfServiceInvocations)).storeExplainabilityResult(any(), any());
         verify(message, times(1)).ack();
     }
 

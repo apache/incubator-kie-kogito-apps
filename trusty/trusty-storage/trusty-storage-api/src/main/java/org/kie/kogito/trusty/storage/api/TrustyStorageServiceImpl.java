@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 
 @ApplicationScoped
 public class TrustyStorageServiceImpl implements TrustyStorageService {
@@ -36,6 +37,11 @@ public class TrustyStorageServiceImpl implements TrustyStorageService {
     @Override
     public Storage<String, Decision> getDecisionsStorage() {
         return storageService.getCache(DECISIONS_STORAGE, Decision.class);
+    }
+
+    @Override
+    public Storage<String, ExplainabilityResult> getExplainabilityResultStorage() {
+        return storageService.getCache(DECISIONS_STORAGE, ExplainabilityResult.class);
     }
 
     @Override

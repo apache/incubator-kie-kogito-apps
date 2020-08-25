@@ -83,7 +83,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
 
         ExplainabilityResultDto explainabilityResult = optData.get();
 
-        service.storeExplainability(attributes.getId(), explainabilityResultFrom(explainabilityResult));
+        service.storeExplainabilityResult(attributes.getId(), explainabilityResultFrom(explainabilityResult));
     }
 
     private static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto) {
