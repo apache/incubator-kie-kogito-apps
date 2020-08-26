@@ -114,7 +114,7 @@ class ExecutionsApiV1IT {
 
         ExecutionsResponse response = given().contentType(ContentType.JSON)
                 .when()
-                .get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=10")
+                .get("/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=10")
                 .as(ExecutionsResponse.class);
 
         Assertions.assertEquals(10, response.getHeaders().size());
@@ -124,7 +124,7 @@ class ExecutionsApiV1IT {
 
         response = given().contentType(ContentType.JSON)
                 .when()
-                .get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=10&offset=5")
+                .get("/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=10&offset=5")
                 .as(ExecutionsResponse.class);
 
         Assertions.assertEquals(10, response.getHeaders().size());
@@ -134,7 +134,7 @@ class ExecutionsApiV1IT {
 
         response = given().contentType(ContentType.JSON)
                 .when()
-                .get("/v1/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=10&offset=10")
+                .get("/executions?from=2000-01-01T00:00:00Z&to=2021-01-01T00:00:00Z&limit=10&offset=10")
                 .as(ExecutionsResponse.class);
 
         Assertions.assertEquals(5, response.getHeaders().size());
