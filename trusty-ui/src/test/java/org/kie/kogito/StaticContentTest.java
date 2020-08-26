@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StaticContentTest {
 
     @TestHTTPResource("index.html")
-    URL url;
+    private URL url;
 
     private static String readStream(InputStream in) throws IOException {
         byte[] data = new byte[1024];
