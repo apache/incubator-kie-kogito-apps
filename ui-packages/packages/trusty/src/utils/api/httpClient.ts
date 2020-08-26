@@ -1,24 +1,24 @@
 import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
 
-const httpClient = axios.create({
+export const httpClient = axios.create({
   // @ts-ignore
   baseURL: window.TRUSTY_ENDPOINT || process.env.KOGITO_TRUSTY_API_HTTP_URL,
   timeout: 5000,
   headers: {}
 });
 
-let call: CancelTokenSource;
+export const EXECUTIONS_PATH = '/executions';
 
-const callOnce = (config: AxiosRequestConfig) => {
-  if (call) {
-    call.cancel('Request superseded');
-  }
-  call = axios.CancelToken.source();
+export const callOnceHandler = () => {
+  let caller: CancelTokenSource;
 
-  config.cancelToken = call.token;
-  return httpClient(config);
+  return (config: AxiosRequestConfig) => {
+    if (caller) {
+      caller.cancel('Request superseded');
+    }
+    caller = axios.CancelToken.source();
+
+    config.cancelToken = caller.token;
+    return httpClient(config);
+  };
 };
-
-const isCancelledRequest = axios.isCancel;
-
-export { httpClient, callOnce, isCancelledRequest };
