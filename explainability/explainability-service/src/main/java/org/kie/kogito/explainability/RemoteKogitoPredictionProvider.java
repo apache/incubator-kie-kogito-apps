@@ -63,6 +63,14 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
         }
         List<Output> resultOutputs = toOutputList(mainObj.getJsonObject("result"));
         List<String> resultOutputNames = resultOutputs.stream().map(Output::getName).collect(toList());
+
+        // It's possible that some outputs are missing in the response from the prediction service
+        // (e.g. when the generated perturbed inputs don't make sense and a decision is skipped).
+        // The explainer, however, may throw exceptions if it can't find all the inputs that were
+        // specified in the execution request.
+        // Here we take the outputs received from the prediction service and we fill (only if needed)
+        // the missing ones with Output objects containing "null" values of type UNDEFINED, to make
+        // the explainer happy.
         List<Output> outputs = Stream.concat(
                 resultOutputs.stream()
                         .filter(output -> request.getOutputs().containsKey(output.getName())),
@@ -70,6 +78,7 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
                         .filter(key -> !resultOutputNames.contains(key))
                         .map(key -> new Output(key, Type.UNDEFINED, new Value<>(null), 1d))
         ).collect(toList());
+
         return new PredictionOutput(outputs);
     }
 
