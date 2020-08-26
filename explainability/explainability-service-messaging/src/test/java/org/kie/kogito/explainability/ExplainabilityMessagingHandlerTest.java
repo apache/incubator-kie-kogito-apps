@@ -16,13 +16,6 @@
 
 package org.kie.kogito.explainability;
 
-import java.util.Collections;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +24,14 @@ import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.messaging.ExplainabilityMessagingHandler;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
+
+import java.util.Collections;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.CompletableFuture.completedFuture;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,13 +50,17 @@ public class ExplainabilityMessagingHandlerTest {
     @BeforeEach
     void setup() {
         explanationService = mock(ExplanationService.class);
-        handler = new ExplainabilityMessagingHandler(explanationService, Executors.newFixedThreadPool(2));
+        PredictionProviderFactory predictionProviderFactory = mock(PredictionProviderFactory.class);
+        PredictionProvider predictionProvider = mock(PredictionProvider.class);
+        when(predictionProviderFactory.createPredictionProvider(any(ExplainabilityRequest.class)))
+                .thenReturn(predictionProvider);
+        handler = new ExplainabilityMessagingHandler(explanationService, predictionProviderFactory);
     }
 
     @Test
     void testCorrectCloudEvent() throws InterruptedException, ExecutionException, TimeoutException {
         Message<String> message = mockMessage(buildCorrectExplainabilityRequestEvent());
-        when(explanationService.explainAsync(any(ExplainabilityRequest.class)))
+        when(explanationService.explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class)))
                 .thenReturn(completedFuture(mockExplainabilityResultDto()));
         testNumberOfInvocations(message, 1);
     }
@@ -71,7 +75,8 @@ public class ExplainabilityMessagingHandlerTest {
     void testExceptionsAreCatched() {
         Message<String> message = mockMessage(buildCorrectExplainabilityRequestEvent());
 
-        doThrow(new RuntimeException("Something really bad")).when(explanationService).explainAsync(any(ExplainabilityRequest.class));
+        doThrow(new RuntimeException("Something really bad")).when(explanationService)
+                .explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class));
         Assertions.assertDoesNotThrow(() -> handler.handleMessage(message));
     }
 
@@ -90,7 +95,8 @@ public class ExplainabilityMessagingHandlerTest {
         handler.handleMessage(message)
                 .toCompletableFuture()
                 .get(1, TimeUnit.SECONDS);
-        verify(explanationService, timeout(3000).times(wantedNumberOfServiceInvocations)).explainAsync(any(ExplainabilityRequest.class));
+        verify(explanationService, timeout(3000).times(wantedNumberOfServiceInvocations))
+                .explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class));
         verify(message, times(1)).ack();
     }
 

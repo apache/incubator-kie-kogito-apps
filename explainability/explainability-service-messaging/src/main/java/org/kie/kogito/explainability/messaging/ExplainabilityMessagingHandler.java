@@ -21,13 +21,14 @@ import io.cloudevents.v1.AttributesImpl;
 import io.cloudevents.v1.CloudEventImpl;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.subjects.PublishSubject;
-import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.explainability.ExplanationService;
+import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.reactivestreams.Publisher;
@@ -40,7 +41,6 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.Executor;
 
 @ApplicationScoped
 public class ExplainabilityMessagingHandler {
@@ -52,19 +52,15 @@ public class ExplainabilityMessagingHandler {
     };
     private final PublishSubject<String> eventSubject = PublishSubject.create();
 
-    private Executor executor;
-
-    private ExplanationService explanationService;
+    protected ExplanationService explanationService;
+    protected PredictionProviderFactory predictionProviderFactory;
 
     @Inject
-    public ExplainabilityMessagingHandler(ExplanationService explanationService, ManagedExecutor executor) {
+    public ExplainabilityMessagingHandler(
+            ExplanationService explanationService,
+            PredictionProviderFactory predictionProviderFactory) {
         this.explanationService = explanationService;
-        this.executor = executor;
-    }
-
-    public ExplainabilityMessagingHandler(ExplanationService explanationService, Executor executor) {
-        this.explanationService = explanationService;
-        this.executor = executor;
+        this.predictionProviderFactory = predictionProviderFactory;
     }
 
     // Incoming
@@ -105,15 +101,16 @@ public class ExplainabilityMessagingHandler {
 
         LOGGER.info("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
 
-        ExplainabilityRequestDto explainabilityResult = optData.get();
+        ExplainabilityRequest request = ExplainabilityRequest.from(optData.get());
+        PredictionProvider provider = predictionProviderFactory.createPredictionProvider(request);
 
         return explanationService
-                .explainAsync(ExplainabilityRequest.from(explainabilityResult))
-                .thenAcceptAsync(this::sendEvent, executor);
+                .explainAsync(request, provider)
+                .thenApply(this::sendEvent);
     }
 
     // Outgoing
-    public CompletionStage<Void> sendEvent(ExplainabilityResultDto result) {
+    public Void sendEvent(ExplainabilityResultDto result) {
         LOGGER.info("Explainability service emits explainability for execution with ID {}", result.getExecutionId());
         String payload = CloudEventUtils.encode(
                 CloudEventUtils.build(result.getExecutionId(),
@@ -122,7 +119,7 @@ public class ExplainabilityMessagingHandler {
                                       ExplainabilityResultDto.class)
         );
         eventSubject.onNext(payload);
-        return CompletableFuture.completedFuture(null);
+        return null;
     }
 
     @Outgoing("trusty-explainability-result")

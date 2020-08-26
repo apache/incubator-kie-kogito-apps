@@ -16,7 +16,6 @@
 package org.kie.kogito.explainability.utils;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +97,7 @@ class ExplainabilityMetricsTest {
                 model.predict(List.of(input))
                         .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                         .get(0));
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             pairs.add(Pair.of(saliency, prediction));
@@ -123,7 +122,7 @@ class ExplainabilityMetricsTest {
                 model.predict(List.of(input))
                         .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                         .get(0));
-        Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             pairs.add(Pair.of(saliency, prediction));

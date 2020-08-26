@@ -35,7 +35,7 @@ import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 public class ConversionUtils {
 
-    private static Feature toFeature(String name, Object value) {
+    protected static Feature toFeature(String name, Object value) {
         if (value instanceof JsonObject) {
             return new Feature(name, Type.COMPOSITE, new Value<>(toFeatureList((JsonObject) value)));
         }
@@ -85,7 +85,7 @@ public class ConversionUtils {
                 .collect(Collectors.toList());
     }
 
-    private static Output toOutput(String name, Object value) {
+    protected static Output toOutput(String name, Object value) {
         if (value instanceof JsonObject) {
             return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList((JsonObject) value)), 1d);
         }
@@ -115,7 +115,7 @@ public class ConversionUtils {
         return toList(values, ConversionUtils::toOutput);
     }
 
-    private static Optional<Pair<Type, Value<?>>> toTypeValuePair(Object value) {
+    protected static Optional<Pair<Type, Value<?>>> toTypeValuePair(Object value) {
         if (value instanceof Boolean) {
             return Optional.of(Pair.of(Type.BOOLEAN, new Value<>((Boolean) value)));
         }

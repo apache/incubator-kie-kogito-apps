@@ -52,7 +52,7 @@ class LimeExplainerTest {
                     .get(0);
             Prediction prediction = new Prediction(input, output);
             Assertions.assertThrows(LocalExplanationException.class,
-                    () -> limeExplainer.explain(prediction, model)
+                    () -> limeExplainer.explainAsync(prediction, model)
                             .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()));
         }
     }
@@ -73,7 +73,7 @@ class LimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                     .get(0);
             Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             assertNotNull(saliencyMap);
         }

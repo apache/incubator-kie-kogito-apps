@@ -16,7 +16,6 @@
 package org.kie.kogito.explainability.local.lime;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ class DummyModelsLimeExplainerTest {
             Prediction prediction = new Prediction(input, outputs.get(0));
 
             LimeExplainer limeExplainer = new LimeExplainer(100, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
@@ -87,7 +86,7 @@ class DummyModelsLimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
             LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
@@ -115,7 +114,7 @@ class DummyModelsLimeExplainerTest {
             Prediction prediction = new Prediction(input, outputs.get(0));
 
             LimeExplainer limeExplainer = new LimeExplainer(1000, 2, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
@@ -143,7 +142,7 @@ class DummyModelsLimeExplainerTest {
             Prediction prediction = new Prediction(input, outputs.get(0));
 
             LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model).toCompletableFuture()
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
@@ -170,7 +169,7 @@ class DummyModelsLimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
             LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);

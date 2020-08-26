@@ -84,7 +84,7 @@ class OpenNLPLimeExplainerTest {
                 }
                 return results;
             });
-            Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);

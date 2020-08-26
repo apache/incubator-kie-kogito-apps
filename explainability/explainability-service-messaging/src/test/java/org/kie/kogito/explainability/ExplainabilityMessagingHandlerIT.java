@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
@@ -71,11 +72,11 @@ public class ExplainabilityMessagingHandlerIT {
         ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
 
         ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap());
-        when(explanationService.explainAsync(any(ExplainabilityRequest.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId, Collections.emptyMap())));
+        when(explanationService.explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId, Collections.emptyMap())));
 
         kafkaClient.produce(ExplainabilityCloudEventBuilder.buildCloudEventJsonString(request), TOPIC_REQUEST);
 
-        verify(explanationService, timeout(1000).times(1)).explainAsync(any(ExplainabilityRequest.class));
+        verify(explanationService, timeout(1000).times(1)).explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class));
 
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 

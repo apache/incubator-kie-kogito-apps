@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
@@ -30,24 +31,19 @@ import org.slf4j.LoggerFactory;
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
-public class RemoteKogitoPredictionProvider implements PredictionProvider {
+public class RemotePredictionProvider implements PredictionProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoteKogitoPredictionProvider.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RemotePredictionProvider.class);
 
     private final ExplainabilityRequest request;
     private final ThreadContext threadContext;
     private final Executor asyncExecutor;
     private final WebClient client;
 
-    public RemoteKogitoPredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext, Executor asyncExecutor) {
+    public RemotePredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext, Executor asyncExecutor) {
         this.request = request;
         URI uri = URI.create(request.getServiceUrl());
-        this.client = WebClient.create(vertx, new WebClientOptions()
-                .setDefaultHost(uri.getHost())
-                .setDefaultPort(uri.getPort())
-                .setSsl("https".equalsIgnoreCase(uri.getScheme()))
-                .setLogActivity(true)
-        );
+        this.client = getClient(vertx, uri);
         this.threadContext = threadContext;
         this.asyncExecutor = asyncExecutor;
     }
@@ -57,7 +53,16 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
         return sendPredictRequest(inputs, request.getModelIdentifier());
     }
 
-    private PredictionOutput toPredictionOutput(JsonObject mainObj) {
+    protected WebClient getClient(Vertx vertx, URI uri) {
+        return WebClient.create(vertx, new WebClientOptions()
+                .setDefaultHost(uri.getHost())
+                .setDefaultPort(uri.getPort())
+                .setSsl("https".equalsIgnoreCase(uri.getScheme()))
+                .setLogActivity(true)
+        );
+    }
+
+    protected PredictionOutput toPredictionOutput(JsonObject mainObj) {
         if (mainObj == null || !mainObj.containsKey("result")) {
             return null;
         }
@@ -82,24 +87,8 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
         return new PredictionOutput(outputs);
     }
 
-    private CompletableFuture<List<PredictionOutput>> sendPredictRequest(List<PredictionInput> inputs, ModelIdentifier modelIdentifier) {
-        List<PredictInput> piList = inputs.stream()
-                .map(input -> new PredictInput(modelIdentifier, toMap(input.getFeatures())))
-                .collect(toList());
-
-        return threadContext.withContextCapture(client.post("/predict")
-                .sendJson(piList)
-                .subscribeAsCompletionStage())
-                .thenApplyAsync(r -> r.bodyAsJsonArray().stream()
-                        .filter(JsonObject.class::isInstance)
-                        .map(JsonObject.class::cast)
-                        .map(this::toPredictionOutput)
-                        .filter(Objects::nonNull)
-                        .collect(toList()), asyncExecutor);
-    }
-
     @SuppressWarnings("unchecked")
-    private Map<String, Object> toMap(List<Feature> features) {
+    protected Map<String, Object> toMap(List<Feature> features) {
         Map<String, Object> map = new HashMap<>();
         for (Feature f : features) {
             if (Type.COMPOSITE.equals(f.getType())) {
@@ -124,5 +113,25 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
             map = (Map<String, Object>) map.get("context");
         }
         return map;
+    }
+
+    protected CompletableFuture<List<PredictionOutput>> sendPredictRequest(List<PredictionInput> inputs, ModelIdentifier modelIdentifier) {
+        List<PredictInput> piList = inputs.stream()
+                .map(input -> new PredictInput(modelIdentifier, toMap(input.getFeatures())))
+                .collect(toList());
+
+        return threadContext.withContextCapture(client.post("/predict")
+                .sendJson(piList)
+                .subscribeAsCompletionStage())
+                .thenApplyAsync(r -> parseRawResult(r.bodyAsJsonArray()), asyncExecutor);
+    }
+
+    protected List<PredictionOutput> parseRawResult(JsonArray jsonArray) {
+        return jsonArray.stream()
+                .filter(JsonObject.class::isInstance)
+                .map(JsonObject.class::cast)
+                .map(this::toPredictionOutput)
+                .filter(Objects::nonNull)
+                .collect(toList());
     }
 }

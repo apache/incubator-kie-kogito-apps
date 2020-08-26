@@ -73,7 +73,7 @@ class LimeStabilityTest {
                 Prediction prediction = new Prediction(input, predictionOutput);
                 List<Saliency> saliencies = new LinkedList<>();
                 for (int i = 0; i < 100; i++) {
-                    Map<String, Saliency> saliencyMap = limeExplainer.explain(prediction, model)
+                    Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                             .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
                     saliencies.addAll(saliencyMap.values());
                 }
