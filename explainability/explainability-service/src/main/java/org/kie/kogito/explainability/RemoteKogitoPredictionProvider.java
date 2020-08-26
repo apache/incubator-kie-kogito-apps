@@ -1,6 +1,14 @@
 package org.kie.kogito.explainability;
 
-import io.vertx.core.json.Json;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Stream;
+
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
@@ -19,15 +27,8 @@ import org.kie.kogito.explainability.models.PredictInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
 import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 public class RemoteKogitoPredictionProvider implements PredictionProvider {
 
@@ -56,12 +57,19 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
         return sendPredictRequest(inputs, request.getModelIdentifier());
     }
 
-    private PredictionOutput toPredictionOutput(JsonObject json) {
-        List<Output> outputs = new LinkedList<>();
-        for (Map.Entry<String, Object> entry : json) {
-            Output output = new Output(entry.getKey(), Type.UNDEFINED, new Value<>(entry.getValue()), 1d);
-            outputs.add(output);
+    private PredictionOutput toPredictionOutput(JsonObject mainObj) {
+        if (mainObj == null || !mainObj.containsKey("result")) {
+            return null;
         }
+        List<Output> resultOutputs = toOutputList(mainObj.getJsonObject("result"));
+        List<String> resultOutputNames = resultOutputs.stream().map(Output::getName).collect(toList());
+        List<Output> outputs = Stream.concat(
+                resultOutputs.stream()
+                        .filter(output -> request.getOutputs().containsKey(output.getName())),
+                request.getOutputs().keySet().stream()
+                        .filter(key -> !resultOutputNames.contains(key))
+                        .map(key -> new Output(key, Type.UNDEFINED, new Value<>(null), 1d))
+        ).collect(toList());
         return new PredictionOutput(outputs);
     }
 
@@ -70,19 +78,15 @@ public class RemoteKogitoPredictionProvider implements PredictionProvider {
                 .map(input -> new PredictInput(modelIdentifier, toMap(input.getFeatures())))
                 .collect(toList());
 
-        LOG.warn(Json.encodePrettily(piList));
-
         return threadContext.withContextCapture(client.post("/predict")
                 .sendJson(piList)
                 .subscribeAsCompletionStage())
-                .thenApplyAsync(r -> {
-                    r.headers().forEach(entry -> LOG.warn("[HEADER] {}: {}", entry.getKey(), entry.getValue()));
-                    LOG.warn("[BODY] {}", r.bodyAsString());
-                    // FIXME handle parsing errors
-                    return r.bodyAsJsonObject().stream()
-                            .map(json -> toPredictionOutput((JsonObject) json))
-                            .collect(toList());
-                }, asyncExecutor);
+                .thenApplyAsync(r -> r.bodyAsJsonArray().stream()
+                        .filter(JsonObject.class::isInstance)
+                        .map(JsonObject.class::cast)
+                        .map(this::toPredictionOutput)
+                        .filter(Objects::nonNull)
+                        .collect(toList()), asyncExecutor);
     }
 
     @SuppressWarnings("unchecked")

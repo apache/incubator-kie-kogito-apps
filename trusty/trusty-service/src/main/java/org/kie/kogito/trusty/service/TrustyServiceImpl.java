@@ -106,12 +106,12 @@ public class TrustyServiceImpl implements TrustyService {
         if (Boolean.TRUE.equals(isExplainabilityEnabled)) {
             Map<String, TypedValue> inputs = decision.getInputs() != null
                     ? decision.getInputs().stream()
-                    .collect(HashMap::new, (m, v) -> m.put(v.getId(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
+                    .collect(HashMap::new, (m, v) -> m.put(v.getName(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
                     : Collections.emptyMap();
 
             Map<String, TypedValue> outputs = decision.getOutcomes() != null
                     ? decision.getOutcomes().stream()
-                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeId(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
+                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeName(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
                     : Collections.emptyMap();
 
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(
@@ -135,21 +135,12 @@ public class TrustyServiceImpl implements TrustyService {
 
     @Override
     public void storeExplainabilityResult(String executionId, ExplainabilityResult result) {
-        // TODO: Store it https://issues.redhat.com/browse/KOGITO-2945
-        LOG.info("*** storeExplainability called ***");
-        LOG.info("executionId: {}", executionId);
-        LOG.info("result.....: {} [executionID]", result.getExecutionId());
-        result.getSaliencies().forEach((output, saliency) -> {
-            LOG.info("result.....: {}", output);
-            saliency.getFeatureImportance().forEach(fi -> LOG.info("result.....: - {}: {}", fi.getFeatureId(), fi.getScore()));
-        });
-        LOG.info("**********************************");
-
         Storage<String, ExplainabilityResult> storage = storageService.getExplainabilityResultStorage();
         if (storage.containsKey(executionId)) {
             throw new IllegalArgumentException(String.format("A explainability result with ID %s is already present in the storage.", executionId));
         }
         storage.put(executionId, result);
+        LOG.info("Stored explainability result for execution {}", executionId);
     }
 
     @Override

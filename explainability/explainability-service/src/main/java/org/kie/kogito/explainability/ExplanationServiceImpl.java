@@ -18,19 +18,15 @@ package org.kie.kogito.explainability;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -39,43 +35,54 @@ import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
+import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
 public class ExplanationServiceImpl implements ExplanationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExplanationServiceImpl.class);
 
-    @ConfigProperty(name = "trusty.explainability.mockExplanation", defaultValue = "true")
-    Boolean mockExplanation;
+    private final boolean mockExplanation;
+
+    private final ManagedExecutor executor;
+    private final LimeExplainer limeExplainer;
+    private final ThreadContext threadContext;
+    private final Vertx vertx;
 
     @Inject
-    ManagedExecutor executor;
+    public ExplanationServiceImpl(
+            @ConfigProperty(name = "trusty.explainability.mockExplanation", defaultValue = "true") Boolean mockExplanation,
+            @ConfigProperty(name = "trusty.explainability.numberOfSamples", defaultValue = "100") Integer numberOfSamples,
+            @ConfigProperty(name = "trusty.explainability.numberOfPerturbations", defaultValue = "1") Integer numberOfPerturbations,
+            ManagedExecutor executor,
+            ThreadContext threadContext,
+            Vertx vertx) {
+        this.mockExplanation = Boolean.TRUE.equals(mockExplanation);
+        this.executor = executor;
+        this.threadContext = threadContext;
+        this.vertx = vertx;
+        this.limeExplainer = new LimeExplainer(numberOfSamples, numberOfPerturbations);
 
-    @Inject
-    Vertx vertx;
-
-    @Inject
-    ThreadContext threadContext;
-
-    private final LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+        LOG.info("LimeExplainer created (numberOfSamples={}, numberOfPerturbations={})", numberOfSamples, numberOfPerturbations);
+        if (mockExplanation) {
+            LOG.info("Mocked explanation ENABLED");
+        }
+    }
 
     @Override
     public CompletionStage<ExplainabilityResultDto> explainAsync(ExplainabilityRequest request) {
-        boolean mockExplanation = Boolean.TRUE.equals(this.mockExplanation);
-
         Function<ExplainabilityRequest, CompletableFuture<Map<String, Saliency>>> explanationFunction = mockExplanation
                 ? this::mockedExplanationOf
                 : this::explanationOf;
@@ -132,59 +139,10 @@ public class ExplanationServiceImpl implements ExplanationService {
     }
 
     private static PredictionInput getPredictionInput(Map<String, TypedValue> inputs) {
-        // TODO : convert inputs to a PredictionInput
-        LOG.info("** getPredictionInput called with " + inputs.size() + " inputs ***");
-
-        List<Feature> features = inputs.entrySet().stream()
-                .flatMap(entry -> toList(entry.getKey(), entry.getValue(), ExplanationServiceImpl::toFeature).stream())
-                .peek(obj -> LOG.info("Feature[name={}, type={}, value={}]", obj.getName(), obj.getType(), obj.getValue()))
-                .collect(Collectors.toList());
-
-        return new PredictionInput(features);
+        return new PredictionInput(toFeatureList(inputs));
     }
 
     private static PredictionOutput getPredictionOutput(Map<String, TypedValue> outputs) {
-        // TODO: convert outputs to a PredictionOutput
-        LOG.info("** getPredictionOutput called with " + outputs.size() + " inputs ***");
-
-        List<Output> features = outputs.entrySet().stream()
-                .flatMap(entry -> toList(entry.getKey(), entry.getValue(), ExplanationServiceImpl::toOutput).stream())
-                .peek(obj -> LOG.info("Output[name={}, type={}, value={}]", obj.getName(), obj.getType(), obj.getValue()))
-                .collect(Collectors.toList());
-
-        return new PredictionOutput(features);
-    }
-
-    // TODO: this is just a stub: implement it properly
-    private static <T> List<T> toList(String name, TypedValue value, BiFunction<String, JsonNode, T> unitConverter) {
-        if (value.isCollection()) {
-            int counter = 0;
-            List<T> result = new LinkedList<>();
-            for (TypedValue childValue : value.toCollection().getValue()) {
-                result.addAll(toList(String.format("%s[%s]", name, counter++), childValue, unitConverter));
-            }
-            return result;
-        }
-        if (value.isStructure()) {
-            return value.toStructure().getValue().entrySet().stream()
-                    .flatMap(entry -> toList(String.format("%s.%s", name, entry.getKey()), entry.getValue(), unitConverter).stream())
-                    .collect(Collectors.toList());
-        }
-        JsonNode jsonValue = value.toUnit().getValue();
-        return List.of(unitConverter.apply(name, jsonValue));
-    }
-
-    // TODO: this is just a stub: implement it properly
-    private static Feature toFeature(String name, JsonNode jsonValue) {
-        return jsonValue.isNumber()
-                ? new Feature(name, Type.NUMBER, new Value<>(jsonValue.asDouble()))
-                : new Feature(name, Type.TEXT, new Value<>(jsonValue.asText()));
-    }
-
-    // TODO: this is just a stub: implement it properly
-    private static Output toOutput(String name, JsonNode jsonValue) {
-        return jsonValue.isNumber()
-                ? new Output(name, Type.NUMBER, new Value<>(jsonValue.asDouble()), 0.0)
-                : new Output(name, Type.TEXT, new Value<>(jsonValue.asText()), 0.0);
+        return new PredictionOutput(toOutputList(outputs));
     }
 }
