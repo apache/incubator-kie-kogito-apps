@@ -119,7 +119,7 @@ module.exports = data = {
         inputs: "{\"trip\":{\"city\":\"New York\",\"country\":\"US\",\"begin\":\"2019-12-09T23:00:00.000+01:00\",\"end\":\"2019-12-14T23:00:00.000+01:00\",\"visaRequired\":true},\"TaskName\":\"VisaApplication\",\"NodeName\":\"Apply for visa\",\"Priority\":\"1\",\"Skippable\":\"true\",\"traveller\":{\"firstName\":\"Jan\",\"lastName\":\"Kowalski\",\"email\":\"jan.kowalski@example.com\",\"nationality\":\"Polish\",\"address\":{\"street\":\"polna\",\"city\":\"Krakow\",\"zipCode\":\"32000\",\"country\":\"Poland\"}},\"GroupId\":\"group1\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:02.39Z",
-        endpoint: "http://localhost:8080/travels/a84df9ba-f41e-47cb-9aa5-67cffff2c5bc/VisaApplication/841b9dba-3d91-4725-9de3-f9f4853b417e"
+        endpoint: "http://localhost:4000/travels/a84df9ba-f41e-47cb-9aa5-67cffff2c5bc/VisaApplication/841b9dba-3d91-4725-9de3-f9f4853b417e"
       },
       {
         id: "475e3eb3-1de4-4f68-a146-79c236353a03",
@@ -145,7 +145,7 @@ module.exports = data = {
         inputs: "{\"trip\":{\"city\":\"New York\",\"country\":\"US\",\"begin\":\"2019-12-09T23:00:00.000+01:00\",\"end\":\"2019-12-14T23:00:00.000+01:00\",\"visaRequired\":true},\"TaskName\":\"VisaApplication\",\"NodeName\":\"Apply for visa\",\"Priority\":\"1\",\"Skippable\":\"true\",\"traveller\":{\"firstName\":\"Jan\",\"lastName\":\"Kowalski\",\"email\":\"jan.kowalski@example.com\",\"nationality\":\"Polish\",\"address\":{\"street\":\"polna\",\"city\":\"Krakow\",\"zipCode\":\"32000\",\"country\":\"Poland\"}},\"GroupId\":\"group1\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:04.884Z",
-        endpoint: "http://localhost:8080/travels/5c10ec86-4cf5-4de2-a5ab-d962893f079d/VisaApplication/475e3eb3-1de4-4f68-a146-79c236353a03"
+        endpoint: "http://localhost:4000/travels/5c10ec86-4cf5-4de2-a5ab-d962893f079d/VisaApplication/475e3eb3-1de4-4f68-a146-79c236353a03"
       },
       {
         id: "c6fedd33-8fea-4adf-97a0-9d2b6676e9d0",
@@ -171,7 +171,7 @@ module.exports = data = {
         inputs: "{\"trip\":{\"city\":\"New York\",\"country\":\"US\",\"begin\":\"2019-12-09T23:00:00.000+01:00\",\"end\":\"2019-12-14T23:00:00.000+01:00\",\"visaRequired\":true},\"TaskName\":\"VisaApplication\",\"NodeName\":\"Apply for visa\",\"Priority\":\"1\",\"Skippable\":\"true\",\"traveller\":{\"firstName\":\"Jan\",\"lastName\":\"Kowalski\",\"email\":\"jan.kowalski@example.com\",\"nationality\":\"Polish\",\"address\":{\"street\":\"polna\",\"city\":\"Krakow\",\"zipCode\":\"32000\",\"country\":\"Poland\"}},\"GroupId\":\"group1\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:07.079Z",
-        endpoint: "http://localhost:8080/travels/9d19c8ec-aa5c-4681-9bb5-ff8cbce08091/VisaApplication/c6fedd33-8fea-4adf-97a0-9d2b6676e9d0"
+        endpoint: "http://localhost:4000/travels/9d19c8ec-aa5c-4681-9bb5-ff8cbce08091/VisaApplication/c6fedd33-8fea-4adf-97a0-9d2b6676e9d0"
       },
       {
         id: "809aae9e-f0bf-4892-b0c9-4be80664d2aa",
@@ -197,7 +197,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:15.389Z",
-        endpoint: "http://localhost:8080/travels/5204b2d2-54ec-4f07-8f8c-3079a1f5fe9b/ConfirmTravel/809aae9e-f0bf-4892-b0c9-4be80664d2aa"
+        endpoint: "http://localhost:4000/travels/5204b2d2-54ec-4f07-8f8c-3079a1f5fe9b/ConfirmTravel/809aae9e-f0bf-4892-b0c9-4be80664d2aa"
       },
       {
         id: "615b9143-1468-4028-b454-6122e2139f5c",
@@ -223,7 +223,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:18.05Z",
-        endpoint: "http://localhost:8080/travels/d6685e24-0aad-4e5c-a64f-29e95cae9e5e/ConfirmTravel/615b9143-1468-4028-b454-6122e2139f5c"
+        endpoint: "http://localhost:4000/travels/d6685e24-0aad-4e5c-a64f-29e95cae9e5e/ConfirmTravel/615b9143-1468-4028-b454-6122e2139f5c"
       },
       {
         id: "2e37c623-a535-4eb1-ae5b-6eaf7f4039c3",
@@ -249,7 +249,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:20.835Z",
-        endpoint: "http://localhost:8080/travels/40ab14f0-3a10-4ffd-96e1-05b0028943b4/ConfirmTravel/2e37c623-a535-4eb1-ae5b-6eaf7f4039c3"
+        endpoint: "http://localhost:4000/travels/40ab14f0-3a10-4ffd-96e1-05b0028943b4/ConfirmTravel/2e37c623-a535-4eb1-ae5b-6eaf7f4039c3"
       },
       {
         id: "3c1d6da4-436a-4728-bc24-9a69781bcbac",
@@ -275,7 +275,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:00:23.701Z",
-        endpoint: "http://localhost:8080/travels/e1d4b174-a9b5-465b-b142-018df18d87d8/ConfirmTravel/3c1d6da4-436a-4728-bc24-9a69781bcbac"
+        endpoint: "http://localhost:4000/travels/e1d4b174-a9b5-465b-b142-018df18d87d8/ConfirmTravel/3c1d6da4-436a-4728-bc24-9a69781bcbac"
       },
       {
         id: "86ddb2c7-c8e1-435f-a274-a8b0eb066ac1",
@@ -301,7 +301,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:01:12.655Z",
-        endpoint: "http://localhost:8080/travels/b8eebfe7-45f4-4ce7-9019-1740222b302a/ConfirmTravel/86ddb2c7-c8e1-435f-a274-a8b0eb066ac1"
+        endpoint: "http://localhost:4000/travels/b8eebfe7-45f4-4ce7-9019-1740222b302a/ConfirmTravel/86ddb2c7-c8e1-435f-a274-a8b0eb066ac1"
       },
       {
         id: "9e1e0601-f7bd-4ad3-88ca-57afc9e3cf9d",
@@ -327,7 +327,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:01:14.416Z",
-        endpoint: "http://localhost:8080/travels/0c469bbf-988b-44e0-8fc9-90286500c519/ConfirmTravel/9e1e0601-f7bd-4ad3-88ca-57afc9e3cf9d"
+        endpoint: "http://localhost:4000/travels/0c469bbf-988b-44e0-8fc9-90286500c519/ConfirmTravel/9e1e0601-f7bd-4ad3-88ca-57afc9e3cf9d"
       },
       {
         id: "a3eefa9a-51b0-4820-bc99-94c370389ed5",
@@ -353,7 +353,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:01:16.426Z",
-        endpoint: "http://localhost:8080/travels/718f44c2-e574-482c-9a24-60d17e474dde/ConfirmTravel/a3eefa9a-51b0-4820-bc99-94c370389ed5"
+        endpoint: "http://localhost:4000/travels/718f44c2-e574-482c-9a24-60d17e474dde/ConfirmTravel/a3eefa9a-51b0-4820-bc99-94c370389ed5"
       },
       {
         id: "aa9f477c-5172-4913-956a-6c76f7278207",
@@ -379,7 +379,7 @@ module.exports = data = {
         inputs: "{\"trip\":{\"city\":\"New York\",\"country\":\"US\",\"begin\":\"2019-12-09T23:00:00.000+01:00\",\"end\":\"2019-12-14T23:00:00.000+01:00\",\"visaRequired\":true},\"TaskName\":\"VisaApplication\",\"NodeName\":\"Apply for visa\",\"Priority\":\"1\",\"Skippable\":\"true\",\"traveller\":{\"firstName\":\"Jan\",\"lastName\":\"Kowalski\",\"email\":\"jan.kowalski@example.com\",\"nationality\":\"Polish\",\"address\":{\"street\":\"polna\",\"city\":\"Krakow\",\"zipCode\":\"32000\",\"country\":\"Poland\"}},\"GroupId\":\"group1\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:22:16.446Z",
-        endpoint: "http://localhost:8080/travels/fe523245-05e2-4a0c-abf7-a774cfe9d3f9/VisaApplication/aa9f477c-5172-4913-956a-6c76f7278207"
+        endpoint: "http://localhost:4000/travels/fe523245-05e2-4a0c-abf7-a774cfe9d3f9/VisaApplication/aa9f477c-5172-4913-956a-6c76f7278207"
       },
       {
         id: "99bb167f-144a-42fb-8f40-b80f34f5bed9",
@@ -405,7 +405,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:32:14.556Z",
-        endpoint: "http://localhost:8080/travels/28f63147-b948-4a63-acce-ec2c5c5f15ca/ConfirmTravel/99bb167f-144a-42fb-8f40-b80f34f5bed9"
+        endpoint: "http://localhost:4000/travels/28f63147-b948-4a63-acce-ec2c5c5f15ca/ConfirmTravel/99bb167f-144a-42fb-8f40-b80f34f5bed9"
       },
       {
         id: "2f8e0452-b50d-40f8-a657-b32c812828ef",
@@ -431,7 +431,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:40:26.901Z",
-        endpoint: "http://localhost:8080/travels/53923218-2a54-40c5-8b01-872d8dd2ec67/ConfirmTravel/2f8e0452-b50d-40f8-a657-b32c812828ef"
+        endpoint: "http://localhost:4000/travels/53923218-2a54-40c5-8b01-872d8dd2ec67/ConfirmTravel/2f8e0452-b50d-40f8-a657-b32c812828ef"
       },
       {
         id: "5ac50f25-192c-4719-9847-f9b8bdfe3381",
@@ -457,7 +457,7 @@ module.exports = data = {
         inputs: "{\"trip\":{\"city\":\"New York\",\"country\":\"US\",\"begin\":\"2019-12-09T23:00:00.000+01:00\",\"end\":\"2019-12-14T23:00:00.000+01:00\",\"visaRequired\":true},\"TaskName\":\"VisaApplication\",\"NodeName\":\"Apply for visa\",\"Priority\":\"1\",\"Skippable\":\"true\",\"traveller\":{\"firstName\":\"Jan\",\"lastName\":\"Kowalski\",\"email\":\"jan.kowalski@example.com\",\"nationality\":\"Polish\",\"address\":{\"street\":\"polna\",\"city\":\"Krakow\",\"zipCode\":\"32000\",\"country\":\"Poland\"}},\"GroupId\":\"group1\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:43:29.628Z",
-        endpoint: "http://localhost:8080/travels/8e0eb71c-b5a3-44a3-9b82-d786781a6598/VisaApplication/5ac50f25-192c-4719-9847-f9b8bdfe3381"
+        endpoint: "http://localhost:4000/travels/8e0eb71c-b5a3-44a3-9b82-d786781a6598/VisaApplication/5ac50f25-192c-4719-9847-f9b8bdfe3381"
       },
       {
         id: "e878bca4-84f6-46a3-a864-9632ab490cab",
@@ -483,7 +483,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T09:44:00.082Z",
-        endpoint: "http://localhost:8080/travels/a413fc40-b192-4879-94aa-dc84d0394f67/ConfirmTravel/e878bca4-84f6-46a3-a864-9632ab490cab"
+        endpoint: "http://localhost:4000/travels/a413fc40-b192-4879-94aa-dc84d0394f67/ConfirmTravel/e878bca4-84f6-46a3-a864-9632ab490cab"
       },
       {
         id: "61676d8f-56b7-4bc3-bd40-4c905d4ab176",
@@ -509,7 +509,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T12:57:33.318Z",
-        endpoint: "http://localhost:8080/travels/90a4d7db-c41f-4e01-b6b1-201be823bc07/ConfirmTravel/61676d8f-56b7-4bc3-bd40-4c905d4ab176"
+        endpoint: "http://localhost:4000/travels/90a4d7db-c41f-4e01-b6b1-201be823bc07/ConfirmTravel/61676d8f-56b7-4bc3-bd40-4c905d4ab176"
       },
       {
         id: "0a65028e-c02b-41f9-9260-5b703fb27a27",
@@ -535,7 +535,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T13:05:52.699Z",
-        endpoint: "http://localhost:8080/travels/fdc72f2c-41fe-440e-bbf6-22510fa4766d/ConfirmTravel/0a65028e-c02b-41f9-9260-5b703fb27a27"
+        endpoint: "http://localhost:4000/travels/fdc72f2c-41fe-440e-bbf6-22510fa4766d/ConfirmTravel/0a65028e-c02b-41f9-9260-5b703fb27a27"
       },
       {
         id: "5fe852de-8d00-4197-9936-3842c648fee1",
@@ -561,7 +561,7 @@ module.exports = data = {
         inputs: "{\"flight\":{\"flightNumber\":\"MX555\",\"seat\":null,\"gate\":null,\"departure\":\"2019-12-09T23:00:00.000+01:00\",\"arrival\":\"2019-12-14T23:00:00.000+01:00\"},\"TaskName\":\"ConfirmTravel\",\"NodeName\":\"Confirm travel\",\"Priority\":\"1\",\"Skippable\":\"true\",\"hotel\":{\"name\":\"Perfect hotel\",\"address\":{\"street\":\"street\",\"city\":\"New York\",\"zipCode\":\"12345\",\"country\":\"US\"},\"phone\":\"09876543\",\"bookingNumber\":\"XX-012345\",\"room\":null},\"GroupId\":\"group2\"}",
         outputs: "{}",
         lastUpdate: "2020-07-30T13:23:26.824Z",
-        endpoint: "http://localhost:8080/travels/b4096227-2c8a-463f-a7a9-776027f77bf4/ConfirmTravel/5fe852de-8d00-4197-9936-3842c648fee1"
+        endpoint: "http://localhost:4000/travels/b4096227-2c8a-463f-a7a9-776027f77bf4/ConfirmTravel/5fe852de-8d00-4197-9936-3842c648fee1"
       }
     ],
   ProcessInstances: [

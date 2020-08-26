@@ -1055,6 +1055,7 @@ exports[`TaskForm Test Test successful callback 2`] = `
     <MockedFormNotification
       closeAction={[Function]}
       message="Task '45a73767-5da3-49bf-9c40-d533c3e77ef3' successfully transitioned to phase 'phase'."
+      ouiaId="user-task-45a73767-5da3-49bf-9c40-d533c3e77ef3"
     />
     <MockedFormRenderer
       formSchema={
@@ -1727,6 +1728,7 @@ exports[`TaskForm Test Test unsuccessful callback 2`] = `
     <MockedFormNotification
       closeAction={[Function]}
       message="Task '45a73767-5da3-49bf-9c40-d533c3e77ef3' couldn't transition to phase 'phase'."
+      ouiaId="user-task-45a73767-5da3-49bf-9c40-d533c3e77ef3"
     />
     <MockedFormRenderer
       formSchema={
@@ -2399,6 +2401,7 @@ exports[`TaskForm Test Test unsuccessful callback with extra message 2`] = `
     <MockedFormNotification
       closeAction={[Function]}
       message="Task '45a73767-5da3-49bf-9c40-d533c3e77ef3' couldn't transition to phase 'phase'. Error: 'Extra error info.'"
+      ouiaId="user-task-45a73767-5da3-49bf-9c40-d533c3e77ef3"
     />
     <MockedFormRenderer
       formSchema={

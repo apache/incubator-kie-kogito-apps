@@ -133,6 +133,7 @@ const TaskForm: React.FC<IOwnProps> = ({
             <FormNotification
               message={alertMessage.message}
               closeAction={alertMessage.callback}
+              ouiaId={'user-task-' + userTaskInstance.id}
             />
           )}
           <FormRenderer

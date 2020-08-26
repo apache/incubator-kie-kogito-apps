@@ -118,7 +118,8 @@ describe('TaskInbox tests', () => {
         }
       }
     ];
-    let wrapper = await getWrapperAsync(
+
+    const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskConsoleContextProvider user={testUser}>
           <Router keyLength={0}>
@@ -128,8 +129,6 @@ describe('TaskInbox tests', () => {
       </MockedProvider>,
       'TaskInbox'
     );
-
-    wrapper = wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 
@@ -158,7 +157,7 @@ describe('TaskInbox tests', () => {
       }
     ];
 
-    let wrapper = await getWrapperAsync(
+    const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskConsoleContextProvider user={testUser}>
           <Router keyLength={0}>
@@ -168,8 +167,6 @@ describe('TaskInbox tests', () => {
       </MockedProvider>,
       'TaskInbox'
     );
-
-    wrapper = wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 
@@ -230,8 +227,6 @@ describe('TaskInbox tests', () => {
       'TaskInbox'
     );
 
-    wrapper = wrapper.update();
-
     expect(wrapper).toMatchSnapshot();
 
     let dataTable = wrapper.find(DataTable);
@@ -249,7 +244,7 @@ describe('TaskInbox tests', () => {
       load10.simulate('click');
     });
 
-    wrapper = wrapper.update();
+    wrapper = wrapper.update().find(TaskInbox);
 
     expect(wrapper).toMatchSnapshot();
 
@@ -280,7 +275,7 @@ describe('TaskInbox tests', () => {
       }
     ];
 
-    let wrapper = await getWrapperAsync(
+    const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TaskConsoleContextProvider user={testUser}>
           <Router keyLength={0}>
@@ -290,8 +285,6 @@ describe('TaskInbox tests', () => {
       </MockedProvider>,
       'TaskInbox'
     );
-
-    wrapper = wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 

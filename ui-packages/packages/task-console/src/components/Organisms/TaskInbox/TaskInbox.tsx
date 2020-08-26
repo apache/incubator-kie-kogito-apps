@@ -185,7 +185,7 @@ const TaskInbox: React.FC = props => {
             onGetMoreInstances(_initval, _pageSize, true)
           }
           pageSize={pageSize}
-          isLoadingMore={false}
+          isLoadingMore={isLoadingMore}
         />
       )}
     </React.Fragment>
