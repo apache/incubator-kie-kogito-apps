@@ -64,5 +64,4 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
                 .map(e -> new ExplainabilityResultItem(e.getKey(), e.getValue()))
                 .collect(Collectors.toList());
     }
-
 }

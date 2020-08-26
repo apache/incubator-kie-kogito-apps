@@ -55,10 +55,13 @@ class ExplainabilityResultItem {
     public static final String SALIENCY_FIELD = "saliency";
 
     @JsonProperty(ID_FIELD)
-    private final String id;
+    private String id;
 
     @JsonProperty(SALIENCY_FIELD)
-    private final Saliency saliency;
+    private Saliency saliency;
+
+    public ExplainabilityResultItem() {
+    }
 
     public ExplainabilityResultItem(String id, Saliency saliency) {
         this.id = id;
@@ -69,7 +72,15 @@ class ExplainabilityResultItem {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Saliency getSaliency() {
         return saliency;
+    }
+
+    public void setSaliency(Saliency saliency) {
+        this.saliency = saliency;
     }
 }
