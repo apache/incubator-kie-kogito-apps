@@ -206,8 +206,6 @@ public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<Strin
                                      int o,
                                      Output currentOutput) {
 
-        System.out.println("currentOutput.getValue() = " + currentOutput.getValue());
-        System.out.println("currentOutput.getValue().getUnderlyingObject() = " + currentOutput.getValue().getUnderlyingObject());
         if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
             Map<Double, Long> rawClassesBalance;
 
