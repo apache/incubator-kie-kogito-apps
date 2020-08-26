@@ -24,15 +24,18 @@ import java.nio.charset.StandardCharsets;
 
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
+import io.vertx.core.http.HttpHeaders;
 import org.junit.jupiter.api.Test;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 public class StaticContentTest {
 
     @TestHTTPResource("index.html")
-    URL url;
+    private URL url;
 
     private static String readStream(InputStream in) throws IOException {
         byte[] data = new byte[1024];
@@ -50,5 +53,13 @@ public class StaticContentTest {
             String contents = readStream(in);
             assertTrue(contents.contains("<title>Kogito - TrustyAI</title>"));
         }
+    }
+
+    @Test
+    public void testHeaders() throws Exception {
+        given().contentType(ContentType.JSON).when().get("/").then()
+                .statusCode(200)
+                .header(HttpHeaders.CACHE_CONTROL.toString(), "no-cache")
+                .header(HttpHeaders.CONTENT_TYPE.toString(), "text/html;charset=utf8");
     }
 }

@@ -59,7 +59,7 @@ public class VertxRouter {
         router.route().handler(StaticHandler.create());
     }
 
-    public void handle(RoutingContext context) {
+    private void handle(RoutingContext context) {
         try {
             context.response()
                     .putHeader(HttpHeaders.CACHE_CONTROL, "no-cache")
