@@ -15,18 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.security.SecureRandom;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.LocalExplanationException;
@@ -45,6 +33,14 @@ import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.LinearModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.security.SecureRandom;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * An implementation of LIME algorithm (Ribeiro et al., 2016) that handles tabular data, text data, complex hierarchically
@@ -113,16 +109,52 @@ public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<Strin
             throw new LocalExplanationException("input features linearization failed");
         }
         List<Output> actualOutputs = prediction.getOutput().getOutputs();
-        /*
-         TODO : restore retrying mechanism, so that when the dataset is not separable this tries to get newly perturbed
-          inputs and outputs until a linearly separable dataset is found or the no. of retries has gone to 0.
-          see https://github.com/kiegroup/kogito-apps/blob/master/explainability/explainability-core/src/main/java/org/kie/kogito/explainability/local/lime/LimeExplainer.java#L141-L179
-         */
+
+        return explainRetryCycle(
+                model,
+                originalInput,
+                targetInput,
+                linearizedTargetInputFeatures,
+                actualOutputs,
+                noOfRetries);
+    }
+
+    protected CompletableFuture<Map<String, Saliency>> explainRetryCycle(
+            PredictionProvider model,
+            PredictionInput originalInput,
+            PredictionInput targetInput,
+            List<Feature> linearizedTargetInputFeatures,
+            List<Output> actualOutputs,
+            int noOfRetries) {
+
         List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures());
 
         return model.predict(perturbedInputs)
-                .thenApply(getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs))
-                .thenApply(limeInputsList -> getSaliencies(targetInput, linearizedTargetInputFeatures, actualOutputs, limeInputsList));
+                .thenCompose(predictionOutputs -> {
+                    try {
+                        List<LimeInputs> limeInputsList = getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs, predictionOutputs);
+                        return completedFuture(getSaliencies(targetInput, linearizedTargetInputFeatures, actualOutputs, limeInputsList));
+                    } catch (DatasetNotSeparableException e) {
+                        if (noOfRetries > 0) {
+                            return explainRetryCycle(model, originalInput, targetInput, linearizedTargetInputFeatures, actualOutputs, noOfRetries - 1);
+                        }
+                        throw e;
+                    }
+                });
+    }
+
+    private List<LimeInputs> getLimeInputs(List<Feature> linearizedTargetInputFeatures,
+                                           List<Output> actualOutputs,
+                                           List<PredictionInput> perturbedInputs,
+                                           List<PredictionOutput> predictionOutputs) {
+        List<LimeInputs> limeInputsList = new LinkedList<>();
+        for (int o = 0; o < actualOutputs.size(); o++) {
+            Output currentOutput = actualOutputs.get(o);
+            LimeInputs limeInputs = prepareInputs(perturbedInputs, predictionOutputs, linearizedTargetInputFeatures,
+                    o, currentOutput);
+            limeInputsList.add(limeInputs);
+        }
+        return limeInputsList;
     }
 
     private Map<String, Saliency> getSaliencies(PredictionInput targetInput, List<Feature> linearizedTargetInputFeatures, List<Output> actualOutputs, List<LimeInputs> limeInputsList) {
@@ -137,28 +169,13 @@ public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<Strin
         return result;
     }
 
-    private Function<List<PredictionOutput>, List<LimeInputs>> getLimeInputs(List<Feature> linearizedTargetInputFeatures,
-                                                                             List<Output> actualOutputs,
-                                                                             List<PredictionInput> perturbedInputs) {
-        return predictionOutputs -> {
-            List<LimeInputs> limeInputsList = new LinkedList<>();
-            for (int o = 0; o < actualOutputs.size(); o++) {
-                Output currentOutput = actualOutputs.get(o);
-                LimeInputs limeInputs = prepareInputs(perturbedInputs, predictionOutputs, linearizedTargetInputFeatures,
-                                                      o, currentOutput);
-                limeInputsList.add(limeInputs);
-            }
-            return limeInputsList;
-        };
-    }
-
     private void getSaliency(PredictionInput targetInput, List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result, LimeInputs limeInputs, Output originalOutput) {
         List<FeatureImportance> featureImportanceList = new LinkedList<>();
 
         // encode the training data so that it can be fed into the linear model
         DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
-                                                           limeInputs.getPerturbedOutputs(),
-                                                           targetInput, originalOutput);
+                limeInputs.getPerturbedOutputs(),
+                targetInput, originalOutput);
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
         // weight the training samples based on the proximity to the target input to explain
@@ -183,40 +200,37 @@ public class LimeExplainer implements LocalExplainer<CompletableFuture<Map<Strin
      * it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
      * feature importance scores.
      */
-    private LimeInputs prepareInputs(List<PredictionInput> perturbedInputs, List<PredictionOutput> perturbedOutputs,
-                                     List<Feature> linearizedTargetInputFeatures, int o,
+    private LimeInputs prepareInputs(List<PredictionInput> perturbedInputs,
+                                     List<PredictionOutput> perturbedOutputs,
+                                     List<Feature> linearizedTargetInputFeatures,
+                                     int o,
                                      Output currentOutput) {
-        LimeInputs limeInputs = null;
-        if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
-            boolean classification;
-            boolean separableDataset = false;
 
+        System.out.println("currentOutput.getValue() = " + currentOutput.getValue());
+        System.out.println("currentOutput.getValue().getUnderlyingObject() = " + currentOutput.getValue().getUnderlyingObject());
+        if (currentOutput.getValue() != null && currentOutput.getValue().getUnderlyingObject() != null) {
             Map<Double, Long> rawClassesBalance;
 
             // calculate the no. of samples belonging to each output class
             Value<?> fv = currentOutput.getValue();
             rawClassesBalance = getClassBalance(perturbedOutputs, fv, o);
+            Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
+            double separationRatio = (double) max / (double) perturbedInputs.size();
 
             // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
-            if (rawClassesBalance.size() > 1) {
-                Long max = rawClassesBalance.values().stream().max(Long::compareTo).orElse(1L);
-                if ((double) max / (double) perturbedInputs.size() < SEPARABLE_DATASET_RATIO) {
-                    separableDataset = true;
-                    classification = rawClassesBalance.size() == 2;
+            if (rawClassesBalance.size() > 1 && separationRatio < SEPARABLE_DATASET_RATIO) {
+                boolean classification = rawClassesBalance.size() == 2;
 
-                    List<Output> outputs = perturbedOutputs.stream().map(po -> po.getOutputs().get(o)).collect(Collectors.toList());
+                List<Output> outputs = perturbedOutputs.stream().map(po -> po.getOutputs().get(o)).collect(Collectors.toList());
 
-                    // if dataset creation process succeeds use it to train the linear model
-                    limeInputs = new LimeInputs(classification, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
-                }
-            }
-            if (!separableDataset) { // fail the explanation if the dataset is not separable
+                // if dataset creation process succeeds use it to train the linear model
+                return new LimeInputs(classification, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
+            } else {
                 throw new DatasetNotSeparableException(currentOutput, rawClassesBalance);
             }
         } else {
-            limeInputs = new LimeInputs(false, linearizedTargetInputFeatures, currentOutput, Collections.emptyList(), Collections.emptyList());
+            return new LimeInputs(false, linearizedTargetInputFeatures, currentOutput, emptyList(), emptyList());
         }
-        return limeInputs;
     }
 
     private Map<Double, Long> getClassBalance(List<PredictionOutput> perturbedOutputs, Value<?> fv, int finalO) {

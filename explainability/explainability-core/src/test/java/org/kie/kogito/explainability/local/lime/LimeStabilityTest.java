@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
@@ -52,7 +51,6 @@ class LimeStabilityTest {
     }
 
     @Test
-    @Disabled("fails with LIME dataset not separable for output 'spam' of type 'boolean' with 'Value{true}' ({1.0=32})")
     void testStabilityWithTextData() throws InterruptedException, ExecutionException, TimeoutException {
         PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
