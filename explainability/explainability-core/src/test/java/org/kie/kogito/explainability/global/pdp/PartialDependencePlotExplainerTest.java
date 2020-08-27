@@ -15,17 +15,10 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.FakeRandom;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
@@ -40,6 +33,13 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -50,7 +50,7 @@ class PartialDependencePlotExplainerTest {
     PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
         @Override
         public DataDistribution getDataDistribution() {
-            return DataUtils.generateRandomDataDistribution(10, 100, new Random());
+            return DataUtils.generateRandomDataDistribution(10, 100, new FakeRandom());
         }
 
         @Override
@@ -88,15 +88,18 @@ class PartialDependencePlotExplainerTest {
 
         PredictionProvider brokenProvider = inputs -> supplyAsync(
                 () -> {
-            try {
-                Thread.sleep(1000);
-                return Collections.emptyList();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+                    try {
+                        Thread.sleep(1000);
+                        return Collections.emptyList();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
 
         Assertions.assertThrows(TimeoutException.class,
                 () -> partialDependencePlotProvider.explain(brokenProvider, metadata));
+
+        Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
+        Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
     }
 }
