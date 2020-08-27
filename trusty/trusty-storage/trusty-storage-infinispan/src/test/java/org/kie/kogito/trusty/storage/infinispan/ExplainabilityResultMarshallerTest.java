@@ -16,23 +16,29 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
-import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
+import org.kie.kogito.trusty.storage.infinispan.testfield.MapToListTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.EXECUTION_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.SALIENCIES_FIELD;
 
-// TODO: fix this with map field
-@Disabled
 public class ExplainabilityResultMarshallerTest extends MarshallerTestTemplate<ExplainabilityResult> {
 
     private static final List<AbstractTestField<ExplainabilityResult, ?>> TEST_FIELD_LIST = List.of(
-            new StringTestField<>(EXECUTION_ID_FIELD, "ID", ExplainabilityResult::getExecutionId, ExplainabilityResult::setExecutionId)
+            new StringTestField<>(EXECUTION_ID_FIELD, "ID", ExplainabilityResult::getExecutionId, ExplainabilityResult::setExecutionId),
+            new MapToListTestField<>(
+                    SALIENCIES_FIELD, Collections.emptyMap(),
+                    ExplainabilityResult::getSaliencies, ExplainabilityResult::setSaliencies,
+                    ExplainabilityResultItem.class,
+                    ExplainabilityResultMarshaller::mapToList, ExplainabilityResultMarshaller::listToMap
+            )
     );
 
     public ExplainabilityResultMarshallerTest() {

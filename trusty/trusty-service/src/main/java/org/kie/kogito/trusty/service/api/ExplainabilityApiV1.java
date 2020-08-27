@@ -39,8 +39,7 @@ public class ExplainabilityApiV1 {
     @APIResponses(value = {
             @APIResponse(description = "Gets the local explanation of a decision.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionStructuredInputsResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
-    }
-    )
+    })
     @Operation(
             summary = "Returns the saliencies for a decision.",
             description = "Returns the saliencies for a particular decision calculated using the lime algorithm."
@@ -54,7 +53,7 @@ public class ExplainabilityApiV1 {
                     schema = @Schema(implementation = String.class)
             ) @PathParam("executionId") String executionId) {
         return retrieveExplainabilityResult(executionId)
-                .map(this::explainabilityResultModelToResponse)
+                .map(ExplainabilityApiV1::explainabilityResultModelToResponse)
                 .map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();
@@ -62,13 +61,13 @@ public class ExplainabilityApiV1 {
 
     private Optional<ExplainabilityResult> retrieveExplainabilityResult(String executionId) {
         try {
-            return Optional.of(trustyService.getExplainabilityResultById(executionId));
+            return Optional.ofNullable(trustyService.getExplainabilityResultById(executionId));
         } catch (IllegalArgumentException ex) {
             return Optional.empty();
         }
     }
 
-    private SalienciesResponse explainabilityResultModelToResponse(ExplainabilityResult model) {
+    static SalienciesResponse explainabilityResultModelToResponse(ExplainabilityResult model) {
         if (model == null) {
             return null;
         }
@@ -80,21 +79,21 @@ public class ExplainabilityApiV1 {
         );
     }
 
-    private FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
+    static FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
         if (model == null) {
             return null;
         }
         return new FeatureImportanceResponse(model.getFeatureId(), model.getScore());
     }
 
-    private SaliencyResponse saliencyModelToResponse(String id, Saliency model) {
+    static SaliencyResponse saliencyModelToResponse(String id, Saliency model) {
         if (model == null) {
             return null;
         }
         return new SaliencyResponse(
                 id,
                 model.getFeatureImportance().stream()
-                        .map(this::featureImportanceModelToResponse)
+                        .map(ExplainabilityApiV1::featureImportanceModelToResponse)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList())
         );
