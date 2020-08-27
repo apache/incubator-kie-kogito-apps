@@ -38,6 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LimeStabilityTest {
 
+    static final double TOP_FEATURE_THRESHOLD = 0.9;
+
     @Test
     void testStabilityWithNumericData() throws Exception {
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
@@ -81,7 +83,7 @@ class LimeStabilityTest {
                 Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
                 boolean topFeature = false;
                 for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
-                    if (entry.getValue() >= 0.9) {
+                    if (entry.getValue() >= TOP_FEATURE_THRESHOLD) {
                         topFeature = true;
                         break;
                     }
@@ -97,7 +99,7 @@ class LimeStabilityTest {
                 Map<Double, Long> impactMap = impacts.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
                 boolean topImpact = false;
                 for (Map.Entry<Double, Long> entry : impactMap.entrySet()) {
-                    if (entry.getValue() >= 0.9) {
+                    if (entry.getValue() >= TOP_FEATURE_THRESHOLD) {
                         topImpact = true;
                         break;
                     }
