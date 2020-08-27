@@ -46,7 +46,7 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
         writer.writeCollection(ExplainabilityResult.SALIENCIES_FIELD, mapToList(input.getSaliencies()), ExplainabilityResultItem.class);
     }
 
-    private static Map<String, Saliency> listToMap(List<ExplainabilityResultItem> inputList) {
+    static Map<String, Saliency> listToMap(List<ExplainabilityResultItem> inputList) {
         if (inputList == null) {
             return null;
         }
@@ -56,7 +56,7 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
         ));
     }
 
-    private static List<ExplainabilityResultItem> mapToList(Map<String, Saliency> inputMap) {
+    static List<ExplainabilityResultItem> mapToList(Map<String, Saliency> inputMap) {
         if (inputMap == null) {
             return null;
         }
