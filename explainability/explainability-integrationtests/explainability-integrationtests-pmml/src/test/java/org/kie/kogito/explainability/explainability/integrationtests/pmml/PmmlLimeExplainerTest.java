@@ -102,7 +102,7 @@ class PmmlLimeExplainerTest {
         }
     }
 
-    @Disabled
+    @Disabled("https://issues.redhat.com/browse/KOGITO-3193")
     void testPMMLRegressionCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
@@ -136,7 +136,7 @@ class PmmlLimeExplainerTest {
         }
     }
 
-    @Disabled()
+    @Disabled("https://issues.redhat.com/browse/KOGITO-3193")
     void testPMMLScorecardCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));

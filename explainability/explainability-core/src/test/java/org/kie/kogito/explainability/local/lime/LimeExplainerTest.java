@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class LimeExplainerTest {
 
@@ -51,9 +52,14 @@ class LimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                     .get(0);
             Prediction prediction = new Prediction(input, output);
-            Assertions.assertThrows(LocalExplanationException.class,
-                    () -> limeExplainer.explainAsync(prediction, model)
-                            .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()));
+            try {
+                limeExplainer.explainAsync(prediction, model)
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            } catch (LocalExplanationException e) {
+                // this is expected
+            } catch (Exception e) {
+                fail(e);
+            }
         }
     }
 

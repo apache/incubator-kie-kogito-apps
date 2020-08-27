@@ -86,7 +86,7 @@ public class ExplainabilityMetrics {
         try {
             predictionOutputs = model.predict(List.of(predictionInput)).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOGGER.error("Impossible to obtain prediction " + e.getMessage(), e);
+            LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
             throw e;
         }
         double impact = 0d;

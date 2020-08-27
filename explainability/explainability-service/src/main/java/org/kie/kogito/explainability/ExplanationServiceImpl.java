@@ -60,7 +60,7 @@ public class ExplanationServiceImpl implements ExplanationService {
         Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
         return localExplainer.explainAsync(prediction, predictionProvider)
                 .thenApply(input -> createResultDto(input, request.getExecutionId()))
-                .exceptionally((throwable) -> {
+                .exceptionally(throwable -> {
                     LOG.error("Exception thrown during explainAsync", throwable);
                     return new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap());
                 });

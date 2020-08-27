@@ -115,7 +115,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                     try {
                         predictionOutputs = model.predict(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        LOGGER.error("Impossible to obtain prediction " + e.getMessage(), e);
+                        LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
                         throw e;
                     }
                     // prediction requests are batched per value of feature 'Xs' under analysis
