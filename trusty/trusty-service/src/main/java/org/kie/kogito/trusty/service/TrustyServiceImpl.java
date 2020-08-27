@@ -49,21 +49,29 @@ public class TrustyServiceImpl implements TrustyService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrustyService.class);
 
-    @ConfigProperty(name = "trusty.explainability.enabled")
-    Boolean isExplainabilityEnabled;
+    private boolean isExplainabilityEnabled;
 
-    @Inject
-    ExplainabilityRequestProducer explainabilityRequestProducer;
-
-    @Inject
-    TrustyStorageService storageService;
+    private ExplainabilityRequestProducer explainabilityRequestProducer;
+    private TrustyStorageService storageService;
 
     TrustyServiceImpl() {
         // dummy constructor needed
     }
 
-    public TrustyServiceImpl(TrustyStorageService storageService) {
+    @Inject
+    public TrustyServiceImpl(
+            @ConfigProperty(name = "trusty.explainability.enabled") Boolean isExplainabilityEnabled,
+            ExplainabilityRequestProducer explainabilityRequestProducer,
+            TrustyStorageService storageService
+    ) {
+        this.isExplainabilityEnabled = Boolean.TRUE.equals(isExplainabilityEnabled);
+        this.explainabilityRequestProducer = explainabilityRequestProducer;
         this.storageService = storageService;
+    }
+
+    // used only in tests
+    void enableExplainability() {
+        isExplainabilityEnabled = true;
     }
 
     @Override
@@ -103,7 +111,7 @@ public class TrustyServiceImpl implements TrustyService {
     public void processDecision(String executionId, String serviceUrl, Decision decision) {
         storeDecision(executionId, decision);
         // TODO: Create a proper ExplainabilityRequestDto when all the properties will be defined and available. https://issues.redhat.com/browse/KOGITO-2944
-        if (Boolean.TRUE.equals(isExplainabilityEnabled)) {
+        if (isExplainabilityEnabled) {
             Map<String, TypedValue> inputs = decision.getInputs() != null
                     ? decision.getInputs().stream()
                     .collect(HashMap::new, (m, v) -> m.put(v.getName(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
