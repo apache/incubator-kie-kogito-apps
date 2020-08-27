@@ -49,7 +49,7 @@ public class ConversionUtils {
     }
 
     public static Feature toFeature(String name, TypedValue value) {
-        // TODO: handle COLLECTION values
+        // TODO: handle COLLECTION values https://issues.redhat.com/browse/KOGITO-3194
         if (value.isUnit()) {
             return toTypeValuePair(value.toUnit().getValue())
                     .map(p -> new Feature(name, p.getLeft(), p.getRight()))
@@ -99,7 +99,7 @@ public class ConversionUtils {
     }
 
     public static Output toOutput(String name, TypedValue value) {
-        // TODO: handle COLLECTION values
+        // TODO: handle COLLECTION values https://issues.redhat.com/browse/KOGITO-3194
         if (value.isUnit()) {
             return toTypeValuePair(value.toUnit().getValue())
                     .map(p -> new Output(name, p.getLeft(), p.getRight(), 1d))

@@ -76,7 +76,7 @@ class ConversionUtilsTest {
         assertEquals(Type.TEXT, features.get(0).getType());
         assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
 
-        // TODO add collection support
+        // TODO add collection support https://issues.redhat.com/browse/KOGITO-3194
         assertNull(ConversionUtils.toFeature("name", new CollectionValue("list")));
     }
 
@@ -124,7 +124,7 @@ class ConversionUtilsTest {
         assertEquals(Type.TEXT, features.get(0).getType());
         assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
 
-        // TODO add collection support
+        // TODO add collection support https://issues.redhat.com/browse/KOGITO-3194
         assertNull(ConversionUtils.toOutput("name", new CollectionValue("list")));
     }
 
