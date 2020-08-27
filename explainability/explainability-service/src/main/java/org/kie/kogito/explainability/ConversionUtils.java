@@ -121,13 +121,13 @@ public class ConversionUtils {
 
     protected static Optional<Pair<Type, Value<Object>>> toTypeValuePair(Object value) {
         if (value instanceof Boolean) {
-            return Optional.of(Pair.of(Type.BOOLEAN, new Value<>((Boolean) value)));
+            return Optional.of(Pair.of(Type.BOOLEAN, new Value<>(value)));
         }
         if (value instanceof Number) {
             return Optional.of(Pair.of(Type.NUMBER, new Value<>(((Number) value).doubleValue())));
         }
         if (value instanceof String) {
-            return Optional.of(Pair.of(Type.TEXT, new Value<>((String) value)));
+            return Optional.of(Pair.of(Type.TEXT, new Value<>(value)));
         }
         return Optional.empty();
     }

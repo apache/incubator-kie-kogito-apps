@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -32,9 +33,12 @@ import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 
+import static java.util.Collections.emptyList;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -130,5 +134,27 @@ class ExplainabilityMetricsTest {
         Assertions.assertDoesNotThrow(() -> {
             ExplainabilityMetrics.classificationFidelity(pairs);
         });
+    }
+
+    @Test
+    void testBrokenPredict() {
+        Config.INSTANCE.setAsyncTimeout(1);
+        Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
+        Prediction emptyPrediction = new Prediction(new PredictionInput(emptyList()), new PredictionOutput(emptyList()));
+        PredictionProvider brokenProvider = inputs -> supplyAsync(
+                () -> {
+                    try {
+                        Thread.sleep(1000);
+                        return emptyList();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+        Assertions.assertThrows(TimeoutException.class,
+                () -> ExplainabilityMetrics.impactScore(brokenProvider, emptyPrediction, emptyList()));
+
+        Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
+        Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
     }
 }
