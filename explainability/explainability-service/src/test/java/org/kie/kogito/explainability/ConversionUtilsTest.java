@@ -137,7 +137,7 @@ class ConversionUtilsTest {
     }
 
     private void commonTypeValuePairObject(Object input, Type type, Object value) {
-        Optional<Pair<Type, Value<?>>> result = ConversionUtils.toTypeValuePair(input);
+        Optional<Pair<Type, Value<Object>>> result = ConversionUtils.toTypeValuePair(input);
         assertTrue(result.isPresent());
         assertEquals(type, result.get().getKey());
         assertEquals(value, result.get().getValue().getUnderlyingObject());
@@ -152,7 +152,7 @@ class ConversionUtilsTest {
     }
 
     private void commonTypeValuePairJson(JsonNode input, Type type, Object value) {
-        Optional<Pair<Type, Value<?>>> result = ConversionUtils.toTypeValuePair(input);
+        Optional<Pair<Type, Value<Object>>> result = ConversionUtils.toTypeValuePair(input);
         assertTrue(result.isPresent());
         assertEquals(type, result.get().getKey());
         assertEquals(value, result.get().getValue().getUnderlyingObject());
