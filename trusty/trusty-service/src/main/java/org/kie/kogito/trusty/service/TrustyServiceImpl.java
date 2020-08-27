@@ -43,11 +43,10 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
-
 import static java.util.Arrays.asList;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
+import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
 
 @ApplicationScoped
 public class TrustyServiceImpl implements TrustyService {
@@ -125,7 +124,6 @@ public class TrustyServiceImpl implements TrustyService {
     @Override
     public void processDecision(String executionId, String serviceUrl, Decision decision) {
         storeDecision(executionId, decision);
-        // TODO: Create a proper ExplainabilityRequestDto when all the properties will be defined and available. https://issues.redhat.com/browse/KOGITO-2944
         if (isExplainabilityEnabled) {
             Map<String, TypedValue> inputs = decision.getInputs() != null
                     ? decision.getInputs().stream()
