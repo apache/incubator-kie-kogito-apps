@@ -20,8 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
@@ -43,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class DummyModelsLimeExplainerTest {
 
     @Test
-    void testMapOneFeatureToOutputRegression() throws ExecutionException, InterruptedException, TimeoutException {
+    void testMapOneFeatureToOutputRegression() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -71,7 +69,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testUnusedFeatureRegression() throws ExecutionException, InterruptedException, TimeoutException {
+    void testUnusedFeatureRegression() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -98,7 +96,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testMapOneFeatureToOutputClassification() throws ExecutionException, InterruptedException, TimeoutException {
+    void testMapOneFeatureToOutputClassification() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -126,7 +124,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testTextSpamClassification() throws ExecutionException, InterruptedException, TimeoutException {
+    void testTextSpamClassification() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -154,7 +152,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @Test
-    void testUnusedFeatureClassification() throws ExecutionException, InterruptedException, TimeoutException {
+    void testUnusedFeatureClassification() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);

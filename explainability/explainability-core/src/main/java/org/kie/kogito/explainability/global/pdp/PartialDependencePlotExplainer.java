@@ -17,7 +17,6 @@ package org.kie.kogito.explainability.global.pdp;
 
 import java.security.SecureRandom;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -75,7 +74,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
     }
 
     @Override
-    public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) {
+    public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws Exception {
         long start = System.currentTimeMillis();
 
         Collection<PartialDependenceGraph> pdps = new LinkedList<>();
@@ -116,8 +115,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                     try {
                         predictionOutputs = model.predict(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        LOGGER.error("Impossible to obtain prediction " + e.getMessage(), e);
-                        throw new IllegalStateException("Impossible to obtain prediction " + e.getMessage(), e);
+                        LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
+                        throw e;
                     }
                     // prediction requests are batched per value of feature 'Xs' under analysis
                     for (PredictionOutput predictionOutput : predictionOutputs) {

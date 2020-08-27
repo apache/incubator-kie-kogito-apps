@@ -47,7 +47,7 @@ import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTrac
 @ApplicationScoped
 public class TrustyServiceImpl implements TrustyService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TrustyService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TrustyServiceImpl.class);
 
     private boolean isExplainabilityEnabled;
 

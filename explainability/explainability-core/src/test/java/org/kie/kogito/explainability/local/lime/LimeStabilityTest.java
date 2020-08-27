@@ -31,8 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,8 +38,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LimeStabilityTest {
 
+    static final double TOP_FEATURE_THRESHOLD = 0.9;
+
     @Test
-    void testStabilityWithNumericData() throws InterruptedException, ExecutionException, TimeoutException {
+    void testStabilityWithNumericData() throws Exception {
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
@@ -51,7 +51,7 @@ class LimeStabilityTest {
     }
 
     @Test
-    void testStabilityWithTextData() throws InterruptedException, ExecutionException, TimeoutException {
+    void testStabilityWithTextData() throws Exception {
         PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
@@ -61,7 +61,7 @@ class LimeStabilityTest {
         assertStable(sumSkipModel, featureList);
     }
 
-    private void assertStable(PredictionProvider model, List<Feature> featureList) throws InterruptedException, ExecutionException, TimeoutException {
+    private void assertStable(PredictionProvider model, List<Feature> featureList) throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -83,7 +83,7 @@ class LimeStabilityTest {
                 Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
                 boolean topFeature = false;
                 for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
-                    if (entry.getValue() >= 0.9) {
+                    if (entry.getValue() >= TOP_FEATURE_THRESHOLD) {
                         topFeature = true;
                         break;
                     }
@@ -99,7 +99,7 @@ class LimeStabilityTest {
                 Map<Double, Long> impactMap = impacts.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
                 boolean topImpact = false;
                 for (Map.Entry<Double, Long> entry : impactMap.entrySet()) {
-                    if (entry.getValue() >= 0.9) {
+                    if (entry.getValue() >= TOP_FEATURE_THRESHOLD) {
                         topImpact = true;
                         break;
                     }

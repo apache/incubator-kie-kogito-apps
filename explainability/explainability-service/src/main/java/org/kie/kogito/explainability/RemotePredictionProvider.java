@@ -64,6 +64,7 @@ public class RemotePredictionProvider implements PredictionProvider {
 
     protected PredictionOutput toPredictionOutput(JsonObject mainObj) {
         if (mainObj == null || !mainObj.containsKey("result")) {
+            LOG.error("Malformed json {}", mainObj);
             return null;
         }
         List<Output> resultOutputs = toOutputList(mainObj.getJsonObject("result"));

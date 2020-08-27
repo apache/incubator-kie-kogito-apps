@@ -53,9 +53,9 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  */
 public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
+    public static final int DEFAULT_NO_OF_RETRIES = 3;
+    public static final double SEPARABLE_DATASET_RATIO = 0.99;
     private static final Logger LOGGER = LoggerFactory.getLogger(LimeExplainer.class);
-    private static final double SEPARABLE_DATASET_RATIO = 0.99;
-    private static final int DEFAULT_NO_OF_RETRIES = 3;
 
     /**
      * No. of samples to be generated for the local linear model training
@@ -94,6 +94,18 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         this.noOfSamples = noOfSamples;
         this.perturbationContext = new PerturbationContext(random, noOfPerturbations);
         this.noOfRetries = noOfRetries;
+    }
+
+    public int getNoOfSamples() {
+        return noOfSamples;
+    }
+
+    public PerturbationContext getPerturbationContext() {
+        return perturbationContext;
+    }
+
+    public int getNoOfRetries() {
+        return noOfRetries;
     }
 
     @Override

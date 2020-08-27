@@ -57,10 +57,14 @@ public class ExplanationServiceImpl implements ExplanationService {
     public CompletionStage<ExplainabilityResultDto> explainAsync(
             ExplainabilityRequest request,
             PredictionProvider predictionProvider) {
+        LOG.debug("Explainability request with executionId {} for model {}:{}",
+                request.getExecutionId(),
+                request.getModelIdentifier().getResourceType(),
+                request.getModelIdentifier().getResourceId());
         Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
         return localExplainer.explainAsync(prediction, predictionProvider)
                 .thenApply(input -> createResultDto(input, request.getExecutionId()))
-                .exceptionally((throwable) -> {
+                .exceptionally(throwable -> {
                     LOG.error("Exception thrown during explainAsync", throwable);
                     return new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap());
                 });
