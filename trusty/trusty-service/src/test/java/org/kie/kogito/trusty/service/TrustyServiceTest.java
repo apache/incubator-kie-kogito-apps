@@ -18,7 +18,9 @@ package org.kie.kogito.trusty.service;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -30,6 +32,7 @@ import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.mocks.StorageImplMock;
+import org.kie.kogito.trusty.service.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
@@ -86,8 +89,8 @@ public class TrustyServiceTest {
 
         Query queryMock = mock(Query.class);
         when(queryMock.filter(any(List.class))).thenReturn(queryMock);
-        when(queryMock.limit(any(Integer.class))).thenReturn(queryMock);
         when(queryMock.offset(any(Integer.class))).thenReturn(queryMock);
+        when(queryMock.sort(any(List.class))).thenReturn(queryMock);
         when(queryMock.execute()).thenReturn(List.of(decision));
 
         Storage storageMock = mock(Storage.class);
@@ -99,10 +102,66 @@ public class TrustyServiceTest {
 
         trustyService.storeDecision(TEST_EXECUTION_ID, decision);
 
-        List<Execution> result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
 
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals(decision.getExecutionId(), result.get(0).getExecutionId());
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals(decision.getExecutionId(), result.getExecutions().get(0).getExecutionId());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenManyExecutionsThenPaginationWorksProperly() {
+        List<Decision> decisions = new ArrayList<>();
+        IntStream.range(0,10).forEach(x -> {
+            Decision d = new Decision();
+            d.setExecutionId(String.valueOf(x));
+            decisions.add(d);
+            });
+
+        Query queryMock = mock(Query.class);
+        when(queryMock.filter(any(List.class))).thenReturn(queryMock);
+        when(queryMock.sort(any(List.class))).thenReturn(queryMock);
+        when(queryMock.execute()).thenReturn(decisions);
+
+        Storage storageMock = mock(Storage.class);
+        decisions.forEach(x -> {
+            when(storageMock.put(eq(x.getExecutionId()), any(Object.class))).thenReturn(x);
+            when(storageMock.containsKey(eq(x.getExecutionId()))).thenReturn(false);
+        });
+        when(storageMock.query()).thenReturn(queryMock);
+
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
+
+        decisions.forEach(x -> trustyService.storeDecision(x.getExecutionId(), x));
+
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 3, 5, "");
+
+        Assertions.assertEquals(3, result.getExecutions().size());
+        Assertions.assertEquals(decisions.size(), result.getAvailableResults());
+
+        result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 5, "");
+
+        Assertions.assertEquals(5, result.getExecutions().size());
+        Assertions.assertEquals(decisions.size(), result.getAvailableResults());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenNoExecutionsNoExceptionsAreRaised() {
+        Query queryMock = mock(Query.class);
+        when(queryMock.filter(any(List.class))).thenReturn(queryMock);
+        when(queryMock.sort(any(List.class))).thenReturn(queryMock);
+        when(queryMock.execute()).thenReturn(new ArrayList<>());
+
+        Storage storageMock = mock(Storage.class);
+        when(storageMock.query()).thenReturn(queryMock);
+
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
+
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
+
+        Assertions.assertEquals(0, result.getExecutions().size());
+        Assertions.assertEquals(0, result.getAvailableResults());
     }
 
     @Test
