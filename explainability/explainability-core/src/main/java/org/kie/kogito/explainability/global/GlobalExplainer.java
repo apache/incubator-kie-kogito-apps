@@ -25,5 +25,5 @@ import org.kie.kogito.explainability.model.PredictionProviderMetadata;
  */
 public interface GlobalExplainer<T> {
 
-    T explain(PredictionProvider model, PredictionProviderMetadata metadata);
+    T explain(PredictionProvider model, PredictionProviderMetadata metadata) throws Exception;
 }

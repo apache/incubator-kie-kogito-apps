@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -64,7 +62,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLRegression() throws ExecutionException, InterruptedException, TimeoutException {
+    void testPMMLRegression() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
@@ -105,7 +103,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled
-    void testPMMLRegressionCategorical() throws ExecutionException, InterruptedException, TimeoutException {
+    void testPMMLRegressionCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("mapX", "red"));
         features.add(FeatureFactory.newTextFeature("mapY", "classB"));
@@ -139,7 +137,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Disabled()
-    void testPMMLScorecardCategorical() throws ExecutionException, InterruptedException, TimeoutException {
+    void testPMMLScorecardCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("input1", "classA"));
         features.add(FeatureFactory.newTextFeature("input2", "classB"));
@@ -180,7 +178,7 @@ class PmmlLimeExplainerTest {
     }
 
     @Test
-    void testPMMLCompoundScorecard() throws ExecutionException, InterruptedException, TimeoutException {
+    void testPMMLCompoundScorecard() throws Exception {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);

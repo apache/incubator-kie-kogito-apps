@@ -75,7 +75,7 @@ public class ExplainabilityMetrics {
      * @param topFeatures the list of important features that should be dropped
      * @return the saliency impact
      */
-    public static double impactScore(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) {
+    public static double impactScore(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) throws Exception {
         List<Feature> copy = List.copyOf(prediction.getInput().getFeatures());
         for (FeatureImportance featureImportance : topFeatures) {
             copy = DataUtils.dropFeature(copy, featureImportance.getFeature());
@@ -87,7 +87,7 @@ public class ExplainabilityMetrics {
             predictionOutputs = model.predict(List.of(predictionInput)).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error("Impossible to obtain prediction " + e.getMessage(), e);
-            throw new IllegalStateException("Impossible to obtain prediction " + e.getMessage(), e);
+            throw e;
         }
         double impact = 0d;
         for (PredictionOutput predictionOutput : predictionOutputs) {
