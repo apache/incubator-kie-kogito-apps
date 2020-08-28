@@ -75,7 +75,7 @@ public class ExplainabilityMetrics {
      * @param topFeatures the list of important features that should be dropped
      * @return the saliency impact
      */
-    public static double impactScore(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) throws Exception {
+    public static double impactScore(PredictionProvider model, Prediction prediction, List<FeatureImportance> topFeatures) throws InterruptedException, ExecutionException, TimeoutException {
         List<Feature> copy = List.copyOf(prediction.getInput().getFeatures());
         for (FeatureImportance featureImportance : topFeatures) {
             copy = DataUtils.dropFeature(copy, featureImportance.getFeature());
@@ -84,7 +84,7 @@ public class ExplainabilityMetrics {
         PredictionInput predictionInput = new PredictionInput(copy);
         List<PredictionOutput> predictionOutputs;
         try {
-            predictionOutputs = model.predict(List.of(predictionInput))
+            predictionOutputs = model.predictAsync(List.of(predictionInput))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error("Impossible to obtain prediction {}", e.getMessage());

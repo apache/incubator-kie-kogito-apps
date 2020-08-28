@@ -146,7 +146,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
         List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures());
 
-        return model.predict(perturbedInputs)
+        return model.predictAsync(perturbedInputs)
                 .thenCompose(predictionOutputs -> {
                     try {
                         List<LimeInputs> limeInputsList = getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs, predictionOutputs);

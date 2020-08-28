@@ -88,7 +88,7 @@ class PmmlLimeExplainerTest {
                 }
                 return outputs;
             });
-            PredictionOutput output = model.predict(List.of(input))
+            PredictionOutput output = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                     .get(0);
             Prediction prediction = new Prediction(input, output);
@@ -124,7 +124,7 @@ class PmmlLimeExplainerTest {
             }
             return outputs;
         });
-        PredictionOutput output = model.predict(List.of(input))
+        PredictionOutput output = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                 .get(0);
         Prediction prediction = new Prediction(input, output);
@@ -166,7 +166,7 @@ class PmmlLimeExplainerTest {
             return outputs;
         });
 
-        PredictionOutput output = model.predict(List.of(input))
+        PredictionOutput output = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                 .get(0);
         Prediction prediction = new Prediction(input, output);
@@ -207,7 +207,7 @@ class PmmlLimeExplainerTest {
                 }
                 return outputs;
             });
-            PredictionOutput output = model.predict(List.of(input))
+            PredictionOutput output = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                     .get(0);
             Prediction prediction = new Prediction(input, output);

@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
@@ -48,7 +47,7 @@ class LimeExplainerTest {
             LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
             PredictionInput input = new PredictionInput(Collections.emptyList());
             PredictionProvider model = TestUtils.getSumSkipModel(0);
-            PredictionOutput output = model.predict(List.of(input))
+            PredictionOutput output = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                     .get(0);
             Prediction prediction = new Prediction(input, output);
@@ -75,7 +74,7 @@ class LimeExplainerTest {
             }
             PredictionInput input = new PredictionInput(features);
             PredictionProvider model = TestUtils.getSumSkipModel(0);
-            PredictionOutput output = model.predict(List.of(input))
+            PredictionOutput output = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                     .get(0);
             Prediction prediction = new Prediction(input, output);

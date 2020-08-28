@@ -49,7 +49,7 @@ public class RemotePredictionProvider implements PredictionProvider {
     }
 
     @Override
-    public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
+    public CompletableFuture<List<PredictionOutput>> predictAsync(List<PredictionInput> inputs) {
         return sendPredictRequest(inputs, request.getModelIdentifier());
     }
 

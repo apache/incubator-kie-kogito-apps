@@ -82,9 +82,8 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenADecisionWhenADecisionIsStoredAndRetrievedThenTheOriginalObjectIsReturned() {
-        String executionId = TEST_EXECUTION_ID;
         Decision decision = new Decision();
-        decision.setExecutionId(executionId);
+        decision.setExecutionId(TEST_EXECUTION_ID);
 
         Query queryMock = mock(Query.class);
         when(queryMock.filter(any(List.class))).thenReturn(queryMock);
@@ -93,8 +92,8 @@ public class TrustyServiceTest {
         when(queryMock.execute()).thenReturn(List.of(decision));
 
         Storage storageMock = mock(Storage.class);
-        when(storageMock.put(eq(executionId), any(Object.class))).thenReturn(decision);
-        when(storageMock.containsKey(eq(executionId))).thenReturn(false);
+        when(storageMock.put(eq(TEST_EXECUTION_ID), any(Object.class))).thenReturn(decision);
+        when(storageMock.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(false);
         when(storageMock.query()).thenReturn(queryMock);
 
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
@@ -166,19 +165,19 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenADecisionWhenADecisionIsStoredAndRetrievedByIdThenTheOriginalObjectIsReturned() {
-        String executionId = TEST_EXECUTION_ID;
         Decision decision = new Decision();
-        decision.setExecutionId(executionId);
+        decision.setExecutionId(TEST_EXECUTION_ID);
 
+        @SuppressWarnings("unchecked")
         Storage storageMock = new StorageImplMock(Decision.class);
 
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(storageMock);
 
-        trustyService.storeDecision(executionId, decision);
+        trustyService.storeDecision(TEST_EXECUTION_ID, decision);
 
-        Decision result = trustyService.getDecisionById(executionId);
+        Decision result = trustyService.getDecisionById(TEST_EXECUTION_ID);
 
-        Assertions.assertEquals(executionId, result.getExecutionId());
+        Assertions.assertEquals(TEST_EXECUTION_ID, result.getExecutionId());
     }
 
     @Test

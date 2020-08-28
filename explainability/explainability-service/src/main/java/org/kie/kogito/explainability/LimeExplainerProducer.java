@@ -31,6 +31,8 @@ import java.util.Map;
 @ApplicationScoped
 public class LimeExplainerProducer {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LimeExplainerProducer.class);
+
     private final Integer numberOfSamples;
     private final Integer numberOfPerturbations;
 
@@ -41,8 +43,6 @@ public class LimeExplainerProducer {
         this.numberOfSamples = numberOfSamples;
         this.numberOfPerturbations = numberOfPerturbations;
     }
-
-    private static final Logger LOG = LoggerFactory.getLogger(LimeExplainerProducer.class);
 
     @Produces
     public LocalExplainer<Map<String, Saliency>> produce() {

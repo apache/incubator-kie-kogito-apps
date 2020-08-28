@@ -68,7 +68,7 @@ class LoanEligibilityDmnLimeExplainerTest {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
-        List<PredictionOutput> predictionOutputs = model.predict(List.of(predictionInput))
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         LimeExplainer limeExplainer = new LimeExplainer(100, 1);

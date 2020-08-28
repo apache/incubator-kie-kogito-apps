@@ -98,7 +98,7 @@ class ExplainabilityMetricsTest {
         PredictionInput input = new PredictionInput(features);
         Prediction prediction = new Prediction(
                 input,
-                model.predict(List.of(input))
+                model.predictAsync(List.of(input))
                         .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                         .get(0));
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
@@ -123,7 +123,7 @@ class ExplainabilityMetricsTest {
         PredictionInput input = new PredictionInput(features);
         Prediction prediction = new Prediction(
                 input,
-                model.predict(List.of(input))
+                model.predictAsync(List.of(input))
                         .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                         .get(0));
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)

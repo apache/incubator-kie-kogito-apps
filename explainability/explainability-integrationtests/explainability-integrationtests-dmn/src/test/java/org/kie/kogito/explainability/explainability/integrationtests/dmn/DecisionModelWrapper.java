@@ -47,7 +47,7 @@ class DecisionModelWrapper implements PredictionProvider {
     }
 
     @Override
-    public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
+    public CompletableFuture<List<PredictionOutput>> predictAsync(List<PredictionInput> inputs) {
         List<PredictionOutput> predictionOutputs = new LinkedList<>();
         for (PredictionInput input : inputs) {
             Map<String, Object> contextVariables = toMap(input.getFeatures());

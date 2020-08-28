@@ -30,5 +30,5 @@ public interface PredictionProvider {
      * @param inputs the input batch
      * @return a batch of prediction outputs
      */
-    CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs);
+    CompletableFuture<List<PredictionOutput>> predictAsync(List<PredictionInput> inputs);
 }

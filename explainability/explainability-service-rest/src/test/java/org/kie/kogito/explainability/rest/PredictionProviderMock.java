@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 public class PredictionProviderMock implements PredictionProvider {
 
     @Override
-    public CompletableFuture<List<PredictionOutput>> predict(List<PredictionInput> inputs) {
+    public CompletableFuture<List<PredictionOutput>> predictAsync(List<PredictionInput> inputs) {
         return CompletableFuture.completedFuture(Collections.emptyList());
     }
 }

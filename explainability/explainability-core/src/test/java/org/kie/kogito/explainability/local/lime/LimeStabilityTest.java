@@ -67,7 +67,7 @@ class LimeStabilityTest {
             random.setSeed(seed);
             LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
             PredictionInput input = new PredictionInput(featureList);
-            List<PredictionOutput> predictionOutputs = model.predict(List.of(input))
+            List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (PredictionOutput predictionOutput : predictionOutputs) {
                 Prediction prediction = new Prediction(input, predictionOutput);
