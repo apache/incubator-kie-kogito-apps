@@ -17,7 +17,6 @@
 package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.net.URI;
-import java.util.Collections;
 
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -25,10 +24,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.FeatureImportanceDto;
+import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
+import org.kie.kogito.trusty.storage.api.model.Saliency;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -42,6 +48,11 @@ public class ExplainabilityResultConsumerTest {
     private TrustyService trustyService;
     private ExplainabilityResultConsumer consumer;
 
+    private FeatureImportanceDto featureImportanceDto1 = new FeatureImportanceDto("feature1", 1d);
+    private FeatureImportanceDto featureImportanceDto2 = new FeatureImportanceDto("feature2", 1d);
+    private SaliencyDto saliencyDto = new SaliencyDto(asList(featureImportanceDto1, featureImportanceDto2));
+    private ExplainabilityResultDto resultDto = new ExplainabilityResultDto("executionId", singletonMap("saliency", saliencyDto));
+
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
@@ -50,7 +61,7 @@ public class ExplainabilityResultConsumerTest {
 
     @Test
     void testCorrectCloudEvent() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", Collections.emptyMap())));
+        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", emptyMap())));
         doNothing().when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
 
         testNumberOfInvocations(message, 1);
@@ -64,10 +75,49 @@ public class ExplainabilityResultConsumerTest {
 
     @Test
     void testExceptionsAreCatched() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", Collections.emptyMap())));
+        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto("test", emptyMap())));
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
+    }
+
+    @Test
+    public void explainabilityResultFrom() {
+        Assertions.assertNull(ExplainabilityResultConsumer.explainabilityResultFrom(null));
+
+        ExplainabilityResult explainabilityResult = ExplainabilityResultConsumer.explainabilityResultFrom(resultDto);
+
+        Assertions.assertNotNull(explainabilityResult);
+        Assertions.assertEquals(resultDto.getExecutionId(), explainabilityResult.getExecutionId());
+        Assertions.assertEquals(resultDto.getSaliencies().size(), explainabilityResult.getSaliencies().size());
+        Assertions.assertTrue(resultDto.getSaliencies().containsKey("saliency"));
+        Assertions.assertEquals(resultDto.getSaliencies().get("saliency").getFeatureImportance().size(),
+                explainabilityResult.getSaliencies().get("saliency").getFeatureImportance().size());
+    }
+
+    @Test
+    public void featureImportanceFrom() {
+        Assertions.assertNull(ExplainabilityResultConsumer.featureImportanceFrom(null));
+
+        FeatureImportance featureImportance = ExplainabilityResultConsumer.featureImportanceFrom(featureImportanceDto1);
+
+        Assertions.assertNotNull(featureImportance);
+        Assertions.assertEquals(featureImportanceDto1.getFeatureId(), featureImportance.getFeatureId());
+        Assertions.assertEquals(featureImportanceDto1.getScore(), featureImportance.getScore());
+    }
+
+    @Test
+    public void saliencyFrom() {
+        Assertions.assertNull(ExplainabilityResultConsumer.saliencyFrom(null));
+
+        Saliency saliency = ExplainabilityResultConsumer.saliencyFrom(saliencyDto);
+
+        Assertions.assertNotNull(saliency);
+        Assertions.assertEquals(saliencyDto.getFeatureImportance().size(), saliency.getFeatureImportance().size());
+        Assertions.assertEquals(saliencyDto.getFeatureImportance().get(0).getFeatureId(),
+                saliency.getFeatureImportance().get(0).getFeatureId());
+        Assertions.assertEquals(saliencyDto.getFeatureImportance().get(0).getScore(),
+                saliency.getFeatureImportance().get(0).getScore(), 0.1);
     }
 
     private Message<String> mockMessage(String payload) {

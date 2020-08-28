@@ -49,6 +49,10 @@ public class ExplainabilityResultItemMarshaller extends AbstractModelMarshaller<
     }
 }
 
+/**
+ * This is an utility class used for ExplainabilityResult proto serialization (see decision.proto). It is needed to support
+ * the handling of a Map<String, Saliency>
+ */
 class ExplainabilityResultItem {
 
     public static final String ID_FIELD = "id";

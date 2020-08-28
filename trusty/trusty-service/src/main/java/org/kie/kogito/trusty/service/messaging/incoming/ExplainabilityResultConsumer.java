@@ -86,7 +86,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
         service.storeExplainabilityResult(attributes.getId(), explainabilityResultFrom(explainabilityResult));
     }
 
-    private static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto) {
+    protected static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto) {
         if (dto == null) {
             return null;
         }
@@ -96,14 +96,14 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
         return new ExplainabilityResult(dto.getExecutionId(), saliencies);
     }
 
-    private static FeatureImportance featureImportanceFrom(FeatureImportanceDto dto) {
+    protected static FeatureImportance featureImportanceFrom(FeatureImportanceDto dto) {
         if (dto == null) {
             return null;
         }
         return new FeatureImportance(dto.getFeatureId(), dto.getScore());
     }
 
-    private static Saliency saliencyFrom(SaliencyDto dto) {
+    protected static Saliency saliencyFrom(SaliencyDto dto) {
         if (dto == null) {
             return null;
         }

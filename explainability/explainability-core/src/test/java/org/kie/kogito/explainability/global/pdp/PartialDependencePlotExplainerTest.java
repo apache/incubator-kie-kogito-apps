@@ -92,7 +92,7 @@ class PartialDependencePlotExplainerTest {
                         Thread.sleep(1000);
                         return Collections.emptyList();
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException("this is a test");
                     }
                 });
 

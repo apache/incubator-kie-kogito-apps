@@ -182,7 +182,7 @@ public class TrustyServiceTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void givenADecisionToProcessWhenExplainabilityIsEnabledThenRequestIsSent() {
+    void givenADecisionToProcessWhenExplainabilityIsEnabledThenRequestIsSent() throws JsonProcessingException {
         trustyService.enableExplainability();
 
         Decision decision = new Decision(
@@ -341,11 +341,7 @@ public class TrustyServiceTest {
         assertThrows(IllegalArgumentException.class, () -> trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
     }
 
-    private static JsonNode toJsonNode(String jsonString) {
-        try {
-            return MAPPER.reader().readTree(jsonString);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
+    private static JsonNode toJsonNode(String jsonString) throws JsonProcessingException {
+        return MAPPER.reader().readTree(jsonString);
     }
 }

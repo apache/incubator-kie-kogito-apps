@@ -35,11 +35,11 @@ import java.util.concurrent.TimeoutException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.explainability.TestUtils.executionId;
-import static org.kie.kogito.explainability.TestUtils.featureImportance1;
-import static org.kie.kogito.explainability.TestUtils.request;
-import static org.kie.kogito.explainability.TestUtils.saliency;
-import static org.kie.kogito.explainability.TestUtils.saliencyMap;
+import static org.kie.kogito.explainability.TestUtils.EXECUTION_ID;
+import static org.kie.kogito.explainability.TestUtils.FEATURE_IMPORTANCE_1;
+import static org.kie.kogito.explainability.TestUtils.REQUEST;
+import static org.kie.kogito.explainability.TestUtils.SALIENCY;
+import static org.kie.kogito.explainability.TestUtils.SALIENCY_MAP;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -58,26 +58,26 @@ class ExplanationServiceImplTest {
         predictionProviderMock = mock(PredictionProvider.class);
         explanationService = new ExplanationServiceImpl(localExplainerMock);
 
-        when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock))).thenReturn(CompletableFuture.completedFuture(saliencyMap));
+        when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock))).thenReturn(CompletableFuture.completedFuture(SALIENCY_MAP));
     }
 
     @Test
     void explainAsync() throws InterruptedException, ExecutionException, TimeoutException {
-        CompletionStage<ExplainabilityResultDto> explainAsync = explanationService.explainAsync(request, predictionProviderMock);
+        CompletionStage<ExplainabilityResultDto> explainAsync = explanationService.explainAsync(REQUEST, predictionProviderMock);
 
         ExplainabilityResultDto resultDto = explainAsync.toCompletableFuture()
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
 
         assertNotNull(resultDto);
-        assertEquals(executionId, resultDto.getExecutionId());
-        assertEquals(saliencyMap.size(), resultDto.getSaliencies().size());
+        assertEquals(EXECUTION_ID, resultDto.getExecutionId());
+        assertEquals(SALIENCY_MAP.size(), resultDto.getSaliencies().size());
         assertTrue(resultDto.getSaliencies().containsKey("key"));
 
         SaliencyDto saliencyDto = resultDto.getSaliencies().get("key");
-        assertEquals(saliency.getPerFeatureImportance().size(), saliencyDto.getFeatureImportance().size());
+        assertEquals(SALIENCY.getPerFeatureImportance().size(), saliencyDto.getFeatureImportance().size());
 
         FeatureImportanceDto featureImportanceDto1 = saliencyDto.getFeatureImportance().get(0);
-        assertEquals(featureImportance1.getFeature().getName(), featureImportanceDto1.getFeatureId());
-        assertEquals(featureImportance1.getScore(), featureImportanceDto1.getScore(), 0.01);
+        assertEquals(FEATURE_IMPORTANCE_1.getFeature().getName(), featureImportanceDto1.getFeatureId());
+        assertEquals(FEATURE_IMPORTANCE_1.getScore(), featureImportanceDto1.getScore(), 0.01);
     }
 }

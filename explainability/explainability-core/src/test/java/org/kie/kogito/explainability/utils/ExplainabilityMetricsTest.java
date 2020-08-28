@@ -147,7 +147,7 @@ class ExplainabilityMetricsTest {
                         Thread.sleep(1000);
                         return emptyList();
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException("this is a test");
                     }
                 });
 

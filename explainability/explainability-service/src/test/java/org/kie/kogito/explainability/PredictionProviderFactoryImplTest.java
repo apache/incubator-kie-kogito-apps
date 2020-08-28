@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.PredictionProvider;
 
-import static org.kie.kogito.explainability.TestUtils.request;
+import static org.kie.kogito.explainability.TestUtils.REQUEST;
 
 class PredictionProviderFactoryImplTest {
 
@@ -32,7 +32,7 @@ class PredictionProviderFactoryImplTest {
                 Vertx.vertx(),
                 ThreadContext.builder().build(),
                 ManagedExecutor.builder().build());
-        PredictionProvider predictionProvider = factory.createPredictionProvider(request);
+        PredictionProvider predictionProvider = factory.createPredictionProvider(REQUEST);
         Assertions.assertNotNull(predictionProvider);
         Assertions.assertTrue(predictionProvider instanceof RemotePredictionProvider);
     }
