@@ -8,10 +8,8 @@ import {
 import { GwtEditorRoutes } from '@kogito-tooling/kie-bc-editors';
 import React, { useMemo } from 'react';
 import { ModelData } from '../../../types';
-import { LinearRegressionViewer } from './pmml/LinearRegressionViewer';
 
 const DMN1_2: string = 'http://www.omg.org/spec/DMN/20151101/dmn.xsd';
-const PMML4_4: string = 'http://www.dmg.org/PMML-4_4';
 
 type ModelDiagramProps = {
   model: ModelData;
@@ -33,11 +31,8 @@ const ModelDiagram = (props: ModelDiagramProps) => {
     []
   );
 
-  switch (type) {
-    case DMN1_2:
-      return makeDMNEditor(model, router);
-    case PMML4_4:
-      return makePMMLEditor(model);
+  if (type === DMN1_2) {
+    return makeDMNEditor(model, router);
   }
 
   return DEFAULT;
@@ -66,10 +61,6 @@ function makeDMNEditor(
       envelopeUri={'/envelope/envelope.html'}
     />
   );
-}
-
-function makePMMLEditor(model: ModelData): JSX.Element {
-  return <LinearRegressionViewer xml={model.model} />;
 }
 
 const DEFAULT: JSX.Element = makeUnknownModel();
