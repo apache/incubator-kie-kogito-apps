@@ -21,7 +21,7 @@ import java.util.Collection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.kie.kogito.tracing.decision.event.variable.TypedVariable.Kind;
+import org.kie.kogito.tracing.typedvalue.TypedValue.Kind;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TypedVariable {
@@ -32,7 +32,7 @@ public class TypedVariable {
     public static final String VALUE_FIELD = "value";
     public static final String COMPONENTS_FIELD = "components";
 
-    @JsonProperty(NAME_FIELD)
+    @JsonProperty(KIND_FIELD)
     private Kind kind;
 
     @JsonProperty(NAME_FIELD)

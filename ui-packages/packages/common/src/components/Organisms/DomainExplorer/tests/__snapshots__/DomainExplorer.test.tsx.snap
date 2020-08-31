@@ -168,9 +168,14 @@ exports[`Domain Explorer component Check error response for getQueryFields query
         <section
           className="pf-c-page__main-section pf-m-light"
         >
-          <Bullseye>
+          <Bullseye
+            data-ouia-component-type="server-errors"
+            data-ouia-safe={true}
+          >
             <div
               className="pf-l-bullseye"
+              data-ouia-component-type="server-errors"
+              data-ouia-safe={true}
             >
               <EmptyState
                 variant="full"
@@ -502,125 +507,130 @@ exports[`Domain Explorer component Mock query testing 1`] = `
                     <div
                       className="pf-c-toolbar__item"
                     >
-                      <ToolbarItem>
-                        <div
-                          className="pf-c-toolbar__item"
-                        >
-                          <Memo(DomainExplorerFilterOptions)
-                            filterChips={
-                              Array [
-                                "metadata / processInstances / state: ACTIVE",
-                              ]
-                            }
-                            finalFilters={
-                              Object {
-                                "metadata": Object {
-                                  "processInstances": Object {
-                                    "state": Object {
-                                      "equal": "ACTIVE",
-                                    },
-                                  },
+                      <Memo(DomainExplorerFilterOptions)
+                        filterChips={
+                          Array [
+                            "metadata / processInstances / state: ACTIVE",
+                          ]
+                        }
+                        finalFilters={
+                          Object {
+                            "metadata": Object {
+                              "processInstances": Object {
+                                "state": Object {
+                                  "equal": "ACTIVE",
                                 },
-                              }
-                            }
-                            generateFilterQuery={[Function]}
-                            getQueryTypes={
-                              Object {
-                                "data": Object {
-                                  "__schema": Object {
-                                    "queryType": Array [
+                              },
+                            },
+                          }
+                        }
+                        generateFilterQuery={[Function]}
+                        getQueryTypes={
+                          Object {
+                            "data": Object {
+                              "__schema": Object {
+                                "queryType": Array [
+                                  Object {
+                                    "inputFields": Array [
                                       Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "test",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                        ],
-                                        "name": "TestArgument",
-                                      },
-                                      Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "city",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "country",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "street",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "TestArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "zipCode",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                        ],
-                                        "kind": "INPUT_OBJECT",
-                                        "name": "AddressArgument",
-                                      },
-                                      Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "id",
-                                            "type": Object {
-                                              "kind": "LIST",
-                                              "name": null,
-                                            },
-                                          },
-                                          Object {
-                                            "name": "equal",
-                                            "type": Object {
-                                              "kind": "SCALAR",
-                                              "name": "String",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "isNull",
-                                            "type": Object {
-                                              "kind": "SCALAR",
-                                              "name": "Boolean",
-                                            },
-                                          },
-                                        ],
-                                        "kind": "INPUT_OBJECT",
-                                        "name": "IdArgument",
+                                        "name": "test",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
                                       },
                                     ],
+                                    "name": "TestArgument",
                                   },
-                                },
-                                "loading": false,
-                              }
-                            }
-                            getSchema={
-                              Object {
-                                "data": Object {},
-                                "loading": false,
-                              }
-                            }
-                            reset={false}
-                            runQuery={false}
-                            setFilterChips={[Function]}
-                            setFinalFilters={[Function]}
-                            setOffset={[Function]}
-                            setReset={[Function]}
-                            setRunQuery={[Function]}
+                                  Object {
+                                    "inputFields": Array [
+                                      Object {
+                                        "name": "city",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "country",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "street",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "TestArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "zipCode",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                    ],
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "AddressArgument",
+                                  },
+                                  Object {
+                                    "inputFields": Array [
+                                      Object {
+                                        "name": "id",
+                                        "type": Object {
+                                          "kind": "LIST",
+                                          "name": null,
+                                        },
+                                      },
+                                      Object {
+                                        "name": "equal",
+                                        "type": Object {
+                                          "kind": "SCALAR",
+                                          "name": "String",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "isNull",
+                                        "type": Object {
+                                          "kind": "SCALAR",
+                                          "name": "Boolean",
+                                        },
+                                      },
+                                    ],
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "IdArgument",
+                                  },
+                                ],
+                              },
+                            },
+                            "loading": false,
+                          }
+                        }
+                        getSchema={
+                          Object {
+                            "data": Object {},
+                            "loading": false,
+                          }
+                        }
+                        reset={false}
+                        runQuery={false}
+                        setFilterChips={[Function]}
+                        setFinalFilters={[Function]}
+                        setOffset={[Function]}
+                        setReset={[Function]}
+                        setRunQuery={[Function]}
+                      >
+                        <ToolbarItem
+                          data-ouia-component-type="filter-options"
+                          data-ouia-safe={true}
+                        >
+                          <div
+                            className="pf-c-toolbar__item"
+                            data-ouia-component-type="filter-options"
+                            data-ouia-safe={true}
                           >
                             <Select
                               aria-label=""
@@ -1022,9 +1032,9 @@ exports[`Domain Explorer component Mock query testing 1`] = `
                                 Apply Filter
                               </button>
                             </Button>
-                          </Memo(DomainExplorerFilterOptions)>
-                        </div>
-                      </ToolbarItem>
+                          </div>
+                        </ToolbarItem>
+                      </Memo(DomainExplorerFilterOptions)>
                     </div>
                   </ToolbarItem>
                   <Portal
@@ -1682,6 +1692,8 @@ exports[`Domain Explorer component Mock query testing 1`] = `
   </Toolbar>
   <Card
     className="kogito-common--domain-explorer__table-OverFlow"
+    data-ouia-component-type="domain-explorer"
+    data-ouia-safe={true}
   >
     <article
       className="pf-c-card kogito-common--domain-explorer__table-OverFlow"
@@ -1964,125 +1976,130 @@ exports[`Domain Explorer component Snapshot test with default prop 1`] = `
                     <div
                       className="pf-c-toolbar__item"
                     >
-                      <ToolbarItem>
-                        <div
-                          className="pf-c-toolbar__item"
-                        >
-                          <Memo(DomainExplorerFilterOptions)
-                            filterChips={
-                              Array [
-                                "metadata / processInstances / state: ACTIVE",
-                              ]
-                            }
-                            finalFilters={
-                              Object {
-                                "metadata": Object {
-                                  "processInstances": Object {
-                                    "state": Object {
-                                      "equal": "ACTIVE",
-                                    },
-                                  },
+                      <Memo(DomainExplorerFilterOptions)
+                        filterChips={
+                          Array [
+                            "metadata / processInstances / state: ACTIVE",
+                          ]
+                        }
+                        finalFilters={
+                          Object {
+                            "metadata": Object {
+                              "processInstances": Object {
+                                "state": Object {
+                                  "equal": "ACTIVE",
                                 },
-                              }
-                            }
-                            generateFilterQuery={[Function]}
-                            getQueryTypes={
-                              Object {
-                                "data": Object {
-                                  "__schema": Object {
-                                    "queryType": Array [
+                              },
+                            },
+                          }
+                        }
+                        generateFilterQuery={[Function]}
+                        getQueryTypes={
+                          Object {
+                            "data": Object {
+                              "__schema": Object {
+                                "queryType": Array [
+                                  Object {
+                                    "inputFields": Array [
                                       Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "test",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                        ],
-                                        "name": "TestArgument",
-                                      },
-                                      Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "city",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "country",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "street",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "TestArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "zipCode",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                        ],
-                                        "kind": "INPUT_OBJECT",
-                                        "name": "AddressArgument",
-                                      },
-                                      Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "id",
-                                            "type": Object {
-                                              "kind": "LIST",
-                                              "name": null,
-                                            },
-                                          },
-                                          Object {
-                                            "name": "equal",
-                                            "type": Object {
-                                              "kind": "SCALAR",
-                                              "name": "String",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "isNull",
-                                            "type": Object {
-                                              "kind": "SCALAR",
-                                              "name": "Boolean",
-                                            },
-                                          },
-                                        ],
-                                        "kind": "INPUT_OBJECT",
-                                        "name": "IdArgument",
+                                        "name": "test",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
                                       },
                                     ],
+                                    "name": "TestArgument",
                                   },
-                                },
-                                "loading": false,
-                              }
-                            }
-                            getSchema={
-                              Object {
-                                "data": Object {},
-                                "loading": false,
-                              }
-                            }
-                            reset={false}
-                            runQuery={false}
-                            setFilterChips={[Function]}
-                            setFinalFilters={[Function]}
-                            setOffset={[Function]}
-                            setReset={[Function]}
-                            setRunQuery={[Function]}
+                                  Object {
+                                    "inputFields": Array [
+                                      Object {
+                                        "name": "city",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "country",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "street",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "TestArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "zipCode",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                    ],
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "AddressArgument",
+                                  },
+                                  Object {
+                                    "inputFields": Array [
+                                      Object {
+                                        "name": "id",
+                                        "type": Object {
+                                          "kind": "LIST",
+                                          "name": null,
+                                        },
+                                      },
+                                      Object {
+                                        "name": "equal",
+                                        "type": Object {
+                                          "kind": "SCALAR",
+                                          "name": "String",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "isNull",
+                                        "type": Object {
+                                          "kind": "SCALAR",
+                                          "name": "Boolean",
+                                        },
+                                      },
+                                    ],
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "IdArgument",
+                                  },
+                                ],
+                              },
+                            },
+                            "loading": false,
+                          }
+                        }
+                        getSchema={
+                          Object {
+                            "data": Object {},
+                            "loading": false,
+                          }
+                        }
+                        reset={false}
+                        runQuery={false}
+                        setFilterChips={[Function]}
+                        setFinalFilters={[Function]}
+                        setOffset={[Function]}
+                        setReset={[Function]}
+                        setRunQuery={[Function]}
+                      >
+                        <ToolbarItem
+                          data-ouia-component-type="filter-options"
+                          data-ouia-safe={true}
+                        >
+                          <div
+                            className="pf-c-toolbar__item"
+                            data-ouia-component-type="filter-options"
+                            data-ouia-safe={true}
                           >
                             <Select
                               aria-label=""
@@ -2484,9 +2501,9 @@ exports[`Domain Explorer component Snapshot test with default prop 1`] = `
                                 Apply Filter
                               </button>
                             </Button>
-                          </Memo(DomainExplorerFilterOptions)>
-                        </div>
-                      </ToolbarItem>
+                          </div>
+                        </ToolbarItem>
+                      </Memo(DomainExplorerFilterOptions)>
                     </div>
                   </ToolbarItem>
                   <Portal
@@ -3144,6 +3161,8 @@ exports[`Domain Explorer component Snapshot test with default prop 1`] = `
   </Toolbar>
   <Card
     className="kogito-common--domain-explorer__table-OverFlow"
+    data-ouia-component-type="domain-explorer"
+    data-ouia-safe={true}
   >
     <article
       className="pf-c-card kogito-common--domain-explorer__table-OverFlow"
@@ -3421,125 +3440,130 @@ exports[`Domain Explorer component check assertions on rememberedParams 1`] = `
                     <div
                       className="pf-c-toolbar__item"
                     >
-                      <ToolbarItem>
-                        <div
-                          className="pf-c-toolbar__item"
-                        >
-                          <Memo(DomainExplorerFilterOptions)
-                            filterChips={
-                              Array [
-                                "metadata / processInstances / state: ACTIVE",
-                              ]
-                            }
-                            finalFilters={
-                              Object {
-                                "metadata": Object {
-                                  "processInstances": Object {
-                                    "state": Object {
-                                      "equal": "ACTIVE",
-                                    },
-                                  },
+                      <Memo(DomainExplorerFilterOptions)
+                        filterChips={
+                          Array [
+                            "metadata / processInstances / state: ACTIVE",
+                          ]
+                        }
+                        finalFilters={
+                          Object {
+                            "metadata": Object {
+                              "processInstances": Object {
+                                "state": Object {
+                                  "equal": "ACTIVE",
                                 },
-                              }
-                            }
-                            generateFilterQuery={[Function]}
-                            getQueryTypes={
-                              Object {
-                                "data": Object {
-                                  "__schema": Object {
-                                    "queryType": Array [
+                              },
+                            },
+                          }
+                        }
+                        generateFilterQuery={[Function]}
+                        getQueryTypes={
+                          Object {
+                            "data": Object {
+                              "__schema": Object {
+                                "queryType": Array [
+                                  Object {
+                                    "inputFields": Array [
                                       Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "test",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                        ],
-                                        "name": "TestArgument",
-                                      },
-                                      Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "city",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "country",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "street",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "TestArgument",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "zipCode",
-                                            "type": Object {
-                                              "kind": "INPUT_OBJECT",
-                                              "name": "StringArgument",
-                                            },
-                                          },
-                                        ],
-                                        "kind": "INPUT_OBJECT",
-                                        "name": "AddressArgument",
-                                      },
-                                      Object {
-                                        "inputFields": Array [
-                                          Object {
-                                            "name": "id",
-                                            "type": Object {
-                                              "kind": "LIST",
-                                              "name": null,
-                                            },
-                                          },
-                                          Object {
-                                            "name": "equal",
-                                            "type": Object {
-                                              "kind": "SCALAR",
-                                              "name": "String",
-                                            },
-                                          },
-                                          Object {
-                                            "name": "isNull",
-                                            "type": Object {
-                                              "kind": "SCALAR",
-                                              "name": "Boolean",
-                                            },
-                                          },
-                                        ],
-                                        "kind": "INPUT_OBJECT",
-                                        "name": "IdArgument",
+                                        "name": "test",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
                                       },
                                     ],
+                                    "name": "TestArgument",
                                   },
-                                },
-                                "loading": false,
-                              }
-                            }
-                            getSchema={
-                              Object {
-                                "data": Object {},
-                                "loading": false,
-                              }
-                            }
-                            reset={false}
-                            runQuery={false}
-                            setFilterChips={[Function]}
-                            setFinalFilters={[Function]}
-                            setOffset={[Function]}
-                            setReset={[Function]}
-                            setRunQuery={[Function]}
+                                  Object {
+                                    "inputFields": Array [
+                                      Object {
+                                        "name": "city",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "country",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "street",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "TestArgument",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "zipCode",
+                                        "type": Object {
+                                          "kind": "INPUT_OBJECT",
+                                          "name": "StringArgument",
+                                        },
+                                      },
+                                    ],
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "AddressArgument",
+                                  },
+                                  Object {
+                                    "inputFields": Array [
+                                      Object {
+                                        "name": "id",
+                                        "type": Object {
+                                          "kind": "LIST",
+                                          "name": null,
+                                        },
+                                      },
+                                      Object {
+                                        "name": "equal",
+                                        "type": Object {
+                                          "kind": "SCALAR",
+                                          "name": "String",
+                                        },
+                                      },
+                                      Object {
+                                        "name": "isNull",
+                                        "type": Object {
+                                          "kind": "SCALAR",
+                                          "name": "Boolean",
+                                        },
+                                      },
+                                    ],
+                                    "kind": "INPUT_OBJECT",
+                                    "name": "IdArgument",
+                                  },
+                                ],
+                              },
+                            },
+                            "loading": false,
+                          }
+                        }
+                        getSchema={
+                          Object {
+                            "data": Object {},
+                            "loading": false,
+                          }
+                        }
+                        reset={false}
+                        runQuery={false}
+                        setFilterChips={[Function]}
+                        setFinalFilters={[Function]}
+                        setOffset={[Function]}
+                        setReset={[Function]}
+                        setRunQuery={[Function]}
+                      >
+                        <ToolbarItem
+                          data-ouia-component-type="filter-options"
+                          data-ouia-safe={true}
+                        >
+                          <div
+                            className="pf-c-toolbar__item"
+                            data-ouia-component-type="filter-options"
+                            data-ouia-safe={true}
                           >
                             <Select
                               aria-label=""
@@ -3941,9 +3965,9 @@ exports[`Domain Explorer component check assertions on rememberedParams 1`] = `
                                 Apply Filter
                               </button>
                             </Button>
-                          </Memo(DomainExplorerFilterOptions)>
-                        </div>
-                      </ToolbarItem>
+                          </div>
+                        </ToolbarItem>
+                      </Memo(DomainExplorerFilterOptions)>
                     </div>
                   </ToolbarItem>
                   <Portal
@@ -4601,6 +4625,8 @@ exports[`Domain Explorer component check assertions on rememberedParams 1`] = `
   </Toolbar>
   <Card
     className="kogito-common--domain-explorer__table-OverFlow"
+    data-ouia-component-type="domain-explorer"
+    data-ouia-safe={true}
   >
     <article
       className="pf-c-card kogito-common--domain-explorer__table-OverFlow"

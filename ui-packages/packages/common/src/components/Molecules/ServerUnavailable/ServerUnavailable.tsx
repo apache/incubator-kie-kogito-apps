@@ -21,8 +21,18 @@ import { aboutLogoContext } from '../../contexts';
 import PageToolbar from '../PageToolbar/PageToolbar';
 import userImage from '../../../static/avatar.svg';
 import '../../styles.css';
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
 
-const ServerUnavailable = props => {
+interface IOwnProps {
+  alt: string;
+  src: string;
+  PageNav?: any;
+}
+const ServerUnavailable: React.FC<IOwnProps & OUIAProps> = ({
+  ouiaId,
+  ouiaSafe,
+  ...props
+}) => {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const onNavToggle = () => {
     setIsNavOpen(!isNavOpen);
@@ -34,9 +44,9 @@ const ServerUnavailable = props => {
       headerTools={
         <PageHeaderTools>
           <aboutLogoContext.Provider value={props.src}>
-              <PageToolbar />
+            <PageToolbar />
           </aboutLogoContext.Provider>
-        <Avatar src={userImage} alt="Kogito Logo" />
+          <Avatar src={userImage} alt="Kogito Logo" />
         </PageHeaderTools>
       }
       showNavToggle
@@ -61,7 +71,10 @@ const ServerUnavailable = props => {
           isManagedSidebar
           className="kogito-common--PageLayout"
         >
-          <PageSection variant="light">
+          <PageSection
+            variant="light"
+            {...componentOuiaProps(ouiaId, 'server-unavailable', ouiaSafe)}
+          >
             <Bullseye>
               <EmptyState variant={EmptyStateVariant.full}>
                 <EmptyStateIcon

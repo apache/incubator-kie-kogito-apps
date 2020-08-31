@@ -30,6 +30,7 @@ import useGetQueryTypesQuery = GraphQL.useGetQueryTypesQuery;
 import useGetQueryFieldsQuery = GraphQL.useGetQueryFieldsQuery;
 import useGetColumnPickerAttributesQuery = GraphQL.useGetColumnPickerAttributesQuery;
 import useGetInputFieldsFromQueryQuery = GraphQL.useGetInputFieldsFromQueryQuery;
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
 interface IOwnProps {
   domainName: string;
   rememberedParams: object[];
@@ -41,7 +42,7 @@ interface IOwnProps {
   defaultFilter: object;
 }
 
-const DomainExplorer: React.FC<IOwnProps> = ({
+const DomainExplorer: React.FC<IOwnProps & OUIAProps> = ({
   domainName,
   rememberedParams,
   rememberedSelections,
@@ -49,7 +50,9 @@ const DomainExplorer: React.FC<IOwnProps> = ({
   rememberedChips,
   metaData,
   defaultChip,
-  defaultFilter
+  defaultFilter,
+  ouiaId,
+  ouiaSafe
 }) => {
   const client = useApolloClient();
   const [columnPickerType, setColumnPickerType] = useState('');
@@ -298,22 +301,20 @@ const DomainExplorer: React.FC<IOwnProps> = ({
                     chips={filterChips}
                     deleteChip={onDeleteChip}
                   >
-                    <ToolbarItem>
-                      <DomainExplorerFilterOptions
-                        filterChips={filterChips}
-                        finalFilters={finalFilters}
-                        getQueryTypes={getQueryTypes}
-                        getSchema={getSchema}
-                        reset={reset}
-                        runQuery={runQuery}
-                        setFilterChips={setFilterChips}
-                        setFinalFilters={setFinalFilters}
-                        setOffset={setOffset}
-                        setReset={setReset}
-                        setRunQuery={setRunQuery}
-                        generateFilterQuery={generateFilterQuery}
-                      />
-                    </ToolbarItem>
+                    <DomainExplorerFilterOptions
+                      filterChips={filterChips}
+                      finalFilters={finalFilters}
+                      getQueryTypes={getQueryTypes}
+                      getSchema={getSchema}
+                      reset={reset}
+                      runQuery={runQuery}
+                      setFilterChips={setFilterChips}
+                      setFinalFilters={setFinalFilters}
+                      setOffset={setOffset}
+                      setReset={setReset}
+                      setRunQuery={setRunQuery}
+                      generateFilterQuery={generateFilterQuery}
+                    />
                   </ToolbarFilter>
                 )}
               </ToolbarToggleGroup>
@@ -369,7 +370,14 @@ const DomainExplorer: React.FC<IOwnProps> = ({
   return (
     <>
       {renderToolbar()}
-      <Card className="kogito-common--domain-explorer__table-OverFlow">
+      <Card
+        className="kogito-common--domain-explorer__table-OverFlow"
+        {...componentOuiaProps(
+          ouiaId,
+          'domain-explorer',
+          ouiaSafe ? ouiaSafe : !tableLoading && !isLoadingMore
+        )}
+      >
         {!tableLoading || isLoadingMore ? (
           <>
             <DomainExplorerTable

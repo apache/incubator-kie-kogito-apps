@@ -130,6 +130,8 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
     }
     className=""
     contentId="expanded-content"
+    data-ouia-component-type="data-table"
+    data-ouia-safe={true}
     dropdownDirection="down"
     dropdownPosition="right"
     expandId="expandable-toggle"
@@ -3138,6 +3140,8 @@ exports[`DataTable component tests Should render DataTable correctly even no col
     }
     className=""
     contentId="expanded-content"
+    data-ouia-component-type="data-table"
+    data-ouia-safe={true}
     dropdownDirection="down"
     dropdownPosition="right"
     expandId="expandable-toggle"

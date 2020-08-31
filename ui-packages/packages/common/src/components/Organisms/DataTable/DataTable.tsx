@@ -18,6 +18,7 @@ import '@patternfly/patternfly/patternfly-addons.css';
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 import jp from 'jsonpath';
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
 
 export interface DataTableColumn {
   path: string;
@@ -96,7 +97,7 @@ const getRows = (data: any[], columns: ICell[]) => {
   return rowList;
 };
 
-const DataTable: React.FC<IOwnProps> = ({
+const DataTable: React.FC<IOwnProps & OUIAProps> = ({
   data,
   isLoading,
   columns,
@@ -106,7 +107,9 @@ const DataTable: React.FC<IOwnProps> = ({
   ErrorComponent,
   refetch,
   sortBy,
-  onSorting
+  onSorting,
+  ouiaId,
+  ouiaSafe
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
   const [columnList, setColumnList] = useState<ICell[]>([]);
@@ -176,6 +179,11 @@ const DataTable: React.FC<IOwnProps> = ({
             rows={rows}
             sortBy={sortBy}
             onSort={onSort}
+            {...componentOuiaProps(
+              ouiaId,
+              'data-table',
+              ouiaSafe ? ouiaSafe : !isLoading
+            )}
           >
             <TableHeader />
             <TableBody rowKey="rowKey" />
