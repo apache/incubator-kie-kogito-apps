@@ -100,6 +100,14 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
     return ouiaPageTypeAndObjectId('user-tasks');
   });
 
+  const onSorting = (index, direction) => {
+    if (index && direction) {
+      const sortingColumn = _.last(columns[index].path.split('.'));
+      setSortBy({ index, direction }); // This is required by PF4 Table Component
+      setOrderByObj(_.set({}, sortingColumn, direction.toUpperCase()));
+    }
+  };
+
   return (
     <React.Fragment>
       <div
@@ -119,8 +127,7 @@ const UserTaskDataTableContainer: React.FC<OUIAProps> = ({
                   refetch={refetch}
                   LoadingComponent={UserTaskLoadingComponent}
                   sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  setOrderByObj={setOrderByObj}
+                  onSorting={onSorting}
                 />
               </Card>
             </GridItem>

@@ -122,9 +122,8 @@ exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTa
                       }
                       isLoading={false}
                       networkStatus={1}
+                      onSorting={[Function]}
                       refetch={[MockFunction]}
-                      setOrderByObj={[Function]}
-                      setSortBy={[Function]}
                       sortBy={Object {}}
                     >
                       <MockedComponent />
@@ -211,9 +210,8 @@ exports[`UserTaskDataTableContainer component tests Should render UserTaskDataTa
                       }
                       isLoading={false}
                       networkStatus={1}
+                      onSorting={[Function]}
                       refetch={[MockFunction]}
-                      setOrderByObj={[Function]}
-                      setSortBy={[Function]}
                       sortBy={Object {}}
                     >
                       <MockedComponent />
