@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PageTitle test default snapshot testing 1`] = `
+<PageTitle
+  title="Title"
+>
+  <Flex>
+    <div
+      className="pf-l-flex"
+    >
+      <FlexItem
+        spacer={
+          Object {
+            "default": "spacerSm",
+          }
+        }
+      >
+        <div
+          className="pf-m-spacer-sm"
+        >
+          <Title
+            data-ouia-component-type="page-title"
+            data-ouia-safe={true}
+            headingLevel="h1"
+            size="4xl"
+          >
+            <h1
+              className="pf-c-title pf-m-4xl"
+              data-ouia-component-type="page-title"
+              data-ouia-safe={true}
+            >
+              Title
+            </h1>
+          </Title>
+        </div>
+      </FlexItem>
+    </div>
+  </Flex>
+</PageTitle>
+`;
+
+exports[`PageTitle test snapshot testing with extra 1`] = `
+<PageTitle
+  extra={
+    <Label>
+      Label
+    </Label>
+  }
+  title="Title"
+>
+  <Flex>
+    <div
+      className="pf-l-flex"
+    >
+      <FlexItem
+        spacer={
+          Object {
+            "default": "spacerSm",
+          }
+        }
+      >
+        <div
+          className="pf-m-spacer-sm"
+        >
+          <Title
+            data-ouia-component-type="page-title"
+            data-ouia-safe={true}
+            headingLevel="h1"
+            size="4xl"
+          >
+            <h1
+              className="pf-c-title pf-m-4xl"
+              data-ouia-component-type="page-title"
+              data-ouia-safe={true}
+            >
+              Title
+            </h1>
+          </Title>
+        </div>
+      </FlexItem>
+      <FlexItem
+        spacer={
+          Object {
+            "default": "spacerSm",
+          }
+        }
+      >
+        <div
+          className="pf-m-spacer-sm"
+        >
+          <Label>
+            <span
+              className="pf-c-label"
+            >
+              <span
+                className="pf-c-label__content"
+              >
+                Label
+              </span>
+            </span>
+          </Label>
+        </div>
+      </FlexItem>
+    </div>
+  </Flex>
+</PageTitle>
+`;

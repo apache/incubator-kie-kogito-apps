@@ -32,6 +32,7 @@ export class TaskFormSubmitHandler implements IFormSubmitHandler {
   private readonly user: User;
   private readonly userTaskInstance: UserTaskInstance;
   private readonly formSchema: FormSchema;
+  private readonly onSubmit?: () => void;
   private readonly successCallback?: (result: string) => void;
   private readonly errorCallback?: (
     errorMessage: string,
@@ -47,12 +48,14 @@ export class TaskFormSubmitHandler implements IFormSubmitHandler {
     userTaskInstance: UserTaskInstance,
     formSchema: FormSchema,
     user: User,
+    onSubmit?: () => void,
     successCallback?: (phase: string) => void,
     errorCallback?: (phase: string, errorMessage?: string) => void
   ) {
     this.userTaskInstance = userTaskInstance;
     this.formSchema = formSchema;
     this.user = user;
+    this.onSubmit = onSubmit;
     this.successCallback = successCallback;
     this.errorCallback = errorCallback;
 
@@ -95,6 +98,10 @@ export class TaskFormSubmitHandler implements IFormSubmitHandler {
       const endpoint = `${this.userTaskInstance.endpoint}?phase=${
         this.selectedPhase
       }&user=${this.user.id}&group=${this.user.groups.join(',')}`;
+
+      if (this.onSubmit) {
+        this.onSubmit();
+      }
 
       const response = await axios.post(endpoint, data, {
         headers: {

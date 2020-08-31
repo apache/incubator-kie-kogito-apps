@@ -11,16 +11,38 @@ exports[`UserTaskPageHeader component tests Should render UserTaskPageHeader cor
       <PageTitle
         title="Task Inbox"
       >
-        <Title
-          headingLevel="h1"
-          size="4xl"
-        >
-          <h1
-            className="pf-c-title pf-m-4xl"
+        <Flex>
+          <div
+            className="pf-l-flex"
           >
-            Task Inbox
-          </h1>
-        </Title>
+            <FlexItem
+              spacer={
+                Object {
+                  "default": "spacerSm",
+                }
+              }
+            >
+              <div
+                className="pf-m-spacer-sm"
+              >
+                <Title
+                  data-ouia-component-type="page-title"
+                  data-ouia-safe={true}
+                  headingLevel="h1"
+                  size="4xl"
+                >
+                  <h1
+                    className="pf-c-title pf-m-4xl"
+                    data-ouia-component-type="page-title"
+                    data-ouia-safe={true}
+                  >
+                    Task Inbox
+                  </h1>
+                </Title>
+              </div>
+            </FlexItem>
+          </div>
+        </Flex>
       </PageTitle>
     </section>
   </PageSection>

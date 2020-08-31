@@ -15,33 +15,36 @@
  */
 
 import React from 'react';
+
+import { GraphQL } from '@kogito-apps/common';
+import UserTaskInstance = GraphQL.UserTaskInstance;
+import { Label } from '@patternfly/react-core';
 import {
   BanIcon,
   CheckCircleIcon,
   OnRunningIcon
 } from '@patternfly/react-icons';
 
-import { GraphQL } from '@kogito-apps/common';
-import UserTaskInstance = GraphQL.UserTaskInstance;
+enum Variant {
+  INLINE = 'inline',
+  LABEL = 'label'
+}
 
 interface IOwnProps {
   task: UserTaskInstance;
+  variant?: 'inline' | 'label';
 }
 
-const TaskState: React.FC<IOwnProps> = ({ task }) => {
-  let icon;
+const TaskState: React.FC<IOwnProps> = ({ task, variant }) => {
+  const icon = resolveTaskStateIcon(task);
 
-  if (task.state === 'Aborted') {
-    icon = <BanIcon className="pf-u-mr-sm" />;
-  } else if (task.completed) {
-    icon = (
-      <CheckCircleIcon
-        className="pf-u-mr-sm"
-        color="var(--pf-global--success-color--100)"
-      />
+  if (variant === Variant.LABEL) {
+    const color = resolveTaskStateLabelColor(task);
+    return (
+      <Label color={color} icon={icon}>
+        {task.state}
+      </Label>
     );
-  } else {
-    icon = <OnRunningIcon className="pf-u-mr-sm" />;
   }
 
   return (
@@ -50,5 +53,30 @@ const TaskState: React.FC<IOwnProps> = ({ task }) => {
     </React.Fragment>
   );
 };
+
+function resolveTaskStateIcon(task: UserTaskInstance) {
+  if (task.state === 'Aborted') {
+    return <BanIcon className="pf-u-mr-sm" />;
+  } else if (task.completed) {
+    return (
+      <CheckCircleIcon
+        className="pf-u-mr-sm"
+        color="var(--pf-global--success-color--100)"
+      />
+    );
+  } else {
+    return <OnRunningIcon className="pf-u-mr-sm" />;
+  }
+}
+
+function resolveTaskStateLabelColor(task: UserTaskInstance) {
+  if (task.state === 'Aborted') {
+    return 'red';
+  } else if (task.completed) {
+    return 'green';
+  } else {
+    return 'blue';
+  }
+}
 
 export default TaskState;

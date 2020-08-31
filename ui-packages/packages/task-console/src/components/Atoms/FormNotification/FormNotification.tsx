@@ -14,38 +14,72 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { Button, Modal, Text, TextContent } from '@patternfly/react-core';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/common';
+import React, { useState } from 'react';
+import {
+  Alert,
+  AlertActionCloseButton,
+  AlertActionLink
+} from '@patternfly/react-core';
 
-interface IOwnProps {
-  message: string;
-  closeAction: () => void;
+enum NotificationType {
+  SUCCESS = 'success',
+  ERROR = 'error'
 }
 
-const FormNotification: React.FC<IOwnProps & OUIAProps> = ({
-  message,
-  closeAction,
-  ouiaId,
-  ouiaSafe
-}) => {
+export interface Notification {
+  type: 'success' | 'error';
+  message: string;
+  details?: string;
+  customAction?: Action;
+  close: () => void;
+}
+
+export interface Action {
+  label: string;
+  onClick: () => void;
+}
+
+interface IOwnProps {
+  notification: Notification;
+}
+
+const FormNotification: React.FC<IOwnProps> = ({ notification }) => {
+  let variant;
+
+  const [showDetails, setShowDetails]: [boolean, any] = useState(false);
+
+  switch (notification.type) {
+    case NotificationType.SUCCESS:
+      variant = 'success';
+      break;
+    case NotificationType.ERROR:
+      variant = 'danger';
+      break;
+  }
+
   return (
-    <Modal
-      variant="small"
-      title="Executing Task"
-      isOpen={true}
-      onClose={closeAction}
-      actions={[
-        <Button key="confirm-selection" variant="primary" onClick={closeAction}>
-          OK
-        </Button>
-      ]}
-      {...componentOuiaProps(ouiaId, 'form-notification-modal', ouiaSafe)}
+    <Alert
+      isInline
+      title={notification.message}
+      variant={variant}
+      actionLinks={
+        <React.Fragment>
+          {notification.details && (
+            <AlertActionLink onClick={() => setShowDetails(!showDetails)}>
+              View details
+            </AlertActionLink>
+          )}
+          {notification.customAction && (
+            <AlertActionLink onClick={notification.customAction.onClick}>
+              {notification.customAction.label}
+            </AlertActionLink>
+          )}
+        </React.Fragment>
+      }
+      actionClose={<AlertActionCloseButton onClose={notification.close} />}
     >
-      <TextContent>
-        <Text>{message}</Text>
-      </TextContent>
-    </Modal>
+      {showDetails && notification.details && <p>{notification.details}</p>}
+    </Alert>
   );
 };
 

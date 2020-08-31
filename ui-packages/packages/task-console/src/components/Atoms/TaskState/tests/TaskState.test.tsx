@@ -21,9 +21,10 @@ import {
   OnRunningIcon
 } from '@patternfly/react-icons';
 import _ from 'lodash';
-import { GraphQL, getWrapper } from '@kogito-apps/common';
+import { getWrapper, GraphQL } from '@kogito-apps/common';
 import TaskState from '../TaskState';
 import UserTaskInstance = GraphQL.UserTaskInstance;
+import { Label } from '@patternfly/react-core';
 
 const userTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -75,6 +76,10 @@ describe('TaskState', () => {
 
     expect(wrapper).toMatchSnapshot();
 
+    const label = wrapper.find(Label);
+
+    expect(label.exists()).toBeFalsy();
+
     const icon = wrapper.find(OnRunningIcon);
 
     expect(icon.exists()).toBeTruthy();
@@ -87,6 +92,10 @@ describe('TaskState', () => {
     const wrapper = getWrapper(<TaskState task={task} />, 'TaskState');
 
     expect(wrapper).toMatchSnapshot();
+
+    const label = wrapper.find(Label);
+
+    expect(label.exists()).toBeFalsy();
 
     const icon = wrapper.find(BanIcon);
 
@@ -101,6 +110,67 @@ describe('TaskState', () => {
     const wrapper = getWrapper(<TaskState task={task} />, 'TaskState');
 
     expect(wrapper).toMatchSnapshot();
+
+    const label = wrapper.find(Label);
+
+    expect(label.exists()).toBeFalsy();
+
+    const icon = wrapper.find(CheckCircleIcon);
+
+    expect(icon.exists()).toBeTruthy();
+  });
+
+  it('Test show active task in label', () => {
+    const wrapper = getWrapper(
+      <TaskState task={userTask} variant={'label'} />,
+      'TaskState'
+    );
+
+    expect(wrapper).toMatchSnapshot();
+
+    const label = wrapper.find(Label);
+
+    expect(label.exists()).toBeTruthy();
+    expect(label.props().color).toBe('blue');
+  });
+
+  it('Test show aborted task in label', () => {
+    const task = _.clone(userTask);
+    task.state = 'Aborted';
+
+    const wrapper = getWrapper(
+      <TaskState task={task} variant={'label'} />,
+      'TaskState'
+    );
+
+    expect(wrapper).toMatchSnapshot();
+
+    const label = wrapper.find(Label);
+
+    expect(label.exists()).toBeTruthy();
+    expect(label.props().color).toBe('red');
+
+    const icon = wrapper.find(BanIcon);
+
+    expect(icon.exists()).toBeTruthy();
+  });
+
+  it('Test show completed task in label', () => {
+    const task = _.clone(userTask);
+    task.state = 'Completed';
+    task.completed = true;
+
+    const wrapper = getWrapper(
+      <TaskState task={task} variant={'label'} />,
+      'TaskState'
+    );
+
+    expect(wrapper).toMatchSnapshot();
+
+    const label = wrapper.find(Label);
+
+    expect(label.exists()).toBeTruthy();
+    expect(label.props().color).toBe('green');
 
     const icon = wrapper.find(CheckCircleIcon);
 

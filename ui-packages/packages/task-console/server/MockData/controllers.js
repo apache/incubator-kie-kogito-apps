@@ -28,7 +28,7 @@ module.exports = controller = {
     });
 
     if(tasksUnableToTransition.includes(task.id)) {
-      res.status(500).send("");
+      res.status(500).send("Unexpected failure when doing a transition!");
     } else {
       const phase = req.query.phase;
 
