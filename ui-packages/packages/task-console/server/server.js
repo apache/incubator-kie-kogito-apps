@@ -76,12 +76,9 @@ const resolvers = {
 
       await timeout(2000);
 
-      if(args.pagination) {
+      if (args.pagination) {
         const offset = args.pagination.offset;
         const limit = args.pagination.limit;
-
-        console.log("offset: " + offset);
-        console.log("limit: " + limit);
 
         result = result.slice(offset, offset + limit);
       }

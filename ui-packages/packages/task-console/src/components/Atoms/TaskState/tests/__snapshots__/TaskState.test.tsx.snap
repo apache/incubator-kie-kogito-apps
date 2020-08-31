@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TaskStateColumn Test show aborted task 1`] = `
-<TaskStateColumn
+exports[`TaskState Test show aborted task 1`] = `
+<TaskState
   task={
     Object {
       "actualOwner": null,
@@ -36,11 +36,11 @@ exports[`TaskStateColumn Test show aborted task 1`] = `
   </BanIcon>
    
   Aborted
-</TaskStateColumn>
+</TaskState>
 `;
 
-exports[`TaskStateColumn Test show active task 1`] = `
-<TaskStateColumn
+exports[`TaskState Test show active task 1`] = `
+<TaskState
   task={
     Object {
       "actualOwner": null,
@@ -75,11 +75,11 @@ exports[`TaskStateColumn Test show active task 1`] = `
   </OnRunningIcon>
    
   Ready
-</TaskStateColumn>
+</TaskState>
 `;
 
-exports[`TaskStateColumn Test show completed task 1`] = `
-<TaskStateColumn
+exports[`TaskState Test show completed task 1`] = `
+<TaskState
   task={
     Object {
       "actualOwner": null,
@@ -115,5 +115,5 @@ exports[`TaskStateColumn Test show completed task 1`] = `
   </CheckCircleIcon>
    
   Completed
-</TaskStateColumn>
+</TaskState>
 `;

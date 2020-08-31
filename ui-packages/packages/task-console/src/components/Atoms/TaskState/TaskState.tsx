@@ -28,7 +28,7 @@ interface IOwnProps {
   task: UserTaskInstance;
 }
 
-const TaskStateColumn: React.FC<IOwnProps> = ({ task }) => {
+const TaskState: React.FC<IOwnProps> = ({ task }) => {
   let icon;
 
   if (task.state === 'Aborted') {
@@ -51,4 +51,4 @@ const TaskStateColumn: React.FC<IOwnProps> = ({ task }) => {
   );
 };
 
-export default TaskStateColumn;
+export default TaskState;

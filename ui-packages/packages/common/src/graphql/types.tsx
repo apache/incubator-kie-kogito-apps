@@ -1035,14 +1035,14 @@ export namespace GraphQL {
     >;
   };
 
-  export type GetTaskForUserQueryVariables = Exact<{
+  export type GetTasksForUserQueryVariables = Exact<{
     user?: Maybe<Scalars['String']>;
     groups?: Maybe<Array<Scalars['String']>>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
   }>;
 
-  export type GetTaskForUserQuery = { __typename?: 'Query' } & {
+  export type GetTasksForUserQuery = { __typename?: 'Query' } & {
     UserTaskInstances?: Maybe<
       Array<
         Maybe<
@@ -1828,8 +1828,8 @@ export namespace GraphQL {
     GetUserTaskByIdQuery,
     GetUserTaskByIdQueryVariables
   >;
-  export const GetTaskForUserDocument = gql`
-    query getTaskForUser(
+  export const GetTasksForUserDocument = gql`
+    query getTasksForUser(
       $user: String
       $groups: [String!]
       $offset: Int
@@ -1873,16 +1873,16 @@ export namespace GraphQL {
   `;
 
   /**
-   * __useGetTaskForUserQuery__
+   * __useGetTasksForUserQuery__
    *
-   * To run a query within a React component, call `useGetTaskForUserQuery` and pass it any options that fit your needs.
-   * When your component renders, `useGetTaskForUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * To run a query within a React component, call `useGetTasksForUserQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetTasksForUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
    * you can use to render your UI.
    *
    * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
    *
    * @example
-   * const { data, loading, error } = useGetTaskForUserQuery({
+   * const { data, loading, error } = useGetTasksForUserQuery({
    *   variables: {
    *      user: // value for 'user'
    *      groups: // value for 'groups'
@@ -1891,36 +1891,36 @@ export namespace GraphQL {
    *   },
    * });
    */
-  export function useGetTaskForUserQuery(
+  export function useGetTasksForUserQuery(
     baseOptions?: ApolloReactHooks.QueryHookOptions<
-      GetTaskForUserQuery,
-      GetTaskForUserQueryVariables
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
     >
   ) {
     return ApolloReactHooks.useQuery<
-      GetTaskForUserQuery,
-      GetTaskForUserQueryVariables
-    >(GetTaskForUserDocument, baseOptions);
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
+    >(GetTasksForUserDocument, baseOptions);
   }
-  export function useGetTaskForUserLazyQuery(
+  export function useGetTasksForUserLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-      GetTaskForUserQuery,
-      GetTaskForUserQueryVariables
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
     >
   ) {
     return ApolloReactHooks.useLazyQuery<
-      GetTaskForUserQuery,
-      GetTaskForUserQueryVariables
-    >(GetTaskForUserDocument, baseOptions);
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
+    >(GetTasksForUserDocument, baseOptions);
   }
-  export type GetTaskForUserQueryHookResult = ReturnType<
-    typeof useGetTaskForUserQuery
+  export type GetTasksForUserQueryHookResult = ReturnType<
+    typeof useGetTasksForUserQuery
   >;
-  export type GetTaskForUserLazyQueryHookResult = ReturnType<
-    typeof useGetTaskForUserLazyQuery
+  export type GetTasksForUserLazyQueryHookResult = ReturnType<
+    typeof useGetTasksForUserLazyQuery
   >;
-  export type GetTaskForUserQueryResult = ApolloReactCommon.QueryResult<
-    GetTaskForUserQuery,
-    GetTaskForUserQueryVariables
+  export type GetTasksForUserQueryResult = ApolloReactCommon.QueryResult<
+    GetTasksForUserQuery,
+    GetTasksForUserQueryVariables
   >;
 }

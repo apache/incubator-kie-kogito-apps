@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TaskDescriptionColumn test Render task description with task des 1`] = `
-<TaskDescriptionColumn
+exports[`TaskDescription test Render task description with task des 1`] = `
+<TaskDescription
   task={
     Object {
       "actualOwner": null,
@@ -152,5 +152,5 @@ exports[`TaskDescriptionColumn test Render task description with task des 1`] = 
       </a>
     </LinkAnchor>
   </Link>
-</TaskDescriptionColumn>
+</TaskDescription>
 `;

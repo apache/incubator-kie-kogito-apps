@@ -26,7 +26,7 @@ interface IOwnProps {
   task: UserTaskInstance;
 }
 
-const TaskDescriptionColumn: React.FC<IOwnProps> = ({ task }) => {
+const TaskDescription: React.FC<IOwnProps> = ({ task }) => {
   const context: IContext<UserTaskInstance> = useContext(TaskConsoleContext);
 
   return (
@@ -46,4 +46,4 @@ const TaskDescriptionColumn: React.FC<IOwnProps> = ({ task }) => {
   );
 };
 
-export default TaskDescriptionColumn;
+export default TaskDescription;

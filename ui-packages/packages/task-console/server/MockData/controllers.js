@@ -84,7 +84,5 @@ function getTaskSchema (taskName, clearPhases) {
     delete schema.phases;
   }
 
-  console.log("Schema: " + JSON.stringify(schema));
-
   return schema;
 }

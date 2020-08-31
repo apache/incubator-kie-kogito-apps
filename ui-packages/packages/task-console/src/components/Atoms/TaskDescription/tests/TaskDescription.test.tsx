@@ -15,21 +15,16 @@
  */
 
 import React from 'react';
-import {
-  BanIcon,
-  CheckCircleIcon,
-  OnRunningIcon
-} from '@patternfly/react-icons';
-import _ from 'lodash';
-import { GraphQL, getWrapper } from '@kogito-apps/common';
-import TaskStateColumn from '../TaskStateColumn';
+import { BrowserRouter } from 'react-router-dom';
+import { getWrapper, GraphQL } from '@kogito-apps/common';
+import TaskDescription from '../TaskDescription';
 import UserTaskInstance = GraphQL.UserTaskInstance;
 
 const userTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
   description: null,
-  name: 'VisaApplication',
   referenceName: 'Apply for visa',
+  name: 'VisaApplication',
   priority: '1',
   processInstanceId: '9ae7ce3b-d49c-4f35-b843-8ac3d22fa427',
   processId: 'travels',
@@ -56,63 +51,21 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-icons', () => ({
-  ...jest.requireActual('@patternfly/react-icons'),
-  OnRunningIcon: () => {
-    return <MockedComponent />;
-  },
-  BanIcon: () => {
-    return <MockedComponent />;
-  },
-  CheckCircleIcon: () => {
+jest.mock('@kogito-apps/common', () => ({
+  ...jest.requireActual('@kogito-apps/common'),
+  ItemDescription: () => {
     return <MockedComponent />;
   }
 }));
 
-describe('TaskStateColumn', () => {
-  it('Test show active task', () => {
+describe('TaskDescription test', () => {
+  it('Render task description with task des', () => {
     const wrapper = getWrapper(
-      <TaskStateColumn task={userTask} />,
-      'TaskStateColumn'
+      <BrowserRouter>
+        <TaskDescription task={userTask} />
+      </BrowserRouter>,
+      'TaskDescription'
     );
-
     expect(wrapper).toMatchSnapshot();
-
-    const icon = wrapper.find(OnRunningIcon);
-
-    expect(icon.exists()).toBeTruthy();
-  });
-
-  it('Test show aborted task', () => {
-    const task = _.clone(userTask);
-    task.state = 'Aborted';
-
-    const wrapper = getWrapper(
-      <TaskStateColumn task={task} />,
-      'TaskStateColumn'
-    );
-
-    expect(wrapper).toMatchSnapshot();
-
-    const icon = wrapper.find(BanIcon);
-
-    expect(icon.exists()).toBeTruthy();
-  });
-
-  it('Test show completed task', () => {
-    const task = _.clone(userTask);
-    task.state = 'Completed';
-    task.completed = true;
-
-    const wrapper = getWrapper(
-      <TaskStateColumn task={task} />,
-      'TaskStateColumn'
-    );
-
-    expect(wrapper).toMatchSnapshot();
-
-    const icon = wrapper.find(CheckCircleIcon);
-
-    expect(icon.exists()).toBeTruthy();
   });
 });

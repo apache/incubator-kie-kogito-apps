@@ -16,23 +16,21 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { Bullseye } from '@patternfly/react-core';
-import Moment from 'react-moment';
 import {
-  KogitoSpinner,
   DataTable,
-  LoadMore,
-  GraphQL,
   DataTableColumn,
-  ServerErrors,
+  GraphQL,
+  KogitoEmptyState,
   KogitoEmptyStateType,
-  KogitoEmptyState
+  KogitoSpinner,
+  LoadMore,
+  ServerErrors
 } from '@kogito-apps/common';
 import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
-import TaskDescriptionColumn from '../../Atoms/TaskDescriptionColumn/TaskDescriptionColumn';
+import Columns from '../../../util/Columns';
 import UserTaskInstance = GraphQL.UserTaskInstance;
-import TaskStateColumn from '../../Atoms/TaskStateColumn/TaskStateColumn';
 
 const UserTaskLoadingComponent = (
   <Bullseye>
@@ -54,7 +52,7 @@ const TaskInbox: React.FC = props => {
   const [
     getUserTasks,
     { loading, error, data, refetch, networkStatus }
-  ] = GraphQL.useGetTaskForUserLazyQuery({
+  ] = GraphQL.useGetTasksForUserLazyQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -125,42 +123,12 @@ const TaskInbox: React.FC = props => {
   }
 
   const columns: DataTableColumn[] = [
-    {
-      label: 'Name',
-      path: 'referenceName',
-      bodyCellTransformer: (cellValue, rowTask) => (
-        <TaskDescriptionColumn task={rowTask} />
-      )
-    },
-    {
-      label: 'Process',
-      path: 'processId'
-    },
-    {
-      label: 'Priority',
-      path: 'priority'
-    },
-    {
-      label: 'State',
-      path: 'state',
-      bodyCellTransformer: (cellValue, rowTask) => (
-        <TaskStateColumn task={rowTask} />
-      )
-    },
-    {
-      label: 'Started',
-      path: 'started',
-      bodyCellTransformer: started => (
-        <Moment fromNow>{new Date(`${started}`)}</Moment>
-      )
-    },
-    {
-      label: 'Last update',
-      path: 'lastUpdate',
-      bodyCellTransformer: lastUpdate => (
-        <Moment fromNow>{new Date(`${lastUpdate}`)}</Moment>
-      )
-    }
+    Columns.getTaskDescriptionColumn(),
+    Columns.getDefaultColumn('processId', 'Process'),
+    Columns.getDefaultColumn('priority', 'Priority'),
+    Columns.getTaskStateColumn(),
+    Columns.getDateColumn('started', 'Started'),
+    Columns.getDateColumn('lastUpdate', 'Last update')
   ];
 
   const mustShowMore =

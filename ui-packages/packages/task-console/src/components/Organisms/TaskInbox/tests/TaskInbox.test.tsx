@@ -20,61 +20,18 @@ import {
   DataTable,
   DefaultUser,
   getWrapperAsync,
+  GraphQL,
   KogitoEmptyState,
   LoadMore,
   ServerErrors,
   User
 } from '@kogito-apps/common';
 import { MockedProvider } from '@apollo/react-testing';
-import { gql } from 'apollo-boost';
+import wait from 'waait';
 import TaskInbox from '../TaskInbox';
 import TaskConsoleContextProvider from '../../../../context/TaskConsoleContext/TaskConsoleContextProvider';
 import { MemoryRouter as Router } from 'react-router';
 import { act } from 'react-dom/test-utils';
-
-const GET_TASKS_FOR_USER = gql`
-  query getTaskForUser(
-    $user: String
-    $groups: [String!]
-    $offset: Int
-    $limit: Int
-  ) {
-    UserTaskInstances(
-      where: {
-        or: [
-          { actualOwner: { equal: $user } }
-          { potentialUsers: { contains: $user } }
-          { potentialGroups: { containsAny: $groups } }
-        ]
-      }
-      pagination: { offset: $offset, limit: $limit }
-    ) {
-      id
-      name
-      referenceName
-      description
-      priority
-      processInstanceId
-      processId
-      rootProcessInstanceId
-      rootProcessId
-      state
-      actualOwner
-      adminGroups
-      adminUsers
-      completed
-      started
-      excludedUsers
-      potentialGroups
-      potentialUsers
-      inputs
-      outputs
-      referenceName
-      lastUpdate
-      endpoint
-    }
-  }
-`;
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -98,12 +55,32 @@ jest.mock('@kogito-apps/common', () => ({
 
 const testUser: User = new DefaultUser('test', ['group1', 'group2']);
 
+const getWrapper = async mocks => {
+  let wrapper;
+
+  await act(async () => {
+    wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <TaskConsoleContextProvider user={testUser}>
+          <Router keyLength={0}>
+            <TaskInbox />
+          </Router>
+        </TaskConsoleContextProvider>
+      </MockedProvider>,
+      'TaskInbox'
+    );
+    await wait();
+  });
+
+  return (wrapper = wrapper.update().find(TaskInbox));
+};
+
 describe('TaskInbox tests', () => {
   it('Test empty state', async () => {
     const mocks = [
       {
         request: {
-          query: GET_TASKS_FOR_USER,
+          query: GraphQL.GetTasksForUserDocument,
           variables: {
             user: testUser.id,
             groups: testUser.groups,
@@ -119,16 +96,7 @@ describe('TaskInbox tests', () => {
       }
     ];
 
-    const wrapper = await getWrapperAsync(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <TaskConsoleContextProvider user={testUser}>
-          <Router keyLength={0}>
-            <TaskInbox />
-          </Router>
-        </TaskConsoleContextProvider>
-      </MockedProvider>,
-      'TaskInbox'
-    );
+    const wrapper = await getWrapper(mocks);
 
     expect(wrapper).toMatchSnapshot();
 
@@ -141,7 +109,7 @@ describe('TaskInbox tests', () => {
     const mocks = [
       {
         request: {
-          query: GET_TASKS_FOR_USER,
+          query: GraphQL.GetTasksForUserDocument,
           variables: {
             user: testUser.id,
             groups: testUser.groups,
@@ -157,16 +125,7 @@ describe('TaskInbox tests', () => {
       }
     ];
 
-    const wrapper = await getWrapperAsync(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <TaskConsoleContextProvider user={testUser}>
-          <Router keyLength={0}>
-            <TaskInbox />
-          </Router>
-        </TaskConsoleContextProvider>
-      </MockedProvider>,
-      'TaskInbox'
-    );
+    const wrapper = await getWrapper(mocks);
 
     expect(wrapper).toMatchSnapshot();
 
@@ -184,7 +143,7 @@ describe('TaskInbox tests', () => {
     const mocks = [
       {
         request: {
-          query: GET_TASKS_FOR_USER,
+          query: GraphQL.GetTasksForUserDocument,
           variables: {
             user: testUser.id,
             groups: testUser.groups,
@@ -200,7 +159,7 @@ describe('TaskInbox tests', () => {
       },
       {
         request: {
-          query: GET_TASKS_FOR_USER,
+          query: GraphQL.GetTasksForUserDocument,
           variables: {
             user: testUser.id,
             groups: testUser.groups,
@@ -216,16 +175,7 @@ describe('TaskInbox tests', () => {
       }
     ];
 
-    let wrapper = await getWrapperAsync(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <TaskConsoleContextProvider user={testUser}>
-          <Router keyLength={0}>
-            <TaskInbox />
-          </Router>
-        </TaskConsoleContextProvider>
-      </MockedProvider>,
-      'TaskInbox'
-    );
+    let wrapper = await getWrapper(mocks);
 
     expect(wrapper).toMatchSnapshot();
 
@@ -260,7 +210,7 @@ describe('TaskInbox tests', () => {
     const mocks = [
       {
         request: {
-          query: GET_TASKS_FOR_USER,
+          query: GraphQL.GetTasksForUserDocument,
           variables: {
             user: testUser.id,
             groups: testUser.groups,
@@ -275,16 +225,7 @@ describe('TaskInbox tests', () => {
       }
     ];
 
-    const wrapper = await getWrapperAsync(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <TaskConsoleContextProvider user={testUser}>
-          <Router keyLength={0}>
-            <TaskInbox />
-          </Router>
-        </TaskConsoleContextProvider>
-      </MockedProvider>,
-      'TaskInbox'
-    );
+    const wrapper = await getWrapper(mocks);
 
     expect(wrapper).toMatchSnapshot();
 
