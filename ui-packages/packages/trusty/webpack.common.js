@@ -15,7 +15,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src', 'index.html'),
-      favicon: 'src/favicon.ico'
+      favicon: 'src/favicon.ico',
+      chunks: ['app']
     }),
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',
@@ -24,8 +25,8 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'static/gwt-editors', to: 'gwt-editors' },
-        { from: 'static/envelope', to: 'envelope' }
+        { from: './static/gwt-editors', to: 'gwt-editors' },
+        { from: './static/envelope', to: 'envelope' }
       ]
     })
   ],
