@@ -5,6 +5,9 @@ import { MockedProvider } from '@apollo/react-testing';
 import { getWrapperAsync } from '@kogito-apps/common';
 import { Label } from '@patternfly/react-core';
 
+// tslint:disable: no-string-literal
+// tslint:disable: no-unexpected-multiline
+
 jest.mock('uuid', () => {
   let value = 1;
   return () => value++;
@@ -200,10 +203,7 @@ describe('DataTable component tests', () => {
       error: undefined,
       refetch: jest.fn(),
       LoadingComponent: undefined,
-      ErrorComponent: undefined,
-      setSortBy: jest.fn(),
-      setOrderByObj: jest.fn(),
-      sortBy: {}
+      ErrorComponent: undefined
     };
 
     const wrapper = await getWrapperAsync(
@@ -225,10 +225,7 @@ describe('DataTable component tests', () => {
       error: {},
       refetch: jest.fn(),
       LoadingComponent: undefined,
-      ErrorComponent: undefined,
-      setSortBy: jest.fn(),
-      setOrderByObj: jest.fn(),
-      sortBy: {}
+      ErrorComponent: undefined
     };
 
     const wrapper = await getWrapperAsync(
@@ -250,10 +247,7 @@ describe('DataTable component tests', () => {
       error: undefined,
       refetch: jest.fn(),
       LoadingComponent: undefined,
-      ErrorComponent: undefined,
-      setSortBy: jest.fn(),
-      setOrderByObj: jest.fn(),
-      sortBy: {}
+      ErrorComponent: undefined
     };
 
     const wrapper = await getWrapperAsync(
@@ -274,10 +268,7 @@ describe('DataTable component tests', () => {
       error: undefined,
       refetch: jest.fn(),
       LoadingComponent: undefined,
-      ErrorComponent: undefined,
-      setSortBy: jest.fn(),
-      setOrderByObj: jest.fn(),
-      sortBy: {}
+      ErrorComponent: undefined
     };
 
     const wrapper = await getWrapperAsync(
@@ -288,5 +279,34 @@ describe('DataTable component tests', () => {
     );
 
     expect(wrapper.find(DataTable)).toMatchSnapshot();
+  });
+
+  it('check sorting functionality', async () => {
+    const props = {
+      data,
+      isLoading: false,
+      networkStatus: 1,
+      error: undefined,
+      refetch: jest.fn(),
+      LoadingComponent: undefined,
+      ErrorComponent: undefined,
+      onSorting: jest.fn(),
+      sortBy: {}
+    };
+
+    const wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <DataTable {...props} />
+      </MockedProvider>,
+      'DataTable'
+    );
+
+    wrapper
+      .find('[aria-label="Data Table"]')
+      .at(0)
+      .props()
+      ['onSort']({}, 1, 'asc');
+
+    expect(props.onSorting).toHaveBeenCalledTimes(1);
   });
 });
