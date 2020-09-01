@@ -61,7 +61,12 @@ const getColumns = (data: any[], columns: DataTableColumn[]) => {
               ? [
                   ((value, extra) => {
                     const rowDataObj = data[extra.rowIndex];
-                    return column.bodyCellTransformer(value, rowDataObj);
+                    return {
+                      children: column.bodyCellTransformer(
+                        value.title,
+                        rowDataObj
+                      )
+                    };
                   }) as ITransform
                 ]
               : undefined,

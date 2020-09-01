@@ -6,9 +6,9 @@ import taskConsoleLogo from '../../../static/taskConsoleLogo.svg';
 
 import UserTaskInstanceDetailsPage from '../UserTaskInstanceDetailsPage/UserTaskInstanceDetailsPage';
 import DataListContainerExpandable from '../DataListContainerExpandable/DataListContainerExpandable';
-import DataListContainer from '../DataListContainer/DataListContainer';
 import UserTaskDataTableContainer from '../UserTaskDataTableContainer/UserTaskDataTableContainer';
 import { Location, History } from 'history';
+import TaskInboxContainer from '../TaskInboxContainer/TaskInboxContainer';
 
 interface IOwnProps {
   location: Location;
@@ -20,23 +20,20 @@ const PageLayout: React.FC<IOwnProps & OUIAProps> = ({ ouiaId, ...props }) => {
   const PageNav = (
     <Nav aria-label="Nav" theme="dark">
       <NavList>
+        <NavItem isActive={pathname === '/TaskInbox'}>
+          <Link
+            to="/TaskInbox"
+            {...ouiaAttribute('data-ouia-navigation-name', 'task-inbox')}
+          >
+            Task Inbox
+          </Link>
+        </NavItem>
         <NavItem isActive={pathname === '/UserTasks'}>
           <Link
             to="/UserTasks"
             {...ouiaAttribute('data-ouia-navigation-name', 'user-tasks')}
           >
             User Tasks
-          </Link>
-        </NavItem>
-        <NavItem isActive={pathname === '/UserTasksFilters'}>
-          <Link
-            to="/UserTasksFilters"
-            {...ouiaAttribute(
-              'data-ouia-navigation-name',
-              'user-tasks-filters'
-            )}
-          >
-            User tasks with filters
           </Link>
         </NavItem>
       </NavList>
@@ -55,13 +52,13 @@ const PageLayout: React.FC<IOwnProps & OUIAProps> = ({ ouiaId, ...props }) => {
       BrandClick={BrandClick}
     >
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/UserTasks" />} />
+        <Route exact path="/" render={() => <Redirect to="/TaskInbox" />} />
+        <Route exact path="/TaskInbox" component={TaskInboxContainer} />
         <Route
           exact
           path="/UserTasks"
           component={DataListContainerExpandable}
         />
-        <Route exact path="/UserTasksFilters" component={DataListContainer} />
         <Route
           exact
           path="/Task/:taskId"

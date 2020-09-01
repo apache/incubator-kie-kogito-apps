@@ -26,15 +26,13 @@ const UserTaskLoadingComponent = (
   </Bullseye>
 );
 
-const stateColumnTransformer = (value, rowDataObj) => {
+const stateColumnTransformer = value => {
   // rowDataObj is the original data object to render the row
   if (!value) {
     return null;
   }
-  const { title } = value;
-  return {
-    children: <Label>{title}</Label>
-  };
+
+  return <Label>{value}</Label>;
 };
 
 const UserTaskDataTableContainer: React.FC<OUIAProps> = ({

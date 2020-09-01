@@ -12,7 +12,8 @@ import {
   appRenderWithAxiosInterceptorConfig,
   getToken,
   isAuthEnabled,
-  ServerUnavailable
+  ServerUnavailable,
+  DefaultUser
 } from '@kogito-apps/common';
 import PageLayout from './components/Templates/PageLayout/PageLayout';
 import TaskConsoleContextProvider from './context/TaskConsoleContext/TaskConsoleContextProvider';
@@ -69,7 +70,9 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const appRender = () => {
   ReactDOM.render(
     <ApolloProvider client={client}>
-      <TaskConsoleContextProvider>
+      <TaskConsoleContextProvider
+        user={new DefaultUser('test', ['group1', 'group2'])}
+      >
         <BrowserRouter>
           <Switch>
             <Route path="/" component={PageLayout} />
