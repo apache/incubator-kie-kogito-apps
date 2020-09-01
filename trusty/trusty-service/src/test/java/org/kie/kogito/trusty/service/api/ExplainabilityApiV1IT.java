@@ -1,7 +1,6 @@
 package org.kie.kogito.trusty.service.api;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -12,6 +11,7 @@ import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.responses.SaliencyResponse;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
@@ -90,7 +90,7 @@ class ExplainabilityApiV1IT {
     void testConverterMethodsNotThrowingWithNullModelValues() {
         assertDoesNotThrow(() -> ExplainabilityApiV1.explainabilityResultModelToResponse(null));
         assertDoesNotThrow(() -> ExplainabilityApiV1.featureImportanceModelToResponse(null));
-        assertDoesNotThrow(() -> ExplainabilityApiV1.saliencyModelToResponse("test", null));
+        assertDoesNotThrow(() -> ExplainabilityApiV1.saliencyModelToResponse(null));
     }
 
     private void mockServiceWithExplainabilityResult() {
@@ -111,12 +111,13 @@ class ExplainabilityApiV1IT {
     private static ExplainabilityResult buildValidExplainabilityResult() {
         return new ExplainabilityResult(
                 TEST_EXECUTION_ID,
-                Map.of(
-                        "Output1", new Saliency(List.of(
+                ExplainabilityResultStatus.SUCCEEDED,
+                List.of(
+                        new Saliency("O1", "Output1", List.of(
                                 new FeatureImportance("Feature1", 0.49384),
                                 new FeatureImportance("Feature2", -0.1084)
                         )),
-                        "Output2", new Saliency(List.of(
+                        new Saliency("O2", "Output2", List.of(
                                 new FeatureImportance("Feature1", 0.0),
                                 new FeatureImportance("Feature2", 0.70293)
                         ))

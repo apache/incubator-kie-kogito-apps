@@ -27,19 +27,27 @@ public class ExplainabilityResultDto {
     @JsonProperty("executionId")
     private String executionId;
 
+    @JsonProperty("succeeded")
+    private Boolean succeeded;
+
     @JsonProperty("saliency")
     private Map<String, SaliencyDto> saliencies;
 
     private ExplainabilityResultDto() {
     }
 
-    public ExplainabilityResultDto(String executionId, Map<String, SaliencyDto> saliencies) {
+    public ExplainabilityResultDto(String executionId, boolean succeeded, Map<String, SaliencyDto> saliencies) {
         this.executionId = executionId;
+        this.succeeded = succeeded;
         this.saliencies = saliencies;
     }
 
     public String getExecutionId() {
         return executionId;
+    }
+
+    public Boolean getSucceeded() {
+        return succeeded;
     }
 
     public Map<String, SaliencyDto> getSaliencies() {

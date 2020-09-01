@@ -18,12 +18,10 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 
 public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<ExplainabilityResult> {
@@ -36,32 +34,16 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
     public ExplainabilityResult readFrom(ProtoStreamReader reader) throws IOException {
         return new ExplainabilityResult(
                 reader.readString(ExplainabilityResult.EXECUTION_ID_FIELD),
-                listToMap(reader.readCollection(ExplainabilityResult.SALIENCIES_FIELD, new ArrayList<>(), ExplainabilityResultItem.class))
+                enumFromString(reader.readString(ExplainabilityResult.STATUS_FIELD), ExplainabilityResultStatus.class),
+                reader.readCollection(ExplainabilityResult.SALIENCIES_FIELD, new ArrayList<>(), Saliency.class)
         );
     }
 
     @Override
     public void writeTo(ProtoStreamWriter writer, ExplainabilityResult input) throws IOException {
         writer.writeString(ExplainabilityResult.EXECUTION_ID_FIELD, input.getExecutionId());
-        writer.writeCollection(ExplainabilityResult.SALIENCIES_FIELD, mapToList(input.getSaliencies()), ExplainabilityResultItem.class);
+        writer.writeString(ExplainabilityResult.STATUS_FIELD, stringFromEnum(input.getStatus()));
+        writer.writeCollection(ExplainabilityResult.SALIENCIES_FIELD, input.getSaliencies(), Saliency.class);
     }
 
-    static Map<String, Saliency> listToMap(List<ExplainabilityResultItem> inputList) {
-        if (inputList == null) {
-            return null;
-        }
-        return inputList.stream().collect(Collectors.toMap(
-                ExplainabilityResultItem::getId,
-                ExplainabilityResultItem::getSaliency
-        ));
-    }
-
-    static List<ExplainabilityResultItem> mapToList(Map<String, Saliency> inputMap) {
-        if (inputMap == null) {
-            return null;
-        }
-        return inputMap.entrySet().stream()
-                .map(e -> new ExplainabilityResultItem(e.getKey(), e.getValue()))
-                .collect(Collectors.toList());
-    }
 }

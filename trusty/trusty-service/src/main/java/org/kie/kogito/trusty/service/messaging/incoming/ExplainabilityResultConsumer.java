@@ -16,6 +16,7 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +36,10 @@ import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
+import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.slf4j.Logger;
@@ -82,28 +86,40 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
         LOGGER.info("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
 
         ExplainabilityResultDto explainabilityResult = optData.get();
+        String executionId = explainabilityResult.getExecutionId();
+        Decision decision = service.getDecisionById(executionId);
 
-        service.storeExplainabilityResult(attributes.getId(), explainabilityResultFrom(explainabilityResult));
+        service.storeExplainabilityResult(executionId, explainabilityResultFrom(explainabilityResult, decision));
     }
 
-    protected static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto) {
+    protected static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto, Decision decision) {
         if (dto == null) {
             return null;
         }
-        Map<String, Saliency> saliencies = dto.getSaliencies() == null ? null :
+
+        Map<String, String> outcomeNameToIdMap = decision == null
+                ? Collections.emptyMap()
+                : decision.getOutcomes().stream().collect(Collectors.toUnmodifiableMap(DecisionOutcome::getOutcomeName, DecisionOutcome::getOutcomeId));
+
+        ExplainabilityResultStatus status = Boolean.TRUE.equals(dto.getSucceeded())
+                ? ExplainabilityResultStatus.SUCCEEDED
+                : ExplainabilityResultStatus.FAILED;
+
+        List<Saliency> saliencies = dto.getSaliencies() == null ? null :
                 dto.getSaliencies().entrySet().stream()
-                        .collect(Collectors.toMap(Map.Entry::getKey, e -> saliencyFrom(e.getValue())));
-        return new ExplainabilityResult(dto.getExecutionId(), saliencies);
+                        .map(e -> saliencyFrom(outcomeNameToIdMap.get(e.getKey()), e.getKey(), e.getValue()))
+                        .collect(Collectors.toList());
+        return new ExplainabilityResult(dto.getExecutionId(), status, saliencies);
     }
 
     protected static FeatureImportance featureImportanceFrom(FeatureImportanceDto dto) {
         if (dto == null) {
             return null;
         }
-        return new FeatureImportance(dto.getFeatureId(), dto.getScore());
+        return new FeatureImportance(dto.getFeatureName(), dto.getScore());
     }
 
-    protected static Saliency saliencyFrom(SaliencyDto dto) {
+    protected static Saliency saliencyFrom(String outcomeId, String outcomeName, SaliencyDto dto) {
         if (dto == null) {
             return null;
         }
@@ -111,7 +127,6 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
                 dto.getFeatureImportance().stream()
                         .map(ExplainabilityResultConsumer::featureImportanceFrom)
                         .collect(Collectors.toList());
-        return new Saliency(featureImportance);
+        return new Saliency(outcomeId, outcomeName, featureImportance);
     }
 }
-

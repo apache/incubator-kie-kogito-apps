@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
-import java.util.Map;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,19 +25,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ExplainabilityResult {
 
     public static final String EXECUTION_ID_FIELD = "executionId";
+    public static final String STATUS_FIELD = "status";
     public static final String SALIENCIES_FIELD = "saliencies";
 
     @JsonProperty(EXECUTION_ID_FIELD)
     private String executionId;
 
+    @JsonProperty(STATUS_FIELD)
+    private ExplainabilityResultStatus status;
+
     @JsonProperty(SALIENCIES_FIELD)
-    private Map<String, Saliency> saliencies;
+    private List<Saliency> saliencies;
 
     public ExplainabilityResult() {
     }
 
-    public ExplainabilityResult(String executionId, Map<String, Saliency> saliencies) {
+    public ExplainabilityResult(String executionId, ExplainabilityResultStatus status, List<Saliency> saliencies) {
         this.executionId = executionId;
+        this.status = status;
         this.saliencies = saliencies;
     }
 
@@ -49,11 +54,19 @@ public class ExplainabilityResult {
         this.executionId = executionId;
     }
 
-    public Map<String, Saliency> getSaliencies() {
+    public ExplainabilityResultStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExplainabilityResultStatus status) {
+        this.status = status;
+    }
+
+    public List<Saliency> getSaliencies() {
         return saliencies;
     }
 
-    public void setSaliencies(Map<String, Saliency> saliencies) {
+    public void setSaliencies(List<Saliency> saliencies) {
         this.saliencies = saliencies;
     }
 }

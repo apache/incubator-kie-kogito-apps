@@ -72,8 +72,9 @@ public class ExplainabilityApiV1 {
             return null;
         }
         return new SalienciesResponse(
-                model.getSaliencies().entrySet().stream()
-                        .map(e -> saliencyModelToResponse(e.getKey(), e.getValue()))
+                model.getStatus().name(),
+                model.getSaliencies().stream()
+                        .map(ExplainabilityApiV1::saliencyModelToResponse)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList())
         );
@@ -83,15 +84,16 @@ public class ExplainabilityApiV1 {
         if (model == null) {
             return null;
         }
-        return new FeatureImportanceResponse(model.getFeatureId(), model.getScore());
+        return new FeatureImportanceResponse(model.getFeatureName(), model.getScore());
     }
 
-    static SaliencyResponse saliencyModelToResponse(String id, Saliency model) {
+    static SaliencyResponse saliencyModelToResponse(Saliency model) {
         if (model == null) {
             return null;
         }
         return new SaliencyResponse(
-                id,
+                model.getOutcomeId(),
+                model.getOutcomeName(),
                 model.getFeatureImportance().stream()
                         .map(ExplainabilityApiV1::featureImportanceModelToResponse)
                         .filter(Objects::nonNull)

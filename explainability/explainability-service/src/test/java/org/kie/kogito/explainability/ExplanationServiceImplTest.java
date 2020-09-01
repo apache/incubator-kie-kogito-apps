@@ -16,6 +16,12 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
@@ -25,12 +31,6 @@ import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
-
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -77,7 +77,7 @@ class ExplanationServiceImplTest {
         assertEquals(SALIENCY.getPerFeatureImportance().size(), saliencyDto.getFeatureImportance().size());
 
         FeatureImportanceDto featureImportanceDto1 = saliencyDto.getFeatureImportance().get(0);
-        assertEquals(FEATURE_IMPORTANCE_1.getFeature().getName(), featureImportanceDto1.getFeatureId());
+        assertEquals(FEATURE_IMPORTANCE_1.getFeature().getName(), featureImportanceDto1.getFeatureName());
         assertEquals(FEATURE_IMPORTANCE_1.getScore(), featureImportanceDto1.getScore(), 0.01);
     }
 }

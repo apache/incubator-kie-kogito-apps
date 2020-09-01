@@ -16,6 +16,14 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
@@ -29,13 +37,6 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
@@ -66,13 +67,14 @@ public class ExplanationServiceImpl implements ExplanationService {
                 .thenApply(input -> createResultDto(input, request.getExecutionId()))
                 .exceptionally(throwable -> {
                     LOG.error("Exception thrown during explainAsync", throwable);
-                    return new ExplainabilityResultDto(request.getExecutionId(), Collections.emptyMap());
+                    return new ExplainabilityResultDto(request.getExecutionId(), false, Collections.emptyMap());
                 });
     }
 
     protected static ExplainabilityResultDto createResultDto(Map<String, Saliency> saliencies, String executionId) {
         return new ExplainabilityResultDto(
                 executionId,
+                true,
                 saliencies.entrySet().stream().collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
