@@ -11,7 +11,7 @@ const useSaliencies = (executionId: string) => {
   useEffect(() => {
     let isMounted = true;
     const config: AxiosRequestConfig = {
-      url: `${EXECUTIONS_PATH}/decisions/${executionId}/saliencies`,
+      url: `${EXECUTIONS_PATH}/decisions/${executionId}/explanations/saliencies`,
       method: 'get'
     };
 
