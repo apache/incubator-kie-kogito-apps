@@ -35,7 +35,7 @@ public class SaliencyMarshallerTest extends MarshallerTestTemplate<Saliency> {
 
     private static final List<AbstractTestField<Saliency, ?>> TEST_FIELD_LIST = List.of(
             new StringTestField<>(OUTCOME_ID_FIELD, "ID", Saliency::getOutcomeId, Saliency::setOutcomeId),
-            new StringTestField<>(OUTCOME_NAME_FIELD, "test", Saliency::getOutcomeId, Saliency::setOutcomeId),
+            new StringTestField<>(OUTCOME_NAME_FIELD, "test", Saliency::getOutcomeName, Saliency::setOutcomeName),
             new ListTestField<>(FEATURE_IMPORTANCE_FIELD, Collections.emptyList(), Saliency::getFeatureImportance, Saliency::setFeatureImportance, FeatureImportance.class)
     );
 
