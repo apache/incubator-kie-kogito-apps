@@ -14,6 +14,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TypeTest {
 
@@ -140,6 +141,21 @@ class TypeTest {
         Value<?> value = new Value<>(features);
         Feature f = new Feature("name", Type.COMPOSITE, value);
         Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
+        assertNotEquals(value, perturbedValue);
+    }
+
+    @Test
+    void testPerturbListFeature() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 2);
+        List<Double> list = new LinkedList<>();
+        list.add(1d);
+        list.add(2d);
+        list.add(3d);
+        list.add(4d);
+        Feature feature = FeatureFactory.newListFeature("name", list);
+        Value<?> value = feature.getValue();
+        Value<?> perturbedValue = feature.getType().perturb(value, perturbationContext);
+        assertNotNull(perturbedValue);
         assertNotEquals(value, perturbedValue);
     }
 

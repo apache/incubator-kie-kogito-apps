@@ -22,6 +22,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
@@ -361,6 +362,35 @@ public enum Type {
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
             return new Value<>(Currency.getInstance(Locale.getDefault()));
+        }
+
+        @Override
+        public List<double[]> encode(Value<?> target, Value<?>... values) {
+            return encodeEquals(target, values);
+        }
+    },
+
+    LIST("list") {
+        @Override
+        public Value<?> drop(Value<?> value) {
+            return new Value<>(Collections.emptyList());
+        }
+
+        @Override
+        public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
+            List<?> copy;
+            if (value.getUnderlyingObject() instanceof List) {
+                List<?> list = (List<?>) value.getUnderlyingObject();
+                copy = new ArrayList<>(List.copyOf(list));
+                int[] indexesToBePerturbed = perturbationContext.getRandom().ints(0, copy.size()).distinct()
+                        .limit(perturbationContext.getNoOfPerturbations()).toArray();
+                for (int index : indexesToBePerturbed) {
+                    copy.remove(index);
+                }
+            } else {
+                copy = Collections.emptyList();
+            }
+            return new Value<>(copy);
         }
 
         @Override

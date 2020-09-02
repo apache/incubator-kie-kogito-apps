@@ -85,8 +85,17 @@ class ConversionUtilsTest {
         assertEquals(Type.TEXT, features.get(0).getType());
         assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
 
-        // TODO add collection support https://issues.redhat.com/browse/KOGITO-3194
-        assertNull(ConversionUtils.toFeature("name", new CollectionValue("list")));
+        List<TypedValue> values = List.of(new UnitValue("number", new DoubleNode(0d)),
+                                          new UnitValue("number", new DoubleNode(1d)));
+        Feature collectionFeature = ConversionUtils.toFeature("name", new CollectionValue("list", values));
+        assertNotNull(collectionFeature);
+        assertEquals("name", collectionFeature.getName());
+        assertEquals(Type.LIST, collectionFeature.getType());
+        assertTrue(collectionFeature.getValue().getUnderlyingObject() instanceof List);
+        @SuppressWarnings("unchecked")
+        List<Double> objects = (List<Double>) collectionFeature.getValue().getUnderlyingObject();
+        assertEquals(2, objects.size());
+
     }
 
     @Test
@@ -133,8 +142,9 @@ class ConversionUtilsTest {
         assertEquals(Type.TEXT, features.get(0).getType());
         assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
 
-        // TODO add collection support https://issues.redhat.com/browse/KOGITO-3194
-        assertNull(ConversionUtils.toOutput("name", new CollectionValue("list")));
+        List<TypedValue> values = List.of(new UnitValue("number", new DoubleNode(0d)),
+                                          new UnitValue("number", new DoubleNode(1d)));
+        assertNotNull(ConversionUtils.toOutput("name", new CollectionValue("list", values)));
     }
 
     @Test

@@ -92,6 +92,10 @@ public class FeatureFactory {
         return new Feature(name, Type.UNDEFINED, new Value<>(object));
     }
 
+    public static Feature newListFeature(String name, List<?> list) {
+        return new Feature(name, Type.LIST, new Value<>(list));
+    }
+
     public static Feature newCompositeFeature(String name, Map<String, Object> map) {
         List<Feature> features = new LinkedList<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {

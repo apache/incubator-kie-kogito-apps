@@ -16,7 +16,9 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,10 +30,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
+import org.kie.kogito.tracing.typedvalue.CollectionValue;
+import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
+import org.kie.kogito.tracing.typedvalue.UnitValue;
 
 public class ConversionUtils {
 
@@ -41,7 +47,7 @@ public class ConversionUtils {
 
     protected static Feature toFeature(String name, Object value) {
         if (value instanceof JsonObject) {
-            return new Feature(name, Type.COMPOSITE, new Value<>(toFeatureList((JsonObject) value)));
+            return FeatureFactory.newCompositeFeature(name, toFeatureList((JsonObject) value));
         }
         return toTypeValuePair(value)
                 .map(p -> new Feature(name, p.getLeft(), p.getRight()))
@@ -49,16 +55,41 @@ public class ConversionUtils {
     }
 
     public static Feature toFeature(String name, TypedValue value) {
-        // TODO: handle COLLECTION values https://issues.redhat.com/browse/KOGITO-3194
         if (value.isUnit()) {
             return toTypeValuePair(value.toUnit().getValue())
                     .map(p -> new Feature(name, p.getLeft(), p.getRight()))
                     .orElse(null);
         }
         if (value.isStructure()) {
-            return new Feature(name, Type.COMPOSITE, new Value<>(toFeatureList(value.toStructure().getValue())));
+            return FeatureFactory.newCompositeFeature(name, toFeatureList(value.toStructure().getValue()));
+        }
+        if (value.isCollection()) {
+            return FeatureFactory.newListFeature(name, toList(value.toCollection()));
         }
         return null;
+    }
+
+    private static List<Object> toList(CollectionValue collectionValue) {
+        Collection<TypedValue> values = collectionValue.getValue();
+        List<Object> list = new LinkedList<>();
+        for (TypedValue typedValue : values) {
+            if (typedValue.isUnit()) {
+                UnitValue unitValue = typedValue.toUnit();
+                JsonNode jsonNode = unitValue.getValue();
+                list.add(jsonNode);
+            } else if (typedValue.isStructure()) {
+                StructureValue structureValue = typedValue.toStructure();
+                Map<String, TypedValue> map = structureValue.getValue();
+                List<Feature> features = toFeatureList(map);
+                list.add(features);
+            } else if (typedValue.isCollection()) {
+                CollectionValue nestedCollectionValue = typedValue.toCollection();
+                List<Object> nested = toList(nestedCollectionValue);
+                list.add(nested);
+            }
+        }
+
+        return list;
     }
 
     public static List<Feature> toFeatureList(JsonObject mainObj) {
@@ -99,14 +130,14 @@ public class ConversionUtils {
     }
 
     public static Output toOutput(String name, TypedValue value) {
-        // TODO: handle COLLECTION values https://issues.redhat.com/browse/KOGITO-3194
         if (value.isUnit()) {
             return toTypeValuePair(value.toUnit().getValue())
                     .map(p -> new Output(name, p.getLeft(), p.getRight(), 1d))
                     .orElse(null);
-        }
-        if (value.isStructure()) {
+        } else if (value.isStructure()) {
             return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList(value.toStructure().getValue())), 1d);
+        } else if (value.isCollection()) {
+            return new Output(name, Type.LIST, new Value<>(toList(value.toCollection())), 1d);
         }
         return null;
     }
