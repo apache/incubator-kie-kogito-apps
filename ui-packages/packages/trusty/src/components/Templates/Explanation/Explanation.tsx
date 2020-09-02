@@ -54,9 +54,9 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
   const history = useHistory();
   const location = useLocation();
 
-  const handleModalToggle = useCallback(() => {
+  const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
-  }, []);
+  };
 
   const switchExplanation = useCallback(
     (selectedOutcomeId: string) => {
