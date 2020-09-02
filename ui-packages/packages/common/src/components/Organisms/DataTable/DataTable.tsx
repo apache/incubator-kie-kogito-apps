@@ -23,7 +23,7 @@ import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
 export interface DataTableColumn {
   path: string;
   label: string;
-  bodyCellTransformer?: (value: any, rowDataObj: object) => any;
+  bodyCellTransformer?: (value: any, rowDataObj?: any) => any;
   isSortable?: boolean;
 }
 interface IOwnProps {
