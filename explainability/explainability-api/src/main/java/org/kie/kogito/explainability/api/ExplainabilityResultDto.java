@@ -28,7 +28,7 @@ public class ExplainabilityResultDto {
     private String executionId;
 
     @JsonProperty("succeeded")
-    private Boolean succeeded;
+    private ExplainabilityStatus status;
 
     @JsonProperty("saliency")
     private Map<String, SaliencyDto> saliencies;
@@ -36,9 +36,9 @@ public class ExplainabilityResultDto {
     private ExplainabilityResultDto() {
     }
 
-    public ExplainabilityResultDto(String executionId, boolean succeeded, Map<String, SaliencyDto> saliencies) {
+    public ExplainabilityResultDto(String executionId, ExplainabilityStatus status, Map<String, SaliencyDto> saliencies) {
         this.executionId = executionId;
-        this.succeeded = succeeded;
+        this.status = status;
         this.saliencies = saliencies;
     }
 
@@ -46,8 +46,8 @@ public class ExplainabilityResultDto {
         return executionId;
     }
 
-    public Boolean getSucceeded() {
-        return succeeded;
+    public ExplainabilityStatus getStatus() {
+        return status;
     }
 
     public Map<String, SaliencyDto> getSaliencies() {

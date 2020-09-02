@@ -7,11 +7,11 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.responses.SaliencyResponse;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
@@ -111,7 +111,7 @@ class ExplainabilityApiV1IT {
     private static ExplainabilityResult buildValidExplainabilityResult() {
         return new ExplainabilityResult(
                 TEST_EXECUTION_ID,
-                ExplainabilityResultStatus.SUCCEEDED,
+                ExplainabilityStatus.SUCCEEDED,
                 List.of(
                         new Saliency("O1", "Output1", List.of(
                                 new FeatureImportance("Feature1", 0.49384),

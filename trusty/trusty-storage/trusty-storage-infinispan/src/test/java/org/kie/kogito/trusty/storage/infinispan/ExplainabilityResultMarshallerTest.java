@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.EnumTestField;
@@ -37,7 +37,7 @@ public class ExplainabilityResultMarshallerTest extends MarshallerTestTemplate<E
 
     private static final List<AbstractTestField<ExplainabilityResult, ?>> TEST_FIELD_LIST = List.of(
             new StringTestField<>(EXECUTION_ID_FIELD, "ID", ExplainabilityResult::getExecutionId, ExplainabilityResult::setExecutionId),
-            new EnumTestField<>(STATUS_FIELD, ExplainabilityResultStatus.SUCCEEDED, ExplainabilityResult::getStatus, ExplainabilityResult::setStatus, ExplainabilityResultStatus.class),
+            new EnumTestField<>(STATUS_FIELD, ExplainabilityStatus.SUCCEEDED, ExplainabilityResult::getStatus, ExplainabilityResult::setStatus, ExplainabilityStatus.class),
             new ListTestField<>(SALIENCIES_FIELD, Collections.emptyList(), ExplainabilityResult::getSaliencies, ExplainabilityResult::setSaliencies, Saliency.class)
     );
 

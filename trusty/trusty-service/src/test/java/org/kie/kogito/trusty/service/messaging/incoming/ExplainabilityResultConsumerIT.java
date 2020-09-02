@@ -26,6 +26,7 @@ import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
@@ -57,7 +58,7 @@ public class ExplainabilityResultConsumerIT {
 
         doNothing().when(trustyService).storeExplainabilityResult(eq(executionId), any(ExplainabilityResult.class));
 
-        kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId, true, Collections.emptyMap())),
+        kafkaClient.produce(buildCloudEventJsonString(new ExplainabilityResultDto(executionId, ExplainabilityStatus.SUCCEEDED, Collections.emptyMap())),
                 KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
 
         verify(trustyService, timeout(3000).times(1)).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));

@@ -39,7 +39,6 @@ import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.slf4j.Logger;
@@ -101,15 +100,11 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
                 ? Collections.emptyMap()
                 : decision.getOutcomes().stream().collect(Collectors.toUnmodifiableMap(DecisionOutcome::getOutcomeName, DecisionOutcome::getOutcomeId));
 
-        ExplainabilityResultStatus status = Boolean.TRUE.equals(dto.getSucceeded())
-                ? ExplainabilityResultStatus.SUCCEEDED
-                : ExplainabilityResultStatus.FAILED;
-
         List<Saliency> saliencies = dto.getSaliencies() == null ? null :
                 dto.getSaliencies().entrySet().stream()
                         .map(e -> saliencyFrom(outcomeNameToIdMap.get(e.getKey()), e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
-        return new ExplainabilityResult(dto.getExecutionId(), status, saliencies);
+        return new ExplainabilityResult(dto.getExecutionId(), dto.getStatus(), saliencies);
     }
 
     protected static FeatureImportance featureImportanceFrom(FeatureImportanceDto dto) {

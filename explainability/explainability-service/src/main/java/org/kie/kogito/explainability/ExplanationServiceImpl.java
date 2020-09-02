@@ -25,6 +25,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.explainability.local.LocalExplainer;
@@ -67,14 +68,14 @@ public class ExplanationServiceImpl implements ExplanationService {
                 .thenApply(input -> createResultDto(input, request.getExecutionId()))
                 .exceptionally(throwable -> {
                     LOG.error("Exception thrown during explainAsync", throwable);
-                    return new ExplainabilityResultDto(request.getExecutionId(), false, Collections.emptyMap());
+                    return new ExplainabilityResultDto(request.getExecutionId(), ExplainabilityStatus.FAILED, Collections.emptyMap());
                 });
     }
 
     protected static ExplainabilityResultDto createResultDto(Map<String, Saliency> saliencies, String executionId) {
         return new ExplainabilityResultDto(
                 executionId,
-                true,
+                ExplainabilityStatus.SUCCEEDED,
                 saliencies.entrySet().stream().collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()

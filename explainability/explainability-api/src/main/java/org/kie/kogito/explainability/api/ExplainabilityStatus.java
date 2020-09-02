@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-package org.kie.kogito.trusty.storage.api.model;
+package org.kie.kogito.explainability.api;
 
-public enum ExplainabilityResultStatus {
+public enum ExplainabilityStatus {
     SUCCEEDED,
     FAILED
 }

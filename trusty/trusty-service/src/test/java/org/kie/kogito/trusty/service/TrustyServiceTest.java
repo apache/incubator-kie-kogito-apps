@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
@@ -38,7 +39,6 @@ import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -297,7 +297,7 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultWhenStoreModelIsCalledThenNoExceptionsAreThrown() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityResultStatus.SUCCEEDED, Collections.emptyList());
+        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, Collections.emptyList());
         Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
 
         when(storageMock.put(eq(TEST_EXECUTION_ID), any(ExplainabilityResult.class))).thenReturn(result);
@@ -309,7 +309,7 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultWhenStoreModelIsCalledMoreThanOnceForSameModelThenExceptionIsThrown() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityResultStatus.SUCCEEDED, Collections.emptyList());
+        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, Collections.emptyList());
         Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
 
         when(storageMock.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
@@ -321,7 +321,7 @@ public class TrustyServiceTest {
 
     @Test
     void givenAnExplainabilityResultWhenAnExplainabilityResultIsStoredAndRetrievedByIdThenTheOriginalObjectIsReturned() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityResultStatus.SUCCEEDED, Collections.emptyList());
+        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, Collections.emptyList());
         Storage<String, ExplainabilityResult> storageMock = new StorageImplMock<>(String.class);
 
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);

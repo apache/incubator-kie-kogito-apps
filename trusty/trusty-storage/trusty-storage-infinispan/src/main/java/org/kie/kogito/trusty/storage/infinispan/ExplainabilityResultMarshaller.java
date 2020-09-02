@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResultStatus;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 
 public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<ExplainabilityResult> {
@@ -34,7 +34,7 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
     public ExplainabilityResult readFrom(ProtoStreamReader reader) throws IOException {
         return new ExplainabilityResult(
                 reader.readString(ExplainabilityResult.EXECUTION_ID_FIELD),
-                enumFromString(reader.readString(ExplainabilityResult.STATUS_FIELD), ExplainabilityResultStatus.class),
+                enumFromString(reader.readString(ExplainabilityResult.STATUS_FIELD), ExplainabilityStatus.class),
                 reader.readCollection(ExplainabilityResult.SALIENCIES_FIELD, new ArrayList<>(), Saliency.class)
         );
     }

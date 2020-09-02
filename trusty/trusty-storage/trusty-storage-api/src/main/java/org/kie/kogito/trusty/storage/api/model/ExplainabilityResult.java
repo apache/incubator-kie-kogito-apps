@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExplainabilityResult {
@@ -32,7 +33,7 @@ public class ExplainabilityResult {
     private String executionId;
 
     @JsonProperty(STATUS_FIELD)
-    private ExplainabilityResultStatus status;
+    private ExplainabilityStatus status;
 
     @JsonProperty(SALIENCIES_FIELD)
     private List<Saliency> saliencies;
@@ -40,7 +41,7 @@ public class ExplainabilityResult {
     public ExplainabilityResult() {
     }
 
-    public ExplainabilityResult(String executionId, ExplainabilityResultStatus status, List<Saliency> saliencies) {
+    public ExplainabilityResult(String executionId, ExplainabilityStatus status, List<Saliency> saliencies) {
         this.executionId = executionId;
         this.status = status;
         this.saliencies = saliencies;
@@ -54,11 +55,11 @@ public class ExplainabilityResult {
         this.executionId = executionId;
     }
 
-    public ExplainabilityResultStatus getStatus() {
+    public ExplainabilityStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ExplainabilityResultStatus status) {
+    public void setStatus(ExplainabilityStatus status) {
         this.status = status;
     }
 
