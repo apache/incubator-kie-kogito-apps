@@ -38,7 +38,7 @@ class ExplainabilityApiV1IT {
         mockServiceWithExplainabilityResult();
 
         SalienciesResponse response = given().filter(new ResponseLoggingFilter())
-                .when().get("/executions/decisions/" + TEST_EXECUTION_ID + "/saliencies")
+                .when().get("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/saliencies")
                 .as(SalienciesResponse.class);
 
         assertNotNull(response);
@@ -73,7 +73,7 @@ class ExplainabilityApiV1IT {
         mockServiceWithNullExplainabilityResult();
 
         given().filter(new ResponseLoggingFilter())
-                .when().get("/executions/decisions/" + TEST_EXECUTION_ID + "/saliencies")
+                .when().get("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/saliencies")
                 .then().statusCode(400);
     }
 
@@ -82,7 +82,7 @@ class ExplainabilityApiV1IT {
         mockServiceWithoutExplainabilityResult();
 
         given().filter(new ResponseLoggingFilter())
-                .when().get("/executions/decisions/" + TEST_EXECUTION_ID + "/saliencies")
+                .when().get("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/saliencies")
                 .then().statusCode(400);
     }
 

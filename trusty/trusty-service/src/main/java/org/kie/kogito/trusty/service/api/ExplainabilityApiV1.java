@@ -35,7 +35,7 @@ public class ExplainabilityApiV1 {
     TrustyService trustyService;
 
     @GET
-    @Path("/{executionId}/saliencies")
+    @Path("/{executionId}/explanations/saliencies")
     @APIResponses(value = {
             @APIResponse(description = "Gets the local explanation of a decision.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionStructuredInputsResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
