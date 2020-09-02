@@ -31,6 +31,7 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.EXECUTION_ID_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.SALIENCIES_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.STATUS_DETAILS_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.STATUS_FIELD;
 
 public class ExplainabilityResultMarshallerTest extends MarshallerTestTemplate<ExplainabilityResult> {
@@ -38,6 +39,7 @@ public class ExplainabilityResultMarshallerTest extends MarshallerTestTemplate<E
     private static final List<AbstractTestField<ExplainabilityResult, ?>> TEST_FIELD_LIST = List.of(
             new StringTestField<>(EXECUTION_ID_FIELD, "ID", ExplainabilityResult::getExecutionId, ExplainabilityResult::setExecutionId),
             new EnumTestField<>(STATUS_FIELD, ExplainabilityStatus.SUCCEEDED, ExplainabilityResult::getStatus, ExplainabilityResult::setStatus, ExplainabilityStatus.class),
+            new StringTestField<>(STATUS_DETAILS_FIELD, "status", ExplainabilityResult::getStatusDetails, ExplainabilityResult::setStatusDetails),
             new ListTestField<>(SALIENCIES_FIELD, Collections.emptyList(), ExplainabilityResult::getSaliencies, ExplainabilityResult::setSaliencies, Saliency.class)
     );
 

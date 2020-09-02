@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
@@ -56,7 +55,7 @@ public class ExplainabilityResultConsumerTest {
     private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_1 = new FeatureImportanceDto("feature1", 1d);
     private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_2 = new FeatureImportanceDto("feature2", 1d);
     private static final SaliencyDto TEST_SALIENCY_DTO = new SaliencyDto(asList(TEST_FEATURE_IMPORTANCE_DTO_1, TEST_FEATURE_IMPORTANCE_DTO_2));
-    private static final ExplainabilityResultDto TEST_RESULT_DTO = new ExplainabilityResultDto("executionId", ExplainabilityStatus.SUCCEEDED, singletonMap("saliency", TEST_SALIENCY_DTO));
+    private static final ExplainabilityResultDto TEST_RESULT_DTO = ExplainabilityResultDto.buildSucceeded("executionId", singletonMap("saliency", TEST_SALIENCY_DTO));
     private static final Decision TEST_DECISION = new Decision(
             TEST_EXECUTION_ID, null, null, true, null, null, null,
             List.of(
@@ -79,7 +78,7 @@ public class ExplainabilityResultConsumerTest {
 
     @Test
     void testCorrectCloudEvent() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, emptyMap())));
+        Message<String> message = mockMessage(buildCloudEventJsonString(ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, emptyMap())));
         doNothing().when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
 
         testNumberOfInvocations(message, 1);
@@ -93,7 +92,7 @@ public class ExplainabilityResultConsumerTest {
 
     @Test
     void testExceptionsAreCatched() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(new ExplainabilityResultDto(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, emptyMap())));
+        Message<String> message = mockMessage(buildCloudEventJsonString(ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, emptyMap())));
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));

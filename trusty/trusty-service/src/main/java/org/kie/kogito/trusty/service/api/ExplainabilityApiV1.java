@@ -73,6 +73,7 @@ public class ExplainabilityApiV1 {
         }
         return new SalienciesResponse(
                 model.getStatus().name(),
+                model.getStatusDetails(),
                 model.getSaliencies().stream()
                         .map(ExplainabilityApiV1::saliencyModelToResponse)
                         .filter(Objects::nonNull)

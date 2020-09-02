@@ -18,13 +18,11 @@ package org.kie.kogito.explainability;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.explainability.local.LocalExplainer;
@@ -32,8 +30,11 @@ import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.explainability.TestUtils.EXECUTION_ID;
 import static org.kie.kogito.explainability.TestUtils.FEATURE_IMPORTANCE_1;
@@ -57,19 +58,23 @@ class ExplanationServiceImplTest {
         localExplainerMock = mock(LocalExplainer.class);
         predictionProviderMock = mock(PredictionProvider.class);
         explanationService = new ExplanationServiceImpl(localExplainerMock);
-
-        when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock))).thenReturn(CompletableFuture.completedFuture(SALIENCY_MAP));
     }
 
     @Test
-    void explainAsync() throws InterruptedException, ExecutionException, TimeoutException {
-        CompletionStage<ExplainabilityResultDto> explainAsync = explanationService.explainAsync(REQUEST, predictionProviderMock);
+    void testExplainAsyncSucceeded() {
+        when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock)))
+                .thenReturn(CompletableFuture.completedFuture(SALIENCY_MAP));
 
-        ExplainabilityResultDto resultDto = explainAsync.toCompletableFuture()
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        ExplainabilityResultDto resultDto = assertDoesNotThrow(() ->
+                explanationService.explainAsync(REQUEST, predictionProviderMock)
+                        .toCompletableFuture()
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+        );
 
         assertNotNull(resultDto);
         assertEquals(EXECUTION_ID, resultDto.getExecutionId());
+        assertSame(ExplainabilityStatus.SUCCEEDED, resultDto.getStatus());
+        assertNull(resultDto.getStatusDetails());
         assertEquals(SALIENCY_MAP.size(), resultDto.getSaliencies().size());
         assertTrue(resultDto.getSaliencies().containsKey("key"));
 
@@ -79,5 +84,23 @@ class ExplanationServiceImplTest {
         FeatureImportanceDto featureImportanceDto1 = saliencyDto.getFeatureImportance().get(0);
         assertEquals(FEATURE_IMPORTANCE_1.getFeature().getName(), featureImportanceDto1.getFeatureName());
         assertEquals(FEATURE_IMPORTANCE_1.getScore(), featureImportanceDto1.getScore(), 0.01);
+    }
+
+    @Test
+    void testExplainAsyncFailed() {
+        when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock)))
+                .thenThrow(RuntimeException.class);
+
+        ExplainabilityResultDto resultDto = assertDoesNotThrow(() ->
+                explanationService.explainAsync(REQUEST, predictionProviderMock)
+                        .toCompletableFuture()
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+        );
+
+        assertNotNull(resultDto);
+        assertEquals(EXECUTION_ID, resultDto.getExecutionId());
+        assertSame(ExplainabilityStatus.FAILED, resultDto.getStatus());
+        assertNotNull(resultDto.getStatusDetails());
+        assertNull(resultDto.getSaliencies());
     }
 }

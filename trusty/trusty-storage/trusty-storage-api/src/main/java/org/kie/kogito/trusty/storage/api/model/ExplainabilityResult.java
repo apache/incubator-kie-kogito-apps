@@ -27,6 +27,7 @@ public class ExplainabilityResult {
 
     public static final String EXECUTION_ID_FIELD = "executionId";
     public static final String STATUS_FIELD = "status";
+    public static final String STATUS_DETAILS_FIELD = "statusDetails";
     public static final String SALIENCIES_FIELD = "saliencies";
 
     @JsonProperty(EXECUTION_ID_FIELD)
@@ -35,15 +36,19 @@ public class ExplainabilityResult {
     @JsonProperty(STATUS_FIELD)
     private ExplainabilityStatus status;
 
+    @JsonProperty(STATUS_DETAILS_FIELD)
+    private String statusDetails;
+
     @JsonProperty(SALIENCIES_FIELD)
     private List<Saliency> saliencies;
 
     public ExplainabilityResult() {
     }
 
-    public ExplainabilityResult(String executionId, ExplainabilityStatus status, List<Saliency> saliencies) {
+    public ExplainabilityResult(String executionId, ExplainabilityStatus status, String statusDetails, List<Saliency> saliencies) {
         this.executionId = executionId;
         this.status = status;
+        this.statusDetails = statusDetails;
         this.saliencies = saliencies;
     }
 
@@ -61,6 +66,14 @@ public class ExplainabilityResult {
 
     public void setStatus(ExplainabilityStatus status) {
         this.status = status;
+    }
+
+    public String getStatusDetails() {
+        return statusDetails;
+    }
+
+    public void setStatusDetails(String statusDetails) {
+        this.statusDetails = statusDetails;
     }
 
     public List<Saliency> getSaliencies() {

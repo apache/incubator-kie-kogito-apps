@@ -106,7 +106,10 @@ message ExplainabilityResult {
     optional string status = 2;
 
     /* @Field(store = Store.YES) */
-    repeated Saliency saliencies = 3;
+    optional string statusDetails = 3;
+
+    /* @Field(store = Store.YES) */
+    repeated Saliency saliencies = 4;
 }
 
 /* @Indexed */

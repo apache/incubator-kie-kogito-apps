@@ -28,7 +28,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.messaging.ExplainabilityMessagingHandler;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -89,7 +88,7 @@ public class ExplainabilityMessagingHandlerTest {
     }
 
     private ExplainabilityResultDto mockExplainabilityResultDto() {
-        return new ExplainabilityResultDto(UUID.randomUUID().toString(), ExplainabilityStatus.SUCCEEDED, Collections.emptyMap());
+        return ExplainabilityResultDto.buildSucceeded(UUID.randomUUID().toString(), Collections.emptyMap());
     }
 
     private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) throws InterruptedException, ExecutionException, TimeoutException {

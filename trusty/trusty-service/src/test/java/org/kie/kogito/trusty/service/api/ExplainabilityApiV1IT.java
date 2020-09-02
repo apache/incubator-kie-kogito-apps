@@ -112,6 +112,7 @@ class ExplainabilityApiV1IT {
         return new ExplainabilityResult(
                 TEST_EXECUTION_ID,
                 ExplainabilityStatus.SUCCEEDED,
+                null,
                 List.of(
                         new Saliency("O1", "Output1", List.of(
                                 new FeatureImportance("Feature1", 0.49384),

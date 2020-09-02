@@ -16,8 +16,8 @@
 
 package org.kie.kogito.explainability;
 
-import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
@@ -25,7 +25,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.explainability.local.LocalExplainer;
@@ -63,19 +62,18 @@ public class ExplanationServiceImpl implements ExplanationService {
                 request.getExecutionId(),
                 request.getModelIdentifier().getResourceType(),
                 request.getModelIdentifier().getResourceId());
-        Prediction prediction = getPrediction(request.getInputs(), request.getOutputs());
-        return localExplainer.explainAsync(prediction, predictionProvider)
+        return CompletableFuture.supplyAsync(() -> getPrediction(request.getInputs(), request.getOutputs()))
+                .thenCompose(prediction -> localExplainer.explainAsync(prediction, predictionProvider))
                 .thenApply(input -> createResultDto(input, request.getExecutionId()))
                 .exceptionally(throwable -> {
                     LOG.error("Exception thrown during explainAsync", throwable);
-                    return new ExplainabilityResultDto(request.getExecutionId(), ExplainabilityStatus.FAILED, Collections.emptyMap());
+                    return ExplainabilityResultDto.buildFailed(request.getExecutionId(), "Failed to calculate values");
                 });
     }
 
     protected static ExplainabilityResultDto createResultDto(Map<String, Saliency> saliencies, String executionId) {
-        return new ExplainabilityResultDto(
+        return ExplainabilityResultDto.buildSucceeded(
                 executionId,
-                ExplainabilityStatus.SUCCEEDED,
                 saliencies.entrySet().stream().collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()

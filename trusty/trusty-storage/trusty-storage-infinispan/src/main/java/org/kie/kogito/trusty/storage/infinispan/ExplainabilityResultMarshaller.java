@@ -35,6 +35,7 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
         return new ExplainabilityResult(
                 reader.readString(ExplainabilityResult.EXECUTION_ID_FIELD),
                 enumFromString(reader.readString(ExplainabilityResult.STATUS_FIELD), ExplainabilityStatus.class),
+                reader.readString(ExplainabilityResult.STATUS_DETAILS_FIELD),
                 reader.readCollection(ExplainabilityResult.SALIENCIES_FIELD, new ArrayList<>(), Saliency.class)
         );
     }
@@ -43,6 +44,7 @@ public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<Expl
     public void writeTo(ProtoStreamWriter writer, ExplainabilityResult input) throws IOException {
         writer.writeString(ExplainabilityResult.EXECUTION_ID_FIELD, input.getExecutionId());
         writer.writeString(ExplainabilityResult.STATUS_FIELD, stringFromEnum(input.getStatus()));
+        writer.writeString(ExplainabilityResult.STATUS_DETAILS_FIELD, input.getStatusDetails());
         writer.writeCollection(ExplainabilityResult.SALIENCIES_FIELD, input.getSaliencies(), Saliency.class);
     }
 

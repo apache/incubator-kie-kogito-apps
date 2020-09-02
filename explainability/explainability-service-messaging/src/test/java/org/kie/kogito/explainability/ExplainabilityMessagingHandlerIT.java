@@ -32,7 +32,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
@@ -74,7 +73,7 @@ public class ExplainabilityMessagingHandlerIT {
         ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
 
         ExplainabilityRequestDto request = new ExplainabilityRequestDto(executionId, serviceUrl, modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap());
-        when(explanationService.explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class))).thenReturn(CompletableFuture.completedFuture(new ExplainabilityResultDto(executionId, ExplainabilityStatus.SUCCEEDED, Collections.emptyMap())));
+        when(explanationService.explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class))).thenReturn(CompletableFuture.completedFuture(ExplainabilityResultDto.buildSucceeded(executionId, Collections.emptyMap())));
 
         kafkaClient.produce(ExplainabilityCloudEventBuilder.buildCloudEventJsonString(request), TOPIC_REQUEST);
 

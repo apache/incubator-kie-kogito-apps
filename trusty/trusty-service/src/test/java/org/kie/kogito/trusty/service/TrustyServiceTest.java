@@ -297,7 +297,7 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultWhenStoreModelIsCalledThenNoExceptionsAreThrown() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, Collections.emptyList());
+        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
         Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
 
         when(storageMock.put(eq(TEST_EXECUTION_ID), any(ExplainabilityResult.class))).thenReturn(result);
@@ -309,7 +309,7 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultWhenStoreModelIsCalledMoreThanOnceForSameModelThenExceptionIsThrown() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, Collections.emptyList());
+        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
         Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
 
         when(storageMock.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
@@ -321,7 +321,7 @@ public class TrustyServiceTest {
 
     @Test
     void givenAnExplainabilityResultWhenAnExplainabilityResultIsStoredAndRetrievedByIdThenTheOriginalObjectIsReturned() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, Collections.emptyList());
+        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
         Storage<String, ExplainabilityResult> storageMock = new StorageImplMock<>(String.class);
 
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);

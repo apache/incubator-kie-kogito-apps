@@ -104,7 +104,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
                 dto.getSaliencies().entrySet().stream()
                         .map(e -> saliencyFrom(outcomeNameToIdMap.get(e.getKey()), e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
-        return new ExplainabilityResult(dto.getExecutionId(), dto.getStatus(), saliencies);
+        return new ExplainabilityResult(dto.getExecutionId(), dto.getStatus(), dto.getStatusDetails(), saliencies);
     }
 
     protected static FeatureImportance featureImportanceFrom(FeatureImportanceDto dto) {
