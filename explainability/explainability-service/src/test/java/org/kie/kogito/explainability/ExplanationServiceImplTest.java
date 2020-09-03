@@ -36,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.explainability.ExplanationServiceImpl.FAILED_STATUS_DETAILS;
 import static org.kie.kogito.explainability.TestUtils.EXECUTION_ID;
 import static org.kie.kogito.explainability.TestUtils.FEATURE_IMPORTANCE_1;
 import static org.kie.kogito.explainability.TestUtils.REQUEST;
@@ -100,7 +101,7 @@ class ExplanationServiceImplTest {
         assertNotNull(resultDto);
         assertEquals(EXECUTION_ID, resultDto.getExecutionId());
         assertSame(ExplainabilityStatus.FAILED, resultDto.getStatus());
-        assertNotNull(resultDto.getStatusDetails());
+        assertEquals(FAILED_STATUS_DETAILS, resultDto.getStatusDetails());
         assertNull(resultDto.getSaliencies());
     }
 }

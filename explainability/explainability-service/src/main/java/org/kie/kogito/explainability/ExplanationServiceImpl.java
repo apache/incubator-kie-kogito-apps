@@ -44,13 +44,14 @@ import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 @ApplicationScoped
 public class ExplanationServiceImpl implements ExplanationService {
 
+    static final String FAILED_STATUS_DETAILS = "Failed to calculate values";
+
     private static final Logger LOG = LoggerFactory.getLogger(ExplanationServiceImpl.class);
 
     private final LocalExplainer<Map<String, Saliency>> localExplainer;
 
     @Inject
-    public ExplanationServiceImpl(
-        LocalExplainer<Map<String, Saliency>> localExplainer) {
+    public ExplanationServiceImpl(LocalExplainer<Map<String, Saliency>> localExplainer) {
         this.localExplainer = localExplainer;
     }
 
@@ -62,16 +63,16 @@ public class ExplanationServiceImpl implements ExplanationService {
                 request.getExecutionId(),
                 request.getModelIdentifier().getResourceType(),
                 request.getModelIdentifier().getResourceId());
-        return CompletableFuture.supplyAsync(() -> getPrediction(request.getInputs(), request.getOutputs()))
-                .thenCompose(prediction -> localExplainer.explainAsync(prediction, predictionProvider))
-                .thenApply(input -> createResultDto(input, request.getExecutionId()))
-                .exceptionally(throwable -> {
-                    LOG.error("Exception thrown during explainAsync", throwable);
-                    return ExplainabilityResultDto.buildFailed(request.getExecutionId(), "Failed to calculate values");
-                });
+        try {
+            return localExplainer.explainAsync(getPrediction(request.getInputs(), request.getOutputs()), predictionProvider)
+                    .thenApply(input -> createSucceededResultDto(request.getExecutionId(), input))
+                    .exceptionally(e -> createFailedResultDto(request.getExecutionId(), e));
+        } catch (Exception e) {
+            return CompletableFuture.completedFuture(createFailedResultDto(request.getExecutionId(), e));
+        }
     }
 
-    protected static ExplainabilityResultDto createResultDto(Map<String, Saliency> saliencies, String executionId) {
+    private static ExplainabilityResultDto createSucceededResultDto(String executionId, Map<String, Saliency> saliencies) {
         return ExplainabilityResultDto.buildSucceeded(
                 executionId,
                 saliencies.entrySet().stream().collect(Collectors.toMap(
@@ -84,17 +85,22 @@ public class ExplanationServiceImpl implements ExplanationService {
         );
     }
 
-    protected static Prediction getPrediction(Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
+    private static ExplainabilityResultDto createFailedResultDto(String executionId, Throwable throwable) {
+        LOG.error("Exception thrown during explainAsync", throwable);
+        return ExplainabilityResultDto.buildFailed(executionId, FAILED_STATUS_DETAILS);
+    }
+
+    private static Prediction getPrediction(Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         PredictionInput input = getPredictionInput(inputs);
         PredictionOutput output = getPredictionOutput(outputs);
         return new Prediction(input, output);
     }
 
-    protected static PredictionInput getPredictionInput(Map<String, TypedValue> inputs) {
+    private static PredictionInput getPredictionInput(Map<String, TypedValue> inputs) {
         return new PredictionInput(toFeatureList(inputs));
     }
 
-    protected static PredictionOutput getPredictionOutput(Map<String, TypedValue> outputs) {
+    private static PredictionOutput getPredictionOutput(Map<String, TypedValue> outputs) {
         return new PredictionOutput(toOutputList(outputs));
     }
 }
