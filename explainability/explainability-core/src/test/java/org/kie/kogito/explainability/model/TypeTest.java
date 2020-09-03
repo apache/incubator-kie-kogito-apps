@@ -144,21 +144,6 @@ class TypeTest {
         assertNotEquals(value, perturbedValue);
     }
 
-    @Test
-    void testPerturbListFeature() {
-        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 2);
-        List<Double> list = new LinkedList<>();
-        list.add(1d);
-        list.add(2d);
-        list.add(3d);
-        list.add(4d);
-        Feature feature = FeatureFactory.newListFeature("name", list);
-        Value<?> value = feature.getValue();
-        Value<?> perturbedValue = feature.getType().perturb(value, perturbationContext);
-        assertNotNull(perturbedValue);
-        assertNotEquals(value, perturbedValue);
-    }
-
     @ParameterizedTest
     @EnumSource
     void testDrop(Type type) {

@@ -59,36 +59,23 @@ public class ConversionUtils {
             return toTypeValuePair(value.toUnit().getValue())
                     .map(p -> new Feature(name, p.getLeft(), p.getRight()))
                     .orElse(null);
-        }
-        if (value.isStructure()) {
+        } else if (value.isStructure()) {
             return FeatureFactory.newCompositeFeature(name, toFeatureList(value.toStructure().getValue()));
+        } else if (value.isCollection()) {
+            return FeatureFactory.newCompositeFeature(name, toFeatureList(name, value.toCollection()));
+        } else {
+            throw new RuntimeException(String.format("unexpected value kind %s", value.getKind()));
         }
-        if (value.isCollection()) {
-            return FeatureFactory.newListFeature(name, toList(value.toCollection()));
-        }
-        return null;
     }
 
-    private static List<Object> toList(CollectionValue collectionValue) {
+    protected static List<Feature> toFeatureList(String name, CollectionValue collectionValue) {
         Collection<TypedValue> values = collectionValue.getValue();
-        List<Object> list = new LinkedList<>();
+        List<Feature> list = new LinkedList<>();
+        int index = 0;
         for (TypedValue typedValue : values) {
-            if (typedValue.isUnit()) {
-                UnitValue unitValue = typedValue.toUnit();
-                JsonNode jsonNode = unitValue.getValue();
-                list.add(jsonNode);
-            } else if (typedValue.isStructure()) {
-                StructureValue structureValue = typedValue.toStructure();
-                Map<String, TypedValue> map = structureValue.getValue();
-                List<Feature> features = toFeatureList(map);
-                list.add(features);
-            } else if (typedValue.isCollection()) {
-                CollectionValue nestedCollectionValue = typedValue.toCollection();
-                List<Object> nested = toList(nestedCollectionValue);
-                list.add(nested);
-            }
+            list.add(toFeature(name + "_" + index, typedValue));
+            index++;
         }
-
         return list;
     }
 
@@ -137,7 +124,7 @@ public class ConversionUtils {
         } else if (value.isStructure()) {
             return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList(value.toStructure().getValue())), 1d);
         } else if (value.isCollection()) {
-            return new Output(name, Type.LIST, new Value<>(toList(value.toCollection())), 1d);
+            return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList(name, value.toCollection())), 1d);
         }
         return null;
     }
