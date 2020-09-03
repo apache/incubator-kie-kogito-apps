@@ -1,9 +1,6 @@
 import { ChannelType } from '@kogito-tooling/channel-common-api';
 import { EditorEnvelopeLocator } from '@kogito-tooling/editor/dist/api';
-import {
-  EmbeddedViewer,
-  File
-} from '@kogito-tooling/editor/dist/embedded';
+import { EmbeddedViewer, File } from '@kogito-tooling/editor/dist/embedded';
 import React from 'react';
 import { ModelData } from '../../../types';
 
@@ -20,7 +17,13 @@ const ModelDiagram = (props: ModelDiagramProps) => {
   const editorEnvelopeLocator: EditorEnvelopeLocator = {
     targetOrigin: window.location.origin,
     mapping: new Map([
-      ["dmn", { resourcesPathPrefix: "../gwt-editors/dmn", envelopePath: "/envelope/envelope.html" }]
+      [
+        'dmn',
+        {
+          resourcesPathPrefix: '../gwt-editors/dmn',
+          envelopePath: '/envelope/envelope.html'
+        }
+      ]
     ])
   };
 
@@ -41,7 +44,7 @@ function makeDMNEditor(
 ): JSX.Element {
   const file: File = {
     fileName: model.name,
-    fileExtension: "dmn",
+    fileExtension: 'dmn',
     getFileContents: () => Promise.resolve(model.model),
     isReadOnly: true
   };
