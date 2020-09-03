@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 
 public class ExplainabilityResultMarshaller extends AbstractModelMarshaller<ExplainabilityResult> {

@@ -28,7 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.trusty.service.messaging.outgoing.ExplainabilityRequestProducer;
@@ -39,6 +38,7 @@ import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

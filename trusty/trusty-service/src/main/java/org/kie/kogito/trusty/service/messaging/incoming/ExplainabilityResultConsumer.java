@@ -39,6 +39,7 @@ import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.slf4j.Logger;
@@ -104,7 +105,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
                 dto.getSaliencies().entrySet().stream()
                         .map(e -> saliencyFrom(outcomeNameToIdMap.get(e.getKey()), e.getKey(), e.getValue()))
                         .collect(Collectors.toList());
-        return new ExplainabilityResult(dto.getExecutionId(), dto.getStatus(), dto.getStatusDetails(), saliencies);
+        return new ExplainabilityResult(dto.getExecutionId(), statusFrom(dto.getStatus()), dto.getStatusDetails(), saliencies);
     }
 
     protected static FeatureImportance featureImportanceFrom(FeatureImportanceDto dto) {
@@ -123,5 +124,15 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
                         .map(ExplainabilityResultConsumer::featureImportanceFrom)
                         .collect(Collectors.toList());
         return new Saliency(outcomeId, outcomeName, featureImportance);
+    }
+
+    protected static ExplainabilityStatus statusFrom(org.kie.kogito.explainability.api.ExplainabilityStatus status) {
+        switch (status) {
+            case SUCCEEDED:
+                return ExplainabilityStatus.SUCCEEDED;
+            case FAILED:
+                return ExplainabilityStatus.FAILED;
+        }
+        return null;
     }
 }

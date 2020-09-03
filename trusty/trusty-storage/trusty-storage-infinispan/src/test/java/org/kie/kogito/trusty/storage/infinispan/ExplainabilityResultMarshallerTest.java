@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
-import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.EnumTestField;
