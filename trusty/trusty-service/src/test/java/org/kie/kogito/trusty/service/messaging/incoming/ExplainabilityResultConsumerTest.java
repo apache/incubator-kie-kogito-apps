@@ -18,6 +18,8 @@ package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import io.cloudevents.v1.CloudEventImpl;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -35,10 +37,15 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
+import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -47,25 +54,31 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-// TODO: improve this test with decision values
-public class ExplainabilityResultConsumerTest {
+class ExplainabilityResultConsumerTest {
 
     private static final String TEST_EXECUTION_ID = "test";
+    private static final String TEST_FEATURE_1_ID = "f1-id";
+    private static final String TEST_FEATURE_1_NAME = "feature1";
+    private static final String TEST_FEATURE_2_ID = "f2-id";
+    private static final String TEST_FEATURE_2_NAME = "feature2";
+    private static final String TEST_OUTCOME_1_ID = "o1-id";
+    private static final String TEST_OUTCOME_1_NAME = "outcome1";
 
-    private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_1 = new FeatureImportanceDto("feature1", 1d);
-    private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_2 = new FeatureImportanceDto("feature2", 1d);
-    private static final SaliencyDto TEST_SALIENCY_DTO = new SaliencyDto(asList(TEST_FEATURE_IMPORTANCE_DTO_1, TEST_FEATURE_IMPORTANCE_DTO_2));
-    private static final ExplainabilityResultDto TEST_RESULT_DTO = ExplainabilityResultDto.buildSucceeded("executionId", singletonMap("saliency", TEST_SALIENCY_DTO));
     private static final Decision TEST_DECISION = new Decision(
             TEST_EXECUTION_ID, null, null, true, null, null, null,
             List.of(
-                    new DecisionInput("F1-ID", TEST_FEATURE_IMPORTANCE_DTO_1.getFeatureName(), null),
-                    new DecisionInput("F2-ID", TEST_FEATURE_IMPORTANCE_DTO_2.getFeatureName(), null)
+                    new DecisionInput(TEST_FEATURE_1_ID, TEST_FEATURE_1_NAME, null),
+                    new DecisionInput(TEST_FEATURE_2_ID, TEST_FEATURE_2_NAME, null)
             ),
             List.of(
-                    new DecisionOutcome("O1-ID", "saliency", null, null, null, null)
+                    new DecisionOutcome(TEST_OUTCOME_1_ID, TEST_OUTCOME_1_NAME, null, null, null, null)
             )
     );
+
+    private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_1 = new FeatureImportanceDto(TEST_FEATURE_1_NAME, 1d);
+    private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_2 = new FeatureImportanceDto(TEST_FEATURE_2_NAME, -1d);
+    private static final SaliencyDto TEST_SALIENCY_DTO = new SaliencyDto(asList(TEST_FEATURE_IMPORTANCE_DTO_1, TEST_FEATURE_IMPORTANCE_DTO_2));
+    private static final ExplainabilityResultDto TEST_RESULT_DTO = ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, singletonMap(TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO));
 
     private TrustyService trustyService;
     private ExplainabilityResultConsumer consumer;
@@ -98,43 +111,82 @@ public class ExplainabilityResultConsumerTest {
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
     }
 
-    @Test
-    public void explainabilityResultFrom() {
-        Assertions.assertNull(ExplainabilityResultConsumer.explainabilityResultFrom(null, null));
+    private void testExplainabilityResultFromWith(Decision decision, String expectedOutcomeId) {
+        ExplainabilityResult explainabilityResult = ExplainabilityResultConsumer.explainabilityResultFrom(TEST_RESULT_DTO, decision);
+        assertNotNull(explainabilityResult);
+        assertEquals(TEST_RESULT_DTO.getExecutionId(), explainabilityResult.getExecutionId());
+        assertNotNull(TEST_RESULT_DTO.getSaliencies());
+        assertEquals(TEST_RESULT_DTO.getSaliencies().size(), explainabilityResult.getSaliencies().size());
 
-        ExplainabilityResult explainabilityResult = ExplainabilityResultConsumer.explainabilityResultFrom(TEST_RESULT_DTO, TEST_DECISION);
+        Optional<Saliency> optSaliency = explainabilityResult.getSaliencies().stream()
+                .filter(s -> s.getOutcomeName().equals(TEST_OUTCOME_1_NAME))
+                .findFirst();
 
-        Assertions.assertNotNull(explainabilityResult);
-        Assertions.assertEquals(TEST_RESULT_DTO.getExecutionId(), explainabilityResult.getExecutionId());
-        Assertions.assertEquals(TEST_RESULT_DTO.getSaliencies().size(), explainabilityResult.getSaliencies().size());
-        Assertions.assertTrue(TEST_RESULT_DTO.getSaliencies().containsKey("saliency"));
-        // Assertions.assertEquals(TEST_RESULT_DTO.getSaliencies().get("saliency").getFeatureImportance().size(),
-        // explainabilityResult.getSaliencies().get("saliency").getFeatureImportance().size());
+        assertFalse(optSaliency.isEmpty());
+
+        Saliency saliency = optSaliency.get();
+        assertEquals(expectedOutcomeId, saliency.getOutcomeId());
+        assertNotNull(saliency.getFeatureImportance());
+        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().size(), saliency.getFeatureImportance().size());
+
+        List<FeatureImportance> featureImportances = saliency.getFeatureImportance().stream()
+                .sorted(ExplainabilityResultConsumerTest::compareFeatureImportance)
+                .collect(Collectors.toList());
+
+        FeatureImportanceDto expected0 = TEST_SALIENCY_DTO.getFeatureImportance().get(0);
+        FeatureImportance actual0 = featureImportances.get(0);
+        assertEquals(expected0.getFeatureName(), actual0.getFeatureName());
+        assertEquals(expected0.getScore(), actual0.getScore());
+
+        FeatureImportanceDto expected1 = TEST_SALIENCY_DTO.getFeatureImportance().get(1);
+        FeatureImportance actual1 = featureImportances.get(1);
+        assertEquals(expected1.getFeatureName(), actual1.getFeatureName());
+        assertEquals(expected1.getScore(), actual1.getScore());
     }
 
     @Test
-    public void featureImportanceFrom() {
-        Assertions.assertNull(ExplainabilityResultConsumer.featureImportanceFrom(null));
+    void testExplainabilityResultFromWithValidParams() {
+        testExplainabilityResultFromWith(TEST_DECISION, TEST_OUTCOME_1_ID);
+    }
 
+    @Test
+    void testExplainabilityResultFromWithNullDecision() {
+        testExplainabilityResultFromWith(null, null);
+    }
+
+    @Test
+    void testExplainabilityResultFromWithNullDto() {
+        assertNull(ExplainabilityResultConsumer.explainabilityResultFrom(null, null));
+    }
+
+    @Test
+    void testFeatureImportanceFromWithValidParams() {
         FeatureImportance featureImportance = ExplainabilityResultConsumer.featureImportanceFrom(TEST_FEATURE_IMPORTANCE_DTO_1);
-
-        Assertions.assertNotNull(featureImportance);
-        Assertions.assertEquals(TEST_FEATURE_IMPORTANCE_DTO_1.getFeatureName(), featureImportance.getFeatureName());
-        Assertions.assertEquals(TEST_FEATURE_IMPORTANCE_DTO_1.getScore(), featureImportance.getScore());
+        assertNotNull(featureImportance);
+        assertEquals(TEST_FEATURE_IMPORTANCE_DTO_1.getFeatureName(), featureImportance.getFeatureName());
+        assertEquals(TEST_FEATURE_IMPORTANCE_DTO_1.getScore(), featureImportance.getScore());
     }
 
     @Test
-    public void saliencyFrom() {
-        Assertions.assertNull(ExplainabilityResultConsumer.saliencyFrom(null, null, null));
+    void testFeatureImportanceFromWithNullDto() {
+        assertNull(ExplainabilityResultConsumer.featureImportanceFrom(null));
+    }
 
-        Saliency saliency = ExplainabilityResultConsumer.saliencyFrom("O1-ID", "saliency", TEST_SALIENCY_DTO);
+    @Test
+    void testSaliencyFromWithValidParams() {
+        Saliency saliency = ExplainabilityResultConsumer.saliencyFrom(TEST_OUTCOME_1_ID, TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO);
 
-        Assertions.assertNotNull(saliency);
-        Assertions.assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().size(), saliency.getFeatureImportance().size());
-        Assertions.assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getFeatureName(),
+        assertNotNull(saliency);
+        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().size(), saliency.getFeatureImportance().size());
+        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getFeatureName(),
                 saliency.getFeatureImportance().get(0).getFeatureName());
-        Assertions.assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getScore(),
+        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getScore(),
                 saliency.getFeatureImportance().get(0).getScore(), 0.1);
+    }
+
+    @Test
+    void testSaliencyFromWithNullDto() {
+        assertNull(ExplainabilityResultConsumer.saliencyFrom(null, null, null));
     }
 
     private Message<String> mockMessage(String payload) {
@@ -160,5 +212,11 @@ public class ExplainabilityResultConsumerTest {
 
     public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
         return CloudEventUtils.encode(buildExplainabilityCloudEvent(resultDto));
+    }
+
+    private static int compareFeatureImportance(FeatureImportance expected, FeatureImportance actual) {
+        return new CompareToBuilder()
+                .append(expected.getFeatureName(), actual.getFeatureName())
+                .toComparison();
     }
 }

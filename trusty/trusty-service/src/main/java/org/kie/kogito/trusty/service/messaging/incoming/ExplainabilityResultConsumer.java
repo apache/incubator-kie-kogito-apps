@@ -87,7 +87,11 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
 
         ExplainabilityResultDto explainabilityResult = optData.get();
         String executionId = explainabilityResult.getExecutionId();
+
         Decision decision = service.getDecisionById(executionId);
+        if (decision == null) {
+            LOGGER.warn("Can't find decision related to explainability result (executionId={})", executionId);
+        }
 
         service.storeExplainabilityResult(executionId, explainabilityResultFrom(explainabilityResult, decision));
     }
