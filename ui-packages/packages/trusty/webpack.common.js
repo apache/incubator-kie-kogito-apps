@@ -15,8 +15,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src', 'index.html'),
-      favicon: 'src/favicon.ico',
-      chunks: ['app']
+      favicon: 'src/favicon.ico'
     }),
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',
