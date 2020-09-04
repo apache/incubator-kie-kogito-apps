@@ -149,7 +149,8 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         return model.predictAsync(perturbedInputs)
                 .thenCompose(predictionOutputs -> {
                     try {
-                        List<LimeInputs> limeInputsList = getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs, predictionOutputs, noOfRetries == 0);
+                        boolean strict = noOfRetries > 0;
+                        List<LimeInputs> limeInputsList = getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs, predictionOutputs, strict);
                         return completedFuture(getSaliencies(targetInput, linearizedTargetInputFeatures, actualOutputs, limeInputsList));
                     } catch (DatasetNotSeparableException e) {
                         if (noOfRetries > 0) {
@@ -160,10 +161,21 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 });
     }
 
+    /**
+     * Obtain the inputs to the LIME algorithm, for each output in the original prediction.
+     *
+     * @param linearizedTargetInputFeatures the linarized features
+     * @param actualOutputs the list of outputs to generate the explanations for
+     * @param perturbedInputs the list of perturbed inputs
+     * @param predictionOutputs the list of outputs associated to each perturbed input
+     * @param strict whether accepting unique values for a given output in the {@code perturbedOutputs}
+     * @return a list of inputs to the LIME algorithm
+     */
     private List<LimeInputs> getLimeInputs(List<Feature> linearizedTargetInputFeatures,
                                            List<Output> actualOutputs,
                                            List<PredictionInput> perturbedInputs,
-                                           List<PredictionOutput> predictionOutputs, boolean strict) {
+                                           List<PredictionOutput> predictionOutputs,
+                                           boolean strict) {
         List<LimeInputs> limeInputsList = new LinkedList<>();
         for (int o = 0; o < actualOutputs.size(); o++) {
             Output currentOutput = actualOutputs.get(o);
@@ -213,9 +225,11 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     }
 
     /**
-     * Perturb the inputs so that the perturbed dataset contains more than just one output class, otherwise
-     * it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
+     * Check the perturbed inputs so that the dataset of perturbed input / outputs contains more than just one output
+     * class, otherwise it would be impossible to linearly separate it, and hence learn meaningful weights to be used as
      * feature importance scores.
+     * The check can be {@code strict} or not, if so it will throw a {@code DatasetNotSeparableException} when the dataset
+     * for a given output is not separable.
      */
     private LimeInputs prepareInputs(List<PredictionInput> perturbedInputs,
                                      List<PredictionOutput> perturbedOutputs,
