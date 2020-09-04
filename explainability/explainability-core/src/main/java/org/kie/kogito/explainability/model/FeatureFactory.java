@@ -21,7 +21,9 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -131,11 +133,25 @@ public class FeatureFactory {
         } else if (value instanceof Feature) {
             feature = (Feature) value;
         } else if (value instanceof List) {
-            try {
-                List<Feature> featureList = (List<Feature>) value;
-                feature = newCompositeFeature(featureName, featureList);
-            } catch (ClassCastException cce) {
-                feature = newObjectFeature(featureName, value);
+            List<?> items = (List<?>) value;
+            if (!items.isEmpty()) {
+                if (items.get(0) instanceof Feature) {
+                    feature = newCompositeFeature(featureName, (List<Feature>) items);
+                } else {
+                    Map<String, Object> map = new HashMap<>();
+                    int index = 0;
+                    for (Object o : (List<?>) value) {
+                        map.put(featureName + "_" + index, o);
+                        index++;
+                    }
+                    List<Feature> fs = new ArrayList<>(map.size());
+                    for (Map.Entry<String, Object> e : map.entrySet()) {
+                        parseFeatureValue(fs, e);
+                    }
+                    feature = newCompositeFeature(featureName, fs);
+                }
+            } else {
+                feature = newCompositeFeature(featureName, Collections.emptyList());
             }
         } else {
             feature = newObjectFeature(featureName, value);
