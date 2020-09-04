@@ -33,19 +33,21 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
+import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Generates the partial dependence plot for a given feature.
+ * Generates the partial dependence plot for the features of a {@link PredictionProvider}.
+ * This currently only works with models that work on {@code Feature}s of {@code Type.Number}.
  * While a strict PD implementation would need the whole training set used to train the model, this implementation seeks
  * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
  * stdDev).
  * <p>
  * see also https://christophm.github.io/interpretable-ml-book/pdp.html
  */
-public class PartialDependencePlotExplainer implements GlobalExplainer<Collection<PartialDependenceGraph>> {
+public class PartialDependencePlotExplainer implements GlobalExplainer<List<PartialDependenceGraph>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
     private static final int DEFAULT_SERIES_LENGTH = 100;
@@ -74,19 +76,21 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
     }
 
     @Override
-    public Collection<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws InterruptedException, ExecutionException, TimeoutException {
+    public List<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws InterruptedException, ExecutionException, TimeoutException {
         long start = System.currentTimeMillis();
 
-        Collection<PartialDependenceGraph> pdps = new LinkedList<>();
+        List<PartialDependenceGraph> pdps = new LinkedList<>();
         DataDistribution dataDistribution = metadata.getDataDistribution();
         int noOfFeatures = metadata.getInputShape().getFeatures().size();
 
         List<FeatureDistribution> featureDistributions = dataDistribution.getFeatureDistributions();
         for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
             for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
+                // generate samples for the feature under analysis
                 double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
                                                                      featureDistributions.get(featureIndex).getMax(), seriesLength);
 
+                // generate data distributions for all features
                 double[][] trainingData = new double[noOfFeatures][seriesLength];
                 for (int i = 0; i < noOfFeatures; i++) {
                     double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
@@ -98,9 +102,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                 double[] marginalImpacts = new double[featureXSvalues.length];
                 for (int i = 0; i < featureXSvalues.length; i++) {
                     List<PredictionInput> predictionInputs = new LinkedList<>();
-                    double xs = featureXSvalues[i];
                     double[] inputs = new double[noOfFeatures];
-                    inputs[featureIndex] = xs;
+                    inputs[featureIndex] = featureXSvalues[i];
                     for (int j = 0; j < seriesLength; j++) {
                         for (int f = 0; f < noOfFeatures; f++) {
                             if (f != featureIndex) {
@@ -121,7 +124,12 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<Collectio
                     // prediction requests are batched per value of feature 'Xs' under analysis
                     for (PredictionOutput predictionOutput : predictionOutputs) {
                         Output output = predictionOutput.getOutputs().get(outputIndex);
-                        marginalImpacts[i] += output.getScore() / (double) seriesLength;
+                        // use numerical output when possible, otherwise only use the score
+                        double v = output.getValue().asNumber();
+                        if (Double.isNaN(v)) {
+                            v = output.getScore();
+                        }
+                        marginalImpacts[i] += v / (double) seriesLength;
                     }
                 }
                 PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),

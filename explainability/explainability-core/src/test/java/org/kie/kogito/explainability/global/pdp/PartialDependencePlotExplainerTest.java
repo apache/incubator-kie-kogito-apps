@@ -33,7 +33,7 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
 
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,8 +41,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PartialDependencePlotExplainerTest {
 
@@ -50,34 +53,51 @@ class PartialDependencePlotExplainerTest {
     PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
         @Override
         public DataDistribution getDataDistribution() {
-            return DataUtils.generateRandomDataDistribution(10, 100, new FakeRandom());
+            return DataUtils.generateRandomDataDistribution(3, 100, new FakeRandom());
         }
 
         @Override
         public PredictionInput getInputShape() {
             List<Feature> features = new LinkedList<>();
-            features.add(FeatureFactory.newTextFeature("text", ""));
+            features.add(FeatureFactory.newNumericalFeature("f0", 0));
+            features.add(FeatureFactory.newNumericalFeature("f1", 0));
+            features.add(FeatureFactory.newNumericalFeature("f2", 0));
             return new PredictionInput(features);
         }
 
         @Override
         public PredictionOutput getOutputShape() {
             List<Output> outputs = new LinkedList<>();
-            outputs.add(new Output("spam", Type.BOOLEAN, new Value<>(null), 0d));
+            outputs.add(new Output("spam", Type.BOOLEAN, new Value<>(false), 0d));
             return new PredictionOutput(outputs);
         }
     };
 
     @Test
     void testPdpTextClassifier() throws Exception {
-        PredictionProvider modelInfo = TestUtils.getDummyTextClassifier();
-        Collection<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo, metadata);
+        PredictionProvider modelInfo = TestUtils.getSumSkipModel(0);
+        List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo, metadata);
         assertNotNull(pdps);
         for (PartialDependenceGraph pdp : pdps) {
             assertNotNull(pdp.getFeature());
             assertNotNull(pdp.getX());
             assertNotNull(pdp.getY());
             assertEquals(pdp.getX().length, pdp.getY().length);
+            assertGraph(pdp);
+        }
+        // the first feature is always skipped by the model, so the predictions are not affected, hence PDP Y values are constant
+        PartialDependenceGraph fixedFeatureGraph = pdps.get(0);
+        assertEquals(Arrays.stream(fixedFeatureGraph.getY()).distinct().count(), 1);
+
+        // the other two instead change but in the same way, due the behaviour of FakeRandom in generating data/distributions
+        assertArrayEquals(pdps.get(1).getY(), pdps.get(2).getY());
+    }
+
+    private void assertGraph(PartialDependenceGraph pdp) {
+        for (int i = 1; i < pdp.getX().length; i++) {
+            assertNotEquals(Double.NaN, pdp.getX()[i]);
+            assertNotEquals(Double.NaN, pdp.getY()[i]);
+            assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
         }
     }
 
@@ -97,7 +117,7 @@ class PartialDependencePlotExplainerTest {
                 });
 
         Assertions.assertThrows(TimeoutException.class,
-                () -> partialDependencePlotProvider.explain(brokenProvider, metadata));
+                                () -> partialDependencePlotProvider.explain(brokenProvider, metadata));
 
         Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
         Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);

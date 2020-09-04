@@ -66,13 +66,13 @@ public class DataUtils {
         double d = getStdDev(data, m);
 
         // force desired standard deviation
-        double d1 = stdDeviation / d;
+        double d1 = d != 0 ? stdDeviation / d : stdDeviation; // avoid division by zero
         for (int i = 0; i < size; i++) {
             data[i] *= d1;
         }
 
         // get the new mean
-        double m1 = m * stdDeviation / d;
+        double m1 = d != 0 ? m * stdDeviation / d : m * stdDeviation; // avoid division by zero
 
         // force desired mean
         for (int i = 0; i < size; i++) {
