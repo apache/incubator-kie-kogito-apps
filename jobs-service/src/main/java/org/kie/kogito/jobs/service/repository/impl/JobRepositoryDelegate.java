@@ -26,6 +26,7 @@ import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import io.quarkus.arc.DefaultBean;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -36,7 +37,7 @@ import org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Default
+@DefaultBean
 @ApplicationScoped
 public class JobRepositoryDelegate implements ReactiveJobRepository {
 
@@ -51,7 +52,8 @@ public class JobRepositoryDelegate implements ReactiveJobRepository {
     public JobRepositoryDelegate(@Any Instance<ReactiveJobRepository> instances,
                                  @ConfigProperty(name = InfinispanConfiguration.PERSISTENCE_CONFIG_KEY)
                                          Optional<String> persistence) {
-        delegate = instances.select(new Repository.Literal(persistence.orElse("in-memory"))).get();
+        delegate = instances.select(BaseReactiveJobRepository.class,
+                                    new Repository.Literal(persistence.orElse("in-memory"))).get();
         LOGGER.info("JobRepository selected {}", delegate.getClass());
     }
 
