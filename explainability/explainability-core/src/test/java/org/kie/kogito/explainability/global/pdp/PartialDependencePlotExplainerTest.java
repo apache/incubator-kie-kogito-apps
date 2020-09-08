@@ -74,7 +74,7 @@ class PartialDependencePlotExplainerTest {
     };
 
     @Test
-    void testPdpTextClassifier() throws Exception {
+    void testPdpNumericClassifier() throws Exception {
         PredictionProvider modelInfo = TestUtils.getSumSkipModel(0);
         List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo, metadata);
         assertNotNull(pdps);
@@ -94,10 +94,11 @@ class PartialDependencePlotExplainerTest {
     }
 
     private void assertGraph(PartialDependenceGraph pdp) {
-        for (int i = 1; i < pdp.getX().length; i++) {
-            assertNotEquals(Double.NaN, pdp.getX()[i]);
+        for (int i = 0; i < pdp.getX().length; i++) {
             assertNotEquals(Double.NaN, pdp.getY()[i]);
-            assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
+            if (i > 0) {
+                assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
+            }
         }
     }
 

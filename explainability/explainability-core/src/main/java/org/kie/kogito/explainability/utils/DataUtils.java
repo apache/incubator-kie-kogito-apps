@@ -72,7 +72,7 @@ public class DataUtils {
         }
 
         // get the new mean
-        double m1 = d != 0 ? m * stdDeviation / d : m * stdDeviation; // avoid division by zero
+        double m1 = d != 0 ? m * stdDeviation / d : m * stdDeviation;
 
         // force desired mean
         for (int i = 0; i < size; i++) {
