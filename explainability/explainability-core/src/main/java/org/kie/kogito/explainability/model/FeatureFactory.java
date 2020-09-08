@@ -28,6 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Factory class for {@link Feature}s
@@ -97,7 +99,7 @@ public class FeatureFactory {
     public static Feature newCompositeFeature(String name, Map<String, Object> map) {
         List<Feature> features = new LinkedList<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
-            parseFeatureValue(features, entry);
+            features.add(parseFeatureValue(entry.getKey(), entry.getValue()));
         }
         return newCompositeFeature(name, features);
     }
@@ -106,57 +108,47 @@ public class FeatureFactory {
         return new Feature(name, Type.COMPOSITE, new Value<>(features));
     }
 
-    private static void parseFeatureValue(List<Feature> features, Map.Entry<String, Object> entry) {
-        Object value = entry.getValue();
-        String featureName = entry.getKey();
-        Feature feature;
+    private static Feature parseFeatureValue(String featureName, Object value) {
         if (value instanceof Map) {
-            feature = newCompositeFeature(featureName, (Map<String, Object>) value);
+            return newCompositeFeature(featureName, (Map<String, Object>) value);
         } else if (value instanceof double[]) {
-            feature = newVectorFeature(featureName, (double[]) value);
+            return newVectorFeature(featureName, (double[]) value);
         } else if (value instanceof LocalTime) {
-            feature = newTimeFeature(featureName, (LocalTime) value);
+            return newTimeFeature(featureName, (LocalTime) value);
         } else if (value instanceof Duration) {
-            feature = newDurationFeature(featureName, (Duration) value);
+            return newDurationFeature(featureName, (Duration) value);
         } else if (value instanceof URI) {
-            feature = newURIFeature(featureName, (URI) value);
+            return newURIFeature(featureName, (URI) value);
         } else if (value instanceof ByteBuffer) {
-            feature = newBinaryFeature(featureName, (ByteBuffer) value);
+            return newBinaryFeature(featureName, (ByteBuffer) value);
         } else if (value instanceof Currency) {
-            feature = newCurrencyFeature(featureName, (Currency) value);
+            return newCurrencyFeature(featureName, (Currency) value);
         } else if (value instanceof Boolean) {
-            feature = newBooleanFeature(featureName, (Boolean) value);
+            return newBooleanFeature(featureName, (Boolean) value);
         } else if (value instanceof Number) {
-            feature = newNumericalFeature(featureName, (Number) value);
+            return newNumericalFeature(featureName, (Number) value);
         } else if (value instanceof String) {
-            feature = newTextFeature(featureName, (String) value);
+            return newTextFeature(featureName, (String) value);
         } else if (value instanceof Feature) {
-            feature = (Feature) value;
+            return (Feature) value;
         } else if (value instanceof List) {
             List<?> items = (List<?>) value;
             if (!items.isEmpty()) {
                 if (items.get(0) instanceof Feature) {
-                    feature = newCompositeFeature(featureName, (List<Feature>) items);
+                    return newCompositeFeature(featureName, (List<Feature>) items);
                 } else {
-                    Map<String, Object> map = new HashMap<>();
-                    int index = 0;
-                    for (Object o : (List<?>) value) {
-                        map.put(featureName + "_" + index, o);
-                        index++;
-                    }
-                    List<Feature> fs = new ArrayList<>(map.size());
-                    for (Map.Entry<String, Object> e : map.entrySet()) {
-                        parseFeatureValue(fs, e);
-                    }
-                    feature = newCompositeFeature(featureName, fs);
+                    List<?> values = (List<?>) value;
+                    List<Feature> fs = IntStream.range(0, values.size())
+                            .mapToObj(i -> parseFeatureValue(featureName + "_" + i, values.get(i)))
+                            .collect(Collectors.toList());
+                    return newCompositeFeature(featureName, fs);
                 }
             } else {
-                feature = newCompositeFeature(featureName, Collections.emptyList());
+                return newCompositeFeature(featureName, Collections.emptyList());
             }
         } else {
-            feature = newObjectFeature(featureName, value);
+            return newObjectFeature(featureName, value);
         }
-        features.add(feature);
     }
 
     /**

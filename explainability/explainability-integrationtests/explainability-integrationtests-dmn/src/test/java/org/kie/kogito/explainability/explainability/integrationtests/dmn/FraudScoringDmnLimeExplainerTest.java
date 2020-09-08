@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNRuntime;
@@ -81,7 +80,6 @@ class FraudScoringDmnLimeExplainerTest {
         LimeExplainer limeExplainer = new LimeExplainer(5000, 1);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        System.out.println(saliencyMap);
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);
