@@ -16,9 +16,9 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -35,9 +35,7 @@ import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
-import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
-import org.kie.kogito.tracing.typedvalue.UnitValue;
 
 public class ConversionUtils {
 
@@ -70,7 +68,7 @@ public class ConversionUtils {
 
     protected static List<Feature> toFeatureList(String name, CollectionValue collectionValue) {
         Collection<TypedValue> values = collectionValue.getValue();
-        List<Feature> list = new LinkedList<>();
+        List<Feature> list = new ArrayList<>(values.size());
         int index = 0;
         for (TypedValue typedValue : values) {
             list.add(toFeature(name + "_" + index, typedValue));

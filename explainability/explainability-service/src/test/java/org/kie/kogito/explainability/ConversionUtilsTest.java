@@ -136,9 +136,9 @@ class ConversionUtilsTest {
         assertEquals(Type.COMPOSITE, collectionFeature.getType());
         assertTrue(collectionFeature.getValue().getUnderlyingObject() instanceof List);
         @SuppressWarnings("unchecked")
-        List<Feature> objects = (List<Feature>) collectionFeature.getValue().getUnderlyingObject();
-        assertEquals(2, objects.size());
-        for (Feature f : objects) {
+        List<Feature> deepFeatures = (List<Feature>) collectionFeature.getValue().getUnderlyingObject();
+        assertEquals(2, deepFeatures.size());
+        for (Feature f : deepFeatures) {
             assertNotNull(f);
             assertNotNull(f.getName());
             assertNotNull(f.getType());
