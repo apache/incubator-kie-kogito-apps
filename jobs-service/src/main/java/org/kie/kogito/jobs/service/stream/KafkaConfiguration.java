@@ -42,20 +42,28 @@ import static org.kie.kogito.jobs.service.stream.KafkaJobStreams.PUBLISH_EVENTS_
 @ApplicationScoped
 public class KafkaConfiguration {
 
-    @Inject
-    @Named("default-kafka-broker")
-    Instance<Map<String, Object>> defaultKafkaConfiguration;
+    private Instance<Map<String, Object>> defaultKafkaConfiguration;
 
-    @Inject
-    Vertx vertx;
+    private Vertx vertx;
 
-    @ConfigProperty(name = PUBLISH_EVENTS_CONFIG_KEY)
-    Optional<Boolean> enabled;
+    private Optional<Boolean> enabled;
 
-    @ConfigProperty(name = "kogito.jobs-events-topic")
-    String topic;
+    private String topic;
+
+    private KafkaAdminClient adminClient;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConfiguration.class);
+
+    @Inject
+    public KafkaConfiguration(@Named("default-kafka-broker") Instance<Map<String, Object>> defaultKafkaConfiguration,
+                              Vertx vertx,
+                              @ConfigProperty(name = PUBLISH_EVENTS_CONFIG_KEY) Optional<Boolean> enabled,
+                              @ConfigProperty(name = "kogito.jobs-events-topic") String topic) {
+        this.defaultKafkaConfiguration = defaultKafkaConfiguration;
+        this.vertx = vertx;
+        this.enabled = enabled;
+        this.topic = topic;
+    }
 
     /**
      * Verify if the needed Kafka topics used by the application already exists, in case they are not found create
@@ -67,7 +75,8 @@ public class KafkaConfiguration {
         LOGGER.info("Kafka topic configuration check.");
         final Map<String, String> config = defaultKafkaConfiguration.get().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, el -> (String) el.getValue()));
-        enabled.map(e -> KafkaAdminClient.create(vertx, config))
+        enabled.filter(Boolean.TRUE::equals)
+                .map(e -> getOrCreateClient(config))
                 .ifPresent(client -> client.listTopics()
                         .subscribe()
                         .with(t -> Optional.ofNullable(t.contains(topic))
@@ -75,5 +84,15 @@ public class KafkaConfiguration {
                                 .ifPresent(newTopic -> client.createTopics(Arrays.asList(newTopic))
                                         .subscribe()
                                         .with(r -> LOGGER.info("Created topic {}", topic)))));
+    }
+
+    private KafkaAdminClient getOrCreateClient(Map<String, String> config) {
+        adminClient = Optional.ofNullable(adminClient)
+                .orElseGet(() -> KafkaAdminClient.create(vertx, config));
+        return adminClient;
+    }
+
+    protected KafkaAdminClient getAdminClient() {
+        return adminClient;
     }
 }

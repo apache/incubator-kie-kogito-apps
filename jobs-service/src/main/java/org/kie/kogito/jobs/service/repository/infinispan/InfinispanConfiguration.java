@@ -48,12 +48,11 @@ public class InfinispanConfiguration {
 
     @Produces
     @Readiness
-    public HealthCheck infinispanHealthCheck(@ConfigProperty(name = PERSISTENCE_CONFIG_KEY)
-                                                     Optional<String> persistence,
+    public HealthCheck infinispanHealthCheck(@ConfigProperty(name = PERSISTENCE_CONFIG_KEY) Optional<String> persistence,
                                              Instance<RemoteCacheManager> cacheManagerInstance) {
         return persistence
                 .filter("infinispan"::equals)
                 .<HealthCheck>map(p -> new InfinispanHealthCheck(cacheManagerInstance))
-                .orElseGet(() -> () -> HealthCheckResponse.up("Default persistence"));
+                .orElse(() -> HealthCheckResponse.up("In Memory Persistence"));
     }
 }

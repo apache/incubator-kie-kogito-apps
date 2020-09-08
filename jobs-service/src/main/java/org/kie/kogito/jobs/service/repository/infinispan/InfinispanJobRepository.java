@@ -22,7 +22,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import io.vertx.core.Vertx;
