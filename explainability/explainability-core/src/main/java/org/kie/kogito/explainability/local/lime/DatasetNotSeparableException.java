@@ -23,9 +23,9 @@ import org.kie.kogito.explainability.model.Output;
 /**
  * Exception thrown when a dataset encoded for LIME is not (linearly) separable.
  */
-class DatasetNotSeparableException extends LocalExplanationException {
+public class DatasetNotSeparableException extends LocalExplanationException {
 
-    DatasetNotSeparableException(Output output, Map<Double, Long> classBalance) {
+    public DatasetNotSeparableException(Output output, Map<Double, Long> classBalance) {
         super("LIME dataset not separable for output '" + output.getName() + "' of type '" + output.getType() + "' with '"
                       + output.getValue() + "' (" + classBalance + ")");
     }

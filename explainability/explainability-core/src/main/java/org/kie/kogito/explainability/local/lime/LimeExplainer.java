@@ -260,7 +260,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             } else {
                 LOGGER.warn("Using an hardly separable dataset for output '{}' of type '{}' with value '{}' ({})",
                             currentOutput.getName(), currentOutput.getType(), currentOutput.getValue(), rawClassesBalance);
-                return new LimeInputs(rawClassesBalance.size() == 2, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
+                return new LimeInputs(classification, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
             }
         } else {
             return new LimeInputs(false, linearizedTargetInputFeatures, currentOutput, emptyList(), emptyList());
