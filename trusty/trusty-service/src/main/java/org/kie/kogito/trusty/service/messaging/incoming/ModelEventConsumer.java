@@ -16,15 +16,13 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import java.util.Optional;
+import java.io.IOException;
 import java.util.concurrent.CompletionStage;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.cloudevents.v1.AttributesImpl;
-import io.cloudevents.v1.CloudEventImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelType;
@@ -35,12 +33,12 @@ import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 @ApplicationScoped
 public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
 
-    private static final TypeReference<CloudEventImpl<ModelEvent>> CLOUD_EVENT_TYPE_REF = new TypeReference<>() {
-    };
-
     private  ModelEventConsumer() {
         //CDI proxy
     }
+
+    @Inject
+    ObjectMapper mapper;
 
     @Inject
     public ModelEventConsumer(final TrustyService service) {
@@ -54,25 +52,22 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     }
 
     @Override
-    protected TypeReference<CloudEventImpl<ModelEvent>> getCloudEventType() {
-        return CLOUD_EVENT_TYPE_REF;
-    }
-
-    @Override
-    protected void handleCloudEvent(final CloudEventImpl<ModelEvent> cloudEvent) {
-        final AttributesImpl attributes = cloudEvent.getAttributes();
-        final Optional<ModelEvent> optData = cloudEvent.getData();
-
-        if (!optData.isPresent()) {
-            LOG.error("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
+    protected void handleCloudEvent(final CloudEvent cloudEvent) {
+        final ModelEvent modelEvent;
+        try {
+            modelEvent = mapper.readValue(cloudEvent.getData(), ModelEvent.class);
+        } catch (IOException e) {
+            LOG.error("Unable to deserialize CloudEvent data as ModelEvent", e);
+            return;
+        }
+        if (modelEvent == null) {
+            LOG.error("Received CloudEvent with id {} from {} with empty data", cloudEvent.getId(), cloudEvent.getSource());
             return;
         }
 
-        LOG.debug("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
+        LOG.debug("Received CloudEvent with id {} from {}", cloudEvent.getId(), cloudEvent.getSource());
 
-        final ModelEvent modelEvent = optData.get();
         final DecisionModelType modelEventType = modelEvent.getType();
-
         if (modelEventType == DecisionModelType.DMN) {
             service.storeModel(modelEvent.getGav().getGroupId(),
                                modelEvent.getGav().getArtifactId(),

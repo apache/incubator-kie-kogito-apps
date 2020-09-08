@@ -16,19 +16,17 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.cloudevents.v1.AttributesImpl;
-import io.cloudevents.v1.CloudEventImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
@@ -50,12 +48,12 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
 
-    private static final TypeReference<CloudEventImpl<ExplainabilityResultDto>> CLOUD_EVENT_TYPE = new TypeReference<>() {
-    };
-
     private ExplainabilityResultConsumer() {
         //CDI proxy
     }
+
+    @Inject
+    ObjectMapper mapper;
 
     @Inject
     public ExplainabilityResultConsumer(TrustyService service) {
@@ -69,23 +67,21 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
     }
 
     @Override
-    protected TypeReference<CloudEventImpl<ExplainabilityResultDto>> getCloudEventType() {
-        return CLOUD_EVENT_TYPE;
-    }
-
-    @Override
-    protected void handleCloudEvent(CloudEventImpl<ExplainabilityResultDto> cloudEvent) {
-        AttributesImpl attributes = cloudEvent.getAttributes();
-        Optional<ExplainabilityResultDto> optData = cloudEvent.getData();
-
-        if (!optData.isPresent()) {
-            LOGGER.error("Received CloudEvent with id {} from {} with empty data", attributes.getId(), attributes.getSource());
+    protected void handleCloudEvent(CloudEvent cloudEvent) {
+        final ExplainabilityResultDto explainabilityResult;
+        try {
+            explainabilityResult = mapper.readValue(cloudEvent.getData(), ExplainabilityResultDto.class);
+        } catch (IOException e) {
+            LOG.error("Unable to deserialize CloudEvent data as ExplainabilityResultDto", e);
+            return;
+        }
+        if (explainabilityResult == null) {
+            LOGGER.error("Received CloudEvent with id {} from {} with empty data", cloudEvent.getId(), cloudEvent.getSource());
             return;
         }
 
-        LOGGER.info("Received CloudEvent with id {} from {}", attributes.getId(), attributes.getSource());
+        LOGGER.info("Received CloudEvent with id {} from {}", cloudEvent.getId(), cloudEvent.getSource());
 
-        ExplainabilityResultDto explainabilityResult = optData.get();
         String executionId = explainabilityResult.getExecutionId();
 
         Decision decision = getDecisionById(executionId);

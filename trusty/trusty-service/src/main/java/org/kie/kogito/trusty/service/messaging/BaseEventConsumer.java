@@ -19,8 +19,7 @@ package org.kie.kogito.trusty.service.messaging;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.cloudevents.v1.CloudEventImpl;
+import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.kie.kogito.trusty.service.TrustyService;
@@ -50,16 +49,14 @@ public abstract class BaseEventConsumer<E> {
         return message.ack();
     }
 
-    protected Optional<CloudEventImpl<E>> decodeCloudEvent(final String payload) {
+    protected Optional<CloudEvent> decodeCloudEvent(final String payload) {
         try {
-            return Optional.of(CloudEventUtils.decode(payload, getCloudEventType()));
+            return Optional.of(CloudEventUtils.decode(payload));
         } catch (IllegalStateException e) {
             LOG.error(String.format("Can't decode message to CloudEvent: %s", payload), e);
             return Optional.empty();
         }
     }
 
-    protected abstract TypeReference<CloudEventImpl<E>> getCloudEventType();
-
-    protected abstract void handleCloudEvent(final CloudEventImpl<E> cloudEvent);
+    protected abstract void handleCloudEvent(final CloudEvent cloudEvent);
 }
