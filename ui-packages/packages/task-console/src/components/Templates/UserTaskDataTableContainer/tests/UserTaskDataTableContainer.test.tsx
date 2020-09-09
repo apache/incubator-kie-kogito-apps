@@ -1,6 +1,11 @@
 import React from 'react';
 import UserTaskDataTableContainer from '../UserTaskDataTableContainer';
-import { getWrapperAsync, GraphQL, DataTable } from '@kogito-apps/common';
+import {
+  getWrapperAsync,
+  GraphQL,
+  DataTable,
+  KogitoSpinner
+} from '@kogito-apps/common';
 import { MemoryRouter as Router } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import { act } from 'react-dom/test-utils';
@@ -132,14 +137,15 @@ describe('UserTaskDataTableContainer component tests', () => {
       'UserTaskDataTableContainer'
     );
 
-    act(() => {
+    await act(async () => {
       wrapper
         .find(DataTable)
         .props()
         .onSorting(1, 'desc');
     });
 
-    expect(wrapper).toMatchSnapshot();
+    wrapper.update();
+
     expect(GraphQL.useGetUserTasksByStatesQuery).toBeCalled();
   });
 });
