@@ -23,8 +23,9 @@ import {
 import _ from 'lodash';
 import { getWrapper, GraphQL } from '@kogito-apps/common';
 import TaskState from '../TaskState';
-import UserTaskInstance = GraphQL.UserTaskInstance;
 import { Label } from '@patternfly/react-core';
+import { TaskStateType } from '../../../../util/Variants';
+import UserTaskInstance = GraphQL.UserTaskInstance;
 
 const userTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -122,7 +123,7 @@ describe('TaskState', () => {
 
   it('Test show active task in label', () => {
     const wrapper = getWrapper(
-      <TaskState task={userTask} variant={'label'} />,
+      <TaskState task={userTask} variant={TaskStateType.LABEL} />,
       'TaskState'
     );
 
@@ -139,7 +140,7 @@ describe('TaskState', () => {
     task.state = 'Aborted';
 
     const wrapper = getWrapper(
-      <TaskState task={task} variant={'label'} />,
+      <TaskState task={task} variant={TaskStateType.LABEL} />,
       'TaskState'
     );
 
@@ -161,7 +162,7 @@ describe('TaskState', () => {
     task.completed = true;
 
     const wrapper = getWrapper(
-      <TaskState task={task} variant={'label'} />,
+      <TaskState task={task} variant={TaskStateType.LABEL} />,
       'TaskState'
     );
 

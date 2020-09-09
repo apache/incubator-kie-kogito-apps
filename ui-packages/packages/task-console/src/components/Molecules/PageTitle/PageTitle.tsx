@@ -4,7 +4,7 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/common';
 
 export interface IOwnProps {
   title: any;
-  extra?: any;
+  extra?: JSX.Element;
 }
 
 const PageTitle: React.FC<IOwnProps & OUIAProps> = ({
@@ -15,13 +15,9 @@ const PageTitle: React.FC<IOwnProps & OUIAProps> = ({
 }) => {
   return (
     <React.Fragment>
-      <Flex>
+      <Flex {...componentOuiaProps(ouiaId, 'page-title', ouiaSafe)}>
         <FlexItem spacer={{ default: 'spacerSm' }}>
-          <Title
-            headingLevel="h1"
-            size="4xl"
-            {...componentOuiaProps(ouiaId, 'page-title', ouiaSafe)}
-          >
+          <Title headingLevel="h1" size="4xl">
             {title}
           </Title>
         </FlexItem>

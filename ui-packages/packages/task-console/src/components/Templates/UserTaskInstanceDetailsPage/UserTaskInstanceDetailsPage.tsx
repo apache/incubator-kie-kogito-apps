@@ -8,8 +8,8 @@ import {
   Grid,
   GridItem,
   PageSection,
-  TextVariants,
-  Text
+  Text,
+  TextVariants
 } from '@patternfly/react-core';
 import {
   componentOuiaProps,
@@ -22,10 +22,11 @@ import {
 import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
-import UserTaskInstance = GraphQL.UserTaskInstance;
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import TaskState from '../../Atoms/TaskState/TaskState';
 import TaskForm from '../../Organisms/TaskForm/TaskForm';
+import { TaskStateType } from '../../../util/Variants';
+import UserTaskInstance = GraphQL.UserTaskInstance;
 
 interface MatchProps {
   taskId: string;
@@ -39,10 +40,7 @@ const UserTaskInstanceDetailsPage: React.FC<RouteComponentProps<
   OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
   const id = props.match.params.taskId;
 
-  const [userTask, setUserTask]: [
-    UserTaskInstance,
-    (UserTaskInstance) => void
-  ] = useState();
+  const [userTask, setUserTask] = useState<UserTaskInstance>();
 
   const context: IContext<UserTaskInstance> = useContext(TaskConsoleContext);
 
@@ -85,7 +83,7 @@ const UserTaskInstanceDetailsPage: React.FC<RouteComponentProps<
 
           <PageTitle
             title={userTask.referenceName}
-            extra={<TaskState task={userTask} variant={'label'} />}
+            extra={<TaskState task={userTask} variant={TaskStateType.LABEL} />}
           />
 
           <Text component={TextVariants.small}>ID: {userTask.id}</Text>

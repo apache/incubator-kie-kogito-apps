@@ -29,6 +29,8 @@ exports[`FormNotification test Notification with custom action test 1`] = `
         </AlertActionLink>
       </React.Fragment>
     }
+    data-ouia-component-type="form-notification-alert"
+    data-ouia-safe={true}
     isInline={true}
     title="The form has been submitted"
     variant="success"
@@ -193,6 +195,8 @@ exports[`FormNotification test Notification with details test 1`] = `
         </AlertActionLink>
       </React.Fragment>
     }
+    data-ouia-component-type="form-notification-alert"
+    data-ouia-safe={true}
     isInline={true}
     title="The form has been submitted"
     variant="danger"
@@ -357,6 +361,8 @@ exports[`FormNotification test Notification with details test 2`] = `
         </AlertActionLink>
       </React.Fragment>
     }
+    data-ouia-component-type="form-notification-alert"
+    data-ouia-safe={true}
     isInline={true}
     title="The form has been submitted"
     variant="danger"
@@ -512,6 +518,8 @@ exports[`FormNotification test Simple notification test 1`] = `
       />
     }
     actionLinks={<React.Fragment />}
+    data-ouia-component-type="form-notification-alert"
+    data-ouia-safe={true}
     isInline={true}
     title="The form has been submitted"
     variant="success"

@@ -276,7 +276,7 @@ describe('TaskForm Test', () => {
     const requestURL = requestParams[0];
 
     expect(requestURL).not.toBe(task.endpoint + '/schema');
-    expect(requestURL).toEqual(getTaskSchemaEndPoint(task));
+    expect(requestURL).toEqual(getTaskSchemaEndPoint(task, testUser));
   });
 
   it('Test submit close notification', async () => {

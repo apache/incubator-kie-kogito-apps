@@ -24,21 +24,17 @@ import {
   CheckCircleIcon,
   OnRunningIcon
 } from '@patternfly/react-icons';
-
-enum Variant {
-  INLINE = 'inline',
-  LABEL = 'label'
-}
+import { TaskStateType } from '../../../util/Variants';
 
 interface IOwnProps {
   task: UserTaskInstance;
-  variant?: 'inline' | 'label';
+  variant?: TaskStateType;
 }
 
 const TaskState: React.FC<IOwnProps> = ({ task, variant }) => {
-  const icon = resolveTaskStateIcon(task);
+  const icon: JSX.Element = resolveTaskStateIcon(task);
 
-  if (variant === Variant.LABEL) {
+  if (variant === TaskStateType.LABEL) {
     const color = resolveTaskStateLabelColor(task);
     return (
       <Label color={color} icon={icon}>
@@ -54,7 +50,7 @@ const TaskState: React.FC<IOwnProps> = ({ task, variant }) => {
   );
 };
 
-function resolveTaskStateIcon(task: UserTaskInstance) {
+function resolveTaskStateIcon(task: UserTaskInstance): JSX.Element {
   if (task.state === 'Aborted') {
     return <BanIcon className="pf-u-mr-sm" />;
   } else if (task.completed) {

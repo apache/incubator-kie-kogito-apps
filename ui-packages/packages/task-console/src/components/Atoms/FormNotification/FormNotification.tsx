@@ -20,14 +20,11 @@ import {
   AlertActionCloseButton,
   AlertActionLink
 } from '@patternfly/react-core';
-
-enum NotificationType {
-  SUCCESS = 'success',
-  ERROR = 'error'
-}
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/common';
+import { NotificationType } from '../../../util/Variants';
 
 export interface Notification {
-  type: 'success' | 'error';
+  type: NotificationType;
   message: string;
   details?: string;
   customAction?: Action;
@@ -43,19 +40,15 @@ interface IOwnProps {
   notification: Notification;
 }
 
-const FormNotification: React.FC<IOwnProps> = ({ notification }) => {
-  let variant;
+const FormNotification: React.FC<IOwnProps & OUIAProps> = ({
+  notification,
+  ouiaId,
+  ouiaSafe
+}) => {
+  const variant =
+    notification.type === NotificationType.ERROR ? 'danger' : 'success';
 
-  const [showDetails, setShowDetails]: [boolean, any] = useState(false);
-
-  switch (notification.type) {
-    case NotificationType.SUCCESS:
-      variant = 'success';
-      break;
-    case NotificationType.ERROR:
-      variant = 'danger';
-      break;
-  }
+  const [showDetails, setShowDetails] = useState<boolean>(false);
 
   return (
     <Alert
@@ -77,6 +70,7 @@ const FormNotification: React.FC<IOwnProps> = ({ notification }) => {
         </React.Fragment>
       }
       actionClose={<AlertActionCloseButton onClose={notification.close} />}
+      {...componentOuiaProps(ouiaId, 'form-notification-alert', ouiaSafe)}
     >
       {showDetails && notification.details && <p>{notification.details}</p>}
     </Alert>

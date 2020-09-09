@@ -30,10 +30,11 @@ import FormRenderer from '../../Molecules/FormRenderer/FormRenderer';
 import { TaskFormSubmitHandler } from '../../../util/uniforms/TaskFormSubmitHandler/TaskFormSubmitHandler';
 import { FormSchema } from '../../../util/uniforms/FormSchema';
 import { getTaskSchemaEndPoint } from '../../../util/Utils';
-import UserTaskInstance = GraphQL.UserTaskInstance;
 import FormNotification, {
   Notification
 } from '../../Atoms/FormNotification/FormNotification';
+import UserTaskInstance = GraphQL.UserTaskInstance;
+import { NotificationType } from '../../../util/Variants';
 
 interface IOwnProps {
   userTaskInstance?: UserTaskInstance;
@@ -48,14 +49,12 @@ const TaskForm: React.FC<IOwnProps> = ({
 }) => {
   // tslint:disable: no-floating-promises
   const context: IContext<UserTaskInstance> = useContext(TaskConsoleContext);
-  const [notification, setNotification]: [Notification, any] = useState(null);
-  const [loading, setLoading]: [boolean, any] = useState(true);
-  const [isSubmitting, setIsSubmitting]: [boolean, any] = useState(false);
-  const [submitted, setSubmitted]: [boolean, any] = useState(false);
-  const [stateUserTask, setStateUserTask]: [UserTaskInstance, any] = useState(
-    null
-  );
-  const [taskFormSchema, setTaskFormSchema]: [FormSchema, any] = useState(null);
+  const [notification, setNotification] = useState<Notification>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const [stateUserTask, setStateUserTask] = useState<UserTaskInstance>();
+  const [taskFormSchema, setTaskFormSchema] = useState<FormSchema>(null);
 
   if (!stateUserTask) {
     if (userTaskInstance) {
@@ -73,7 +72,7 @@ const TaskForm: React.FC<IOwnProps> = ({
 
   const loadForm = () => {
     if (stateUserTask) {
-      const endpoint = getTaskSchemaEndPoint(stateUserTask);
+      const endpoint = getTaskSchemaEndPoint(stateUserTask, context.getUser());
 
       axios
         .get(endpoint, {
@@ -97,9 +96,9 @@ const TaskForm: React.FC<IOwnProps> = ({
   };
 
   const showNotification = (
-    notificationType: string,
+    notificationType: NotificationType,
     submitMessage: string,
-    submitCallback?: any,
+    submitCallback?: () => void,
     notificationDetails?: string
   ) => {
     setNotification({
@@ -140,7 +139,7 @@ const TaskForm: React.FC<IOwnProps> = ({
       const notifySuccess = (phase: string) => {
         const message = `Task '${userTaskInstance.referenceName}' successfully transitioned to phase '${phase}'.`;
 
-        showNotification('success', message, successCallback);
+        showNotification(NotificationType.SUCCESS, message, successCallback);
         setIsSubmitting(false);
         setSubmitted(true);
       };
@@ -148,7 +147,7 @@ const TaskForm: React.FC<IOwnProps> = ({
       const notifyError = (phase: string, error?: string) => {
         const message = `Task '${userTaskInstance.referenceName}' couldn't transition to phase '${phase}'.`;
 
-        showNotification('error', message, errorCallback, error);
+        showNotification(NotificationType.ERROR, message, errorCallback, error);
         setIsSubmitting(false);
       };
 

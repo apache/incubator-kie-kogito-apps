@@ -22,11 +22,12 @@ import {
   Alert
 } from '@patternfly/react-core';
 import { getWrapper } from '@kogito-apps/common';
+import { NotificationType } from '../../../../util/Variants';
 
 describe('FormNotification test', () => {
   it('Simple notification test', () => {
     const notificationProps: Notification = {
-      type: 'success',
+      type: NotificationType.SUCCESS,
       message: 'The form has been submitted',
       close: jest.fn()
     };
@@ -54,7 +55,7 @@ describe('FormNotification test', () => {
 
   it('Notification with details test', async () => {
     const notificationProps: Notification = {
-      type: 'error',
+      type: NotificationType.ERROR,
       message: 'The form has been submitted',
       close: jest.fn(),
       details: 'The details here!'
@@ -89,7 +90,7 @@ describe('FormNotification test', () => {
 
   it('Notification with custom action test', async () => {
     const notificationProps: Notification = {
-      type: 'success',
+      type: NotificationType.SUCCESS,
       message: 'The form has been submitted',
       close: jest.fn(),
       customAction: {

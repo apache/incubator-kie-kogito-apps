@@ -78,7 +78,7 @@ const testSuccessfulRequest = async (phase: string, expectedPayload) => {
   const expectedEndpoint =
     userTaskInstance.endpoint +
     (phase ? '?phase=' + phase : '') +
-    '&user=test&group=group1,group2';
+    '&user=test&group=group1&group=group2';
 
   expect(postParams[0]).toBe(expectedEndpoint);
   expect(postParams[1]).toMatchObject(expectedPayload);

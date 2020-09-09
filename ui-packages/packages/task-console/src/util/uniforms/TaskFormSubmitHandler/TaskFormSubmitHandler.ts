@@ -22,6 +22,7 @@ import {
 } from '../FormSubmitHandler/FormSubmitHandler';
 import { FormSchema } from '../FormSchema';
 import UserTaskInstance = GraphQL.UserTaskInstance;
+import { getTaskEndpointSecurityParams } from '../../Utils';
 
 interface FormAssignments {
   inputs: string[];
@@ -97,7 +98,7 @@ export class TaskFormSubmitHandler implements IFormSubmitHandler {
 
       const endpoint = `${this.userTaskInstance.endpoint}?phase=${
         this.selectedPhase
-      }&user=${this.user.id}&group=${this.user.groups.join(',')}`;
+      }&${getTaskEndpointSecurityParams(this.user)}`;
 
       if (this.onSubmit) {
         this.onSubmit();
