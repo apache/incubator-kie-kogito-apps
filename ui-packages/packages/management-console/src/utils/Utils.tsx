@@ -379,3 +379,16 @@ export const getTriggerableNodes = async (
     return [];
   }
 };
+
+export const jobCancel = async (
+  job: Pick<GraphQL.Job, 'id' | 'endpoint'>,
+  onJobCancelSuccess: () => void,
+  onJobCancelFailure: (errorMessage: string) => void
+) => {
+  try {
+    await axios.delete(`${job.endpoint}/${job.id}`);
+    onJobCancelSuccess();
+  } catch (error) {
+    onJobCancelFailure(JSON.stringify(error.message));
+  }
+};
