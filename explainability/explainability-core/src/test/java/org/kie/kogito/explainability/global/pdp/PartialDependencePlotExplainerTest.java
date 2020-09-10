@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.FakeRandom;
 import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -117,7 +118,7 @@ class PartialDependencePlotExplainerTest {
                     }
                 });
 
-        Assertions.assertThrows(TimeoutException.class,
+        Assertions.assertThrows(GlobalExplanationException.class,
                                 () -> partialDependencePlotProvider.explain(brokenProvider, metadata));
 
         Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
