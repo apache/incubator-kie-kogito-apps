@@ -63,6 +63,7 @@ export namespace GraphQL {
     retries?: Maybe<Scalars['Int']>;
     lastUpdate?: Maybe<Scalars['DateTime']>;
     executionCounter?: Maybe<Scalars['Int']>;
+    endpoint?: Maybe<Scalars['String']>;
   };
 
   export type JobArgument = {
@@ -781,6 +782,14 @@ export namespace GraphQL {
                   | 'definitionId'
                 >
               >;
+              milestones?: Maybe<
+                Array<
+                  { __typename?: 'Milestone' } & Pick<
+                    Milestone,
+                    'id' | 'name' | 'status'
+                  >
+                >
+              >;
             }
         >
       >
@@ -1298,6 +1307,11 @@ export namespace GraphQL {
           exit
           type
           definitionId
+        }
+        milestones {
+          id
+          name
+          status
         }
       }
     }

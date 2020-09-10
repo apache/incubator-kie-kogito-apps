@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FeatureImportanceDto {
 
-    @JsonProperty("featureId")
-    private String featureId;
+    @JsonProperty("featureName")
+    private String featureName;
 
     @JsonProperty("score")
     private Double score;
@@ -31,13 +31,13 @@ public class FeatureImportanceDto {
     private FeatureImportanceDto() {
     }
 
-    public FeatureImportanceDto(String featureId, Double score) {
-        this.featureId = featureId;
+    public FeatureImportanceDto(String featureName, Double score) {
+        this.featureName = featureName;
         this.score = score;
     }
 
-    public String getFeatureId() {
-        return featureId;
+    public String getFeatureName() {
+        return featureName;
     }
 
     public Double getScore() {
