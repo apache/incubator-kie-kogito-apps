@@ -24,6 +24,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
+import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
@@ -66,7 +67,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
 
     /**
      * Create a PDP provider.
-     *
+     * <p>
      * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
      */
     public PartialDependencePlotExplainer() {
@@ -89,36 +90,13 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                                                                      featureDistributions.get(featureIndex).getMax(), seriesLength);
 
                 // generate data distributions for all features
-                double[][] trainingData = new double[noOfFeatures][seriesLength];
-                for (int i = 0; i < noOfFeatures; i++) {
-                    double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
-                                                                  featureDistributions.get(i).getStdDev(), seriesLength,
-                                                                  random);
-                    trainingData[i] = featureData;
-                }
+                double[][] trainingData = generateDistributions(noOfFeatures, featureDistributions);
 
                 double[] marginalImpacts = new double[featureXSvalues.length];
                 for (int i = 0; i < featureXSvalues.length; i++) {
-                    List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
-                    double[] inputs = new double[noOfFeatures];
-                    inputs[featureIndex] = featureXSvalues[i];
-                    for (int j = 0; j < seriesLength; j++) {
-                        for (int f = 0; f < noOfFeatures; f++) {
-                            if (f != featureIndex) {
-                                inputs[f] = trainingData[f][j];
-                            }
-                        }
-                        PredictionInput input = new PredictionInput(DataUtils.doublesToFeatures(inputs));
-                        predictionInputs.add(input);
-                    }
-
-                    List<PredictionOutput> predictionOutputs;
-                    try {
-                        predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-                    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                        LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
-                        throw e;
-                    }
+                    List<PredictionInput> predictionInputs = prepareInputs(noOfFeatures, featureIndex, featureXSvalues,
+                                                                           trainingData, i);
+                    List<PredictionOutput> predictionOutputs = getOutputs(model, predictionInputs);
                     // prediction requests are batched per value of feature 'Xs' under analysis
                     for (PredictionOutput predictionOutput : predictionOutputs) {
                         Output output = predictionOutput.getOutputs().get(outputIndex);
@@ -138,5 +116,70 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         long end = System.currentTimeMillis();
         LOGGER.debug("explanation time: {}ms", (end - start));
         return pdps;
+    }
+
+    /**
+     * Perform batch predictions on the model.
+     *
+     * @param model            the model to be queried
+     * @param predictionInputs a batch of inputs
+     * @return a batch of outputs
+     */
+    private List<PredictionOutput> getOutputs(PredictionProvider model, List<PredictionInput> predictionInputs) {
+        List<PredictionOutput> predictionOutputs;
+        try {
+            predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
+            throw new GlobalExplanationException(e);
+        }
+        return predictionOutputs;
+    }
+
+    /**
+     * Generate inputs for a particular feature, using a specific discrete value from the data distribution of the
+     * feature under analysis for that particular feature and values from a training data distribution (which we sample)
+     * for all the other feature values.
+     *
+     * @param noOfFeatures    number of features in an input
+     * @param featureIndex    the index of the feature under analysis
+     * @param featureXSvalues discrete values of the feature under analysis
+     * @param trainingData    training data for all the features
+     * @param i               index of the specific discrete value of the feature under analysis to be evaluated
+     * @return a list of prediction inputs
+     */
+    private List<PredictionInput> prepareInputs(int noOfFeatures, int featureIndex, double[] featureXSvalues,
+                                                double[][] trainingData, int i) {
+        List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
+        double[] inputs = new double[noOfFeatures];
+        inputs[featureIndex] = featureXSvalues[i];
+        for (int j = 0; j < seriesLength; j++) {
+            for (int f = 0; f < noOfFeatures; f++) {
+                if (f != featureIndex) {
+                    inputs[f] = trainingData[f][j];
+                }
+            }
+            PredictionInput input = new PredictionInput(DataUtils.doublesToFeatures(inputs));
+            predictionInputs.add(input);
+        }
+        return predictionInputs;
+    }
+
+    /**
+     * Sample training data distributions from each feature distribution.
+     *
+     * @param noOfFeatures         number of features
+     * @param featureDistributions feature distributions
+     * @return a matrix of numbers with {@code #noOfFeatures} rows and {@code #seriesLength} columns
+     */
+    private double[][] generateDistributions(int noOfFeatures, List<FeatureDistribution> featureDistributions) {
+        double[][] trainingData = new double[noOfFeatures][seriesLength];
+        for (int i = 0; i < noOfFeatures; i++) {
+            double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
+                                                          featureDistributions.get(i).getStdDev(), seriesLength,
+                                                          random);
+            trainingData[i] = featureData;
+        }
+        return trainingData;
     }
 }

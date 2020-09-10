@@ -87,7 +87,7 @@ class PartialDependencePlotExplainerTest {
         }
         // the first feature is always skipped by the model, so the predictions are not affected, hence PDP Y values are constant
         PartialDependenceGraph fixedFeatureGraph = pdps.get(0);
-        assertEquals(Arrays.stream(fixedFeatureGraph.getY()).distinct().count(), 1);
+        assertEquals(1, Arrays.stream(fixedFeatureGraph.getY()).distinct().count());
 
         // the other two instead change but in the same way, due the behaviour of FakeRandom in generating data/distributions
         assertArrayEquals(pdps.get(1).getY(), pdps.get(2).getY());
