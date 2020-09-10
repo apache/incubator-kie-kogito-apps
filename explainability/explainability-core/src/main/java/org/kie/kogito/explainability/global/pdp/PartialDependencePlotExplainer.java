@@ -16,8 +16,7 @@
 package org.kie.kogito.explainability.global.pdp;
 
 import java.security.SecureRandom;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -33,7 +32,6 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
-import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +77,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     public List<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws InterruptedException, ExecutionException, TimeoutException {
         long start = System.currentTimeMillis();
 
-        List<PartialDependenceGraph> pdps = new LinkedList<>();
+        List<PartialDependenceGraph> pdps = new ArrayList<>();
         DataDistribution dataDistribution = metadata.getDataDistribution();
         int noOfFeatures = metadata.getInputShape().getFeatures().size();
 
@@ -101,7 +99,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
 
                 double[] marginalImpacts = new double[featureXSvalues.length];
                 for (int i = 0; i < featureXSvalues.length; i++) {
-                    List<PredictionInput> predictionInputs = new LinkedList<>();
+                    List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
                     double[] inputs = new double[noOfFeatures];
                     inputs[featureIndex] = featureXSvalues[i];
                     for (int j = 0; j < seriesLength; j++) {
@@ -126,7 +124,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                         Output output = predictionOutput.getOutputs().get(outputIndex);
                         // use numerical output when possible, otherwise only use the score
                         double v = output.getValue().asNumber();
-                        if (Double.isNaN(v)) {
+                        if (Double.isNaN(v)) { // check the output can be converted to a proper number
                             v = output.getScore();
                         }
                         marginalImpacts[i] += v / (double) seriesLength;
