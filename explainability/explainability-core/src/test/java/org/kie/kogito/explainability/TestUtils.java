@@ -18,7 +18,6 @@ package org.kie.kogito.explainability;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -121,6 +120,17 @@ public class TestUtils {
                     }
                 }
                 Output output = new Output("spam", Type.BOOLEAN, new Value<>(spam), 1d);
+                outputs.add(new PredictionOutput(List.of(output)));
+            }
+            return outputs;
+        });
+    }
+
+    public static PredictionProvider getFixedOutputClassifier() {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> outputs = new LinkedList<>();
+            for (PredictionInput ignored : inputs) {
+                Output output = new Output("class", Type.BOOLEAN, new Value<>(false), 1d);
                 outputs.add(new PredictionOutput(List.of(output)));
             }
             return outputs;
