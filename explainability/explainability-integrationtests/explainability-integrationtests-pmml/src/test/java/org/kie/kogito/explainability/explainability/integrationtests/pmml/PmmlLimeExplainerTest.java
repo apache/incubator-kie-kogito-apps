@@ -170,7 +170,7 @@ class PmmlLimeExplainerTest {
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
             double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(1));
-            assertEquals(1d, v);
+            assertEquals(0.33d, v, 1e-2);
         }
     }
 
