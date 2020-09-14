@@ -2,13 +2,11 @@
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
-
 export namespace GraphQL {
   export type Maybe<T> = T | null;
   export type Exact<T extends { [key: string]: unknown }> = {
     [K in keyof T]: T[K];
   };
-
   /** All built-in and custom scalars, mapped to their actual values */
   export type Scalars = {
     ID: string;
@@ -973,8 +971,9 @@ export namespace GraphQL {
           { __typename?: 'UserTaskInstance' } & Pick<
             UserTaskInstance,
             | 'id'
-            | 'description'
             | 'name'
+            | 'referenceName'
+            | 'description'
             | 'priority'
             | 'processInstanceId'
             | 'processId'
@@ -991,7 +990,6 @@ export namespace GraphQL {
             | 'potentialUsers'
             | 'inputs'
             | 'outputs'
-            | 'referenceName'
             | 'endpoint'
           >
         >
@@ -1684,8 +1682,9 @@ export namespace GraphQL {
     ) {
       UserTaskInstances(where: { state: { in: $state } }, orderBy: $orderBy) {
         id
-        description
         name
+        referenceName
+        description
         priority
         processInstanceId
         processId
@@ -1721,6 +1720,7 @@ export namespace GraphQL {
    * const { data, loading, error } = useGetUserTasksByStatesQuery({
    *   variables: {
    *      state: // value for 'state'
+   *      orderBy: // value for 'orderBy'
    *   },
    * });
    */
@@ -1869,7 +1869,6 @@ export namespace GraphQL {
         potentialUsers
         inputs
         outputs
-        referenceName
         lastUpdate
         endpoint
       }
