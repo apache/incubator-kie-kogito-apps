@@ -44,8 +44,7 @@ class TraceEventConsumerTest {
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new TraceEventConsumer(trustyService);
-        consumer.mapper = TrustyServiceTestUtils.MAPPER;
+        consumer = new TraceEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER);
     }
 
     @Test

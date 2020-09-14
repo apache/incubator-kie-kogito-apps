@@ -16,28 +16,36 @@
 
 package org.kie.kogito.trusty.service.messaging;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.kie.kogito.decision.DecisionModelType;
 import org.kie.kogito.tracing.decision.event.CloudEventUtils;
+import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.service.messaging.incoming.ModelEventConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class BaseEventConsumer {
+public abstract class BaseEventConsumer<E> {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(BaseEventConsumer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BaseEventConsumer.class);
 
     protected final TrustyService service;
+    private final ObjectMapper mapper;
 
     protected BaseEventConsumer() {
-        this(null);
+        this(null, null);
     }
 
-    public BaseEventConsumer(final TrustyService service) {
+    public BaseEventConsumer(final TrustyService service, ObjectMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     protected CompletionStage<Void> handleMessage(final Message<String> message) {
@@ -58,5 +66,23 @@ public abstract class BaseEventConsumer {
         }
     }
 
-    protected abstract void handleCloudEvent(final CloudEvent cloudEvent);
+    protected void handleCloudEvent(final CloudEvent cloudEvent) {
+        final E payload;
+        try {
+            payload = mapper.readValue(cloudEvent.getData(), getEventType());
+        } catch (IOException e) {
+            LOG.error("Unable to deserialize CloudEvent data as " + getEventType().getType().getTypeName(), e);
+            return;
+        }
+        if (payload == null) {
+            LOG.error("Received CloudEvent with id {} from {} with empty data", cloudEvent.getId(), cloudEvent.getSource());
+            return;
+        }
+        LOG.debug("Received CloudEvent with id {} from {}", cloudEvent.getId(), cloudEvent.getSource());
+        internalHandleCloudEvent(cloudEvent, payload);
+    }
+
+    protected abstract TypeReference<E> getEventType();
+
+    protected abstract void internalHandleCloudEvent(final CloudEvent cloudEvent, final E payload);
 }

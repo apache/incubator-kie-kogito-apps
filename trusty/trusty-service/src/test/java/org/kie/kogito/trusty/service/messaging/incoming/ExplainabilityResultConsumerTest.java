@@ -87,8 +87,7 @@ class ExplainabilityResultConsumerTest {
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new ExplainabilityResultConsumer(trustyService);
-        consumer.mapper = TrustyServiceTestUtils.MAPPER;
+        consumer = new ExplainabilityResultConsumer(trustyService, TrustyServiceTestUtils.MAPPER);
     }
 
     @Test

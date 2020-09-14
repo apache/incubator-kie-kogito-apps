@@ -16,11 +16,11 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
@@ -29,20 +29,23 @@ import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class TraceEventConsumer extends BaseEventConsumer {
+public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
+    private static final TypeReference<TraceEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
+    };
 
     private TraceEventConsumer() {
         //CDI proxy
     }
 
     @Inject
-    ObjectMapper mapper;
-
-    @Inject
-    public TraceEventConsumer(TrustyService service) {
-        super(service);
+    public TraceEventConsumer(TrustyService service, ObjectMapper mapper) {
+        super(service, mapper);
     }
 
     @Override
@@ -52,28 +55,18 @@ public class TraceEventConsumer extends BaseEventConsumer {
     }
 
     @Override
-    protected void handleCloudEvent(CloudEvent cloudEvent) {
-        final TraceEvent traceEvent;
-        try {
-            traceEvent = mapper.readValue(cloudEvent.getData(), TraceEvent.class);
-        } catch (IOException e) {
-            LOG.error("Unable to deserialize CloudEvent data as TraceEvent", e);
-            return;
-        }
-
-        if (traceEvent == null) {
-            LOG.error("Received CloudEvent with id {} from {} with empty data", cloudEvent.getId(), cloudEvent.getSource());
-            return;
-        }
-
-        LOG.debug("Received CloudEvent with id {} from {}", cloudEvent.getId(), cloudEvent.getSource());
-
-        TraceEventType traceEventType = traceEvent.getHeader().getType();
+    protected void internalHandleCloudEvent(CloudEvent cloudEvent, TraceEvent payload) {
+        TraceEventType traceEventType = payload.getHeader().getType();
 
         if (traceEventType == TraceEventType.DMN) {
-            service.processDecision(cloudEvent.getId(), traceEvent.getHeader().getResourceId().getServiceUrl(), TraceEventConverter.toDecision(traceEvent, cloudEvent.getSource().toString()));
+            service.processDecision(cloudEvent.getId(), payload.getHeader().getResourceId().getServiceUrl(), TraceEventConverter.toDecision(payload, cloudEvent.getSource().toString()));
         } else {
             LOG.error("Unsupported TraceEvent type {}", traceEventType);
         }
+    }
+
+    @Override
+    protected TypeReference<TraceEvent> getEventType() {
+        return CLOUD_EVENT_TYPE;
     }
 }

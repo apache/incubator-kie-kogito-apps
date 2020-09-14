@@ -45,8 +45,7 @@ class ModelEventConsumerTest {
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new ModelEventConsumer(trustyService);
-        consumer.mapper = TrustyServiceTestUtils.MAPPER;
+        consumer = new ModelEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER);
     }
 
     @Test
