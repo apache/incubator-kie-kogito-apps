@@ -34,6 +34,8 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -235,7 +237,8 @@ class DataUtilsTest {
                 changedFeatures++;
             }
         }
-        assertEquals(noOfPerturbations, changedFeatures);
+        assertThat(changedFeatures).isBetween((int) Math.min(noOfPerturbations, input.getFeatures().size() * 0.5),
+                                              (int) Math.max(noOfPerturbations, input.getFeatures().size() * 0.5));
     }
 
     private void assertPerturbDropString(PredictionInput input, int noOfPerturbations) {
@@ -248,7 +251,8 @@ class DataUtilsTest {
                 changedFeatures++;
             }
         }
-        assertEquals(noOfPerturbations, changedFeatures);
+        assertThat(changedFeatures).isBetween((int) Math.min(noOfPerturbations, input.getFeatures().size() * 0.5),
+                                              (int) Math.max(noOfPerturbations, input.getFeatures().size() * 0.5));
     }
 
     @Test
