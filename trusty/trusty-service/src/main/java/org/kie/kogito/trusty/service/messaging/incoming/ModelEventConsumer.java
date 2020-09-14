@@ -31,7 +31,7 @@ import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 
 @ApplicationScoped
-public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
+public class ModelEventConsumer extends BaseEventConsumer {
 
     private  ModelEventConsumer() {
         //CDI proxy

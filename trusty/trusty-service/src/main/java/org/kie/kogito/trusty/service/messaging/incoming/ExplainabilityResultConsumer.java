@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class ExplainabilityResultConsumer extends BaseEventConsumer<ExplainabilityResultDto> {
+public class ExplainabilityResultConsumer extends BaseEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
 

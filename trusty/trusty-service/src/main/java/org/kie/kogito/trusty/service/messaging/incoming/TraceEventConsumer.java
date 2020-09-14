@@ -31,7 +31,7 @@ import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 
 @ApplicationScoped
-public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
+public class TraceEventConsumer extends BaseEventConsumer {
 
     private TraceEventConsumer() {
         //CDI proxy

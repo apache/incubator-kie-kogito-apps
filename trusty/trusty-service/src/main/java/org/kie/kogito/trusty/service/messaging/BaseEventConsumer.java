@@ -26,7 +26,7 @@ import org.kie.kogito.trusty.service.TrustyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class BaseEventConsumer<E> {
+public abstract class BaseEventConsumer {
 
     protected static final Logger LOG = LoggerFactory.getLogger(BaseEventConsumer.class);
 
