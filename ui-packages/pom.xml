@@ -82,16 +82,6 @@
                   <yarnVersion>${version.yarn}</yarnVersion>
                 </configuration>
               </execution>
-              <execution>
-                <id>npm install lock-treatment-tool</id>
-                <goals>
-                  <goal>npm</goal>
-                </goals>
-                <configuration>
-                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>install lock-treatment-tool --global-style --no-package-lock --no-save</arguments>
-                </configuration>
-              </execution>
             </executions>
           </plugin>
         </plugins>
@@ -111,11 +101,11 @@
               <execution>
                 <id>lock-treatment-tool execution</id>
                 <goals>
-                  <goal>npm</goal>
+                  <goal>npx</goal>
                 </goals>
                 <configuration>
                   <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>run locktt -- --skipIntegrity</arguments>
+                  <arguments>lock-treatment-tool --skipIntegrity</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -125,7 +115,7 @@
                 </goals>
                 <configuration>
                   <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>install --force --fetch-retry-mintimeout=100000 --fetch-retries=10  --frozen-lockfile</arguments>
+                  <arguments>install --fetch-retry-mintimeout=100000 --fetch-retries=10  --frozen-lockfile</arguments>
                 </configuration>
               </execution>
             </executions>
