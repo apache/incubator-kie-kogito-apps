@@ -3,7 +3,8 @@ import {
   Table,
   TableHeader,
   TableBody,
-  TableVariant
+  TableVariant,
+  sortable
 } from '@patternfly/react-table';
 import {
   Title,
@@ -32,19 +33,63 @@ import KogitoSpinner from '../../Atoms/KogitoSpinner/KogitoSpinner';
 import EndpointLink from '../../Atoms/EndpointLink/EndpointLink';
 import { GraphQL } from '../../../graphql/types';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
+import ServerErrors from '../ServerErrors/ServerErrors';
+import {
+  KogitoEmptyState,
+  KogitoEmptyStateType
+} from '../../Atoms/KogitoEmptyState/KogitoEmptyState';
+import { set } from '../../../utils/Utils';
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
 
-const DomainExplorerTable = ({
+interface RowContent {
+  cells: string[] | object[];
+  parent?: number;
+  isOpen?: boolean;
+  rowKey: string;
+}
+interface IOwnProps {
+  columnFilters: any[];
+  displayTable: boolean;
+  displayEmptyState: boolean;
+  filterError: string;
+  finalFilters: object;
+  filterChips: string[];
+  handleRetry: () => void;
+  isLoadingMore: boolean;
+  offset: number;
+  onDeleteChip: (type: string) => void;
+  parameters: object[];
+  rows: RowContent[];
+  selected: string[];
+  setOrderByObj: (orderObj: object) => void;
+  setRows: (rows: ((row: object[]) => object[]) | object[]) => void;
+  setRunQuery: (runQuery: boolean) => void;
+  setSortBy: (sortBy: object) => void;
+  sortBy: object;
+  tableLoading: boolean;
+}
+const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
   columnFilters,
-  tableLoading,
   displayTable,
   displayEmptyState,
-  parameters,
-  selected,
-  offset,
-  setRows,
-  rows,
+  filterError,
+  finalFilters,
+  filterChips,
+  handleRetry,
   isLoadingMore,
-  handleRetry
+  offset,
+  onDeleteChip,
+  parameters,
+  rows,
+  selected,
+  setRows,
+  setOrderByObj,
+  setRunQuery,
+  setSortBy,
+  sortBy,
+  tableLoading,
+  ouiaId,
+  ouiaSafe
 }) => {
   // tslint:disable: forin
   const [columns, setColumns] = useState([]);
@@ -109,7 +154,8 @@ const DomainExplorerTable = ({
       for (const i in data) {
         const rest = k.length ? ' / ' + i : i;
         if (data[i] === null) {
-          !tempKeys.includes(k + rest) && tempKeys.push(k + rest);
+          !tempKeys.includes(k + rest) &&
+            tempKeys.push({ title: k + rest, transforms: [sortable] });
           if (rest.hasOwnProperty) {
             tempValue.push(data[i]);
           }
@@ -120,7 +166,8 @@ const DomainExplorerTable = ({
           }
         } else {
           if (rest !== '__typename' && !rest.match('/ __typename')) {
-            !tempKeys.includes(k + rest) && tempKeys.push(k + rest);
+            !tempKeys.includes(k + rest) &&
+              tempKeys.push({ title: k + rest, transforms: [sortable] });
             if (rest.hasOwnProperty) {
               tempValue.push(data[i].toString());
             }
@@ -165,11 +212,22 @@ const DomainExplorerTable = ({
                       <Link
                         to={{
                           pathname: '/Process/' + tempObj.id,
-                          state: { parameters, selected }
+                          state: {
+                            parameters,
+                            selected,
+                            finalFilters,
+                            filterChips
+                          }
                         }}
                       >
                         <strong>
-                          <ItemDescriptor processInstanceData={tempObj} />
+                          <ItemDescriptor
+                            itemDescription={{
+                              id: tempObj.id,
+                              name: tempObj.processName,
+                              description: tempObj.businessKey
+                            }}
+                          />
                         </strong>
                       </Link>
                       <div>
@@ -309,59 +367,86 @@ const DomainExplorerTable = ({
     setRows([...rows]);
   };
 
+  const onSort = (event, index, direction) => {
+    setSortBy({ index, direction });
+    const sortingColumn = event.target.innerText.replace(' / ', ',');
+    const obj = {};
+    set(obj, sortingColumn, direction.toUpperCase());
+    setOrderByObj(obj);
+    setRunQuery(true);
+  };
   return (
     <React.Fragment>
       {displayTable && !displayEmptyState && columns.length && (
         <Table
           cells={columns}
           rows={rows}
+          sortBy={sortBy}
+          onSort={onSort}
           aria-label="Domain Explorer Table"
           className="kogito-common--domain-explorer__table"
           onCollapse={onCollapse}
+          {...componentOuiaProps(
+            ouiaId,
+            'domain-explorer-table',
+            ouiaSafe ? ouiaSafe : !tableLoading && !isLoadingMore
+          )}
         >
           <TableHeader />
           <TableBody rowKey="rowKey" />
         </Table>
       )}
-      {!displayEmptyState && !displayTable && (
+      {!displayTable && (
         <Card component={'div'}>
           <CardBody>
-            <Bullseye>
-              <EmptyState>
-                <EmptyStateIcon icon={SearchIcon} />
-                <Title headingLevel="h5" size="lg">
-                  No columns selected
-                </Title>
-                <EmptyStateBody>
-                  <Button
-                    variant="link"
-                    id="retry-columns-button"
-                    onClick={handleRetry}
-                    isInline
-                  >
-                    Manage columns
-                  </Button>{' '}
-                  to see content
-                </EmptyStateBody>
-              </EmptyState>
-            </Bullseye>
-          </CardBody>
-        </Card>
-      )}
-      {displayEmptyState && (
-        <Card component={'div'}>
-          <CardBody>
-            <Bullseye>
-              <EmptyState>
-                <EmptyStateIcon icon={SearchIcon} />
-                <Title headingLevel="h5" size="lg">
-                  No data available
-                </Title>
-                <EmptyStateBody>
-                  Selected domain has no data to display. Check other domains.
-                </EmptyStateBody>
-              </EmptyState>
-            </Bullseye>
+            {!displayEmptyState &&
+              !filterError &&
+              filterChips.length > 0 &&
+              selected.length === 0 && (
+                <Bullseye>
+                  <EmptyState>
+                    <EmptyStateIcon icon={SearchIcon} />
+                    <Title headingLevel="h5" size="lg">
+                      No columns selected
+                    </Title>
+                    <EmptyStateBody>
+                      <Button
+                        variant="link"
+                        id="retry-columns-button"
+                        onClick={handleRetry}
+                        isInline
+                      >
+                        Manage columns
+                      </Button>{' '}
+                      to see content
+                    </EmptyStateBody>
+                  </EmptyState>
+                </Bullseye>
+              )}
+            {displayEmptyState && (
+              <Bullseye>
+                <EmptyState>
+                  <EmptyStateIcon icon={SearchIcon} />
+                  <Title headingLevel="h5" size="lg">
+                    No data available
+                  </Title>
+                  <EmptyStateBody>
+                    Selected filters have no data to display. Try other filters.
+                  </EmptyStateBody>
+                </EmptyState>
+              </Bullseye>
+            )}
+            {!displayEmptyState && !displayTable && filterError && (
+              <ServerErrors error={filterError} variant="small" />
+            )}
+            {filterChips.length === 0 && (
+              <KogitoEmptyState
+                type={KogitoEmptyStateType.Reset}
+                title="No filter applied."
+                body="Try applying at least one filter to see results"
+                onClick={() => onDeleteChip('')}
+              />
+            )}
           </CardBody>
         </Card>
       )}

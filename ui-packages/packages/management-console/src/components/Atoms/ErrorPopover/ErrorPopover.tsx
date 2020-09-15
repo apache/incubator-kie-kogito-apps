@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover, Button } from '@patternfly/react-core';
-import { stateIconCreator } from '../../../utils/Utils';
-import { GraphQL } from '@kogito-apps/common';
+import { ProcessInstanceIconCreator } from '../../../utils/Utils';
+import { GraphQL, OUIAProps, componentOuiaProps } from '@kogito-apps/common';
 import ProcessInstance = GraphQL.ProcessInstance;
 
 interface IOwnProps {
@@ -9,14 +9,17 @@ interface IOwnProps {
   onSkipClick: () => void;
   onRetryClick: () => void;
 }
-const ErrorPopover: React.FC<IOwnProps> = ({
+const ErrorPopover: React.FC<IOwnProps & OUIAProps> = ({
   processInstanceData,
   onSkipClick,
-  onRetryClick
+  onRetryClick,
+  ouiaId,
+  ouiaSafe
 }) => {
   return (
     <Popover
       zIndex={300}
+      id={processInstanceData.id}
       headerContent={<div>Process error</div>}
       bodyContent={
         <div>
@@ -49,9 +52,10 @@ const ErrorPopover: React.FC<IOwnProps> = ({
         ]
       }
       position="auto"
+      {...componentOuiaProps(ouiaId, 'error-popover', ouiaSafe)}
     >
       <Button variant="link" isInline>
-        {stateIconCreator(processInstanceData.state)}
+        {ProcessInstanceIconCreator(processInstanceData.state)}
       </Button>
     </Popover>
   );

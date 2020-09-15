@@ -34,21 +34,22 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.responses.DecisionOutcomeResponse;
 import org.kie.kogito.trusty.service.responses.DecisionOutcomesResponse;
 import org.kie.kogito.trusty.service.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
-@Path("v1/executions/decisions")
+@Path("executions/decisions")
 public class DecisionsApiV1 {
 
     @Inject
-    ITrustyService trustyService;
+    TrustyService trustyService;
 
     /**
      * Gets an execution header by ID.
+     *
      * @param executionId The execution ID.
      * @return The execution header.
      */

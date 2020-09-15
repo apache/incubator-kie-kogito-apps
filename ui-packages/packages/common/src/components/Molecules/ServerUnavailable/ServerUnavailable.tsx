@@ -11,6 +11,7 @@ import {
   Page,
   PageSidebar,
   PageHeader,
+  PageHeaderTools,
   Avatar,
   Brand
 } from '@patternfly/react-core';
@@ -20,8 +21,18 @@ import { aboutLogoContext } from '../../contexts';
 import PageToolbar from '../PageToolbar/PageToolbar';
 import userImage from '../../../static/avatar.svg';
 import '../../styles.css';
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
 
-const ServerUnavailable = props => {
+interface IOwnProps {
+  alt: string;
+  src: string;
+  PageNav?: any;
+}
+const ServerUnavailable: React.FC<IOwnProps & OUIAProps> = ({
+  ouiaId,
+  ouiaSafe,
+  ...props
+}) => {
   const [isNavOpen, setIsNavOpen] = useState(true);
   const onNavToggle = () => {
     setIsNavOpen(!isNavOpen);
@@ -30,12 +41,14 @@ const ServerUnavailable = props => {
   const Header = (
     <PageHeader
       logo={<Brand src={props.src} alt={props.alt} />}
-      toolbar={
-        <aboutLogoContext.Provider value={props.src}>
-          <PageToolbar />
-        </aboutLogoContext.Provider>
+      headerTools={
+        <PageHeaderTools>
+          <aboutLogoContext.Provider value={props.src}>
+            <PageToolbar />
+          </aboutLogoContext.Provider>
+          <Avatar src={userImage} alt="Kogito Logo" />
+        </PageHeaderTools>
       }
-      avatar={<Avatar src={userImage} alt="Kogito Logo" />}
       showNavToggle
       isNavOpen={isNavOpen}
       onNavToggle={onNavToggle}
@@ -58,12 +71,14 @@ const ServerUnavailable = props => {
           isManagedSidebar
           className="kogito-common--PageLayout"
         >
-          <PageSection variant="light">
+          <PageSection
+            variant="light"
+            {...componentOuiaProps(ouiaId, 'server-unavailable', ouiaSafe)}
+          >
             <Bullseye>
               <EmptyState variant={EmptyStateVariant.full}>
                 <EmptyStateIcon
                   icon={ExclamationCircleIcon}
-                  size="md"
                   color="var(--pf-global--danger-color--100)"
                 />
                 <Title headingLevel="h1" size="4xl">

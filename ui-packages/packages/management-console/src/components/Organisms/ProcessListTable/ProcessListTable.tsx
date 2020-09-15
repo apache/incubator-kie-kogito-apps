@@ -5,14 +5,17 @@ import {
   GraphQL,
   KogitoEmptyState,
   KogitoEmptyStateType,
-  KogitoSpinner
+  KogitoSpinner,
+  OUIAProps,
+  componentOuiaProps
 } from '@kogito-apps/common';
 import '../../Templates/ProcessListPage/ProcessListPage.css';
 import ProcessListTableItems from '../../Molecules/ProcessListTableItems/ProcessListTableItems';
 import '@patternfly/patternfly/patternfly-addons.css';
 import './ProcessListTable.css';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
-
+import { ProcessInstanceBulkList } from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
+/* tslint:disable:no-string-literal */
 type filterType = {
   status: GraphQL.ProcessInstanceState[];
   businessKey: string[];
@@ -23,8 +26,8 @@ interface IOwnProps {
   initData: any;
   isLoading: boolean;
   setIsError: (isError: boolean) => void;
-  abortedObj: any;
-  setAbortedObj: any;
+  selectedInstances: ProcessInstanceBulkList;
+  setSelectedInstances: (selectedInstances: ProcessInstanceBulkList) => void;
   pageSize: number;
   filters: filterType;
   setIsAllChecked: (isAllChecked: boolean) => void;
@@ -32,19 +35,21 @@ interface IOwnProps {
   setSelectedNumber: (selectedNumber: number) => void;
 }
 
-const ProcessListTable: React.FC<IOwnProps> = ({
+const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
   initData,
   setInitData,
   setLimit,
   isLoading,
   setIsError,
-  abortedObj,
-  setAbortedObj,
+  selectedInstances,
+  setSelectedInstances,
   pageSize,
   filters,
   setIsAllChecked,
   selectedNumber,
-  setSelectedNumber
+  setSelectedNumber,
+  ouiaId,
+  ouiaSafe
 }) => {
   const [checkedArray, setCheckedArray] = useState<ProcessInstanceState[]>(
     filters.status
@@ -53,51 +58,31 @@ const ProcessListTable: React.FC<IOwnProps> = ({
     setCheckedArray(filters.status);
   }, [filters]);
 
+  const queryVariables = {
+    state: { in: checkedArray },
+    parentProcessInstanceId: { isNull: true }
+  };
+
   const searchWordsArray = [];
   if (filters.businessKey.length > 0) {
     filters.businessKey.forEach((word: string) =>
       searchWordsArray.push({ businessKey: { like: word } })
     );
+    queryVariables['or'] = searchWordsArray;
   }
 
   const { loading, error, data } = GraphQL.useGetProcessInstancesQuery({
     variables: {
-      state: checkedArray,
+      where: queryVariables,
       offset: 0,
       limit: pageSize
     },
-    skip: filters.businessKey.length > 0,
     fetchPolicy: 'network-only'
   });
-
-  const {
-    loading: loading1,
-    data: data1,
-    error: error1
-  } = GraphQL.useGetProcessInstancesWithBusinessKeyQuery({
-    variables: {
-      state: checkedArray,
-      offset: 0,
-      limit: pageSize,
-      businessKeys: searchWordsArray
-    },
-    skip: filters.businessKey.length === 0,
-    fetchPolicy: 'network-only'
-  });
-
-  useEffect(() => {
-    if (!loading1 && data1 !== undefined) {
-      data1.ProcessInstances.forEach((instance: any) => {
-        instance.isChecked = false;
-        instance.isOpen = false;
-      });
-    }
-    setInitData(data1);
-  }, [data1]);
 
   useEffect(() => {
     setIsError(false);
-    setAbortedObj({});
+    setSelectedInstances({});
     if (!loading && data !== undefined) {
       data.ProcessInstances.forEach((instance: any) => {
         instance.isChecked = false;
@@ -108,7 +93,7 @@ const ProcessListTable: React.FC<IOwnProps> = ({
     setInitData(data);
   }, [data]);
 
-  if (loading || isLoading || loading1) {
+  if (loading || isLoading) {
     return (
       <Bullseye>
         <KogitoSpinner spinnerText="Loading process instances..." />
@@ -116,19 +101,17 @@ const ProcessListTable: React.FC<IOwnProps> = ({
     );
   }
 
-  if (error || error1) {
+  if (error) {
     setIsError(true);
-    if (error1) {
-      return <ServerErrors error={error1} />;
-    }
-    if (error) {
-      return <ServerErrors error={error} />;
-    }
+    return <ServerErrors error={error} variant="large" />;
   }
 
   return (
-    <DataList aria-label="Process instance list">
-      {(!loading || !loading1) &&
+    <DataList
+      aria-label="Process instance list"
+      {...componentOuiaProps(ouiaId, 'process-list-table', ouiaSafe)}
+    >
+      {!loading &&
         initData !== undefined &&
         initData.ProcessInstances.map((item, index) => {
           return (
@@ -139,8 +122,8 @@ const ProcessListTable: React.FC<IOwnProps> = ({
               initData={initData}
               setInitData={setInitData}
               loadingInitData={loading}
-              abortedObj={abortedObj}
-              setAbortedObj={setAbortedObj}
+              selectedInstances={selectedInstances}
+              setSelectedInstances={setSelectedInstances}
               setIsAllChecked={setIsAllChecked}
               selectedNumber={selectedNumber}
               setSelectedNumber={setSelectedNumber}

@@ -14,45 +14,66 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  BaseSizes,
-  Button,
-  Modal,
-  Text,
-  TextContent,
-  Title,
-  TitleLevel
+  Alert,
+  AlertActionCloseButton,
+  AlertActionLink
 } from '@patternfly/react-core';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/common';
+import { NotificationType } from '../../../util/Variants';
 
-interface IOwnProps {
+export interface Notification {
+  type: NotificationType;
   message: string;
-  closeAction: () => void;
+  details?: string;
+  customAction?: Action;
+  close: () => void;
 }
 
-const FormNotification: React.FC<IOwnProps> = ({ message, closeAction }) => {
+export interface Action {
+  label: string;
+  onClick: () => void;
+}
+
+interface IOwnProps {
+  notification: Notification;
+}
+
+const FormNotification: React.FC<IOwnProps & OUIAProps> = ({
+  notification,
+  ouiaId,
+  ouiaSafe
+}) => {
+  const variant =
+    notification.type === NotificationType.ERROR ? 'danger' : 'success';
+
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+
   return (
-    <Modal
-      isSmall={true}
-      title=""
-      header={
-        <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
-          Executing Task
-        </Title>
+    <Alert
+      isInline
+      title={notification.message}
+      variant={variant}
+      actionLinks={
+        <React.Fragment>
+          {notification.details && (
+            <AlertActionLink onClick={() => setShowDetails(!showDetails)}>
+              View details
+            </AlertActionLink>
+          )}
+          {notification.customAction && (
+            <AlertActionLink onClick={notification.customAction.onClick}>
+              {notification.customAction.label}
+            </AlertActionLink>
+          )}
+        </React.Fragment>
       }
-      isOpen={true}
-      onClose={closeAction}
-      actions={[
-        <Button key="confirm-selection" variant="primary" onClick={closeAction}>
-          OK
-        </Button>
-      ]}
-      isFooterLeftAligned={false}
+      actionClose={<AlertActionCloseButton onClose={notification.close} />}
+      {...componentOuiaProps(ouiaId, 'form-notification-alert', ouiaSafe)}
     >
-      <TextContent>
-        <Text>{message}</Text>
-      </TextContent>
-    </Modal>
+      {showDetails && notification.details && <p>{notification.details}</p>}
+    </Alert>
   );
 };
 

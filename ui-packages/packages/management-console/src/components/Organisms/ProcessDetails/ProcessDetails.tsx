@@ -14,8 +14,17 @@ import {
 import React from 'react';
 import { LevelDownAltIcon, LevelUpAltIcon } from '@patternfly/react-icons';
 import { Link } from 'react-router-dom';
-import { ItemDescriptor, GraphQL, EndpointLink } from '@kogito-apps/common';
-import { stateIconCreator } from '../../../utils/Utils';
+import {
+  ItemDescriptor,
+  GraphQL,
+  EndpointLink,
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/common';
+import {
+  getProcessInstanceDescription,
+  ProcessInstanceIconCreator
+} from '../../../utils/Utils';
 import ProcessInstance = GraphQL.ProcessInstance;
 
 interface IOwnProps {
@@ -36,9 +45,20 @@ interface IOwnProps {
   };
   from: any;
 }
-const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
+const ProcessDetails: React.FC<IOwnProps & OUIAProps> = ({
+  data,
+  from,
+  ouiaId,
+  ouiaSafe
+}) => {
   return (
-    <Card>
+    <Card
+      {...componentOuiaProps(
+        ouiaId ? ouiaId : data.ProcessInstances[0].id,
+        'process-details',
+        ouiaSafe
+      )}
+    >
       <CardHeader>
         <Title headingLevel="h3" size="xl">
           Details
@@ -60,7 +80,7 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
           )}
           <FormGroup label="State" fieldId="state">
             <Text component={TextVariants.p}>
-              {stateIconCreator(data.ProcessInstances[0].state)}
+              {ProcessInstanceIconCreator(data.ProcessInstances[0].state)}
             </Text>
           </FormGroup>
           <FormGroup label="Id" fieldId="id">
@@ -133,9 +153,9 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
                   >
                     <Button variant="link" icon={<LevelUpAltIcon />}>
                       <ItemDescriptor
-                        processInstanceData={
+                        itemDescription={getProcessInstanceDescription(
                           data.ProcessInstances[0].parentProcessInstance
-                        }
+                        )}
                       />
                     </Button>
                   </Tooltip>
@@ -154,7 +174,11 @@ const ProcessDetails: React.FC<IOwnProps> = ({ data, from }) => {
                     >
                       <Tooltip content={child.id}>
                         <Button variant="link" icon={<LevelDownAltIcon />}>
-                          <ItemDescriptor processInstanceData={child} />
+                          <ItemDescriptor
+                            itemDescription={getProcessInstanceDescription(
+                              child
+                            )}
+                          />
                         </Button>
                       </Tooltip>
                     </Link>

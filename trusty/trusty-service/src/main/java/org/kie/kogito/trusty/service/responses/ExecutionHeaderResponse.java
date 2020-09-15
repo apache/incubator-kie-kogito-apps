@@ -23,7 +23,7 @@ import java.time.ZoneOffset;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.kie.kogito.trusty.storage.api.model.Execution;
-import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
+import org.kie.kogito.trusty.storage.api.model.ExecutionType;
 
 /**
  * An execution header.
@@ -37,8 +37,8 @@ public class ExecutionHeaderResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private OffsetDateTime executionDate;
 
-    @JsonProperty("hasSucceeded")
-    private boolean hasSucceeded;
+    @JsonProperty("executionSucceeded")
+    private Boolean hasSucceeded;
 
     @JsonProperty("executorName")
     private String executorName;
@@ -46,24 +46,40 @@ public class ExecutionHeaderResponse {
     @JsonProperty("executedModelName")
     private String executedModelName;
 
+    @JsonProperty("executedModelNamespace")
+    private String executedModelNamespace;
+
     @JsonProperty("executionType")
-    private ExecutionTypeEnum executionType;
+    private ExecutionType executionType;
 
     private ExecutionHeaderResponse() {
     }
 
-    public ExecutionHeaderResponse(String executionId, OffsetDateTime executionDate, boolean hasSucceeded, String executorName, String executedModelName, ExecutionTypeEnum executionType) {
+    public ExecutionHeaderResponse(String executionId,
+                                   OffsetDateTime executionDate,
+                                   Boolean hasSucceeded,
+                                   String executorName,
+                                   String executedModelName,
+                                   String executedModelNamespace,
+                                   ExecutionType executionType) {
         this.executionId = executionId;
         this.executionDate = executionDate;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
         this.executedModelName = executedModelName;
+        this.executedModelNamespace = executedModelNamespace;
         this.executionType = executionType;
     }
 
     public static ExecutionHeaderResponse fromExecution(Execution execution) {
         OffsetDateTime ldt = OffsetDateTime.ofInstant((Instant.ofEpochMilli(execution.getExecutionTimestamp())), ZoneOffset.UTC);
-        return new ExecutionHeaderResponse(execution.getExecutionId(), ldt, execution.hasSucceeded(), execution.getExecutorName(), execution.getExecutedModelName(), execution.getExecutionType());
+        return new ExecutionHeaderResponse(execution.getExecutionId(),
+                                           ldt,
+                                           execution.hasSucceeded(),
+                                           execution.getExecutorName(),
+                                           execution.getExecutedModelName(),
+                                           execution.getExecutedModelNamespace(),
+                                           execution.getExecutionType());
     }
 
     /**
@@ -89,7 +105,7 @@ public class ExecutionHeaderResponse {
      *
      * @return true if the execution was successful from an technical point of view, false otherwise.
      */
-    public boolean hasSucceeded() {
+    public Boolean hasSucceeded() {
         return hasSucceeded;
     }
 
@@ -112,11 +128,20 @@ public class ExecutionHeaderResponse {
     }
 
     /**
+     * Gets the namespace of the executed model.
+     *
+     * @return The namespace of the executed model.
+     */
+    public String getExecutedModelNamespace() {
+        return executedModelNamespace;
+    }
+
+    /**
      * Gets the execution type.
      *
      * @return The execution type.
      */
-    public ExecutionTypeEnum getExecutionType() {
+    public ExecutionType getExecutionType() {
         return executionType;
     }
 }

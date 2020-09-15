@@ -2,50 +2,12 @@ import gql from 'graphql-tag';
 
 const GET_PROCESS_INSTANCES = gql`
   query getProcessInstances(
-    $state: [ProcessInstanceState!]
+    $where: ProcessInstanceArgument
     $offset: Int
     $limit: Int
   ) {
     ProcessInstances(
-      where: {
-        parentProcessInstanceId: { isNull: true }
-        state: { in: $state }
-      }
-      pagination: { offset: $offset, limit: $limit }
-    ) {
-      id
-      processId
-      processName
-      parentProcessInstanceId
-      rootProcessInstanceId
-      roles
-      state
-      start
-      lastUpdate
-      addons
-      businessKey
-      serviceUrl
-      error {
-        nodeDefinitionId
-        message
-      }
-    }
-  }
-`;
-
-const GET_PROCESS_INSTANCES_WITH_BUSINESSKEY = gql`
-  query getProcessInstancesWithBusinessKey(
-    $state: [ProcessInstanceState!]
-    $offset: Int
-    $limit: Int
-    $businessKeys: [ProcessInstanceArgument!]
-  ) {
-    ProcessInstances(
-      where: {
-        parentProcessInstanceId: { isNull: true }
-        state: { in: $state }
-        or: $businessKeys
-      }
+      where: $where
       pagination: { offset: $offset, limit: $limit }
     ) {
       id
@@ -133,6 +95,11 @@ const GET_PROCESS_INSTANCE = gql`
         exit
         type
         definitionId
+      }
+      milestones {
+        id
+        name
+        status
       }
     }
   }
@@ -238,8 +205,139 @@ const GET_INPUT_FIELDS_FROM_TYPES = gql`
         type {
           name
           kind
+          enumValues {
+            name
+          }
+          ofType {
+            kind
+            name
+            enumValues {
+              name
+            }
+          }
         }
       }
+    }
+  }
+`;
+
+const GET_USER_TASKS_BY_STATES = gql`
+  query getUserTasksByStates($state: [String!]) {
+    UserTaskInstances(where: { state: { in: $state } }) {
+      id
+      description
+      name
+      priority
+      processInstanceId
+      processId
+      rootProcessInstanceId
+      rootProcessId
+      state
+      actualOwner
+      adminGroups
+      adminUsers
+      completed
+      started
+      excludedUsers
+      potentialGroups
+      potentialUsers
+      inputs
+      outputs
+      referenceName
+      endpoint
+    }
+  }
+`;
+
+const GET_USER_TASK = gql`
+  query getUserTaskById($id: String) {
+    UserTaskInstances(where: { id: { equal: $id } }) {
+      id
+      description
+      name
+      priority
+      processInstanceId
+      processId
+      rootProcessInstanceId
+      rootProcessId
+      state
+      actualOwner
+      adminGroups
+      adminUsers
+      completed
+      started
+      excludedUsers
+      potentialGroups
+      potentialUsers
+      inputs
+      outputs
+      referenceName
+      endpoint
+    }
+  }
+`;
+
+const GET_TASKS_FOR_USER = gql`
+  query getTasksForUser(
+    $user: String
+    $groups: [String!]
+    $offset: Int
+    $limit: Int
+  ) {
+    UserTaskInstances(
+      where: {
+        or: [
+          { actualOwner: { equal: $user } }
+          { potentialUsers: { contains: $user } }
+          { potentialGroups: { containsAny: $groups } }
+        ]
+      }
+      pagination: { offset: $offset, limit: $limit }
+    ) {
+      id
+      name
+      referenceName
+      description
+      priority
+      processInstanceId
+      processId
+      rootProcessInstanceId
+      rootProcessId
+      state
+      actualOwner
+      adminGroups
+      adminUsers
+      completed
+      started
+      excludedUsers
+      potentialGroups
+      potentialUsers
+      inputs
+      outputs
+      referenceName
+      lastUpdate
+      endpoint
+    }
+  }
+`;
+
+const GET_JOBS_BY_PROC_INST_ID = gql`
+  query getJobsByProcessInstanceId($processInstanceId: String) {
+    Jobs(where: { processInstanceId: { equal: $processInstanceId } }) {
+      id
+      processId
+      processInstanceId
+      rootProcessId
+      status
+      expirationTime
+      priority
+      callbackEndpoint
+      repeatInterval
+      repeatLimit
+      scheduledId
+      retries
+      lastUpdate
+      expirationTime
     }
   }
 `;

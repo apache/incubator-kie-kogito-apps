@@ -19,7 +19,6 @@ package org.kie.kogito.trusty.service;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,12 +27,13 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.trusty.service.models.MatchedExecutionHeaders;
+import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.Execution;
 
 @QuarkusTest
-@QuarkusTestResource(TrustyInfinispanServerTestResource.class)
+@QuarkusTestResource(InfinispanQuarkusTestResource.class)
 public class TrustyServiceIT {
 
     @Inject
@@ -44,7 +44,9 @@ public class TrustyServiceIT {
 
     @BeforeEach
     public void setup() {
+        trustyStorageService.getExplainabilityResultStorage().clear();
         trustyStorageService.getDecisionsStorage().clear();
+        trustyStorageService.getModelStorage().clear();
     }
 
     @Test
@@ -53,9 +55,9 @@ public class TrustyServiceIT {
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692957000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692959000L), ZoneOffset.UTC);
-        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals("myExecution", result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
@@ -65,9 +67,9 @@ public class TrustyServiceIT {
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692940000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692955000L), ZoneOffset.UTC);
-        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(from, to, 100, 0, "");
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals("myExecution", result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
@@ -77,9 +79,9 @@ public class TrustyServiceIT {
 
         OffsetDateTime from = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692940000L), ZoneOffset.UTC);
         OffsetDateTime to = OffsetDateTime.ofInstant(Instant.ofEpochMilli(1591692959000L), ZoneOffset.UTC);
-        List<Execution> result = trustyService.getExecutionHeaders(from, to, 100, 0, "my");
-        Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("myExecution", result.get(0).getExecutionId());
+        MatchedExecutionHeaders result = trustyService.getExecutionHeaders(from, to, 100, 0, "my");
+        Assertions.assertEquals(1, result.getExecutions().size());
+        Assertions.assertEquals("myExecution", result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
@@ -104,11 +106,39 @@ public class TrustyServiceIT {
         Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getDecisionById(executionId));
     }
 
+    @Test
+    public void givenAModelWhenGetModelByIdIsCalledThenTheModelIsReturned() {
+        String model = "definition";
+        String modelId = "name:namespace";
+        storeModel(model);
+
+        String result = trustyService.getModelById(modelId);
+        Assertions.assertEquals(model, result);
+    }
+
+    @Test
+    public void givenADuplicatedModelWhenTheModelIsStoredThenAnExceptionIsRaised() {
+        String model = "definition";
+        storeModel(model);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> storeModel(model));
+    }
+
+    @Test
+    public void givenNoModelsWhenAModelIsRetrievedThenAnExceptionIsRaised() {
+        String modelId = "name:namespace";
+        Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getModelById(modelId));
+    }
+
     private Decision storeExecution(String executionId, Long timestamp) {
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
         decision.setExecutionTimestamp(timestamp);
         trustyService.storeDecision(decision.getExecutionId(), decision);
         return decision;
+    }
+
+    private String storeModel(String model) {
+        trustyService.storeModel("groupId", "artifactId", "version", "name", "namespace", model);
+        return model;
     }
 }

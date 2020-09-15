@@ -5,6 +5,9 @@ import * as ApolloReactHooks from '@apollo/react-hooks';
 
 export namespace GraphQL {
   export type Maybe<T> = T | null;
+  export type Exact<T extends { [key: string]: any }> = {
+    [K in keyof T]: T[K];
+  };
 
   /** All built-in and custom scalars, mapped to their actual values */
   export type Scalars = {
@@ -13,6 +16,7 @@ export namespace GraphQL {
     Boolean: boolean;
     Int: number;
     Float: number;
+    /** An ISO-8601 compliant DateTime Scalar */
     DateTime: any;
   };
 
@@ -59,6 +63,7 @@ export namespace GraphQL {
     retries?: Maybe<Scalars['Int']>;
     lastUpdate?: Maybe<Scalars['DateTime']>;
     executionCounter?: Maybe<Scalars['Int']>;
+    endpoint?: Maybe<Scalars['String']>;
   };
 
   export type JobArgument = {
@@ -648,14 +653,14 @@ export namespace GraphQL {
     NonNull = 'NON_NULL'
   }
 
-  export type GetProcessInstancesQueryVariables = {
-    state?: Maybe<Array<ProcessInstanceState>>;
+  export type GetProcessInstancesQueryVariables = Exact<{
+    where?: Maybe<ProcessInstanceArgument>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
-  };
+  }>;
 
   export type GetProcessInstancesQuery = { __typename?: 'Query' } & {
-    ProcessInstances: Maybe<
+    ProcessInstances?: Maybe<
       Array<
         Maybe<
           { __typename?: 'ProcessInstance' } & Pick<
@@ -673,7 +678,7 @@ export namespace GraphQL {
             | 'businessKey'
             | 'serviceUrl'
           > & {
-              error: Maybe<
+              error?: Maybe<
                 { __typename?: 'ProcessInstanceError' } & Pick<
                   ProcessInstanceError,
                   'nodeDefinitionId' | 'message'
@@ -685,52 +690,12 @@ export namespace GraphQL {
     >;
   };
 
-  export type GetProcessInstancesWithBusinessKeyQueryVariables = {
-    state?: Maybe<Array<ProcessInstanceState>>;
-    offset?: Maybe<Scalars['Int']>;
-    limit?: Maybe<Scalars['Int']>;
-    businessKeys?: Maybe<Array<ProcessInstanceArgument>>;
-  };
-
-  export type GetProcessInstancesWithBusinessKeyQuery = {
-    __typename?: 'Query';
-  } & {
-    ProcessInstances: Maybe<
-      Array<
-        Maybe<
-          { __typename?: 'ProcessInstance' } & Pick<
-            ProcessInstance,
-            | 'id'
-            | 'processId'
-            | 'processName'
-            | 'parentProcessInstanceId'
-            | 'rootProcessInstanceId'
-            | 'roles'
-            | 'state'
-            | 'start'
-            | 'lastUpdate'
-            | 'addons'
-            | 'businessKey'
-            | 'serviceUrl'
-          > & {
-              error: Maybe<
-                { __typename?: 'ProcessInstanceError' } & Pick<
-                  ProcessInstanceError,
-                  'nodeDefinitionId' | 'message'
-                >
-              >;
-            }
-        >
-      >
-    >;
-  };
-
-  export type GetChildInstancesQueryVariables = {
+  export type GetChildInstancesQueryVariables = Exact<{
     rootProcessInstanceId?: Maybe<Scalars['String']>;
-  };
+  }>;
 
   export type GetChildInstancesQuery = { __typename?: 'Query' } & {
-    ProcessInstances: Maybe<
+    ProcessInstances?: Maybe<
       Array<
         Maybe<
           { __typename?: 'ProcessInstance' } & Pick<
@@ -748,7 +713,7 @@ export namespace GraphQL {
             | 'addons'
             | 'businessKey'
           > & {
-              error: Maybe<
+              error?: Maybe<
                 { __typename?: 'ProcessInstanceError' } & Pick<
                   ProcessInstanceError,
                   'nodeDefinitionId' | 'message'
@@ -760,12 +725,12 @@ export namespace GraphQL {
     >;
   };
 
-  export type GetProcessInstanceByIdQueryVariables = {
+  export type GetProcessInstanceByIdQueryVariables = Exact<{
     id?: Maybe<Scalars['String']>;
-  };
+  }>;
 
   export type GetProcessInstanceByIdQuery = { __typename?: 'Query' } & {
-    ProcessInstances: Maybe<
+    ProcessInstances?: Maybe<
       Array<
         Maybe<
           { __typename?: 'ProcessInstance' } & Pick<
@@ -785,19 +750,19 @@ export namespace GraphQL {
             | 'endpoint'
             | 'serviceUrl'
           > & {
-              parentProcessInstance: Maybe<
+              parentProcessInstance?: Maybe<
                 { __typename?: 'ProcessInstance' } & Pick<
                   ProcessInstance,
                   'id' | 'processName' | 'businessKey'
                 >
               >;
-              error: Maybe<
+              error?: Maybe<
                 { __typename?: 'ProcessInstanceError' } & Pick<
                   ProcessInstanceError,
                   'nodeDefinitionId' | 'message'
                 >
               >;
-              childProcessInstances: Maybe<
+              childProcessInstances?: Maybe<
                 Array<
                   { __typename?: 'ProcessInstance' } & Pick<
                     ProcessInstance,
@@ -817,27 +782,35 @@ export namespace GraphQL {
                   | 'definitionId'
                 >
               >;
+              milestones?: Maybe<
+                Array<
+                  { __typename?: 'Milestone' } & Pick<
+                    Milestone,
+                    'id' | 'name' | 'status'
+                  >
+                >
+              >;
             }
         >
       >
     >;
   };
 
-  export type GetColumnPickerAttributesQueryVariables = {
+  export type GetColumnPickerAttributesQueryVariables = Exact<{
     columnPickerType: Scalars['String'];
-  };
+  }>;
 
   export type GetColumnPickerAttributesQuery = { __typename?: 'Query' } & {
-    __type: Maybe<
+    __type?: Maybe<
       { __typename?: '__Type' } & Pick<__Type, 'name'> & {
-          fields: Maybe<
+          fields?: Maybe<
             Array<
               { __typename?: '__Field' } & Pick<__Field, 'name'> & {
                   type: { __typename?: '__Type' } & Pick<
                     __Type,
                     'name' | 'kind'
                   > & {
-                      fields: Maybe<
+                      fields?: Maybe<
                         Array<
                           { __typename?: '__Field' } & Pick<__Field, 'name'> & {
                               type: { __typename?: '__Type' } & Pick<
@@ -855,13 +828,13 @@ export namespace GraphQL {
     >;
   };
 
-  export type GetQueryTypesQueryVariables = {};
+  export type GetQueryTypesQueryVariables = Exact<{ [key: string]: never }>;
 
   export type GetQueryTypesQuery = { __typename?: 'Query' } & {
     __schema: { __typename?: '__Schema' } & {
       queryType: Array<
         { __typename?: '__Type' } & Pick<__Type, 'name' | 'kind'> & {
-            fields: Maybe<
+            fields?: Maybe<
               Array<
                 { __typename?: '__Field' } & Pick<__Field, 'name'> & {
                     type: { __typename?: '__Type' } & Pick<
@@ -871,7 +844,7 @@ export namespace GraphQL {
                   }
               >
             >;
-            inputFields: Maybe<
+            inputFields?: Maybe<
               Array<
                 { __typename?: '__InputValue' } & Pick<__InputValue, 'name'> & {
                     type: { __typename?: '__Type' } & Pick<
@@ -886,12 +859,12 @@ export namespace GraphQL {
     };
   };
 
-  export type GetQueryFieldsQueryVariables = {};
+  export type GetQueryFieldsQueryVariables = Exact<{ [key: string]: never }>;
 
   export type GetQueryFieldsQuery = { __typename?: 'Query' } & {
-    __type: Maybe<
+    __type?: Maybe<
       { __typename?: '__Type' } & Pick<__Type, 'name'> & {
-          fields: Maybe<
+          fields?: Maybe<
             Array<
               { __typename?: '__Field' } & Pick<__Field, 'name'> & {
                   args: Array<
@@ -906,7 +879,7 @@ export namespace GraphQL {
                       }
                   >;
                   type: { __typename?: '__Type' } & {
-                    ofType: Maybe<
+                    ofType?: Maybe<
                       { __typename?: '__Type' } & Pick<__Type, 'name'>
                     >;
                   };
@@ -917,21 +890,21 @@ export namespace GraphQL {
     >;
   };
 
-  export type GetInputFieldsFromQueryQueryVariables = {
+  export type GetInputFieldsFromQueryQueryVariables = Exact<{
     currentQuery: Scalars['String'];
-  };
+  }>;
 
   export type GetInputFieldsFromQueryQuery = { __typename?: 'Query' } & {
-    __type: Maybe<
+    __type?: Maybe<
       { __typename?: '__Type' } & Pick<__Type, 'name'> & {
-          inputFields: Maybe<
+          inputFields?: Maybe<
             Array<
               { __typename?: '__InputValue' } & Pick<__InputValue, 'name'> & {
                   type: { __typename?: '__Type' } & Pick<
                     __Type,
                     'name' | 'kind'
                   > & {
-                      inputFields: Maybe<
+                      inputFields?: Maybe<
                         Array<
                           { __typename?: '__InputValue' } & Pick<
                             __InputValue,
@@ -952,20 +925,44 @@ export namespace GraphQL {
     >;
   };
 
-  export type GetInputFieldsFromTypeQueryVariables = {
+  export type GetInputFieldsFromTypeQueryVariables = Exact<{
     type: Scalars['String'];
-  };
+  }>;
 
   export type GetInputFieldsFromTypeQuery = { __typename?: 'Query' } & {
-    __type: Maybe<
+    __type?: Maybe<
       { __typename?: '__Type' } & Pick<__Type, 'name'> & {
-          inputFields: Maybe<
+          inputFields?: Maybe<
             Array<
               { __typename?: '__InputValue' } & Pick<__InputValue, 'name'> & {
                   type: { __typename?: '__Type' } & Pick<
                     __Type,
                     'name' | 'kind'
-                  >;
+                  > & {
+                      enumValues?: Maybe<
+                        Array<
+                          { __typename?: '__EnumValue' } & Pick<
+                            __EnumValue,
+                            'name'
+                          >
+                        >
+                      >;
+                      ofType?: Maybe<
+                        { __typename?: '__Type' } & Pick<
+                          __Type,
+                          'kind' | 'name'
+                        > & {
+                            enumValues?: Maybe<
+                              Array<
+                                { __typename?: '__EnumValue' } & Pick<
+                                  __EnumValue,
+                                  'name'
+                                >
+                              >
+                            >;
+                          }
+                      >;
+                    };
                 }
             >
           >;
@@ -973,17 +970,158 @@ export namespace GraphQL {
     >;
   };
 
+  export type GetUserTasksByStatesQueryVariables = Exact<{
+    state?: Maybe<Array<Scalars['String']>>;
+  }>;
+
+  export type GetUserTasksByStatesQuery = { __typename?: 'Query' } & {
+    UserTaskInstances?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'UserTaskInstance' } & Pick<
+            UserTaskInstance,
+            | 'id'
+            | 'description'
+            | 'name'
+            | 'priority'
+            | 'processInstanceId'
+            | 'processId'
+            | 'rootProcessInstanceId'
+            | 'rootProcessId'
+            | 'state'
+            | 'actualOwner'
+            | 'adminGroups'
+            | 'adminUsers'
+            | 'completed'
+            | 'started'
+            | 'excludedUsers'
+            | 'potentialGroups'
+            | 'potentialUsers'
+            | 'inputs'
+            | 'outputs'
+            | 'referenceName'
+            | 'endpoint'
+          >
+        >
+      >
+    >;
+  };
+
+  export type GetUserTaskByIdQueryVariables = Exact<{
+    id?: Maybe<Scalars['String']>;
+  }>;
+
+  export type GetUserTaskByIdQuery = { __typename?: 'Query' } & {
+    UserTaskInstances?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'UserTaskInstance' } & Pick<
+            UserTaskInstance,
+            | 'id'
+            | 'description'
+            | 'name'
+            | 'priority'
+            | 'processInstanceId'
+            | 'processId'
+            | 'rootProcessInstanceId'
+            | 'rootProcessId'
+            | 'state'
+            | 'actualOwner'
+            | 'adminGroups'
+            | 'adminUsers'
+            | 'completed'
+            | 'started'
+            | 'excludedUsers'
+            | 'potentialGroups'
+            | 'potentialUsers'
+            | 'inputs'
+            | 'outputs'
+            | 'referenceName'
+            | 'endpoint'
+          >
+        >
+      >
+    >;
+  };
+
+  export type GetTasksForUserQueryVariables = Exact<{
+    user?: Maybe<Scalars['String']>;
+    groups?: Maybe<Array<Scalars['String']>>;
+    offset?: Maybe<Scalars['Int']>;
+    limit?: Maybe<Scalars['Int']>;
+  }>;
+
+  export type GetTasksForUserQuery = { __typename?: 'Query' } & {
+    UserTaskInstances?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'UserTaskInstance' } & Pick<
+            UserTaskInstance,
+            | 'id'
+            | 'name'
+            | 'referenceName'
+            | 'description'
+            | 'priority'
+            | 'processInstanceId'
+            | 'processId'
+            | 'rootProcessInstanceId'
+            | 'rootProcessId'
+            | 'state'
+            | 'actualOwner'
+            | 'adminGroups'
+            | 'adminUsers'
+            | 'completed'
+            | 'started'
+            | 'excludedUsers'
+            | 'potentialGroups'
+            | 'potentialUsers'
+            | 'inputs'
+            | 'outputs'
+            | 'lastUpdate'
+            | 'endpoint'
+          >
+        >
+      >
+    >;
+  };
+
+  export type GetJobsByProcessInstanceIdQueryVariables = Exact<{
+    processInstanceId?: Maybe<Scalars['String']>;
+  }>;
+
+  export type GetJobsByProcessInstanceIdQuery = { __typename?: 'Query' } & {
+    Jobs?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'Job' } & Pick<
+            Job,
+            | 'id'
+            | 'processId'
+            | 'processInstanceId'
+            | 'rootProcessId'
+            | 'status'
+            | 'expirationTime'
+            | 'priority'
+            | 'callbackEndpoint'
+            | 'repeatInterval'
+            | 'repeatLimit'
+            | 'scheduledId'
+            | 'retries'
+            | 'lastUpdate'
+          >
+        >
+      >
+    >;
+  };
+
   export const GetProcessInstancesDocument = gql`
     query getProcessInstances(
-      $state: [ProcessInstanceState!]
+      $where: ProcessInstanceArgument
       $offset: Int
       $limit: Int
     ) {
       ProcessInstances(
-        where: {
-          parentProcessInstanceId: { isNull: true }
-          state: { in: $state }
-        }
+        where: $where
         pagination: { offset: $offset, limit: $limit }
       ) {
         id
@@ -1018,7 +1156,7 @@ export namespace GraphQL {
    * @example
    * const { data, loading, error } = useGetProcessInstancesQuery({
    *   variables: {
-   *      state: // value for 'state'
+   *      where: // value for 'where'
    *      offset: // value for 'offset'
    *      limit: // value for 'limit'
    *   },
@@ -1055,92 +1193,6 @@ export namespace GraphQL {
   export type GetProcessInstancesQueryResult = ApolloReactCommon.QueryResult<
     GetProcessInstancesQuery,
     GetProcessInstancesQueryVariables
-  >;
-  export const GetProcessInstancesWithBusinessKeyDocument = gql`
-    query getProcessInstancesWithBusinessKey(
-      $state: [ProcessInstanceState!]
-      $offset: Int
-      $limit: Int
-      $businessKeys: [ProcessInstanceArgument!]
-    ) {
-      ProcessInstances(
-        where: {
-          parentProcessInstanceId: { isNull: true }
-          state: { in: $state }
-          or: $businessKeys
-        }
-        pagination: { offset: $offset, limit: $limit }
-      ) {
-        id
-        processId
-        processName
-        parentProcessInstanceId
-        rootProcessInstanceId
-        roles
-        state
-        start
-        lastUpdate
-        addons
-        businessKey
-        serviceUrl
-        error {
-          nodeDefinitionId
-          message
-        }
-      }
-    }
-  `;
-
-  /**
-   * __useGetProcessInstancesWithBusinessKeyQuery__
-   *
-   * To run a query within a React component, call `useGetProcessInstancesWithBusinessKeyQuery` and pass it any options that fit your needs.
-   * When your component renders, `useGetProcessInstancesWithBusinessKeyQuery` returns an object from Apollo Client that contains loading, error, and data properties
-   * you can use to render your UI.
-   *
-   * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
-   *
-   * @example
-   * const { data, loading, error } = useGetProcessInstancesWithBusinessKeyQuery({
-   *   variables: {
-   *      state: // value for 'state'
-   *      offset: // value for 'offset'
-   *      limit: // value for 'limit'
-   *      businessKeys: // value for 'businessKeys'
-   *   },
-   * });
-   */
-  export function useGetProcessInstancesWithBusinessKeyQuery(
-    baseOptions?: ApolloReactHooks.QueryHookOptions<
-      GetProcessInstancesWithBusinessKeyQuery,
-      GetProcessInstancesWithBusinessKeyQueryVariables
-    >
-  ) {
-    return ApolloReactHooks.useQuery<
-      GetProcessInstancesWithBusinessKeyQuery,
-      GetProcessInstancesWithBusinessKeyQueryVariables
-    >(GetProcessInstancesWithBusinessKeyDocument, baseOptions);
-  }
-  export function useGetProcessInstancesWithBusinessKeyLazyQuery(
-    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-      GetProcessInstancesWithBusinessKeyQuery,
-      GetProcessInstancesWithBusinessKeyQueryVariables
-    >
-  ) {
-    return ApolloReactHooks.useLazyQuery<
-      GetProcessInstancesWithBusinessKeyQuery,
-      GetProcessInstancesWithBusinessKeyQueryVariables
-    >(GetProcessInstancesWithBusinessKeyDocument, baseOptions);
-  }
-  export type GetProcessInstancesWithBusinessKeyQueryHookResult = ReturnType<
-    typeof useGetProcessInstancesWithBusinessKeyQuery
-  >;
-  export type GetProcessInstancesWithBusinessKeyLazyQueryHookResult = ReturnType<
-    typeof useGetProcessInstancesWithBusinessKeyLazyQuery
-  >;
-  export type GetProcessInstancesWithBusinessKeyQueryResult = ApolloReactCommon.QueryResult<
-    GetProcessInstancesWithBusinessKeyQuery,
-    GetProcessInstancesWithBusinessKeyQueryVariables
   >;
   export const GetChildInstancesDocument = gql`
     query getChildInstances($rootProcessInstanceId: String) {
@@ -1255,6 +1307,11 @@ export namespace GraphQL {
           exit
           type
           definitionId
+        }
+        milestones {
+          id
+          name
+          status
         }
       }
     }
@@ -1598,6 +1655,16 @@ export namespace GraphQL {
           type {
             name
             kind
+            enumValues {
+              name
+            }
+            ofType {
+              kind
+              name
+              enumValues {
+                name
+              }
+            }
           }
         }
       }
@@ -1651,5 +1718,321 @@ export namespace GraphQL {
   export type GetInputFieldsFromTypeQueryResult = ApolloReactCommon.QueryResult<
     GetInputFieldsFromTypeQuery,
     GetInputFieldsFromTypeQueryVariables
+  >;
+  export const GetUserTasksByStatesDocument = gql`
+    query getUserTasksByStates($state: [String!]) {
+      UserTaskInstances(where: { state: { in: $state } }) {
+        id
+        description
+        name
+        priority
+        processInstanceId
+        processId
+        rootProcessInstanceId
+        rootProcessId
+        state
+        actualOwner
+        adminGroups
+        adminUsers
+        completed
+        started
+        excludedUsers
+        potentialGroups
+        potentialUsers
+        inputs
+        outputs
+        referenceName
+        endpoint
+      }
+    }
+  `;
+
+  /**
+   * __useGetUserTasksByStatesQuery__
+   *
+   * To run a query within a React component, call `useGetUserTasksByStatesQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetUserTasksByStatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * you can use to render your UI.
+   *
+   * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+   *
+   * @example
+   * const { data, loading, error } = useGetUserTasksByStatesQuery({
+   *   variables: {
+   *      state: // value for 'state'
+   *   },
+   * });
+   */
+  export function useGetUserTasksByStatesQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<
+      GetUserTasksByStatesQuery,
+      GetUserTasksByStatesQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useQuery<
+      GetUserTasksByStatesQuery,
+      GetUserTasksByStatesQueryVariables
+    >(GetUserTasksByStatesDocument, baseOptions);
+  }
+  export function useGetUserTasksByStatesLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+      GetUserTasksByStatesQuery,
+      GetUserTasksByStatesQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useLazyQuery<
+      GetUserTasksByStatesQuery,
+      GetUserTasksByStatesQueryVariables
+    >(GetUserTasksByStatesDocument, baseOptions);
+  }
+  export type GetUserTasksByStatesQueryHookResult = ReturnType<
+    typeof useGetUserTasksByStatesQuery
+  >;
+  export type GetUserTasksByStatesLazyQueryHookResult = ReturnType<
+    typeof useGetUserTasksByStatesLazyQuery
+  >;
+  export type GetUserTasksByStatesQueryResult = ApolloReactCommon.QueryResult<
+    GetUserTasksByStatesQuery,
+    GetUserTasksByStatesQueryVariables
+  >;
+  export const GetUserTaskByIdDocument = gql`
+    query getUserTaskById($id: String) {
+      UserTaskInstances(where: { id: { equal: $id } }) {
+        id
+        description
+        name
+        priority
+        processInstanceId
+        processId
+        rootProcessInstanceId
+        rootProcessId
+        state
+        actualOwner
+        adminGroups
+        adminUsers
+        completed
+        started
+        excludedUsers
+        potentialGroups
+        potentialUsers
+        inputs
+        outputs
+        referenceName
+        endpoint
+      }
+    }
+  `;
+
+  /**
+   * __useGetUserTaskByIdQuery__
+   *
+   * To run a query within a React component, call `useGetUserTaskByIdQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetUserTaskByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * you can use to render your UI.
+   *
+   * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+   *
+   * @example
+   * const { data, loading, error } = useGetUserTaskByIdQuery({
+   *   variables: {
+   *      id: // value for 'id'
+   *   },
+   * });
+   */
+  export function useGetUserTaskByIdQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<
+      GetUserTaskByIdQuery,
+      GetUserTaskByIdQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useQuery<
+      GetUserTaskByIdQuery,
+      GetUserTaskByIdQueryVariables
+    >(GetUserTaskByIdDocument, baseOptions);
+  }
+  export function useGetUserTaskByIdLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+      GetUserTaskByIdQuery,
+      GetUserTaskByIdQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useLazyQuery<
+      GetUserTaskByIdQuery,
+      GetUserTaskByIdQueryVariables
+    >(GetUserTaskByIdDocument, baseOptions);
+  }
+  export type GetUserTaskByIdQueryHookResult = ReturnType<
+    typeof useGetUserTaskByIdQuery
+  >;
+  export type GetUserTaskByIdLazyQueryHookResult = ReturnType<
+    typeof useGetUserTaskByIdLazyQuery
+  >;
+  export type GetUserTaskByIdQueryResult = ApolloReactCommon.QueryResult<
+    GetUserTaskByIdQuery,
+    GetUserTaskByIdQueryVariables
+  >;
+  export const GetTasksForUserDocument = gql`
+    query getTasksForUser(
+      $user: String
+      $groups: [String!]
+      $offset: Int
+      $limit: Int
+    ) {
+      UserTaskInstances(
+        where: {
+          or: [
+            { actualOwner: { equal: $user } }
+            { potentialUsers: { contains: $user } }
+            { potentialGroups: { containsAny: $groups } }
+          ]
+        }
+        pagination: { offset: $offset, limit: $limit }
+      ) {
+        id
+        name
+        referenceName
+        description
+        priority
+        processInstanceId
+        processId
+        rootProcessInstanceId
+        rootProcessId
+        state
+        actualOwner
+        adminGroups
+        adminUsers
+        completed
+        started
+        excludedUsers
+        potentialGroups
+        potentialUsers
+        inputs
+        outputs
+        referenceName
+        lastUpdate
+        endpoint
+      }
+    }
+  `;
+
+  /**
+   * __useGetTasksForUserQuery__
+   *
+   * To run a query within a React component, call `useGetTasksForUserQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetTasksForUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * you can use to render your UI.
+   *
+   * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+   *
+   * @example
+   * const { data, loading, error } = useGetTasksForUserQuery({
+   *   variables: {
+   *      user: // value for 'user'
+   *      groups: // value for 'groups'
+   *      offset: // value for 'offset'
+   *      limit: // value for 'limit'
+   *   },
+   * });
+   */
+  export function useGetTasksForUserQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useQuery<
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
+    >(GetTasksForUserDocument, baseOptions);
+  }
+  export function useGetTasksForUserLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useLazyQuery<
+      GetTasksForUserQuery,
+      GetTasksForUserQueryVariables
+    >(GetTasksForUserDocument, baseOptions);
+  }
+  export type GetTasksForUserQueryHookResult = ReturnType<
+    typeof useGetTasksForUserQuery
+  >;
+  export type GetTasksForUserLazyQueryHookResult = ReturnType<
+    typeof useGetTasksForUserLazyQuery
+  >;
+  export type GetTasksForUserQueryResult = ApolloReactCommon.QueryResult<
+    GetTasksForUserQuery,
+    GetTasksForUserQueryVariables
+  >;
+  export const GetJobsByProcessInstanceIdDocument = gql`
+    query getJobsByProcessInstanceId($processInstanceId: String) {
+      Jobs(where: { processInstanceId: { equal: $processInstanceId } }) {
+        id
+        processId
+        processInstanceId
+        rootProcessId
+        status
+        expirationTime
+        priority
+        callbackEndpoint
+        repeatInterval
+        repeatLimit
+        scheduledId
+        retries
+        lastUpdate
+        expirationTime
+      }
+    }
+  `;
+
+  /**
+   * __useGetJobsByProcessInstanceIdQuery__
+   *
+   * To run a query within a React component, call `useGetJobsByProcessInstanceIdQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetJobsByProcessInstanceIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * you can use to render your UI.
+   *
+   * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+   *
+   * @example
+   * const { data, loading, error } = useGetJobsByProcessInstanceIdQuery({
+   *   variables: {
+   *      processInstanceId: // value for 'processInstanceId'
+   *   },
+   * });
+   */
+  export function useGetJobsByProcessInstanceIdQuery(
+    baseOptions?: ApolloReactHooks.QueryHookOptions<
+      GetJobsByProcessInstanceIdQuery,
+      GetJobsByProcessInstanceIdQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useQuery<
+      GetJobsByProcessInstanceIdQuery,
+      GetJobsByProcessInstanceIdQueryVariables
+    >(GetJobsByProcessInstanceIdDocument, baseOptions);
+  }
+  export function useGetJobsByProcessInstanceIdLazyQuery(
+    baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+      GetJobsByProcessInstanceIdQuery,
+      GetJobsByProcessInstanceIdQueryVariables
+    >
+  ) {
+    return ApolloReactHooks.useLazyQuery<
+      GetJobsByProcessInstanceIdQuery,
+      GetJobsByProcessInstanceIdQueryVariables
+    >(GetJobsByProcessInstanceIdDocument, baseOptions);
+  }
+  export type GetJobsByProcessInstanceIdQueryHookResult = ReturnType<
+    typeof useGetJobsByProcessInstanceIdQuery
+  >;
+  export type GetJobsByProcessInstanceIdLazyQueryHookResult = ReturnType<
+    typeof useGetJobsByProcessInstanceIdLazyQuery
+  >;
+  export type GetJobsByProcessInstanceIdQueryResult = ApolloReactCommon.QueryResult<
+    GetJobsByProcessInstanceIdQuery,
+    GetJobsByProcessInstanceIdQueryVariables
   >;
 }

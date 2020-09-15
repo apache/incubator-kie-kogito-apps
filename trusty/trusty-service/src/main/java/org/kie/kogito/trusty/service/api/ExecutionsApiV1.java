@@ -16,13 +16,16 @@
 
 package org.kie.kogito.trusty.service.api;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.ws.rs.DefaultValue;
@@ -39,24 +42,27 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
-import org.kie.kogito.trusty.service.ITrustyService;
+import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.service.messaging.incoming.ModelIdCreator;
+import org.kie.kogito.trusty.service.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.service.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.service.responses.ExecutionsResponse;
-import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The trusty api resource.
  */
-@Path("v1/executions")
+@Path("executions")
 public class ExecutionsApiV1 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionsApiV1.class);
 
     @Inject
-    ITrustyService executionService;
+    TrustyService executionService;
 
     /**
      * Gets all the headers of the executions that were evaluated within a specified time range.
@@ -118,21 +124,21 @@ public class ExecutionsApiV1 {
         OffsetDateTime fromDate;
         OffsetDateTime toDate;
         try {
-            fromDate = parseParameterDate(from);
-            toDate = parseParameterDate(to);
+            fromDate = parseParameterDate(from, true);
+            toDate = parseParameterDate(to, false);
         } catch (DateTimeParseException e) {
             LOGGER.warn("Invalid date", e);
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), "Date format should be yyyy-MM-dd'T'HH:mm:ssZ").build();
         }
 
-        List<Execution> executions = executionService.getExecutionHeaders(fromDate, toDate, limit, offset, prefix);
+        MatchedExecutionHeaders result = executionService.getExecutionHeaders(fromDate, toDate, limit, offset, prefix);
 
         List<ExecutionHeaderResponse> headersResponses = new ArrayList<>();
-        executions.forEach(x -> headersResponses.add(ExecutionHeaderResponse.fromExecution(x)));
-        return Response.ok(new ExecutionsResponse(headersResponses.size(), limit, offset, headersResponses)).build();
+        result.getExecutions().forEach(x -> headersResponses.add(ExecutionHeaderResponse.fromExecution(x)));
+        return Response.ok(new ExecutionsResponse(result.getAvailableResults(), limit, offset, headersResponses)).build();
     }
 
-    private OffsetDateTime parseParameterDate(String date) {
+    private OffsetDateTime parseParameterDate(String date, boolean localDateAtStartOfDay) {
         if (date.equals("yesterday")) {
             return OffsetDateTime.now(ZoneOffset.UTC).minusDays(1);
         }
@@ -140,6 +146,62 @@ public class ExecutionsApiV1 {
             return OffsetDateTime.now(ZoneOffset.UTC);
         }
 
-        return ZonedDateTime.parse(date, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+        try {
+            return ZonedDateTime.parse(date, DateTimeFormatter.ISO_OFFSET_DATE_TIME).toOffsetDateTime();
+        } catch (DateTimeParseException e) {
+            ZonedDateTime zonedDateTime = LocalDate.parse(date, DateTimeFormatter.ISO_DATE).atStartOfDay(ZoneId.systemDefault());
+            return localDateAtStartOfDay
+                    ? zonedDateTime.toOffsetDateTime()
+                    : zonedDateTime.toOffsetDateTime().plusDays(1).minusNanos(1);
+        }
+    }
+
+    /**
+     * Gets the model associated with an execution.
+     *
+     * @param executionId The execution ID.
+     * @return The model associated with the execution.
+     */
+    @GET
+    @Path("/{executionId}/model")
+    @APIResponses(value = {
+            @APIResponse(description = "Gets the model associated with an execution.", responseCode = "200", content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(type = SchemaType.STRING))),
+            @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    }
+    )
+    @Operation(summary = "Gets the model associated with an execution.")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getModel(
+            @Parameter(
+                    name = "executionId",
+                    description = "The execution ID.",
+                    required = true,
+                    schema = @Schema(implementation = String.class)
+            ) @PathParam("executionId") String executionId) {
+        return handleModelRequest(executionId);
+    }
+
+    private Response handleModelRequest(String executionId) {
+        return retrieveModel(executionId)
+                .map(definition -> Response.ok(definition).build())
+                .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
+    }
+
+    private Optional<String> retrieveModel(String executionId) {
+        try {
+            Optional<Decision> decision = retrieveDecision(executionId);
+            //TODO GAV components are provided but unused. See https://issues.redhat.com/browse/FAI-239
+            return decision.map(d -> executionService.getModelById(ModelIdCreator.makeIdentifier(null, null, null, d.getExecutedModelName(), d.getExecutedModelNamespace())));
+        } catch (IllegalArgumentException ex) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Decision> retrieveDecision(String executionId) {
+        try {
+            return Optional.ofNullable(executionService.getDecisionById(executionId));
+        } catch (IllegalArgumentException ex) {
+            return Optional.empty();
+        }
     }
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import {
   Breadcrumb,
@@ -7,28 +7,42 @@ import {
   CardBody,
   Grid,
   GridItem,
-  InjectedOuiaProps,
   PageSection,
-  withOuiaContext
+  Text,
+  TextVariants
 } from '@patternfly/react-core';
-import { ouiaPageTypeAndObjectId } from '@kogito-apps/common';
-import PageTitle from '../../Molecules/PageTitle/PageTitle';
-import TaskForm from '../../Organisms/TaskForm/TaskForm';
+import {
+  componentOuiaProps,
+  GraphQL,
+  KogitoEmptyState,
+  KogitoEmptyStateType,
+  ouiaPageTypeAndObjectId,
+  OUIAProps
+} from '@kogito-apps/common';
 import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
-import { TaskInfo } from '../../../model/TaskInfo';
+import PageTitle from '../../Molecules/PageTitle/PageTitle';
+import TaskState from '../../Atoms/TaskState/TaskState';
+import TaskForm from '../../Organisms/TaskForm/TaskForm';
+import { TaskStateType } from '../../../util/Variants';
+import UserTaskInstance = GraphQL.UserTaskInstance;
 
 interface MatchProps {
-  taskID: string;
+  taskId: string;
 }
 
-const UserTaskInstanceDetailsPage: React.FC<
-  RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps
-> = ({ ouiaContext, ...props }) => {
-  const id = props.match.params.taskID;
+const UserTaskInstanceDetailsPage: React.FC<RouteComponentProps<
+  MatchProps,
+  {},
+  {}
+> &
+  OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
+  const id = props.match.params.taskId;
 
-  const context: IContext<TaskInfo> = useContext(TaskConsoleContext);
+  const [userTask, setUserTask] = useState<UserTaskInstance>();
+
+  const context: IContext<UserTaskInstance> = useContext(TaskConsoleContext);
 
   useEffect(() => {
     window.onpopstate = () => {
@@ -37,38 +51,61 @@ const UserTaskInstanceDetailsPage: React.FC<
   });
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'user-tasks', id);
+    return ouiaPageTypeAndObjectId('user-tasks', id);
   });
 
-  const taskInfo = context.getActiveItem();
+  useEffect(() => {
+    if (context.getActiveItem()) {
+      setUserTask(context.getActiveItem());
+    }
+  }, []);
+
+  if (!userTask) {
+    return (
+      <KogitoEmptyState
+        type={KogitoEmptyStateType.Info}
+        title={'Cannot find task'}
+        body={`Cannot find task with id '${id}'`}
+      />
+    );
+  }
 
   return (
     <React.Fragment>
-      <PageSection variant="light">
-        <PageTitle title="Task Details" />
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link to={'/'}>Home</Link>
-          </BreadcrumbItem>
-        </Breadcrumb>
-      </PageSection>
-      <PageSection>
-        <Grid gutter="md" className="pf-u-h-100">
-          <GridItem span={12} className="pf-u-h-100">
-            <Card className="pf-u-h-100">
-              <CardBody className="pf-u-h-100">
-                <TaskForm
-                  taskInfo={taskInfo}
-                  successCallback={() => props.history.goBack()}
-                  errorCallback={() => props.history.goBack()}
-                />
-              </CardBody>
-            </Card>
-          </GridItem>
-        </Grid>
-      </PageSection>
+      <div {...componentOuiaProps(ouiaId, 'UserTaskInstanceDetails', ouiaSafe)}>
+        <PageSection variant="light">
+          <Breadcrumb>
+            <BreadcrumbItem>
+              <Link to={'/'}>Task Inbox</Link>
+            </BreadcrumbItem>
+            <BreadcrumbItem>{userTask.referenceName}</BreadcrumbItem>
+          </Breadcrumb>
+
+          <PageTitle
+            title={userTask.referenceName}
+            extra={<TaskState task={userTask} variant={TaskStateType.LABEL} />}
+          />
+
+          <Text component={TextVariants.small}>ID: {userTask.id}</Text>
+        </PageSection>
+        <PageSection>
+          <Grid hasGutter md={1} className="pf-u-h-100">
+            <GridItem span={12} className="pf-u-h-100">
+              <Card className="pf-u-h-100">
+                <CardBody className="pf-u-h-100">
+                  <TaskForm
+                    userTaskInstance={userTask}
+                    successCallback={() => props.history.push('/')}
+                    errorCallback={() => props.history.push('/')}
+                  />
+                </CardBody>
+              </Card>
+            </GridItem>
+          </Grid>
+        </PageSection>
+      </div>
     </React.Fragment>
   );
 };
 
-export default withOuiaContext(UserTaskInstanceDetailsPage);
+export default UserTaskInstanceDetailsPage;

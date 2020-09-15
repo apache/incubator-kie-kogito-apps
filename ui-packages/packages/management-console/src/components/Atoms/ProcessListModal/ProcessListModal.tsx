@@ -2,72 +2,81 @@ import React from 'react';
 import {
   Modal,
   Title,
-  TitleLevel,
-  BaseSizes,
   Button,
   TextContent,
-  Text
+  Text,
+  TitleSizes
 } from '@patternfly/react-core';
 import ProcessListBulkInstances from '../ProcessListBulkInstances/ProcessListBulkInstances';
-
+import { IOperation } from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
+import { OUIAProps, componentOuiaProps } from '@kogito-apps/common';
 interface IOwnProps {
   modalTitle: JSX.Element;
   modalContent?: string;
   handleModalToggle: () => void;
-  abortedMessageObj?: any;
-  completedMessageObj?: any;
   isModalOpen: boolean;
-  checkedArray: string[];
-  isAbortModalOpen?: boolean;
-  isSingleAbort?: any;
+  resetSelected?: () => void;
+  operationResult?: IOperation;
+  processName?: string;
 }
-const ProcessListModal: React.FC<IOwnProps> = ({
+const ProcessListModal: React.FC<IOwnProps & OUIAProps> = ({
   modalContent,
   modalTitle,
-  abortedMessageObj,
-  completedMessageObj,
   isModalOpen,
-  checkedArray,
   handleModalToggle,
-  isAbortModalOpen,
-  isSingleAbort
+  resetSelected,
+  operationResult,
+  processName,
+  ouiaId,
+  ouiaSafe
 }) => {
+  const onOkClick = () => {
+    handleModalToggle();
+    operationResult && resetSelected();
+  };
+
+  const createBoldText = (text: string, shouldBeBold: string): JSX.Element => {
+    const textArray = text.split(shouldBeBold);
+    return (
+      <span>
+        {textArray.map((item, index) => (
+          <React.Fragment key={index}>
+            {item}
+            {index !== textArray.length - 1 && <b>{shouldBeBold}</b>}
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  };
+
   return (
     <Modal
-      isSmall={true}
+      variant="small"
       title=""
       header={
-        <Title headingLevel={TitleLevel.h1} size={BaseSizes['2xl']}>
+        <Title headingLevel="h1" size={TitleSizes['2xl']}>
           {modalTitle}
         </Title>
       }
       isOpen={isModalOpen}
-      onClose={handleModalToggle}
+      onClose={onOkClick}
+      aria-label="process list modal"
+      aria-labelledby="process list modal"
       actions={[
-        <Button
-          key="confirm-selection"
-          variant="primary"
-          onClick={handleModalToggle}
-        >
+        <Button key="confirm-selection" variant="primary" onClick={onOkClick}>
           OK
         </Button>
       ]}
-      isFooterLeftAligned={false}
+      {...componentOuiaProps(ouiaId, 'process-list-modal', ouiaSafe)}
     >
-      {abortedMessageObj !== undefined &&
-        completedMessageObj !== undefined &&
-        isAbortModalOpen && (
-          <ProcessListBulkInstances
-            abortedMessageObj={abortedMessageObj}
-            completedMessageObj={completedMessageObj}
-            isSingleAbort={isSingleAbort}
-            checkedArray={checkedArray}
-            isAbortModalOpen={isAbortModalOpen}
-          />
-        )}
+      {operationResult !== undefined && (
+        <ProcessListBulkInstances operationResult={operationResult} />
+      )}
       <TextContent>
         <Text>
-          <strong>{modalContent}</strong>
+          {modalContent &&
+            processName &&
+            createBoldText(modalContent, processName)}
         </Text>
       </TextContent>
     </Modal>

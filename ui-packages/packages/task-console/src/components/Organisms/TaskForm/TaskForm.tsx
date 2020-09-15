@@ -1,62 +1,81 @@
-import React, { useContext, useEffect, useState } from 'react';
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import { isEmpty } from 'lodash';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { Stack, StackItem } from '@patternfly/react-core';
 import {
+  GraphQL,
   KogitoEmptyState,
   KogitoEmptyStateType,
   KogitoSpinner
 } from '@kogito-apps/common';
-import { TaskInfo } from '../../../model/TaskInfo';
 import TaskConsoleContext, {
   IContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
-import FormNotification from '../../Atoms/FormNotification/FormNotification';
 import FormRenderer from '../../Molecules/FormRenderer/FormRenderer';
 import { TaskFormSubmitHandler } from '../../../util/uniforms/TaskFormSubmitHandler/TaskFormSubmitHandler';
 import { FormSchema } from '../../../util/uniforms/FormSchema';
+import { getTaskSchemaEndPoint } from '../../../util/Utils';
+import FormNotification, {
+  Notification
+} from '../../Atoms/FormNotification/FormNotification';
+import UserTaskInstance = GraphQL.UserTaskInstance;
+import { NotificationType } from '../../../util/Variants';
 
 interface IOwnProps {
-  taskInfo?: TaskInfo;
+  userTaskInstance?: UserTaskInstance;
   successCallback?: () => void;
   errorCallback?: () => void;
 }
 
-interface AlertMessage {
-  message: string;
-  callback: () => void;
-}
-
 const TaskForm: React.FC<IOwnProps> = ({
-  taskInfo,
+  userTaskInstance,
   successCallback,
   errorCallback
 }) => {
   // tslint:disable: no-floating-promises
-  const context: IContext<TaskInfo> = useContext(TaskConsoleContext);
-  const [alertMessage, setAlertMessage]: [AlertMessage, any] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userTaskInfo, setUserTaskInfo]: [TaskInfo, any] = useState(null);
-  const [taskFormSchema, setTaskFormSchema]: [FormSchema, any] = useState(null);
+  const context: IContext<UserTaskInstance> = useContext(TaskConsoleContext);
+  const [notification, setNotification] = useState<Notification>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const [stateUserTask, setStateUserTask] = useState<UserTaskInstance>();
+  const [taskFormSchema, setTaskFormSchema] = useState<FormSchema>(null);
 
-  if (!userTaskInfo) {
-    if (taskInfo) {
-      setUserTaskInfo(taskInfo);
+  if (!stateUserTask) {
+    if (userTaskInstance) {
+      setStateUserTask(userTaskInstance);
     } else {
       if (context.getActiveItem()) {
-        setUserTaskInfo(context.getActiveItem());
+        setStateUserTask(context.getActiveItem());
       }
     }
   }
 
   useEffect(() => {
     loadForm();
-  }, [userTaskInfo]);
+  }, [stateUserTask]);
 
   const loadForm = () => {
-    if (userTaskInfo) {
+    if (stateUserTask) {
+      const endpoint = getTaskSchemaEndPoint(stateUserTask, context.getUser());
+
       axios
-        .get(userTaskInfo.getTaskEndPoint() + '/schema', {
+        .get(endpoint, {
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
@@ -76,69 +95,89 @@ const TaskForm: React.FC<IOwnProps> = ({
     }
   };
 
-  const showAlertMessage = (submitMessage: string, submitCallback?: any) => {
-    setAlertMessage({
+  const showNotification = (
+    notificationType: NotificationType,
+    submitMessage: string,
+    submitCallback?: () => void,
+    notificationDetails?: string
+  ) => {
+    setNotification({
+      type: notificationType,
       message: submitMessage,
-      callback: () => {
-        setAlertMessage(null);
-        if (submitCallback) {
-          submitCallback();
-        }
+      details: notificationDetails,
+      customAction: submitCallback
+        ? {
+            label: 'Select another Task',
+            onClick: () => {
+              setNotification(null);
+              if (submitCallback) {
+                submitCallback();
+              }
+            }
+          }
+        : undefined,
+      close: () => {
+        setNotification(null);
       }
     });
   };
 
-  if (userTaskInfo) {
+  if (stateUserTask) {
     if (loading) {
       return (
         <KogitoSpinner
-          spinnerText={'Loading form for task: ' + userTaskInfo.task.name}
+          spinnerText={'Loading form for task: ' + stateUserTask.name}
         />
       );
     }
 
-    if (taskFormSchema) {
+    if (isSubmitting) {
+      return <KogitoSpinner spinnerText={'Submitting form...'} />;
+    }
 
+    if (taskFormSchema) {
       const notifySuccess = (phase: string) => {
-        const message = `Task '${taskInfo.task.id}' successfully transitioned to phase '${phase}'.`;
-        showAlertMessage(message, successCallback);
+        const message = `Task '${userTaskInstance.referenceName}' successfully transitioned to phase '${phase}'.`;
+
+        showNotification(NotificationType.SUCCESS, message, successCallback);
+        setIsSubmitting(false);
+        setSubmitted(true);
       };
 
       const notifyError = (phase: string, error?: string) => {
-        let message = `Task '${taskInfo.task.id}' couldn't transition to phase '${phase}'.`;
+        const message = `Task '${userTaskInstance.referenceName}' couldn't transition to phase '${phase}'.`;
 
-        if (error) {
-          message += ` Error: '${error}'`;
-        }
-
-        showAlertMessage(message, errorCallback);
+        showNotification(NotificationType.ERROR, message, errorCallback, error);
+        setIsSubmitting(false);
       };
 
       const formSubmitHandler = new TaskFormSubmitHandler(
-        userTaskInfo,
+        stateUserTask,
         taskFormSchema,
+        context.getUser(),
+        () => setIsSubmitting(true),
         phase => notifySuccess(phase),
-      (phase, errorMessage) => notifyError(phase, errorMessage));
+        (phase, errorMessage) => notifyError(phase, errorMessage)
+      );
 
-      const outputs = JSON.parse(userTaskInfo.task.outputs);
-      const formData = !isEmpty(outputs)
-        ? outputs
-        : JSON.parse(userTaskInfo.task.inputs);
+      const formData = JSON.parse(stateUserTask.inputs);
 
       return (
-        <React.Fragment>
-          {alertMessage && (
-            <FormNotification
-              message={alertMessage.message}
-              closeAction={alertMessage.callback}
-            />
+        <Stack hasGutter>
+          {notification && (
+            <StackItem>
+              <FormNotification notification={notification} />
+            </StackItem>
           )}
-          <FormRenderer
-            formSchema={taskFormSchema}
-            model={formData}
-            formSubmitHandler={formSubmitHandler}
-          />
-        </React.Fragment>
+          <StackItem>
+            <FormRenderer
+              formSchema={taskFormSchema}
+              model={formData}
+              readOnly={submitted}
+              formSubmitHandler={formSubmitHandler}
+            />
+          </StackItem>
+        </Stack>
       );
     }
   }

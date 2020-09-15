@@ -23,7 +23,7 @@ import {
 } from '@patternfly/react-icons';
 import React, { useState } from 'react';
 import './ProcessDetailsTimeline.css';
-import { GraphQL } from '@kogito-apps/common';
+import { GraphQL, OUIAProps, componentOuiaProps } from '@kogito-apps/common';
 import {
   handleRetry,
   handleSkip,
@@ -44,7 +44,11 @@ enum TitleType {
   SUCCESS = 'success',
   FAILURE = 'failure'
 }
-const ProcessDetailsTimeline: React.FC<IOwnProps> = ({ data }) => {
+const ProcessDetailsTimeline: React.FC<IOwnProps & OUIAProps> = ({
+  data,
+  ouiaId,
+  ouiaSafe
+}) => {
   const [kebabOpenArray, setKebabOpenArray] = useState([]);
   const [modalTitle, setModalTitle] = useState<string>('');
   const [titleType, setTitleType] = useState<string>('');
@@ -217,11 +221,12 @@ const ProcessDetailsTimeline: React.FC<IOwnProps> = ({ data }) => {
   };
 
   return (
-    <Card>
+    <Card
+      {...componentOuiaProps(ouiaId ? ouiaId : data.id, 'timeline', ouiaSafe)}
+    >
       <ProcessListModal
         isModalOpen={isModalOpen}
         handleModalToggle={handleModalToggle}
-        checkedArray={data && [data.state]}
         modalTitle={setTitle(titleType, modalTitle)}
         modalContent={modalContent}
       />
@@ -231,12 +236,12 @@ const ProcessDetailsTimeline: React.FC<IOwnProps> = ({ data }) => {
         </Title>
       </CardHeader>
       <CardBody>
-        <Stack gutter="md" className="kogito-management-console--timeline">
+        <Stack hasGutter className="kogito-management-console--timeline">
           {data.nodes &&
             data.nodes.map((content, idx) => {
               return (
                 <Split
-                  gutter={'sm'}
+                  hasGutter
                   className={'kogito-management-console--timeline-item'}
                   key={content.id}
                 >

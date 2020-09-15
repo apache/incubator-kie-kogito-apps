@@ -6,13 +6,22 @@ import {
   BanIcon,
   PausedIcon,
   ErrorCircleOIcon,
-  InfoCircleIcon
+  InfoCircleIcon,
+  UndoIcon,
+  ClockIcon
 } from '@patternfly/react-icons';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 import ProcessInstance = GraphQL.ProcessInstance;
+import JobStatus = GraphQL.JobStatus;
+import {
+  ProcessInstanceBulkList,
+  OperationType
+} from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
 
-export const stateIconCreator = (state: ProcessInstanceState): JSX.Element => {
+export const ProcessInstanceIconCreator = (
+  state: ProcessInstanceState
+): JSX.Element => {
   switch (state) {
     case ProcessInstanceState.Active:
       return (
@@ -58,6 +67,52 @@ export const stateIconCreator = (state: ProcessInstanceState): JSX.Element => {
   }
 };
 
+export const JobsIconCreator = (state: JobStatus): JSX.Element => {
+  switch (state) {
+    case JobStatus.Error:
+      return (
+        <>
+          <ErrorCircleOIcon
+            className="pf-u-mr-sm"
+            color="var(--pf-global--danger-color--100)"
+          />
+          Error
+        </>
+      );
+    case JobStatus.Canceled:
+      return (
+        <>
+          <BanIcon className="pf-u-mr-sm" />
+          Canceled
+        </>
+      );
+    case JobStatus.Executed:
+      return (
+        <>
+          <CheckCircleIcon
+            className="pf-u-mr-sm"
+            color="var(--pf-global--success-color--100)"
+          />
+          Executed
+        </>
+      );
+    case JobStatus.Retry:
+      return (
+        <>
+          <UndoIcon className="pf-u-mr-sm" />
+          Retry
+        </>
+      );
+    case JobStatus.Scheduled:
+      return (
+        <>
+          <ClockIcon className="pf-u-mr-sm" />
+          Scheduled
+        </>
+      );
+  }
+};
+
 export const setTitle = (
   titleStatus: string,
   titleText: string
@@ -86,41 +141,37 @@ export const setTitle = (
   }
 };
 
-export const handleSkip = (
+export const handleSkip = async (
   processInstance: Pick<ProcessInstance, 'id' | 'processId' | 'serviceUrl'>,
   onSkipSuccess: () => void,
   onSkipFailure: (errorMessage: string) => void
-): void => {
-  axios
-    .post(
+) => {
+  try {
+    await axios.post(
       `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/skip`
-    )
-    .then(() => {
-      onSkipSuccess();
-    })
-    .catch(error => {
-      onSkipFailure(JSON.stringify(error.message));
-    });
+    );
+    onSkipSuccess();
+  } catch (error) {
+    onSkipFailure(JSON.stringify(error.message));
+  }
 };
 
-export const handleRetry = (
+export const handleRetry = async (
   processInstance: Pick<ProcessInstance, 'id' | 'processId' | 'serviceUrl'>,
   onRetrySuccess: () => void,
   onRetryFailure: (errorMessage: string) => void
-): void => {
-  axios
-    .post(
+) => {
+  try {
+    await axios.post(
       `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/retrigger`
-    )
-    .then(() => {
-      onRetrySuccess();
-    })
-    .catch(error => {
-      onRetryFailure(JSON.stringify(error.message));
-    });
+    );
+    onRetrySuccess();
+  } catch (error) {
+    onRetryFailure(JSON.stringify(error.message));
+  }
 };
 
-export const handleAbort = (
+export const handleAbort = async (
   processInstance: Pick<
     ProcessInstance,
     'id' | 'processId' | 'serviceUrl' | 'state'
@@ -128,17 +179,15 @@ export const handleAbort = (
   onRetrySuccess: () => void,
   onRetryFailure: (errorMessage: string) => void
 ) => {
-  axios
-    .delete(
+  try {
+    await axios.delete(
       `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}`
-    )
-    .then(() => {
-      processInstance.state = ProcessInstanceState.Aborted;
-      onRetrySuccess();
-    })
-    .catch(error => {
-      onRetryFailure(JSON.stringify(error.message));
-    });
+    );
+    processInstance.state = ProcessInstanceState.Aborted;
+    onRetrySuccess();
+  } catch (error) {
+    onRetryFailure(JSON.stringify(error.message));
+  }
 };
 
 export const handleNodeInstanceRetrigger = (
@@ -177,79 +226,84 @@ export const handleNodeInstanceCancel = (
     });
 };
 
-export const handleAbortAll = (
-  abortedObj,
-  initData,
-  setModalTitle,
-  setTitleType,
-  setAbortedMessageObj,
-  setCompletedMessageObj,
-  handleAbortModalToggle
+export const performMultipleAction = async (
+  instanceToBeActioned: ProcessInstanceBulkList,
+  multiActionResult: (
+    successInstances: ProcessInstanceBulkList,
+    failedInstances: ProcessInstanceBulkList
+  ) => void,
+  processType: OperationType
 ) => {
-  const tempAbortedObj = { ...abortedObj };
-  const completedAndAborted = {};
-  for (const [id, processInstance] of Object.entries(tempAbortedObj)) {
-    initData.ProcessInstances.map(instance => {
-      if (instance.id === id) {
-        /* istanbul ignore else */
-        if (
-          instance.addons.includes('process-management') &&
-          instance.serviceUrl !== null
-        ) {
-          if (
-            instance.state === ProcessInstanceState.Completed ||
-            instance.state === ProcessInstanceState.Aborted
-          ) {
-            completedAndAborted[id] = processInstance;
-            delete tempAbortedObj[id];
-          } else {
-            instance.state = ProcessInstanceState.Aborted;
-          }
+  const successInstances = {};
+  const failedInstances = {};
+  for (const id of Object.keys(instanceToBeActioned)) {
+    if (processType === OperationType.ABORT) {
+      await handleAbort(
+        instanceToBeActioned[id],
+        () => {
+          successInstances[id] = instanceToBeActioned[id];
+        },
+        errorMessage => {
+          failedInstances[id] = instanceToBeActioned[id];
+          failedInstances[id].errorMessage = errorMessage;
         }
-      }
-      if (instance.childDataList !== undefined) {
-        instance.childDataList.map(child => {
-          if (child.id === id) {
-            /* istanbul ignore else */
-            if (
-              instance.addons.includes('process-management') &&
-              instance.serviceUrl !== null
-            ) {
-              if (
-                child.state === ProcessInstanceState.Completed ||
-                child.state === ProcessInstanceState.Aborted
-              ) {
-                completedAndAborted[id] = processInstance;
-                delete tempAbortedObj[id];
-              } else {
-                child.state = ProcessInstanceState.Aborted;
-              }
-            }
-          }
-        });
-      }
-    });
+      );
+    } else if (processType === OperationType.SKIP) {
+      await handleSkip(
+        instanceToBeActioned[id],
+        () => {
+          successInstances[id] = instanceToBeActioned[id];
+        },
+        errorMessage => {
+          failedInstances[id] = instanceToBeActioned[id];
+          failedInstances[id].errorMessage = errorMessage;
+        }
+      );
+    } else if (processType === OperationType.RETRY) {
+      await handleRetry(
+        instanceToBeActioned[id],
+        () => {
+          successInstances[id] = instanceToBeActioned[id];
+        },
+        errorMessage => {
+          failedInstances[id] = instanceToBeActioned[id];
+          failedInstances[id].errorMessage = errorMessage;
+        }
+      );
+    }
   }
-  const promiseArray = [];
-  Object.keys(tempAbortedObj).forEach((id: string) => {
-    promiseArray.push(
-      axios.delete(
-        `${tempAbortedObj[id].serviceUrl}/management/processes/${tempAbortedObj[id].processId}/instances/${tempAbortedObj[id].id}`
-      )
-    );
-  });
-  setModalTitle('Abort operation');
-  Promise.all(promiseArray)
-    .then(() => {
-      setTitleType('success');
-      setAbortedMessageObj(tempAbortedObj);
-      setCompletedMessageObj(completedAndAborted);
-      handleAbortModalToggle();
-    })
-    .catch(() => {
-      setTitleType('failure');
-      setAbortedMessageObj(tempAbortedObj);
-      setCompletedMessageObj(completedAndAborted);
-      handleAbortModalToggle();
-    });
+  multiActionResult(successInstances, failedInstances);
+};
+
+export const getProcessInstanceDescription = (
+  processInstance: GraphQL.ProcessInstance
+) => {
+  return {
+    id: processInstance.id,
+    name: processInstance.processName,
+    description: processInstance.businessKey
+  };
+};
+
+// function containing Api call to update process variables
+export const handleVariableUpdate = async (
+  processInstance: Pick<ProcessInstance, 'id' | 'endpoint'>,
+  updateJson: object,
+  setDisplayLabel: (displayLabel: boolean) => void,
+  setDisplaySuccess: (displaySuccess: boolean) => void,
+  setVariableError: (error: string) => void
+) => {
+  try {
+    await axios
+      .post(`${processInstance.endpoint}/${processInstance.id}`, updateJson)
+      .then(() => {
+        setDisplayLabel(false);
+        setDisplaySuccess(true);
+        setTimeout(() => {
+          setDisplaySuccess(false);
+        }, 2000);
+      });
+  } catch (error) {
+    setVariableError(error.message);
+  }
 };

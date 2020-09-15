@@ -32,26 +32,29 @@ public class Decision extends Execution {
     public static final String OUTCOMES_FIELD = "outcomes";
 
     @JsonProperty(INPUTS_FIELD)
-    private Collection<TypedValue> inputs;
+    private Collection<DecisionInput> inputs;
 
     @JsonProperty(OUTCOMES_FIELD)
     private Collection<DecisionOutcome> outcomes;
 
     public Decision() {
-        super(ExecutionTypeEnum.DECISION);
+        super(ExecutionType.DECISION);
     }
 
-    public Decision(String executionId, Long executionTimestamp, Boolean hasSucceeded, String executorName, String executedModelName, List<TypedValue> inputs, List<DecisionOutcome> outcomes) {
-        super(executionId, executionTimestamp, hasSucceeded, executorName, executedModelName, ExecutionTypeEnum.DECISION);
+    public Decision(String executionId, String sourceUrl, Long executionTimestamp, Boolean hasSucceeded,
+                    String executorName, String executedModelName, String executedModelNamespace,
+                    List<DecisionInput> inputs, List<DecisionOutcome> outcomes) {
+        super(executionId, sourceUrl, executionTimestamp, hasSucceeded, executorName,
+                executedModelName, executedModelNamespace, ExecutionType.DECISION);
         this.inputs = inputs;
         this.outcomes = outcomes;
     }
 
-    public Collection<TypedValue> getInputs() {
+    public Collection<DecisionInput> getInputs() {
         return inputs;
     }
 
-    public void setInputs(Collection<TypedValue> inputs) {
+    public void setInputs(Collection<DecisionInput> inputs) {
         this.inputs = inputs;
     }
 

@@ -13,26 +13,38 @@ import {
   OverflowMenu,
   OverflowMenuContent,
   OverflowMenuGroup,
-  InjectedOuiaProps,
-  withOuiaContext
+  ModalVariant,
+  Modal,
+  TitleSizes,
+  Flex,
+  FlexItem
 } from '@patternfly/react-core';
 import {
   ServerErrors,
   ouiaPageTypeAndObjectId,
   ItemDescriptor,
   KogitoSpinner,
-  GraphQL
+  GraphQL,
+  componentOuiaProps,
+  OUIAProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
 import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
+import ProcessDetailsMilestones from '../../Organisms/ProcessDetailsMilestones/ProcessDetailsMilestones';
 import './ProcessDetailsPage.css';
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
-import { handleAbort, setTitle } from '../../../utils/Utils';
+import {
+  handleAbort,
+  setTitle,
+  handleVariableUpdate
+} from '../../../utils/Utils';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
+import { SyncIcon, InfoCircleIcon } from '@patternfly/react-icons';
+import ProcessDetailsJobsPanel from '../../Organisms/ProcessDetailsJobsPanel/ProcessDetailsJobsPanel';
 
 interface MatchProps {
   instanceID: string;
@@ -43,18 +55,24 @@ enum TitleType {
   FAILURE = 'failure'
 }
 
-const ProcessDetailsPage: React.FC<
-  RouteComponentProps<MatchProps, {}, {}> & InjectedOuiaProps
-> = ({ ouiaContext, ...props }) => {
+const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
+  OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
   const id = props.match.params.instanceID;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>('');
   const [titleType, setTitleType] = useState<string>('');
   const [modalContent, setModalContent] = useState<string>('');
-  const currentPage = JSON.parse(window.localStorage.getItem('state'));
+  const [updateJson, setUpdateJson] = useState<any>({});
+  const [displayLabel, setDisplayLabel] = useState(false);
+  const [displaySuccess, setDisplaySuccess] = useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [variableError, setVariableError] = useState();
+  let currentPage = JSON.parse(window.localStorage.getItem('state'));
 
   const { loading, error, data } = GraphQL.useGetProcessInstanceByIdQuery({
-    variables: { id }
+    variables: { id },
+    fetchPolicy: 'network-only'
   });
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
@@ -67,7 +85,7 @@ const ProcessDetailsPage: React.FC<
   });
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId(ouiaContext, 'process-instances', id);
+    return ouiaPageTypeAndObjectId('process-instances', id);
   });
 
   const onShowMessage = (
@@ -80,8 +98,8 @@ const ProcessDetailsPage: React.FC<
     setModalContent(content);
     handleModalToggle();
   };
-  const onAbortClick = () => {
-    handleAbort(
+  const onAbortClick = async () => {
+    await handleAbort(
       data.ProcessInstances[0],
       () =>
         onShowMessage(
@@ -95,6 +113,185 @@ const ProcessDetailsPage: React.FC<
           `Failed to abort process ${data.ProcessInstances[0].processName}. Message: ${errorMessage}`,
           TitleType.FAILURE
         )
+    );
+  };
+
+  useEffect(() => {
+    if (data) {
+      setUpdateJson(JSON.parse(data.ProcessInstances[0].variables));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (variableError && variableError.length > 0) {
+      setErrorModalOpen(true);
+    }
+  }, [variableError]);
+
+  const handleSave = async () => {
+    setDisplaySuccess(false);
+    await handleVariableUpdate(
+      data.ProcessInstances[0],
+      updateJson,
+      setDisplayLabel,
+      setDisplaySuccess,
+      setVariableError
+    );
+  };
+
+  const handleRefresh = () => {
+    if (displayLabel === true) {
+      setConfirmationModal(true);
+    } else {
+      window.location.reload();
+    }
+  };
+
+  const handleConfirmationModal = () => {
+    setConfirmationModal(!confirmationModal);
+  };
+
+  const handleConfirm = () => {
+    window.location.reload();
+    handleConfirmationModal();
+  };
+
+  const handleCancel = () => {
+    handleConfirmationModal();
+  };
+
+  const RenderConfirmationModal = () => {
+    return (
+      <Modal
+        title=""
+        header={
+          <>
+            <Title headingLevel="h1" size={TitleSizes['2xl']}>
+              <InfoCircleIcon
+                className="pf-u-mr-sm"
+                color="var(--pf-global--warning-color--100)"
+              />
+              Refresh
+            </Title>
+          </>
+        }
+        variant={ModalVariant.small}
+        isOpen={confirmationModal}
+        onClose={handleConfirmationModal}
+        actions={[
+          <Button
+            key="Ok"
+            variant="primary"
+            id="confirm-button"
+            onClick={handleConfirm}
+          >
+            Ok
+          </Button>,
+          <Button
+            key="Cancel"
+            variant="link"
+            id="cancel-button"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+        ]}
+        aria-label="Confirmation modal"
+        aria-labelledby="Confirmation modal"
+      >
+        This action discards changes made on process variables.
+      </Modal>
+    );
+  };
+
+  const handleErrorModal = () => {
+    setErrorModalOpen(!errorModalOpen);
+  };
+
+  const handleRetry = () => {
+    handleErrorModal();
+    setVariableError(null);
+    // tslint:disable-next-line: no-floating-promises
+    handleSave();
+  };
+
+  const handleDiscard = () => {
+    handleErrorModal();
+    handleRefresh();
+  };
+
+  const errorModal = () => {
+    return (
+      <Modal
+        title=""
+        header={
+          <>
+            <Title headingLevel="h1" size={TitleSizes['2xl']}>
+              <InfoCircleIcon
+                className="pf-u-mr-sm"
+                color="var(--pf-global--danger-color--100)"
+              />
+              Error
+            </Title>
+          </>
+        }
+        variant={ModalVariant.small}
+        isOpen={errorModalOpen}
+        onClose={handleErrorModal}
+        actions={[
+          <Button
+            key="Retry"
+            variant="primary"
+            id="retry-button"
+            onClick={handleRetry}
+          >
+            Retry
+          </Button>,
+          <Button
+            key="Discard"
+            variant="link"
+            id="discard-button"
+            onClick={handleDiscard}
+          >
+            Discard
+          </Button>
+        ]}
+        aria-label="Error modal"
+        aria-labelledby="Error modal"
+      >
+        {variableError}
+      </Modal>
+    );
+  };
+
+  const updateVariablesButton = () => {
+    if (data.ProcessInstances[0].serviceUrl !== null) {
+      return (
+        <Button
+          variant="secondary"
+          id="save-button"
+          className="kogito-management-console--details__buttonMargin"
+          onClick={handleSave}
+          isDisabled={!displayLabel}
+        >
+          Save
+        </Button>
+      );
+    }
+  };
+
+  const refreshButton = () => {
+    return (
+      <Button
+        variant="plain"
+        onClick={() => {
+          handleRefresh();
+        }}
+        id="refresh-button"
+        aria-label={'Refresh list'}
+      >
+        <SyncIcon />
+      </Button>
     );
   };
   const abortButton = () => {
@@ -125,6 +322,7 @@ const ProcessDetailsPage: React.FC<
     const result = data.ProcessInstances;
     /* istanbul ignore else */
     if (currentPage) {
+      currentPage = { ...currentPage, ...props.location.state };
       const tempPath = currentPage.prev.split('/');
       prevPath = tempPath.filter(item => item);
       BreadCrumb.push(...prevPath);
@@ -155,24 +353,24 @@ const ProcessDetailsPage: React.FC<
   }
 
   return (
-    <>
+    <div {...componentOuiaProps(ouiaId, 'ProcessDetailsPage', ouiaSafe)}>
       {!error ? (
         <>
           <PageSection variant="light">
             <ProcessListModal
               isModalOpen={isModalOpen}
               handleModalToggle={handleModalToggle}
-              checkedArray={
-                data &&
-                data.ProcessInstances &&
-                data.ProcessInstances[0] && [data.ProcessInstances[0].state]
-              }
               modalTitle={setTitle(titleType, modalTitle)}
               modalContent={modalContent}
+              processName={
+                data &&
+                data.ProcessInstances &&
+                data.ProcessInstances[0].processName
+              }
             />
             <PageTitle title="Process Details" />
             {!loading ? (
-              <Grid gutter="md" span={12} lg={6} xl={4}>
+              <Grid hasGutter md={1} span={12} lg={6} xl={4}>
                 <GridItem span={12}>
                   <Breadcrumb>
                     <BreadcrumbItem>
@@ -220,47 +418,94 @@ const ProcessDetailsPage: React.FC<
           </PageSection>
           <PageSection>
             {!loading ? (
-              <Grid gutter="md" span={12} lg={6} xl={4}>
-                <GridItem span={12}>
-                  <Split
-                    gutter={'md'}
-                    component={'div'}
-                    className="pf-u-align-items-center"
-                  >
-                    <SplitItem isFilled={true}>
-                      <Title
-                        headingLevel="h2"
-                        size="4xl"
-                        className="kogito-management-console--details__title"
-                      >
-                        <ItemDescriptor
-                          processInstanceData={data.ProcessInstances[0]}
-                        />
-                      </Title>
-                    </SplitItem>
-                    <SplitItem>
-                      <OverflowMenu breakpoint="lg">
-                        <OverflowMenuContent isPersistent>
-                          <OverflowMenuGroup groupType="button" isPersistent>
-                            {abortButton()}
-                          </OverflowMenuGroup>
-                        </OverflowMenuContent>
-                      </OverflowMenu>
-                    </SplitItem>
-                  </Split>
-                </GridItem>
-                {currentPage && (
-                  <GridItem>
-                    <ProcessDetails data={data} from={currentPage} />
+              <>
+                <Grid hasGutter md={1} span={12} lg={6} xl={4}>
+                  <GridItem span={12}>
+                    <Split
+                      hasGutter={true}
+                      component={'div'}
+                      className="pf-u-align-items-center"
+                    >
+                      <SplitItem isFilled={true}>
+                        <Title
+                          headingLevel="h2"
+                          size="4xl"
+                          className="kogito-management-console--details__title"
+                        >
+                          <ItemDescriptor
+                            itemDescription={{
+                              id: data.ProcessInstances[0].id,
+                              name: data.ProcessInstances[0].processName,
+                              description: data.ProcessInstances[0].businessKey
+                            }}
+                          />
+                        </Title>
+                      </SplitItem>
+                      <SplitItem>
+                        <OverflowMenu breakpoint="lg">
+                          <OverflowMenuContent isPersistent>
+                            <OverflowMenuGroup groupType="button" isPersistent>
+                              <>
+                                {updateVariablesButton()}
+                                {abortButton()}
+                                {refreshButton()}
+                              </>
+                            </OverflowMenuGroup>
+                          </OverflowMenuContent>
+                        </OverflowMenu>
+                      </SplitItem>
+                    </Split>
                   </GridItem>
-                )}
-                <GridItem>
-                  <ProcessDetailsProcessVariables data={data} />
-                </GridItem>
-                <GridItem>
-                  <ProcessDetailsTimeline data={data.ProcessInstances[0]} />
-                </GridItem>
-              </Grid>
+                </Grid>
+                <Flex>
+                  <Flex
+                    direction={{ default: 'column' }}
+                    flex={{ default: 'flex_1' }}
+                  >
+                    {currentPage && (
+                      <FlexItem>
+                        <ProcessDetails data={data} from={currentPage} />
+                      </FlexItem>
+                    )}
+                    {data.ProcessInstances[0].milestones.length > 0 && (
+                      <FlexItem>
+                        <ProcessDetailsMilestones
+                          milestones={data.ProcessInstances[0].milestones}
+                        />
+                      </FlexItem>
+                    )}
+                  </Flex>
+                  <Flex
+                    direction={{ default: 'column' }}
+                    flex={{ default: 'flex_1' }}
+                  >
+                    {Object.keys(updateJson).length > 0 && (
+                      <FlexItem>
+                        <ProcessDetailsProcessVariables
+                          displayLabel={displayLabel}
+                          displaySuccess={displaySuccess}
+                          setUpdateJson={setUpdateJson}
+                          setDisplayLabel={setDisplayLabel}
+                          updateJson={updateJson}
+                        />
+                      </FlexItem>
+                    )}
+                  </Flex>
+                  <Flex
+                    direction={{ default: 'column' }}
+                    flex={{ default: 'flex_1' }}
+                  >
+                    <FlexItem>
+                      <ProcessDetailsTimeline data={data.ProcessInstances[0]} />
+                    </FlexItem>
+                    <FlexItem>
+                      <ProcessDetailsJobsPanel processInstanceId={id} />
+                    </FlexItem>
+                  </Flex>
+                  {errorModal()}
+                  {RenderConfirmationModal()}
+                </Flex>
+              </>
             ) : (
               <Card>
                 <Bullseye>
@@ -271,10 +516,10 @@ const ProcessDetailsPage: React.FC<
           </PageSection>
         </>
       ) : (
-        <ServerErrors error={error} />
+        <ServerErrors error={error} variant="large" />
       )}
-    </>
+    </div>
   );
 };
 
-export default withOuiaContext(ProcessDetailsPage);
+export default ProcessDetailsPage;

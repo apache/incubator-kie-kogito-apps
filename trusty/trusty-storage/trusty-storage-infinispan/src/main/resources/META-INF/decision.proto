@@ -12,22 +12,42 @@ message Decision {
     optional string executionId = 2;
 
     /* @Field(store = Store.YES) */
-    optional int64 executionTimestamp = 3;
+    optional string sourceUrl = 3;
+
+    /* @Field(store = Store.YES) 
+     * @SortableField
+     */
+    optional int64 executionTimestamp = 4;
 
     /* @Field(store = Store.YES) */
-    optional bool hasSucceeded = 4;
+    optional bool hasSucceeded = 5;
 
     /* @Field(store = Store.YES) */
-    optional string executorName = 5;
+    optional string executorName = 6;
 
     /* @Field(store = Store.YES) */
-    optional string executedModelName = 6;
+    optional string executedModelName = 7;
 
     /* @Field(store = Store.YES) */
-    repeated TypedValue inputs = 7;
+    optional string executedModelNamespace = 8;
 
     /* @Field(store = Store.YES) */
-    repeated DecisionOutcome outcomes = 8;
+    repeated DecisionInput inputs = 9;
+
+    /* @Field(store = Store.YES) */
+    repeated DecisionOutcome outcomes = 10;
+}
+
+/* @Indexed */
+message DecisionInput {
+    /* @Field(store = Store.YES) */
+    optional string id = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string name = 2;
+
+    /* @Field(store = Store.YES) */
+    optional TypedVariable value = 3;
 }
 
 /* @Indexed */
@@ -42,10 +62,10 @@ message DecisionOutcome {
     optional string evaluationStatus = 3;
 
     /* @Field(store = Store.YES) */
-    optional TypedValue outcomeResult = 4;
+    optional TypedVariable outcomeResult = 4;
 
     /* @Field(store = Store.YES) */
-    repeated TypedValue outcomeInputs = 5;
+    repeated TypedVariable outcomeInputs = 5;
 
     /* @Field(store = Store.YES) */
     repeated ExecutionMessage messages = 6;
@@ -78,6 +98,30 @@ message ExecutionMessage {
 }
 
 /* @Indexed */
+message ExplainabilityResult {
+    /* @Field(store = Store.YES) */
+    optional string executionId = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string status = 2;
+
+    /* @Field(store = Store.YES) */
+    optional string statusDetails = 3;
+
+    /* @Field(store = Store.YES) */
+    repeated Saliency saliencies = 4;
+}
+
+/* @Indexed */
+message FeatureImportance {
+    /* @Field(store = Store.YES) */
+    optional string featureName = 1;
+
+    /* @Field(store = Store.YES) */
+    optional double score = 2;
+}
+
+/* @Indexed */
 message MessageExceptionField {
     /* @Field(store = Store.YES) */
     optional string className = 1;
@@ -90,13 +134,31 @@ message MessageExceptionField {
 }
 
 /* @Indexed */
-message TypedValue {
+message Saliency {
     /* @Field(store = Store.YES) */
-    optional string name = 1;
+    optional string outcomeId = 1;
 
     /* @Field(store = Store.YES) */
-    optional string typeRef = 2;
+    optional string outcomeName = 2;
 
     /* @Field(store = Store.YES) */
-    optional string value = 3;
+    repeated FeatureImportance featureImportance = 3;
+}
+
+/* @Indexed */
+message TypedVariable {
+    /* @Field(store = Store.YES) */
+    optional string kind = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string name = 2;
+
+    /* @Field(store = Store.YES) */
+    optional string typeRef = 3;
+
+    /* @Field(store = Store.YES) */
+    optional string value = 4;
+
+    /* @Field(store = Store.YES) */
+    repeated TypedVariable components = 5;
 }

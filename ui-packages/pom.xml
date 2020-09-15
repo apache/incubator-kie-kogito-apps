@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>kogito-apps</artifactId>
-    <version>8.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
@@ -19,14 +19,16 @@
     <sonar.sources>
       ${path.to.packages}/common/src,
       ${path.to.packages}/management-console/src,
-      ${path.to.packages}/task-console/src
+      ${path.to.packages}/task-console/src,
+      ${path.to.packages}/trusty/src
     </sonar.sources>
     <sonar.exclusions>**/__mocks__/**,**/mocks/**,**/*.stories.tsx</sonar.exclusions>
     <sonar.test.inclusions>**/*test.ts,**/*test.tsx</sonar.test.inclusions>
     <sonar.javascript.lcov.reportPaths>
       ${path.to.packages}/common/coverage/lcov.info,
       ${path.to.packages}/management-console/coverage/lcov.info,
-      ${path.to.packages}/task-console/coverage/lcov.info
+      ${path.to.packages}/task-console/coverage/lcov.info,
+      ${path.to.packages}/trusty/coverage/lcov.info
     </sonar.javascript.lcov.reportPaths>
   </properties>
   <build>
@@ -113,7 +115,7 @@
                 </goals>
                 <configuration>
                   <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>run locktt --</arguments>
+                  <arguments>run locktt -- --skipIntegrity</arguments>
                 </configuration>
               </execution>
               <execution>
@@ -123,7 +125,7 @@
                 </goals>
                 <configuration>
                   <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-                  <arguments>install --force --fetch-retry-mintimeout=100000 --fetch-retries=10</arguments>
+                  <arguments>install --force --fetch-retry-mintimeout=100000 --fetch-retries=10  --frozen-lockfile</arguments>
                 </configuration>
               </execution>
             </executions>

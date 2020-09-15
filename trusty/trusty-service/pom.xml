@@ -5,7 +5,7 @@
   <parent>
     <artifactId>trusty</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>8.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -47,7 +47,15 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-tracing-decision-api</artifactId>
+      <artifactId>tracing-decision-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>explainability-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-oidc</artifactId>
     </dependency>
 
     <dependency>
@@ -66,22 +74,20 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>testcontainers</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>persistence-commons-infinispan</artifactId>
-      <type>test-jar</type>
+      <artifactId>kogito-test-utils</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>kafka</artifactId>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

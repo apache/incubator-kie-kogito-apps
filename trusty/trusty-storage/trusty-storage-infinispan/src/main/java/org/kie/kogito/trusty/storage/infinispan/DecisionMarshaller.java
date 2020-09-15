@@ -21,10 +21,10 @@ import java.util.ArrayList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Execution;
-import org.kie.kogito.trusty.storage.api.model.ExecutionTypeEnum;
-import org.kie.kogito.trusty.storage.api.model.TypedValue;
+import org.kie.kogito.trusty.storage.api.model.ExecutionType;
 
 public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
 
@@ -34,17 +34,19 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
 
     @Override
     public Decision readFrom(ProtoStreamReader reader) throws IOException {
-        ExecutionTypeEnum executionType = enumFromString(reader.readString(Execution.EXECUTION_TYPE_FIELD), ExecutionTypeEnum.class);
-        if (executionType != ExecutionTypeEnum.DECISION) {
+        ExecutionType executionType = enumFromString(reader.readString(Execution.EXECUTION_TYPE_FIELD), ExecutionType.class);
+        if (executionType != ExecutionType.DECISION) {
             throw new IllegalStateException("Unsupported execution type: " + executionType);
         }
         return new Decision(
                 reader.readString(Execution.EXECUTION_ID_FIELD),
+                reader.readString(Execution.SOURCE_URL_FIELD),
                 reader.readLong(Execution.EXECUTION_TIMESTAMP_FIELD),
                 reader.readBoolean(Execution.HAS_SUCCEEDED_FIELD),
                 reader.readString(Execution.EXECUTOR_NAME_FIELD),
                 reader.readString(Execution.EXECUTED_MODEL_NAME_FIELD),
-                reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), TypedValue.class),
+                reader.readString(Execution.EXECUTED_MODEL_NAMESPACE_FIELD),
+                reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), DecisionInput.class),
                 reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class)
         );
     }
@@ -53,11 +55,13 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
     public void writeTo(ProtoStreamWriter writer, Decision input) throws IOException {
         writer.writeString(Execution.EXECUTION_TYPE_FIELD, stringFromEnum(input.getExecutionType()));
         writer.writeString(Execution.EXECUTION_ID_FIELD, input.getExecutionId());
+        writer.writeString(Execution.SOURCE_URL_FIELD, input.getSourceUrl());
         writer.writeLong(Execution.EXECUTION_TIMESTAMP_FIELD, input.getExecutionTimestamp());
         writer.writeBoolean(Execution.HAS_SUCCEEDED_FIELD, input.hasSucceeded());
         writer.writeString(Execution.EXECUTOR_NAME_FIELD, input.getExecutorName());
         writer.writeString(Execution.EXECUTED_MODEL_NAME_FIELD, input.getExecutedModelName());
-        writer.writeCollection(Decision.INPUTS_FIELD, input.getInputs(), TypedValue.class);
+        writer.writeString(Execution.EXECUTED_MODEL_NAMESPACE_FIELD, input.getExecutedModelNamespace());
+        writer.writeCollection(Decision.INPUTS_FIELD, input.getInputs(), DecisionInput.class);
         writer.writeCollection(Decision.OUTCOMES_FIELD, input.getOutcomes(), DecisionOutcome.class);
     }
 }

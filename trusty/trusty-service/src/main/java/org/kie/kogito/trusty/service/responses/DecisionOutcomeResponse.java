@@ -35,10 +35,10 @@ public class DecisionOutcomeResponse {
     private String evaluationStatus;
 
     @JsonProperty("outcomeResult")
-    private TypedValueResponse outcomeResult;
+    private TypedVariableResponse outcomeResult;
 
     @JsonProperty("outcomeInputs")
-    private Collection<TypedValueResponse> outcomeInputs;
+    private Collection<TypedVariableResponse> outcomeInputs;
 
     @JsonProperty("messages")
     private Collection<MessageResponse> messages;
@@ -49,7 +49,7 @@ public class DecisionOutcomeResponse {
     private DecisionOutcomeResponse() {
     }
 
-    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedValueResponse outcomeResult, Collection<TypedValueResponse> outcomeInputs, Collection<MessageResponse> messages, boolean hasErrors) {
+    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedVariableResponse outcomeResult, Collection<TypedVariableResponse> outcomeInputs, Collection<MessageResponse> messages, boolean hasErrors) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
         this.evaluationStatus = evaluationStatus;
@@ -71,11 +71,11 @@ public class DecisionOutcomeResponse {
         return evaluationStatus;
     }
 
-    public TypedValueResponse getOutcomeResult() {
+    public TypedVariableResponse getOutcomeResult() {
         return outcomeResult;
     }
 
-    public Collection<TypedValueResponse> getOutcomeInputs() {
+    public Collection<TypedVariableResponse> getOutcomeInputs() {
         return outcomeInputs;
     }
 
@@ -92,8 +92,8 @@ public class DecisionOutcomeResponse {
                 outcome.getOutcomeId(),
                 outcome.getOutcomeName(),
                 outcome.getEvaluationStatus(),
-                TypedValueResponse.from(outcome.getOutcomeResult()),
-                from(outcome.getOutcomeInputs(), TypedValueResponse::from),
+                TypedVariableResponse.from(outcome.getOutcomeResult()),
+                from(outcome.getOutcomeInputs(), TypedVariableResponse::from),
                 from(outcome.getMessages(), MessageResponse::from),
                 outcome.hasErrors()
         );

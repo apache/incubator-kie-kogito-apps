@@ -17,9 +17,9 @@ import _ from 'lodash';
 import axios from 'axios';
 
 import ApplyForVisaForm from '../../../tests/mocks/ApplyForVisa';
-import { UserTaskInstance } from '../../../../graphql/types';
-import { TaskInfoImpl } from '../../../../model/TaskInfo';
 import { TaskFormSubmitHandler } from '../TaskFormSubmitHandler';
+import { DefaultUser, GraphQL, User } from '@kogito-apps/common';
+import UserTaskInstance = GraphQL.UserTaskInstance;
 
 const userTaskInstance: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -43,22 +43,22 @@ const userTaskInstance: UserTaskInstance = {
     '{"Skippable":"true","trip":{"city":"Boston","country":"US","visaRequired":true},"TaskName":"VisaApplication","NodeName":"Apply for visa","traveller":{"firstName":"Rachel","lastName":"White","email":"rwhite@gorle.com","nationality":"Polish","address":{"street":"Cabalone","city":"Zerf","zipCode":"765756","country":"Poland"}},"Priority":"1"}',
   outputs: '{}',
   referenceName: 'VisaApplication',
-  lastUpdate: '2020-02-19T11:11:56.282Z'
+  lastUpdate: '2020-02-19T11:11:56.282Z',
+  endpoint:
+    'http://localhost:8080/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3'
 };
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-const taskInfo = new TaskInfoImpl(
-  userTaskInstance,
-  'http://localhost:8080/travels'
-);
-
 let formData;
 let handler;
 let formSchema;
+let onSubmit;
 let successCallback;
 let errorCallback;
+
+const testUser: User = new DefaultUser('test', ['group1', 'group2']);
 
 const testSuccessfulRequest = async (phase: string, expectedPayload) => {
   const response = {
@@ -76,11 +76,14 @@ const testSuccessfulRequest = async (phase: string, expectedPayload) => {
   expect(postParams).toHaveLength(3);
 
   const expectedEndpoint =
-    taskInfo.getTaskEndPoint() + (phase ? '?phase=' + phase : '');
+    userTaskInstance.endpoint +
+    (phase ? '?phase=' + phase : '') +
+    '&user=test&group=group1&group=group2';
 
   expect(postParams[0]).toBe(expectedEndpoint);
   expect(postParams[1]).toMatchObject(expectedPayload);
 
+  expect(onSubmit).toBeCalled();
   expect(successCallback).toBeCalledWith(phase);
   expect(errorCallback).not.toBeCalled();
 };
@@ -95,6 +98,7 @@ const testUnSuccessfulRequest = async (
   handler.getActions()[1].execute();
   await handler.doSubmit(formData);
 
+  expect(onSubmit).toBeCalled();
   expect(errorCallback).toBeCalledWith(phase, expecteErrorMessage);
   expect(successCallback).not.toBeCalled();
 };
@@ -111,6 +115,7 @@ const testUnexpectedRequestError = async (
 
   expect(mockedAxios.post).toBeCalled();
 
+  expect(onSubmit).toBeCalled();
   expect(errorCallback).toBeCalledWith(phase, expecteErrorMessage);
   expect(successCallback).not.toBeCalled();
 };
@@ -120,12 +125,15 @@ describe('TaskFormSubmitHandler tests', () => {
     formData = JSON.parse(userTaskInstance.inputs);
 
     formSchema = _.cloneDeep(ApplyForVisaForm);
+    onSubmit = jest.fn();
     successCallback = jest.fn();
     errorCallback = jest.fn();
 
     handler = new TaskFormSubmitHandler(
-      taskInfo,
+      userTaskInstance,
       formSchema,
+      testUser,
+      onSubmit,
       successCallback,
       errorCallback
     );
@@ -142,12 +150,16 @@ describe('TaskFormSubmitHandler tests', () => {
     delete formSchema.phase;
 
     handler = new TaskFormSubmitHandler(
-      taskInfo,
+      userTaskInstance,
       formSchema,
+      testUser,
+      onSubmit,
       successCallback,
       errorCallback
     );
     handler.doSubmit({});
+
+    expect(onSubmit).not.toBeCalled();
 
     expect(successCallback).not.toBeCalled();
     expect(errorCallback).not.toBeCalled();

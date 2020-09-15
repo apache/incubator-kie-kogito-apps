@@ -6,16 +6,23 @@ import {
   Text,
   TextVariants
 } from '@patternfly/react-core';
-import { GraphQL } from '../../../graphql/types';
-import ProcessInstance = GraphQL.ProcessInstance;
+import { OUIAProps, componentOuiaProps } from '../../../utils/OuiaUtils';
+
+export interface ItemDescription {
+  id: string;
+  name: string;
+  description?: string;
+}
 
 interface IOwnProps {
-  processInstanceData: Pick<
-    ProcessInstance,
-    'id' | 'processName' | 'businessKey'
-  >;
+  itemDescription: ItemDescription;
 }
-const ItemDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
+
+const ItemDescriptor: React.FC<IOwnProps & OUIAProps> = ({
+  itemDescription,
+  ouiaId,
+  ouiaSafe
+}) => {
   const idStringModifier = (strId: string) => {
     return (
       <TextContent className="pf-u-display-inline">
@@ -27,13 +34,16 @@ const ItemDescriptor: React.FC<IOwnProps> = ({ processInstanceData }) => {
   };
   return (
     <>
-      <Tooltip content={processInstanceData.id}>
+      <Tooltip
+        content={itemDescription.id}
+        {...componentOuiaProps(ouiaId, 'item-descriptor', ouiaSafe)}
+      >
         <span>
-          {processInstanceData.processName}{' '}
-          {processInstanceData.businessKey ? (
-            <Badge>{processInstanceData.businessKey}</Badge>
+          {itemDescription.name}{' '}
+          {itemDescription.description ? (
+            <Badge>{itemDescription.description}</Badge>
           ) : (
-            idStringModifier(processInstanceData.id)
+            idStringModifier(itemDescription.id)
           )}
         </span>
       </Tooltip>

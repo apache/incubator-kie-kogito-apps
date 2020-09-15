@@ -26,14 +26,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Execution {
 
     public final static String EXECUTION_ID_FIELD = "executionId";
+    public final static String SOURCE_URL_FIELD = "sourceUrl";
     public final static String EXECUTION_TIMESTAMP_FIELD = "executionTimestamp";
     public final static String HAS_SUCCEEDED_FIELD = "hasSucceeded";
     public final static String EXECUTOR_NAME_FIELD = "executorName";
     public final static String EXECUTED_MODEL_NAME_FIELD = "executedModelName";
+    public final static String EXECUTED_MODEL_NAMESPACE_FIELD = "executedModelNamespace";
     public final static String EXECUTION_TYPE_FIELD = "executionType";
 
     @JsonProperty(EXECUTION_ID_FIELD)
     private String executionId;
+
+    @JsonProperty(SOURCE_URL_FIELD)
+    private String sourceUrl;
 
     @JsonProperty(EXECUTION_TIMESTAMP_FIELD)
     private Long executionTimestamp;
@@ -47,23 +52,29 @@ public class Execution {
     @JsonProperty(EXECUTED_MODEL_NAME_FIELD)
     private String executedModelName;
 
+    @JsonProperty(EXECUTED_MODEL_NAMESPACE_FIELD)
+    private String executedModelNamespace;
+
     @JsonProperty(EXECUTION_TYPE_FIELD)
-    private ExecutionTypeEnum executionType;
+    private ExecutionType executionType;
 
     public Execution() {
     }
 
-    public Execution(ExecutionTypeEnum executionType) {
+    public Execution(ExecutionType executionType) {
         this.executionType = executionType;
     }
 
-    public Execution(String executionId, Long executionTimestamp, Boolean hasSucceeded,
-                     String executorName, String executedModelName, ExecutionTypeEnum executionType) {
+    public Execution(String executionId, String sourceUrl, Long executionTimestamp, Boolean hasSucceeded,
+                     String executorName, String executedModelName, String executedModelNamespace,
+                     ExecutionType executionType) {
         this.executionId = executionId;
+        this.sourceUrl = sourceUrl;
         this.executionTimestamp = executionTimestamp;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
         this.executedModelName = executedModelName;
+        this.executedModelNamespace = executedModelNamespace;
         this.executionType = executionType;
     }
 
@@ -83,6 +94,24 @@ public class Execution {
      */
     public void setExecutionId(String executionId) {
         this.executionId = executionId;
+    }
+
+    /**
+     * Gets the source URL of the service where the execution happened.
+     *
+     * @return The service URL.
+     */
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    /**
+     * Sets the source URL of the service where the execution happened.
+     *
+     * @param sourceUrl The service URL.
+     */
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
     }
 
     /**
@@ -149,11 +178,29 @@ public class Execution {
     }
 
     /**
+     * Gets the namespace of the executed model.
+     *
+     * @return The namespace of the executed model.
+     */
+    public String getExecutedModelNamespace() {
+        return executedModelNamespace;
+    }
+
+    /**
+     * Sets the executed model namespace.
+     *
+     * @param executedModelNamespace The executed model namespace.
+     */
+    public void setExecutedModelNamespace(String executedModelNamespace) {
+        this.executedModelNamespace = executedModelNamespace;
+    }
+
+    /**
      * Gets the execution type.
      *
      * @return The execution type.
      */
-    public ExecutionTypeEnum getExecutionType() {
+    public ExecutionType getExecutionType() {
         return executionType;
     }
 
@@ -162,7 +209,7 @@ public class Execution {
      *
      * @param executionType The execution type.
      */
-    public void setExecutionType(ExecutionTypeEnum executionType) {
+    public void setExecutionType(ExecutionType executionType) {
         this.executionType = executionType;
     }
 
