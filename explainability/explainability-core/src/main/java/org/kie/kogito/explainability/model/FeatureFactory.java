@@ -137,9 +137,8 @@ public class FeatureFactory {
                 if (items.get(0) instanceof Feature) {
                     return newCompositeFeature(featureName, (List<Feature>) items);
                 } else {
-                    List<?> values = (List<?>) value;
-                    List<Feature> fs = IntStream.range(0, values.size())
-                            .mapToObj(i -> parseFeatureValue(featureName + "_" + i, values.get(i)))
+                    List<Feature> fs = IntStream.range(0, items.size())
+                            .mapToObj(i -> parseFeatureValue(featureName + "_" + i, items.get(i)))
                             .collect(Collectors.toList());
                     return newCompositeFeature(featureName, fs);
                 }
