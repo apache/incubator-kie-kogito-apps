@@ -118,7 +118,7 @@ class PartialDependencePlotExplainerTest {
                     }
                 });
 
-        Assertions.assertThrows(GlobalExplanationException.class,
+        Assertions.assertThrows(TimeoutException.class,
                                 () -> partialDependencePlotProvider.explain(brokenProvider, metadata));
 
         Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);

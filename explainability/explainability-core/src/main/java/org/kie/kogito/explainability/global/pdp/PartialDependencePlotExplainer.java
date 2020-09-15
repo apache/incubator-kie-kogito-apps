@@ -125,13 +125,14 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
      * @param predictionInputs a batch of inputs
      * @return a batch of outputs
      */
-    private List<PredictionOutput> getOutputs(PredictionProvider model, List<PredictionInput> predictionInputs) {
+    private List<PredictionOutput> getOutputs(PredictionProvider model, List<PredictionInput> predictionInputs)
+            throws InterruptedException, ExecutionException, TimeoutException {
         List<PredictionOutput> predictionOutputs;
         try {
             predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
-            throw new GlobalExplanationException(e);
+            throw e;
         }
         return predictionOutputs;
     }
