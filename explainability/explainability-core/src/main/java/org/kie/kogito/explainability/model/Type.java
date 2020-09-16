@@ -312,30 +312,7 @@ public enum Type {
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
             List<Feature> composite = getFeatures(value);
-            List<Feature> newList = new ArrayList<>(composite);
-            if (!newList.isEmpty()) {
-                // perturb at most in the range [|features|/2), noOfPerturbations]
-                int lowerBound = (int) Math.min(perturbationContext.getNoOfPerturbations(), 0.5d * composite.size());
-                int upperBound = (int) Math.max(perturbationContext.getNoOfPerturbations(), 0.5d * composite.size());
-                upperBound = Math.min(upperBound, composite.size() - 1);
-                lowerBound = Math.max(1, lowerBound); // lower bound should always greater than zero (not ok to not perturb)
-                int perturbationSize = 0;
-                if (lowerBound == upperBound) {
-                    perturbationSize = lowerBound;
-                }
-                else if (upperBound > lowerBound) {
-                    perturbationSize = perturbationContext.getRandom().ints(lowerBound, 1 + upperBound).findFirst().orElse(1);
-                }
-                if (perturbationSize > 0) {
-                    int[] indexesToBePerturbed = perturbationContext.getRandom().ints(1, newList.size())
-                            .distinct().limit(perturbationSize).toArray();
-                    for (int index : indexesToBePerturbed) {
-                        Feature cf = composite.get(index);
-                        Feature f = FeatureFactory.copyOf(cf, cf.getType().perturb(cf.getValue(), perturbationContext));
-                        newList.set(index, f);
-                    }
-                }
-            }
+            List<Feature> newList = DataUtils.perturbFeatures(composite, perturbationContext);
             return new Value<>(newList);
         }
 
