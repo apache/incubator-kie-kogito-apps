@@ -59,6 +59,7 @@ app.post('/management/processes/:processId/instances/:processInstanceId/nodeInst
 app.delete('/management/processes/:processId/instances/:processInstanceId/nodeInstances/:nodeInstanceId',
   controller.callNodeCancel
 );
+app.get('/process/definition/svg/:processId', controller.dispatchSVG);
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

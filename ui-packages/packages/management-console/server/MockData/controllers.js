@@ -1,4 +1,7 @@
 const restData = require('./rest');
+const path = require('path');
+
+const processSvg = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b','8035b580-6ae4-4aa8-9ec0-e18e19809e0blmnop']
 
 module.exports = controller = {
   showError: (req, res) => {
@@ -97,6 +100,13 @@ module.exports = controller = {
     else{
       nodeObject[0].exit = new Date().toISOString();
       res.status(200).send(data[0]);
+    }
+  },
+  dispatchSVG: (req, res) => {
+    if(processSvg.includes(req.params.processId)){
+      res.sendFile(path.resolve(__dirname+'../../../src/static/travels.svg'))
+    } else {
+      res.send(null);
     }
   }
 };

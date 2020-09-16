@@ -30,6 +30,7 @@ import {
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
+import ProcessDetailsVisualization from '../../Organisms/ProcessDetailsVisualization/ProcessDetailsVisualization';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
 import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
@@ -455,6 +456,18 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
                         </OverflowMenu>
                       </SplitItem>
                     </Split>
+                  </GridItem>
+                </Grid>
+                <Grid
+                  hasGutter
+                  md={1}
+                  span={12}
+                  lg={6}
+                  xl={4}
+                  style={{ marginTop: '20px', marginBottom: '20px' }}
+                >
+                  <GridItem span={8}>
+                    <ProcessDetailsVisualization data={data} id={id} />
                   </GridItem>
                 </Grid>
                 <Flex>

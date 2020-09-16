@@ -1713,7 +1713,7 @@ module.exports ={ ProcessInstanceData : [
     serviceUrl: 'http://localhost:4000',
     rootProcessInstanceId: null,
     serviceUrl:'http://localhost:4000',
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -1832,7 +1832,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl: 'http://localhost:4000',
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: ['process-management'],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -1950,8 +1950,8 @@ module.exports ={ ProcessInstanceData : [
     roles: [],
     state: 'ACTIVE',
     rootProcessInstanceId: null,
-    serviceUrl: 'http://localhost:4000/',
-    endpoint: 'http://localhost:4000/',
+    serviceUrl: 'http://localhost:4000',
+    endpoint: 'http://localhost:4000',
     addons: ['process-management'],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2070,7 +2070,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:null,
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2189,7 +2189,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:'http://localhost:4000',
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2308,7 +2308,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:null,
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2427,7 +2427,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:null,
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2546,7 +2546,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:'http://localhost:4000',
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2665,7 +2665,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:'http://localhost:4000',
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2784,7 +2784,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl: 'http://localhost:4000',
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -2903,7 +2903,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'ACTIVE',
     rootProcessInstanceId: null,
     serviceUrl:null,
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
@@ -3022,7 +3022,7 @@ module.exports ={ ProcessInstanceData : [
     state: 'COMPLETED',
     rootProcessInstanceId: null,
     serviceUrl: null,
-    endpoint: 'http://localhost:4000/',
+    endpoint: 'http://localhost:4000',
     addons: [],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
