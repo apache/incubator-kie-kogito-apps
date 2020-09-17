@@ -159,7 +159,7 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            return new Value<>(!Boolean.getBoolean(value.asString()));
+            return new Value<>(!Boolean.parseBoolean(value.asString()));
         }
 
         @Override
