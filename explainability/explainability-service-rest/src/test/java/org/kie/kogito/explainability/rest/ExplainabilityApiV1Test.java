@@ -34,11 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ExplainabilityApiV1Test {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String executionId = "test";
+    private static final String serviceUrl = "http://localhost:8080";
 
     @Test
     public void testEndpointWithRequest() throws JsonProcessingException {
-        String executionId = "test";
-        String serviceUrl = "http://localhost:8080";
         ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
 
         String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId, serviceUrl, modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
@@ -55,9 +55,6 @@ public class ExplainabilityApiV1Test {
 
     @Test
     public void testEndpointWithBadRequests() throws JsonProcessingException {
-        String executionId = "test";
-        String serviceUrl = "http://localhost:8080";
-
         ExplainabilityRequestDto[] badRequests = new ExplainabilityRequestDto[]{
                 null,
                 new ExplainabilityRequestDto(null, serviceUrl, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
