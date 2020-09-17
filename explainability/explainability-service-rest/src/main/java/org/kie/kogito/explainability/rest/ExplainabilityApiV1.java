@@ -49,16 +49,16 @@ public class ExplainabilityApiV1 {
 
     protected ExplanationService explanationService;
     protected PredictionProviderFactory predictionProviderFactory;
-
-    @Inject
-    Validator validator;
+    protected Validator validator;
 
     @Inject
     public ExplainabilityApiV1(
             ExplanationService explanationService,
-            PredictionProviderFactory predictionProviderFactory) {
+            PredictionProviderFactory predictionProviderFactory,
+            Validator validator) {
         this.explanationService = explanationService;
         this.predictionProviderFactory = predictionProviderFactory;
+        this.validator = validator;
     }
 
     @POST
