@@ -19,6 +19,7 @@ package org.kie.kogito.explainability.models;
 import java.util.Map;
 
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 public class ExplainabilityRequest {

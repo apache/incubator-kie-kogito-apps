@@ -56,13 +56,13 @@ public class ExplainabilityApiV1Test {
     @Test
     public void testEndpointWithBadRequests() throws JsonProcessingException {
         ExplainabilityRequestDto[] badRequests = new ExplainabilityRequestDto[]{
-                null,
                 new ExplainabilityRequestDto(null, serviceUrl, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("", "test"), Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("test", ""), Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(executionId, serviceUrl, null, Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(executionId, "", new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(executionId, null, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(null, null, null, Collections.emptyMap(), Collections.emptyMap()),
         };
 
         for (int i = 0; i < badRequests.length; i++) {

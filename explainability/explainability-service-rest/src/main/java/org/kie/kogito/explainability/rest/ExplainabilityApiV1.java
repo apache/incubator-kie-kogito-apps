@@ -16,10 +16,14 @@
 
 package org.kie.kogito.explainability.rest;
 
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -37,7 +41,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.kie.kogito.explainability.ExplanationService;
 import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
-import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
@@ -48,15 +51,14 @@ public class ExplainabilityApiV1 {
     protected PredictionProviderFactory predictionProviderFactory;
 
     @Inject
+    Validator validator;
+
+    @Inject
     public ExplainabilityApiV1(
             ExplanationService explanationService,
             PredictionProviderFactory predictionProviderFactory) {
         this.explanationService = explanationService;
         this.predictionProviderFactory = predictionProviderFactory;
-    }
-
-    private boolean isNullOrEmpty(String s) {
-        return s == null || s == "";
     }
 
     @POST
@@ -70,10 +72,13 @@ public class ExplainabilityApiV1 {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> explain(ExplainabilityRequestDto requestDto) {
-        RequestValidationResult validationResult = validateRequest(requestDto);
-        if (!validationResult.isValid()) {
+        Set<ConstraintViolation<ExplainabilityRequestDto>> violations = validator.validate(requestDto);
+
+        if (!violations.isEmpty()) {
             return Uni.createFrom().completionStage(
-                    CompletableFuture.completedFuture(Response.status(400).entity(validationResult.getMessage()).build())
+                    CompletableFuture.completedFuture(
+                            Response.status(400).entity(violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("\n"))).build()
+                    )
             );
         }
 
@@ -83,28 +88,6 @@ public class ExplainabilityApiV1 {
                 .thenApply(x -> Response.ok(x).build());
 
         return Uni.createFrom().completionStage(result);
-    }
-
-    private RequestValidationResult validateRequest(ExplainabilityRequestDto requestDto) {
-        if (requestDto == null) {
-            return new RequestValidationResult(false, "The request can not be empty.");
-        }
-
-        if (requestDto.getExecutionId() == null) {
-            return new RequestValidationResult(false, "The executionId must be included in the request.");
-        }
-
-        ModelIdentifierDto modelIdentifierDto = requestDto.getModelIdentifier();
-
-        if (modelIdentifierDto == null || isNullOrEmpty(modelIdentifierDto.getResourceType()) || isNullOrEmpty(modelIdentifierDto.getResourceId())) {
-            return new RequestValidationResult(false, "The model identifier information is required in the request.");
-        }
-
-        if (isNullOrEmpty(requestDto.getServiceUrl())) {
-            return new RequestValidationResult(false, "The service url information of the application that evaluated the decision is not provided in the request.");
-        }
-
-        return new RequestValidationResult(true, null);
     }
 }
 
