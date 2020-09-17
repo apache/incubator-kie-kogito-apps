@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability.rest;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.inject.Inject;
@@ -36,6 +37,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.kie.kogito.explainability.ExplanationService;
 import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
@@ -53,6 +55,10 @@ public class ExplainabilityApiV1 {
         this.predictionProviderFactory = predictionProviderFactory;
     }
 
+    private boolean isNullOrEmpty(String s) {
+        return s == null || s == "";
+    }
+
     @POST
     @Path("/explain")
     @APIResponses(value = {
@@ -64,12 +70,41 @@ public class ExplainabilityApiV1 {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> explain(ExplainabilityRequestDto requestDto) {
+        RequestValidationResult validationResult = validateRequest(requestDto);
+        if (!validationResult.isValid()) {
+            return Uni.createFrom().completionStage(
+                    CompletableFuture.completedFuture(Response.status(400).entity(validationResult.getMessage()).build())
+            );
+        }
+
         ExplainabilityRequest request = ExplainabilityRequest.from(requestDto);
         PredictionProvider provider = predictionProviderFactory.createPredictionProvider(request);
         CompletionStage<Response> result = explanationService.explainAsync(request, provider)
                 .thenApply(x -> Response.ok(x).build());
 
         return Uni.createFrom().completionStage(result);
+    }
+
+    private RequestValidationResult validateRequest(ExplainabilityRequestDto requestDto) {
+        if (requestDto == null) {
+            return new RequestValidationResult(false, "The request can not be empty.");
+        }
+
+        if (requestDto.getExecutionId() == null) {
+            return new RequestValidationResult(false, "The executionId must be included in the request.");
+        }
+
+        ModelIdentifierDto modelIdentifierDto = requestDto.getModelIdentifier();
+
+        if (modelIdentifierDto == null || isNullOrEmpty(modelIdentifierDto.getResourceType()) || isNullOrEmpty(modelIdentifierDto.getResourceId())) {
+            return new RequestValidationResult(false, "The model identifier information is required in the request.");
+        }
+
+        if (isNullOrEmpty(requestDto.getServiceUrl())) {
+            return new RequestValidationResult(false, "The service url information of the application that evaluated the decision is not provided in the request.");
+        }
+
+        return new RequestValidationResult(true, null);
     }
 }
 

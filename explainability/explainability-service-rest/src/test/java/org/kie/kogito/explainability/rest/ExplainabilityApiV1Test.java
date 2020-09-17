@@ -16,6 +16,8 @@
 
 package org.kie.kogito.explainability.rest;
 
+import java.util.Collections;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.test.junit.QuarkusTest;
@@ -24,8 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
-
-import java.util.Collections;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,5 +51,33 @@ public class ExplainabilityApiV1Test {
                 .as(ExplainabilityResultDto.class);
 
         assertEquals(executionId, result.getExecutionId());
+    }
+
+    @Test
+    public void testEndpointWithBadRequests() throws JsonProcessingException {
+        String executionId = "test";
+        String serviceUrl = "http://localhost:8080";
+
+        ExplainabilityRequestDto[] badRequests = new ExplainabilityRequestDto[]{
+                null,
+                new ExplainabilityRequestDto(null, serviceUrl, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("test", ""), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, serviceUrl, null, Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, "", new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, null, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
+        };
+
+        for (int i = 0; i < badRequests.length; i++) {
+            String body = MAPPER.writeValueAsString(badRequests[i]);
+
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(body)
+                    .when()
+                    .post("/v1/explain")
+                    .then()
+                    .statusCode(400);
+        }
     }
 }
