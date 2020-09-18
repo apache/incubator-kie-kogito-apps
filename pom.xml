@@ -65,6 +65,26 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <configuration>
+          <header>${project.root.dir}/licensesheader.txt</header>
+          <includes>
+            <include>**/*.java</include>
+            <include>**/src/**/*.tsx</include>
+          </includes>
+          <mapping>
+            <tsx>JAVADOC_STYLE</tsx>
+          </mapping>
+          <excludes>
+            <exclude>.mvn/**</exclude>
+            <exclude>node_modules/**</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <dependencyManagement>
