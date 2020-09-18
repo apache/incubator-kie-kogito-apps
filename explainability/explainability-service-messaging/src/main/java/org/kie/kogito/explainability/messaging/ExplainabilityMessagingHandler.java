@@ -118,13 +118,16 @@ public class ExplainabilityMessagingHandler {
     // Outgoing
     public Void sendEvent(ExplainabilityResultDto result) {
         LOGGER.info("Explainability service emits explainability for execution with ID {}", result.getExecutionId());
-        String payload = CloudEventUtils.encode(
-                CloudEventUtils.build(result.getExecutionId(),
-                                      URI_PRODUCER,
-                                      result,
-                                      ExplainabilityResultDto.class)
-        );
-        eventSubject.onNext(payload);
+        Optional<CloudEvent> event = CloudEventUtils.build(result.getExecutionId(),
+                URI_PRODUCER,
+                result,
+                ExplainabilityResultDto.class);
+        if(event.isPresent()) {
+            String payload = CloudEventUtils.encode(event.get());
+            eventSubject.onNext(payload);
+        } else {
+            LOGGER.warn("Ignoring empty CloudEvent");
+        }
         return null;
     }
 

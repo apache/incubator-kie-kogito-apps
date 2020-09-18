@@ -208,7 +208,7 @@ class ExplainabilityResultConsumerTest {
                 URI.create("explainabilityResult/test"),
                 resultDto,
                 ExplainabilityResultDto.class
-        );
+        ).get();
     }
 
     public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {

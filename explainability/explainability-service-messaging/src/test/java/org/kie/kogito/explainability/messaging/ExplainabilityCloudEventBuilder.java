@@ -30,7 +30,7 @@ public class ExplainabilityCloudEventBuilder {
                 URI.create("trustyService/test"),
                 request,
                 ExplainabilityRequestDto.class
-        );
+        ).get();
     }
 
     public static String buildCloudEventJsonString(ExplainabilityRequestDto request) {
