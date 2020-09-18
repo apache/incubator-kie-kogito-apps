@@ -54,6 +54,12 @@ export const loadSecurityContext = async (
 export const getUserName = (): string => {
   return getLoadedSecurityContext().userName;
 };
+export const getUserRoles = (): string[] => {
+  if (isAuthEnabled()) {
+    return getKeycloakInstance().tokenParsed.realm_access.roles;
+  }
+  return [];
+};
 
 export const getToken = (): string => {
   return getLoadedSecurityContext().token;

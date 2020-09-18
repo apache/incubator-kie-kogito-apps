@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`KogitoAppContextProvider tests Test context with auth 1`] = `
+<KogitoAppContextProvider>
+  <MockedComponent
+    context={
+      AppContextImpl {
+        "environment": Object {
+          "mode": 1,
+        },
+        "userSystem": KeycloakUserSystem {
+          "currentUser": DefaultUser {
+            "groups": Array [
+              "user",
+              "manager",
+            ],
+            "id": "jdoe",
+          },
+        },
+      }
+    }
+  />
+</KogitoAppContextProvider>
+`;
+
+exports[`KogitoAppContextProvider tests Test context without auth 1`] = `
+<KogitoAppContextProvider>
+  <MockedComponent
+    context={
+      AppContextImpl {
+        "environment": Object {
+          "mode": 0,
+        },
+        "userSystem": TestUserSystemImpl {
+          "currentUser": Object {
+            "groups": Array [
+              "employees",
+            ],
+            "id": "john",
+          },
+          "onUserChange": [Function],
+          "userManager": TestUserManagerImpl {
+            "system": Array [
+              "john",
+              "mary",
+              "poul",
+            ],
+            "users": Array [],
+          },
+        },
+      }
+    }
+  />
+</KogitoAppContextProvider>
+`;

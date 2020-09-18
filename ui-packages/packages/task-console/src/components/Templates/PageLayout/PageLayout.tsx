@@ -61,7 +61,7 @@ const PageLayout: React.FC<IOwnProps & OUIAProps> = ({ ouiaId, ...props }) => {
         />
         <Route
           exact
-          path="/Task/:taskId"
+          path="/TaskDetails/:taskId"
           render={routeProps => <UserTaskInstanceDetailsPage {...routeProps} />}
         />
         <Route

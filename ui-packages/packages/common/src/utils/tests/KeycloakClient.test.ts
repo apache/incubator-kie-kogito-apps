@@ -34,6 +34,19 @@ describe('Tests for keycloak client functions', () => {
     expect(KeycloakClient.getUserName()).toEqual('jdoe');
   });
 
+  it('Test getUserRoles function', () => {
+    const isAuthEnabledMock = jest.spyOn(KeycloakClient, 'isAuthEnabled');
+    isAuthEnabledMock.mockReturnValue(true);
+
+    const userRoles = KeycloakClient.getUserRoles();
+    expect(userRoles).toHaveLength(2);
+    expect(userRoles).toContainEqual('user');
+    expect(userRoles).toContainEqual('manager');
+
+    isAuthEnabledMock.mockReturnValue(false);
+    expect(KeycloakClient.getUserRoles()).toHaveLength(0);
+  });
+
   it('Test getToken function', () => {
     const getLoadedSecurityContextMock = jest.spyOn(KeycloakClient, 'getLoadedSecurityContext');
     getLoadedSecurityContextMock.mockReturnValue(mockUserContext);

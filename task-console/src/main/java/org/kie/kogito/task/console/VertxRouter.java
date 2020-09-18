@@ -42,6 +42,22 @@ public class VertxRouter {
     String dataIndexHttpURL;
 
     @Inject
+    @ConfigProperty(name = "kogito.auth.enabled", defaultValue = "false")
+    String authEnabled;
+
+    @Inject
+    @ConfigProperty(name = "kogito.auth.keycloak.realm", defaultValue = "kogito")
+    String authKeycloakRealm;
+
+    @Inject
+    @ConfigProperty(name = "kogito.auth.keycloak.url", defaultValue = "http://localhost:8280")
+    String authKeycloakUrl;
+
+    @Inject
+    @ConfigProperty(name = "kogito.auth.keycloak.client.id", defaultValue = "kogito-console-quarkus")
+    String authKeycloakClientId;
+
+    @Inject
     Vertx vertx;
 
     private String resource;
@@ -51,14 +67,18 @@ public class VertxRouter {
         resource = vertx.fileSystem()
                 .readFileBlocking("META-INF/resources/index.html")
                 .toString(UTF_8)
-                .replace("__DATA_INDEX_ENDPOINT__", "\"" + dataIndexHttpURL + "/graphql\"");
+                .replace("__DATA_INDEX_ENDPOINT__", "\"" + dataIndexHttpURL + "/graphql\"")
+                .replace("__KOGITO_AUTH_ENABLED__", authEnabled)
+                .replace("__KOGITO_AUTH_KEYCLOAK_REALM__", "\"" + authKeycloakRealm + "\"")
+                .replace("__KOGITO_AUTH_KEYCLOAK_URL__", "\"" + authKeycloakUrl + "\"")
+                .replace("__KOGITO_AUTH_KEYCLOAK_CLIENT_ID__", "\"" + authKeycloakClientId + "\"");
     }
 
     void setupRouter(@Observes Router router) {
-        router.route("/").handler(ctx -> ctx.response().putHeader("location", "/UserTasks/").setStatusCode(302).end());
-        router.route("/TaskInbox*").handler(this::handle);
+        router.route("/").handler(ctx -> ctx.response().putHeader("location", "/TaskInbox/").setStatusCode(302).end());
+        router.route("/TaskInbox").handler(this::handle);
         router.route("/UserTasks*").handler(this::handle);
-        router.route("/Task*").handler(this::handle);
+        router.route("/TaskDetails*").handler(this::handle);
         router.route().handler(StaticHandler.create());
     }
 

@@ -10,6 +10,16 @@ const props: any = {
   history: []
 };
 
+const MockedComponent = (): React.ReactElement => {
+  return <></>;
+};
+jest.mock('@kogito-apps/common', () => ({
+  ...jest.requireActual('@kogito-apps/common'),
+  KogitoPageLayout: () => {
+    return <MockedComponent />;
+  }
+}));
+
 jest.mock('../../../Organisms/TaskInbox/TaskInbox.tsx');
 jest.mock('../../DataListContainerExpandable/DataListContainerExpandable.tsx');
 

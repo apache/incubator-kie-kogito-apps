@@ -19,4 +19,12 @@ export { default as DomainExplorerListDomains } from './src/components/Organisms
 export * from './src/utils/OuiaUtils';
 export * from './src/utils/KeycloakClient';
 export * from './src/graphql/types';
-export * from './src/models/User/User';
+export * from './src/environment/auth/Auth';
+export {
+  default as KogitoAppContext,
+  AppContext,
+  Environment,
+  EnvironmentMode,
+  useKogitoAppContext
+} from './src/environment/context/KogitoAppContext';
+export { default as KogitoAppContextProvider } from './src/components/Molecules/KogitoAppContextProvider/KogitoAppContextProvider';

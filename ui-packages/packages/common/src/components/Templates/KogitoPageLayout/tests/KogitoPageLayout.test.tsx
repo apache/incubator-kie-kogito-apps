@@ -13,6 +13,8 @@ const props = {
   BrandClick: jest.fn()
 };
 
+jest.mock('../../../Molecules/PageToolbar/PageToolbar');
+
 describe('KogitoPageLayout component tests', () => {
   const isAuthEnabledMock = jest.spyOn(Keycloak, 'isAuthEnabled');
   isAuthEnabledMock.mockReturnValue(false);

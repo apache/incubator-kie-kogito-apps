@@ -9,7 +9,8 @@ import {
   ServerUnavailable,
   appRenderWithAxiosInterceptorConfig,
   getToken,
-  isAuthEnabled
+  isAuthEnabled,
+  KogitoAppContextProvider
 } from '@kogito-apps/common';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
@@ -36,11 +37,13 @@ const fallbackUI = onError(({ networkError }: any) => {
   if (networkError && networkError.stack === 'TypeError: Failed to fetch') {
     return ReactDOM.render(
       <ApolloProvider client={client}>
-        <ServerUnavailable
-          PageNav={PageNav}
-          src={managementConsoleLogo}
-          alt={'Management Console Logo'}
-        />
+        <KogitoAppContextProvider>
+          <ServerUnavailable
+            PageNav={PageNav}
+            src={managementConsoleLogo}
+            alt={'Management Console Logo'}
+          />
+        </KogitoAppContextProvider>
       </ApolloProvider>,
       document.getElementById('root')
     );
@@ -68,11 +71,13 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const appRender = () => {
   ReactDOM.render(
     <ApolloProvider client={client}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" component={PageLayout} />
-        </Switch>
-      </BrowserRouter>
+      <KogitoAppContextProvider>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" component={PageLayout} />
+          </Switch>
+        </BrowserRouter>
+      </KogitoAppContextProvider>
     </ApolloProvider>,
     document.getElementById('root')
   );
