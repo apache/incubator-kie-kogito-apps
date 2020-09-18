@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -71,17 +72,7 @@ public class ExplainabilityApiV1 {
     @Operation(summary = "Retrieve the explainability for a given decision.", description = "Retrieve the explainability for a given decision.")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Uni<Response> explain(ExplainabilityRequestDto requestDto) {
-        Set<ConstraintViolation<ExplainabilityRequestDto>> violations = validator.validate(requestDto);
-
-        if (!violations.isEmpty()) {
-            return Uni.createFrom().completionStage(
-                    CompletableFuture.completedFuture(
-                            Response.status(400).entity(violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("\n"))).build()
-                    )
-            );
-        }
-
+    public Uni<Response> explain(@Valid ExplainabilityRequestDto requestDto) {
         ExplainabilityRequest request = ExplainabilityRequest.from(requestDto);
         PredictionProvider provider = predictionProviderFactory.createPredictionProvider(request);
         CompletionStage<Response> result = explanationService.explainAsync(request, provider)
