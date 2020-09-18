@@ -24,7 +24,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
-import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
