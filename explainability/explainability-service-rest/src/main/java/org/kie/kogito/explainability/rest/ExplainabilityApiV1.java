@@ -16,13 +16,9 @@
 
 package org.kie.kogito.explainability.rest;
 
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
