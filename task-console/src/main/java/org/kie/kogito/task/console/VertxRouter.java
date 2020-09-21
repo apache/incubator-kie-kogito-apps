@@ -77,7 +77,6 @@ public class VertxRouter {
     void setupRouter(@Observes Router router) {
         router.route("/").handler(ctx -> ctx.response().putHeader("location", "/TaskInbox/").setStatusCode(302).end());
         router.route("/TaskInbox").handler(this::handle);
-        router.route("/UserTasks*").handler(this::handle);
         router.route("/TaskDetails*").handler(this::handle);
         router.route().handler(StaticHandler.create());
     }

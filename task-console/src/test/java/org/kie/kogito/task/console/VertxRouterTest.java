@@ -31,10 +31,6 @@ class VertxRouterTest {
                 .then()
                 .statusCode(200);
 
-        given().when().get("/UserTasks")
-                .then()
-                .statusCode(200);
-
         given().when().get("/TaskDetails/a1e139d5-4e77-48c9-84ae-34578e904e5a")
                 .then()
                 .statusCode(200);

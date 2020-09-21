@@ -21,7 +21,6 @@ jest.mock('@kogito-apps/common', () => ({
 }));
 
 jest.mock('../../../Organisms/TaskInbox/TaskInbox.tsx');
-jest.mock('../../DataListContainerExpandable/DataListContainerExpandable.tsx');
 
 describe('PageLayout Click test', () => {
   it('Brand click testing', () => {

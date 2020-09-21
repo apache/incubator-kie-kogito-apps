@@ -67,8 +67,7 @@ const resolvers = {
 
         if (args['where'].state && args['where'].state.in) {
           return args['where'].state.in.includes(datum.state);
-        }
-        else if (args['where'].id && args['where'].id.equal) {
+        } else if (args['where'].id && args['where'].id.equal) {
           // mock to return single id
           return datum.id === args['where'].id.equal
         } else {
@@ -85,10 +84,8 @@ const resolvers = {
           }
 
           const potentialGroupsClause = args['where'].or[2];
-
-          potentialGroupsClause.potentialGroups.containsAny
-
-          return potentialGroupsClause.potentialGroups.containsAny.some(clauseGroup => datum.potentialGroups.includes(clauseGroup));
+          return potentialGroupsClause.potentialGroups.containsAny
+            .some(clauseGroup => datum.potentialGroups.includes(clauseGroup));
         }
       });
       if (args['orderBy']) {
@@ -107,13 +104,10 @@ const resolvers = {
 
         result = result.slice(offset, offset + limit);
       }
-
-      console.log('result length: ' + result.length);
       return result;
     },
     ProcessInstances: async (parent, args) => {
       const result = data.ProcessInstances.filter(datum => {
-        console.log('args', args['where']);
         if (args['where'].id && args['where'].id.equal) {
           return datum.id === args['where'].id.equal;
         } else {
@@ -121,7 +115,6 @@ const resolvers = {
         }
       });
       await timeout(2000);
-      console.log('result length: ' + result.length);
       return result;
     }
   },
