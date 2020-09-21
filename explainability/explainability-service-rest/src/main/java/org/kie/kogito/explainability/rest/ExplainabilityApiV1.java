@@ -20,7 +20,6 @@ import java.util.concurrent.CompletionStage;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -46,16 +45,13 @@ public class ExplainabilityApiV1 {
 
     protected ExplanationService explanationService;
     protected PredictionProviderFactory predictionProviderFactory;
-    protected Validator validator;
 
     @Inject
     public ExplainabilityApiV1(
             ExplanationService explanationService,
-            PredictionProviderFactory predictionProviderFactory,
-            Validator validator) {
+            PredictionProviderFactory predictionProviderFactory) {
         this.explanationService = explanationService;
         this.predictionProviderFactory = predictionProviderFactory;
-        this.validator = validator;
     }
 
     @POST
