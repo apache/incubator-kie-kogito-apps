@@ -16,12 +16,17 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import io.vertx.core.Vertx;
@@ -31,15 +36,15 @@ import org.infinispan.client.hotrod.Flag;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.Search;
+import org.infinispan.commons.configuration.XMLStringConfiguration;
+import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
-import org.infinispan.query.dsl.SortOrder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.qualifier.Repository;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
-import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
 
@@ -49,6 +54,7 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
 
     private RemoteCache<String, JobDetails> cache;
     private QueryFactory queryFactory;
+    private RemoteCacheManager remoteCacheManager;
 
     InfinispanJobRepository() {
         super(null, null);
@@ -59,7 +65,19 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
                                    JobStreams jobStreams,
                                    RemoteCacheManager remoteCacheManager) {
         super(vertx, jobStreams);
-        this.cache = remoteCacheManager.administration().getOrCreateCache(JOB_DETAILS, (String) null);
+        this.remoteCacheManager = remoteCacheManager;
+    }
+
+    private XMLStringConfiguration getCacheTemplate() {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("META-INF/kogito-cache-default.xml");
+        String xml = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+                .lines()
+                .collect(Collectors.joining("\n"));
+        return new XMLStringConfiguration(xml);
+    }
+
+    void init(@Observes InfinispanInitialized event) {
+        this.cache = remoteCacheManager.getCache(JOB_DETAILS);
         this.queryFactory = Search.getQueryFactory(cache);
     }
 
@@ -89,36 +107,37 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
 
     @Override
     public PublisherBuilder<JobDetails> findAll() {
-        return ReactiveStreams
-                .fromIterable(queryFactory.from(JobDetails.class)
-                                      .<JobDetails>build()
-                                      .list());
+        Query<JobDetails> query = queryFactory.<JobDetails>create("from job.service.JobDetails");
+        return ReactiveStreams.fromIterable(query.execute().list());
     }
 
     @Override
     public PublisherBuilder<JobDetails> findByStatus(JobStatus... status) {
-        return ReactiveStreams.fromIterable(queryFactory.from(JobDetails.class)
-                                                    .having("status")
-                                                    .in(Arrays.stream(status)
-                                                                .map(JobStatus::name)
-                                                                .collect(Collectors.toList()))
-                                                    .<JobDetails>build()
-                                                    .list());
+        Query<JobDetails> query = queryFactory.create("from job.service.JobDetails j " +
+                                                              "where " +
+                                                              "and j.status:(" + createStatusQuery(status) + ")");
+        return ReactiveStreams.fromIterable(query.execute().list());
     }
 
+    @Override
     public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to,
                                                                                 JobStatus... status) {
-        return ReactiveStreams.fromIterable(queryFactory.from(JobDetails.class)
-                                                    .having("status")
-                                                    .in(Arrays.stream(status)
-                                                                .map(JobStatus::name)
-                                                                .collect(Collectors.toList()))
-                                                    .and()
-                                                    .having("trigger.nextFireTime")
-                                                    .between(DateUtil.zonedDateTimeToInstant(from),
-                                                             DateUtil.zonedDateTimeToInstant(to))
-                                                    .orderBy("priority", SortOrder.DESC)
-                                                    .<JobDetails>build()
-                                                    .list());
+        Query<JobDetails> query = queryFactory.create("from job.service.JobDetails j " +
+                                                              "where " +
+                                                              "j.trigger.nextFireTime > :from " +
+                                                              "and j.trigger.nextFireTime < :to " +
+                                                              "and j.status:(" +  createStatusQuery(status) + ") " +
+                                                              "order by j.priority desc"
+        );
+        query.setParameter("to", to.toInstant().toEpochMilli());
+        query.setParameter("from", from.toInstant().toEpochMilli());
+        return ReactiveStreams.fromIterable(query.execute().list());
+    }
+
+    //building the query sentence for the status IN (not supported to use array in setParameter on the query)
+    private String createStatusQuery(JobStatus[] status) {
+        return Arrays.stream(status)
+                .map(JobStatus::name)
+                .collect(Collectors.joining("\' \'", "\'", "\'"));
     }
 }
