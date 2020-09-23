@@ -47,6 +47,7 @@ import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfig
 public class InfinispanConfiguration {
 
     public static final String PERSISTENCE_CONFIG_KEY = "kogito.jobs-service.persistence";
+    public static final String CACHE_TEMPLATE_XML = "META-INF/kogito-cache-default.xml";
     private AtomicBoolean initialized = new AtomicBoolean(Boolean.FALSE);
 
     /**
@@ -92,7 +93,7 @@ public class InfinispanConfiguration {
     }
 
     private XMLStringConfiguration getCacheTemplate() {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("META-INF/kogito-cache-default.xml");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(CACHE_TEMPLATE_XML);
         String xml = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                 .lines()
                 .collect(Collectors.joining("\n"));
