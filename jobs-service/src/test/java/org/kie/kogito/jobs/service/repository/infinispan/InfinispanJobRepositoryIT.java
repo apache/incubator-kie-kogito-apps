@@ -16,6 +16,8 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import io.quarkus.test.common.QuarkusTestResource;
@@ -47,7 +49,7 @@ class InfinispanJobRepositoryIT extends BaseJobRepositoryTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        await().until(() -> infinispanConfiguration.isInitialized());
+        await().atMost(2, TimeUnit.SECONDS).until(() -> infinispanConfiguration.isInitialized());
         remoteCacheManager.getCache(InfinispanConfiguration.Caches.JOB_DETAILS).clear();
         super.setUp();
     }

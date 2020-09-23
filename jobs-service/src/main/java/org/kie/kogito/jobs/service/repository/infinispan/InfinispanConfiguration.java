@@ -77,10 +77,10 @@ public class InfinispanConfiguration {
 
     void initializeCaches(@Observes @Priority(Interceptor.Priority.PLATFORM_BEFORE) StartupEvent startupEvent,
                           @ConfigProperty(name = PERSISTENCE_CONFIG_KEY) Optional<String> persistence,
-                          RemoteCacheManager remoteCacheManager,
+                          Instance<RemoteCacheManager> remoteCacheManager,
                           Event<InfinispanInitialized> initializedEvent) {
         isEnabled(persistence)
-                .map(c -> remoteCacheManager.administration().getOrCreateCache(JOB_DETAILS, getCacheTemplate()))
+                .map(c -> remoteCacheManager.get().administration().getOrCreateCache(JOB_DETAILS, getCacheTemplate()))
                 .ifPresent(c -> {
                     initializedEvent.fire(new InfinispanInitialized());
                     initialized.set(Boolean.TRUE);

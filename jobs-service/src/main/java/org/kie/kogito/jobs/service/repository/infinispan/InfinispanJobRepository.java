@@ -16,10 +16,6 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
@@ -36,7 +32,6 @@ import org.infinispan.client.hotrod.Flag;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.Search;
-import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -66,14 +61,6 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
                                    RemoteCacheManager remoteCacheManager) {
         super(vertx, jobStreams);
         this.remoteCacheManager = remoteCacheManager;
-    }
-
-    private XMLStringConfiguration getCacheTemplate() {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("META-INF/kogito-cache-default.xml");
-        String xml = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
-        return new XMLStringConfiguration(xml);
     }
 
     void init(@Observes InfinispanInitialized event) {
@@ -126,7 +113,7 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
                                                               "where " +
                                                               "j.trigger.nextFireTime > :from " +
                                                               "and j.trigger.nextFireTime < :to " +
-                                                              "and j.status:(" +  createStatusQuery(status) + ") " +
+                                                              "and j.status :(" + createStatusQuery(status) + ") " +
                                                               "order by j.priority desc"
         );
         query.setParameter("to", to.toInstant().toEpochMilli());
