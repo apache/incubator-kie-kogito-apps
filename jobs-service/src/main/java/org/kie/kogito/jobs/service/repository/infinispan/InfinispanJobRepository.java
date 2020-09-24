@@ -102,7 +102,7 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
     public PublisherBuilder<JobDetails> findByStatus(JobStatus... status) {
         Query<JobDetails> query = queryFactory.create("from job.service.JobDetails j " +
                                                               "where " +
-                                                              "and j.status in (" + createStatusQuery(status) + ")");
+                                                              "j.status in (" + createStatusQuery(status) + ")");
         return ReactiveStreams.fromIterable(query.execute().list());
     }
 

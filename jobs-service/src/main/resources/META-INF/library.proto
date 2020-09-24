@@ -4,7 +4,7 @@ package job.service;
 message JobDetails {
   optional string id = 1;
   optional string correlationId = 2;
-  /* @Field(store = Store.YES, analyze = Analyze.YES, analyzer = @Analyzer(definition = "keyword")) */
+  /* @Field(store = Store.YES) */
   optional string status = 3;//enum
   optional int64 lastUpdate = 4;
   optional int32 retries = 5;
