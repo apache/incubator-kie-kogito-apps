@@ -3,11 +3,7 @@
     <local-cache name="JOB_DETAILS">
       <indexing>
         <property name="default.directory_provider">local-heap</property>
-        <indexed-entities>
-          <indexed-entity>job.service.JobDetails</indexed-entity>
-        </indexed-entities>
       </indexing>
-      <encoding media-type="application/x-protostream"/>
     </local-cache>
   </cache-container>
 </infinispan>

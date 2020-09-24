@@ -113,7 +113,7 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
                                                               "where " +
                                                               "j.trigger.nextFireTime > :from " +
                                                               "and j.trigger.nextFireTime < :to " +
-                                                              "and j.status :(" + createStatusQuery(status) + ") " +
+                                                              "and j.status in (" + createStatusQuery(status) + ") " +
                                                               "order by j.priority desc"
         );
         query.setParameter("to", to.toInstant().toEpochMilli());
@@ -125,6 +125,6 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
     private String createStatusQuery(JobStatus[] status) {
         return Arrays.stream(status)
                 .map(JobStatus::name)
-                .collect(Collectors.joining("\' \'", "\'", "\'"));
+                .collect(Collectors.joining("\', \'", "\'", "\'"));
     }
 }
