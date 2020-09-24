@@ -15,10 +15,13 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +29,7 @@ import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -86,8 +90,21 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            ByteBuffer byteBuffer = ByteBuffer.allocate(0);
-            return new Value<>(byteBuffer);
+            if (value.getUnderlyingObject() instanceof ByteBuffer) {
+                ByteBuffer currentBuffer = (ByteBuffer) value.getUnderlyingObject();
+                byte[] copy = new byte[currentBuffer.array().length];
+                int maxPerturbationSize = Math.min(copy.length, Math.max((int) (copy.length * 0.5), perturbationContext.getNoOfPerturbations()));
+                System.arraycopy(currentBuffer.array(), 0, copy, 0, currentBuffer.array().length);
+                int[] indexes = perturbationContext.getRandom().ints(0, copy.length)
+                        .limit(maxPerturbationSize).toArray();
+                for (int i = 0; i < indexes.length; i++) {
+                    copy[i] = 0;
+                }
+                return new Value<>(ByteBuffer.wrap(copy));
+            } else {
+                ByteBuffer byteBuffer = ByteBuffer.allocate(0);
+                return new Value<>(byteBuffer);
+            }
         }
 
         @Override
@@ -176,7 +193,41 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            return new Value<>(java.net.URI.create(""));
+            String uriAsString = value.asString();
+            java.net.URI uri = java.net.URI.create(uriAsString);
+            String scheme = uri.getScheme();
+            String host = uri.getHost();
+            if (perturbationContext.getRandom().nextBoolean()) {
+                if ("localhost".equalsIgnoreCase(host)) {
+                    host = "0.0.0.0";
+                } else {
+                    host = "localhost";
+                }
+            }
+            String path = uri.getPath();
+            if (perturbationContext.getRandom().nextBoolean()) {
+                path = "";
+            }
+            String fragment = uri.getFragment();
+            if (perturbationContext.getRandom().nextBoolean()) {
+                if (fragment != null && fragment.length() > 0) {
+                    fragment = "";
+                } else { // generate a random string
+                    byte[] bytes = new byte[Math.max(128, perturbationContext.getRandom().nextInt(1024))];
+                    perturbationContext.getRandom().nextBytes(bytes);
+                    fragment = new String(bytes);
+                }
+            }
+            java.net.URI newURI;
+            try {
+                newURI = new URI(scheme, host, path, fragment);
+                if (uri.equals(newURI)) {  // to avoid "unfortunate" cases where no URI parameter has been perturbed
+                    newURI = java.net.URI.create("");
+                }
+            } catch (URISyntaxException e) {
+                newURI = java.net.URI.create("");
+            }
+            return new Value<>(newURI);
         }
 
         @Override
@@ -216,7 +267,14 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            return new Value<>(Duration.of(0, ChronoUnit.SECONDS));
+            Duration duration;
+            try {
+                duration = Duration.parse(value.asString());
+            } catch (DateTimeParseException parseException) {
+                duration = Duration.of(0, ChronoUnit.HOURS);
+            }
+            duration = duration.plus(1L + perturbationContext.getRandom().nextInt(23), ChronoUnit.HOURS);
+            return new Value<>(duration);
         }
 
         @Override
@@ -237,15 +295,19 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            // randomly set a non zero value to zero (or decrease it by 1)
+            // set a number of non zero values to zero (or decrease them by 1)
             double[] vector = value.asVector();
             double[] values = Arrays.copyOf(vector, vector.length);
             if (values.length > 1) {
-                int idx = perturbationContext.getRandom().nextInt(values.length);
-                if (values[idx] != 0) {
-                    values[idx] = 0;
-                } else {
-                    values[idx]--;
+                int maxPerturbationSize = Math.min(vector.length, Math.max((int) (vector.length * 0.5), perturbationContext.getNoOfPerturbations()));
+                int[] indexes = perturbationContext.getRandom().ints(0, vector.length)
+                        .limit(maxPerturbationSize).toArray();
+                for (int idx : indexes) {
+                    if (values[idx] != 0) {
+                        values[idx] = 0;
+                    } else {
+                        values[idx]--;
+                    }
                 }
             }
             return new Value<>(values);
@@ -361,7 +423,8 @@ public enum Type {
 
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
-            return new Value<>(Currency.getInstance(Locale.getDefault()));
+            List<Currency> availableCurrencies = new ArrayList<>(Currency.getAvailableCurrencies());
+            return new Value<>(availableCurrencies.get(perturbationContext.getRandom().nextInt(availableCurrencies.size())));
         }
 
         @Override

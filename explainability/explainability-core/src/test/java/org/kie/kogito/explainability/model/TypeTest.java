@@ -131,6 +131,18 @@ class TypeTest {
     }
 
     @Test
+    void testPerturbByteBufferFeature() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        byte[] bytes = new byte[1024];
+        perturbationContext.getRandom().nextBytes(bytes);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        byteBuffer.put(bytes);
+        Feature feature = new Feature("name", Type.BINARY, new Value<>(byteBuffer));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
     void testPerturbCompositeFeature() {
         PerturbationContext perturbationContext = new PerturbationContext(new Random(), 2);
         List<Feature> features = new LinkedList<>();
