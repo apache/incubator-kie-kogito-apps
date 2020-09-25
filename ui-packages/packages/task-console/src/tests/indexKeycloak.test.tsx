@@ -6,7 +6,14 @@ jest.mock('keycloak-js');
 const mockedKeycloak = Keycloak as jest.Mocked<typeof Keycloak>;
 
 const MockKeycloakInstance = jest.fn(() => ({
-  init: jest.fn()
+  init: jest.fn(),
+  token: 'fasd',
+  tokenParsed: {
+    preferred_username : "testUser",
+    realm_access: {
+      roles:['role1']
+    }
+  }
 }));
 
 const MockKeycloakInstancePromise = jest.fn(() => ({
@@ -23,6 +30,7 @@ process.env.KOGITO_DATAINDEX_HTTP_URL = 'http://localhost:8180';
 describe('Index test with Keycloak', () => {
   it('rendering with keycloak', () => {
     process.env.KOGITO_AUTH_ENABLED = 'true';
+    process.env.KOGITO_REACT_AUTH_ENABLED = 'true';
     process.env.KOGITO_KEYCLOAK_URL = 'http://localhost/keycloak';
     process.env.KOGITO_KEYCLOAK_CLIENT_ID = 'clientId';
 

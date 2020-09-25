@@ -15,6 +15,7 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({
       KOGITO_AUTH_ENABLED: false,
+      KOGITO_REACT_AUTH_ENABLED: false,
       KOGITO_KEYCLOAK_REALM: 'kogito',
       KOGITO_KEYCLOAK_URL: 'http://localhost:8280',
       KOGITO_KEYCLOAK_CLIENT_ID: 'kogito-console-react',

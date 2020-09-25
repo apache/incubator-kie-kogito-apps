@@ -36,6 +36,11 @@
   </dependencyManagement>
   <dependencies>
     <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>security-commons</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-web</artifactId>
     </dependency>
