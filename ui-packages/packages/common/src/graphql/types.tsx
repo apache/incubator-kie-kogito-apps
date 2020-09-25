@@ -1047,8 +1047,7 @@ export namespace GraphQL {
   };
 
   export type GetTasksForUserQueryVariables = Exact<{
-    user?: Maybe<Scalars['String']>;
-    groups?: Maybe<Array<Scalars['String']>>;
+    whereArgument?: Maybe<UserTaskInstanceArgument>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
     orderBy?: Maybe<UserTaskInstanceOrderBy>;
@@ -1883,20 +1882,13 @@ export namespace GraphQL {
   >;
   export const GetTasksForUserDocument = gql`
     query getTasksForUser(
-      $user: String
-      $groups: [String!]
+      $whereArgument: UserTaskInstanceArgument
       $offset: Int
       $limit: Int
       $orderBy: UserTaskInstanceOrderBy
     ) {
       UserTaskInstances(
-        where: {
-          or: [
-            { actualOwner: { equal: $user } }
-            { potentialUsers: { contains: $user } }
-            { potentialGroups: { containsAny: $groups } }
-          ]
-        }
+        where: $whereArgument
         pagination: { offset: $offset, limit: $limit }
         orderBy: $orderBy
       ) {
@@ -1938,8 +1930,7 @@ export namespace GraphQL {
    * @example
    * const { data, loading, error } = useGetTasksForUserQuery({
    *   variables: {
-   *      user: // value for 'user'
-   *      groups: // value for 'groups'
+   *      whereArgument: // value for 'whereArgument'
    *      offset: // value for 'offset'
    *      limit: // value for 'limit'
    *      orderBy: // value for 'orderBy'
