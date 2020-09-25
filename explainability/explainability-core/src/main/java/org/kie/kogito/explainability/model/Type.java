@@ -211,7 +211,7 @@ public enum Type {
                 if (fragment != null && fragment.length() > 0) {
                     fragment = "";
                 } else { // generate a random string
-                    byte[] bytes = new byte[Math.max(128, perturbationContext.getRandom().nextInt(1024))];
+                    byte[] bytes = new byte[Math.max(4, perturbationContext.getRandom().nextInt(16))];
                     perturbationContext.getRandom().nextBytes(bytes);
                     fragment = new String(bytes);
                 }
@@ -422,6 +422,10 @@ public enum Type {
         @Override
         public Value<?> perturb(Value<?> value, PerturbationContext perturbationContext) {
             List<Currency> availableCurrencies = new ArrayList<>(Currency.getAvailableCurrencies());
+            if (value.getUnderlyingObject() instanceof Currency) {
+                Currency current = (Currency) value.getUnderlyingObject();
+                availableCurrencies.removeIf(current::equals);
+            }
             return new Value<>(availableCurrencies.get(perturbationContext.getRandom().nextInt(availableCurrencies.size())));
         }
 

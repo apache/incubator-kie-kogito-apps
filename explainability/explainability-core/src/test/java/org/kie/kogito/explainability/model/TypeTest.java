@@ -1,12 +1,17 @@
 package org.kie.kogito.explainability.model;
 
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -138,6 +143,42 @@ class TypeTest {
         ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
         byteBuffer.put(bytes);
         Feature feature = new Feature("name", Type.BINARY, new Value<>(byteBuffer));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
+    void testPerturbURIFeature() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        URI uri = URI.create("https://www.redhat.com/en/technologies/jboss-middleware/process-automation-manager");
+        Feature feature = new Feature("name", Type.URI, new Value<>(uri));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
+    void testPerturbTimeFeature() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        LocalTime time = LocalTime.now();
+        Feature feature = new Feature("name", Type.TIME, new Value<>(time));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
+    void testPerturbDurationFeature() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        Duration time = Duration.of(2, ChronoUnit.DAYS);
+        Feature feature = new Feature("name", Type.DURATION, new Value<>(time));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
+    void testPerturbCurrencyFeature() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        Currency currency = Currency.getInstance(Locale.getDefault());
+        Feature feature = new Feature("name", Type.CURRENCY, new Value<>(currency));
         Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
         assertNotEquals(feature.getValue(), perturbedValue);
     }
