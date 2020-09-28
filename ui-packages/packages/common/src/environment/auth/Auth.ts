@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
+/**
+ * Definition of a kogito app user.
+ */
 export interface User {
+  /**
+   * Identifier of the user.
+   */
   id: string;
+
+  /**
+   * List of groups/roles the user belongs to.
+   */
   groups: string[];
 }
 
-export interface UserSystem {
-  logout();
+/**
+ * Definition of a kogito app UserContext.
+ */
+export interface UserContext {
+  /**
+   * Retrieves the user that is currently logged to the app.
+   */
   getCurrentUser(): User;
-}
 
-export interface TestUserManager {
-  listUsers(): User[];
-  listAllUsers(): User[];
-  systemUsers(): string[];
-  addUser(userId: string, groups: string[]): void;
-  removeUser(userId: string);
-  getUser(userId: string): User;
-}
-
-export interface TestUserSystem extends UserSystem {
-  getUserManager(): TestUserManager;
-  su(userId: string);
+  /**
+   * Logs out the current user
+   */
+  logout();
 }
 
 export class DefaultUser implements User {

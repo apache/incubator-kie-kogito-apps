@@ -14,13 +14,56 @@
  * limitations under the License.
  */
 
-import { DefaultUser, User, TestUserManager } from './Auth';
+import { DefaultUser, User } from './Auth';
 
 export const TEST_USERS: User[] = [
   { id: 'john', groups: ['employees'] },
   { id: 'mary', groups: ['managers'] },
   { id: 'poul', groups: ['interns', 'managers'] }
 ];
+
+/**
+ * Definition of a UserManager for test purposes, provides a set of predefined
+ * users and allows adding new test users in-memory.
+ */
+export interface TestUserManager {
+  /**
+   * Lists the test users that the have been added
+   */
+  listUsers(): User[];
+
+  /**
+   * Lists all users stored, including the predefined ones
+   */
+  listAllUsers(): User[];
+
+  /**
+   * Lists the logins of the system users
+   */
+  systemUsers(): string[];
+
+  /**
+   * Adds a new test user, these test users are in-memory and reloading the app
+   * will cause losing them. If the userId matches an existing test user,
+   * the user will be overwritten with the new roles. System users won't be
+   * overwritten.
+   * @param userId the id for the new user
+   * @param groups the groups/roles the user belongs to.
+   */
+  addUser(userId: string, groups: string[]): void;
+
+  /**
+   * Removes the user identified by the userId. System users won't be removed.
+   * @param userId the identifier of the user to remove
+   */
+  removeUser(userId: string);
+
+  /**
+   * Retrieves the user identified by the userId or undefined if not found.
+   * @param userId the identifier of the user to find.
+   */
+  getUser(userId: string): User | undefined;
+}
 
 export class TestUserManagerImpl implements TestUserManager {
   private readonly system: string[] = TEST_USERS.map(user => user.id);
@@ -43,7 +86,7 @@ export class TestUserManagerImpl implements TestUserManager {
     this.users.push(new DefaultUser(userId, groups));
   }
 
-  getUser(userId: string): User {
+  getUser(userId: string): User | undefined {
     const allUsers = this.listAllUsers();
     return allUsers.find(user => user.id === userId);
   }

@@ -23,8 +23,8 @@ import {
   resetTestKogitoAppContext,
   setTestKogitoAppContextModeToTest,
   testKogitoAppContext
-} from '../../../../environment/auth/tests/mocks/KogitoAppContextTestingUtils';
-import { TestUserSystem } from '../../../../environment/auth/Auth';
+} from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
+import { TestUserContext } from '../../../../environment/auth/TestUserContext';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -260,7 +260,7 @@ describe('AddTestUser tests', () => {
     expect(userIdFG.prop('helperTextInvalid')).toBeNull();
     expect(userId.prop('validated')).toStrictEqual('success');
 
-    const testUserSystem = testKogitoAppContext.userSystem as TestUserSystem;
+    const testUserSystem = testKogitoAppContext.userContext as TestUserContext;
     testUserSystem.getUserManager().addUser('test', []);
 
     act(() => {

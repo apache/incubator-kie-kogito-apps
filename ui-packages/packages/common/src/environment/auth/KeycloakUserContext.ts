@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-import { User, DefaultUser, UserSystem } from './Auth';
-import {
-  getUserName,
-  getUserRoles,
-  handleLogout,
-  isAuthEnabled
-} from '../../utils/KeycloakClient';
+import { User, DefaultUser, UserContext } from './Auth';
+import { handleLogout, isAuthEnabled } from '../../utils/KeycloakClient';
 
-export class KeycloakUserSystem implements UserSystem {
-  private currentUser: User;
+export class KeycloakUserContext implements UserContext {
+  private readonly currentUser: User;
+  private readonly token: string;
 
-  constructor() {
+  constructor(keycloakInfo) {
     if (!isAuthEnabled()) {
       throw new Error(
         'Cannot create KeycloakUserSystem: Keycloak auth not enabled!'
       );
     }
-
-    const login: string = getUserName();
-    const groups: string[] = getUserRoles();
-    this.currentUser = new DefaultUser(login, groups);
+    this.currentUser = new DefaultUser(
+      keycloakInfo.userName,
+      keycloakInfo.roles
+    );
+    this.token = keycloakInfo.token;
   }
 
   logout() {
@@ -43,5 +40,9 @@ export class KeycloakUserSystem implements UserSystem {
 
   getCurrentUser(): User {
     return this.currentUser;
+  }
+
+  getToken(): string {
+    return this.token;
   }
 }

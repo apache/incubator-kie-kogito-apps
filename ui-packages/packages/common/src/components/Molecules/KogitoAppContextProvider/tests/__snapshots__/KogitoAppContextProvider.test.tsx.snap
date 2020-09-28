@@ -1,14 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`KogitoAppContextProvider tests Test context with auth 1`] = `
-<KogitoAppContextProvider>
+<KogitoAppContextProvider
+  userContext={
+    KeycloakUserContext {
+      "currentUser": DefaultUser {
+        "groups": Array [
+          "user",
+          "manager",
+        ],
+        "id": "jdoe",
+      },
+      "token": "token",
+    }
+  }
+>
   <MockedComponent
     context={
       AppContextImpl {
         "environment": Object {
           "mode": 1,
         },
-        "userSystem": KeycloakUserSystem {
+        "userContext": KeycloakUserContext {
           "currentUser": DefaultUser {
             "groups": Array [
               "user",
@@ -16,6 +29,7 @@ exports[`KogitoAppContextProvider tests Test context with auth 1`] = `
             ],
             "id": "jdoe",
           },
+          "token": "token",
         },
       }
     }
@@ -24,21 +38,39 @@ exports[`KogitoAppContextProvider tests Test context with auth 1`] = `
 `;
 
 exports[`KogitoAppContextProvider tests Test context without auth 1`] = `
-<KogitoAppContextProvider>
+<KogitoAppContextProvider
+  userContext={
+    TestUserContextImpl {
+      "currentUser": Object {
+        "groups": Array [
+          "employees",
+        ],
+        "id": "john",
+      },
+      "userManager": TestUserManagerImpl {
+        "system": Array [
+          "john",
+          "mary",
+          "poul",
+        ],
+        "users": Array [],
+      },
+    }
+  }
+>
   <MockedComponent
     context={
       AppContextImpl {
         "environment": Object {
           "mode": 0,
         },
-        "userSystem": TestUserSystemImpl {
+        "userContext": TestUserContextImpl {
           "currentUser": Object {
             "groups": Array [
               "employees",
             ],
             "id": "john",
           },
-          "onUserChange": [Function],
           "userManager": TestUserManagerImpl {
             "system": Array [
               "john",

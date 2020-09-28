@@ -86,5 +86,5 @@ Start the task console at port 8380, (the keycloak client 'kogito-console-quarku
 and enabling auth:
 
 ```
-mvn clean compile quarkus:dev -Dquarkus.http.port=8380 -Dkogito.auth.enabled=true
+mvn clean compile quarkus:dev -Dquarkus.http.port=8380 -Dquarkus.profile=keycloak
 ```

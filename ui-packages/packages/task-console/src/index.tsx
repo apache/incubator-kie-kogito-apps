@@ -14,7 +14,8 @@ import {
   getToken,
   isAuthEnabled,
   KogitoAppContextProvider,
-  ServerUnavailable
+  ServerUnavailable,
+  UserContext
 } from '@kogito-apps/common';
 import PageLayout from './components/Templates/PageLayout/PageLayout';
 import TaskConsoleContextProvider from './context/TaskConsoleContext/TaskConsoleContextProvider';
@@ -38,13 +39,11 @@ const fallbackUI = onError(({ networkError }: any) => {
   if (networkError && networkError.stack === 'TypeError: Failed to fetch') {
     return ReactDOM.render(
       <ApolloProvider client={client}>
-        <KogitoAppContextProvider>
-          <ServerUnavailable
-            PageNav={PageNav}
-            src={taskConsoleLogo}
-            alt={'Task Console Logo'}
-          />
-        </KogitoAppContextProvider>
+        <ServerUnavailable
+          PageNav={PageNav}
+          src={taskConsoleLogo}
+          alt={'Task Console Logo'}
+        />
       </ApolloProvider>,
       document.getElementById('root')
     );
@@ -69,10 +68,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: setGQLContext.concat(fallbackUI.concat(httpLink))
 });
 
-const appRender = () => {
+const appRender = (ctx: UserContext) => {
   ReactDOM.render(
     <ApolloProvider client={client}>
-      <KogitoAppContextProvider>
+      <KogitoAppContextProvider userContext={ctx}>
         <TaskConsoleContextProvider>
           <BrowserRouter>
             <Switch>
@@ -86,4 +85,4 @@ const appRender = () => {
   );
 };
 
-appRenderWithAxiosInterceptorConfig(() => appRender());
+appRenderWithAxiosInterceptorConfig((ctx: UserContext) => appRender(ctx));

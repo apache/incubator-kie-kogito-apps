@@ -14,39 +14,28 @@
  * limitations under the License.
  */
 
-import React, { ReactElement } from 'react';
+import React from 'react';
 
 import KogitoAppContext, {
   AppContextImpl,
   EnvironmentMode
 } from '../../../environment/context/KogitoAppContext';
-import { TestUserSystemImpl } from '../../../environment/auth/TestUserSystem';
 import { isAuthEnabled } from '../../../utils/KeycloakClient';
-import { KeycloakUserSystem } from '../../../environment/auth/KeycloakUserSystem';
+import { UserContext } from '../../../environment/auth/Auth';
 
 interface IOwnProps {
-  children: ReactElement;
+  userContext: UserContext;
 }
 
-const KogitoAppContextProvider: React.FC<IOwnProps> = ({ children }) => {
-  const authEnabled: boolean = isAuthEnabled();
-
-  const getUserSystem = () => {
-    const userSystem = authEnabled
-      ? new KeycloakUserSystem()
-      : new TestUserSystemImpl(user => {
-          window.location.href = '/';
-        });
-    return userSystem;
-  };
-
-  const appUserSystem = getUserSystem();
-
+const KogitoAppContextProvider: React.FC<IOwnProps> = ({
+  userContext,
+  children
+}) => {
   return (
     <KogitoAppContext.Provider
       value={
-        new AppContextImpl(appUserSystem, {
-          mode: authEnabled ? EnvironmentMode.PROD : EnvironmentMode.TEST
+        new AppContextImpl(userContext, {
+          mode: isAuthEnabled() ? EnvironmentMode.PROD : EnvironmentMode.TEST
         })
       }
     >

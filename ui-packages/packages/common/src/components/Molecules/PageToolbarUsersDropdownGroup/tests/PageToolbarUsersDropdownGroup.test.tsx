@@ -18,17 +18,13 @@ import { act } from 'react-dom/test-utils';
 
 import { getWrapper } from '../../../../utils/OuiaUtils';
 import PageToolbarUsersDropdownGroup from '../PageToolbarUsersDropdownGroup';
-import {
-  DropdownGroup,
-  DropdownItem,
-  DropdownSeparator
-} from '@patternfly/react-core';
+import { DropdownGroup, DropdownItem } from '@patternfly/react-core';
 import { TEST_USERS } from '../../../../environment/auth/TestUserManager';
 import {
   resetTestKogitoAppContext,
   setTestKogitoAppContextModeToTest,
   testKogitoAppContext
-} from '../../../../environment/auth/tests/mocks/KogitoAppContextTestingUtils';
+} from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -64,7 +60,6 @@ describe('PageToolbarUsersDropdownGroup tests', () => {
 
     expect(wrapper.children().length).toStrictEqual(0);
 
-    expect(wrapper.find(DropdownSeparator).exists()).toBeFalsy();
     expect(wrapper.find(DropdownGroup).exists()).toBeFalsy();
     expect(wrapper.find(DropdownItem).exists()).toBeFalsy();
   });
@@ -81,7 +76,6 @@ describe('PageToolbarUsersDropdownGroup tests', () => {
 
     expect(wrapper).toMatchSnapshot();
 
-    expect(wrapper.find(DropdownSeparator).exists()).toBeTruthy();
     expect(wrapper.find(DropdownGroup).exists()).toBeTruthy();
     expect(wrapper.find(DropdownItem).exists()).toBeTruthy();
 

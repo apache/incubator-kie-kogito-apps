@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-import { TestUserManager } from '../Auth';
-import { TEST_USERS, TestUserManagerImpl } from '../TestUserManager';
+import {
+  TEST_USERS,
+  TestUserManager,
+  TestUserManagerImpl
+} from '../TestUserManager';
 
 let userManager: TestUserManager;
 

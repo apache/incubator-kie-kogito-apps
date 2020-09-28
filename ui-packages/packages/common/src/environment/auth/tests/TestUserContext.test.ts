@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-import { TestUserSystemImpl } from '../TestUserSystem';
+import { TestUserContextImpl } from '../TestUserContext';
 import { TEST_USERS, TestUserManagerImpl } from '../TestUserManager';
 
-let userSystem: TestUserSystemImpl;
-let onUserChange;
+let userSystem: TestUserContextImpl;
 
 describe('TestUserSystemImpl tests', () => {
   beforeEach(() => {
-    onUserChange = jest.fn();
-    userSystem = new TestUserSystemImpl(onUserChange);
+    userSystem = new TestUserContextImpl();
   });
 
   it('Test getCurrentUser', () => {
@@ -39,9 +37,6 @@ describe('TestUserSystemImpl tests', () => {
     userSystem.su(TEST_USERS[1].id);
 
     expect(userSystem.getCurrentUser()).toStrictEqual(TEST_USERS[1]);
-
-    expect(onUserChange).toBeCalledWith(TEST_USERS[1]);
-    expect(onUserChange).toBeCalledTimes(1);
   });
 
   it('Test logout', () => {
@@ -51,7 +46,6 @@ describe('TestUserSystemImpl tests', () => {
 
     userSystem.logout();
 
-    expect(onUserChange).toBeCalledWith(TEST_USERS[0]);
-    expect(onUserChange).toBeCalledTimes(2);
+    expect(userSystem.getCurrentUser()).toStrictEqual(TEST_USERS[0]);
   });
 });

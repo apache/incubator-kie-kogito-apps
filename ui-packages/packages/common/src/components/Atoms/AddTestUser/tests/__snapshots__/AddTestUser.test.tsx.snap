@@ -1,14 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AddTestUser tests Add test with successful validation 1`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -160,14 +155,9 @@ exports[`AddTestUser tests Add test with successful validation 1`] = `
 `;
 
 exports[`AddTestUser tests Add test with successful validation 2`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -323,14 +313,9 @@ exports[`AddTestUser tests Add test with successful validation 2`] = `
 `;
 
 exports[`AddTestUser tests Add test with validation error 1`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -482,14 +467,9 @@ exports[`AddTestUser tests Add test with validation error 1`] = `
 `;
 
 exports[`AddTestUser tests Add test with validation error 2`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -650,14 +630,9 @@ exports[`AddTestUser tests Add test with validation error 2`] = `
 `;
 
 exports[`AddTestUser tests Cancel test 1`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -838,14 +813,9 @@ exports[`AddTestUser tests Snapshot test in Test mode 1`] = `
       <div
         className="pf-l-stack__item pf-m-fill"
       >
-        <Form
-          data-ouia-component-type="add-test-user-form"
-          data-ouia-safe={true}
-        >
+        <Form>
           <form
             className="pf-c-form"
-            data-ouia-component-type="add-test-user-form"
-            data-ouia-safe={true}
             noValidate={true}
           >
             <FormGroup
@@ -1001,14 +971,9 @@ exports[`AddTestUser tests Snapshot test in Test mode 1`] = `
 `;
 
 exports[`AddTestUser tests Test groups field validations 1`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -1160,14 +1125,9 @@ exports[`AddTestUser tests Test groups field validations 1`] = `
 `;
 
 exports[`AddTestUser tests Test groups field validations 2`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -1321,14 +1281,9 @@ exports[`AddTestUser tests Test groups field validations 2`] = `
 `;
 
 exports[`AddTestUser tests Test groups field validations 3`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -1482,14 +1437,9 @@ exports[`AddTestUser tests Test groups field validations 3`] = `
 `;
 
 exports[`AddTestUser tests Test groups field validations 4`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -1643,14 +1593,9 @@ exports[`AddTestUser tests Test groups field validations 4`] = `
 `;
 
 exports[`AddTestUser tests Test userId field validations 1`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -1802,14 +1747,9 @@ exports[`AddTestUser tests Test userId field validations 1`] = `
 `;
 
 exports[`AddTestUser tests Test userId field validations 2`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -1970,14 +1910,9 @@ exports[`AddTestUser tests Test userId field validations 2`] = `
 `;
 
 exports[`AddTestUser tests Test userId field validations 3`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -2138,14 +2073,9 @@ exports[`AddTestUser tests Test userId field validations 3`] = `
 `;
 
 exports[`AddTestUser tests Test userId field validations 4`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup
@@ -2299,14 +2229,9 @@ exports[`AddTestUser tests Test userId field validations 4`] = `
 `;
 
 exports[`AddTestUser tests Test userId field validations 5`] = `
-<Form
-  data-ouia-component-type="add-test-user-form"
-  data-ouia-safe={true}
->
+<Form>
   <form
     className="pf-c-form"
-    data-ouia-component-type="add-test-user-form"
-    data-ouia-safe={true}
     noValidate={true}
   >
     <FormGroup

@@ -37,10 +37,8 @@ import {
   EnvironmentMode,
   useKogitoAppContext
 } from '../../../environment/context/KogitoAppContext';
-import {
-  TestUserManager,
-  TestUserSystem
-} from '../../../environment/auth/Auth';
+import { TestUserContext } from '../../../environment/auth/TestUserContext';
+import { TestUserManager } from '../../../environment/auth/TestUserManager';
 
 interface IOwnProps {
   isOpen: boolean;
@@ -74,7 +72,7 @@ const AddTestUser: React.FC<IOwnProps & OUIAProps> = ({
       return false;
     }
 
-    const testUserSystem: TestUserSystem = context.userSystem as TestUserSystem;
+    const testUserSystem: TestUserContext = context.userContext as TestUserContext;
     const userManager: TestUserManager = testUserSystem.getUserManager();
     const user = userManager.getUser(newUserId);
 
@@ -122,7 +120,7 @@ const AddTestUser: React.FC<IOwnProps & OUIAProps> = ({
     const isUserIdValidated = validateUserId(userId);
     const areGroupsValidated = validateGroups(groups);
     if (isUserIdValidated && areGroupsValidated) {
-      const testUserSystem: TestUserSystem = context.userSystem as TestUserSystem;
+      const testUserSystem: TestUserContext = context.userContext as TestUserContext;
 
       const userGroups = groups
         .split(',')
@@ -161,6 +159,7 @@ const AddTestUser: React.FC<IOwnProps & OUIAProps> = ({
       variant={ModalVariant.small}
       onClose={close}
       isOpen={isOpen}
+      {...componentOuiaProps(ouiaId, 'add-test-user-form-modal', ouiaSafe)}
     >
       <Stack hasGutter>
         <StackItem>
@@ -182,7 +181,7 @@ const AddTestUser: React.FC<IOwnProps & OUIAProps> = ({
           </Alert>
         </StackItem>
         <StackItem isFilled>
-          <Form {...componentOuiaProps(ouiaId, 'add-test-user-form', ouiaSafe)}>
+          <Form>
             <FormGroup
               fieldId={'userId'}
               label={'User Id'}

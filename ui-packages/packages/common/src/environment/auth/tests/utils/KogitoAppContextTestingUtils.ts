@@ -16,21 +16,13 @@
 
 import * as Keycloak from '../../../../utils/KeycloakClient';
 import * as KogitoAppContext from '../../../context/KogitoAppContext';
-import { TestUserSystemImpl } from '../../TestUserSystem';
+import { TestUserContextImpl } from '../../TestUserContext';
 
 export const testIsAuthEnabledMock = jest.spyOn(Keycloak, 'isAuthEnabled');
 testIsAuthEnabledMock.mockReturnValue(true);
 
-export const testGetUserNameMock = jest.spyOn(Keycloak, 'getUserName');
-testGetUserNameMock.mockReturnValue('jdoe');
-
-export const testGetUserRolesMock = jest.spyOn(Keycloak, 'getUserRoles');
-testGetUserRolesMock.mockReturnValue(['user', 'manager']);
-
 const newContext = (): KogitoAppContext.AppContext => {
-  const testUserSystem = new TestUserSystemImpl(() => {
-    return;
-  });
+  const testUserSystem = new TestUserContextImpl();
 
   return new KogitoAppContext.AppContextImpl(testUserSystem, {
     mode: KogitoAppContext.EnvironmentMode.TEST

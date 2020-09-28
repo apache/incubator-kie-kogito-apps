@@ -44,6 +44,7 @@ exports[`PageToolbar component tests Snapshot testing 1`] = `
                         >
                           About
                         </DropdownItem>,
+                        <DropdownSeparator />,
                         <MockedPageToolbarUsersDropdownGroup
                           toggleAddUsersModal={[Function]}
                         />,
@@ -84,6 +85,7 @@ exports[`PageToolbar component tests Snapshot testing 1`] = `
                           >
                             About
                           </DropdownItem>,
+                          <DropdownSeparator />,
                           <MockedPageToolbarUsersDropdownGroup
                             toggleAddUsersModal={[Function]}
                           />,

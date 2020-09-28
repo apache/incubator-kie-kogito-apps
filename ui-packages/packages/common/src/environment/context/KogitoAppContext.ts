@@ -15,25 +15,25 @@
  */
 
 import React, { useContext } from 'react';
-import { User, UserSystem } from '../auth/Auth';
+import { User, UserContext } from '../auth/Auth';
 
 export interface AppContext {
   getCurrentUser(): User;
-  readonly userSystem: UserSystem;
+  readonly userContext: UserContext;
   readonly environment: Environment;
 }
 
 export class AppContextImpl implements AppContext {
-  public readonly userSystem: UserSystem;
+  public readonly userContext: UserContext;
   public readonly environment: Environment;
 
-  constructor(userSystem: UserSystem, environment: Environment) {
-    this.userSystem = userSystem;
+  constructor(userSystem: UserContext, environment: Environment) {
+    this.userContext = userSystem;
     this.environment = environment;
   }
 
   getCurrentUser(): User {
-    return this.userSystem.getCurrentUser();
+    return this.userContext.getCurrentUser();
   }
 }
 

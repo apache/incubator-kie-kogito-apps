@@ -14,25 +14,45 @@
  * limitations under the License.
  */
 
-import { TestUserSystem, User, TestUserManager } from './Auth';
-import { TEST_USERS, TestUserManagerImpl } from './TestUserManager';
+import { User, UserContext } from './Auth';
+import {
+  TEST_USERS,
+  TestUserManager,
+  TestUserManagerImpl
+} from './TestUserManager';
 
 /**
- * Test implementation of a UserSystem
+ * Definition of a UserContext for testing purposes. It provides functionalities
+ * not intended to be used on productive environments
  */
-export class TestUserSystemImpl implements TestUserSystem {
-  private static readonly STORAGE_KEY: string = 'kogito-test-user-system';
+export interface TestUserContext extends UserContext {
+  /**
+   * Switches the context user.
+   * @param userId The identifier of the user to switch to. The switch will only
+   * happen if the userId belongs to an existing test user.
+   */
+  su(userId: string);
+
+  /**
+   * Retrieves an instance of a TestUserManager that can be used to access the
+   * system users
+   */
+  getUserManager(): TestUserManager;
+}
+
+/**
+ * Test implementation of a UserContext
+ */
+export class TestUserContextImpl implements TestUserContext {
+  private static readonly STORAGE_KEY: string = 'kogito-test-user-context';
 
   private readonly userManager: TestUserManager;
-  private readonly onUserChange: (user: User) => void;
 
   private currentUser: User;
 
-  constructor(userConsumer: (user: User) => void) {
-    this.onUserChange = userConsumer;
-
+  constructor() {
     const stateStr: string = window.sessionStorage.getItem(
-      TestUserSystemImpl.STORAGE_KEY
+      TestUserContextImpl.STORAGE_KEY
     );
 
     if (stateStr) {
@@ -65,10 +85,11 @@ export class TestUserSystemImpl implements TestUserSystem {
       };
 
       window.sessionStorage.setItem(
-        TestUserSystemImpl.STORAGE_KEY,
+        TestUserContextImpl.STORAGE_KEY,
         JSON.stringify(state)
       );
-      this.onUserChange(this.currentUser);
+      // reloading app
+      window.location.href = '/';
     }
   }
 

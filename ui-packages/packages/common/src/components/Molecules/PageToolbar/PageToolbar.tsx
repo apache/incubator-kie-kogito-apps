@@ -54,7 +54,7 @@ const PageToolbar: React.FunctionComponent<OUIAProps> = ({
     setmodalToggle(!modalToggle);
   };
 
-  const handleaddUserModalToggle = () => {
+  const handleAddUserModalToggle = () => {
     setAddUserToggle(!addUserToggle);
   };
 
@@ -73,8 +73,8 @@ const PageToolbar: React.FunctionComponent<OUIAProps> = ({
   };
 
   const handleLogout = () => {
-    if (context.userSystem) {
-      context.userSystem.logout();
+    if (context.userContext) {
+      context.userContext.logout();
     }
   };
 
@@ -90,6 +90,9 @@ const PageToolbar: React.FunctionComponent<OUIAProps> = ({
   );
 
   if (testMode) {
+    userDropdownItems.push(
+      <DropdownSeparator key={userDropdownItems.length} />
+    );
     userDropdownItems.push(
       <PageToolbarUsersDropdownGroup
         key={userDropdownItems.length}
@@ -113,7 +116,7 @@ const PageToolbar: React.FunctionComponent<OUIAProps> = ({
       />
       <AddTestUser
         isOpen={testMode && addUserToggle}
-        toggleModal={handleaddUserModalToggle}
+        toggleModal={handleAddUserModalToggle}
       />
       <Toolbar {...componentOuiaProps(ouiaId, 'page-toolbar', ouiaSafe)}>
         <ToolbarGroup>

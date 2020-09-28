@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-import { KeycloakUserSystem } from '../KeycloakUserSystem';
+import { KeycloakUserContext } from '../KeycloakUserContext';
 import * as Keycloak from '../../../utils/KeycloakClient';
 
 const isAuthEnabled = jest.spyOn(Keycloak, 'isAuthEnabled');
-const getUserName = jest.spyOn(Keycloak, 'getUserName');
-const getUserRoles = jest.spyOn(Keycloak, 'getUserRoles');
 const handleLogout = jest.spyOn(Keycloak, 'handleLogout');
+
+const keycloakInfo = {
+  userName: 'jdoe',
+  roles: ['user', 'manager'],
+  token: 'token'
+};
 
 const prepareMock = (keyCloakEnabled: boolean) => {
   isAuthEnabled.mockReturnValue(keyCloakEnabled);
-  getUserName.mockReturnValue('jdoe');
-  getUserRoles.mockReturnValue(['user', 'manager']);
   handleLogout.mockReturnValue();
 };
 
@@ -33,7 +35,9 @@ describe('KeycloakUserSystem tests', () => {
   it('KeycloakUserSystem basic testing ', () => {
     prepareMock(true);
 
-    const userSystem: KeycloakUserSystem = new KeycloakUserSystem();
+    const userSystem: KeycloakUserContext = new KeycloakUserContext(
+      keycloakInfo
+    );
     expect(userSystem).not.toBeNull();
 
     const user = userSystem.getCurrentUser();
@@ -53,7 +57,9 @@ describe('KeycloakUserSystem tests', () => {
     prepareMock(false);
 
     expect(() => {
-      const userSystem: KeycloakUserSystem = new KeycloakUserSystem();
+      const userSystem: KeycloakUserContext = new KeycloakUserContext(
+        keycloakInfo
+      );
       userSystem.getCurrentUser();
     }).toThrowError(
       'Cannot create KeycloakUserSystem: Keycloak auth not enabled!'

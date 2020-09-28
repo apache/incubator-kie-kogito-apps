@@ -26,8 +26,8 @@ import {
 } from '../../../../environment/context/KogitoAppContext';
 import { TEST_USERS } from '../../../../environment/auth/TestUserManager';
 import { User } from '../../../../environment/auth/Auth';
-import { TestUserSystemImpl } from '../../../../environment/auth/TestUserSystem';
-import { KeycloakUserSystem } from '../../../../environment/auth/KeycloakUserSystem';
+import { TestUserContextImpl } from '../../../../environment/auth/TestUserContext';
+import { KeycloakUserContext } from '../../../../environment/auth/KeycloakUserContext';
 
 const MockedComponent = (props): React.ReactElement => {
   return <></>;
@@ -35,11 +35,8 @@ const MockedComponent = (props): React.ReactElement => {
 
 describe('KogitoAppContextProvider tests', () => {
   it('Test context without auth', () => {
-    const isAuthEnabledMock = jest.spyOn(KeycloakClient, 'isAuthEnabled');
-    isAuthEnabledMock.mockReturnValue(false);
-
     const wrapper = mount(
-      <KogitoAppContextProvider>
+      <KogitoAppContextProvider userContext={new TestUserContextImpl()}>
         <KogitoAppContext.Consumer>
           {ctx => <MockedComponent context={ctx} />}
         </KogitoAppContext.Consumer>
@@ -56,7 +53,7 @@ describe('KogitoAppContextProvider tests', () => {
 
     expect(context).not.toBeNull();
     expect(context.environment.mode).toStrictEqual(EnvironmentMode.TEST);
-    expect(context.userSystem).toBeInstanceOf(TestUserSystemImpl);
+    expect(context.userContext).toBeInstanceOf(TestUserContextImpl);
     expect(context.getCurrentUser()).toStrictEqual(TEST_USERS[0]);
   });
 
@@ -64,14 +61,16 @@ describe('KogitoAppContextProvider tests', () => {
     const isAuthEnabledMock = jest.spyOn(KeycloakClient, 'isAuthEnabled');
     isAuthEnabledMock.mockReturnValue(true);
 
-    const getUserNameMock = jest.spyOn(KeycloakClient, 'getUserName');
-    getUserNameMock.mockReturnValue('jdoe');
-
-    const getUserRolesMock = jest.spyOn(KeycloakClient, 'getUserRoles');
-    getUserRolesMock.mockReturnValue(['user', 'manager']);
-
     const wrapper = mount(
-      <KogitoAppContextProvider>
+      <KogitoAppContextProvider
+        userContext={
+          new KeycloakUserContext({
+            userName: 'jdoe',
+            roles: ['user', 'manager'],
+            token: 'token'
+          })
+        }
+      >
         <KogitoAppContext.Consumer>
           {ctx => <MockedComponent context={ctx} />}
         </KogitoAppContext.Consumer>
@@ -88,7 +87,7 @@ describe('KogitoAppContextProvider tests', () => {
 
     expect(context).not.toBeNull();
     expect(context.environment.mode).toStrictEqual(EnvironmentMode.PROD);
-    expect(context.userSystem).toBeInstanceOf(KeycloakUserSystem);
+    expect(context.userContext).toBeInstanceOf(KeycloakUserContext);
 
     const user: User = context.getCurrentUser();
 
