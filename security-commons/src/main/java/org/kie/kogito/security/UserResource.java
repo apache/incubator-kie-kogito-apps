@@ -53,13 +53,13 @@ public class UserResource {
     public static class User {
 
         private String userName = "Anonymous";
-        private Set<String> roles= Collections.emptySet();
+        private Set<String> roles = Collections.emptySet();
         private String token = "";
 
         User(SecurityIdentity identity) {
-            if(identity != null &&
-                    identity.getPrincipal()!=null &&
-                    identity.getCredential(TokenCredential.class)!=null) {
+            if (identity != null &&
+                    identity.getPrincipal() != null &&
+                    identity.getCredential(TokenCredential.class) != null) {
                 this.userName = identity.getPrincipal().getName();
                 this.roles = identity.getRoles();
                 this.token = identity.getCredential(TokenCredential.class).getToken();
@@ -74,7 +74,7 @@ public class UserResource {
             return roles;
         }
 
-        public String getToken(){
+        public String getToken() {
             return token;
         }
     }
