@@ -972,6 +972,7 @@ export namespace GraphQL {
 
   export type GetUserTasksByStatesQueryVariables = Exact<{
     state?: Maybe<Array<Scalars['String']>>;
+    orderBy?: Maybe<UserTaskInstanceOrderBy>;
   }>;
 
   export type GetUserTasksByStatesQuery = { __typename?: 'Query' } & {
@@ -981,8 +982,9 @@ export namespace GraphQL {
           { __typename?: 'UserTaskInstance' } & Pick<
             UserTaskInstance,
             | 'id'
-            | 'description'
             | 'name'
+            | 'referenceName'
+            | 'description'
             | 'priority'
             | 'processInstanceId'
             | 'processId'
@@ -999,7 +1001,6 @@ export namespace GraphQL {
             | 'potentialUsers'
             | 'inputs'
             | 'outputs'
-            | 'referenceName'
             | 'endpoint'
           >
         >
@@ -1038,6 +1039,7 @@ export namespace GraphQL {
             | 'outputs'
             | 'referenceName'
             | 'endpoint'
+            | 'lastUpdate'
           >
         >
       >
@@ -1049,6 +1051,7 @@ export namespace GraphQL {
     groups?: Maybe<Array<Scalars['String']>>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
+    orderBy?: Maybe<UserTaskInstanceOrderBy>;
   }>;
 
   export type GetTasksForUserQuery = { __typename?: 'Query' } & {
@@ -1720,9 +1723,14 @@ export namespace GraphQL {
     GetInputFieldsFromTypeQueryVariables
   >;
   export const GetUserTasksByStatesDocument = gql`
-    query getUserTasksByStates($state: [String!]) {
-      UserTaskInstances(where: { state: { in: $state } }) {
+    query getUserTasksByStates(
+      $state: [String!]
+      $orderBy: UserTaskInstanceOrderBy
+    ) {
+      UserTaskInstances(where: { state: { in: $state } }, orderBy: $orderBy) {
         id
+        name
+        referenceName
         description
         name
         priority
@@ -1760,6 +1768,7 @@ export namespace GraphQL {
    * const { data, loading, error } = useGetUserTasksByStatesQuery({
    *   variables: {
    *      state: // value for 'state'
+   *      orderBy: // value for 'orderBy'
    *   },
    * });
    */
@@ -1819,6 +1828,7 @@ export namespace GraphQL {
         outputs
         referenceName
         endpoint
+        lastUpdate
       }
     }
   `;
@@ -1877,6 +1887,7 @@ export namespace GraphQL {
       $groups: [String!]
       $offset: Int
       $limit: Int
+      $orderBy: UserTaskInstanceOrderBy
     ) {
       UserTaskInstances(
         where: {
@@ -1887,6 +1898,7 @@ export namespace GraphQL {
           ]
         }
         pagination: { offset: $offset, limit: $limit }
+        orderBy: $orderBy
       ) {
         id
         name
@@ -1908,7 +1920,6 @@ export namespace GraphQL {
         potentialUsers
         inputs
         outputs
-        referenceName
         lastUpdate
         endpoint
       }
@@ -1931,6 +1942,7 @@ export namespace GraphQL {
    *      groups: // value for 'groups'
    *      offset: // value for 'offset'
    *      limit: // value for 'limit'
+   *      orderBy: // value for 'orderBy'
    *   },
    * });
    */
