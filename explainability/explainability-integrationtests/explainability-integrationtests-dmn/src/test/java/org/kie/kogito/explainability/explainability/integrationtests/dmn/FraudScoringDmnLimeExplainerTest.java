@@ -40,6 +40,7 @@ import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -86,8 +87,7 @@ class FraudScoringDmnLimeExplainerTest {
             double topScore = Math.abs(topFeatures.stream().map(FeatureImportance::getScore).findFirst().orElse(0d));
             if (!topFeatures.isEmpty() && topScore > 0) {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, topFeatures);
-                assertTrue(v > 0d); // checks the drop of important features triggers a flipped prediction (or a significant drop in the output score).
-
+                assertThat(v).isGreaterThan(0); // checks the drop of important features triggers a flipped prediction (or a significant drop in the output score).
             }
         }
     }
