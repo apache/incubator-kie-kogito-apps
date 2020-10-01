@@ -87,7 +87,7 @@ class FraudScoringDmnLimeExplainerTest {
             double topScore = Math.abs(topFeatures.stream().map(FeatureImportance::getScore).findFirst().orElse(0d));
             if (!topFeatures.isEmpty() && topScore > 0) {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, topFeatures);
-                assertThat(v).isGreaterThan(0); // checks the drop of important features triggers a flipped prediction (or a significant drop in the output score).
+                assertThat(v).isPositive(); // checks the drop of important features triggers a flipped prediction (or a significant drop in the output score).
             }
         }
     }

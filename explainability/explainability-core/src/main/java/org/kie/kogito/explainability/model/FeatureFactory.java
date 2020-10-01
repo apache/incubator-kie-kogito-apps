@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Currency;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -132,21 +131,24 @@ public class FeatureFactory {
         } else if (value instanceof Feature) {
             return (Feature) value;
         } else if (value instanceof List) {
-            List<?> items = (List<?>) value;
-            if (!items.isEmpty()) {
-                if (items.get(0) instanceof Feature) {
-                    return newCompositeFeature(featureName, (List<Feature>) items);
-                } else {
-                    List<Feature> fs = IntStream.range(0, items.size())
-                            .mapToObj(i -> parseFeatureValue(featureName + "_" + i, items.get(i)))
-                            .collect(Collectors.toList());
-                    return newCompositeFeature(featureName, fs);
-                }
-            } else {
-                return newCompositeFeature(featureName, Collections.emptyList());
-            }
+            return parseList(featureName, (List<?>) value);
         } else {
             return newObjectFeature(featureName, value);
+        }
+    }
+
+    private static Feature parseList(String featureName, List<?> value) {
+        if (!value.isEmpty()) {
+            if (value.get(0) instanceof Feature) {
+                return newCompositeFeature(featureName, (List<Feature>) value);
+            } else {
+                List<Feature> fs = IntStream.range(0, value.size())
+                        .mapToObj(i -> parseFeatureValue(featureName + "_" + i, value.get(i)))
+                        .collect(Collectors.toList());
+                return newCompositeFeature(featureName, fs);
+            }
+        } else {
+            return newCompositeFeature(featureName, Collections.emptyList());
         }
     }
 
