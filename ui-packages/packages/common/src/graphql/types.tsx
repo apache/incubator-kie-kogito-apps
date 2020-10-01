@@ -2,11 +2,13 @@
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
+
 export namespace GraphQL {
   export type Maybe<T> = T | null;
   export type Exact<T extends { [key: string]: any }> = {
     [K in keyof T]: T[K];
   };
+
   /** All built-in and custom scalars, mapped to their actual values */
   export type Scalars = {
     ID: string;
@@ -1037,6 +1039,7 @@ export namespace GraphQL {
             | 'outputs'
             | 'referenceName'
             | 'endpoint'
+            | 'lastUpdate'
           >
         >
       >
@@ -1048,6 +1051,7 @@ export namespace GraphQL {
     groups?: Maybe<Array<Scalars['String']>>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
+    orderBy?: Maybe<UserTaskInstanceOrderBy>;
   }>;
 
   export type GetTasksForUserQuery = { __typename?: 'Query' } & {
@@ -1728,6 +1732,7 @@ export namespace GraphQL {
         name
         referenceName
         description
+        name
         priority
         processInstanceId
         processId
@@ -1823,6 +1828,7 @@ export namespace GraphQL {
         outputs
         referenceName
         endpoint
+        lastUpdate
       }
     }
   `;
@@ -1881,6 +1887,7 @@ export namespace GraphQL {
       $groups: [String!]
       $offset: Int
       $limit: Int
+      $orderBy: UserTaskInstanceOrderBy
     ) {
       UserTaskInstances(
         where: {
@@ -1891,6 +1898,7 @@ export namespace GraphQL {
           ]
         }
         pagination: { offset: $offset, limit: $limit }
+        orderBy: $orderBy
       ) {
         id
         name
@@ -1934,6 +1942,7 @@ export namespace GraphQL {
    *      groups: // value for 'groups'
    *      offset: // value for 'offset'
    *      limit: // value for 'limit'
+   *      orderBy: // value for 'orderBy'
    *   },
    * });
    */
