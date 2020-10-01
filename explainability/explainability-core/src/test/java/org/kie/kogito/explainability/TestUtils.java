@@ -15,11 +15,20 @@
  */
 package org.kie.kogito.explainability;
 
+import java.net.URI;
+import java.nio.ByteBuffer;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -171,5 +180,71 @@ public class TestUtils {
         when(value.asString()).thenReturn(String.valueOf(d));
         when(f.getValue()).thenReturn(value);
         return f;
+    }
+
+    public static Value<?> generateValue(Type type, Random random) {
+        Value<?> value;
+        switch (type) {
+            case TEXT:
+                String s = randomString(random);
+                value = new Value<>(s);
+                break;
+            case CATEGORICAL:
+                value = new Value<>(String.valueOf(random.nextInt(4)));
+                break;
+            case BINARY:
+                byte[] bytes = new byte[8];
+                random.nextBytes(bytes);
+                value = new Value<>(ByteBuffer.wrap(bytes));
+                break;
+            case NUMBER:
+                value = new Value<>(random.nextDouble());
+                break;
+            case BOOLEAN:
+                value = new Value<>(random.nextBoolean());
+                break;
+            case URI:
+                String uriString = "http://" + randomString(random) + ".com";
+                URI uri = URI.create(uriString);
+                value = new Value<>(uri);
+                break;
+            case TIME:
+                value = new Value<>(LocalTime.of(random.nextInt(23), random.nextInt(59)));
+                break;
+            case DURATION:
+                value = new Value<>(Duration.ofDays(random.nextInt(30)));
+                break;
+            case VECTOR:
+                double[] vector = new double[5];
+                for (int i = 0; i < vector.length; i++) {
+                    vector[i] = random.nextDouble();
+                }
+                value = new Value<>(vector);
+                break;
+            case UNDEFINED:
+                value = new Value<>(new Object());
+                break;
+            case COMPOSITE:
+                Type[] types = Type.values();
+                List<Object> values = new LinkedList<>();
+                Type nestedType = types[random.nextInt(types.length - 1)];
+                for (int i = 0; i < 5; i++) {
+                    Feature f = new Feature("f_"+i,nestedType, generateValue(nestedType, random));
+                    values.add(f);
+                }
+                value = new Value<>(values);
+                break;
+            case CURRENCY:
+                ArrayList<Currency> currencies = new ArrayList<>(Currency.getAvailableCurrencies());
+                value = new Value<>(currencies.get(random.nextInt(currencies.size() - 1)));
+                break;
+            default:
+                value = new Value<>(null);
+        }
+        return value;
+    }
+
+    private static String randomString(Random random) {
+        return Long.toHexString(Double.doubleToLongBits(random.nextDouble()));
     }
 }

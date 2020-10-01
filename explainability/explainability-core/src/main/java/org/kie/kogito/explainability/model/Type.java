@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -95,8 +96,8 @@ public enum Type {
                 System.arraycopy(currentBuffer.array(), 0, copy, 0, currentBuffer.array().length);
                 int[] indexes = perturbationContext.getRandom().ints(0, copy.length)
                         .limit(maxPerturbationSize).toArray();
-                for (int i = 0; i < indexes.length; i++) {
-                    copy[i] = 0;
+                for (int index : indexes) {
+                    copy[index] = 0;
                 }
                 return new Value<>(ByteBuffer.wrap(copy));
             } else {
@@ -146,14 +147,13 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             // find maximum and minimum values
-            double[] doubles = new double[values.length + 1];
+            double[] doubles = new double[values.length];
             int i = 0;
             for (Value<?> v : values) {
                 doubles[i] = v.asNumber();
                 i++;
             }
             double originalValue = target.asNumber();
-            doubles[i] = originalValue;
             double min = DoubleStream.of(doubles).min().orElse(Double.MIN_VALUE);
             double max = DoubleStream.of(doubles).max().orElse(Double.MAX_VALUE);
             // feature scaling + kernel based clustering
@@ -211,9 +211,7 @@ public enum Type {
                 if (fragment != null && fragment.length() > 0) {
                     fragment = "";
                 } else { // generate a random string
-                    byte[] bytes = new byte[Math.max(4, perturbationContext.getRandom().nextInt(16))];
-                    perturbationContext.getRandom().nextBytes(bytes);
-                    fragment = new String(bytes);
+                    fragment = Long.toHexString(Double.doubleToLongBits(perturbationContext.getRandom().nextDouble()));
                 }
             }
             java.net.URI newURI;
@@ -397,10 +395,11 @@ public enum Type {
                 i++;
             }
             List<double[]> result = new LinkedList<>();
-            for (int j = 0; j < values().length; j++) {
+
+            for (int j = 0; j < values.length; j++) {
                 List<Double> vector = new LinkedList<>();
                 for (List<double[]> multiColumn : multiColumns) {
-                    double[] doubles = multiColumn.get(i);
+                    double[] doubles = multiColumn.get(j);
                     vector.addAll(Arrays.asList(ArrayUtils.toObject(doubles)));
                 }
                 double[] doubles = new double[vector.size()];

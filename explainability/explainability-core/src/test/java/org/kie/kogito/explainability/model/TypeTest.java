@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.LinkedList;
@@ -17,8 +16,12 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.kie.kogito.explainability.TestUtils;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TypeTest {
 
@@ -115,6 +118,24 @@ class TypeTest {
     }
 
     @Test
+    void testPerturbNonLocalhostURI() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        Value<?> value = new Value<>("http://128.0.0.1:8081");
+        Feature f = new Feature("name", Type.URI, value);
+        Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
+        assertNotEquals(value, perturbedValue);
+    }
+
+    @Test
+    void testPerturbFragmentURI() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        Value<?> value = new Value<>("http://localhost:8080/path#paragraph1");
+        Feature f = new Feature("name", Type.URI, value);
+        Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
+        assertNotEquals(value, perturbedValue);
+    }
+
+    @Test
     void testPerturbVector() {
         PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
         double[] doubles = new double[3];
@@ -175,6 +196,24 @@ class TypeTest {
     }
 
     @Test
+    void testZeroCategory() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        String category = "0";
+        Feature feature = new Feature("name", Type.CATEGORICAL, new Value<>(category));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
+    void testNonZeroCategory() {
+        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        String category = "1";
+        Feature feature = new Feature("name", Type.CATEGORICAL, new Value<>(category));
+        Value<?> perturbedValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+        assertNotEquals(feature.getValue(), perturbedValue);
+    }
+
+    @Test
     void testPerturbCurrencyFeature() {
         PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
         Currency currency = Currency.getInstance(Locale.getDefault());
@@ -226,6 +265,27 @@ class TypeTest {
             PerturbationContext perturbationContext = new PerturbationContext(random, 1);
             Value<?> perturbed = type.perturb(v, perturbationContext);
             assertNotEquals(v, perturbed, type.name());
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void testEncode(Type type) {
+        for (int seed = 0; seed < 5; seed++) {
+            Random random = new Random();
+            random.setSeed(seed);
+            Value<?> target = TestUtils.generateValue(type, random);
+            Value<?>[] values = new Value<?>[random.nextInt(10)];
+            for (int i = 0; i < values.length; i++) {
+                values[i] = TestUtils.generateValue(type, random);
+            }
+            List<double[]> vectors = type.encode(target, values);
+            assertNotNull(vectors);
+            assertEquals(values.length, vectors.size());
+            for (double[] vector : vectors) {
+                assertThat(Arrays.stream(vector).min().orElse(-2)).isGreaterThanOrEqualTo(-1);
+                assertThat(Arrays.stream(vector).max().orElse(2)).isLessThanOrEqualTo(1);
+            }
         }
     }
 }
