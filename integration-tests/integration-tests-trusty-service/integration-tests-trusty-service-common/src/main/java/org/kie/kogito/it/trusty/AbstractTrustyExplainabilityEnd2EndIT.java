@@ -44,11 +44,9 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTrustyExplainabilityEnd2EndIT.class);
 
     private final BiFunction<String, String, KogitoServiceContainer> kogitoServiceContainerProducer;
-    private final String expectedExplainabilityStatus;
 
-    protected AbstractTrustyExplainabilityEnd2EndIT(BiFunction<String, String, KogitoServiceContainer> kogitoServiceContainerProducer, String expectedExplainabilityStatus) {
+    protected AbstractTrustyExplainabilityEnd2EndIT(BiFunction<String, String, KogitoServiceContainer> kogitoServiceContainerProducer) {
         this.kogitoServiceContainerProducer = kogitoServiceContainerProducer;
-        this.expectedExplainabilityStatus = expectedExplainabilityStatus;
     }
 
     @Test
@@ -129,7 +127,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     .then().statusCode(200)
                     .extract().as(SalienciesResponse.class);
 
-            assertEquals(expectedExplainabilityStatus, salienciesResponse.getStatus());
+            assertEquals("SUCCEEDED", salienciesResponse.getStatus());
         }
     }
 
