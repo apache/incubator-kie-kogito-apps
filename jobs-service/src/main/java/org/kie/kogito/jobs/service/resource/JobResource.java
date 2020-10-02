@@ -76,7 +76,7 @@ public class JobResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public CompletionStage<ScheduledJob> patch(@PathParam("id") String id, @RequestBody Job job) throws Exception {
+    public CompletionStage<ScheduledJob> patch(@PathParam("id") String id, @RequestBody Job job) {
         LOGGER.debug("REST patch update {}", job);
         JobDetails jobToBeMerged = ScheduledJobAdapter.to(ScheduledJobBuilder.from(job));
         //validating allowed patch attributes

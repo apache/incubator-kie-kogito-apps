@@ -37,7 +37,7 @@ public class ScheduledJobAdapter {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    {
+    static {
         OBJECT_MAPPER.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
         OBJECT_MAPPER.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -91,7 +91,7 @@ public class ScheduledJobAdapter {
                 .executionCounter(scheduledJob.getExecutionCounter())
                 .lastUpdate(scheduledJob.getLastUpdate())
                 .recipient(Optional.ofNullable(scheduledJob.getCallbackEndpoint())
-                                   .map(e -> new Recipient.HTTPRecipient(e))
+                                   .map(Recipient.HTTPRecipient::new)
                                    .orElse(null))
                 .retries(scheduledJob.getRetries())
                 .scheduledId(scheduledJob.getScheduledId())
