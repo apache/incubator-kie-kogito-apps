@@ -13,7 +13,7 @@ exports[`TaskDetails testing Snapshot testing 1`] = `
       "excludedUsers": Array [],
       "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
       "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-      "lastUpdate": null,
+      "lastUpdate": "2020-02-19T11:11:56.282Z",
       "name": "VisaApplication",
       "outputs": "{}",
       "potentialGroups": Array [],
@@ -24,7 +24,7 @@ exports[`TaskDetails testing Snapshot testing 1`] = `
       "referenceName": "Apply for visa",
       "rootProcessId": null,
       "rootProcessInstanceId": null,
-      "started": null,
+      "started": "2020-02-19T11:11:56.282Z",
       "state": "Ready",
     }
   }
@@ -152,7 +152,7 @@ exports[`TaskDetails testing Snapshot testing 1`] = `
                     "excludedUsers": Array [],
                     "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
                     "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-                    "lastUpdate": null,
+                    "lastUpdate": "2020-02-19T11:11:56.282Z",
                     "name": "VisaApplication",
                     "outputs": "{}",
                     "potentialGroups": Array [],
@@ -163,7 +163,7 @@ exports[`TaskDetails testing Snapshot testing 1`] = `
                     "referenceName": "Apply for visa",
                     "rootProcessId": null,
                     "rootProcessInstanceId": null,
-                    "started": null,
+                    "started": "2020-02-19T11:11:56.282Z",
                     "state": "Ready",
                   }
                 }
@@ -272,7 +272,38 @@ exports[`TaskDetails testing Snapshot testing 1`] = `
             <div
               className="pf-c-form__group-control"
             >
-              -
+              <Text
+                component="p"
+              >
+                <p
+                  className=""
+                  data-pf-content={true}
+                >
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    <time
+                      dateTime={"2020-02-19T11:11:56.282Z"}
+                    >
+                      8 months ago
+                    </time>
+                  </t>
+                </p>
+              </Text>
             </div>
           </div>
         </FormGroup>
@@ -326,9 +357,9 @@ exports[`TaskDetails testing Snapshot testing 1`] = `
                     withTitle={false}
                   >
                     <time
-                      dateTime={null}
+                      dateTime={"2020-02-19T11:11:56.282Z"}
                     >
-                      Invalid date
+                      8 months ago
                     </time>
                   </t>
                 </p>
@@ -458,13 +489,13 @@ exports[`TaskDetails testing Snapshot testing with completed task 1`] = `
       "actualOwner": null,
       "adminGroups": Array [],
       "adminUsers": Array [],
-      "completed": "-",
+      "completed": "2020-02-19T11:11:56.282Z",
       "description": null,
       "endpoint": "http://localhost:8080/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3",
       "excludedUsers": Array [],
       "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
       "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-      "lastUpdate": null,
+      "lastUpdate": "2020-02-19T11:11:56.282Z",
       "name": "VisaApplication",
       "outputs": "{}",
       "potentialGroups": Array [],
@@ -475,7 +506,7 @@ exports[`TaskDetails testing Snapshot testing with completed task 1`] = `
       "referenceName": "Apply for visa",
       "rootProcessId": null,
       "rootProcessInstanceId": null,
-      "started": null,
+      "started": "2020-02-19T11:11:56.282Z",
       "state": "completed",
     }
   }
@@ -597,13 +628,13 @@ exports[`TaskDetails testing Snapshot testing with completed task 1`] = `
                     "actualOwner": null,
                     "adminGroups": Array [],
                     "adminUsers": Array [],
-                    "completed": "-",
+                    "completed": "2020-02-19T11:11:56.282Z",
                     "description": null,
                     "endpoint": "http://localhost:8080/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3",
                     "excludedUsers": Array [],
                     "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
                     "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-                    "lastUpdate": null,
+                    "lastUpdate": "2020-02-19T11:11:56.282Z",
                     "name": "VisaApplication",
                     "outputs": "{}",
                     "potentialGroups": Array [],
@@ -614,7 +645,7 @@ exports[`TaskDetails testing Snapshot testing with completed task 1`] = `
                     "referenceName": "Apply for visa",
                     "rootProcessId": null,
                     "rootProcessInstanceId": null,
-                    "started": null,
+                    "started": "2020-02-19T11:11:56.282Z",
                     "state": "completed",
                   }
                 }
@@ -723,7 +754,38 @@ exports[`TaskDetails testing Snapshot testing with completed task 1`] = `
             <div
               className="pf-c-form__group-control"
             >
-              -
+              <Text
+                component="p"
+              >
+                <p
+                  className=""
+                  data-pf-content={true}
+                >
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    <time
+                      dateTime={"2020-02-19T11:11:56.282Z"}
+                    >
+                      8 months ago
+                    </time>
+                  </t>
+                </p>
+              </Text>
             </div>
           </div>
         </FormGroup>
@@ -777,9 +839,9 @@ exports[`TaskDetails testing Snapshot testing with completed task 1`] = `
                     withTitle={false}
                   >
                     <time
-                      dateTime={null}
+                      dateTime={"2020-02-19T11:11:56.282Z"}
                     >
-                      Invalid date
+                      8 months ago
                     </time>
                   </t>
                 </p>
@@ -915,7 +977,7 @@ exports[`TaskDetails testing Snapshot testing with description 1`] = `
       "excludedUsers": Array [],
       "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
       "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-      "lastUpdate": null,
+      "lastUpdate": "2020-02-19T11:11:56.282Z",
       "name": "VisaApplication",
       "outputs": "{}",
       "potentialGroups": Array [],
@@ -926,7 +988,7 @@ exports[`TaskDetails testing Snapshot testing with description 1`] = `
       "referenceName": "Apply for visa",
       "rootProcessId": null,
       "rootProcessInstanceId": null,
-      "started": null,
+      "started": "2020-02-19T11:11:56.282Z",
       "state": "Ready",
     }
   }
@@ -1092,7 +1154,7 @@ exports[`TaskDetails testing Snapshot testing with description 1`] = `
                     "excludedUsers": Array [],
                     "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
                     "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-                    "lastUpdate": null,
+                    "lastUpdate": "2020-02-19T11:11:56.282Z",
                     "name": "VisaApplication",
                     "outputs": "{}",
                     "potentialGroups": Array [],
@@ -1103,7 +1165,7 @@ exports[`TaskDetails testing Snapshot testing with description 1`] = `
                     "referenceName": "Apply for visa",
                     "rootProcessId": null,
                     "rootProcessInstanceId": null,
-                    "started": null,
+                    "started": "2020-02-19T11:11:56.282Z",
                     "state": "Ready",
                   }
                 }
@@ -1212,7 +1274,38 @@ exports[`TaskDetails testing Snapshot testing with description 1`] = `
             <div
               className="pf-c-form__group-control"
             >
-              -
+              <Text
+                component="p"
+              >
+                <p
+                  className=""
+                  data-pf-content={true}
+                >
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    <time
+                      dateTime={"2020-02-19T11:11:56.282Z"}
+                    >
+                      8 months ago
+                    </time>
+                  </t>
+                </p>
+              </Text>
             </div>
           </div>
         </FormGroup>
@@ -1266,9 +1359,9 @@ exports[`TaskDetails testing Snapshot testing with description 1`] = `
                     withTitle={false}
                   >
                     <time
-                      dateTime={null}
+                      dateTime={"2020-02-19T11:11:56.282Z"}
                     >
-                      Invalid date
+                      8 months ago
                     </time>
                   </t>
                 </p>
@@ -1404,7 +1497,7 @@ exports[`TaskDetails testing Snapshot testing with owner 1`] = `
       "excludedUsers": Array [],
       "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
       "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-      "lastUpdate": null,
+      "lastUpdate": "2020-02-19T11:11:56.282Z",
       "name": "VisaApplication",
       "outputs": "{}",
       "potentialGroups": Array [],
@@ -1415,7 +1508,7 @@ exports[`TaskDetails testing Snapshot testing with owner 1`] = `
       "referenceName": "Apply for visa",
       "rootProcessId": null,
       "rootProcessInstanceId": null,
-      "started": null,
+      "started": "2020-02-19T11:11:56.282Z",
       "state": "Ready",
     }
   }
@@ -1543,7 +1636,7 @@ exports[`TaskDetails testing Snapshot testing with owner 1`] = `
                     "excludedUsers": Array [],
                     "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
                     "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-                    "lastUpdate": null,
+                    "lastUpdate": "2020-02-19T11:11:56.282Z",
                     "name": "VisaApplication",
                     "outputs": "{}",
                     "potentialGroups": Array [],
@@ -1554,7 +1647,7 @@ exports[`TaskDetails testing Snapshot testing with owner 1`] = `
                     "referenceName": "Apply for visa",
                     "rootProcessId": null,
                     "rootProcessInstanceId": null,
-                    "started": null,
+                    "started": "2020-02-19T11:11:56.282Z",
                     "state": "Ready",
                   }
                 }
@@ -1663,7 +1756,38 @@ exports[`TaskDetails testing Snapshot testing with owner 1`] = `
             <div
               className="pf-c-form__group-control"
             >
-              -
+              <Text
+                component="p"
+              >
+                <p
+                  className=""
+                  data-pf-content={true}
+                >
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    <time
+                      dateTime={"2020-02-19T11:11:56.282Z"}
+                    >
+                      8 months ago
+                    </time>
+                  </t>
+                </p>
+              </Text>
             </div>
           </div>
         </FormGroup>
@@ -1717,9 +1841,9 @@ exports[`TaskDetails testing Snapshot testing with owner 1`] = `
                     withTitle={false}
                   >
                     <time
-                      dateTime={null}
+                      dateTime={"2020-02-19T11:11:56.282Z"}
                     >
-                      Invalid date
+                      8 months ago
                     </time>
                   </t>
                 </p>
@@ -1855,7 +1979,7 @@ exports[`TaskDetails testing Snapshot testing with potential groups and potentia
       "excludedUsers": Array [],
       "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
       "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-      "lastUpdate": null,
+      "lastUpdate": "2020-02-19T11:11:56.282Z",
       "name": "VisaApplication",
       "outputs": "{}",
       "potentialGroups": Array [
@@ -1872,7 +1996,7 @@ exports[`TaskDetails testing Snapshot testing with potential groups and potentia
       "referenceName": "Apply for visa",
       "rootProcessId": null,
       "rootProcessInstanceId": null,
-      "started": null,
+      "started": "2020-02-19T11:11:56.282Z",
       "state": "Ready",
     }
   }
@@ -2000,7 +2124,7 @@ exports[`TaskDetails testing Snapshot testing with potential groups and potentia
                     "excludedUsers": Array [],
                     "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
                     "inputs": "{\\"Skippable\\":\\"true\\",\\"trip\\":{\\"city\\":\\"Boston\\",\\"country\\":\\"US\\",\\"begin\\":\\"2020-02-19T23:00:00.000+01:00\\",\\"end\\":\\"2020-02-26T23:00:00.000+01:00\\",\\"visaRequired\\":true},\\"TaskName\\":\\"VisaApplication\\",\\"NodeName\\":\\"Apply for visa\\",\\"traveller\\":{\\"firstName\\":\\"Rachel\\",\\"lastName\\":\\"White\\",\\"email\\":\\"rwhite@gorle.com\\",\\"nationality\\":\\"Polish\\",\\"address\\":{\\"street\\":\\"Cabalone\\",\\"city\\":\\"Zerf\\",\\"zipCode\\":\\"765756\\",\\"country\\":\\"Poland\\"}},\\"Priority\\":\\"1\\"}",
-                    "lastUpdate": null,
+                    "lastUpdate": "2020-02-19T11:11:56.282Z",
                     "name": "VisaApplication",
                     "outputs": "{}",
                     "potentialGroups": Array [
@@ -2017,7 +2141,7 @@ exports[`TaskDetails testing Snapshot testing with potential groups and potentia
                     "referenceName": "Apply for visa",
                     "rootProcessId": null,
                     "rootProcessInstanceId": null,
-                    "started": null,
+                    "started": "2020-02-19T11:11:56.282Z",
                     "state": "Ready",
                   }
                 }
@@ -2202,7 +2326,38 @@ exports[`TaskDetails testing Snapshot testing with potential groups and potentia
             <div
               className="pf-c-form__group-control"
             >
-              -
+              <Text
+                component="p"
+              >
+                <p
+                  className=""
+                  data-pf-content={true}
+                >
+                  <t
+                    ago={false}
+                    calendar={false}
+                    decimal={false}
+                    element={null}
+                    filter={[Function]}
+                    fromNow={true}
+                    interval={60000}
+                    local={false}
+                    onChange={[Function]}
+                    titleFormat=""
+                    toNow={false}
+                    unit={null}
+                    unix={false}
+                    utc={false}
+                    withTitle={false}
+                  >
+                    <time
+                      dateTime={"2020-02-19T11:11:56.282Z"}
+                    >
+                      8 months ago
+                    </time>
+                  </t>
+                </p>
+              </Text>
             </div>
           </div>
         </FormGroup>
@@ -2256,9 +2411,9 @@ exports[`TaskDetails testing Snapshot testing with potential groups and potentia
                     withTitle={false}
                   >
                     <time
-                      dateTime={null}
+                      dateTime={"2020-02-19T11:11:56.282Z"}
                     >
-                      Invalid date
+                      8 months ago
                     </time>
                   </t>
                 </p>
