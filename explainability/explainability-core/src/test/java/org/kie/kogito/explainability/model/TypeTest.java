@@ -16,7 +16,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.kie.kogito.explainability.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -278,10 +277,10 @@ class TypeTest {
         for (int seed = 0; seed < 5; seed++) {
             Random random = new Random();
             random.setSeed(seed);
-            Value<?> target = TestUtils.generateValue(type, random);
+            Value<?> target = type.randomValue(random);
             Value<?>[] values = new Value<?>[random.nextInt(10)];
             for (int i = 0; i < values.length; i++) {
-                values[i] = TestUtils.generateValue(type, random);
+                values[i] = type.randomValue(random);
             }
             List<double[]> vectors = type.encode(target, values);
             assertNotNull(vectors);

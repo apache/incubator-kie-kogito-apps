@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
@@ -55,6 +55,11 @@ public enum Type {
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
         }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(randomString(random));
+        }
     },
 
     CATEGORICAL("categorical") {
@@ -77,6 +82,11 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(String.valueOf(random.nextInt(4)));
         }
     },
 
@@ -109,6 +119,13 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            byte[] bytes = new byte[8];
+            random.nextBytes(bytes);
+            return new Value<>(ByteBuffer.wrap(bytes));
         }
     },
 
@@ -164,6 +181,11 @@ public enum Type {
 
             return encodedValues.stream().map(d -> new double[]{d}).collect(Collectors.toList());
         }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(random.nextDouble());
+        }
     },
 
     BOOLEAN("boolean") {
@@ -180,6 +202,11 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(random.nextBoolean());
         }
     },
 
@@ -230,6 +257,13 @@ public enum Type {
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
         }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            String uriString = "http://" + randomString(random) + ".com";
+            URI uri = java.net.URI.create(uriString);
+            return new Value<>(uri);
+        }
     },
 
     TIME("time") {
@@ -252,6 +286,11 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(LocalTime.of(random.nextInt(23), random.nextInt(59)));
         }
     },
 
@@ -276,6 +315,11 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(Duration.ofDays(random.nextInt(30)));
         }
     },
 
@@ -313,6 +357,15 @@ public enum Type {
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
         }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            double[] vector = new double[5];
+            for (int i = 0; i < vector.length; i++) {
+                vector[i] = random.nextDouble();
+            }
+            return new Value<>(vector);
+        }
     },
 
     UNDEFINED("undefined") {
@@ -343,6 +396,11 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            return new Value<>(new Object());
         }
     },
 
@@ -401,6 +459,18 @@ public enum Type {
             }
             return result;
         }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            Type[] types = Type.values();
+            List<Object> values = new LinkedList<>();
+            Type nestedType = types[random.nextInt(types.length - 1)];
+            for (int i = 0; i < 5; i++) {
+                Feature f = new Feature("f_"+i,nestedType, nestedType.randomValue(random));
+                values.add(f);
+            }
+            return new Value<>(values);
+        }
     },
 
     CURRENCY("currency") {
@@ -422,6 +492,12 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             return encodeEquals(target, values);
+        }
+
+        @Override
+        public Value<?> randomValue(Random random) {
+            ArrayList<Currency> currencies = new ArrayList<>(Currency.getAvailableCurrencies());
+            return new Value<>(currencies.get(random.nextInt(currencies.size() - 1)));
         }
     };
 
@@ -480,4 +556,16 @@ public enum Type {
      * @return a list of vectors
      */
     public abstract List<double[]> encode(Value<?> target, Value<?>... values);
+
+    /**
+     * Generate a random {@code Value} (depending on the underlying {@code Type}).
+     *
+     * @param random random instance
+     * @return a random Value
+     */
+    public abstract Value<?> randomValue(Random random);
+
+    private static String randomString(Random random) {
+        return Long.toHexString(Double.doubleToLongBits(random.nextDouble()));
+    }
 }
