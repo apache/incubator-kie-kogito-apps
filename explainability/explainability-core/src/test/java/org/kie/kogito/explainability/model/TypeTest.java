@@ -18,6 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -289,6 +290,19 @@ class TypeTest {
                 assertThat(Arrays.stream(vector).min().orElse(-2)).isGreaterThanOrEqualTo(-1);
                 assertThat(Arrays.stream(vector).max().orElse(2)).isLessThanOrEqualTo(1);
             }
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    void testRandomValue(Type type) {
+        for (int seed = 0; seed < 5; seed++) {
+            Random random = new Random();
+            random.setSeed(seed);
+            Value<?> value = type.randomValue(random);
+            assertNotNull(value);
+            assertDoesNotThrow(() -> type.drop(value));
+            assertDoesNotThrow(() -> type.perturb(value, new PerturbationContext(random, random.nextInt())));
         }
     }
 }
