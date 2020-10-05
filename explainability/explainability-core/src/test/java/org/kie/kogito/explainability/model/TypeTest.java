@@ -278,10 +278,11 @@ class TypeTest {
         for (int seed = 0; seed < 5; seed++) {
             Random random = new Random();
             random.setSeed(seed);
-            Value<?> target = type.randomValue(random);
+            PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
+            Value<?> target = type.randomValue(perturbationContext);
             Value<?>[] values = new Value<?>[random.nextInt(10)];
             for (int i = 0; i < values.length; i++) {
-                values[i] = type.randomValue(random);
+                values[i] = type.randomValue(perturbationContext);
             }
             List<double[]> vectors = type.encode(target, values);
             assertNotNull(vectors);
@@ -299,10 +300,11 @@ class TypeTest {
         for (int seed = 0; seed < 5; seed++) {
             Random random = new Random();
             random.setSeed(seed);
-            Value<?> value = type.randomValue(random);
+            PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
+            Value<?> value = type.randomValue(perturbationContext);
             assertNotNull(value);
             assertDoesNotThrow(() -> type.drop(value));
-            assertDoesNotThrow(() -> type.perturb(value, new PerturbationContext(random, random.nextInt())));
+            assertDoesNotThrow(() -> type.perturb(value, perturbationContext));
         }
     }
 }

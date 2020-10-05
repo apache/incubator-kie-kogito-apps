@@ -57,8 +57,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            return new Value<>(randomString(random));
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            return new Value<>(randomString(perturbationContext.getRandom()));
         }
     },
 
@@ -85,8 +85,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            return new Value<>(String.valueOf(random.nextInt(4)));
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            return new Value<>(String.valueOf(perturbationContext.getRandom().nextInt(4)));
         }
     },
 
@@ -122,9 +122,9 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
             byte[] bytes = new byte[8];
-            random.nextBytes(bytes);
+            perturbationContext.getRandom().nextBytes(bytes);
             return new Value<>(ByteBuffer.wrap(bytes));
         }
     },
@@ -183,8 +183,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            return new Value<>(random.nextDouble());
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            return new Value<>(perturbationContext.getRandom().nextDouble());
         }
     },
 
@@ -205,8 +205,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            return new Value<>(random.nextBoolean());
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            return new Value<>(perturbationContext.getRandom().nextBoolean());
         }
     },
 
@@ -259,8 +259,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            String uriString = "http://" + randomString(random) + ".com";
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            String uriString = "http://" + randomString(perturbationContext.getRandom()) + ".com";
             URI uri = java.net.URI.create(uriString);
             return new Value<>(uri);
         }
@@ -289,8 +289,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            return new Value<>(LocalTime.of(random.nextInt(23), random.nextInt(59)));
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            return new Value<>(LocalTime.of(perturbationContext.getRandom().nextInt(23), perturbationContext.getRandom().nextInt(59)));
         }
     },
 
@@ -318,8 +318,8 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
-            return new Value<>(Duration.ofDays(random.nextInt(30)));
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
+            return new Value<>(Duration.ofDays(perturbationContext.getRandom().nextInt(30)));
         }
     },
 
@@ -359,10 +359,10 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
             double[] vector = new double[5];
             for (int i = 0; i < vector.length; i++) {
-                vector[i] = random.nextDouble();
+                vector[i] = perturbationContext.getRandom().nextDouble();
             }
             return new Value<>(vector);
         }
@@ -399,7 +399,7 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
             return new Value<>(new Object());
         }
     },
@@ -461,12 +461,12 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
             Type[] types = Type.values();
             List<Object> values = new LinkedList<>();
-            Type nestedType = types[random.nextInt(types.length - 1)];
+            Type nestedType = types[perturbationContext.getRandom().nextInt(types.length - 1)];
             for (int i = 0; i < 5; i++) {
-                Feature f = new Feature("f_"+i,nestedType, nestedType.randomValue(random));
+                Feature f = new Feature("f_"+i,nestedType, nestedType.randomValue(perturbationContext));
                 values.add(f);
             }
             return new Value<>(values);
@@ -495,9 +495,9 @@ public enum Type {
         }
 
         @Override
-        public Value<?> randomValue(Random random) {
+        public Value<?> randomValue(PerturbationContext perturbationContext) {
             ArrayList<Currency> currencies = new ArrayList<>(Currency.getAvailableCurrencies());
-            return new Value<>(currencies.get(random.nextInt(currencies.size() - 1)));
+            return new Value<>(currencies.get(perturbationContext.getRandom().nextInt(currencies.size() - 1)));
         }
     };
 
@@ -560,10 +560,10 @@ public enum Type {
     /**
      * Generate a random {@code Value} (depending on the underlying {@code Type}).
      *
-     * @param random random instance
+     * @param perturbationContext context object used to randomize values
      * @return a random Value
      */
-    public abstract Value<?> randomValue(Random random);
+    public abstract Value<?> randomValue(PerturbationContext perturbationContext);
 
     private static String randomString(Random random) {
         return Long.toHexString(Double.doubleToLongBits(random.nextDouble()));
