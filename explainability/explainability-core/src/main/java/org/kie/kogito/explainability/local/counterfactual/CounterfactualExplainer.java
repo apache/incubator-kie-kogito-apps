@@ -130,15 +130,12 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
         try {
             // Wait until the solving ends
             solution = solverJob.getFinalBestSolution();
-            System.out.println(solution.toString());
         } catch (InterruptedException | ExecutionException e) {
-            throw new IllegalStateException("Solving failed.", e);
+            throw new IllegalStateException("Solving failed: {}", e);
         }
 
-        System.out.println("The counterfactual is:");
-        for (CounterfactualEntity cfEntity : solution.getEntities()) {
-            System.out.println(cfEntity.asFeature().toString());
-        }
+        solverManager.close();
+
         return CompletableFuture.completedFuture(solution.getEntities());
     }
 }

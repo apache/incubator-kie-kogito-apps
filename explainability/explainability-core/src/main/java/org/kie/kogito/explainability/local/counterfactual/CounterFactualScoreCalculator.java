@@ -51,7 +51,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
      *
      * @param predictions The list of predictions (containing a single prediction)
      * @param goal        The desired outcome a list of {@link Output}
-     * @return
+     * @return Numerical distance between prediction and desired outcome
      */
     private double predictionDistance(List<PredictionOutput> predictions, List<Output> goal) {
         final List<Output> outputs = predictions.get(0).getOutputs();
@@ -85,7 +85,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             }
         }
 
-        logger.debug(builder.toString());
+        logger.debug("Current solution: {}", builder);
 
         List<Feature> input = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
 
@@ -102,10 +102,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             logger.info("Penalise outcome (output: {})", distance);
 
         } catch (InterruptedException | ExecutionException e) {
-            logger.error(e.getMessage());
+            logger.error("Impossible to obtain prediction {}", e.getMessage());
         }
 
-        logger.info("Soft score: " + (-Math.abs(primarySoftScore)));
+        logger.debug("Soft score: {}", -Math.abs(primarySoftScore));
         return BendableBigDecimalScore.of(
                 new BigDecimal[]{
                         BigDecimal.valueOf(primaryHardScore), BigDecimal.valueOf(secondaryHardScore)

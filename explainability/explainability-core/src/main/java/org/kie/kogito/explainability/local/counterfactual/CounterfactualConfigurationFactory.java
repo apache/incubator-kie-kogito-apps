@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CounterfactualConfigurationFactory {
+
+    private CounterfactualConfigurationFactory() {
+        
+    }
+
     public static SolverConfig createSolverConfig(Long timeLimit, int tabuSize, int acceptedCount) {
         SolverConfig solverConfig = new SolverConfig();
 
