@@ -101,6 +101,24 @@ public class TestUtils {
         });
     }
 
+    public static PredictionProvider getSumThresholdModel(double center, double epsilon) {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                double result = 0;
+                for (int i = 0; i < features.size(); i++) {
+                        result += features.get(i).getValue().asNumber();
+                }
+                final boolean inside = (result >= center - epsilon && result <= center + epsilon);
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("inside", Type.BOOLEAN, new Value<>(inside), 1d)));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
+        });
+    }
+
     public static PredictionProvider getDummyTextClassifier() {
         List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
         return inputs -> supplyAsync(() -> {
