@@ -51,17 +51,6 @@ class KeycloakTrustyUIServiceIT {
     }
 
     public static class ITKeycloakProfile implements QuarkusTestProfile {
-
-        @Override
-        public Map<String, String> getConfigOverrides() {
-            return Collections.emptyMap();
-        }
-
-        @Override
-        public Set<Class<?>> getEnabledAlternatives() {
-            return Collections.emptySet();
-        }
-
         @Override
         public List<TestResourceEntry> testResources() {
             return Collections
