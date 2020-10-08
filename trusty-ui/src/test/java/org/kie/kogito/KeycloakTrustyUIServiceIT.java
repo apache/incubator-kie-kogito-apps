@@ -1,13 +1,7 @@
 package org.kie.kogito;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.QuarkusTestProfile;
-import io.quarkus.test.junit.TestProfile;
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
@@ -18,7 +12,7 @@ import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-@TestProfile(KeycloakTrustyUIServiceIT.ITKeycloakProfile.class)
+@QuarkusTestResource(KeycloakQuarkusTestResource.Conditional.class)
 class KeycloakTrustyUIServiceIT {
 
     private static final String VALID_USER = "jdoe";
@@ -48,13 +42,5 @@ class KeycloakTrustyUIServiceIT {
                 .when()
                 .post(keycloakURL + "/protocol/openid-connect/token")
                 .as(AccessTokenResponse.class).getToken();
-    }
-
-    public static class ITKeycloakProfile implements QuarkusTestProfile {
-        @Override
-        public List<TestResourceEntry> testResources() {
-            return Collections
-                    .singletonList(new TestResourceEntry(KeycloakQuarkusTestResource.class));
-        }
     }
 }

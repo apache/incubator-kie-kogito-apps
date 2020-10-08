@@ -151,6 +151,7 @@
               </includes>
               <systemPropertyVariables>
                 <quarkus.test.profile>keycloak</quarkus.test.profile>
+                <enable.resource.keycloak>true</enable.resource.keycloak>
                 <quarkus.http.auth.policy.role-policy1.roles-allowed>confidential</quarkus.http.auth.policy.role-policy1.roles-allowed>
                 <quarkus.http.auth.permission.roles1.paths>/*</quarkus.http.auth.permission.roles1.paths>
                 <quarkus.http.auth.permission.roles1.policy>role-policy1</quarkus.http.auth.permission.roles1.policy>
