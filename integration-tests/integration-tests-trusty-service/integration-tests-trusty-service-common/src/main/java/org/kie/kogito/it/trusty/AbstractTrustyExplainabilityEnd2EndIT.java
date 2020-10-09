@@ -28,12 +28,13 @@ import org.kie.kogito.trusty.service.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -42,6 +43,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public abstract class AbstractTrustyExplainabilityEnd2EndIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractTrustyExplainabilityEnd2EndIT.class);
+
+    private static final String EXPL_SERVICE_ALIAS = "expl-service";
+    private static final int EXPL_SERVICE_SAMPLES = 10;
+
+    private static final String INFINISPAN_ALIAS = "infinispan";
+    private static final String INFINISPAN_SERVER_LIST = INFINISPAN_ALIAS + ":11222";
+
+    private static final String KAFKA_ALIAS = "kafka";
+    private static final String KAFKA_BOOTSTRAP_SERVERS = KAFKA_ALIAS + ":9092";
+
+    private static final String KOGITO_SERVICE_ALIAS = "kogito-service";
+    private static final String KOGITO_SERVICE_URL = "http://" + KOGITO_SERVICE_ALIAS + ":8080";
+
+    private static final String TRUSTY_SERVICE_ALIAS = "trusty-service";
 
     private final BiFunction<String, String, KogitoServiceContainer> kogitoServiceContainerProducer;
 
@@ -56,34 +71,32 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
 
                 final InfinispanContainer infinispan = new InfinispanContainer()
                         .withNetwork(network)
-                        .withNetworkAliases("infinispan");
+                        .withNetworkAliases(INFINISPAN_ALIAS);
 
                 final KafkaContainer kafka = new KafkaContainer()
                         .withNetwork(network)
-                        .withNetworkAliases("kafka");
+                        .withNetworkAliases(KAFKA_ALIAS);
 
-                final ExplainabilityServiceMessagingContainer explService = new ExplainabilityServiceMessagingContainer("kafka:9092", 10)
+                final ExplainabilityServiceMessagingContainer explService = new ExplainabilityServiceMessagingContainer(KAFKA_BOOTSTRAP_SERVERS, EXPL_SERVICE_SAMPLES)
                         .withLogConsumer(new Slf4jLogConsumer(LOGGER))
                         .withNetwork(network)
-                        .withNetworkAliases("expl-service");
+                        .withNetworkAliases(EXPL_SERVICE_ALIAS);
 
-                final TrustyServiceContainer trustyService = new TrustyServiceContainer("infinispan:11222", "kafka:9092", true)
+                final TrustyServiceContainer trustyService = new TrustyServiceContainer(INFINISPAN_SERVER_LIST, KAFKA_BOOTSTRAP_SERVERS, true)
                         .withLogConsumer(new Slf4jLogConsumer(LOGGER))
                         .withNetwork(network)
-                        .withNetworkAliases("trusty-service");
+                        .withNetworkAliases(TRUSTY_SERVICE_ALIAS);
 
-                final KogitoServiceContainer kogitoService = kogitoServiceContainerProducer.apply("kafka:9092", "http://kogito-service:8080")
+                final KogitoServiceContainer kogitoService = kogitoServiceContainerProducer.apply(KAFKA_BOOTSTRAP_SERVERS, KOGITO_SERVICE_URL)
                         .withLogConsumer(new Slf4jLogConsumer(LOGGER))
                         .withNetwork(network)
-                        .withNetworkAliases("kogito-service")
+                        .withNetworkAliases(KOGITO_SERVICE_ALIAS)
         ) {
             infinispan.start();
             assertTrue(infinispan.isRunning());
 
             kafka.start();
             assertTrue(kafka.isRunning());
-
-            Testcontainers.exposeHostPorts(18080);
 
             explService.start();
             assertTrue(explService.isRunning());
@@ -103,32 +116,34 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     .when().post("/Traffic Violation")
                     .then().statusCode(200);
 
-            // wait a reasonable amount of time for the loop to complete
-            Thread.sleep(5000);
+            await()
+                    .atLeast(5, SECONDS)
+                    .atMost(30, SECONDS)
+                    .with().pollInterval(5, SECONDS)
+                    .untilAsserted(() -> {
+                        ExecutionsResponse executionsResponse = given()
+                                .port(trustyService.getFirstMappedPort())
+                                .when().get("/executions?limit=1")
+                                .then().statusCode(200)
+                                .extract().as(ExecutionsResponse.class);
 
-            ExecutionsResponse executionsResponse = given()
-                    .port(trustyService.getFirstMappedPort())
-                    .when().get("/executions?limit=1")
-                    .then().statusCode(200)
-                    .extract().as(ExecutionsResponse.class);
+                        assertSame(1, executionsResponse.getHeaders().size());
 
-            assertSame(1, executionsResponse.getHeaders().size());
+                        String executionId = executionsResponse.getHeaders().stream()
+                                .findFirst()
+                                .map(ExecutionHeaderResponse::getExecutionId)
+                                .orElseThrow(IllegalStateException::new);
 
-            String executionId = executionsResponse.getHeaders().stream()
-                    .findFirst()
-                    .map(ExecutionHeaderResponse::getExecutionId)
-                    .orElseThrow(IllegalStateException::new);
+                        assertNotNull(executionId);
 
-            assertNotNull(executionId);
+                        SalienciesResponse salienciesResponse = given()
+                                .port(trustyService.getFirstMappedPort())
+                                .when().get("/executions/decisions/" + executionId + "/explanations/saliencies")
+                                .then().statusCode(200)
+                                .extract().as(SalienciesResponse.class);
 
-            SalienciesResponse salienciesResponse = given()
-                    .port(trustyService.getFirstMappedPort())
-                    .when().get("/executions/decisions/" + executionId + "/explanations/saliencies")
-                    .then().statusCode(200)
-                    .extract().as(SalienciesResponse.class);
-
-            assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+                        assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+                    });
         }
     }
-
 }

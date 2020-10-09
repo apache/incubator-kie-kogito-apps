@@ -24,7 +24,7 @@ import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 public class InfinispanContainer extends GenericContainer<InfinispanContainer> {
 
     public InfinispanContainer() {
-        super(getImageName("infinispan"));  // "quay.io/infinispan/server:10.1.5.Final"
+        super(getImageName("infinispan"));
         addEnv("USER", "admin");
         addEnv("PASS", "admin");
         addExposedPort(11222);

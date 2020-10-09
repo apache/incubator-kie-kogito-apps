@@ -24,7 +24,7 @@ import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 public class ExplainabilityServiceMessagingContainer extends GenericContainer<ExplainabilityServiceMessagingContainer> {
 
     public ExplainabilityServiceMessagingContainer(String kafkaBootstrapServers, int numberOfSamples) {
-        super(getImageName("explainability-service-messaging"));  // "org.kie.kogito/explainability-service-messaging:1.0.0-SNAPSHOT"
+        super(getImageName("explainability-service-messaging"));
         addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaBootstrapServers);
         addEnv("TRUSTY_EXPLAINABILITY_NUMBEROFSAMPLES", String.valueOf(numberOfSamples));
         addExposedPort(8080);

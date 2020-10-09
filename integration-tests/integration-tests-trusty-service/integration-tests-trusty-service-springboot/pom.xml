@@ -13,6 +13,7 @@
   <properties>
     <container.image.kogito-service>org.kie.kogito/integration-tests-trusty-service-springboot:${project.version}</container.image.kogito-service>
     <sonar.exclusions>**/KogitoApplication.java</sonar.exclusions>
+    <version.jib-maven-plugin>2.5.2</version.jib-maven-plugin>
   </properties>
 
   <dependencies>
@@ -83,7 +84,7 @@
       <plugin>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-maven-plugin</artifactId>
-        <version>2.5.2</version>
+        <version>${version.jib-maven-plugin}</version>
         <configuration>
           <to>
             <image>${container.image.kogito-service}</image>

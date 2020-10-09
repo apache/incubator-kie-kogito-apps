@@ -23,7 +23,7 @@ import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 public class KogitoServiceContainer extends GenericContainer<KogitoServiceContainer> {
 
     public KogitoServiceContainer(String kogitoServiceUrl) {
-        super(getImageName("kogito-service"));  // "org.kie.kogito/integration-tests-trusty-service-quarkus:1.0.0-SNAPSHOT"
+        super(getImageName("kogito-service"));
         addEnv("KOGITO_SERVICE_URL", kogitoServiceUrl);
         addExposedPort(8080);
     }

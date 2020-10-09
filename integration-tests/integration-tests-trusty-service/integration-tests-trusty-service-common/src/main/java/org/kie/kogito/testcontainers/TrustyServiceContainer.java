@@ -24,7 +24,7 @@ import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 public class TrustyServiceContainer extends GenericContainer<TrustyServiceContainer> {
 
     public TrustyServiceContainer(String infinispanServerList, String kafkaBootstrapServer, boolean explainabilityEnabled) {
-        super(getImageName("trusty-service"));  // "org.kie.kogito/trusty-service:1.0.0-SNAPSHOT"
+        super(getImageName("trusty-service"));
         addEnv("INFINISPAN_SERVER_LIST", infinispanServerList);
         addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaBootstrapServer);
         addEnv("TRUSTY_EXPLAINABILITY_ENABLED", String.valueOf(explainabilityEnabled));
