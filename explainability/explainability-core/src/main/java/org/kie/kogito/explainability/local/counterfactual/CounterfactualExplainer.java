@@ -16,10 +16,8 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import org.kie.kogito.explainability.local.LocalExplainer;
-import org.kie.kogito.explainability.local.counterfactual.entities.BooleanEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
-import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.model.*;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
@@ -31,6 +29,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * Provides exemplar (counterfactual) explanations for a predictive model.
@@ -47,6 +47,8 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
     private final List<Boolean> constraints;
     private final SolverConfig solverConfig;
 
+    private final Executor executor;
+
     /**
      * Create a new {@link CounterfactualExplainer} using OptaPlanner as the underlying engine.
      *
@@ -55,11 +57,12 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
      * @param goal           A collection of {@link Output} representing the desired outcome
      * @param solverConfig   An OptaPlanner {@link SolverConfig} configuration
      */
-    public CounterfactualExplainer(DataBoundaries dataBoundaries, List<Boolean> contraints, List<Output> goal, SolverConfig solverConfig) {
+    public CounterfactualExplainer(DataBoundaries dataBoundaries, List<Boolean> contraints, List<Output> goal, SolverConfig solverConfig, Executor executor) {
         this.constraints = contraints;
         this.goal = goal;
         this.dataBoundaries = dataBoundaries;
         this.solverConfig = solverConfig;
+        this.executor = executor;
     }
 
     public CounterfactualExplainer(DataBoundaries dataBoundaries, List<Boolean> constraints, List<Output> goal) {
@@ -69,7 +72,8 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
                 CounterfactualConfigurationFactory.createSolverConfig(
                         DEFAULT_TIME_LIMIT,
                         DEFAULT_TABU_SIZE,
-                        DEFAULT_ACCEPTED_COUNT)
+                        DEFAULT_ACCEPTED_COUNT),
+                ForkJoinPool.commonPool()
         );
     }
 
@@ -84,8 +88,16 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
      * @param acceptedCount  How many accepted moves should be evaluated during each step
      * @see "Glover, Fred. "Tabu search—part I." ORSA Journal on computing 1, no. 3 (1989): 190-206"
      */
+    public CounterfactualExplainer(DataBoundaries dataBoundaries, List<Boolean> contraints, List<Output> goal, Long timeLimit, int tabuSize, int acceptedCount, Executor executor) {
+        this(dataBoundaries, contraints, goal, CounterfactualConfigurationFactory.createSolverConfig(timeLimit, tabuSize, acceptedCount), executor);
+    }
+
     public CounterfactualExplainer(DataBoundaries dataBoundaries, List<Boolean> contraints, List<Output> goal, Long timeLimit, int tabuSize, int acceptedCount) {
-        this(dataBoundaries, contraints, goal, CounterfactualConfigurationFactory.createSolverConfig(timeLimit, tabuSize, acceptedCount));
+        this(dataBoundaries, contraints, goal, CounterfactualConfigurationFactory.createSolverConfig(timeLimit, tabuSize, acceptedCount), ForkJoinPool.commonPool());
+    }
+
+    private Executor getExecutor() {
+        return this.executor;
     }
 
     private List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {
@@ -95,18 +107,8 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
             final Feature feature = predictionInput.getFeatures().get(i);
             final Boolean isConstrained = constraints.get(i);
             final FeatureBoundary featureDistribution = dataBoundaries.getFeatureBoundaries().get(i);
-            if (feature.getType() == Type.NUMBER) {
-                if (feature.getValue().getUnderlyingObject() instanceof Double) {
-                    final DoubleEntity doubleEntity = new DoubleEntity(feature, featureDistribution.getStart(), featureDistribution.getEnd(), isConstrained);
-                    entities.add(doubleEntity);
-                } else if (feature.getValue().getUnderlyingObject() instanceof Integer) {
-                    final IntegerEntity integerEntity = new IntegerEntity(feature, (int) featureDistribution.getStart(), (int) featureDistribution.getEnd(), isConstrained);
-                    entities.add(integerEntity);
-                }
-            } else if (feature.getType() == Type.BOOLEAN) {
-                final BooleanEntity booleanEntity = new BooleanEntity(feature, isConstrained);
-                entities.add(booleanEntity);
-            }
+            final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, isConstrained, featureDistribution);
+            entities.add(counterfactualEntity);
         }
         return entities;
     }
@@ -118,24 +120,24 @@ public class CounterfactualExplainer implements LocalExplainer<List<Counterfactu
 
         final UUID problemId = UUID.randomUUID();
 
-        SolverManager<CounterfactualSolution, UUID> solverManager =
-                SolverManager.create(solverConfig, new SolverManagerConfig());
+        return CompletableFuture.supplyAsync(() -> {
+            SolverManager<CounterfactualSolution, UUID> solverManager =
+                    SolverManager.create(solverConfig, new SolverManagerConfig());
 
-        CounterfactualSolution problem =
-                new CounterfactualSolution(entities, model, goal);
+            CounterfactualSolution problem =
+                    new CounterfactualSolution(entities, model, goal);
 
-
-        SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(problemId, problem);
-        CounterfactualSolution solution;
-        try {
-            // Wait until the solving ends
-            solution = solverJob.getFinalBestSolution();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new IllegalStateException("Solving failed: {}", e);
-        }
-
-        solverManager.close();
-
-        return CompletableFuture.completedFuture(solution.getEntities());
+            SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(problemId, problem);
+            CounterfactualSolution solution;
+            try {
+                // Wait until the solving ends
+                solution = solverJob.getFinalBestSolution();
+                return solution.getEntities();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new IllegalStateException("Solving failed: {}", e);
+            } finally {
+                solverManager.close();
+            }
+        }, this.executor);
     }
 }

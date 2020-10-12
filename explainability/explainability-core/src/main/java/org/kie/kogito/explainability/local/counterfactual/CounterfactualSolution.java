@@ -16,7 +16,6 @@
 
 package org.kie.kogito.explainability.local.counterfactual;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -38,10 +37,8 @@ public class CounterfactualSolution {
     @PlanningEntityCollectionProperty
     private List<CounterfactualEntity> entities;
 
-    @JsonIgnore
     private List<Output> goal;
 
-    @JsonIgnore
     private PredictionProvider model;
 
     private BendableBigDecimalScore score;

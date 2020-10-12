@@ -25,11 +25,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CounterfactualExplainerTest {
+
+    final long predictionTimeOut = 10L;
+    final TimeUnit predictionTimeUnit = TimeUnit.SECONDS;
 
     @Test
     void testNonEmptyInput() throws ExecutionException, InterruptedException, TimeoutException {
@@ -54,7 +58,7 @@ class CounterfactualExplainerTest {
             PredictionInput input = new PredictionInput(features);
             PredictionProvider model = TestUtils.getSumSkipModel(0);
             PredictionOutput output = model.predictAsync(List.of(input))
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                    .get(predictionTimeOut, predictionTimeUnit)
                     .get(0);
             Prediction prediction = new Prediction(input, output);
             List<CounterfactualEntity> counterfactualEntities = counterfactualExplainer.explainAsync(prediction, model)
@@ -102,7 +106,7 @@ class CounterfactualExplainerTest {
                     .get(0);
             Prediction prediction = new Prediction(input, output);
             List<CounterfactualEntity> counterfactualEntities = counterfactualExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+                    .get(predictionTimeOut, predictionTimeUnit);
 
             double totalSum = 0;
             for (CounterfactualEntity entity : counterfactualEntities) {
@@ -144,7 +148,7 @@ class CounterfactualExplainerTest {
                     .get(0);
             Prediction prediction = new Prediction(input, output);
             List<CounterfactualEntity> counterfactualEntities = counterfactualExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+                    .get(predictionTimeOut, predictionTimeUnit);
 
             double totalSum = 0;
             for (CounterfactualEntity entity : counterfactualEntities) {
@@ -190,7 +194,7 @@ class CounterfactualExplainerTest {
                     .get(0);
             Prediction prediction = new Prediction(input, output);
             List<CounterfactualEntity> counterfactualEntities = counterfactualExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+                    .get(predictionTimeOut, predictionTimeUnit);
 
             double totalSum = 0;
             for (CounterfactualEntity entity : counterfactualEntities) {
