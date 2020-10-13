@@ -29,36 +29,41 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 @PlanningEntity
 public class BooleanEntity implements CounterfactualEntity {
     @PlanningVariable(valueRangeProviderRefs = {"booleanRange"})
-    private Boolean value;
-
-    private Feature feature;
+    private Boolean proposedValue;
 
     private boolean constrained;
+    private Boolean originalValue;
+    private String featureName;
 
     public BooleanEntity() {
+    }
+
+    private BooleanEntity(Boolean originalValue, String featureName, boolean constrained) {
+        this.proposedValue = originalValue;
+        this.originalValue = originalValue;
+        this.featureName = featureName;
+        this.constrained = constrained;
     }
 
     /**
      * Creates a {@link BooleanEntity}, taking the original input value from the
      * provided {@link Feature} and specifying whether the entity is contrained or not.
      *
-     * @param feature     Original input {@link Feature}
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param originalFeature Original input {@link Feature}
+     * @param constrained     Whether this entity's value should be fixed or not
      */
-    public BooleanEntity(Feature feature, boolean constrained) {
-        this.value = (Boolean) feature.getValue().getUnderlyingObject();
-        this.feature = feature;
-        this.constrained = constrained;
+    public static BooleanEntity from(Feature originalFeature, boolean constrained) {
+        return new BooleanEntity((Boolean) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), constrained);
     }
 
     /**
      * Creates an unconstrained {@link BooleanEntity}, taking the original input value from the
      * provided {@link Feature}.
      *
-     * @param feature feature Original input {@link Feature}
+     * @param originalFeature feature Original input {@link Feature}
      */
-    public BooleanEntity(Feature feature) {
-        this(feature, false);
+    public static BooleanEntity from(Feature originalFeature) {
+        return BooleanEntity.from(originalFeature, false);
     }
 
     /**
@@ -68,7 +73,7 @@ public class BooleanEntity implements CounterfactualEntity {
      * @return Numerical distance
      */
     public double distance() {
-        return value.equals(feature.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
+        return proposedValue.equals(originalValue) ? 0.0 : 1.0;
     }
 
     /**
@@ -78,7 +83,7 @@ public class BooleanEntity implements CounterfactualEntity {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newBooleanFeature(feature.getName(), this.value);
+        return FeatureFactory.newBooleanFeature(this.featureName, this.proposedValue);
     }
 
     @Override
@@ -94,7 +99,7 @@ public class BooleanEntity implements CounterfactualEntity {
      */
     @Override
     public boolean isChanged() {
-        return !this.feature.getValue().getUnderlyingObject().equals(this.value);
+        return !this.originalValue.equals(this.proposedValue);
     }
 
     @ValueRangeProvider(id = "booleanRange")
@@ -104,6 +109,6 @@ public class BooleanEntity implements CounterfactualEntity {
 
     @Override
     public String toString() {
-        return "BooleanFeature{" + "value=" + value + ", id='" + feature.getName() + '\'' + '}';
+        return "BooleanFeature{" + "value=" + proposedValue + ", id='" + featureName + '\'' + '}';
     }
 }

@@ -30,30 +30,37 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 @PlanningEntity
 public class IntegerEntity implements CounterfactualEntity {
     @PlanningVariable(valueRangeProviderRefs = {"intRange"})
-    public Integer value;
+    public Integer proposedValue;
 
     int intRangeMinimum;
     int intRangeMaximum;
-    private Feature feature;
+    private String featureName;
     private boolean constrained;
+    private Integer originalValue;
 
     public IntegerEntity() {
+    }
+
+    private IntegerEntity(Integer originalValue, String featureName, int minimum, int maximum, boolean constrained) {
+        this.proposedValue = originalValue;
+        this.originalValue = originalValue;
+        this.featureName = featureName;
+        this.intRangeMinimum = minimum;
+        this.intRangeMaximum = maximum;
+        this.constrained = constrained;
     }
 
     /**
      * Creates a {@link IntegerEntity}, taking the original input value from the
      * provided {@link Feature} and specifying whether the entity is constrained or not.
      *
-     * @param feature     Original input {@link Feature}
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param originalFeature Original input {@link Feature}
+     * @param constrained     Whether this entity's value should be fixed or not
      */
-    public IntegerEntity(Feature feature, int minimum, int maximum, boolean constrained) {
-        this.value = (int) feature.getValue().asNumber();
-        this.feature = feature;
-        this.intRangeMinimum = minimum;
-        this.intRangeMaximum = maximum;
-        this.constrained = constrained;
+    public static IntegerEntity from(Feature originalFeature, int minimum, int maximum, boolean constrained) {
+        return new IntegerEntity((int) originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum, constrained);
     }
+
 
     /**
      * Creates an unconstrained {@link IntegerEntity}, taking the original input value from the
@@ -61,8 +68,8 @@ public class IntegerEntity implements CounterfactualEntity {
      *
      * @param feature feature Original input {@link Feature}
      */
-    public IntegerEntity(Feature feature, int minimum, int maximum) {
-        this(feature, minimum, maximum, false);
+    public static IntegerEntity from(Feature feature, int minimum, int maximum) {
+        return IntegerEntity.from(feature, minimum, maximum, false);
     }
 
     @ValueRangeProvider(id = "intRange")
@@ -74,13 +81,13 @@ public class IntegerEntity implements CounterfactualEntity {
     public String toString() {
         return "IntegerFeature{"
                 + "value="
-                + value
+                + proposedValue
                 + ", intRangeMinimum="
                 + intRangeMinimum
                 + ", intRangeMaximum="
                 + intRangeMaximum
                 + ", id='"
-                + feature.getName()
+                + featureName
                 + '\''
                 + '}';
     }
@@ -93,7 +100,7 @@ public class IntegerEntity implements CounterfactualEntity {
      */
     @Override
     public double distance() {
-        return Math.abs(this.value - (int) this.feature.getValue().asNumber());
+        return Math.abs(this.proposedValue - originalValue);
     }
 
     /**
@@ -103,7 +110,7 @@ public class IntegerEntity implements CounterfactualEntity {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newNumericalFeature(feature.getName(), this.value);
+        return FeatureFactory.newNumericalFeature(featureName, this.proposedValue);
     }
 
 
@@ -120,6 +127,6 @@ public class IntegerEntity implements CounterfactualEntity {
      */
     @Override
     public boolean isChanged() {
-        return !this.feature.getValue().getUnderlyingObject().equals(this.value);
+        return !originalValue.equals(this.proposedValue);
     }
 }

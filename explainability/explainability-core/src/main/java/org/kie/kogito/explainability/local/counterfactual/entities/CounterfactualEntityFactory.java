@@ -21,17 +21,21 @@ import org.kie.kogito.explainability.model.Type;
 
 public class CounterfactualEntityFactory {
 
+    private CounterfactualEntityFactory() {
+
+    }
+
     public static CounterfactualEntity from(Feature feature, Boolean isConstrained, FeatureBoundary featureDistribution) {
 
         CounterfactualEntity entity = null;
         if (feature.getType() == Type.NUMBER) {
             if (feature.getValue().getUnderlyingObject() instanceof Double) {
-                entity = new DoubleEntity(feature, featureDistribution.getStart(), featureDistribution.getEnd(), isConstrained);
+                entity = DoubleEntity.from(feature, featureDistribution.getStart(), featureDistribution.getEnd(), isConstrained);
             } else if (feature.getValue().getUnderlyingObject() instanceof Integer) {
-                entity = new IntegerEntity(feature, (int) featureDistribution.getStart(), (int) featureDistribution.getEnd(), isConstrained);
+                entity = IntegerEntity.from(feature, (int) featureDistribution.getStart(), (int) featureDistribution.getEnd(), isConstrained);
             }
         } else if (feature.getType() == Type.BOOLEAN) {
-            entity = new BooleanEntity(feature, isConstrained);
+            entity = BooleanEntity.from(feature, isConstrained);
         } else {
             throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
         }

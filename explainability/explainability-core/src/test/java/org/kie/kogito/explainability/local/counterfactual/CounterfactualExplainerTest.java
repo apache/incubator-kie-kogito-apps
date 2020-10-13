@@ -129,13 +129,22 @@ class CounterfactualExplainerTest {
             List<Feature> features = new LinkedList<>();
             List<FeatureBoundary> featureBoundaries = new LinkedList<>();
             List<Boolean> constraints = new LinkedList<>();
-            for (int i = 0; i < 4; i++) {
-                features.add(TestUtils.getMockedNumericFeature(i));
-                featureBoundaries.add(new FeatureBoundary(0.0, 1000.0));
-                constraints.add(false);
-            }
+            features.add(FeatureFactory.newNumericalFeature("f-num1", 100.0));
+            constraints.add(false);
+            featureBoundaries.add(new FeatureBoundary(0.0, 1000.0));
+            features.add(FeatureFactory.newNumericalFeature("f-num2", 100.0));
+            constraints.add(false);
+            featureBoundaries.add(new FeatureBoundary(0.0, 1000.0));
+            features.add(FeatureFactory.newNumericalFeature("f-num3", 100.0));
+            constraints.add(false);
+            featureBoundaries.add(new FeatureBoundary(0.0, 1000.0));
+            features.add(FeatureFactory.newNumericalFeature("f-num4", 100.0));
+            constraints.add(false);
+            featureBoundaries.add(new FeatureBoundary(0.0, 1000.0));
+
             // add a constraint
-            constraints.set(2, true);
+            constraints.set(0, true);
+            constraints.set(3, true);
             final DataBoundaries dataBoundaries = new DataBoundaries(featureBoundaries);
             CounterfactualExplainer counterfactualExplainer = new CounterfactualExplainer(dataBoundaries, constraints, goal, 5L, 70, 5000);
 
@@ -155,7 +164,8 @@ class CounterfactualExplainerTest {
                 totalSum += entity.asFeature().getValue().asNumber();
                 System.out.println(entity);
             }
-            assertFalse(counterfactualEntities.get(2).isChanged());
+            assertFalse(counterfactualEntities.get(0).isChanged());
+            assertFalse(counterfactualEntities.get(3).isChanged());
             assertTrue(totalSum <= center + epsilon);
             assertTrue(totalSum >= center - epsilon);
         }

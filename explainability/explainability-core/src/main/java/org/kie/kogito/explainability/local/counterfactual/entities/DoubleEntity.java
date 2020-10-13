@@ -29,41 +29,49 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 @PlanningEntity
 public class DoubleEntity implements CounterfactualEntity {
     @PlanningVariable(valueRangeProviderRefs = {"doubleRange"})
-    public Double value;
+    public Double proposedValue;
 
     double doubleRangeMinimum;
     double doubleRangeMaximum;
 
-    private Feature feature;
+    private Double originalValue;
+
     private boolean constrained;
+    private String featureName;
 
     public DoubleEntity() {
     }
 
-    /**
-     * Creates a {@link DoubleEntity}, taking the original input value from the
-     * provided {@link Feature} and specifying whether the entity is constrained or not.
-     *
-     * @param feature     Original input {@link Feature}
-     * @param constrained Whether this entity's value should be fixed or not
-     */
-    public DoubleEntity(Feature feature, double minimum, double maximum, boolean constrained) {
-        this.value = feature.getValue().asNumber();
-        this.feature = feature;
+    private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum, boolean constrained) {
+        this.proposedValue = originalValue;
+        this.originalValue = originalValue;
+        this.featureName = featureName;
         this.doubleRangeMinimum = minimum;
         this.doubleRangeMaximum = maximum;
         this.constrained = constrained;
     }
 
     /**
+     * Creates a {@link DoubleEntity}, taking the original input value from the
+     * provided {@link Feature} and specifying whether the entity is constrained or not.
+     *
+     * @param originalFeature Original input {@link Feature}
+     * @param constrained     Whether this entity's value should be fixed or not
+     */
+    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum, boolean constrained) {
+        return new DoubleEntity(originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum, constrained);
+    }
+
+    /**
      * Creates an unconstrained {@link DoubleEntity}, taking the original input value from the
      * provided {@link Feature}.
      *
-     * @param feature feature Original input {@link Feature}
+     * @param originalFeature feature Original input {@link Feature}
      */
-    public DoubleEntity(Feature feature, double minimum, double maximum) {
-        this(feature, minimum, maximum, false);
+    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum) {
+        return DoubleEntity.from(originalFeature, minimum, maximum, false);
     }
+
 
     @ValueRangeProvider(id = "doubleRange")
     public ValueRange getValueRange() {
@@ -74,13 +82,13 @@ public class DoubleEntity implements CounterfactualEntity {
     public String toString() {
         return "DoubleFeature{"
                 + "value="
-                + value
+                + proposedValue
                 + ", doubleRangeMinimum="
                 + doubleRangeMinimum
                 + ", doubleRangeMaximum="
                 + doubleRangeMaximum
                 + ", id='"
-                + feature.getName()
+                + featureName
                 + '\''
                 + '}';
     }
@@ -93,7 +101,7 @@ public class DoubleEntity implements CounterfactualEntity {
      */
     @Override
     public double distance() {
-        return Math.abs(this.value - this.feature.getValue().asNumber());
+        return Math.abs(this.proposedValue - originalValue);
     }
 
     /**
@@ -103,7 +111,7 @@ public class DoubleEntity implements CounterfactualEntity {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newNumericalFeature(feature.getName(), this.value);
+        return FeatureFactory.newNumericalFeature(featureName, this.proposedValue);
     }
 
     @Override
@@ -119,6 +127,6 @@ public class DoubleEntity implements CounterfactualEntity {
      */
     @Override
     public boolean isChanged() {
-        return !this.feature.getValue().getUnderlyingObject().equals(this.value);
+        return !originalValue.equals(this.proposedValue);
     }
 }
