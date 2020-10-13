@@ -25,6 +25,11 @@ interface ITaskInboxFilterProps {
   applyFilter: () => void;
   resetFilter: () => void;
 }
+enum Category {
+  STATUS = 'Status',
+  TASK_NAME = 'Task name'
+}
+
 const TaskInboxToolbar: React.FC<ITaskInboxFilterProps & OUIAProps> = ({
   applyFilter,
   resetFilter,
@@ -75,21 +80,25 @@ const TaskInboxToolbar: React.FC<ITaskInboxFilterProps & OUIAProps> = ({
     forceUpdate();
   };
 
-  const onDelete = (type: string = '', id: string = ''): void => {
-    if (type === 'Status') {
-      const statusArray = [...context.getActiveFilters().filters.status];
-      _.remove(statusArray, (status: string) => {
-        return status === id;
-      });
-      context.getActiveFilters().filters.status = [...statusArray];
-      context.getActiveFilters().selectedStatus = [...statusArray];
-    }
-    if (type === 'Task name') {
-      const taskNames = [...context.getActiveFilters().filters.taskNames];
-      _.remove(taskNames, (taskName: string) => {
-        return taskName === id;
-      });
-      context.getActiveFilters().filters.taskNames = [...taskNames];
+  const onDelete = (categoryName: Category, value: string): void => {
+    switch (categoryName) {
+      case Category.STATUS: {
+        const statusArray = [...context.getActiveFilters().filters.status];
+        _.remove(statusArray, (status: string) => {
+          return status === value;
+        });
+        context.getActiveFilters().filters.status = [...statusArray];
+        context.getActiveFilters().selectedStatus = [...statusArray];
+        break;
+      }
+      case Category.TASK_NAME: {
+        const taskNames = [...context.getActiveFilters().filters.taskNames];
+        _.remove(taskNames, (taskName: string) => {
+          return taskName === value;
+        });
+        context.getActiveFilters().filters.taskNames = [...taskNames];
+        break;
+      }
     }
     applyFilter();
   };
@@ -128,7 +137,7 @@ const TaskInboxToolbar: React.FC<ITaskInboxFilterProps & OUIAProps> = ({
         <ToolbarFilter
           chips={context.getActiveFilters().filters.status}
           deleteChip={onDelete}
-          categoryName="Status"
+          categoryName={Category.STATUS}
         >
           <Select
             variant={SelectVariant.checkbox}
@@ -145,7 +154,7 @@ const TaskInboxToolbar: React.FC<ITaskInboxFilterProps & OUIAProps> = ({
         <ToolbarFilter
           chips={context.getActiveFilters().filters.taskNames}
           deleteChip={onDelete}
-          categoryName="Task name"
+          categoryName={Category.TASK_NAME}
         >
           <InputGroup>
             <TextInput

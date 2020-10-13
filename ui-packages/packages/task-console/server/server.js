@@ -101,10 +101,10 @@ const resolvers = {
     UserTaskInstances: async (parent, args) => {
       let result = data.UserTaskInstances.filter(datum => {
         console.log('args', args)
-        
+
         if (args['where'].and) {
           // if filter available
-          if(!checkTaskAssignment(datum,args['where'].and[0])){
+          if (!checkTaskAssignment(datum, args['where'].and[0])) {
             return false;
           }
           if (args['where'].and[1].and.length === 2) {
@@ -113,7 +113,7 @@ const resolvers = {
           }
           else if (args['where'].and[1].and.length === 1) {
             if (args['where'].and[1].and[0].state) {
-               // if filter by states only
+              // if filter by states only
               return checkStatesFilters(datum, args['where'].and[1].and[0].state.in);
             } else if (args['where'].and[1].and[0].or) {
               // if filter by taskNames only
@@ -125,12 +125,12 @@ const resolvers = {
         }
         else if (args['where'].or) {
           // if no filters
-          return checkTaskAssignment(datum,args['where']);
+          return checkTaskAssignment(datum, args['where']);
         }
         else if (args['where'].id && args['where'].id.equal) {
           // mock to return single id
           return datum.id === args['where'].id.equal
-        } 
+        }
         return false;
       });
 

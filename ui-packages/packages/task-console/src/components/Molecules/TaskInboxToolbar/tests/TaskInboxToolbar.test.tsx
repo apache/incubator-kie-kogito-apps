@@ -44,7 +44,7 @@ describe('TaskInbox toolbar tests', () => {
     wrapper
       .find(Select)
       .find(SelectOption)
-      .at(2)
+      .findWhere(node => node.props().value === 'Completed')
       .find('input')
       .simulate('change');
     // add completed to context
@@ -56,7 +56,7 @@ describe('TaskInbox toolbar tests', () => {
     wrapper
       .find(Select)
       .find(SelectOption)
-      .at(0)
+      .findWhere(node => node.props().value === 'Ready')
       .find('input')
       .simulate('change');
     // remove ready from context
@@ -144,14 +144,14 @@ describe('TaskInbox toolbar tests', () => {
     wrapper
       .find(Select)
       .find(SelectOption)
-      .at(0)
+      .findWhere(node => node.props().value === 'Ready')
       .find('input')
       .simulate('change');
     wrapper = wrapper.update();
     wrapper
       .find(Select)
       .find(SelectOption)
-      .at(1)
+      .findWhere(node => node.props().value === 'Reserved')
       .find('input')
       .simulate('change');
     wrapper = wrapper.update();

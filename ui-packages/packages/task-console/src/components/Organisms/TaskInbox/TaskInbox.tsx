@@ -52,7 +52,6 @@ const TaskInbox: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any[]>([]);
-  const [sorting, setSorting] = useState<boolean>(false);
   const [isTableDataLoaded, setIsTableDataLoaded] = useState<boolean>(false);
   const [
     getUserTasks,
@@ -169,7 +168,6 @@ const TaskInbox: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   };
 
   const fetchUserTasks = (_queryOffset: number, _queryLimit: number): void => {
-    console.log(context.getActiveQueryInfo().sortBy);
     getUserTasks({
       variables: {
         whereArgument: createWhereArgument(),
@@ -192,7 +190,6 @@ const TaskInbox: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
 
   useEffect(() => {
     if (!loading && data !== undefined) {
-      setSorting(false);
       if (isLoadingMore && _.isEmpty(context.getActiveQueryInfo().sortBy)) {
         const newData = tableData.concat(data.UserTaskInstances);
         setTableData(newData);
@@ -208,7 +205,7 @@ const TaskInbox: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   }, [data]);
 
   const onSorting = (index: number, direction: SortByDirection): void => {
-    setSorting(true);
+    setIsTableDataLoaded(false);
     if (direction) {
       context.getActiveQueryInfo().sortBy = { index, direction };
     } else {
@@ -239,7 +236,7 @@ const TaskInbox: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     return <ServerErrors error={error} variant={'large'} />;
   }
 
-  if (!isLoaded || sorting) {
+  if (!isLoaded) {
     return UserTaskLoadingComponent;
   }
 
