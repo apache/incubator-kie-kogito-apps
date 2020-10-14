@@ -346,10 +346,10 @@ const ProcessDetailsTimeline: React.FC<IOwnProps & OUIAProps> = ({
   };
 
   const renderTimerIcon = (id: string): JSX.Element => {
-    return jobsResponse.data.Jobs.map(job => {
+    return jobsResponse.data.Jobs.map((job, idx) => {
       if (id === job.nodeInstanceId) {
         return (
-          <Tooltip content={'Node has job'}>
+          <Tooltip content={'Node has job'} key={idx}>
             <OutlinedClockIcon
               className="pf-u-ml-sm"
               color="var(--pf-global--icon--Color--dark)"

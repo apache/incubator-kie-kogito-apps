@@ -512,6 +512,7 @@ exports[`ProcessDetailsTimeline component tests Snapshot testing for service url
                 </Tooltip>
                 <Tooltip
                   content="Node has job"
+                  key="0"
                 >
                   <OutlinedClockIcon
                     className="pf-u-ml-sm"
@@ -642,6 +643,7 @@ exports[`ProcessDetailsTimeline component tests Snapshot testing for service url
               <span>
                 <Tooltip
                   content="Node has job"
+                  key="1"
                 >
                   <OutlinedClockIcon
                     className="pf-u-ml-sm"
