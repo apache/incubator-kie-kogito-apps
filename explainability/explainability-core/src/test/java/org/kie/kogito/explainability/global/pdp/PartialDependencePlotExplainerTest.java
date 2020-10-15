@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.FakeRandom;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -98,7 +97,7 @@ class PartialDependencePlotExplainerTest {
         for (int i = 0; i < pdp.getX().length; i++) {
             assertNotEquals(Double.NaN, pdp.getY()[i]);
             if (i > 0) {
-                assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
+                assertTrue(pdp.getX()[i] >= pdp.getX()[i - 1]);
             }
         }
     }

@@ -32,6 +32,7 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
+import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,12 +82,12 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         DataDistribution dataDistribution = metadata.getDataDistribution();
         int noOfFeatures = metadata.getInputShape().getFeatures().size();
 
-        List<FeatureDistribution> featureDistributions = dataDistribution.getFeatureDistributions();
+        List<FeatureDistribution> featureDistributions = dataDistribution.asFeatureDistributions();
         for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
             for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
                 // generate samples for the feature under analysis
-                double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
-                                                                     featureDistributions.get(featureIndex).getMax(), seriesLength);
+                FeatureDistribution featureDistribution = featureDistributions.get(featureIndex);
+                double[] featureXSvalues = featureDistribution.sample(seriesLength).stream().map(Value::asNumber).map(Number::doubleValue).mapToDouble(d -> d).sorted().toArray();
 
                 // generate data distributions for all features
                 double[][] trainingData = generateDistributions(noOfFeatures, featureDistributions);
@@ -175,9 +176,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     private double[][] generateDistributions(int noOfFeatures, List<FeatureDistribution> featureDistributions) {
         double[][] trainingData = new double[noOfFeatures][seriesLength];
         for (int i = 0; i < noOfFeatures; i++) {
-            double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
-                                                          featureDistributions.get(i).getStdDev(), seriesLength,
-                                                          random);
+            double[] featureData = featureDistributions.get(i).sample(seriesLength).stream()
+                    .map(Value::asNumber).map(Number::doubleValue).mapToDouble(d -> d).sorted().toArray();
             trainingData[i] = featureData;
         }
         return trainingData;

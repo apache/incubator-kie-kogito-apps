@@ -286,18 +286,10 @@ class DataUtilsTest {
     void testRandomDistributionGeneration() {
         DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(10, 10, random);
         assertNotNull(dataDistribution);
-        assertNotNull(dataDistribution.getFeatureDistributions());
-        for (FeatureDistribution featureDistribution : dataDistribution.getFeatureDistributions()) {
+        assertNotNull(dataDistribution.asFeatureDistributions());
+        for (FeatureDistribution featureDistribution : dataDistribution.asFeatureDistributions()) {
             assertNotNull(featureDistribution);
         }
-    }
-
-    @Test
-    void testGetFeatureDistribution() {
-        double[] doubles = new double[10];
-        Arrays.fill(doubles, 1);
-        FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
-        assertNotNull(featureDistribution);
     }
 
     @Test

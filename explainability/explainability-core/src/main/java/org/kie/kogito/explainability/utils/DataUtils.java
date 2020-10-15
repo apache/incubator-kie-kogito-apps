@@ -26,6 +26,8 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.IndependentFeaturesDatatDistribution;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
@@ -165,7 +167,7 @@ public class DataUtils {
                 perturbationSize = perturbationContext.getRandom().ints(lowerBound, 1 + upperBound).findFirst().orElse(1);
             }
             if (perturbationSize > 0) {
-                int[] indexesToBePerturbed = perturbationContext.getRandom().ints(1, newFeatures.size())
+                int[] indexesToBePerturbed = perturbationContext.getRandom().ints(0, newFeatures.size())
                         .distinct().limit(perturbationSize).toArray();
                 for (int index : indexesToBePerturbed) {
                     Feature feature = newFeatures.get(index);
@@ -328,20 +330,6 @@ public class DataUtils {
     }
 
     /**
-     * Calculate distribution statistics for an array of numbers.
-     *
-     * @param doubles an array of numbers
-     * @return feature distribution statistics
-     */
-    public static FeatureDistribution getFeatureDistribution(double[] doubles) {
-        double min = DoubleStream.of(doubles).min().orElse(0);
-        double max = DoubleStream.of(doubles).max().orElse(0);
-        double mean = getMean(doubles);
-        double stdDev = getStdDev(doubles, mean);
-        return new FeatureDistribution(min, max, mean, stdDev);
-    }
-
-    /**
      * Generate a random data distribution.
      *
      * @param noOfFeatures     number of features
@@ -352,10 +340,11 @@ public class DataUtils {
         List<FeatureDistribution> featureDistributions = new LinkedList<>();
         for (int i = 0; i < noOfFeatures; i++) {
             double[] doubles = generateData(random.nextDouble(), random.nextDouble(), distributionSize, random);
-            FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
+            Feature feature = FeatureFactory.newNumericalFeature("f_" + i, Double.NaN);
+            FeatureDistribution featureDistribution = new NumericFeatureDistribution(feature, doubles);
             featureDistributions.add(featureDistribution);
         }
-        return new DataDistribution(featureDistributions);
+        return new IndependentFeaturesDatatDistribution(featureDistributions);
     }
 
     /**
