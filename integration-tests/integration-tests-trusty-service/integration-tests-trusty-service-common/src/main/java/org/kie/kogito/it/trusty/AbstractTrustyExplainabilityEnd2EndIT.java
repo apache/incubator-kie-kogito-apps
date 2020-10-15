@@ -16,6 +16,7 @@
 
 package org.kie.kogito.it.trusty;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,6 @@ import org.kie.kogito.testcontainers.ExplainabilityServiceMessagingContainer;
 import org.kie.kogito.testcontainers.InfinispanContainer;
 import org.kie.kogito.testcontainers.KogitoServiceContainer;
 import org.kie.kogito.testcontainers.TrustyServiceContainer;
-import org.kie.kogito.trusty.service.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.service.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 import org.slf4j.Logger;
@@ -107,14 +107,23 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
             kogitoService.start();
             assertTrue(kogitoService.isRunning());
 
-            String json = "{\"Driver\":{\"Age\":25,\"Points\":13},\"Violation\":{\"Type\":\"speed\",\"Actual Speed\":115,\"Speed Limit\":100}}";
+            final List<String> jsonList = List.of(
+                    "{\"Driver\":{\"Age\":25,\"Points\":13},\"Violation\":{\"Type\":\"speed\",\"Actual Speed\":105,\"Speed Limit\":100}}",
+                    "{\"Driver\":{\"Age\":37,\"Points\":20},\"Violation\":{\"Type\":\"speed\",\"Actual Speed\":135,\"Speed Limit\":100}}",
+                    "{\"Driver\":{\"Age\":18,\"Points\": 0},\"Violation\":{\"Type\":\"speed\",\"Actual Speed\": 85,\"Speed Limit\": 70}}",
+                    "{\"Driver\":{\"Age\":56,\"Points\":13},\"Violation\":{\"Type\":\"speed\",\"Actual Speed\": 35,\"Speed Limit\": 25}}",
+                    "{\"Driver\":{\"Age\":40,\"Points\":13},\"Violation\":{\"Type\":\"speed\",\"Actual Speed\":215,\"Speed Limit\":120}}"
+            );
+            final int expectedExecutions = jsonList.size();
 
-            given()
-                    .port(kogitoService.getFirstMappedPort())
-                    .contentType("application/json")
-                    .body(json)
-                    .when().post("/Traffic Violation")
-                    .then().statusCode(200);
+            jsonList.forEach(json ->
+                    given()
+                            .port(kogitoService.getFirstMappedPort())
+                            .contentType("application/json")
+                            .body(json)
+                            .when().post("/Traffic Violation")
+                            .then().statusCode(200)
+            );
 
             await()
                     .atLeast(5, SECONDS)
@@ -123,26 +132,25 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     .untilAsserted(() -> {
                         ExecutionsResponse executionsResponse = given()
                                 .port(trustyService.getFirstMappedPort())
-                                .when().get("/executions?limit=1")
+                                .when().get(String.format("/executions?limit=%d", expectedExecutions))
                                 .then().statusCode(200)
                                 .extract().as(ExecutionsResponse.class);
 
-                        assertSame(1, executionsResponse.getHeaders().size());
+                        assertSame(expectedExecutions, executionsResponse.getHeaders().size());
 
-                        String executionId = executionsResponse.getHeaders().stream()
-                                .findFirst()
-                                .map(ExecutionHeaderResponse::getExecutionId)
-                                .orElseThrow(IllegalStateException::new);
+                        executionsResponse.getHeaders().forEach(execution -> {
+                            String executionId = execution.getExecutionId();
 
-                        assertNotNull(executionId);
+                            assertNotNull(executionId);
 
-                        SalienciesResponse salienciesResponse = given()
-                                .port(trustyService.getFirstMappedPort())
-                                .when().get("/executions/decisions/" + executionId + "/explanations/saliencies")
-                                .then().statusCode(200)
-                                .extract().as(SalienciesResponse.class);
+                            SalienciesResponse salienciesResponse = given()
+                                    .port(trustyService.getFirstMappedPort())
+                                    .when().get("/executions/decisions/" + executionId + "/explanations/saliencies")
+                                    .then().statusCode(200)
+                                    .extract().as(SalienciesResponse.class);
 
-                        assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+                            assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+                        });
                     });
         }
     }
