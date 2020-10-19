@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -96,25 +99,22 @@ public class Value<S> {
 
     private double[] parseVectorString(String string) {
         double[] doubles;
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String[] tokens = string
-                    .replaceFirst("\\[", "")
-                    .replaceFirst("]", "")
-                    .replaceFirst("\\{", "")
-                    .replaceFirst("}", "")
-                    .split(",?\\s+");
-            int noOfWords = tokens.length;
-            doubles = new double[noOfWords];
-            // parse string encoded vector
-            if (Arrays.stream(tokens).allMatch(s -> s.matches("-?\\d+(\\.\\d+)?"))) {
-                for (int i = 0; i < tokens.length; i++) {
-                    doubles[i] = Double.parseDouble(tokens[i]);
-                }
-            } else { // or make a vector of 1s
-                Arrays.fill(doubles, 1);
-            }
+            JsonParser parser = objectMapper.createParser(string);
+            // parse a double[] as a string
+            Double[] ar = objectMapper.readValue(parser, Double[].class);
+            doubles = Arrays.stream(ar).mapToDouble(Double::doubleValue).toArray();
         } catch (Exception e) {
-            doubles = new double[0];
+            try {
+                // parse a string of whitespace separated doubles
+                JsonParser parser = objectMapper.createParser(string);
+                MappingIterator<Double> iterator = objectMapper.readValues(parser, Double.class);
+                doubles = iterator.readAll().stream().mapToDouble(Double::doubleValue).toArray();
+            } catch (Exception e2) {
+                // it was not possible to parse the string as a vector
+                doubles = new double[0];
+            }
         }
         return doubles;
     }
