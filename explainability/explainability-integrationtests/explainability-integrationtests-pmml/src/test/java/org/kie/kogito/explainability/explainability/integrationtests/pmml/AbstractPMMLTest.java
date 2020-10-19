@@ -40,7 +40,7 @@ public abstract class AbstractPMMLTest {
         this.pmmlRuntime = pmmlRuntime;
     }
 
-    public static PMMLRuntime getPMMLRuntime(String modelName, File pmmlFile) {
+    public static PMMLRuntime getPMMLRuntime(final File pmmlFile) {
         return PMML_RUNTIME_FACTORY.getPMMLRuntimeFromFile(pmmlFile);
     }
 }
