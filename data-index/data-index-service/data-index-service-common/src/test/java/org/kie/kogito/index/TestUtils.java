@@ -16,9 +16,13 @@
 
 package org.kie.kogito.index;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,6 +31,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -65,9 +70,17 @@ public final class TestUtils {
         return readFileContent("travels.proto");
     }
 
-    public static String readFileContent(String file) throws URISyntaxException, IOException {
-        Path path = Paths.get(Thread.currentThread().getContextClassLoader().getResource(file).toURI());
-        return new String(Files.readAllBytes(path));
+    public static String readFileContent(String file) throws IOException {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
+        Objects.requireNonNull(inputStream, "Could not resolve file path: " + file);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        int result = bis.read();
+        while (result != -1) {
+            buf.write((byte) result);
+            result = bis.read();
+        }
+        return buf.toString(StandardCharsets.UTF_8.name());
     }
 
     public static KogitoProcessCloudEvent getProcessCloudEvent(String processId, String processInstanceId, ProcessInstanceState status, String rootProcessInstanceId, String rootProcessId, String parentProcessInstanceId) {
