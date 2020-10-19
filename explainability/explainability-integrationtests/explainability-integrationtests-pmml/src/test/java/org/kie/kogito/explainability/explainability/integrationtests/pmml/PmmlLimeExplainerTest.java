@@ -37,7 +37,7 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.pmml.evaluator.api.executor.PMMLRuntime;
+import org.kie.pmml.api.runtime.PMMLRuntime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
