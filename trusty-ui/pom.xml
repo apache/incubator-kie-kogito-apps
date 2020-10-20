@@ -113,6 +113,7 @@
         <configuration>
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
           </systemProperties>
         </configuration>
       </plugin>
