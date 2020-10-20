@@ -83,7 +83,7 @@ class FraudScoringDmnLimeExplainerTest {
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
-            List<FeatureImportance> topFeatures = saliency.getTopFeatures(3);
+            List<FeatureImportance> topFeatures = saliency.getTopFeatures(4);
             double topScore = Math.abs(topFeatures.stream().map(FeatureImportance::getScore).findFirst().orElse(0d));
             if (!topFeatures.isEmpty() && topScore > 0) {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, topFeatures);
