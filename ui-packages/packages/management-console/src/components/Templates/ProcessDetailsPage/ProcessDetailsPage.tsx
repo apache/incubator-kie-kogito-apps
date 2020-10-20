@@ -45,6 +45,9 @@ import {
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 import { SyncIcon, InfoCircleIcon } from '@patternfly/react-icons';
 import ProcessDetailsJobsPanel from '../../Organisms/ProcessDetailsJobsPanel/ProcessDetailsJobsPanel';
+import { StaticContext } from 'react-router';
+import * as H from 'history';
+import ProcessDetailsNodeTrigger from '../../Organisms/ProcessDetailsNodeTrigger/ProcessDetailsNodeTrigger';
 
 interface MatchProps {
   instanceID: string;
@@ -55,7 +58,11 @@ enum TitleType {
   FAILURE = 'failure'
 }
 
-const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
+const ProcessDetailsPage: React.FC<RouteComponentProps<
+  MatchProps,
+  StaticContext,
+  H.LocationState
+> &
   OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
   const id = props.match.params.instanceID;
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -338,7 +345,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
             state: {
               prev: currentPage ? currentPage.prev : '/ProcessInstances',
               title: 'Process not found',
-              description: `Process instance with the id ${id} not found`,
+              description: `Process instance with the id ${id} not found`,
               buttonText: currentPage
                 ? `Go to ${prevPath[0]
                     .replace(/([A-Z])/g, ' $1')
@@ -502,6 +509,15 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<MatchProps, {}, {}> &
                     <FlexItem>
                       <ProcessDetailsJobsPanel processInstanceId={id} />
                     </FlexItem>
+                    {data.ProcessInstances[0].addons.includes(
+                      'process-management'
+                    ) && (
+                      <FlexItem>
+                        <ProcessDetailsNodeTrigger
+                          processInstanceData={data.ProcessInstances[0]}
+                        />
+                      </FlexItem>
+                    )}
                   </Flex>
                   {errorModal()}
                   {RenderConfirmationModal()}

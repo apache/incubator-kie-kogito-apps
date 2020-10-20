@@ -1,4 +1,4 @@
-/* tslint:disable */
+/* eslint-disable */
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactHooks from '@apollo/react-hooks';
@@ -51,6 +51,7 @@ export namespace GraphQL {
     id: Scalars['String'];
     processId?: Maybe<Scalars['String']>;
     processInstanceId?: Maybe<Scalars['String']>;
+    nodeInstanceId?: Maybe<Scalars['String']>;
     rootProcessInstanceId?: Maybe<Scalars['String']>;
     rootProcessId?: Maybe<Scalars['String']>;
     status: JobStatus;
@@ -72,6 +73,7 @@ export namespace GraphQL {
     id?: Maybe<IdArgument>;
     processId?: Maybe<StringArgument>;
     processInstanceId?: Maybe<IdArgument>;
+    nodeInstanceId?: Maybe<IdArgument>;
     rootProcessInstanceId?: Maybe<IdArgument>;
     rootProcessId?: Maybe<StringArgument>;
     status?: Maybe<JobStatusArgument>;
@@ -1047,8 +1049,7 @@ export namespace GraphQL {
   };
 
   export type GetTasksForUserQueryVariables = Exact<{
-    user?: Maybe<Scalars['String']>;
-    groups?: Maybe<Array<Scalars['String']>>;
+    whereArgument?: Maybe<UserTaskInstanceArgument>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
     orderBy?: Maybe<UserTaskInstanceOrderBy>;
@@ -1111,6 +1112,7 @@ export namespace GraphQL {
             | 'scheduledId'
             | 'retries'
             | 'lastUpdate'
+            | 'endpoint'
           >
         >
       >
@@ -1883,20 +1885,13 @@ export namespace GraphQL {
   >;
   export const GetTasksForUserDocument = gql`
     query getTasksForUser(
-      $user: String
-      $groups: [String!]
+      $whereArgument: UserTaskInstanceArgument
       $offset: Int
       $limit: Int
       $orderBy: UserTaskInstanceOrderBy
     ) {
       UserTaskInstances(
-        where: {
-          or: [
-            { actualOwner: { equal: $user } }
-            { potentialUsers: { contains: $user } }
-            { potentialGroups: { containsAny: $groups } }
-          ]
-        }
+        where: $whereArgument
         pagination: { offset: $offset, limit: $limit }
         orderBy: $orderBy
       ) {
@@ -1938,8 +1933,7 @@ export namespace GraphQL {
    * @example
    * const { data, loading, error } = useGetTasksForUserQuery({
    *   variables: {
-   *      user: // value for 'user'
-   *      groups: // value for 'groups'
+   *      whereArgument: // value for 'whereArgument'
    *      offset: // value for 'offset'
    *      limit: // value for 'limit'
    *      orderBy: // value for 'orderBy'
@@ -1995,6 +1989,7 @@ export namespace GraphQL {
         retries
         lastUpdate
         expirationTime
+        endpoint
       }
     }
   `;

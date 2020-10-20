@@ -59,6 +59,42 @@ function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const checkStatesFilters = (userTaskInstance, states) => {
+  return states.includes(userTaskInstance.state)
+}
+
+const checkTaskNameFilters = (userTaskInstance, names) => {
+  for (let i = 0; i < names.length; i++) {
+    if (
+      userTaskInstance.referenceName &&
+      userTaskInstance.referenceName
+        .toLowerCase()
+        .indexOf(
+          names[i].referenceName.like.toLowerCase()
+        ) > -1
+    ) {
+      return true
+    }
+  }
+}
+
+const checkTaskAssignment = (userTaskInstance, assignments) => {
+  const actualOwnerClause = assignments.or[0];
+  if (actualOwnerClause.actualOwner.equal === userTaskInstance.actualOwner) {
+    return true;
+  }
+
+  const potentialUsersClause = assignments.or[1];
+
+  if (userTaskInstance.potentialUsers.includes(potentialUsersClause.potentialUsers.contains)) {
+    return true;
+  }
+
+  const potentialGroupsClause = assignments.or[2];
+  return potentialGroupsClause.potentialGroups.containsAny
+    .some(clauseGroup => userTaskInstance.potentialGroups.includes(clauseGroup));
+}
+
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
@@ -66,21 +102,39 @@ const resolvers = {
       let result = data.UserTaskInstances.filter(datum => {
         console.log('args', args)
 
-        if (args['where'].state && args['where'].state.in) {
-          return args['where'].state.in.includes(datum.state);
+        if (args['where'].and) {
+          // if filter available
+          if (!checkTaskAssignment(datum, args['where'].and[0])) {
+            return false;
+          }
+          if (args['where'].and[1].and.length === 2) {
+            // if filter by state and taskNames
+            return checkTaskNameFilters(datum, args['where'].and[1].and[1].or) && checkStatesFilters(datum, args['where'].and[1].and[0].state.in);
+          }
+          else if (args['where'].and[1].and.length === 1) {
+            if (args['where'].and[1].and[0].state) {
+              // if filter by states only
+              return checkStatesFilters(datum, args['where'].and[1].and[0].state.in);
+            } else if (args['where'].and[1].and[0].or) {
+              // if filter by taskNames only
+              return checkTaskNameFilters(datum, args['where'].and[1].and[0].or);
+            }
+          } else if (args['where'].and[1].and.length === 0) {
+            return false
+          }
+        }
+        else if (args['where'].or) {
+          // if no filters
+          return checkTaskAssignment(datum, args['where']);
         }
         else if (args['where'].id && args['where'].id.equal) {
           // mock to return single id
           return datum.id === args['where'].id.equal
         }
-        else {
-          // searching for tasks assigned to current user
-          return true;
-        }
-
+        return false;
       });
+
       if (args['orderBy']) {
-        console.log('sort by:', args['orderBy']);
         result = _.orderBy(
           result,
           _.keys(args['orderBy']).map(key => key.toLowerCase()),
@@ -95,21 +149,17 @@ const resolvers = {
 
         result = result.slice(offset, offset + limit);
       }
-
-      console.log('result length: ' + result.length);
       return result;
     },
     ProcessInstances: async (parent, args) => {
       const result = data.ProcessInstances.filter(datum => {
-        console.log('args', args['where']);
         if (args['where'].id && args['where'].id.equal) {
-          return datum.id == args['where'].id.equal;
+          return datum.id === args['where'].id.equal;
         } else {
           return false;
         }
       });
       await timeout(2000);
-      console.log('result length: ' + result.length);
       return result;
     }
   },

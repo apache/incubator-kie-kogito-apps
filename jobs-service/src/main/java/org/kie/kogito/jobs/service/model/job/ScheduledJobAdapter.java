@@ -21,7 +21,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -35,11 +37,18 @@ public class ScheduledJobAdapter {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    static {
+        OBJECT_MAPPER.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+        OBJECT_MAPPER.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
+
     private ScheduledJobAdapter() {
     }
 
     public static ScheduledJob of(JobDetails jobDetails) {
-        final ProcessPayload payload = payloadDeserialize(String.valueOf(jobDetails.getPayload()));
+        final ProcessPayload payload = payloadDeserialize(jobDetails.getPayload());
         return ScheduledJob.builder()
                 .job(new JobBuilder()
                              .id(jobDetails.getId())
@@ -66,6 +75,7 @@ public class ScheduledJobAdapter {
                              .rootProcessInstanceId(payload.getRootProcessInstanceId())
                              .processId(payload.getProcessId())
                              .processInstanceId(payload.getProcessInstanceId())
+                             .nodeInstanceId(payload.getNodeInstanceId())
                              .build())
                 .scheduledId(jobDetails.getScheduledId())
                 .status(jobDetails.getStatus())
@@ -81,8 +91,9 @@ public class ScheduledJobAdapter {
                 .correlationId(scheduledJob.getId())
                 .executionCounter(scheduledJob.getExecutionCounter())
                 .lastUpdate(scheduledJob.getLastUpdate())
-                .payload("process")
-                .recipient(new Recipient.HTTPRecipient(scheduledJob.getCallbackEndpoint()))
+                .recipient(Optional.ofNullable(scheduledJob.getCallbackEndpoint())
+                                   .map(Recipient.HTTPRecipient::new)
+                                   .orElse(null))
                 .retries(scheduledJob.getRetries())
                 .scheduledId(scheduledJob.getScheduledId())
                 .status(scheduledJob.getStatus())
@@ -116,21 +127,33 @@ public class ScheduledJobAdapter {
 
     public static String payloadSerialize(ScheduledJob scheduledJob) {
         try {
+            if (Objects.isNull(scheduledJob.getProcessInstanceId())
+                    && Objects.isNull(scheduledJob.getRootProcessInstanceId())
+                    && Objects.isNull(scheduledJob.getProcessId())
+                    && Objects.isNull(scheduledJob.getRootProcessId())) {
+                return null;
+            }
             return OBJECT_MAPPER.writeValueAsString(new ProcessPayload(scheduledJob.getProcessInstanceId(),
                                                                        scheduledJob.getRootProcessInstanceId(),
                                                                        scheduledJob.getProcessId(),
-                                                                       scheduledJob.getRootProcessId()));
+                                                                       scheduledJob.getRootProcessId(),
+                                                                       scheduledJob.getNodeInstanceId()));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ProcessPayload payloadDeserialize(String payload) {
-        try {
-            return OBJECT_MAPPER.readValue(payload, ProcessPayload.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public static ProcessPayload payloadDeserialize(Object payload) {
+        return Optional.ofNullable(payload)
+                .map(String::valueOf)
+                .map(p -> {
+                    try {
+                        return OBJECT_MAPPER.readValue(p, ProcessPayload.class);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .orElse(new ProcessPayload());
     }
 
     final static class ProcessPayload {
@@ -139,16 +162,19 @@ public class ScheduledJobAdapter {
         private String rootProcessInstanceId;
         private String processId;
         private String rootProcessId;
+        private String nodeInstanceId;
 
         private ProcessPayload() {
             //needed by jackson
         }
 
-        public ProcessPayload(String processInstanceId, String rootProcessInstanceId, String processId, String rootProcessId) {
+        public ProcessPayload(String processInstanceId, String rootProcessInstanceId, String processId,
+                              String rootProcessId, String nodeInstanceId) {
             this.processInstanceId = processInstanceId;
             this.rootProcessInstanceId = rootProcessInstanceId;
             this.processId = processId;
             this.rootProcessId = rootProcessId;
+            this.nodeInstanceId = nodeInstanceId;
         }
 
         public String getProcessInstanceId() {
@@ -165,6 +191,10 @@ public class ScheduledJobAdapter {
 
         public String getRootProcessId() {
             return rootProcessId;
+        }
+
+        public String getNodeInstanceId() {
+            return nodeInstanceId;
         }
     }
 }
