@@ -77,7 +77,7 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
-        LimeExplainer limeExplainer = new LimeExplainer(10, 3);
+        LimeExplainer limeExplainer = new LimeExplainer(100, 5);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
