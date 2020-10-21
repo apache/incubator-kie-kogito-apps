@@ -18,6 +18,7 @@ import {
   ProcessInstanceBulkList,
   OperationType
 } from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
+import { Title, TitleSizes } from '@patternfly/react-core';
 
 export interface TriggerableNode {
   id: number;
@@ -125,28 +126,33 @@ export const setTitle = (
   titleStatus: string,
   titleText: string
 ): JSX.Element => {
+  let icon = null;
+
   switch (titleStatus) {
     case 'success':
-      return (
-        <>
-          <InfoCircleIcon
-            className="pf-u-mr-sm"
-            color="var(--pf-global--info-color--100)"
-          />{' '}
-          {titleText}{' '}
-        </>
+      icon = (
+        <InfoCircleIcon
+          className="pf-u-mr-sm"
+          color="var(--pf-global--info-color--100)"
+        />
       );
+      break;
     case 'failure':
-      return (
-        <>
-          <InfoCircleIcon
-            className="pf-u-mr-sm"
-            color="var(--pf-global--danger-color--100)"
-          />{' '}
-          {titleText}{' '}
-        </>
+      icon = (
+        <InfoCircleIcon
+          className="pf-u-mr-sm"
+          color="var(--pf-global--danger-color--100)"
+        />
       );
+      break;
   }
+
+  return (
+    <Title headingLevel="h1" size={TitleSizes['2xl']}>
+      {icon}
+      {titleText}
+    </Title>
+  );
 };
 
 export const handleSkip = async (

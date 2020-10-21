@@ -202,6 +202,14 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
   <MockedProcessListModal
     handleModalToggle={[Function]}
     isModalOpen={false}
+    modalTitle={
+      <Title
+        headingLevel="h1"
+        size="2xl"
+      >
+        
+      </Title>
+    }
     ouiaId="operation-result"
     resetSelected={[Function]}
   />

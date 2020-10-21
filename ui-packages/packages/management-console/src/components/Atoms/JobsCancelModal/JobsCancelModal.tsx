@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Modal,
-  Title,
-  Button,
-  TextContent,
-  Text,
-  TitleSizes
-} from '@patternfly/react-core';
+import { Modal, Button, TextContent, Text } from '@patternfly/react-core';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/common';
 interface IOwnProps {
   actionType: string;
@@ -28,11 +21,7 @@ const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
     <Modal
       variant="small"
       title=""
-      header={
-        <Title headingLevel="h1" size={TitleSizes['2xl']}>
-          {modalTitle}
-        </Title>
-      }
+      header={modalTitle}
       isOpen={isModalOpen}
       onClose={handleModalToggle}
       aria-label={`${actionType} Modal`}

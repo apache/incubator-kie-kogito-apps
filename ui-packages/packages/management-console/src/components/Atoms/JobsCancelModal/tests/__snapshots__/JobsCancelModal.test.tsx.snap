@@ -25,17 +25,13 @@ exports[`job cancel modal tests snapshot test 1`] = `
       headingLevel="h1"
       size="2xl"
     >
-      <React.Fragment>
-        <InfoCircleIcon
-          className="pf-u-mr-sm"
-          color="var(--pf-global--info-color--100)"
-          noVerticalAlign={false}
-          size="sm"
-        />
-         
-        Job cancel
-         
-      </React.Fragment>
+      <InfoCircleIcon
+        className="pf-u-mr-sm"
+        color="var(--pf-global--info-color--100)"
+        noVerticalAlign={false}
+        size="sm"
+      />
+      Job cancel
     </Title>
   }
   isOpen={true}
