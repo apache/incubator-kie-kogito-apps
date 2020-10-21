@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -37,15 +36,21 @@ import org.kie.kogito.explainability.model.Saliency;
 public class AggregatedLimeExplainer implements GlobalExplainer<Map<String, Saliency>> {
 
     private final LimeExplainer limeExplainer;
+    private final int sampleSize;
 
     public AggregatedLimeExplainer(LimeExplainer limeExplainer) {
+        this(limeExplainer, 100);
+    }
+
+    public AggregatedLimeExplainer(LimeExplainer limeExplainer, int sampleSize) {
         this.limeExplainer = limeExplainer;
+        this.sampleSize = sampleSize;
     }
 
     @Override
     public Map<String, Saliency> explain(PredictionProvider model, PredictionProviderMetadata metadata)
             throws InterruptedException, ExecutionException {
-        List<PredictionInput> inputs = metadata.getDataDistribution().sample(100);
+        List<PredictionInput> inputs = metadata.getDataDistribution().sample(sampleSize);
         List<Saliency> saliencies = new ArrayList<>();
         for (PredictionInput input : inputs) {
             Prediction prediction = new Prediction(input, model.predictAsync(List.of(input)).get().get(0));
