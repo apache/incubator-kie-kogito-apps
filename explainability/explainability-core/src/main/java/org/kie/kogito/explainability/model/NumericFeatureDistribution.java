@@ -21,10 +21,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Numeric feature distribution based on {@code double[]}.
  */
 public class NumericFeatureDistribution implements FeatureDistribution {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(NumericFeatureDistribution.class);
 
     private final Feature feature;
     private final double[] doubles;
@@ -46,13 +51,18 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        List<Double> copy = Arrays.stream(doubles).boxed().collect(Collectors.toList());
-        Collections.shuffle(copy);
-        List<Value<?>> samples = new ArrayList<>(sampleSize);
-        for (int i = 0; i < sampleSize; i++) {
-            samples.add(new Value<>(copy.get(i)));
+        if (sampleSize >= doubles.length) {
+            LOGGER.warn("required {} samples, but only {} are available", sampleSize, doubles.length);
+            return getAllSamples();
+        } else {
+            List<Double> copy = Arrays.stream(doubles).boxed().collect(Collectors.toList());
+            Collections.shuffle(copy);
+            List<Value<?>> samples = new ArrayList<>(sampleSize);
+            for (int i = 0; i < sampleSize; i++) {
+                samples.add(new Value<>(copy.get(i)));
+            }
+            return samples;
         }
-        return samples;
     }
 
     @Override
