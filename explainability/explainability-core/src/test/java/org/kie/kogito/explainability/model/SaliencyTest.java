@@ -66,7 +66,7 @@ class SaliencyTest {
         fis.add(new FeatureImportance(TestUtils.getMockedNumericFeature(), 0.04));
         Output output = new Output("name", Type.NUMBER);
         Saliency saliency = new Saliency(output, fis);
-        List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
+        List<FeatureImportance> topFeatures = saliency.getNegativeFeatures(2);
         assertNotNull(topFeatures);
         assertEquals(1, topFeatures.size());
         List<Double> collect = topFeatures.stream().map(FeatureImportance::getScore).collect(Collectors.toList());
