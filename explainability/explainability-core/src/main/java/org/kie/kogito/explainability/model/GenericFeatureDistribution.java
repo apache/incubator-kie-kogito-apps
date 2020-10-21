@@ -18,14 +18,16 @@ package org.kie.kogito.explainability.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
-import org.kie.kogito.explainability.utils.DataUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Feature distribution based on list of {@code Values}.
  */
 public class GenericFeatureDistribution implements FeatureDistribution {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(GenericFeatureDistribution.class);
 
     private final Feature feature;
     private final List<Value<?>> values;
@@ -47,13 +49,18 @@ public class GenericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        List<Value<?>> copy = new java.util.ArrayList<>(values);
-        Collections.shuffle(copy);
-        List<Value<?>> samples = new ArrayList<>(sampleSize);
-        for (int i = 0; i < sampleSize; i++) {
-            samples.add(copy.get(i));
+        if (sampleSize >= values.size()) {
+            LOGGER.warn("required {} samples, but only {} are available", sampleSize, values.size());
+            return getAllSamples();
+        } else {
+            List<Value<?>> copy = new java.util.ArrayList<>(values);
+            Collections.shuffle(copy);
+            List<Value<?>> samples = new ArrayList<>(sampleSize);
+            for (int i = 0; i < sampleSize; i++) {
+                samples.add(copy.get(i));
+            }
+            return samples;
         }
-        return samples;
     }
 
     @Override
