@@ -28,10 +28,7 @@ public class Output {
     private final String name;
 
     public Output(String name, Type type) {
-        this.name = name;
-        this.type = type;
-        this.value = new Value<>(null);
-        this.score = 0d;
+        this(name, type, new Value<>(null), 0d);
     }
 
     public Output(String name, Type type, Value value, double score) {
