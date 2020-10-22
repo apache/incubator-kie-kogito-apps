@@ -71,16 +71,31 @@ public final class TestUtils {
     }
 
     public static String readFileContent(String file) throws IOException {
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
-        Objects.requireNonNull(inputStream, "Could not resolve file path: " + file);
-        BufferedInputStream bis = new BufferedInputStream(inputStream);
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        int result = bis.read();
-        while (result != -1) {
-            buf.write((byte) result);
-            result = bis.read();
+        InputStream inputStream = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream buf = null;
+        try {
+            inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
+            Objects.requireNonNull(inputStream, "Could not resolve file path: " + file);
+            bis = new BufferedInputStream(inputStream);
+            buf = new ByteArrayOutputStream();
+            int result = bis.read();
+            while (result != -1) {
+                buf.write((byte) result);
+                result = bis.read();
+            }
+            return buf.toString(StandardCharsets.UTF_8.name());
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (bis != null) {
+                bis.close();
+            }
+            if (buf != null) {
+                buf.close();
+            }
         }
-        return buf.toString(StandardCharsets.UTF_8.name());
     }
 
     public static KogitoProcessCloudEvent getProcessCloudEvent(String processId, String processInstanceId, ProcessInstanceState status, String rootProcessInstanceId, String rootProcessId, String parentProcessInstanceId) {
