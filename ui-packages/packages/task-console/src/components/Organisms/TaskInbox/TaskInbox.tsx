@@ -125,7 +125,7 @@ const TaskInbox: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     context.getActiveFilters().filters.taskNames.forEach(word => {
       formattedTextArray.push({
         referenceName: {
-          like: word
+          like: `*${word}*`
         }
       });
     });
