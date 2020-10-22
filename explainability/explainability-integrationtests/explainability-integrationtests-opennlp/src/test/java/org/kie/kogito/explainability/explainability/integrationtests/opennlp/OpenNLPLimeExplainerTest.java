@@ -87,7 +87,6 @@ class OpenNLPLimeExplainerTest {
             features.add(FeatureFactory.newFulltextFeature("text", inputText, s -> Arrays.asList(s.split("\\W"))));
             PredictionInput input = new PredictionInput(features);
 
-
             PredictionOutput output = model.predictAsync(List.of(input)).get().get(0);
             assertNotNull(output);
             assertNotNull(output.getOutputs());
