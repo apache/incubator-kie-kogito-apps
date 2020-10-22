@@ -19,6 +19,14 @@ import {
   OperationType
 } from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
 
+export interface TriggerableNode {
+  id: number;
+  name: string;
+  type: string;
+  uniqueId: string;
+  nodeDefinitionId: string;
+}
+/* tslint:disable:no-floating-promises */
 export const ProcessInstanceIconCreator = (
   state: ProcessInstanceState
 ): JSX.Element => {
@@ -307,5 +315,67 @@ export const handleVariableUpdate = async (
       });
   } catch (error) {
     setVariableError(error.message);
+  }
+};
+
+export const handleJobReschedule = async (
+  job,
+  repeatInterval,
+  repeatLimit,
+  rescheduleClicked,
+  setErrorMessage,
+  setRescheduleClicked,
+  scheduleDate,
+  refetch
+): Promise<any> => {
+  let parameter = {};
+  if (repeatInterval === null && repeatLimit === null) {
+    parameter = {
+      expirationTime: new Date(scheduleDate)
+    };
+  } else {
+    parameter = {
+      expirationTime: new Date(scheduleDate),
+      repeatInterval,
+      repeatLimit
+    };
+  }
+  try {
+    await axios.patch(`${job.endpoint}/${job.id}`, parameter).then(res => {
+      setRescheduleClicked(!rescheduleClicked);
+    });
+  } catch (error) {
+    setRescheduleClicked(!rescheduleClicked);
+    setErrorMessage(error.message);
+  }
+  refetch();
+};
+
+export const handleNodeTrigger = async (
+  processInstance: Pick<ProcessInstance, 'id' | 'serviceUrl' | 'processId'>,
+  node: Pick<TriggerableNode, 'nodeDefinitionId'>,
+  onTriggerSuccess: () => void,
+  onTriggerFailure: (error: string) => void
+): Promise<void> => {
+  try {
+    await axios.post(
+      `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/nodes/${node.nodeDefinitionId}`
+    );
+    onTriggerSuccess();
+  } catch (error) {
+    onTriggerFailure(JSON.stringify(error.message));
+  }
+};
+
+export const getTriggerableNodes = async (
+  processInstance: Pick<GraphQL.ProcessInstance, 'processId' | 'serviceUrl'>
+): Promise<TriggerableNode[]> => {
+  try {
+    const result = await axios.get(
+      `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/nodes`
+    );
+    return result.data;
+  } catch (error) {
+    return [];
   }
 };
