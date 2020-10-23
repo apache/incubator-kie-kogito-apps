@@ -497,7 +497,7 @@ describe('Process Details Page component tests', () => {
     window.location = location;
     expect(handleVariableUpdateSpy).toHaveBeenCalled();
   });
-  it('test node tirgger presence', async () => {
+  it('test node trigger presence', async () => {
     // with active state- node trigger panel present
     const wrapperWithNodeTrigger = await getWrapperAsync(
       <MockedProvider mocks={mocks1} addTypename={false}>
