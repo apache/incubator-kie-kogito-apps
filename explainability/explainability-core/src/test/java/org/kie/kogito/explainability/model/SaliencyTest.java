@@ -74,6 +74,28 @@ class SaliencyTest {
     }
 
     @Test
+    void testSameImportantFeatures() {
+        List<FeatureImportance> fis = new ArrayList<>();
+        fis.add(new FeatureImportance(TestUtils.getMockedNumericFeature(), 0.1));
+        fis.add(new FeatureImportance(TestUtils.getMockedNumericFeature(), 0.1));
+        fis.add(new FeatureImportance(TestUtils.getMockedNumericFeature(), 0.1));
+        Output output = new Output("name", Type.NUMBER);
+        Saliency saliency = new Saliency(output, fis);
+        List<FeatureImportance> topFeatures = saliency.getTopFeatures(2);
+        assertNotNull(topFeatures);
+        assertEquals(2, topFeatures.size());
+        List<Double> collect = topFeatures.stream().map(FeatureImportance::getScore).collect(Collectors.toList());
+        assertTrue(collect.contains(0.1));
+        assertTrue(collect.contains(0.1));
+        List<FeatureImportance> negativeFeatures = saliency.getNegativeFeatures(2);
+        assertNotNull(negativeFeatures);
+        assertTrue(negativeFeatures.isEmpty());
+        List<FeatureImportance> positiveFeatures = saliency.getPositiveFeatures(2);
+        assertNotNull(positiveFeatures);
+        assertEquals(2, positiveFeatures.size());
+    }
+
+    @Test
     void testMerge() {
         List<FeatureImportance> fis1 = new ArrayList<>();
         fis1.add(new FeatureImportance(FeatureFactory.newTextFeature("f1", "foo"), 0.1));
