@@ -104,7 +104,7 @@ pipeline {
             steps {
                 dir('kogito-apps') {
                     script {
-                        maven.mvnVersionsSet(getProjectVersion())
+                        maven.mvnVersionsUpdateParentAndChildModules(getSnapshotVersion(), true)
                     }
                 }
             }
