@@ -51,6 +51,10 @@ public class VertxRouterSetup {
     String graphUIPath;
 
     @Inject
+    @ConfigProperty(name = "kogito.data-index.vertx-diagram.folder.path", defaultValue = "META-INF/processSVG")
+    String staticResourceRootPath;
+
+    @Inject
     GraphQL graphQL;
 
     void setupRouter(@Observes Router router) {
@@ -60,6 +64,12 @@ public class VertxRouterSetup {
         }
         router.route(graphUIPath + "/*").handler(graphiQLHandler);
         router.route().handler(LoggerHandler.create());
+
+        StaticHandler diagramHandler = StaticHandler.create();
+        diagramHandler.setAllowRootFileSystemAccess(true);
+        diagramHandler.setWebRoot(staticResourceRootPath);
+        router.route("/diagram/*").handler(diagramHandler);
+
         router.route().handler(StaticHandler.create());
         router.route().handler(FaviconHandler.create());
         router.route("/").handler(ctx -> ctx.response().putHeader("location", graphUIPath + "/").setStatusCode(302).end());

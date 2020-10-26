@@ -74,6 +74,7 @@ public class VertxRouterSetupTest {
     public void setup() {
         lenient().when(routerMock.route()).thenReturn(routeMock);
         lenient().when(routerMock.route(anyString())).thenReturn(routeMock);
+        vertxRouterSetup.staticResourceRootPath="/WEB-INF/processSVG";
     }
 
     @Test
