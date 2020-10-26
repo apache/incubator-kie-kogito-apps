@@ -1114,6 +1114,7 @@ export namespace GraphQL {
             | 'retries'
             | 'lastUpdate'
             | 'endpoint'
+            | 'nodeInstanceId'
           >
         >
       >
@@ -2018,6 +2019,7 @@ export namespace GraphQL {
         retries
         lastUpdate
         endpoint
+        nodeInstanceId
       }
     }
   `;
