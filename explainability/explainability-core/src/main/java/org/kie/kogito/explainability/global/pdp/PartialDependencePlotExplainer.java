@@ -172,7 +172,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         double[][] trainingData = new double[noOfFeatures][seriesLength];
         for (int i = 0; i < noOfFeatures; i++) {
             double[] featureData = featureDistributions.get(i).sample(seriesLength).stream()
-                    .map(Value::asNumber).map(Number::doubleValue).mapToDouble(d -> d).sorted().toArray();
+                    .map(Value::asNumber).map(Number::doubleValue).mapToDouble(d -> d).toArray();
             trainingData[i] = featureData;
         }
         return trainingData;
