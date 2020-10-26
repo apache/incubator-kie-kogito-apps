@@ -37,6 +37,7 @@ import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
+import org.kie.kogito.index.messaging.KogitoUserTaskCloudEventDeserializer;
 import org.kie.kogito.index.messaging.ReactiveMessagingEventConsumer;
 import org.kie.kogito.index.model.MilestoneStatus;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
@@ -83,6 +84,7 @@ import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndState;
 import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
+import static org.kie.kogito.index.TestUtils.readFileContent;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
@@ -772,7 +774,6 @@ abstract class AbstractIndexingServiceIT {
         event.getData().setPriority("Low");
         event.getData().setActualOwner("admin");
         event.getData().setState("Completed");
-
         indexUserTaskCloudEvent(event);
 
         validateUserTaskInstance(getUserTaskInstanceByIdAndActualOwner(taskId, "admin"), event);
@@ -794,6 +795,17 @@ abstract class AbstractIndexingServiceIT {
                 .body("data.Deals[0].metadata.userTasks[0].started", is(formatZonedDateTime(event.getData().getStarted().withZoneSameInstant(ZoneOffset.UTC))))
                 .body("data.Deals[0].metadata.userTasks[0].completed", is(formatZonedDateTime(event.getData().getCompleted().withZoneSameInstant(ZoneOffset.UTC))))
                 .body("data.Deals[0].metadata.userTasks[0].lastUpdate", is(formatZonedDateTime(event.getTime().withZoneSameInstant(ZoneOffset.UTC))));
+
+        event.setData((new KogitoUserTaskCloudEventDeserializer().deserialize(null, readFileContent("user_task_instance_event.json")
+                .getBytes()).getData()));
+        indexUserTaskCloudEvent(event);
+
+        given().contentType(ContentType.JSON)
+                .body(getDealsByTaskId(taskId))
+                .when().post("/graphql")
+                .then().log().ifValidationFails().statusCode(200)
+                .body("data.Deals[0].metadata.userTasks[1].actualOwner", nullValue());
+
     }
 
     @Test
