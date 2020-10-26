@@ -15,10 +15,8 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -52,17 +50,14 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     private static final int DEFAULT_SERIES_LENGTH = 100;
 
     private final int seriesLength;
-    private final Random random;
 
     /**
      * Create a PDP provider.
      *
      * @param seriesLength the no. of data points sampled for each given feature.
-     * @param random       random number generator
      */
-    public PartialDependencePlotExplainer(int seriesLength, Random random) {
+    public PartialDependencePlotExplainer(int seriesLength) {
         this.seriesLength = seriesLength;
-        this.random = random;
     }
 
     /**
@@ -71,7 +66,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
      * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
      */
     public PartialDependencePlotExplainer() {
-        this(DEFAULT_SERIES_LENGTH, new SecureRandom());
+        this(DEFAULT_SERIES_LENGTH);
     }
 
     @Override

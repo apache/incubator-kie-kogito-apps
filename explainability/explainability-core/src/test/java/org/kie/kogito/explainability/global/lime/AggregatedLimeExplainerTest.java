@@ -33,7 +33,7 @@ class AggregatedLimeExplainerTest {
 
     @Test
     void testExplain() throws ExecutionException, InterruptedException {
-        PredictionProvider evenFeatureModel = TestUtils.getSumSkipModel(1);
+        PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(1);
         PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
             @Override
             public DataDistribution getDataDistribution() {
@@ -58,7 +58,7 @@ class AggregatedLimeExplainerTest {
         };
 
         AggregatedLimeExplainer aggregatedLimeExplainer = new AggregatedLimeExplainer(new LimeExplainer(100, 1));
-        Map<String, Saliency> explain = aggregatedLimeExplainer.explain(evenFeatureModel, metadata);
+        Map<String, Saliency> explain = aggregatedLimeExplainer.explain(sumSkipModel, metadata);
         assertNotNull(explain);
         assertEquals(1, explain.size());
         assertTrue(explain.containsKey("sum-but1"));
