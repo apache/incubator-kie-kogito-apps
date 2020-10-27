@@ -35,7 +35,7 @@ const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
           OK
         </Button>
       ]}
-      {...componentOuiaProps(ouiaId, 'job-cancel-modal', ouiaSafe)}
+      {...componentOuiaProps(ouiaId, 'jobs-cancel-modal', ouiaSafe)}
     >
       <TextContent>
         <Text>{modalContent}</Text>

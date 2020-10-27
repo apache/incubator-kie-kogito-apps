@@ -64,8 +64,12 @@ describe('uitility function testing', () => {
   it('set title tests', () => {
     const successResult = setTitle('success', 'Abort operation');
     const failureResult = setTitle('failure', 'Skip operation');
-    expect(successResult.props[children][1]).toEqual('Abort operation');
-    expect(failureResult.props[children][1]).toEqual('Skip operation');
+    expect(successResult.props[children][1].props.children).toEqual(
+      'Abort operation'
+    );
+    expect(failureResult.props[children][1].props.children).toEqual(
+      'Skip operation'
+    );
   });
 
   describe('handle skip tests', () => {

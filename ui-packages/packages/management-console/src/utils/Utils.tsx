@@ -150,7 +150,7 @@ export const setTitle = (
   return (
     <Title headingLevel="h1" size={TitleSizes['2xl']}>
       {icon}
-      {titleText}
+      <span>{titleText}</span>
     </Title>
   );
 };

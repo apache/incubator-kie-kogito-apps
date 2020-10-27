@@ -17,7 +17,7 @@ exports[`job cancel modal tests snapshot test 1`] = `
   aria-label="Job Cancel Modal"
   aria-labelledby="Job Cancel Modal"
   className=""
-  data-ouia-component-type="job-cancel-modal"
+  data-ouia-component-type="jobs-cancel-modal"
   data-ouia-safe={true}
   hasNoBodyWrapper={false}
   header={
@@ -31,7 +31,9 @@ exports[`job cancel modal tests snapshot test 1`] = `
         noVerticalAlign={false}
         size="sm"
       />
-      Job cancel
+      <span>
+        Job cancel
+      </span>
     </Title>
   }
   isOpen={true}
