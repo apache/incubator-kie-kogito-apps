@@ -65,17 +65,18 @@ const checkStatesFilters = (userTaskInstance, states) => {
 
 const checkTaskNameFilters = (userTaskInstance, names) => {
   for (let i = 0; i < names.length; i++) {
-    if (
-      userTaskInstance.referenceName &&
+    let name = names[i].referenceName.like.toLowerCase();
+    name = name.substring(1, name.length-1);
+
+    if(userTaskInstance.referenceName &&
       userTaskInstance.referenceName
         .toLowerCase()
-        .indexOf(
-          names[i].referenceName.like.toLowerCase()
-        ) > -1
-    ) {
-      return true
+        .includes(name)) {
+      return true;
     }
   }
+
+  return false;
 }
 
 const checkTaskAssignment = (userTaskInstance, assignments) => {
