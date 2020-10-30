@@ -4479,7 +4479,7 @@ exports[`Jobs management table component tests Snapshot with default props 1`] =
                                 <time
                                   dateTime={"2020-08-27T03:35:50.147Z"}
                                 >
-                                  in 2 months
+                                  3 months ago
                                 </time>
                               </t>
                             </td>
@@ -5611,7 +5611,7 @@ exports[`Jobs management table component tests Snapshot with default props 1`] =
                                 <time
                                   dateTime={"2020-08-27T04:35:54.631Z"}
                                 >
-                                  2 months
+                                  3 months
                                 </time>
                               </t>
                             </td>
@@ -5746,7 +5746,7 @@ exports[`Jobs management table component tests Snapshot with default props 1`] =
                                 <time
                                   dateTime={"2020-08-27T03:35:54.635Z"}
                                 >
-                                  in 2 months
+                                  3 months ago
                                 </time>
                               </t>
                             </td>
@@ -6957,7 +6957,7 @@ exports[`Jobs management table component tests Snapshot with default props 1`] =
                                 <time
                                   dateTime={"2020-08-27T04:35:54.631Z"}
                                 >
-                                  2 months
+                                  3 months
                                 </time>
                               </t>
                             </td>
@@ -7092,7 +7092,7 @@ exports[`Jobs management table component tests Snapshot with default props 1`] =
                                 <time
                                   dateTime={"2020-08-27T03:35:54.635Z"}
                                 >
-                                  in 2 months
+                                  3 months ago
                                 </time>
                               </t>
                             </td>

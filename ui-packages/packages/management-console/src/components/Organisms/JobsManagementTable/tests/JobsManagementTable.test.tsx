@@ -7,7 +7,7 @@ import * as Utils from '../../../../utils/Utils';
 import axios from 'axios';
 import { refetchContext } from '../../../contexts';
 jest.mock('axios');
-Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
+Date.now = jest.fn(() => new Date(Date.UTC(2020, 10, 30)).valueOf());
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 const MockedTableHeader = (): React.ReactElement => {
