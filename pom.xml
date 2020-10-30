@@ -24,8 +24,6 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
 
-    <version.org.infinispan.image>10.1.5.Final</version.org.infinispan.image>
-
     <!-- external containers used for testing -->
     <container.image.infinispan>quay.io/infinispan/server:${version.org.infinispan.image}</container.image.infinispan>
     <!-- internal containers used for testing (built by maven using quarkus-container-image-jib) -->
