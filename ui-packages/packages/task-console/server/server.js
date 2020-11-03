@@ -138,7 +138,7 @@ const resolvers = {
       if (args['orderBy']) {
         result = _.orderBy(
           result,
-          _.keys(args['orderBy']).map(key => key.toLowerCase()),
+          _.keys(args['orderBy']).map(key => key),
           _.values(args['orderBy']).map(value => value.toLowerCase())
         );
       }
