@@ -132,7 +132,6 @@ exports[`ProcessBulkModal component tests snapshot testing 1`] = `
         },
       }
     }
-    type="processList"
   />
   <TextContent>
     <Text>

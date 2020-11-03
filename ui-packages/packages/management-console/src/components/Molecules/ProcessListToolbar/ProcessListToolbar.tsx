@@ -66,14 +66,11 @@ export interface ProcessInstanceBulkList {
     'id' | 'processId' | 'serviceUrl' | 'state'
   >;
 }
-export interface JobsBulkList {
-  [key: string]: GraphQL.Job;
-}
 
 interface IOperationResult {
-  successInstances: ProcessInstanceBulkList | JobsBulkList;
-  failedInstances: ProcessInstanceBulkList | JobsBulkList;
-  ignoredInstances: ProcessInstanceBulkList | JobsBulkList;
+  successInstances: ProcessInstanceBulkList;
+  failedInstances: ProcessInstanceBulkList;
+  ignoredInstances: ProcessInstanceBulkList;
 }
 interface IOperationMessages {
   successMessage: string;

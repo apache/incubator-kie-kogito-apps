@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, Button, TextContent, Text } from '@patternfly/react-core';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/common';
-import ProcessListBulkInstances from '../ProcessListBulkInstances/ProcessListBulkInstances';
-import { IOperation } from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
+import JobsBulkList from '../JobsBulkList/JobsBulkList';
+import { IJobOperation } from '../../Templates/JobsManagementPage/JobsManagementPage';
 
 interface IOwnProps {
   actionType: string;
@@ -10,7 +10,7 @@ interface IOwnProps {
   modalContent: string;
   handleModalToggle: () => void;
   isModalOpen: boolean;
-  jobOperations?: IOperation;
+  jobOperations?: IJobOperation;
 }
 const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
   actionType,
@@ -47,7 +47,7 @@ const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
           <Text>{modalContent}</Text>
         </TextContent>
       ) : (
-        <ProcessListBulkInstances operationResult={jobOperations} type="job" />
+        <JobsBulkList operationResult={jobOperations} />
       )}
     </Modal>
   );

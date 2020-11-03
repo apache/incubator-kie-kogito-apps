@@ -10,15 +10,15 @@ const jobOperation = {
       successMessage: 'Cancel Jobs',
       ignoredMessage:
         'These jobs were ignored because they were executed or canceled',
-      noProcessMessage: 'No jobs were canceled'
+      noJobsMessage: 'No jobs were canceled'
     },
     functions: {
       perform: jest.fn()
     },
     results: {
-      successInstances: {},
-      failedInstances: {},
-      IgnoredInstances: {}
+      successJobs: {},
+      failedJobs: {},
+      IgnoredJobs: {}
     }
   }
 };

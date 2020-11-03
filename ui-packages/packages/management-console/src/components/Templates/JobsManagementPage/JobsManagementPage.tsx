@@ -44,6 +44,40 @@ enum JobOperationType {
   CANCEL = 'CANCEL'
 }
 
+export interface JobsBulkList {
+  [key: string]: GraphQL.Job;
+}
+
+interface IJobOperationResult {
+  successJobs: JobsBulkList;
+  failedJobs: JobsBulkList;
+  ignoredJobs: JobsBulkList;
+}
+interface IJobOperationMessages {
+  successMessage: string;
+  warningMessage?: string;
+  ignoredMessage: string;
+  noJobsMessage: string;
+}
+
+interface IJobOperationFunctions {
+  perform: () => void;
+}
+
+interface IJobOperationResults {
+  [key: string]: IJobOperationResult;
+}
+
+export interface IJobOperation {
+  results: IJobOperationResult;
+  messages: IJobOperationMessages;
+  functions: IJobOperationFunctions;
+}
+
+interface IOperations {
+  [key: string]: IJobOperation;
+}
+
 const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const defaultStatus: GraphQL.JobStatus[] = [GraphQL.JobStatus.Scheduled];
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
@@ -69,19 +103,21 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [selectedJobInstances, setSelectedJobInstances] = useState<
     GraphQL.Job[]
   >([]);
-  const [jobOperationResults, setJobOperationResults] = useState({
+  const [jobOperationResults, setJobOperationResults] = useState<
+    IJobOperationResults
+  >({
     CANCEL: {
-      successInstances: {},
-      failedInstances: {},
-      ignoredInstances: {}
+      successJobs: {},
+      failedJobs: {},
+      ignoredJobs: {}
     }
   });
-  const jobOperations = {
+  const jobOperations: IOperations = {
     CANCEL: {
       results: jobOperationResults[JobOperationType.CANCEL],
       messages: {
-        successMessage: 'Cancel jobs: ',
-        noProcessMessage: 'No jobs were canceled',
+        successMessage: 'Canceled jobs: ',
+        noJobsMessage: 'No jobs were canceled',
         warningMessage:
           'Note: The job status has been updated. The list may appear inconsistent until you refresh any applied filters.',
         ignoredMessage:
@@ -89,29 +125,29 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
       },
       functions: {
         perform: async () => {
-          const ignoredInstances = {};
-          const remainingInstances = selectedJobInstances.filter(job => {
+          const ignoredJobs = {};
+          const remainingJobs = selectedJobInstances.filter(job => {
             if (
               job.status === GraphQL.JobStatus.Canceled ||
               job.status === GraphQL.JobStatus.Executed
             ) {
-              ignoredInstances[job.id] = job;
+              ignoredJobs[job.id] = job;
             } else {
               return true;
             }
           });
           await performMultipleCancel(
-            remainingInstances,
-            (successInstances, failedInstances) => {
+            remainingJobs,
+            (successJobs, failedJobs) => {
               setModalTitle(setTitle('success', 'Job Cancel'));
               setModalContent('');
               setJobOperationResults({
                 ...jobOperationResults,
                 [JobOperationType.CANCEL]: {
                   ...jobOperationResults[JobOperationType.CANCEL],
-                  successInstances,
-                  failedInstances,
-                  ignoredInstances
+                  successJobs,
+                  failedJobs,
+                  ignoredJobs
                 }
               });
               handleCancelModalToggle();

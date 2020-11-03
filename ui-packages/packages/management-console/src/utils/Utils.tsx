@@ -16,10 +16,10 @@ import ProcessInstance = GraphQL.ProcessInstance;
 import JobStatus = GraphQL.JobStatus;
 import {
   ProcessInstanceBulkList,
-  OperationType,
-  JobsBulkList
+  OperationType
 } from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
 import { Title, TitleSizes } from '@patternfly/react-core';
+import { JobsBulkList } from '../components/Templates/JobsManagementPage/JobsManagementPage';
 
 export interface TriggerableNode {
   id: number;
@@ -414,21 +414,21 @@ export const jobCancel = async (
 export const performMultipleCancel = async (
   jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
   multiActionResult: (
-    successInstances: JobsBulkList,
-    failedInstances: JobsBulkList
+    successJobs: JobsBulkList,
+    failedJobs: JobsBulkList
   ) => void
 ) => {
-  const successInstances = {};
-  const failedInstances = {};
+  const successJobs = {};
+  const failedJobs = {};
   for (const job of jobsToBeActioned) {
     try {
       await axios.delete(`${job.endpoint}/${job.id}`);
-      successInstances[job.id] = job;
+      successJobs[job.id] = job;
     } catch (error) {
       job.errorMessage = error.errorMessage;
-      failedInstances[job.id] = job;
-      failedInstances[job.id].errorMessage = JSON.stringify(error.message);
+      failedJobs[job.id] = job;
+      failedJobs[job.id].errorMessage = JSON.stringify(error.message);
     }
   }
-  multiActionResult(successInstances, failedInstances);
+  multiActionResult(successJobs, failedJobs);
 };

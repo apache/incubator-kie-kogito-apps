@@ -675,14 +675,14 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
               },
               "messages": Object {
                 "ignoredMessage": "These jobs were ignored because they were already canceled or executed.",
-                "noProcessMessage": "No jobs were canceled",
-                "successMessage": "Cancel jobs: ",
+                "noJobsMessage": "No jobs were canceled",
+                "successMessage": "Canceled jobs: ",
                 "warningMessage": "Note: The job status has been updated. The list may appear inconsistent until you refresh any applied filters.",
               },
               "results": Object {
-                "failedInstances": Object {},
-                "ignoredInstances": Object {},
-                "successInstances": Object {},
+                "failedJobs": Object {},
+                "ignoredJobs": Object {},
+                "successJobs": Object {},
               },
             }
           }
