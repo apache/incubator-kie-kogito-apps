@@ -97,7 +97,8 @@ const props1 = {
       perform: jest.fn(),
       changeProcessStatus: jest.fn()
     }
-  }
+  },
+  type: 'processList'
 };
 
 const props2 = {
@@ -153,7 +154,8 @@ const props2 = {
       perform: jest.fn(),
       changeProcessStatus: jest.fn()
     }
-  }
+  },
+  type: 'processList'
 };
 
 const props3 = {
@@ -213,7 +215,8 @@ const props3 = {
       perform: jest.fn(),
       changeProcessStatus: jest.fn()
     }
-  }
+  },
+  type: 'processList'
 };
 
 const props4 = {
@@ -354,7 +357,46 @@ const props4 = {
       perform: jest.fn(),
       changeProcessStatus: jest.fn()
     }
-  }
+  },
+  type: 'processList'
+};
+
+const props5 = {
+  operationResult: {
+    messages: {
+      successMessage: 'Canceled',
+      ignoredMessage:
+        'These jobs were ignored because they were executed or canceled',
+      noProcessMessage: 'No jobs were canceled'
+    },
+    results: {
+      successInstances: {
+        'dad3aa88-5c1e-4858-a919-6123c675a0fa_0': {
+          callbackEndpoint:
+            'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+          endpoint: 'http://localhost:4000/jobs',
+          expirationTime: '2020-08-27T04:35:54.631Z',
+          id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+          lastUpdate: '2020-08-27T03:35:54.635Z',
+          priority: 0,
+          processId: 'travels',
+          processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+          repeatInterval: null,
+          repeatLimit: null,
+          retries: 0,
+          rootProcessId: '',
+          scheduledId: null,
+          status: GraphQL.JobStatus.Scheduled
+        }
+      },
+      failedInstances: {},
+      ignoredInstances: {}
+    },
+    functions: {
+      perform: jest.fn()
+    }
+  },
+  type: 'job'
 };
 
 describe('ProcessBulkList component tests', () => {
@@ -372,6 +414,10 @@ describe('ProcessBulkList component tests', () => {
   });
   it('snapshot testing for a single abort instance', () => {
     const wrapper = shallow(<ProcessListBulkInstances {...props4} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+  it('snapshot testing multi-cancel', () => {
+    const wrapper = shallow(<ProcessListBulkInstances {...props5} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

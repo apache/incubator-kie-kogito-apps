@@ -63,7 +63,10 @@ const ProcessListModal: React.FC<IOwnProps & OUIAProps> = ({
       {...componentOuiaProps(ouiaId, 'process-list-modal', ouiaSafe)}
     >
       {operationResult !== undefined && (
-        <ProcessListBulkInstances operationResult={operationResult} />
+        <ProcessListBulkInstances
+          operationResult={operationResult}
+          type="processList"
+        />
       )}
       <TextContent>
         <Text>{createBoldText(modalContent, processName)}</Text>

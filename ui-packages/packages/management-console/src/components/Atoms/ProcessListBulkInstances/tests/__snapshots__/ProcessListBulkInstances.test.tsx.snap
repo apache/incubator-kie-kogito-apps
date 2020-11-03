@@ -240,3 +240,34 @@ exports[`ProcessBulkList component tests snapshot testing multi-abort with no sk
   </TextContent>
 </div>
 `;
+
+exports[`ProcessBulkList component tests snapshot testing multi-cancel 1`] = `
+<div
+  data-ouia-component-type="process-list-bulk-instances"
+  data-ouia-safe={true}
+>
+  <TextContent>
+    <Text
+      component="h2"
+    >
+      Canceled
+    </Text>
+    <TextList>
+      <TextListItem
+        key="dad3aa88-5c1e-4858-a919-6123c675a0fa_0"
+      >
+        <strong>
+          <ItemDescriptor
+            itemDescription={
+              Object {
+                "id": "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                "name": "travels",
+              }
+            }
+          />
+        </strong>
+      </TextListItem>
+    </TextList>
+  </TextContent>
+</div>
+`;

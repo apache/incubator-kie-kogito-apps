@@ -14,16 +14,30 @@ import {
   GraphQL
 } from '@kogito-apps/common';
 import { IOperation } from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
-import { getProcessInstanceDescription } from '../../../utils/Utils';
+import {
+  getProcessInstanceDescription,
+  getJobsDescription
+} from '../../../utils/Utils';
 
 interface IOwnProps {
   operationResult: IOperation;
+  type: string;
 }
+
 const ProcessListBulkInstances: React.FC<IOwnProps & OUIAProps> = ({
   operationResult,
+  type,
   ouiaId,
   ouiaSafe
 }) => {
+  const getItemDescription = item => {
+    if (type === 'processList') {
+      return getProcessInstanceDescription(item);
+    } else if (type === 'job') {
+      return getJobsDescription(item);
+    }
+  };
+
   return (
     <div
       {...componentOuiaProps(ouiaId, 'process-list-bulk-instances', ouiaSafe)}
@@ -36,14 +50,12 @@ const ProcessListBulkInstances: React.FC<IOwnProps & OUIAProps> = ({
             </Text>
             <TextList>
               {Object.entries(operationResult.results.successInstances).map(
-                (process: [string, GraphQL.ProcessInstance]) => {
+                (item: [string, GraphQL.ProcessInstance | GraphQL.Job]) => {
                   return (
-                    <TextListItem key={process[0]}>
+                    <TextListItem key={item[0]}>
                       <strong>
                         <ItemDescriptor
-                          itemDescription={getProcessInstanceDescription(
-                            process[1]
-                          )}
+                          itemDescription={getItemDescription(item[1])}
                         />
                       </strong>
                     </TextListItem>
@@ -80,14 +92,12 @@ const ProcessListBulkInstances: React.FC<IOwnProps & OUIAProps> = ({
             </Text>
             <TextList>
               {Object.entries(operationResult.results.ignoredInstances).map(
-                (process: [string, GraphQL.ProcessInstance]) => {
+                (item: [string, GraphQL.ProcessInstance | GraphQL.Job]) => {
                   return (
-                    <TextListItem key={process[0]}>
+                    <TextListItem key={item[0]}>
                       <strong>
                         <ItemDescriptor
-                          itemDescription={getProcessInstanceDescription(
-                            process[1]
-                          )}
+                          itemDescription={getItemDescription(item[1])}
                         />
                       </strong>
                     </TextListItem>
@@ -105,22 +115,15 @@ const ProcessListBulkInstances: React.FC<IOwnProps & OUIAProps> = ({
             <Text component={TextVariants.h2}>Errors:</Text>
             <TextList>
               {Object.entries(operationResult.results.failedInstances).map(
-                (
-                  process: [
-                    string,
-                    GraphQL.ProcessInstance & { errorMessage?: string }
-                  ]
-                ) => {
+                (item: [string, GraphQL.ProcessInstance | GraphQL.Job]) => {
                   return (
-                    <TextListItem key={process[0]}>
+                    <TextListItem key={item[0]}>
                       <strong>
                         <ItemDescriptor
-                          itemDescription={getProcessInstanceDescription(
-                            process[1]
-                          )}
+                          itemDescription={getItemDescription(item[1])}
                         />
                       </strong>{' '}
-                      -{process[1].errorMessage}
+                      -{item[1]['errorMessage']}
                     </TextListItem>
                   );
                 }

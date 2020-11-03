@@ -16,7 +16,8 @@ import ProcessInstance = GraphQL.ProcessInstance;
 import JobStatus = GraphQL.JobStatus;
 import {
   ProcessInstanceBulkList,
-  OperationType
+  OperationType,
+  JobsBulkList
 } from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
 import { Title, TitleSizes } from '@patternfly/react-core';
 
@@ -299,6 +300,13 @@ export const getProcessInstanceDescription = (
   };
 };
 
+export const getJobsDescription = (job: GraphQL.Job) => {
+  return {
+    id: job.id,
+    name: job.processId
+  };
+};
+
 // function containing Api call to update process variables
 export const handleVariableUpdate = async (
   processInstance: Pick<ProcessInstance, 'id' | 'endpoint'>,
@@ -401,4 +409,26 @@ export const jobCancel = async (
     onJobCancelFailure(JSON.stringify(error.message));
     refetch();
   }
+};
+
+export const performMultipleCancel = async (
+  jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
+  multiActionResult: (
+    successInstances: JobsBulkList,
+    failedInstances: JobsBulkList
+  ) => void
+) => {
+  const successInstances = {};
+  const failedInstances = {};
+  for (const job of jobsToBeActioned) {
+    try {
+      await axios.delete(`${job.endpoint}/${job.id}`);
+      successInstances[job.id] = job;
+    } catch (error) {
+      job.errorMessage = error.errorMessage;
+      failedInstances[job.id] = job;
+      failedInstances[job.id].errorMessage = JSON.stringify(error.message);
+    }
+  }
+  multiActionResult(successInstances, failedInstances);
 };
