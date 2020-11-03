@@ -12,6 +12,18 @@
   <name>Kogito :: Explainability</name>
   <packaging>pom</packaging>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-bom</artifactId>
+        <version>${version.io.quarkus}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
   <modules>
     <module>explainability-api</module>
     <module>explainability-core</module>
