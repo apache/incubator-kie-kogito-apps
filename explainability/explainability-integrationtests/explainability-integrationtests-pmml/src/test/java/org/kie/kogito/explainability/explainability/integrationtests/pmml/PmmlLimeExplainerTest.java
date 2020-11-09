@@ -100,13 +100,13 @@ class PmmlLimeExplainerTest {
                 assertEquals(1d, v);
             }
             int topK = 1;
-            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK, 10);
             for (int i = 1; i <= topK; i++) {
                 for (String decision : stability.getDecisions()) {
                     double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.6);
+                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
                     double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.6);
+                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
                 }
             }
         }
@@ -145,7 +145,7 @@ class PmmlLimeExplainerTest {
             assertEquals(1d, v);
         }
         int topK = 1;
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK, 10);
         for (int i = 1; i <= topK; i++) {
             for (String decision : stability.getDecisions()) {
                 double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
@@ -196,7 +196,7 @@ class PmmlLimeExplainerTest {
             assertEquals(0.33d, v, 1e-2);
         }
         int topK = 1;
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK, 10);
         for (int i = 1; i <= topK; i++) {
             for (String decision : stability.getDecisions()) {
                 double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
@@ -247,7 +247,7 @@ class PmmlLimeExplainerTest {
                 assertEquals(1d, v);
             }
             int topK = 1;
-            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK, 10);
             for (int i = 1; i <= topK; i++) {
                 for (String decision : stability.getDecisions()) {
                     double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);

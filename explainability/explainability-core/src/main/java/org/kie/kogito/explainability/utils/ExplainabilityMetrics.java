@@ -149,19 +149,17 @@ public class ExplainabilityMetrics {
      * @param saliencyLocalExplainer a local saliency explainer
      * @param topK no. of top k positive/negative features for which stability report will be generated
      * @return a report about stability of all the decisions/predictions (and for each {@code k < topK})
-     * @throws InterruptedException
-     * @throws ExecutionException
-     * @throws TimeoutException
      */
     public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, PredictionInput input,
-                                                                   LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer, int topK)
+                                                                   LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
+                                                                   int topK, int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
         PredictionOutput predictionOutput = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()).get(0);
         Prediction prediction = new Prediction(input, predictionOutput);
         Map<String,List<Saliency>> saliencies = new HashMap<>();
         int skipped = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < runs; i++) {
             Map<String, Saliency> saliencyMap = saliencyLocalExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Map.Entry<String, Saliency> saliencyEntry : saliencyMap.entrySet()) {

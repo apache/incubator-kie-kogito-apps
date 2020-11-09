@@ -99,7 +99,7 @@ class OpenNLPLimeExplainerTest {
                 assertEquals(1d, i1);
             }
             int topK = 2;
-            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK, 10);
             for (int i = 1; i <= topK; i++) {
                 for (String decision : stability.getDecisions()) {
                     double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);

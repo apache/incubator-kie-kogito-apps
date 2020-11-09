@@ -78,7 +78,7 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
-        LimeExplainer limeExplainer = new LimeExplainer(1000, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
@@ -90,15 +90,15 @@ class FraudScoringDmnLimeExplainerTest {
                 assertThat(v).isPositive(); // checks the drop of important features triggers a flipped prediction (or a significant drop in the output score).
             }
         }
-//        int topK = 1;
-//        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, predictionInput, limeExplainer, topK);
-//        for (int i = 1; i <= topK; i++) {
-//            for (String decision : stability.getDecisions()) {
-//                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-//                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.6);
-//                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-//                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.6);
-//            }
-//        }
+        int topK = 1;
+        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, predictionInput, limeExplainer, topK, 10);
+        for (int i = 1; i <= topK; i++) {
+            for (String decision : stability.getDecisions()) {
+                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
+                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
+                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
+            }
+        }
     }
 }
