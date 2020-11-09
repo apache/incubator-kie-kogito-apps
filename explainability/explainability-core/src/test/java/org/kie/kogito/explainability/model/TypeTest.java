@@ -294,6 +294,27 @@ class TypeTest {
         }
     }
 
+    @Test
+    void testEncodeNumericSymmetric() {
+        for (int seed = 0; seed < 5; seed++) {
+            Random random = new Random();
+            random.setSeed(seed);
+            PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
+            Value<?> target = Type.NUMBER.randomValue(perturbationContext);
+            Value<?>[] values = new Value<?>[6];
+            for (int i = 0; i < values.length / 2; i++) {
+                values[i] = new Value<>(target.asNumber() + target.asNumber() * (1 + i) / 100d);
+                values[values.length - 1 - i] = new Value<>(target.asNumber() - target.asNumber() * (1 + i) / 100d);
+            }
+            List<double[]> vectors = Type.NUMBER.encode(target, values);
+            assertNotNull(vectors);
+            assertEquals(values.length, vectors.size());
+            for (int i = 0; i < vectors.size() / 2; i++) {
+                assertEquals(vectors.get(i)[0], vectors.get(vectors.size() - 1 - i)[0]);
+            }
+        }
+    }
+
     @ParameterizedTest
     @EnumSource
     void testRandomValue(Type type) {

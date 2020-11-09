@@ -38,7 +38,9 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.pmml.api.runtime.PMMLRuntime;
+import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.explainability.explainability.integrationtests.pmml.AbstractPMMLTest.getPMMLRuntime;
@@ -97,6 +99,16 @@ class PmmlLimeExplainerTest {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(2));
                 assertEquals(1d, v);
             }
+            int topK = 1;
+            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+            for (int i = 1; i <= topK; i++) {
+                for (String decision : stability.getDecisions()) {
+                    double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
+                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.6);
+                    double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.6);
+                }
+            }
         }
     }
 
@@ -107,7 +119,7 @@ class PmmlLimeExplainerTest {
         features.add(FeatureFactory.newCategoricalFeature("mapY", "classB"));
         PredictionInput input = new PredictionInput(features);
 
-        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(500, 1);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput input1 : inputs) {
@@ -132,6 +144,16 @@ class PmmlLimeExplainerTest {
             double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(1));
             assertEquals(1d, v);
         }
+        int topK = 1;
+        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+        for (int i = 1; i <= topK; i++) {
+            for (String decision : stability.getDecisions()) {
+                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
+                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.6);
+                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.6);
+            }
+        }
     }
 
     @Test
@@ -141,7 +163,7 @@ class PmmlLimeExplainerTest {
         features.add(FeatureFactory.newCategoricalFeature("input2", "classB"));
         PredictionInput input = new PredictionInput(features);
 
-        LimeExplainer limeExplainer = new LimeExplainer(10, 1);
+        LimeExplainer limeExplainer = new LimeExplainer(300, 1);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput input1 : inputs) {
@@ -173,6 +195,16 @@ class PmmlLimeExplainerTest {
             double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(1));
             assertEquals(0.33d, v, 1e-2);
         }
+        int topK = 1;
+        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+        for (int i = 1; i <= topK; i++) {
+            for (String decision : stability.getDecisions()) {
+                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
+                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.6);
+                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.6);
+            }
+        }
     }
 
     @Test
@@ -180,7 +212,7 @@ class PmmlLimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(100, 2, random);
+            LimeExplainer limeExplainer = new LimeExplainer(300, 1, random);
             List<Feature> features = new LinkedList<>();
             features.add(FeatureFactory.newNumericalFeature("input1", -50));
             features.add(FeatureFactory.newTextFeature("input2", "classB"));
@@ -213,6 +245,16 @@ class PmmlLimeExplainerTest {
                 assertNotNull(saliency);
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
                 assertEquals(1d, v);
+            }
+            int topK = 1;
+            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, input, limeExplainer, topK);
+            for (int i = 1; i <= topK; i++) {
+                for (String decision : stability.getDecisions()) {
+                    double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
+                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.6);
+                    double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.6);
+                }
             }
         }
     }

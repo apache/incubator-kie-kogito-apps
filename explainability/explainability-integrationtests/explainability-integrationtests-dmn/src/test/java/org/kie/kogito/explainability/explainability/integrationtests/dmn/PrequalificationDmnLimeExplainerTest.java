@@ -32,6 +32,7 @@ import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -43,43 +44,47 @@ import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class LoanEligibilityDmnLimeExplainerTest {
+class PrequalificationDmnLimeExplainerTest {
 
     @Test
-    void testLoanEligibilityDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn")));
+    void testPrequalificationDMNExplanation1() throws ExecutionException, InterruptedException, TimeoutException {
+        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/Prequalification-1.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
-        final String FRAUD_NS = "https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example";
-        final String FRAUD_NAME = "LoanEligibility";
-        DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
+        final String NS = "http://www.trisotech.com/definitions/_f31e1f8e-d4ce-4a3a-ac3b-747efa6b3401";
+        final String NAME = "Prequalification";
+        DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, NS, NAME);
 
-        final Map<String, Object> client = new HashMap<>();
-        client.put("Age", 43);
-        client.put("Salary", 1950);
-        client.put("Existing payments", 100);
-        final Map<String, Object> loan = new HashMap<>();
-        loan.put("Duration", 15);
-        loan.put("Installment", 100);
+        final Map<String, Object> borrower = new HashMap<>();
+        borrower.put("Monthly Other Debt", 1000);
+        borrower.put("Monthly Income", 10000);
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Client", client);
-        contextVariables.put("Loan", loan);
-
-        PredictionProvider model = new DecisionModelWrapper(decisionModel);
+        contextVariables.put("Appraised Value", 500000);
+        contextVariables.put("Loan Amount", 300000);
+        contextVariables.put("Credit Score", 600);
+        contextVariables.put("Borrower", borrower);
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
+
+        PredictionProvider model = new DecisionModelWrapper(decisionModel);
+
+        LimeExplainer limeExplainer = new LimeExplainer(3000, 3);
+
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
-        LimeExplainer limeExplainer = new LimeExplainer(300, 1);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
+            List<FeatureImportance> topFeatures = saliency.getTopFeatures(2);
+            if (!topFeatures.isEmpty()) {
+                assertThat(ExplainabilityMetrics.impactScore(model, prediction, topFeatures)).isPositive();
+            }
         }
+
         int topK = 1;
         LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, predictionInput, limeExplainer, topK);
         for (int i = 1; i <= topK; i++) {

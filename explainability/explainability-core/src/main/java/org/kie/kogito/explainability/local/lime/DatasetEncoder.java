@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,6 +96,24 @@ class DatasetEncoder {
                 pi++;
             }
         }
+//        try {
+//            FileOutputStream fileOutputStream = new FileOutputStream("target/"+originalOutput.getName() + "-"+System.nanoTime()+".csv");
+//            for (Pair<double[], Double> sample : trainingSet) {
+//                StringBuilder builder =  new StringBuilder();
+//                for (double d : sample.getLeft()) {
+//                    if (builder.length() > 0) {
+//                        builder.append(' ');
+//                    }
+//                    builder.append(d);
+//                }
+//                builder.append(' ').append(sample.getRight()).append('\n');
+//                fileOutputStream.write(builder.toString().getBytes(Charset.defaultCharset()));
+//            }
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return trainingSet;
     }
 

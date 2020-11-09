@@ -130,7 +130,7 @@ public enum Type {
     },
 
     NUMBER("number") {
-        private static final double CLUSTER_THRESHOLD = 1e-3;
+        private static final double CLUSTER_THRESHOLD = 1e-1;
 
         @Override
         public Value<?> drop(Value<?> value) {
@@ -150,12 +150,13 @@ public enum Type {
             // sample from a standard normal distribution and center around feature value
             double normalDistributionSample = perturbationContext.getRandom().nextGaussian();
             if (originalFeatureValue != 0d) {
-                normalDistributionSample = normalDistributionSample * originalFeatureValue + originalFeatureValue;
+                double stDev = originalFeatureValue * 0.1; // set std dev at 10% of feature value
+                normalDistributionSample = normalDistributionSample * originalFeatureValue + stDev;
             }
             if (intValue) {
                 normalDistributionSample = (int) normalDistributionSample;
                 if (normalDistributionSample == originalFeatureValue) {
-                    normalDistributionSample = (int) normalDistributionSample * 10d;
+                    normalDistributionSample = (int) normalDistributionSample + 1;
                 }
             }
             return new Value<>(normalDistributionSample);
@@ -164,20 +165,28 @@ public enum Type {
         @Override
         public List<double[]> encode(Value<?> target, Value<?>... values) {
             // find maximum and minimum values
-            double[] doubles = new double[values.length];
+            double[] doubles = new double[values.length + 1];
             int i = 0;
             for (Value<?> v : values) {
                 doubles[i] = v.asNumber();
                 i++;
             }
             double originalValue = target.asNumber();
+            doubles[i] = originalValue; // include target number in feature scaling
             double min = DoubleStream.of(doubles).min().orElse(Double.MIN_VALUE);
             double max = DoubleStream.of(doubles).max().orElse(Double.MAX_VALUE);
-            // feature scaling + kernel based clustering
-            double threshold = DataUtils.gaussianKernel((originalValue - min) / (max - min), 0, 1);
-            List<Double> encodedValues = DoubleStream.of(doubles).map(d -> (d - min) / (max - min))
-                    .map(d -> Double.isNaN(d) ? 1 : d).boxed().map(d -> DataUtils.gaussianKernel(d, 0, 1))
-                    .map(d -> (d - threshold < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
+
+            // feature scaling
+            List<Double> scaledValues = DoubleStream.of(doubles).map(d -> (d - min) / (max - min)).boxed().collect(Collectors.toList());
+            double scaledOriginalValue = scaledValues.remove(i); // extract the scaled original value (it must not appear in encoded values)
+
+            // kernel based clustering
+            double sigma = 1;
+            double threshold = DataUtils.gaussianKernel(scaledOriginalValue, scaledOriginalValue, sigma);
+            List<Double> clusteredValues = scaledValues.stream()
+                    .map(d -> Double.isNaN(d) ? 0 : d).map(d -> DataUtils.gaussianKernel(d, scaledOriginalValue, sigma)).collect(Collectors.toList());
+            List<Double> encodedValues = clusteredValues.stream()
+                    .map(d -> (Math.abs(d - threshold) < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
 
             return encodedValues.stream().map(d -> new double[]{d}).collect(Collectors.toList());
         }
