@@ -77,11 +77,6 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
      */
     private final PerturbationContext perturbationContext;
 
-    /**
-     * Whether the explainer should adapt the variance in the generated (perturbed) data when it's not separable.
-     */
-    private final boolean adaptDatasetVariance;
-
     public LimeExplainer(int noOfSamples, int noOfPerturbations) {
         this(noOfSamples, new PerturbationContext(new SecureRandom(), noOfPerturbations));
     }
@@ -91,15 +86,19 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     }
 
     public LimeExplainer(int noOfSamples, PerturbationContext perturbationContext) {
-        this(noOfSamples, perturbationContext, DEFAULT_NO_OF_RETRIES, false);
+        this(noOfSamples, perturbationContext, DEFAULT_NO_OF_RETRIES);
     }
 
-    public LimeExplainer(int noOfSamples, PerturbationContext perturbationContext, int noOfRetries,
-                         boolean adaptDatasetVariance) {
+    public LimeExplainer(int noOfSamples, PerturbationContext perturbationContext, int noOfRetries) {
         this.noOfSamples = noOfSamples;
         this.perturbationContext = perturbationContext;
         this.noOfRetries = noOfRetries;
-        this.adaptDatasetVariance = adaptDatasetVariance;
+    }
+
+    public LimeExplainer(int noOfSamples, int noOfPerturbations, int noOfRetries, Random random) {
+        this.noOfSamples = noOfSamples;
+        this.perturbationContext = new PerturbationContext(random, noOfPerturbations);
+        this.noOfRetries = noOfRetries;
     }
 
     public int getNoOfSamples() {
@@ -134,9 +133,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 targetInput,
                 linearizedTargetInputFeatures,
                 actualOutputs,
-                noOfRetries,
-                noOfSamples,
-                perturbationContext);
+                noOfRetries);
     }
 
     protected CompletableFuture<Map<String, Saliency>> explainRetryCycle(
@@ -145,9 +142,9 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             PredictionInput targetInput,
             List<Feature> linearizedTargetInputFeatures,
             List<Output> actualOutputs,
-            int noOfRetries, int noOfSamples, PerturbationContext perturbationContext) {
+            int noOfRetries) {
 
-        List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures(), perturbationContext);
+        List<PredictionInput> perturbedInputs = getPerturbedInputs(originalInput.getFeatures());
 
         return model.predictAsync(perturbedInputs)
                 .thenCompose(predictionOutputs -> {
@@ -157,19 +154,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                         return completedFuture(getSaliencies(targetInput, linearizedTargetInputFeatures, actualOutputs, limeInputsList));
                     } catch (DatasetNotSeparableException e) {
                         if (noOfRetries > 0) {
-                            PerturbationContext newPerturbationContext;
-                            int newNoOfSamples;
-                            if (adaptDatasetVariance) {
-                                newPerturbationContext = new PerturbationContext(perturbationContext.getRandom(),
-                                                                                 perturbationContext.getNoOfPerturbations() + 1);
-                                newNoOfSamples = noOfSamples * 2;
-                            } else {
-                                newPerturbationContext = perturbationContext;
-                                newNoOfSamples = noOfSamples;
-                            }
-                            return explainRetryCycle(model, originalInput, targetInput, linearizedTargetInputFeatures,
-                                                     actualOutputs, noOfRetries - 1, newNoOfSamples,
-                                                     newPerturbationContext);
+                            return explainRetryCycle(model, originalInput, targetInput, linearizedTargetInputFeatures, actualOutputs, noOfRetries - 1);
                         }
                         throw e;
                     }
@@ -180,10 +165,10 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
      * Obtain the inputs to the LIME algorithm, for each output in the original prediction.
      *
      * @param linearizedTargetInputFeatures the linarized features
-     * @param actualOutputs                 the list of outputs to generate the explanations for
-     * @param perturbedInputs               the list of perturbed inputs
-     * @param predictionOutputs             the list of outputs associated to each perturbed input
-     * @param strict                        whether accepting unique values for a given output in the {@code perturbedOutputs}
+     * @param actualOutputs the list of outputs to generate the explanations for
+     * @param perturbedInputs the list of perturbed inputs
+     * @param predictionOutputs the list of outputs associated to each perturbed input
+     * @param strict whether accepting unique values for a given output in the {@code perturbedOutputs}
      * @return a list of inputs to the LIME algorithm
      */
     private List<LimeInputs> getLimeInputs(List<Feature> linearizedTargetInputFeatures,
@@ -266,6 +251,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             if (strict) {
                 // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
                 if (rawClassesBalance.size() > 1 && separationRatio < SEPARABLE_DATASET_RATIO) {
+
                     // if dataset creation process succeeds use it to train the linear model
                     return new LimeInputs(classification, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
                 } else {
@@ -296,7 +282,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         return rawClassesBalance;
     }
 
-    private List<PredictionInput> getPerturbedInputs(List<Feature> features, PerturbationContext perturbationContext) {
+    private List<PredictionInput> getPerturbedInputs(List<Feature> features) {
         List<PredictionInput> perturbedInputs = new LinkedList<>();
         // as per LIME paper, the dataset size should be at least |features|^2
         double perturbedDataSize = Math.max(noOfSamples, Math.pow(2, features.size()));
