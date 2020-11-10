@@ -18,6 +18,8 @@ import {
   ProcessInstanceBulkList,
   OperationType
 } from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
+import { Title, TitleSizes } from '@patternfly/react-core';
+import { JobsBulkList } from '../components/Templates/JobsManagementPage/JobsManagementPage';
 
 export interface TriggerableNode {
   id: number;
@@ -125,28 +127,33 @@ export const setTitle = (
   titleStatus: string,
   titleText: string
 ): JSX.Element => {
+  let icon = null;
+
   switch (titleStatus) {
     case 'success':
-      return (
-        <>
-          <InfoCircleIcon
-            className="pf-u-mr-sm"
-            color="var(--pf-global--info-color--100)"
-          />{' '}
-          {titleText}{' '}
-        </>
+      icon = (
+        <InfoCircleIcon
+          className="pf-u-mr-sm"
+          color="var(--pf-global--info-color--100)"
+        />
       );
+      break;
     case 'failure':
-      return (
-        <>
-          <InfoCircleIcon
-            className="pf-u-mr-sm"
-            color="var(--pf-global--danger-color--100)"
-          />{' '}
-          {titleText}{' '}
-        </>
+      icon = (
+        <InfoCircleIcon
+          className="pf-u-mr-sm"
+          color="var(--pf-global--danger-color--100)"
+        />
       );
+      break;
   }
+
+  return (
+    <Title headingLevel="h1" size={TitleSizes['2xl']}>
+      {icon}
+      <span>{titleText}</span>
+    </Title>
+  );
 };
 
 export const handleSkip = async (
@@ -293,6 +300,13 @@ export const getProcessInstanceDescription = (
   };
 };
 
+export const getJobsDescription = (job: GraphQL.Job) => {
+  return {
+    id: job.id,
+    name: job.processId
+  };
+};
+
 // function containing Api call to update process variables
 export const handleVariableUpdate = async (
   processInstance: Pick<ProcessInstance, 'id' | 'endpoint'>,
@@ -343,12 +357,13 @@ export const handleJobReschedule = async (
   try {
     await axios.patch(`${job.endpoint}/${job.id}`, parameter).then(res => {
       setRescheduleClicked(!rescheduleClicked);
+      refetch();
     });
   } catch (error) {
     setRescheduleClicked(!rescheduleClicked);
     setErrorMessage(error.message);
+    refetch();
   }
-  refetch();
 };
 
 export const handleNodeTrigger = async (
@@ -378,4 +393,46 @@ export const getTriggerableNodes = async (
   } catch (error) {
     return [];
   }
+};
+
+export const jobCancel = async (
+  job: Pick<GraphQL.Job, 'id' | 'endpoint'>,
+  setModalTitle: (title: JSX.Element) => void,
+  setModalContent: (content: string) => void,
+  refetch
+) => {
+  try {
+    await axios.delete(`${job.endpoint}/${job.id}`);
+    setModalTitle(setTitle('success', 'Job cancel'));
+    setModalContent(`The job: ${job.id} is canceled successfully`);
+    refetch();
+  } catch (error) {
+    setModalTitle(setTitle('failure', 'Job cancel'));
+    setModalContent(
+      `The job: ${job.id} failed to cancel. Error message: ${error.message}`
+    );
+    refetch();
+  }
+};
+
+export const performMultipleCancel = async (
+  jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
+  multiActionResult: (
+    successJobs: JobsBulkList,
+    failedJobs: JobsBulkList
+  ) => void
+) => {
+  const successJobs = {};
+  const failedJobs = {};
+  for (const job of jobsToBeActioned) {
+    try {
+      await axios.delete(`${job.endpoint}/${job.id}`);
+      successJobs[job.id] = job;
+    } catch (error) {
+      job.errorMessage = error.errorMessage;
+      failedJobs[job.id] = job;
+      failedJobs[job.id].errorMessage = JSON.stringify(error.message);
+    }
+  }
+  multiActionResult(successJobs, failedJobs);
 };

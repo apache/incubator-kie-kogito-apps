@@ -16,7 +16,6 @@
 
 export interface IFormAction {
   name: string;
-  primary?: boolean;
 
   execute?(): void;
 }

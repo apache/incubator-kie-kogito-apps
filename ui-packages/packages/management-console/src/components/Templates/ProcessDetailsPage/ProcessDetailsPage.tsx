@@ -29,6 +29,7 @@ import {
   OUIAProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
@@ -81,6 +82,13 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
     variables: { id },
     fetchPolicy: 'network-only'
   });
+
+  const getJobs = GraphQL.useGetJobsByProcessInstanceIdQuery({
+    variables: {
+      processInstanceId: id
+    }
+  });
+
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -503,21 +511,40 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
                     direction={{ default: 'column' }}
                     flex={{ default: 'flex_1' }}
                   >
-                    <FlexItem>
-                      <ProcessDetailsTimeline data={data.ProcessInstances[0]} />
-                    </FlexItem>
-                    <FlexItem>
-                      <ProcessDetailsJobsPanel processInstanceId={id} />
-                    </FlexItem>
-                    {data.ProcessInstances[0].addons.includes(
-                      'process-management'
-                    ) && (
+                    {!getJobs.loading && (
                       <FlexItem>
-                        <ProcessDetailsNodeTrigger
-                          processInstanceData={data.ProcessInstances[0]}
+                        <ProcessDetailsTimeline
+                          data={data.ProcessInstances[0]}
+                          jobsResponse={_.pick(getJobs, [
+                            'data',
+                            'loading',
+                            'refetch'
+                          ])}
                         />
                       </FlexItem>
                     )}
+                    <FlexItem>
+                      <ProcessDetailsJobsPanel
+                        jobsResponse={_.pick(getJobs, [
+                          'data',
+                          'loading',
+                          'refetch'
+                        ])}
+                      />
+                    </FlexItem>
+                    {data.ProcessInstances[0].addons.includes(
+                      'process-management'
+                    ) &&
+                      data.ProcessInstances[0].state !==
+                        GraphQL.ProcessInstanceState.Completed &&
+                      data.ProcessInstances[0].state !==
+                        GraphQL.ProcessInstanceState.Aborted && (
+                        <FlexItem>
+                          <ProcessDetailsNodeTrigger
+                            processInstanceData={data.ProcessInstances[0]}
+                          />
+                        </FlexItem>
+                      )}
                   </Flex>
                   {errorModal()}
                   {RenderConfirmationModal()}

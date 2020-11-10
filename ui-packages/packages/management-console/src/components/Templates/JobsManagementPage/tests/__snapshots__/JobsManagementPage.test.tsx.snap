@@ -1,0 +1,696 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Jobs management page tests mock data with empty response 1`] = `
+<JobsManagementPage>
+  <Redirect
+    to={
+      Object {
+        "pathname": "/NoData",
+        "state": Object {
+          "buttonText": "Go to process instance",
+          "description": "There are no jobs associated with any process instance.",
+          "prev": "/ProcessInstances",
+          "title": "Jobs not found",
+        },
+      }
+    }
+  >
+    <Lifecycle
+      onMount={[Function]}
+      onUpdate={[Function]}
+      to={
+        Object {
+          "pathname": "/NoData",
+          "state": Object {
+            "buttonText": "Go to process instance",
+            "description": "There are no jobs associated with any process instance.",
+            "prev": "/ProcessInstances",
+            "title": "Jobs not found",
+          },
+        }
+      }
+    />
+  </Redirect>
+</JobsManagementPage>
+`;
+
+exports[`Jobs management page tests mock data with error response 1`] = `
+<JobsManagementPage>
+  <div
+    data-ouia-component-type="JobsManagementPage"
+    data-ouia-safe={true}
+  >
+    <ServerErrors
+      error={
+        [Error: Network error: Error writing result to store for query:
+ {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAllJobs"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"values"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"JobStatus"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Jobs"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"status"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"values"}}}]}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"processId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"processInstanceId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"rootProcessId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"status"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"expirationTime"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"priority"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"callbackEndpoint"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"repeatInterval"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"repeatLimit"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"scheduledId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"retries"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"lastUpdate"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"endpoint"},"arguments":[],"directives":[]}]}}]}}],"loc":{"start":0,"end":383}}
+Cannot read property 'Jobs' of null]
+      }
+      variant="large"
+    >
+      <MockedServerErrors />
+    </ServerErrors>
+  </div>
+</JobsManagementPage>
+`;
+
+exports[`Jobs management page tests snapshot test with mock data 1`] = `
+<JobsManagementPage>
+  <div
+    data-ouia-component-type="JobsManagementPage"
+    data-ouia-safe={true}
+  >
+    <PageSection
+      variant="light"
+    >
+      <section
+        className="pf-c-page__main-section pf-m-light"
+      >
+        <PageTitle
+          title="Jobs Management"
+        >
+          <Title
+            data-ouia-component-type="page-title"
+            data-ouia-safe={true}
+            headingLevel="h1"
+            size="4xl"
+          >
+            <h1
+              className="pf-c-title pf-m-4xl"
+              data-ouia-component-type="page-title"
+              data-ouia-safe={true}
+            >
+              Jobs Management
+            </h1>
+          </Title>
+        </PageTitle>
+        <Breadcrumb>
+          <MockedBreadcrumb />
+        </Breadcrumb>
+      </section>
+    </PageSection>
+    <PageSection>
+      <section
+        className="pf-c-page__main-section"
+      >
+        <Toolbar
+          className="pf-m-toggle-group-container"
+          clearAllFilters={[Function]}
+          clearFiltersButtonText="Reset to default"
+          collapseListedFiltersBreakpoint="md"
+          id="data-toolbar-with-chip-groups"
+        >
+          <div
+            className="pf-c-toolbar pf-m-toggle-group-container"
+            id="data-toolbar-with-chip-groups"
+          >
+            <ToolbarContent
+              isExpanded={false}
+              showClearFiltersButton={false}
+            >
+              <div
+                className="pf-c-toolbar__content"
+              >
+                <div
+                  className="pf-c-toolbar__content-section"
+                >
+                  <JobsManagementFilters
+                    chips={
+                      Array [
+                        "SCHEDULED",
+                      ]
+                    }
+                    selectedStatus={
+                      Array [
+                        "SCHEDULED",
+                      ]
+                    }
+                    setChips={[Function]}
+                    setSelectedStatus={[Function]}
+                    setValues={[Function]}
+                  />
+                  <ForwardRef>
+                    <ToolbarGroupWithRef
+                      innerRef={null}
+                    >
+                      <div
+                        className="pf-c-toolbar__group"
+                      >
+                        <ToolbarItem>
+                          <div
+                            className="pf-c-toolbar__item"
+                          >
+                            <Button
+                              aria-label="Refresh list"
+                              id="refresh-button"
+                              onClick={[Function]}
+                              ouiaId="refresh-button"
+                              variant="plain"
+                            >
+                              <button
+                                aria-disabled={false}
+                                aria-label="Refresh list"
+                                className="pf-c-button pf-m-plain"
+                                data-ouia-component-id="refresh-button"
+                                data-ouia-component-type="PF4/Button"
+                                data-ouia-safe={true}
+                                disabled={false}
+                                id="refresh-button"
+                                onClick={[Function]}
+                                type="button"
+                              >
+                                <SyncIcon>
+                                  <MockedIcon />
+                                </SyncIcon>
+                              </button>
+                            </Button>
+                          </div>
+                        </ToolbarItem>
+                      </div>
+                    </ToolbarGroupWithRef>
+                  </ForwardRef>
+                  <ToolbarItem
+                    variant="separator"
+                  >
+                    <Divider
+                      className="pf-m-vertical"
+                    >
+                      <hr
+                        className="pf-c-divider pf-m-vertical"
+                      />
+                    </Divider>
+                  </ToolbarItem>
+                  <ForwardRef
+                    className="pf-u-ml-md"
+                    id="jobs-management-buttons"
+                  >
+                    <ToolbarGroupWithRef
+                      className="pf-u-ml-md"
+                      id="jobs-management-buttons"
+                      innerRef={null}
+                    >
+                      <div
+                        className="pf-c-toolbar__group pf-u-ml-md"
+                        id="jobs-management-buttons"
+                      >
+                        <OverflowMenu
+                          breakpoint="xl"
+                        >
+                          <div
+                            className="pf-c-overflow-menu"
+                          >
+                            <OverflowMenuContent />
+                            <OverflowMenuControl>
+                              <div
+                                className="pf-c-overflow-menu__control"
+                              >
+                                 
+                                <Dropdown
+                                  dropdownItems={
+                                    Array [
+                                      <DropdownItem
+                                        isDisabled={true}
+                                        onClick={[Function]}
+                                      >
+                                        Cancel selected
+                                      </DropdownItem>,
+                                    ]
+                                  }
+                                  isOpen={false}
+                                  isPlain={true}
+                                  onSelect={[Function]}
+                                  toggle={
+                                    <KebabToggle
+                                      onToggle={[Function]}
+                                    />
+                                  }
+                                >
+                                  <DropdownWithContext
+                                    autoFocus={true}
+                                    className=""
+                                    direction="down"
+                                    dropdownItems={
+                                      Array [
+                                        <DropdownItem
+                                          isDisabled={true}
+                                          onClick={[Function]}
+                                        >
+                                          Cancel selected
+                                        </DropdownItem>,
+                                      ]
+                                    }
+                                    isGrouped={false}
+                                    isOpen={false}
+                                    isPlain={true}
+                                    menuAppendTo="inline"
+                                    onSelect={[Function]}
+                                    position="left"
+                                    toggle={
+                                      <KebabToggle
+                                        onToggle={[Function]}
+                                      />
+                                    }
+                                  >
+                                    <div
+                                      className="pf-c-dropdown"
+                                      data-ouia-component-id={5}
+                                      data-ouia-component-type="PF4/Dropdown"
+                                      data-ouia-safe={true}
+                                    >
+                                      <KebabToggle
+                                        aria-haspopup={true}
+                                        getMenuRef={[Function]}
+                                        id="pf-dropdown-toggle-id-2"
+                                        isOpen={false}
+                                        isPlain={true}
+                                        key=".0"
+                                        onEnter={[Function]}
+                                        onToggle={[Function]}
+                                        parentRef={
+                                          Object {
+                                            "current": <div
+                                              class="pf-c-dropdown"
+                                              data-ouia-component-id="5"
+                                              data-ouia-component-type="PF4/Dropdown"
+                                              data-ouia-safe="true"
+                                            >
+                                              <button
+                                                aria-expanded="false"
+                                                aria-haspopup="true"
+                                                aria-label="Actions"
+                                                class="pf-c-dropdown__toggle pf-m-plain"
+                                                id="pf-dropdown-toggle-id-2"
+                                                type="button"
+                                              >
+                                                <svg
+                                                  aria-hidden="true"
+                                                  fill="currentColor"
+                                                  height="1em"
+                                                  role="img"
+                                                  style="vertical-align: -0.125em;"
+                                                  viewBox="0 0 192 512"
+                                                  width="1em"
+                                                >
+                                                  <path
+                                                    d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                                    transform=""
+                                                  />
+                                                </svg>
+                                              </button>
+                                            </div>,
+                                          }
+                                        }
+                                      >
+                                        <Toggle
+                                          aria-haspopup={true}
+                                          aria-label="Actions"
+                                          bubbleEvent={false}
+                                          className=""
+                                          getMenuRef={[Function]}
+                                          id="pf-dropdown-toggle-id-2"
+                                          isActive={false}
+                                          isDisabled={false}
+                                          isOpen={false}
+                                          isPlain={true}
+                                          isPrimary={false}
+                                          isSplitButton={false}
+                                          onEnter={[Function]}
+                                          onToggle={[Function]}
+                                          parentRef={
+                                            Object {
+                                              "current": <div
+                                                class="pf-c-dropdown"
+                                                data-ouia-component-id="5"
+                                                data-ouia-component-type="PF4/Dropdown"
+                                                data-ouia-safe="true"
+                                              >
+                                                <button
+                                                  aria-expanded="false"
+                                                  aria-haspopup="true"
+                                                  aria-label="Actions"
+                                                  class="pf-c-dropdown__toggle pf-m-plain"
+                                                  id="pf-dropdown-toggle-id-2"
+                                                  type="button"
+                                                >
+                                                  <svg
+                                                    aria-hidden="true"
+                                                    fill="currentColor"
+                                                    height="1em"
+                                                    role="img"
+                                                    style="vertical-align: -0.125em;"
+                                                    viewBox="0 0 192 512"
+                                                    width="1em"
+                                                  >
+                                                    <path
+                                                      d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                                      transform=""
+                                                    />
+                                                  </svg>
+                                                </button>
+                                              </div>,
+                                            }
+                                          }
+                                        >
+                                          <button
+                                            aria-expanded={false}
+                                            aria-haspopup={true}
+                                            aria-label="Actions"
+                                            className="pf-c-dropdown__toggle pf-m-plain"
+                                            disabled={false}
+                                            id="pf-dropdown-toggle-id-2"
+                                            onClick={[Function]}
+                                            onKeyDown={[Function]}
+                                            type="button"
+                                          >
+                                            <EllipsisVIcon
+                                              color="currentColor"
+                                              noVerticalAlign={false}
+                                              size="sm"
+                                            >
+                                              <svg
+                                                aria-hidden={true}
+                                                aria-labelledby={null}
+                                                fill="currentColor"
+                                                height="1em"
+                                                role="img"
+                                                style={
+                                                  Object {
+                                                    "verticalAlign": "-0.125em",
+                                                  }
+                                                }
+                                                viewBox="0 0 192 512"
+                                                width="1em"
+                                              >
+                                                <path
+                                                  d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
+                                                  transform=""
+                                                />
+                                              </svg>
+                                            </EllipsisVIcon>
+                                          </button>
+                                        </Toggle>
+                                      </KebabToggle>
+                                    </div>
+                                  </DropdownWithContext>
+                                </Dropdown>
+                                 
+                              </div>
+                            </OverflowMenuControl>
+                          </div>
+                        </OverflowMenu>
+                      </div>
+                    </ToolbarGroupWithRef>
+                  </ForwardRef>
+                </div>
+                <ToolbarExpandableContent
+                  chipContainerRef={
+                    Object {
+                      "current": null,
+                    }
+                  }
+                  clearAllFilters={[Function]}
+                  clearFiltersButtonText="Reset to default"
+                  expandableContentRef={
+                    Object {
+                      "current": <div
+                        class="pf-c-toolbar__expandable-content"
+                        id="data-toolbar-with-chip-groups-expandable-content-2"
+                      >
+                        <div
+                          class="pf-c-toolbar__group"
+                        />
+                      </div>,
+                    }
+                  }
+                  id="data-toolbar-with-chip-groups-expandable-content-2"
+                  isExpanded={false}
+                  showClearFiltersButton={false}
+                >
+                  <div
+                    className="pf-c-toolbar__expandable-content"
+                    id="data-toolbar-with-chip-groups-expandable-content-2"
+                  >
+                    <ForwardRef>
+                      <ToolbarGroupWithRef
+                        innerRef={null}
+                      >
+                        <div
+                          className="pf-c-toolbar__group"
+                        />
+                      </ToolbarGroupWithRef>
+                    </ForwardRef>
+                  </div>
+                </ToolbarExpandableContent>
+              </div>
+            </ToolbarContent>
+            <ToolbarChipGroupContent
+              chipGroupContentRef={
+                Object {
+                  "current": <div
+                    class="pf-c-toolbar__content pf-m-hidden"
+                    hidden=""
+                  >
+                    <div
+                      class="pf-c-toolbar__group"
+                    />
+                  </div>,
+                }
+              }
+              clearAllFilters={[Function]}
+              clearFiltersButtonText="Reset to default"
+              collapseListedFiltersBreakpoint="md"
+              isExpanded={false}
+              numberOfFilters={0}
+              showClearFiltersButton={false}
+            >
+              <div
+                className="pf-c-toolbar__content pf-m-hidden"
+                hidden={true}
+              >
+                <ForwardRef
+                  className=""
+                >
+                  <ToolbarGroupWithRef
+                    className=""
+                    innerRef={null}
+                  >
+                    <div
+                      className="pf-c-toolbar__group"
+                    />
+                  </ToolbarGroupWithRef>
+                </ForwardRef>
+              </div>
+            </ToolbarChipGroupContent>
+          </div>
+        </Toolbar>
+        <Card>
+          <article
+            className="pf-c-card"
+            data-ouia-component-id={6}
+            data-ouia-component-type="PF4/Card"
+            data-ouia-safe={true}
+          >
+            <CardBody>
+              <div
+                className="pf-c-card__body"
+              >
+                <JobsManagementTable
+                  data={
+                    Object {
+                      "Jobs": Array [
+                        Object {
+                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
+                          "endpoint": "http://localhost:4000/jobs",
+                          "expirationTime": null,
+                          "id": "6e74a570-31c8-4020-bd70-19be2cb625f3_0",
+                          "lastUpdate": "2020-08-27T03:35:50.147Z",
+                          "priority": 0,
+                          "processId": "travels",
+                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                          "repeatInterval": null,
+                          "repeatLimit": null,
+                          "retries": 0,
+                          "rootProcessId": null,
+                          "scheduledId": "0",
+                          "status": "EXECUTED",
+                        },
+                        Object {
+                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                          "endpoint": "http://localhost:4000/jobs",
+                          "expirationTime": "2020-08-27T04:35:54.631Z",
+                          "id": "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                          "lastUpdate": "2020-08-27T03:35:54.635Z",
+                          "priority": 0,
+                          "processId": "travels",
+                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                          "repeatInterval": null,
+                          "repeatLimit": null,
+                          "retries": 0,
+                          "rootProcessId": "",
+                          "scheduledId": null,
+                          "status": "SCHEDULED",
+                        },
+                        Object {
+                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                          "endpoint": "http://localhost:4000/jobs",
+                          "expirationTime": "2020-08-27T04:35:54.631Z",
+                          "id": "2234dde-npce1-2908-b3131-6123c675a0fa_0",
+                          "lastUpdate": "2020-08-27T03:35:54.635Z",
+                          "priority": 0,
+                          "processId": "travels",
+                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                          "repeatInterval": null,
+                          "repeatLimit": null,
+                          "retries": 0,
+                          "rootProcessId": "",
+                          "scheduledId": null,
+                          "status": "CANCELED",
+                        },
+                      ],
+                    }
+                  }
+                  handleCancelModalToggle={[Function]}
+                  handleDetailsToggle={[Function]}
+                  handleRescheduleToggle={[Function]}
+                  selectedJobInstances={Array []}
+                  setModalContent={[Function]}
+                  setModalTitle={[Function]}
+                  setSelectedJob={[Function]}
+                  setSelectedJobInstances={[Function]}
+                />
+              </div>
+            </CardBody>
+          </article>
+        </Card>
+        <MockedJobsPanelDetailsModal
+          actionType="Job Details"
+          handleModalToggle={[Function]}
+          isModalOpen={false}
+          job={
+            Object {
+              "__typename": "Job",
+              "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+              "endpoint": "http://localhost:4000/jobs",
+              "expirationTime": "2020-08-27T04:35:54.631Z",
+              "id": "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+              "lastUpdate": "2020-08-27T03:35:54.635Z",
+              "priority": 0,
+              "processId": "travels",
+              "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+              "repeatInterval": null,
+              "repeatLimit": null,
+              "retries": 0,
+              "rootProcessId": "",
+              "scheduledId": null,
+              "status": "SCHEDULED",
+            }
+          }
+          modalAction={
+            Array [
+              <Button
+                onClick={[Function]}
+                variant="primary"
+              >
+                OK
+              </Button>,
+            ]
+          }
+          modalTitle={
+            <Title
+              headingLevel="h1"
+              size="2xl"
+            >
+              <InfoCircleIcon
+                className="pf-u-mr-sm"
+                color="var(--pf-global--info-color--100)"
+                noVerticalAlign={false}
+                size="sm"
+              />
+              <span>
+                Job Details
+              </span>
+            </Title>
+          }
+        />
+        <JobsRescheduleModal
+          actionType="Job Reschedule"
+          handleModalToggle={[Function]}
+          isModalOpen={false}
+          job={
+            Object {
+              "__typename": "Job",
+              "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+              "endpoint": "http://localhost:4000/jobs",
+              "expirationTime": "2020-08-27T04:35:54.631Z",
+              "id": "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+              "lastUpdate": "2020-08-27T03:35:54.635Z",
+              "priority": 0,
+              "processId": "travels",
+              "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+              "repeatInterval": null,
+              "repeatLimit": null,
+              "retries": 0,
+              "rootProcessId": "",
+              "scheduledId": null,
+              "status": "SCHEDULED",
+            }
+          }
+          modalAction={
+            Array [
+              <Button
+                onClick={[Function]}
+                variant="secondary"
+              >
+                Cancel
+              </Button>,
+            ]
+          }
+          modalTitle={
+            <Title
+              headingLevel="h1"
+              size="2xl"
+            >
+              <InfoCircleIcon
+                className="pf-u-mr-sm"
+                color="var(--pf-global--info-color--100)"
+                noVerticalAlign={false}
+                size="sm"
+              />
+              <span>
+                Job Reschedule
+              </span>
+            </Title>
+          }
+          rescheduleClicked={false}
+          setRescheduleClicked={[Function]}
+        />
+        <JobsCancelModal
+          actionType="Job Cancel"
+          handleModalToggle={[Function]}
+          isModalOpen={false}
+          jobOperations={
+            Object {
+              "functions": Object {
+                "perform": [Function],
+              },
+              "messages": Object {
+                "ignoredMessage": "These jobs were ignored because they were already canceled or executed.",
+                "noJobsMessage": "No jobs were canceled",
+                "successMessage": "Canceled jobs: ",
+                "warningMessage": "Note: The job status has been updated. The list may appear inconsistent until you refresh any applied filters.",
+              },
+              "results": Object {
+                "failedJobs": Object {},
+                "ignoredJobs": Object {},
+                "successJobs": Object {},
+              },
+            }
+          }
+          modalContent=""
+          modalTitle={null}
+        />
+      </section>
+    </PageSection>
+  </div>
+</JobsManagementPage>
+`;

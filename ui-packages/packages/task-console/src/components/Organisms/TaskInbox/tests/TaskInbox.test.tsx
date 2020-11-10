@@ -18,23 +18,23 @@ import React from 'react';
 import userTasks from './mocks/testdata';
 import {
   DataTable,
-  DefaultUser,
-  getWrapperAsync,
   GraphQL,
-  KogitoEmptyState,
   LoadMore,
-  ServerErrors,
-  User
+  ServerErrors
 } from '@kogito-apps/common';
-import { MockedProvider } from '@apollo/react-testing';
 import wait from 'waait';
 import TaskInbox from '../TaskInbox';
-import { MemoryRouter as Router } from 'react-router';
 import { act } from 'react-dom/test-utils';
 import { DropdownToggleAction } from '@patternfly/react-core';
-import TaskConsoleContext, {
-  DefaultContext
+import {
+  ITaskConsoleContext,
+  TaskConsoleContextImpl
 } from '../../../../context/TaskConsoleContext/TaskConsoleContext';
+import {
+  ITaskConsoleFilterContext,
+  TaskConsoleFilterContextImpl
+} from '../../../../context/TaskConsoleFilterContext/TaskConsoleFilterContext';
+import { getTaskInboxWrapper } from './utils/TaskInboxTestingUtils';
 jest.mock('../../../Molecules/TaskInboxToolbar/TaskInboxToolbar');
 
 /* tslint:disable */
@@ -58,29 +58,15 @@ jest.mock('@kogito-apps/common', () => ({
   }
 }));
 
-const testUser: User = new DefaultUser('test', ['group1', 'group2']);
-
-const getWrapper = async (mocks, context) => {
-  let wrapper;
-
-  await act(async () => {
-    wrapper = await getWrapperAsync(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <TaskConsoleContext.Provider value={context}>
-          <Router keyLength={0}>
-            <TaskInbox />
-          </Router>
-        </TaskConsoleContext.Provider>
-      </MockedProvider>,
-      'TaskInbox'
-    );
-    await wait();
-  });
-
-  return (wrapper = wrapper.update().find(TaskInbox));
-};
+let consoleContext: ITaskConsoleContext<GraphQL.UserTaskInstance>;
+let filterContext: ITaskConsoleFilterContext;
 
 describe('TaskInbox tests', () => {
+  beforeEach(() => {
+    consoleContext = new TaskConsoleContextImpl();
+    filterContext = new TaskConsoleFilterContextImpl();
+  });
+
   it('Test empty state', async () => {
     const mocks = [
       {
@@ -91,62 +77,22 @@ describe('TaskInbox tests', () => {
               and: [
                 {
                   or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
+                    { actualOwner: { equal: 'john' } },
                     {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
-                    }
-                  ]
-                },
-                {
-                  and: [
-                    {
-                      state: { in: ['Ready', 'Reserved'] }
-                    }
-                  ]
-                }
-              ]
-            },
-            offset: 0,
-            limit: 10,
-            orderBy: {
-              lastUpdate: 'DESC'
-            }
-          }
-        },
-        result: {
-          data: {
-            UserTaskInstances: []
-          }
-        }
-      }
-    ];
-    const context = new DefaultContext<GraphQL.UserTaskInstance>(testUser);
-    const wrapper = await getWrapper(mocks, context);
-    expect(wrapper).toMatchSnapshot();
-    const emptyState = wrapper.find(KogitoEmptyState);
-
-    expect(emptyState.exists()).toBeTruthy();
-  });
-
-  it('Test load data without LoadMore', async () => {
-    const mocks = [
-      {
-        request: {
-          query: GraphQL.GetTasksForUserDocument,
-          variables: {
-            whereArgument: {
-              and: [
-                {
-                  or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
-                    {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
+                      and: [
+                        { actualOwner: { isNull: true } },
+                        { not: { excludedUsers: { contains: 'john' } } },
+                        {
+                          or: [
+                            { potentialUsers: { contains: 'john' } },
+                            {
+                              potentialGroups: {
+                                containsAny: ['employees', 'developers']
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -171,8 +117,11 @@ describe('TaskInbox tests', () => {
         }
       }
     ];
-    const context = new DefaultContext<GraphQL.UserTaskInstance>(testUser);
-    const wrapper = await getWrapper(mocks, context);
+    const wrapper = await getTaskInboxWrapper(
+      mocks,
+      consoleContext,
+      filterContext
+    );
 
     expect(wrapper).toMatchSnapshot();
 
@@ -196,12 +145,22 @@ describe('TaskInbox tests', () => {
               and: [
                 {
                   or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
+                    { actualOwner: { equal: 'john' } },
                     {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
+                      and: [
+                        { actualOwner: { isNull: true } },
+                        { not: { excludedUsers: { contains: 'john' } } },
+                        {
+                          or: [
+                            { potentialUsers: { contains: 'john' } },
+                            {
+                              potentialGroups: {
+                                containsAny: ['employees', 'developers']
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -233,12 +192,22 @@ describe('TaskInbox tests', () => {
               and: [
                 {
                   or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
+                    { actualOwner: { equal: 'john' } },
                     {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
+                      and: [
+                        { actualOwner: { isNull: true } },
+                        { not: { excludedUsers: { contains: 'john' } } },
+                        {
+                          or: [
+                            { potentialUsers: { contains: 'john' } },
+                            {
+                              potentialGroups: {
+                                containsAny: ['employees', 'developers']
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -263,8 +232,11 @@ describe('TaskInbox tests', () => {
         }
       }
     ];
-    const context = new DefaultContext<GraphQL.UserTaskInstance>(testUser);
-    let wrapper = await getWrapper(mocks, context);
+    let wrapper = await getTaskInboxWrapper(
+      mocks,
+      consoleContext,
+      filterContext
+    );
 
     expect(wrapper).toMatchSnapshot();
 
@@ -306,12 +278,22 @@ describe('TaskInbox tests', () => {
               and: [
                 {
                   or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
+                    { actualOwner: { equal: 'john' } },
                     {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
+                      and: [
+                        { actualOwner: { isNull: true } },
+                        { not: { excludedUsers: { contains: 'john' } } },
+                        {
+                          or: [
+                            { potentialUsers: { contains: 'john' } },
+                            {
+                              potentialGroups: {
+                                containsAny: ['employees', 'developers']
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -335,8 +317,11 @@ describe('TaskInbox tests', () => {
         }
       }
     ];
-    const context = new DefaultContext<GraphQL.UserTaskInstance>(testUser);
-    const wrapper = await getWrapper(mocks, context);
+    const wrapper = await getTaskInboxWrapper(
+      mocks,
+      consoleContext,
+      filterContext
+    );
 
     expect(wrapper).toMatchSnapshot();
 
@@ -359,12 +344,22 @@ describe('TaskInbox tests', () => {
               and: [
                 {
                   or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
+                    { actualOwner: { equal: 'john' } },
                     {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
+                      and: [
+                        { actualOwner: { isNull: true } },
+                        { not: { excludedUsers: { contains: 'john' } } },
+                        {
+                          or: [
+                            { potentialUsers: { contains: 'john' } },
+                            {
+                              potentialGroups: {
+                                containsAny: ['employees', 'developers']
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -396,12 +391,22 @@ describe('TaskInbox tests', () => {
               and: [
                 {
                   or: [
-                    { actualOwner: { equal: 'test' } },
-                    { potentialUsers: { contains: 'test' } },
+                    { actualOwner: { equal: 'john' } },
                     {
-                      potentialGroups: {
-                        containsAny: ['group1', 'group2']
-                      }
+                      and: [
+                        { actualOwner: { isNull: true } },
+                        { not: { excludedUsers: { contains: 'john' } } },
+                        {
+                          or: [
+                            { potentialUsers: { contains: 'john' } },
+                            {
+                              potentialGroups: {
+                                containsAny: ['employees', 'developers']
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
@@ -429,8 +434,28 @@ describe('TaskInbox tests', () => {
         request: {
           query: GraphQL.GetTasksForUserDocument,
           variables: {
-            user: testUser.id,
-            groups: testUser.groups,
+            whereArgument: {
+              and: [
+                {
+                  or: [
+                    { actualOwner: { equal: 'john' } },
+                    { potentialUsers: { contains: 'john' } },
+                    {
+                      potentialGroups: {
+                        containsAny: ['employees', 'developers']
+                      }
+                    }
+                  ]
+                },
+                {
+                  and: [
+                    {
+                      state: { in: ['Ready', 'Reserved'] }
+                    }
+                  ]
+                }
+              ]
+            },
             offset: 0,
             limit: 10,
             orderBy: { state: GraphQL.OrderBy.Asc }
@@ -443,8 +468,11 @@ describe('TaskInbox tests', () => {
         }
       }
     ];
-    const context = new DefaultContext<GraphQL.UserTaskInstance>(testUser);
-    let wrapper = await getWrapper(mocks, context);
+    let wrapper = await getTaskInboxWrapper(
+      mocks,
+      consoleContext,
+      filterContext
+    );
     // sortby value check
     await act(async () => {
       wrapper

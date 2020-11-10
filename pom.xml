@@ -23,13 +23,13 @@
     <maven.compiler.release>11</maven.compiler.release>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <version.maven-remote-resources-plugin>1.7.0</version.maven-remote-resources-plugin>
 
-    <version.org.infinispan.image>10.1.5.Final</version.org.infinispan.image>
-
-    <!-- containers used for testing -->
-    <container.image.infinispan>quay.io/infinispan/server:${version.org.infinispan.image}</container.image.infinispan>
+    <!-- external containers used for testing -->
+    <container.image.infinispan>quay.io/infinispan/server:${version.org.infinispan}</container.image.infinispan>
+    <!-- internal containers used for testing (built by maven using quarkus-container-image-jib) -->
+    <container.image.explainability-service-messaging>org.kie.kogito/explainability-service-messaging:${project.version}</container.image.explainability-service-messaging>
     <container.image.jobs-service>org.kie.kogito/jobs-service:${project.version}</container.image.jobs-service>
+    <container.image.trusty-service>org.kie.kogito/trusty-service:${project.version}</container.image.trusty-service>
   </properties>
 
   <repositories>
@@ -57,11 +57,6 @@
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
           <version>${version.frontend.plugin}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-remote-resources-plugin</artifactId>
-          <version>${version.maven-remote-resources-plugin}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -103,6 +98,6 @@
     <module>task-console</module>
     <module>explainability</module>
     <module>trusty</module>
-    <module>integration-tests</module>
+    <module>apps-integration-tests</module>
   </modules>
 </project>
