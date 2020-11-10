@@ -45,6 +45,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OpenNLPLimeExplainerTest {
@@ -87,7 +88,10 @@ class OpenNLPLimeExplainerTest {
             features.add(FeatureFactory.newFulltextFeature("text", inputText, s -> Arrays.asList(s.split("\\W"))));
             PredictionInput input = new PredictionInput(features);
 
-            PredictionOutput output = model.predictAsync(List.of(input)).get().get(0);
+            List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input)).get();
+            assertNotNull(predictionOutputs);
+            assertFalse(predictionOutputs.isEmpty());
+            PredictionOutput output = predictionOutputs.get(0);
             assertNotNull(output);
             assertNotNull(output.getOutputs());
             assertEquals(1, output.getOutputs().size());
