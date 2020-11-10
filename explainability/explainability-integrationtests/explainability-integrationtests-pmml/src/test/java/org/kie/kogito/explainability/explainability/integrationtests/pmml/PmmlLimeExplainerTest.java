@@ -42,6 +42,7 @@ import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.explainability.explainability.integrationtests.pmml.AbstractPMMLTest.getPMMLRuntime;
 import static org.kie.test.util.filesystem.FileUtils.getFile;
@@ -66,7 +67,7 @@ class PmmlLimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(100, 1, random);
+            LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
             List<Feature> features = new LinkedList<>();
             features.add(FeatureFactory.newNumericalFeature("sepalLength", 6.9));
             features.add(FeatureFactory.newNumericalFeature("sepalWidth", 3.1));
@@ -88,15 +89,18 @@ class PmmlLimeExplainerTest {
                 }
                 return outputs;
             });
-            PredictionOutput output = model.predictAsync(List.of(input))
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                    .get(0);
+            List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            assertNotNull(predictionOutputs);
+            assertFalse(predictionOutputs.isEmpty());
+            PredictionOutput output = predictionOutputs.get(0);
+            assertNotNull(output);
             Prediction prediction = new Prediction(input, output);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
-                double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(2));
+                double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
                 assertEquals(1d, v);
             }
             int topK = 1;
