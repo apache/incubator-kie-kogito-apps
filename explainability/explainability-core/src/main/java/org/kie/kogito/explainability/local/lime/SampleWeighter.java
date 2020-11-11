@@ -27,7 +27,7 @@ import org.kie.kogito.explainability.utils.DataUtils;
  */
 class SampleWeighter {
 
-    private static final double SIGMA = 0.75;
+    private static final double SIGMA = 0.675;
 
     static double[] getSampleWeights(PredictionInput targetInput, Collection<Pair<double[], Double>> training) {
         int noOfFeatures = targetInput.getFeatures().size();

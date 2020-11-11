@@ -85,8 +85,8 @@ class LoanEligibilityDmnLimeExplainerTest {
         for (int i = 1; i <= topK; i++) {
             for (String decision : stability.getDecisions()) {
                 double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
                 double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
                 assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
             }
         }

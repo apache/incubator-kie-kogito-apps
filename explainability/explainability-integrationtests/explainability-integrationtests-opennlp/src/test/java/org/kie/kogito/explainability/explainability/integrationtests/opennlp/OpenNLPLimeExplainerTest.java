@@ -103,8 +103,8 @@ class OpenNLPLimeExplainerTest {
             for (int i = 1; i <= topK; i++) {
                 for (String decision : stability.getDecisions()) {
                     double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.8);
                     double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.8);
                     assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.8);
                 }
             }

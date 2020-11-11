@@ -96,8 +96,8 @@ class FraudScoringDmnLimeExplainerTest {
             for (String decision : stability.getDecisions()) {
                 if (!"Last Transaction".equalsIgnoreCase(decision)) {
                     double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
                     double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
+                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
                     assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
                 }
             }
