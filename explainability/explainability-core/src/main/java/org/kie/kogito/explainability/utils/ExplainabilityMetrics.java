@@ -145,18 +145,15 @@ public class ExplainabilityMetrics {
      * positive/negative features always the same for a single prediction?".
      *
      * @param model a model to explain
-     * @param input the input on which explanation stability will be evaluated
+     * @param prediction the prediction on which explanation stability will be evaluated
      * @param saliencyLocalExplainer a local saliency explainer
      * @param topK no. of top k positive/negative features for which stability report will be generated
      * @return a report about stability of all the decisions/predictions (and for each {@code k < topK})
      */
-    public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, PredictionInput input,
+    public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, Prediction prediction,
                                                                    LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
                                                                    int topK, int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
-        PredictionOutput predictionOutput = model.predictAsync(List.of(input))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()).get(0);
-        Prediction prediction = new Prediction(input, predictionOutput);
         Map<String,List<Saliency>> saliencies = new HashMap<>();
         int skipped = 0;
         for (int i = 0; i < runs; i++) {

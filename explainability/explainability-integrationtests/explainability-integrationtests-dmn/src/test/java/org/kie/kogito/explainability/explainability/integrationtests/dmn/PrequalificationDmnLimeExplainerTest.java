@@ -86,7 +86,7 @@ class PrequalificationDmnLimeExplainerTest {
         }
 
         int topK = 1;
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, predictionInput, limeExplainer, topK, 10);
+        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
         for (int i = 1; i <= topK; i++) {
             for (String decision : stability.getDecisions()) {
                 double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
