@@ -64,6 +64,7 @@ describe('Jobs management page tests', () => {
               rootProcessId: null,
               scheduledId: '0',
               status: GraphQL.JobStatus.Executed,
+              executionCounter: 2,
               __typename: 'Job'
             },
             {
@@ -82,6 +83,7 @@ describe('Jobs management page tests', () => {
               rootProcessId: '',
               scheduledId: null,
               status: GraphQL.JobStatus.Scheduled,
+              executionCounter: 1,
               __typename: 'Job'
             },
             {
@@ -100,6 +102,7 @@ describe('Jobs management page tests', () => {
               rootProcessId: '',
               scheduledId: null,
               status: GraphQL.JobStatus.Canceled,
+              executionCounter: 0,
               __typename: 'Job'
             }
           ]

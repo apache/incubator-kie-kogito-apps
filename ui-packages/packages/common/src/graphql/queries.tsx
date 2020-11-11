@@ -360,6 +360,7 @@ const GET_ALL_JOBS = gql`
       retries
       lastUpdate
       endpoint
+      executionCounter
     }
   }
 `;

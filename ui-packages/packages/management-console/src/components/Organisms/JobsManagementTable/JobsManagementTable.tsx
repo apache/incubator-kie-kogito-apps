@@ -46,7 +46,14 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
   const editableJobStatus: string[] = ['SCHEDULED', 'ERROR'];
-  const columns: string[] = ['Id', 'Status', 'Expiration time', 'Last update'];
+  const columns: string[] = [
+    'Id',
+    'Status',
+    'Expiration time',
+    'Retries',
+    'Execution counter',
+    'Last update'
+  ];
   const jobRow: IRow[] = [];
 
   const handleJobDetails = (id): void => {
@@ -108,7 +115,7 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
         const ele = {
           title: (
             <Tooltip content={job.id}>
-              <span>{job.id}</span>
+              <span>{job.id.substring(0, 7)}</span>
             </Tooltip>
           )
         };
@@ -152,6 +159,11 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
           )
         };
         tempRows.push(ele);
+      } else {
+        const ele = {
+          title: <span>{job[item]}</span>
+        };
+        tempRows.push(ele);
       }
     }
     return { tempRows, jobType };
@@ -159,7 +171,16 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
 
   const tableContent = (): void => {
     data.Jobs.map(job => {
-      const retrievedValue = getValues(job);
+      const retrievedValue = getValues(
+        _.pick(job, [
+          'id',
+          'status',
+          'expirationTime',
+          'retries',
+          'executionCounter',
+          'lastUpdate'
+        ])
+      );
       jobRow.push({
         cells: retrievedValue.tempRows,
         type: retrievedValue.jobType,
