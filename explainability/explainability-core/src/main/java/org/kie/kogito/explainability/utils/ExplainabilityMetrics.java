@@ -145,40 +145,17 @@ public class ExplainabilityMetrics {
      * Such an evaluation is intended to measure how stable the explanations are in terms of "are the top k most important
      * positive/negative features always the same for a single prediction?".
      *
-     * @param model a model to explain
-     * @param prediction the prediction on which explanation stability will be evaluated
+     * @param model                  a model to explain
+     * @param prediction             the prediction on which explanation stability will be evaluated
      * @param saliencyLocalExplainer a local saliency explainer
-     * @param topK no. of top k positive/negative features for which stability report will be generated
+     * @param topK                   no. of top k positive/negative features for which stability report will be generated
      * @return a report about stability of all the decisions/predictions (and for each {@code k < topK})
      */
     public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, Prediction prediction,
                                                                    LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
                                                                    int topK, int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
-        Map<String,List<Saliency>> saliencies = new HashMap<>();
-        int skipped = 0;
-        for (int i = 0; i < runs; i++) {
-            Map<String, Saliency> saliencyMap = saliencyLocalExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            for (Map.Entry<String, Saliency> saliencyEntry : saliencyMap.entrySet()) {
-                // aggregate saliencies by output name
-                List<FeatureImportance> topFeatures = saliencyEntry.getValue().getTopFeatures(1);
-                if (!topFeatures.isEmpty() && topFeatures.get(0).getScore() != 0) { // skip empty or 0 valued saliencies
-                    if (saliencies.containsKey(saliencyEntry.getKey())) {
-                        List<Saliency> localSaliencies = saliencies.get(saliencyEntry.getKey());
-                        List<Saliency> updatedSaliencies = new ArrayList<>(localSaliencies);
-                        updatedSaliencies.add(saliencyEntry.getValue());
-                        saliencies.put(saliencyEntry.getKey(), updatedSaliencies);
-                    } else {
-                        saliencies.put(saliencyEntry.getKey(), List.of(saliencyEntry.getValue()));
-                    }
-                } else {
-                    LOGGER.warn("skipping empty / zero saliency for {}", saliencyEntry.getKey());
-                    skipped++;
-                }
-            }
-        }
-        LOGGER.debug("skipped {} useless saliencies", skipped);
+        Map<String, List<Saliency>> saliencies = getMultipleSaliencies(model, prediction, saliencyLocalExplainer, runs);
 
         LocalSaliencyStability saliencyStability = new LocalSaliencyStability(saliencies.keySet());
         // for each decision, calculate the stability rate for the top k important feature set, for each k < topK
@@ -207,6 +184,46 @@ public class ExplainabilityMetrics {
             }
         }
         return saliencyStability;
+    }
+
+    /**
+     * Get multiple saliencies, aggregated by decision name.
+     *
+     * @param model                  the model used to perform predictions
+     * @param prediction             the prediction to explain
+     * @param saliencyLocalExplainer a local explainer that generates saliences
+     * @param runs                   the no. of explanations to be generated
+     * @return the generated saliencies, aggregated by decision name, across the different runs
+     */
+    private static Map<String, List<Saliency>> getMultipleSaliencies(PredictionProvider model, Prediction prediction,
+                                                                     LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
+                                                                     int runs)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        Map<String, List<Saliency>> saliencies = new HashMap<>();
+        int skipped = 0;
+        for (int i = 0; i < runs; i++) {
+            Map<String, Saliency> saliencyMap = saliencyLocalExplainer.explainAsync(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            for (Map.Entry<String, Saliency> saliencyEntry : saliencyMap.entrySet()) {
+                // aggregate saliencies by output name
+                List<FeatureImportance> topFeatures = saliencyEntry.getValue().getTopFeatures(1);
+                if (!topFeatures.isEmpty() && topFeatures.get(0).getScore() != 0) { // skip empty or 0 valued saliencies
+                    if (saliencies.containsKey(saliencyEntry.getKey())) {
+                        List<Saliency> localSaliencies = saliencies.get(saliencyEntry.getKey());
+                        List<Saliency> updatedSaliencies = new ArrayList<>(localSaliencies);
+                        updatedSaliencies.add(saliencyEntry.getValue());
+                        saliencies.put(saliencyEntry.getKey(), updatedSaliencies);
+                    } else {
+                        saliencies.put(saliencyEntry.getKey(), List.of(saliencyEntry.getValue()));
+                    }
+                } else {
+                    LOGGER.warn("skipping empty / zero saliency for {}", saliencyEntry.getKey());
+                    skipped++;
+                }
+            }
+        }
+        LOGGER.debug("skipped {} useless saliencies", skipped);
+        return saliencies;
     }
 
     private static Map<List<String>, Long> getTopKFeaturesFrequency(List<Saliency> saliencies, Function<Saliency, List<FeatureImportance>> saliencyListFunction) {
