@@ -229,7 +229,7 @@ public class ExplainabilityMetrics {
     private static Map<List<String>, Long> getTopKFeaturesFrequency(List<Saliency> saliencies, Function<Saliency, List<FeatureImportance>> saliencyListFunction) {
         return saliencies.stream().map(saliencyListFunction)
                 .map(l -> l.stream().map(f -> f.getFeature().getName())
-                        .collect(Collectors.toList())) // f -> f.stream().sorted().collect(Collectors.toList())
+                        .collect(Collectors.toList()))
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
