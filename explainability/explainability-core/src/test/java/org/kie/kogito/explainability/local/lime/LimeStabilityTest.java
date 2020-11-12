@@ -52,7 +52,8 @@ class LimeStabilityTest {
             for (int i = 0; i < 5; i++) {
                 featureList.add(TestUtils.getMockedNumericFeature(i));
             }
-            LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
+            LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             assertStable(limeExplainer, sumSkipModel, featureList);
         }
     }
@@ -68,7 +69,10 @@ class LimeStabilityTest {
                 featureList.add(TestUtils.getMockedTextFeature("foo " + i));
             }
             featureList.add(TestUtils.getMockedTextFeature("money"));
-            LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(10)
+                    .withPerturbationContext(new PerturbationContext(random, 1));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             assertStable(limeExplainer, sumSkipModel, featureList);
         }
     }
@@ -82,9 +86,12 @@ class LimeStabilityTest {
 
             int samples = 1;
             int retries = 4;
-
-            LimeExplainer adaptiveVarianceLE = new LimeExplainer(samples, perturbationContext,
-                                                            retries, true);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(samples)
+                    .withPerturbationContext(perturbationContext)
+                    .withRetries(retries)
+                    .withAdaptiveVariance(true);
+            LimeExplainer adaptiveVarianceLE = new LimeExplainer(limeConfig);
 
             List<Feature> features = new LinkedList<>();
             for (int i = 0; i < 4; i++) {

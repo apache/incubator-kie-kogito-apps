@@ -58,60 +58,21 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  */
 public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
-    public static final int DEFAULT_NO_OF_RETRIES = 3;
     public static final double SEPARABLE_DATASET_RATIO = 0.99;
     private static final Logger LOGGER = LoggerFactory.getLogger(LimeExplainer.class);
 
-    /**
-     * No. of samples to be generated for the local linear model training
-     */
-    private final int noOfSamples;
+    private final LimeConfig limeConfig;
 
-    /**
-     * No. of retries while trying to find a (linearly) separable dataset
-     */
-    private final int noOfRetries;
-
-    /**
-     * Context object for perturbing features
-     */
-    private final PerturbationContext perturbationContext;
-
-    /**
-     * Whether the explainer should adapt the variance in the generated (perturbed) data when it's not separable.
-     */
-    private final boolean adaptDatasetVariance;
-
-    public LimeExplainer(int noOfSamples, int noOfPerturbations) {
-        this(noOfSamples, new PerturbationContext(new SecureRandom(), noOfPerturbations));
+    public LimeExplainer() {
+        this(new LimeConfig());
     }
 
-    public LimeExplainer(int noOfSamples, int noOfPerturbations, Random random) {
-        this(noOfSamples, new PerturbationContext(random, noOfPerturbations));
+    public LimeExplainer(LimeConfig limeConfig) {
+        this.limeConfig = limeConfig;
     }
 
-    public LimeExplainer(int noOfSamples, PerturbationContext perturbationContext) {
-        this(noOfSamples, perturbationContext, DEFAULT_NO_OF_RETRIES, false);
-    }
-
-    public LimeExplainer(int noOfSamples, PerturbationContext perturbationContext, int noOfRetries,
-                         boolean adaptDatasetVariance) {
-        this.noOfSamples = noOfSamples;
-        this.perturbationContext = perturbationContext;
-        this.noOfRetries = noOfRetries;
-        this.adaptDatasetVariance = adaptDatasetVariance;
-    }
-
-    public int getNoOfSamples() {
-        return noOfSamples;
-    }
-
-    public PerturbationContext getPerturbationContext() {
-        return perturbationContext;
-    }
-
-    public int getNoOfRetries() {
-        return noOfRetries;
+    public LimeConfig getLimeConfig() {
+        return limeConfig;
     }
 
     @Override
@@ -134,9 +95,9 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 targetInput,
                 linearizedTargetInputFeatures,
                 actualOutputs,
-                noOfRetries,
-                noOfSamples,
-                perturbationContext);
+                limeConfig.getNoOfRetries(),
+                limeConfig.getNoOfSamples(),
+                limeConfig.getPerturbationContext());
     }
 
     protected CompletableFuture<Map<String, Saliency>> explainRetryCycle(
@@ -159,7 +120,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                         if (noOfRetries > 0) {
                             PerturbationContext newPerturbationContext;
                             int newNoOfSamples;
-                            if (adaptDatasetVariance) {
+                            if (limeConfig.adaptDatasetVariance()) {
                                 newPerturbationContext = new PerturbationContext(perturbationContext.getRandom(),
                                                                                  perturbationContext.getNoOfPerturbations() + 1);
                                 newNoOfSamples = noOfSamples * 2;
@@ -299,7 +260,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     private List<PredictionInput> getPerturbedInputs(List<Feature> features, PerturbationContext perturbationContext) {
         List<PredictionInput> perturbedInputs = new LinkedList<>();
         // as per LIME paper, the dataset size should be at least |features|^2
-        double perturbedDataSize = Math.max(noOfSamples, Math.pow(2, features.size()));
+        double perturbedDataSize = Math.max(limeConfig.getNoOfSamples(), Math.pow(2, features.size()));
         for (int i = 0; i < perturbedDataSize; i++) {
             List<Feature> newFeatures = DataUtils.perturbFeatures(features, perturbationContext);
             perturbedInputs.add(new PredictionInput(newFeatures));
