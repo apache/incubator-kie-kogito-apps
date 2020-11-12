@@ -15,13 +15,11 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -92,7 +90,6 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         return explainRetryCycle(
                 model,
                 originalInput,
-                targetInput,
                 linearizedTargetInputFeatures,
                 actualOutputs,
                 limeConfig.getNoOfRetries(),
@@ -103,7 +100,6 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     protected CompletableFuture<Map<String, Saliency>> explainRetryCycle(
             PredictionProvider model,
             PredictionInput originalInput,
-            PredictionInput targetInput,
             List<Feature> linearizedTargetInputFeatures,
             List<Output> actualOutputs,
             int noOfRetries, int noOfSamples, PerturbationContext perturbationContext) {
@@ -115,7 +111,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                     try {
                         boolean strict = noOfRetries > 0;
                         List<LimeInputs> limeInputsList = getLimeInputs(linearizedTargetInputFeatures, actualOutputs, perturbedInputs, predictionOutputs, strict);
-                        return completedFuture(getSaliencies(targetInput, linearizedTargetInputFeatures, actualOutputs, limeInputsList));
+                        return completedFuture(getSaliencies(linearizedTargetInputFeatures, actualOutputs, limeInputsList));
                     } catch (DatasetNotSeparableException e) {
                         if (noOfRetries > 0) {
                             PerturbationContext newPerturbationContext;
@@ -132,7 +128,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                                 newPerturbationContext = perturbationContext;
                                 newNoOfSamples = noOfSamples;
                             }
-                            return explainRetryCycle(model, originalInput, targetInput, linearizedTargetInputFeatures,
+                            return explainRetryCycle(model, originalInput, linearizedTargetInputFeatures,
                                                      actualOutputs, noOfRetries - 1, newNoOfSamples,
                                                      newPerturbationContext);
                         }
@@ -166,29 +162,29 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         return limeInputsList;
     }
 
-    private Map<String, Saliency> getSaliencies(PredictionInput targetInput, List<Feature> linearizedTargetInputFeatures, List<Output> actualOutputs, List<LimeInputs> limeInputsList) {
+    private Map<String, Saliency> getSaliencies(List<Feature> linearizedTargetInputFeatures, List<Output> actualOutputs, List<LimeInputs> limeInputsList) {
         Map<String, Saliency> result = new HashMap<>();
         for (int o = 0; o < actualOutputs.size(); o++) {
             LimeInputs limeInputs = limeInputsList.get(o);
             Output originalOutput = actualOutputs.get(o);
 
-            getSaliency(targetInput, linearizedTargetInputFeatures, result, limeInputs, originalOutput);
+            getSaliency(linearizedTargetInputFeatures, result, limeInputs, originalOutput);
             LOGGER.debug("weights set for output {}", originalOutput);
         }
         return result;
     }
 
-    private void getSaliency(PredictionInput targetInput, List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result, LimeInputs limeInputs, Output originalOutput) {
+    private void getSaliency(List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result, LimeInputs limeInputs, Output originalOutput) {
         List<FeatureImportance> featureImportanceList = new LinkedList<>();
 
         // encode the training data so that it can be fed into the linear model
         DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
                                                            limeInputs.getPerturbedOutputs(),
-                                                           targetInput, originalOutput);
+                                                           linearizedTargetInputFeatures, originalOutput);
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
         // weight the training samples based on the proximity to the target input to explain
-        double[] sampleWeights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
+        double[] sampleWeights = SampleWeighter.getSampleWeights(linearizedTargetInputFeatures, trainingSet);
         LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
         double loss = linearModel.fit(trainingSet, sampleWeights);
         if (!Double.isNaN(loss)) {
