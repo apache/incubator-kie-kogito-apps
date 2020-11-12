@@ -156,7 +156,7 @@ public enum Type {
             if (intValue) {
                 normalDistributionSample = (int) normalDistributionSample;
                 if (normalDistributionSample == originalFeatureValue) {
-                    normalDistributionSample = (int) normalDistributionSample + 1;
+                    normalDistributionSample = (int) normalDistributionSample + 1d;
                 }
             }
             return new Value<>(normalDistributionSample);

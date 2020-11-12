@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,7 +218,7 @@ public class ExplainabilityMetrics {
 
     private static Pair<List<String>, Long> getMostFrequent(Map<List<String>, Long> collect) {
         long max = 0L;
-        Pair<List<String>, Long> topK = null;
+        Pair<List<String>, Long> topK = Pair.of(Collections.emptyList(), 0L);
         for (Map.Entry<List<String>, Long> entry : collect.entrySet()) {
             if (entry.getValue() >= max) {
                 topK = Pair.of(entry.getKey(), entry.getValue());
