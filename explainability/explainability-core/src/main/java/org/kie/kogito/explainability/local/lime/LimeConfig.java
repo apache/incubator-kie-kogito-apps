@@ -27,7 +27,6 @@ public class LimeConfig {
     private static final int DEFAULT_NO_OF_SAMPLES = 300;
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
-    private static final PerturbationContext DEFAULT_PERTURBATION_CONTEXT = new PerturbationContext(new SecureRandom(), 1);
 
     /**
      * No. of samples to be generated for the local linear model training
@@ -42,7 +41,7 @@ public class LimeConfig {
     /**
      * Context object for perturbing features
      */
-    private PerturbationContext perturbationContext = DEFAULT_PERTURBATION_CONTEXT;
+    private PerturbationContext perturbationContext = new PerturbationContext(new SecureRandom(), 1);
 
     /**
      * Whether the explainer should adapt the variance in the generated (perturbed) data when it's not separable.
