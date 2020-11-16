@@ -15,9 +15,11 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +32,15 @@ public class PredictionInputsDataDistribution implements DataDistribution {
     private final Logger LOGGER = LoggerFactory.getLogger(PredictionInputsDataDistribution.class);
 
     private final List<PredictionInput> inputs;
+    private final Random random;
 
     public PredictionInputsDataDistribution(List<PredictionInput> inputs) {
+        this(inputs, new SecureRandom());
+    }
+
+    public PredictionInputsDataDistribution(List<PredictionInput> inputs, Random random) {
         this.inputs = Collections.unmodifiableList(inputs);
+        this.random = random;
     }
 
     @Override
@@ -48,11 +56,9 @@ public class PredictionInputsDataDistribution implements DataDistribution {
             LOGGER.warn("required {} samples, but only {} are available", sampleSize, inputs.size());
             return getAllSamples();
         } else {
-            List<PredictionInput> copy = new java.util.ArrayList<>(inputs);
-            Collections.shuffle(copy);
             List<PredictionInput> samples = new ArrayList<>(sampleSize);
             for (int i = 0; i < sampleSize; i++) {
-                samples.add(copy.get(i));
+                samples.add(inputs.get(random.nextInt(inputs.size() - 1)));
             }
             return samples;
         }
