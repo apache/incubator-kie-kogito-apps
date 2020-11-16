@@ -100,10 +100,16 @@
     }
   },
   "UserTaskInstanceByIdAndActualOwner": {
-    "query": "query ( $id: String, $actualOwner: String ) { UserTaskInstances( where: {  id: {  equal : $id }, actualOwner: { equal: $actualOwner } } ){ %s } }",
+    "query": "query ( $id: String, $actualOwner: String ) { UserTaskInstances( where: {  id: {  equal : $id }, actualOwner: { equal: $actualOwner }, not: { excludedUsers: { contains : $actualOwner } } } ){ %s } }",
     "variables": {
       "id": "%s",
       "actualOwner": "%s"
+    }
+  },
+  "UserTaskInstanceByIdNoActualOwner": {
+    "query": "query ( $id: String ) { UserTaskInstances( where: {  id: {  equal : $id }, actualOwner: { isNull: true } } ){ %s } }",
+    "variables": {
+      "id": "%s"
     }
   },
   "UserTaskInstanceByIdAndState": {
@@ -168,6 +174,12 @@
   },
   "DealsByTaskId": {
     "query": "query ( $id: String ) { Deals ( where: { metadata : { userTasks : { id : { equal : $id } } } } ){ id, __typename, name, review, metadata { lastUpdate, userTasks { id, description, state, name, priority, processInstanceId, actualOwner, started, completed, lastUpdate } } } }",
+    "variables": {
+      "id": "%s"
+    }
+  },
+  "DealsByTaskIdNoActualOwner": {
+    "query": "query ( $id: String ) { Deals ( where: { metadata : { userTasks : { id : { equal : $id }, actualOwner: { isNull: true } } } } ){ id, __typename, name, review, metadata { lastUpdate, userTasks { id, description, state, name, priority, processInstanceId, actualOwner, started, completed, lastUpdate } } } }",
     "variables": {
       "id": "%s"
     }

@@ -337,7 +337,28 @@ const GET_JOBS_BY_PROC_INST_ID = gql`
       scheduledId
       retries
       lastUpdate
+      endpoint
+      nodeInstanceId
+    }
+  }
+`;
+
+const GET_ALL_JOBS = gql`
+  query getAllJobs($values: [JobStatus]) {
+    Jobs(where: { status: { in: $values } }) {
+      id
+      processId
+      processInstanceId
+      rootProcessId
+      status
       expirationTime
+      priority
+      callbackEndpoint
+      repeatInterval
+      repeatLimit
+      scheduledId
+      retries
+      lastUpdate
       endpoint
     }
   }

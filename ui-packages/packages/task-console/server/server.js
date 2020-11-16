@@ -65,17 +65,18 @@ const checkStatesFilters = (userTaskInstance, states) => {
 
 const checkTaskNameFilters = (userTaskInstance, names) => {
   for (let i = 0; i < names.length; i++) {
-    if (
-      userTaskInstance.referenceName &&
+    let name = names[i].referenceName.like.toLowerCase();
+    name = name.substring(1, name.length-1);
+
+    if(userTaskInstance.referenceName &&
       userTaskInstance.referenceName
         .toLowerCase()
-        .indexOf(
-          names[i].referenceName.like.toLowerCase()
-        ) > -1
-    ) {
-      return true
+        .includes(name)) {
+      return true;
     }
   }
+
+  return false;
 }
 
 const checkTaskAssignment = (userTaskInstance, assignments) => {
@@ -83,16 +84,24 @@ const checkTaskAssignment = (userTaskInstance, assignments) => {
   if (actualOwnerClause.actualOwner.equal === userTaskInstance.actualOwner) {
     return true;
   }
+  if (userTaskInstance.actualOwner === null) {
 
-  const potentialUsersClause = assignments.or[1];
+    const excludedUsersClause = assignments.or[1].and[1].not;
 
-  if (userTaskInstance.potentialUsers.includes(potentialUsersClause.potentialUsers.contains)) {
-    return true;
+    if(userTaskInstance.excludedUsers && userTaskInstance.excludedUsers.includes(excludedUsersClause.excludedUsers.contains)) {
+      return false;
+    }
+
+    const potentialUsersClause = assignments.or[1].and[2].or[0];
+    if (userTaskInstance.potentialUsers.includes(potentialUsersClause.potentialUsers.contains)) {
+      return true;
+    }
+    const potentialGroupsClause = assignments.or[1].and[2].or[1];
+    if (potentialGroupsClause.potentialGroups.containsAny
+            .some(clauseGroup => userTaskInstance.potentialGroups.includes(clauseGroup))) {
+      return true;
+    }
   }
-
-  const potentialGroupsClause = assignments.or[2];
-  return potentialGroupsClause.potentialGroups.containsAny
-    .some(clauseGroup => userTaskInstance.potentialGroups.includes(clauseGroup));
 }
 
 // Provide resolver functions for your schema fields
@@ -137,7 +146,7 @@ const resolvers = {
       if (args['orderBy']) {
         result = _.orderBy(
           result,
-          _.keys(args['orderBy']).map(key => key.toLowerCase()),
+          _.keys(args['orderBy']).map(key => key),
           _.values(args['orderBy']).map(value => value.toLowerCase())
         );
       }

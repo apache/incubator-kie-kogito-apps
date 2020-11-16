@@ -69,6 +69,7 @@ app.post('/management/processes/:processId/instances/:processInstanceId/nodes/:n
   controller.callNodeTrigger
 );
 app.get('/management/processes/:processId/nodes', controller.getTriggerableNodes)
+app.delete('/jobs/:jobId',controller.callJobCancel);
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -152,13 +153,18 @@ const resolvers = {
       return result;
     },
     Jobs: async (parent, args) => {
-      const result = data.JobsData.filter(jobData => {
-        console.log('Job data args->', args['where'].processInstanceId)
-        if (args['where'].processInstanceId && args['where'].processInstanceId.equal) {
-          return jobData.processInstanceId == args['where'].processInstanceId.equal;
-        }
-      });
-      return result;
+      if (Object.keys(args).length> 0) {
+        const result = data.JobsData.filter(jobData => {
+          console.log('Job data args->', args['where'].processInstanceId)
+          if (args['where'].processInstanceId && args['where'].processInstanceId.equal) {
+            return jobData.processInstanceId == args['where'].processInstanceId.equal;
+          } else if (args['where'].status && args['where'].status.in) {
+            return args['where'].status.in.includes(jobData.status)
+          }
+        });
+        await timeout(2000);
+        return result;
+      }      
     }
   },
 

@@ -5,17 +5,12 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>kogito-apps</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>jobs-service</artifactId>
   <name>Jobs Service</name>
   <description>Jobs Service (Timers and Async Jobs)</description>
-
-  <properties>
-    <!-- overriding the default infinispan version to use 11 instead of 10, remove it once 11 is the default -->
-    <version.org.infinispan.image>11.0.3.Final</version.org.infinispan.image>
-  </properties>
 
   <dependencies>
     <dependency>

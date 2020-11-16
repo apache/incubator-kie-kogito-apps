@@ -1,22 +1,35 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React from 'react';
 import * as H from 'history';
 import {
-  DefaultUser,
   GraphQL,
   KogitoEmptyState,
-  User,
   getWrapperAsync,
   ServerErrors
 } from '@kogito-apps/common';
 import UserTaskInstance = GraphQL.UserTaskInstance;
 import TaskConsoleContext, {
-  DefaultContext
+  TaskConsoleContextImpl
 } from '../../../../context/TaskConsoleContext/TaskConsoleContext';
 import UserTaskInstanceDetailsPage from '../UserTaskInstanceDetailsPage';
 import { BrowserRouter } from 'react-router-dom';
 import {
   Breadcrumb,
-  Text,
   DrawerPanelContent,
   DrawerCloseButton
 } from '@patternfly/react-core';
@@ -26,11 +39,15 @@ import { act } from 'react-dom/test-utils';
 import { MockedProvider } from '@apollo/react-testing';
 import wait from 'waait';
 import { GraphQLError } from 'graphql';
+import FormNotification, {
+  Notification
+} from '../../../Atoms/FormNotification/FormNotification';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
+jest.mock('../../../Atoms/FormNotification/FormNotification');
 jest.mock('../../../Atoms/TaskState/TaskState');
 jest.mock('../../../Molecules/PageTitle/PageTitle');
 jest.mock('../../../Organisms/TaskDetails/TaskDetails');
@@ -83,8 +100,6 @@ const userTaskInstance: UserTaskInstance = {
     'http://localhost:8080/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3'
 };
 
-const testUser: User = new DefaultUser('test', ['group1', 'group2']);
-
 const props = {
   match: {
     params: {
@@ -117,7 +132,13 @@ const getWrapper = async (mocks, context) => {
   return (wrapper = wrapper.update().find('UserTaskInstanceDetailsPage'));
 };
 
+const pushSpy = jest.spyOn(props.history, 'push');
+
 describe('UserTaskInstanceDetailsPage tests', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('Test empty state', async () => {
     const mocks = [
       {
@@ -134,7 +155,7 @@ describe('UserTaskInstanceDetailsPage tests', () => {
         }
       }
     ];
-    const context = new DefaultContext<UserTaskInstance>(testUser);
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
     context.setActiveItem(null);
     const wrapper = await getWrapper(mocks, context);
     expect(wrapper).toMatchSnapshot();
@@ -162,7 +183,7 @@ describe('UserTaskInstanceDetailsPage tests', () => {
         }
       }
     ];
-    const context = new DefaultContext<UserTaskInstance>(testUser);
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
     const wrapper = await getWrapper(mocks, context);
     const serverErrors = wrapper.find(ServerErrors);
     expect(serverErrors).toMatchSnapshot();
@@ -173,7 +194,7 @@ describe('UserTaskInstanceDetailsPage tests', () => {
   });
 
   it('Test active task', async () => {
-    const context = new DefaultContext<UserTaskInstance>(testUser);
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
     const mocks = [
       {
         request: {
@@ -201,18 +222,137 @@ describe('UserTaskInstanceDetailsPage tests', () => {
     expect(title.props().title).toStrictEqual(userTaskInstance.referenceName);
     expect(title.props().extra).not.toBeNull();
 
-    const id = wrapper.find(Text);
-    expect(id.exists()).toBeTruthy();
-    expect(id.html()).toContain(`ID: ${userTaskInstance.id}`);
-
     const taskForm = wrapper.find(TaskForm);
     expect(taskForm.exists()).toBeTruthy();
     expect(taskForm.props().userTaskInstance).toStrictEqual(userTaskInstance);
-    expect(taskForm.props().successCallback).not.toBeNull();
-    expect(taskForm.props().errorCallback).not.toBeNull();
+    expect(taskForm.props().onSubmitSuccess).not.toBeNull();
+    expect(taskForm.props().onSubmitError).not.toBeNull();
   });
+
+  it('Test submit success notification', async () => {
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
+    context.setActiveItem(userTaskInstance);
+    const mocks = [];
+    let wrapper = await getWrapper(mocks, context);
+
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(Breadcrumb).exists()).toBeTruthy();
+
+    const taskForm = wrapper.find(TaskForm);
+
+    await act(async () => {
+      taskForm.props().onSubmitSuccess('phase');
+    });
+
+    wrapper = wrapper.update().find(UserTaskInstanceDetailsPage);
+
+    expect(wrapper).toMatchSnapshot();
+
+    const notificationComponent = wrapper.find(FormNotification);
+    expect(notificationComponent.exists()).toBeTruthy();
+
+    const notification = notificationComponent.props().notification;
+
+    expect(notification).not.toBeNull();
+    expect(notification.type).toStrictEqual('success');
+    expect(notification.message).toStrictEqual(
+      "Task 'Apply for visa' successfully transitioned to phase 'phase'."
+    );
+    expect(notification.details).toBeUndefined();
+    expect(notification.customAction).not.toBeNull();
+
+    await act(async () => {
+      notification.close();
+    });
+
+    wrapper = wrapper.update().find(UserTaskInstanceDetailsPage);
+    expect(wrapper).toMatchSnapshot();
+
+    expect(wrapper.find(FormNotification).exists()).toBeFalsy();
+  });
+
+  it('Test submit notification - go to inbox link', async () => {
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
+    context.setActiveItem(userTaskInstance);
+    const mocks = [];
+    let wrapper = await getWrapper(mocks, context);
+
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(Breadcrumb).exists()).toBeTruthy();
+
+    const taskForm = wrapper.find(TaskForm);
+
+    await act(async () => {
+      taskForm.props().onSubmitSuccess('phase');
+    });
+
+    wrapper = wrapper.update().find(UserTaskInstanceDetailsPage);
+
+    const notificationComponent = wrapper.find(FormNotification);
+    expect(notificationComponent.exists()).toBeTruthy();
+
+    const notification: Notification = notificationComponent.props()
+      .notification;
+
+    expect(notification).not.toBeNull();
+    expect(notification.customAction).not.toBeNull();
+
+    await act(async () => {
+      notification.customAction.onClick();
+    });
+
+    wrapper = wrapper.update();
+
+    expect(wrapper.find(FormNotification).exists()).toBeFalsy();
+
+    expect(pushSpy).toBeCalledWith('/');
+  });
+
+  it('Test submit error notification', async () => {
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
+    context.setActiveItem(userTaskInstance);
+    const mocks = [];
+    let wrapper = await getWrapper(mocks, context);
+
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(Breadcrumb).exists()).toBeTruthy();
+
+    const taskForm = wrapper.find(TaskForm);
+
+    await act(async () => {
+      taskForm.props().onSubmitError('phase', 'Extra info!');
+    });
+
+    wrapper = wrapper.update().find(UserTaskInstanceDetailsPage);
+
+    expect(wrapper).toMatchSnapshot();
+
+    let notificationComponent = wrapper.find(FormNotification);
+    expect(notificationComponent.exists()).toBeTruthy();
+
+    const notification = notificationComponent.props().notification;
+
+    expect(notification).not.toBeNull();
+    expect(notification.type).toStrictEqual('error');
+    expect(notification.message).toStrictEqual(
+      "Task 'Apply for visa' couldn't transition to phase 'phase'."
+    );
+    expect(notification.details).not.toBeUndefined();
+    expect(notification.customAction).not.toBeNull();
+
+    await act(async () => {
+      notification.close();
+    });
+
+    wrapper = wrapper.update().find(UserTaskInstanceDetailsPage);
+    expect(wrapper).toMatchSnapshot();
+
+    notificationComponent = wrapper.find(FormNotification);
+    expect(notificationComponent.exists()).toBeFalsy();
+  });
+
   it('test task details drawer', async () => {
-    const context = new DefaultContext<UserTaskInstance>(testUser);
+    const context = new TaskConsoleContextImpl<UserTaskInstance>();
     const mocks = [
       {
         request: {
