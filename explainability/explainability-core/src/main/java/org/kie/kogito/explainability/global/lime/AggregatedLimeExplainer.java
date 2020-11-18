@@ -15,16 +15,18 @@
  */
 package org.kie.kogito.explainability.global.lime;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
 import org.kie.kogito.explainability.model.Saliency;
@@ -33,7 +35,7 @@ import org.kie.kogito.explainability.model.Saliency;
  * Global explainer aggregating LIME explanations over a number of inputs by reporting the mean feature importance for
  * each feature.
  */
-public class AggregatedLimeExplainer implements GlobalExplainer<Map<String, Saliency>> {
+public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFuture<Map<String, Saliency>>> {
 
     private final LimeExplainer limeExplainer;
     private final int sampleSize;
@@ -48,19 +50,19 @@ public class AggregatedLimeExplainer implements GlobalExplainer<Map<String, Sali
     }
 
     @Override
-    public Map<String, Saliency> explain(PredictionProvider model, PredictionProviderMetadata metadata)
-            throws InterruptedException, ExecutionException {
+    public CompletableFuture<Map<String, Saliency>> explain(PredictionProvider model, PredictionProviderMetadata metadata) {
         List<PredictionInput> inputs = metadata.getDataDistribution().sample(sampleSize);
-        List<Saliency> saliencies = new ArrayList<>();
-        for (PredictionInput input : inputs) {
-            Prediction prediction = new Prediction(input, model.predictAsync(List.of(input)).get().get(0));
-            saliencies.addAll(limeExplainer.explainAsync(prediction, model).get().values());
-        }
-        List<Saliency> merged = Saliency.merge(saliencies.toArray(new Saliency[0]));
-        Map<String, Saliency> meanSaliencyMap = new HashMap<>();
-        for (Saliency saliency: merged) {
-            meanSaliencyMap.put(saliency.getOutput().getName(), saliency);
-        }
-        return meanSaliencyMap;
+
+        CompletableFuture<List<Prediction>> listCompletableFuture = model.predictAsync(inputs)
+                .thenApply(os -> getCollect(inputs, os));
+
+        return listCompletableFuture.thenApply(predictions -> predictions.parallelStream().map(p -> limeExplainer.explainAsync(p, model))
+                .map(CompletableFuture::join)
+                .reduce(Collections.emptyMap(), Saliency::merge));
+    }
+
+    private List<Prediction> getCollect(List<PredictionInput> inputs, List<PredictionOutput> os) {
+        return IntStream.range(0, os.size())
+                .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
     }
 }
