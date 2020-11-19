@@ -82,7 +82,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
             for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
                 // generate samples for the feature under analysis
                 FeatureDistribution featureDistribution = featureDistributions.get(featureIndex);
-                double[] featureXSvalues = featureDistribution.sample(seriesLength).stream().map(Value::asNumber).map(Number::doubleValue).mapToDouble(d -> d).sorted().toArray();
+                double[] featureXSvalues = featureDistribution.sample(seriesLength).stream().mapToDouble(v -> v.asNumber().doubleValue()).sorted().toArray();
 
                 // generate data distributions for all features
                 double[][] trainingData = generateDistributions(noOfFeatures, featureDistributions);
