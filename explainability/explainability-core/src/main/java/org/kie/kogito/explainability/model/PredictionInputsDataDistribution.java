@@ -21,15 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Data distribution based on list of {@code PredictionInputs}.
  */
 public class PredictionInputsDataDistribution implements DataDistribution {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(PredictionInputsDataDistribution.class);
 
     private final List<PredictionInput> inputs;
     private final Random random;
@@ -52,16 +47,13 @@ public class PredictionInputsDataDistribution implements DataDistribution {
 
     @Override
     public List<PredictionInput> sample(int sampleSize) {
-        if (sampleSize >= inputs.size()) {
-            LOGGER.warn("required {} samples, but only {} are available", sampleSize, inputs.size());
-            return getAllSamples();
-        } else {
-            List<PredictionInput> samples = new ArrayList<>(sampleSize);
-            for (int i = 0; i < sampleSize; i++) {
-                samples.add(inputs.get(random.nextInt(inputs.size() - 1)));
-            }
-            return samples;
+        List<PredictionInput> samples = new ArrayList<>(sampleSize);
+        for (int i = 0; i < sampleSize; i++) {
+            int index = random.nextInt(inputs.size() - 1);
+            index = index % inputs.size();
+            samples.add(inputs.get(index));
         }
+        return samples;
     }
 
     @Override

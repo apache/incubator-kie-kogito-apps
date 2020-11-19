@@ -21,15 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Numeric feature distribution based on {@code double[]}.
  */
 public class NumericFeatureDistribution implements FeatureDistribution {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(NumericFeatureDistribution.class);
 
     private final Feature feature;
     private final double[] doubles;
@@ -51,18 +46,15 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        if (sampleSize >= doubles.length) {
-            LOGGER.warn("required {} samples, but only {} are available", sampleSize, doubles.length);
-            return getAllSamples();
-        } else {
-            List<Double> copy = Arrays.stream(doubles).boxed().collect(Collectors.toList());
-            Collections.shuffle(copy);
-            List<Value<?>> samples = new ArrayList<>(sampleSize);
-            for (int i = 0; i < sampleSize; i++) {
-                samples.add(new Value<>(copy.get(i)));
+        List<Double> copy = Arrays.stream(doubles).boxed().collect(Collectors.toList());
+        List<Value<?>> samples = new ArrayList<>(sampleSize);
+        for (int i = 0; i < sampleSize; i++) {
+            if (i % doubles.length == 0) {
+                Collections.shuffle(copy);
             }
-            return samples;
+            samples.add(new Value<>(copy.get(i % doubles.length)));
         }
+        return samples;
     }
 
     @Override
@@ -71,6 +63,7 @@ public class NumericFeatureDistribution implements FeatureDistribution {
         for (double aDouble : doubles) {
             values.add(new Value<>(aDouble));
         }
+        Collections.shuffle(values);
         return Collections.unmodifiableList(values);
     }
 }

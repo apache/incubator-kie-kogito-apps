@@ -53,6 +53,21 @@ class NumericFeatureDistributionTest {
     }
 
     @Test
+    void testLargerSamples() {
+        Feature feature = TestUtils.getMockedNumericFeature();
+        double[] doubles = DataUtils.generateSamples(0, 10, 10);
+        NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, doubles);
+        List<Value<?>> samples = numericFeatureDistribution.sample(21);
+        assertNotNull(samples);
+        assertEquals(21, samples.size());
+        for (Value<?> sample : samples) {
+            assertNotNull(sample);
+            assertNotNull(sample.getUnderlyingObject());
+            assertThat(sample.asNumber()).isBetween(0d, 10d);
+        }
+    }
+
+    @Test
     void testGetAllSamples() {
         Feature feature = TestUtils.getMockedNumericFeature();
         double[] doubles = DataUtils.generateSamples(0, 10, 10);
