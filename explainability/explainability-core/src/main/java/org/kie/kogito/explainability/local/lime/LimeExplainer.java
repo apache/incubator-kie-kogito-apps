@@ -56,7 +56,6 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  */
 public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
-    public static final double SEPARABLE_DATASET_RATIO = 0.99;
     private static final Logger LOGGER = LoggerFactory.getLogger(LimeExplainer.class);
 
     private final LimeConfig limeConfig;
@@ -228,7 +227,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             boolean classification = rawClassesBalance.size() == 2;
             if (strict) {
                 // check if the dataset is separable and also if the linear model should fit a regressor or a classifier
-                if (rawClassesBalance.size() > 1 && separationRatio < SEPARABLE_DATASET_RATIO) {
+                if (rawClassesBalance.size() > 1 && separationRatio < limeConfig.getSeparableDatasetRatio()) {
                     // if dataset creation process succeeds use it to train the linear model
                     return new LimeInputs(classification, linearizedTargetInputFeatures, currentOutput, perturbedInputs, outputs);
                 } else {

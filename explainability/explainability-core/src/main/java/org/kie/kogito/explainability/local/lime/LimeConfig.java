@@ -25,8 +25,11 @@ import org.kie.kogito.explainability.model.PerturbationContext;
 public class LimeConfig {
 
     private static final int DEFAULT_NO_OF_SAMPLES = 300;
+    private static final double DEFAULT_SEPARABLE_DATASET_RATIO = 0.99;
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
+
+    private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
     /**
      * No. of samples to be generated for the local linear model training
@@ -47,6 +50,11 @@ public class LimeConfig {
      * Whether the explainer should adapt the variance in the generated (perturbed) data when it's not separable.
      */
     private boolean adaptDatasetVariance = DEFAULT_ADAPT_DATASET_VARIANCE;
+
+    public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
+        this.separableDatasetRatio = separableDatasetRatio;
+        return this;
+    }
 
     public LimeConfig withPerturbationContext(PerturbationContext perturbationContext) {
         this.perturbationContext = perturbationContext;
@@ -82,5 +90,9 @@ public class LimeConfig {
 
     public boolean adaptDatasetVariance() {
         return adaptDatasetVariance;
+    }
+
+    public double getSeparableDatasetRatio() {
+        return separableDatasetRatio;
     }
 }
