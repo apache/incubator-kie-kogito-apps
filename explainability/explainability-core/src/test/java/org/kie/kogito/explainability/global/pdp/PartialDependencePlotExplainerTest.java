@@ -18,7 +18,6 @@ package org.kie.kogito.explainability.global.pdp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.FakeRandom;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
@@ -37,10 +36,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -53,7 +54,7 @@ class PartialDependencePlotExplainerTest {
     PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
         @Override
         public DataDistribution getDataDistribution() {
-            return DataUtils.generateRandomDataDistribution(3, 100, new FakeRandom());
+            return DataUtils.generateRandomDataDistribution(3, 100, new Random());
         }
 
         @Override
@@ -68,7 +69,7 @@ class PartialDependencePlotExplainerTest {
         @Override
         public PredictionOutput getOutputShape() {
             List<Output> outputs = new LinkedList<>();
-            outputs.add(new Output("spam", Type.BOOLEAN, new Value<>(false), 0d));
+            outputs.add(new Output("sum-but0", Type.BOOLEAN, new Value<>(false), 0d));
             return new PredictionOutput(outputs);
         }
     };
@@ -89,15 +90,16 @@ class PartialDependencePlotExplainerTest {
         PartialDependenceGraph fixedFeatureGraph = pdps.get(0);
         assertEquals(1, Arrays.stream(fixedFeatureGraph.getY()).distinct().count());
 
-        // the other two instead change but in the same way, due the behaviour of FakeRandom in generating data/distributions
-        assertArrayEquals(pdps.get(1).getY(), pdps.get(2).getY());
+        // the other two instead vary in Y values
+        assertThat(Arrays.stream(pdps.get(1).getY()).distinct().count()).isGreaterThan(1);
+        assertThat(Arrays.stream(pdps.get(2).getY()).distinct().count()).isGreaterThan(1);
     }
 
     private void assertGraph(PartialDependenceGraph pdp) {
         for (int i = 0; i < pdp.getX().length; i++) {
             assertNotEquals(Double.NaN, pdp.getY()[i]);
             if (i > 0) {
-                assertTrue(pdp.getX()[i] >= pdp.getX()[i - 1]);
+                assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
             }
         }
     }
