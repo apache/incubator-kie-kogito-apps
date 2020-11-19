@@ -147,7 +147,7 @@ class SaliencyTest {
         Map<String, Saliency> map2 = new HashMap<>();
         map2.put("out", saliency2);
 
-        Map<String,Saliency> merge = Saliency.merge(map1, map2);
+        Map<String, Saliency> merge = Saliency.merge(map1, map2);
         assertNotNull(merge);
         assertEquals(1, merge.size());
         Saliency mergedSaliency = merge.get("out");

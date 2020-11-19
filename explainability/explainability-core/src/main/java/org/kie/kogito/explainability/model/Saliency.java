@@ -100,12 +100,14 @@ public class Saliency {
     public static Map<String, Saliency> merge(Map<String, Saliency>... saliencies) {
         Map<String, Saliency> finalResult = new HashMap<>();
 
-        Map<Output, List<Saliency>> collect2 = Arrays.stream(saliencies).collect(Collectors.toList()).stream()  //  Stream<Map<String, String>>
-                .map(Map::values)              // Stream<List<String>>
-                .flatMap(Collection::stream)   // Stream<String>
+        // group Saliencies by Output
+        Map<Output, List<Saliency>> flatten = Arrays.stream(saliencies).collect(Collectors.toList()).stream()
+                .map(Map::values)
+                .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(Saliency::getOutput));
 
-        for (Map.Entry<Output, List<Saliency>> saliencyEntry : collect2.entrySet()) {
+        // calculate mean feature importance
+        for (Map.Entry<Output, List<Saliency>> saliencyEntry : flatten.entrySet()) {
             List<FeatureImportance> result = new ArrayList<>();
             List<FeatureImportance> fis = saliencyEntry.getValue().stream().map(s -> s.perFeatureImportance).flatMap(Collection::stream).collect(Collectors.toList());
             Map<Feature, List<FeatureImportance>> collect = fis.stream().collect(Collectors.groupingBy(fi -> FeatureFactory.copyOf(fi.getFeature(), new Value<>(null))));
@@ -121,4 +123,3 @@ public class Saliency {
 
 
 }
-
