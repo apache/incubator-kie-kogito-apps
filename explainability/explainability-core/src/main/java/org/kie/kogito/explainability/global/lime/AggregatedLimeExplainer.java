@@ -15,8 +15,7 @@
  */
 package org.kie.kogito.explainability.global.lime;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.global.GlobalExplainer;
+import org.kie.kogito.explainability.global.ExistingPredictionsGlobalExplainer;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -32,12 +32,14 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.utils.DataUtils;
 
 /**
  * Global explainer aggregating LIME explanations over a number of inputs by reporting the mean feature importance for
  * each feature.
  */
-public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFuture<Map<String, Saliency>>> {
+public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFuture<Map<String, Saliency>>>,
+                                                ExistingPredictionsGlobalExplainer<CompletableFuture<Map<String, Saliency>>> {
 
     private final LimeExplainer limeExplainer;
     private final int sampleSize;
@@ -56,14 +58,15 @@ public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFutur
         List<PredictionInput> inputs = metadata.getDataDistribution().sample(sampleSize); // sample inputs from the data distribution
 
         return model.predictAsync(inputs) // execute the model on the inputs
-                .thenApply(os -> getCollect(inputs, os)) // generate predictions from inputs and outputs
-                .thenApply(predictions -> predictions.parallelStream().map(p -> limeExplainer.explainAsync(p, model)) // extract saliency for each input
-                .map(CompletableFuture::join) // aggregate all the saliencies
-                .reduce(Collections.emptyMap(), (m1, m2) -> Saliency.merge(List.of(m1, m2)))); // merge all the saliencies together
+                .thenApply(os -> DataUtils.getPredictions(inputs, os)) // generate predictions from inputs and outputs
+                .thenCompose(ps -> explain(model, ps)); // explain predictions
     }
 
-    private List<Prediction> getCollect(List<PredictionInput> inputs, List<PredictionOutput> os) {
-        return IntStream.range(0, os.size())
-                .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
+    @Override
+    public CompletableFuture<Map<String, Saliency>> explain(PredictionProvider model, Collection<Prediction> predictions) {
+        return CompletableFuture.completedFuture(predictions)
+                .thenApply(p -> p.stream().map(prediction -> limeExplainer.explainAsync(prediction, model)) // extract saliency for each input
+                        .map(CompletableFuture::join) // aggregate all the saliencies
+                        .reduce(Collections.emptyMap(), (m1, m2) -> Saliency.merge(List.of(m1, m2)))); // merge all the saliencies together
     }
 }

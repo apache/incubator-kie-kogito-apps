@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
@@ -29,7 +30,9 @@ import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.IndependentFeaturesDatatDistribution;
 import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
@@ -396,5 +399,17 @@ public class DataUtils {
         } else {
             flattenedFeatures.add(f);
         }
+    }
+
+    /**
+     * Build Predictions from PredictionInputs and PredictionOutputs.
+     *
+     * @param inputs prediction inputs
+     * @param os     prediction outputs
+     * @return a list of predictions
+     */
+    public static List<Prediction> getPredictions(List<PredictionInput> inputs, List<PredictionOutput> os) {
+        return IntStream.range(0, os.size())
+                .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
     }
 }

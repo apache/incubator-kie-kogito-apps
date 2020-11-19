@@ -49,18 +49,15 @@ public class GenericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        if (sampleSize >= values.size()) {
-            LOGGER.warn("required {} samples, but only {} are available", sampleSize, values.size());
-            return getAllSamples();
-        } else {
-            List<Value<?>> copy = new java.util.ArrayList<>(values);
-            Collections.shuffle(copy);
-            List<Value<?>> samples = new ArrayList<>(sampleSize);
-            for (int i = 0; i < sampleSize; i++) {
-                samples.add(copy.get(i));
+        List<Value<?>> copy = new java.util.ArrayList<>(values);
+        List<Value<?>> samples = new ArrayList<>(sampleSize);
+        for (int i = 0; i < sampleSize; i++) {
+            if (i % values.size() == 0) {
+                Collections.shuffle(copy);
             }
-            return samples;
+            samples.add(copy.get(i));
         }
+        return samples;
     }
 
     @Override

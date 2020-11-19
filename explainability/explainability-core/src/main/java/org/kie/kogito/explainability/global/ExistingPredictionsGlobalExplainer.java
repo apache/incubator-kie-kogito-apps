@@ -15,25 +15,25 @@
  */
 package org.kie.kogito.explainability.global;
 
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.PredictionProviderMetadata;
+import java.util.Collection;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionProvider;
 
 /**
- * A global explainability method.
+ * A global explainability method that leverages existing predictions (e.g. from historical data) instead of generating
+ * new ones for the purpose of explainability.
  *
  * @param <T> the type of global explanation generated
  */
-public interface GlobalExplainer<T> {
+public interface ExistingPredictionsGlobalExplainer<T> {
 
     /**
-     * Generate a global explanation on a given model, using existing metadata about the model.
+     * Generate a global explanation on a given model, using existing predictions.
      *
-     * @param model    the model to explain
-     * @param metadata information about the model
+     * @param model       the model to explain
+     * @param predictions the predictions used to generate the global explanation
      * @return a global explanation
      */
-    T explain(PredictionProvider model, PredictionProviderMetadata metadata) throws InterruptedException, ExecutionException, TimeoutException;
+    T explain(PredictionProvider model, Collection<Prediction> predictions);
 }

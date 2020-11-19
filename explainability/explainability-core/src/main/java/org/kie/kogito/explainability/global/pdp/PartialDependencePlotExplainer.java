@@ -70,7 +70,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     }
 
     @Override
-    public List<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws InterruptedException, ExecutionException, TimeoutException {
+    public List<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata)
+            throws InterruptedException, ExecutionException, TimeoutException {
         long start = System.currentTimeMillis();
 
         List<PartialDependenceGraph> pdps = new ArrayList<>();
