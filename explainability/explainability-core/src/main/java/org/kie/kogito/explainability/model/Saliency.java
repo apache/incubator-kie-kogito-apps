@@ -74,41 +74,17 @@ public class Saliency {
     }
 
     /**
-     * Merge saliencies so that they are aggregated by {@code Output#getName} and the resulting list of associated
-     * {@code FeatureImportance}s is derived by calculating the mean score for each feature across all such saliencies.
-     *
-     * @param saliencies an array of saliencies
-     * @return a list of merged saliencies, one for each output appearing in the input saliencies
-     */
-    public static List<Saliency> merge(Saliency... saliencies) {
-        List<Saliency> finalList = new ArrayList<>();
-        Map<Output, List<Saliency>> perOutputSaliencies = Arrays.stream(saliencies).collect(Collectors.groupingBy(s -> new Output(s.getOutput().getName(), s.getOutput().getType())));
-        for (Map.Entry<Output, List<Saliency>> saliencyEntry : perOutputSaliencies.entrySet()) {
-            List<FeatureImportance> result = new ArrayList<>();
-            List<FeatureImportance> fis = saliencyEntry.getValue().stream().map(s -> s.perFeatureImportance).flatMap(Collection::stream).collect(Collectors.toList());
-            Map<Feature, List<FeatureImportance>> collect = fis.stream().collect(Collectors.groupingBy(fi -> FeatureFactory.copyOf(fi.getFeature(), new Value<>(null))));
-            for (Map.Entry<Feature, List<FeatureImportance>> entry : collect.entrySet()) {
-                double meanScore = entry.getValue().stream().map(FeatureImportance::getScore).flatMapToDouble(DoubleStream::of).average().orElse(0);
-                result.add(new FeatureImportance(entry.getKey(), meanScore));
-            }
-            result.sort(Comparator.comparing(f -> f.getFeature().getName()));
-            finalList.add(new Saliency(saliencyEntry.getKey(), result));
-        }
-        return finalList;
-    }
-
-    /**
      * Merge saliencies so that they are aggregated by {@code Output} and the resulting list of associated
      * {@code FeatureImportance}s is derived by calculating the mean score for each feature across all such saliencies.
      *
-     * @param saliencies an array of saliency maps
+     * @param saliencies a collection of saliency maps
      * @return a map of merged saliencies, one for each output appearing in the input saliencies
      */
-    public static Map<String, Saliency> merge(Map<String, Saliency>... saliencies) {
+    public static Map<String, Saliency> merge(Collection<Map<String, Saliency>> saliencies) {
         Map<String, Saliency> finalResult = new HashMap<>();
 
         // group Saliencies by Output
-        Map<Output, List<Saliency>> flatten = Arrays.stream(saliencies).collect(Collectors.toList()).stream()
+        Map<Output, List<Saliency>> flatten = saliencies.stream()
                 .map(Map::values)
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(Saliency::getOutput));

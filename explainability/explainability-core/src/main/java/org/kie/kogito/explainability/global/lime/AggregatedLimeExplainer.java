@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.explainability.global.lime;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +59,7 @@ public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFutur
                 .thenApply(os -> getCollect(inputs, os)) // generate predictions from inputs and outputs
                 .thenApply(predictions -> predictions.parallelStream().map(p -> limeExplainer.explainAsync(p, model)) // extract saliency for each input
                 .map(CompletableFuture::join) // aggregate all the saliencies
-                .reduce(Collections.emptyMap(), Saliency::merge)); // merge all the saliencies together
+                .reduce(Collections.emptyMap(), (m1, m2) -> Saliency.merge(List.of(m1, m2)))); // merge all the saliencies together
     }
 
     private List<Prediction> getCollect(List<PredictionInput> inputs, List<PredictionOutput> os) {

@@ -98,36 +98,6 @@ class SaliencyTest {
     }
 
     @Test
-    void testMergeSaliencies() {
-        List<FeatureImportance> fis1 = new ArrayList<>();
-        fis1.add(new FeatureImportance(FeatureFactory.newTextFeature("f1", "foo"), 0.1));
-        fis1.add(new FeatureImportance(FeatureFactory.newTextFeature("f2", "bar"), -0.4));
-        fis1.add(new FeatureImportance(FeatureFactory.newNumericalFeature("f3", 10), 0.01));
-        Output output1 = new Output("out", Type.NUMBER);
-        Saliency saliency1 = new Saliency(output1, fis1);
-
-        List<FeatureImportance> fis2 = new ArrayList<>();
-        fis2.add(new FeatureImportance(FeatureFactory.newTextFeature("f1", "foo"), 0.2));
-        fis2.add(new FeatureImportance(FeatureFactory.newTextFeature("f2", "bar"), -0.2));
-        fis2.add(new FeatureImportance(FeatureFactory.newNumericalFeature("f3", 10), 0.03));
-        Output output2 = new Output("out", Type.NUMBER);
-        Saliency saliency2 = new Saliency(output2, fis2);
-
-        Saliency[] saliencies = new Saliency[]{saliency1, saliency2};
-
-        List<Saliency> merge = Saliency.merge(saliencies);
-        assertNotNull(merge);
-        assertEquals(1, merge.size());
-        Saliency mergedSaliency = merge.get(0);
-        List<FeatureImportance> perFeatureImportance = mergedSaliency.getPerFeatureImportance();
-        assertNotNull(perFeatureImportance);
-        assertEquals(3, perFeatureImportance.size());
-        assertEquals(0.15, perFeatureImportance.get(0).getScore(), 1e-3);
-        assertEquals(-0.3, perFeatureImportance.get(1).getScore(), 1e-3);
-        assertEquals(0.02, perFeatureImportance.get(2).getScore(), 1e-3);
-    }
-
-    @Test
     void testMergeSaliencyMaps() {
         List<FeatureImportance> fis1 = new ArrayList<>();
         fis1.add(new FeatureImportance(FeatureFactory.newTextFeature("f1", "foo"), 0.1));
@@ -147,7 +117,7 @@ class SaliencyTest {
         Map<String, Saliency> map2 = new HashMap<>();
         map2.put("out", saliency2);
 
-        Map<String, Saliency> merge = Saliency.merge(map1, map2);
+        Map<String, Saliency> merge = Saliency.merge(List.of(map1, map2));
         assertNotNull(merge);
         assertEquals(1, merge.size());
         Saliency mergedSaliency = merge.get("out");
