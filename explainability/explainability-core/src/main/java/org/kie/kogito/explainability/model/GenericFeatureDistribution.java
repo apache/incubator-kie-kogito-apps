@@ -19,15 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Feature distribution based on list of {@code Values}.
  */
 public class GenericFeatureDistribution implements FeatureDistribution {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(GenericFeatureDistribution.class);
 
     private final Feature feature;
     private final List<Value<?>> values;

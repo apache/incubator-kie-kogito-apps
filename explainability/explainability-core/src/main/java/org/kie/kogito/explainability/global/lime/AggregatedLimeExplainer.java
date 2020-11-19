@@ -20,15 +20,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.global.ExistingPredictionsGlobalExplainer;
+import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
 import org.kie.kogito.explainability.model.Saliency;
