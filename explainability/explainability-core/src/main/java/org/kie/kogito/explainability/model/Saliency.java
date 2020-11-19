@@ -97,6 +97,13 @@ public class Saliency {
         return finalList;
     }
 
+    /**
+     * Merge saliencies so that they are aggregated by {@code Output} and the resulting list of associated
+     * {@code FeatureImportance}s is derived by calculating the mean score for each feature across all such saliencies.
+     *
+     * @param saliencies an array of saliency maps
+     * @return a map of merged saliencies, one for each output appearing in the input saliencies
+     */
     public static Map<String, Saliency> merge(Map<String, Saliency>... saliencies) {
         Map<String, Saliency> finalResult = new HashMap<>();
 
