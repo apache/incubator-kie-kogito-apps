@@ -29,24 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class IndependentFeaturesDatatDistributionTest {
 
     @Test
-    void testSample() {
-        List<FeatureDistribution> featureDistributions = new ArrayList<>(3);
-        double[] doubles1 = DataUtils.generateSamples(0, 1, 10);
-        double[] doubles2 = DataUtils.generateSamples(0, 1, 10);
-        double[] doubles3 = DataUtils.generateSamples(0, 1, 10);
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
-        IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
-        PredictionInput sample = independentFeaturesDatatDistribution.sample();
-        assertNotNull(sample);
-        assertEquals(3, sample.getFeatures().size());
-        assertThat(sample.getFeatures().get(0).getValue().asNumber()).isBetween(0d, 1d);
-        assertThat(sample.getFeatures().get(1).getValue().asNumber()).isBetween(0d, 1d);
-        assertThat(sample.getFeatures().get(2).getValue().asNumber()).isBetween(0d, 1d);
-    }
-
-    @Test
     void testSamples() {
         List<FeatureDistribution> featureDistributions = new ArrayList<>(3);
         double[] doubles1 = DataUtils.generateSamples(0, 1, 10);
@@ -56,29 +38,10 @@ class IndependentFeaturesDatatDistributionTest {
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
         IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
+        assertEquals(1000, independentFeaturesDatatDistribution.getAllSamples().size());
         List<PredictionInput> samples = independentFeaturesDatatDistribution.sample(3);
         assertNotNull(samples);
         assertEquals(3, samples.size());
-        for (PredictionInput sample : samples) {
-            assertThat(sample.getFeatures().get(0).getValue().asNumber()).isBetween(0d, 1d);
-            assertThat(sample.getFeatures().get(1).getValue().asNumber()).isBetween(0d, 1d);
-            assertThat(sample.getFeatures().get(2).getValue().asNumber()).isBetween(0d, 1d);
-        }
-    }
-
-    @Test
-    void testGetAllSamples() {
-        List<FeatureDistribution> featureDistributions = new ArrayList<>(3);
-        double[] doubles1 = DataUtils.generateSamples(0, 1, 3);
-        double[] doubles2 = DataUtils.generateSamples(0, 1, 3);
-        double[] doubles3 = DataUtils.generateSamples(0, 1, 3);
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
-        IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
-        List<PredictionInput> samples = independentFeaturesDatatDistribution.getAllSamples();
-        assertNotNull(samples);
-        assertEquals(27, samples.size());
         for (PredictionInput sample : samples) {
             assertThat(sample.getFeatures().get(0).getValue().asNumber()).isBetween(0d, 1d);
             assertThat(sample.getFeatures().get(1).getValue().asNumber()).isBetween(0d, 1d);
@@ -91,18 +54,15 @@ class IndependentFeaturesDatatDistributionTest {
         List<FeatureDistribution> featureDistributions = new ArrayList<>(3);
         double[] doubles1 = DataUtils.generateSamples(0, 1, 3);
         double[] doubles2 = DataUtils.generateSamples(0, 1, 3);
-        double[] doubles3 = DataUtils.generateSamples(0, 1, 3);
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
-        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
         IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
-        List<PredictionInput> samples = independentFeaturesDatatDistribution.sample(100);
+        List<PredictionInput> samples = independentFeaturesDatatDistribution.sample(300);
         assertNotNull(samples);
-        assertEquals(100, samples.size());
+        assertEquals(300, samples.size());
         for (PredictionInput sample : samples) {
             assertThat(sample.getFeatures().get(0).getValue().asNumber()).isBetween(0d, 1d);
             assertThat(sample.getFeatures().get(1).getValue().asNumber()).isBetween(0d, 1d);
-            assertThat(sample.getFeatures().get(2).getValue().asNumber()).isBetween(0d, 1d);
         }
     }
 

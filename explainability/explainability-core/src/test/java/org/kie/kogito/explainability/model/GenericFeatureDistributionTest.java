@@ -29,90 +29,27 @@ import static org.junit.jupiter.api.Assertions.*;
 class GenericFeatureDistributionTest {
 
     @Test
-    void testNumericSample() {
-        Feature feature = TestUtils.getMockedNumericFeature();
-        double[] doubles = DataUtils.generateSamples(0, 10, 10);
-        List<Value<?>> values = Arrays.stream(doubles).mapToObj(Value::new).collect(Collectors.toList());
-        GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
-        Value<?> sample = numericFeatureDistribution.sample();
-        assertNotNull(sample);
-        assertNotNull(sample.getUnderlyingObject());
-        assertThat(sample.asNumber()).isBetween(0d, 10d);
-    }
-
-    @Test
     void testNumericSamples() {
         Feature feature = TestUtils.getMockedNumericFeature();
         double[] doubles = DataUtils.generateSamples(0, 10, 10);
         List<Value<?>> values = Arrays.stream(doubles).mapToObj(Value::new).collect(Collectors.toList());
         GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
-        List<Value<?>> samples = numericFeatureDistribution.sample(3);
-        assertNotNull(samples);
-        assertEquals(3, samples.size());
-        for (Value<?> sample : samples) {
-            assertNotNull(sample);
-            assertNotNull(sample.getUnderlyingObject());
-            assertThat(sample.asNumber()).isBetween(0d, 10d);
-        }
-    }
-
-    @Test
-    void testNumericGetAllSamples() {
-        Feature feature = TestUtils.getMockedNumericFeature();
-        double[] doubles = DataUtils.generateSamples(0, 10, 10);
-        List<Value<?>> values = Arrays.stream(doubles).mapToObj(Value::new).collect(Collectors.toList());
-        GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
-        List<Value<?>> samples = numericFeatureDistribution.getAllSamples();
-        assertNotNull(samples);
-        assertEquals(10, samples.size());
-        for (Value<?> sample : samples) {
-            assertNotNull(sample);
-            assertNotNull(sample.getUnderlyingObject());
-            assertThat(sample.asNumber()).isBetween(0d, 10d);
-        }
+        assertEquals(10, numericFeatureDistribution.getAllSamples().size());
+        assertEquals(3, numericFeatureDistribution.sample(3).size());
+        assertThat(numericFeatureDistribution.sample().asNumber()).isBetween(0d, 10d);
+        assertEquals(19, numericFeatureDistribution.sample(19).size());
     }
 
     @Test
     void testStringSample() {
         Feature feature = TestUtils.getMockedNumericFeature();
-        String[] words = "a b c d e f g h i j k l m n o p q r s u v w x y z".split(" ");
-        List<Value<?>> values = Arrays.stream(words).map(Value::new).collect(Collectors.toList());
-        GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
-        Value<?> sample = numericFeatureDistribution.sample();
-        assertNotNull(sample);
-        assertNotNull(sample.getUnderlyingObject());
-        assertThat(sample.asString()).isBetween("a", "z");
-    }
-
-    @Test
-    void testStringSamples() {
-        Feature feature = TestUtils.getMockedNumericFeature();
-        String[] words = "a b c d e f g h i j k l m n o p q r s u v w x y z".split(" ");
-        List<Value<?>> values = Arrays.stream(words).map(Value::new).collect(Collectors.toList());
-        GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
-        List<Value<?>> samples = numericFeatureDistribution.sample(3);
-        assertNotNull(samples);
-        assertEquals(3, samples.size());
-        for (Value<?> sample : samples) {
-            assertNotNull(sample);
-            assertNotNull(sample.getUnderlyingObject());
-            assertThat(sample.asString()).isBetween("a", "z");
-        }
-    }
-
-    @Test
-    void testStringGetAllSamples() {
-        Feature feature = TestUtils.getMockedNumericFeature();
         String[] words = "a b c d e f g h i j k l m n o p q r s t u v w x y z".split(" ");
         List<Value<?>> values = Arrays.stream(words).map(Value::new).collect(Collectors.toList());
-        GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
-        List<Value<?>> samples = numericFeatureDistribution.getAllSamples();
-        assertNotNull(samples);
-        assertEquals(26, samples.size());
-        for (Value<?> sample : samples) {
-            assertNotNull(sample);
-            assertNotNull(sample.getUnderlyingObject());
-            assertThat(sample.asString()).isBetween("a", "z");
-        }
+        GenericFeatureDistribution stringFeatureDistribution = new GenericFeatureDistribution(feature, values);
+        assertEquals(26, stringFeatureDistribution.getAllSamples().size());
+        assertEquals(3, stringFeatureDistribution.sample(3).size());
+        assertThat(stringFeatureDistribution.sample().asString()).isBetween("a","z");
+        assertEquals(55, stringFeatureDistribution.sample(55).size());
     }
+
 }

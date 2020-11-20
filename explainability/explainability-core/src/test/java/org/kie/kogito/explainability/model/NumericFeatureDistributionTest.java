@@ -15,41 +15,29 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.utils.DataUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class NumericFeatureDistributionTest {
 
     @Test
-    void testSample() {
+    void testNumericFeatureDistributionSampling() {
         Feature feature = TestUtils.getMockedNumericFeature();
         double[] doubles = DataUtils.generateSamples(0, 10, 10);
-        NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, doubles);
-        Value<?> sample = numericFeatureDistribution.sample();
-        assertNotNull(sample);
-        assertNotNull(sample.getUnderlyingObject());
-        assertThat(sample.asNumber()).isBetween(0d, 10d);
-    }
-
-    @Test
-    void testSamples() {
-        Feature feature = TestUtils.getMockedNumericFeature();
-        double[] doubles = DataUtils.generateSamples(0, 10, 10);
-        NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, doubles);
-        List<Value<?>> samples = numericFeatureDistribution.sample(3);
-        assertNotNull(samples);
-        assertEquals(3, samples.size());
-        for (Value<?> sample : samples) {
-            assertNotNull(sample);
-            assertNotNull(sample.getUnderlyingObject());
-            assertThat(sample.asNumber()).isBetween(0d, 10d);
-        }
+        List<Value<?>> values = Arrays.stream(doubles).mapToObj(Value::new).collect(Collectors.toList());
+        GenericFeatureDistribution numericFeatureDistribution = new GenericFeatureDistribution(feature, values);
+        assertEquals(10, numericFeatureDistribution.getAllSamples().size());
+        assertEquals(3, numericFeatureDistribution.sample(3).size());
+        assertThat(numericFeatureDistribution.sample().asNumber()).isBetween(0d, 10d);
     }
 
     @Test
@@ -67,18 +55,4 @@ class NumericFeatureDistributionTest {
         }
     }
 
-    @Test
-    void testGetAllSamples() {
-        Feature feature = TestUtils.getMockedNumericFeature();
-        double[] doubles = DataUtils.generateSamples(0, 10, 10);
-        NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, doubles);
-        List<Value<?>> samples = numericFeatureDistribution.getAllSamples();
-        assertNotNull(samples);
-        assertEquals(10, samples.size());
-        for (Value<?> sample : samples) {
-            assertNotNull(sample);
-            assertNotNull(sample.getUnderlyingObject());
-            assertThat(sample.asNumber()).isBetween(0d, 10d);
-        }
-    }
 }

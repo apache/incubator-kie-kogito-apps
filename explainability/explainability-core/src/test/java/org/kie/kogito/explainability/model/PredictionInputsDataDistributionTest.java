@@ -46,6 +46,7 @@ class PredictionInputsDataDistributionTest {
         inputs.add(new PredictionInput(List.of(TestUtils.getMockedTextFeature("bar"))));
         inputs.add(new PredictionInput(List.of(TestUtils.getMockedTextFeature("asd"))));
         PredictionInputsDataDistribution predictionInputsDataDistribution = new PredictionInputsDataDistribution(inputs);
+        assertEquals(3, predictionInputsDataDistribution.getAllSamples().size());
         List<PredictionInput> samples = predictionInputsDataDistribution.sample(2);
         assertNotNull(samples);
         assertEquals(2, samples.size());
@@ -64,21 +65,6 @@ class PredictionInputsDataDistributionTest {
         List<PredictionInput> samples = predictionInputsDataDistribution.sample(12);
         assertNotNull(samples);
         assertEquals(12, samples.size());
-        for (PredictionInput sample : samples) {
-            assertTrue(inputs.contains(sample));
-        }
-    }
-
-    @Test
-    void testGetAllSamples() {
-        List<PredictionInput> inputs = new ArrayList<>(3);
-        inputs.add(new PredictionInput(List.of(TestUtils.getMockedTextFeature("foo"))));
-        inputs.add(new PredictionInput(List.of(TestUtils.getMockedTextFeature("bar"))));
-        inputs.add(new PredictionInput(List.of(TestUtils.getMockedTextFeature("asd"))));
-        PredictionInputsDataDistribution predictionInputsDataDistribution = new PredictionInputsDataDistribution(inputs);
-        List<PredictionInput> samples = predictionInputsDataDistribution.getAllSamples();
-        assertNotNull(samples);
-        assertEquals(3, samples.size());
         for (PredictionInput sample : samples) {
             assertTrue(inputs.contains(sample));
         }
