@@ -101,5 +101,4 @@ public class Saliency {
         return finalResult;
     }
 
-
 }
