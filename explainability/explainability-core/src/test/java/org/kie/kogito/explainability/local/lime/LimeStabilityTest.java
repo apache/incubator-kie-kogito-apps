@@ -15,6 +15,14 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
@@ -25,14 +33,6 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
