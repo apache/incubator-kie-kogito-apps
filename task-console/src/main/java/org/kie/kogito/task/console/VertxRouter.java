@@ -46,6 +46,14 @@ public class VertxRouter {
     String authEnabled;
 
     @Inject
+    @ConfigProperty(name = "kogito.task.active.states.list", defaultValue = "Ready,Reserved")
+    String activeTaskStates;
+
+    @Inject
+    @ConfigProperty(name = "kogito.task.states.list", defaultValue = "Ready,Reserved,Completed,Aborted,Skipped")
+    String allTaskStates;
+
+    @Inject
     Vertx vertx;
 
     private String resource;
@@ -56,7 +64,9 @@ public class VertxRouter {
                 .readFileBlocking("META-INF/resources/index.html")
                 .toString(UTF_8)
                 .replace("__DATA_INDEX_ENDPOINT__", "\"" + dataIndexHttpURL + "/graphql\"")
-                .replace("__KOGITO_AUTH_ENABLED__", authEnabled);
+                .replace("__KOGITO_AUTH_ENABLED__", authEnabled)
+                .replace("__KOGITO_TASK_ACTIVE_STATES_LIST__", "\"" + activeTaskStates + "\"")
+                .replace("__KOGITO_TASK_STATES_LIST__", "\"" + allTaskStates + "\"");
     }
 
     void setupRouter(@Observes Router router) {
