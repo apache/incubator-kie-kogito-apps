@@ -412,4 +412,11 @@ public class DataUtils {
         return IntStream.range(0, os.size())
                 .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
     }
+
+    public static <T> List<T> sampleWithReplacement(List<T> values, int sampleSize, Random random) {
+        return random
+                .ints(sampleSize, 0, values.size() - 1)
+                .mapToObj(values::get)
+                .collect(Collectors.toList());
+    }
 }

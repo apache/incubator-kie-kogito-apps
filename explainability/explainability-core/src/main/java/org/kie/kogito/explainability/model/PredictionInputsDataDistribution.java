@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.kie.kogito.explainability.utils.DataUtils;
+
 /**
  * Data distribution based on list of {@code PredictionInputs}.
  */
@@ -40,25 +42,19 @@ public class PredictionInputsDataDistribution implements DataDistribution {
 
     @Override
     public PredictionInput sample() {
-        List<PredictionInput> copy = new java.util.ArrayList<>(inputs);
-        Collections.shuffle(copy);
-        return copy.get(0);
+        return sample(1).get(0);
     }
 
     @Override
     public List<PredictionInput> sample(int sampleSize) {
-        List<PredictionInput> samples = new ArrayList<>(sampleSize);
-        for (int i = 0; i < sampleSize; i++) {
-            int index = random.nextInt(inputs.size() - 1);
-            index = index % inputs.size();
-            samples.add(inputs.get(index));
-        }
-        return samples;
+        return DataUtils.sampleWithReplacement(inputs, sampleSize, new Random());
     }
 
     @Override
     public List<PredictionInput> getAllSamples() {
-        return inputs;
+        List<PredictionInput> copy = new ArrayList<>(inputs);
+        Collections.shuffle(copy);
+        return copy;
     }
 
     @Override

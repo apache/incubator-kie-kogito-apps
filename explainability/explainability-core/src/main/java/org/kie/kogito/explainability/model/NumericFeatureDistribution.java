@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
+
+import org.kie.kogito.explainability.utils.DataUtils;
 
 /**
  * Numeric feature distribution based on {@code double[]}.
@@ -46,23 +49,16 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        List<Double> copy = Arrays.stream(doubles).boxed().collect(Collectors.toList());
-        List<Value<?>> samples = new ArrayList<>(sampleSize);
-        for (int i = 0; i < sampleSize; i++) {
-            if (i % doubles.length == 0) {
-                Collections.shuffle(copy);
-            }
-            samples.add(new Value<>(copy.get(i % doubles.length)));
-        }
-        return samples;
+        return DataUtils.sampleWithReplacement(toValuesList(), sampleSize, new Random());
+    }
+
+    private List<Value<?>> toValuesList() {
+        return Arrays.stream(doubles).boxed().map(Value::new).collect(Collectors.toList());
     }
 
     @Override
     public List<Value<?>> getAllSamples() {
-        List<Value<?>> values = new ArrayList<>(doubles.length);
-        for (double aDouble : doubles) {
-            values.add(new Value<>(aDouble));
-        }
+        List<Value<?>> values = toValuesList();
         Collections.shuffle(values);
         return Collections.unmodifiableList(values);
     }

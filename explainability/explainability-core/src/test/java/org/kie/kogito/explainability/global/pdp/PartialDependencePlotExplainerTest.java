@@ -98,7 +98,7 @@ class PartialDependencePlotExplainerTest {
         for (int i = 0; i < pdp.getX().length; i++) {
             assertNotEquals(Double.NaN, pdp.getY()[i]);
             if (i > 0) {
-                assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
+                assertTrue(pdp.getX()[i] >= pdp.getX()[i - 1]);
             }
         }
     }

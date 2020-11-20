@@ -18,6 +18,9 @@ package org.kie.kogito.explainability.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
+import org.kie.kogito.explainability.utils.DataUtils;
 
 /**
  * Feature distribution based on list of {@code Values}.
@@ -44,19 +47,13 @@ public class GenericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        List<Value<?>> copy = new java.util.ArrayList<>(values);
-        List<Value<?>> samples = new ArrayList<>(sampleSize);
-        for (int i = 0; i < sampleSize; i++) {
-            if (i % values.size() == 0) {
-                Collections.shuffle(copy);
-            }
-            samples.add(copy.get(i));
-        }
-        return samples;
+        return DataUtils.sampleWithReplacement(values, sampleSize, new Random());
     }
 
     @Override
     public List<Value<?>> getAllSamples() {
-        return values;
+        List<Value<?>> copy = new java.util.ArrayList<>(values);
+        Collections.shuffle(copy);
+        return copy;
     }
 }
