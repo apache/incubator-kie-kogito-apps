@@ -38,11 +38,13 @@ import org.kie.kogito.explainability.utils.DataUtils;
 public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFuture<Map<String, Saliency>>>,
                                                 ExistingPredictionsGlobalExplainer<CompletableFuture<Map<String, Saliency>>> {
 
+    private static final int DEFAULT_SAMPLE_SIZE = 100;
+
     private final LimeExplainer limeExplainer;
     private final int sampleSize;
 
     public AggregatedLimeExplainer(LimeExplainer limeExplainer) {
-        this(limeExplainer, 100);
+        this(limeExplainer, DEFAULT_SAMPLE_SIZE);
     }
 
     public AggregatedLimeExplainer(LimeExplainer limeExplainer, int sampleSize) {

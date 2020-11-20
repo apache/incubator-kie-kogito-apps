@@ -87,6 +87,26 @@ class IndependentFeaturesDatatDistributionTest {
     }
 
     @Test
+    void testLargerSamples() {
+        List<FeatureDistribution> featureDistributions = new ArrayList<>(3);
+        double[] doubles1 = DataUtils.generateSamples(0, 1, 3);
+        double[] doubles2 = DataUtils.generateSamples(0, 1, 3);
+        double[] doubles3 = DataUtils.generateSamples(0, 1, 3);
+        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
+        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
+        featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
+        IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
+        List<PredictionInput> samples = independentFeaturesDatatDistribution.sample(100);
+        assertNotNull(samples);
+        assertEquals(100, samples.size());
+        for (PredictionInput sample : samples) {
+            assertThat(sample.getFeatures().get(0).getValue().asNumber()).isBetween(0d, 1d);
+            assertThat(sample.getFeatures().get(1).getValue().asNumber()).isBetween(0d, 1d);
+            assertThat(sample.getFeatures().get(2).getValue().asNumber()).isBetween(0d, 1d);
+        }
+    }
+
+    @Test
     void testAsFeatureDistributions() {
         List<FeatureDistribution> featureDistributions = new ArrayList<>(3);
         double[] doubles1 = DataUtils.generateSamples(0, 1, 3);
