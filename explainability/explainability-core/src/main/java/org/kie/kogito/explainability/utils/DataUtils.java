@@ -413,6 +413,15 @@ public class DataUtils {
                 .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
     }
 
+    /**
+     * Sample (with replacement) from a list of values.
+     *
+     * @param values     the list to sample from
+     * @param sampleSize the no. of samples to draw
+     * @param random     a random instance
+     * @param <T>        the type of values to sample
+     * @return a list of sampled values
+     */
     public static <T> List<T> sampleWithReplacement(List<T> values, int sampleSize, Random random) {
         return random
                 .ints(sampleSize, 0, values.size() - 1)

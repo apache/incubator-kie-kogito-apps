@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,10 +32,16 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     private final Feature feature;
     private final double[] doubles;
+    private final Random random;
 
     public NumericFeatureDistribution(Feature feature, double[] doubles) {
+        this(feature, doubles, new SecureRandom());
+    }
+
+    public NumericFeatureDistribution(Feature feature, double[] doubles, Random random) {
         this.feature = feature;
         this.doubles = doubles;
+        this.random = random;
     }
 
     @Override
@@ -49,7 +56,7 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        return DataUtils.sampleWithReplacement(toValuesList(), sampleSize, new Random());
+        return DataUtils.sampleWithReplacement(toValuesList(), sampleSize, random);
     }
 
     private List<Value<?>> toValuesList() {

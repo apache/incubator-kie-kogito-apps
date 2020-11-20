@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,10 +30,16 @@ public class GenericFeatureDistribution implements FeatureDistribution {
 
     private final Feature feature;
     private final List<Value<?>> values;
+    private final Random random;
 
     public GenericFeatureDistribution(Feature feature, List<Value<?>> values) {
+        this(feature, values, new SecureRandom());
+    }
+
+    public GenericFeatureDistribution(Feature feature, List<Value<?>> values, Random random) {
         this.feature = feature;
         this.values = Collections.unmodifiableList(values);
+        this.random = random;
     }
 
     @Override
@@ -47,7 +54,7 @@ public class GenericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        return DataUtils.sampleWithReplacement(values, sampleSize, new Random());
+        return DataUtils.sampleWithReplacement(values, sampleSize, random);
     }
 
     @Override

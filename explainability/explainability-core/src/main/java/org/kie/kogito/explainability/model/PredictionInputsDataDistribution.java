@@ -47,7 +47,7 @@ public class PredictionInputsDataDistribution implements DataDistribution {
 
     @Override
     public List<PredictionInput> sample(int sampleSize) {
-        return DataUtils.sampleWithReplacement(inputs, sampleSize, new Random());
+        return DataUtils.sampleWithReplacement(inputs, sampleSize, random);
     }
 
     @Override
