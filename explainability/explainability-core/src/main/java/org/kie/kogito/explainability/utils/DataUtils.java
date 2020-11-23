@@ -424,7 +424,7 @@ public class DataUtils {
      */
     public static <T> List<T> sampleWithReplacement(List<T> values, int sampleSize, Random random) {
         return random
-                .ints(sampleSize, 0, values.size() - 1)
+                .ints(sampleSize, 0, values.size())
                 .mapToObj(values::get)
                 .collect(Collectors.toList());
     }

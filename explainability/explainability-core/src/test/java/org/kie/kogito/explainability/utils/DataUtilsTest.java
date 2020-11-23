@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -399,5 +400,15 @@ class DataUtilsTest {
             Feature newFeature = DataUtils.dropOnLinearizedFeatures(target, source);
             assertNotEquals(source, newFeature);
         }
+    }
+
+    @Test
+    void testSampleWithReplacement() {
+        List<Double> values = Arrays.stream(DataUtils.generateData(0, 1, 100, random)).boxed().collect(Collectors.toList());
+        int sampleSize = random.nextInt(100);
+        List<Double> samples = DataUtils.sampleWithReplacement(values, sampleSize, random);
+        assertNotNull(samples);
+        assertEquals(sampleSize, samples.size());
+        assertThat(values).contains(samples.get(random.nextInt(sampleSize - 1)));
     }
 }
