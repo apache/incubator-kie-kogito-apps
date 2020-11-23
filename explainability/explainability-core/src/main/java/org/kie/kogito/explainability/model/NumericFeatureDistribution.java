@@ -55,16 +55,16 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        return DataUtils.sampleWithReplacement(toValuesList(), sampleSize, random);
+        return DataUtils.sampleWithReplacement(toValuesList(doubles), sampleSize, random);
     }
 
-    private List<Value<?>> toValuesList() {
+    private List<Value<?>> toValuesList(double[] doubles) {
         return Arrays.stream(doubles).boxed().map(Value::new).collect(Collectors.toList());
     }
 
     @Override
     public List<Value<?>> getAllSamples() {
-        List<Value<?>> values = toValuesList();
+        List<Value<?>> values = toValuesList(doubles);
         Collections.shuffle(values);
         return Collections.unmodifiableList(values);
     }
