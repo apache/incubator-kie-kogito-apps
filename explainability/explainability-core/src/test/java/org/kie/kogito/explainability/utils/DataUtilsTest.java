@@ -405,10 +405,16 @@ class DataUtilsTest {
     @Test
     void testSampleWithReplacement() {
         List<Double> values = Arrays.stream(DataUtils.generateData(0, 1, 100, random)).boxed().collect(Collectors.toList());
-        int sampleSize = random.nextInt(100);
+        int sampleSize = 10;
         List<Double> samples = DataUtils.sampleWithReplacement(values, sampleSize, random);
         assertNotNull(samples);
         assertEquals(sampleSize, samples.size());
         assertThat(values).contains(samples.get(random.nextInt(sampleSize - 1)));
+
+        int largerSampleSize = 300;
+        List<Double> largerSamples = DataUtils.sampleWithReplacement(values, largerSampleSize, random);
+        assertThat(largerSamples).isNotNull();
+        assertThat(largerSampleSize).isEqualTo(largerSamples.size());
+        assertThat(values).contains(largerSamples.get(random.nextInt(largerSampleSize - 1)));
     }
 }
