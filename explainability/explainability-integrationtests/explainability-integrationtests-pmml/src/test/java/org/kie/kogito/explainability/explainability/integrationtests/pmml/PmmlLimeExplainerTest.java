@@ -41,9 +41,6 @@ import org.kie.pmml.api.runtime.PMMLRuntime;
 import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.kie.kogito.explainability.explainability.integrationtests.pmml.AbstractPMMLTest.getPMMLRuntime;
 import static org.kie.test.util.filesystem.FileUtils.getFile;
 
@@ -91,17 +88,17 @@ class PmmlLimeExplainerTest {
             });
             List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            assertNotNull(predictionOutputs);
-            assertFalse(predictionOutputs.isEmpty());
+            assertThat(predictionOutputs).isNotNull();
+            assertThat(predictionOutputs).isNotEmpty();
             PredictionOutput output = predictionOutputs.get(0);
-            assertNotNull(output);
+            assertThat(output).isNotNull();
             Prediction prediction = new Prediction(input, output);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
-                assertNotNull(saliency);
+                assertThat(saliency).isNotNull();
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
-                assertEquals(1d, v);
+                assertThat(v).isEqualTo(1d);
             }
             int topK = 1;
             LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
@@ -137,16 +134,19 @@ class PmmlLimeExplainerTest {
             }
             return outputs;
         });
-        PredictionOutput output = model.predictAsync(List.of(input))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                .get(0);
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        assertThat(predictionOutputs).isNotNull();
+        assertThat(predictionOutputs).isNotEmpty();
+        PredictionOutput output = predictionOutputs.get(0);
+        assertThat(output).isNotNull();
         Prediction prediction = new Prediction(input, output);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
-            assertNotNull(saliency);
-            double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(1));
-            assertEquals(1d, v);
+            assertThat(saliency).isNotNull();
+            double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
+            assertThat(v).isEqualTo(1d);
         }
         int topK = 1;
         LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
@@ -188,16 +188,19 @@ class PmmlLimeExplainerTest {
             return outputs;
         });
 
-        PredictionOutput output = model.predictAsync(List.of(input))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                .get(0);
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        assertThat(predictionOutputs).isNotNull();
+        assertThat(predictionOutputs).isNotEmpty();
+        PredictionOutput output = predictionOutputs.get(0);
+        assertThat(output).isNotNull();
         Prediction prediction = new Prediction(input, output);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
-            assertNotNull(saliency);
-            double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(1));
-            assertEquals(0.33d, v, 1e-2);
+            assertThat(saliency).isNotNull();
+            double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
+            assertThat(v).isEqualTo(1d);
         }
         int topK = 1;
         LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
@@ -239,16 +242,19 @@ class PmmlLimeExplainerTest {
                 }
                 return outputs;
             });
-            PredictionOutput output = model.predictAsync(List.of(input))
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                    .get(0);
+            List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            assertThat(predictionOutputs).isNotNull();
+            assertThat(predictionOutputs).isNotEmpty();
+            PredictionOutput output = predictionOutputs.get(0);
+            assertThat(output).isNotNull();
             Prediction prediction = new Prediction(input, output);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
-                assertNotNull(saliency);
+                assertThat(saliency).isNotNull();
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
-                assertEquals(1d, v);
+                assertThat(v).isEqualTo(1d);
             }
             int topK = 1;
             LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
