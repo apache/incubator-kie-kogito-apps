@@ -310,7 +310,7 @@ class TypeTest {
             assertNotNull(vectors);
             assertEquals(values.length, vectors.size());
             for (int i = 0; i < vectors.size() / 2; i++) {
-                assertEquals(vectors.get(i)[0], vectors.get(vectors.size() - 1 - i)[0]);
+                assertThat(vectors.get(i)[0]).isEqualTo(vectors.get(vectors.size() - 1 - i)[0]);
             }
         }
     }
