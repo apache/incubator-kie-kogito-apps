@@ -234,14 +234,7 @@ public class ExplainabilityMetrics {
     }
 
     private static Pair<List<String>, Long> getMostFrequent(Map<List<String>, Long> collect) {
-        long max = 0L;
-        Pair<List<String>, Long> topK = Pair.of(Collections.emptyList(), 0L);
-        for (Map.Entry<List<String>, Long> entry : collect.entrySet()) {
-            if (entry.getValue() >= max) {
-                topK = Pair.of(entry.getKey(), entry.getValue());
-                max = entry.getValue();
-            }
-        }
-        return topK;
+        Map.Entry<List<String>, Long> maxEntry = Collections.max(collect.entrySet(), Map.Entry.comparingByValue());
+        return Pair.of(maxEntry.getKey(), maxEntry.getValue());
     }
 }
