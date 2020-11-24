@@ -200,7 +200,7 @@ class PmmlLimeExplainerTest {
         for (Saliency saliency : saliencyMap.values()) {
             assertThat(saliency).isNotNull();
             double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
-            assertThat(v).isEqualTo(1d);
+            assertThat(v).isGreaterThan(0d);
         }
         int topK = 1;
         LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
