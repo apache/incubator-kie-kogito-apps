@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.model;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.kie.kogito.explainability.utils.DataUtils;
 public class NumericFeatureDistribution implements FeatureDistribution {
 
     private final Feature feature;
-    private final double[] doubles;
+    private final List<Value<?>> doubles;
     private final Random random;
 
     public NumericFeatureDistribution(Feature feature, double[] doubles) {
@@ -39,7 +40,7 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     public NumericFeatureDistribution(Feature feature, double[] doubles, Random random) {
         this.feature = feature;
-        this.doubles = doubles;
+        this.doubles = toValuesList(doubles);
         this.random = random;
     }
 
@@ -55,7 +56,7 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> sample(int sampleSize) {
-        return DataUtils.sampleWithReplacement(toValuesList(doubles), sampleSize, random);
+        return DataUtils.sampleWithReplacement(doubles, sampleSize, random);
     }
 
     private List<Value<?>> toValuesList(double[] doubles) {
@@ -64,7 +65,7 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public List<Value<?>> getAllSamples() {
-        List<Value<?>> values = toValuesList(doubles);
+        List<Value<?>> values = new ArrayList<>(doubles);
         Collections.shuffle(values);
         return Collections.unmodifiableList(values);
     }
