@@ -16,11 +16,11 @@
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
 import java.io.InputStreamReader;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -80,9 +80,11 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
+        Random random = new Random();
+        random.setSeed(4);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(100)
-                .withPerturbationContext(new PerturbationContext(new SecureRandom(), 5));
+                .withPerturbationContext(new PerturbationContext(random, 5));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
