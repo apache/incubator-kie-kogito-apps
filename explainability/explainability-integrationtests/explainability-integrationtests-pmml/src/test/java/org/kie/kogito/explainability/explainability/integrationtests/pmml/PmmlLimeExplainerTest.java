@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.pmml;
 
-import java.security.SecureRandom;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -113,9 +112,11 @@ class PmmlLimeExplainerTest {
         features.add(FeatureFactory.newCategoricalFeature("mapY", "classB"));
         PredictionInput input = new PredictionInput(features);
 
+        Random random = new Random();
+        random.setSeed(4);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(new SecureRandom(), 1));
+                .withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
@@ -150,9 +151,11 @@ class PmmlLimeExplainerTest {
         features.add(FeatureFactory.newCategoricalFeature("input2", "classB"));
         PredictionInput input = new PredictionInput(features);
 
+        Random random = new Random();
+        random.setSeed(4);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(new SecureRandom(), 1));
+                .withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
