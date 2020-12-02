@@ -16,17 +16,23 @@
 package org.kie.kogito.explainability.global.pdp;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
@@ -37,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Generates the partial dependence plot for the features of a {@link PredictionProvider}.
- * This currently only works with models that work on {@code Feature}s of {@code Type.Number}.
+ * This currently only works with models that use {@code Feature}s of {@code Type.Number}.
  * While a strict PD implementation would need the whole training set used to train the model, this implementation seeks
  * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
  * stdDev).
@@ -70,17 +76,29 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     }
 
     @Override
-    public List<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata)
+    public List<PartialDependenceGraph> explainFromMetadata(PredictionProvider model, PredictionProviderMetadata metadata)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        return explainFromDataDistribution(model, metadata.getOutputShape().getOutputs().size(), metadata.getDataDistribution());
+    }
+
+    @Override
+    public List<PartialDependenceGraph> explainFromPredictions(PredictionProvider model, Collection<Prediction> predictions)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        int outputSize = predictions.isEmpty() ? 0 : predictions.stream().findAny().map(p -> p.getOutput().getOutputs().size()).orElse(0);
+        List<PredictionInput> inputs = predictions.stream().map(Prediction::getInput).collect(Collectors.toList());
+        return explainFromDataDistribution(model, outputSize, new PredictionInputsDataDistribution(inputs));
+    }
+
+    private List<PartialDependenceGraph> explainFromDataDistribution(PredictionProvider model, int outputSize,
+                                                                     DataDistribution dataDistribution)
             throws InterruptedException, ExecutionException, TimeoutException {
         long start = System.currentTimeMillis();
-
         List<PartialDependenceGraph> pdps = new ArrayList<>();
-        DataDistribution dataDistribution = metadata.getDataDistribution();
-        int noOfFeatures = metadata.getInputShape().getFeatures().size();
-
         List<FeatureDistribution> featureDistributions = dataDistribution.asFeatureDistributions();
+        int noOfFeatures = featureDistributions.size();
+
         for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
-            for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
+            for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
                 // generate samples for the feature under analysis
                 FeatureDistribution featureDistribution = featureDistributions.get(featureIndex);
                 double[] featureXSvalues = featureDistribution.sample(seriesLength).stream().mapToDouble(Value::asNumber).sorted().toArray();
@@ -88,10 +106,14 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 // generate data distributions for all features
                 double[][] trainingData = generateDistributions(noOfFeatures, featureDistributions);
 
+                Feature feature = null;
                 double[] marginalImpacts = new double[featureXSvalues.length];
                 for (int i = 0; i < featureXSvalues.length; i++) {
                     List<PredictionInput> predictionInputs = prepareInputs(noOfFeatures, featureIndex, featureXSvalues,
                                                                            trainingData, i);
+                    if (feature == null && !predictionInputs.isEmpty()) {
+                        feature = FeatureFactory.copyOf(predictionInputs.get(0).getFeatures().get(featureIndex), new Value<>(null));
+                    }
                     List<PredictionOutput> predictionOutputs = getOutputs(model, predictionInputs);
                     // prediction requests are batched per value of feature 'Xs' under analysis
                     for (PredictionOutput predictionOutput : predictionOutputs) {
@@ -104,7 +126,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                         marginalImpacts[i] += v / (double) seriesLength;
                     }
                 }
-                PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),
+                PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature,
                                                                                            featureXSvalues, marginalImpacts);
                 pdps.add(partialDependenceGraph);
             }
