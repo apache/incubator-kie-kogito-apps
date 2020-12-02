@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableHeader, IRow } from '@patternfly/react-table';
 import { OUIAProps, componentOuiaProps, GraphQL } from '@kogito-apps/common';
 import { Tooltip } from '@patternfly/react-core';
-import { JobsIconCreator, jobCancel, setTitle } from '../../../utils/Utils';
+import { JobsIconCreator, jobCancel } from '../../../utils/Utils';
 import Moment from 'react-moment';
 import { HistoryIcon } from '@patternfly/react-icons';
 import { refetchContext } from '../../contexts';
+import _ from 'lodash';
 
 interface ActionsMeta {
   title: string;
@@ -26,6 +27,8 @@ interface IOwnProps {
   setModalTitle: (modalTitle: JSX.Element) => void;
   setModalContent: (modalContent: string) => void;
   setSelectedJob: (job: GraphQL.Job) => void;
+  selectedJobInstances: GraphQL.Job[];
+  setSelectedJobInstances: (job: GraphQL.Job[]) => void;
 }
 
 const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
@@ -36,14 +39,26 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
   setModalTitle,
   setModalContent,
   setSelectedJob,
+  selectedJobInstances,
+  setSelectedJobInstances,
   ouiaId,
   ouiaSafe
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
+  const columns = [
+    { title: 'Id' },
+    { title: 'Status' },
+    { title: 'Expiration time' },
+    { title: 'Retries' },
+    { title: 'Execution counter' },
+    { title: 'Last update' }
+  ];
   const editableJobStatus: string[] = ['SCHEDULED', 'ERROR'];
-  const columns: string[] = ['Id', 'Status', 'Expiration time', 'Last update'];
   const jobRow: IRow[] = [];
-
+  columns.map(column => {
+    column['props'] = { className: 'pf-u-text-align-center' };
+    return column;
+  });
   const handleJobDetails = (id): void => {
     const job = data.Jobs.find(job => job.id === id);
     setSelectedJob(job);
@@ -60,20 +75,7 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
 
   const handleCancelAction = (id): void => {
     const job = data.Jobs.find(job => job.id === id);
-    jobCancel(
-      job,
-      () => {
-        setModalTitle(setTitle('success', 'Job cancel'));
-        setModalContent(`The job: ${job.id} is canceled successfully`);
-      },
-      errorMessage => {
-        setModalTitle(setTitle('failure', 'Job cancel'));
-        setModalContent(
-          `The job: ${job.id} failed to cancel. Error message: ${errorMessage}`
-        );
-      },
-      refetch
-    );
+    jobCancel(job, setModalTitle, setModalContent, refetch);
     handleCancelModalToggle();
   };
 
@@ -116,7 +118,7 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
         const ele = {
           title: (
             <Tooltip content={job.id}>
-              <span>{job.id}</span>
+              <span>{job.id.substring(0, 7)}</span>
             </Tooltip>
           )
         };
@@ -160,6 +162,11 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
           )
         };
         tempRows.push(ele);
+      } else {
+        const ele = {
+          title: <span>{job[item]}</span>
+        };
+        tempRows.push(ele);
       }
     }
     return { tempRows, jobType };
@@ -167,11 +174,21 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
 
   const tableContent = (): void => {
     data.Jobs.map(job => {
-      const retrievedValue = getValues(job);
+      const retrievedValue = getValues(
+        _.pick(job, [
+          'id',
+          'status',
+          'expirationTime',
+          'retries',
+          'executionCounter',
+          'lastUpdate'
+        ])
+      );
       jobRow.push({
         cells: retrievedValue.tempRows,
         type: retrievedValue.jobType,
-        rowKey: job.id
+        rowKey: job.id,
+        selected: false
       });
     });
     /* istanbul ignore else */
@@ -180,8 +197,42 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
     }
   };
 
-  const onSelect = (): void => {
-    return null;
+  const onSelect = (event, isSelected, rowId): void => {
+    const copyOfRows = [...rows];
+    if (rowId === -1) {
+      copyOfRows.map(row => {
+        row.selected = isSelected;
+        return row;
+      });
+      if (selectedJobInstances.length === data.Jobs.length) {
+        setSelectedJobInstances([]);
+      } else if (selectedJobInstances.length < data.Jobs.length) {
+        /* istanbul ignore else*/
+        setSelectedJobInstances(data.Jobs);
+      }
+    } else {
+      if (copyOfRows[rowId]) {
+        copyOfRows[rowId].selected = isSelected;
+        const row = data.Jobs.filter(
+          job => job.id === copyOfRows[rowId].rowKey
+        );
+        const rowData = _.find(selectedJobInstances, [
+          'id',
+          copyOfRows[rowId].rowKey
+        ]);
+        if (rowData === undefined) {
+          setSelectedJobInstances([...selectedJobInstances, row[0]]);
+        } else {
+          const copyOfSelectedJobInstances = [...selectedJobInstances];
+          _.remove(
+            copyOfSelectedJobInstances,
+            job => job.id === copyOfRows[rowId].rowKey
+          );
+          setSelectedJobInstances(copyOfSelectedJobInstances);
+        }
+      }
+    }
+    setRows(copyOfRows);
   };
 
   useEffect(() => {

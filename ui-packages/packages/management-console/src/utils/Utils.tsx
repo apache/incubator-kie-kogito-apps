@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SVG from 'react-inlinesvg';
 import {
   OnRunningIcon,
   CheckCircleIcon,
@@ -19,6 +20,7 @@ import {
   OperationType
 } from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
 import { Title, TitleSizes } from '@patternfly/react-core';
+import { JobsBulkList } from '../components/Templates/JobsManagementPage/JobsManagementPage';
 
 export interface TriggerableNode {
   id: number;
@@ -299,6 +301,13 @@ export const getProcessInstanceDescription = (
   };
 };
 
+export const getJobsDescription = (job: GraphQL.Job) => {
+  return {
+    id: job.id,
+    name: job.processId
+  };
+};
+
 // function containing Api call to update process variables
 export const handleVariableUpdate = async (
   processInstance: Pick<ProcessInstance, 'id' | 'endpoint'>,
@@ -389,16 +398,60 @@ export const getTriggerableNodes = async (
 
 export const jobCancel = async (
   job: Pick<GraphQL.Job, 'id' | 'endpoint'>,
-  onJobCancelSuccess: () => void,
-  onJobCancelFailure: (errorMessage: string) => void,
+  setModalTitle: (title: JSX.Element) => void,
+  setModalContent: (content: string) => void,
   refetch
 ) => {
   try {
     await axios.delete(`${job.endpoint}/${job.id}`);
-    onJobCancelSuccess();
+    setModalTitle(setTitle('success', 'Job cancel'));
+    setModalContent(`The job: ${job.id} is canceled successfully`);
     refetch();
   } catch (error) {
-    onJobCancelFailure(JSON.stringify(error.message));
+    setModalTitle(setTitle('failure', 'Job cancel'));
+    setModalContent(
+      `The job: ${job.id} failed to cancel. Error message: ${error.message}`
+    );
     refetch();
+  }
+};
+
+export const performMultipleCancel = async (
+  jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
+  multiActionResult: (
+    successJobs: JobsBulkList,
+    failedJobs: JobsBulkList
+  ) => void
+) => {
+  const successJobs = {};
+  const failedJobs = {};
+  for (const job of jobsToBeActioned) {
+    try {
+      await axios.delete(`${job.endpoint}/${job.id}`);
+      successJobs[job.id] = job;
+    } catch (error) {
+      job.errorMessage = error.errorMessage;
+      failedJobs[job.id] = job;
+      failedJobs[job.id].errorMessage = JSON.stringify(error.message);
+    }
+  }
+  multiActionResult(successJobs, failedJobs);
+};
+
+export const getSvg = async (data, setSvg, setSvgError): Promise<void> => {
+  setSvg(null);
+  try {
+    await axios
+      .get(
+        `/svg/processes/${data.ProcessInstances[0].processId}/instances/${data.ProcessInstances[0].id}`
+      )
+      .then(res => {
+        const temp = <SVG src={res.data} />;
+        setSvg(temp);
+      });
+  } catch (error) {
+    if (error.response && error.response.status !== 404) {
+      setSvgError(error.message);
+    }
   }
 };

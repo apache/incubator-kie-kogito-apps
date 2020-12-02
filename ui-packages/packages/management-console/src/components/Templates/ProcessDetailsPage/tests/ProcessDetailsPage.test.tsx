@@ -5,6 +5,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { getWrapperAsync, GraphQL } from '@kogito-apps/common';
 import GetProcessInstanceByIdDocument = GraphQL.GetProcessInstanceByIdDocument;
+import GetJobsByProcessInstanceIdDocument = GraphQL.GetJobsByProcessInstanceIdDocument;
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 import MilestoneStatus = GraphQL.MilestoneStatus;
 import { Button } from '@patternfly/react-core';
@@ -13,6 +14,7 @@ jest.mock('axios');
 import * as Utils from '../../../../utils/Utils';
 import { act } from 'react-dom/test-utils';
 import _ from 'lodash';
+import InlineSVG from 'react-inlinesvg';
 // tslint:disable: no-string-literal
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('../../../Atoms/ProcessListModal/ProcessListModal');
@@ -24,6 +26,7 @@ jest.mock(
 jest.mock(
   '../../../Organisms/ProcessDetailsMilestones/ProcessDetailsMilestones'
 );
+jest.mock('../../../Organisms/ProcessDetailsJobsPanel/ProcessDetailsJobsPanel');
 jest.mock(
   '../../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables'
 );
@@ -176,6 +179,61 @@ const mocks1 = [
         ]
       }
     }
+  },
+  {
+    request: {
+      query: GetJobsByProcessInstanceIdDocument,
+      variables: {
+        processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
+      },
+      fetchPolicy: 'network-only'
+    },
+    result: {
+      loading: false,
+      refetch: jest.fn(),
+      data: {
+        Jobs: [
+          {
+            id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            processId: 'travels',
+            processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+            rootProcessId: null,
+            status: 'EXECUTED',
+            priority: 0,
+            callbackEndpoint:
+              'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            repeatInterval: null,
+            repeatLimit: null,
+            scheduledId: '0',
+            retries: 0,
+            lastUpdate: '2020-08-27T03:35:50.147Z',
+            expirationTime: null,
+            endpoint: 'http://localhost:4000',
+            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9',
+            executionCounter: 3
+          },
+          {
+            id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            processId: 'travels',
+            processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+            rootProcessId: null,
+            status: 'SCHEDULED',
+            priority: 0,
+            callbackEndpoint:
+              'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            repeatInterval: null,
+            repeatLimit: null,
+            scheduledId: '0',
+            retries: 0,
+            lastUpdate: '2020-08-27T03:35:50.147Z',
+            expirationTime: null,
+            endpoint: 'http://localhost:4000',
+            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1',
+            executionCounter: 4
+          }
+        ]
+      }
+    }
   }
 ];
 
@@ -248,6 +306,61 @@ const mocks2 = [
         ]
       }
     }
+  },
+  {
+    request: {
+      query: GetJobsByProcessInstanceIdDocument,
+      variables: {
+        processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
+      },
+      fetchPolicy: 'network-only'
+    },
+    result: {
+      loading: false,
+      refetch: jest.fn(),
+      data: {
+        Jobs: [
+          {
+            id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            processId: 'travels',
+            processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+            rootProcessId: null,
+            status: 'EXECUTED',
+            priority: 0,
+            callbackEndpoint:
+              'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            repeatInterval: null,
+            repeatLimit: null,
+            scheduledId: '0',
+            retries: 0,
+            lastUpdate: '2020-08-27T03:35:50.147Z',
+            expirationTime: null,
+            endpoint: 'http://localhost:4000',
+            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9',
+            executionCounter: 6
+          },
+          {
+            id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            processId: 'travels',
+            processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+            rootProcessId: null,
+            status: 'SCHEDULED',
+            priority: 0,
+            callbackEndpoint:
+              'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            repeatInterval: null,
+            repeatLimit: null,
+            scheduledId: '0',
+            retries: 0,
+            lastUpdate: '2020-08-27T03:35:50.147Z',
+            expirationTime: null,
+            endpoint: 'http://localhost:4000',
+            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1',
+            executionCounter: 1
+          }
+        ]
+      }
+    }
   }
 ];
 
@@ -316,6 +429,61 @@ const mocks3 = [
                 __typename: 'Milestones'
               }
             ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    request: {
+      query: GetJobsByProcessInstanceIdDocument,
+      variables: {
+        processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
+      },
+      fetchPolicy: 'network-only'
+    },
+    result: {
+      loading: false,
+      refetch: jest.fn(),
+      data: {
+        Jobs: [
+          {
+            id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            processId: 'travels',
+            processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+            rootProcessId: null,
+            status: 'EXECUTED',
+            priority: 0,
+            callbackEndpoint:
+              'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            repeatInterval: null,
+            repeatLimit: null,
+            scheduledId: '0',
+            retries: 0,
+            lastUpdate: '2020-08-27T03:35:50.147Z',
+            expirationTime: null,
+            endpoint: 'http://localhost:4000',
+            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9',
+            executionCounter: 4
+          },
+          {
+            id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            processId: 'travels',
+            processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+            rootProcessId: null,
+            status: 'SCHEDULED',
+            priority: 0,
+            callbackEndpoint:
+              'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+            repeatInterval: null,
+            repeatLimit: null,
+            scheduledId: '0',
+            retries: 0,
+            lastUpdate: '2020-08-27T03:35:50.147Z',
+            expirationTime: null,
+            endpoint: 'http://localhost:4000',
+            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1',
+            executionCounter: 7
           }
         ]
       }
@@ -546,5 +714,28 @@ describe('Process Details Page component tests', () => {
         .find('MockedProcessDetailsNodeTrigger')
         .exists()
     ).toBeFalsy();
+  });
+
+  it('test api to get svg', async () => {
+    const res = {
+      data:
+        '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></svg>'
+    };
+    const svgElement: JSX.Element = (
+      <InlineSVG cacheRequests={true} src={res.data} uniquifyIDs={false} />
+    );
+    mockedAxios.get.mockResolvedValue(res);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks1} addTypename={false}>
+        <BrowserRouter>
+          <ProcessDetailsPage {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+      'ProcessDetailsPage'
+    );
+    wrapper.update();
+    expect(
+      wrapper.find('MockedProcessDetailsProcessDiagram').props()['svg']
+    ).toEqual(svgElement);
   });
 });

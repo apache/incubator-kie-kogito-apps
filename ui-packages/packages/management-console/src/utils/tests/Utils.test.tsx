@@ -12,7 +12,10 @@ import {
   handleJobReschedule,
   handleNodeTrigger,
   getTriggerableNodes,
-  jobCancel
+  jobCancel,
+  getJobsDescription,
+  performMultipleCancel,
+  getSvg
 } from '../Utils';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
@@ -694,7 +697,116 @@ describe('uitility function testing', () => {
       await jobCancel(job, onJobCancelSuccess, onJobCancelFailure, refetch);
       await wait(0);
       expect(onJobCancelFailure).toHaveBeenCalled();
-      expect(onJobCancelFailure.mock.calls[0][0]).toEqual('"404 error"');
+      expect(onJobCancelFailure.mock.calls[0][0]).toEqual(
+        'The job: T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0 is canceled successfully'
+      );
+    });
+  });
+  it('get jobs description tests', () => {
+    const job = {
+      id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+      processId: 'travels',
+      processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+      rootProcessId: '',
+      status: GraphQL.JobStatus.Scheduled,
+      priority: 0,
+      callbackEndpoint:
+        'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+      repeatInterval: null,
+      repeatLimit: null,
+      scheduledId: null,
+      retries: 0,
+      lastUpdate: '2020-08-27T03:35:54.635Z',
+      expirationTime: '2020-08-27T04:35:54.631Z',
+      endpoint: 'http://localhost:4000/jobs'
+    };
+    const result = getJobsDescription(job);
+    expect(result).toEqual({
+      id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+      name: 'travels'
+    });
+  });
+  describe('bulk cancel tests', () => {
+    const bulkJobs = [
+      {
+        id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+        processId: 'travels',
+        processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+        rootProcessId: '',
+        status: GraphQL.JobStatus.Scheduled,
+        priority: 0,
+        callbackEndpoint:
+          'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+        repeatInterval: null,
+        repeatLimit: null,
+        scheduledId: null,
+        retries: 0,
+        lastUpdate: '2020-08-27T03:35:54.635Z',
+        expirationTime: '2020-08-27T04:35:54.631Z',
+        endpoint: 'http://localhost:4000/jobs',
+        errorMessage: ''
+      }
+    ];
+    it('bulk cancel success', async () => {
+      mockedAxios.delete.mockResolvedValue({});
+      const result = jest.fn();
+      await performMultipleCancel(bulkJobs, result);
+      await wait(0);
+      expect(result.mock.calls[0][0]).toBeDefined();
+      expect(result.mock.calls[0][1]).toEqual({});
+    });
+    it('bulk cancel failure', async () => {
+      mockedAxios.delete.mockRejectedValue({});
+      const result = jest.fn();
+      await performMultipleCancel(bulkJobs, result);
+      await wait(0);
+      expect(result.mock.calls[0][0]).toEqual({});
+      expect(result.mock.calls[0][1]).toBeDefined();
+    });
+  });
+  describe('test utility of svg panel', () => {
+    const data = {
+      ProcessInstances: [
+        {
+          callbackEndpoint:
+            'http://localhost:8080/management/jobs/travels/instances/9865268c-64d7-3a44-8972-7325b295f7cc/timers/58180644-2fdf-4261-83f2-f4e783d308a3_0',
+          executionCounter: 0,
+          executionResponse: null,
+          expirationTime: '2020-10-16T10:17:22.879Z',
+          id: '58180644-2fdf-4261-83f2-f4e783d308a3_0',
+          lastUpdate: '2020-10-07T07:41:31.467Z',
+          priority: 0,
+          processId: 'travels',
+          processInstanceId: '9865268c-64d7-3a44-8972-7325b295f7cc',
+          repeatInterval: null,
+          repeatLimit: null,
+          retries: 0,
+          rootProcessId: null,
+          rootProcessInstanceId: null,
+          scheduledId: null,
+          status: 'SCHEDULED'
+        }
+      ]
+    };
+    const setSvg = jest.fn();
+    const setSvgError = jest.fn();
+    it('handle api to get svg', async () => {
+      mockedAxios.get.mockResolvedValue({
+        data:
+          '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></g></g></svg>',
+        status: 200,
+        statusText: 'OK'
+      });
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalled();
+    });
+    it('handle api to get svg', async () => {
+      const errorResponse404 = {
+        response: { status: 404 }
+      };
+      mockedAxios.get.mockRejectedValue(errorResponse404);
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalledWith(null);
     });
   });
 });

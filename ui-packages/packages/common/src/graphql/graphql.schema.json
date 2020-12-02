@@ -203,6 +203,16 @@
             "defaultValue": null
           },
           {
+            "name": "not",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "ProcessInstanceArgument",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "id",
             "description": null,
             "type": {
@@ -1788,6 +1798,16 @@
             "defaultValue": null
           },
           {
+            "name": "not",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "UserTaskInstanceArgument",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "state",
             "description": null,
             "type": {
@@ -1829,6 +1849,16 @@
           },
           {
             "name": "priority",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "StringArgument",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "processId",
             "description": null,
             "type": {
               "kind": "INPUT_OBJECT",
@@ -2000,6 +2030,16 @@
           },
           {
             "name": "priority",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "OrderBy",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "processId",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -2431,6 +2471,16 @@
                   "ofType": null
                 }
               }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "not",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "JobArgument",
+              "ofType": null
             },
             "defaultValue": null
           },

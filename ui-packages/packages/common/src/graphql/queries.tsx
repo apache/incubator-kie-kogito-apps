@@ -338,13 +338,15 @@ const GET_JOBS_BY_PROC_INST_ID = gql`
       retries
       lastUpdate
       endpoint
+      nodeInstanceId
+      executionCounter
     }
   }
 `;
 
 const GET_ALL_JOBS = gql`
-  query getAllJobs {
-    Jobs {
+  query getAllJobs($values: [JobStatus]) {
+    Jobs(where: { status: { in: $values } }) {
       id
       processId
       processInstanceId
@@ -359,6 +361,7 @@ const GET_ALL_JOBS = gql`
       retries
       lastUpdate
       endpoint
+      executionCounter
     }
   }
 `;

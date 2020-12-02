@@ -301,6 +301,7 @@ module.exports = typeDefs = gql`
   input UserTaskInstanceArgument {
     and: [UserTaskInstanceArgument!]
     or: [UserTaskInstanceArgument!]
+    not: UserTaskInstanceArgument
     state: StringArgument
     id: IdArgument
     description: StringArgument
@@ -343,6 +344,7 @@ module.exports = typeDefs = gql`
     description: OrderBy
     name: OrderBy
     priority: OrderBy
+    processId: OrderBy
     completed: OrderBy
     started: OrderBy
     referenceName: OrderBy

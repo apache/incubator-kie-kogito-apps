@@ -22,10 +22,12 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -37,6 +39,7 @@ import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OpenNLPLimeExplainerTest {
@@ -61,19 +65,13 @@ class OpenNLPLimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(100, 2, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(100)
+                    .withPerturbationContext(new PerturbationContext(random, 2));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             InputStream is = getClass().getResourceAsStream("/opennlp/langdetect-183.bin");
             LanguageDetectorModel languageDetectorModel = new LanguageDetectorModel(is);
-            String inputText = "italiani, spaghetti pizza mandolino";
             LanguageDetector languageDetector = new LanguageDetectorME(languageDetectorModel);
-            Language bestLanguage = languageDetector.predictLanguage(inputText);
-
-            List<Feature> features = new LinkedList<>();
-            features.add(FeatureFactory.newFulltextFeature("text", inputText));
-            PredictionInput input = new PredictionInput(features);
-            PredictionOutput output = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value<>(bestLanguage.getLang()),
-                                                                              bestLanguage.getConfidence())));
-            Prediction prediction = new Prediction(input, output);
 
             PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
                 List<PredictionOutput> results = new LinkedList<>();
@@ -91,6 +89,24 @@ class OpenNLPLimeExplainerTest {
                 }
                 return results;
             });
+
+            String inputText = "italiani,spaghetti pizza mandolino";
+            List<Feature> features = new LinkedList<>();
+            features.add(FeatureFactory.newFulltextFeature("text", inputText, s -> Arrays.asList(s.split("\\W"))));
+            PredictionInput input = new PredictionInput(features);
+
+            List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input)).get();
+            assertNotNull(predictionOutputs);
+            assertFalse(predictionOutputs.isEmpty());
+            PredictionOutput output = predictionOutputs.get(0);
+            assertNotNull(output);
+            assertNotNull(output.getOutputs());
+            assertEquals(1, output.getOutputs().size());
+            assertEquals("ita", output.getOutputs().get(0).getValue().asString());
+            assertEquals(0.03, output.getOutputs().get(0).getScore(), 1e-2);
+
+            Prediction prediction = new Prediction(input, output);
+
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {

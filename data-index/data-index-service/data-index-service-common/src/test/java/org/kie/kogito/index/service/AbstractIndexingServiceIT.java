@@ -56,6 +56,7 @@ import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.kie.kogito.index.GraphQLUtils.getDealsByTaskId;
+import static org.kie.kogito.index.GraphQLUtils.getDealsByTaskIdNoActualOwner;
 import static org.kie.kogito.index.GraphQLUtils.getJobById;
 import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByBusinessKey;
 import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceById;
@@ -78,8 +79,10 @@ import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndActual
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndCompleted;
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndPotentialGroups;
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndPotentialUsers;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndProcessId;
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndStarted;
 import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndState;
+import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdNoActualOwner;
 import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
@@ -742,7 +745,7 @@ abstract class AbstractIndexingServiceIT {
 
         validateUserTaskInstance(getUserTaskInstanceById(taskId), event);
         validateUserTaskInstance(getUserTaskInstanceByIdAndActualOwner(taskId, "kogito"), event);
-
+        validateUserTaskInstance(getUserTaskInstanceByIdAndProcessId(taskId, processId), event);
         validateUserTaskInstance(getUserTaskInstanceByIdAndPotentialGroups(taskId, new ArrayList<>(event.getData().getPotentialGroups())), event);
         validateUserTaskInstance(getUserTaskInstanceByIdAndPotentialUsers(taskId, new ArrayList<>(event.getData().getPotentialUsers())), event);
         validateUserTaskInstance(getUserTaskInstanceByIdAndState(taskId, event.getData().getState()), event);
@@ -791,6 +794,29 @@ abstract class AbstractIndexingServiceIT {
                 .body("data.Deals[0].metadata.userTasks[0].name", is("TaskName"))
                 .body("data.Deals[0].metadata.userTasks[0].priority", is("Low"))
                 .body("data.Deals[0].metadata.userTasks[0].actualOwner", is("admin"))
+                .body("data.Deals[0].metadata.userTasks[0].started", is(formatZonedDateTime(event.getData().getStarted().withZoneSameInstant(ZoneOffset.UTC))))
+                .body("data.Deals[0].metadata.userTasks[0].completed", is(formatZonedDateTime(event.getData().getCompleted().withZoneSameInstant(ZoneOffset.UTC))))
+                .body("data.Deals[0].metadata.userTasks[0].lastUpdate", is(formatZonedDateTime(event.getTime().withZoneSameInstant(ZoneOffset.UTC))));
+
+        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, null);
+        indexUserTaskCloudEvent(event);
+
+        validateUserTaskInstance(getUserTaskInstanceByIdNoActualOwner(taskId), event);
+
+        given().contentType(ContentType.JSON)
+                .body(getDealsByTaskIdNoActualOwner(taskId))
+                .when().post("/graphql")
+                .then().log().ifValidationFails().statusCode(200)
+                .body("data.Deals[0].id", is(processInstanceId))
+                .body("data.Deals[0].__typename", is("Deals"))
+                .body("data.Deals[0].metadata.lastUpdate", is(formatZonedDateTime(event.getTime().withZoneSameInstant(ZoneOffset.UTC))))
+                .body("data.Deals[0].metadata.userTasks.size()", is(1))
+                .body("data.Deals[0].metadata.userTasks[0].id", is(taskId))
+                .body("data.Deals[0].metadata.userTasks[0].description", is("TaskDescription"))
+                .body("data.Deals[0].metadata.userTasks[0].state", is("InProgress"))
+                .body("data.Deals[0].metadata.userTasks[0].name", is("TaskName"))
+                .body("data.Deals[0].metadata.userTasks[0].priority", is("High"))
+                .body("data.Deals[0].metadata.userTasks[0].actualOwner", nullValue())
                 .body("data.Deals[0].metadata.userTasks[0].started", is(formatZonedDateTime(event.getData().getStarted().withZoneSameInstant(ZoneOffset.UTC))))
                 .body("data.Deals[0].metadata.userTasks[0].completed", is(formatZonedDateTime(event.getData().getCompleted().withZoneSameInstant(ZoneOffset.UTC))))
                 .body("data.Deals[0].metadata.userTasks[0].lastUpdate", is(formatZonedDateTime(event.getTime().withZoneSameInstant(ZoneOffset.UTC))));

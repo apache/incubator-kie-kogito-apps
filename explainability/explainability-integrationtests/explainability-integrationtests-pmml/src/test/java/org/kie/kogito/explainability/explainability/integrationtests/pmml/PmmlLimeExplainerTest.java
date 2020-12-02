@@ -25,10 +25,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -64,7 +66,10 @@ class PmmlLimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(1000, 1, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(1000)
+                    .withPerturbationContext(new PerturbationContext(random, 1));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             List<Feature> features = new LinkedList<>();
             features.add(FeatureFactory.newNumericalFeature("sepalLength", 6.9));
             features.add(FeatureFactory.newNumericalFeature("sepalWidth", 3.1));
@@ -120,7 +125,12 @@ class PmmlLimeExplainerTest {
         features.add(FeatureFactory.newCategoricalFeature("mapY", "classB"));
         PredictionInput input = new PredictionInput(features);
 
-        LimeExplainer limeExplainer = new LimeExplainer(500, 1);
+        Random random = new Random();
+        random.setSeed(4);
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(500)
+                .withPerturbationContext(new PerturbationContext(random, 1));
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput input1 : inputs) {
@@ -167,7 +177,12 @@ class PmmlLimeExplainerTest {
         features.add(FeatureFactory.newCategoricalFeature("input2", "classB"));
         PredictionInput input = new PredictionInput(features);
 
-        LimeExplainer limeExplainer = new LimeExplainer(300, 1);
+        Random random = new Random();
+        random.setSeed(4);
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(300)
+                .withPerturbationContext(new PerturbationContext(random, 1));
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput input1 : inputs) {
@@ -219,7 +234,10 @@ class PmmlLimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(300, 1, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(300)
+                    .withPerturbationContext(new PerturbationContext(random, 1));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             List<Feature> features = new LinkedList<>();
             features.add(FeatureFactory.newNumericalFeature("input1", -50));
             features.add(FeatureFactory.newTextFeature("input2", "classB"));

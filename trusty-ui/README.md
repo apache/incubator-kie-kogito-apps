@@ -18,12 +18,12 @@ The application is packageable using:
 ```
 mvn package
 ```
-It produces the executable `trusty-ui-1.0.0-SNAPSHOT-runner.jar` file in `/target` directory.
+It produces the executable `trusty-ui-2.0.0-SNAPSHOT-runner.jar` file in `/target` directory.
 Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
 
 The application is now runnable using:
 ```
-java -jar target/trusty-ui-1.0.0-SNAPSHOT-runner.jar
+java -jar target/trusty-ui-2.0.0-SNAPSHOT-runner.jar
 ```
 
 ## Creating a native executable
@@ -38,7 +38,7 @@ Or you can use Docker to build the native executable using:
 mvn package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your binary: `./target/trusty-ui-1.0.0-SNAPSHOT-runner`
+You can then execute your binary: `./target/trusty-ui-2.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image-guide .
 
@@ -66,6 +66,22 @@ mvn package -Dui -Dnative
 ## Working with trusty-ui features
 
 # TODO https://issues.redhat.com/browse/KOGITO-3183
+
+## Enabling Keycloak security
+
+### Starting and Configuring the Keycloak Server
+
+To start a Keycloak Server you can use Docker and just run the following command:
+
+```
+docker run -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin -e KEYCLOAK_IMPORT=/tmp/kogito-realm.json -v {absolute_path}/kogito-apps/config/kogito-realm.json:/tmp/kogito-realm.json -p 8280:8080 jboss/keycloak
+```
+
+You should be able to access your Keycloak Server at [localhost:8280/auth](http://localhost:8280)
+and verify keycloak server is running properly: log in as the admin user to access the Keycloak Administration Console. 
+Username should be admin and password admin.
+
+To change any of this client configuration access to http://localhost:8280/auth/admin/master/console/#/realms/kogito.
 
 ### Starting Kogito Trusty UI in dev mode
 

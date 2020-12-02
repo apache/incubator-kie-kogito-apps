@@ -70,6 +70,7 @@ export namespace GraphQL {
   export type JobArgument = {
     and?: Maybe<Array<JobArgument>>;
     or?: Maybe<Array<JobArgument>>;
+    not?: Maybe<JobArgument>;
     id?: Maybe<IdArgument>;
     processId?: Maybe<StringArgument>;
     processInstanceId?: Maybe<IdArgument>;
@@ -223,6 +224,7 @@ export namespace GraphQL {
   export type ProcessInstanceArgument = {
     and?: Maybe<Array<ProcessInstanceArgument>>;
     or?: Maybe<Array<ProcessInstanceArgument>>;
+    not?: Maybe<ProcessInstanceArgument>;
     id?: Maybe<IdArgument>;
     processId?: Maybe<StringArgument>;
     processName?: Maybe<StringArgument>;
@@ -395,11 +397,13 @@ export namespace GraphQL {
   export type UserTaskInstanceArgument = {
     and?: Maybe<Array<UserTaskInstanceArgument>>;
     or?: Maybe<Array<UserTaskInstanceArgument>>;
+    not?: Maybe<UserTaskInstanceArgument>;
     state?: Maybe<StringArgument>;
     id?: Maybe<IdArgument>;
     description?: Maybe<StringArgument>;
     name?: Maybe<StringArgument>;
     priority?: Maybe<StringArgument>;
+    processId?: Maybe<StringArgument>;
     processInstanceId?: Maybe<IdArgument>;
     actualOwner?: Maybe<StringArgument>;
     potentialUsers?: Maybe<StringArrayArgument>;
@@ -457,6 +461,7 @@ export namespace GraphQL {
     description?: Maybe<OrderBy>;
     name?: Maybe<OrderBy>;
     priority?: Maybe<OrderBy>;
+    processId?: Maybe<OrderBy>;
     completed?: Maybe<OrderBy>;
     started?: Maybe<OrderBy>;
     referenceName?: Maybe<OrderBy>;
@@ -1113,13 +1118,17 @@ export namespace GraphQL {
             | 'retries'
             | 'lastUpdate'
             | 'endpoint'
+            | 'nodeInstanceId'
+            | 'executionCounter'
           >
         >
       >
     >;
   };
 
-  export type GetAllJobsQueryVariables = Exact<{ [key: string]: never }>;
+  export type GetAllJobsQueryVariables = Exact<{
+    values?: Maybe<Array<Maybe<JobStatus>>>;
+  }>;
 
   export type GetAllJobsQuery = { __typename?: 'Query' } & {
     Jobs?: Maybe<
@@ -1141,6 +1150,7 @@ export namespace GraphQL {
             | 'retries'
             | 'lastUpdate'
             | 'endpoint'
+            | 'executionCounter'
           >
         >
       >
@@ -2017,6 +2027,8 @@ export namespace GraphQL {
         retries
         lastUpdate
         endpoint
+        nodeInstanceId
+        executionCounter
       }
     }
   `;
@@ -2070,8 +2082,8 @@ export namespace GraphQL {
     GetJobsByProcessInstanceIdQueryVariables
   >;
   export const GetAllJobsDocument = gql`
-    query getAllJobs {
-      Jobs {
+    query getAllJobs($values: [JobStatus]) {
+      Jobs(where: { status: { in: $values } }) {
         id
         processId
         processInstanceId
@@ -2086,6 +2098,7 @@ export namespace GraphQL {
         retries
         lastUpdate
         endpoint
+        executionCounter
       }
     }
   `;
@@ -2102,6 +2115,7 @@ export namespace GraphQL {
    * @example
    * const { data, loading, error } = useGetAllJobsQuery({
    *   variables: {
+   *      values: // value for 'values'
    *   },
    * });
    */

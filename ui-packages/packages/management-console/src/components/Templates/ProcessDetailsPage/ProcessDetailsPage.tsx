@@ -29,25 +29,29 @@ import {
   OUIAProps
 } from '@kogito-apps/common';
 import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import { Link, Redirect, RouteComponentProps } from 'react-router-dom';
 import ProcessDetails from '../../Organisms/ProcessDetails/ProcessDetails';
 import ProcessDetailsProcessVariables from '../../Organisms/ProcessDetailsProcessVariables/ProcessDetailsProcessVariables';
 import ProcessDetailsTimeline from '../../Organisms/ProcessDetailsTimeline/ProcessDetailsTimeline';
 import ProcessDetailsMilestones from '../../Organisms/ProcessDetailsMilestones/ProcessDetailsMilestones';
+import ProcessDetailsJobsPanel from '../../Organisms/ProcessDetailsJobsPanel/ProcessDetailsJobsPanel';
+import ProcessDetailsNodeTrigger from '../../Organisms/ProcessDetailsNodeTrigger/ProcessDetailsNodeTrigger';
+import ProcessDetailsProcessDiagram from '../../Organisms/ProcessDetailsProcessDiagram/ProcessDetailsProcessDiagram';
+import ProcessDetailsErrorModal from '../../Atoms/ProcessDetailsErrorModal/ProcessDetailsErrorModal';
 import './ProcessDetailsPage.css';
 import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import {
+  getSvg,
   handleAbort,
   setTitle,
   handleVariableUpdate
 } from '../../../utils/Utils';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 import { SyncIcon, InfoCircleIcon } from '@patternfly/react-icons';
-import ProcessDetailsJobsPanel from '../../Organisms/ProcessDetailsJobsPanel/ProcessDetailsJobsPanel';
 import { StaticContext } from 'react-router';
 import * as H from 'history';
-import ProcessDetailsNodeTrigger from '../../Organisms/ProcessDetailsNodeTrigger/ProcessDetailsNodeTrigger';
 
 interface MatchProps {
   instanceID: string;
@@ -75,12 +79,25 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(false);
   const [variableError, setVariableError] = useState();
+  const [svgError, setSvgError] = useState<string>('');
+  const [svg, setSvg] = React.useState(null);
+  const [svgErrorModalOpen, setSvgErrorModalOpen] = useState<boolean>(false);
   let currentPage = JSON.parse(window.localStorage.getItem('state'));
 
   const { loading, error, data } = GraphQL.useGetProcessInstanceByIdQuery({
     variables: { id },
     fetchPolicy: 'network-only'
   });
+
+  const getJobs = GraphQL.useGetJobsByProcessInstanceIdQuery({
+    variables: {
+      processInstanceId: id
+    }
+  });
+  const handleSvgErrorModal = () => {
+    setSvgErrorModalOpen(!svgErrorModalOpen);
+  };
+
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -124,10 +141,20 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   };
 
   useEffect(() => {
-    if (data) {
-      setUpdateJson(JSON.parse(data.ProcessInstances[0].variables));
-    }
+    const handleSvgApi = async () => {
+      if (data && data.ProcessInstances[0].id === id) {
+        await getSvg(data, setSvg, setSvgError);
+        setUpdateJson(JSON.parse(data.ProcessInstances[0].variables));
+      }
+    };
+    handleSvgApi();
   }, [data]);
+
+  useEffect(() => {
+    if (svgError && svgError.length > 0) {
+      setSvgErrorModalOpen(true);
+    }
+  }, [svgError]);
 
   useEffect(() => {
     if (variableError && variableError.length > 0) {
@@ -360,6 +387,85 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
     }
   }
 
+  const renderProcessDiagram = () => {
+    return (
+      <Flex>
+        <FlexItem>
+          {svg !== null && svg.props.src && (
+            <ProcessDetailsProcessDiagram svg={svg} />
+          )}
+        </FlexItem>
+      </Flex>
+    );
+  };
+
+  const renderProcessDetails = () => {
+    return (
+      <Flex direction={{ default: 'column' }} flex={{ default: 'flex_1' }}>
+        {currentPage && (
+          <FlexItem>
+            <ProcessDetails data={data} from={currentPage} />
+          </FlexItem>
+        )}
+        {data.ProcessInstances[0].milestones.length > 0 && (
+          <FlexItem>
+            <ProcessDetailsMilestones
+              milestones={data.ProcessInstances[0].milestones}
+            />
+          </FlexItem>
+        )}
+      </Flex>
+    );
+  };
+
+  const renderProcessVariables = () => {
+    return (
+      <Flex direction={{ default: 'column' }} flex={{ default: 'flex_1' }}>
+        {Object.keys(updateJson).length > 0 && (
+          <FlexItem>
+            <ProcessDetailsProcessVariables
+              displayLabel={displayLabel}
+              displaySuccess={displaySuccess}
+              setUpdateJson={setUpdateJson}
+              setDisplayLabel={setDisplayLabel}
+              updateJson={updateJson}
+            />
+          </FlexItem>
+        )}
+      </Flex>
+    );
+  };
+  const renderPanels = () => {
+    if (svg !== null && svg.props.src) {
+      return (
+        <Flex direction={{ default: 'column' }}>
+          {renderProcessDiagram()}
+          <Flex>
+            {renderProcessDetails()}
+            {renderProcessVariables()}
+          </Flex>
+        </Flex>
+      );
+    } else {
+      return (
+        <>
+          {renderProcessDetails()}
+          {renderProcessVariables()}
+        </>
+      );
+    }
+  };
+
+  const errorModalAction: JSX.Element[] = [
+    <Button
+      key="confirm-selection"
+      variant="primary"
+      onClick={handleSvgErrorModal}
+    >
+      OK
+    </Button>
+  ];
+
   return (
     <div {...componentOuiaProps(ouiaId, 'ProcessDetailsPage', ouiaSafe)}>
       {!error ? (
@@ -465,49 +571,35 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
                     </Split>
                   </GridItem>
                 </Grid>
-                <Flex>
+                <Flex
+                  direction={{ default: 'column', lg: 'row' }}
+                  className="kogito-management-console--details__marginSpaces"
+                >
+                  {renderPanels()}
                   <Flex
                     direction={{ default: 'column' }}
                     flex={{ default: 'flex_1' }}
                   >
-                    {currentPage && (
+                    {!getJobs.loading && (
                       <FlexItem>
-                        <ProcessDetails data={data} from={currentPage} />
-                      </FlexItem>
-                    )}
-                    {data.ProcessInstances[0].milestones.length > 0 && (
-                      <FlexItem>
-                        <ProcessDetailsMilestones
-                          milestones={data.ProcessInstances[0].milestones}
+                        <ProcessDetailsTimeline
+                          data={data.ProcessInstances[0]}
+                          jobsResponse={_.pick(getJobs, [
+                            'data',
+                            'loading',
+                            'refetch'
+                          ])}
                         />
                       </FlexItem>
                     )}
-                  </Flex>
-                  <Flex
-                    direction={{ default: 'column' }}
-                    flex={{ default: 'flex_1' }}
-                  >
-                    {Object.keys(updateJson).length > 0 && (
-                      <FlexItem>
-                        <ProcessDetailsProcessVariables
-                          displayLabel={displayLabel}
-                          displaySuccess={displaySuccess}
-                          setUpdateJson={setUpdateJson}
-                          setDisplayLabel={setDisplayLabel}
-                          updateJson={updateJson}
-                        />
-                      </FlexItem>
-                    )}
-                  </Flex>
-                  <Flex
-                    direction={{ default: 'column' }}
-                    flex={{ default: 'flex_1' }}
-                  >
                     <FlexItem>
-                      <ProcessDetailsTimeline data={data.ProcessInstances[0]} />
-                    </FlexItem>
-                    <FlexItem>
-                      <ProcessDetailsJobsPanel processInstanceId={id} />
+                      <ProcessDetailsJobsPanel
+                        jobsResponse={_.pick(getJobs, [
+                          'data',
+                          'loading',
+                          'refetch'
+                        ])}
+                      />
                     </FlexItem>
                     {data.ProcessInstances[0].addons.includes(
                       'process-management'
@@ -535,6 +627,16 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
               </Card>
             )}
           </PageSection>
+          {svgErrorModalOpen && (
+            <ProcessDetailsErrorModal
+              errorString={svgError}
+              errorModalOpen={svgErrorModalOpen}
+              errorModalAction={errorModalAction}
+              handleErrorModal={handleSvgErrorModal}
+              label="svg error modal"
+              title={setTitle('failure', 'Process Diagram')}
+            />
+          )}
         </>
       ) : (
         <ServerErrors error={error} variant="large" />
