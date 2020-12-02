@@ -42,7 +42,16 @@ public class PredictionInputsDataDistribution implements DataDistribution {
 
     @Override
     public PredictionInput sample() {
-        return sample(1).get(0);
+        if (inputs.isEmpty()) {
+            return new PredictionInput(Collections.emptyList());
+        } else {
+            List<PredictionInput> inputs = sample(1);
+            if (inputs.isEmpty()) {
+                return new PredictionInput(Collections.emptyList());
+            } else {
+                return inputs.get(0);
+            }
+        }
     }
 
     @Override

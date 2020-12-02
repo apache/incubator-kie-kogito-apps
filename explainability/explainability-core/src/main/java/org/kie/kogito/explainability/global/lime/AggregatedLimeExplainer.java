@@ -38,23 +38,15 @@ import org.kie.kogito.explainability.utils.DataUtils;
 public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFuture<Map<String, Saliency>>>,
                                                 ExistingPredictionsGlobalExplainer<CompletableFuture<Map<String, Saliency>>> {
 
-    private static final int DEFAULT_SAMPLE_SIZE = 100;
-
     private final LimeExplainer limeExplainer;
-    private final int sampleSize;
 
     public AggregatedLimeExplainer(LimeExplainer limeExplainer) {
-        this(limeExplainer, DEFAULT_SAMPLE_SIZE);
-    }
-
-    public AggregatedLimeExplainer(LimeExplainer limeExplainer, int sampleSize) {
         this.limeExplainer = limeExplainer;
-        this.sampleSize = sampleSize;
     }
 
     @Override
     public CompletableFuture<Map<String, Saliency>> explain(PredictionProvider model, PredictionProviderMetadata metadata) {
-        List<PredictionInput> inputs = metadata.getDataDistribution().sample(sampleSize); // sample inputs from the data distribution
+        List<PredictionInput> inputs = metadata.getDataDistribution().sample(limeExplainer.getLimeConfig().getNoOfSamples()); // sample inputs from the data distribution
 
         return model.predictAsync(inputs) // execute the model on the inputs
                 .thenApply(os -> DataUtils.getPredictions(inputs, os)) // generate predictions from inputs and outputs
