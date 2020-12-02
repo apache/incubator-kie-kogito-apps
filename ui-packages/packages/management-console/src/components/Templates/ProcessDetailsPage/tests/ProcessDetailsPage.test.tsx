@@ -14,6 +14,7 @@ jest.mock('axios');
 import * as Utils from '../../../../utils/Utils';
 import { act } from 'react-dom/test-utils';
 import _ from 'lodash';
+import InlineSVG from 'react-inlinesvg';
 // tslint:disable: no-string-literal
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('../../../Atoms/ProcessListModal/ProcessListModal');
@@ -208,7 +209,8 @@ const mocks1 = [
             lastUpdate: '2020-08-27T03:35:50.147Z',
             expirationTime: null,
             endpoint: 'http://localhost:4000',
-            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9'
+            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9',
+            executionCounter: 3
           },
           {
             id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
@@ -226,7 +228,8 @@ const mocks1 = [
             lastUpdate: '2020-08-27T03:35:50.147Z',
             expirationTime: null,
             endpoint: 'http://localhost:4000',
-            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1'
+            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1',
+            executionCounter: 4
           }
         ]
       }
@@ -333,7 +336,8 @@ const mocks2 = [
             lastUpdate: '2020-08-27T03:35:50.147Z',
             expirationTime: null,
             endpoint: 'http://localhost:4000',
-            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9'
+            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9',
+            executionCounter: 6
           },
           {
             id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
@@ -351,7 +355,8 @@ const mocks2 = [
             lastUpdate: '2020-08-27T03:35:50.147Z',
             expirationTime: null,
             endpoint: 'http://localhost:4000',
-            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1'
+            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1',
+            executionCounter: 1
           }
         ]
       }
@@ -458,7 +463,8 @@ const mocks3 = [
             lastUpdate: '2020-08-27T03:35:50.147Z',
             expirationTime: null,
             endpoint: 'http://localhost:4000',
-            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9'
+            nodeInstanceId: '69e0a0f5-2360-4174-a8f8-a892a31fc2f9',
+            executionCounter: 4
           },
           {
             id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
@@ -476,7 +482,8 @@ const mocks3 = [
             lastUpdate: '2020-08-27T03:35:50.147Z',
             expirationTime: null,
             endpoint: 'http://localhost:4000',
-            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1'
+            nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1',
+            executionCounter: 7
           }
         ]
       }
@@ -707,5 +714,28 @@ describe('Process Details Page component tests', () => {
         .find('MockedProcessDetailsNodeTrigger')
         .exists()
     ).toBeFalsy();
+  });
+
+  it('test api to get svg', async () => {
+    const res = {
+      data:
+        '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></svg>'
+    };
+    const svgElement: JSX.Element = (
+      <InlineSVG cacheRequests={true} src={res.data} uniquifyIDs={false} />
+    );
+    mockedAxios.get.mockResolvedValue(res);
+    const wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks1} addTypename={false}>
+        <BrowserRouter>
+          <ProcessDetailsPage {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+      'ProcessDetailsPage'
+    );
+    wrapper.update();
+    expect(
+      wrapper.find('MockedProcessDetailsProcessDiagram').props()['svg']
+    ).toEqual(svgElement);
   });
 });
