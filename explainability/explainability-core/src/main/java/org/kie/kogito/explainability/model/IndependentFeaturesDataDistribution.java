@@ -16,21 +16,18 @@
 package org.kie.kogito.explainability.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import com.google.common.collect.Sets;
 
 /**
  * Data distribution based on list of {@code FeatureDistributions}.
  */
-public class IndependentFeaturesDatatDistribution implements DataDistribution {
+public class IndependentFeaturesDataDistribution implements DataDistribution {
 
     private final List<FeatureDistribution> featureDistributions;
 
-    public IndependentFeaturesDatatDistribution(List<FeatureDistribution> featureDistributions) {
+    public IndependentFeaturesDataDistribution(List<FeatureDistribution> featureDistributions) {
         this.featureDistributions = Collections.unmodifiableList(featureDistributions);
     }
 
@@ -55,10 +52,10 @@ public class IndependentFeaturesDatatDistribution implements DataDistribution {
 
     @Override
     public List<PredictionInput> getAllSamples() {
-        List<Set<Feature>> featureEnumerations = new ArrayList<>(featureDistributions.size());
+        List<Collection<Feature>> featureEnumerations = new ArrayList<>(featureDistributions.size());
         for (FeatureDistribution featureDistribution : featureDistributions) {
             List<Value<?>> allValues = featureDistribution.getAllSamples();
-            Set<Feature> currentFeatures = new HashSet<>(allValues.size());
+            List<Feature> currentFeatures = new ArrayList<>(allValues.size());
             Feature feature = featureDistribution.getFeature();
             for (Value<?> v : allValues) {
                 Feature f = FeatureFactory.copyOf(feature, v);
@@ -66,12 +63,34 @@ public class IndependentFeaturesDatatDistribution implements DataDistribution {
             }
             featureEnumerations.add(currentFeatures);
         }
-        Set<List<Feature>> cartesianProduct = Sets.cartesianProduct(featureEnumerations);
-        List<PredictionInput> inputs = new ArrayList<>(cartesianProduct.size());
-        for (List<Feature> features : cartesianProduct) {
+        Collection<List<Feature>> combinedFeaturesList = cartesianProduct(featureEnumerations);
+        List<PredictionInput> inputs = new ArrayList<>(combinedFeaturesList.size());
+        for (List<Feature> features : combinedFeaturesList) {
             inputs.add(new PredictionInput(features));
         }
         return inputs;
+    }
+
+    static <T> Collection<List<T>> cartesianProduct(List<Collection<T>> valueEnumerations) {
+        Collection<List<T>> combinedValues = new ArrayList<>();
+        if (!valueEnumerations.isEmpty()) {
+            getElementsAtDepth(valueEnumerations, combinedValues, 0, new ArrayList<>());
+        }
+        return combinedValues;
+    }
+
+    private static <T> void getElementsAtDepth(List<Collection<T>> valueEnumerations, Collection<List<T>> combinedValues, int depth,
+                                               List<T> currentItem) {
+        if (depth == valueEnumerations.size()) {
+            combinedValues.add(currentItem);
+        } else {
+            Collection<T> currentCollection = valueEnumerations.get(depth);
+            for (T element : currentCollection) {
+                List<T> copy = new ArrayList<>(currentItem);
+                copy.add(element);
+                getElementsAtDepth(valueEnumerations, combinedValues, depth + 1, copy);
+            }
+        }
     }
 
     @Override

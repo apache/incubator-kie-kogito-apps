@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.utils;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -404,6 +405,11 @@ class DataUtilsTest {
 
     @Test
     void testSampleWithReplacement() {
+        List<Double> emptyValues = new ArrayList<>();
+        List<Double> emptySamples = DataUtils.sampleWithReplacement(emptyValues, 1, random);
+        assertNotNull(emptySamples);
+        assertEquals(0, emptySamples.size());
+
         List<Double> values = Arrays.stream(DataUtils.generateData(0, 1, 100, random)).boxed().collect(Collectors.toList());
         int sampleSize = 10;
         List<Double> samples = DataUtils.sampleWithReplacement(values, sampleSize, random);

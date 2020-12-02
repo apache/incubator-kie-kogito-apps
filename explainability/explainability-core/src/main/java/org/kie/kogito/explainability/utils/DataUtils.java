@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +28,7 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.IndependentFeaturesDatatDistribution;
+import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
 import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
@@ -347,7 +348,7 @@ public class DataUtils {
             FeatureDistribution featureDistribution = new NumericFeatureDistribution(feature, doubles);
             featureDistributions.add(featureDistribution);
         }
-        return new IndependentFeaturesDatatDistribution(featureDistributions);
+        return new IndependentFeaturesDataDistribution(featureDistributions);
     }
 
     /**
@@ -423,9 +424,13 @@ public class DataUtils {
      * @return a list of sampled values
      */
     public static <T> List<T> sampleWithReplacement(List<T> values, int sampleSize, Random random) {
-        return random
-                .ints(sampleSize, 0, values.size())
-                .mapToObj(values::get)
-                .collect(Collectors.toList());
+        if (sampleSize <= 0 || values.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return random
+                    .ints(sampleSize, 0, values.size())
+                    .mapToObj(values::get)
+                    .collect(Collectors.toList());
+        }
     }
 }

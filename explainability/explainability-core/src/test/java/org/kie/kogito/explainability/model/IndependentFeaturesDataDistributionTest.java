@@ -16,7 +16,11 @@
 package org.kie.kogito.explainability.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
@@ -26,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class IndependentFeaturesDatatDistributionTest {
+class IndependentFeaturesDataDistributionTest {
 
     @Test
     void testSamples() {
@@ -37,9 +41,9 @@ class IndependentFeaturesDatatDistributionTest {
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
-        IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
-        assertEquals(1000, independentFeaturesDatatDistribution.getAllSamples().size());
-        List<PredictionInput> samples = independentFeaturesDatatDistribution.sample(3);
+        IndependentFeaturesDataDistribution independentFeaturesDataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
+        assertEquals(1000, independentFeaturesDataDistribution.getAllSamples().size());
+        List<PredictionInput> samples = independentFeaturesDataDistribution.sample(3);
         assertNotNull(samples);
         assertEquals(3, samples.size());
         for (PredictionInput sample : samples) {
@@ -56,8 +60,8 @@ class IndependentFeaturesDatatDistributionTest {
         double[] doubles2 = DataUtils.generateSamples(0, 1, 3);
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
-        IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
-        List<PredictionInput> samples = independentFeaturesDatatDistribution.sample(300);
+        IndependentFeaturesDataDistribution independentFeaturesDataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
+        List<PredictionInput> samples = independentFeaturesDataDistribution.sample(300);
         assertNotNull(samples);
         assertEquals(300, samples.size());
         for (PredictionInput sample : samples) {
@@ -75,8 +79,27 @@ class IndependentFeaturesDatatDistributionTest {
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
-        IndependentFeaturesDatatDistribution independentFeaturesDatatDistribution = new IndependentFeaturesDatatDistribution(featureDistributions);
-        List<FeatureDistribution> list = independentFeaturesDatatDistribution.asFeatureDistributions();
+        IndependentFeaturesDataDistribution independentFeaturesDataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
+        List<FeatureDistribution> list = independentFeaturesDataDistribution.asFeatureDistributions();
         assertEquals(list, featureDistributions);
+    }
+
+    @Test
+    void testEmptyCartesianProduct() {
+        Collection<List<Object>> lists = IndependentFeaturesDataDistribution.cartesianProduct(Collections.emptyList());
+        assertNotNull(lists);
+        assertThat(lists).isEmpty();
+    }
+
+    @Test
+    void testCartesianProduct() {
+        List<Collection<Double>> enumerations = new ArrayList<>(3);
+        enumerations.add(Arrays.stream(DataUtils.generateSamples(0, 1, 3)).boxed().collect(Collectors.toList()));
+        enumerations.add(Arrays.stream(DataUtils.generateSamples(0, 1, 3)).boxed().collect(Collectors.toList()));
+        enumerations.add(Arrays.stream(DataUtils.generateSamples(0, 1, 3)).boxed().collect(Collectors.toList()));
+        Collection<List<Double>> lists = IndependentFeaturesDataDistribution.cartesianProduct(enumerations);
+        assertNotNull(lists);
+        assertThat(lists).isNotEmpty();
+        assertThat(lists).hasSize(27);
     }
 }

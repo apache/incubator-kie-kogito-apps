@@ -51,7 +51,16 @@ public class NumericFeatureDistribution implements FeatureDistribution {
 
     @Override
     public Value<?> sample() {
-        return sample(1).get(0);
+        if (doubles.isEmpty()) {
+            return new Value<>(null);
+        } else {
+            List<Value<?>> samples = sample(1);
+            if (samples.isEmpty()) {
+                return new Value<>(null);
+            } else {
+                return samples.get(0);
+            }
+        }
     }
 
     @Override
