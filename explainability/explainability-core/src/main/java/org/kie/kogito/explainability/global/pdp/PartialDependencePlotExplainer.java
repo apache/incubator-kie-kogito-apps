@@ -230,20 +230,4 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         return predictionInputs;
     }
 
-    /**
-     * Sample training data distributions from each feature distribution.
-     *
-     * @param noOfFeatures         number of features
-     * @param featureDistributions feature distributions
-     * @return a matrix of numbers with {@code #noOfFeatures} rows and {@code #seriesLength} columns
-     */
-    private double[][] generateDistributions(int noOfFeatures, List<FeatureDistribution> featureDistributions) {
-        double[][] trainingData = new double[noOfFeatures][seriesLength];
-        for (int i = 0; i < noOfFeatures; i++) {
-            double[] featureData = featureDistributions.get(i).sample(seriesLength).stream()
-                    .map(Value::asNumber).map(Number::doubleValue).mapToDouble(d -> d).toArray();
-            trainingData[i] = featureData;
-        }
-        return trainingData;
-    }
 }
