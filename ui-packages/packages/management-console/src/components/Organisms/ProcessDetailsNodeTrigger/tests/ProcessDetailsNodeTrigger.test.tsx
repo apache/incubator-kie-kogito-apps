@@ -4,6 +4,7 @@ import { getWrapperAsync } from '@kogito-apps/common';
 import { DropdownToggle, DropdownItem, FlexItem } from '@patternfly/react-core';
 import { act } from 'react-dom/test-utils';
 import axios from 'axios';
+import ProcessDetailsErrorModal from '../../../Atoms/ProcessDetailsErrorModal/ProcessDetailsErrorModal';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
@@ -125,13 +126,13 @@ describe('Process details node trigger component tests', () => {
         .simulate('click');
     });
     wrapper = wrapper.update();
-    wrapper = wrapper.find('ProcessListModal');
+    wrapper = wrapper.find('ProcessDetailsErrorModal');
     // takes snapshot of the success modal
     expect(wrapper).toMatchSnapshot();
     // check the modal content
-    expect(wrapper.find('ProcessListModal').props()['modalContent']).toEqual(
-      'The node Book was triggered successfully'
-    );
+    expect(
+      wrapper.find('ProcessDetailsErrorModal').props()['errorString']
+    ).toEqual('The node Book was triggered successfully');
   });
 
   it('Node trigger failure tests', async () => {
@@ -159,12 +160,25 @@ describe('Process details node trigger component tests', () => {
         .simulate('click');
     });
     wrapper = wrapper.update();
-    wrapper = wrapper.find('ProcessListModal');
+    wrapper = wrapper.find('ProcessDetailsErrorModal');
     // takes snapshot of the failed modal
     expect(wrapper).toMatchSnapshot();
     // check the modal content
-    expect(wrapper.find('ProcessListModal').props()['modalContent']).toEqual(
-      'The node Book trigger failed. ErrorMessage : "403 error"'
+    expect(
+      wrapper.find('ProcessDetailsErrorModal').props()['errorString']
+    ).toEqual('The node Book trigger failed. ErrorMessage : "403 error"');
+  });
+  it('failed to retrieve nodes', async () => {
+    mockedAxios.get.mockRejectedValue({ message: '404 error' });
+    let wrapper = await getWrapperAsync(
+      <ProcessDetailsNodeTrigger processInstanceData={ProcessInstanceData} />,
+      'ProcessDetailsNodeTrigger'
     );
+    wrapper = wrapper.update().find(ProcessDetailsErrorModal);
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(ProcessDetailsErrorModal).exists()).toBeTruthy();
+    expect(
+      wrapper.find(ProcessDetailsErrorModal).props()['errorString']
+    ).toEqual('Retrieval of nodes failed with error: 404 error');
   });
 });
