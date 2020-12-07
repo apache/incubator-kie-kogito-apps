@@ -20,7 +20,10 @@ import { shallow } from 'enzyme';
 import PageToolbar from '../PageToolbar';
 import { getWrapper } from '../../../../utils/OuiaUtils';
 import { Dropdown } from '@patternfly/react-core';
-import { setTestKogitoAppContextModeToTest } from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
+import {
+  resetTestKogitoAppContext,
+  testIsTestUserSystemEnabledMock
+} from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
 
 jest.mock('../../AboutModalBox/AboutModalBox');
 jest.mock('../../PageToolbarUsersDropdownGroup/PageToolbarUsersDropdownGroup');
@@ -28,13 +31,61 @@ jest.mock('../../../Atoms/AddTestUser/AddTestUser');
 
 describe('PageToolbar component tests', () => {
   beforeEach(() => {
-    setTestKogitoAppContextModeToTest(true);
+    testIsTestUserSystemEnabledMock.mockReturnValue(false);
+    resetTestKogitoAppContext(false);
   });
 
-  it('Snapshot testing', () => {
+  it('Snapshot testing - auth disabled', () => {
     const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
 
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Snapshot testing - auth enabled', () => {
+    resetTestKogitoAppContext(true);
+    const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('Testing dropdown items - auth enabled', () => {
+    resetTestKogitoAppContext(true);
+
+    const wrapper = shallow(<PageToolbar />);
+
+    expect(wrapper).toMatchSnapshot();
+
+    const dropdown = wrapper.find(Dropdown);
+
+    const dropdownItems = dropdown.prop('dropdownItems');
+
+    expect(dropdownItems.length).toStrictEqual(3);
+  });
+
+  it('Testing dropdown items - auth disabled', () => {
+    const wrapper = shallow(<PageToolbar />);
+
+    expect(wrapper).toMatchSnapshot();
+
+    const dropdown = wrapper.find(Dropdown);
+
+    const drodownItems = dropdown.prop('dropdownItems');
+
+    expect(drodownItems.length).toStrictEqual(1);
+  });
+
+  it('Testing dropdown items - auth disabled TestUserSystem enabled', () => {
+    testIsTestUserSystemEnabledMock.mockReturnValue(true);
+
+    const wrapper = shallow(<PageToolbar />);
+
+    expect(wrapper).toMatchSnapshot();
+
+    const dropdown = wrapper.find(Dropdown);
+
+    const drodownItems = dropdown.prop('dropdownItems');
+
+    expect(drodownItems.length).toStrictEqual(3);
   });
 
   it('Testing select dropdown test', () => {
@@ -92,7 +143,9 @@ describe('PageToolbar component tests', () => {
     expect(aboutModalBox.prop('isOpenProp')).toBeTruthy();
   });
 
-  it('Testing handleaddUserModalToggle - dev mode', () => {
+  it('Testing handleaddUserModalToggle - TestUserSystem enabled', () => {
+    testIsTestUserSystemEnabledMock.mockReturnValue(true);
+
     const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
 
     let addUserModal = wrapper.find('MockedAddTestUser');
@@ -110,8 +163,8 @@ describe('PageToolbar component tests', () => {
     expect(addUserModal.prop('isOpen')).toBeTruthy();
   });
 
-  it('Testing handleaddUserModalToggle test - prod mode', () => {
-    setTestKogitoAppContextModeToTest(false);
+  it('Testing handleaddUserModalToggle test - TestUserSystem disabled', () => {
+    testIsTestUserSystemEnabledMock.mockReturnValue(false);
 
     const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
 
@@ -128,27 +181,5 @@ describe('PageToolbar component tests', () => {
     addUserModal = wrapper.update().find('MockedAddTestUser');
 
     expect(addUserModal.prop('isOpen')).toBeFalsy();
-  });
-
-  it('Testing dropdown items - test mode', () => {
-    const wrapper = shallow(<PageToolbar />);
-
-    const dropdown = wrapper.find(Dropdown);
-
-    const drodownItems = dropdown.prop('dropdownItems');
-
-    expect(drodownItems.length).toStrictEqual(5);
-  });
-
-  it('Testing dropdown items - prod mode', () => {
-    setTestKogitoAppContextModeToTest(false);
-
-    const wrapper = shallow(<PageToolbar />);
-
-    const dropdown = wrapper.find(Dropdown);
-
-    const drodownItems = dropdown.prop('dropdownItems');
-
-    expect(drodownItems.length).toStrictEqual(3);
   });
 });
