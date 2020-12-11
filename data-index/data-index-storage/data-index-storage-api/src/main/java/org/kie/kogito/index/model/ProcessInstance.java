@@ -24,10 +24,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class ProcessInstance extends ProcessInstanceMeta {
 
+    @JsonProperty("variables")
     private JsonNode variables;
     @JsonProperty("nodeInstances")
     private List<NodeInstance> nodes;
+    @JsonProperty("milestones")
     private List<Milestone> milestones;
+    @JsonProperty("addons")
     private Set<String> addons;
 
     private ProcessInstanceError error;

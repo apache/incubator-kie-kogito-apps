@@ -16,15 +16,22 @@
 
 package org.kie.kogito.index.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class UserTaskInstance extends UserTaskInstanceMeta {
 
+    @JsonProperty("processId")
     private String processId;
+    @JsonProperty("rootProcessId")
     private String rootProcessId;
+    @JsonProperty("rootProcessInstanceId")
     private String rootProcessInstanceId;
+    @JsonProperty("inputs")
     private JsonNode inputs;
+    @JsonProperty("outputs")
     private JsonNode outputs;
+    @JsonProperty("endpoint")
     private String endpoint;
 
     public String getProcessId() {

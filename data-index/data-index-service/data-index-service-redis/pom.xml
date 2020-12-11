@@ -1,114 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>trusty</artifactId>
+    <artifactId>data-index-service</artifactId>
     <groupId>org.kie.kogito</groupId>
     <version>2.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>trusty-service</artifactId>
-  <name>Kogito :: Trusty Service</name>
+  <artifactId>data-index-service-redis</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-openapi</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-reactive-messaging</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-service-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-service-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-storage-api</artifactId>
-    </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.kie.kogito</groupId>-->
-<!--      <artifactId>trusty-storage-infinispan</artifactId>-->
-<!--    </dependency>-->
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-storage-redis</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-health</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>tracing-decision-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>explainability-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-oidc</artifactId>
-    </dependency>
-
-    <!-- Build container image -->
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-container-image-jib</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-mockito</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-test-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka-clients</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.awaitility</groupId>
-      <artifactId>awaitility</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-core</artifactId>
-      <scope>test</scope>
+      <artifactId>data-index-storage-redis</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -131,41 +45,43 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>**/Native*IT.java</exclude>
+            <exclude>**/*Native*IT.java</exclude>
           </excludes>
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
             <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
           </systemProperties>
         </configuration>
         <executions>
           <execution>
-            <id>default</id>
-            <goals>
-              <goal>integration-test</goal>
-            </goals>
-            <configuration>
-              <excludes combine.children="append"> <!-- Add the exclude to existing ones -->
-                <exclude>**/Keycloak*IT.java</exclude> <!-- Separate execution for this one -->
-              </excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>testWithKeycloak</id>
+            <id>mongo-default</id>
             <goals>
               <goal>integration-test</goal>
             </goals>
             <configuration>
               <includes>
-                <include>**/Keycloak*IT.java</include>
+                <include>**/Mongo*IT.java</include>
               </includes>
-              <systemPropertyVariables>
-                <quarkus.test.profile>keycloak</quarkus.test.profile>
+              <excludes combine.children="append"> <!-- Add the exclude to existing ones -->
+                <exclude>**/*Keycloak*IT.java</exclude> <!-- Separate execution for this one -->
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>mongo-testWithKeycloak</id>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>**/MongoKeycloak*IT.java</include>
+              </includes>
+              <systemProperties>
+                <quarkus.test.profile>keycloak-test</quarkus.test.profile>
                 <quarkus.http.auth.policy.role-policy1.roles-allowed>confidential</quarkus.http.auth.policy.role-policy1.roles-allowed>
                 <quarkus.http.auth.permission.roles1.paths>/*</quarkus.http.auth.permission.roles1.paths>
                 <quarkus.http.auth.permission.roles1.policy>role-policy1</quarkus.http.auth.permission.roles1.policy>
-              </systemPropertyVariables>
+              </systemProperties>
             </configuration>
           </execution>
           <execution>
@@ -186,6 +102,7 @@
       </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>native</id>
@@ -215,14 +132,14 @@
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
               <execution>
-                <id>native-tests</id>
+                <id>mongo-native-tests</id>
                 <goals>
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
                 <configuration>
                   <includes>
-                    <include>**/Native*IT.java</include>
+                    <include>**/MongoNative*IT.java</include>
                   </includes>
                   <systemProperties>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
@@ -235,5 +152,4 @@
       </build>
     </profile>
   </profiles>
-
 </project>

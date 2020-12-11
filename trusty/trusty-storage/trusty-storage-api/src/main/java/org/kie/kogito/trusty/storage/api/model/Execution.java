@@ -47,7 +47,7 @@ public class Execution {
     private Boolean hasSucceeded;
 
     @JsonProperty(EXECUTOR_NAME_FIELD)
-    private String executorName;
+    private String executorName = "unknown";
 
     @JsonProperty(EXECUTED_MODEL_NAME_FIELD)
     private String executedModelName;
@@ -72,7 +72,7 @@ public class Execution {
         this.sourceUrl = sourceUrl;
         this.executionTimestamp = executionTimestamp;
         this.hasSucceeded = hasSucceeded;
-        this.executorName = executorName;
+        this.executorName = "pippo";
         this.executedModelName = executedModelName;
         this.executedModelNamespace = executedModelNamespace;
         this.executionType = executionType;
