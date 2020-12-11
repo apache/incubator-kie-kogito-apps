@@ -41,10 +41,9 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.LocalSaliencyStability;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -87,15 +86,7 @@ class TrafficViolationDmnLimeExplainerTest {
             List<String> strings = saliency.getTopFeatures(3).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
             assertTrue(strings.contains("Actual Speed") || strings.contains("Speed Limit"));
         }
-        int topK = 1;
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-        for (int i = 1; i <= topK; i++) {
-            for (String decision : stability.getDecisions()) {
-                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
-                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
-            }
-        }
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                0.5, 0.5));
     }
 }

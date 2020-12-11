@@ -18,8 +18,6 @@ package org.kie.kogito.explainability;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
@@ -30,11 +28,10 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.LocalSaliencyStability;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -181,16 +178,8 @@ public class TestUtils {
     }
 
     public static void assertLimeStability(PredictionProvider model, Prediction prediction, LimeExplainer limeExplainer,
-                                       int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate)
-            throws InterruptedException, ExecutionException, TimeoutException, TimeoutException, ExecutionException {
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-        for (int i = 1; i <= topK; i++) {
-            for (String decision : stability.getDecisions()) {
-                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(minimumPositiveStabilityRate);
-                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(minimumNegativeStabilityRate);
-            }
-        }
+                                       int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, topK,
+                                                                  minimumPositiveStabilityRate, minimumNegativeStabilityRate));
     }
 }

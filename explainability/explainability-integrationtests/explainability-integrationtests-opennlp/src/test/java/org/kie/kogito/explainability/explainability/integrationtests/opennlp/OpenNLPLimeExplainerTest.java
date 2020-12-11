@@ -36,7 +36,7 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.LocalSaliencyStability;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -47,7 +47,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -114,16 +114,8 @@ class OpenNLPLimeExplainerTest {
                 double i1 = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(3));
                 assertEquals(1d, i1);
             }
-            int topK = 2;
-            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-            for (int i = 1; i <= topK; i++) {
-                for (String decision : stability.getDecisions()) {
-                    double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                    double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.8);
-                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.8);
-                }
-            }
+            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 2,
+                                                                                    0.8, 0.8));
         }
     }
 }

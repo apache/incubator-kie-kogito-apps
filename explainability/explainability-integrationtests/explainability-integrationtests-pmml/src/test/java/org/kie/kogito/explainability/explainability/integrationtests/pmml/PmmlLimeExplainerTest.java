@@ -39,10 +39,12 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.kie.pmml.api.runtime.PMMLRuntime;
 import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.kie.kogito.explainability.explainability.integrationtests.pmml.AbstractPMMLTest.getPMMLRuntime;
 import static org.kie.test.util.filesystem.FileUtils.getFile;
 
@@ -105,16 +107,8 @@ class PmmlLimeExplainerTest {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
                 assertThat(v).isEqualTo(1d);
             }
-            int topK = 1;
-            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-            for (int i = 1; i <= topK; i++) {
-                for (String decision : stability.getDecisions()) {
-                    double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                    double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
-                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
-                }
-            }
+            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                    0.5, 0.5));
         }
     }
 
@@ -158,16 +152,8 @@ class PmmlLimeExplainerTest {
             double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
             assertThat(v).isEqualTo(1d);
         }
-        int topK = 1;
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-        for (int i = 1; i <= topK; i++) {
-            for (String decision : stability.getDecisions()) {
-                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
-                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
-            }
-        }
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                0.5, 0.5));
     }
 
     @Test
@@ -217,16 +203,8 @@ class PmmlLimeExplainerTest {
             double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
             assertThat(v).isGreaterThan(0d);
         }
-        int topK = 1;
-        LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-        for (int i = 1; i <= topK; i++) {
-            for (String decision : stability.getDecisions()) {
-                double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
-                assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
-            }
-        }
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                0.5, 0.5));
     }
 
     @Test
@@ -274,16 +252,8 @@ class PmmlLimeExplainerTest {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
                 assertThat(v).isEqualTo(1d);
             }
-            int topK = 1;
-            LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, limeExplainer, topK, 10);
-            for (int i = 1; i <= topK; i++) {
-                for (String decision : stability.getDecisions()) {
-                    double positiveStabilityScore = stability.getPositiveStabilityScore(decision, i);
-                    double negativeStabilityScore = stability.getNegativeStabilityScore(decision, i);
-                    assertThat(positiveStabilityScore).isGreaterThanOrEqualTo(0.5);
-                    assertThat(negativeStabilityScore).isGreaterThanOrEqualTo(0.5);
-                }
-            }
+            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                    0.5, 0.5));
         }
     }
 }

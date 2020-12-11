@@ -48,11 +48,11 @@ public class LocalSaliencyStability {
     }
 
     public double getPositiveStabilityScore(String decision, int k) {
-        return map.get(decision).get(k).getPositiveFrequencyRate();
+        return map.get(decision).get(k).getPositiveFrequencyScore();
     }
 
     public double getNegativeStabilityScore(String decision, int k) {
-        return map.get(decision).get(k).getNegativeFrequencyRate();
+        return map.get(decision).get(k).getNegativeFrequencyScore();
     }
 
     /**
@@ -60,16 +60,16 @@ public class LocalSaliencyStability {
      * @param decision the decision
      * @param k the no. of top features considered
      * @param positiveFeatureNames the names of top positive features
-     * @param positiveFrequencyRate the frequency rate of the top positive features
+     * @param positiveFrequencyScore the frequency score of the top positive features
      * @param negativeFeatureNames the names of top negative features
-     * @param negativeFrequencyRate the frequency rate of the top negative features
+     * @param negativeFrequencyScore the frequency score of the top negative features
      */
-    public void add(String decision, int k, List<String> positiveFeatureNames, double positiveFrequencyRate,
-                    List<String> negativeFeatureNames, double negativeFrequencyRate) {
+    public void add(String decision, int k, List<String> positiveFeatureNames, double positiveFrequencyScore,
+                    List<String> negativeFeatureNames, double negativeFrequencyScore) {
         if (map.containsKey(decision)) {
             Map<Integer, SaliencyFrequencyMetadata> integerMap = map.get(decision);
-            integerMap.put(k, new SaliencyFrequencyMetadata(positiveFeatureNames, positiveFrequencyRate,
-                                                            negativeFeatureNames, negativeFrequencyRate));
+            integerMap.put(k, new SaliencyFrequencyMetadata(positiveFeatureNames, positiveFrequencyScore,
+                                                            negativeFeatureNames, negativeFrequencyScore));
         }
     }
 
@@ -79,24 +79,24 @@ public class LocalSaliencyStability {
     private static class SaliencyFrequencyMetadata {
 
         private final List<String> positiveFeatureNames;
-        private final double positiveFrequencyRate;
+        private final double positiveFrequencyScore;
         private final List<String> negativeFeatureNames;
-        private final double negativeFrequencyRate;
+        private final double negativeFrequencyScore;
 
-        private SaliencyFrequencyMetadata(List<String> positiveFeatureNames, double positiveFrequencyRate,
-                                          List<String> negativeFeatureNames, double negativeFrequencyRate) {
+        private SaliencyFrequencyMetadata(List<String> positiveFeatureNames, double positiveFrequencyScore,
+                                          List<String> negativeFeatureNames, double negativeFrequencyScore) {
             this.positiveFeatureNames = positiveFeatureNames;
-            this.positiveFrequencyRate = positiveFrequencyRate;
+            this.positiveFrequencyScore = positiveFrequencyScore;
             this.negativeFeatureNames = negativeFeatureNames;
-            this.negativeFrequencyRate = negativeFrequencyRate;
+            this.negativeFrequencyScore = negativeFrequencyScore;
         }
 
-        double getNegativeFrequencyRate() {
-            return negativeFrequencyRate;
+        double getNegativeFrequencyScore() {
+            return negativeFrequencyScore;
         }
 
-        double getPositiveFrequencyRate() {
-            return positiveFrequencyRate;
+        double getPositiveFrequencyScore() {
+            return positiveFrequencyScore;
         }
 
         List<String> getNegativeFeatureNames() {
