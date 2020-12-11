@@ -217,7 +217,7 @@ public class ExplainabilityMetrics {
                         saliencies.put(saliencyEntry.getKey(), List.of(saliencyEntry.getValue()));
                     }
                 } else {
-                    LOGGER.warn("skipping empty / zero saliency for {}", saliencyEntry.getKey());
+                    LOGGER.debug("skipping empty / zero saliency for {}", saliencyEntry.getKey());
                     skipped++;
                 }
             }
