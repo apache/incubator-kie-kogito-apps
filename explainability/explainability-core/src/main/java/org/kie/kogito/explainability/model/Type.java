@@ -168,10 +168,10 @@ public enum Type {
             double[] doubles = new double[values.length + 1];
             int valueIndex = 0;
             for (Value<?> v : values) {
-                doubles[valueIndex] = v.asNumber();
+                doubles[valueIndex] = Double.isNaN(v.asNumber()) ? 0 : v.asNumber();
                 valueIndex++;
             }
-            double originalValue = target.asNumber();
+            double originalValue = Double.isNaN(target.asNumber()) ? 0 : target.asNumber();
             doubles[valueIndex] = originalValue; // include target number in feature scaling
             double min = DoubleStream.of(doubles).min().orElse(Double.MIN_VALUE);
             double max = DoubleStream.of(doubles).max().orElse(Double.MAX_VALUE);
@@ -184,7 +184,7 @@ public enum Type {
             double sigma = 1;
             double threshold = DataUtils.gaussianKernel(scaledOriginalValue, scaledOriginalValue, sigma);
             List<Double> clusteredValues = scaledValues.stream()
-                    .map(d -> Double.isNaN(d) ? 0 : d).map(d -> DataUtils.gaussianKernel(d, scaledOriginalValue, sigma)).collect(Collectors.toList());
+                    .map(d -> DataUtils.gaussianKernel(d, scaledOriginalValue, sigma)).collect(Collectors.toList());
             List<Double> encodedValues = clusteredValues.stream()
                     .map(d -> (Math.abs(d - threshold) < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
 

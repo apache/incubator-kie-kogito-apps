@@ -330,6 +330,22 @@ class TypeTest {
         }
     }
 
+    @Test
+    void testEncodeNaN() {
+        Random random = new Random();
+        random.setSeed(4);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        Value<?> target = Type.NUMBER.randomValue(perturbationContext);
+        Value<?>[] values = new Value<?>[6];
+        for (int i = 0; i < values.length - 1; i++) {
+            values[i] = Type.NUMBER.randomValue(perturbationContext);
+        }
+        values[5] = new Value<>(Double.NaN);
+        List<double[]> vectors = Type.NUMBER.encode(target, values);
+        assertThat(vectors).isNotEmpty();
+        assertThat(vectors).doesNotContain(new double[]{Double.NaN});
+    }
+
     @ParameterizedTest
     @EnumSource
     void testRandomValue(Type type) {
