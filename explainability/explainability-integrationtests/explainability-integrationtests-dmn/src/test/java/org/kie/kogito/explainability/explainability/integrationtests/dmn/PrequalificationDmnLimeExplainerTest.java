@@ -52,7 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class PrequalificationDmnLimeExplainerTest {
 
     @Test
-    void testPrequalificationDMNExplanation1() throws ExecutionException, InterruptedException, TimeoutException {
+    void testPrequalificationDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/Prequalification-1.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
