@@ -45,7 +45,7 @@ const ProcessDetailsNodeTrigger: React.FC<IOwnProps & OUIAProps> = ({
   const [modalTitle, setModalTitle] = useState<string>('');
   const [titleType, setTitleType] = useState<string>('');
   const [modalContent, setModalContent] = useState<string>('');
-  const [error, isError] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
   const [nodes, setNodes] = useState<TriggerableNode[]>([]);
   /* tslint:disable:no-floating-promises */
   useEffect(() => {
@@ -53,11 +53,11 @@ const ProcessDetailsNodeTrigger: React.FC<IOwnProps & OUIAProps> = ({
       await getTriggerableNodes(
         processInstanceData,
         (resultNodes: TriggerableNode[]) => {
-          isError(false);
+          setIsError(false);
           setNodes(resultNodes);
         },
         (error: string) => {
-          isError(true);
+          setIsError(true);
           setModalTitle('Node trigger Error');
           setModalContent(`Retrieval of nodes failed with error: ${error}`);
           setTitleType('failure');
@@ -144,7 +144,7 @@ const ProcessDetailsNodeTrigger: React.FC<IOwnProps & OUIAProps> = ({
         label="Node Trigger Error"
         title={setTitle(titleType, modalTitle)}
       />
-      {!error ? (
+      {!isError ? (
         <Card {...componentOuiaProps(ouiaId, 'node-trigger', ouiaSafe)}>
           <CardHeader>
             <Title headingLevel="h3" size="xl">
@@ -185,7 +185,7 @@ const ProcessDetailsNodeTrigger: React.FC<IOwnProps & OUIAProps> = ({
                         <Split hasGutter>
                           <SplitItem>
                             <Text component={TextVariants.h6}>
-                              Node name :{' '}
+                              {'Node name : '}
                             </Text>
                           </SplitItem>
                           <SplitItem>
@@ -202,7 +202,7 @@ const ProcessDetailsNodeTrigger: React.FC<IOwnProps & OUIAProps> = ({
                         <Split hasGutter>
                           <SplitItem>
                             <Text component={TextVariants.h6}>
-                              Node type :{' '}
+                              {'Node type : '}
                             </Text>
                           </SplitItem>
                           <SplitItem>
@@ -218,7 +218,9 @@ const ProcessDetailsNodeTrigger: React.FC<IOwnProps & OUIAProps> = ({
                         {' '}
                         <Split hasGutter>
                           <SplitItem>
-                            <Text component={TextVariants.h6}>Node id : </Text>
+                            <Text component={TextVariants.h6}>
+                              {'Node id : '}
+                            </Text>
                           </SplitItem>
                           <SplitItem>
                             <Text component={TextVariants.p}>

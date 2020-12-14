@@ -72,13 +72,13 @@ describe('Process details node trigger component tests', () => {
     // snapshot with data displayed
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find(FlexItem).length).toEqual(3);
-    // //  Node name displayed
+    // Node name displayed
     expect(
       wrapper
         .find(FlexItem)
         .find('h6')
-        .children()
         .at(0)
+        .children()
         .contains('Node name : ')
     ).toBeTruthy();
     // Node type displayed
@@ -86,8 +86,8 @@ describe('Process details node trigger component tests', () => {
       wrapper
         .find(FlexItem)
         .find('h6')
-        .children()
         .at(1)
+        .children()
         .contains('Node type : ')
     ).toBeTruthy();
     // Node id displayed
@@ -95,8 +95,8 @@ describe('Process details node trigger component tests', () => {
       wrapper
         .find(FlexItem)
         .find('h6')
-        .children()
         .at(2)
+        .children()
         .contains('Node id : ')
     ).toBeTruthy();
   });
