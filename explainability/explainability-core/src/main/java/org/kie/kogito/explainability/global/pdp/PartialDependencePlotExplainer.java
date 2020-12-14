@@ -107,7 +107,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 // generate samples for the feature under analysis
                 FeatureDistribution featureDistribution = featureDistributions.get(featureIndex);
                 List<Value<?>> xsValues = featureDistribution.sample(seriesLength).stream()
-                        .sorted((v1,v2)-> Comparator.comparingDouble((ToDoubleFunction<Value<?>>) Value::asNumber).compare(v1, v2))
+                        .sorted((v1, v2) -> Comparator.comparingDouble((ToDoubleFunction<Value<?>>) Value::asNumber).compare(v1, v2))
+                        .distinct()
                         .collect(Collectors.toList());
                 List<Feature> featureXSvalues = xsValues.stream()
                         .map(v -> FeatureFactory.copyOf(featureDistribution.getFeature(), v)).collect(Collectors.toList());
@@ -118,6 +119,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                         .map(values -> values.stream()
                                 //.sorted((v1,v2)-> Comparator.comparingDouble((ToDoubleFunction<Value<?>>) Value::asNumber).compare(v1, v2))
                                 .map(v -> FeatureFactory.copyOf(featureDistribution.getFeature(), v))
+                                .distinct()
                                 .collect(Collectors.toList()))
                         .collect(Collectors.toList());
 
@@ -138,11 +140,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                             outputDecision = new Output(output.getName(), output.getType());
                         }
                         if (Type.NUMBER.equals(output.getType())) {
-                            // use numerical output when possible, otherwise only use the score
                             double v = output.getValue().asNumber();
-                            if (Double.isNaN(v)) { // check the output can be converted to a proper number
-                                v = output.getScore();
-                            }
                             if (marginalImpacts.size() > i) {
                                 marginalImpacts.set(i, new Value<>(marginalImpacts.get(i).asNumber() + v / (double) seriesLength));
                             } else {
