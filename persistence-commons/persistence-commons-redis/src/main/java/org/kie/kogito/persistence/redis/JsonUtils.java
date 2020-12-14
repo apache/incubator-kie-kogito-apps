@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.persistence.redis.index;
+package org.kie.kogito.persistence.redis;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import io.redisearch.Schema;
+public class JsonUtils {
+    private static final ObjectMapper MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
 
-public class RedisCreateIndexEvent {
-
-    public String indexName;
-    public List<Schema.Field> fields = new ArrayList<>();
-
-    public RedisCreateIndexEvent withField(Schema.Field field){
-        this.fields.add(field);
-        return this;
+    public static ObjectMapper getMapper(){
+        return MAPPER;
     }
 }

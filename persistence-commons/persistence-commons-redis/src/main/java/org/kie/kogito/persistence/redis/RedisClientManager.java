@@ -13,20 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.persistence.redis.index;
+package org.kie.kogito.persistence.redis;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.redisearch.client.Client;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import io.redisearch.Schema;
+public class RedisClientManager {
+    @ConfigProperty(name = "kogito.persistence.redis.host", defaultValue = "localhost")
+    private String host;
+    @ConfigProperty(name = "kogito.persistence.redis.port", defaultValue = "6379")
+    private int port;
 
-public class RedisCreateIndexEvent {
-
-    public String indexName;
-    public List<Schema.Field> fields = new ArrayList<>();
-
-    public RedisCreateIndexEvent withField(Schema.Field field){
-        this.fields.add(field);
-        return this;
+    public Client getClient(String indexName){
+        return new Client(indexName, host, port);
     }
 }

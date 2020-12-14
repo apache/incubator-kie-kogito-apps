@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kie.kogito.persistence.redis;
 
 import java.io.IOException;
@@ -6,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.redisearch.SearchResult;
 import io.redisearch.client.Client;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
@@ -22,14 +38,15 @@ public class RedisQuery<V> implements Query<V> {
     Integer offset;
     List<AttributeFilter<?>> filters;
     List<AttributeSort> sortBy;
-    ObjectMapper mapper = new ObjectMapper();
+    String indexName;
 
     private Class<V> type;
 
     private Client redisClient;
 
-    public RedisQuery(Client redisClient, Class<V> type) {
+    public RedisQuery(Client redisClient, String indexName, Class<V> type) {
         this.redisClient = redisClient;
+        this.indexName = indexName;
         this.type = type;
     }
 
@@ -59,8 +76,9 @@ public class RedisQuery<V> implements Query<V> {
 
     @Override
     public List<V> execute() {
-        LOGGER.info(RedisQueryFactory.buildQueryBody(filters));
-        io.redisearch.Query query = new io.redisearch.Query(RedisQueryFactory.buildQueryBody(filters));
+        LOGGER.info("Being asked to look for results for type: " + type.getName());
+        LOGGER.info(RedisQueryFactory.buildQueryBody(indexName, filters));
+        io.redisearch.Query query = new io.redisearch.Query(RedisQueryFactory.buildQueryBody(indexName, filters));
         if (limit != null && offset != null) {
             query.limit(limit, offset);
         }
@@ -77,7 +95,8 @@ public class RedisQuery<V> implements Query<V> {
         LOGGER.info("total results: " + search.totalResults);
         return search.docs.stream().map(x -> {
             try {
-                return mapper.readValue((String)x.get("rawObject"), type);
+                LOGGER.info("FETCHED: " + x.get("rawObject"));
+                return JsonUtils.getMapper().readValue((String)x.get("rawObject"), type);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

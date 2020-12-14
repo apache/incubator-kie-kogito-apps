@@ -1,4 +1,19 @@
-package org.kie.kogito.persistence.redis;
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ package org.kie.kogito.persistence.redis;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +23,9 @@ import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Joiner;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.redisearch.Document;
-import io.redisearch.Schema;
 import io.redisearch.client.Client;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
@@ -27,7 +41,6 @@ public class RedisStorage<V> implements Storage<String, V> {
     private RedisIndexManager redisIndexManager;
     private String indexName;
     private Class<V> type;
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     public RedisStorage(Client redisClient, RedisIndexManager redisIndexManager, String indexName, Class<V> type) {
         LOGGER.info(indexName);
@@ -52,7 +65,7 @@ public class RedisStorage<V> implements Storage<String, V> {
 
     @Override
     public Query<V> query() {
-        return new RedisQuery<>(redisClient, type);
+        return new RedisQuery<>(redisClient, indexName, type);
     }
 
     @Override
@@ -60,11 +73,11 @@ public class RedisStorage<V> implements Storage<String, V> {
         LOGGER.info("FETCHING KEY: " + key + " in storage: " + indexName);
         Document document = redisClient.getDocument(key);
         LOGGER.info(String.valueOf(document == null));
-        if (document == null){
+        if (document == null) {
             return null;
         }
         try {
-            return objectMapper.readValue((String)document.get("rawObject"), type);
+            return JsonUtils.getMapper().readValue((String) document.get("rawObject"), type);
         } catch (JsonProcessingException e) {
             LOGGER.warn("SHIT", e);
             e.printStackTrace();
@@ -75,20 +88,22 @@ public class RedisStorage<V> implements Storage<String, V> {
     @Override
     public V put(String key, V value) {
         Map<String, Object> myMap = new HashMap<>();
-        LOGGER.info("PUTTING KEY: " + key + " in storage: " + indexName);
+        LOGGER.info("PUTTING KEY: " + key + " in storage: " + indexName + " for declared type: " + type.getName() + " for given class: " + value.getClass());
         List<String> fields = redisIndexManager.getSchema(indexName);
-        if (fields.size() != 0){ // Add into the payload only the indexed fields, if there is any
-            Map<String, Object> tmp = objectMapper.convertValue(value, Map.class);
-            for (String mapKey : fields){
-                if (tmp.get(mapKey) != null){
+        if (fields.size() != 0) { // Add into the payload only the indexed fields, if there is any
+            Map<String, Object> tmp = JsonUtils.getMapper().convertValue(value, Map.class);
+            for (String mapKey : fields) {
+                if (tmp.get(mapKey) != null) {
                     myMap.put(mapKey, tmp.get(mapKey));
                 }
             }
         }
 
-        myMap.put("myKey", "myKey");
+        myMap.put("indexName", indexName);
+
         try {
-            myMap.put("rawObject", objectMapper.writeValueAsString(value));
+            LOGGER.info(JsonUtils.getMapper().writeValueAsString(value));
+            myMap.put("rawObject", JsonUtils.getMapper().writeValueAsString(value));
         } catch (JsonProcessingException e) {
             LOGGER.warn("VERY BAD", e);
             e.printStackTrace();
