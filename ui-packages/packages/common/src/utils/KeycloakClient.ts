@@ -46,10 +46,8 @@ export const loadSecurityContext = async (onloadSuccess: () => void) => {
 
 const getNonAuthUserContext = (): UserContext => {
   if (isTestUserSystemEnabled()) {
-    // @ts-ignore
     return new TestUserContextImpl();
   } else {
-    // @ts-ignore
     return {
       getCurrentUser(): User {
         return ANONYMOUS_USER;

@@ -22,6 +22,7 @@ import { getWrapper } from '../../../../utils/OuiaUtils';
 import { Dropdown } from '@patternfly/react-core';
 import {
   resetTestKogitoAppContext,
+  testHandleLogoutMock,
   testIsTestUserSystemEnabledMock
 } from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
 
@@ -32,6 +33,7 @@ jest.mock('../../../Atoms/AddTestUser/AddTestUser');
 describe('PageToolbar component tests', () => {
   beforeEach(() => {
     testIsTestUserSystemEnabledMock.mockReturnValue(false);
+    testHandleLogoutMock.mockClear();
     resetTestKogitoAppContext(false);
   });
 
@@ -62,6 +64,26 @@ describe('PageToolbar component tests', () => {
     expect(dropdownItems.length).toStrictEqual(3);
   });
 
+  it('Testing logout - auth enabled', () => {
+    resetTestKogitoAppContext(true);
+
+    const wrapper = shallow(<PageToolbar />);
+
+    const dropdown = wrapper.find(Dropdown);
+
+    const dropdownItems = dropdown.prop('dropdownItems');
+
+    expect(dropdownItems.length).toStrictEqual(3);
+
+    const logout = dropdownItems[2];
+
+    act(() => {
+      logout.props.onClick();
+    });
+
+    expect(testHandleLogoutMock).toBeCalled();
+  });
+
   it('Testing dropdown items - auth disabled', () => {
     const wrapper = shallow(<PageToolbar />);
 
@@ -69,9 +91,9 @@ describe('PageToolbar component tests', () => {
 
     const dropdown = wrapper.find(Dropdown);
 
-    const drodownItems = dropdown.prop('dropdownItems');
+    const dropdownItems = dropdown.prop('dropdownItems');
 
-    expect(drodownItems.length).toStrictEqual(1);
+    expect(dropdownItems.length).toStrictEqual(1);
   });
 
   it('Testing dropdown items - auth disabled TestUserSystem enabled', () => {
@@ -83,9 +105,9 @@ describe('PageToolbar component tests', () => {
 
     const dropdown = wrapper.find(Dropdown);
 
-    const drodownItems = dropdown.prop('dropdownItems');
+    const dropdownItems = dropdown.prop('dropdownItems');
 
-    expect(drodownItems.length).toStrictEqual(3);
+    expect(dropdownItems.length).toStrictEqual(3);
   });
 
   it('Testing select dropdown test', () => {

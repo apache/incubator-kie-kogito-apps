@@ -23,6 +23,9 @@ import { KeycloakUserContext } from '../../KeycloakUserContext';
 export const testIsAuthEnabledMock = jest.spyOn(Keycloak, 'isAuthEnabled');
 testIsAuthEnabledMock.mockReturnValue(true);
 
+export const testHandleLogoutMock = jest.spyOn(Keycloak, 'handleLogout');
+testHandleLogoutMock.mockImplementation(jest.fn());
+
 export const testIsTestUserSystemEnabledMock = jest.spyOn(
   Utils,
   'isTestUserSystemEnabled'
