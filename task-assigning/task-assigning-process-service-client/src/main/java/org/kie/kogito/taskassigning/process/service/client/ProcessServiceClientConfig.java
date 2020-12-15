@@ -16,86 +16,31 @@
 
 package org.kie.kogito.taskassigning.process.service.client;
 
-public class ProcessServiceClientConfig {
+import java.net.URL;
 
-    private String serviceUrl;
+import org.kie.kogito.taskassigning.config.ServiceClientConfig;
 
-    private long connectTimeoutMillis;
-
-    private long readTimeoutMillis;
+public class ProcessServiceClientConfig extends ServiceClientConfig {
 
     private ProcessServiceClientConfig() {
     }
 
-    private ProcessServiceClientConfig(String serviceUrl, long connectTimeoutMillis, long readTimeoutMillis) {
-        this.serviceUrl = serviceUrl;
-        this.connectTimeoutMillis = connectTimeoutMillis;
-        this.readTimeoutMillis = readTimeoutMillis;
+    private ProcessServiceClientConfig(URL serviceUrl, long connectTimeoutMillis, long readTimeoutMillis) {
+        super(serviceUrl, connectTimeoutMillis, readTimeoutMillis);
     }
 
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    public String getServiceUrl() {
-        return serviceUrl;
-    }
-
-    public long getConnectTimeoutMillis() {
-        return connectTimeoutMillis;
-    }
-
-    public long getReadTimeoutMillis() {
-        return readTimeoutMillis;
-    }
-
-    public static class Builder {
-
-        private String serviceUrl;
-        private long connectTimeoutMillis;
-        private long readTimeoutMillis;
+    public static class Builder extends ServiceClientConfig.Builder<ProcessServiceClientConfig, Builder> {
 
         private Builder() {
         }
 
+        @Override
         public ProcessServiceClientConfig build() {
             return new ProcessServiceClientConfig(serviceUrl, connectTimeoutMillis, readTimeoutMillis);
-        }
-
-        public Builder serviceUrl(String serviceUrl) {
-            this.serviceUrl = serviceUrl;
-            return this;
-        }
-
-        /**
-         * Set the connect timeout in milliseconds.
-         * <p>
-         * Like JAX-RS's <code>javax.ws.rs.client.ClientBuilder</code>'s
-         * <code>connectTimeout</code> method, specifying a timeout of 0 represents
-         * infinity, and negative values are not allowed.
-         */
-        public Builder connectTimeoutMillis(long connectTimeoutMillis) {
-            if (connectTimeoutMillis < 0) {
-                throw new IllegalArgumentException("Cannot set a negative connectTimeoutMillis value");
-            }
-            this.connectTimeoutMillis = connectTimeoutMillis;
-            return this;
-        }
-
-        /**
-         * Set the read timeout.
-         * <p>
-         * Like JAX-RS's <code>javax.ws.rs.client.ClientBuilder</code>'s
-         * <code>readTimeout</code> method, specifying a timeout of 0 represents
-         * infinity, and negative values are not allowed.
-         * </p>
-         */
-        public Builder readTimeoutMillis(long readTimeoutMillis) {
-            if (readTimeoutMillis < 0) {
-                throw new IllegalArgumentException("Cannot set a negative readTimeoutMillis value");
-            }
-            this.readTimeoutMillis = readTimeoutMillis;
-            return this;
         }
     }
 }

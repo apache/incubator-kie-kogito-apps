@@ -38,10 +38,11 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LoanEligibilityDmnLimeExplainerTest {
 
@@ -55,15 +56,15 @@ class LoanEligibilityDmnLimeExplainerTest {
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
 
         final Map<String, Object> client = new HashMap<>();
-        client.put("age", 43);
-        client.put("salary", 1950);
-        client.put("existing payments", 100);
+        client.put("Age", 43);
+        client.put("Salary", 1950);
+        client.put("Existing payments", 100);
         final Map<String, Object> loan = new HashMap<>();
-        loan.put("duration", 15);
-        loan.put("installment", 100);
+        loan.put("Duration", 15);
+        loan.put("Installment", 100);
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("client", client);
-        contextVariables.put("loan", loan);
+        contextVariables.put("Client", client);
+        contextVariables.put("Loan", loan);
 
         PredictionProvider model = new DecisionModelWrapper(decisionModel);
         List<Feature> features = new LinkedList<>();
@@ -72,12 +73,14 @@ class LoanEligibilityDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
-        LimeConfig limeConfig = new LimeConfig().withSamples(100);
+        LimeConfig limeConfig = new LimeConfig().withSamples(300);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
             assertNotNull(saliency);
         }
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                0.5, 0.5));
     }
 }
