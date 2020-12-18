@@ -16,14 +16,11 @@
 package org.kie.kogito.persistence.redis;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.redisearch.Client;
 import io.redisearch.SearchResult;
-import io.redisearch.client.Client;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.AttributeSort;
 import org.kie.kogito.persistence.api.query.Query;
@@ -31,13 +28,16 @@ import org.kie.kogito.persistence.api.query.SortDirection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.kie.kogito.persistence.redis.Constants.RAW_OBJECT_FIELD;
+
 public class RedisQuery<V> implements Query<V> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RedisQuery.class);
 
     Integer limit;
     Integer offset;
     List<AttributeFilter<?>> filters;
-    List<AttributeSort> sortBy;
+    AttributeSort sortBy;
     String indexName;
 
     private Class<V> type;
@@ -70,40 +70,35 @@ public class RedisQuery<V> implements Query<V> {
 
     @Override
     public Query<V> sort(List<AttributeSort> sortBy) {
-        this.sortBy = sortBy;
+        if (!sortBy.isEmpty()) {
+            if (sortBy.size() > 1) { // TODO: implement backend side sorting on multiple attributes
+                throw new UnsupportedOperationException("Multiple sorting attributes not implemented yet.");
+            }
+            this.sortBy = sortBy.get(0);
+        }
         return this;
     }
 
     @Override
     public List<V> execute() {
-        LOGGER.info("Being asked to look for results for type: " + type.getName());
-        LOGGER.info(RedisQueryFactory.buildQueryBody(indexName, filters));
         io.redisearch.Query query = new io.redisearch.Query(RedisQueryFactory.buildQueryBody(indexName, filters));
         if (limit != null && offset != null) {
             query.limit(limit, offset);
         }
-        if (sortBy.size() == 1){ // TODO: implement backend side sorting on multiple attributes
-            query.setSortBy(sortBy.get(0).getAttribute(), SortDirection.ASC.equals(sortBy.get(0).getSort()));
-        }
-        if (sortBy.size() > 1){
-            throw new UnsupportedOperationException("Unsupported multiple sorting attributes");
+        if (sortBy != null) {
+            query.setSortBy(sortBy.getAttribute(), SortDirection.ASC.equals(sortBy.getSort()));
         }
 
         RedisQueryFactory.addFilters(query, filters);
-
         SearchResult search = redisClient.search(query);
-        LOGGER.info("total results: " + search.totalResults);
+        LOGGER.debug(String.format("%d documets have been found for the query.", search.totalResults));
+
         return search.docs.stream().map(x -> {
             try {
-                LOGGER.info("FETCHED: " + x.get("rawObject"));
-                return JsonUtils.getMapper().readValue((String)x.get("rawObject"), type);
+                return JsonUtils.getMapper().readValue((String) x.get(RAW_OBJECT_FIELD), type);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Could not deserialize a retrieved object.", e);
             }
         }).collect(Collectors.toList());
-    }
-
-    List<AttributeSort> getSortBy() {
-        return sortBy;
     }
 }

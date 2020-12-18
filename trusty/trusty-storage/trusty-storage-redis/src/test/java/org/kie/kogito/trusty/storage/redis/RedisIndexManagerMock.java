@@ -13,32 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.persistence.redis.index;
+package org.kie.kogito.trusty.storage.redis;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.redisearch.Schema;
+import org.kie.kogito.persistence.redis.RedisClientManager;
+import org.kie.kogito.persistence.redis.index.RedisCreateIndexEvent;
+import org.kie.kogito.persistence.redis.index.RedisIndexManager;
 
-public class RedisCreateIndexEvent {
+public class RedisIndexManagerMock extends RedisIndexManager {
 
-    private final String indexName;
-    private final List<Schema.Field> fields = new ArrayList<>();
+    private List<String> indexNames = new ArrayList<>();
 
-    public RedisCreateIndexEvent(String indexName) {
-        this.indexName = indexName;
+    public RedisIndexManagerMock(RedisClientManager redisClientManager) {
+        super(redisClientManager);
     }
 
-    public RedisCreateIndexEvent withField(Schema.Field field) {
-        this.fields.add(field);
-        return this;
+    @Override
+    public void createIndex(RedisCreateIndexEvent event) {
+        indexNames.add(event.getIndexName());
     }
 
-    public String getIndexName() {
-        return indexName;
-    }
-
-    public List<Schema.Field> getFields() {
-        return fields;
+    public List<String> getIndexNames() {
+        return indexNames;
     }
 }

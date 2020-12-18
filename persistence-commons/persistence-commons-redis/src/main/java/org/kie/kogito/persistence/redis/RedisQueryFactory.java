@@ -18,17 +18,17 @@ package org.kie.kogito.persistence.redis;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.redisearch.Query;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
+
+import static org.kie.kogito.persistence.redis.Constants.INDEX_NAME_FIELD;
 
 public class RedisQueryFactory {
 
     static String buildQueryBody(String indexName, List<AttributeFilter<?>> filters) {
         List<String> components = new ArrayList<>();
-        components.add("@indexName:" + indexName);
+        components.add(String.format("@%s:%s", INDEX_NAME_FIELD, indexName));
         for (AttributeFilter attributeFilter : filters) {
             switch (attributeFilter.getCondition()) {
-                case CONTAINS:
                 case EQUAL:
                     components.add(String.format("@%s:%s", attributeFilter.getAttribute(), attributeFilter.getValue()));
                     break;
@@ -43,7 +43,6 @@ public class RedisQueryFactory {
     static void addFilters(io.redisearch.Query query, List<AttributeFilter<?>> filters) {
         for (AttributeFilter attributeFilter : filters) {
             switch (attributeFilter.getCondition()) {
-                case CONTAINS:
                 case EQUAL:
                 case LIKE:
                     break;
@@ -84,12 +83,12 @@ public class RedisQueryFactory {
                     );
                     break;
                 default:
-                    throw new UnsupportedOperationException("query filter not supported: " + attributeFilter.getCondition());
+                    throw new UnsupportedOperationException("Redis does not support query filter: " + attributeFilter.getCondition());
             }
         }
     }
 
-    static Double convertNumeric(Object obj) {
+    private static Double convertNumeric(Object obj) {
         if (obj instanceof Long) {
             return ((Long) obj).doubleValue();
         }

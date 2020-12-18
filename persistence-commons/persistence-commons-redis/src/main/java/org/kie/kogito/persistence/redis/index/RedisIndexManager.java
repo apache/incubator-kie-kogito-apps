@@ -15,52 +15,52 @@
  */
 package org.kie.kogito.persistence.redis.index;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import io.redisearch.Client;
 import io.redisearch.Schema;
-import io.redisearch.client.Client;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.persistence.redis.RedisClientManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.exceptions.JedisDataException;
 
+import static org.kie.kogito.persistence.redis.Constants.INDEX_NAME_FIELD;
+
 @ApplicationScoped
 public class RedisIndexManager {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RedisIndexManager.class);
 
+    private final RedisClientManager redisClientManager;
     private Map<String, List<String>> indexes = new HashMap<>();
 
     @Inject
-    RedisClientManager redisClientManager;
+    public RedisIndexManager(RedisClientManager redisClientManager) {
+        this.redisClientManager = redisClientManager;
+    }
 
     public void createIndex(RedisCreateIndexEvent event) {
-        Client client = redisClientManager.getClient(event.indexName);
-        List<String> fields = new ArrayList<>();
+        Client client = redisClientManager.getClient(event.getIndexName());
+        indexes.put(event.getIndexName(), event.getFields().stream().map(field -> field.name).collect(Collectors.toList()));
+
         Schema schema = new Schema();
-            for (Schema.Field field : event.fields) {
-                fields.add(field.name);
-                schema.addField(field);
-            }
-        schema.addField(new Schema.Field("indexName", Schema.FieldType.FullText, false ));
+        event.getFields().forEach(schema::addField);
+        schema.addField(new Schema.Field(INDEX_NAME_FIELD, Schema.FieldType.FullText, false));
 
-        indexes.put(event.indexName, fields);
-
-        try{
-            client.createIndex(schema, Client.IndexOptions.defaultOptions());
-        }
-        catch (JedisDataException ignored){
-            LOGGER.warn("something went wrong.", ignored);
+        try {
+            client.createIndex(schema, io.redisearch.client.Client.IndexOptions.defaultOptions());
+        } catch (JedisDataException ignored) {
+            LOGGER.info(String.format("Could not add redis index %s, it probably already exists.", event.getIndexName()));
         }
     }
 
-    public List<String> getSchema(String indexName){
+    public List<String> getSchema(String indexName) {
         return indexes.get(indexName);
     }
 }

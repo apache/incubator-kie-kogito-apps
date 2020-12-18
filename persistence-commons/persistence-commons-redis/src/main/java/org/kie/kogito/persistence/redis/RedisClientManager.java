@@ -15,16 +15,20 @@
  */
 package org.kie.kogito.persistence.redis;
 
-import io.redisearch.client.Client;
+import java.net.URL;
+
+import javax.enterprise.context.ApplicationScoped;
+
+import io.redisearch.Client;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+@ApplicationScoped
 public class RedisClientManager {
-    @ConfigProperty(name = "kogito.persistence.redis.host", defaultValue = "localhost")
-    private String host;
-    @ConfigProperty(name = "kogito.persistence.redis.port", defaultValue = "6379")
-    private int port;
 
-    public Client getClient(String indexName){
-        return new Client(indexName, host, port);
+    @ConfigProperty(name = "kogito.persistence.redis.url", defaultValue = "http://localhost:6379")
+    private URL url;
+
+    public Client getClient(String indexName) {
+        return new io.redisearch.client.Client(indexName, url.getHost(), url.getPort());
     }
 }

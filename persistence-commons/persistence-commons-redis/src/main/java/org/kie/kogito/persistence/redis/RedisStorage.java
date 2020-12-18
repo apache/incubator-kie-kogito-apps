@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package org.kie.kogito.persistence.redis;
+package org.kie.kogito.persistence.redis;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,25 +22,25 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.redisearch.Client;
 import io.redisearch.Document;
-import io.redisearch.client.Client;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.persistence.redis.index.RedisIndexManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.kie.kogito.persistence.redis.Constants.INDEX_NAME_FIELD;
+import static org.kie.kogito.persistence.redis.Constants.RAW_OBJECT_FIELD;
+
 public class RedisStorage<V> implements Storage<String, V> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RedisStorage.class);
 
-    private Client redisClient;
-    private RedisIndexManager redisIndexManager;
-    private String indexName;
-    private Class<V> type;
+    private final Client redisClient;
+    private final RedisIndexManager redisIndexManager;
+    private final String indexName;
+    private final Class<V> type;
 
     public RedisStorage(Client redisClient, RedisIndexManager redisIndexManager, String indexName, Class<V> type) {
         LOGGER.info(indexName);
@@ -52,15 +52,17 @@ public class RedisStorage<V> implements Storage<String, V> {
 
     @Override
     public void addObjectCreatedListener(Consumer<V> consumer) {
+        throw new UnsupportedOperationException("addObjectCreatedListener operation not supported for Redis.");
     }
 
     @Override
     public void addObjectUpdatedListener(Consumer<V> consumer) {
-
+        throw new UnsupportedOperationException("addObjectUpdatedListener operation not supported for Redis.");
     }
 
     @Override
     public void addObjectRemovedListener(Consumer<String> consumer) {
+        throw new UnsupportedOperationException("addObjectRemovedListener operation not supported for Redis.");
     }
 
     @Override
@@ -70,45 +72,37 @@ public class RedisStorage<V> implements Storage<String, V> {
 
     @Override
     public V get(String key) {
-        LOGGER.info("FETCHING KEY: " + key + " in storage: " + indexName);
         Document document = redisClient.getDocument(key);
-        LOGGER.info(String.valueOf(document == null));
-        if (document == null) {
-            return null;
-        }
         try {
-            return JsonUtils.getMapper().readValue((String) document.get("rawObject"), type);
+            return document == null ? null : JsonUtils.getMapper().readValue((String) document.get(RAW_OBJECT_FIELD), type);
         } catch (JsonProcessingException e) {
-            LOGGER.warn("SHIT", e);
-            e.printStackTrace();
+            LOGGER.warn("Could not deserialize the requested object.", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public V put(String key, V value) {
-        Map<String, Object> myMap = new HashMap<>();
-        LOGGER.info("PUTTING KEY: " + key + " in storage: " + indexName + " for declared type: " + type.getName() + " for given class: " + value.getClass());
-        List<String> fields = redisIndexManager.getSchema(indexName);
-        if (fields.size() != 0) { // Add into the payload only the indexed fields, if there is any
-            Map<String, Object> tmp = JsonUtils.getMapper().convertValue(value, Map.class);
-            for (String mapKey : fields) {
-                if (tmp.get(mapKey) != null) {
-                    myMap.put(mapKey, tmp.get(mapKey));
+        Map<String, Object> document = new HashMap<>();
+        List<String> indexedFields = redisIndexManager.getSchema(indexName);
+        if (indexedFields.size() > 0) { // Add into the payload only the indexed fields, if there is any
+            Map<String, Object> mappedValue = JsonUtils.getMapper().convertValue(value, Map.class);
+            for (String fieldName : indexedFields) {
+                if (mappedValue.get(fieldName) != null) { // If a field is indexed, its value can not be null: it has to be filtered out
+                    document.put(fieldName, mappedValue.get(fieldName));
                 }
             }
         }
 
-        myMap.put("indexName", indexName);
+        document.put(INDEX_NAME_FIELD, indexName);
 
         try {
-            LOGGER.info(JsonUtils.getMapper().writeValueAsString(value));
-            myMap.put("rawObject", JsonUtils.getMapper().writeValueAsString(value));
+            document.put(RAW_OBJECT_FIELD, JsonUtils.getMapper().writeValueAsString(value));
         } catch (JsonProcessingException e) {
-            LOGGER.warn("VERY BAD", e);
-            e.printStackTrace();
+            LOGGER.warn("Could not serialize the object.", e);
+            throw new RuntimeException(e);
         }
-        redisClient.addDocument(key, myMap);
+        redisClient.addDocument(key, document);
         return value;
     }
 
@@ -121,17 +115,12 @@ public class RedisStorage<V> implements Storage<String, V> {
 
     @Override
     public boolean containsKey(String key) {
-        try {
-            Document document = redisClient.getDocument(key);
-            return key.equals(document.getId());
-        } catch (RuntimeException e) {
-            return false;
-        }
+        return redisClient.getDocument(key) != null;
     }
 
     @Override
     public Set<Map.Entry<String, V>> entrySet() {
-        throw new UnsupportedOperationException("entrySet operation not supported for Redis persistence.");
+        throw new UnsupportedOperationException("entrySet operation not supported for Redis.");
     }
 
     @Override

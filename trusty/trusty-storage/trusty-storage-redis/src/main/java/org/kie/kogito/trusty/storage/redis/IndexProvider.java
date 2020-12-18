@@ -24,38 +24,51 @@ import io.redisearch.Schema;
 import org.kie.kogito.persistence.redis.index.RedisCreateIndexEvent;
 import org.kie.kogito.persistence.redis.index.RedisIndexManager;
 import org.kie.kogito.trusty.storage.api.model.Execution;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.DECISIONS_STORAGE;
+import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.EXPLAINABILITY_RESULTS_STORAGE;
 import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.MODELS_STORAGE;
 
 @Singleton
 @Startup
 public class IndexProvider {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexProvider.class);
 
+    private RedisIndexManager indexManager;
+
     @Inject
-    RedisIndexManager indexManager;
+    public IndexProvider(RedisIndexManager redisIndexManager) {
+        this.indexManager = redisIndexManager;
+    }
 
     @PostConstruct
-    public void createIndexes(){
-        LOGGER.info("Producing create index event");
-        RedisCreateIndexEvent decisionIndexEvent = new RedisCreateIndexEvent();
-        decisionIndexEvent.indexName = DECISIONS_STORAGE;
+    public void createIndexes() {
+        LOGGER.debug("Creating redis indexes for Trusty Service.");
+        createDecisionStorageIndex();
+
+        createModelsStorageIndex();
+
+        createExplainabilityResultsStorageIndex();
+        LOGGER.debug("Creation of redis indexes completed.");
+    }
+
+    private void createDecisionStorageIndex() {
+        RedisCreateIndexEvent decisionIndexEvent = new RedisCreateIndexEvent(DECISIONS_STORAGE);
         decisionIndexEvent.withField(new Schema.Field(Execution.EXECUTION_ID_FIELD, Schema.FieldType.FullText, false));
         decisionIndexEvent.withField(new Schema.Field(Execution.EXECUTION_TIMESTAMP_FIELD, Schema.FieldType.Numeric, true));
         indexManager.createIndex(decisionIndexEvent);
-        LOGGER.info("Producing create index event done");
+    }
 
-        RedisCreateIndexEvent modelIndexEvent = new RedisCreateIndexEvent();
-        modelIndexEvent.indexName = MODELS_STORAGE;
+    private void createModelsStorageIndex() {
+        RedisCreateIndexEvent modelIndexEvent = new RedisCreateIndexEvent(MODELS_STORAGE);
         indexManager.createIndex(modelIndexEvent);
+    }
 
-        RedisCreateIndexEvent explainabilityIndexEvent = new RedisCreateIndexEvent();
-        explainabilityIndexEvent.indexName = MODELS_STORAGE;
-        explainabilityIndexEvent.withField(new Schema.Field(ExplainabilityResult.EXECUTION_ID_FIELD, Schema.FieldType.FullText, false));
+    private void createExplainabilityResultsStorageIndex() {
+        RedisCreateIndexEvent explainabilityIndexEvent = new RedisCreateIndexEvent(EXPLAINABILITY_RESULTS_STORAGE);
         indexManager.createIndex(explainabilityIndexEvent);
     }
 }

@@ -18,8 +18,6 @@ package org.kie.kogito.persistence.redis;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.redisearch.client.Client;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
