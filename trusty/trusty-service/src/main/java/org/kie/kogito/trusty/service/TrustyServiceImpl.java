@@ -82,9 +82,7 @@ public class TrustyServiceImpl implements TrustyService {
     public MatchedExecutionHeaders getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         List<AttributeFilter<?>> filters = new ArrayList<>();
-        if (!prefix.equals("")){
-            filters.add(QueryFilterFactory.like(Execution.EXECUTION_ID_FIELD, prefix));
-        }
+        filters.add(QueryFilterFactory.like(Execution.EXECUTION_ID_FIELD, prefix + "*"));
         filters.add(QueryFilterFactory.greaterThanEqual(Execution.EXECUTION_TIMESTAMP_FIELD, from.toInstant().toEpochMilli()));
         filters.add(QueryFilterFactory.lessThanEqual(Execution.EXECUTION_TIMESTAMP_FIELD, to.toInstant().toEpochMilli()));
         ArrayList result = new ArrayList<>(storage.query()
