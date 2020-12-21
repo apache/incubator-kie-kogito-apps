@@ -41,14 +41,14 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>trusty-storage-api</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.kie.kogito</groupId>-->
-<!--      <artifactId>trusty-storage-infinispan</artifactId>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-storage-redis</artifactId>
+      <artifactId>trusty-storage-infinispan</artifactId>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.kie.kogito</groupId>-->
+<!--      <artifactId>trusty-storage-redis</artifactId>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>

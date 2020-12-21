@@ -106,7 +106,7 @@ public class RedisQueryFactoryTest {
 
         RedisQueryFactory.addFilters(query, filters);
 
-        verify(query, times(5));
+        verify(query, times(5)).addFilter(any(Query.Filter.class));
     }
 
     private void testFilterShouldNotBeSupported(AttributeFilter<?> filter) {

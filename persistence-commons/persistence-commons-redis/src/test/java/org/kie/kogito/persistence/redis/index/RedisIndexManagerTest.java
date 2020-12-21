@@ -25,6 +25,7 @@ import org.kie.kogito.persistence.redis.RedisClientManager;
 import org.kie.kogito.persistence.redis.RedisClientMock;
 import org.mockito.Mockito;
 
+import static org.kie.kogito.persistence.redis.Constants.INDEX_NAME_FIELD;
 import static org.kie.kogito.persistence.redis.Person.AGE_PROPERTY;
 import static org.kie.kogito.persistence.redis.Person.NAME_PROPERTY;
 import static org.kie.kogito.persistence.redis.TestContants.TEST_INDEX_NAME;
@@ -54,6 +55,6 @@ public class RedisIndexManagerTest {
         List<String> fieldNames = personSchema.fields.stream().map(x -> x.name).collect(Collectors.toList());
         Assertions.assertTrue(fieldNames.contains(NAME_PROPERTY));
         Assertions.assertTrue(fieldNames.contains(AGE_PROPERTY));
-        Assertions.assertTrue(fieldNames.contains(TEST_INDEX_NAME));
+        Assertions.assertTrue(fieldNames.contains(INDEX_NAME_FIELD));
     }
 }

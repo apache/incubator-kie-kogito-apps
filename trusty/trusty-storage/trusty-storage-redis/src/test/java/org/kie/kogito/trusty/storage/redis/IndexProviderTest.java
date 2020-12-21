@@ -20,6 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.redis.RedisClientManager;
 import org.mockito.Mockito;
 
+import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.DECISIONS_STORAGE;
+import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.EXPLAINABILITY_RESULTS_STORAGE;
+import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.MODELS_STORAGE;
+
 public class IndexProviderTest {
 
     @Test
@@ -30,8 +34,8 @@ public class IndexProviderTest {
         indexProvider.createIndexes();
 
         Assertions.assertEquals(3, redisIndexManager.getIndexNames().size());
-        Assertions.assertTrue(redisIndexManager.getIndexNames().contains("decisions"));
-        Assertions.assertTrue(redisIndexManager.getIndexNames().contains("model"));
-        Assertions.assertTrue(redisIndexManager.getIndexNames().contains("explainability-results"));
+        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(DECISIONS_STORAGE));
+        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(MODELS_STORAGE));
+        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(EXPLAINABILITY_RESULTS_STORAGE));
     }
 }

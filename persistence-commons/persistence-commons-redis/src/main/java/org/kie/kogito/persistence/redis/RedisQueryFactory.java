@@ -92,6 +92,9 @@ public class RedisQueryFactory {
         if (obj instanceof Long) {
             return ((Long) obj).doubleValue();
         }
+        if (obj instanceof Integer){
+            return ((Integer) obj).doubleValue();
+        }
         return (Double) obj;
     }
 }
