@@ -87,7 +87,7 @@ public class RedisQueryFactoryTest {
         filters.add(QueryFilterFactory.between("shouldBeIgnored", 0, 1));
         String result = RedisQueryFactory.buildQueryBody(TEST_INDEX_NAME, filters);
 
-        Assertions.assertEquals("@indexName:myIndexName @firstAttribute:firstValue @secondAttribute:secondValue*", result);
+        Assertions.assertEquals("@indexName:myIndexName @firstAttribute:firstValue @secondAttribute:secondValue", result);
     }
 
     @Test
