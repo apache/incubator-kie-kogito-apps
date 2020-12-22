@@ -435,10 +435,10 @@ public class TrustyServiceTestUtils {
 
     private static TraceOutputValue buildOutputShouldTheDriverBeSuspended(String status, String value, List<Message> messages) {
         return new TraceOutputValue(OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_ID, OUTPUT_SHOULD_THE_DRIVER_BE_SUSPENDED_NODE_NAME,
-                status,
-                value == null ? null : vEventSuspended,
-                value == null ? Map.of("Fine", vEventFine) : Map.of("Driver", vEventDriver, "Fine", vEventFine),
-                messages
+                                    status,
+                                    value == null ? null : vEventSuspended,
+                                    value == null ? Map.of("Fine", vEventFine) : Map.of("Driver", vEventDriver, "Fine", vEventFine),
+                                    messages
         );
     }
 

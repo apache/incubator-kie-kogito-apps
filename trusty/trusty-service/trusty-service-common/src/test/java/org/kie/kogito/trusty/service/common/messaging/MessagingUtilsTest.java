@@ -15,15 +15,15 @@
  */
 package org.kie.kogito.trusty.service.common.messaging;
 
+import java.util.Collection;
+import java.util.Map;
+
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
-
-import java.util.Collection;
-import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -60,6 +60,5 @@ class MessagingUtilsTest {
         Assertions.assertEquals(1, valueMap.size());
         Assertions.assertTrue(valueMap.containsKey("name"));
         Assertions.assertTrue(valueMap.get("name") instanceof UnitValue);
-
     }
 }

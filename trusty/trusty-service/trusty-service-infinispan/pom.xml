@@ -15,13 +15,41 @@
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-storage-common</artifactId>
+      <artifactId>trusty-service-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>trusty-storage-infinispan</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>trusty-service-common</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-test-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -49,7 +77,6 @@
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
-            <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
           </systemProperties>
         </configuration>
         <executions>
@@ -58,28 +85,6 @@
             <goals>
               <goal>integration-test</goal>
             </goals>
-            <configuration>
-              <excludes combine.children="append"> <!-- Add the exclude to existing ones -->
-                <exclude>**/Keycloak*IT.java</exclude> <!-- Separate execution for this one -->
-              </excludes>
-            </configuration>
-          </execution>
-          <execution>
-            <id>testWithKeycloak</id>
-            <goals>
-              <goal>integration-test</goal>
-            </goals>
-            <configuration>
-              <includes>
-                <include>**/Keycloak*IT.java</include>
-              </includes>
-              <systemPropertyVariables>
-                <quarkus.test.profile>keycloak</quarkus.test.profile>
-                <quarkus.http.auth.policy.role-policy1.roles-allowed>confidential</quarkus.http.auth.policy.role-policy1.roles-allowed>
-                <quarkus.http.auth.permission.roles1.paths>/*</quarkus.http.auth.permission.roles1.paths>
-                <quarkus.http.auth.permission.roles1.policy>role-policy1</quarkus.http.auth.permission.roles1.policy>
-              </systemPropertyVariables>
-            </configuration>
           </execution>
           <execution>
             <id>verify</id>

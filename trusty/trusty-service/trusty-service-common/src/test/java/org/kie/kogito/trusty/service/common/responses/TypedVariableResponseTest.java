@@ -52,6 +52,42 @@ class TypedVariableResponseTest {
     private static final int VALUE_41 = 41;
     private static final int VALUE_50 = 50;
 
+    private static TypedVariable buildTestCollection() throws JsonProcessingException {
+        return TypedVariable.buildCollection(VAR_NAME_COLLECTION, TYPE_REF_STRING, List.of(
+                buildTestUnitVariable(null, TYPE_REF_STRING, "\"" + VALUE_COUNT_ONE + "\""),
+                buildTestUnitVariable(null, TYPE_REF_STRING, "\"" + VALUE_COUNT_TWO + "\""),
+                buildTestUnitVariable(null, TYPE_REF_STRING, "\"" + VALUE_COUNT_THREE + "\"")
+        ));
+    }
+
+    private static TypedVariable buildTestCollectionOfStructures() throws JsonProcessingException {
+        return TypedVariable.buildCollection(VAR_NAME_COLLECTION, TYPE_REF_STRUCT, List.of(
+                TypedVariable.buildStructure(null, TYPE_REF_STRUCT, List.of(
+                        buildTestUnitVariable(VALUE_AGE, TYPE_REF_NUMBER, "" + VALUE_34),
+                        buildTestUnitVariable(VALUE_TOWN, TYPE_REF_STRING, "\"" + VALUE_MONZA + "\"")
+                )),
+                TypedVariable.buildStructure(null, TYPE_REF_STRUCT, List.of(
+                        buildTestUnitVariable(VALUE_AGE, TYPE_REF_NUMBER, "" + VALUE_41),
+                        buildTestUnitVariable(VALUE_TOWN, TYPE_REF_STRING, "\"" + VALUE_TAVULLIA + "\"")
+                ))
+        ));
+    }
+
+    private static TypedVariable buildTestStructure() throws JsonProcessingException {
+        return TypedVariable.buildStructure(VAR_NAME_STRUCT, TYPE_REF_STRUCT, List.of(
+                buildTestUnitVariable(VALUE_AGE, TYPE_REF_NUMBER, "" + VALUE_50),
+                buildTestUnitVariable(VALUE_TOWN, TYPE_REF_STRING, "\"" + VALUE_MILANO + "\"")
+        ));
+    }
+
+    private static TypedVariable buildTestUnitVariable() throws JsonProcessingException {
+        return buildTestUnitVariable(VAR_NAME_UNIT, TYPE_REF_STRING, "\"" + VALUE_HELLO_THIS_IS_A_TEST + "\"");
+    }
+
+    private static TypedVariable buildTestUnitVariable(String name, String typeRef, String jsonValue) throws JsonProcessingException {
+        return TypedVariable.buildUnit(name, typeRef, TrustyServiceTestUtils.MAPPER.readTree(jsonValue));
+    }
+
     @Test
     void testCollection() throws JsonProcessingException {
         TypedVariableResponse response = typedVariableResponseFrom(buildTestCollection());
@@ -166,41 +202,5 @@ class TypedVariableResponseTest {
 
         Assertions.assertTrue(response.getValue().isTextual());
         Assertions.assertEquals(VALUE_HELLO_THIS_IS_A_TEST, response.getValue().textValue());
-    }
-
-    private static TypedVariable buildTestCollection() throws JsonProcessingException {
-        return TypedVariable.buildCollection(VAR_NAME_COLLECTION, TYPE_REF_STRING, List.of(
-                buildTestUnitVariable(null, TYPE_REF_STRING, "\"" + VALUE_COUNT_ONE + "\""),
-                buildTestUnitVariable(null, TYPE_REF_STRING, "\"" + VALUE_COUNT_TWO + "\""),
-                buildTestUnitVariable(null, TYPE_REF_STRING, "\"" + VALUE_COUNT_THREE + "\"")
-        ));
-    }
-
-    private static TypedVariable buildTestCollectionOfStructures() throws JsonProcessingException {
-        return TypedVariable.buildCollection(VAR_NAME_COLLECTION, TYPE_REF_STRUCT, List.of(
-                TypedVariable.buildStructure(null, TYPE_REF_STRUCT, List.of(
-                        buildTestUnitVariable(VALUE_AGE, TYPE_REF_NUMBER, "" + VALUE_34),
-                        buildTestUnitVariable(VALUE_TOWN, TYPE_REF_STRING, "\"" + VALUE_MONZA + "\"")
-                )),
-                TypedVariable.buildStructure(null, TYPE_REF_STRUCT, List.of(
-                        buildTestUnitVariable(VALUE_AGE, TYPE_REF_NUMBER, "" + VALUE_41),
-                        buildTestUnitVariable(VALUE_TOWN, TYPE_REF_STRING, "\"" + VALUE_TAVULLIA + "\"")
-                ))
-        ));
-    }
-
-    private static TypedVariable buildTestStructure() throws JsonProcessingException {
-        return TypedVariable.buildStructure(VAR_NAME_STRUCT, TYPE_REF_STRUCT, List.of(
-                buildTestUnitVariable(VALUE_AGE, TYPE_REF_NUMBER, "" + VALUE_50),
-                buildTestUnitVariable(VALUE_TOWN, TYPE_REF_STRING, "\"" + VALUE_MILANO + "\"")
-        ));
-    }
-
-    private static TypedVariable buildTestUnitVariable() throws JsonProcessingException {
-        return buildTestUnitVariable(VAR_NAME_UNIT, TYPE_REF_STRING, "\"" + VALUE_HELLO_THIS_IS_A_TEST + "\"");
-    }
-
-    private static TypedVariable buildTestUnitVariable(String name, String typeRef, String jsonValue) throws JsonProcessingException {
-        return TypedVariable.buildUnit(name, typeRef, TrustyServiceTestUtils.MAPPER.readTree(jsonValue));
     }
 }

@@ -26,7 +26,6 @@ import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 
-import static org.kie.kogito.trusty.service.common.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.timeout;

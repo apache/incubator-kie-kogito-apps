@@ -26,6 +26,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ModelIdCreatorTest {
 
+    private static Stream<Arguments> provideParametersForModelIdCreator() {
+        return Stream.of(
+                Arguments.of(null, null, null, "name", "namespace", "name:namespace"),
+                Arguments.of("ignore", null, null, "name", "namespace", "name:namespace"),
+                Arguments.of(null, "ignore", null, "name", "namespace", "name:namespace"),
+                Arguments.of(null, null, "ignore", "name", "namespace", "name:namespace"),
+                Arguments.of(null, null, null, "name", null, "name:"),
+                Arguments.of(null, null, null, null, "namespace", ":namespace")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("provideParametersForModelIdCreator")
     void isBlank_ShouldReturnTrueForNullOrBlankStrings(final String groupId,
@@ -39,16 +50,5 @@ public class ModelIdCreatorTest {
                                                              version,
                                                              name,
                                                              namespace));
-    }
-
-    private static Stream<Arguments> provideParametersForModelIdCreator() {
-        return Stream.of(
-                Arguments.of(null, null, null, "name", "namespace", "name:namespace"),
-                Arguments.of("ignore", null, null, "name", "namespace", "name:namespace"),
-                Arguments.of(null, "ignore", null, "name", "namespace", "name:namespace"),
-                Arguments.of(null, null, "ignore", "name", "namespace", "name:namespace"),
-                Arguments.of(null, null, null, "name", null, "name:"),
-                Arguments.of(null, null, null, null, "namespace", ":namespace")
-        );
     }
 }

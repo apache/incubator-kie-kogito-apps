@@ -27,7 +27,6 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
-import static org.kie.kogito.trusty.service.common.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -39,13 +38,11 @@ import static org.mockito.Mockito.verify;
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class TraceEventConsumerIT {
 
-    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
-    private String kafkaBootstrapServers;
-
     @InjectMock
     TrustyService trustyService;
-
     KafkaClient kafkaClient;
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @Test
     public void eventLoopIsNotStoppedWithException() {

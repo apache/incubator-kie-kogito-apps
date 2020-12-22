@@ -84,6 +84,25 @@ class ExplainabilityResultConsumerTest {
     private TrustyService trustyService;
     private ExplainabilityResultConsumer consumer;
 
+    public static CloudEvent buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
+        return CloudEventUtils.build(
+                resultDto.getExecutionId(),
+                URI.create("explainabilityResult/test"),
+                resultDto,
+                ExplainabilityResultDto.class
+        ).get();
+    }
+
+    public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
+        return CloudEventUtils.encode(buildExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
+    }
+
+    private static int compareFeatureImportance(FeatureImportance expected, FeatureImportance actual) {
+        return new CompareToBuilder()
+                .append(expected.getFeatureName(), actual.getFeatureName())
+                .toComparison();
+    }
+
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
@@ -180,9 +199,9 @@ class ExplainabilityResultConsumerTest {
         assertNotNull(saliency);
         assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().size(), saliency.getFeatureImportance().size());
         assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getFeatureName(),
-                saliency.getFeatureImportance().get(0).getFeatureName());
+                     saliency.getFeatureImportance().get(0).getFeatureName());
         assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getScore(),
-                saliency.getFeatureImportance().get(0).getScore(), 0.1);
+                     saliency.getFeatureImportance().get(0).getScore(), 0.1);
     }
 
     @Test
@@ -200,24 +219,5 @@ class ExplainabilityResultConsumerTest {
         consumer.handleMessage(message);
         verify(trustyService, times(wantedNumberOfServiceInvocations)).storeExplainabilityResult(any(), any());
         verify(message, times(1)).ack();
-    }
-
-    public static CloudEvent buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
-        return CloudEventUtils.build(
-                resultDto.getExecutionId(),
-                URI.create("explainabilityResult/test"),
-                resultDto,
-                ExplainabilityResultDto.class
-        ).get();
-    }
-
-    public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
-        return CloudEventUtils.encode(buildExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
-    }
-
-    private static int compareFeatureImportance(FeatureImportance expected, FeatureImportance actual) {
-        return new CompareToBuilder()
-                .append(expected.getFeatureName(), actual.getFeatureName())
-                .toComparison();
     }
 }

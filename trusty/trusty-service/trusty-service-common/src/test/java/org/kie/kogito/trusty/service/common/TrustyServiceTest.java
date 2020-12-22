@@ -30,9 +30,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.mocks.StorageImplMock;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
-import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
@@ -61,6 +61,10 @@ public class TrustyServiceTest {
     private ExplainabilityRequestProducer explainabilityRequestProducerMock;
     private TrustyStorageService trustyStorageServiceMock;
     private TrustyServiceImpl trustyService;
+
+    private static JsonNode toJsonNode(String jsonString) throws JsonProcessingException {
+        return MAPPER.reader().readTree(jsonString);
+    }
 
     @BeforeEach
     void setup() {
@@ -111,11 +115,11 @@ public class TrustyServiceTest {
     @SuppressWarnings("unchecked")
     void givenManyExecutionsThenPaginationWorksProperly() {
         List<Decision> decisions = new ArrayList<>();
-        IntStream.range(0,10).forEach(x -> {
+        IntStream.range(0, 10).forEach(x -> {
             Decision d = new Decision();
             d.setExecutionId(String.valueOf(x));
             decisions.add(d);
-            });
+        });
 
         Query queryMock = mock(Query.class);
         when(queryMock.filter(any(List.class))).thenReturn(queryMock);
@@ -340,9 +344,5 @@ public class TrustyServiceTest {
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);
 
         assertThrows(IllegalArgumentException.class, () -> trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
-    }
-
-    private static JsonNode toJsonNode(String jsonString) throws JsonProcessingException {
-        return MAPPER.reader().readTree(jsonString);
     }
 }

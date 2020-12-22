@@ -18,13 +18,10 @@ package org.kie.kogito.trusty.service.common.messaging.incoming;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
-import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
@@ -35,23 +32,16 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.kie.kogito.trusty.service.common.TrustyServiceTestUtils.buildCloudEventJsonString;
 
-@QuarkusTest
-@QuarkusTestResource(InfinispanQuarkusTestResource.class)
-@QuarkusTestResource(KafkaQuarkusTestResource.class)
-class ModelEventConsumerInfinispanIT {
-
-    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
-    private String kafkaBootstrapServers;
+public abstract class AbstractModelEventConsumerIT {
 
     @Inject
     TrustyService trustyService;
-
     @Inject
     TrustyStorageService trustyStorageService;
-
     KafkaClient kafkaClient;
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    private String kafkaBootstrapServers;
 
     @BeforeEach
     public void setup() {

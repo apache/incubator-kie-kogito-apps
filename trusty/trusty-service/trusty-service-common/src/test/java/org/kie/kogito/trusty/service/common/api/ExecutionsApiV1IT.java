@@ -96,8 +96,8 @@ class ExecutionsApiV1IT {
     @Test
     void givenARequestWhenExecutionEndpointIsCalledThenTheExecutionHeaderIsReturned() throws ParseException {
         Execution execution = new Execution("test1", "http://localhost:8081/model",
-                OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
-                true, "name", "model", "namespace", ExecutionType.DECISION);
+                                            OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
+                                            true, "name", "model", "namespace", ExecutionType.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class)))
                 .thenReturn(new MatchedExecutionHeaders(List.of(execution), 1));
 
@@ -176,14 +176,14 @@ class ExecutionsApiV1IT {
         ArrayList<Execution> executions = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             executions.add(new Execution(String.format("test-%d", i), "test",
-                    OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).plusDays(i).toInstant().toEpochMilli(),
-                    true, "name", "model", "namespace", ExecutionType.DECISION));
+                                         OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).plusDays(i).toInstant().toEpochMilli(),
+                                         true, "name", "model", "namespace", ExecutionType.DECISION));
         }
         return executions;
     }
 
-    private void mockGetExecutionHeaders(List<Execution> executions, int offset, int limit){
+    private void mockGetExecutionHeaders(List<Execution> executions, int offset, int limit) {
         Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), eq(limit), eq(offset), any(String.class)))
-                .thenReturn(new MatchedExecutionHeaders(executions.subList(offset, Math.min(offset+limit, executions.size())), executions.size()));
+                .thenReturn(new MatchedExecutionHeaders(executions.subList(offset, Math.min(offset + limit, executions.size())), executions.size()));
     }
 }

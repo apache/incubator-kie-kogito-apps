@@ -15,6 +15,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>trusty-service-api</module>
     <module>trusty-service-common</module>
     <module>trusty-service-infinispan</module>
     <module>trusty-service-redis</module>

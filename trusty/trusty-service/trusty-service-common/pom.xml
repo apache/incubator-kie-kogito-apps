@@ -42,14 +42,6 @@
       <artifactId>trusty-storage-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-storage-infinispan</artifactId>
-    </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.kie.kogito</groupId>-->
-<!--      <artifactId>trusty-storage-redis</artifactId>-->
-<!--    </dependency>-->
-    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
@@ -107,9 +99,26 @@
       <artifactId>keycloak-core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <version>1.5.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>

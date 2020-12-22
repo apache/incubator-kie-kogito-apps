@@ -33,7 +33,9 @@ public class RedisQueryFactory {
                     components.add(String.format("@%s:%s", attributeFilter.getAttribute(), attributeFilter.getValue()));
                     break;
                 case LIKE:
-                    components.add(String.format("@%s:%s*", attributeFilter.getAttribute(), attributeFilter.getValue()));
+                    if(!"".equals(attributeFilter.getValue()) && !"*".equals(attributeFilter.getValue())){
+                        components.add(String.format("@%s:%s", attributeFilter.getAttribute(), attributeFilter.getValue()));
+                    }
                     break;
             }
         }

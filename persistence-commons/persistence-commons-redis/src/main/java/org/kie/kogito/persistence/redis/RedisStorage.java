@@ -43,7 +43,6 @@ public class RedisStorage<V> implements Storage<String, V> {
     private final Class<V> type;
 
     public RedisStorage(Client redisClient, RedisIndexManager redisIndexManager, String indexName, Class<V> type) {
-        LOGGER.info(indexName);
         this.redisClient = redisClient;
         this.redisIndexManager = redisIndexManager;
         this.indexName = indexName;
@@ -125,7 +124,10 @@ public class RedisStorage<V> implements Storage<String, V> {
 
     @Override
     public void clear() {
-        redisClient.dropIndex();
+        List<Document> documents = redisClient.search(new io.redisearch.Query(String.format("@%s:%s", INDEX_NAME_FIELD, indexName))).docs;
+        for(Document doc : documents){
+            redisClient.deleteDocument(doc.getId());
+        };
     }
 
     @Override

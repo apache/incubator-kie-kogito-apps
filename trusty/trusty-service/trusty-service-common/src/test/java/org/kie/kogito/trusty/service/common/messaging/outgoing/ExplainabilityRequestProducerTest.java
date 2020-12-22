@@ -41,5 +41,4 @@ class ExplainabilityRequestProducerTest {
 
         subscriber.assertValueCount(1);
     }
-
 }

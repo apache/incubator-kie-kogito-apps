@@ -22,19 +22,14 @@ import java.time.ZoneOffset;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
-import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
-@QuarkusTest
-@QuarkusTestResource(InfinispanQuarkusTestResource.class)
-public class TrustyServiceIT {
+public abstract class AbstractTrustyServiceIT {
 
     @Inject
     TrustyService trustyService;

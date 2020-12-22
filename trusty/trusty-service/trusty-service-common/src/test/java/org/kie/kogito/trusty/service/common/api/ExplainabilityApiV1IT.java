@@ -18,7 +18,6 @@ import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -33,6 +32,24 @@ class ExplainabilityApiV1IT {
 
     @InjectMock
     TrustyService executionService;
+
+    private static ExplainabilityResult buildValidExplainabilityResult() {
+        return new ExplainabilityResult(
+                TEST_EXECUTION_ID,
+                ExplainabilityStatus.SUCCEEDED,
+                null,
+                List.of(
+                        new Saliency("O1", "Output1", List.of(
+                                new FeatureImportance("Feature1", 0.49384),
+                                new FeatureImportance("Feature2", -0.1084)
+                        )),
+                        new Saliency("O2", "Output2", List.of(
+                                new FeatureImportance("Feature1", 0.0),
+                                new FeatureImportance("Feature2", 0.70293)
+                        ))
+                )
+        );
+    }
 
     @Test
     void testSalienciesWithExplainabilityResult() {
@@ -107,23 +124,5 @@ class ExplainabilityApiV1IT {
     private void mockServiceWithoutExplainabilityResult() {
         when(executionService.getExplainabilityResultById(anyString()))
                 .thenThrow(new IllegalArgumentException("Explainability result does not exist."));
-    }
-
-    private static ExplainabilityResult buildValidExplainabilityResult() {
-        return new ExplainabilityResult(
-                TEST_EXECUTION_ID,
-                ExplainabilityStatus.SUCCEEDED,
-                null,
-                List.of(
-                        new Saliency("O1", "Output1", List.of(
-                                new FeatureImportance("Feature1", 0.49384),
-                                new FeatureImportance("Feature2", -0.1084)
-                        )),
-                        new Saliency("O2", "Output2", List.of(
-                                new FeatureImportance("Feature1", 0.0),
-                                new FeatureImportance("Feature2", 0.70293)
-                        ))
-                )
-        );
     }
 }

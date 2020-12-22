@@ -24,7 +24,6 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
-import static org.kie.kogito.trusty.service.common.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;

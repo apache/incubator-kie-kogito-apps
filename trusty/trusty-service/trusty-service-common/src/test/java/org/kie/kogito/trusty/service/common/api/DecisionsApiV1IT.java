@@ -182,7 +182,7 @@ class DecisionsApiV1IT {
         assertDecisionStructuredInputResponse(buildDecisionStructuredInputsResponse(ListStatus.FULL), response);
     }
 
-    private <T> void assertCollection(Collection<T> expected, Collection<T> actual, BiConsumer<T,T> itemAssertor) {
+    private <T> void assertCollection(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor) {
         if (expected == null) {
             assertNull(actual);
             return;
@@ -190,7 +190,7 @@ class DecisionsApiV1IT {
         assertSame(expected.size(), actual.size());
         Iterator<T> itExpected = expected.iterator();
         Iterator<T> itActual = actual.iterator();
-        while(itExpected.hasNext() && itActual.hasNext()) {
+        while (itExpected.hasNext() && itActual.hasNext()) {
             itemAssertor.accept(itExpected.next(), itActual.next());
         }
     }
@@ -226,7 +226,6 @@ class DecisionsApiV1IT {
         assertEquals(expected.getExecutedModelName(), actual.getExecutedModelName());
         assertEquals(expected.getExecutedModelNamespace(), actual.getExecutedModelNamespace());
     }
-
 
     private void assertMessageResponse(MessageResponse expected, MessageResponse actual) {
         assertNotNull(actual);
@@ -294,7 +293,7 @@ class DecisionsApiV1IT {
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                                         new MessageExceptionField("TestException", "Test exception message",
-                                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
+                                                                  new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
                                         )
                                 ))
                         )
@@ -311,9 +310,9 @@ class DecisionsApiV1IT {
                 new TypedVariableResponse("result", "ResType", mapper.readTree("\"The First Outcome\""), null),
                 Collections.emptyList(),
                 List.of(new MessageResponse("WARNING", "INTERNAL", "TEST", "testSrc", "Test message",
-                        new MessageExceptionFieldResponse("TestException", "Test exception message",
-                                new MessageExceptionFieldResponse("TestExceptionCause", "Test exception cause message", null)
-                        )
+                                            new MessageExceptionFieldResponse("TestException", "Test exception message",
+                                                                              new MessageExceptionFieldResponse("TestExceptionCause", "Test exception cause message", null)
+                                            )
                 )),
                 false
         );
@@ -322,7 +321,7 @@ class DecisionsApiV1IT {
     private DecisionOutcomesResponse buildDecisionOutcomesResponse(ListStatus outcomesStatus) throws JsonProcessingException {
         switch (outcomesStatus) {
             case NULL:
-                return new DecisionOutcomesResponse(buildExecutionHeaderResponse(),null);
+                return new DecisionOutcomesResponse(buildExecutionHeaderResponse(), null);
             case EMPTY:
                 return new DecisionOutcomesResponse(buildExecutionHeaderResponse(), Collections.emptyList());
             case FULL:

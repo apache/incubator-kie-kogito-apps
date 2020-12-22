@@ -50,19 +50,6 @@ public class ExplainabilityResultConsumerIT {
 
     KafkaClient kafkaClient;
 
-    @Test
-    public void explainabilityResultIsProcessedAndStored() {
-        kafkaClient = new KafkaClient(kafkaBootstrapServers);
-        String executionId = "executionId";
-
-        doNothing().when(trustyService).storeExplainabilityResult(eq(executionId), any(ExplainabilityResult.class));
-
-        kafkaClient.produce(buildCloudEventJsonString(ExplainabilityResultDto.buildSucceeded(executionId, Collections.emptyMap())),
-                KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
-
-        verify(trustyService, timeout(3000).times(1)).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
-    }
-
     public static CloudEvent buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
         return CloudEventUtils.build(
                 resultDto.getExecutionId(),
@@ -74,5 +61,18 @@ public class ExplainabilityResultConsumerIT {
 
     public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
         return CloudEventUtils.encode(buildExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
+    }
+
+    @Test
+    public void explainabilityResultIsProcessedAndStored() {
+        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+        String executionId = "executionId";
+
+        doNothing().when(trustyService).storeExplainabilityResult(eq(executionId), any(ExplainabilityResult.class));
+
+        kafkaClient.produce(buildCloudEventJsonString(ExplainabilityResultDto.buildSucceeded(executionId, Collections.emptyMap())),
+                            KafkaConstants.TRUSTY_EXPLAINABILITY_RESULT_TOPIC);
+
+        verify(trustyService, timeout(3000).times(1)).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
     }
 }
