@@ -25,56 +25,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Job {
 
-    @JsonProperty("id")
     private String id;
-
-    @JsonProperty("processId")
     private String processId;
-
-    @JsonProperty("processInstanceId")
     private String processInstanceId;
-
-    @JsonProperty("nodeInstanceId")
     private String nodeInstanceId;
-
-    @JsonProperty("rootProcessId")
     private String rootProcessId;
-
-    @JsonProperty("rootProcessInstanceId")
     private String rootProcessInstanceId;
 
-    @JsonProperty("expirationTime")
     private ZonedDateTime expirationTime;
-
-    @JsonProperty("priority")
     private Integer priority;
-
-    @JsonProperty("callbackEndpoint")
     private String callbackEndpoint;
-
-    @JsonProperty("repeatInterval")
     private Long repeatInterval;
-
-    @JsonProperty("repeatLimit")
     private Integer repeatLimit;
 
     //ScheduledJob
-    @JsonProperty("scheduledId")
     private String scheduledId;
-
-    @JsonProperty("retries")
     private Integer retries;
-
-    @JsonProperty("status")
     private String status;
-
-    @JsonProperty("lastUpdate")
     private ZonedDateTime lastUpdate;
-
-    @JsonProperty("executionCounter")
     private Integer executionCounter;
-
-    @JsonProperty("endpoint")
     private String endpoint;
 
     public String getId() {
