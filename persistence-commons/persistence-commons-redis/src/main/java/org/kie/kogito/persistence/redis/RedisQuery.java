@@ -71,7 +71,7 @@ public class RedisQuery<V> implements Query<V> {
     @Override
     public Query<V> sort(List<AttributeSort> sortBy) {
         if (!sortBy.isEmpty()) {
-            if (sortBy.size() > 1) { // TODO: implement backend side sorting on multiple attributes
+            if (sortBy.size() > 1) { // TODO: implement backend side sorting on multiple attributes https://issues.redhat.com/browse/KOGITO-4072
                 throw new UnsupportedOperationException("Multiple sorting attributes not implemented yet.");
             }
             this.sortBy = sortBy.get(0);
@@ -82,9 +82,9 @@ public class RedisQuery<V> implements Query<V> {
     @Override
     public List<V> execute() {
         io.redisearch.Query query = new io.redisearch.Query(RedisQueryFactory.buildQueryBody(indexName, filters));
-        if (limit != null && offset != null) {
-            query.limit(limit, offset);
-        }
+
+        setQueryLimitAndOffset(query);
+
         if (sortBy != null) {
             query.setSortBy(sortBy.getAttribute(), SortDirection.ASC.equals(sortBy.getSort()));
         }
@@ -100,5 +100,19 @@ public class RedisQuery<V> implements Query<V> {
                 throw new RuntimeException("Could not deserialize a retrieved object.", e);
             }
         }).collect(Collectors.toList());
+    }
+
+    private void setQueryLimitAndOffset(io.redisearch.Query query){
+        if (limit != null && offset == null){
+            LOGGER.warn("Limit was specified in Redis query but not the offset. Limit is ignored.");
+            return;
+        }
+        if (limit == null && offset != null){
+            LOGGER.warn("Offset was specified in Redis query but not the limit. Offset is ignored.");
+            return;
+        }
+        if (limit != null && offset != null){
+            query.limit(offset, limit);
+        }
     }
 }
