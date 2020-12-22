@@ -21,10 +21,10 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 
-public class TrustyServiceContainer extends GenericContainer<TrustyServiceContainer> {
+public class InfinispanTrustyServiceContainer extends GenericContainer<InfinispanTrustyServiceContainer> {
 
-    public TrustyServiceContainer(String infinispanServerList, String kafkaBootstrapServer, boolean explainabilityEnabled) {
-        super(getImageName("trusty-service"));
+    public InfinispanTrustyServiceContainer(String infinispanServerList, String kafkaBootstrapServer, boolean explainabilityEnabled) {
+        super(getImageName("trusty-service-infinispan"));
         addEnv("INFINISPAN_SERVER_LIST", infinispanServerList);
         addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaBootstrapServer);
         addEnv("TRUSTY_EXPLAINABILITY_ENABLED", String.valueOf(explainabilityEnabled));

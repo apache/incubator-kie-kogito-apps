@@ -61,7 +61,7 @@
             </dependency>
             <dependency>
               <groupId>org.kie.kogito</groupId>
-              <artifactId>trusty-service</artifactId>
+              <artifactId>trusty-service-infinispan</artifactId>
               <version>${project.version}</version>
               <classifier>runner</classifier>
               <scope>runtime</scope>
@@ -73,7 +73,7 @@
               <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
               <container.image.explainability-service-messaging>${container.image.explainability-service-messaging}</container.image.explainability-service-messaging>
               <container.image.kogito-service>${container.image.kogito-service}</container.image.kogito-service>
-              <container.image.trusty-service>${container.image.trusty-service}</container.image.trusty-service>
+              <container.image.trusty-service-infinispan>${container.image.trusty-service-infinispan}</container.image.trusty-service-infinispan>
             </systemPropertyVariables>
             <classesDirectory>${project.build.outputDirectory}</classesDirectory>
           </configuration>
