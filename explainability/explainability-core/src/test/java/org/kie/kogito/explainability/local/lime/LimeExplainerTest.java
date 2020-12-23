@@ -15,6 +15,14 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
@@ -26,14 +34,6 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -44,7 +44,9 @@ class LimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(10);
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             PredictionInput input = new PredictionInput(Collections.emptyList());
             PredictionProvider model = TestUtils.getSumSkipModel(0);
             PredictionOutput output = model.predictAsync(List.of(input))
@@ -61,7 +63,9 @@ class LimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(10, 1, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(10);
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             List<Feature> features = new LinkedList<>();
             for (int i = 0; i < 4; i++) {
                 features.add(TestUtils.getMockedNumericFeature(i));

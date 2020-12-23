@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -30,15 +31,19 @@ import org.kie.kogito.decision.DecisionModel;
 import org.kie.kogito.dmn.DMNKogito;
 import org.kie.kogito.dmn.DmnDecisionModel;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -70,7 +75,10 @@ class TrafficViolationDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
-        LimeExplainer limeExplainer = new LimeExplainer(100, 1);
+        Random random = new Random();
+        random.setSeed(4);
+        LimeConfig limeConfig = new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(random, 2));
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
@@ -78,5 +86,7 @@ class TrafficViolationDmnLimeExplainerTest {
             List<String> strings = saliency.getTopFeatures(3).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
             assertTrue(strings.contains("Actual Speed") || strings.contains("Speed Limit"));
         }
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                                                                                0.5, 0.5));
     }
 }

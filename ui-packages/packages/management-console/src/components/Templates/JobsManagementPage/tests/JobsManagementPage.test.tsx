@@ -13,10 +13,17 @@ jest.mock('../../../Atoms/JobsCancelModal/JobsCancelModal');
 const MockedServerErrors = (): React.ReactElement => {
   return <></>;
 };
+
+const MockedKogitoEmptyState = (): React.ReactElement => {
+  return <></>;
+};
 jest.mock('@kogito-apps/common', () => ({
   ...jest.requireActual('@kogito-apps/common'),
   ServerErrors: () => {
     return <MockedServerErrors />;
+  },
+  KogitoEmptyState: () => {
+    return <MockedKogitoEmptyState />;
   }
 }));
 
@@ -42,8 +49,13 @@ describe('Jobs management page tests', () => {
   const mocks = [
     {
       request: {
-        query: GraphQL.GetAllJobsDocument,
-        variables: { values: ['SCHEDULED'] }
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
       },
       result: {
         data: {
@@ -64,6 +76,7 @@ describe('Jobs management page tests', () => {
               rootProcessId: null,
               scheduledId: '0',
               status: GraphQL.JobStatus.Executed,
+              executionCounter: 2,
               __typename: 'Job'
             },
             {
@@ -82,6 +95,7 @@ describe('Jobs management page tests', () => {
               rootProcessId: '',
               scheduledId: null,
               status: GraphQL.JobStatus.Scheduled,
+              executionCounter: 1,
               __typename: 'Job'
             },
             {
@@ -100,6 +114,7 @@ describe('Jobs management page tests', () => {
               rootProcessId: '',
               scheduledId: null,
               status: GraphQL.JobStatus.Canceled,
+              executionCounter: 4,
               __typename: 'Job'
             }
           ]
@@ -111,8 +126,13 @@ describe('Jobs management page tests', () => {
   const mocks2 = [
     {
       request: {
-        query: GraphQL.GetAllJobsDocument,
-        variables: { values: ['SCHEDULED'] }
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
       },
       result: {
         data: {
@@ -125,8 +145,13 @@ describe('Jobs management page tests', () => {
   const mocks3 = [
     {
       request: {
-        query: GraphQL.GetAllJobsDocument,
-        variables: { values: ['SCHEDULED'] }
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
       },
       result: {
         data: null,
@@ -265,5 +290,30 @@ describe('Jobs management page tests', () => {
         .children()
         .contains('Cancel selected')
     ).toBeTruthy();
+  });
+  it('test click handler on empty state', async () => {
+    let wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <JobsManagementPage />
+        </BrowserRouter>
+      </MockedProvider>,
+      'JobsManagementPage'
+    );
+    const event: any = {};
+    await act(async () => {
+      wrapper
+        .find('KogitoEmptyState')
+        .props()
+        ['onClick'](event);
+    });
+    wrapper = wrapper.update();
+    const defaultChip: string[] = ['SCHEDULED'];
+    expect(wrapper.find('JobsManagementFilters').props()['chips']).toEqual(
+      defaultChip
+    );
+    expect(
+      wrapper.find('JobsManagementFilters').props()['selectedStatus']
+    ).toEqual(defaultChip);
   });
 });

@@ -16,39 +16,15 @@
 
 package org.kie.kogito.taskassigning.process.service.client;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.config.AbstractServiceClientConfigTest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class ProcessServiceClientConfigTest extends AbstractServiceClientConfigTest<ProcessServiceClientConfig> {
 
-class ProcessServiceClientConfigTest {
-
-    private static final String SERVICE_URL = "SERVICE_URL";
-    private static final long CONNECT_TIMEOUT = 1;
-    private static final long READ_TIMOUT = 2;
-
-    private ProcessServiceClientConfig config;
-
-    @BeforeEach
-    void setUp() {
-        config = ProcessServiceClientConfig.newBuilder()
+    @Override
+    protected ProcessServiceClientConfig createConfig() {
+        return ProcessServiceClientConfig.newBuilder()
                 .serviceUrl(SERVICE_URL)
                 .connectTimeoutMillis(CONNECT_TIMEOUT)
                 .readTimeoutMillis(READ_TIMOUT).build();
-    }
-
-    @Test
-    void getServiceURL() {
-        assertThat(config.getServiceUrl()).isEqualTo(SERVICE_URL);
-    }
-
-    @Test
-    void getConnectTimoutMillis() {
-        assertThat(config.getConnectTimeoutMillis()).isEqualTo(CONNECT_TIMEOUT);
-    }
-
-    @Test
-    void getReadTimoutMillis() {
-        assertThat(config.getReadTimeoutMillis()).isEqualTo(READ_TIMOUT);
     }
 }

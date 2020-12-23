@@ -49,7 +49,8 @@ describe('Jobs management table component tests', () => {
           retries: 0,
           rootProcessId: null,
           scheduledId: '0',
-          status: GraphQL.JobStatus.Executed
+          status: GraphQL.JobStatus.Executed,
+          executionCounter: 1
         },
         {
           callbackEndpoint:
@@ -66,7 +67,8 @@ describe('Jobs management table component tests', () => {
           retries: 0,
           rootProcessId: '',
           scheduledId: null,
-          status: GraphQL.JobStatus.Scheduled
+          status: GraphQL.JobStatus.Scheduled,
+          executionCounter: 2
         },
         {
           callbackEndpoint:
@@ -83,7 +85,8 @@ describe('Jobs management table component tests', () => {
           retries: 0,
           rootProcessId: '',
           scheduledId: null,
-          status: GraphQL.JobStatus.Canceled
+          status: GraphQL.JobStatus.Canceled,
+          executionCounter: 4
         }
       ]
     },
@@ -92,9 +95,12 @@ describe('Jobs management table component tests', () => {
     handleCancelModalToggle: jest.fn(),
     setModalTitle: jest.fn(),
     setModalContent: jest.fn(),
+    setOrderBy: jest.fn(),
     setSelectedJob: jest.fn(),
     selectedJobInstances: [],
-    setSelectedJobInstances: jest.fn()
+    setSelectedJobInstances: jest.fn(),
+    sortBy: {},
+    setSortBy: jest.fn()
   };
   it('Snapshot with default props', async () => {
     const wrapper = await getWrapperAsync(
@@ -103,10 +109,12 @@ describe('Jobs management table component tests', () => {
     );
     expect(wrapper).toMatchSnapshot();
     const event: any = {};
-    wrapper
-      .find('Table')
-      .props()
-      ['onSelect'](event);
+    await act(async () => {
+      wrapper
+        .find('Table')
+        .props()
+        ['onSelect'](event);
+    });
   });
 
   it('test job details action', async () => {
@@ -294,5 +302,24 @@ describe('Jobs management table component tests', () => {
         .simulate('change');
     });
     expect(props.setSelectedJobInstances).toHaveBeenCalled();
+  });
+  it('test sorting controls', async () => {
+    const handleSort: any = jest.spyOn(React, 'useState');
+    handleSort.mockImplementation(sortBy => [sortBy, props.setSortBy]);
+    let wrapper = await getWrapperAsync(
+      <JobsManagementTable {...props} />,
+      'JobsManagementTable'
+    );
+    const event = { target: { innerText: 'Last update' } };
+    const index = 1;
+    const direction = 'asc';
+    await act(async () => {
+      wrapper
+        .find('Table')
+        .props()
+        ['onSort'](event, index, direction);
+    });
+    wrapper = wrapper.update();
+    expect(props.setSortBy).toBeTruthy();
   });
 });

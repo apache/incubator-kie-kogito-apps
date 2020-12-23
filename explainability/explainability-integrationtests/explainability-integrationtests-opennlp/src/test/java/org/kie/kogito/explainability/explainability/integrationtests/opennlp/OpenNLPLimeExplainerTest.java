@@ -22,10 +22,12 @@ import opennlp.tools.langdetect.LanguageDetectorModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -34,6 +36,7 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -44,6 +47,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -61,7 +65,10 @@ class OpenNLPLimeExplainerTest {
         Random random = new Random();
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
-            LimeExplainer limeExplainer = new LimeExplainer(100, 2, random);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withSamples(100)
+                    .withPerturbationContext(new PerturbationContext(random, 2));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             InputStream is = getClass().getResourceAsStream("/opennlp/langdetect-183.bin");
             LanguageDetectorModel languageDetectorModel = new LanguageDetectorModel(is);
             LanguageDetector languageDetector = new LanguageDetectorME(languageDetectorModel);
@@ -107,6 +114,8 @@ class OpenNLPLimeExplainerTest {
                 double i1 = ExplainabilityMetrics.impactScore(model, prediction, saliency.getPositiveFeatures(3));
                 assertEquals(1d, i1);
             }
+            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 2,
+                                                                                    0.8, 0.8));
         }
     }
 }
