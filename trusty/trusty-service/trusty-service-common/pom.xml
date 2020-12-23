@@ -114,21 +114,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <configuration>
-          <uberJar>true</uberJar>
-          <skipOriginalJarRename>true</skipOriginalJarRename>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
@@ -197,21 +182,6 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-maven-plugin</artifactId>
-            <configuration>
-              <uberJar>true</uberJar>
-              <skipOriginalJarRename>true</skipOriginalJarRename>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
