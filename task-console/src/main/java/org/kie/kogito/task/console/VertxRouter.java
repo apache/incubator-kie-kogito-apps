@@ -53,6 +53,10 @@ public class VertxRouter {
     @ConfigProperty(name = "kogito.task.states.list", defaultValue = "Ready,Reserved,Completed,Aborted,Skipped")
     String allTaskStates;
 
+    @ConfigProperty(name = "kogito.test.user-system.enabled", defaultValue = "false")
+    String testUserSystemEnabled;
+
+
     @Inject
     Vertx vertx;
 
@@ -66,7 +70,8 @@ public class VertxRouter {
                 .replace("__DATA_INDEX_ENDPOINT__", "\"" + dataIndexHttpURL + "/graphql\"")
                 .replace("__KOGITO_AUTH_ENABLED__", authEnabled)
                 .replace("__KOGITO_TASK_ACTIVE_STATES_LIST__", "\"" + activeTaskStates + "\"")
-                .replace("__KOGITO_TASK_STATES_LIST__", "\"" + allTaskStates + "\"");
+                .replace("__KOGITO_TASK_STATES_LIST__", "\"" + allTaskStates + "\"")
+                .replace("__KOGITO_TEST_USER_SYSTEM_ENABLED__", testUserSystemEnabled);
     }
 
     void setupRouter(@Observes Router router) {
