@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.ResourceArg;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.apache.http.HttpStatus;
@@ -16,13 +17,14 @@ import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 
 import static io.restassured.RestAssured.given;
+import static org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource.KOGITO_OIDC_TENANTS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
-@QuarkusTestResource(KeycloakQuarkusTestResource.class)
+@QuarkusTestResource(value = KeycloakQuarkusTestResource.class, initArgs = {@ResourceArg(name = KOGITO_OIDC_TENANTS, value = "web-app-tenant")})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class KeycloakTrustyServiceIT {
 
