@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -43,26 +44,19 @@ import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.kie.pmml.api.runtime.PMMLRuntime;
 import org.kie.kogito.explainability.utils.LocalSaliencyStability;
+import org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.kie.kogito.explainability.explainability.integrationtests.pmml.AbstractPMMLTest.getPMMLRuntime;
 import static org.kie.test.util.filesystem.FileUtils.getFile;
 
-@Disabled
 class PmmlLimeExplainerTest {
 
-    private static PMMLRuntime logisticRegressionIrisRuntime;
-    private static PMMLRuntime categoricalVariableRegressionRuntime;
-    private static PMMLRuntime scorecardCategoricalRuntime;
-    private static PMMLRuntime compoundScoreCardRuntime;
-
     @BeforeAll
-    static void setUpBefore() {
-        logisticRegressionIrisRuntime = getPMMLRuntime(getFile("logisticRegressionIrisData.pmml"));
-        categoricalVariableRegressionRuntime = getPMMLRuntime(getFile("categoricalVariablesRegression.pmml"));
-        scorecardCategoricalRuntime = getPMMLRuntime(getFile("SimpleScorecardCategorical.pmml"));
-        compoundScoreCardRuntime = getPMMLRuntime(getFile("CompoundNestedPredicateScorecard.pmml"));
+    static void init() {
+        Config.INSTANCE.setAsyncTimeout(15000);
+        Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -83,12 +77,13 @@ class PmmlLimeExplainerTest {
 
             PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
                 List<PredictionOutput> outputs = new LinkedList<>();
+                PMMLRuntime pmmlRuntime = new PMMLRuntimeFactoryImpl().getPMMLRuntimeFromFile(getFile("logisticRegressionIrisData.pmml"));
                 for (PredictionInput input1 : inputs) {
                     List<Feature> features1 = input1.getFeatures();
                     LogisticRegressionIrisDataExecutor pmmlModel = new LogisticRegressionIrisDataExecutor(
                             features1.get(0).getValue().asNumber(), features1.get(1).getValue().asNumber(),
                             features1.get(2).getValue().asNumber(), features1.get(3).getValue().asNumber());
-                    PMML4Result result = pmmlModel.execute(logisticRegressionIrisRuntime);
+                    PMML4Result result = pmmlModel.execute(pmmlRuntime);
                     String species = result.getResultVariables().get("Species").toString();
                     PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("species", Type.TEXT, new Value<>(species), 1d)));
                     outputs.add(predictionOutput);
@@ -110,7 +105,7 @@ class PmmlLimeExplainerTest {
                 assertThat(v).isEqualTo(1d);
             }
             assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                    0.5, 0.5));
+                    0.5, 0.5));
         }
     }
 
@@ -129,11 +124,12 @@ class PmmlLimeExplainerTest {
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
+            PMMLRuntime pmmlRuntime = new PMMLRuntimeFactoryImpl().getPMMLRuntimeFromFile(getFile("categoricalVariablesRegression.pmml"));
             for (PredictionInput input1 : inputs) {
                 List<Feature> features1 = input1.getFeatures();
                 CategoricalVariablesRegressionExecutor pmmlModel = new CategoricalVariablesRegressionExecutor(
                         features1.get(0).getValue().asString(), features1.get(1).getValue().asString());
-                PMML4Result result = pmmlModel.execute(categoricalVariableRegressionRuntime);
+                PMML4Result result = pmmlModel.execute(pmmlRuntime);
                 String score = result.getResultVariables().get("result").toString();
                 PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("result", Type.NUMBER, new Value<>(score), 1d)));
                 outputs.add(predictionOutput);
@@ -155,7 +151,7 @@ class PmmlLimeExplainerTest {
             assertThat(v).isEqualTo(1d);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                0.5, 0.5));
+                0.5, 0.5));
     }
 
     @Test
@@ -173,11 +169,12 @@ class PmmlLimeExplainerTest {
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
+            PMMLRuntime pmmlRuntime = new PMMLRuntimeFactoryImpl().getPMMLRuntimeFromFile(getFile("SimpleScorecardCategorical.pmml"));
             for (PredictionInput input1 : inputs) {
                 List<Feature> features1 = input1.getFeatures();
                 SimpleScorecardCategoricalExecutor pmmlModel = new SimpleScorecardCategoricalExecutor(
                         features1.get(0).getValue().asString(), features1.get(1).getValue().asString());
-                PMML4Result result = pmmlModel.execute(scorecardCategoricalRuntime);
+                PMML4Result result = pmmlModel.execute(pmmlRuntime);
                 String score = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.TARGET_FIELD);
                 String reason1 = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.REASON_CODE1_FIELD);
                 String reason2 = "" + result.getResultVariables().get(SimpleScorecardCategoricalExecutor.REASON_CODE2_FIELD);
@@ -206,7 +203,7 @@ class PmmlLimeExplainerTest {
             assertThat(v).isGreaterThan(0d);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                0.5, 0.5));
+                0.5, 0.5));
     }
 
     @Test
@@ -225,11 +222,12 @@ class PmmlLimeExplainerTest {
 
             PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
                 List<PredictionOutput> outputs = new LinkedList<>();
+                PMMLRuntime pmmlRuntime = new PMMLRuntimeFactoryImpl().getPMMLRuntimeFromFile(getFile("CompoundNestedPredicateScorecard.pmml"));
                 for (PredictionInput input1 : inputs) {
                     List<Feature> features1 = input1.getFeatures();
                     CompoundNestedPredicateScorecardExecutor pmmlModel = new CompoundNestedPredicateScorecardExecutor(
                             features1.get(0).getValue().asNumber(), features1.get(1).getValue().asString());
-                    PMML4Result result = pmmlModel.execute(compoundScoreCardRuntime);
+                    PMML4Result result = pmmlModel.execute(pmmlRuntime);
                     String score = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.TARGET_FIELD);
                     String reason1 = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.REASON_CODE1_FIELD);
                     PredictionOutput predictionOutput = new PredictionOutput(List.of(
@@ -255,7 +253,7 @@ class PmmlLimeExplainerTest {
                 assertThat(v).isEqualTo(1d);
             }
             assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                    0.5, 0.5));
+                    0.5, 0.5));
         }
     }
 }
