@@ -53,12 +53,8 @@ public class SchemaResource {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
-    public String jitdmn(String payload) throws Exception {
-        String modelXML = payload;
-        // System.out.println(modelXML);
-        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Arrays.asList(modelResource)).getOrElseThrow(RuntimeException::new);
-        DMNModel dmnModel = dmnRuntime.getModels().get(0);
+    public String schema(String payload) throws Exception {
+        DMNModel dmnModel = modelFromXML(payload);
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Arrays.asList(dmnModel)).build();
         ObjectNode jsNode = oasResult.getJsonSchemaNode();
@@ -79,16 +75,19 @@ public class SchemaResource {
         return jsonContent;
     }
 
+    private static DMNModel modelFromXML(String modelXML) {
+        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Arrays.asList(modelResource)).getOrElseThrow(RuntimeException::new);
+        DMNModel dmnModel = dmnRuntime.getModels().get(0);
+        return dmnModel;
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
     public String form(String payload) throws Exception {
-        String modelXML = payload;
-        // System.out.println(modelXML);
-        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Arrays.asList(modelResource)).getOrElseThrow(RuntimeException::new);
-        DMNModel dmnModel = dmnRuntime.getModels().get(0);
+        DMNModel dmnModel = modelFromXML(payload);
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Arrays.asList(dmnModel)).build();
         ObjectNode jsNode = oasResult.getJsonSchemaNode();

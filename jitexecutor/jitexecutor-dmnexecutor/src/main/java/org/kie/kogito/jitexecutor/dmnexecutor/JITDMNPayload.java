@@ -29,9 +29,7 @@ public class JITDMNPayload {
         this.model = model;
         this.context = context;
     }
-
     
-
     public String getModel() {
         return model;
     }
