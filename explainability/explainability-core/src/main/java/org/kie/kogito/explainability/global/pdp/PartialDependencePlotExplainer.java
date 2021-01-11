@@ -155,8 +155,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 updateMarginalImpact(marginalImpacts, i, output);
             }
         }
-        PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature, outputDecision, xsValues, marginalImpacts);
-        return partialDependenceGraph;
+        return new PartialDependenceGraph(feature, outputDecision, xsValues, marginalImpacts);
     }
 
     private void updateMarginalImpact(List<Value<?>> marginalImpacts, int i, Output output) {
