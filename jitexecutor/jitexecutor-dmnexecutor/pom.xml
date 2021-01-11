@@ -26,7 +26,6 @@
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-dmn-openapi</artifactId>
-      <version>${version.org.kie7}</version>
     </dependency>
 
     <dependency>

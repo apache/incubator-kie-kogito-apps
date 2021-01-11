@@ -36,7 +36,7 @@ public class SchemaResourceTest {
         given()
         .contentType(ContentType.XML)
         .body(MODEL)
-        .when().post("/schema")
+        .when().post("/jitdmn/schema")
         .then()
         .statusCode(200)
         .body(containsString("InputSet"), containsString("x-dmn-type"))
