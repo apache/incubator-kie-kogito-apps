@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Generates the partial dependence plot for the features of a {@link PredictionProvider}.
- * This currently only works with models that use {@code Feature}s of {@code Type.Number}.
  * While a strict PD implementation would need the whole training set used to train the model, this implementation seeks
  * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
  * stdDev).
