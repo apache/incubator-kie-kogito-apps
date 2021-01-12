@@ -34,12 +34,11 @@ public class SchemaResourceTest {
     public void test() throws IOException {
         final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
         given()
-        .contentType(ContentType.XML)
-        .body(MODEL)
-        .when().post("/jitdmn/schema")
-        .then()
-        .statusCode(200)
-        .body(containsString("InputSet"), containsString("x-dmn-type"))
-        ;
+            .contentType(ContentType.XML)
+            .body(MODEL)
+            .when().post("/jitdmn/schema")
+            .then()
+            .statusCode(200)
+            .body(containsString("InputSet"), containsString("x-dmn-type"));
     }
 }
