@@ -41,12 +41,11 @@ public class JITDMNResourceTest {
         context.put("PITI Ratio", .1);
         JITDMNPayload jitdmnpayload = new JITDMNPayload(MODEL, context);
         given()
-        .contentType(ContentType.JSON)
-        .body(jitdmnpayload)
-        .when().post("/jitdmn")
-        .then()
-        .statusCode(200)
-        .body(containsString("Loan Approval"), containsString("Approved"))
-        ;
+            .contentType(ContentType.JSON)
+            .body(jitdmnpayload)
+            .when().post("/jitdmn")
+            .then()
+            .statusCode(200)
+            .body(containsString("Loan Approval"), containsString("Approved"));
     }
 }
