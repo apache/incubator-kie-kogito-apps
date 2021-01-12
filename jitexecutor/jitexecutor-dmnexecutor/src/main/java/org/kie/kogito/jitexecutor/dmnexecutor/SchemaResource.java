@@ -44,7 +44,7 @@ import org.kie.internal.io.ResourceFactory;
 
 import io.smallrye.openapi.runtime.io.schema.SchemaWriter;
 
-@Path("jitdmn")
+@Path("jitdmn/schema")
 public class SchemaResource {
 
     // trick for resolver/implementation for NI
@@ -53,7 +53,6 @@ public class SchemaResource {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("schema")
     public String schema(String payload) throws Exception {
         DMNModel dmnModel = modelFromXML(payload);
 
