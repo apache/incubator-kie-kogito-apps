@@ -45,5 +45,4 @@ public class JITDMNPayload {
     public void setContext(Map<String, Object> context) {
         this.context = context;
     }
-
 }
