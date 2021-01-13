@@ -11,6 +11,7 @@
   <name>Kogito :: Explainability Integration Tests PMML</name>
   
   <dependencies>
+
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>explainability-core</artifactId>
@@ -20,6 +21,28 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jboss.logging</groupId>
+          <artifactId>jboss-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jboss.logging</groupId>
+          <artifactId>jboss-logging-annotations</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jboss.threads</groupId>
+          <artifactId>jboss-threads</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.jboss.sl4j</groupId>
+          <artifactId>slf4j-jboss-logmanager</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- TODO : move dependencies below to kogito-pmml once DROOLS-5491 is fixed -->
     <dependency>
@@ -87,6 +110,7 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
 </project>

@@ -24,20 +24,18 @@ import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.*;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.kie.pmml.api.runtime.PMMLRuntime;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInternal.getPMMLRuntime;
 import static org.kie.test.util.filesystem.FileUtils.getFile;
 
-@Disabled
 class PmmlCompoundScorecardLimeExplainerTest {
 
     private static PMMLRuntime compoundScoreCardRuntime;
@@ -45,7 +43,7 @@ class PmmlCompoundScorecardLimeExplainerTest {
     @BeforeAll
     static void setUpBefore() {
         compoundScoreCardRuntime = getPMMLRuntime(getFile("CompoundNestedPredicateScorecard.pmml"));
-        Config.INSTANCE.setAsyncTimeout(25000);
+        Config.INSTANCE.setAsyncTimeout(5000);
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
 
@@ -58,20 +56,21 @@ class PmmlCompoundScorecardLimeExplainerTest {
                     .withSamples(300)
                     .withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            List<Feature> features = new LinkedList<>();
+            List<Feature> features = new ArrayList<>(2);
             features.add(FeatureFactory.newNumericalFeature("input1", -50));
             features.add(FeatureFactory.newTextFeature("input2", "classB"));
             PredictionInput input = new PredictionInput(features);
 
             PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
-                List<PredictionOutput> outputs = new LinkedList<>();
-                for (PredictionInput input1 : inputs) {
-                    List<Feature> features1 = input1.getFeatures();
+                List<PredictionOutput> outputs = new ArrayList<>(inputs.size());
+                for (PredictionInput predictionInput : inputs) {
+                    List<Feature> inputFeatures = predictionInput.getFeatures();
                     CompoundNestedPredicateScorecardExecutor pmmlModel = new CompoundNestedPredicateScorecardExecutor(
-                            features1.get(0).getValue().asNumber(), features1.get(1).getValue().asString());
+                            inputFeatures.get(0).getValue().asNumber(), inputFeatures.get(1).getValue().asString());
                     PMML4Result result = pmmlModel.execute(compoundScoreCardRuntime);
-                    String score = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.TARGET_FIELD);
-                    String reason1 = "" + result.getResultVariables().get(CompoundNestedPredicateScorecardExecutor.REASON_CODE1_FIELD);
+                    Map<String, Object> resultVariables = result.getResultVariables();
+                    String score = "" + resultVariables.get(CompoundNestedPredicateScorecardExecutor.TARGET_FIELD);
+                    String reason1 = "" + resultVariables.get(CompoundNestedPredicateScorecardExecutor.REASON_CODE1_FIELD);
                     PredictionOutput predictionOutput = new PredictionOutput(List.of(
                             new Output("score", Type.TEXT, new Value<>(score), 1d),
                             new Output("reason1", Type.TEXT, new Value<>(reason1), 1d)
@@ -95,10 +94,8 @@ class PmmlCompoundScorecardLimeExplainerTest {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
                 assertThat(v).isEqualTo(1d);
             }
-            for (int i = 0; i < 10; i++) {
-                saliencyMap = limeExplainer.explainAsync(prediction, model)
-                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            }
+            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                    0.5, 0.5));
         }
     }
 }
