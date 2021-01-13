@@ -1,6 +1,8 @@
 // tslint:disable: forin
 // tslint:disable: no-floating-promises
 
+import { isAuthEnabled } from './KeycloakClient';
+
 const nestedCheck = (ele, valueObj) => {
   for (const key in ele) {
     const temp = ele[key];
@@ -127,7 +129,7 @@ export const clearEmpties = obj => {
 };
 
 // function adds new property to existing object
-export const set = (obj, path, val) => {
+export const constructObject = (obj, path, val) => {
   const keys = path.split(',');
   const lastKey = keys.pop();
   // tslint:disable-next-line: no-shadowed-variable
@@ -148,4 +150,12 @@ export const removeDuplicates = (arr, comp) => {
     .map(e => arr[e]);
 
   return unique;
+};
+
+export const isTestUserSystemEnabled = () => {
+  const testSystemEnabled: boolean =
+    // @ts-ignore
+    window.TEST_USER_SYSTEM_ENABLED || process.env.TEST_USER_SYSTEM_ENABLED;
+
+  return !isAuthEnabled() && testSystemEnabled;
 };
