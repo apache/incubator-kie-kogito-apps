@@ -29,6 +29,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.jobs.api.Job;
@@ -278,6 +279,7 @@ class JobResourceIT {
     }
 
     @Test
+    @Disabled("https://issues.redhat.com/browse/KOGITO-4118")
     void testForcingCreateExpiredJob() throws Exception {
         scheduler.setForceExecuteExpiredJobs(true);
         createExpiredJob().statusCode(200);
