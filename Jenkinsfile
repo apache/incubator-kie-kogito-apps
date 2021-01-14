@@ -39,7 +39,10 @@ pipeline {
         stage('Build Runtimes') {
             steps {
                 script {
-                    getMavenCommand('kogito-runtimes').run('clean install')
+                    getMavenCommand('kogito-runtimes')
+                        .skipTests(true)
+                        .withProperty('skipITs', true)
+                        .run('clean install')
                 }
             }
         }
@@ -48,10 +51,7 @@ pipeline {
                 script {
                     // Skip unnecessary plugins to save time.
                     getMavenCommand('optaplanner')
-                        .withProperty('enforcer.skip')
-                        .withProperty('formatter.skip')
-                        .withProperty('impsort.skip')
-                        .withProperty('revapi.skip')
+                        .withProperty('quickly')
                         .run('clean install')
                 }
             }
