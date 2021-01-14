@@ -16,10 +16,7 @@
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -31,13 +28,7 @@ import org.kie.kogito.dmn.DmnDecisionModel;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.model.*;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -73,14 +64,18 @@ class LoanEligibilityDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
-        LimeConfig limeConfig = new LimeConfig().withSamples(300);
-        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        for (Saliency saliency : saliencyMap.values()) {
-            assertNotNull(saliency);
+        Random random = new Random();
+        for (int i = 0; i < 5; i++) {
+            random.setSeed(i);
+            LimeConfig limeConfig = new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            for (Saliency saliency : saliencyMap.values()) {
+                assertNotNull(saliency);
+            }
+            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                    0.5, 0.5));
         }
-        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                0.5, 0.5));
     }
 }
