@@ -16,7 +16,6 @@
 package org.kie.kogito.explainability.explainability.integrationtests.pmml;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.kogito.explainability.Config;
