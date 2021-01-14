@@ -56,3 +56,8 @@ pipeline {
         }
     }
 }
+
+MavenCommand getMavenCommand(){
+    return new MavenCommand(this, ['-fae'])
+                .withSettingsXmlId('kogito_release_settings')
+}
