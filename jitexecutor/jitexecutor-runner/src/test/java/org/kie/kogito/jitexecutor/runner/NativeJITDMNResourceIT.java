@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmnexecutor;
+package org.kie.kogito.jitexecutor.runner;
 
 import io.quarkus.test.junit.NativeImageTest;
+import org.kie.kogito.jitexecutor.dmn.JITDMNResourceTest;
 
 @NativeImageTest
 public class NativeJITDMNResourceIT extends JITDMNResourceTest {
-
     // Execute the same tests but in native mode.
 }

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmnexecutor;
+package org.kie.kogito.jitexecutor.runner;
 
 import io.quarkus.test.junit.NativeImageTest;
+import org.kie.kogito.jitexecutor.dmn.SchemaResourceTest;
 
 @NativeImageTest
 public class NativeSchemaResourceIT extends SchemaResourceTest {

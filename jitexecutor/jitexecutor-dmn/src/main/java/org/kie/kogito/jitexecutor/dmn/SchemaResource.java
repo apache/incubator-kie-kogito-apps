@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmnexecutor;
+package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.StringReader;
 import java.util.Arrays;

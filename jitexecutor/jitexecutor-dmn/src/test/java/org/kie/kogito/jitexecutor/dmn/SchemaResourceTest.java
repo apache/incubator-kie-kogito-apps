@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmnexecutor;
+package org.kie.kogito.jitexecutor.dmn;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.Test;
@@ -30,22 +28,17 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
 @QuarkusTest
-public class JITDMNResourceTest {
+public class SchemaResourceTest {
 
     @Test
-    public void testHelloEndpoint() throws IOException {
+    public void test() throws IOException {
         final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
-        Map<String, Object> context = new HashMap<>();
-        context.put("FICO Score", 800);
-        context.put("DTI Ratio", .1);
-        context.put("PITI Ratio", .1);
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(MODEL, context);
         given()
-            .contentType(ContentType.JSON)
-            .body(jitdmnpayload)
-            .when().post("/jitdmn")
+            .contentType(ContentType.XML)
+            .body(MODEL)
+            .when().post("/jitdmn/schema")
             .then()
             .statusCode(200)
-            .body(containsString("Loan Approval"), containsString("Approved"));
+            .body(containsString("InputSet"), containsString("x-dmn-type"));
     }
 }

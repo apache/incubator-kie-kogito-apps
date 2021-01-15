@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>jitexecutor-dmn</artifactId>
-  <name>Kogito :: JIT DMN Executor</name>
+  <name>Kogito :: JIT Executor DMN</name>
 
   <dependencies>
     <dependency>
