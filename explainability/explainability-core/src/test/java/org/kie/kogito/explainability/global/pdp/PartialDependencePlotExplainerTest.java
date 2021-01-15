@@ -148,7 +148,7 @@ class PartialDependencePlotExplainerTest {
             Collection<Prediction> predictions = new ArrayList<>(3);
 
             List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
-                                         "huge donation for you!");
+                                         "huge donation for you!", "bitcoin for you");
             for (String text : texts) {
                 List<Feature> features = new ArrayList<>();
                 features.add(FeatureFactory.newFulltextFeature("text", text));

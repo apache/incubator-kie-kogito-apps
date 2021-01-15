@@ -15,30 +15,17 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
+import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.global.GlobalExplainer;
+import org.kie.kogito.explainability.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
-
-import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.global.GlobalExplainer;
-import org.kie.kogito.explainability.model.DataDistribution;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PartialDependenceGraph;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.PredictionProviderMetadata;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Generates the partial dependence plot for the features of a {@link PredictionProvider}.
@@ -96,15 +83,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         int noOfFeatures = featureDistributions.size();
 
         // fetch entire data distributions for all features
-        List<List<Feature>> trainingData = new ArrayList<>(featureDistributions.size());
-        for (FeatureDistribution fd : featureDistributions) {
-            List<Value<?>> allSamples = fd.getAllSamples();
-            Set<Feature> features = new HashSet<>(allSamples.size());
-            for (Value<?> v : allSamples) {
-                features.add(FeatureFactory.copyOf(fd.getFeature(), v));
-            }
-            trainingData.add(new ArrayList<>(features));
-        }
+        List<PredictionInput> trainingData = dataDistribution.sample(seriesLength);
 
         // create a PDP for each feature
         for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
@@ -121,8 +100,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
 
             // create a PDP for each feature and each output
             for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
-                PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, noOfFeatures, trainingData,
-                        featureIndex, xsValues, featureXSvalues, outputIndex);
+                PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, trainingData,
+                        xsValues, featureXSvalues, outputIndex);
                 pdps.add(partialDependenceGraph);
             }
         }
@@ -131,18 +110,21 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         return pdps;
     }
 
-    private PartialDependenceGraph getPartialDependenceGraph(PredictionProvider model, int noOfFeatures, List<List<Feature>> trainingData, int featureIndex, List<Value<?>> xsValues, List<Feature> featureXSvalues, int outputIndex) throws InterruptedException, ExecutionException, TimeoutException {
-        Feature feature = null;
+    private PartialDependenceGraph getPartialDependenceGraph(PredictionProvider model,
+                                                             List<PredictionInput> trainingData,
+                                                             List<Value<?>> xsValues,
+                                                             List<Feature> featureXSvalues, int outputIndex)
+            throws InterruptedException, ExecutionException, TimeoutException {
         Output outputDecision = null;
+        Feature feature = null;
         // each feature value of the feature under analysis should have a corresponding output value (composed by the marginal impacts of the other features)
         List<Value<?>> marginalImpacts = new ArrayList<>(featureXSvalues.size());
         for (int i = 0; i < featureXSvalues.size(); i++) {
-            List<PredictionInput> predictionInputs = prepareInputs(noOfFeatures, featureIndex,
-                    featureXSvalues.get(i), trainingData);
             // initialize an empty feature to use in the generated PDP
-            if (feature == null && !predictionInputs.isEmpty()) {
-                feature = FeatureFactory.copyOf(predictionInputs.get(0).getFeatures().get(featureIndex), new Value<>(null));
+            if (feature == null) {
+                feature = FeatureFactory.copyOf(featureXSvalues.get(i), new Value<>(null));
             }
+            List<PredictionInput> predictionInputs = prepareInputs(featureXSvalues.get(i), trainingData);
             List<PredictionOutput> predictionOutputs = getOutputs(model, predictionInputs);
             // prediction requests are batched per value of feature 'Xs' under analysis
             for (PredictionOutput predictionOutput : predictionOutputs) {
@@ -209,34 +191,39 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
      * The resulting list of prediction inputs will have the very same value for the feature under analysis, and values
      * from the training data for all other features.
      *
-     * @param noOfFeatures number of features in an input
-     * @param featureIndex the index of the feature under analysis
      * @param featureXs    specific value of the feature under analysis
-     * @param trainingData training data for all the features
+     * @param trainingData training data
      * @return a list of prediction inputs
      */
-    private List<PredictionInput> prepareInputs(int noOfFeatures, int featureIndex, Feature featureXs,
-                                                List<List<Feature>> trainingData) {
+    private List<PredictionInput> prepareInputs(Feature featureXs,
+                                                List<PredictionInput> trainingData) {
         List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
 
-        for (int j = 0; j < seriesLength; j++) {
-            Feature[] inputs = new Feature[noOfFeatures];
-            for (int f = 0; f < noOfFeatures; f++) {
-                if (f != featureIndex) {
-                    List<Feature> features = trainingData.get(f);
-                    if (features.size() > j) {
-                        inputs[f] = features.get(j);
-                    } else {
-                        inputs[f] = features.get(j % features.size());
-                    }
-                } else {
-                    inputs[featureIndex] = featureXs;
-                }
-            }
-            PredictionInput input = new PredictionInput(Arrays.asList(inputs));
-            predictionInputs.add(input);
+        for (PredictionInput trainingSample : trainingData) {
+            List<Feature> features = trainingSample.getFeatures();
+            List<Feature> newFeatures = replaceFeatures(featureXs, features);
+            predictionInputs.add(new PredictionInput(newFeatures));
         }
         return predictionInputs;
+    }
+
+    private List<Feature> replaceFeatures(Feature featureXs, List<Feature> features) {
+        List<Feature> newFeatures = new ArrayList<>();
+        for (Feature f : features) {
+            Feature newFeature;
+            if (f.getName().equals(featureXs.getName())) {
+                newFeature = FeatureFactory.copyOf(f, featureXs.getValue());
+            } else {
+                if (Type.COMPOSITE == f.getType()) {
+                    List<Feature> elements = (List<Feature>) f.getValue().getUnderlyingObject();
+                    newFeature = FeatureFactory.newCompositeFeature(f.getName(), replaceFeatures(featureXs, elements));
+                } else {
+                    newFeature = FeatureFactory.copyOf(f, f.getValue());
+                }
+            }
+            newFeatures.add(newFeature);
+        }
+        return newFeatures;
     }
 
 }
