@@ -50,4 +50,14 @@ public class PartialDependenceGraph {
     public List<Value<?>> getY() {
         return y;
     }
+
+    @Override
+    public String toString() {
+        return "PartialDependenceGraph{" +
+                "x=" + x +
+                ", y=" + y +
+                ", feature=" + feature +
+                ", output=" + output +
+                '}';
+    }
 }
