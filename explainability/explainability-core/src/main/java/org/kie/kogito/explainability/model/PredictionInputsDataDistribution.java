@@ -45,11 +45,11 @@ public class PredictionInputsDataDistribution implements DataDistribution {
         if (inputs.isEmpty()) {
             return new PredictionInput(Collections.emptyList());
         } else {
-            List<PredictionInput> inputs = sample(1);
-            if (inputs.isEmpty()) {
+            List<PredictionInput> singleSample = sample(1);
+            if (singleSample.isEmpty()) {
                 return new PredictionInput(Collections.emptyList());
             } else {
-                return inputs.get(0);
+                return singleSample.get(0);
             }
         }
     }

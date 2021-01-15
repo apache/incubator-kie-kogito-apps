@@ -86,10 +86,9 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         List<PredictionInput> trainingData = dataDistribution.sample(seriesLength);
 
         // create a PDP for each feature
-        for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
+        for (FeatureDistribution featureDistribution : featureDistributions) {
             // generate (further) samples for the feature under analysis
             // TBD: maybe just reuse trainingData
-            FeatureDistribution featureDistribution = featureDistributions.get(featureIndex);
             List<Value<?>> xsValues = featureDistribution.sample(seriesLength).stream()
                     .sorted(Comparator.comparing(Value::asString)) // sort alphanumerically (if Value#asNumber is NaN)
                     .sorted((v1, v2) -> Comparator.comparingDouble((ToDoubleFunction<Value<?>>) Value::asNumber).compare(v1, v2)) // sort by natural order
@@ -100,8 +99,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
 
             // create a PDP for each feature and each output
             for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
-                PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, trainingData,
-                        xsValues, featureXSvalues, outputIndex);
+                PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, trainingData, xsValues,
+                                                                                          featureXSvalues, outputIndex);
                 pdps.add(partialDependenceGraph);
             }
         }
