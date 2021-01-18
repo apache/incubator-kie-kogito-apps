@@ -15,20 +15,13 @@
  */
 package org.kie.kogito.explainability;
 
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.utils.ValidationUtils;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -105,6 +98,25 @@ public class TestUtils {
         });
     }
 
+    public static PredictionProvider getSumThresholdModel(double center, double epsilon) {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                final int N = features.size();
+                double result = 0;
+                for (int i = 0; i < N; i++) {
+                        result += features.get(i).getValue().asNumber();
+                }
+                final boolean inside = (result >= center - epsilon && result <= center + epsilon);
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("inside", Type.BOOLEAN, new Value<>(inside), 1.0 - Math.abs(result - center))));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
+        });
+    }
+
     public static PredictionProvider getDummyTextClassifier() {
         List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
         return inputs -> supplyAsync(() -> {
@@ -127,6 +139,45 @@ public class TestUtils {
                 outputs.add(new PredictionOutput(List.of(output)));
             }
             return outputs;
+        });
+    }
+
+    public static PredictionProvider getSymbolicArithmeticModel() {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                String operand = "+";
+                double result = 0;
+                for (Feature feature : features) {
+                    if (feature.getName().equals("operand")) {
+                        operand = feature.getValue().asString();
+                    }
+                }
+                for (Feature feature : features) {
+                    if (!feature.getName().equals("operand")) {
+                        switch (operand) {
+                            case "+":
+                                result += feature.getValue().asNumber();
+                                break;
+                            case "-":
+                                result -= feature.getValue().asNumber();
+                                break;
+                            case "*":
+                                result *= feature.getValue().asNumber();
+                                break;
+                            case "/":
+                                result /= feature.getValue().asNumber();
+                                break;
+                        }
+                    }
+                }
+
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("result", Type.NUMBER, new Value<>(result), 1d)));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
         });
     }
 

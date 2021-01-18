@@ -89,7 +89,7 @@ public class DataUtils {
         return data;
     }
 
-    static double getMean(double[] data) {
+    public static double getMean(double[] data) {
         double m = 0;
         for (double datum : data) {
             m += datum;
@@ -98,7 +98,7 @@ public class DataUtils {
         return m;
     }
 
-    static double getStdDev(double[] data, double mean) {
+    public static double getStdDev(double[] data, double mean) {
         double d = 0;
         for (double datum : data) {
             d += Math.pow(datum - mean, 2);
