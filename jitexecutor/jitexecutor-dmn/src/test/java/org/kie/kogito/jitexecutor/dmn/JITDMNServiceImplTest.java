@@ -39,7 +39,7 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
-    public void testModelEvaluation(){
+    public void testModelEvaluation() {
         Map<String, Object> context = new HashMap<>();
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);

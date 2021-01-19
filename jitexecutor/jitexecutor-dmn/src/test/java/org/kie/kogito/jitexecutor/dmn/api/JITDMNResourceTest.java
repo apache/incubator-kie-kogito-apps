@@ -16,37 +16,59 @@
 
 package org.kie.kogito.jitexecutor.dmn.api;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.drools.core.util.IoUtils;
-import org.junit.jupiter.api.Test;
-
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import org.drools.core.util.IoUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
 public class JITDMNResourceTest {
 
+    private static String model;
+
+    @BeforeAll
+    public static void setup() throws IOException {
+        model = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
+    }
+
     @Test
-    public void testHelloEndpoint() throws IOException {
-        final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
+    public void testjitEndpoint() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn")
+                .then()
+                .statusCode(200)
+                .body(containsString("Loan Approval"), containsString("Approved"));
+    }
+
+    @Test
+    public void testjitdmnResultEndpoint() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn/dmnresult")
+                .then()
+                .statusCode(200)
+                .body(containsString("Loan Approval"), containsString("Approved"), containsString("xls2dmn"));
+    }
+
+    private Map<String, Object> buildContext() {
         Map<String, Object> context = new HashMap<>();
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);
         context.put("PITI Ratio", .1);
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(MODEL, context);
-        given()
-            .contentType(ContentType.JSON)
-            .body(jitdmnpayload)
-            .when().post("/jitdmn")
-            .then()
-            .statusCode(200)
-            .body(containsString("Loan Approval"), containsString("Approved"));
+        return context;
     }
 }
