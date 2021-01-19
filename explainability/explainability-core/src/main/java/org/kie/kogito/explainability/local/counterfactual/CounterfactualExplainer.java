@@ -125,6 +125,7 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
                 throw new IllegalStateException("Solving failed: {}", e);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                throw new IllegalStateException("Solving failed (Thread interrupted): {}", e);
             } finally {
                 solverManager.close();
             }
