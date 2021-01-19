@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmn;
+package org.kie.kogito.jitexecutor.dmn.api;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
