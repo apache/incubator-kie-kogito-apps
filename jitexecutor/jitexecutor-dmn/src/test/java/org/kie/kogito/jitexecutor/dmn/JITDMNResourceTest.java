@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 
 @QuarkusTest
 public class JITDMNResourceTest {

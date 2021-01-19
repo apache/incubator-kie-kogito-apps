@@ -18,31 +18,14 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.util.Map;
 
-public class JITDMNPayload {
-    private String model;
-    private Map<String, Object> context;
-    
-    public JITDMNPayload() {
-    }
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.kie.kogito.jitexecutor.dmn.models.JITDMNEvaluationResult;
 
-    public JITDMNPayload(String model, Map<String, Object> context) {
-        this.model = model;
-        this.context = context;
-    }
-    
-    public String getModel() {
-        return model;
-    }
+public interface JITDMNService {
 
-    public Map<String, Object> getContext() {
-        return context;
-    }
+    JITDMNEvaluationResult evaluateModel(String modelXML, Map<String, Object> context);
 
-    public void setModel(String model) {
-        this.model = model;
-    }
+    ObjectNode getSchema(String model);
 
-    public void setContext(Map<String, Object> context) {
-        this.context = context;
-    }
+    ObjectNode getForm(String model);
 }

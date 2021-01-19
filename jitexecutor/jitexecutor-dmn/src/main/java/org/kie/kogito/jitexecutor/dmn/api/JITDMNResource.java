@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmn;
+package org.kie.kogito.jitexecutor.dmn.api;
 
 import java.io.StringReader;
 import java.util.Arrays;
@@ -39,6 +39,7 @@ import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
 import org.kie.internal.io.ResourceFactory;
+import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 
 @Path("/jitdmn")
 public class JITDMNResource {
