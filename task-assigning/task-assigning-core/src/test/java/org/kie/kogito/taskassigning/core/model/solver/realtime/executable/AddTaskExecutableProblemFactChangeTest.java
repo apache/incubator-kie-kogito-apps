@@ -24,7 +24,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.core.TestConstants;
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
@@ -45,44 +47,44 @@ class AddTaskExecutableProblemFactChangeTest extends AbstractExecutableProblemFa
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void addTaskProblemFactChange24Tasks8UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         addTaskProblemFactChangeRandomSet(SET_OF_24TASKS_8USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void addTaskProblemFactChange50Tasks5Users() {
-        checkRunTurtleTests();
         addTaskProblemFactChange(SET_OF_50TASKS_5USERS_SOLUTION.resource(), Arrays.asList("50", "52", "70", "85", "100"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void addTaskProblemFactChange50Tasks5UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         addTaskProblemFactChangeRandomSet(SET_OF_50TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void addTaskProblemFactChange100Tasks5Users() {
-        checkRunTurtleTests();
         addTaskProblemFactChange(SET_OF_100TASKS_5USERS_SOLUTION.resource(), Arrays.asList("100", "105", "200", "350"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void addTaskProblemFactChange100Tasks5UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         addTaskProblemFactChangeRandomSet(SET_OF_100TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void addTaskProblemFactChange500Tasks20Users() {
-        checkRunTurtleTests();
         addTaskProblemFactChange(SET_OF_500TASKS_20USERS_SOLUTION.resource(), Arrays.asList("500", "600", "700"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void addTaskProblemFactChange500Tasks20UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         addTaskProblemFactChangeRandomSet(SET_OF_500TASKS_20USERS_SOLUTION.resource());
     }
 

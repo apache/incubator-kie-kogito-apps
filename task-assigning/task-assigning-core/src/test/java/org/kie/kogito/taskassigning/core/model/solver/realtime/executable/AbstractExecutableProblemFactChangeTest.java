@@ -165,15 +165,19 @@ abstract class AbstractExecutableProblemFactChangeTest extends AbstractTaskAssig
                                                                                             Function<T, String> solutionAfterChange) throws Exception {
 
         String resourceName = solutionResource.substring(solutionResource.lastIndexOf("/") + 1);
-        writeToTempFile(filePrefix + "." + testType + ".InitialSolution_", printSolution(initialSolution));
+        writeToTempFile(buildTestFileName(filePrefix, testType, "InitialSolution", resourceName, 0), printSolution(initialSolution));
         for (int i = 0; i < programmedChanges.size(); i++) {
             T scheduledChange = programmedChanges.get(i);
             try {
-                writeToTempFile(filePrefix + "." + testType + ".WorkingSolutionBeforeChange_" + resourceName + "_" + i + "__", solutionBeforeChange.apply(scheduledChange));
-                writeToTempFile(filePrefix + "." + testType + ".SolutionAfterChange_" + resourceName + "_" + i + "__", solutionAfterChange.apply(scheduledChange));
+                writeToTempFile(buildTestFileName(filePrefix, testType, "WorkingSolutionBeforeChange", resourceName, i), solutionBeforeChange.apply(scheduledChange));
+                writeToTempFile(buildTestFileName(filePrefix, testType, "SolutionAfterChange", resourceName, i), solutionAfterChange.apply(scheduledChange));
             } catch (Exception e) {
                 LOGGER.error("An error was produced during test files writing.", e);
             }
         }
+    }
+
+    private static String buildTestFileName(String filePrefix, String testType, String solutionName, String resourceName, int changeNumber) {
+        return filePrefix + "." + testType + "." + solutionName + "_" + resourceName + "_" + changeNumber + "__";
     }
 }

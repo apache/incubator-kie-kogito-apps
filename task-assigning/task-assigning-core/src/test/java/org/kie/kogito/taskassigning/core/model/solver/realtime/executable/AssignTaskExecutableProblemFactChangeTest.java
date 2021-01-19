@@ -25,7 +25,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.core.TestConstants;
 import org.kie.kogito.taskassigning.core.model.ChainElement;
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
@@ -94,44 +96,44 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void assignTaskProblemFactChange24Tasks8UsersRandom() throws Exception {
-        checkRunDevelopmentOnlyTests();
         assignTaskProblemFactChangeRandomChangeSet(SET_OF_24TASKS_8USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void assignTaskProblemFactChange50Tasks5Users() throws Exception {
-        checkRunTurtleTests();
         assignTaskProblemFactChangeFixedChangeSet(SET_OF_50TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void assignTaskProblemFactChange50Tasks5UsersRandom() throws Exception {
-        checkRunDevelopmentOnlyTests();
         assignTaskProblemFactChangeRandomChangeSet(SET_OF_50TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void assignTaskProblemFactChange100Tasks5Users() throws Exception {
-        checkRunTurtleTests();
         assignTaskProblemFactChangeFixedChangeSet(SET_OF_100TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void assignTaskProblemFactChange100Tasks5UsersRandom() throws Exception {
-        checkRunDevelopmentOnlyTests();
         assignTaskProblemFactChangeRandomChangeSet(SET_OF_100TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void assignTaskProblemFactChange500Tasks20Users() throws Exception {
-        checkRunTurtleTests();
         assignTaskProblemFactChangeFixedChangeSet(SET_OF_500TASKS_20USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void assignTaskProblemFactChange500Tasks20UsersRandom() throws Exception {
-        checkRunDevelopmentOnlyTests();
         assignTaskProblemFactChangeRandomChangeSet(SET_OF_500TASKS_20USERS_SOLUTION.resource());
     }
 

@@ -34,28 +34,22 @@ import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_US
 import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.extractTaskAssignments;
 import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
 
-class TestSolver extends AbstractTaskAssigningCoreTest {
+class SolverTest extends AbstractTaskAssigningCoreTest {
 
     private static final long TEST_TIMEOUT = 20;
 
     @Test
     @Timeout(TEST_TIMEOUT)
     void startSolverAndSolution24Tasks8Users() {
-        testSolverStartAndSolution(1, SET_OF_24TASKS_8USERS_SOLUTION.resource(), false);
-    }
-
-    @Test
-    @Timeout(TEST_TIMEOUT)
-    void startSolverAndSolution24Tasks8UsersWithDrlFile() {
-        testSolverStartAndSolution(1, SET_OF_24TASKS_8USERS_SOLUTION.resource(), true);
+        testSolverStartAndSolution(1, SET_OF_24TASKS_8USERS_SOLUTION.resource());
     }
 
     /**
      * Tests that solver for the tasks assigning problem definition can be properly started, a solution can be produced,
      * and that some minimal constrains are met by de solution.
      */
-    private void testSolverStartAndSolution(int stepCountLimit, String solutionResource, boolean useDrlFile) {
-        Solver<TaskAssigningSolution> solver = createNonDaemonSolver(stepCountLimit, useDrlFile);
+    private void testSolverStartAndSolution(int stepCountLimit, String solutionResource) {
+        Solver<TaskAssigningSolution> solver = createNonDaemonSolver(stepCountLimit);
         TaskAssigningSolution solution = readTaskAssigningSolution(solutionResource);
         solution.getUserList().add(PLANNING_USER);
         TaskAssigningSolution result = solver.solve(solution);

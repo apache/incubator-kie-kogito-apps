@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.core.TestConstants;
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
@@ -38,48 +40,54 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
 
     @Test
     void removeTaskProblemFactChange24Tasks8Users() {
-        removeTaskProblemFactChange(SET_OF_24TASKS_8USERS_SOLUTION.resource(), Arrays.asList("0", "10", "11", "4", "20", "100", "78"));
+        removeTaskProblemFactChange(SET_OF_24TASKS_8USERS_SOLUTION.resource(),
+                                    Arrays.asList("0", "10", "11", "4", "20", "100", "78"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void removeTaskProblemFactChange24Tasks8UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         removeTaskProblemFactChangeRandomSet(SET_OF_24TASKS_8USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void removeTaskProblemFactChange50Tasks5Users() {
-        checkRunTurtleTests();
-        removeTaskProblemFactChange(SET_OF_50TASKS_5USERS_SOLUTION.resource(), Arrays.asList("0", "10", "1", "4", "20", "30", "35", "40", "45", "57", "60"));
+        removeTaskProblemFactChange(SET_OF_50TASKS_5USERS_SOLUTION.resource(),
+                                    Arrays.asList("0", "10", "1", "4", "20", "30", "35", "40", "45", "57", "60"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void removeTaskProblemFactChange50Tasks5UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         removeTaskProblemFactChangeRandomSet(SET_OF_50TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void removeTaskProblemFactChange100Tasks5Users() {
-        checkRunTurtleTests();
-        removeTaskProblemFactChange(SET_OF_100TASKS_5USERS_SOLUTION.resource(), Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "130", "200"));
+        removeTaskProblemFactChange(SET_OF_100TASKS_5USERS_SOLUTION.resource(),
+                                    Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "130",
+                                                  "200"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void removeTaskProblemFactChange100Tasks5UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         removeTaskProblemFactChangeRandomSet(SET_OF_100TASKS_5USERS_SOLUTION.resource());
     }
 
     @Test
+    @Tag(TestConstants.TURTLE_TEST)
     void removeTaskProblemFactChange500Tasks20Users() {
-        checkRunTurtleTests();
-        removeTaskProblemFactChange(SET_OF_500TASKS_20USERS_SOLUTION.resource(), Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "300", "400", "25", "1000", "1001"));
+        removeTaskProblemFactChange(SET_OF_500TASKS_20USERS_SOLUTION.resource(),
+                                    Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "300",
+                                                  "400", "25", "1000", "1001"));
     }
 
     @Test
+    @Tag(TestConstants.DEVELOPMENT_ONLY_TEST)
     void removeTaskProblemFactChange500Tasks20UsersRandom() {
-        checkRunDevelopmentOnlyTests();
         removeTaskProblemFactChangeRandomSet(SET_OF_500TASKS_20USERS_SOLUTION.resource());
     }
 

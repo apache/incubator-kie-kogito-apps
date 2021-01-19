@@ -39,34 +39,34 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class AbstractTaskAssigningCoreTest extends AbstractTaskAssigningTest {
+public abstract class AbstractTaskAssigningCoreTest {
+
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     protected boolean writeTestFiles() {
         return Boolean.parseBoolean(System.getProperty("org.kie.kogito.taskassigning.test.writeFiles", "false"));
     }
 
-    protected SolverConfig createBaseConfig(boolean useDrlFile) {
+    protected SolverConfig createBaseConfig() {
         SolverConfig config = new SolverConfig();
         config.setSolutionClass(TaskAssigningSolution.class);
         config.setEntityClassList(Arrays.asList(ChainElement.class, TaskAssignment.class));
-        if (useDrlFile) {
-            config.setScoreDirectorFactoryConfig(new ScoreDirectorFactoryConfig().withScoreDrls("org/kie/kogito/taskassigning/solver/taskAssigningScoreRules.drl"));
-        } else {
-            config.setScoreDirectorFactoryConfig(new ScoreDirectorFactoryConfig().withConstraintProviderClass(DefaultTaskAssigningConstraintProvider.class));
-        }
+        config.setScoreDirectorFactoryConfig(new ScoreDirectorFactoryConfig().withConstraintProviderClass(DefaultTaskAssigningConstraintProvider.class));
         return config;
     }
 
     protected Solver<TaskAssigningSolution> createDaemonSolver() {
-        SolverConfig config = createBaseConfig(false);
+        SolverConfig config = createBaseConfig();
         config.setDaemon(true);
         SolverFactory<TaskAssigningSolution> solverFactory = SolverFactory.create(config);
         return solverFactory.buildSolver();
     }
 
-    protected Solver<TaskAssigningSolution> createNonDaemonSolver(int stepCountLimit, boolean useDrlFile) {
-        SolverConfig config = createBaseConfig(useDrlFile);
+    protected Solver<TaskAssigningSolution> createNonDaemonSolver(int stepCountLimit) {
+        SolverConfig config = createBaseConfig();
         ConstructionHeuristicPhaseConfig constructionHeuristicPhaseConfig = new ConstructionHeuristicPhaseConfig();
         constructionHeuristicPhaseConfig.setConstructionHeuristicType(ConstructionHeuristicType.FIRST_FIT);
         LocalSearchPhaseConfig phaseConfig = new LocalSearchPhaseConfig();
