@@ -35,7 +35,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Provides exemplar (counterfactual) explanations for a predictive model.
@@ -120,10 +119,12 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
             try {
                 // Wait until the solving ends
                 solution = solverJob.getFinalBestSolution();
-
                 return solution.getEntities();
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (ExecutionException e) {
+                logger.error("Solving failed.");
                 throw new IllegalStateException("Solving failed: {}", e);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             } finally {
                 solverManager.close();
             }

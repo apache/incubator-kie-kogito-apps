@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -114,9 +113,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 logger.debug("Penalise outcome (confidence threshold: {})", tertiaryHardScore);
             }
 
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (ExecutionException e) {
             logger.error("Impossible to obtain prediction {}", e.getMessage());
-            throw new RuntimeException("Impossible to obtain prediction");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));
