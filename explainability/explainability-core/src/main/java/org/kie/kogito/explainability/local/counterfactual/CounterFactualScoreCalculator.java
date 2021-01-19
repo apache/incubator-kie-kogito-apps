@@ -102,12 +102,13 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 for (int i = 0; i < outputs.size(); i++) {
                     final Output output = outputs.get(i);
                     final Output goalOutput = goal.get(i);
-                    distance += goalOutput.getValue().asNumber() - output.getValue().asNumber();
+                    final double d = goalOutput.getValue().asNumber() - output.getValue().asNumber();
+                    distance += d * d;
                     if (output.getScore() < goalOutput.getScore()) {
                         tertiaryHardScore -= 1;
                     }
                 }
-                primaryHardScore -= distance * distance;
+                primaryHardScore -= Math.sqrt(distance);
                 logger.debug("Penalise outcome (prediction distance: {})", primaryHardScore);
                 logger.debug("Penalise outcome (constraints changed: {})", secondaryHardScore);
                 logger.debug("Penalise outcome (confidence threshold: {})", tertiaryHardScore);

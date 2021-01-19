@@ -32,7 +32,9 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class CounterfactualExplainerTest {
 
@@ -401,10 +403,6 @@ class CounterfactualExplainerTest {
                         result /= feature.getValue().asNumber();
                         break;
                 }
-            }
-
-            for (CounterfactualEntity entity : counterfactualEntities) {
-                System.out.println(entity);
             }
 
             final double epsilon = 0.01;
