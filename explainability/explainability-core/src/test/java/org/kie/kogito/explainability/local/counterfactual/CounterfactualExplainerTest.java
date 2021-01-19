@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,6 @@ class CounterfactualExplainerTest {
         for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
 
-
             List<Feature> features = new LinkedList<>();
             List<FeatureDomain> featureBoundaries = new LinkedList<>();
             List<Boolean> constraints = new LinkedList<>();
@@ -110,7 +109,6 @@ class CounterfactualExplainerTest {
             featureBoundaries.add(FeatureDomain.numerical(0.0, 1000.0));
 
             final DataDomain dataDomain = new DataDomain(featureBoundaries);
-
 
             final SolverConfig solverConfig = CounterfactualConfigurationFactory
                     .builder().withScoreCalculationCountLimit(steps).build();
@@ -403,7 +401,6 @@ class CounterfactualExplainerTest {
                         result /= feature.getValue().asNumber();
                         break;
                 }
-
             }
 
             for (CounterfactualEntity entity : counterfactualEntities) {
@@ -512,7 +509,6 @@ class CounterfactualExplainerTest {
 
             final DataDomain dataDomain = new DataDomain(featureBoundaries);
 
-
             final SolverConfig solverConfig = CounterfactualConfigurationFactory
                     .builder().withScoreCalculationCountLimit(steps).build();
             final CounterfactualExplainer counterfactualExplainer =
@@ -549,8 +545,6 @@ class CounterfactualExplainerTest {
             final double predictionScore = cfOutput.getOutputs().get(0).getScore();
             System.out.println("Prediction score: " + predictionScore);
             assertTrue(predictionScore < 0.1);
-
         }
     }
-
 }

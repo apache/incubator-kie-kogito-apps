@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,10 +86,6 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
         return new Builder(goal, constraints, dataDomain);
     }
 
-    private Executor getExecutor() {
-        return this.executor;
-    }
-
     private List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {
         return IntStream.range(0, predictionInput.getFeatures().size())
                 .mapToObj(featureIndex -> {
@@ -133,16 +129,14 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
             }
         }, this.executor);
 
-       final CompletableFuture<List<PredictionOutput>> cfOutputs = cfEntities.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
-               s.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())
-       ))));
+        final CompletableFuture<List<PredictionOutput>> cfOutputs = cfEntities.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
+                s.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())
+        ))));
 
-       return CompletableFuture.allOf(cfOutputs, cfEntities).thenApply(v -> new Counterfactual(cfEntities.join(), cfOutputs.join()));
-
+        return CompletableFuture.allOf(cfOutputs, cfEntities).thenApply(v -> new Counterfactual(cfEntities.join(), cfOutputs.join()));
     }
 
     public static class Builder {
-
 
         private final DataDomain dataDomain;
         private final List<Boolean> constraints;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DoubleEntityTest {
 
-
     @Test
     void distanceUnscaled() {
         final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0);
@@ -40,10 +39,10 @@ class DoubleEntityTest {
     void distanceScaled() {
         final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0);
         final FeatureDomain featureDomain = FeatureDomain.numerical(0.0, 40.0);
-        final FeatureDistribution featureDistribution = new NumericFeatureDistribution(doubleFeature, new NormalDistribution(25.0, 2.0).sample(1000));
+        final FeatureDistribution featureDistribution = new NumericFeatureDistribution(doubleFeature, new NormalDistribution(25.0, 2.0).sample(5000));
         DoubleEntity entity = (DoubleEntity) CounterfactualEntityFactory.from(doubleFeature, false, featureDomain, featureDistribution);
         entity.proposedValue = 30.0;
-        assertTrue(entity.distance() > 2.30 && entity.distance() < 2.70);
+        final double distance = entity.distance();
+        assertTrue(distance > 2.30 && distance < 2.70);
     }
-
 }

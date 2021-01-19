@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,12 +58,11 @@ public class DoubleEntity implements CounterfactualEntity {
         this.doubleRangeMinimum = minimum;
         this.doubleRangeMaximum = maximum;
         this.constrained = constrained;
-        if (featureDistribution!=null) {
+        if (featureDistribution != null) {
             final double[] samples = featureDistribution.getAllSamples().stream().mapToDouble(Value::asNumber).toArray();
             final double mean = DataUtils.getMean(samples);
             this.stdDev = DataUtils.getStdDev(samples, mean);
         }
-
     }
 
     /**

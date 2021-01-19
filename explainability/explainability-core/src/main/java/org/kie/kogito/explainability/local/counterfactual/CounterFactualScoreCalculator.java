@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 
 package org.kie.kogito.explainability.local.counterfactual;
-
 
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.Feature;
@@ -48,10 +47,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
 
     /**
      * Calculates the counterfactual score for each proposed solution.
-     *
      * This method assumes that each model used as {@link org.kie.kogito.explainability.model.PredictionProvider} is
      * consistent, in the sense that for repeated operations, the size of the returned collection of
      * {@link PredictionOutput} is the same, if the size of {@link PredictionInput} doesn't change.
+     *
      * @param solution Proposed solution
      * @return A {@link BendableBigDecimalScore} with three "hard" levels and one "soft" level
      */
@@ -66,9 +65,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         StringBuilder builder = new StringBuilder();
 
         for (CounterfactualEntity entity : solution.getEntities()) {
-            primarySoftScore += entity.distance();
+            final double entityDistance = entity.distance();
+            primarySoftScore += entityDistance;
             final Feature f = entity.asFeature();
-            builder.append(f.getName()).append("=").append(f.getValue().getUnderlyingObject()).append("(d: ").append(entity.distance()).append("),");
+            builder.append(String.format("%s=%s (d:%f)", f.getName(), f.getValue().getUnderlyingObject(), entityDistance));
 
             if (entity.isConstrained() && (entity.isChanged())) {
                 secondaryHardScore -= 1;
@@ -111,11 +111,11 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 logger.debug("Penalise outcome (prediction distance: {})", primaryHardScore);
                 logger.debug("Penalise outcome (constraints changed: {})", secondaryHardScore);
                 logger.debug("Penalise outcome (confidence threshold: {})", tertiaryHardScore);
-
             }
 
         } catch (InterruptedException | ExecutionException e) {
             logger.error("Impossible to obtain prediction {}", e.getMessage());
+            throw new RuntimeException("Impossible to obtain prediction");
         }
 
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));
