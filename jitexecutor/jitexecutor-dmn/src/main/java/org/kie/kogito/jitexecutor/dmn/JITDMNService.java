@@ -18,14 +18,9 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.jitexecutor.dmn.models.JITDMNEvaluationResult;
 
 public interface JITDMNService {
 
     JITDMNEvaluationResult evaluateModel(String modelXML, Map<String, Object> context);
-
-    ObjectNode getSchema(String model);
-
-    ObjectNode getForm(String model);
 }
