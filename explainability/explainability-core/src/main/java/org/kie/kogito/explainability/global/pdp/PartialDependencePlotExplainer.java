@@ -135,6 +135,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 updateMarginalImpact(marginalImpacts, i, output);
             }
         }
+        // collapse impacts ?
         return new PartialDependenceGraph(feature, outputDecision, xsValues, marginalImpacts);
     }
 
@@ -153,13 +154,18 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 classCount.put(categoricalOutput, 1L);
                 marginalImpacts.add(new Value<>(classCount));
             } else {
-                Map<String, Long> classCount = (Map<String, Long>) marginalImpacts.get(i).getUnderlyingObject();
-                if (classCount.containsKey(categoricalOutput)) {
-                    classCount.put(categoricalOutput, classCount.get(categoricalOutput) + 1);
-                } else {
-                    classCount.put(categoricalOutput, 1L);
+                Value<?> value = marginalImpacts.get(i);
+                try {
+                    Map<String, Long> classCount = (Map<String, Long>) value.getUnderlyingObject();
+                    if (classCount.containsKey(categoricalOutput)) {
+                        classCount.put(categoricalOutput, classCount.get(categoricalOutput) + 1);
+                    } else {
+                        classCount.put(categoricalOutput, 1L);
+                    }
+                    marginalImpacts.set(i, new Value<>(classCount));
+                } catch (ClassCastException cce) {
+                    // ignore malformed output
                 }
-                marginalImpacts.set(i, new Value<>(classCount));
             }
         }
     }
