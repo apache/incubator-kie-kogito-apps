@@ -83,7 +83,8 @@ class FraudScoringDmnLimeExplainerTest {
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         Random random = new Random();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 5; i++) {
+            System.err.println(i);
             random.setSeed(i);
             LimeConfig limeConfig = new LimeConfig()
                     .withSamples(300)
