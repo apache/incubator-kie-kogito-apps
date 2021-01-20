@@ -23,8 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.DataDistribution;
@@ -50,8 +49,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AggregatedLimeExplainerTest {
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testExplainWithMetadata(Random random) throws ExecutionException, InterruptedException {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testExplainWithMetadata(int seed) throws ExecutionException, InterruptedException {
+        Random random = new Random();
+        random.setSeed(seed);
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(1);
         PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
             @Override
@@ -89,8 +90,10 @@ class AggregatedLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testExplainWithPredictions(Random random) throws ExecutionException, InterruptedException {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testExplainWithPredictions(int seed) throws ExecutionException, InterruptedException {
+        Random random = new Random();
+        random.setSeed(seed);
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(1);
         DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(3, 100, random);
         List<PredictionInput> samples = dataDistribution.sample(10);

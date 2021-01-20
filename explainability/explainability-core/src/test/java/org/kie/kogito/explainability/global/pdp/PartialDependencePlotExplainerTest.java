@@ -25,9 +25,8 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
@@ -77,8 +76,10 @@ class PartialDependencePlotExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testPdpNumericClassifier(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testPdpNumericClassifier(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         PredictionProvider modelInfo = TestUtils.getSumSkipModel(0);
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
         List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explainFromMetadata(modelInfo, getMetadata(random));
@@ -109,8 +110,10 @@ class PartialDependencePlotExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testBrokenPredict(Random random) {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testBrokenPredict(int seed) {
+        Random random = new Random();
+        random.setSeed(seed);
         Config.INSTANCE.setAsyncTimeout(1);
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();

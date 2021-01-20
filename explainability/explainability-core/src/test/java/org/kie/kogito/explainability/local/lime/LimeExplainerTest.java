@@ -24,9 +24,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
@@ -42,8 +41,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class LimeExplainerTest {
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testEmptyPrediction(Random random) throws ExecutionException, InterruptedException, TimeoutException {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testEmptyPrediction(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+        Random random = new Random();
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
@@ -58,8 +59,10 @@ class LimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testNonEmptyInput(Random random) throws ExecutionException, InterruptedException, TimeoutException {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testNonEmptyInput(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+        Random random = new Random();
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);

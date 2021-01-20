@@ -30,7 +30,7 @@ import opennlp.tools.langdetect.LanguageDetectorME;
 import opennlp.tools.langdetect.LanguageDetectorModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -46,7 +46,6 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -63,8 +62,10 @@ class OpenNLPLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testOpenNLPLangDetect(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testOpenNLPLangDetect(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(100)
                 .withPerturbationContext(new PerturbationContext(random, 2));

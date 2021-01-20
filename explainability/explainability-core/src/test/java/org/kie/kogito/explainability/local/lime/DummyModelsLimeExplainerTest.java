@@ -23,9 +23,8 @@ import java.util.Random;
 import java.util.function.Function;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -44,8 +43,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class DummyModelsLimeExplainerTest {
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testMapOneFeatureToOutputRegression(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testMapOneFeatureToOutputRegression(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         int idx = 1;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
@@ -74,8 +75,10 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testUnusedFeatureRegression(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testUnusedFeatureRegression(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         int idx = 2;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 100));
@@ -103,8 +106,10 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testMapOneFeatureToOutputClassification(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testMapOneFeatureToOutputClassification(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         int idx = 1;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 1));
@@ -129,8 +134,10 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testTextSpamClassification(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testTextSpamClassification(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         List<Feature> features = new LinkedList<>();
         Function<String, List<String>> tokenizer = s -> Arrays.asList(s.split(" ").clone());
         features.add(FeatureFactory.newFulltextFeature("f1", "we go here and there", tokenizer));
@@ -159,8 +166,10 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testUnusedFeatureClassification(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testUnusedFeatureClassification(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         int idx = 2;
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 6));
@@ -188,8 +197,10 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testFixedOutput(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testFixedOutput(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f1", 6));
         features.add(FeatureFactory.newNumericalFeature("f2", 3));

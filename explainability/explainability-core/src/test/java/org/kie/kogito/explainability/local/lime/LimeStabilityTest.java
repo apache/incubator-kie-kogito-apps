@@ -23,11 +23,9 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -46,8 +44,10 @@ class LimeStabilityTest {
     static final double TOP_FEATURE_THRESHOLD = 0.9;
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testStabilityWithNumericData(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testStabilityWithNumericData(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
@@ -59,8 +59,10 @@ class LimeStabilityTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testStabilityWithTextData(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testStabilityWithTextData(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
@@ -75,8 +77,10 @@ class LimeStabilityTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testAdaptiveVariance(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testAdaptiveVariance(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
 
         int samples = 1;

@@ -21,13 +21,6 @@
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>explainability-core</artifactId>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-
     <!-- TODO : move dependencies below to kogito-pmml once DROOLS-5491 is fixed -->
     <dependency>
       <groupId>org.kie</groupId>

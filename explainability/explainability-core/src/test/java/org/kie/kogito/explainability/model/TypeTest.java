@@ -30,9 +30,8 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -240,8 +239,10 @@ class TypeTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testPerturbCompositeFeature(Random random) {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testPerturbCompositeFeature(int seed) {
+        Random random = new Random();
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, 2);
         List<Feature> features = new LinkedList<>();
         features.add(new Feature("f1", Type.TEXT, new Value<>("foo bar")));
@@ -309,8 +310,10 @@ class TypeTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testEncodeNumericSymmetric(Random random) {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testEncodeNumericSymmetric(int seed) {
+        Random random = new Random();
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
         Value<?> target = Type.NUMBER.randomValue(perturbationContext);
         Value<?>[] values = new Value<?>[6];

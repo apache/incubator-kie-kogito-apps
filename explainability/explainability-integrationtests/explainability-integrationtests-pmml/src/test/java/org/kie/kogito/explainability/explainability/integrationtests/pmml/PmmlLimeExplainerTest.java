@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
@@ -42,7 +42,6 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.kie.pmml.api.runtime.PMMLRuntime;
 
@@ -68,8 +67,10 @@ class PmmlLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testPMMLRegression(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testPMMLRegression(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(1000)
                 .withPerturbationContext(new PerturbationContext(random, 1));
@@ -209,8 +210,10 @@ class PmmlLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ArgumentsSource(RandomTestArgumentsProvider.class)
-    void testPMMLCompoundScorecard(Random random) throws Exception {
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void testPMMLCompoundScorecard(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(300)
                 .withPerturbationContext(new PerturbationContext(random, 1));
