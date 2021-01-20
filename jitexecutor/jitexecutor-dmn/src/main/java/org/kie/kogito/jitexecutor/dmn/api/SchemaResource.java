@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jitexecutor.dmnexecutor;
+package org.kie.kogito.jitexecutor.dmn.api;
 
 import java.io.StringReader;
 import java.util.Collections;
@@ -51,7 +51,7 @@ public class SchemaResource {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response schema(String payload) throws Exception {
+    public Response schema(String payload) {
         DMNModel dmnModel = modelFromXML(payload);
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
@@ -75,15 +75,14 @@ public class SchemaResource {
     private static DMNModel modelFromXML(String modelXML) {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
-        DMNModel dmnModel = dmnRuntime.getModels().get(0);
-        return dmnModel;
+        return dmnRuntime.getModels().get(0);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
-    public Response form(String payload) throws Exception {
+    public Response form(String payload) {
         DMNModel dmnModel = modelFromXML(payload);
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
