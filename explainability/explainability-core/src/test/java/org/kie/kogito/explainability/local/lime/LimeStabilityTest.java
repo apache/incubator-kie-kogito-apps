@@ -74,7 +74,8 @@ class LimeStabilityTest {
         assertStable(limeExplainer, sumSkipModel, featureList);
     }
 
-    @Test
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
     void testAdaptiveVariance(Random random) throws Exception {
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
 
