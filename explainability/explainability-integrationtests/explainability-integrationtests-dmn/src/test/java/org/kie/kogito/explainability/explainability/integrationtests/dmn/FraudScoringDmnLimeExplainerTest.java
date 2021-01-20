@@ -84,11 +84,10 @@ class FraudScoringDmnLimeExplainerTest {
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
-            System.err.println(i);
             random.setSeed(i);
             LimeConfig limeConfig = new LimeConfig()
                     .withSamples(300)
-                    .withPerturbationContext(new PerturbationContext(random, 5));
+                    .withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -102,7 +101,7 @@ class FraudScoringDmnLimeExplainerTest {
                 }
             }
             assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.5));
+                    0.4, 0.4)); // set to 0.4 since "Last Transaction" is inherently unstable output
         }
     }
 }
