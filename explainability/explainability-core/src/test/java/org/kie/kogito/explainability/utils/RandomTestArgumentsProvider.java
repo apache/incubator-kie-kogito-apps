@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability.utils;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -26,11 +27,11 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 
 public class RandomTestArgumentsProvider implements ArgumentsProvider {
 
-    private static final IntStream seeds = IntStream.range(0, 5);
+    private static final int[] seeds = IntStream.range(0, 5).toArray();
 
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
-        return seeds.mapToObj(seed -> {
+        return Arrays.stream(seeds).mapToObj(seed -> {
             Random random = new Random();
             random.setSeed(seed);
             return Arguments.of(random);
