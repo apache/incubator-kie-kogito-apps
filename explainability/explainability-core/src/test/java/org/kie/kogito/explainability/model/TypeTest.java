@@ -30,7 +30,9 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -237,21 +239,18 @@ class TypeTest {
         assertNotEquals(feature.getValue(), perturbedValue);
     }
 
-    @Test
-    void testPerturbCompositeFeature() {
-        Random random = new Random();
-        for (int i = 0; i < 10000; i++) {
-            random.setSeed(i);
-            PerturbationContext perturbationContext = new PerturbationContext(random, 2);
-            List<Feature> features = new LinkedList<>();
-            features.add(new Feature("f1", Type.TEXT, new Value<>("foo bar")));
-            features.add(new Feature("f2", Type.NUMBER, new Value<>(1d)));
-            features.add(new Feature("f3", Type.BOOLEAN, new Value<>(true)));
-            Value<?> value = new Value<>(features);
-            Feature f = new Feature("name", Type.COMPOSITE, value);
-            Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
-            assertNotEquals(value, perturbedValue, "fail with seed " + i);
-        }
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
+    void testPerturbCompositeFeature(Random random) {
+        PerturbationContext perturbationContext = new PerturbationContext(random, 2);
+        List<Feature> features = new LinkedList<>();
+        features.add(new Feature("f1", Type.TEXT, new Value<>("foo bar")));
+        features.add(new Feature("f2", Type.NUMBER, new Value<>(1d)));
+        features.add(new Feature("f3", Type.BOOLEAN, new Value<>(true)));
+        Value<?> value = new Value<>(features);
+        Feature f = new Feature("name", Type.COMPOSITE, value);
+        Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
+        assertNotEquals(value, perturbedValue);
     }
 
     @Test
@@ -309,24 +308,21 @@ class TypeTest {
         }
     }
 
-    @Test
-    void testEncodeNumericSymmetric() {
-        for (int seed = 0; seed < 5; seed++) {
-            Random random = new Random();
-            random.setSeed(seed);
-            PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
-            Value<?> target = Type.NUMBER.randomValue(perturbationContext);
-            Value<?>[] values = new Value<?>[6];
-            for (int i = 0; i < values.length / 2; i++) {
-                values[i] = new Value<>(target.asNumber() + target.asNumber() * (1 + i) / 100d);
-                values[values.length - 1 - i] = new Value<>(target.asNumber() - target.asNumber() * (1 + i) / 100d);
-            }
-            List<double[]> vectors = Type.NUMBER.encode(target, values);
-            assertNotNull(vectors);
-            assertEquals(values.length, vectors.size());
-            for (int i = 0; i < vectors.size() / 2; i++) {
-                assertThat(vectors.get(i)[0]).isEqualTo(vectors.get(vectors.size() - 1 - i)[0]);
-            }
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
+    void testEncodeNumericSymmetric(Random random) {
+        PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
+        Value<?> target = Type.NUMBER.randomValue(perturbationContext);
+        Value<?>[] values = new Value<?>[6];
+        for (int i = 0; i < values.length / 2; i++) {
+            values[i] = new Value<>(target.asNumber() + target.asNumber() * (1 + i) / 100d);
+            values[values.length - 1 - i] = new Value<>(target.asNumber() - target.asNumber() * (1 + i) / 100d);
+        }
+        List<double[]> vectors = Type.NUMBER.encode(target, values);
+        assertNotNull(vectors);
+        assertEquals(values.length, vectors.size());
+        for (int i = 0; i < vectors.size() / 2; i++) {
+            assertThat(vectors.get(i)[0]).isEqualTo(vectors.get(vectors.size() - 1 - i)[0]);
         }
     }
 

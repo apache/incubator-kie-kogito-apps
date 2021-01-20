@@ -24,7 +24,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -42,64 +45,54 @@ class LimeStabilityTest {
 
     static final double TOP_FEATURE_THRESHOLD = 0.9;
 
-    @Test
-    void testStabilityWithNumericData() throws Exception {
-        Random random = new Random();
-        for (int seed = 0; seed < 5; seed++) {
-            random.setSeed(seed);
-            PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
-            List<Feature> featureList = new LinkedList<>();
-            for (int i = 0; i < 5; i++) {
-                featureList.add(TestUtils.getMockedNumericFeature(i));
-            }
-            LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            assertStable(limeExplainer, sumSkipModel, featureList);
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
+    void testStabilityWithNumericData(Random random) throws Exception {
+        PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
+        List<Feature> featureList = new LinkedList<>();
+        for (int i = 0; i < 5; i++) {
+            featureList.add(TestUtils.getMockedNumericFeature(i));
         }
+        LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        assertStable(limeExplainer, sumSkipModel, featureList);
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
+    void testStabilityWithTextData(Random random) throws Exception {
+        PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
+        List<Feature> featureList = new LinkedList<>();
+        for (int i = 0; i < 4; i++) {
+            featureList.add(TestUtils.getMockedTextFeature("foo " + i));
+        }
+        featureList.add(TestUtils.getMockedTextFeature("money"));
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(10)
+                .withPerturbationContext(new PerturbationContext(random, 1));
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        assertStable(limeExplainer, sumSkipModel, featureList);
     }
 
     @Test
-    void testStabilityWithTextData() throws Exception {
-        Random random = new Random();
-        for (int seed = 0; seed < 5; seed++) {
-            random.setSeed(seed);
-            PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
-            List<Feature> featureList = new LinkedList<>();
-            for (int i = 0; i < 4; i++) {
-                featureList.add(TestUtils.getMockedTextFeature("foo " + i));
-            }
-            featureList.add(TestUtils.getMockedTextFeature("money"));
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(10)
-                    .withPerturbationContext(new PerturbationContext(random, 1));
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            assertStable(limeExplainer, sumSkipModel, featureList);
+    void testAdaptiveVariance(Random random) throws Exception {
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+
+        int samples = 1;
+        int retries = 4;
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(samples)
+                .withPerturbationContext(perturbationContext)
+                .withRetries(retries)
+                .withAdaptiveVariance(true);
+        LimeExplainer adaptiveVarianceLE = new LimeExplainer(limeConfig);
+
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 4; i++) {
+            features.add(FeatureFactory.newNumericalFeature("f-" + i, 2));
         }
-    }
-
-    @Test
-    void testAdaptiveVariance() throws Exception {
-        Random random = new Random();
-        for (int seed = 0; seed < 5; seed++) {
-            random.setSeed(seed);
-            PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-
-            int samples = 1;
-            int retries = 4;
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(samples)
-                    .withPerturbationContext(perturbationContext)
-                    .withRetries(retries)
-                    .withAdaptiveVariance(true);
-            LimeExplainer adaptiveVarianceLE = new LimeExplainer(limeConfig);
-
-            List<Feature> features = new LinkedList<>();
-            for (int i = 0; i < 4; i++) {
-                features.add(FeatureFactory.newNumericalFeature("f-"+i,2));
-            }
-            PredictionProvider model = TestUtils.getEvenSumModel(0);
-            assertStable(adaptiveVarianceLE, model, features);
-        }
+        PredictionProvider model = TestUtils.getEvenSumModel(0);
+        assertStable(adaptiveVarianceLE, model, features);
     }
 
     private void assertStable(LimeExplainer limeExplainer, PredictionProvider model, List<Feature> featureList) throws Exception {

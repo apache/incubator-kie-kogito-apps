@@ -23,8 +23,10 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.utils.RandomTestArgumentsProvider;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.LocalExplanationException;
 import org.kie.kogito.explainability.model.Feature;
@@ -39,46 +41,40 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LimeExplainerTest {
 
-    @Test
-    void testEmptyPrediction() throws ExecutionException, InterruptedException, TimeoutException {
-        Random random = new Random();
-        for (int seed = 0; seed < 5; seed++) {
-            random.setSeed(seed);
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(10);
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            PredictionInput input = new PredictionInput(Collections.emptyList());
-            PredictionProvider model = TestUtils.getSumSkipModel(0);
-            PredictionOutput output = model.predictAsync(List.of(input))
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                    .get(0);
-            Prediction prediction = new Prediction(input, output);
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
+    void testEmptyPrediction(Random random) throws ExecutionException, InterruptedException, TimeoutException {
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(10);
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        PredictionInput input = new PredictionInput(Collections.emptyList());
+        PredictionProvider model = TestUtils.getSumSkipModel(0);
+        PredictionOutput output = model.predictAsync(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                .get(0);
+        Prediction prediction = new Prediction(input, output);
 
-            assertThrows(LocalExplanationException.class, () -> limeExplainer.explainAsync(prediction, model));
-        }
+        assertThrows(LocalExplanationException.class, () -> limeExplainer.explainAsync(prediction, model));
     }
 
-    @Test
-    void testNonEmptyInput() throws ExecutionException, InterruptedException, TimeoutException {
-        Random random = new Random();
-        for (int seed = 0; seed < 5; seed++) {
-            random.setSeed(seed);
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(10);
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            List<Feature> features = new LinkedList<>();
-            for (int i = 0; i < 4; i++) {
-                features.add(TestUtils.getMockedNumericFeature(i));
-            }
-            PredictionInput input = new PredictionInput(features);
-            PredictionProvider model = TestUtils.getSumSkipModel(0);
-            PredictionOutput output = model.predictAsync(List.of(input))
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                    .get(0);
-            Prediction prediction = new Prediction(input, output);
-            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            assertNotNull(saliencyMap);
+    @ParameterizedTest
+    @ArgumentsSource(RandomTestArgumentsProvider.class)
+    void testNonEmptyInput(Random random) throws ExecutionException, InterruptedException, TimeoutException {
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(10);
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        List<Feature> features = new LinkedList<>();
+        for (int i = 0; i < 4; i++) {
+            features.add(TestUtils.getMockedNumericFeature(i));
         }
+        PredictionInput input = new PredictionInput(features);
+        PredictionProvider model = TestUtils.getSumSkipModel(0);
+        PredictionOutput output = model.predictAsync(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                .get(0);
+        Prediction prediction = new Prediction(input, output);
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        assertNotNull(saliencyMap);
     }
 }
