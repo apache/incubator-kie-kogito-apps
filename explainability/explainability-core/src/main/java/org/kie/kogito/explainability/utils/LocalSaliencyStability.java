@@ -16,10 +16,10 @@
 package org.kie.kogito.explainability.utils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Local {@code Saliency} stability evaluation result.
@@ -29,9 +29,9 @@ public class LocalSaliencyStability {
     private final Map<String, Map<Integer, SaliencyFrequencyMetadata>> map;
 
     public LocalSaliencyStability(Set<String> decisions) {
-        map = new ConcurrentHashMap<>();
+        map = new HashMap<>();
         for (String k : decisions) {
-            map.put(k, new ConcurrentHashMap<>());
+            map.put(k, new HashMap<>());
         }
     }
 
