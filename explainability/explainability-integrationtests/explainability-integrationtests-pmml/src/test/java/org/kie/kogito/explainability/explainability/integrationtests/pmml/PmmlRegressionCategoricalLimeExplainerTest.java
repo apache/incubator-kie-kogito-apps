@@ -49,7 +49,6 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
 
-
     @Test
     void testPMMLRegressionCategorical() throws Exception {
         List<Feature> features = new LinkedList<>();
