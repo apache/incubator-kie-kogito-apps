@@ -22,6 +22,7 @@ import org.kie.kogito.explainability.utils.ValidationUtils;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -38,7 +39,7 @@ public class TestUtils {
                 Feature feature = features.get(featureIndex);
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("feature-" + featureIndex, feature.getType(), feature.getValue(),
-                                           1d)));
+                                1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -105,7 +106,7 @@ public class TestUtils {
                 List<Feature> features = predictionInput.getFeatures();
                 double result = 0;
                 for (int i = 0; i < features.size(); i++) {
-                        result += features.get(i).getValue().asNumber();
+                    result += features.get(i).getValue().asNumber();
                 }
                 final boolean inside = (result >= center - epsilon && result <= center + epsilon);
                 PredictionOutput predictionOutput = new PredictionOutput(
@@ -144,18 +145,21 @@ public class TestUtils {
     public static PredictionProvider getSymbolicArithmeticModel() {
         return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            final String OPERAND_FEATURE_NAME = "operand";
             for (PredictionInput predictionInput : inputs) {
                 List<Feature> features = predictionInput.getFeatures();
-                String operand = "+";
-                double result = 0;
-                for (Feature feature : features) {
-                    if (feature.getName().equals("operand")) {
-                        operand = feature.getValue().asString();
-                    }
+                // Find a valid operand feature, if any
+                Optional<String> operand = features.stream().filter(f -> OPERAND_FEATURE_NAME.equals(f.getName()))
+                        .map(f -> f.getValue().asString()).findFirst();
+                if (!operand.isPresent()) {
+                    throw new IllegalArgumentException("No valid operand found in features");
                 }
+                final String operandValue = operand.get();
+                double result = 0;
+                // Apply the found operand to the rest of the features
                 for (Feature feature : features) {
-                    if (!feature.getName().equals("operand")) {
-                        switch (operand) {
+                    if (!OPERAND_FEATURE_NAME.equals(feature.getName())) {
+                        switch (operandValue) {
                             case "+":
                                 result += feature.getValue().asNumber();
                                 break;
@@ -228,8 +232,8 @@ public class TestUtils {
     }
 
     public static void assertLimeStability(PredictionProvider model, Prediction prediction, LimeExplainer limeExplainer,
-                                       int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
+                                           int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, topK,
-                                                                  minimumPositiveStabilityRate, minimumNegativeStabilityRate));
+                minimumPositiveStabilityRate, minimumNegativeStabilityRate));
     }
 }

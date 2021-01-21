@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability.local.counterfactual;
 
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -30,6 +31,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
@@ -87,7 +89,8 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         final List<Output> goal = solution.getGoal();
 
         try {
-            List<PredictionOutput> predictions = predictionAsync.get();
+            List<PredictionOutput> predictions = predictionAsync.get(Config.INSTANCE.getAsyncTimeout(),
+                    Config.INSTANCE.getAsyncTimeUnit());
 
             double distance = 0.0;
 
@@ -116,7 +119,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         } catch (ExecutionException e) {
             logger.error("Impossible to obtain prediction {}", e.getMessage());
         } catch (InterruptedException e) {
+            logger.error("Impossible to obtain prediction {}", e.getMessage());
             Thread.currentThread().interrupt();
+        } catch (TimeoutException e) {
+            logger.error("Prediction timed out");
         }
 
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));
