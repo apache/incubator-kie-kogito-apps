@@ -100,6 +100,6 @@ class FraudScoringDmnLimeExplainerTest {
             }
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                0.5, 0.5));
+                                                                                0.5, 0.4));
     }
 }
