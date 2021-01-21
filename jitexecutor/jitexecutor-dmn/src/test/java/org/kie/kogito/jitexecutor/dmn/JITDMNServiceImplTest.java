@@ -24,8 +24,8 @@ import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.dmn.rest.DMNResult;
 import org.kie.kogito.jitexecutor.dmn.api.JITDMNResourceTest;
-import org.kie.kogito.jitexecutor.dmn.models.JITDMNEvaluationResult;
 
 public class JITDMNServiceImplTest {
 
@@ -44,11 +44,11 @@ public class JITDMNServiceImplTest {
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);
         context.put("PITI Ratio", .1);
-        JITDMNEvaluationResult evaluationResult = jitdmnService.evaluateModel(model, context);
+        DMNResult dmnResult = jitdmnService.evaluateModel(model, context);
 
-        Assertions.assertEquals("xls2dmn", evaluationResult.getModelName());
-        Assertions.assertEquals("xls2dmn_741b355c-685c-4827-b13a-833da8321da4", evaluationResult.getModelNamespace());
-        Assertions.assertTrue(evaluationResult.getDmnResult().getMessages().isEmpty());
-        Assertions.assertEquals("Approved", evaluationResult.getDmnResult().getDecisionResultByName("Loan Approval").getResult());
+        Assertions.assertEquals("xls2dmn", dmnResult.getModelName());
+        Assertions.assertEquals("xls2dmn_741b355c-685c-4827-b13a-833da8321da4", dmnResult.getNamespace());
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals("Approved", dmnResult.getDecisionResultByName("Loan Approval").getResult());
     }
 }

@@ -28,10 +28,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
+import org.kie.kogito.dmn.rest.DMNResult;
 import org.kie.kogito.jitexecutor.dmn.JITDMNService;
-import org.kie.kogito.jitexecutor.dmn.models.JITDMNEvaluationResult;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 
 @Path("/jitdmn")
@@ -44,7 +43,7 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitdmn(JITDMNPayload payload) {
-        DMNResult evaluateAll = jitdmnService.evaluateModel(payload.getModel(), payload.getContext()).getDmnResult();
+        DMNResult evaluateAll = jitdmnService.evaluateModel(payload.getModel(), payload.getContext());
         Map<String, Object> restResulk = new HashMap<>();
         for (Entry<String, Object> kv : evaluateAll.getContext().getAll().entrySet()) {
             restResulk.put(kv.getKey(), MarshallingStubUtils.stubDMNResult(kv.getValue(), String::valueOf));
@@ -57,12 +56,7 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitdmnResult(JITDMNPayload payload) {
-        JITDMNEvaluationResult evaluationResult = jitdmnService.evaluateModel(payload.getModel(), payload.getContext());
-        org.kie.kogito.dmn.rest.DMNResult restdmnResult = new org.kie.kogito.dmn.rest.DMNResult(
-                evaluationResult.getModelNamespace(),
-                evaluationResult.getModelName(),
-                evaluationResult.getDmnResult()
-        );
-        return Response.ok(restdmnResult).build();
+        DMNResult dmnResult = jitdmnService.evaluateModel(payload.getModel(), payload.getContext());
+        return Response.ok(dmnResult).build();
     }
 }

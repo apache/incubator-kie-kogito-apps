@@ -18,9 +18,9 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.util.Map;
 
-import org.kie.kogito.jitexecutor.dmn.models.JITDMNEvaluationResult;
+import org.kie.kogito.dmn.rest.DMNResult;
 
 public interface JITDMNService {
 
-    JITDMNEvaluationResult evaluateModel(String modelXML, Map<String, Object> context);
+    DMNResult evaluateModel(String modelXML, Map<String, Object> context);
 }

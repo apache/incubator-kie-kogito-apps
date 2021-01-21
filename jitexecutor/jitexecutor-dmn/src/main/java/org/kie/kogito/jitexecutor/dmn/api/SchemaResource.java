@@ -48,6 +48,12 @@ public class SchemaResource {
     // trick for resolver/implementation for NI
     static final OpenAPI x = OASFactory.createObject(OpenAPI.class);
 
+    private static DMNModel modelFromXML(String modelXML) {
+        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
+        return dmnRuntime.getModels().get(0);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
@@ -70,12 +76,6 @@ public class SchemaResource {
         jsNode.putArray("required").add("context").add("model");
 
         return Response.ok(jsNode).build();
-    }
-
-    private static DMNModel modelFromXML(String modelXML) {
-        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
-        return dmnRuntime.getModels().get(0);
     }
 
     @POST
