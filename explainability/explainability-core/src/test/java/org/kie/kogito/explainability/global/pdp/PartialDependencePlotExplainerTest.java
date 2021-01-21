@@ -103,7 +103,6 @@ class PartialDependencePlotExplainerTest {
     }
 
     private void assertGraph(PartialDependenceGraph pdp) {
-        System.err.println(pdp);
         for (int i = 0; i < pdp.getX().size(); i++) {
             assertNotEquals(Double.NaN, pdp.getY().get(i).asNumber());
             if (i > 0) {
