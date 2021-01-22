@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.ui;
+package org.kie.kogito.trusty.ui;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.kie.ui;
+package org.kie.kogito.trusty.ui;
 
 import io.quarkus.test.junit.NativeImageTest;
 
