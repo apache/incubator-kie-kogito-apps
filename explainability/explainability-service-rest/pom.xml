@@ -186,6 +186,11 @@
           </plugin>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration combine.self="override">
+              <includes>
+                <include>**/Native*IT.java</include>
+              </includes>
+            </configuration>
             <executions>
               <execution>
                 <id>native-tests</id>
@@ -193,10 +198,13 @@
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
-                <configuration>
+                <configuration combine.self="override">
                   <includes>
                     <include>**/Native*IT.java</include>
                   </includes>
+                  <excludes>
+                    <exclude>**/Keycloak*IT.java</exclude>
+                  </excludes>
                   <systemProperties>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                   </systemProperties>

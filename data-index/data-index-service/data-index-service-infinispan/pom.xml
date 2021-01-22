@@ -181,7 +181,7 @@
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
-                <configuration>
+                <configuration combine.self="override">
                   <includes>
                     <include>**/InfinispanNative*IT.java</include>
                   </includes>
