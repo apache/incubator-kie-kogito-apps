@@ -16,7 +16,11 @@
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -28,7 +32,14 @@ import org.kie.kogito.dmn.DmnDecisionModel;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -58,7 +69,7 @@ class LoanEligibilityDmnLimeExplainerTest {
         contextVariables.put("Loan", loan);
 
         PredictionProvider model = new DecisionModelWrapper(decisionModel);
-        List<Feature> features = new LinkedList<>();
+        List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(predictionInput))
