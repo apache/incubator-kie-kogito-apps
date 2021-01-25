@@ -186,11 +186,6 @@
           </plugin>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration combine.self="override">
-              <includes>
-                <include>**/Native*IT.java</include>
-              </includes>
-            </configuration>
             <executions>
               <execution>
                 <id>native-tests</id>
