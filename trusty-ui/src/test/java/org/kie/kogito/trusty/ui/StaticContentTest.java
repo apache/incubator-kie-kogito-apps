@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class StaticContentTest {
 
     @TestHTTPResource("index.html")
-    private URL url;
+    URL url;
 
     private static String readStream(InputStream in) throws IOException {
         byte[] data = new byte[1024];
@@ -56,7 +56,7 @@ public class StaticContentTest {
     }
 
     @Test
-    public void testHeaders() throws Exception {
+    public void testHeaders() {
         given().contentType(ContentType.JSON).when().get("/").then()
                 .statusCode(200)
                 .header(HttpHeaders.CACHE_CONTROL.toString(), "no-cache")
