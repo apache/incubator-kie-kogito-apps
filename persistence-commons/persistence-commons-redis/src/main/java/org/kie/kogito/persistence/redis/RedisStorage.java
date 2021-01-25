@@ -51,17 +51,17 @@ public class RedisStorage<V> implements Storage<String, V> {
 
     @Override
     public void addObjectCreatedListener(Consumer<V> consumer) {
-        throw new UnsupportedOperationException("addObjectCreatedListener operation not supported for Redis.");
+        throw new UnsupportedOperationException("addObjectCreatedListener operation is not supported for Redis yet.");
     }
 
     @Override
     public void addObjectUpdatedListener(Consumer<V> consumer) {
-        throw new UnsupportedOperationException("addObjectUpdatedListener operation not supported for Redis.");
+        throw new UnsupportedOperationException("addObjectUpdatedListener operation is not supported for Redis yet.");
     }
 
     @Override
     public void addObjectRemovedListener(Consumer<String> consumer) {
-        throw new UnsupportedOperationException("addObjectRemovedListener operation not supported for Redis.");
+        throw new UnsupportedOperationException("addObjectRemovedListener operation is not supported for Redis yet.");
     }
 
     @Override
@@ -125,9 +125,9 @@ public class RedisStorage<V> implements Storage<String, V> {
     @Override
     public void clear() {
         List<Document> documents = redisClient.search(new io.redisearch.Query(String.format("@%s:%s", INDEX_NAME_FIELD, indexName))).docs;
-        for(Document doc : documents){
+        for (Document doc : documents) {
             redisClient.deleteDocument(doc.getId());
-        };
+        }
     }
 
     @Override
