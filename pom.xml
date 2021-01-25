@@ -31,6 +31,10 @@
     <container.image.explainability-service-messaging>org.kie.kogito/explainability-service-messaging:${project.version}</container.image.explainability-service-messaging>
     <container.image.jobs-service>org.kie.kogito/jobs-service:${project.version}</container.image.jobs-service>
     <container.image.trusty-service-infinispan>org.kie.kogito/trusty-service-infinispan:${project.version}</container.image.trusty-service-infinispan>
+    <container.image.trusty-service>org.kie.kogito/trusty-service:${project.version}</container.image.trusty-service>
+
+    <!-- OptaPlanner version -->
+    <version.org.optaplanner>8.2.0-SNAPSHOT</version.org.optaplanner>
   </properties>
 
   <repositories>
@@ -85,6 +89,13 @@
         <version>${project.version}</version>
         <type>pom</type>
       </dependency>
+      <dependency>
+        <groupId>org.optaplanner</groupId>
+        <artifactId>optaplanner-bom</artifactId>
+        <version>${version.org.optaplanner}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -100,6 +111,7 @@
     <module>explainability</module>
     <module>trusty</module>
     <module>task-assigning</module>
+    <module>jitexecutor</module>
     <module>apps-integration-tests</module>
   </modules>
 </project>
