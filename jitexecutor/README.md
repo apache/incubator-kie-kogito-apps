@@ -13,7 +13,7 @@ mvn clean package -DskipTests
 run the generated application under `jitexecutor-runner/target` with 
 
 ```bash
-java -jar jitexecutor-runner/target/jitexecutor-runner-2.0.0-SNAPSHOT.jar
+java -jar jitexecutor-runner/target/jitexecutor-runner-2.0.0-SNAPSHOT-runner.jar
 ``` 
 
 An helper HTML page is available at `localhost:8080/index.html`. You can use this page to submit a DMN model with a context and get back the results. 
