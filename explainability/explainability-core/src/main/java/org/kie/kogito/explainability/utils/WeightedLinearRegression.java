@@ -56,11 +56,13 @@ public class WeightedLinearRegression {
     /**
      * Fit the WLR model to the data.
      *
-     * @param x An [nsamples x nfeatures] array of doubles; each row contains one data point of size [nfeatures]
-     * @param y An [nsamples] array, where y[n] is the observation for data point n.
-     * @param sample_weights An [nsamples] array, where sample_weights[n] is the weighting of data point n.
+     * @param x An {@code nsamples x nfeatures} array of doubles; each row contains one data point of size [nfeatures]
+     * @param y An {@code nsamples} array, where y[n] is the observation for data point n.
+     * @param sample_weights An {@code nsamples} array, where sample_weights[n] is the weighting of data point n.
      *
-     * returns C, an [nfeatures] array of coefficients as computed by the regression
+     * @return C, an {@code nfeatures} array of coefficients as computed by the regression.
+     * In the case where {@code intercept} is true, the last value of {@code C} is the intercept.
+     *
      */
     public double[] fit(double[][] x, double[] y, double[] sample_weights) throws ArithmeticException {
         // if we want to compute an intercept, add a dummy feature at last column.
@@ -148,7 +150,7 @@ public class WeightedLinearRegression {
     /**
      * Recover the goodness-of-fit of the WLR model. This is the coefficient of determination, as per:
      * https://en.wikipedia.org/wiki/Multiple_correlation
-     *
+     * @return the coefficient of determination
      */
     public Double getGoodnessOfFit(){
         if (! this.fitPerformed) {
@@ -179,7 +181,7 @@ public class WeightedLinearRegression {
 
     /**
      * Recover the mean square error of the WLR model.
-     *
+     * @return the mean squared error of the model
      */
     public Double getMSE(){
         if (! this.fitPerformed) {
@@ -204,7 +206,7 @@ public class WeightedLinearRegression {
     /**
      * Inverts the square, non-singular matrix X
      * @param X a square, non-singular double[][] X
-     * Returns the inverted matrix
+     * @return the inverted matrix
      *
      * Dr. Debabrata DasGupta's description of the algorithm is here:
      * https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm

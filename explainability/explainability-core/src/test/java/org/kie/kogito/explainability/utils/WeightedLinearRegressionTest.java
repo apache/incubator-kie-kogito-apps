@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 class WeightedLinearRegressionTest {
+    // Setup some consistent random generators for various parameters
     Random rn = new Random();
     int nRandomTests = 100;
     int generateNFeatures(){
@@ -48,12 +49,12 @@ class WeightedLinearRegressionTest {
         return -50 + (100 * this.rn.nextDouble());
     }
 
+    // test the case where we have a over/fully specified system of equations, no intercept
     @Test
     void testNoIntercept() {
         for (int test_num = 0; test_num<nRandomTests; test_num++) {
 
             // create test conditions at random
-
             int nfeatures = generateNFeatures();
             int nsamples = generateNSamples(nfeatures);
 
@@ -93,6 +94,7 @@ class WeightedLinearRegressionTest {
         }
     }
 
+    // test the case where we have a over/fully specified system of equations, with intercept
     @Test
     void testWithIntercept() {
         for (int test_num = 0; test_num<nRandomTests; test_num++) {
@@ -141,6 +143,7 @@ class WeightedLinearRegressionTest {
         }
     }
 
+    // test the case where we have a under-specified system of equations, with intercept
     @Test
     void testUnderspecified() {
         for (int test_num = 0; test_num<nRandomTests; test_num++) {
@@ -191,6 +194,7 @@ class WeightedLinearRegressionTest {
         }
     }
 
+    // test the case where we have a vastly under-specified system of equations (only one sample), with intercept
     @Test
     void testSingularMatrix() {
         for (int test_num = 0; test_num<nRandomTests; test_num++) {
