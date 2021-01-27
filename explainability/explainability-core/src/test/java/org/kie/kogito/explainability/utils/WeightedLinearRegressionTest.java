@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class WeightedLinearRegressionTest {
     // Setup some consistent random generators for various parameters
     Random rn = new Random();
-    int nRandomTests = 100;
+    int nRandomTests = 1;
     int generateNFeatures(){
-        return this.rn.nextInt(50)+1;
+        return this.rn.nextInt(5)+1;
     }
 
     int generateNSamples(int nfeatures){
@@ -91,6 +88,41 @@ class WeightedLinearRegressionTest {
             assertArrayEquals(actualCoeffs, coeffs, 1e-3);
             assertEquals(1, WLR.getGoodnessOfFit(),1e-3);
             assertEquals(0, WLR.getMSE(),1e-3);
+        }
+    }
+
+    @Test
+    void testZeroWeights() {
+        for (int test_num = 0; test_num<nRandomTests; test_num++) {
+
+            // create test conditions at random
+            int nfeatures = generateNFeatures();
+            int nsamples = generateNSamples(nfeatures);
+
+            double[][] X = new double[nsamples][nfeatures];
+            double[] Y = new double[nsamples];
+            double[] actualCoeffs = new double[nfeatures];
+            double[] sampleWeights = new double[nsamples];
+
+            // build input and output data, along with sample weights
+            for (int i = 0; i < nsamples; i++) {
+                Y[i] = 0;
+                double weight = generateWeight();
+                sampleWeights[i] = 0;
+                for (int j = 0; j < nfeatures; j++) {
+                    X[i][j] = generateXPoint();
+                    if (i == 0) {
+                        actualCoeffs[j] = generateCoeff();
+                    }
+                    Y[i] += actualCoeffs[j] * X[i][j];
+                }
+            }
+
+            // test to recover initial parameters
+            WeightedLinearRegression WLR = new WeightedLinearRegression(false);
+            WLR.fit(X, Y, sampleWeights);
+            assertThrows(ArithmeticException.class, WLR::getGoodnessOfFit);
+            assertThrows(ArithmeticException.class, WLR::getMSE);
         }
     }
 
@@ -200,7 +232,6 @@ class WeightedLinearRegressionTest {
         for (int test_num = 0; test_num<nRandomTests; test_num++) {
 
             // create test conditions at random
-            Random rn = new Random();
             int nfeatures = generateNFeatures() + 5;
             int nsamples = 1;
 
@@ -241,7 +272,7 @@ class WeightedLinearRegressionTest {
             for (int i=0; i<coeffs.length; i++) {
                 assertFalse(Double.isNaN(coeffs[i]));
             }
-            assertTrue(Double.isInfinite(WLR.getGoodnessOfFit()));
+            assertThrows(ArithmeticException.class, WLR::getGoodnessOfFit);
         }
     }
 }
