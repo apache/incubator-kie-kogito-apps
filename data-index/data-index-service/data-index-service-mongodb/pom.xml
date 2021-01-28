@@ -82,7 +82,7 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>**/*Native*IT.java</exclude>
+            <exclude>**/Native*IT.java</exclude>
           </excludes>
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
