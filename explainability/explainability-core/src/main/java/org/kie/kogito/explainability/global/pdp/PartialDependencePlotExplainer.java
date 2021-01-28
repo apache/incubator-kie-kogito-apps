@@ -34,7 +34,12 @@ import org.kie.kogito.explainability.model.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.ToDoubleFunction;
@@ -51,17 +56,16 @@ import java.util.stream.Collectors;
 public class PartialDependencePlotExplainer implements GlobalExplainer<List<PartialDependenceGraph>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
-    private static final int DEFAULT_SERIES_LENGTH = 100;
 
-    private final int seriesLength;
+    private final PartialDependencePlotConfig config;
 
     /**
      * Create a PDP provider.
      *
-     * @param seriesLength the no. of data points sampled for each given feature.
+     * @param config the PDP configuration.
      */
-    public PartialDependencePlotExplainer(int seriesLength) {
-        this.seriesLength = seriesLength;
+    public PartialDependencePlotExplainer(PartialDependencePlotConfig config) {
+        this.config = config;
     }
 
     /**
@@ -70,7 +74,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
      * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
      */
     public PartialDependencePlotExplainer() {
-        this(DEFAULT_SERIES_LENGTH);
+        this(new PartialDependencePlotConfig());
     }
 
     @Override
@@ -96,13 +100,13 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         int noOfFeatures = featureDistributions.size();
 
         // fetch entire data distributions for all features
-        List<PredictionInput> trainingData = dataDistribution.sample(seriesLength);
+        List<PredictionInput> trainingData = dataDistribution.sample(config.getSeriesLength());
 
         // create a PDP for each feature
         for (FeatureDistribution featureDistribution : featureDistributions) {
             // generate (further) samples for the feature under analysis
             // TBD: maybe just reuse trainingData
-            List<Value<?>> xsValues = featureDistribution.sample(seriesLength).stream()
+            List<Value<?>> xsValues = featureDistribution.sample(config.getSeriesLength()).stream()
                     .sorted(Comparator.comparing(Value::asString)) // sort alphanumerically (if Value#asNumber is NaN)
                     .sorted((v1, v2) -> Comparator.comparingDouble((ToDoubleFunction<Value<?>>) Value::asNumber).compare(v1, v2)) // sort by natural order
                     .distinct() // drop duplicates
@@ -113,7 +117,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
             // create a PDP for each feature and each output
             for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
                 PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, trainingData, xsValues,
-                                                                                          featureXSvalues, outputIndex);
+                        featureXSvalues, outputIndex);
                 pdps.add(partialDependenceGraph);
             }
         }
@@ -130,7 +134,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         Output outputDecision = null;
         Feature feature = null;
         // each feature value of the feature under analysis should have a corresponding output value (composed by the marginal impacts of the other features)
-        List<Value<?>> marginalImpacts = new ArrayList<>(featureXSvalues.size());
+        List<Map<Value<?>, Long>> valueCounts = new ArrayList<>(featureXSvalues.size());
         for (int i = 0; i < featureXSvalues.size(); i++) {
             // initialize an empty feature to use in the generated PDP
             if (feature == null) {
@@ -144,43 +148,65 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 if (outputDecision == null) {
                     outputDecision = new Output(output.getName(), output.getType());
                 }
-                // update marginal impacts
-                updateMarginalImpact(marginalImpacts, i, output);
+                // update output value counts
+                updateValueCounts(valueCounts, i, output);
             }
         }
-        // collapse impacts ?
-        return new PartialDependenceGraph(feature, outputDecision, xsValues, marginalImpacts);
+
+        if (outputDecision != null) {
+            List<Value<?>> yValues = collapseMarginalImpacts(valueCounts, outputDecision.getType());
+            return new PartialDependenceGraph(feature, outputDecision, xsValues, yValues);
+        } else {
+            throw new RuntimeException("cannot produce PDP for null decision");
+        }
     }
 
-    private void updateMarginalImpact(List<Value<?>> marginalImpacts, int i, Output output) {
-        if (Type.NUMBER.equals(output.getType())) {
-            double v = output.getValue().asNumber();
-            if (marginalImpacts.size() > i) {
-                marginalImpacts.set(i, new Value<>(marginalImpacts.get(i).asNumber() + v / (double) seriesLength));
-            } else {
-                marginalImpacts.add(i, new Value<>(v / (double) seriesLength));
-            }
+    /**
+     * Collapse value counts into marginal impacts.
+     * For numbers ({@code Type.NUMBER.equals(type))} this is just the average of each value at each feature value.
+     * For all other types the final {@link Value} is just the most frequent
+     *
+     * @param valueCounts the frequency of each value at each position
+     * @param type        the type of the output
+     * @return the marginal impacts
+     */
+    private List<Value<?>> collapseMarginalImpacts(List<Map<Value<?>, Long>> valueCounts, Type type) {
+        List<Value<?>> yValues = new ArrayList<>();
+        if (Type.NUMBER.equals(type)) {
+            List<Double> doubles = valueCounts.stream()
+                    .map(v -> v.entrySet().stream()
+                            .map(e -> e.getKey().asNumber() * e.getValue() / config.getSeriesLength()).mapToDouble(d -> d).sum()).collect(Collectors.toList());
+            yValues = doubles.stream().map(Value::new).collect(Collectors.toList());
         } else {
-            String categoricalOutput = output.getValue().asString();
-            if (marginalImpacts.size() <= i) {
-                Map<String, Long> classCount = new HashMap<>();
-                classCount.put(categoricalOutput, 1L);
-                marginalImpacts.add(new Value<>(classCount));
-            } else {
-                Value<?> value = marginalImpacts.get(i);
-                try {
-                    Map<String, Long> classCount = (Map<String, Long>) value.getUnderlyingObject();
-                    if (classCount.containsKey(categoricalOutput)) {
-                        classCount.put(categoricalOutput, classCount.get(categoricalOutput) + 1);
-                    } else {
-                        classCount.put(categoricalOutput, 1L);
+            for (Map<Value<?>, Long> item : valueCounts) {
+                long max = 0;
+                String output = null;
+                for (Map.Entry<Value<?>, Long> entry : item.entrySet()) {
+                    if (entry.getValue() > max) {
+                        max = entry.getValue();
+                        output = entry.getKey().asString();
                     }
-                    marginalImpacts.set(i, new Value<>(classCount));
-                } catch (ClassCastException cce) {
-                    // ignore malformed output
-                    LOGGER.error("malformed value {} for output {} of type {}", value, output.getName(), output.getType());
                 }
+                yValues.add(new Value<>(output));
             }
+        }
+        return yValues;
+    }
+
+    private void updateValueCounts(List<Map<Value<?>, Long>> valueCounts, int i, Output output) {
+        Value<?> categoricalOutput = output.getValue();
+        if (valueCounts.size() <= i) {
+            Map<Value<?>, Long> classCount = new HashMap<>();
+            classCount.put(categoricalOutput, 1L);
+            valueCounts.add(classCount);
+        } else {
+            Map<Value<?>, Long> classCount = valueCounts.get(i);
+            if (classCount.containsKey(categoricalOutput)) {
+                classCount.put(categoricalOutput, classCount.get(categoricalOutput) + 1);
+            } else {
+                classCount.put(categoricalOutput, 1L);
+            }
+            valueCounts.set(i, classCount);
         }
     }
 
@@ -216,7 +242,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
      */
     private List<PredictionInput> prepareInputs(Feature featureXs,
                                                 List<PredictionInput> trainingData) {
-        List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
+        List<PredictionInput> predictionInputs = new ArrayList<>(config.getSeriesLength());
 
         for (PredictionInput trainingSample : trainingData) {
             List<Feature> features = trainingSample.getFeatures();
