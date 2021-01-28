@@ -20,7 +20,7 @@ import io.quarkus.test.junit.NativeImageTest;
 import org.junit.jupiter.api.Disabled;
 
 @NativeImageTest
-@Disabled("Injection of beans into a test class using @Inject is not supported in native image tests")
-class MongoNativeIndexingServiceIT extends MongoIndexingServiceIT {
+@Disabled("https://issues.redhat.com/browse/KOGITO-4311 - Injection of beans into a test class using @Inject is not supported in native image tests")
+class NativeMongoIndexingServiceIT extends MongoIndexingServiceIT {
     // Execute the same tests but in native mode.
 }

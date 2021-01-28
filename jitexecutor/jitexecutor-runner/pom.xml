@@ -78,19 +78,15 @@
           <plugin>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-maven-plugin</artifactId>
-            <configuration>
-              <uberJar>false</uberJar>
-            </configuration>
             <executions>
               <execution>
                 <goals>
-                  <goal>build</goal>
+                  <goal>native-image</goal>
                 </goals>
               </execution>
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
               <execution>
@@ -111,10 +107,6 @@
           </plugin>
         </plugins>
       </build>
-      <properties>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
     </profile>
   </profiles>
-
 </project>

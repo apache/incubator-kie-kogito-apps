@@ -146,7 +146,6 @@
       </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>native</id>
@@ -160,15 +159,14 @@
           <plugin>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-maven-plugin</artifactId>
-            <configuration>
-              <uberJar>true</uberJar>
-              <skipOriginalJarRename>true</skipOriginalJarRename>
-            </configuration>
             <executions>
               <execution>
                 <goals>
-                  <goal>build</goal>
+                  <goal>native-image</goal>
                 </goals>
+                <configuration>
+                  <enableHttpUrlHandler>true</enableHttpUrlHandler>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -176,18 +174,20 @@
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
               <execution>
-                <id>infinispan-native-tests</id>
                 <goals>
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
                 <configuration combine.self="override">
                   <includes>
-                    <include>**/InfinispanNative*IT.java</include>
+                    <include>**/Native*IT.java</include>
                   </includes>
-                  <systemPropertyVariables>
+                  <excludes>
+                    <exclude>**/Keycloak*IT.java</exclude>
+                  </excludes>
+                  <systemProperties>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                  </systemPropertyVariables>
+                  </systemProperties>
                 </configuration>
               </execution>
             </executions>
