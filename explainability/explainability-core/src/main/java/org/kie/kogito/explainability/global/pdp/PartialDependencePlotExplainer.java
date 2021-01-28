@@ -164,7 +164,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     /**
      * Collapse value counts into marginal impacts.
      * For numbers ({@code Type.NUMBER.equals(type))} this is just the average of each value at each feature value.
-     * For all other types the final {@link Value} is just the most frequent
+     * For all other types the final {@link Value} is just the most frequent.
      *
      * @param valueCounts the frequency of each value at each position
      * @param type        the type of the output
