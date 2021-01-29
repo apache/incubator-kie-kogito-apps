@@ -35,7 +35,8 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -58,7 +59,7 @@ class OpenNLPPDPExplainerTest {
         LanguageDetector languageDetector = new LanguageDetectorME(languageDetectorModel);
 
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
-            List<PredictionOutput> results = new LinkedList<>();
+            List<PredictionOutput> results = new ArrayList<>();
             for (PredictionInput predictionInput : inputs) {
                 StringBuilder builder = new StringBuilder();
                 for (Feature f : predictionInput.getFeatures()) {
