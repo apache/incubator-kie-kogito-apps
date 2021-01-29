@@ -47,9 +47,6 @@ import java.util.stream.Collectors;
 
 /**
  * Generates the partial dependence plot for the features of a {@link PredictionProvider}.
- * While a strict PD implementation would need the whole training set used to train the model, this implementation seeks
- * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
- * stdDev).
  * <p>
  * see also https://christophm.github.io/interpretable-ml-book/pdp.html
  */
@@ -60,7 +57,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     private final PartialDependencePlotConfig config;
 
     /**
-     * Create a PDP provider.
+     * Create a PDP explainer with given configuration.
      *
      * @param config the PDP configuration.
      */
@@ -69,9 +66,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     }
 
     /**
-     * Create a PDP provider.
-     * <p>
-     * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
+     * Create a PDP explainer with the default {@link PartialDependencePlotConfig}.
      */
     public PartialDependencePlotExplainer() {
         this(new PartialDependencePlotConfig());
@@ -117,7 +112,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
             // create a PDP for each feature and each output
             for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
                 PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, trainingData, xsValues,
-                        featureXSvalues, outputIndex);
+                                                                                          featureXSvalues, outputIndex);
                 pdps.add(partialDependenceGraph);
             }
         }
@@ -193,20 +188,20 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         return yValues;
     }
 
-    private void updateValueCounts(List<Map<Value<?>, Long>> valueCounts, int i, Output output) {
+    private void updateValueCounts(List<Map<Value<?>, Long>> valueCounts, int featureValueIndex, Output output) {
         Value<?> categoricalOutput = output.getValue();
-        if (valueCounts.size() <= i) {
+        if (valueCounts.size() <= featureValueIndex) {
             Map<Value<?>, Long> classCount = new HashMap<>();
             classCount.put(categoricalOutput, 1L);
             valueCounts.add(classCount);
         } else {
-            Map<Value<?>, Long> classCount = valueCounts.get(i);
+            Map<Value<?>, Long> classCount = valueCounts.get(featureValueIndex);
             if (classCount.containsKey(categoricalOutput)) {
                 classCount.put(categoricalOutput, classCount.get(categoricalOutput) + 1);
             } else {
                 classCount.put(categoricalOutput, 1L);
             }
-            valueCounts.set(i, classCount);
+            valueCounts.set(featureValueIndex, classCount);
         }
     }
 
@@ -270,5 +265,4 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         }
         return newFeatures;
     }
-
 }
