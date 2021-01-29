@@ -22,7 +22,7 @@ Otherwise, you can make a POST request directly to the endpoint `/jitdmn` with t
 ```json
 
 {
-  "model" : "<your DMN model in base64 encoding here>",
+  "model" : "<your base64 encoded DMN model here>",
   "context" : "{<your context here>}"
 }
 ``` 
