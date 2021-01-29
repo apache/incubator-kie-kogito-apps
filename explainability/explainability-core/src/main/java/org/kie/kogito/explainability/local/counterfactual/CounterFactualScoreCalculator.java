@@ -111,9 +111,9 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                     }
                 }
                 primaryHardScore -= Math.sqrt(distance);
-                logger.debug("Penalise outcome (prediction distance: {})", primaryHardScore);
-                logger.debug("Penalise outcome (constraints changed: {})", secondaryHardScore);
-                logger.debug("Penalise outcome (confidence threshold: {})", tertiaryHardScore);
+                logger.debug("Distance penalty: {}", primaryHardScore);
+                logger.debug("Changed constraints penalty: {}", secondaryHardScore);
+                logger.debug("Confidence threshold penalty: {}", tertiaryHardScore);
             }
 
         } catch (ExecutionException e) {

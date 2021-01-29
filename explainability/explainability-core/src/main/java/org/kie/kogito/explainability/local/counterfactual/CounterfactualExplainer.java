@@ -41,7 +41,7 @@ import java.util.stream.IntStream;
  * This implementation uses the Constraint Solution Problem solver OptaPlanner to search for
  * counterfactuals which minimize a score calculated by {@link CounterFactualScoreCalculator}.
  */
-public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
+public class CounterfactualExplainer implements LocalExplainer<CounterfactualResult> {
 
     private static final Logger logger =
             LoggerFactory.getLogger(CounterfactualExplainer.class);
@@ -101,7 +101,7 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
     }
 
     @Override
-    public CompletableFuture<Counterfactual> explainAsync(Prediction prediction, PredictionProvider model) {
+    public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction, PredictionProvider model) {
 
         final List<CounterfactualEntity> entities = createEntities(prediction.getInput());
 
@@ -135,7 +135,7 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
                 s.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())
         ))));
 
-        return CompletableFuture.allOf(cfOutputs, cfEntities).thenApply(v -> new Counterfactual(cfEntities.join(), cfOutputs.join()));
+        return CompletableFuture.allOf(cfOutputs, cfEntities).thenApply(v -> new CounterfactualResult(cfEntities.join(), cfOutputs.join()));
     }
 
     public static class Builder {
@@ -174,11 +174,11 @@ public class CounterfactualExplainer implements LocalExplainer<Counterfactual> {
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
             }
             return new CounterfactualExplainer(dataDistribution,
-                    dataDomain,
-                    constraints,
-                    goal,
-                    solverConfig,
-                    executor);
+                                               dataDomain,
+                                               constraints,
+                                               goal,
+                                               solverConfig,
+                                               executor);
         }
     }
 }

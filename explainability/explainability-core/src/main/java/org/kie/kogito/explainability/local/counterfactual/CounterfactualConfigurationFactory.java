@@ -45,13 +45,13 @@ public class CounterfactualConfigurationFactory {
 
     public static class Builder {
 
-        private TerminationConfig terminationConfig = null;
+        // create a default termination config if none supplied
+        private TerminationConfig terminationConfig = new TerminationConfig();
         private int tabuSize = DEFAULT_TABU_SIZE;
         private int acceptedCount = DEFAULT_ACCEPTED_COUNT;
 
         private Builder() {
-            // create a default termination config if none supplied
-            this.terminationConfig = new TerminationConfig();
+            // Set default termination time
             terminationConfig.setSecondsSpentLimit(DEFAULT_TIME_LIMIT);
         }
 
@@ -96,11 +96,6 @@ public class CounterfactualConfigurationFactory {
 
         public Builder withTerminationConfig(TerminationConfig terminationConfig) {
             this.terminationConfig = terminationConfig;
-            return this;
-        }
-
-        public Builder withScoreCalculationCountLimit(long scoreCalculationCountLimit) {
-            this.terminationConfig.setScoreCalculationCountLimit(scoreCalculationCountLimit);
             return this;
         }
     }

@@ -109,6 +109,6 @@ public class BooleanEntity implements CounterfactualEntity {
 
     @Override
     public String toString() {
-        return "BooleanFeature{" + "value=" + proposedValue + ", id='" + featureName + '\'' + '}';
+        return "BooleanEntity{" + "value=" + proposedValue + ", id='" + featureName + '\'' + '}';
     }
 }

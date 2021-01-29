@@ -25,12 +25,12 @@ import java.util.List;
  * Entities represent the counterfactual features and the {@link org.kie.kogito.explainability.model.PredictionOutput}
  * contains the prediction result for the counterfactual, including the prediction score, if available.
  */
-public class Counterfactual {
+public class CounterfactualResult {
 
     private List<CounterfactualEntity> entities;
     private List<PredictionOutput> output;
 
-    public Counterfactual(List<CounterfactualEntity> entities, List<PredictionOutput> output) {
+    public CounterfactualResult(List<CounterfactualEntity> entities, List<PredictionOutput> output) {
         this.entities = entities;
         this.output = output;
     }

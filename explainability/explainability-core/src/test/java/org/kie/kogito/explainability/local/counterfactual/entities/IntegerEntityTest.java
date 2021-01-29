@@ -15,10 +15,13 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import org.apache.commons.math3.analysis.function.Floor;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.FeatureDomain;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 
 import java.util.Arrays;
 
@@ -45,6 +48,5 @@ class IntegerEntityTest {
         entity.proposedValue = 40;
         final double distance = entity.distance();
         assertTrue(distance > 1.20 && distance < 1.30);
-
     }
 }

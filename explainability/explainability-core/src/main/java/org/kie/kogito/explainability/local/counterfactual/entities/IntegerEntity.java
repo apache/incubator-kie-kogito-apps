@@ -32,6 +32,7 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 @PlanningEntity
 public class IntegerEntity implements CounterfactualEntity {
+
     @PlanningVariable(valueRangeProviderRefs = {"intRange"})
     public Integer proposedValue;
 
@@ -106,7 +107,6 @@ public class IntegerEntity implements CounterfactualEntity {
         return IntegerEntity.from(feature, minimum, maximum, featureDistribution, false);
     }
 
-
     @ValueRangeProvider(id = "intRange")
     public ValueRange getValueRange() {
         return ValueRangeFactory.createIntValueRange(intRangeMinimum, intRangeMaximum);
@@ -139,7 +139,7 @@ public class IntegerEntity implements CounterfactualEntity {
     public double distance() {
         double distance = Math.abs(this.proposedValue - originalValue);
         if (this.stdDev != null) {
-            return distance / (this.stdDev * this.stdDev) ;
+            return distance / (this.stdDev * this.stdDev);
         } else {
             return distance;
         }
@@ -154,7 +154,6 @@ public class IntegerEntity implements CounterfactualEntity {
     public Feature asFeature() {
         return FeatureFactory.newNumericalFeature(featureName, this.proposedValue);
     }
-
 
     @Override
     public boolean isConstrained() {

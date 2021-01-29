@@ -16,7 +16,14 @@
 package org.kie.kogito.explainability;
 
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import java.util.Arrays;
@@ -39,7 +46,7 @@ public class TestUtils {
                 Feature feature = features.get(featureIndex);
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("feature-" + featureIndex, feature.getType(), feature.getValue(),
-                                1d)));
+                                           1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -234,6 +241,6 @@ public class TestUtils {
     public static void assertLimeStability(PredictionProvider model, Prediction prediction, LimeExplainer limeExplainer,
                                            int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, topK,
-                minimumPositiveStabilityRate, minimumNegativeStabilityRate));
+                                                                                minimumPositiveStabilityRate, minimumNegativeStabilityRate));
     }
 }

@@ -17,9 +17,11 @@ package org.kie.kogito.explainability.local.counterfactual.entities;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.model.*;
-
-import java.util.Arrays;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.FeatureDomain;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
