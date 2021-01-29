@@ -22,6 +22,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.jitexecutor.dmn.utils.Base64Utils;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -31,7 +32,7 @@ public class SchemaResourceTest {
 
     @Test
     public void test() throws IOException {
-        final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
+        final String MODEL = Base64Utils.encode(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
         given()
                 .contentType(ContentType.XML)
                 .body(MODEL)

@@ -41,6 +41,7 @@ import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.openapi.DMNOASGeneratorFactory;
 import org.kie.dmn.openapi.model.DMNOASResult;
 import org.kie.internal.io.ResourceFactory;
+import org.kie.kogito.jitexecutor.dmn.utils.Base64Utils;
 
 @Path("jitdmn/schema")
 public class SchemaResource {
@@ -58,7 +59,7 @@ public class SchemaResource {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     public Response schema(String payload) {
-        DMNModel dmnModel = modelFromXML(payload);
+        DMNModel dmnModel = modelFromXML(Base64Utils.decode(payload));
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
         ObjectNode jsNode = oasResult.getJsonSchemaNode();
@@ -83,7 +84,7 @@ public class SchemaResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
     public Response form(String payload) {
-        DMNModel dmnModel = modelFromXML(payload);
+        DMNModel dmnModel = modelFromXML(Base64Utils.decode(payload));
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
         ObjectNode jsNode = oasResult.getJsonSchemaNode();

@@ -26,6 +26,7 @@ import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
+import org.kie.kogito.jitexecutor.dmn.utils.Base64Utils;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -37,7 +38,7 @@ public class JITDMNResourceTest {
 
     @BeforeAll
     public static void setup() throws IOException {
-        model = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
+        model = Base64Utils.encode(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
     }
 
     @Test
