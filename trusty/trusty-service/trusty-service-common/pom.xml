@@ -187,18 +187,31 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>native-image</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
               <execution>
-                <id>native-tests</id>
                 <goals>
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
-                <configuration>
+                <configuration combine.self="override">
                   <includes>
                     <include>**/Native*IT.java</include>
                   </includes>
+                  <excludes>
+                    <exclude>**/Keycloak*IT.java</exclude>
+                  </excludes>
                   <systemProperties>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                   </systemProperties>
@@ -210,5 +223,4 @@
       </build>
     </profile>
   </profiles>
-
 </project>
