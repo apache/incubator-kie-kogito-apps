@@ -22,23 +22,26 @@ import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
 
+import static org.mockito.Mockito.mock;
+
 @Mock
+@SuppressWarnings("unchecked")
 @ApplicationScoped
 @StorageQualifier("mock")
 public class CacheManagerServiceMock implements StorageService {
 
     @Override
     public Storage<String, String> getCache(String name) {
-        return null;
+        return mock(Storage.class);
     }
 
     @Override
     public <T> Storage<String, T> getCache(String name, Class<T> type) {
-        return null;
+        return mock(Storage.class);
     }
 
     @Override
     public <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType) {
-        return null;
+        return mock(Storage.class);
     }
 }

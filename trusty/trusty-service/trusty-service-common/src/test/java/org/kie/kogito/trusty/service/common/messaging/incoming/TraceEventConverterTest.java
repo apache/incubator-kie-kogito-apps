@@ -62,7 +62,7 @@ class TraceEventConverterTest {
     }
 
     @Test
-    @Disabled("This test is broken by design, should be changed.")
+    @Disabled("https://issues.redhat.com/browse/KOGITO-4318 - This test is broken by design, should be changed.")
     void testTraceEventWithError() throws JsonProcessingException, JSONException {
         doTest(TrustyServiceTestUtils.buildTraceEventWithErrors(), TrustyServiceTestUtils.buildDecisionWithErrors());
     }
