@@ -20,5 +20,4 @@
     <module>trusty-service-infinispan</module>
     <module>trusty-service-redis</module>
   </modules>
-
 </project>
