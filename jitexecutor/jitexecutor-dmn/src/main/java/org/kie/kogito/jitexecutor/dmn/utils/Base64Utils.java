@@ -28,4 +28,8 @@ public class Base64Utils {
         byte[] b = Base64.getDecoder().decode(encoded);
         return new String(b);
     }
+    
+    private Base64Utils() {
+        // not allowed for util class.
+    }
 }
