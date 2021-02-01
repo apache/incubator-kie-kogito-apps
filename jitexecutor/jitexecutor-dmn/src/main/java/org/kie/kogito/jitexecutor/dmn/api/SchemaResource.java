@@ -56,10 +56,10 @@ public class SchemaResource {
     }
 
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     public Response schema(String payload) {
-        DMNModel dmnModel = modelFromXML(Base64Utils.decode(payload));
+        DMNModel dmnModel = modelFromXML(payload);
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
         ObjectNode jsNode = oasResult.getJsonSchemaNode();
@@ -80,11 +80,11 @@ public class SchemaResource {
     }
 
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
     public Response form(String payload) {
-        DMNModel dmnModel = modelFromXML(Base64Utils.decode(payload));
+        DMNModel dmnModel = modelFromXML(payload);
 
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
         ObjectNode jsNode = oasResult.getJsonSchemaNode();
