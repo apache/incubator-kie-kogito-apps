@@ -34,7 +34,7 @@ public class SchemaResourceTest {
     public void test() throws IOException {
         final String MODEL = Base64Utils.encode(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
         given()
-                .contentType(ContentType.XML)
+                .contentType(ContentType.TEXT)
                 .body(MODEL)
                 .when().post("/jitdmn/schema")
                 .then()

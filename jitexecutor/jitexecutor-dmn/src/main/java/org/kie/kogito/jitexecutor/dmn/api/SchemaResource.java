@@ -56,7 +56,7 @@ public class SchemaResource {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response schema(String payload) {
         DMNModel dmnModel = modelFromXML(Base64Utils.decode(payload));
@@ -80,7 +80,7 @@ public class SchemaResource {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
     public Response form(String payload) {
