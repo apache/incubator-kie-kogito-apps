@@ -185,7 +185,8 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
         // weight the training samples based on the proximity to the target input to explain
-        double[] sampleWeights = SampleWeighter.getSampleWeights(linearizedTargetInputFeatures, trainingSet);
+        double kernelWidth = limeConfig.getKernelWidth() * Math.sqrt(linearizedTargetInputFeatures.size());
+        double[] sampleWeights = SampleWeighter.getSampleWeights(linearizedTargetInputFeatures, trainingSet, kernelWidth);
         LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
         double loss = linearModel.fit(trainingSet, sampleWeights);
         if (!Double.isNaN(loss)) {

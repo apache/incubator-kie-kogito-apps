@@ -28,6 +28,7 @@ public class LimeConfig {
     private static final double DEFAULT_SEPARABLE_DATASET_RATIO = 0.99;
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
+    private static final double DEFAULT_KERNEL_WIDTH = 0.675;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
@@ -50,6 +51,7 @@ public class LimeConfig {
      * Whether the explainer should adapt the variance in the generated (perturbed) data when it's not separable.
      */
     private boolean adaptDatasetVariance = DEFAULT_ADAPT_DATASET_VARIANCE;
+    private double kernelWidth = DEFAULT_KERNEL_WIDTH;
 
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
@@ -76,6 +78,11 @@ public class LimeConfig {
         return this;
     }
 
+    public LimeConfig withKernelWidth(double kernelWidth) {
+        this.kernelWidth = kernelWidth;
+        return this;
+    }
+
     public int getNoOfRetries() {
         return noOfRetries;
     }
@@ -94,5 +101,9 @@ public class LimeConfig {
 
     public double getSeparableDatasetRatio() {
         return separableDatasetRatio;
+    }
+
+    public double getKernelWidth() {
+        return kernelWidth;
     }
 }
