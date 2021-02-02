@@ -2777,11 +2777,6 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@patternfly/patternfly@4.65.5":
-  version "4.65.5"
-  resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.65.5.tgz#22917237ea8b9cbfe52be1dfd00a258a6bfdb324"
-  integrity sha512-10dXyBt4fo55Wtm7v+Vmn9eVp4rD25fR296uif0nxGX3ZXhEuyyPOfo2DgNmCFHu42Exo6N8DP7W472Pp9VkJw==
-
 "@patternfly/patternfly@4.70.2":
   version "4.70.2"
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.70.2.tgz#94b733f68f4f63040ab142eb2fa3c3ac5d08f2ae"
@@ -2827,7 +2822,7 @@
     tippy.js "5.1.2"
     tslib "1.13.0"
 
-"@patternfly/react-core@^4.79.2":
+"@patternfly/react-core@^4.84.4":
   version "4.90.2"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.90.2.tgz#d03346d8f3a8d785e076b93df296ce4fa79d9dbe"
   integrity sha512-Ld4HCXYrVZR+ycWKvygmOEDyyMpb/pfZFklJiT/9ktSSSU9SfKwH2XmXotgjwBy1lYUoRYJ58xTpV19duouEoA==
@@ -2845,7 +2840,7 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.7.22.tgz#ee8c4f66020abf200cbdd233fba27d004dea562f"
   integrity sha512-JDsnebr9CNIyrv9yjaGFQ56OChbV6KcxMYBIpNc8/sZdU4TXHWNC7P7rlUM/BuGpbWvyaOJtscRuf5uteIKX3A==
 
-"@patternfly/react-icons@^4.7.18", "@patternfly/react-icons@^4.7.22", "@patternfly/react-icons@^4.8.4":
+"@patternfly/react-icons@^4.7.22", "@patternfly/react-icons@^4.8.4":
   version "4.8.4"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.8.4.tgz#2917088b29dda5843872321ae222fb96302ec6a0"
   integrity sha512-nGrZ6F57drim7t5FlFz7YusHVs8xngiayB20oSsJeewppOZ3vJDVhHaiJjsIRMB9PcVOY99QT2wnyiY1eYPVyA==
@@ -2855,21 +2850,21 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.7.22.tgz#fda249c5ee03db965cad648da92aa1caa7eff02f"
   integrity sha512-ojNuSNJx6CkNtsSFseZ2SJEVyzPMFYh0jOs204ICzYM1+fn9acsIi3Co0bcskFRzw8F6e2/x+8uVNx6QI8elxg==
 
-"@patternfly/react-styles@^4.7.16", "@patternfly/react-styles@^4.7.22", "@patternfly/react-styles@^4.7.29":
+"@patternfly/react-styles@^4.7.22", "@patternfly/react-styles@^4.7.29":
   version "4.7.29"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.7.29.tgz#a11cc8a9d4c4a0ac9c6bc298a47477473eaa430c"
   integrity sha512-eAO9xh2+IQHIBCihmwNuDVCeAWhGXIhbUNJEwZzvevYuH4Pnl0X8YaWoYmM2ZfL8ZdagRTLvjGW+hoZGkUyCBQ==
 
-"@patternfly/react-table@4.19.23":
-  version "4.19.23"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.19.23.tgz#7788f9b2cf0193c09575d5b8e24aac46ca14d7f0"
-  integrity sha512-OyASOsfoDNKz2Tj9Z6cUFtF9yGlqM13lxb/dParnpHOWI9syOKhiL2Pzqtg2J7FaiZHOJyPkKwEZBU9K9Bz7+g==
+"@patternfly/react-table@4.19.45":
+  version "4.19.45"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-table/-/react-table-4.19.45.tgz#aa635447bbc5e36aab63f6b61380165f640b7028"
+  integrity sha512-HFOefgyZ8SGbLflGlEqefHrdxrV+X+x7+bBRvsB+zFZAYWDVau3Z6Pkv8gY5JselBsMywZYPb5juHBoBkzuezg==
   dependencies:
-    "@patternfly/patternfly" "4.65.5"
-    "@patternfly/react-core" "^4.79.2"
-    "@patternfly/react-icons" "^4.7.18"
-    "@patternfly/react-styles" "^4.7.16"
-    "@patternfly/react-tokens" "^4.9.18"
+    "@patternfly/patternfly" "4.70.2"
+    "@patternfly/react-core" "^4.84.4"
+    "@patternfly/react-icons" "^4.7.22"
+    "@patternfly/react-styles" "^4.7.22"
+    "@patternfly/react-tokens" "^4.9.22"
     lodash "^4.17.19"
     tslib "1.13.0"
 
@@ -2878,7 +2873,7 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.9.22.tgz#d23488cddf19ad065ef55bd43b47336ee63bf4cc"
   integrity sha512-hN/8u7mFR62naFB2hdO7nl1p/0lCXtNq+VY+BAbp4UFC2/QyjNP0IOPBR+mR9Pbj5JwxrURI7G5blLp+k9RLvQ==
 
-"@patternfly/react-tokens@^4.9.18", "@patternfly/react-tokens@^4.9.22", "@patternfly/react-tokens@^4.9.26":
+"@patternfly/react-tokens@^4.9.22", "@patternfly/react-tokens@^4.9.26":
   version "4.9.26"
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.9.26.tgz#320759bceef71ff752d79acea278c6cdada9e51f"
   integrity sha512-SSbY6BaUb7ycXhvdBNk2yzOlteRUHnchHSYPBFvhUk+SqpsjQ7j13/ZTok6pcHXrcj3FaL9f82/ep4eTXPzmWg==
