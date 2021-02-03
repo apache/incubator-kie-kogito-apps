@@ -28,7 +28,7 @@ class WeightedLinearRegressionTest {
 
     // check the overspecified case, no intercept
     @Test
-    void testOverspecifiedNoIntercept(){
+    void testOverspecifiedNoIntercept() {
         double[][] x = {
                 {1., 10., 3., -4.},
                 {10., 5., -3., 3.7},
@@ -44,14 +44,14 @@ class WeightedLinearRegressionTest {
         WeightedLinearRegressionResults wlrr =
                 WeightedLinearRegression.fit(x, y, sampleWeights, false);
         assertArrayEquals(actualCoefs, wlrr.getCoefficients(), 1e-6);
-        assertEquals(0.0,wlrr.getMSE(), 1e-6);
-        assertEquals(1.0,wlrr.getGof(), 1e-6);
+        assertEquals(0.0, wlrr.getMSE(), 1e-6);
+        assertEquals(1.0, wlrr.getGof(), 1e-6);
 
     }
 
     // check the overspecified case, with intercept
     @Test
-    void testOverspecifiedIntercept(){
+    void testOverspecifiedIntercept() {
         double[][] x = {
                 {1., 10., 3., -4.},
                 {10., 5., -3., 3.7},
@@ -74,7 +74,7 @@ class WeightedLinearRegressionTest {
 
     // check the overspecified case with intercept, with also random error in the observations.
     @Test
-    void testOverspecifiedWithError(){
+    void testOverspecifiedWithError() {
         double[][] x = {
                 {1., 10., 3.},
                 {10., 5., -3.},
@@ -83,8 +83,8 @@ class WeightedLinearRegressionTest {
                 {0., 3., -1.},
                 {17., -3, 0.}
         };
-        double[] y = {131.24777803,  72.68862812,  51.48328659, 105.24910402,  23.76140738, 41.08339528};
-        double[] sampleWeights = {0.11155536, 0.2297424 , 0.18834107, 0.30395088, 0.06050119, 0.10590911};
+        double[] y = {131.24777803, 72.68862812, 51.48328659, 105.24910402, 23.76140738, 41.08339528};
+        double[] sampleWeights = {0.11155536, 0.2297424, 0.18834107, 0.30395088, 0.06050119, 0.10590911};
         double[] actualCoefs = {4., 10., 8.};
 
         WeightedLinearRegressionResults wlrr =
@@ -94,14 +94,14 @@ class WeightedLinearRegressionTest {
         assertArrayEquals(actualCoefs, wlrr.getCoefficients(), 1.0);
 
         // the random error in the observations is between 0 and 10, so the MSE should be less than or equal to 10.
-        assertTrue(wlrr.getMSE()<=10.);
+        assertTrue(wlrr.getMSE() <= 10.);
 
     }
 
     // check the underspecified case with no intercept. The coefficient matrix here is un-invertible, so we must
     // use jittering. This adds some randomness to the algorithm, so we run it 100 times to check for stability
     @Test
-    void testUnderspecifiedNoIntercept(){
+    void testUnderspecifiedNoIntercept() {
         double[][] x = {
                 {1., 10., 3., -4.},
                 {10., 5., -3., 3.7},
@@ -111,7 +111,7 @@ class WeightedLinearRegressionTest {
         double[] sampleWeights = {.8, .1, .1};
 
         // since there's some randomness in the jitter invert, let's make sure it's stable
-        for (int run=0; run<100; run++) {
+        for (int run = 0; run < 100; run++) {
             WeightedLinearRegressionResults wlrr =
                     WeightedLinearRegression.fit(x, y, sampleWeights, false);
             assertEquals(0.0, wlrr.getMSE(), 1e-6);
@@ -122,7 +122,7 @@ class WeightedLinearRegressionTest {
     // check the underspecified case with intercept. The coefficient matrix here is un-invertible, so we must
     // use jittering. This adds some randomness to the algorithm, so we run it 100 times to check for stability
     @Test
-    void testUnderspecifiedIntercept(){
+    void testUnderspecifiedIntercept() {
         double[][] x = {
                 {1., 10., 3., -4.},
                 {10., 5., -3., 3.7},
@@ -132,7 +132,7 @@ class WeightedLinearRegressionTest {
         double[] sampleWeights = {.8, .1, .1};
 
         // since there's some randomness in the jitter invert, let's make sure it's stable
-        for (int run=0; run<100; run++) {
+        for (int run = 0; run < 100; run++) {
             WeightedLinearRegressionResults wlrr =
                     WeightedLinearRegression.fit(x, y, sampleWeights, true);
             assertEquals(0.0, wlrr.getMSE(), 1e-6);
@@ -143,7 +143,7 @@ class WeightedLinearRegressionTest {
     // === testing some edge cases ===
     // when we only have one sample, the GoF calculation should break
     @Test
-    void testOneSample(){
+    void testOneSample() {
         double[][] x = {
                 {1., 2., 3., 4.},
         };
@@ -156,7 +156,7 @@ class WeightedLinearRegressionTest {
 
     // if we have only one feature, should be an easy calculation
     @Test
-    void testOneFeature(){
+    void testOneFeature() {
         double[][] x = {
                 {1.},
                 {4.},
@@ -174,6 +174,4 @@ class WeightedLinearRegressionTest {
         assertEquals(0.0, wlrr.getMSE(), 1e-6);
         assertEquals(1.0, wlrr.getGof(), 1e-6);
     }
-
-
 }
