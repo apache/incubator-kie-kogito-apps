@@ -21,6 +21,8 @@ import java.util.stream.IntStream;
 
 
 public class Matrix {
+    private Matrix() { throw new IllegalStateException("Utility class"); }
+
     /**
      * @param x: the double array to return the matrix shape of
      * @return shape, an int array of length 2, where shape[0] = number of rows and shape[1] is number of columns

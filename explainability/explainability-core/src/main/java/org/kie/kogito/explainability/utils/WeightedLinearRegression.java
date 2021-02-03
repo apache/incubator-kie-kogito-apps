@@ -16,10 +16,6 @@
 
 package org.kie.kogito.explainability.utils;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.stream.IntStream;
-
 /**
  * Performs a weighted linear regression over the provided features, observations, and weights
  * The algorithm is modified from modified from Dr. Walt Fair's WLR algorithm here:
@@ -29,6 +25,9 @@ import java.util.stream.IntStream;
  * https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm,
  * */
 public class WeightedLinearRegression {
+    private WeightedLinearRegression() { throw new IllegalStateException("Utility class"); }
+
+
     // MAIN ALGORITHM ==================================================================================================
     /**
      * Fit the WLR model to the features.
@@ -159,11 +158,11 @@ public class WeightedLinearRegression {
         double totalSquareSum = 0;
         double residualSquareSum = 0;
         for (int i = 0; i < nsamples; i++) {
-            double f_i = 0;
+            double fI = 0;
             for (int j = 0; j < nfeatures; j++) {
-                f_i += features[i][j] * coefficients[j][0];
+                fI += features[i][j] * coefficients[j][0];
             }
-            double residual = (observations[i] - f_i);
+            double residual = (observations[i] - fI);
             double variance = (observations[i] - yBar);
             totalSquareSum += sampleWeights[i] * (variance * variance);
             residualSquareSum += sampleWeights[i] * (residual * residual);
@@ -190,11 +189,11 @@ public class WeightedLinearRegression {
         double totalResidual = 0;
         double weightSum = 0;
         for (int i = 0; i < nsamples; i++) {
-            double f_i = 0;
+            double fI = 0;
             for (int j = 0; j < nfeatures; j++) {
-                f_i += features[i][j] * coefficients[j][0];
+                fI += features[i][j] * coefficients[j][0];
             }
-            double residual = (observations[i] - f_i);
+            double residual = (observations[i] - fI);
             totalResidual += sampleWeights[i] * (residual * residual);
             weightSum += sampleWeights[i];
         }

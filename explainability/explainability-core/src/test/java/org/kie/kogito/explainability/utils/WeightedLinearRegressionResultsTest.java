@@ -16,9 +16,6 @@
 package org.kie.kogito.explainability.utils;
 
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -26,7 +23,7 @@ class WeightedLinearRegressionResultsTest {
 
     // check that WLRR works with no intercept, that everything recovers as expected
     @Test
-    public void testWLRResultsNoIntercept(){
+    void testWLRResultsNoIntercept(){
         double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}};
         double[] flatCoef = {5., 1., -1., 3.};
         WeightedLinearRegressionResults wlrr =
@@ -39,7 +36,7 @@ class WeightedLinearRegressionResultsTest {
 
     // check that WLRR works with intercept, that the intercept is extracted from coefficient matrix
     @Test
-    public void testWLRResultWithIntercept(){
+    void testWLRResultWithIntercept(){
         double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}};
         double[] flatCoef = {5., 1., -1.};
         WeightedLinearRegressionResults wlrr =
@@ -52,7 +49,7 @@ class WeightedLinearRegressionResultsTest {
 
     // check that predict correctly computes the linear function
     @Test
-    public void testPredictions(){
+    void testPredictions(){
         double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}, {5.}};
         double[][] x = {
                 {1., 5., 3., -2},
@@ -69,7 +66,7 @@ class WeightedLinearRegressionResultsTest {
     // check that predict throws an error if the input matrix has the wrong number of features compared to the number
     // of coefficients
     @Test
-    public void testPredictionsWrongNumFeatures(){
+    void testPredictionsWrongNumFeatures(){
         double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}, {5.}};
         double[][] x = {
                 {1., 5.},

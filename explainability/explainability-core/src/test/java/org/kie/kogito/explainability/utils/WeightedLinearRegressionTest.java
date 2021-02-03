@@ -14,13 +14,7 @@
  * limitations under the License.
  */
 package org.kie.kogito.explainability.utils;
-
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.Random;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -173,5 +167,38 @@ class WeightedLinearRegressionTest {
         assertEquals(0.0, wlrr.getIntercept(), 1e-6);
         assertEquals(0.0, wlrr.getMSE(), 1e-6);
         assertEquals(1.0, wlrr.getGof(), 1e-6);
+    }
+
+    // === testing error cases ===
+    @Test
+    void testSampleMismatch() {
+        double[][] x = {
+                {1., 10., 3., -4.},
+                {10., 5., -3., 3.7},
+                {14., -6.6, 7., 14.},
+        };
+        double[] y = {103., 87.2};
+        double[] sampleWeights = {.8, .1, .1};
+
+        // since there's some randomness in the jitter invert, let's make sure it's stable
+
+        assertThrows(IllegalArgumentException.class,
+                ()->WeightedLinearRegression.fit(x, y, sampleWeights, true));
+    }
+
+    @Test
+    void testZeroWeights() {
+        double[][] x = {
+                {1., 10., 3., -4.},
+                {10., 5., -3., 3.7},
+                {14., -6.6, 7., 14.},
+        };
+        double[] y = {103., 87.2};
+        double[] sampleWeights = {0., 0., 0.};
+
+        // since there's some randomness in the jitter invert, let's make sure it's stable
+
+        assertThrows(IllegalArgumentException.class,
+                () -> WeightedLinearRegression.fit(x, y, sampleWeights, true));
     }
 }
