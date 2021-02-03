@@ -15,264 +15,165 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
 class WeightedLinearRegressionTest {
-    // Setup some consistent random generators for various parameters
-    Random rn = new Random();
-    int nRandomTests = 1;
-    int generateNFeatures(){
-        return this.rn.nextInt(5)+1;
-    }
 
-    int generateNSamples(int nfeatures){
-        return this.rn.nextInt(nfeatures*2) + nfeatures + 1;
-    }
-
-    double generateWeight(){
-        return 1 + (10 * this.rn.nextDouble());
-    }
-
-    double generateXPoint(){
-        return -50 + (100 * this.rn.nextDouble());
-    }
-
-    double generateCoeff(){
-        return -50 + (100 * this.rn.nextDouble());
-    }
-
-    // test the case where we have a over/fully specified system of equations, no intercept
+    // check the overspecified case, no intercept
     @Test
-    void testNoIntercept() {
-        for (int test_num = 0; test_num<nRandomTests; test_num++) {
+    void testOverspecifiedNoIntercept(){
+        double[][] x = {
+                {1., 10., 3., -4.},
+                {10., 5., -3., 3.7},
+                {14., -6.6, 7., 14.},
+                {-20., 15., 3.3, 1.},
+                {0., 3., -1., 2.2},
+                {17., -3, 0., 7.}
+        };
+        double[] y = {104., 88.2, 130., 102.4, 35.2, 80.};
+        double[] sampleWeights = {.1, .1, .1, .1, .3, .3};
+        double[] actualCoefs = {4., 10., 8., 6.};
 
-            // create test conditions at random
-            int nfeatures = generateNFeatures();
-            int nsamples = generateNSamples(nfeatures);
+        WeightedLinearRegressionResults wlrr =
+                WeightedLinearRegression.fit(x, y, sampleWeights, false);
+        assertArrayEquals(actualCoefs, wlrr.getCoefficients(), 1e-6);
+        assertEquals(0.0,wlrr.getMSE(), 1e-6);
+        assertEquals(1.0,wlrr.getGof(), 1e-6);
 
-            double[][] X = new double[nsamples][nfeatures];
-            double[] Y = new double[nsamples];
-            double[] actualCoeffs = new double[nfeatures];
-            double[] sampleWeights = new double[nsamples];
-            double totalWeight = 0;
+    }
 
-            // build input and output data, along with sample weights
-            for (int i = 0; i < nsamples; i++) {
-                Y[i] = 0;
-                double weight = generateWeight();
-                totalWeight += weight;
-                sampleWeights[i] = weight;
-                for (int j = 0; j < nfeatures; j++) {
-                    X[i][j] = generateXPoint();
-                    if (i == 0) {
-                        actualCoeffs[j] = generateCoeff();
-                    }
-                    Y[i] += actualCoeffs[j] * X[i][j];
-                }
-            }
+    // check the overspecified case, with intercept
+    @Test
+    void testOverspecifiedIntercept(){
+        double[][] x = {
+                {1., 10., 3., -4.},
+                {10., 5., -3., 3.7},
+                {14., -6.6, 7., 14.},
+                {-20., 15., 3.3, 1.},
+                {0., 3., -1., 2.2},
+                {17., -3, 0., 7.}
+        };
+        double[] y = {109., 93.2, 135., 107.4, 40.2, 85.};
+        double[] sampleWeights = {.1, .1, .1, .1, .3, .3};
+        double[] actualCoefs = {4., 10., 8., 6.};
 
-            // normalize sample weights
-            for (int i = 0; i < nsamples; i++) {
-                sampleWeights[i] /= totalWeight;
-            }
+        WeightedLinearRegressionResults wlrr =
+                WeightedLinearRegression.fit(x, y, sampleWeights, true);
+        assertArrayEquals(actualCoefs, wlrr.getCoefficients(), 1e-6);
+        assertEquals(5., wlrr.getIntercept(), 1e-6);
+        assertEquals(0.0, wlrr.getMSE(), 1e-6);
+        assertEquals(1.0, wlrr.getGof(), 1e-6);
+    }
 
-            // test to recover initial parameters
-            WeightedLinearRegression WLR = new WeightedLinearRegression(false);
-            assertTrue(Double.isNaN(WLR.getGoodnessOfFit()));
-            double[] coeffs = WLR.fit(X, Y, sampleWeights);
-            assertArrayEquals(actualCoeffs, coeffs, 1e-3);
-            assertEquals(1, WLR.getGoodnessOfFit(),1e-3);
-            assertEquals(0, WLR.getMSE(),1e-3);
+    // check the overspecified case with intercept, with also random error in the observations.
+    @Test
+    void testOverspecifiedWithError(){
+        double[][] x = {
+                {1., 10., 3.},
+                {10., 5., -3.},
+                {14., -6.6, 7.},
+                {-20., 15., 3.3},
+                {0., 3., -1.},
+                {17., -3, 0.}
+        };
+        double[] y = {131.24777803,  72.68862812,  51.48328659, 105.24910402,  23.76140738, 41.08339528};
+        double[] sampleWeights = {0.11155536, 0.2297424 , 0.18834107, 0.30395088, 0.06050119, 0.10590911};
+        double[] actualCoefs = {4., 10., 8.};
+
+        WeightedLinearRegressionResults wlrr =
+                WeightedLinearRegression.fit(x, y, sampleWeights, true);
+
+        // there is a random error in the given observations, so make sure we get close to the actual coefficients
+        assertArrayEquals(actualCoefs, wlrr.getCoefficients(), 1.0);
+
+        // the random error in the observations is between 0 and 10, so the MSE should be less than or equal to 10.
+        assertTrue(wlrr.getMSE()<=10.);
+
+    }
+
+    // check the underspecified case with no intercept. The coefficient matrix here is un-invertible, so we must
+    // use jittering. This adds some randomness to the algorithm, so we run it 100 times to check for stability
+    @Test
+    void testUnderspecifiedNoIntercept(){
+        double[][] x = {
+                {1., 10., 3., -4.},
+                {10., 5., -3., 3.7},
+                {14., -6.6, 7., 14.},
+        };
+        double[] y = {104., 88.2, 130.};
+        double[] sampleWeights = {.8, .1, .1};
+
+        // since there's some randomness in the jitter invert, let's make sure it's stable
+        for (int run=0; run<100; run++) {
+            WeightedLinearRegressionResults wlrr =
+                    WeightedLinearRegression.fit(x, y, sampleWeights, false);
+            assertEquals(0.0, wlrr.getMSE(), 1e-6);
+            assertEquals(1.0, wlrr.getGof(), 1e-6);
         }
     }
 
+    // check the underspecified case with intercept. The coefficient matrix here is un-invertible, so we must
+    // use jittering. This adds some randomness to the algorithm, so we run it 100 times to check for stability
     @Test
-    void testZeroWeights() {
-        for (int test_num = 0; test_num<nRandomTests; test_num++) {
+    void testUnderspecifiedIntercept(){
+        double[][] x = {
+                {1., 10., 3., -4.},
+                {10., 5., -3., 3.7},
+                {14., -6.6, 7., 14.},
+        };
+        double[] y = {103., 87.2, 129.};
+        double[] sampleWeights = {.8, .1, .1};
 
-            // create test conditions at random
-            int nfeatures = generateNFeatures();
-            int nsamples = generateNSamples(nfeatures);
-
-            double[][] X = new double[nsamples][nfeatures];
-            double[] Y = new double[nsamples];
-            double[] actualCoeffs = new double[nfeatures];
-            double[] sampleWeights = new double[nsamples];
-
-            // build input and output data, along with sample weights
-            for (int i = 0; i < nsamples; i++) {
-                Y[i] = 0;
-                double weight = generateWeight();
-                sampleWeights[i] = 0;
-                for (int j = 0; j < nfeatures; j++) {
-                    X[i][j] = generateXPoint();
-                    if (i == 0) {
-                        actualCoeffs[j] = generateCoeff();
-                    }
-                    Y[i] += actualCoeffs[j] * X[i][j];
-                }
-            }
-
-            // test to recover initial parameters
-            WeightedLinearRegression WLR = new WeightedLinearRegression(false);
-            WLR.fit(X, Y, sampleWeights);
-            assertThrows(ArithmeticException.class, WLR::getGoodnessOfFit);
-            assertThrows(ArithmeticException.class, WLR::getMSE);
+        // since there's some randomness in the jitter invert, let's make sure it's stable
+        for (int run=0; run<100; run++) {
+            WeightedLinearRegressionResults wlrr =
+                    WeightedLinearRegression.fit(x, y, sampleWeights, true);
+            assertEquals(0.0, wlrr.getMSE(), 1e-6);
+            assertEquals(1.0, wlrr.getGof(), 1e-6);
         }
     }
 
-    // test the case where we have a over/fully specified system of equations, with intercept
+    // === testing some edge cases ===
+    // when we only have one sample, the GoF calculation should break
     @Test
-    void testWithIntercept() {
-        for (int test_num = 0; test_num<nRandomTests; test_num++) {
+    void testOneSample(){
+        double[][] x = {
+                {1., 2., 3., 4.},
+        };
+        double[] y = {72.};
+        double[] sampleWeights = {1.};
 
-            // create test conditions at random
-            int nfeatures = generateNFeatures();
-            int nsamples = generateNSamples(nfeatures);
-
-            double[][] X = new double[nsamples][nfeatures];
-            double[] Y = new double[nsamples];
-            double[] actualCoeffs = new double[nfeatures+1];
-            double[] sampleWeights = new double[nsamples];
-            double totalWeight = 0;
-
-            // build input and output data, along with sample weights
-            for (int i = 0; i < nsamples; i++) {
-                Y[i] = 0;
-                double weight = generateWeight();
-                totalWeight += weight;
-                sampleWeights[i] = weight;
-                for (int j = 0; j < nfeatures+1; j++) {
-                    if (i==0) {
-                        actualCoeffs[j] = generateXPoint();;
-                    }
-                    if (j < nfeatures) {
-                        X[i][j] = generateCoeff();
-                        Y[i] += actualCoeffs[j] * X[i][j];
-                    } else {
-                        // last coefficient is the intercept
-                        Y[i] += actualCoeffs[nfeatures];
-                    }
-                }
-            }
-
-            // normalize sample weights
-            for (int i = 0; i < nsamples; i++) {
-                sampleWeights[i] /= totalWeight;
-            }
-
-            // test to recover initial parameters
-            WeightedLinearRegression WLR = new WeightedLinearRegression(true);
-            double[] coeffs = WLR.fit(X, Y, sampleWeights);
-            assertArrayEquals(actualCoeffs, coeffs, 1e-2);
-            assertEquals(1, WLR.getGoodnessOfFit(),1e-2);
-            assertEquals(0, WLR.getMSE(),1e-3);
-        }
+        assertThrows(ArithmeticException.class,
+                () -> WeightedLinearRegression.fit(x, y, sampleWeights, true));
     }
 
-    // test the case where we have a under-specified system of equations, with intercept
+    // if we have only one feature, should be an easy calculation
     @Test
-    void testUnderspecified() {
-        for (int test_num = 0; test_num<nRandomTests; test_num++) {
+    void testOneFeature(){
+        double[][] x = {
+                {1.},
+                {4.},
+                {10.},
+                {5.}
+        };
+        double[] y = {5., 20., 50., 25.,};
+        double[] sampleWeights = {1., 1., 1., 1.};
+        double[] actualCoefs = {5.};
 
-            // create test conditions at random
-            int nfeatures = generateNFeatures() + 5;
-            int nsamples = Math.max(2, nfeatures - rn.nextInt(nfeatures));
-
-            double[][] X = new double[nsamples][nfeatures];
-            double[] Y = new double[nsamples];
-            double[] actualCoeffs = new double[nfeatures+1];
-            double[] sampleWeights = new double[nsamples];
-            double totalWeight = 0;
-
-            // build input and output data, along with sample weights
-            for (int i = 0; i < nsamples; i++) {
-                Y[i] = 0;
-                double weight = generateWeight();
-                totalWeight += weight;
-                sampleWeights[i] = weight;
-                for (int j = 0; j < nfeatures+1; j++) {
-                    if (i==0) {
-                        actualCoeffs[j] = generateCoeff();
-                    }
-                    if (j < nfeatures) {
-                        X[i][j] = generateXPoint();
-                        Y[i] += actualCoeffs[j] * X[i][j];
-                    } else {
-                        // last coefficient is the intercept
-                        Y[i] += actualCoeffs[nfeatures];
-                    }
-                }
-            }
-
-            // normalize sample weights
-            for (int i = 0; i < nsamples; i++) {
-                sampleWeights[i] /= totalWeight;
-            }
-
-            // test to recover initial parameters
-            WeightedLinearRegression WLR = new WeightedLinearRegression(true);
-            double[] coeffs = WLR.fit(X, Y, sampleWeights);
-            for (int i=0; i<coeffs.length; i++) {
-                assertFalse(Double.isNaN(coeffs[i]));
-            }
-            assertFalse(Double.isNaN(WLR.getGoodnessOfFit()));
-            assertFalse(Double.isNaN(WLR.getMSE()));
-        }
+        WeightedLinearRegressionResults wlrr =
+                WeightedLinearRegression.fit(x, y, sampleWeights, false);
+        assertArrayEquals(actualCoefs, wlrr.getCoefficients(), 1e-6);
+        assertEquals(0.0, wlrr.getIntercept(), 1e-6);
+        assertEquals(0.0, wlrr.getMSE(), 1e-6);
+        assertEquals(1.0, wlrr.getGof(), 1e-6);
     }
 
-    // test the case where we have a vastly under-specified system of equations (only one sample), with intercept
-    @Test
-    void testSingularMatrix() {
-        for (int test_num = 0; test_num<nRandomTests; test_num++) {
 
-            // create test conditions at random
-            int nfeatures = generateNFeatures() + 5;
-            int nsamples = 1;
-
-            double[][] X = new double[nsamples][nfeatures];
-            double[] Y = new double[nsamples];
-            double[] actualCoeffs = new double[nfeatures+1];
-            double[] sampleWeights = new double[nsamples];
-            double totalWeight = 0;
-
-            // build input and output data, along with sample weights
-            for (int i = 0; i < nsamples; i++) {
-                Y[i] = 0;
-                double weight = generateWeight();
-                totalWeight += weight;
-                sampleWeights[i] = weight;
-                for (int j = 0; j < nfeatures+1; j++) {
-                    if (i==0) {
-                        actualCoeffs[j] = generateCoeff();
-                    }
-                    if (j < nfeatures) {
-                        X[i][j] = generateXPoint();
-                        Y[i] += actualCoeffs[j] * X[i][j];
-                    } else {
-                        // last coefficient is the intercept
-                        Y[i] += actualCoeffs[nfeatures];
-                    }
-                }
-            }
-
-            // normalize sample weights
-            for (int i = 0; i < nsamples; i++) {
-                sampleWeights[i] /= totalWeight;
-            }
-
-            // test to recover initial parameters
-            WeightedLinearRegression WLR = new WeightedLinearRegression(true);
-            double[] coeffs = WLR.fit(X, Y, sampleWeights);
-            for (int i=0; i<coeffs.length; i++) {
-                assertFalse(Double.isNaN(coeffs[i]));
-            }
-            assertThrows(ArithmeticException.class, WLR::getGoodnessOfFit);
-        }
-    }
 }
