@@ -64,6 +64,18 @@ public class JITDMNResourceTest {
                 .body(containsString("Loan Approval"), containsString("Approved"), containsString("xls2dmn"));
     }
 
+    @Test
+    public void testjitExplainabilityEndpoint() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn/evaluateAndExplain")
+                .then()
+                .statusCode(200)
+                .body(containsString("Loan Approval"), containsString("Approved"), containsString("xls2dmn"));
+    }
+
     private Map<String, Object> buildContext() {
         Map<String, Object> context = new HashMap<>();
         context.put("FICO Score", 800);

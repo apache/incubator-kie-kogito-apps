@@ -17,6 +17,7 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,5 +51,56 @@ public class JITDMNServiceImplTest {
         Assertions.assertEquals("xls2dmn_741b355c-685c-4827-b13a-833da8321da4", dmnResult.getNamespace());
         Assertions.assertTrue(dmnResult.getMessages().isEmpty());
         Assertions.assertEquals("Approved", dmnResult.getDecisionResultByName("Loan Approval").getResult());
+    }
+
+    @Test
+    public void testExplainability() throws IOException {
+        String allTypesModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/allTypes.dmn")));
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("stringInput", "test");
+        context.put("listOfStringInput", Collections.singletonList("test"));
+        context.put("numberInput", 1);
+        context.put("listOfNumbersInput", Collections.singletonList(1));
+        context.put("booleanInput", true);
+        context.put("listOfBooleansInput", Collections.singletonList(true));
+
+        context.put("timeInput", "h09:00");
+        context.put("dateInput", "2020-04-02");
+        context.put("dateAndTimeInput", "2020-04-02T09:00:00");
+        context.put("daysAndTimeDurationInput", "P1DT1H");
+        context.put("yearsAndMonthDurationInput", "P1Y1M");
+
+        Map<String, Object> complexInput = new HashMap<>();
+        complexInput.put("aNestedListOfNumbers", Collections.singletonList(1));
+        complexInput.put("aNestedString", "test");
+        complexInput.put("aNestedComplexInput", Collections.singletonMap("doubleNestedNumber", 1));
+
+        context.put("complexInput", complexInput);
+        context.put("listOfComplexInput", Collections.singletonList(complexInput));
+
+        String string = jitdmnService.evaluateModelAndExplain(allTypesModel, context);
+    }
+
+    @Test
+    public void explainabilityFunctionalTest() throws IOException {
+        String functionalTestModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/functionalTest1.dmn")));
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("booleanInput", true);
+        context.put("notUsedInput", 1);
+
+        String string = jitdmnService.evaluateModelAndExplain(functionalTestModel, context);
+    }
+
+    @Test
+    public void explainabilityFunctionalTest2() throws IOException {
+        String functionalTestModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/functionalTest2.dmn")));
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("numberInput", 1);
+        context.put("notUsedInput", 1);
+
+        String string = jitdmnService.evaluateModelAndExplain(functionalTestModel, context);
     }
 }

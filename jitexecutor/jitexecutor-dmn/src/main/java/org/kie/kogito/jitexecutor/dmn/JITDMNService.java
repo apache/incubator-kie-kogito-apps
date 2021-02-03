@@ -23,4 +23,6 @@ import org.kie.kogito.dmn.rest.DMNResult;
 public interface JITDMNService {
 
     DMNResult evaluateModel(String modelXML, Map<String, Object> context);
+
+    String evaluateModelAndExplain(String modelXML, Map<String, Object> context);
 }

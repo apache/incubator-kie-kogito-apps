@@ -59,4 +59,13 @@ public class JITDMNResource {
         DMNResult dmnResult = jitdmnService.evaluateModel(payload.getModel(), payload.getContext());
         return Response.ok(dmnResult).build();
     }
+
+    @POST
+    @Path("/evaluateAndExplain")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response jitEvaluateAndExplain(JITDMNPayload payload) {
+        String saliencies = jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext());
+        return Response.ok(saliencies).build();
+    }
 }
