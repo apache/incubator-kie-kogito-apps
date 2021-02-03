@@ -100,16 +100,16 @@ public class Matrix {
      * This is the pivot value for the Gauss-Jordan algorithm
      *
      * @param x          a square double[][]; the matrix to find the diagonal element within
-     * @param pivotsUsed a binary int[], marking whether a specific index has been used as a pivot yet or not
+     * @param pivotsUsed a boolean[], marking whether a specific index has been used as a pivot yet or not
      * @return the index of the found pivot
      */
-    private static int findPivot(double[][] x, int[] pivotsUsed) {
+    private static int findPivot(double[][] x, boolean[] pivotsUsed) {
         double maxAbs = 0;
         int pivot = 0;
         int size = Matrix.getShape(x)[0];
         for (int diagIdx = 0; diagIdx < size; diagIdx++) {
             double abs = Math.abs(x[diagIdx][diagIdx]);
-            if (abs > maxAbs && pivotsUsed[diagIdx] == 0) {
+            if (abs > maxAbs && !pivotsUsed[diagIdx]) {
                 pivot = diagIdx;
                 maxAbs = abs;
             }
@@ -135,7 +135,8 @@ public class Matrix {
         }
 
         // initialize array to track which pivots have been used
-        int[] pivotsUsed = IntStream.range(0, size).map(i -> 0).toArray();
+        boolean[] pivotsUsed = new boolean[size];
+        Arrays.fill(pivotsUsed, false);
 
         // perform both operations until each row has been used as pivot
         // once we've done all iterations, X will be inverted in place
@@ -156,7 +157,7 @@ public class Matrix {
             copy[pivot][pivot] = 1.;
 
             //mark the pivot used
-            pivotsUsed[pivot] = 1;
+            pivotsUsed[pivot] = true;
 
             // normalize the pivot row
             for (int i = 0; i < size; i++) {
