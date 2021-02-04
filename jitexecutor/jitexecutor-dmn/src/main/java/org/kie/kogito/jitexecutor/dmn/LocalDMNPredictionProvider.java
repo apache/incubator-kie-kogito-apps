@@ -41,8 +41,10 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class LocalDMNPredictionProvider implements PredictionProvider {
 
+    public static final String DUMMY_DMN_CONTEXT_KEY = "dmnContext";
     private final DMNModel dmnModel;
     private final DMNRuntime dmnRuntime;
+
 
     public LocalDMNPredictionProvider(DMNModel dmnModel, DMNRuntime dmnRuntime) {
         this.dmnModel = dmnModel;
@@ -50,10 +52,11 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public CompletableFuture<List<PredictionOutput>> predictAsync(List<PredictionInput> inputs) {
         List<PredictionOutput> predictionOutputs = new ArrayList<>();
         for (PredictionInput input : inputs) {
-            Map<String, Object> contextVariables = toMap(input.getFeatures());
+            Map<String, Object> contextVariables = (Map<String, Object>) toMap(input.getFeatures()).get(DUMMY_DMN_CONTEXT_KEY);
             predictionOutputs.add(toPredictionOutput(predict(contextVariables)));
         }
         return completedFuture(predictionOutputs);
@@ -66,6 +69,14 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
             outputs.add(output);
         }
         return new PredictionOutput(outputs);
+    }
+
+    public DMNModel getDmnModel() {
+        return dmnModel;
+    }
+
+    public DMNRuntime getDmnRuntime() {
+        return dmnRuntime;
     }
 
     public DMNResult predict(Map<String, Object> contextVariables) {
@@ -108,9 +119,6 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
                     map.put(f.getName(), underlyingObject);
                 }
             }
-        }
-        if (map.containsKey("context")) {
-            map = (Map<String, Object>) map.get("context");
         }
         return map;
     }

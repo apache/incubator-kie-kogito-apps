@@ -52,6 +52,8 @@ import org.kie.kogito.trusty.service.responses.FeatureImportanceResponse;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.responses.SaliencyResponse;
 
+import static org.kie.kogito.jitexecutor.dmn.LocalDMNPredictionProvider.DUMMY_DMN_CONTEXT_KEY;
+
 @ApplicationScoped
 public class JITDMNServiceImpl implements JITDMNService {
 
@@ -61,28 +63,23 @@ public class JITDMNServiceImpl implements JITDMNService {
 
     @Override
     public KogitoDMNResult evaluateModel(String modelXML, Map<String, Object> context) {
-        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
-                .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
-        DMNModel dmnModel = dmnRuntime.getModels().get(0);
-        LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
+        LocalDMNPredictionProvider localDMNPredictionProvider = buildLocalDMNPredictionProvider(modelXML);
+
         DMNResult dmnResult = localDMNPredictionProvider.predict(context);
+        DMNModel dmnModel = localDMNPredictionProvider.getDmnModel();
         return new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult);
     }
 
     @Override
     public DMNResultWithExplanation evaluateModelAndExplain(String modelXML, Map<String, Object> context) {
-        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
-                .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
-        DMNModel dmnModel = dmnRuntime.getModels().get(0);
-        LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
+        LocalDMNPredictionProvider localDMNPredictionProvider = buildLocalDMNPredictionProvider(modelXML);
 
         DMNResult dmnResult = localDMNPredictionProvider.predict(context);
+        DMNModel dmnModel = localDMNPredictionProvider.getDmnModel();
 
         PredictionInput predictionInput = new PredictionInput(
                 // TODO: Date/Time types are considered as strings, proper conversion to be implemented https://issues.redhat.com/browse/KOGITO-4351
-                Collections.singletonList(FeatureFactory.newCompositeFeature("context", context))
+                Collections.singletonList(FeatureFactory.newCompositeFeature(DUMMY_DMN_CONTEXT_KEY, context))
         );
 
         Prediction prediction = new Prediction(predictionInput, localDMNPredictionProvider.toPredictionOutput(dmnResult));
@@ -103,6 +100,23 @@ public class JITDMNServiceImpl implements JITDMNService {
             );
         }
 
+        List<SaliencyResponse> saliencyResponses = buildSalienciesResponse(dmnModel, saliencyMap);
+
+        return new DMNResultWithExplanation(
+                new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
+                new SalienciesResponse(ExplainabilityStatus.SUCCEEDED.name(), null, saliencyResponses)
+        );
+    }
+
+    private LocalDMNPredictionProvider buildLocalDMNPredictionProvider(String modelXML) {
+        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
+                .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
+        DMNModel dmnModel = dmnRuntime.getModels().get(0);
+        return new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
+    }
+
+    private List<SaliencyResponse> buildSalienciesResponse(DMNModel dmnModel, Map<String, Saliency> saliencyMap) {
         List<SaliencyResponse> saliencyResponses = new ArrayList<>();
         for (Map.Entry<String, Saliency> entry : saliencyMap.entrySet()) {
             DecisionNode decisionByName = dmnModel.getDecisionByName(entry.getKey());
@@ -116,11 +130,7 @@ public class JITDMNServiceImpl implements JITDMNService {
                                   )
             );
         }
-
-        return new DMNResultWithExplanation(
-                new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
-                new SalienciesResponse(ExplainabilityStatus.SUCCEEDED.name(), null, saliencyResponses)
-        );
+        return saliencyResponses;
     }
 
     private static FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
