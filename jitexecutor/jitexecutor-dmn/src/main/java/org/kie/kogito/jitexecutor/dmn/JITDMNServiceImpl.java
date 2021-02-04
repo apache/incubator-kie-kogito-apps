@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -29,26 +30,33 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.kie.api.io.Resource;
-import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNRuntime;
+import org.kie.dmn.api.core.ast.DecisionNode;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
-import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.dmn.rest.DMNResult;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
+import org.kie.kogito.jitexecutor.dmn.responses.ExplainabilityStatus;
+import org.kie.kogito.trusty.service.responses.FeatureImportanceResponse;
+import org.kie.kogito.trusty.service.responses.SalienciesResponse;
+import org.kie.kogito.trusty.service.responses.SaliencyResponse;
 
 @ApplicationScoped
 public class JITDMNServiceImpl implements JITDMNService {
+
+    private static final int EXPLAINABILITY_LIME_SAMPLE_SIZE = 300;
+    private static final int EXPLAINABILITY_NO_OF_PERTURBATION = 1;
+    private static final String EXPLAINABILITY_FAILED_MESSAGE = "Failed to calculate values";
 
     @Override
     public org.kie.kogito.dmn.rest.DMNResult evaluateModel(String modelXML, Map<String, Object> context) {
@@ -56,52 +64,68 @@ public class JITDMNServiceImpl implements JITDMNService {
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
-        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
-        org.kie.dmn.api.core.DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
+        org.kie.dmn.api.core.DMNResult dmnResult = localDMNPredictionProvider.predict(context);
         return new DMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult);
     }
 
     @Override
-    public String evaluateModelAndExplain(String modelXML, Map<String, Object> context) {
+    public DMNResultWithExplanation evaluateModelAndExplain(String modelXML, Map<String, Object> context) {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
-
-        List<Feature> features = new ArrayList<>();
-        features.add(FeatureFactory.newCompositeFeature("context", context));
-        PredictionInput predictionInput = new PredictionInput(features);
-
         LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
 
-        PredictionOutput predictionOutput = null;
-        try {
-            predictionOutput = localDMNPredictionProvider
-                    .predictAsync(Collections.singletonList(predictionInput))
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                    .get(0);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
-        }
+        org.kie.dmn.api.core.DMNResult dmnResult = localDMNPredictionProvider.predict(context);
 
-        Prediction prediction = new Prediction(predictionInput, predictionOutput);
+        PredictionInput predictionInput = new PredictionInput(
+                // TODO: Date/Time types are considered as strings, proper conversion to be implemented https://issues.redhat.com/browse/KOGITO-4351
+                Collections.singletonList(FeatureFactory.newCompositeFeature("context", context))
+        );
 
-        LimeConfig limeConfig = new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(new Random(), 1));
+        Prediction prediction = new Prediction(predictionInput, localDMNPredictionProvider.toPredictionOutput(dmnResult));
+
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(EXPLAINABILITY_LIME_SAMPLE_SIZE)
+                .withPerturbationContext(new PerturbationContext(new Random(), EXPLAINABILITY_NO_OF_PERTURBATION));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+
         Map<String, Saliency> saliencyMap = null;
         try {
             saliencyMap = limeExplainer.explainAsync(prediction, localDMNPredictionProvider)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
-            e.printStackTrace();
+            return new DMNResultWithExplanation(
+                    new DMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
+                    new SalienciesResponse(ExplainabilityStatus.FAILED.name(), EXPLAINABILITY_FAILED_MESSAGE, null)
+            );
         }
 
-        String response = "";
-        for (Saliency saliency : saliencyMap.values()) {
-            System.out.println(saliency.getOutput().getName());
-            response = saliency.getPerFeatureImportance().stream().map(f -> f.getFeature().getName() + " " + f.getScore()).collect(Collectors.joining("\n"));
-            System.out.println(response);
+        List<SaliencyResponse> saliencyResponses = new ArrayList<>();
+        for (Map.Entry<String, Saliency> entry : saliencyMap.entrySet()) {
+            DecisionNode decisionByName = dmnModel.getDecisionByName(entry.getKey());
+            saliencyResponses.add(new SaliencyResponse(
+                                          decisionByName.getId(),
+                                          decisionByName.getName(),
+                                          entry.getValue().getPerFeatureImportance().stream()
+                                                  .map(JITDMNServiceImpl::featureImportanceModelToResponse)
+                                                  .filter(Objects::nonNull)
+                                                  .collect(Collectors.toList())
+                                  )
+            );
         }
-        return saliencyMap.toString();
+
+        return new DMNResultWithExplanation(
+                new DMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
+                new SalienciesResponse(ExplainabilityStatus.SUCCEEDED.name(), null, saliencyResponses)
+        );
+    }
+
+    private static FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
+        if (model == null) {
+            return null;
+        }
+        return new FeatureImportanceResponse(model.getFeature().getName(), model.getScore());
     }
 }

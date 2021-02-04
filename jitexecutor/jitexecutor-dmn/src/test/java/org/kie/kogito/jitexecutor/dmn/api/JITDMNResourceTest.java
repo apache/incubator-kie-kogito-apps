@@ -73,7 +73,7 @@ public class JITDMNResourceTest {
                 .when().post("/jitdmn/evaluateAndExplain")
                 .then()
                 .statusCode(200)
-                .body(containsString("Loan Approval"), containsString("Approved"), containsString("xls2dmn"));
+                .body(containsString("dmnResult"), containsString("saliencies"), containsString("xls2dmn"));
     }
 
     private Map<String, Object> buildContext() {

@@ -32,6 +32,7 @@ import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
 import org.kie.kogito.dmn.rest.DMNResult;
 import org.kie.kogito.jitexecutor.dmn.JITDMNService;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
+import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
 
 @Path("/jitdmn")
 public class JITDMNResource {
@@ -65,7 +66,7 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitEvaluateAndExplain(JITDMNPayload payload) {
-        String saliencies = jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext());
-        return Response.ok(saliencies).build();
+        DMNResultWithExplanation response = jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext());
+        return Response.ok(response).build();
     }
 }

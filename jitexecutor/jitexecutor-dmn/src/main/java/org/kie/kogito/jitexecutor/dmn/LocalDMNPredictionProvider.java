@@ -26,6 +26,7 @@ import java.util.concurrent.CompletableFuture;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.DMNModel;
+import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.kogito.explainability.model.Feature;
@@ -53,21 +54,23 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
         List<PredictionOutput> predictionOutputs = new ArrayList<>();
         for (PredictionInput input : inputs) {
             Map<String, Object> contextVariables = toMap(input.getFeatures());
-            System.out.println(contextVariables);
-            predictionOutputs.add(predict(contextVariables));
+            predictionOutputs.add(toPredictionOutput(predict(contextVariables)));
         }
         return completedFuture(predictionOutputs);
     }
 
-    private PredictionOutput predict(Map<String, Object> contextVariables) {
-        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(contextVariables);
-        org.kie.dmn.api.core.DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+    public PredictionOutput toPredictionOutput(org.kie.dmn.api.core.DMNResult dmnResult) {
         List<Output> outputs = new ArrayList<>();
         for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
             Output output = buildOutput(decisionResult);
             outputs.add(output);
         }
         return new PredictionOutput(outputs);
+    }
+
+    public DMNResult predict(Map<String, Object> contextVariables) {
+        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(contextVariables);
+        return dmnRuntime.evaluateAll(dmnModel, dmnContext);
     }
 
     private Output buildOutput(DMNDecisionResult dmnDecisionResult) {

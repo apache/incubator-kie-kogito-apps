@@ -27,6 +27,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.dmn.rest.DMNResult;
 import org.kie.kogito.jitexecutor.dmn.api.JITDMNResourceTest;
+import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
 
 public class JITDMNServiceImplTest {
 
@@ -79,28 +80,13 @@ public class JITDMNServiceImplTest {
         context.put("complexInput", complexInput);
         context.put("listOfComplexInput", Collections.singletonList(complexInput));
 
-        String string = jitdmnService.evaluateModelAndExplain(allTypesModel, context);
-    }
+        DMNResultWithExplanation response = jitdmnService.evaluateModelAndExplain(allTypesModel, context);
 
-    @Test
-    public void explainabilityFunctionalTest() throws IOException {
-        String functionalTestModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/functionalTest1.dmn")));
+        Assertions.assertNotNull(response.dmnResult);
+        Assertions.assertEquals(1, response.dmnResult.getDecisionResults().size());
 
-        Map<String, Object> context = new HashMap<>();
-        context.put("booleanInput", true);
-        context.put("notUsedInput", 1);
-
-        String string = jitdmnService.evaluateModelAndExplain(functionalTestModel, context);
-    }
-
-    @Test
-    public void explainabilityFunctionalTest2() throws IOException {
-        String functionalTestModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/functionalTest2.dmn")));
-
-        Map<String, Object> context = new HashMap<>();
-        context.put("numberInput", 1);
-        context.put("notUsedInput", 1);
-
-        String string = jitdmnService.evaluateModelAndExplain(functionalTestModel, context);
+        Assertions.assertNotNull(response.salienciesResponse);
+        Assertions.assertEquals(1, response.salienciesResponse.getSaliencies().size());
+        Assertions.assertEquals(17, response.salienciesResponse.getSaliencies().get(0).getFeatureImportance().size());
     }
 }
