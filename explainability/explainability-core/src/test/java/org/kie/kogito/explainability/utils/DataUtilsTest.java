@@ -426,4 +426,34 @@ class DataUtilsTest {
         assertThat(largerSampleSize).isEqualTo(largerSamples.size());
         assertThat(values).contains(largerSamples.get(random.nextInt(largerSampleSize - 1)));
     }
+
+    @Test
+    void testBootstrap() {
+        List<Value<?>> values = new ArrayList<>();
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        for (int i = 0; i < 10; i++) {
+            values.add(Type.NUMBER.randomValue(perturbationContext));
+        }
+        double[] means = new double[100];
+        double[] stdDevs = new double[100];
+        double[] mins = new double[100];
+        double[] maxs = new double[100];
+        for (int i = 0; i < 100; i++) {
+            List<Value<?>> sampledValues = DataUtils.sampleWithReplacement(values, 5, random);
+            double mean = DataUtils.getMean(sampledValues.stream().mapToDouble(Value::asNumber).toArray());
+            double stdDev = DataUtils.getStdDev(sampledValues.stream().mapToDouble(Value::asNumber).toArray(), mean);
+            double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
+            double max = sampledValues.stream().mapToDouble(Value::asNumber).max().orElse(Double.MAX_VALUE);
+            means[i] = mean;
+            stdDevs[i] = stdDev;
+            mins[i] = min;
+            maxs[i] = max;
+        }
+        double finalMean = DataUtils.getMean(means);
+        double finalStdDev = DataUtils.getMean(stdDevs);
+        double finalMin = DataUtils.getMean(mins);
+        double finalMax = DataUtils.getMean(maxs);
+        double[] distribution = DataUtils.generateData(finalMean, finalStdDev, 10, random);
+
+    }
 }
