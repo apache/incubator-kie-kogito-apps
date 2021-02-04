@@ -17,13 +17,13 @@
 package org.kie.kogito.jitexecutor.dmn.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.kie.kogito.dmn.rest.DMNResult;
+import org.kie.kogito.dmn.rest.KogitoDMNResult;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 
 public class DMNResultWithExplanation {
 
     @JsonProperty("dmnResult")
-    public DMNResult dmnResult;
+    public KogitoDMNResult dmnResult;
 
     @JsonProperty("saliencies")
     public SalienciesResponse salienciesResponse;
@@ -31,7 +31,7 @@ public class DMNResultWithExplanation {
     public DMNResultWithExplanation() {
     }
 
-    public DMNResultWithExplanation(DMNResult dmnResult, SalienciesResponse salienciesResponse) {
+    public DMNResultWithExplanation(KogitoDMNResult dmnResult, SalienciesResponse salienciesResponse) {
         this.dmnResult = dmnResult;
         this.salienciesResponse = salienciesResponse;
     }

@@ -25,7 +25,7 @@ import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.dmn.rest.DMNResult;
+import org.kie.kogito.dmn.rest.KogitoDMNResult;
 import org.kie.kogito.jitexecutor.dmn.api.JITDMNResourceTest;
 import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
 
@@ -46,7 +46,7 @@ public class JITDMNServiceImplTest {
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);
         context.put("PITI Ratio", .1);
-        DMNResult dmnResult = jitdmnService.evaluateModel(model, context);
+        KogitoDMNResult dmnResult = jitdmnService.evaluateModel(model, context);
 
         Assertions.assertEquals("xls2dmn", dmnResult.getModelName());
         Assertions.assertEquals("xls2dmn_741b355c-685c-4827-b13a-833da8321da4", dmnResult.getNamespace());

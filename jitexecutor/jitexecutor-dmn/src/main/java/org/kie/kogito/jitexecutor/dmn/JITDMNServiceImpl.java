@@ -35,7 +35,7 @@ import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.api.core.ast.DecisionNode;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.internal.io.ResourceFactory;
-import org.kie.kogito.dmn.rest.DMNResult;
+import org.kie.kogito.dmn.rest.KogitoDMNResult;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -59,14 +59,14 @@ public class JITDMNServiceImpl implements JITDMNService {
     private static final String EXPLAINABILITY_FAILED_MESSAGE = "Failed to calculate values";
 
     @Override
-    public org.kie.kogito.dmn.rest.DMNResult evaluateModel(String modelXML, Map<String, Object> context) {
+    public KogitoDMNResult evaluateModel(String modelXML, Map<String, Object> context) {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
         LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
         org.kie.dmn.api.core.DMNResult dmnResult = localDMNPredictionProvider.predict(context);
-        return new DMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult);
+        return new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class JITDMNServiceImpl implements JITDMNService {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | TimeoutException | ExecutionException e) {
             return new DMNResultWithExplanation(
-                    new DMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
+                    new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
                     new SalienciesResponse(ExplainabilityStatus.FAILED.name(), EXPLAINABILITY_FAILED_MESSAGE, null)
             );
         }
@@ -117,7 +117,7 @@ public class JITDMNServiceImpl implements JITDMNService {
         }
 
         return new DMNResultWithExplanation(
-                new DMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
+                new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult),
                 new SalienciesResponse(ExplainabilityStatus.SUCCEEDED.name(), null, saliencyResponses)
         );
     }
