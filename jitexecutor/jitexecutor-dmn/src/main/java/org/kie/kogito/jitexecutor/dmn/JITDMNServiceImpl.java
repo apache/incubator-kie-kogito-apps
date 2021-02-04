@@ -31,6 +31,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNModel;
+import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.api.core.ast.DecisionNode;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
@@ -65,7 +66,7 @@ public class JITDMNServiceImpl implements JITDMNService {
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
         LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
-        org.kie.dmn.api.core.DMNResult dmnResult = localDMNPredictionProvider.predict(context);
+        DMNResult dmnResult = localDMNPredictionProvider.predict(context);
         return new KogitoDMNResult(dmnModel.getNamespace(), dmnModel.getName(), dmnResult);
     }
 
@@ -77,7 +78,7 @@ public class JITDMNServiceImpl implements JITDMNService {
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
         LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnModel, dmnRuntime);
 
-        org.kie.dmn.api.core.DMNResult dmnResult = localDMNPredictionProvider.predict(context);
+        DMNResult dmnResult = localDMNPredictionProvider.predict(context);
 
         PredictionInput predictionInput = new PredictionInput(
                 // TODO: Date/Time types are considered as strings, proper conversion to be implemented https://issues.redhat.com/browse/KOGITO-4351
@@ -91,7 +92,7 @@ public class JITDMNServiceImpl implements JITDMNService {
                 .withPerturbationContext(new PerturbationContext(new Random(), EXPLAINABILITY_NO_OF_PERTURBATION));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
 
-        Map<String, Saliency> saliencyMap = null;
+        Map<String, Saliency> saliencyMap;
         try {
             saliencyMap = limeExplainer.explainAsync(prediction, localDMNPredictionProvider)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
