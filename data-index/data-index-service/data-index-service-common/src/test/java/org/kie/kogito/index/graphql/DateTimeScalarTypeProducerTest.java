@@ -16,18 +16,19 @@
 
 package org.kie.kogito.index.graphql;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import org.junit.jupiter.api.Test;
+
 import graphql.language.StringValue;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 public class DateTimeScalarTypeProducerTest {
 
@@ -42,14 +43,15 @@ public class DateTimeScalarTypeProducerTest {
     public void testParseValue() {
         assertThat(dateTimeScalar.getName()).isEqualTo("DateTime");
         assertThat(dateTimeScalar.getCoercing().parseValue(null)).isNull();
-        assertThat(dateTimeScalar.getCoercing().parseValue("2019-11-20T03:14:03.075Z")).isEqualTo(1574219643075l); 
+        assertThat(dateTimeScalar.getCoercing().parseValue("2019-11-20T03:14:03.075Z")).isEqualTo(1574219643075l);
     }
 
     @Test
     public void testParseLiteral() {
         assertThat(dateTimeScalar.getName()).isEqualTo("DateTime");
         assertThat(dateTimeScalar.getCoercing().parseLiteral(null)).isNull();
-        assertThat(dateTimeScalar.getCoercing().parseLiteral(new StringValue("2019-11-20T03:14:03.075Z"))).isEqualTo(1574219643075l);
+        assertThat(dateTimeScalar.getCoercing().parseLiteral(new StringValue("2019-11-20T03:14:03.075Z")))
+                .isEqualTo(1574219643075l);
     }
 
     @Test
@@ -59,7 +61,8 @@ public class DateTimeScalarTypeProducerTest {
             dateTimeScalar.getCoercing().serialize(null);
             fail("Method should throw CoercingSerializeException");
         } catch (CoercingSerializeException ex) {
-            assertThat(ex.getMessage()).isEqualTo("Expected something we can convert to 'java.time.OffsetDateTime' but was 'null'.");
+            assertThat(ex.getMessage())
+                    .isEqualTo("Expected something we can convert to 'java.time.OffsetDateTime' but was 'null'.");
         }
     }
 
@@ -70,7 +73,8 @@ public class DateTimeScalarTypeProducerTest {
             dateTimeScalar.getCoercing().serialize(1);
             fail("Method should throw CoercingSerializeException");
         } catch (CoercingSerializeException ex) {
-            assertThat(ex.getMessage()).isEqualTo("Expected something we can convert to 'java.time.OffsetDateTime' but was 'java.lang.Integer'.");
+            assertThat(ex.getMessage())
+                    .isEqualTo("Expected something we can convert to 'java.time.OffsetDateTime' but was 'java.lang.Integer'.");
         }
     }
 
@@ -87,7 +91,8 @@ public class DateTimeScalarTypeProducerTest {
         assertThat(dateTimeScalar.getName()).isEqualTo("DateTime");
         ZonedDateTime time = ZonedDateTime.now();
         String result = (String) dateTimeScalar.getCoercing().serialize(String.valueOf(time.toInstant().toEpochMilli()));
-        assertThat(result).isEqualTo(time.withZoneSameInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        assertThat(result).isEqualTo(time.withZoneSameInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
     }
 
     @Test
@@ -97,7 +102,8 @@ public class DateTimeScalarTypeProducerTest {
             dateTimeScalar.getCoercing().serialize("test");
             fail("Method should throw CoercingSerializeException");
         } catch (CoercingSerializeException ex) {
-            assertThat(ex.getMessage()).isEqualTo("Invalid ISO-8601 value : 'test'. because of : 'Text 'test' could not be parsed at index 0'");
+            assertThat(ex.getMessage())
+                    .isEqualTo("Invalid ISO-8601 value : 'test'. because of : 'Text 'test' could not be parsed at index 0'");
         }
     }
 

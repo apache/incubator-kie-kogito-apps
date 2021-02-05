@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.messaging;
 
+import static java.lang.String.format;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -27,9 +29,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -44,7 +43,10 @@ import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.lang.String.format;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
 
 @ApplicationScoped
 public class ReactiveMessagingEventConsumer {
@@ -76,7 +78,8 @@ public class ReactiveMessagingEventConsumer {
     public void onDomainModelRegisteredEvent(@Observes DomainModelRegisteredEvent event) {
         LOGGER.info("New domain model registered for Process Id: {}", event.getProcessId());
         consumers.computeIfAbsent(event.getProcessId(), f -> {
-            MessageConsumer<ObjectNode> consumer = eventBus.consumer(format(KOGITO_DOMAIN_EVENTS, event.getProcessId()), e -> onDomainEvent(e));
+            MessageConsumer<ObjectNode> consumer =
+                    eventBus.consumer(format(KOGITO_DOMAIN_EVENTS, event.getProcessId()), e -> onDomainEvent(e));
             LOGGER.info("Consumer registered for address: {}", consumer.address());
             return consumer;
         });

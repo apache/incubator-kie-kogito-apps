@@ -16,12 +16,12 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+
 import java.util.UUID;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,8 @@ import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)
@@ -48,9 +49,10 @@ class UserTaskInstanceStorageIT extends StorageTestBase<String, UserTaskInstance
 
     @BeforeEach
     void setUp() {
-        this.storage = new MongoStorage<>(mongoClientManager.getCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class),
-                                          mongoClientManager.getReactiveCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class),
-                                          UserTaskInstance.class.getName(), new UserTaskInstanceEntityMapper());
+        this.storage =
+                new MongoStorage<>(mongoClientManager.getCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class),
+                        mongoClientManager.getReactiveCollection(USER_TASK_INSTANCES_STORAGE, UserTaskInstanceEntity.class),
+                        UserTaskInstance.class.getName(), new UserTaskInstanceEntityMapper());
     }
 
     @AfterEach
@@ -62,8 +64,12 @@ class UserTaskInstanceStorageIT extends StorageTestBase<String, UserTaskInstance
     void testCache() {
         String taskId = UUID.randomUUID().toString();
         String processInstanceId = UUID.randomUUID().toString();
-        UserTaskInstance userTaskInstance1 = TestUtils.createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "InProgress", 0L);
-        UserTaskInstance userTaskInstance2 = TestUtils.createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "Completed", 1000L);
+        UserTaskInstance userTaskInstance1 =
+                TestUtils.createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5),
+                        UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "InProgress", 0L);
+        UserTaskInstance userTaskInstance2 =
+                TestUtils.createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5),
+                        UUID.randomUUID().toString(), RandomStringUtils.randomAlphabetic(10), "Completed", 1000L);
         testStorage(storage, taskId, userTaskInstance1, userTaskInstance2);
     }
 }

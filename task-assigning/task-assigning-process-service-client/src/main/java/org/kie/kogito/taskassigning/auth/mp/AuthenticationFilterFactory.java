@@ -30,7 +30,8 @@ import org.kie.kogito.taskassigning.auth.AuthenticationCredentials;
 @ApplicationScoped
 public class AuthenticationFilterFactory {
 
-    private Map<Class<? extends AuthenticationCredentials>, AuthenticationFilterProvider<? extends AuthenticationCredentials>> providers = new HashMap<>();
+    private Map<Class<? extends AuthenticationCredentials>, AuthenticationFilterProvider<? extends AuthenticationCredentials>> providers =
+            new HashMap<>();
 
     public AuthenticationFilterFactory() {
         //CDI proxying
@@ -38,15 +39,17 @@ public class AuthenticationFilterFactory {
 
     @Inject
     public AuthenticationFilterFactory(Instance<AuthenticationFilterProvider<?>> instance) {
-        this.providers = instance.stream().collect(Collectors.toMap(AuthenticationFilterProvider::getCredentialsType, Function.identity()));
+        this.providers = instance.stream()
+                .collect(Collectors.toMap(AuthenticationFilterProvider::getCredentialsType, Function.identity()));
     }
 
     @SuppressWarnings("unchecked")
     public AuthenticationFilter newAuthenticationFilter(AuthenticationCredentials credentials) {
         AuthenticationFilterProvider<? extends AuthenticationCredentials> provider = providers.get(credentials.getClass());
         if (provider == null) {
-            throw new UnsupportedOperationException("Authentication method is not supported for the credentials: " + credentials);
+            throw new UnsupportedOperationException(
+                    "Authentication method is not supported for the credentials: " + credentials);
         }
-        return ((AuthenticationFilterProvider)provider).createInstance(credentials);
+        return ((AuthenticationFilterProvider) provider).createInstance(credentials);
     }
 }

@@ -44,7 +44,8 @@ public class ExplainabilityResult {
     public ExplainabilityResult() {
     }
 
-    public ExplainabilityResult(String executionId, ExplainabilityStatus status, String statusDetails, List<Saliency> saliencies) {
+    public ExplainabilityResult(String executionId, ExplainabilityStatus status, String statusDetails,
+            List<Saliency> saliencies) {
         this.executionId = executionId;
         this.status = status;
         this.statusDetails = statusDetails;

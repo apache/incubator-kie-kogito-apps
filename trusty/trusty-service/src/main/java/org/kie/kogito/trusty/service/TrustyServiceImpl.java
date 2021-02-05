@@ -16,6 +16,11 @@
 
 package org.kie.kogito.trusty.service;
 
+import static java.util.Arrays.asList;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
+import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
+import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
+
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,11 +48,6 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.Arrays.asList;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
-import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
-
 @ApplicationScoped
 public class TrustyServiceImpl implements TrustyService {
 
@@ -66,8 +66,7 @@ public class TrustyServiceImpl implements TrustyService {
     public TrustyServiceImpl(
             @ConfigProperty(name = "trusty.explainability.enabled") Boolean isExplainabilityEnabled,
             ExplainabilityRequestProducer explainabilityRequestProducer,
-            TrustyStorageService storageService
-    ) {
+            TrustyStorageService storageService) {
         this.isExplainabilityEnabled = Boolean.TRUE.equals(isExplainabilityEnabled);
         this.explainabilityRequestProducer = explainabilityRequestProducer;
         this.storageService = storageService;
@@ -79,17 +78,17 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public MatchedExecutionHeaders getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset, String prefix) {
+    public MatchedExecutionHeaders getExecutionHeaders(OffsetDateTime from, OffsetDateTime to, int limit, int offset,
+            String prefix) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         List<AttributeFilter<?>> filters = new ArrayList<>();
         filters.add(QueryFilterFactory.like(Execution.EXECUTION_ID_FIELD, prefix + "*"));
         filters.add(QueryFilterFactory.greaterThanEqual(Execution.EXECUTION_TIMESTAMP_FIELD, from.toInstant().toEpochMilli()));
         filters.add(QueryFilterFactory.lessThanEqual(Execution.EXECUTION_TIMESTAMP_FIELD, to.toInstant().toEpochMilli()));
         ArrayList result = new ArrayList<>(storage.query()
-                                                   .sort(asList(orderBy(Execution.EXECUTION_TIMESTAMP_FIELD, DESC)))
-                                                   .filter(filters)
-                                                   .execute()
-        );
+                .sort(asList(orderBy(Execution.EXECUTION_TIMESTAMP_FIELD, DESC)))
+                .filter(filters)
+                .execute());
 
         if (result.size() < offset) {
             throw new IllegalArgumentException("Out of bound start offset in result");
@@ -102,7 +101,8 @@ public class TrustyServiceImpl implements TrustyService {
     public Decision getDecisionById(String executionId) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         if (!storage.containsKey(executionId)) {
-            throw new IllegalArgumentException(String.format("A decision with ID %s does not exist in the storage.", executionId));
+            throw new IllegalArgumentException(
+                    String.format("A decision with ID %s does not exist in the storage.", executionId));
         }
         return storage.get(executionId);
     }
@@ -111,7 +111,8 @@ public class TrustyServiceImpl implements TrustyService {
     public void storeDecision(String executionId, Decision decision) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         if (storage.containsKey(executionId)) {
-            throw new IllegalArgumentException(String.format("A decision with ID %s is already present in the storage.", executionId));
+            throw new IllegalArgumentException(
+                    String.format("A decision with ID %s is already present in the storage.", executionId));
         }
         storage.put(executionId, decision);
     }
@@ -127,12 +128,15 @@ public class TrustyServiceImpl implements TrustyService {
         if (isExplainabilityEnabled) {
             Map<String, TypedValue> inputs = decision.getInputs() != null
                     ? decision.getInputs().stream()
-                    .collect(HashMap::new, (m, v) -> m.put(v.getName(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
+                            .collect(HashMap::new, (m, v) -> m.put(v.getName(), modelToTracingTypedValue(v.getValue())),
+                                    HashMap::putAll)
                     : Collections.emptyMap();
 
             Map<String, TypedValue> outputs = decision.getOutcomes() != null
                     ? decision.getOutcomes().stream()
-                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeName(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
+                            .collect(HashMap::new,
+                                    (m, v) -> m.put(v.getOutcomeName(), modelToTracingTypedValue(v.getOutcomeResult())),
+                                    HashMap::putAll)
                     : Collections.emptyMap();
 
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(
@@ -140,8 +144,7 @@ public class TrustyServiceImpl implements TrustyService {
                     serviceUrl,
                     createDecisionModelIdentifierDto(decision),
                     inputs,
-                    outputs
-            ));
+                    outputs));
         }
     }
 
@@ -149,7 +152,8 @@ public class TrustyServiceImpl implements TrustyService {
     public ExplainabilityResult getExplainabilityResultById(String executionId) {
         Storage<String, ExplainabilityResult> storage = storageService.getExplainabilityResultStorage();
         if (!storage.containsKey(executionId)) {
-            throw new IllegalArgumentException(String.format("A explainability result with ID %s does not exist in the storage.", executionId));
+            throw new IllegalArgumentException(
+                    String.format("A explainability result with ID %s does not exist in the storage.", executionId));
         }
         return storage.get(executionId);
     }
@@ -158,18 +162,21 @@ public class TrustyServiceImpl implements TrustyService {
     public void storeExplainabilityResult(String executionId, ExplainabilityResult result) {
         Storage<String, ExplainabilityResult> storage = storageService.getExplainabilityResultStorage();
         if (storage.containsKey(executionId)) {
-            throw new IllegalArgumentException(String.format("A explainability result with ID %s is already present in the storage.", executionId));
+            throw new IllegalArgumentException(
+                    String.format("A explainability result with ID %s is already present in the storage.", executionId));
         }
         storage.put(executionId, result);
         LOG.info("Stored explainability result for execution {}", executionId);
     }
 
     @Override
-    public void storeModel(String groupId, String artifactId, String version, String name, String namespace, String definition) {
+    public void storeModel(String groupId, String artifactId, String version, String name, String namespace,
+            String definition) {
         final String identifier = ModelIdCreator.makeIdentifier(groupId, artifactId, version, name, namespace);
         final Storage<String, String> storage = storageService.getModelStorage();
         if (storage.containsKey(identifier)) {
-            throw new IllegalArgumentException(String.format("A model with ID %s is already present in the storage.", identifier));
+            throw new IllegalArgumentException(
+                    String.format("A model with ID %s is already present in the storage.", identifier));
         }
         storage.put(identifier, definition);
     }

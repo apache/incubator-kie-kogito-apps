@@ -16,6 +16,13 @@
 
 package org.kie.kogito.explainability;
 
+import java.security.SecureRandom;
+import java.util.Map;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
@@ -24,13 +31,6 @@ import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Saliency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-
-import java.security.SecureRandom;
-import java.util.Map;
 
 @ApplicationScoped
 public class LimeExplainerProducer {
@@ -43,14 +43,16 @@ public class LimeExplainerProducer {
     @Inject
     public LimeExplainerProducer(
             @ConfigProperty(name = "trusty.explainability.numberOfSamples", defaultValue = "100") Integer numberOfSamples,
-            @ConfigProperty(name = "trusty.explainability.numberOfPerturbations", defaultValue = "1") Integer numberOfPerturbations) {
+            @ConfigProperty(name = "trusty.explainability.numberOfPerturbations",
+                    defaultValue = "1") Integer numberOfPerturbations) {
         this.numberOfSamples = numberOfSamples;
         this.numberOfPerturbations = numberOfPerturbations;
     }
 
     @Produces
     public LocalExplainer<Map<String, Saliency>> produce() {
-        LOG.debug("LimeExplainer created (numberOfSamples={}, numberOfPerturbations={})", numberOfSamples, numberOfPerturbations);
+        LOG.debug("LimeExplainer created (numberOfSamples={}, numberOfPerturbations={})", numberOfSamples,
+                numberOfPerturbations);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(numberOfSamples)
                 .withPerturbationContext(new PerturbationContext(new SecureRandom(), numberOfPerturbations));

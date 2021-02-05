@@ -16,24 +16,25 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.FEATURE_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.SCORE_FIELD;
+
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.DoubleTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
-import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.FEATURE_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.SCORE_FIELD;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class FeatureImportanceMarshallerTest extends MarshallerTestTemplate<FeatureImportance> {
 
     private static final List<AbstractTestField<FeatureImportance, ?>> TEST_FIELD_LIST = List.of(
-            new StringTestField<>(FEATURE_NAME_FIELD, "test", FeatureImportance::getFeatureName, FeatureImportance::setFeatureName),
-            new DoubleTestField<>(SCORE_FIELD, 0.2, FeatureImportance::getScore, FeatureImportance::setScore)
-    );
+            new StringTestField<>(FEATURE_NAME_FIELD, "test", FeatureImportance::getFeatureName,
+                    FeatureImportance::setFeatureName),
+            new DoubleTestField<>(SCORE_FIELD, 0.2, FeatureImportance::getScore, FeatureImportance::setScore));
 
     public FeatureImportanceMarshallerTest() {
         super(FeatureImportance.class);

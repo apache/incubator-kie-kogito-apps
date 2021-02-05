@@ -16,6 +16,14 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentCaptor.forClass;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Optional;
@@ -23,7 +31,6 @@ import java.util.Optional;
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 
-import io.quarkus.runtime.StartupEvent;
 import org.apache.commons.io.IOUtils;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
@@ -36,13 +43,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentCaptor.forClass;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import io.quarkus.runtime.StartupEvent;
 
 @ExtendWith(MockitoExtension.class)
 class InfinispanConfigurationTest {
@@ -56,10 +57,10 @@ class InfinispanConfigurationTest {
 
     @Test
     void initializeCaches(@Mock Event<InfinispanInitialized> initializedEvent,
-                          @Mock RemoteCacheManager remoteCacheManager,
-                          @Mock Instance<RemoteCacheManager> instance,
-                          @Mock RemoteCacheManagerAdmin administration,
-                          @Mock RemoteCache<Object, Object> cache) throws IOException {
+            @Mock RemoteCacheManager remoteCacheManager,
+            @Mock Instance<RemoteCacheManager> instance,
+            @Mock RemoteCacheManagerAdmin administration,
+            @Mock RemoteCache<Object, Object> cache) throws IOException {
         when(instance.get()).thenReturn(remoteCacheManager);
         when(remoteCacheManager.administration()).thenReturn(administration);
         when(administration.getOrCreateCache(anyString(), any(XMLStringConfiguration.class))).thenReturn(cache);
@@ -68,10 +69,12 @@ class InfinispanConfigurationTest {
         assertThat(tested.isInitialized()).isFalse();
         tested.initializeCaches(new StartupEvent(), Optional.of("infinispan"), instance, initializedEvent);
         verify(administration).getOrCreateCache(eq(InfinispanConfiguration.Caches.JOB_DETAILS),
-                                                templateCaptor.capture());
+                templateCaptor.capture());
 
         assertThat(templateCaptor.getValue().toXMLString(null))
-                .isEqualTo(IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(InfinispanConfiguration.CACHE_TEMPLATE_XML), Charset.forName("UTF-8")));
+                .isEqualTo(IOUtils.toString(
+                        this.getClass().getClassLoader().getResourceAsStream(InfinispanConfiguration.CACHE_TEMPLATE_XML),
+                        Charset.forName("UTF-8")));
         verify(initializedEvent).fire(any(InfinispanInitialized.class));
         assertThat(tested.isInitialized()).isTrue();
 

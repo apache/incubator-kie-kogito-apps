@@ -16,13 +16,13 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
+import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
 
 public abstract class ArgumentContainer implements Argument {
 

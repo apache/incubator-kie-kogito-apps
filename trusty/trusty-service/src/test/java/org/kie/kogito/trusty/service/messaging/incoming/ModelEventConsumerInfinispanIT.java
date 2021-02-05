@@ -16,10 +16,16 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
+
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,13 +35,8 @@ import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)
@@ -63,7 +64,7 @@ class ModelEventConsumerInfinispanIT {
         kafkaClient = new KafkaClient(kafkaBootstrapServers);
 
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
-                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+                KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
         await()
                 .atMost(5, SECONDS)
                 .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getModelById("name:namespace")));

@@ -16,6 +16,13 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime.executable;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_100TASKS_5USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_24TASKS_8USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_500TASKS_20USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_50TASKS_5USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_USER;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,16 +35,9 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.core.TestConstants;
 import org.kie.kogito.taskassigning.core.model.Task;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.solver.realtime.AddTaskProblemFactChange;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_100TASKS_5USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_24TASKS_8USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_500TASKS_20USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_50TASKS_5USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_USER;
 
 class AddTaskExecutableProblemFactChangeTest extends AbstractExecutableProblemFactChangeTest {
 
@@ -94,7 +94,7 @@ class AddTaskExecutableProblemFactChangeTest extends AbstractExecutableProblemFa
         String taskId = "20"; //randomly selected task.
         TaskAssignment taskAssignment = new TaskAssignment(Task.newBuilder().id(taskId).build());
         Assertions.assertThatThrownBy(() -> executeSequentialChanges(solution,
-                                                                     Collections.singletonList(new ProgrammedProblemFactChange<>(new AddTaskProblemFactChange(taskAssignment)))))
+                Collections.singletonList(new ProgrammedProblemFactChange<>(new AddTaskProblemFactChange(taskAssignment)))))
                 .hasMessage("A task assignment with the given identifier id: %s already exists", taskId);
     }
 
@@ -112,12 +112,14 @@ class AddTaskExecutableProblemFactChangeTest extends AbstractExecutableProblemFa
     private void addTaskProblemFactChange(TaskAssigningSolution solution, List<String> taskIds) {
         solution.getUserList().add(PLANNING_USER);
         List<ProgrammedProblemFactChange<AddTaskProblemFactChange>> programmedChanges = taskIds.stream()
-                .map(id -> new ProgrammedProblemFactChange<>(new AddTaskProblemFactChange(new TaskAssignment(Task.newBuilder().id(id).name("NewTask_" + id).build()))))
+                .map(id -> new ProgrammedProblemFactChange<>(new AddTaskProblemFactChange(
+                        new TaskAssignment(Task.newBuilder().id(id).name("NewTask_" + id).build()))))
                 .collect(Collectors.toList());
 
         //each partial solution must have the change that was applied on it.
         executeSequentialChanges(solution, programmedChanges);
-        programmedChanges.forEach(change -> assertAddTaskProblemFactChangeWasProduced(change.getChange(), change.getSolutionAfterChange()));
+        programmedChanges.forEach(
+                change -> assertAddTaskProblemFactChangeWasProduced(change.getChange(), change.getSolutionAfterChange()));
 
         //finally the last solution must have the result of all the changes.
         TaskAssigningSolution lastSolution = programmedChanges.get(programmedChanges.size() - 1).getSolutionAfterChange();
@@ -129,6 +131,8 @@ class AddTaskExecutableProblemFactChangeTest extends AbstractExecutableProblemFa
     }
 
     private void assertAddTaskProblemFactChangeWasProduced(AddTaskProblemFactChange change, TaskAssigningSolution solution) {
-        assertThat(solution.getTaskAssignmentList().stream().anyMatch(taskAssignment -> Objects.equals(change.getTaskAssignment().getId(), taskAssignment.getId()))).isTrue();
+        assertThat(solution.getTaskAssignmentList().stream()
+                .anyMatch(taskAssignment -> Objects.equals(change.getTaskAssignment().getId(), taskAssignment.getId())))
+                        .isTrue();
     }
 }

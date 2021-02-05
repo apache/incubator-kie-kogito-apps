@@ -16,6 +16,10 @@
 
 package org.kie.kogito.taskassigning.process.service.client.impl.mp;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
@@ -25,10 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ProcessServiceClientMPTest {
@@ -61,14 +61,17 @@ class ProcessServiceClientMPTest {
         doReturn(taskSchema)
                 .when(clientRest)
                 .getTaskSchema(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, USER, Arrays.asList(GROUP1, GROUP2));
-        Set<String> result = client.getAvailablePhases(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, USER, Arrays.asList(GROUP1, GROUP2));
+        Set<String> result = client.getAvailablePhases(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, USER,
+                Arrays.asList(GROUP1, GROUP2));
         assertThat(result).containsExactlyInAnyOrder(PHASE1, PHASE2);
     }
 
     @Test
     void transitionTask() {
-        client.transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER, Arrays.asList(GROUP1, GROUP2));
-        verify(clientRest).transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER, Arrays.asList(GROUP1, GROUP2), EMPTY_JSON);
+        client.transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER,
+                Arrays.asList(GROUP1, GROUP2));
+        verify(clientRest).transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER,
+                Arrays.asList(GROUP1, GROUP2), EMPTY_JSON);
     }
 
     @Test

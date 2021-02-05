@@ -16,12 +16,12 @@
 
 package org.kie.kogito.taskassigning.process.service.client.impl.mp;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class TaskSchemaTest {
 

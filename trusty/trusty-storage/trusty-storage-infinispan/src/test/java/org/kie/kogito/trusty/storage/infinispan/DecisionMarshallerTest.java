@@ -16,10 +16,20 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.kie.kogito.trusty.storage.api.model.Decision.INPUTS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Decision.OUTCOMES_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAMESPACE_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TIMESTAMP_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TYPE_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTOR_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.HAS_SUCCEEDED_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.SOURCE_URL_FIELD;
+
 import java.util.Collections;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
@@ -32,31 +42,28 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.EnumTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.LongTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
-import static org.kie.kogito.trusty.storage.api.model.Decision.INPUTS_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Decision.OUTCOMES_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAMESPACE_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TIMESTAMP_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TYPE_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTOR_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.HAS_SUCCEEDED_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.SOURCE_URL_FIELD;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DecisionMarshallerTest extends MarshallerTestTemplate<Decision> {
 
     private static final List<AbstractTestField<Decision, ?>> TEST_FIELD_LIST = List.of(
             new StringTestField<>(EXECUTION_ID_FIELD, "test", Decision::getExecutionId, Decision::setExecutionId),
-            new StringTestField<>(SOURCE_URL_FIELD, "http://localhost:8080/modelName", Decision::getSourceUrl, Decision::setSourceUrl),
-            new LongTestField<>(EXECUTION_TIMESTAMP_FIELD, 0L, Decision::getExecutionTimestamp, Decision::setExecutionTimestamp),
+            new StringTestField<>(SOURCE_URL_FIELD, "http://localhost:8080/modelName", Decision::getSourceUrl,
+                    Decision::setSourceUrl),
+            new LongTestField<>(EXECUTION_TIMESTAMP_FIELD, 0L, Decision::getExecutionTimestamp,
+                    Decision::setExecutionTimestamp),
             new StringTestField<>(EXECUTOR_NAME_FIELD, "jack", Decision::getExecutorName, Decision::setExecutorName),
-            new StringTestField<>(EXECUTED_MODEL_NAME_FIELD, "modelName", Decision::getExecutedModelName, Decision::setExecutedModelName),
-            new StringTestField<>(EXECUTED_MODEL_NAMESPACE_FIELD, "modelNamespace", Decision::getExecutedModelNamespace, Decision::setExecutedModelNamespace),
+            new StringTestField<>(EXECUTED_MODEL_NAME_FIELD, "modelName", Decision::getExecutedModelName,
+                    Decision::setExecutedModelName),
+            new StringTestField<>(EXECUTED_MODEL_NAMESPACE_FIELD, "modelNamespace", Decision::getExecutedModelNamespace,
+                    Decision::setExecutedModelNamespace),
             new BooleanTestField<>(HAS_SUCCEEDED_FIELD, Boolean.TRUE, Decision::hasSucceeded, Decision::setSuccess),
-            new EnumTestField<>(EXECUTION_TYPE_FIELD, ExecutionType.DECISION, Decision::getExecutionType, Decision::setExecutionType, ExecutionType.class),
-            new CollectionTestField<>(INPUTS_FIELD, Collections.emptyList(), Decision::getInputs, Decision::setInputs, DecisionInput.class),
-            new CollectionTestField<>(OUTCOMES_FIELD, Collections.emptyList(), Decision::getOutcomes, Decision::setOutcomes, DecisionOutcome.class)
-    );
+            new EnumTestField<>(EXECUTION_TYPE_FIELD, ExecutionType.DECISION, Decision::getExecutionType,
+                    Decision::setExecutionType, ExecutionType.class),
+            new CollectionTestField<>(INPUTS_FIELD, Collections.emptyList(), Decision::getInputs, Decision::setInputs,
+                    DecisionInput.class),
+            new CollectionTestField<>(OUTCOMES_FIELD, Collections.emptyList(), Decision::getOutcomes, Decision::setOutcomes,
+                    DecisionOutcome.class));
 
     public DecisionMarshallerTest() {
         super(Decision.class);

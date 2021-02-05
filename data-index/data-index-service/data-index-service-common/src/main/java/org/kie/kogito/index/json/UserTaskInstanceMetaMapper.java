@@ -16,20 +16,21 @@
 
 package org.kie.kogito.index.json;
 
-import java.util.Set;
-import java.util.function.Function;
-
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
-import org.kie.kogito.index.model.UserTaskInstance;
-
 import static org.kie.kogito.index.Constants.ID;
 import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.Constants.LAST_UPDATE;
 import static org.kie.kogito.index.Constants.PROCESS_ID;
 import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+
+import java.util.Set;
+import java.util.function.Function;
+
+import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
+import org.kie.kogito.index.model.UserTaskInstance;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class UserTaskInstanceMetaMapper implements Function<KogitoUserTaskCloudEvent, ObjectNode> {
 
@@ -41,7 +42,8 @@ public class UserTaskInstanceMetaMapper implements Function<KogitoUserTaskCloudE
 
         UserTaskInstance ut = event.getData();
         ObjectNode json = getObjectMapper().createObjectNode();
-        json.put(ID, event.getRootProcessInstanceId() == null ? event.getProcessInstanceId() : event.getRootProcessInstanceId());
+        json.put(ID,
+                event.getRootProcessInstanceId() == null ? event.getProcessInstanceId() : event.getRootProcessInstanceId());
         json.put(PROCESS_ID, event.getRootProcessId() == null ? event.getProcessId() : event.getRootProcessId());
         ObjectNode kogito = getObjectMapper().createObjectNode();
         kogito.put(LAST_UPDATE, event.getTime().toInstant().toEpochMilli());

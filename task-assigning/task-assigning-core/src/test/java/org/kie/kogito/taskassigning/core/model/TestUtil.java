@@ -26,9 +26,9 @@ public class TestUtil {
 
     public static TaskAssignment mockTaskAssignment(String taskId, boolean pinned) {
         TaskAssignment taskAssignment = new TaskAssignment(Task.newBuilder()
-                                                                   .id(taskId)
-                                                                   .name("Task_" + taskId)
-                                                                   .priority("0").build());
+                .id(taskId)
+                .name("Task_" + taskId)
+                .priority("0").build());
         taskAssignment.setPinned(pinned);
         return taskAssignment;
     }

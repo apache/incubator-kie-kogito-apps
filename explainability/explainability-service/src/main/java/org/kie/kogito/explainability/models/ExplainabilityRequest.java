@@ -29,7 +29,8 @@ public class ExplainabilityRequest {
     private final Map<String, TypedValue> inputs;
     private final Map<String, TypedValue> outputs;
 
-    public ExplainabilityRequest(String executionId, String serviceUrl, ModelIdentifier modelIdentifier, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
+    public ExplainabilityRequest(String executionId, String serviceUrl, ModelIdentifier modelIdentifier,
+            Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         this.executionId = executionId;
         this.serviceUrl = serviceUrl;
         this.modelIdentifier = modelIdentifier;
@@ -63,7 +64,6 @@ public class ExplainabilityRequest {
                 dto.getServiceUrl(),
                 ModelIdentifier.from(dto.getModelIdentifier()),
                 dto.getInputs(),
-                dto.getOutputs()
-        );
+                dto.getOutputs());
     }
 }

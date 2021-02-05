@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.infinispan.schema;
 
+import static java.util.Collections.emptyList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +34,6 @@ import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
 import org.kie.kogito.persistence.infinispan.cache.ProtobufCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static java.util.Collections.emptyList;
 
 @ApplicationScoped
 public class ProtoSchemaManager {

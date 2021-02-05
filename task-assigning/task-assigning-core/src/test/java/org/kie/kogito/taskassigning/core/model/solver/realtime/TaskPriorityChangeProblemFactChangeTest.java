@@ -16,12 +16,13 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-class TaskPriorityChangeProblemFactChangeTest extends AbstractTaskPropertyChangeProblemFactChangeTest<TaskPriorityChangeProblemFactChange> {
+class TaskPriorityChangeProblemFactChangeTest
+        extends AbstractTaskPropertyChangeProblemFactChangeTest<TaskPriorityChangeProblemFactChange> {
 
     private static final String CURRENT_PRIORITY = "CURRENT_PRIORITY";
     private static final String NEW_PRIORITY = "NEW_PRIORITY";

@@ -16,13 +16,13 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
+import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtil.unlinkTaskAssignment;
+
 import org.kie.kogito.taskassigning.core.model.ChainElement;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.api.solver.ProblemFactChange;
-
-import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtil.unlinkTaskAssignment;
 
 /**
  * Implements the removal of a TaskAssignment from the working solution. If a TaskAssignment with the given identifier

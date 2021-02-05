@@ -16,18 +16,18 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
+import static org.kie.kogito.taskassigning.core.model.solver.DefaultTaskAssigningConstraints.hardLevelWeight;
+import static org.kie.kogito.taskassigning.core.model.solver.DefaultTaskAssigningConstraints.softLevelWeight;
+
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
 import org.optaplanner.core.api.score.stream.ConstraintProvider;
-
-import static org.kie.kogito.taskassigning.core.model.solver.DefaultTaskAssigningConstraints.hardLevelWeight;
-import static org.kie.kogito.taskassigning.core.model.solver.DefaultTaskAssigningConstraints.softLevelWeight;
 
 public class DefaultTaskAssigningConstraintProvider implements ConstraintProvider {
 
     @Override
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
-        return new Constraint[]{
+        return new Constraint[] {
                 requiredPotentialOwner(constraintFactory),
                 requiredSkills(constraintFactory),
                 planningUserAssignment(constraintFactory),

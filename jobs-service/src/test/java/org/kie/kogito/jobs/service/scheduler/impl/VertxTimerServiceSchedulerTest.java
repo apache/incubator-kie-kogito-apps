@@ -16,12 +16,16 @@
 
 package org.kie.kogito.jobs.service.scheduler.impl;
 
-import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.given;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 import java.time.ZonedDateTime;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import io.vertx.mutiny.core.Vertx;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,11 +45,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.given;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import io.vertx.mutiny.core.Vertx;
 
 @ExtendWith(MockitoExtension.class)
 class VertxTimerServiceSchedulerTest {
@@ -78,7 +78,8 @@ class VertxTimerServiceSchedulerTest {
         ZonedDateTime time = DateUtil.now().plusSeconds(1);
         final ManageableJobHandle handle = schedule(time);
         verify(vertx).setTimer(timeCaptor.capture(), any());
-        assertThat(timeCaptor.getValue()).isGreaterThan(time.toInstant().minusMillis(System.currentTimeMillis()).toEpochMilli());
+        assertThat(timeCaptor.getValue())
+                .isGreaterThan(time.toInstant().minusMillis(System.currentTimeMillis()).toEpochMilli());
         given().await()
                 .atMost(2, TimeUnit.SECONDS)
                 .untilAsserted(() -> verify(executor).execute(jobCaptor.capture()));

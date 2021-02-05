@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.explainability.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,9 +25,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.utils.DataUtils;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GenericFeatureDistributionTest {
 
@@ -48,7 +48,7 @@ class GenericFeatureDistributionTest {
         GenericFeatureDistribution stringFeatureDistribution = new GenericFeatureDistribution(feature, values);
         assertEquals(26, stringFeatureDistribution.getAllSamples().size());
         assertEquals(3, stringFeatureDistribution.sample(3).size());
-        assertThat(stringFeatureDistribution.sample().asString()).isBetween("a","z");
+        assertThat(stringFeatureDistribution.sample().asString()).isBetween("a", "z");
         assertEquals(55, stringFeatureDistribution.sample(55).size());
     }
 

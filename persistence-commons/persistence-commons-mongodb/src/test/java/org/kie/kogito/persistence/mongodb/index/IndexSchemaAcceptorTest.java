@@ -16,12 +16,12 @@
 
 package org.kie.kogito.persistence.mongodb.index;
 
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.persistence.api.schema.SchemaType;
-
 import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
 import static org.wildfly.common.Assert.assertFalse;
 import static org.wildfly.common.Assert.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.persistence.api.schema.SchemaType;
 
 class IndexSchemaAcceptorTest {
 

@@ -18,10 +18,11 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MessageMarshaller extends AbstractModelMarshaller<Message> {
 
@@ -37,8 +38,7 @@ public class MessageMarshaller extends AbstractModelMarshaller<Message> {
                 reader.readString(Message.TYPE_FIELD),
                 reader.readString(Message.SOURCE_ID_FIELD),
                 reader.readString(Message.TEXT_FIELD),
-                reader.readObject(Message.EXCEPTION_FIELD, MessageExceptionField.class)
-        );
+                reader.readObject(Message.EXCEPTION_FIELD, MessageExceptionField.class));
     }
 
     @Override
@@ -54,9 +54,9 @@ public class MessageMarshaller extends AbstractModelMarshaller<Message> {
     @Override
     public String getTypeName() {
         /*
-          The org.kie.kogito.trusty.storage.api.model.Message model is mapped to the ExecutionMessage
-          protobuf definition as a workaround for an error in infinispan protostream library:
-          using the Message name throws an exception during serialization.
+         * The org.kie.kogito.trusty.storage.api.model.Message model is mapped to the ExecutionMessage
+         * protobuf definition as a workaround for an error in infinispan protostream library:
+         * using the Message name throws an exception during serialization.
          */
         return String.format("%s.%s", getJavaClass().getPackageName(), "ExecutionMessage");
     }

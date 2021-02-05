@@ -32,7 +32,8 @@ public class ProcessServiceClientMP implements ProcessServiceClient {
     }
 
     @Override
-    public Set<String> getAvailablePhases(String processId, String processInstanceId, String taskId, String workItemId, String user, List<String> groups) {
+    public Set<String> getAvailablePhases(String processId, String processInstanceId, String taskId, String workItemId,
+            String user, List<String> groups) {
         HashSet<String> result = new HashSet<>();
         TaskSchema schema = client.getTaskSchema(processId, processInstanceId, taskId, workItemId, user, groups);
         if (schema != null && schema.getPhases() != null) {
@@ -42,7 +43,8 @@ public class ProcessServiceClientMP implements ProcessServiceClient {
     }
 
     @Override
-    public void transitionTask(String processId, String processInstanceId, String taskId, String workItemId, String phase, String user, List<String> groups) {
+    public void transitionTask(String processId, String processInstanceId, String taskId, String workItemId, String phase,
+            String user, List<String> groups) {
         client.transitionTask(processId, processInstanceId, taskId, workItemId, phase, user, groups, "{}");
     }
 
