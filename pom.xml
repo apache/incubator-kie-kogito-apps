@@ -108,7 +108,7 @@
         <module>persistence-commons</module>
         <module>jobs-service</module>
         <module>data-index</module>
-<!--        <module>ui-packages</module>-->
+        <module>ui-packages</module>
         <module>security-commons</module>
         <module>management-console</module>
         <module>trusty-ui</module>
