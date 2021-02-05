@@ -23,12 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNDecisionResult;
-import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
-import org.kie.dmn.api.core.DMNRuntime;
-import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
@@ -41,14 +37,11 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class LocalDMNPredictionProvider implements PredictionProvider {
 
-    public static final String DUMMY_DMN_CONTEXT_KEY = "dmnContext";
-    private final DMNModel dmnModel;
-    private final DMNRuntime dmnRuntime;
+    public static final String DUMMY_DMN_CONTEXT_KEY = "dummyDMNContext";
+    private final DMNEvaluator dmnEvaluator;
 
-
-    public LocalDMNPredictionProvider(DMNModel dmnModel, DMNRuntime dmnRuntime) {
-        this.dmnModel = dmnModel;
-        this.dmnRuntime = dmnRuntime;
+    public LocalDMNPredictionProvider(DMNEvaluator dmnEvaluator) {
+        this.dmnEvaluator = dmnEvaluator;
     }
 
     @Override
@@ -57,12 +50,19 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
         List<PredictionOutput> predictionOutputs = new ArrayList<>();
         for (PredictionInput input : inputs) {
             Map<String, Object> contextVariables = (Map<String, Object>) toMap(input.getFeatures()).get(DUMMY_DMN_CONTEXT_KEY);
-            predictionOutputs.add(toPredictionOutput(predict(contextVariables)));
+            predictionOutputs.add(toPredictionOutput(dmnEvaluator.evaluate(contextVariables)));
         }
         return completedFuture(predictionOutputs);
     }
 
-    public PredictionOutput toPredictionOutput(org.kie.dmn.api.core.DMNResult dmnResult) {
+    public static PredictionInput toPredictionInput(Map<String, Object> context) {
+        return new PredictionInput(
+                // TODO: Date/Time types are considered as strings, proper conversion to be implemented https://issues.redhat.com/browse/KOGITO-4351
+                Collections.singletonList(FeatureFactory.newCompositeFeature(DUMMY_DMN_CONTEXT_KEY, context))
+        );
+    }
+
+    public static PredictionOutput toPredictionOutput(DMNResult dmnResult) {
         List<Output> outputs = new ArrayList<>();
         for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
             Output output = buildOutput(decisionResult);
@@ -71,20 +71,7 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
         return new PredictionOutput(outputs);
     }
 
-    public DMNModel getDmnModel() {
-        return dmnModel;
-    }
-
-    public DMNRuntime getDmnRuntime() {
-        return dmnRuntime;
-    }
-
-    public DMNResult predict(Map<String, Object> contextVariables) {
-        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(contextVariables);
-        return dmnRuntime.evaluateAll(dmnModel, dmnContext);
-    }
-
-    private Output buildOutput(DMNDecisionResult dmnDecisionResult) {
+    private static Output buildOutput(DMNDecisionResult dmnDecisionResult) {
         Feature result = FeatureFactory.parseFeatureValue(dmnDecisionResult.getDecisionName(), dmnDecisionResult.getResult());
         return new Output(dmnDecisionResult.getDecisionName(), result.getType(), result.getValue(), 1d);
     }
