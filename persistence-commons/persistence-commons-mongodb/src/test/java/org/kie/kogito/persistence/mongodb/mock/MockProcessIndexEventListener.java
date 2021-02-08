@@ -16,11 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.mock;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -30,6 +25,11 @@ import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
 import org.mockito.Mockito;
 
 import io.quarkus.test.Mock;
+
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @Mock
 @ApplicationScoped

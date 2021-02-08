@@ -16,12 +16,6 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
-
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +31,12 @@ import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 class ProcessInstanceEntityMapperTest {
 

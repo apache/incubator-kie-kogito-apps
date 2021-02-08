@@ -16,17 +16,6 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_SOURCE;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithNullFields;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithNullFields;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +28,17 @@ import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceOutputValue;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_SOURCE;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithNullFields;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithNullFields;
 
 class TraceEventConverterTest {
 

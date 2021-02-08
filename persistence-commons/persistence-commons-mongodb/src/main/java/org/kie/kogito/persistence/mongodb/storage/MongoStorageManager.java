@@ -16,8 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
-import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -25,6 +23,8 @@ import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
 import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
+
+import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
 
 @ApplicationScoped
 @StorageQualifier(MONGODB_STORAGE)

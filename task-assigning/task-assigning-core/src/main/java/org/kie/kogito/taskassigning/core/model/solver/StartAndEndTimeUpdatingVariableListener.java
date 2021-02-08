@@ -16,9 +16,6 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.END_TIME_IN_MINUTES;
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_IN_MINUTES;
-
 import java.util.Objects;
 
 import org.kie.kogito.taskassigning.core.model.ChainElement;
@@ -26,6 +23,9 @@ import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.optaplanner.core.api.domain.variable.VariableListener;
 import org.optaplanner.core.api.score.director.ScoreDirector;
+
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.END_TIME_IN_MINUTES;
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_IN_MINUTES;
 
 /**
  * Given a chained graph:

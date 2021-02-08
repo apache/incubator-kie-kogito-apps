@@ -16,6 +16,9 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
+import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
+import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
+
 import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.ACTUAL_OWNER;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.COMPLETED;
@@ -27,9 +30,6 @@ import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTask
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.REFERENCE_NAME;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STARTED;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STATE;
-
-import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
-import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
 
 class UserTaskInstanceArgumentTest extends AbstractArgumentContainerTest<UserTaskInstanceArgument> {
 

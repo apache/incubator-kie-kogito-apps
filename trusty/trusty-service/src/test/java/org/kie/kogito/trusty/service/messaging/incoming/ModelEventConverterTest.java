@@ -16,10 +16,10 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
-
-import org.junit.jupiter.api.Test;
 
 class ModelEventConverterTest {
 

@@ -16,14 +16,6 @@
 
 package org.kie.kogito.jobs.service.scheduler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,6 +40,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.quarkus.runtime.StartupEvent;
 import io.vertx.mutiny.core.Vertx;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JobSchedulerManagerTest {

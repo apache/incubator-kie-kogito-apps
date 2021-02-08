@@ -16,8 +16,6 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,6 +41,8 @@ import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.kie.kogito.infinispan.health.InfinispanHealthCheck;
 
 import io.quarkus.runtime.StartupEvent;
+
+import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
 
 @ApplicationScoped
 public class InfinispanConfiguration {

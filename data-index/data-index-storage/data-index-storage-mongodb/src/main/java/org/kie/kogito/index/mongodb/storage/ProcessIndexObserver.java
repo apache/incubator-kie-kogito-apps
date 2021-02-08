@@ -16,8 +16,6 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
-import static org.kie.kogito.index.mongodb.Constants.getDomainCollectionName;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -27,6 +25,8 @@ import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;
 import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
+
+import static org.kie.kogito.index.mongodb.Constants.getDomainCollectionName;
 
 @ApplicationScoped
 public class ProcessIndexObserver {

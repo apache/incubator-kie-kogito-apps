@@ -16,10 +16,6 @@
 
 package org.kie.kogito.index.graphql.query;
 
-import static io.restassured.RestAssured.given;
-import static java.lang.String.format;
-import static org.hamcrest.CoreMatchers.isA;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -39,6 +35,10 @@ import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchemaElement;
 import io.restassured.http.ContentType;
+
+import static io.restassured.RestAssured.given;
+import static java.lang.String.format;
+import static org.hamcrest.CoreMatchers.isA;
 
 abstract class AbstractGraphQLQueryOrderByIT {
 

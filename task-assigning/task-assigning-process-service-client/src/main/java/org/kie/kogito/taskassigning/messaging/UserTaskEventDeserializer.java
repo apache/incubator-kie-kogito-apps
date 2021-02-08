@@ -16,9 +16,6 @@
 
 package org.kie.kogito.taskassigning.messaging;
 
-import static java.lang.String.format;
-import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
-
 import java.io.IOException;
 import java.net.URI;
 import java.time.temporal.ChronoUnit;
@@ -27,6 +24,9 @@ import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import com.google.common.net.UrlEscapers;
+
+import static java.lang.String.format;
+import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
 
 public class UserTaskEventDeserializer implements Deserializer<UserTaskEvent> {
 

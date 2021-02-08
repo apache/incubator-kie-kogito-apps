@@ -16,8 +16,6 @@
 
 package org.kie.kogito.persistence.protobuf;
 
-import static java.util.stream.Collectors.toSet;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +32,8 @@ import org.infinispan.protostream.descriptors.FileDescriptor;
 import org.kie.kogito.persistence.api.schema.AttributeDescriptor;
 import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
 import org.kie.kogito.persistence.api.schema.IndexDescriptor;
+
+import static java.util.stream.Collectors.toSet;
 
 class ProtoIndexParser implements AnnotationMetadataCreator<EntityIndexDescriptor, Descriptor> {
 

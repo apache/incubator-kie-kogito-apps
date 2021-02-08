@@ -16,6 +16,23 @@
 
 package org.kie.kogito.index.graphql.query;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.kie.kogito.persistence.api.query.AttributeFilter;
+import org.kie.kogito.persistence.api.query.FilterCondition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLInputType;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLNamedType;
+
 import static graphql.schema.GraphQLTypeUtil.isList;
 import static graphql.schema.GraphQLTypeUtil.simplePrint;
 import static graphql.schema.GraphQLTypeUtil.unwrapNonNull;
@@ -38,23 +55,6 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.not;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
-
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.kie.kogito.persistence.api.query.AttributeFilter;
-import org.kie.kogito.persistence.api.query.FilterCondition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import graphql.schema.GraphQLEnumType;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLInputType;
-import graphql.schema.GraphQLList;
-import graphql.schema.GraphQLNamedType;
 
 public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, GraphQLQueryParser> {
 

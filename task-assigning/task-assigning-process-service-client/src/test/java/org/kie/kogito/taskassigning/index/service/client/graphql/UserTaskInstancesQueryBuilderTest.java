@@ -16,12 +16,6 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
-import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.DESCRIPTION;
-import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.NAME;
-import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STARTED;
-
 import java.util.Iterator;
 import java.util.stream.Stream;
 
@@ -32,6 +26,12 @@ import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringAr
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
+import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.DESCRIPTION;
+import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.NAME;
+import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STARTED;
 
 class UserTaskInstancesQueryBuilderTest {
 

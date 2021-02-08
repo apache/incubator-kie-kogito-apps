@@ -16,8 +16,6 @@
 
 package org.kie.kogito.index.messaging;
 
-import static java.lang.String.format;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -47,6 +45,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
+
+import static java.lang.String.format;
 
 @ApplicationScoped
 public class ReactiveMessagingEventConsumer {

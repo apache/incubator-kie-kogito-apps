@@ -1,8 +1,5 @@
 package org.kie.kogito.explainability;
 
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
-
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +28,9 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.ext.web.client.WebClient;
+
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 public class RemotePredictionProvider implements PredictionProvider {
 

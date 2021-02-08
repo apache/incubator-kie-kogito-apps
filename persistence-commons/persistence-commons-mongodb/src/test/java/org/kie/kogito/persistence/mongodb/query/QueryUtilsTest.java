@@ -16,6 +16,16 @@
 
 package org.kie.kogito.persistence.mongodb.query;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.bson.conversions.Bson;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
+
+import com.mongodb.client.model.Filters;
+
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,16 +45,6 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.not;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import org.bson.conversions.Bson;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
-
-import com.mongodb.client.model.Filters;
 
 class QueryUtilsTest {
 

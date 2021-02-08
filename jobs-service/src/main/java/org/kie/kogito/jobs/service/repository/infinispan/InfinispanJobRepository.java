@@ -16,8 +16,6 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
-
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.concurrent.CompletionStage;
@@ -43,6 +41,8 @@ import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 
 import io.vertx.core.Vertx;
+
+import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
 
 @ApplicationScoped
 @Repository("infinispan")

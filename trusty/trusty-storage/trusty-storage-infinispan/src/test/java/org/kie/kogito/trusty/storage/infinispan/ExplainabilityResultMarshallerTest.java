@@ -16,11 +16,6 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
-import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.EXECUTION_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.SALIENCIES_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.STATUS_DETAILS_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.STATUS_FIELD;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +29,11 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.ListTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.EXECUTION_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.SALIENCIES_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.STATUS_DETAILS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.ExplainabilityResult.STATUS_FIELD;
 
 public class ExplainabilityResultMarshallerTest extends MarshallerTestTemplate<ExplainabilityResult> {
 

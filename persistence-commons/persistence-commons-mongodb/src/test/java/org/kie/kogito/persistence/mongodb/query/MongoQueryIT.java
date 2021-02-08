@@ -16,12 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.query;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
-import static org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper.TEST_ATTRIBUTE;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,6 +33,12 @@ import com.mongodb.client.MongoCollection;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
+import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
+import static org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper.TEST_ATTRIBUTE;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

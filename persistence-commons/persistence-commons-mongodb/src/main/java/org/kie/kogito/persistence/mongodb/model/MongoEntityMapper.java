@@ -16,9 +16,9 @@
 
 package org.kie.kogito.persistence.mongodb.model;
 
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-
 import java.util.regex.Pattern;
+
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 /**
  * A mongo entity mapper is responsible for converting between a data model and the corresponding mongo storage entity

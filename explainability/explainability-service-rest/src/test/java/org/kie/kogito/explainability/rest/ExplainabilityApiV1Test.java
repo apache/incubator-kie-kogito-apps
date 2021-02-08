@@ -16,9 +16,6 @@
 
 package org.kie.kogito.explainability.rest;
 
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
@@ -31,6 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class ExplainabilityApiV1Test {

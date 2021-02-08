@@ -16,6 +16,34 @@
 
 package org.kie.kogito.index.service;
 
+import java.net.URI;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.index.event.KogitoJobCloudEvent;
+import org.kie.kogito.index.event.KogitoProcessCloudEvent;
+import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
+import org.kie.kogito.index.messaging.ReactiveMessagingEventConsumer;
+import org.kie.kogito.index.model.MilestoneStatus;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -63,34 +91,6 @@ import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.kie.kogito.index.model.ProcessInstanceState.ERROR;
-
-import java.net.URI;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexStorageService;
-import org.kie.kogito.index.event.KogitoJobCloudEvent;
-import org.kie.kogito.index.event.KogitoProcessCloudEvent;
-import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
-import org.kie.kogito.index.messaging.ReactiveMessagingEventConsumer;
-import org.kie.kogito.index.model.MilestoneStatus;
-import org.kie.kogito.persistence.protobuf.ProtobufService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 
 abstract class AbstractIndexingServiceIT {
 

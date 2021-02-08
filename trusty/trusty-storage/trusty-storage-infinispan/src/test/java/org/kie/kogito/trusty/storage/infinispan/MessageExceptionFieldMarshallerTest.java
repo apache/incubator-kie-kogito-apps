@@ -16,10 +16,6 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
-import static org.kie.kogito.trusty.storage.api.model.MessageExceptionField.CAUSE_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.MessageExceptionField.CLASS_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.MessageExceptionField.MESSAGE_FIELD;
-
 import java.util.List;
 
 import org.infinispan.protostream.MessageMarshaller;
@@ -29,6 +25,10 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.ObjectTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.kie.kogito.trusty.storage.api.model.MessageExceptionField.CAUSE_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.MessageExceptionField.CLASS_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.MessageExceptionField.MESSAGE_FIELD;
 
 public class MessageExceptionFieldMarshallerTest extends MarshallerTestTemplate<MessageExceptionField> {
 

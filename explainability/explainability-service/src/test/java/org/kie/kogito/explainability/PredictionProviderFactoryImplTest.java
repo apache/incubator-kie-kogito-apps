@@ -15,8 +15,6 @@
  */
 package org.kie.kogito.explainability;
 
-import static org.kie.kogito.explainability.TestUtils.REQUEST;
-
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.context.ThreadContext;
 import org.junit.jupiter.api.Assertions;
@@ -24,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.PredictionProvider;
 
 import io.vertx.mutiny.core.Vertx;
+
+import static org.kie.kogito.explainability.TestUtils.REQUEST;
 
 class PredictionProviderFactoryImplTest {
 

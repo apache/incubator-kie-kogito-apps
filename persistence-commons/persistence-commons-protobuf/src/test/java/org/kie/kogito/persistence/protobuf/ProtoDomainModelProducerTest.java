@@ -16,10 +16,6 @@
 
 package org.kie.kogito.persistence.protobuf;
 
-import static org.kie.kogito.persistence.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-
 import javax.enterprise.event.Event;
 
 import org.infinispan.protostream.FileDescriptorSource;
@@ -34,6 +30,10 @@ import org.kie.kogito.persistence.protobuf.domain.ProtoDomainModelProducer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.kie.kogito.persistence.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ProtoDomainModelProducerTest {

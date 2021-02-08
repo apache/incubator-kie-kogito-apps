@@ -16,12 +16,6 @@
 
 package org.kie.kogito.persistence.protobuf;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.toMap;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.INDEXED_ANNOTATION;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.configureBuilder;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.createEntityIndexeDescriptors;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -48,6 +42,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.StartupEvent;
+
+import static java.lang.String.format;
+import static java.util.stream.Collectors.toMap;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.INDEXED_ANNOTATION;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.configureBuilder;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.createEntityIndexeDescriptors;
 
 @ApplicationScoped
 public class ProtobufService {

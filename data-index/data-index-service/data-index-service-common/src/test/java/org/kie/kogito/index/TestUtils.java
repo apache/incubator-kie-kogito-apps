@@ -16,10 +16,6 @@
 
 package org.kie.kogito.index;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Collections.singleton;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,6 +45,10 @@ import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.singleton;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 public final class TestUtils {
 

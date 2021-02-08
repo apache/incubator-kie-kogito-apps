@@ -16,9 +16,6 @@
 
 package org.kie.kogito.index.service;
 
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
@@ -27,6 +24,9 @@ import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 
 abstract class AbstractKeycloakIntegrationIndexingServiceIT {
 

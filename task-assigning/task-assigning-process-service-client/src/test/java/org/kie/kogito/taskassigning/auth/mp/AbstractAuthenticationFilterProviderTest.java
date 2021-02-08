@@ -16,11 +16,11 @@
 
 package org.kie.kogito.taskassigning.auth.mp;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.auth.AuthenticationCredentials;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 abstract class AbstractAuthenticationFilterProviderTest<T extends AuthenticationCredentials> {
 

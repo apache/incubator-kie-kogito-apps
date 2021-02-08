@@ -16,11 +16,11 @@
 
 package org.kie.kogito.persistence.mongodb.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 class MongoEntityMapperTest {
 

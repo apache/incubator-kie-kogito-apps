@@ -16,12 +16,6 @@
 
 package org.kie.kogito.index.json;
 
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
-
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +23,12 @@ import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.model.ProcessInstanceState;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 
 public class ProcessInstanceMetaMapperTest {
 

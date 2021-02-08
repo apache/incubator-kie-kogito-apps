@@ -16,15 +16,6 @@
 
 package org.kie.kogito.index.graphql.query;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
-import static java.util.Collections.singletonMap;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +30,15 @@ import graphql.language.ObjectField;
 import graphql.language.ObjectValue;
 import graphql.language.VariableReference;
 import graphql.schema.DataFetchingEnvironment;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonMap;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GraphQLQueryOrderParserTest {
 

@@ -16,9 +16,6 @@
 
 package org.kie.kogito.index.mongodb;
 
-import static java.util.Collections.singleton;
-import static java.util.Collections.singletonList;
-
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -41,6 +38,9 @@ import org.kie.kogito.index.model.UserTaskInstance;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 
 public class TestUtils {
 

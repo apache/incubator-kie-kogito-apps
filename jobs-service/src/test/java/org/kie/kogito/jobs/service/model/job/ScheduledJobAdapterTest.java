@@ -16,8 +16,6 @@
 
 package org.kie.kogito.jobs.service.model.job;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -32,6 +30,8 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ScheduledJobAdapterTest {
 

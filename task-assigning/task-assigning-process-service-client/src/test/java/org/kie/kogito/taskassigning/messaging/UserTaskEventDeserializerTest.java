@@ -16,10 +16,6 @@
 
 package org.kie.kogito.taskassigning.messaging;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +26,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
 
 class UserTaskEventDeserializerTest {
 

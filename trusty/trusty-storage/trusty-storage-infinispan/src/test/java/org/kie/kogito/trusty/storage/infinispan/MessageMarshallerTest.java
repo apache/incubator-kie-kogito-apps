@@ -16,13 +16,6 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
-import static org.kie.kogito.trusty.storage.api.model.Message.CATEGORY_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Message.EXCEPTION_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Message.LEVEL_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Message.SOURCE_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Message.TEXT_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Message.TYPE_FIELD;
-
 import java.util.List;
 
 import org.infinispan.protostream.MessageMarshaller;
@@ -35,6 +28,13 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.ObjectTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.kie.kogito.trusty.storage.api.model.Message.CATEGORY_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Message.EXCEPTION_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Message.LEVEL_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Message.SOURCE_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Message.TEXT_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Message.TYPE_FIELD;
 
 public class MessageMarshallerTest extends MarshallerTestTemplate<Message> {
 

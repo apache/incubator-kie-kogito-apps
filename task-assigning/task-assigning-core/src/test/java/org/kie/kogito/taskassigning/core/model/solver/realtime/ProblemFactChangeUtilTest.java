@@ -16,13 +16,6 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTaskAssignment;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +28,13 @@ import org.kie.kogito.taskassigning.core.model.User;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.optaplanner.core.api.score.director.ScoreDirector;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTaskAssignment;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ProblemFactChangeUtilTest {

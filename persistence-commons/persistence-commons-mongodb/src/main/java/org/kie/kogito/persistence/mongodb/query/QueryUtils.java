@@ -16,6 +16,13 @@
 
 package org.kie.kogito.persistence.mongodb.query;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
+
+import org.bson.conversions.Bson;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
+
 import static com.mongodb.client.model.Filters.all;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -29,13 +36,6 @@ import static com.mongodb.client.model.Filters.not;
 import static com.mongodb.client.model.Filters.or;
 import static com.mongodb.client.model.Filters.regex;
 import static java.util.stream.Collectors.toList;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.UnaryOperator;
-
-import org.bson.conversions.Bson;
-import org.kie.kogito.persistence.api.query.AttributeFilter;
 
 public class QueryUtils {
 

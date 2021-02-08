@@ -16,28 +16,6 @@
 
 package org.kie.kogito.index.mongodb.query;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithId;
-import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithIdInOrder;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.and;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.between;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAll;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAny;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.greaterThan;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.greaterThanEqual;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.in;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.isNull;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThan;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThanEqual;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -60,6 +38,28 @@ import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithId;
+import static org.kie.kogito.index.mongodb.query.QueryTestUtils.assertWithIdInOrder;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.and;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.between;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAll;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAny;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.greaterThan;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.greaterThanEqual;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.in;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.isNull;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThan;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThanEqual;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

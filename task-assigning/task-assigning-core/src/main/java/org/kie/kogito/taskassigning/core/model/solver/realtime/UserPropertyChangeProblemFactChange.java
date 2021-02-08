@@ -16,8 +16,6 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
-import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtil.releaseNonPinnedTaskAssignments;
-
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +24,8 @@ import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.api.solver.ProblemFactChange;
+
+import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtil.releaseNonPinnedTaskAssignments;
 
 public class UserPropertyChangeProblemFactChange implements ProblemFactChange<TaskAssigningSolution> {
 

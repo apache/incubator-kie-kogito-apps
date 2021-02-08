@@ -16,9 +16,6 @@
 
 package org.kie.kogito.jitexecutor.dmn.api;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +27,9 @@ import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
 public class JITDMNResourceTest {

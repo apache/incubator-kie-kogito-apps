@@ -16,9 +16,6 @@
 
 package org.kie.kogito.index.graphql;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +26,9 @@ import org.junit.jupiter.api.Test;
 import graphql.language.StringValue;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class DateTimeScalarTypeProducerTest {
 

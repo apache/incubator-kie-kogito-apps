@@ -16,18 +16,6 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
-
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -42,6 +30,18 @@ import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CLOUDEVENT_WITH_ERRORS_ID;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectDecision;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)

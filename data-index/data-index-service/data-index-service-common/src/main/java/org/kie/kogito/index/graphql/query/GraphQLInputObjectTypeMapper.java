@@ -16,10 +16,6 @@
 
 package org.kie.kogito.index.graphql.query;
 
-import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
-
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -35,6 +31,10 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+
+import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
+import static graphql.schema.GraphQLNonNull.nonNull;
+import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 
 public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper {
 

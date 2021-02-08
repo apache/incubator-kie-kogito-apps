@@ -16,8 +16,6 @@
 
 package org.kie.kogito.jobs.service.stream;
 
-import static org.kie.kogito.jobs.service.stream.KafkaJobStreams.PUBLISH_EVENTS_CONFIG_KEY;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
@@ -38,6 +36,8 @@ import io.quarkus.runtime.StartupEvent;
 import io.vertx.kafka.admin.NewTopic;
 import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.kafka.admin.KafkaAdminClient;
+
+import static org.kie.kogito.jobs.service.stream.KafkaJobStreams.PUBLISH_EVENTS_CONFIG_KEY;
 
 @Startup
 @ApplicationScoped

@@ -16,9 +16,6 @@
 
 package org.kie.kogito.jobs.service.stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
-
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
@@ -36,6 +33,9 @@ import io.quarkus.runtime.StartupEvent;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.vertx.mutiny.core.Vertx;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)

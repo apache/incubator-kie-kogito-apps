@@ -16,8 +16,6 @@
 
 package org.kie.kogito.persistence.infinispan.cache;
 
-import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
-
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +34,8 @@ import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
 
 @ApplicationScoped
 @StorageQualifier(INFINISPAN_STORAGE)

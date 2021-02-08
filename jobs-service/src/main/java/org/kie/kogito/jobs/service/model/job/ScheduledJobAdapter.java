@@ -16,8 +16,6 @@
 
 package org.kie.kogito.jobs.service.model.job;
 
-import static org.kie.kogito.jobs.service.utils.DateUtil.toDate;
-
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,6 +31,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+
+import static org.kie.kogito.jobs.service.utils.DateUtil.toDate;
 
 public class ScheduledJobAdapter {
 

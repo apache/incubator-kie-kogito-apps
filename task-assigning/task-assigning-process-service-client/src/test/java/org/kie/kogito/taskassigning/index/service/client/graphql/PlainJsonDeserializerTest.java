@@ -16,9 +16,6 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.doReturn;
-
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 class PlainJsonDeserializerTest {

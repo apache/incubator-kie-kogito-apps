@@ -16,9 +16,6 @@
 
 package org.kie.kogito.explainability;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonMap;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +33,9 @@ import org.kie.kogito.tracing.typedvalue.UnitValue;
 
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonMap;
 
 public class TestUtils {
 

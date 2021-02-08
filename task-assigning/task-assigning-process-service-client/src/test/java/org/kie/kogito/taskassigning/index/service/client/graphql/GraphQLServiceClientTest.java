@@ -16,6 +16,16 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
+import java.util.Arrays;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstance.Field.ID;
@@ -26,16 +36,6 @@ import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTask
 import static org.kie.kogito.taskassigning.index.service.client.graphql.WireMockGraphQLResource.USER_TASKS_QUERY_FAILURE_MOCK;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.WireMockGraphQLResource.USER_TASKS_QUERY_MOCK;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.WireMockGraphQLResource.USER_TASKS_QUERY_MOCK_RESULT;
-
-import java.util.Arrays;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(WireMockGraphQLResource.class)

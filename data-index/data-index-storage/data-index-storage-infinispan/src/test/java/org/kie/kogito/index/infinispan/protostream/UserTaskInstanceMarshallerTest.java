@@ -16,6 +16,20 @@
 
 package org.kie.kogito.index.infinispan.protostream;
 
+import java.io.IOException;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+
+import org.infinispan.protostream.MessageMarshaller;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.model.UserTaskInstance;
+import org.mockito.InOrder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.infinispan.protostream.UserTaskInstanceMarshaller.ACTUAL_OWNER;
@@ -46,20 +60,6 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-
-import org.infinispan.protostream.MessageMarshaller;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.model.UserTaskInstance;
-import org.mockito.InOrder;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 class UserTaskInstanceMarshallerTest {
 

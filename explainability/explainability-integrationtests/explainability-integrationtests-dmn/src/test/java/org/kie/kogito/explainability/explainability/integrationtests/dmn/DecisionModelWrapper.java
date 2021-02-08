@@ -15,8 +15,6 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,6 +33,8 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * {@link PredictionProvider} implementation based on a Kogito {@link DecisionModel}.

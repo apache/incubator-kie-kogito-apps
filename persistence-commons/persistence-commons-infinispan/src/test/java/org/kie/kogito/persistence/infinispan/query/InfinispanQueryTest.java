@@ -16,15 +16,6 @@
 
 package org.kie.kogito.persistence.infinispan.query;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.*;
-import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
-import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,6 +30,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.*;
+import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
+import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InfinispanQueryTest {

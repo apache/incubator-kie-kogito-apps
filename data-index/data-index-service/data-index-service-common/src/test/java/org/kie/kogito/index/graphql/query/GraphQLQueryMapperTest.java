@@ -16,22 +16,6 @@
 
 package org.kie.kogito.index.graphql.query;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonMap;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.persistence.api.query.FilterCondition.AND;
-import static org.kie.kogito.persistence.api.query.FilterCondition.BETWEEN;
-import static org.kie.kogito.persistence.api.query.FilterCondition.EQUAL;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAll;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAny;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.in;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.isNull;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +37,22 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import graphql.schema.GraphQLScalarType;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.singletonMap;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.persistence.api.query.FilterCondition.AND;
+import static org.kie.kogito.persistence.api.query.FilterCondition.BETWEEN;
+import static org.kie.kogito.persistence.api.query.FilterCondition.EQUAL;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAll;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.containsAny;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.in;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.isNull;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 
 @ExtendWith(MockitoExtension.class)
 public class GraphQLQueryMapperTest {

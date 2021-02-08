@@ -16,14 +16,14 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
 
 import io.quarkus.test.junit.QuarkusTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 class GraphQLServiceClientFactoryTest {

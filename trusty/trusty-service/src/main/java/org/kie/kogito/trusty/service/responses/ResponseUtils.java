@@ -16,8 +16,6 @@
 
 package org.kie.kogito.trusty.service.responses;
 
-import static org.kie.kogito.tracing.typedvalue.TypedValue.Kind.STRUCTURE;
-
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -39,6 +37,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.cloudevents.jackson.JsonFormat;
+
+import static org.kie.kogito.tracing.typedvalue.TypedValue.Kind.STRUCTURE;
 
 public class ResponseUtils {
 

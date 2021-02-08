@@ -16,11 +16,6 @@
 
 package org.kie.kogito.jobs.service.repository.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -38,6 +33,11 @@ import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.jobs.service.utils.FunctionsUtil;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("java:S5786")
 public abstract class BaseJobRepositoryTest {

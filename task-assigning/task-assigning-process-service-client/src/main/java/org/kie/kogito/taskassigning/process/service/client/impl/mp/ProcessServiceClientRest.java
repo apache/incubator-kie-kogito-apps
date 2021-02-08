@@ -16,8 +16,6 @@
 
 package org.kie.kogito.taskassigning.process.service.client.impl.mp;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
 import java.io.Closeable;
 import java.util.List;
 
@@ -31,6 +29,8 @@ import javax.ws.rs.QueryParam;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public interface ProcessServiceClientRest extends Closeable {
 

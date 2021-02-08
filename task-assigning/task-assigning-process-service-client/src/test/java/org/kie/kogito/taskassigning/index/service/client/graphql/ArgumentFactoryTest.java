@@ -16,9 +16,6 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
-
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +32,9 @@ import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringEq
 import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringInArgument;
 import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringIsNullArgument;
 import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringLikeArgument;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
 
 class ArgumentFactoryTest {
 

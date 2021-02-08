@@ -16,11 +16,6 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +29,11 @@ import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class TraceEventTestUtils {
 

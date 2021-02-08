@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import static java.util.Collections.emptyList;
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,6 +41,9 @@ import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.LinearModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.util.Collections.emptyList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * An implementation of LIME algorithm (Ribeiro et al., 2016) that handles tabular data, text data, complex hierarchically

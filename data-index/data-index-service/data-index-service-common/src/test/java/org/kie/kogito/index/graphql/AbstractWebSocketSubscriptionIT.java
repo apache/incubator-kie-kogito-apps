@@ -16,16 +16,6 @@
 
 package org.kie.kogito.index.graphql;
 
-import static io.restassured.RestAssured.given;
-import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.COMPLETE;
-import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.DATA;
-import static java.lang.String.format;
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-import static org.hamcrest.CoreMatchers.isA;
-import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
-import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
-import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
-
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -52,6 +42,16 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.handler.graphql.ApolloWSMessageType;
+
+import static io.restassured.RestAssured.given;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.COMPLETE;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.DATA;
+import static java.lang.String.format;
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.hamcrest.CoreMatchers.isA;
+import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
+import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
+import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 
 abstract class AbstractWebSocketSubscriptionIT {
 

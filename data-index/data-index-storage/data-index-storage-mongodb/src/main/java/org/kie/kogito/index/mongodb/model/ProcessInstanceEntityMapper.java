@@ -16,13 +16,6 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
-
 import java.util.Optional;
 
 import org.kie.kogito.index.model.Milestone;
@@ -33,6 +26,13 @@ import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessInstance, ProcessInstanceEntity> {
 

@@ -16,6 +16,28 @@
 
 package org.kie.kogito.index.mongodb.query;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.UUID;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.index.mongodb.TestUtils;
+import org.kie.kogito.index.mongodb.model.ProcessInstanceEntity;
+import org.kie.kogito.index.mongodb.model.ProcessInstanceEntityMapper;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.SortDirection;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
+import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
@@ -39,28 +61,6 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.UUID;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.mongodb.TestUtils;
-import org.kie.kogito.index.mongodb.model.ProcessInstanceEntity;
-import org.kie.kogito.index.mongodb.model.ProcessInstanceEntityMapper;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.query.SortDirection;
-import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
-import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
-import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

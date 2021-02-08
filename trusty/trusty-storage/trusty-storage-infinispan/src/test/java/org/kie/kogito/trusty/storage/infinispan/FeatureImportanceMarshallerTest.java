@@ -16,9 +16,6 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
-import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.FEATURE_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.SCORE_FIELD;
-
 import java.util.List;
 
 import org.infinispan.protostream.MessageMarshaller;
@@ -28,6 +25,9 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.DoubleTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.FEATURE_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.FeatureImportance.SCORE_FIELD;
 
 public class FeatureImportanceMarshallerTest extends MarshallerTestTemplate<FeatureImportance> {
 

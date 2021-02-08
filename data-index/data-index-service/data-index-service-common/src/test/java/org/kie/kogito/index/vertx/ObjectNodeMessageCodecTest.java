@@ -16,11 +16,6 @@
 
 package org.kie.kogito.index.vertx;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -29,6 +24,11 @@ import org.kie.kogito.index.json.DataIndexParsingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.vertx.core.buffer.Buffer;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ObjectNodeMessageCodecTest {
 

@@ -16,10 +16,6 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
-
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
@@ -37,6 +33,10 @@ import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

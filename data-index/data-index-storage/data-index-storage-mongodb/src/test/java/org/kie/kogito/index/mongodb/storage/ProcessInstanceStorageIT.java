@@ -16,8 +16,6 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -38,6 +36,8 @@ import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

@@ -16,6 +16,14 @@
 
 package org.kie.kogito.taskassigning.process.service.client;
 
+import java.util.Collections;
+import java.util.Map;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.matching.UrlPattern;
+
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -26,14 +34,6 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.util.Collections;
-import java.util.Map;
-
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.matching.UrlPattern;
-
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class WireMockKeycloakResource implements QuarkusTestResourceLifecycleManager {
 

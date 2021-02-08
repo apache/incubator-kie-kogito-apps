@@ -16,14 +16,6 @@
 
 package org.kie.kogito.index.messaging;
 
-import static io.restassured.RestAssured.given;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isA;
-import static org.kie.kogito.index.TestUtils.readFileContent;
-
 import java.util.Collection;
 
 import javax.inject.Inject;
@@ -37,6 +29,14 @@ import org.kie.kogito.persistence.protobuf.ProtobufService;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
 import io.restassured.http.ContentType;
+
+import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isA;
+import static org.kie.kogito.index.TestUtils.readFileContent;
 
 abstract class AbstractReactiveMessagingEventConsumerKafkaIT {
 

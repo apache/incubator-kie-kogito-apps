@@ -16,13 +16,6 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_24TASKS_8USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_USER;
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.extractTaskAssignments;
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -33,6 +26,13 @@ import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.solver.Solver;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_24TASKS_8USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_USER;
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.extractTaskAssignments;
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
 
 class SolverTest extends AbstractTaskAssigningCoreTest {
 

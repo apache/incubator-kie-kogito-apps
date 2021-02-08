@@ -16,12 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
-import static java.util.Arrays.asList;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.watchCollection;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +30,12 @@ import org.kie.kogito.persistence.mongodb.query.MongoQuery;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.ReplaceOptions;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
+import static java.util.Arrays.asList;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.watchCollection;
 
 public class MongoStorage<V, E> implements Storage<String, V> {
 
