@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.utils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.LocalExplainer;
+import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,4 +239,132 @@ public class ExplainabilityMetrics {
         Map.Entry<List<String>, Long> maxEntry = Collections.max(collect.entrySet(), Map.Entry.comparingByValue());
         return Pair.of(maxEntry.getKey(), maxEntry.getValue());
     }
+
+    public static double getRecall(String decision, PredictionProvider predictionProvider,
+                                   LocalExplainer<Map<String, Saliency>> localExplainer,
+                                   DataDistribution dataDistribution, int k, int chunkSize)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        // see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
+        List<PredictionInput> inputs = dataDistribution.getAllSamples();
+        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
+                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
+        List<Prediction> sorted = predictions.stream().sorted((p1, p2) -> {
+            Output o1 = p1.getOutput().getByName(decision);
+            Output o2 = p2.getOutput().getByName(decision);
+            if (o1 != null && o2 != null) {
+                return Double.compare(o2.getScore(), o1.getScore()); // descending order
+            } else {
+                return 0;
+            }
+        }).collect(Collectors.toList());
+        List<Prediction> topChunk = new ArrayList<>(chunkSize);
+        List<Prediction> bottomChunk = new ArrayList<>(chunkSize);
+        for (int i = 0; i < chunkSize; i++) {
+            topChunk.add(sorted.get(i));
+        }
+        for (int i = 0; i < chunkSize; i++) {
+            bottomChunk.add(sorted.get(sorted.size() - i - 1));
+        }
+        double tp = 0;
+        double fn = 0;
+        int currentChunk = 0;
+        for (Prediction prediction : topChunk) {
+            Output output = prediction.getOutput().getByName(decision);
+            Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
+                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+            Saliency saliency = stringSaliencyMap.get(decision);
+            List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
+                    .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
+
+            List<Feature> importantFeatures = new ArrayList<>();
+            for (FeatureImportance featureImportance : topFeatures) {
+                importantFeatures.add(featureImportance.getFeature());
+            }
+
+            PredictionInput input = bottomChunk.get(currentChunk).getInput();
+            List<Feature> features = List.copyOf(input.getFeatures());
+            for (Feature f : importantFeatures) {
+                features = DataUtils.replaceFeatures(f, features);
+            }
+            input = new PredictionInput(features);
+
+            List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
+                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+            PredictionOutput predictionOutput = predictionOutputList.get(0);
+            Output newOutput = predictionOutput.getByName(decision);
+            if (output.getValue().equals(newOutput.getValue())) {
+                tp++;
+            } else {
+                fn++;
+            }
+            currentChunk++;
+        }
+        return tp / (tp + fn);
+    }
+
+    public static double getPrecision(String decision, PredictionProvider predictionProvider,
+                                      LocalExplainer<Map<String, Saliency>> localExplainer,
+                                      DataDistribution dataDistribution, int k, int chunkSize)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        // see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
+        List<PredictionInput> inputs = dataDistribution.getAllSamples();
+        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
+                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
+        List<Prediction> sorted = predictions.stream().sorted((p1, p2) -> {
+            Output o1 = p1.getOutput().getByName(decision);
+            Output o2 = p2.getOutput().getByName(decision);
+            if (o1 != null && o2 != null) {
+                return Double.compare(o2.getScore(), o1.getScore()); // descending order
+            } else {
+                return 0;
+            }
+        }).collect(Collectors.toList());
+        List<Prediction> topChunk = new ArrayList<>(chunkSize);
+        List<Prediction> bottomChunk = new ArrayList<>(chunkSize);
+        for (int i = 0; i < chunkSize; i++) {
+            topChunk.add(sorted.get(i));
+        }
+        for (int i = 0; i < chunkSize; i++) {
+            bottomChunk.add(sorted.get(sorted.size() - i - 1));
+        }
+        double tp = 0;
+        double fp = 0;
+        int currentChunk = 0;
+
+        for (Prediction prediction : bottomChunk) {
+            Output output = prediction.getOutput().getByName(decision);
+            Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
+                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+            Saliency saliency = stringSaliencyMap.get(decision);
+            List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
+                    .sorted(Comparator.comparingDouble(FeatureImportance::getScore)).limit(k).collect(Collectors.toList());
+
+            List<Feature> importantFeatures = new ArrayList<>();
+            for (FeatureImportance featureImportance : topFeatures) {
+                importantFeatures.add(featureImportance.getFeature());
+            }
+
+            PredictionInput input = topChunk.get(currentChunk).getInput();
+            List<Feature> features = List.copyOf(input.getFeatures());
+            for (Feature f : importantFeatures) {
+                features = DataUtils.replaceFeatures(f, features);
+            }
+            input = new PredictionInput(features);
+
+            List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
+                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+            PredictionOutput predictionOutput = predictionOutputList.get(0);
+            Output newOutput = predictionOutput.getByName(decision);
+            if (!output.getValue().equals(newOutput.getValue())) {
+                tp++;
+            } else {
+                fp++;
+            }
+            currentChunk++;
+        }
+        return tp / (tp + fp);
+    }
+
 }

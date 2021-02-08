@@ -433,4 +433,23 @@ public class DataUtils {
                     .collect(Collectors.toList());
         }
     }
+
+    public static List<Feature> replaceFeatures(Feature featureToUse, List<Feature> existingFeatures) {
+        List<Feature> newFeatures = new ArrayList<>();
+        for (Feature f : existingFeatures) {
+            Feature newFeature;
+            if (f.getName().equals(featureToUse.getName())) {
+                newFeature = FeatureFactory.copyOf(f, featureToUse.getValue());
+            } else {
+                if (Type.COMPOSITE == f.getType()) {
+                    List<Feature> elements = (List<Feature>) f.getValue().getUnderlyingObject();
+                    newFeature = FeatureFactory.newCompositeFeature(f.getName(), replaceFeatures(featureToUse, elements));
+                } else {
+                    newFeature = FeatureFactory.copyOf(f, f.getValue());
+                }
+            }
+            newFeatures.add(newFeature);
+        }
+        return newFeatures;
+    }
 }
