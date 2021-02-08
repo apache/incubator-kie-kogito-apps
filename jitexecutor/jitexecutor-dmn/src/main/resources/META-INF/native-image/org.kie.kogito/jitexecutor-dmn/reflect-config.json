@@ -1273,15 +1273,6 @@
       "allDeclaredMethods" : true,
       "allPublicMethods" : true,
       "allDeclaredFields" : true,
-      "allPublicFields" : true
-    },
-    {
-      "name":"org.kie.dmn.model.v1_2.TDMNElement",
-      "allDeclaredConstructors" : true,
-      "allPublicConstructors" : true,
-      "allDeclaredMethods" : true,
-      "allPublicMethods" : true,
-      "allDeclaredFields" : true,
       "allPublicFields" : true,
       "allPublicClasses" : true
     },
