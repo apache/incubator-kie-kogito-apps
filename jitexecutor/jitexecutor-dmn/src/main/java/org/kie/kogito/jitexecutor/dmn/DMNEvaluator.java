@@ -42,7 +42,7 @@ public class DMNEvaluator {
         return new DMNEvaluator(dmnModel, dmnRuntime);
     }
 
-    public DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
+    private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
         this.dmnModel = dmnModel;
         this.dmnRuntime = dmnRuntime;
     }
