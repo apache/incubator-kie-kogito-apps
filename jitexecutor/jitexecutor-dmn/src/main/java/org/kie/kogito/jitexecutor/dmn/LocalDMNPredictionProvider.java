@@ -37,7 +37,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class LocalDMNPredictionProvider implements PredictionProvider {
 
-    public static final String DUMMY_DMN_CONTEXT_KEY = "dummyDMNContext";
+    private static final String DUMMY_DMN_CONTEXT_KEY = "dummyDMNContext";
     private final DMNEvaluator dmnEvaluator;
 
     public LocalDMNPredictionProvider(DMNEvaluator dmnEvaluator) {
