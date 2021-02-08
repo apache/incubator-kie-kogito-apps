@@ -27,10 +27,6 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 @ApplicationScoped
 public class TrustyStorageServiceImpl implements TrustyStorageService {
 
-    public static final String DECISIONS_STORAGE = "decisions";
-    public static final String EXPLAINABILITY_RESULTS_STORAGE = "explainability-results";
-    public static final String MODELS_STORAGE = "models";
-
     @Inject
     StorageService storageService;
 
