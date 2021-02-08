@@ -43,9 +43,13 @@ import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
 import org.kie.kogito.trusty.service.responses.FeatureImportanceResponse;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.responses.SaliencyResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class JITDMNServiceImpl implements JITDMNService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JITDMNServiceImpl.class);
 
     private static final String EXPLAINABILITY_FAILED = "FAILED";
     private static final String EXPLAINABILITY_FAILED_MESSAGE = "Failed to calculate values";
@@ -79,12 +83,15 @@ public class JITDMNServiceImpl implements JITDMNService {
                 .withSamples(explainabilityLimeSampleSize)
                 .withPerturbationContext(new PerturbationContext(new Random(), explainabilityLimeNoOfPerturbation));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-
         Map<String, Saliency> saliencyMap;
         try {
             saliencyMap = limeExplainer.explainAsync(prediction, localDMNPredictionProvider)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        } catch (InterruptedException | TimeoutException | ExecutionException e) {
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            if (e instanceof InterruptedException) {
+                LOGGER.error("Critical InterruptedException occurred", e);
+                Thread.currentThread().interrupt();
+            }
             return new DMNResultWithExplanation(
                     new KogitoDMNResult(dmnEvaluator.getNamespace(), dmnEvaluator.getName(), dmnResult),
                     new SalienciesResponse(EXPLAINABILITY_FAILED, EXPLAINABILITY_FAILED_MESSAGE, null)
