@@ -18195,9 +18195,9 @@ uniforms@3.0.0:
     tslib "^1.10.0"
 
 uniforms@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/uniforms/-/uniforms-3.0.1.tgz#501516bec1e556d815275e4bf8ea5b18b1f38078"
-  integrity sha512-ULYBRs0GUc1HGKY+TpOIeYQnCFdy25CDUFkPqrlYlNU45YnommuadFtl3o6TyeOytY4z7M6Hy0SgDSeWYYZoLQ==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/uniforms/-/uniforms-3.1.0.tgz#ba226b25f2b5405d7a0ae53cf9aa15cfcc4a5022"
+  integrity sha512-ei3UjC3EcSraI5e+K+cKhUOHAQKZwx6owFVrwxNV3JlHaN4a6d/aivUxNAuW4clUohElT+yXl1QfaulxZPc+Rg==
   dependencies:
     invariant "^2.0.0"
     lodash "^4.0.0"

@@ -123,5 +123,12 @@
     "webpack-dev-server": "^3.8.0",
     "webpack-merge": "^4.2.2",
     "yarn": "^1.22.4"
+  },
+  "resolutions": {
+    "@patternfly/react-core": "4.84.4",
+    "@patternfly/react-icons": "4.7.22",
+    "@patternfly/react-styles": "4.7.22",
+    "@patternfly/react-table": "4.19.45",
+    "@patternfly/react-tokens": "4.9.22"
   }
 }
