@@ -121,11 +121,11 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                     solution = solverJob.getFinalBestSolution();
                     return solution.getEntities();
                 } catch (ExecutionException e) {
-                    logger.error("Prediction returned an error {}", e.getMessage());
+                    logger.error("Solving failed: {}", e.getMessage());
                     throw new IllegalStateException("Prediction returned an error {}", e);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Interrupted while waiting for prediction {}", e);
+                    throw new IllegalStateException("Solving failed (Thread interrupted): {}", e);
                 }
             }
         }, this.executor);
