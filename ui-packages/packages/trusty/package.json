@@ -23,10 +23,7 @@
     "typescript": "~3.8.3",
     "use-react-router-breadcrumbs": "^1.0.4"
   },
-  "resolutions": {
-    "@patternfly/react-charts": "6.12.12"
-  },
-  "scripts": {
+    "scripts": {
     "start": "webpack-dev-server --hot --color --progress --info=true --config webpack.dev.js",
     "build:prod": "yarn copy-embedded-editor && yarn lint && webpack --config webpack.prod.js",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
