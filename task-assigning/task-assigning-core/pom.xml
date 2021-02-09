@@ -8,7 +8,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>task-assigning</artifactId>
-    <version>1.2.0.Final</version>
+    <version>1.2.1-SNAPSHOT</version>
   </parent>
   <artifactId>task-assigning-core</artifactId>
   <name>kogito :: Task Assigning Core</name>
