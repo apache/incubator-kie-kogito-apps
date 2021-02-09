@@ -17,4 +17,15 @@ public class PredictionOutput {
     public List<Output> getOutputs() {
         return outputs;
     }
+
+    public Output getByName(String name) {
+        Output o = null;
+        for (Output output : outputs) {
+            if (name.equalsIgnoreCase(output.getName())) {
+                o = output;
+                break;
+            }
+        }
+        return o;
+    }
 }
