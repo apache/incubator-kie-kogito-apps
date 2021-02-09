@@ -108,26 +108,25 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         final UUID problemId = UUID.randomUUID();
 
         final CompletableFuture<List<CounterfactualEntity>> cfEntities = CompletableFuture.supplyAsync(() -> {
-            SolverManager<CounterfactualSolution, UUID> solverManager =
-                    SolverManager.create(solverConfig, new SolverManagerConfig());
+            try (SolverManager<CounterfactualSolution, UUID> solverManager =
+                         SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
-            CounterfactualSolution problem =
-                    new CounterfactualSolution(entities, model, goal);
+                CounterfactualSolution problem =
+                        new CounterfactualSolution(entities, model, goal);
 
-            SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(problemId, problem);
-            CounterfactualSolution solution;
-            try {
-                // Wait until the solving ends
-                solution = solverJob.getFinalBestSolution();
-                return solution.getEntities();
-            } catch (ExecutionException e) {
-                logger.error("Solving failed.");
-                throw new IllegalStateException("Solving failed: {}", e);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new IllegalStateException("Solving failed (Thread interrupted): {}", e);
-            } finally {
-                solverManager.close();
+                SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(problemId, problem);
+                CounterfactualSolution solution;
+                try {
+                    // Wait until the solving ends
+                    solution = solverJob.getFinalBestSolution();
+                    return solution.getEntities();
+                } catch (ExecutionException e) {
+                    logger.error("Prediction returned an error {}", e.getMessage());
+                    throw new IllegalStateException("Prediction returned an error {}", e);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException("Interrupted while waiting for prediction {}", e);
+                }
             }
         }, this.executor);
 
