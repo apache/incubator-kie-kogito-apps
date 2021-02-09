@@ -117,12 +117,12 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             }
 
         } catch (ExecutionException e) {
-            logger.error("Impossible to obtain prediction {}", e.getMessage());
+            logger.error("Prediction returned an error {}", e.getMessage());
         } catch (InterruptedException e) {
-            logger.error("Impossible to obtain prediction {}", e.getMessage());
+            logger.error("Interrupted while waiting for prediction {}", e.getMessage());
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.error("Prediction timed out");
+            logger.error("Timed out while waiting for prediction");
         }
 
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));

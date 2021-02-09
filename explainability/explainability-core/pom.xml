@@ -15,16 +15,6 @@
     <version.org.apache.commons.math>3.6.1</version.org.apache.commons.math>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math3</artifactId>
-      <version>${version.org.apache.commons.math}</version>
-    </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -56,11 +46,6 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math3</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

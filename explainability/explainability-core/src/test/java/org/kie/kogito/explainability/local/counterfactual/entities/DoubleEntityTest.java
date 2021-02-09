@@ -15,8 +15,11 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureDomain;
@@ -37,14 +40,18 @@ class DoubleEntityTest {
         assertEquals(10.0, entity.distance());
     }
 
-    @Test
-    void distanceScaled() {
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4})
+    void distanceScaled(int seed) {
+        Random random = new Random();
+        random.setSeed(seed);
+
         final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0);
         final FeatureDomain featureDomain = FeatureDomain.numerical(0.0, 40.0);
-        final FeatureDistribution featureDistribution = new NumericFeatureDistribution(doubleFeature, new NormalDistribution(25.0, 2.0).sample(5000));
+        final FeatureDistribution featureDistribution = new NumericFeatureDistribution(doubleFeature, random.doubles(5000, 10.0, 40.0).toArray());
         DoubleEntity entity = (DoubleEntity) CounterfactualEntityFactory.from(doubleFeature, false, featureDomain, featureDistribution);
         entity.proposedValue = 30.0;
         final double distance = entity.distance();
-        assertTrue(distance > 2.30 && distance < 2.70);
+        assertTrue(distance > 0.1 && distance < 0.2);
     }
 }
