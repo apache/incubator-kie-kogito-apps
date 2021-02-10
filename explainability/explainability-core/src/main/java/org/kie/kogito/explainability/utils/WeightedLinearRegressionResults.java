@@ -36,13 +36,13 @@ public class WeightedLinearRegressionResults {
     public WeightedLinearRegressionResults(double[][] coefficients, boolean intercept, double gof, double mse){
         //if intercept is true
         if (intercept){
-            double[] rawCoeffs = Matrix.getCol(coefficients, 0);
+            double[] rawCoeffs = MatrixUtils.getCol(coefficients, 0);
             this.coefficients = java.util.Arrays
                     .stream(rawCoeffs, 0, rawCoeffs.length - 1)
                     .toArray();
             this.intercept = rawCoeffs[rawCoeffs.length-1];
         } else {
-            this.coefficients = Matrix.getCol(coefficients, 0);
+            this.coefficients = MatrixUtils.getCol(coefficients, 0);
             this.intercept = 0.0;
         }
 

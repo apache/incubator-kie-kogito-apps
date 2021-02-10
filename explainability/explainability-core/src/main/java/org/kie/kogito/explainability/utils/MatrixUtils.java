@@ -20,8 +20,11 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 
-public class Matrix {
-    private Matrix() { throw new IllegalStateException("Utility class"); }
+public class MatrixUtils {
+    static double zeroThreshold = 1e-9;
+
+    private MatrixUtils() { throw new IllegalStateException("Utility class"); }
+
 
     /**
      * @param x: the double array to return the matrix shape of
@@ -34,7 +37,7 @@ public class Matrix {
     }
 
     static double[] getCol(double[][] x, int i) throws IllegalArgumentException {
-        int cols = Matrix.getShape(x)[1];
+        int cols = MatrixUtils.getShape(x)[1];
         if (cols <= i) {
             throw new IllegalArgumentException(
                     String.format("Column index %d too large, matrix only has %d column(s)", i, cols)
@@ -53,7 +56,7 @@ public class Matrix {
      * @return the transpose of x
      */
     static double[][] transpose(double[][] x) {
-        int[] shape = Matrix.getShape(x);
+        int[] shape = MatrixUtils.getShape(x);
 
         double[][] transposed = new double[shape[1]][shape[0]];
         for (int i = 0; i < shape[0]; i++) {
@@ -73,8 +76,8 @@ public class Matrix {
      * @return the matrix product of a and b
      */
     static double[][] matrixMultiply(double[][] a, double[][] b) throws IllegalArgumentException {
-        int[] aShape = Matrix.getShape(a);
-        int[] bShape = Matrix.getShape(b);
+        int[] aShape = MatrixUtils.getShape(a);
+        int[] bShape = MatrixUtils.getShape(b);
 
 
         if (aShape[1] != bShape[0]) {
@@ -87,7 +90,6 @@ public class Matrix {
         double[][] product = new double[aShape[0]][bShape[1]];
         for (int i = 0; i < aShape[0]; i++) {
             for (int j = 0; j < bShape[1]; j++) {
-                product[i][j] = 0;
                 for (int k = 0; k < aShape[1]; k++) {
                     product[i][j] += a[i][k] * b[k][j];
                 }
@@ -108,7 +110,7 @@ public class Matrix {
     private static int findPivot(double[][] x, boolean[] pivotsUsed) {
         double maxAbs = 0;
         int pivot = 0;
-        int size = Matrix.getShape(x)[0];
+        int size = MatrixUtils.getShape(x)[0];
         for (int diagIdx = 0; diagIdx < size; diagIdx++) {
             double abs = Math.abs(x[diagIdx][diagIdx]);
             if (abs > maxAbs && !pivotsUsed[diagIdx]) {
@@ -130,7 +132,7 @@ public class Matrix {
      * https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm
      */
     public static double[][] invertSquareMatrix(double[][] x) {
-        int size = Matrix.getShape(x)[0];
+        int size = MatrixUtils.getShape(x)[0];
         double[][] copy = new double[size][size];
         for (int i = 0; i < size; i++) {
             copy[i] = Arrays.copyOf(x[i], size);
@@ -147,11 +149,11 @@ public class Matrix {
             // find the pivot
             // the pivot idx is the idx of the diagonal element with largest absolute value
             // that hasn't already been used as a pivot
-            int pivot = Matrix.findPivot(copy, pivotsUsed);
+            int pivot = MatrixUtils.findPivot(copy, pivotsUsed);
             double pivotVal = copy[pivot][pivot];
 
             // check if pivotVal is 0, allowing for some floating point error
-            if (Math.abs(pivotVal) < 1e-9) {
+            if (Math.abs(pivotVal) < MatrixUtils.zeroThreshold) {
                 throw new ArithmeticException("Matrix is singular and cannot be inverted");
             }
 
@@ -182,23 +184,23 @@ public class Matrix {
     }
 
     /**
-     * Attempt to invert the given matrix in-place.
+     * Attempt to invert the given matrix.
      * If the matrix is singular, jitter the values slightly to break singularity
      * @param x a square double[][]; the matrix to be inverted
      * @param numRetries the number of times to attempt jittering before giving up
-     * @return boolean, whether or not the inversion was successful
+     * @return double[][], the inverted matrix
      *
      */
     public static double[][] jitterInvert(double[][] x, int numRetries) throws ArithmeticException {
         double[][] xInv;
         for (int jitterTries=0; jitterTries < numRetries; jitterTries++) {
             try {
-                xInv = Matrix.invertSquareMatrix(x);
+                xInv = MatrixUtils.invertSquareMatrix(x);
                 return xInv;
             } catch(ArithmeticException e){
                 // if the inversion is unsuccessful, we can try slightly jittering the matrix.
                 // this will reduce the accuracy of the inversion marginally, but ensures that we get results
-                Matrix.jitterMatrix(x, 1e-8);
+                MatrixUtils.jitterMatrix(x, 1e-8);
             }
         }
 

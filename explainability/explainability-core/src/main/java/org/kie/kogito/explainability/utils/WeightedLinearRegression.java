@@ -81,7 +81,7 @@ public class WeightedLinearRegression {
 
         //invert the coefficient matrix
         try {
-            x = Matrix.jitterInvert(x, 10);
+            x = MatrixUtils.jitterInvert(x, 10);
         } catch (ArithmeticException e) {
             throw new ArithmeticException(
                     "Weighted Linear Regression: Matrix cannot be inverted! " +
@@ -92,7 +92,7 @@ public class WeightedLinearRegression {
         }
 
         // recover the coefficients by multiplying the inverse coefficient matrix by B
-        double[][] coefficients = Matrix.matrixMultiply(x, b);
+        double[][] coefficients = MatrixUtils.matrixMultiply(x, b);
         double gof = WeightedLinearRegression
                 .getGoodnessOfFit(adjustedFeatures, observations, sampleWeights, coefficients);
         double mse = WeightedLinearRegression

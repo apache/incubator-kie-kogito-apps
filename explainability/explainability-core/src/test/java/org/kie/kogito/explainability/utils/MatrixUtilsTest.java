@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class MatrixTest {
+class MatrixUtilsTest {
     // === Make some matrices to use in tests ===
     double[][] matOneElem = {
             {5.},
@@ -90,7 +90,7 @@ class MatrixTest {
     // === Shape Tests ===
     @Test
     void testShape(){
-        int[] shape = Matrix.getShape(mat3X5);
+        int[] shape = MatrixUtils.getShape(mat3X5);
         assertArrayEquals(new int[]{3, 5}, shape);
     }
 
@@ -98,19 +98,19 @@ class MatrixTest {
     // === getColumn Tests ===
     @Test
     void testGetCol() {
-        double[] col = Matrix.getCol(mat3X4, 1);
+        double[] col = MatrixUtils.getCol(mat3X4, 1);
         assertArrayEquals(col, new double[]{10., 5., -3.});
     }
 
     @Test
     void testGetColTooBig() {
-        assertThrows(IllegalArgumentException.class, ()->Matrix.getCol(mat3X4, 10));
+        assertThrows(IllegalArgumentException.class, ()-> MatrixUtils.getCol(mat3X4, 10));
     }
 
     // === Transpose Tests ===
     @Test
     void testOneElemTranspose() {
-        double[][] matOneElemTranspose = Matrix.transpose(matOneElem);
+        double[][] matOneElemTranspose = MatrixUtils.transpose(matOneElem);
         for (int i = 0; i < matOneElemTranspose.length; i++) {
             assertArrayEquals(matOneElemTranspose[i], matOneElem[i]);
         }
@@ -118,7 +118,7 @@ class MatrixTest {
 
     @Test
     void testVectorTranspose() {
-        double[][] matRowVectorTranspose = Matrix.transpose(matRowVector);
+        double[][] matRowVectorTranspose = MatrixUtils.transpose(matRowVector);
         for (int i=0; i<matRowVectorTranspose.length; i++) {
             assertArrayEquals(matRowVectorTranspose[i], matColVector[i]);
         }
@@ -126,7 +126,7 @@ class MatrixTest {
 
     @Test
     void testMatrixTranspose() {
-        double[][] mat3X4Transpose = Matrix.transpose(mat3X4);
+        double[][] mat3X4Transpose = MatrixUtils.transpose(mat3X4);
         for (int i = 0; i < mat3X4Transpose.length; i++) {
             assertArrayEquals(mat3X4Transpose[i], mat4X3[i]);
         }
@@ -134,7 +134,7 @@ class MatrixTest {
     // === Matrix Multiplication Tests ===
     @Test
     void testMatMulNormal(){
-        double[][] prod = Matrix.matrixMultiply(mat4X3, mat3X5);
+        double[][] prod = MatrixUtils.matrixMultiply(mat4X3, mat3X5);
         for (int i = 0; i < prod.length; i++) {
             assertArrayEquals(mat43X35Product[i], prod[i], 1e-6);
         }
@@ -143,13 +143,13 @@ class MatrixTest {
     @Test
     void testMatMulWrongShape(){
         assertThrows(IllegalArgumentException.class,
-                () -> Matrix.matrixMultiply(mat3X4, mat3X5));
+                () -> MatrixUtils.matrixMultiply(mat3X4, mat3X5));
 
     }
 
     @Test
     void testVectorRowColMultiply(){
-        double[][] prod = Matrix.matrixMultiply(matRowVector, matColVector);
+        double[][] prod = MatrixUtils.matrixMultiply(matRowVector, matColVector);
         for (int i = 0; i < prod.length; i++) {
             assertArrayEquals(vectorProdRowCol[i], prod[i], 1e-6);
         }
@@ -157,7 +157,7 @@ class MatrixTest {
 
     @Test
     void testVectorColRowMultiply(){
-        double[][] prod = Matrix.matrixMultiply(matColVector, matRowVector);
+        double[][] prod = MatrixUtils.matrixMultiply(matColVector, matRowVector);
         for (int i = 0; i < prod.length; i++) {
             assertArrayEquals(vectorProdColRow[i], prod[i], 1e-6);
         }
@@ -166,7 +166,7 @@ class MatrixTest {
     // === Matrix Inversion tests ===
     @Test
     void testInvertNormal(){
-        double[][] inv = Matrix.invertSquareMatrix(matSquareNonSingular);
+        double[][] inv = MatrixUtils.invertSquareMatrix(matSquareNonSingular);
         for (int i = 0; i < inv.length; i++) {
             assertArrayEquals(matSNSInv[i], inv[i], 1e-6);
         }
@@ -174,7 +174,7 @@ class MatrixTest {
 
     @Test
     void testInvertSingular(){
-        assertThrows(ArithmeticException.class, ()->Matrix.invertSquareMatrix(matSquareSingular));
+        assertThrows(ArithmeticException.class, ()-> MatrixUtils.invertSquareMatrix(matSquareSingular));
     }
 
     // === Jitter Invert Tests ===
@@ -182,11 +182,11 @@ class MatrixTest {
     void testJitterInvert(){
         // since there's some randomness in jitter invert, let's make sure it's stable
         for (int run=0; run<100; run++) {
-            double[][] inv = Matrix.jitterInvert(matSquareSingular, 10);
+            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10);
 
             // since the output of jitterInvert is non-deterministic for singular matrices, check to make sure
             // key properties of the inverse matrix hold true; namely M*M_inv = Identity
-            double[][] prod = Matrix.matrixMultiply(matSquareSingular, inv);
+            double[][] prod = MatrixUtils.matrixMultiply(matSquareSingular, inv);
             for (int i = 0; i < prod.length; i++) {
                 assertArrayEquals(prod[i], identity[i], 1e-6);
             }
