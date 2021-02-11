@@ -16,6 +16,9 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
+import static org.kie.kogito.taskassigning.core.model.DefaultLabels.AFFINITIES;
+import static org.kie.kogito.taskassigning.core.model.DefaultLabels.SKILLS;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,9 +38,6 @@ import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.test.api.score.stream.ConstraintVerifier;
-
-import static org.kie.kogito.taskassigning.core.model.DefaultLabels.AFFINITIES;
-import static org.kie.kogito.taskassigning.core.model.DefaultLabels.SKILLS;
 
 class DefaultTaskAssigningConstraintProviderTest {
 

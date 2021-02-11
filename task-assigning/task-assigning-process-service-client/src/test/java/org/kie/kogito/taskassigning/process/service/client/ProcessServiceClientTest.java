@@ -16,20 +16,6 @@
 
 package org.kie.kogito.taskassigning.process.service.client;
 
-import java.util.Arrays;
-import java.util.Set;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.taskassigning.ClientServices;
-import org.kie.kogito.taskassigning.auth.BasicAuthenticationCredentials;
-import org.kie.kogito.taskassigning.auth.KeycloakAuthenticationCredentials;
-import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.taskassigning.process.service.client.WireMockKeycloakResource.CLIENT_ID;
 import static org.kie.kogito.taskassigning.process.service.client.WireMockKeycloakResource.KEYCLOAK_PASSWORD;
@@ -51,6 +37,20 @@ import static org.kie.kogito.taskassigning.process.service.client.WireMockProces
 import static org.kie.kogito.taskassigning.process.service.client.WireMockProcessResource.TASK_ID;
 import static org.kie.kogito.taskassigning.process.service.client.WireMockProcessResource.USER;
 import static org.kie.kogito.taskassigning.process.service.client.WireMockProcessResource.WORKITEM_ID;
+
+import java.util.Arrays;
+import java.util.Set;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.ClientServices;
+import org.kie.kogito.taskassigning.auth.BasicAuthenticationCredentials;
+import org.kie.kogito.taskassigning.auth.KeycloakAuthenticationCredentials;
+import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(WireMockProcessResource.class)

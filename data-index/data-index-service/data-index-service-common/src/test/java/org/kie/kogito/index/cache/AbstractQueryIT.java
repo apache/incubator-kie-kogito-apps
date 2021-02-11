@@ -16,20 +16,6 @@
 
 package org.kie.kogito.index.cache;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.DataIndexStorageService;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.query.AttributeFilter;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,6 +34,20 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.isNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThan;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.lessThanEqual;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
 
 abstract class AbstractQueryIT {
 

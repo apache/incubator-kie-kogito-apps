@@ -16,6 +16,8 @@
 
 package org.kie.kogito.persistence.protobuf;
 
+import static org.kie.kogito.persistence.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -34,8 +36,6 @@ import org.kie.kogito.persistence.api.proto.DomainDescriptor;
 import org.kie.kogito.persistence.api.schema.AttributeDescriptor;
 import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
 import org.kie.kogito.persistence.api.schema.IndexDescriptor;
-
-import static org.kie.kogito.persistence.protobuf.ProtobufService.DOMAIN_MODEL_PROTO_NAME;
 
 public class TestUtils {
 

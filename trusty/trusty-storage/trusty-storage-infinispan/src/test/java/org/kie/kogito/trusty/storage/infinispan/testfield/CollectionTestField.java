@@ -16,15 +16,15 @@
 
 package org.kie.kogito.trusty.storage.infinispan.testfield;
 
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.eq;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.infinispan.protostream.MessageMarshaller;
-
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.ArgumentMatchers.eq;
 
 public class CollectionTestField<M, T> extends AbstractTestField<M, Collection<T>> {
     private final Class<T> elementClass;

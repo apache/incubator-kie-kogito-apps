@@ -16,12 +16,12 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
-import org.kie.kogito.persistence.api.Storage;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.kie.kogito.persistence.api.Storage;
 
 class StorageTestBase<K, V> {
 

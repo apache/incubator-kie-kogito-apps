@@ -16,6 +16,10 @@
 
 package org.kie.kogito.index.graphql;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.ProcessInstance;
 
@@ -24,10 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import graphql.schema.DataFetchingEnvironment;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class GraphQLSchemaManagerTest {
 

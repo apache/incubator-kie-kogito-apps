@@ -16,11 +16,11 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class PriorityHelperTest {
 

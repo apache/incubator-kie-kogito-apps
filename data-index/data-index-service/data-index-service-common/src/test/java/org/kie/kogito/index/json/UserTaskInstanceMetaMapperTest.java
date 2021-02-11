@@ -16,18 +16,18 @@
 
 package org.kie.kogito.index.json;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
+
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 
 public class UserTaskInstanceMetaMapperTest {
 

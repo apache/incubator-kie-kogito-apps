@@ -16,6 +16,8 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -23,8 +25,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class AbstractArgumentTest<V, T extends Argument> {

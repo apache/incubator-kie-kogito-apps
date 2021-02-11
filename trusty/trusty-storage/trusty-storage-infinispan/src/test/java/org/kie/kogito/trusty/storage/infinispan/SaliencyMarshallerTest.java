@@ -16,6 +16,10 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.kie.kogito.trusty.storage.api.model.Saliency.FEATURE_IMPORTANCE_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Saliency.OUTCOME_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Saliency.OUTCOME_NAME_FIELD;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -27,10 +31,6 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.ListTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.kie.kogito.trusty.storage.api.model.Saliency.FEATURE_IMPORTANCE_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Saliency.OUTCOME_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Saliency.OUTCOME_NAME_FIELD;
 
 public class SaliencyMarshallerTest extends MarshallerTestTemplate<Saliency> {
 

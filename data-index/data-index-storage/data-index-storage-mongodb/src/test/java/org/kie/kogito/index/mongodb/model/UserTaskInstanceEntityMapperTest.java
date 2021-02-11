@@ -16,6 +16,11 @@
 
 package org.kie.kogito.index.mongodb.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
+
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +31,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.UserTaskInstance;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 class UserTaskInstanceEntityMapperTest {
 

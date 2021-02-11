@@ -16,22 +16,6 @@
 
 package org.kie.kogito.index.mongodb.query;
 
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
-import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.query.SortDirection;
-import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
-import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
-import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
@@ -47,6 +31,22 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.like;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
+
+import javax.inject.Inject;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
+import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.SortDirection;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
+import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

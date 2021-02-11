@@ -16,6 +16,8 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime.executable;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -28,8 +30,6 @@ import org.kie.kogito.taskassigning.core.AbstractTaskAssigningCoreTest;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.optaplanner.core.api.solver.ProblemFactChange;
 import org.optaplanner.core.api.solver.Solver;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 abstract class AbstractExecutableProblemFactChangeTest extends AbstractTaskAssigningCoreTest {
 

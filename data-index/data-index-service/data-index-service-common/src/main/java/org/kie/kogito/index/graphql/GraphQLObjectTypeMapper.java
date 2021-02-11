@@ -16,6 +16,9 @@
 
 package org.kie.kogito.index.graphql;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
+
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -31,9 +34,6 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
-
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 
 public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, GraphQLObjectType> {
 

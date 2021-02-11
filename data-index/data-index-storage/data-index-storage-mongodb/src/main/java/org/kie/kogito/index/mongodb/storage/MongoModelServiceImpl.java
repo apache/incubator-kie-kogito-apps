@@ -16,6 +16,12 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
+import static org.kie.kogito.index.Constants.JOBS_STORAGE;
+import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+import static org.kie.kogito.index.mongodb.Constants.isDomainCollection;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -36,12 +42,6 @@ import org.kie.kogito.index.mongodb.model.UserTaskInstanceEntityMapper;
 import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.storage.MongoModelService;
-
-import static org.kie.kogito.index.Constants.JOBS_STORAGE;
-import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
-import static org.kie.kogito.index.mongodb.Constants.isDomainCollection;
 
 @ApplicationScoped
 public class MongoModelServiceImpl implements MongoModelService {

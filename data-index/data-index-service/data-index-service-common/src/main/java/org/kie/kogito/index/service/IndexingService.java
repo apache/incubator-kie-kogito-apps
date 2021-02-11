@@ -16,6 +16,15 @@
 
 package org.kie.kogito.index.service;
 
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.index.Constants.ID;
+import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.Constants.LAST_UPDATE;
+import static org.kie.kogito.index.Constants.PROCESS_ID;
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -33,15 +42,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.index.Constants.ID;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.Constants.LAST_UPDATE;
-import static org.kie.kogito.index.Constants.PROCESS_ID;
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 @ApplicationScoped
 public class IndexingService {

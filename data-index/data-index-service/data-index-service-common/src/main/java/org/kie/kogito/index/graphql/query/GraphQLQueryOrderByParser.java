@@ -16,6 +16,10 @@
 
 package org.kie.kogito.index.graphql.query;
 
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,10 +36,6 @@ import graphql.language.ObjectValue;
 import graphql.language.Value;
 import graphql.language.VariableReference;
 import graphql.schema.DataFetchingEnvironment;
-
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 
 public class GraphQLQueryOrderByParser implements Function<DataFetchingEnvironment, List<AttributeSort>> {
 

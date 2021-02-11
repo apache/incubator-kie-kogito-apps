@@ -16,6 +16,9 @@
 
 package org.kie.kogito.index.messaging;
 
+import static java.util.Collections.emptySet;
+import static org.kie.kogito.index.TestUtils.readFileContent;
+
 import java.net.URI;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,9 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
-
-import static java.util.Collections.emptySet;
-import static org.kie.kogito.index.TestUtils.readFileContent;
 
 public class KogitoCloudEventDeserializerTest {
 

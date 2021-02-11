@@ -16,6 +16,16 @@
 
 package org.kie.kogito.persistence.protobuf;
 
+import static java.util.stream.Collectors.toMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.INDEXED_ANNOTATION;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.configureBuilder;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.createAttributeDescriptor;
+import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.createEntityIndexeDescriptors;
+import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileContent;
+import static org.kie.kogito.persistence.protobuf.TestUtils.getValidEntityIndexDescriptors;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -29,16 +39,6 @@ import org.infinispan.protostream.impl.SerializationContextImpl;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.schema.AttributeDescriptor;
 import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
-
-import static java.util.stream.Collectors.toMap;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.INDEXED_ANNOTATION;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.configureBuilder;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.createAttributeDescriptor;
-import static org.kie.kogito.persistence.protobuf.ProtoIndexParser.createEntityIndexeDescriptors;
-import static org.kie.kogito.persistence.protobuf.TestUtils.getTestFileContent;
-import static org.kie.kogito.persistence.protobuf.TestUtils.getValidEntityIndexDescriptors;
 
 class ProtoIndexParserTest {
 

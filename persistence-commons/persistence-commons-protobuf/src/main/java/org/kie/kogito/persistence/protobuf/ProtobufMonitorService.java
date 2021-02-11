@@ -16,6 +16,10 @@
 
 package org.kie.kogito.persistence.protobuf;
 
+import static java.lang.String.format;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -45,10 +49,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.ShutdownEvent;
-
-import static java.lang.String.format;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 @ApplicationScoped
 public class ProtobufMonitorService {

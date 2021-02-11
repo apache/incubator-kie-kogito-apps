@@ -16,6 +16,9 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
+import static org.kie.kogito.taskassigning.core.model.TaskAssigningSolution.HARD_LEVELS_SIZE;
+import static org.kie.kogito.taskassigning.core.model.TaskAssigningSolution.SOFT_LEVELS_SIZE;
+
 import org.kie.kogito.taskassigning.core.model.DefaultLabels;
 import org.kie.kogito.taskassigning.core.model.ModelConstants;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
@@ -24,9 +27,6 @@ import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.buildin.bendablelong.BendableLongScore;
 import org.optaplanner.core.api.score.stream.Constraint;
 import org.optaplanner.core.api.score.stream.ConstraintFactory;
-
-import static org.kie.kogito.taskassigning.core.model.TaskAssigningSolution.HARD_LEVELS_SIZE;
-import static org.kie.kogito.taskassigning.core.model.TaskAssigningSolution.SOFT_LEVELS_SIZE;
 
 public class DefaultTaskAssigningConstraints {
 

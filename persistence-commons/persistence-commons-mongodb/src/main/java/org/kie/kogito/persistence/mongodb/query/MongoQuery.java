@@ -16,6 +16,11 @@
 
 package org.kie.kogito.persistence.mongodb.query;
 
+import static com.mongodb.client.model.Sorts.ascending;
+import static com.mongodb.client.model.Sorts.descending;
+import static com.mongodb.client.model.Sorts.orderBy;
+import static java.util.stream.Collectors.toList;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +35,6 @@ import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-
-import static com.mongodb.client.model.Sorts.ascending;
-import static com.mongodb.client.model.Sorts.descending;
-import static com.mongodb.client.model.Sorts.orderBy;
-import static java.util.stream.Collectors.toList;
 
 public class MongoQuery<V, E> implements Query<V> {
 

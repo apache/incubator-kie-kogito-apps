@@ -16,6 +16,18 @@
 
 package org.kie.kogito.persistence.mongodb.index;
 
+import static io.quarkus.test.junit.QuarkusMock.installMockForType;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.kie.kogito.persistence.mongodb.index.IndexManager.DEFAULT_INDEX;
+import static org.kie.kogito.persistence.mongodb.index.IndexManager.INDEX_NAME_FIELD;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -54,18 +66,6 @@ import com.mongodb.client.model.Indexes;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-
-import static io.quarkus.test.junit.QuarkusMock.installMockForType;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.kie.kogito.persistence.mongodb.index.IndexManager.DEFAULT_INDEX;
-import static org.kie.kogito.persistence.mongodb.index.IndexManager.INDEX_NAME_FIELD;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

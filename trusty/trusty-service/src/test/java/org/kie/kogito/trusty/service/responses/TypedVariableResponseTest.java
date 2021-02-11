@@ -16,6 +16,8 @@
 
 package org.kie.kogito.trusty.service.responses;
 
+import static org.kie.kogito.trusty.service.responses.ResponseUtils.typedVariableResponseFrom;
+
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -25,8 +27,6 @@ import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-
-import static org.kie.kogito.trusty.service.responses.ResponseUtils.typedVariableResponseFrom;
 
 class TypedVariableResponseTest {
 

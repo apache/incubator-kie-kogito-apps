@@ -16,12 +16,12 @@
 
 package org.kie.kogito.index.mongodb.query;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
 import java.util.function.BiConsumer;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class QueryTestUtils {
 

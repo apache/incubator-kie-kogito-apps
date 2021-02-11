@@ -15,16 +15,16 @@
  */
 package org.kie.kogito.it.jobs;
 
-import org.junit.jupiter.api.Test;
-
-import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
-
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.with;
 import static org.hamcrest.CoreMatchers.notNullValue;
+
+import org.junit.jupiter.api.Test;
+
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 
 public abstract class BaseProcessTimerIT {
 

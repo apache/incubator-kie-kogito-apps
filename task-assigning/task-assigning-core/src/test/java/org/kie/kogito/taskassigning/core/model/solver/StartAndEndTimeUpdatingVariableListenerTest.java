@@ -16,6 +16,9 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +31,6 @@ import org.kie.kogito.taskassigning.core.model.User;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.optaplanner.core.api.score.director.ScoreDirector;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class StartAndEndTimeUpdatingVariableListenerTest {

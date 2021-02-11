@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,8 +37,6 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LimeStabilityTest {
 

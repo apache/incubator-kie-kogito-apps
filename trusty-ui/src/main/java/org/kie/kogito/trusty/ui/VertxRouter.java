@@ -16,6 +16,8 @@
 
 package org.kie.kogito.trusty.ui;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -30,8 +32,6 @@ import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.StaticHandler;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 @ApplicationScoped
 public class VertxRouter {

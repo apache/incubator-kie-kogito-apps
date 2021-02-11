@@ -16,6 +16,13 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime.executable;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_100TASKS_5USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_24TASKS_8USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_500TASKS_20USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_50TASKS_5USERS_SOLUTION;
+import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_USER;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,13 +42,6 @@ import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.kie.kogito.taskassigning.core.model.solver.realtime.AssignTaskProblemFactChange;
 import org.optaplanner.core.api.score.director.ScoreDirector;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_100TASKS_5USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_24TASKS_8USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_500TASKS_20USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.TestDataSet.SET_OF_50TASKS_5USERS_SOLUTION;
-import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_USER;
 
 class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProblemFactChangeTest {
 

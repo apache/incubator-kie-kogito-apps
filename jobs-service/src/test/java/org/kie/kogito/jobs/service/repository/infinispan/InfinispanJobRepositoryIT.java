@@ -16,6 +16,8 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
+import static org.awaitility.Awaitility.await;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -30,8 +32,6 @@ import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-
-import static org.awaitility.Awaitility.await;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)

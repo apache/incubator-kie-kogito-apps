@@ -16,6 +16,18 @@
 
 package org.kie.kogito.jobs.service.scheduler;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
+import static org.kie.kogito.jobs.service.model.JobStatus.SCHEDULED;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,18 +57,6 @@ import org.reactivestreams.Publisher;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
-import static org.kie.kogito.jobs.service.model.JobStatus.SCHEDULED;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @SuppressWarnings("java:S5786")
 public abstract class BaseTimerJobSchedulerTest {

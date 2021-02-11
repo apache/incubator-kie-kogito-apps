@@ -16,6 +16,9 @@
 
 package org.kie.kogito.persistence.infinispan.query;
 
+import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -27,9 +30,6 @@ import org.kie.kogito.persistence.api.query.AttributeSort;
 import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
 
 public class InfinispanQuery<T> implements Query<T> {
 

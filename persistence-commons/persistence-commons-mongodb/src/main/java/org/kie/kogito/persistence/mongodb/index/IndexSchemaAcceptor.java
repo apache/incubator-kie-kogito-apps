@@ -16,14 +16,14 @@
 
 package org.kie.kogito.persistence.mongodb.index;
 
+import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;
+import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
+
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.persistence.api.schema.SchemaAcceptor;
 import org.kie.kogito.persistence.api.schema.SchemaType;
-
-import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;
-import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
 
 @ApplicationScoped
 public class IndexSchemaAcceptor implements SchemaAcceptor {

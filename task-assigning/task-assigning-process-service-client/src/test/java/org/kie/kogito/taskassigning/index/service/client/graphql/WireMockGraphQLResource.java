@@ -16,15 +16,6 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import java.util.Collections;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.tomakehurst.wiremock.WireMockServer;
-
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
@@ -35,6 +26,15 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
+
+import java.util.Collections;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.tomakehurst.wiremock.WireMockServer;
+
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class WireMockGraphQLResource implements QuarkusTestResourceLifecycleManager {
 

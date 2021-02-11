@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.trusty.service.messaging;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -25,9 +28,6 @@ import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import com.fasterxml.jackson.databind.node.TextNode;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 class MessagingUtilsTest {
 

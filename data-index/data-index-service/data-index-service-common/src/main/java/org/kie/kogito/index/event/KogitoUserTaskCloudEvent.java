@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.event;
 
+import static java.lang.String.format;
+
 import java.net.URI;
 import java.time.ZonedDateTime;
 
@@ -24,8 +26,6 @@ import org.kie.kogito.index.model.UserTaskInstance;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.net.UrlEscapers;
-
-import static java.lang.String.format;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KogitoUserTaskCloudEvent extends KogitoCloudEvent<UserTaskInstance> {

@@ -16,6 +16,9 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.extractTaskAssignments;
+
 import java.util.List;
 
 import org.kie.kogito.taskassigning.core.model.ChainElement;
@@ -23,9 +26,6 @@ import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
-
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.extractTaskAssignments;
 
 public class ProblemFactChangeUtil {
 

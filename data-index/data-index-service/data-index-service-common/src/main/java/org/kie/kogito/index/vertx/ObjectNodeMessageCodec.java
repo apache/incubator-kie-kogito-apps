@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.vertx;
 
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+
 import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -28,8 +30,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
-
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 @ApplicationScoped
 public class ObjectNodeMessageCodec implements MessageCodec<ObjectNode, ObjectNode> {

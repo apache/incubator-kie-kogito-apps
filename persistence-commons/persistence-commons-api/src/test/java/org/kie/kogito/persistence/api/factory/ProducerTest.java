@@ -16,6 +16,9 @@
 
 package org.kie.kogito.persistence.api.factory;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import javax.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +29,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ProducerTest {

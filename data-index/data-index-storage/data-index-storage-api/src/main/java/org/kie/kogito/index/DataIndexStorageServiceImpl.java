@@ -16,6 +16,11 @@
 
 package org.kie.kogito.index;
 
+import static org.kie.kogito.index.Constants.JOBS_STORAGE;
+import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,11 +34,6 @@ import org.kie.kogito.persistence.api.StorageService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.quarkus.runtime.Startup;
-
-import static org.kie.kogito.index.Constants.JOBS_STORAGE;
-import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
 
 @ApplicationScoped
 @Startup

@@ -16,6 +16,13 @@
 
 package org.kie.kogito.taskassigning.index.service.client;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,13 +36,6 @@ import org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanc
 import org.kie.kogito.taskassigning.index.service.client.impl.DataIndexServiceClientImpl;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class DataIndexServiceClientTest {

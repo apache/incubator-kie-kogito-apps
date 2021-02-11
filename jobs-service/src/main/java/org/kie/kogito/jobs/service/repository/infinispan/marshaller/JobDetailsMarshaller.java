@@ -16,6 +16,9 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan.marshaller;
 
+import static org.kie.kogito.jobs.service.utils.DateUtil.instantToZonedDateTime;
+import static org.kie.kogito.jobs.service.utils.DateUtil.zonedDateTimeToInstant;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Optional;
@@ -24,9 +27,6 @@ import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.timer.Trigger;
-
-import static org.kie.kogito.jobs.service.utils.DateUtil.instantToZonedDateTime;
-import static org.kie.kogito.jobs.service.utils.DateUtil.zonedDateTimeToInstant;
 
 public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
 

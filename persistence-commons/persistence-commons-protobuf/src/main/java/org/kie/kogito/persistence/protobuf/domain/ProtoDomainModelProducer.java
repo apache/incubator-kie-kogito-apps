@@ -16,6 +16,9 @@
 
 package org.kie.kogito.persistence.protobuf.domain;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -35,9 +38,6 @@ import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
 import org.kie.kogito.persistence.protobuf.FileDescriptorRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @ApplicationScoped
 public class ProtoDomainModelProducer {

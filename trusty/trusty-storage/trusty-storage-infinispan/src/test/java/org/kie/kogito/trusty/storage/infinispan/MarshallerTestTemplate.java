@@ -16,6 +16,10 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -29,10 +33,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockingDetails;
 
 abstract class MarshallerTestTemplate<T> {
 

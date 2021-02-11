@@ -16,6 +16,12 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+
 import java.net.URI;
 import java.util.Collections;
 
@@ -32,12 +38,6 @@ import io.cloudevents.CloudEvent;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)

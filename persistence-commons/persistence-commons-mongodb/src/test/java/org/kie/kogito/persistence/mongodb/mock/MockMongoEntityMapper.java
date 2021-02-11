@@ -16,10 +16,10 @@
 
 package org.kie.kogito.persistence.mongodb.mock;
 
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+
 import org.bson.Document;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
-
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
 
 public class MockMongoEntityMapper implements MongoEntityMapper<String, Document> {
 

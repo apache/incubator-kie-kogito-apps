@@ -16,6 +16,12 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
+import static com.mongodb.client.model.Aggregates.match;
+import static com.mongodb.client.model.changestream.FullDocument.UPDATE_LOOKUP;
+import static java.util.Collections.singletonList;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToObject;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -30,12 +36,6 @@ import org.reactivestreams.Subscription;
 
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import com.mongodb.reactivestreams.client.MongoCollection;
-
-import static com.mongodb.client.model.Aggregates.match;
-import static com.mongodb.client.model.changestream.FullDocument.UPDATE_LOOKUP;
-import static java.util.Collections.singletonList;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToObject;
 
 public class StorageUtils {
 

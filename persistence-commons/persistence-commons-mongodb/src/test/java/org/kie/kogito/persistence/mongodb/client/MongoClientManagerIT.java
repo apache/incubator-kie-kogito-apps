@@ -16,6 +16,9 @@
 
 package org.kie.kogito.persistence.mongodb.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import javax.inject.Inject;
 
 import org.bson.Document;
@@ -26,9 +29,6 @@ import com.mongodb.client.MongoCollection;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

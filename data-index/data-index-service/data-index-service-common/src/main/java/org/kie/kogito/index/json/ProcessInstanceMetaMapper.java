@@ -16,13 +16,6 @@
 
 package org.kie.kogito.index.json;
 
-import java.util.function.Function;
-
-import org.kie.kogito.index.event.KogitoProcessCloudEvent;
-import org.kie.kogito.index.model.ProcessInstance;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import static org.kie.kogito.index.Constants.ID;
 import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.Constants.LAST_UPDATE;
@@ -30,6 +23,13 @@ import static org.kie.kogito.index.Constants.PROCESS_ID;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.Constants.PROCESS_NAME;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+
+import java.util.function.Function;
+
+import org.kie.kogito.index.event.KogitoProcessCloudEvent;
+import org.kie.kogito.index.model.ProcessInstance;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ProcessInstanceMetaMapper implements Function<KogitoProcessCloudEvent, ObjectNode> {
 

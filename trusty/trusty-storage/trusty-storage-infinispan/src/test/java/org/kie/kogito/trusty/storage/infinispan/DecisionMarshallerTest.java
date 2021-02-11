@@ -16,6 +16,17 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.kie.kogito.trusty.storage.api.model.Decision.INPUTS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Decision.OUTCOMES_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAMESPACE_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TIMESTAMP_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TYPE_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTOR_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.HAS_SUCCEEDED_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.Execution.SOURCE_URL_FIELD;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -32,17 +43,6 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.LongTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.kie.kogito.trusty.storage.api.model.Decision.INPUTS_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Decision.OUTCOMES_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAMESPACE_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTED_MODEL_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TIMESTAMP_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTION_TYPE_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.EXECUTOR_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.HAS_SUCCEEDED_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Execution.SOURCE_URL_FIELD;
 
 public class DecisionMarshallerTest extends MarshallerTestTemplate<Decision> {
 

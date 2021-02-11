@@ -16,13 +16,13 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.condition;
 
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.hasAllLabels;
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
+
 import org.kie.kogito.taskassigning.core.model.DefaultLabels;
 import org.kie.kogito.taskassigning.core.model.ModelConstants;
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.core.model.User;
-
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.hasAllLabels;
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
 
 public class TaskAssigningConditions {
 

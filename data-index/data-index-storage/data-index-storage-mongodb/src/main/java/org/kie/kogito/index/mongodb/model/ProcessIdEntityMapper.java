@@ -16,9 +16,9 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
-
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+
+import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
 public class ProcessIdEntityMapper implements MongoEntityMapper<String, ProcessIdEntity> {
 

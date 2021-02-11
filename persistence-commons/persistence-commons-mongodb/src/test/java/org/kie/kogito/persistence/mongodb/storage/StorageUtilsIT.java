@@ -16,6 +16,13 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
+import static com.mongodb.client.model.Filters.eq;
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.storage.MongoStorage.OPERATION_TYPE;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -35,13 +42,6 @@ import com.mongodb.client.MongoCollection;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-
-import static com.mongodb.client.model.Filters.eq;
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.storage.MongoStorage.OPERATION_TYPE;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

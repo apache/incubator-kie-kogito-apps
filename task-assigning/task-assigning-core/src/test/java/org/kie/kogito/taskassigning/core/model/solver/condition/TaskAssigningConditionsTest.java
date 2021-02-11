@@ -16,6 +16,11 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.condition;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockGroup;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTask;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
+
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -25,11 +30,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.kie.kogito.taskassigning.core.model.ModelConstants;
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.core.model.User;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockGroup;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTask;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
 
 class TaskAssigningConditionsTest {
 

@@ -16,6 +16,8 @@
 
 package org.kie.kogito.index.event;
 
+import static java.util.Arrays.asList;
+
 import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -24,8 +26,6 @@ import org.kie.kogito.index.model.ProcessInstance;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import static java.util.Arrays.asList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KogitoProcessCloudEvent extends KogitoCloudEvent<ProcessInstance> {

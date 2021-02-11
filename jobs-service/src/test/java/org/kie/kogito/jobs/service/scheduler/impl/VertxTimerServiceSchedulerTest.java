@@ -16,6 +16,12 @@
 
 package org.kie.kogito.jobs.service.scheduler.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.given;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 import java.time.ZonedDateTime;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
@@ -40,12 +46,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.vertx.mutiny.core.Vertx;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.given;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class VertxTimerServiceSchedulerTest {

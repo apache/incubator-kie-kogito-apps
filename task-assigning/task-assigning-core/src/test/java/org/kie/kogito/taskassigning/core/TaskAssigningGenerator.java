@@ -16,6 +16,8 @@
 
 package org.kie.kogito.taskassigning.core;
 
+import static org.optaplanner.examples.common.app.CommonApp.DATA_DIR_SYSTEM_PROPERTY;
+
 import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -36,8 +38,6 @@ import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.optaplanner.examples.common.app.CommonApp.DATA_DIR_SYSTEM_PROPERTY;
 
 /**
  * Helper class for generating a set of example solution files. Was used for generating the files below and doesn't need

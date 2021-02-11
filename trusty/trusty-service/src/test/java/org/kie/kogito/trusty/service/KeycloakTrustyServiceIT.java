@@ -1,5 +1,7 @@
 package org.kie.kogito.trusty.service;
 
+import static io.restassured.RestAssured.given;
+
 import org.apache.http.HttpStatus;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
@@ -11,8 +13,6 @@ import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-
-import static io.restassured.RestAssured.given;
 
 @QuarkusTest
 @QuarkusTestResource(KeycloakQuarkusTestResource.class)

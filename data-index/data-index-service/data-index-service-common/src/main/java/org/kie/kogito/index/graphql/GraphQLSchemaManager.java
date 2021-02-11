@@ -16,6 +16,11 @@
 
 package org.kie.kogito.index.graphql;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -64,11 +69,6 @@ import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
 import io.vertx.axle.core.eventbus.MessageConsumer;
 import io.vertx.axle.core.eventbus.MessageProducer;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
 
 @ApplicationScoped
 public class GraphQLSchemaManager {

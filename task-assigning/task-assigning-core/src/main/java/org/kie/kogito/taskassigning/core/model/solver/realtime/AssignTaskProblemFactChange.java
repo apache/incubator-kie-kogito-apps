@@ -16,6 +16,9 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
+import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtil.unlinkTaskAssignment;
+
 import java.util.ArrayList;
 
 import org.kie.kogito.taskassigning.core.TaskAssigningRuntimeException;
@@ -25,9 +28,6 @@ import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.api.solver.ProblemFactChange;
-
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
-import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtil.unlinkTaskAssignment;
 
 /**
  * Implements the "direct" assignment of a Task to a User.

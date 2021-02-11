@@ -16,6 +16,13 @@
 
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.EVALUATION_STATUS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.MESSAGES_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_INPUTS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_RESULT_FIELD;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -29,13 +36,6 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.ObjectTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.EVALUATION_STATUS_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.MESSAGES_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_INPUTS_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DecisionOutcome.OUTCOME_RESULT_FIELD;
 
 public class DecisionOutcomeMarshallerTest extends MarshallerTestTemplate<DecisionOutcome> {
 

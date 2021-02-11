@@ -16,6 +16,10 @@
 
 package org.kie.kogito.security;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,10 +28,6 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class UserResourceTest {
 

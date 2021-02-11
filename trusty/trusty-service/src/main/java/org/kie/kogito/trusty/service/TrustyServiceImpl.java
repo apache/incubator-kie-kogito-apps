@@ -16,6 +16,11 @@
 
 package org.kie.kogito.trusty.service;
 
+import static java.util.Arrays.asList;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
+import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
+import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
+
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,11 +47,6 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static java.util.Arrays.asList;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
-import static org.kie.kogito.trusty.service.messaging.MessagingUtils.modelToTracingTypedValue;
 
 @ApplicationScoped
 public class TrustyServiceImpl implements TrustyService {
