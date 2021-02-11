@@ -17,6 +17,6 @@
 package org.kie.kogito.trusty.service.responses;
 
 public enum ExecutionType {
-    DECISION,
-    PROCESS
+        DECISION,
+        PROCESS
 }

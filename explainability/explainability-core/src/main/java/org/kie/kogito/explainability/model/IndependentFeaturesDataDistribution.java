@@ -79,9 +79,8 @@ public class IndependentFeaturesDataDistribution implements DataDistribution {
         return combinedValues;
     }
 
-    private static <T> void getElementsAtDepth(List<Collection<T>> valueEnumerations, Collection<List<T>> combinedValues,
-            int depth,
-            List<T> currentItem) {
+    private static <T> void getElementsAtDepth(List<Collection<T>> valueEnumerations, Collection<List<T>> combinedValues, int depth,
+                                               List<T> currentItem) {
         if (depth == valueEnumerations.size()) {
             combinedValues.add(currentItem);
         } else {

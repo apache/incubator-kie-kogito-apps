@@ -16,11 +16,11 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
-
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
+
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 public class JobEntityMapper implements MongoEntityMapper<Job, JobEntity> {
 

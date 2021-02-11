@@ -15,10 +15,6 @@
  */
 package org.kie.kogito.explainability.model;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,6 +25,10 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.utils.DataUtils;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class IndependentFeaturesDataDistributionTest {
 
@@ -41,8 +41,7 @@ class IndependentFeaturesDataDistributionTest {
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
-        IndependentFeaturesDataDistribution independentFeaturesDataDistribution =
-                new IndependentFeaturesDataDistribution(featureDistributions);
+        IndependentFeaturesDataDistribution independentFeaturesDataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
         assertEquals(1000, independentFeaturesDataDistribution.getAllSamples().size());
         List<PredictionInput> samples = independentFeaturesDataDistribution.sample(3);
         assertNotNull(samples);
@@ -61,8 +60,7 @@ class IndependentFeaturesDataDistributionTest {
         double[] doubles2 = DataUtils.generateSamples(0, 1, 3);
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
-        IndependentFeaturesDataDistribution independentFeaturesDataDistribution =
-                new IndependentFeaturesDataDistribution(featureDistributions);
+        IndependentFeaturesDataDistribution independentFeaturesDataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
         List<PredictionInput> samples = independentFeaturesDataDistribution.sample(300);
         assertNotNull(samples);
         assertEquals(300, samples.size());
@@ -81,8 +79,7 @@ class IndependentFeaturesDataDistributionTest {
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles1));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles2));
         featureDistributions.add(new NumericFeatureDistribution(TestUtils.getMockedNumericFeature(), doubles3));
-        IndependentFeaturesDataDistribution independentFeaturesDataDistribution =
-                new IndependentFeaturesDataDistribution(featureDistributions);
+        IndependentFeaturesDataDistribution independentFeaturesDataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
         List<FeatureDistribution> list = independentFeaturesDataDistribution.asFeatureDistributions();
         assertEquals(list, featureDistributions);
     }

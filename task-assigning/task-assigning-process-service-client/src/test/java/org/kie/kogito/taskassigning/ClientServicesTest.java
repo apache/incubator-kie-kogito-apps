@@ -16,14 +16,14 @@
 
 package org.kie.kogito.taskassigning;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.taskassigning.index.service.client.DataIndexServiceClientFactory;
 import org.kie.kogito.taskassigning.process.service.client.ProcessServiceClientFactory;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class ClientServicesTest {

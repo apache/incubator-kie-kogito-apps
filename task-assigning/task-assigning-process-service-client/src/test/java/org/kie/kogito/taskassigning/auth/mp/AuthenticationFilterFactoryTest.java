@@ -16,17 +16,16 @@
 
 package org.kie.kogito.taskassigning.auth.mp;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import javax.inject.Inject;
 
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.auth.AuthenticationCredentials;
 import org.kie.kogito.taskassigning.auth.BasicAuthenticationCredentials;
 import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @QuarkusTest
 class AuthenticationFilterFactoryTest {

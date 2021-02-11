@@ -16,9 +16,9 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql.date;
 
-import static org.kie.kogito.taskassigning.util.JsonUtils.newObjectNode;
-
 import com.fasterxml.jackson.databind.JsonNode;
+
+import static org.kie.kogito.taskassigning.util.JsonUtils.newObjectNode;
 
 public abstract class SimpleDateArgument<T> extends DateArgument<T> {
 

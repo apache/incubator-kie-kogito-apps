@@ -16,9 +16,8 @@
 
 package org.kie.kogito.jitexecutor.runner;
 
-import org.kie.kogito.jitexecutor.dmn.api.SchemaResourceTest;
-
 import io.quarkus.test.junit.NativeImageTest;
+import org.kie.kogito.jitexecutor.dmn.api.SchemaResourceTest;
 
 @NativeImageTest
 public class NativeSchemaResourceIT extends SchemaResourceTest {

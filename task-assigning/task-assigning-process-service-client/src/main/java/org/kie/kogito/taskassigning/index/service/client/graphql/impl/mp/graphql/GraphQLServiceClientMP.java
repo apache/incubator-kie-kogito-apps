@@ -16,18 +16,17 @@
 
 package org.kie.kogito.taskassigning.index.service.client.graphql.impl.mp.graphql;
 
-import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
-
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.taskassigning.index.service.client.graphql.GraphQLServiceClient;
 import org.kie.kogito.taskassigning.index.service.client.graphql.GraphQLServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
 
 /**
  * Basic GraphQLServiceClient implementation for avoiding introducing third party libraries. This implementation

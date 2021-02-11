@@ -16,22 +16,21 @@
 
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
-import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
-
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
+import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectModelEvent;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
@@ -54,9 +53,9 @@ public class ModelEventConsumerIT {
                 .storeModel(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
 
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
-                KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
-                KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
 
         verify(trustyService, timeout(3000).times(2))
                 .storeModel(anyString(), anyString(), anyString(), anyString(), anyString(), anyString());

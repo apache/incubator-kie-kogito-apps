@@ -16,14 +16,6 @@
 
 package org.kie.kogito.index.infinispan.protostream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.infinispan.protostream.MilestoneMarshaller.ID;
-import static org.kie.kogito.index.infinispan.protostream.MilestoneMarshaller.NAME;
-import static org.kie.kogito.index.infinispan.protostream.MilestoneMarshaller.STATUS;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 import java.util.UUID;
 
@@ -32,6 +24,14 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.MilestoneStatus;
 import org.mockito.InOrder;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.index.infinispan.protostream.MilestoneMarshaller.ID;
+import static org.kie.kogito.index.infinispan.protostream.MilestoneMarshaller.NAME;
+import static org.kie.kogito.index.infinispan.protostream.MilestoneMarshaller.STATUS;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MilestoneMarshallerTest {
 

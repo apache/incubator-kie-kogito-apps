@@ -18,11 +18,10 @@ package org.kie.kogito.trusty.service.messaging.outgoing;
 
 import java.util.Collections;
 
+import io.reactivex.subscribers.TestSubscriber;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
-
-import io.reactivex.subscribers.TestSubscriber;
 
 class ExplainabilityRequestProducerTest {
 
@@ -37,7 +36,8 @@ class ExplainabilityRequestProducerTest {
                 "executionId", "http://localhost:8080/model",
                 new ModelIdentifierDto("dmn", "modelNamespace:model"),
                 Collections.emptyMap(),
-                Collections.emptyMap()));
+                Collections.emptyMap()
+        ));
 
         subscriber.assertValueCount(1);
     }

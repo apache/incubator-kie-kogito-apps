@@ -16,11 +16,10 @@
 
 package org.kie.kogito.mgmt;
 
-import static io.restassured.RestAssured.given;
-
+import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
 
 @QuarkusTest
 public class VertxRouterTest {

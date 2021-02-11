@@ -16,19 +16,13 @@
 
 package org.kie.kogito.jobs.service.scheduler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import io.quarkus.runtime.StartupEvent;
+import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,8 +40,13 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.quarkus.runtime.StartupEvent;
-import io.vertx.mutiny.core.Vertx;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class JobSchedulerManagerTest {
@@ -84,9 +83,9 @@ class JobSchedulerManagerTest {
                 .build();
 
         lenient().when(repository.findByStatusBetweenDatesOrderByPriority(any(ZonedDateTime.class),
-                any(ZonedDateTime.class),
-                any(JobStatus.class),
-                any(JobStatus.class)))
+                                                                          any(ZonedDateTime.class),
+                                                                          any(JobStatus.class),
+                                                                          any(JobStatus.class)))
                 .thenReturn(ReactiveStreams.of(scheduledJob));
         lenient().when(scheduler.scheduled(JOB_ID))
                 .thenReturn(Optional.empty());

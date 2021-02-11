@@ -16,9 +16,6 @@
 
 package org.kie.kogito.taskassigning.core.model.solver;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +28,9 @@ import org.kie.kogito.taskassigning.core.model.User;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.optaplanner.core.api.score.director.ScoreDirector;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class StartAndEndTimeUpdatingVariableListenerTest {
@@ -92,21 +92,12 @@ class StartAndEndTimeUpdatingVariableListenerTest {
     }
 
     private void verifyTimes() {
-        assertThat(taskAssignment3.getStartTimeInMinutes())
-                .isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes());
-        assertThat(taskAssignment3.getEndTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes()
-                + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes());
-        assertThat(taskAssignment4.getStartTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes()
-                + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes());
-        assertThat(taskAssignment4.getEndTimeInMinutes())
-                .isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes()
-                        + taskAssignment3.getDurationInMinutes() + taskAssignment4.getDurationInMinutes());
-        assertThat(taskAssignment5.getStartTimeInMinutes())
-                .isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes()
-                        + taskAssignment3.getDurationInMinutes() + taskAssignment4.getDurationInMinutes());
-        assertThat(taskAssignment5.getEndTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes()
-                + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes()
-                + taskAssignment4.getDurationInMinutes() + taskAssignment5.getDurationInMinutes());
+        assertThat(taskAssignment3.getStartTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes());
+        assertThat(taskAssignment3.getEndTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes());
+        assertThat(taskAssignment4.getStartTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes());
+        assertThat(taskAssignment4.getEndTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes() + taskAssignment4.getDurationInMinutes());
+        assertThat(taskAssignment5.getStartTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes() + taskAssignment4.getDurationInMinutes());
+        assertThat(taskAssignment5.getEndTimeInMinutes()).isEqualTo(taskAssignment1.getDurationInMinutes() + taskAssignment2.getDurationInMinutes() + taskAssignment3.getDurationInMinutes() + taskAssignment4.getDurationInMinutes() + taskAssignment5.getDurationInMinutes());
 
         Stream.of(taskAssignment3, taskAssignment4, taskAssignment5).forEach(taskAssignment -> {
             verify(scoreDirector).beforeVariableChanged(taskAssignment, TaskAssignment.START_TIME_IN_MINUTES);

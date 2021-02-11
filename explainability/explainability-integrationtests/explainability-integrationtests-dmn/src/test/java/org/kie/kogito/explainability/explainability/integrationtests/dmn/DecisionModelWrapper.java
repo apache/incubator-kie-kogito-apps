@@ -15,15 +15,6 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.DMNResult;
@@ -35,6 +26,15 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * {@link PredictionProvider} implementation based on a Kogito {@link DecisionModel}.
@@ -56,8 +56,7 @@ class DecisionModelWrapper implements PredictionProvider {
             DMNResult dmnResult = decisionModel.evaluateAll(context);
             List<Output> outputs = new LinkedList<>();
             for (DMNDecisionResult decisionResult : dmnResult.getDecisionResults()) {
-                Output output =
-                        new Output(decisionResult.getDecisionName(), Type.TEXT, new Value<>(decisionResult.getResult()), 1d);
+                Output output = new Output(decisionResult.getDecisionName(), Type.TEXT, new Value<>(decisionResult.getResult()), 1d);
                 outputs.add(output);
             }
             PredictionOutput predictionOutput = new PredictionOutput(outputs);
@@ -72,8 +71,7 @@ class DecisionModelWrapper implements PredictionProvider {
         for (Feature f : features) {
             if (Type.COMPOSITE.equals(f.getType())) {
                 List<Feature> compositeFeatures = (List<Feature>) f.getValue().getUnderlyingObject();
-                boolean isList =
-                        compositeFeatures.stream().allMatch(feature -> feature.getName().startsWith(f.getName() + "_"));
+                boolean isList = compositeFeatures.stream().allMatch(feature -> feature.getName().startsWith(f.getName() + "_"));
                 if (isList) {
                     List<Object> objects = new ArrayList<>(compositeFeatures.size());
                     for (Feature fs : compositeFeatures) {

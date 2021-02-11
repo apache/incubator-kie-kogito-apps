@@ -16,18 +16,17 @@
 
 package org.kie.kogito.index.graphql;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import graphql.schema.DataFetchingEnvironment;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.model.ProcessInstance;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.model.ProcessInstance;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import graphql.schema.DataFetchingEnvironment;
 
 public class GraphQLSchemaManagerTest {
 
@@ -66,23 +65,16 @@ public class GraphQLSchemaManagerTest {
 
     @Test
     public void testUrlProcessIdServiceUrl() {
-        assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("travels", "http://localhost:8080/travels")))
-                .isEqualTo("http://localhost:8080");
-        assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orders", "http://localhost:8080/orders")))
-                .isEqualTo("http://localhost:8080");
-        assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orderItems", "http://localhost:8080/orderItems")))
-                .isEqualTo("http://localhost:8080");
+        assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("travels", "http://localhost:8080/travels"))).isEqualTo("http://localhost:8080");
+        assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orders", "http://localhost:8080/orders"))).isEqualTo("http://localhost:8080");
+        assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orderItems", "http://localhost:8080/orderItems"))).isEqualTo("http://localhost:8080");
     }
 
     @Test
     public void testJsonUrlProcessIdServiceUrl() {
-        assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("travels", "http://localhost:8080/travels")))
-                .isEqualTo("http://localhost:8080");
-        assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orders", "http://localhost:8080/orders")))
-                .isEqualTo("http://localhost:8080");
-        assertThat(schemaManager
-                .getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orderItems", "http://localhost:8080/orderItems")))
-                        .isEqualTo("http://localhost:8080");
+        assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("travels", "http://localhost:8080/travels"))).isEqualTo("http://localhost:8080");
+        assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orders", "http://localhost:8080/orders"))).isEqualTo("http://localhost:8080");
+        assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orderItems", "http://localhost:8080/orderItems"))).isEqualTo("http://localhost:8080");
     }
 
     private DataFetchingEnvironment geJsonEnv(String processId, String endpoint) {

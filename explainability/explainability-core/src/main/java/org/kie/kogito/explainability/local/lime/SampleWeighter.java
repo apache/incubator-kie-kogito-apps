@@ -32,7 +32,6 @@ class SampleWeighter {
 
     /**
      * Obtain sample weights for a training set, given a list of target input features to compare with.
-     * 
      * @param targetInputFeatures target input features
      * @param training the (sparse) training set
      * @return a eeight for each sample in the training set

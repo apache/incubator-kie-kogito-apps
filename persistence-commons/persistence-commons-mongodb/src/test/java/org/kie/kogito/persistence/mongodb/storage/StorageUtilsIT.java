@@ -16,13 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
-import static com.mongodb.client.model.Filters.eq;
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.storage.MongoStorage.OPERATION_TYPE;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -30,6 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import com.mongodb.client.MongoCollection;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +34,12 @@ import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
-import com.mongodb.client.MongoCollection;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import static com.mongodb.client.model.Filters.eq;
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.storage.MongoStorage.OPERATION_TYPE;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)
@@ -58,17 +56,14 @@ class StorageUtilsIT {
 
     @Test
     void testWatchCollection_insert() throws Exception {
-        com.mongodb.reactivestreams.client.MongoCollection<Document> reactiveMongoCollection =
-                mongoClientManager.getReactiveCollection("test");
+        com.mongodb.reactivestreams.client.MongoCollection<Document> reactiveMongoCollection = mongoClientManager.getReactiveCollection("test");
         MongoEntityMapper<String, Document> mongoEntityMapper = new MockMongoEntityMapper();
 
         TestListener testListenerInsert1 = new TestListener(2);
-        StorageUtils.watchCollection(reactiveMongoCollection, eq(OPERATION_TYPE, "insert"),
-                (k, v) -> testListenerInsert1.add(v), mongoEntityMapper);
+        StorageUtils.watchCollection(reactiveMongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerInsert1.add(v), mongoEntityMapper);
 
         TestListener testListenerInsert2 = new TestListener(2);
-        StorageUtils.watchCollection(reactiveMongoCollection, eq(OPERATION_TYPE, "insert"),
-                (k, v) -> testListenerInsert2.add(v), mongoEntityMapper);
+        StorageUtils.watchCollection(reactiveMongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerInsert2.add(v), mongoEntityMapper);
 
         MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey1", "testValue1"));
@@ -84,17 +79,14 @@ class StorageUtilsIT {
 
     @Test
     void testWatchCollection_update() throws Exception {
-        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoReactiveCollection =
-                mongoClientManager.getReactiveCollection("test");
+        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoReactiveCollection = mongoClientManager.getReactiveCollection("test");
         MongoEntityMapper<String, Document> mongoEntityMapper = new MockMongoEntityMapper();
 
         TestListener testListenerUpdate1 = new TestListener(2);
-        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "replace"),
-                (k, v) -> testListenerUpdate1.add(v), mongoEntityMapper);
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "replace"), (k, v) -> testListenerUpdate1.add(v), mongoEntityMapper);
 
         TestListener testListenerUpdate2 = new TestListener(2);
-        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "replace"),
-                (k, v) -> testListenerUpdate2.add(v), mongoEntityMapper);
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "replace"), (k, v) -> testListenerUpdate2.add(v), mongoEntityMapper);
 
         MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey1", "testValue1"));
@@ -113,17 +105,14 @@ class StorageUtilsIT {
 
     @Test
     void testWatchCollection_delete() throws Exception {
-        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoReactiveCollection =
-                mongoClientManager.getReactiveCollection("test");
+        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoReactiveCollection = mongoClientManager.getReactiveCollection("test");
         MongoEntityMapper<String, Document> mongoEntityMapper = new MockMongoEntityMapper();
 
         TestListener testListenerRemove1 = new TestListener(2);
-        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "insert"),
-                (k, v) -> testListenerRemove1.add(k), mongoEntityMapper);
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerRemove1.add(k), mongoEntityMapper);
 
         TestListener testListenerRemove2 = new TestListener(2);
-        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "insert"),
-                (k, v) -> testListenerRemove2.add(k), mongoEntityMapper);
+        StorageUtils.watchCollection(mongoReactiveCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> testListenerRemove2.add(k), mongoEntityMapper);
 
         MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
         mongoCollection.insertOne(mongoEntityMapper.mapToEntity("testKey1", "testValue1"));

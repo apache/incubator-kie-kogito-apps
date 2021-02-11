@@ -35,6 +35,7 @@ public class ManageableJobHandle implements JobHandle {
         this.id = Optional.ofNullable(id).map(Long::parseLong).orElse(null);
     }
 
+
     public ManageableJobHandle(boolean cancel) {
         this.cancel = cancel;
     }

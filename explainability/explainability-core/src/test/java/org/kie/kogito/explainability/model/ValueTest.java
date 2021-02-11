@@ -15,14 +15,14 @@
  */
 package org.kie.kogito.explainability.model;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ValueTest {
 
@@ -36,7 +36,7 @@ class ValueTest {
         assertEquals(1.1, numericValue.asNumber());
         double[] vector = numericValue.asVector();
         assertNotNull(vector);
-        assertArrayEquals(new double[] { 1.1 }, vector);
+        assertArrayEquals(new double[]{1.1}, vector);
     }
 
     @Test
@@ -104,7 +104,7 @@ class ValueTest {
         assertEquals(Double.NaN, vectorValue.asNumber());
         double[] vector = vectorValue.asVector();
         assertNotNull(vector);
-        assertArrayEquals(new double[] { 0.1, 0.2, 0.3 }, vector);
+        assertArrayEquals(new double[]{0.1, 0.2, 0.3}, vector);
     }
 
     @Test
@@ -118,7 +118,7 @@ class ValueTest {
         assertEquals(Double.NaN, vectorValue.asNumber());
         double[] vector = vectorValue.asVector();
         assertNotNull(vector);
-        assertArrayEquals(new double[] { 0.1, 0.2, 0.3 }, vector);
+        assertArrayEquals(new double[]{0.1, 0.2, 0.3}, vector);
     }
 
 }

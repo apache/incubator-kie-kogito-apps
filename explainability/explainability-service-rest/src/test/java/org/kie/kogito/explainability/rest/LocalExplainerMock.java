@@ -15,19 +15,18 @@
  */
 package org.kie.kogito.explainability.rest;
 
-import static java.util.Collections.emptyMap;
-
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import io.quarkus.test.Mock;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 
-import io.quarkus.test.Mock;
+import static java.util.Collections.emptyMap;
 
 @Mock
 @ApplicationScoped

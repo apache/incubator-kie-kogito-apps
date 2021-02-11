@@ -39,8 +39,7 @@ public abstract class AbstractTaskPropertyChangeProblemFactChange implements Pro
     public void doChange(ScoreDirector<TaskAssigningSolution> scoreDirector) {
         TaskAssignment workingTaskAssignment = scoreDirector.lookUpWorkingObjectOrReturnNull(taskAssignment);
         if (workingTaskAssignment == null) {
-            throw new TaskAssigningRuntimeException(
-                    String.format("Expected task assignment: %s was not found in current working solution", taskAssignment));
+            throw new TaskAssigningRuntimeException(String.format("Expected task assignment: %s was not found in current working solution", taskAssignment));
         }
         scoreDirector.beforeProblemPropertyChanged(workingTaskAssignment);
         Task currentTask = workingTaskAssignment.getTask();
@@ -53,7 +52,6 @@ public abstract class AbstractTaskPropertyChangeProblemFactChange implements Pro
 
     /**
      * Apply the necessary changes on the shallow cloned task instance.
-     * 
      * @see ##cloneCurrentTask(Task)
      * @see Task.CloneBuilder
      */
@@ -61,7 +59,6 @@ public abstract class AbstractTaskPropertyChangeProblemFactChange implements Pro
 
     /**
      * Generates a convenient shallow clone of currentTask.
-     * 
      * @see Task.CloneBuilder
      */
     protected Task cloneCurrentTask(Task currentTask) {

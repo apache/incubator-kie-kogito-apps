@@ -16,18 +16,11 @@
 
 package org.kie.kogito.index.graphql.query;
 
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import org.kie.kogito.persistence.api.query.AttributeSort;
-import org.kie.kogito.persistence.api.query.SortDirection;
 
 import graphql.language.Argument;
 import graphql.language.EnumValue;
@@ -36,6 +29,12 @@ import graphql.language.ObjectValue;
 import graphql.language.Value;
 import graphql.language.VariableReference;
 import graphql.schema.DataFetchingEnvironment;
+import org.kie.kogito.persistence.api.query.AttributeSort;
+import org.kie.kogito.persistence.api.query.SortDirection;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 
 public class GraphQLQueryOrderByParser implements Function<DataFetchingEnvironment, List<AttributeSort>> {
 
@@ -44,8 +43,7 @@ public class GraphQLQueryOrderByParser implements Function<DataFetchingEnvironme
         if (env == null) {
             return emptyList();
         }
-        Optional<Argument> sortByArgument =
-                env.getMergedField().getArguments().stream().filter(a -> "orderBy".equals(a.getName())).findFirst();
+        Optional<Argument> sortByArgument = env.getMergedField().getArguments().stream().filter(a -> "orderBy".equals(a.getName())).findFirst();
         if (sortByArgument.isPresent()) {
             Value value = sortByArgument.get().getValue();
             if (value instanceof ObjectValue) {

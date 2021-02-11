@@ -16,8 +16,6 @@
 
 package org.kie.kogito.jobs.service.model.job;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -32,6 +30,8 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ScheduledJobAdapterTest {
 
@@ -56,10 +56,10 @@ class ScheduledJobAdapterTest {
     @BeforeAll
     public static void before() throws Exception {
         payload = new ObjectMapper().writeValueAsString(new ProcessPayload(PROCESS_INSTANCE_ID,
-                ROOT_PROCESS_INSTANCE_ID,
-                PROCESS_ID,
-                ROOT_PROCESS_ID,
-                NODE_INSTANCE_ID));
+                                                                           ROOT_PROCESS_INSTANCE_ID,
+                                                                           PROCESS_ID,
+                                                                           ROOT_PROCESS_ID,
+                                                                           NODE_INSTANCE_ID));
     }
 
     @Test
@@ -133,16 +133,16 @@ class ScheduledJobAdapterTest {
     private ScheduledJob.ScheduledJobBuilder getScheduledJobCommonBuilder(JobBuilder jobBuilder) {
         return ScheduledJob.builder()
                 .job(jobBuilder
-                        .id(ID)
-                        .priority(PRIORITY)
-                        .expirationTime(TIME)
-                        .callbackEndpoint(ENDPOINT)
-                        .rootProcessId(ROOT_PROCESS_ID)
-                        .rootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
-                        .processId(PROCESS_ID)
-                        .processInstanceId(PROCESS_INSTANCE_ID)
-                        .nodeInstanceId(NODE_INSTANCE_ID)
-                        .build())
+                             .id(ID)
+                             .priority(PRIORITY)
+                             .expirationTime(TIME)
+                             .callbackEndpoint(ENDPOINT)
+                             .rootProcessId(ROOT_PROCESS_ID)
+                             .rootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                             .processId(PROCESS_ID)
+                             .processInstanceId(PROCESS_INSTANCE_ID)
+                             .nodeInstanceId(NODE_INSTANCE_ID)
+                             .build())
                 .executionCounter(COUNTER)
                 .retries(RETRIES)
                 .scheduledId(SCHEDULED_ID)

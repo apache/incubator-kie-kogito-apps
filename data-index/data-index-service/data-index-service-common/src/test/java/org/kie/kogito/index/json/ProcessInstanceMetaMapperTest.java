@@ -16,19 +16,18 @@
 
 package org.kie.kogito.index.json;
 
+import java.util.UUID;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.event.KogitoProcessCloudEvent;
+import org.kie.kogito.index.model.ProcessInstanceState;
+
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
-
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.event.KogitoProcessCloudEvent;
-import org.kie.kogito.index.model.ProcessInstanceState;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ProcessInstanceMetaMapperTest {
 
@@ -39,8 +38,7 @@ public class ProcessInstanceMetaMapperTest {
         String processInstanceId = UUID.randomUUID().toString();
         String rootProcessInstanceId = UUID.randomUUID().toString();
         String piPrefix = KOGITO_DOMAIN_ATTRIBUTE + "." + PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
-        KogitoProcessCloudEvent event = getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.COMPLETED,
-                rootProcessInstanceId, rootProcessId, rootProcessInstanceId);
+        KogitoProcessCloudEvent event = getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.COMPLETED, rootProcessInstanceId, rootProcessId, rootProcessInstanceId);
         ObjectNode json = new ProcessInstanceMetaMapper().apply(event);
         assertThat(json).isNotNull();
         assertThatJson(json.toString()).and(
@@ -61,9 +59,10 @@ public class ProcessInstanceMetaMapperTest {
                 a -> a.node(piPrefix + "[0].endpoint").isEqualTo(event.getSource().toString()),
                 a -> a.node(piPrefix + "[0].start").isEqualTo(event.getData().getStart().toInstant().toEpochMilli()),
                 a -> a.node(piPrefix + "[0].end").isEqualTo(event.getData().getEnd().toInstant().toEpochMilli()),
-                a -> a.node(piPrefix + "[0].lastUpdate").isEqualTo(event.getData().getLastUpdate().toInstant().toEpochMilli()));
+                a -> a.node(piPrefix + "[0].lastUpdate").isEqualTo(event.getData().getLastUpdate().toInstant().toEpochMilli())
+        );
     }
-
+    
     @Test
     public void testProcessInstanceMapperWithBusinessKey() {
         String processId = "travels";
@@ -71,8 +70,7 @@ public class ProcessInstanceMetaMapperTest {
         String processInstanceId = UUID.randomUUID().toString();
         String rootProcessInstanceId = UUID.randomUUID().toString();
         String piPrefix = KOGITO_DOMAIN_ATTRIBUTE + "." + PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
-        KogitoProcessCloudEvent event = getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.COMPLETED,
-                rootProcessInstanceId, rootProcessId, rootProcessInstanceId);
+        KogitoProcessCloudEvent event = getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.COMPLETED, rootProcessInstanceId, rootProcessId, rootProcessInstanceId);
         event.getData().setBusinessKey("custom-key");
         ObjectNode json = new ProcessInstanceMetaMapper().apply(event);
         assertThat(json).isNotNull();
@@ -95,6 +93,7 @@ public class ProcessInstanceMetaMapperTest {
                 a -> a.node(piPrefix + "[0].start").isEqualTo(event.getData().getStart().toInstant().toEpochMilli()),
                 a -> a.node(piPrefix + "[0].end").isEqualTo(event.getData().getEnd().toInstant().toEpochMilli()),
                 a -> a.node(piPrefix + "[0].lastUpdate").isEqualTo(event.getData().getLastUpdate().toInstant().toEpochMilli()),
-                a -> a.node(piPrefix + "[0].businessKey").isEqualTo(event.getData().getBusinessKey()));
+                a -> a.node(piPrefix + "[0].businessKey").isEqualTo(event.getData().getBusinessKey())
+        );
     }
 }

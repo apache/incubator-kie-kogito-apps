@@ -15,10 +15,6 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.pmml;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInternal.getPMMLRuntime;
-
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +44,17 @@ import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.kie.pmml.api.runtime.PMMLRuntime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInternal.getPMMLRuntime;
+
 class PmmlRegressionCategoricalLimeExplainerTest {
 
     private static PMMLRuntime categoricalVariableRegressionRuntime;
 
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {
-        categoricalVariableRegressionRuntime = getPMMLRuntime(
-                ResourceReaderUtils.getResourceAsFile("categoricalvariablesregression/categoricalVariablesRegression.pmml"));
+        categoricalVariableRegressionRuntime = getPMMLRuntime(ResourceReaderUtils.getResourceAsFile("categoricalvariablesregression/categoricalVariablesRegression.pmml"));
         Config.INSTANCE.setAsyncTimeout(5000);
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
@@ -81,8 +80,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
                         features1.get(0).getValue().asString(), features1.get(1).getValue().asString());
                 PMML4Result result = pmmlModel.execute(categoricalVariableRegressionRuntime);
                 String score = result.getResultVariables().get("result").toString();
-                PredictionOutput predictionOutput =
-                        new PredictionOutput(List.of(new Output("result", Type.NUMBER, new Value<>(score), 1d)));
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("result", Type.NUMBER, new Value<>(score), 1d)));
                 outputs.add(predictionOutput);
             }
             return outputs;
@@ -102,6 +100,6 @@ class PmmlRegressionCategoricalLimeExplainerTest {
             assertThat(v).isEqualTo(1d);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                0.5, 0.5));
+                                                                                0.5, 0.5));
     }
 }

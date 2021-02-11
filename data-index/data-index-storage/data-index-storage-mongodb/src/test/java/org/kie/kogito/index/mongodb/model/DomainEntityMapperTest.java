@@ -16,18 +16,17 @@
 
 package org.kie.kogito.index.mongodb.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.bson.Document;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.index.mongodb.model.DomainEntityMapper.ID;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bson.Document;
-import org.junit.jupiter.api.Test;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class DomainEntityMapperTest {
 

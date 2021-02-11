@@ -25,7 +25,6 @@ public interface MongoModelService {
 
     /**
      * Get the entity mapper which converts between the given data model and the corresponding mongo storage entity
-     * 
      * @param name the name of the data model
      * @return the entity mapper for the given data model
      */

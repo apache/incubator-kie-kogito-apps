@@ -16,11 +16,10 @@
 
 package org.kie.kogito.jobs.service.events;
 
-import org.kie.kogito.event.AbstractDataEvent;
-import org.kie.kogito.jobs.service.model.ScheduledJob;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreType;
+import org.kie.kogito.event.AbstractDataEvent;
+import org.kie.kogito.jobs.service.model.ScheduledJob;
 
 /**
  * <a href="https://cloudevents.io">CloudEvent</a> to propagate job status information from Job Service.
@@ -31,13 +30,13 @@ public class JobDataEvent extends AbstractDataEvent<ScheduledJob> {
 
     public JobDataEvent(String source, ScheduledJob data) {
         super(JOB_EVENT_TYPE,
-                source,
-                data,
-                data.getProcessInstanceId(),
-                data.getRootProcessInstanceId(),
-                data.getProcessId(),
-                data.getRootProcessId(),
-                null);
+              source,
+              data,
+              data.getProcessInstanceId(),
+              data.getRootProcessInstanceId(),
+              data.getProcessId(),
+              data.getRootProcessId(),
+              null);
     }
 
     @JsonIgnore

@@ -16,18 +16,18 @@
 
 package org.kie.kogito.taskassigning.core.model.solver.filter;
 
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.hasAllLabels;
-import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
-
 import org.kie.kogito.taskassigning.core.model.ChainElement;
 import org.kie.kogito.taskassigning.core.model.DefaultLabels;
 import org.kie.kogito.taskassigning.core.model.ModelConstants;
-import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
+import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.impl.heuristic.selector.common.decorator.SelectionFilter;
 import org.optaplanner.core.impl.heuristic.selector.move.generic.ChangeMove;
+
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.hasAllLabels;
+import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
 
 /**
  * SelectionFilter implementation for determining if a move of a TaskA to UserB can be realized. The move is accepted
@@ -45,7 +45,6 @@ public class TaskByGroupAndSkillsChangeMoveFilter
 
         return user != null && user.isEnabled() &&
                 (ModelConstants.IS_PLANNING_USER.test(user.getId()) ||
-                        (isPotentialOwner(assignmentToMove.getTask(), user)
-                                && hasAllLabels(assignmentToMove.getTask(), user, DefaultLabels.SKILLS.name())));
+                        (isPotentialOwner(assignmentToMove.getTask(), user) && hasAllLabels(assignmentToMove.getTask(), user, DefaultLabels.SKILLS.name())));
     }
 }

@@ -30,8 +30,7 @@ public class SchemaDescriptor {
 
     ProcessDescriptor processDescriptor;
 
-    public SchemaDescriptor(String name, String schemaContent, Map<String, EntityIndexDescriptor> entityIndexDescriptors,
-            ProcessDescriptor processDescriptor) {
+    public SchemaDescriptor(String name, String schemaContent, Map<String, EntityIndexDescriptor> entityIndexDescriptors, ProcessDescriptor processDescriptor) {
         this.name = name;
         this.schemaContent = schemaContent;
         this.entityIndexDescriptors = entityIndexDescriptors;

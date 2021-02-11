@@ -61,7 +61,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
     Optional<Boolean> forceExecuteExpiredJobs;
 
     /**
-     * The current chunk size in minutes the scheduler handles, it is used to keep a limit number of jobs scheduled
+     * The current chunk size  in minutes the scheduler handles, it is used to keep a limit number of jobs scheduled
      * in the in-memory scheduler.
      */
     long schedulerChunkInMinutes;
@@ -75,10 +75,10 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
     }
 
     public BaseTimerJobScheduler(ReactiveJobRepository jobRepository,
-            long backoffRetryMillis,
-            long maxIntervalLimitToRetryMillis,
-            long schedulerChunkInMinutes,
-            Boolean forceExecuteExpiredJobs) {
+                                 long backoffRetryMillis,
+                                 long maxIntervalLimitToRetryMillis,
+                                 long schedulerChunkInMinutes,
+                                 Boolean forceExecuteExpiredJobs) {
         this.jobRepository = jobRepository;
         this.backoffRetryMillis = backoffRetryMillis;
         this.maxIntervalLimitToRetryMillis = maxIntervalLimitToRetryMillis;
@@ -106,8 +106,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
 
     @Override
     public PublisherBuilder<JobDetails> reschedule(String id, Trigger trigger) {
-        return ReactiveStreams
-                .fromCompletionStageNullable(jobRepository.merge(id, JobDetails.builder().trigger(trigger).build()))
+        return ReactiveStreams.fromCompletionStageNullable(jobRepository.merge(id, JobDetails.builder().trigger(trigger).build()))
                 .peek(this::doCancel)
                 .map(this::schedule)
                 .flatMapRsPublisher(j -> j);
@@ -123,7 +122,6 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
 
     /**
      * Performs the given job scheduling process on the scheduler, after all the validations already made.
-     * 
      * @param job to be scheduled
      * @return
      */
@@ -137,7 +135,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
                         .of(delay.isNegative())
                         .filter(Boolean.FALSE::equals)
                         .orElseThrow(() -> new RuntimeException("The expirationTime should be greater than current " +
-                                "time")))
+                                                                        "time")))
                 //schedule the job on the scheduler
                 .map(delay -> scheduleRegistering(job, Optional.empty()))
                 .flatMap(p -> p)
@@ -148,12 +146,10 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
 
     /**
      * Check if it should be scheduled (on the current chunk) or saved to be scheduled later.
-     * 
      * @return
      */
     private boolean isOnCurrentSchedulerChunk(JobDetails job) {
-        return DateUtil.fromDate(job.getTrigger().hasNextFireTime())
-                .isBefore(DateUtil.now().plusMinutes(schedulerChunkInMinutes));
+        return DateUtil.fromDate(job.getTrigger().hasNextFireTime()).isBefore(DateUtil.now().plusMinutes(schedulerChunkInMinutes));
     }
 
     private PublisherBuilder<JobDetails> handleExistingJob(JobDetails job) {
@@ -185,9 +181,9 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
         return Optional.of(Duration.between(DateUtil.now(), expirationTime))
                 .filter(d -> !d.isNegative())
                 .orElse(forceExecuteExpiredJobs
-                        .filter(Boolean.TRUE::equals)
-                        .map(f -> Duration.ofSeconds(1))
-                        .orElse(Duration.ofSeconds(-1)));
+                                .filter(Boolean.TRUE::equals)
+                                .map(f -> Duration.ofSeconds(1))
+                                .orElse(Duration.ofSeconds(-1)));
     }
 
     public PublisherBuilder<JobDetails> handleJobExecutionSuccess(JobDetails futureJob) {
@@ -237,7 +233,6 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
      * between retries and a limit of max interval of {@link BaseTimerJobScheduler#maxIntervalLimitToRetryMillis}
      * to retry, after this interval it the job it the job is not successfully executed it will remain in error
      * state, with no more retries.
-     * 
      * @param errorResponse
      * @return
      */
@@ -264,7 +259,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
 
     private PointInTimeTrigger getRetryTrigger() {
         return new PointInTimeTrigger(DateUtil.now().plus(backoffRetryMillis,
-                ChronoUnit.MILLIS).toInstant().toEpochMilli(), null, null);
+                                                          ChronoUnit.MILLIS).toInstant().toEpochMilli(), null, null);
     }
 
     private CompletionStage<JobDetails> handleExpiredJob(JobDetails scheduledJob) {
@@ -315,11 +310,11 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
     @Override
     public CompletionStage<JobDetails> cancel(String jobId) {
         return cancel(jobRepository
-                .get(jobId)
-                .thenApply(scheduledJob -> Optional
-                        .ofNullable(scheduledJob)
-                        .map(j -> jobWithStatus(j, JobStatus.CANCELED))
-                        .orElse(null)));
+                              .get(jobId)
+                              .thenApply(scheduledJob -> Optional
+                                      .ofNullable(scheduledJob)
+                                      .map(j -> jobWithStatus(j, JobStatus.CANCELED))
+                                      .orElse(null)));
     }
 
     public abstract Publisher<ManageableJobHandle> doCancel(JobDetails scheduledJob);

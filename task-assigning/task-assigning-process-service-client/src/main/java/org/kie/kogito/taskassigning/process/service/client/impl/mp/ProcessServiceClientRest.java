@@ -16,8 +16,6 @@
 
 package org.kie.kogito.taskassigning.process.service.client.impl.mp;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
 import java.io.Closeable;
 import java.util.List;
 
@@ -28,9 +26,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public interface ProcessServiceClientRest extends Closeable {
 
@@ -38,16 +37,14 @@ public interface ProcessServiceClientRest extends Closeable {
     @Path("/{processId}/{processInstanceId}/{taskId}/{workitemId}")
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
-    ObjectNode transitionTask(@PathParam String processId, @PathParam String processInstanceId, @PathParam String taskId,
-            @PathParam String workitemId,
-            @QueryParam("phase") String phase,
-            @QueryParam("user") String user, @QueryParam("group") List<String> group,
-            String payload);
+    ObjectNode transitionTask(@PathParam String processId, @PathParam String processInstanceId, @PathParam String taskId, @PathParam String workitemId,
+                              @QueryParam("phase") String phase,
+                              @QueryParam("user") String user, @QueryParam("group") List<String> group,
+                              String payload);
 
     @GET
     @Path("/{processId}/{processInstanceId}/{taskId}/{workitemId}/schema")
     @Produces(APPLICATION_JSON)
-    TaskSchema getTaskSchema(@PathParam String processId, @PathParam String processInstanceId, @PathParam String taskId,
-            @PathParam String workitemId,
-            @QueryParam("user") String user, @QueryParam("group") List<String> group);
+    TaskSchema getTaskSchema(@PathParam String processId, @PathParam String processInstanceId, @PathParam String taskId, @PathParam String workitemId,
+                             @QueryParam("user") String user, @QueryParam("group") List<String> group);
 }

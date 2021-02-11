@@ -41,8 +41,7 @@ public class MessageResponse {
     private MessageResponse() {
     }
 
-    public MessageResponse(String level, String category, String type, String sourceId, String text,
-            MessageExceptionFieldResponse exception) {
+    public MessageResponse(String level, String category, String type, String sourceId, String text, MessageExceptionFieldResponse exception) {
         this.level = level;
         this.category = category;
         this.type = type;

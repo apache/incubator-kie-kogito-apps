@@ -16,12 +16,12 @@
 
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import static org.awaitility.Awaitility.await;
-
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
@@ -30,8 +30,7 @@ import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import static org.awaitility.Awaitility.await;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)

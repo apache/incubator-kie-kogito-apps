@@ -16,21 +16,19 @@
 
 package org.kie.kogito.explainability.rest;
 
-import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Collections;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.ExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
 public class ExplainabilityApiV1Test {
@@ -43,8 +41,7 @@ public class ExplainabilityApiV1Test {
     public void testEndpointWithRequest() throws JsonProcessingException {
         ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
 
-        String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId, serviceUrl, modelIdentifierDto,
-                Collections.emptyMap(), Collections.emptyMap()));
+        String body = MAPPER.writeValueAsString(new ExplainabilityRequestDto(executionId, serviceUrl, modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
 
         ExplainabilityResultDto result = given()
                 .contentType(ContentType.JSON)
@@ -58,18 +55,13 @@ public class ExplainabilityApiV1Test {
 
     @Test
     public void testEndpointWithBadRequests() throws JsonProcessingException {
-        ExplainabilityRequestDto[] badRequests = new ExplainabilityRequestDto[] {
-                new ExplainabilityRequestDto(null, serviceUrl, new ModelIdentifierDto("test", "test"), Collections.emptyMap(),
-                        Collections.emptyMap()),
-                new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("", "test"),
-                        Collections.emptyMap(), Collections.emptyMap()),
-                new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("test", ""),
-                        Collections.emptyMap(), Collections.emptyMap()),
+        ExplainabilityRequestDto[] badRequests = new ExplainabilityRequestDto[]{
+                new ExplainabilityRequestDto(null, serviceUrl, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, serviceUrl, new ModelIdentifierDto("test", ""), Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(executionId, serviceUrl, null, Collections.emptyMap(), Collections.emptyMap()),
-                new ExplainabilityRequestDto(executionId, "", new ModelIdentifierDto("test", "test"), Collections.emptyMap(),
-                        Collections.emptyMap()),
-                new ExplainabilityRequestDto(executionId, null, new ModelIdentifierDto("test", "test"), Collections.emptyMap(),
-                        Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, "", new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
+                new ExplainabilityRequestDto(executionId, null, new ModelIdentifierDto("test", "test"), Collections.emptyMap(), Collections.emptyMap()),
                 new ExplainabilityRequestDto(null, null, null, Collections.emptyMap(), Collections.emptyMap()),
         };
 

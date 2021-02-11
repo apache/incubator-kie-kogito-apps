@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import io.vertx.core.Vertx;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -37,8 +38,6 @@ import org.kie.kogito.jobs.service.qualifier.Repository;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
-
-import io.vertx.core.Vertx;
 
 @ApplicationScoped
 @Repository("in-memory")
@@ -84,16 +83,14 @@ public class InMemoryJobRepository extends BaseReactiveJobRepository implements 
     }
 
     @Override
-    public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to,
-            JobStatus... status) {
+    public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to, JobStatus... status) {
         return ReactiveStreams.fromIterable(
                 jobMap.values()
                         .stream()
                         .filter(j -> Optional.ofNullable(j.getStatus())
                                 .filter(s -> Objects.nonNull(status))
                                 .map(s -> Stream.of(status).anyMatch(s::equals)).orElse(true))
-                        .filter(j -> DateUtil.fromDate(j.getTrigger().hasNextFireTime()).isAfter(from)
-                                && DateUtil.fromDate(j.getTrigger().hasNextFireTime()).isBefore(to))
+                        .filter(j -> DateUtil.fromDate(j.getTrigger().hasNextFireTime()).isAfter(from) && DateUtil.fromDate(j.getTrigger().hasNextFireTime()).isBefore(to))
                         .sorted(Comparator.comparing(JobDetails::getPriority).reversed())
                         .collect(Collectors.toList()));
     }

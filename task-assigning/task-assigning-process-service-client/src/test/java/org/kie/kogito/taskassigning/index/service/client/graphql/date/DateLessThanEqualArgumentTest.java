@@ -41,6 +41,7 @@ class DateLessThanEqualArgumentTest extends AbstractDateArgumentTest<ZonedDateTi
     protected Stream<Arguments> createTestValues() {
         return Stream.of(
                 Arguments.of(new TestArgument<>(VALUE, "{\"lessThanEqual\":\"" + VALUE + "\"}")),
-                Arguments.of(new TestArgument<>(null, "{\"lessThanEqual\":null}")));
+                Arguments.of(new TestArgument<>(null, "{\"lessThanEqual\":null}"))
+        );
     }
 }

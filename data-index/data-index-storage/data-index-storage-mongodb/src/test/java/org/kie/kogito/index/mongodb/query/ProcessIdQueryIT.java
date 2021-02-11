@@ -16,6 +16,21 @@
 
 package org.kie.kogito.index.mongodb.query;
 
+import javax.inject.Inject;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
+import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.SortDirection;
+import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
+import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
@@ -32,22 +47,6 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.or;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.mongodb.model.ProcessIdEntity;
-import org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.query.SortDirection;
-import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
-import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
-import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)
 class ProcessIdQueryIT extends QueryTestBase<String, String> {
@@ -60,8 +59,8 @@ class ProcessIdQueryIT extends QueryTestBase<String, String> {
     @BeforeEach
     void setUp() {
         storage = new MongoStorage<>(mongoClientManager.getCollection(PROCESS_ID_MODEL_STORAGE, ProcessIdEntity.class),
-                mongoClientManager.getReactiveCollection(PROCESS_ID_MODEL_STORAGE, ProcessIdEntity.class),
-                String.class.getName(), new ProcessIdEntityMapper());
+                                     mongoClientManager.getReactiveCollection(PROCESS_ID_MODEL_STORAGE, ProcessIdEntity.class),
+                                     String.class.getName(), new ProcessIdEntityMapper());
         storage.clear();
     }
 
@@ -79,32 +78,20 @@ class ProcessIdQueryIT extends QueryTestBase<String, String> {
         storage.put(processId, type1);
         storage.put(subProcessId, type2);
 
-        queryAndAssert(assertWithString(), storage, singletonList(in("processId", asList(processId, subProcessId))), null, null,
-                null, type1, type2);
+        queryAndAssert(assertWithString(), storage, singletonList(in("processId", asList(processId, subProcessId))), null, null, null, type1, type2);
         queryAndAssert(assertWithString(), storage, singletonList(equalTo("processId", processId)), null, null, null, type1);
         queryAndAssert(assertWithString(), storage, singletonList(notNull("processId")), null, null, null, type1, type2);
         queryAndAssert(assertWithString(), storage, singletonList(contains("fullTypeName", type1)), null, null, null, type1);
-        queryAndAssert(assertWithString(), storage, singletonList(containsAny("fullTypeName", asList(type1, type2))), null,
-                null, null, type1, type2);
-        queryAndAssert(assertWithString(), storage, singletonList(containsAll("processId", asList(processId, subProcessId))),
-                null, null, null);
+        queryAndAssert(assertWithString(), storage, singletonList(containsAny("fullTypeName", asList(type1, type2))), null, null, null, type1, type2);
+        queryAndAssert(assertWithString(), storage, singletonList(containsAll("processId", asList(processId, subProcessId))), null, null, null);
         queryAndAssert(assertWithString(), storage, singletonList(like("processId", "*_sub")), null, null, null, type2);
-        queryAndAssert(assertWithString(), storage,
-                singletonList(and(asList(equalTo("processId", processId), equalTo("fullTypeName", type1)))), null, null, null,
-                type1);
-        queryAndAssert(assertWithString(), storage,
-                singletonList(or(asList(equalTo("processId", processId), equalTo("fullTypeName", type2)))), null, null, null,
-                type1, type2);
-        queryAndAssert(assertWithString(), storage, asList(equalTo("processId", processId), equalTo("fullTypeName", type2)),
-                null, null, null);
+        queryAndAssert(assertWithString(), storage, singletonList(and(asList(equalTo("processId", processId), equalTo("fullTypeName", type1)))), null, null, null, type1);
+        queryAndAssert(assertWithString(), storage, singletonList(or(asList(equalTo("processId", processId), equalTo("fullTypeName", type2)))), null, null, null, type1, type2);
+        queryAndAssert(assertWithString(), storage, asList(equalTo("processId", processId), equalTo("fullTypeName", type2)), null, null, null);
 
-        queryAndAssert(assertWithStringInOrder(), storage, singletonList(in("processId", asList(processId, subProcessId))),
-                singletonList(orderBy("fullTypeName", SortDirection.DESC)), 1, 1, type2);
-        queryAndAssert(assertWithStringInOrder(), storage, null, singletonList(orderBy("fullTypeName", SortDirection.DESC)), 1,
-                1, type2);
-        queryAndAssert(assertWithStringInOrder(), storage, null,
-                asList(orderBy("fullTypeName", SortDirection.DESC), orderBy("processId", SortDirection.DESC)), null, null,
-                type1, type2);
+        queryAndAssert(assertWithStringInOrder(), storage, singletonList(in("processId", asList(processId, subProcessId))), singletonList(orderBy("fullTypeName", SortDirection.DESC)), 1, 1, type2);
+        queryAndAssert(assertWithStringInOrder(), storage, null, singletonList(orderBy("fullTypeName", SortDirection.DESC)), 1, 1, type2);
+        queryAndAssert(assertWithStringInOrder(), storage, null, asList(orderBy("fullTypeName", SortDirection.DESC), orderBy("processId", SortDirection.DESC)), null, null, type1, type2);
         queryAndAssert(assertWithStringInOrder(), storage, null, null, 1, 1, type2);
     }
 }

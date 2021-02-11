@@ -27,8 +27,7 @@ public class EntityIndexDescriptor {
 
     List<AttributeDescriptor> attributeDescriptors;
 
-    public EntityIndexDescriptor(String name, List<IndexDescriptor> indexDescriptors,
-            List<AttributeDescriptor> attributeDescriptors) {
+    public EntityIndexDescriptor(String name, List<IndexDescriptor> indexDescriptors, List<AttributeDescriptor> attributeDescriptors) {
         this.name = name;
         this.indexDescriptors = indexDescriptors;
         this.attributeDescriptors = attributeDescriptors;
