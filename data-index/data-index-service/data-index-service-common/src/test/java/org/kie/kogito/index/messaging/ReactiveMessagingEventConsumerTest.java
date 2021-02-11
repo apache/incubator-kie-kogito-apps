@@ -20,7 +20,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +33,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,7 +67,8 @@ public class ReactiveMessagingEventConsumerTest {
         String processInstanceId = UUID.randomUUID().toString();
 
         Message<KogitoProcessCloudEvent> event = mock(Message.class);
-        when(event.getPayload()).thenReturn(getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null));
+        when(event.getPayload())
+                .thenReturn(getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null));
 
         CompletableFuture<Void> future = consumer.onProcessInstanceDomainEvent(event).toCompletableFuture();
         future.get(1, TimeUnit.MINUTES);
@@ -88,7 +90,8 @@ public class ReactiveMessagingEventConsumerTest {
         String processInstanceId = UUID.randomUUID().toString();
 
         Message<KogitoProcessCloudEvent> event = mock(Message.class);
-        when(event.getPayload()).thenReturn(getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null));
+        when(event.getPayload())
+                .thenReturn(getProcessCloudEvent(processId, processInstanceId, ProcessInstanceState.ACTIVE, null, null, null));
 
         CompletableFuture<Void> future = consumer.onProcessInstanceDomainEvent(event).toCompletableFuture();
         future.get(1, TimeUnit.MINUTES);
@@ -120,7 +123,8 @@ public class ReactiveMessagingEventConsumerTest {
         String processInstanceId = UUID.randomUUID().toString();
 
         Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
-        when(event.getPayload()).thenReturn(getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress"));
+        when(event.getPayload())
+                .thenReturn(getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress"));
 
         CompletableFuture<Void> future = consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture();
         future.get(1, TimeUnit.MINUTES);
@@ -143,7 +147,8 @@ public class ReactiveMessagingEventConsumerTest {
         String processInstanceId = UUID.randomUUID().toString();
 
         Message<KogitoUserTaskCloudEvent> event = mock(Message.class);
-        when(event.getPayload()).thenReturn(getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress"));
+        when(event.getPayload())
+                .thenReturn(getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, "InProgress"));
 
         CompletableFuture<Void> future = consumer.onUserTaskInstanceDomainEvent(event).toCompletableFuture();
         future.get(1, TimeUnit.MINUTES);

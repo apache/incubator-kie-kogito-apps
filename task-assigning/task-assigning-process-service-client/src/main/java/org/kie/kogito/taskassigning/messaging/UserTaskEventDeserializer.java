@@ -20,9 +20,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.temporal.ChronoUnit;
 
-import com.google.common.net.UrlEscapers;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
+
+import com.google.common.net.UrlEscapers;
 
 import static java.lang.String.format;
 import static org.kie.kogito.taskassigning.util.JsonUtils.OBJECT_MAPPER;
@@ -42,7 +43,8 @@ public class UserTaskEventDeserializer implements Deserializer<UserTaskEvent> {
             event.setEndpoint(buildEndpoint(message.getSource(), event.getProcessInstanceId(), event.getName(), event.getId()));
             return event;
         } catch (IOException e) {
-            throw new SerializationException("An error was produced during UserTaskEventMessage deserialization: " + e.getMessage(), e);
+            throw new SerializationException(
+                    "An error was produced during UserTaskEventMessage deserialization: " + e.getMessage(), e);
         }
     }
 

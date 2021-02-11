@@ -78,19 +78,21 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     @Override
     public List<PartialDependenceGraph> explainFromMetadata(PredictionProvider model, PredictionProviderMetadata metadata)
             throws InterruptedException, ExecutionException, TimeoutException {
-        return explainFromDataDistribution(model, metadata.getOutputShape().getOutputs().size(), metadata.getDataDistribution());
+        return explainFromDataDistribution(model, metadata.getOutputShape().getOutputs().size(),
+                metadata.getDataDistribution());
     }
 
     @Override
     public List<PartialDependenceGraph> explainFromPredictions(PredictionProvider model, Collection<Prediction> predictions)
             throws InterruptedException, ExecutionException, TimeoutException {
-        int outputSize = predictions.isEmpty() ? 0 : predictions.stream().findAny().map(p -> p.getOutput().getOutputs().size()).orElse(0);
+        int outputSize = predictions.isEmpty() ? 0
+                : predictions.stream().findAny().map(p -> p.getOutput().getOutputs().size()).orElse(0);
         List<PredictionInput> inputs = predictions.stream().map(Prediction::getInput).collect(Collectors.toList());
         return explainFromDataDistribution(model, outputSize, new PredictionInputsDataDistribution(inputs));
     }
 
     private List<PartialDependenceGraph> explainFromDataDistribution(PredictionProvider model, int outputSize,
-                                                                     DataDistribution dataDistribution)
+            DataDistribution dataDistribution)
             throws InterruptedException, ExecutionException, TimeoutException {
         long start = System.currentTimeMillis();
         List<PartialDependenceGraph> pdps = new ArrayList<>();
@@ -101,7 +103,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
             for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
                 // generate samples for the feature under analysis
                 FeatureDistribution featureDistribution = featureDistributions.get(featureIndex);
-                double[] featureXSvalues = featureDistribution.sample(seriesLength).stream().mapToDouble(Value::asNumber).sorted().toArray();
+                double[] featureXSvalues =
+                        featureDistribution.sample(seriesLength).stream().mapToDouble(Value::asNumber).sorted().toArray();
 
                 // generate data distributions for all features
                 double[][] trainingData = generateDistributions(noOfFeatures, featureDistributions);
@@ -110,9 +113,10 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                 double[] marginalImpacts = new double[featureXSvalues.length];
                 for (int i = 0; i < featureXSvalues.length; i++) {
                     List<PredictionInput> predictionInputs = prepareInputs(noOfFeatures, featureIndex, featureXSvalues,
-                                                                           trainingData, i);
+                            trainingData, i);
                     if (feature == null && !predictionInputs.isEmpty()) {
-                        feature = FeatureFactory.copyOf(predictionInputs.get(0).getFeatures().get(featureIndex), new Value<>(null));
+                        feature = FeatureFactory.copyOf(predictionInputs.get(0).getFeatures().get(featureIndex),
+                                new Value<>(null));
                     }
                     List<PredictionOutput> predictionOutputs = getOutputs(model, predictionInputs);
                     // prediction requests are batched per value of feature 'Xs' under analysis
@@ -127,7 +131,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
                     }
                 }
                 PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature,
-                                                                                           featureXSvalues, marginalImpacts);
+                        featureXSvalues, marginalImpacts);
                 pdps.add(partialDependenceGraph);
             }
         }
@@ -139,7 +143,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     /**
      * Perform batch predictions on the model.
      *
-     * @param model            the model to be queried
+     * @param model the model to be queried
      * @param predictionInputs a batch of inputs
      * @return a batch of outputs
      */
@@ -147,7 +151,8 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
             throws InterruptedException, ExecutionException, TimeoutException {
         List<PredictionOutput> predictionOutputs;
         try {
-            predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(),
+                    Config.INSTANCE.getAsyncTimeUnit());
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
             throw e;
@@ -160,15 +165,15 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
      * feature under analysis for that particular feature and values from a training data distribution (which we sample)
      * for all the other feature values.
      *
-     * @param noOfFeatures    number of features in an input
-     * @param featureIndex    the index of the feature under analysis
+     * @param noOfFeatures number of features in an input
+     * @param featureIndex the index of the feature under analysis
      * @param featureXSvalues discrete values of the feature under analysis
-     * @param trainingData    training data for all the features
-     * @param i               index of the specific discrete value of the feature under analysis to be evaluated
+     * @param trainingData training data for all the features
+     * @param i index of the specific discrete value of the feature under analysis to be evaluated
      * @return a list of prediction inputs
      */
     private List<PredictionInput> prepareInputs(int noOfFeatures, int featureIndex, double[] featureXSvalues,
-                                                double[][] trainingData, int i) {
+            double[][] trainingData, int i) {
         List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
         double[] inputs = new double[noOfFeatures];
         inputs[featureIndex] = featureXSvalues[i];
@@ -187,7 +192,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     /**
      * Sample training data distributions from each feature distribution.
      *
-     * @param noOfFeatures         number of features
+     * @param noOfFeatures number of features
      * @param featureDistributions feature distributions
      * @return a matrix of numbers with {@code #noOfFeatures} rows and {@code #seriesLength} columns
      */

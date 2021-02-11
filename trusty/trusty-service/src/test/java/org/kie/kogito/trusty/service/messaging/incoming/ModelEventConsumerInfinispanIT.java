@@ -18,8 +18,6 @@ package org.kie.kogito.trusty.service.messaging.incoming;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +26,9 @@ import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -63,7 +64,7 @@ class ModelEventConsumerInfinispanIT {
         kafkaClient = new KafkaClient(kafkaBootstrapServers);
 
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectModelEvent()),
-                            KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
+                KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
         await()
                 .atMost(5, SECONDS)
                 .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getModelById("name:namespace")));

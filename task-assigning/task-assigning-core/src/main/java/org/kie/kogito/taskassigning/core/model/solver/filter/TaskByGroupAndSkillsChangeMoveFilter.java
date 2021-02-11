@@ -19,8 +19,8 @@ package org.kie.kogito.taskassigning.core.model.solver.filter;
 import org.kie.kogito.taskassigning.core.model.ChainElement;
 import org.kie.kogito.taskassigning.core.model.DefaultLabels;
 import org.kie.kogito.taskassigning.core.model.ModelConstants;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.impl.heuristic.selector.common.decorator.SelectionFilter;
@@ -45,6 +45,7 @@ public class TaskByGroupAndSkillsChangeMoveFilter
 
         return user != null && user.isEnabled() &&
                 (ModelConstants.IS_PLANNING_USER.test(user.getId()) ||
-                        (isPotentialOwner(assignmentToMove.getTask(), user) && hasAllLabels(assignmentToMove.getTask(), user, DefaultLabels.SKILLS.name())));
+                        (isPotentialOwner(assignmentToMove.getTask(), user)
+                                && hasAllLabels(assignmentToMove.getTask(), user, DefaultLabels.SKILLS.name())));
     }
 }

@@ -54,7 +54,8 @@ class PmmlScorecardCategoricalLimeExplainerTest {
 
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {
-        scorecardCategoricalRuntime = getPMMLRuntime(ResourceReaderUtils.getResourceAsFile("simplescorecardcategorical/SimpleScorecardCategorical.pmml"));
+        scorecardCategoricalRuntime = getPMMLRuntime(
+                ResourceReaderUtils.getResourceAsFile("simplescorecardcategorical/SimpleScorecardCategorical.pmml"));
         Config.INSTANCE.setAsyncTimeout(5000);
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
@@ -85,8 +86,7 @@ class PmmlScorecardCategoricalLimeExplainerTest {
                 PredictionOutput predictionOutput = new PredictionOutput(List.of(
                         new Output("score", Type.TEXT, new Value<>(score), 1d),
                         new Output("reason1", Type.TEXT, new Value<>(reason1), 1d),
-                        new Output("reason2", Type.TEXT, new Value<>(reason2), 1d)
-                ));
+                        new Output("reason2", Type.TEXT, new Value<>(reason2), 1d)));
                 outputs.add(predictionOutput);
             }
             return outputs;
@@ -107,6 +107,6 @@ class PmmlScorecardCategoricalLimeExplainerTest {
             assertThat(v).isGreaterThan(0d);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                0.5, 0.5));
+                0.5, 0.5));
     }
 }

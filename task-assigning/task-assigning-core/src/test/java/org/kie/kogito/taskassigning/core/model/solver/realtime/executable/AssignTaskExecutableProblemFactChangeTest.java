@@ -55,8 +55,8 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
         private Consumer<TaskAssigningSolution> solutionBeforeChangesConsumer;
 
         WorkingSolutionAwareProblemFactChange(TaskAssignment taskAssignment,
-                                              User user,
-                                              Consumer<TaskAssigningSolution> solutionBeforeChangesConsumer) {
+                User user,
+                Consumer<TaskAssigningSolution> solutionBeforeChangesConsumer) {
             super(taskAssignment, user);
             this.solutionBeforeChangesConsumer = solutionBeforeChangesConsumer;
         }
@@ -77,8 +77,8 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
 
         ProgrammedAssignTaskProblemFactChange(TaskAssignment taskAssignment, User user) {
             setChange(new WorkingSolutionAwareProblemFactChange(taskAssignment,
-                                                                user,
-                                                                workingSolution -> printSolution(workingSolution, workingSolutionBeforeChange)));
+                    user,
+                    workingSolution -> printSolution(workingSolution, workingSolutionBeforeChange)));
         }
 
         String workingSolutionBeforeChangeAsString() {
@@ -142,7 +142,9 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
         TaskAssigningSolution solution = readTaskAssigningSolution(SET_OF_24TASKS_8USERS_SOLUTION.resource());
         TaskAssignment taskAssignment = solution.getTaskAssignmentList().get(0);
         User user = new User("Non Existing");
-        Assertions.assertThatThrownBy(() -> executeSequentialChanges(solution, Collections.singletonList(new ProgrammedAssignTaskProblemFactChange(taskAssignment, user))))
+        Assertions
+                .assertThatThrownBy(() -> executeSequentialChanges(solution,
+                        Collections.singletonList(new ProgrammedAssignTaskProblemFactChange(taskAssignment, user))))
                 .hasMessage("Expected user: %s was not found in current working solution", user);
     }
 
@@ -252,18 +254,18 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     }
 
     private void assignTaskProblemFactChange(TaskAssigningSolution solution,
-                                             String solutionResource,
-                                             String testType,
-                                             List<ProgrammedAssignTaskProblemFactChange> programmedChanges) throws Exception {
+            String solutionResource,
+            String testType,
+            List<ProgrammedAssignTaskProblemFactChange> programmedChanges) throws Exception {
         TaskAssigningSolution initialSolution = executeSequentialChanges(solution, programmedChanges);
         if (writeTestFiles()) {
             writeProblemFactChangesTestFiles(initialSolution,
-                                             solutionResource,
-                                             "AssignTaskExecutableProblemFactChangeTest.assignTaskProblemFactChangeTest",
-                                             testType,
-                                             programmedChanges,
-                                             ProgrammedAssignTaskProblemFactChange::workingSolutionBeforeChangeAsString,
-                                             ProgrammedAssignTaskProblemFactChange::solutionAfterChangeAsString);
+                    solutionResource,
+                    "AssignTaskExecutableProblemFactChangeTest.assignTaskProblemFactChangeTest",
+                    testType,
+                    programmedChanges,
+                    ProgrammedAssignTaskProblemFactChange::workingSolutionBeforeChangeAsString,
+                    ProgrammedAssignTaskProblemFactChange::solutionAfterChangeAsString);
         }
 
         //each partial solution must have the change that was applied on it.
@@ -288,10 +290,12 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
      * asserts that the assignment defined by the change is not violated (exists in) by the solution.
      * The assignment defined in the change must also be pinned in the produced solution as well as any other
      * previous assignment for the given user.
+     * 
      * @param change The change that was executed for producing the solution.
      * @param solution The produced solution.
      */
-    private void assertAssignTaskProblemFactChangeWasProduced(AssignTaskProblemFactChange change, TaskAssigningSolution solution) throws Exception {
+    private void assertAssignTaskProblemFactChangeWasProduced(AssignTaskProblemFactChange change,
+            TaskAssigningSolution solution) throws Exception {
         User internalUser = solution.getUserList().stream()
                 .filter(user -> Objects.equals(user.getId(), change.getUser().getId()))
                 .findFirst().orElseThrow(() -> new Exception("User: " + change.getUser() + " was not found in solution."));

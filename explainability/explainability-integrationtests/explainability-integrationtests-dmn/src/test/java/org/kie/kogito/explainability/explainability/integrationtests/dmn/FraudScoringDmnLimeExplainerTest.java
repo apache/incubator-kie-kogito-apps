@@ -53,7 +53,8 @@ class FraudScoringDmnLimeExplainerTest {
 
     @Test
     void testFraudScoringDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/fraud.dmn")));
+        DMNRuntime dmnRuntime =
+                DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/fraud.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String FRAUD_NS = "http://www.redhat.com/dmn/definitions/_81556584-7d78-4f8c-9d5f-b3cddb9b5c73";

@@ -27,7 +27,8 @@ import static org.mockito.ArgumentMatchers.eq;
 public class ObjectTestField<M, T> extends AbstractTestField<M, T> {
     private final Class<T> fieldClass;
 
-    public ObjectTestField(String fieldName, T fieldValue, Function<M, T> getter, BiConsumer<M, T> setter, Class<T> fieldClass) {
+    public ObjectTestField(String fieldName, T fieldValue, Function<M, T> getter, BiConsumer<M, T> setter,
+            Class<T> fieldClass) {
         super(fieldName, fieldValue, getter, setter);
         this.fieldClass = fieldClass;
     }

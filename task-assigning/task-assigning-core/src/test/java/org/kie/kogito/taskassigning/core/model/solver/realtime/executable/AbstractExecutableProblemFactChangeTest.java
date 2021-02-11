@@ -81,12 +81,13 @@ abstract class AbstractExecutableProblemFactChangeTest extends AbstractTaskAssig
         }
     }
 
-    protected TaskAssigningSolution executeSequentialChanges(TaskAssigningSolution solution, List<? extends ProgrammedProblemFactChange> changes) {
+    protected TaskAssigningSolution executeSequentialChanges(TaskAssigningSolution solution,
+            List<? extends ProgrammedProblemFactChange> changes) {
         Solver<TaskAssigningSolution> solver = createDaemonSolver();
 
         //store the first solution that was produced by the solver for knowing how things looked like at the very
         //beginning before any change was produced.
-        final TaskAssigningSolution[] initialSolution = {null};
+        final TaskAssigningSolution[] initialSolution = { null };
         final AtomicInteger lastExecutedChangeId = new AtomicInteger(-1);
 
         final Semaphore programNextChange = new Semaphore(0);
@@ -97,7 +98,7 @@ abstract class AbstractExecutableProblemFactChangeTest extends AbstractTaskAssig
         List<ProgrammedProblemFactChange> scheduledChanges = new ArrayList<>();
 
         int totalProgrammedChanges = programmedChanges.size();
-        int[] pendingChanges = {programmedChanges.size()};
+        int[] pendingChanges = { programmedChanges.size() };
 
         solver.addEventListener(event -> {
             if (initialSolution[0] == null) {
@@ -156,28 +157,33 @@ abstract class AbstractExecutableProblemFactChangeTest extends AbstractTaskAssig
         return initialSolution[0];
     }
 
-    protected <T extends ProgrammedProblemFactChange> void writeProblemFactChangesTestFiles(TaskAssigningSolution initialSolution,
-                                                                                            String solutionResource,
-                                                                                            String filePrefix,
-                                                                                            String testType,
-                                                                                            List<T> programmedChanges,
-                                                                                            Function<T, String> solutionBeforeChange,
-                                                                                            Function<T, String> solutionAfterChange) throws Exception {
+    protected <T extends ProgrammedProblemFactChange> void writeProblemFactChangesTestFiles(
+            TaskAssigningSolution initialSolution,
+            String solutionResource,
+            String filePrefix,
+            String testType,
+            List<T> programmedChanges,
+            Function<T, String> solutionBeforeChange,
+            Function<T, String> solutionAfterChange) throws Exception {
 
         String resourceName = solutionResource.substring(solutionResource.lastIndexOf("/") + 1);
-        writeToTempFile(buildTestFileName(filePrefix, testType, "InitialSolution", resourceName, 0), printSolution(initialSolution));
+        writeToTempFile(buildTestFileName(filePrefix, testType, "InitialSolution", resourceName, 0),
+                printSolution(initialSolution));
         for (int i = 0; i < programmedChanges.size(); i++) {
             T scheduledChange = programmedChanges.get(i);
             try {
-                writeToTempFile(buildTestFileName(filePrefix, testType, "WorkingSolutionBeforeChange", resourceName, i), solutionBeforeChange.apply(scheduledChange));
-                writeToTempFile(buildTestFileName(filePrefix, testType, "SolutionAfterChange", resourceName, i), solutionAfterChange.apply(scheduledChange));
+                writeToTempFile(buildTestFileName(filePrefix, testType, "WorkingSolutionBeforeChange", resourceName, i),
+                        solutionBeforeChange.apply(scheduledChange));
+                writeToTempFile(buildTestFileName(filePrefix, testType, "SolutionAfterChange", resourceName, i),
+                        solutionAfterChange.apply(scheduledChange));
             } catch (Exception e) {
                 LOGGER.error("An error was produced during test files writing.", e);
             }
         }
     }
 
-    private static String buildTestFileName(String filePrefix, String testType, String solutionName, String resourceName, int changeNumber) {
+    private static String buildTestFileName(String filePrefix, String testType, String solutionName, String resourceName,
+            int changeNumber) {
         return filePrefix + "." + testType + "." + solutionName + "_" + resourceName + "_" + changeNumber + "__";
     }
 }

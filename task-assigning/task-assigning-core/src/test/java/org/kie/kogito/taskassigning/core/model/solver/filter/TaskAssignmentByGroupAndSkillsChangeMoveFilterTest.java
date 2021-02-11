@@ -70,25 +70,37 @@ class TaskAssignmentByGroupAndSkillsChangeMoveFilterTest {
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.emptySet()),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.emptySet()),
                                 mockUser(USER, false, Collections.emptyList(), Collections.emptySet())),
                         false),
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.emptySet()),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.emptySet()),
                                 mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
                         true),
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.singleton(SKILL)),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.singleton(SKILL)),
                                 mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
                         false),
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.singleton(SKILL)),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.singleton(SKILL)),
                                 mockUser(USER, true, Collections.emptyList(), Collections.singleton(SKILL))),
                         true),
 
@@ -102,8 +114,7 @@ class TaskAssignmentByGroupAndSkillsChangeMoveFilterTest {
                         mockChangeMove(
                                 mockTask(Collections.singletonList(mockGroup(GROUP)), Collections.emptySet()),
                                 mockUser(USER, true, Collections.singletonList(mockGroup(GROUP)), Collections.emptySet())),
-                        true)
-        );
+                        true));
     }
 
     @SuppressWarnings("unchecked")

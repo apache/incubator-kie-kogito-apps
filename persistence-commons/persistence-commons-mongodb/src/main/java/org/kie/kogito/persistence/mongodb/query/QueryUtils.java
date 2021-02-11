@@ -43,7 +43,8 @@ public class QueryUtils {
     }
 
     static Optional<Bson> generateQuery(List<AttributeFilter<?>> filters, UnaryOperator<String> filterFunction) {
-        return Optional.ofNullable(filters).filter(f -> !f.isEmpty()).map(fs -> and(fs.stream().map(f -> generateSingleQuery(f, filterFunction)).collect(toList())));
+        return Optional.ofNullable(filters).filter(f -> !f.isEmpty())
+                .map(fs -> and(fs.stream().map(f -> generateSingleQuery(f, filterFunction)).collect(toList())));
     }
 
     static Bson generateSingleQuery(AttributeFilter<?> filter, UnaryOperator<String> filterFunction) {
@@ -68,17 +69,20 @@ public class QueryUtils {
             case BETWEEN:
                 List<?> value = (List<?>) filter.getValue();
                 return and(gte(filterFunction.apply(filter.getAttribute()), value.get(0)),
-                           lte(filterFunction.apply(filter.getAttribute()), value.get(1)));
+                        lte(filterFunction.apply(filter.getAttribute()), value.get(1)));
             case IN:
                 return in(filterFunction.apply(filter.getAttribute()), (List<?>) filter.getValue());
             case CONTAINS_ALL:
                 return all(filterFunction.apply(filter.getAttribute()), (List<?>) filter.getValue());
             case CONTAINS_ANY:
-                return or(((List<?>) filter.getValue()).stream().map(v -> eq(filterFunction.apply(filter.getAttribute()), v)).collect(toList()));
+                return or(((List<?>) filter.getValue()).stream().map(v -> eq(filterFunction.apply(filter.getAttribute()), v))
+                        .collect(toList()));
             case OR:
-                return or(((List<AttributeFilter<?>>) filter.getValue()).stream().map(f -> generateSingleQuery(f, filterFunction)).collect(toList()));
+                return or(((List<AttributeFilter<?>>) filter.getValue()).stream()
+                        .map(f -> generateSingleQuery(f, filterFunction)).collect(toList()));
             case AND:
-                return and(((List<AttributeFilter<?>>) filter.getValue()).stream().map(f -> generateSingleQuery(f, filterFunction)).collect(toList()));
+                return and(((List<AttributeFilter<?>>) filter.getValue()).stream()
+                        .map(f -> generateSingleQuery(f, filterFunction)).collect(toList()));
             case NOT:
                 return not(generateSingleQuery((AttributeFilter<?>) filter.getValue(), filterFunction));
             default:

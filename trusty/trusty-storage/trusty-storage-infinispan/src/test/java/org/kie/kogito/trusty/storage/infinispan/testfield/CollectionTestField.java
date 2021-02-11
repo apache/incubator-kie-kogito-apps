@@ -29,7 +29,8 @@ import static org.mockito.ArgumentMatchers.eq;
 public class CollectionTestField<M, T> extends AbstractTestField<M, Collection<T>> {
     private final Class<T> elementClass;
 
-    public CollectionTestField(String fieldName, Collection<T> fieldValue, Function<M, Collection<T>> getter, BiConsumer<M, Collection<T>> setter, Class<T> elementClass) {
+    public CollectionTestField(String fieldName, Collection<T> fieldValue, Function<M, Collection<T>> getter,
+            BiConsumer<M, Collection<T>> setter, Class<T> elementClass) {
         super(fieldName, fieldValue, getter, setter);
         this.elementClass = elementClass;
     }

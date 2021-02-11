@@ -61,14 +61,17 @@ class ProcessServiceClientMPTest {
         doReturn(taskSchema)
                 .when(clientRest)
                 .getTaskSchema(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, USER, Arrays.asList(GROUP1, GROUP2));
-        Set<String> result = client.getAvailablePhases(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, USER, Arrays.asList(GROUP1, GROUP2));
+        Set<String> result = client.getAvailablePhases(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, USER,
+                Arrays.asList(GROUP1, GROUP2));
         assertThat(result).containsExactlyInAnyOrder(PHASE1, PHASE2);
     }
 
     @Test
     void transitionTask() {
-        client.transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER, Arrays.asList(GROUP1, GROUP2));
-        verify(clientRest).transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER, Arrays.asList(GROUP1, GROUP2), EMPTY_JSON);
+        client.transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER,
+                Arrays.asList(GROUP1, GROUP2));
+        verify(clientRest).transitionTask(PROCESS_ID, PROCESS_INSTANCE_ID, TASK_ID, WORKITEM_ID, PHASE1, USER,
+                Arrays.asList(GROUP1, GROUP2), EMPTY_JSON);
     }
 
     @Test

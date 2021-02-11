@@ -45,8 +45,10 @@ public class TraceEventTestUtils {
         assertEquals(expected.hasSucceeded(), actual.hasSucceeded());
         assertEquals(expected.getExecutedModelName(), actual.getExecutedModelName());
         assertEquals(expected.getExecutorName(), actual.getExecutorName());
-        assertList(expected.getInputs(), actual.getInputs(), TraceEventTestUtils::assertDecisionInput, TraceEventTestUtils::compareDecisionInput);
-        assertList(expected.getOutcomes(), actual.getOutcomes(), TraceEventTestUtils::assertDecisionOutcome, TraceEventTestUtils::compareDecisionOutcome);
+        assertList(expected.getInputs(), actual.getInputs(), TraceEventTestUtils::assertDecisionInput,
+                TraceEventTestUtils::compareDecisionInput);
+        assertList(expected.getOutcomes(), actual.getOutcomes(), TraceEventTestUtils::assertDecisionOutcome,
+                TraceEventTestUtils::compareDecisionOutcome);
     }
 
     public static void assertDecisionInput(DecisionInput expected, DecisionInput actual) {
@@ -60,11 +62,14 @@ public class TraceEventTestUtils {
         assertEquals(expected.getOutcomeName(), actual.getOutcomeName());
         assertTypedVariable(expected.getOutcomeResult(), actual.getOutcomeResult());
         assertEquals(expected.getEvaluationStatus(), actual.getEvaluationStatus());
-        assertList(expected.getOutcomeInputs(), actual.getOutcomeInputs(), TraceEventTestUtils::assertTypedVariable, TraceEventTestUtils::compareTypedVariable);
-        assertList(expected.getMessages(), actual.getMessages(), TraceEventTestUtils::assertMessage, TraceEventTestUtils::compareMessage);
+        assertList(expected.getOutcomeInputs(), actual.getOutcomeInputs(), TraceEventTestUtils::assertTypedVariable,
+                TraceEventTestUtils::compareTypedVariable);
+        assertList(expected.getMessages(), actual.getMessages(), TraceEventTestUtils::assertMessage,
+                TraceEventTestUtils::compareMessage);
     }
 
-    public static <T> void assertList(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor, Comparator<? super T> comparator) {
+    public static <T> void assertList(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor,
+            Comparator<? super T> comparator) {
         if (expected == null && actual == null
                 || expected == null && actual.isEmpty()
                 || actual == null && expected.isEmpty()) {
@@ -114,7 +119,8 @@ public class TraceEventTestUtils {
         return new CompareToBuilder()
                 .append(expected.getId(), actual.getId())
                 .append(expected.getName(), actual.getName())
-                .append(expected.getValue(), actual.getValue(), toObjectComparator(TypedVariable.class, TraceEventTestUtils::compareTypedVariable))
+                .append(expected.getValue(), actual.getValue(),
+                        toObjectComparator(TypedVariable.class, TraceEventTestUtils::compareTypedVariable))
                 .toComparison();
     }
 
@@ -123,7 +129,8 @@ public class TraceEventTestUtils {
                 .append(expected.getOutcomeId(), actual.getOutcomeId())
                 .append(expected.getOutcomeName(), actual.getOutcomeName())
                 .append(expected.getEvaluationStatus(), actual.getEvaluationStatus())
-                .append(expected.getOutcomeResult(), actual.getOutcomeResult(), toObjectComparator(TypedVariable.class, TraceEventTestUtils::compareTypedVariable))
+                .append(expected.getOutcomeResult(), actual.getOutcomeResult(),
+                        toObjectComparator(TypedVariable.class, TraceEventTestUtils::compareTypedVariable))
                 .toComparison();
     }
 

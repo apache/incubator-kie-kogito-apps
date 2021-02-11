@@ -42,7 +42,6 @@ class StringEqualArgumentTest extends AbstractStringArgumentTest<String, StringE
     protected Stream<Arguments> createTestValues() {
         return Stream.of(
                 Arguments.of(new TestArgument<>(VALUE, "{\"equal\":\"" + VALUE + "\"}")),
-                Arguments.of(new TestArgument<>(null, "{\"equal\":null}"))
-        );
+                Arguments.of(new TestArgument<>(null, "{\"equal\":null}")));
     }
 }

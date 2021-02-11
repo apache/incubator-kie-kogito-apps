@@ -22,9 +22,10 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -61,7 +62,8 @@ class UserTaskEventDeserializerTest {
     private static final String PROCESS_ID = "PROCESS_ID";
     private static final String ROOT_PROCESS_ID = "ROOT_PROCESS_ID";
 
-    private static final String ENDPOINT = "http://myapplication.cloud.com:8280/" + PROCESS_ID + "/" + PROCESS_INSTANCE_ID + "/" + TASK_NAME + "/" + TASK_INSTANCE_ID;
+    private static final String ENDPOINT = "http://myapplication.cloud.com:8280/" + PROCESS_ID + "/" + PROCESS_INSTANCE_ID + "/"
+            + TASK_NAME + "/" + TASK_INSTANCE_ID;
 
     private UserTaskEventDeserializer deserializer;
 
@@ -72,7 +74,8 @@ class UserTaskEventDeserializerTest {
 
     @Test
     void deserialize() throws Exception {
-        Path path = Paths.get(Thread.currentThread().getContextClassLoader().getResource("org/kie/kogito/taskassigning/messaging/UserTaskCloudEvent.json").toURI());
+        Path path = Paths.get(Thread.currentThread().getContextClassLoader()
+                .getResource("org/kie/kogito/taskassigning/messaging/UserTaskCloudEvent.json").toURI());
         byte[] eventBytes = Files.readAllBytes(path);
         UserTaskEvent event = deserializer.deserialize(TOPIC, eventBytes);
 

@@ -20,10 +20,11 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,7 +41,8 @@ import static org.kie.kogito.taskassigning.index.service.client.graphql.WireMock
 @QuarkusTestResource(WireMockGraphQLResource.class)
 class GraphQLServiceClientTest {
 
-    private static final String SAME_VALUE_EXPECTED_FOR_FIELD_AT_TASK = "Tasks at position: %s are expected to have the same value for field: %s";
+    private static final String SAME_VALUE_EXPECTED_FOR_FIELD_AT_TASK =
+            "Tasks at position: %s are expected to have the same value for field: %s";
     private static final String QUERY_NAME = "UserTaskInstances";
 
     @Inject
@@ -49,7 +51,7 @@ class GraphQLServiceClientTest {
     @Test
     void executeQuery() {
         GraphQLServiceClient client = graphQLServiceClientFactory.newClient(createServiceConfig(),
-                                                                            NoAuthenticationCredentials.INSTANCE);
+                NoAuthenticationCredentials.INSTANCE);
 
         UserTaskInstance[] result = client.executeQuery(QUERY_NAME, USER_TASKS_QUERY_MOCK, UserTaskInstance[].class);
         assertResults(result, USER_TASKS_QUERY_MOCK_RESULT);
@@ -58,13 +60,14 @@ class GraphQLServiceClientTest {
     @Test
     void executeQueryWithFailure() {
         GraphQLServiceClient client = graphQLServiceClientFactory.newClient(createServiceConfig(),
-                                                                            NoAuthenticationCredentials.INSTANCE);
+                NoAuthenticationCredentials.INSTANCE);
 
         assertThatThrownBy(() -> client.executeQuery(QUERY_NAME, USER_TASKS_QUERY_FAILURE_MOCK, UserTaskInstance[].class))
                 .hasMessageStartingWith("An error was produced during query execution:");
     }
 
-    private static void assertResults(UserTaskInstance[] result, WireMockGraphQLResource.UserTaskInstanceMock[] expectedResult) {
+    private static void assertResults(UserTaskInstance[] result,
+            WireMockGraphQLResource.UserTaskInstanceMock[] expectedResult) {
         assertThat(result)
                 .isNotEmpty()
                 .hasSize(expectedResult.length);
@@ -74,7 +77,8 @@ class GraphQLServiceClientTest {
         }
     }
 
-    private static void assertTaskEquals(UserTaskInstance task, WireMockGraphQLResource.UserTaskInstanceMock expectedTask, int index) {
+    private static void assertTaskEquals(UserTaskInstance task, WireMockGraphQLResource.UserTaskInstanceMock expectedTask,
+            int index) {
         assertThat(task.getId())
                 .as(SAME_VALUE_EXPECTED_FOR_FIELD_AT_TASK, index, ID.getName())
                 .isEqualTo(expectedTask.getId());

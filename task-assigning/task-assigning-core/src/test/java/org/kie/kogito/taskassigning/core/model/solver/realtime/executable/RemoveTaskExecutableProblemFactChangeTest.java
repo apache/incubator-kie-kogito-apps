@@ -41,7 +41,7 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     @Test
     void removeTaskProblemFactChange24Tasks8Users() {
         removeTaskProblemFactChange(SET_OF_24TASKS_8USERS_SOLUTION.resource(),
-                                    Arrays.asList("0", "10", "11", "4", "20", "100", "78"));
+                Arrays.asList("0", "10", "11", "4", "20", "100", "78"));
     }
 
     @Test
@@ -54,7 +54,7 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     @Tag(TestConstants.TURTLE_TEST)
     void removeTaskProblemFactChange50Tasks5Users() {
         removeTaskProblemFactChange(SET_OF_50TASKS_5USERS_SOLUTION.resource(),
-                                    Arrays.asList("0", "10", "1", "4", "20", "30", "35", "40", "45", "57", "60"));
+                Arrays.asList("0", "10", "1", "4", "20", "30", "35", "40", "45", "57", "60"));
     }
 
     @Test
@@ -67,8 +67,8 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     @Tag(TestConstants.TURTLE_TEST)
     void removeTaskProblemFactChange100Tasks5Users() {
         removeTaskProblemFactChange(SET_OF_100TASKS_5USERS_SOLUTION.resource(),
-                                    Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "130",
-                                                  "200"));
+                Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "130",
+                        "200"));
     }
 
     @Test
@@ -81,8 +81,8 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     @Tag(TestConstants.TURTLE_TEST)
     void removeTaskProblemFactChange500Tasks20Users() {
         removeTaskProblemFactChange(SET_OF_500TASKS_20USERS_SOLUTION.resource(),
-                                    Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "300",
-                                                  "400", "25", "1000", "1001"));
+                Arrays.asList("5", "15", "11", "4", "20", "30", "36", "40", "45", "58", "99", "300",
+                        "400", "25", "1000", "1001"));
     }
 
     @Test
@@ -103,7 +103,8 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
 
         //each partial solution must have the change that was applied on it.
         executeSequentialChanges(solution, programmedChanges);
-        programmedChanges.forEach(change -> assertRemoveTaskProblemFactChangeWasProduced(change.getChange(), change.getSolutionAfterChange()));
+        programmedChanges.forEach(
+                change -> assertRemoveTaskProblemFactChangeWasProduced(change.getChange(), change.getSolutionAfterChange()));
 
         //finally the last solution must have the result of all the changes.
         TaskAssigningSolution lastSolution = programmedChanges.get(programmedChanges.size() - 1).getSolutionAfterChange();
@@ -124,11 +125,15 @@ class RemoveTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     /**
      * Given a RemoveTaskProblemFact change and a solution that was produced as the result of applying the change,
      * asserts that the pointed task assignment is not present in the solution.
+     * 
      * @param change The change that was executed for producing the solution.
      * @param solution The produced solution.
      */
-    private void assertRemoveTaskProblemFactChangeWasProduced(RemoveTaskProblemFactChange change, TaskAssigningSolution solution) {
-        assertThat(solution.getTaskAssignmentList().stream().anyMatch(taskAssignment -> Objects.equals(change.getTaskAssignment().getId(), taskAssignment.getId()))).isFalse();
+    private void assertRemoveTaskProblemFactChangeWasProduced(RemoveTaskProblemFactChange change,
+            TaskAssigningSolution solution) {
+        assertThat(solution.getTaskAssignmentList().stream()
+                .anyMatch(taskAssignment -> Objects.equals(change.getTaskAssignment().getId(), taskAssignment.getId())))
+                        .isFalse();
     }
 
     private static TaskAssignment findTaskAssignmentOrCreate(TaskAssigningSolution solution, String id) {

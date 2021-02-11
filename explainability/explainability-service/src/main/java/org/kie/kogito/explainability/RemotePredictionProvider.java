@@ -9,11 +9,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.ext.web.client.WebClient;
 import org.eclipse.microprofile.context.ThreadContext;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -28,6 +23,12 @@ import org.kie.kogito.explainability.models.PredictInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClientOptions;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.web.client.WebClient;
+
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
@@ -40,7 +41,8 @@ public class RemotePredictionProvider implements PredictionProvider {
     private final Executor asyncExecutor;
     private final WebClient client;
 
-    public RemotePredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext, Executor asyncExecutor) {
+    public RemotePredictionProvider(ExplainabilityRequest request, Vertx vertx, ThreadContext threadContext,
+            Executor asyncExecutor) {
         this.request = request;
         URI uri = URI.create(request.getServiceUrl());
         this.client = getClient(vertx, uri);
@@ -59,8 +61,7 @@ public class RemotePredictionProvider implements PredictionProvider {
                 .setDefaultHost(uri.getHost())
                 .setDefaultPort(port)
                 .setSsl("https".equalsIgnoreCase(uri.getScheme()))
-                .setLogActivity(true)
-        );
+                .setLogActivity(true));
     }
 
     protected PredictionOutput toPredictionOutput(JsonObject mainObj) {
@@ -83,8 +84,8 @@ public class RemotePredictionProvider implements PredictionProvider {
                         .filter(output -> request.getOutputs().containsKey(output.getName())),
                 request.getOutputs().keySet().stream()
                         .filter(key -> !resultOutputNames.contains(key))
-                        .map(key -> new Output(key, Type.UNDEFINED, new Value<>(null), 1d))
-        ).collect(toList());
+                        .map(key -> new Output(key, Type.UNDEFINED, new Value<>(null), 1d)))
+                .collect(toList());
 
         return new PredictionOutput(outputs);
     }
@@ -117,7 +118,8 @@ public class RemotePredictionProvider implements PredictionProvider {
         return map;
     }
 
-    protected CompletableFuture<List<PredictionOutput>> sendPredictRequest(List<PredictionInput> inputs, ModelIdentifier modelIdentifier) {
+    protected CompletableFuture<List<PredictionOutput>> sendPredictRequest(List<PredictionInput> inputs,
+            ModelIdentifier modelIdentifier) {
         List<PredictInput> piList = inputs.stream()
                 .map(input -> new PredictInput(modelIdentifier, toMap(input.getFeatures())))
                 .collect(toList());

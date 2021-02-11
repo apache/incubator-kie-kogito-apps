@@ -47,7 +47,8 @@ public class GraphQLScalarTypeProducer {
         try {
             return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(dateTime);
         } catch (DateTimeException e) {
-            throw new CoercingSerializeException("Unable to turn TemporalAccessor into OffsetDateTime because of : '" + e.getMessage() + "'.");
+            throw new CoercingSerializeException(
+                    "Unable to turn TemporalAccessor into OffsetDateTime because of : '" + e.getMessage() + "'.");
         }
     }
 
@@ -64,14 +65,17 @@ public class GraphQLScalarTypeProducer {
                             dateTime = (ZonedDateTime) input;
                         } else if (input instanceof String) {
                             try {
-                                dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(input.toString())), ZoneOffset.UTC);
+                                dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(input.toString())),
+                                        ZoneOffset.UTC);
                             } catch (NumberFormatException ex) {
                                 dateTime = parseDateTime(input.toString());
                             }
                         } else if (input instanceof Long) {
                             dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli((Long) input), ZoneOffset.UTC);
                         } else {
-                            throw new CoercingSerializeException("Expected something we can convert to 'java.time.OffsetDateTime' but was '" + (input == null ? "null" : input.getClass().getName()) + "'.");
+                            throw new CoercingSerializeException(
+                                    "Expected something we can convert to 'java.time.OffsetDateTime' but was '"
+                                            + (input == null ? "null" : input.getClass().getName()) + "'.");
                         }
                         return formatDateTime(dateTime);
                     }

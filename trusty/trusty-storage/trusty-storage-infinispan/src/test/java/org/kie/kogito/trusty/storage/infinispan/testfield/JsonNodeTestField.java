@@ -20,15 +20,18 @@ import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 
 public class JsonNodeTestField<M> extends StringTestField<M> {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public JsonNodeTestField(String fieldName, JsonNode fieldValue, Function<M, JsonNode> getter, BiConsumer<M, JsonNode> setter) {
-        super(fieldName, stringFromJson(fieldValue), obj -> stringFromJson(getter.apply(obj)), (obj, value) -> setter.accept(obj, jsonFromString(value)));
+    public JsonNodeTestField(String fieldName, JsonNode fieldValue, Function<M, JsonNode> getter,
+            BiConsumer<M, JsonNode> setter) {
+        super(fieldName, stringFromJson(fieldValue), obj -> stringFromJson(getter.apply(obj)),
+                (obj, value) -> setter.accept(obj, jsonFromString(value)));
     }
 
     private static JsonNode jsonFromString(String value) {

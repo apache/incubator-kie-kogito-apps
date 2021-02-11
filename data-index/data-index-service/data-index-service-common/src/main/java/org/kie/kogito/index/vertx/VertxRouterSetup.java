@@ -22,6 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 import graphql.GraphQL;
 import io.quarkus.oidc.AccessTokenCredential;
 import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
@@ -37,7 +39,6 @@ import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class VertxRouterSetup {
@@ -68,8 +69,8 @@ public class VertxRouterSetup {
     }
 
     protected void addGraphiqlRequestHeader(GraphiQLHandler graphiQLHandler) {
-        graphiQLHandler.graphiQLRequestHeaders(rc -> MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.AUTHORIZATION, "Bearer " + getCurrentAccessToken(rc))
-        );
+        graphiQLHandler.graphiQLRequestHeaders(
+                rc -> MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.AUTHORIZATION, "Bearer " + getCurrentAccessToken(rc)));
     }
 
     private String getCurrentAccessToken(RoutingContext routingContext) {
@@ -80,4 +81,3 @@ public class VertxRouterSetup {
                 .orElse("");
     }
 }
-

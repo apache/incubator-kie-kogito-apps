@@ -57,7 +57,8 @@ class DummyModelsLimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
 
-            LimeConfig limeConfig = new LimeConfig().withSamples(100).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(100).withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -70,7 +71,8 @@ class DummyModelsLimeExplainerTest {
             int topK = 1;
             double minimumPositiveStabilityRate = 0.5;
             double minimumNegativeStabilityRate = 0.5;
-            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate,
+                    minimumNegativeStabilityRate);
         }
     }
 
@@ -89,7 +91,8 @@ class DummyModelsLimeExplainerTest {
             List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
-            LimeConfig limeConfig = new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -102,7 +105,8 @@ class DummyModelsLimeExplainerTest {
             int topK = 1;
             double minimumPositiveStabilityRate = 0.5;
             double minimumNegativeStabilityRate = 0.5;
-            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate,
+                    minimumNegativeStabilityRate);
         }
     }
 
@@ -122,7 +126,8 @@ class DummyModelsLimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
 
-            LimeConfig limeConfig = new LimeConfig().withSamples(100).withPerturbationContext(new PerturbationContext(random, 2));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(100).withPerturbationContext(new PerturbationContext(random, 2));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -151,7 +156,8 @@ class DummyModelsLimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
 
-            LimeConfig limeConfig = new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model).toCompletableFuture()
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -164,7 +170,8 @@ class DummyModelsLimeExplainerTest {
             int topK = 1;
             double minimumPositiveStabilityRate = 0.5;
             double minimumNegativeStabilityRate = 0.5;
-            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate,
+                    minimumNegativeStabilityRate);
         }
     }
 
@@ -183,7 +190,8 @@ class DummyModelsLimeExplainerTest {
             List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
-            LimeConfig limeConfig = new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -196,7 +204,8 @@ class DummyModelsLimeExplainerTest {
             int topK = 1;
             double minimumPositiveStabilityRate = 0.5;
             double minimumNegativeStabilityRate = 0.5;
-            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate,
+                    minimumNegativeStabilityRate);
         }
     }
 
@@ -214,7 +223,8 @@ class DummyModelsLimeExplainerTest {
             List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             Prediction prediction = new Prediction(input, outputs.get(0));
-            LimeConfig limeConfig = new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -230,7 +240,8 @@ class DummyModelsLimeExplainerTest {
             int topK = 1;
             double minimumPositiveStabilityRate = 0.5;
             double minimumNegativeStabilityRate = 0.5;
-            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+            TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate,
+                    minimumNegativeStabilityRate);
         }
     }
 }

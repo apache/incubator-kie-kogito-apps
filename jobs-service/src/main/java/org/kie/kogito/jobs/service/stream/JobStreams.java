@@ -19,7 +19,6 @@ package org.kie.kogito.jobs.service.stream;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import io.smallrye.reactive.messaging.annotations.Broadcast;
 import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
@@ -30,6 +29,8 @@ import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 
 /**
  * Class that configure the Consumers for Job Streams,like Job Executed, Job Error... and execute the actions for each

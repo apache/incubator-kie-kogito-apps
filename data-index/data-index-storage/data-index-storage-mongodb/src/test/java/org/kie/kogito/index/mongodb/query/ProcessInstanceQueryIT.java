@@ -22,8 +22,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +34,9 @@ import org.kie.kogito.persistence.api.query.SortDirection;
 import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 import org.kie.kogito.persistence.mongodb.storage.MongoStorage;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -72,9 +73,10 @@ class ProcessInstanceQueryIT extends QueryTestBase<String, ProcessInstance> {
 
     @BeforeEach
     void setUp() {
-        this.storage = new MongoStorage<>(mongoClientManager.getCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class),
-                                          mongoClientManager.getReactiveCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class),
-                                          ProcessInstance.class.getName(), new ProcessInstanceEntityMapper());
+        this.storage =
+                new MongoStorage<>(mongoClientManager.getCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class),
+                        mongoClientManager.getReactiveCollection(PROCESS_INSTANCES_STORAGE, ProcessInstanceEntity.class),
+                        ProcessInstance.class.getName(), new ProcessInstanceEntityMapper());
     }
 
     @AfterEach
@@ -88,32 +90,64 @@ class ProcessInstanceQueryIT extends QueryTestBase<String, ProcessInstance> {
         String processInstanceId = UUID.randomUUID().toString();
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
-        ProcessInstance processInstance = TestUtils.createProcessInstance(processInstanceId, processId, null, null, ACTIVE.ordinal(), 0L);
-        ProcessInstance subProcessInstance = TestUtils.createProcessInstance(subProcessInstanceId, subProcessId, processInstanceId, processId, COMPLETED.ordinal(), 1000L);
+        ProcessInstance processInstance =
+                TestUtils.createProcessInstance(processInstanceId, processId, null, null, ACTIVE.ordinal(), 0L);
+        ProcessInstance subProcessInstance = TestUtils.createProcessInstance(subProcessInstanceId, subProcessId,
+                processInstanceId, processId, COMPLETED.ordinal(), 1000L);
         storage.put(processInstanceId, processInstance);
         storage.put(subProcessInstanceId, subProcessInstance);
 
-        queryAndAssert(assertWithId(), storage, singletonList(in("state", asList(ACTIVE.ordinal(), COMPLETED.ordinal()))), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(equalTo("state", ACTIVE.ordinal())), null, null, null, processInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(greaterThan("state", ACTIVE.ordinal())), null, null, null, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(greaterThanEqual("state", ACTIVE.ordinal())), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(lessThan("state", COMPLETED.ordinal())), null, null, null, processInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(lessThanEqual("state", COMPLETED.ordinal())), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(between("state", ACTIVE.ordinal(), COMPLETED.ordinal())), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(isNull("rootProcessInstanceId")), null, null, null, processInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(notNull("rootProcessInstanceId")), null, null, null, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(contains("roles", "admin")), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(containsAny("roles", asList("admin", "kogito"))), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(containsAll("roles", asList("admin", "kogito"))), null, null, null);
-        queryAndAssert(assertWithId(), storage, singletonList(like("processId", "*_sub")), null, null, null, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(and(asList(lessThan("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()), lessThanEqual("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli())))), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, singletonList(or(asList(equalTo("rootProcessInstanceId", processInstanceId), equalTo("start", processInstance.getStart().toInstant().toEpochMilli())))), null, null, null, processInstanceId, subProcessInstanceId);
-        queryAndAssert(assertWithId(), storage, asList(isNull("roles"), isNull("end"), greaterThan("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()), greaterThanEqual("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli())), null, null, null);
-        queryAndAssert(assertWithId(), storage, singletonList(equalTo("nodes.id", processInstance.getNodes().get(0).getId())), null, null, null, processInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(in("state", asList(ACTIVE.ordinal(), COMPLETED.ordinal()))), null,
+                null, null, processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(equalTo("state", ACTIVE.ordinal())), null, null, null,
+                processInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(greaterThan("state", ACTIVE.ordinal())), null, null, null,
+                subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(greaterThanEqual("state", ACTIVE.ordinal())), null, null, null,
+                processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(lessThan("state", COMPLETED.ordinal())), null, null, null,
+                processInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(lessThanEqual("state", COMPLETED.ordinal())), null, null, null,
+                processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(between("state", ACTIVE.ordinal(), COMPLETED.ordinal())), null,
+                null, null, processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(isNull("rootProcessInstanceId")), null, null, null,
+                processInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(notNull("rootProcessInstanceId")), null, null, null,
+                subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(contains("roles", "admin")), null, null, null, processInstanceId,
+                subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(containsAny("roles", asList("admin", "kogito"))), null, null,
+                null, processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(containsAll("roles", asList("admin", "kogito"))), null, null,
+                null);
+        queryAndAssert(assertWithId(), storage, singletonList(like("processId", "*_sub")), null, null, null,
+                subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage,
+                singletonList(and(asList(lessThan("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()),
+                        lessThanEqual("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli())))),
+                null, null, null, processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage,
+                singletonList(or(asList(equalTo("rootProcessInstanceId", processInstanceId),
+                        equalTo("start", processInstance.getStart().toInstant().toEpochMilli())))),
+                null, null, null, processInstanceId, subProcessInstanceId);
+        queryAndAssert(assertWithId(), storage,
+                asList(isNull("roles"), isNull("end"),
+                        greaterThan("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli()),
+                        greaterThanEqual("start", Instant.now().plus(1, ChronoUnit.DAYS).toEpochMilli())),
+                null, null, null);
+        queryAndAssert(assertWithId(), storage, singletonList(equalTo("nodes.id", processInstance.getNodes().get(0).getId())),
+                null, null, null, processInstanceId);
 
-        queryAndAssert(assertWithIdInOrder(), storage, asList(in("id", asList(processInstanceId, subProcessInstanceId)), in("processId", asList(processId, subProcessId))), singletonList(orderBy("processId", SortDirection.ASC)), 1, 1, subProcessInstanceId);
-        queryAndAssert(assertWithIdInOrder(), storage, null, singletonList(orderBy("processId", SortDirection.DESC)), null, null, subProcessInstanceId, processInstanceId);
+        queryAndAssert(assertWithIdInOrder(), storage,
+                asList(in("id", asList(processInstanceId, subProcessInstanceId)),
+                        in("processId", asList(processId, subProcessId))),
+                singletonList(orderBy("processId", SortDirection.ASC)), 1, 1, subProcessInstanceId);
+        queryAndAssert(assertWithIdInOrder(), storage, null, singletonList(orderBy("processId", SortDirection.DESC)), null,
+                null, subProcessInstanceId, processInstanceId);
         queryAndAssert(assertWithIdInOrder(), storage, null, null, 1, 1, subProcessInstanceId);
-        queryAndAssert(assertWithIdInOrder(), storage, null, asList(orderBy("processId", SortDirection.ASC), orderBy("state", SortDirection.ASC)), 1, 1, subProcessInstanceId);
+        queryAndAssert(assertWithIdInOrder(), storage, null,
+                asList(orderBy("processId", SortDirection.ASC), orderBy("state", SortDirection.ASC)), 1, 1,
+                subProcessInstanceId);
     }
 }

@@ -50,7 +50,8 @@ class LoanEligibilityDmnLimeExplainerTest {
 
     @Test
     void testLoanEligibilityDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn")));
+        DMNRuntime dmnRuntime = DMNKogito
+                .createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String FRAUD_NS = "https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example";
@@ -78,7 +79,8 @@ class LoanEligibilityDmnLimeExplainerTest {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             random.setSeed(i);
-            LimeConfig limeConfig = new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(random, 1));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());

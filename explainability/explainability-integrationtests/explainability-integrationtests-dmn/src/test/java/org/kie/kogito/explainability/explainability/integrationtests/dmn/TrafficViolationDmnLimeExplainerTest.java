@@ -52,7 +52,8 @@ class TrafficViolationDmnLimeExplainerTest {
 
     @Test
     void testTrafficViolationDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
+        DMNRuntime dmnRuntime = DMNKogito
+                .createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String TRAFFIC_VIOLATION_NS = "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF";
@@ -78,13 +79,15 @@ class TrafficViolationDmnLimeExplainerTest {
         Random random = new Random();
         for (int i = 0; i < 5; i++) {
             random.setSeed(i);
-            LimeConfig limeConfig = new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(random, 2));
+            LimeConfig limeConfig =
+                    new LimeConfig().withSamples(300).withPerturbationContext(new PerturbationContext(random, 2));
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
                 assertNotNull(saliency);
-                List<String> strings = saliency.getTopFeatures(3).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
+                List<String> strings =
+                        saliency.getTopFeatures(3).stream().map(f -> f.getFeature().getName()).collect(Collectors.toList());
                 assertTrue(strings.contains("Actual Speed") || strings.contains("Speed Limit"));
             }
             assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,

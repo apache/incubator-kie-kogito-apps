@@ -37,7 +37,8 @@ public class UserPropertyChangeProblemFactChange implements ProblemFactChange<Ta
 
     private Set<Group> newGroups;
 
-    public UserPropertyChangeProblemFactChange(User user, boolean enabled, Map<String, Object> newAttributes, Set<Group> newGroups) {
+    public UserPropertyChangeProblemFactChange(User user, boolean enabled, Map<String, Object> newAttributes,
+            Set<Group> newGroups) {
         this.user = user;
         this.enabled = enabled;
         this.newAttributes = newAttributes;

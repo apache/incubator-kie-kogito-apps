@@ -25,7 +25,6 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import io.quarkus.arc.DefaultBean;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -35,6 +34,8 @@ import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.quarkus.arc.DefaultBean;
 
 @DefaultBean
 @ApplicationScoped
@@ -49,10 +50,9 @@ public class JobRepositoryDelegate implements ReactiveJobRepository {
 
     @Inject
     public JobRepositoryDelegate(@Any Instance<ReactiveJobRepository> instances,
-                                 @ConfigProperty(name = InfinispanConfiguration.PERSISTENCE_CONFIG_KEY)
-                                         Optional<String> persistence) {
+            @ConfigProperty(name = InfinispanConfiguration.PERSISTENCE_CONFIG_KEY) Optional<String> persistence) {
         delegate = instances.select(BaseReactiveJobRepository.class,
-                                    new Repository.Literal(persistence.orElse("in-memory"))).get();
+                new Repository.Literal(persistence.orElse("in-memory"))).get();
         LOGGER.info("JobRepository selected {}", delegate.getClass());
     }
 
@@ -92,7 +92,8 @@ public class JobRepositoryDelegate implements ReactiveJobRepository {
     }
 
     @Override
-    public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to, JobStatus... status) {
+    public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to,
+            JobStatus... status) {
         return delegate.findByStatusBetweenDatesOrderByPriority(from, to, status);
     }
 
