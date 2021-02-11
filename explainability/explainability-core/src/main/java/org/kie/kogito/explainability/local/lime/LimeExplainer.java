@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -119,7 +120,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                             int newNoOfSamples;
                             if (limeConfig.adaptDatasetVariance()) {
                                 int nextPerturbationSize = Math.max(perturbationContext.getNoOfPerturbations() + 1,
-                                                   linearizedTargetInputFeatures.size() / noOfRetries);
+                                                                    linearizedTargetInputFeatures.size() / noOfRetries);
                                 // make sure to stay within the max no. of features boundaries
                                 nextPerturbationSize = Math.min(linearizedTargetInputFeatures.size() - 1, nextPerturbationSize);
                                 newPerturbationContext = new PerturbationContext(perturbationContext.getRandom(),
@@ -175,7 +176,8 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         return result;
     }
 
-    private void getSaliency(List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result, LimeInputs limeInputs, Output originalOutput) {
+    private void getSaliency(List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result,
+                             LimeInputs limeInputs, Output originalOutput) {
         List<FeatureImportance> featureImportanceList = new LinkedList<>();
 
         // encode the training data so that it can be fed into the linear model
@@ -186,13 +188,44 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
         // weight the training samples based on the proximity to the target input to explain
         double[] sampleWeights = SampleWeighter.getSampleWeights(linearizedTargetInputFeatures, trainingSet);
-        LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
+
+        int ts = linearizedTargetInputFeatures.size();
+        double[] coefficients = new double[ts];
+        Arrays.fill(coefficients, 1);
+        if (limeConfig.isPenalizeBalanceSparse() && !trainingSet.isEmpty()) {
+            // calculate per feature class balance
+            double[] zeroPredicted = new double[ts];
+            double[] onePredicted = new double[ts];
+            for (Pair<double[], Double> sample : trainingSet) {
+                double[] sparseVector = sample.getKey();
+                for (int i = 0; i < sparseVector.length; i++) {
+                    double inputValue = sparseVector[i];
+                    Double outputValue = sample.getValue();
+                    if (1 == outputValue) {
+                        onePredicted[i] += inputValue;
+                    } else {
+                        zeroPredicted[i] += inputValue;
+                    }
+                }
+            }
+            zeroPredicted = Arrays.stream(zeroPredicted).map(d -> d / trainingSet.size()).toArray();
+            onePredicted = Arrays.stream(onePredicted).map(d -> d / trainingSet.size()).toArray();
+            for (int i = 0; i < coefficients.length; i++) {
+                double zeroDistance = Math.abs(0.5 - zeroPredicted[i]);
+                double oneDistance = Math.abs(0.5 - onePredicted[i]);
+                double zm = Math.tanh((1e-2 + zeroDistance + oneDistance) / 2 * ts);
+                coefficients[i] *= zm;
+            }
+        }
+
+        LinearModel linearModel = new LinearModel(ts, limeInputs.isClassification());
         double loss = linearModel.fit(trainingSet, sampleWeights);
         if (!Double.isNaN(loss)) {
             // create the output saliency
             int i = 0;
             for (Feature linearizedFeature : linearizedTargetInputFeatures) {
-                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]);
+                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]
+                        * coefficients[i]);
                 featureImportanceList.add(featureImportance);
                 i++;
             }

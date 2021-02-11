@@ -28,6 +28,7 @@ public class LimeConfig {
     private static final double DEFAULT_SEPARABLE_DATASET_RATIO = 0.99;
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
+    private static final boolean DEFAULT_PENALIZE_BALANCE_SPARSE = false;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
@@ -51,6 +52,11 @@ public class LimeConfig {
      */
     private boolean adaptDatasetVariance = DEFAULT_ADAPT_DATASET_VARIANCE;
 
+    /**
+     * Whether to penalize weights whose sparse features encoding is balanced with respect to target output
+     */
+    private boolean penalizeBalanceSparse = DEFAULT_PENALIZE_BALANCE_SPARSE;
+
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
         return this;
@@ -63,6 +69,11 @@ public class LimeConfig {
 
     public LimeConfig withAdaptiveVariance(boolean adaptDatasetVariance) {
         this.adaptDatasetVariance = adaptDatasetVariance;
+        return this;
+    }
+
+    public LimeConfig withPenalizeBalanceSparse(boolean penalizeBalanceSparse) {
+        this.penalizeBalanceSparse = penalizeBalanceSparse;
         return this;
     }
 
@@ -94,5 +105,9 @@ public class LimeConfig {
 
     public double getSeparableDatasetRatio() {
         return separableDatasetRatio;
+    }
+
+    public boolean isPenalizeBalanceSparse() {
+        return penalizeBalanceSparse;
     }
 }
