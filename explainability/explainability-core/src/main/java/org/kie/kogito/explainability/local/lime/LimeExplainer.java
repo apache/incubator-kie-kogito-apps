@@ -228,7 +228,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
      * We consider a sparse feature to be better for training the classifier accurately when it doesn't present a good
      * balance of 1s and 0s values with respect to 0 and 1 predictions. In fact such features would hardly generate a
      * well fitting classifier, if taken in isolation.
-     * The generated coefficients are inverse proportional with respect to the no. of features as the above becomes more
+     * The generated coefficients are proportional with respect to the no. of features as the above becomes more
      * impacting when the no. of features is low.
      *
      * @param linearizedTargetInputFeatures no of features
@@ -261,8 +261,8 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 // calculate distance from the perfect balance (high is good)
                 double zeroDistance = Math.abs(0.5 - zeroPredicted[i]);
                 double oneDistance = Math.abs(0.5 - onePredicted[i]);
-                // coefficient is proportional to distance and inverse proportional to the number of features
-                double zm = Math.tanh((1e-2 + zeroDistance + oneDistance) / (2 * ts));
+                // coefficient is proportional to distance and to the number of features (between 0 and 1)
+                double zm = Math.tanh((1e-2 + zeroDistance + oneDistance) + ts / 10d);
                 coefficients[i] *= zm;
             }
         }
