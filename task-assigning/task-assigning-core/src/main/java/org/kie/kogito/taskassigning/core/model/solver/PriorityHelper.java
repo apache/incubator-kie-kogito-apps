@@ -24,13 +24,18 @@ import java.util.stream.Collectors;
  */
 public class PriorityHelper {
 
-    private static final String HIGH_LEVEL_PRIORITY_RANGE = "org.kie.kogito.taskassigning.core.model.solver.priorityHelper.highLevelPriorities";
-    private static final String MEDIUM_LEVEL_PRIORITY_RANGE = "org.kie.kogito.taskassigning.core.model.solver.priorityHelper.mediumLevelPriorities";
-    private static final String LOW_LEVEL_PRIORITY_RANGE = "org.kie.kogito.taskassigning.core.model.solver.priorityHelper.lowLevelPriorities";
+    private static final String HIGH_LEVEL_PRIORITY_RANGE =
+            "org.kie.kogito.taskassigning.core.model.solver.priorityHelper.highLevelPriorities";
+    private static final String MEDIUM_LEVEL_PRIORITY_RANGE =
+            "org.kie.kogito.taskassigning.core.model.solver.priorityHelper.mediumLevelPriorities";
+    private static final String LOW_LEVEL_PRIORITY_RANGE =
+            "org.kie.kogito.taskassigning.core.model.solver.priorityHelper.lowLevelPriorities";
 
     private static final Set<String> HIGH_LEVEL_PRIORITIES = buildRange(System.getProperty(HIGH_LEVEL_PRIORITY_RANGE, "0,1,2"));
-    private static final Set<String> MEDIUM_LEVEL_PRIORITIES = buildRange(System.getProperty(MEDIUM_LEVEL_PRIORITY_RANGE, "3,4,5,6"));
-    private static final Set<String> LOW_LEVEL_PRIORITIES = buildRange(System.getProperty(LOW_LEVEL_PRIORITY_RANGE, "7,8,9,10"));
+    private static final Set<String> MEDIUM_LEVEL_PRIORITIES =
+            buildRange(System.getProperty(MEDIUM_LEVEL_PRIORITY_RANGE, "3,4,5,6"));
+    private static final Set<String> LOW_LEVEL_PRIORITIES =
+            buildRange(System.getProperty(LOW_LEVEL_PRIORITY_RANGE, "7,8,9,10"));
 
     private PriorityHelper() {
     }

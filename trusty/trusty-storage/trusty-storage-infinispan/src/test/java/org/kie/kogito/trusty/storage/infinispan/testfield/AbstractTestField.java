@@ -15,15 +15,15 @@
  */
 package org.kie.kogito.trusty.storage.infinispan.testfield;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.infinispan.protostream.MessageMarshaller;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public abstract class AbstractTestField<M, T> {
 

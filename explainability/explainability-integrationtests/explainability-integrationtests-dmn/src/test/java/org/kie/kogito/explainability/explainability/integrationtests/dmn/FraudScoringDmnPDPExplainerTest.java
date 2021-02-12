@@ -15,6 +15,18 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNRuntime;
@@ -33,30 +45,18 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.utils.DataUtils;
 
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class FraudScoringDmnPDPExplainerTest {
 
     @Test
     void testFraudScoringDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/fraud.dmn")));
+        DMNRuntime dmnRuntime =
+                DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/fraud.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String FRAUD_NS = "http://www.redhat.com/dmn/definitions/_81556584-7d78-4f8c-9d5f-b3cddb9b5c73";
         final String FRAUD_NAME = "fraud-scoring";
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
         PredictionProvider model = new DecisionModelWrapper(decisionModel);
-
 
         List<PredictionInput> inputs = getInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(inputs)
@@ -98,7 +98,8 @@ class FraudScoringDmnPDPExplainerTest {
 
         Random random = new Random();
         for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(),
+                    new PerturbationContext(random, predictionInput.getFeatures().size()));
             predictionInputs.add(new PredictionInput(perturbFeatures));
         }
 

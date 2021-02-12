@@ -40,5 +40,6 @@ public interface ReactiveJobRepository {
 
     PublisherBuilder<JobDetails> findAll();
 
-    PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to, JobStatus... status);
+    PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to,
+            JobStatus... status);
 }

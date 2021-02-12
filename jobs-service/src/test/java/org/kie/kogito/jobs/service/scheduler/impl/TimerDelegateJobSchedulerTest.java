@@ -15,10 +15,17 @@
  */
 package org.kie.kogito.jobs.service.scheduler.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 import java.util.Optional;
 import java.util.UUID;
 
-import io.reactivex.Flowable;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,13 +48,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivestreams.Publisher;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import io.reactivex.Flowable;
 
 @ExtendWith(MockitoExtension.class)
 class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
@@ -81,7 +82,8 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
 
     @Test
     void testDoCancel() {
-        Publisher<ManageableJobHandle> cancel = tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(SCHEDULED_ID).build());
+        Publisher<ManageableJobHandle> cancel =
+                tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(SCHEDULED_ID).build());
         Flowable.fromPublisher(cancel).subscribe(dummyCallback(), dummyCallback());
         verify(timer).removeJob(any(ManageableJobHandle.class));
     }

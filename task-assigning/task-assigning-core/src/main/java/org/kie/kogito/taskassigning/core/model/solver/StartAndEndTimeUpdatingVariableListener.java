@@ -15,16 +15,16 @@
  */
 package org.kie.kogito.taskassigning.core.model.solver;
 
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.END_TIME_IN_MINUTES;
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_IN_MINUTES;
+
 import java.util.Objects;
 
 import org.kie.kogito.taskassigning.core.model.ChainElement;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.optaplanner.core.api.domain.variable.VariableListener;
 import org.optaplanner.core.api.score.director.ScoreDirector;
-
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.END_TIME_IN_MINUTES;
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_IN_MINUTES;
 
 /**
  * Given a chained graph:
@@ -38,27 +38,32 @@ import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_
 public class StartAndEndTimeUpdatingVariableListener implements VariableListener<TaskAssigningSolution, TaskAssignment> {
 
     @Override
-    public void beforeEntityAdded(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment taskAssignment) {
+    public void beforeEntityAdded(final ScoreDirector<TaskAssigningSolution> scoreDirector,
+            final TaskAssignment taskAssignment) {
         // Do nothing
     }
 
     @Override
-    public void afterEntityAdded(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment taskAssignment) {
+    public void afterEntityAdded(final ScoreDirector<TaskAssigningSolution> scoreDirector,
+            final TaskAssignment taskAssignment) {
         updateStartAndEndTime(scoreDirector, taskAssignment);
     }
 
     @Override
-    public void beforeVariableChanged(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment taskAssignment) {
+    public void beforeVariableChanged(final ScoreDirector<TaskAssigningSolution> scoreDirector,
+            final TaskAssignment taskAssignment) {
         // Do nothing
     }
 
     @Override
-    public void afterVariableChanged(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment taskAssignment) {
+    public void afterVariableChanged(final ScoreDirector<TaskAssigningSolution> scoreDirector,
+            final TaskAssignment taskAssignment) {
         updateStartAndEndTime(scoreDirector, taskAssignment);
     }
 
     @Override
-    public void beforeEntityRemoved(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment taskAssignment) {
+    public void beforeEntityRemoved(final ScoreDirector<TaskAssigningSolution> scoreDirector,
+            final TaskAssignment taskAssignment) {
         // Do nothing
     }
 
@@ -67,10 +72,12 @@ public class StartAndEndTimeUpdatingVariableListener implements VariableListener
         // Do nothing
     }
 
-    private static void updateStartAndEndTime(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment sourceTaskAssignment) {
+    private static void updateStartAndEndTime(final ScoreDirector<TaskAssigningSolution> scoreDirector,
+            final TaskAssignment sourceTaskAssignment) {
         ChainElement previous = sourceTaskAssignment.getPreviousElement();
         TaskAssignment shadowTaskAssignment = sourceTaskAssignment;
-        Integer previousEndTime = previous == null || !previous.isTaskAssignment() ? 0 : ((TaskAssignment)previous).getEndTimeInMinutes();
+        Integer previousEndTime =
+                previous == null || !previous.isTaskAssignment() ? 0 : ((TaskAssignment) previous).getEndTimeInMinutes();
         Integer startTime = previousEndTime;
         Integer endTime = calculateEndTime(shadowTaskAssignment, startTime);
         while (shadowTaskAssignment != null && !Objects.equals(shadowTaskAssignment.getStartTimeInMinutes(), startTime)) {

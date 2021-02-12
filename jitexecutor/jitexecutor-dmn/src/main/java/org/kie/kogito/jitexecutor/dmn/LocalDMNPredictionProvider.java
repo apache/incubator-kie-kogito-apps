@@ -16,6 +16,8 @@
 
 package org.kie.kogito.jitexecutor.dmn;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,8 +34,6 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
-
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 public class LocalDMNPredictionProvider implements PredictionProvider {
 
@@ -58,8 +58,7 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
     public static PredictionInput toPredictionInput(Map<String, Object> context) {
         return new PredictionInput(
                 // TODO: Date/Time types are considered as strings, proper conversion to be implemented https://issues.redhat.com/browse/KOGITO-4351
-                Collections.singletonList(FeatureFactory.newCompositeFeature(DUMMY_DMN_CONTEXT_KEY, context))
-        );
+                Collections.singletonList(FeatureFactory.newCompositeFeature(DUMMY_DMN_CONTEXT_KEY, context)));
     }
 
     public static PredictionOutput toPredictionOutput(DMNResult dmnResult) {
@@ -82,7 +81,8 @@ public class LocalDMNPredictionProvider implements PredictionProvider {
         for (Feature f : features) {
             if (Type.COMPOSITE.equals(f.getType())) {
                 List<Feature> compositeFeatures = (List<Feature>) f.getValue().getUnderlyingObject();
-                boolean isList = compositeFeatures.stream().allMatch(feature -> feature.getName().startsWith(f.getName() + "_"));
+                boolean isList =
+                        compositeFeatures.stream().allMatch(feature -> feature.getName().startsWith(f.getName() + "_"));
                 if (isList) {
                     List<Object> objects = new ArrayList<>(compositeFeatures.size());
                     for (Feature fs : compositeFeatures) {

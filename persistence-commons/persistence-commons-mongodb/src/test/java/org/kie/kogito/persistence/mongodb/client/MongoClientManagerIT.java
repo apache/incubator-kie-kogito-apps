@@ -16,17 +16,19 @@
 
 package org.kie.kogito.persistence.mongodb.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import javax.inject.Inject;
 
-import com.mongodb.client.MongoCollection;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.mongodb.client.MongoCollection;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)
@@ -52,14 +54,16 @@ class MongoClientManagerIT {
 
     @Test
     void testGetReactiveCollection() {
-        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoCollection = mongoClientManager.getReactiveCollection("test");
+        com.mongodb.reactivestreams.client.MongoCollection<Document> mongoCollection =
+                mongoClientManager.getReactiveCollection("test");
         assertEquals(mongoClientManager.database, mongoCollection.getNamespace().getDatabaseName());
         assertEquals("test", mongoCollection.getNamespace().getCollectionName());
     }
 
     @Test
     void testGetReactiveCollection_withDocumentClass() {
-        com.mongodb.reactivestreams.client.MongoCollection<TestClass> mongoCollection = mongoClientManager.getReactiveCollection("test", TestClass.class);
+        com.mongodb.reactivestreams.client.MongoCollection<TestClass> mongoCollection =
+                mongoClientManager.getReactiveCollection("test", TestClass.class);
         assertEquals(mongoClientManager.database, mongoCollection.getNamespace().getDatabaseName());
         assertEquals("test", mongoCollection.getNamespace().getCollectionName());
         assertTrue(mongoCollection.getDocumentClass().isAssignableFrom(TestClass.class));

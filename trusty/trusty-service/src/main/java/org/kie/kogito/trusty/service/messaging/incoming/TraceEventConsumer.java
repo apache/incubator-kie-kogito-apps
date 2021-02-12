@@ -16,12 +16,10 @@
 package org.kie.kogito.trusty.service.messaging.incoming;
 
 import java.util.concurrent.CompletionStage;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
@@ -30,6 +28,11 @@ import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.messaging.BaseEventConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.cloudevents.CloudEvent;
 
 @ApplicationScoped
 public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
@@ -58,7 +61,8 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
         TraceEventType traceEventType = payload.getHeader().getType();
 
         if (traceEventType == TraceEventType.DMN) {
-            service.processDecision(cloudEvent.getId(), payload.getHeader().getResourceId().getServiceUrl(), TraceEventConverter.toDecision(payload, cloudEvent.getSource().toString()));
+            service.processDecision(cloudEvent.getId(), payload.getHeader().getResourceId().getServiceUrl(),
+                    TraceEventConverter.toDecision(payload, cloudEvent.getSource().toString()));
         } else {
             LOG.error("Unsupported TraceEvent type {}", traceEventType);
         }

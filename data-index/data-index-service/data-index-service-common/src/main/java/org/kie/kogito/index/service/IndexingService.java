@@ -15,14 +15,20 @@
  */
 package org.kie.kogito.index.service;
 
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.index.Constants.ID;
+import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.Constants.LAST_UPDATE;
+import static org.kie.kogito.index.Constants.PROCESS_ID;
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.NodeInstance;
@@ -32,14 +38,9 @@ import org.kie.kogito.persistence.api.Storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.index.Constants.ID;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.Constants.LAST_UPDATE;
-import static org.kie.kogito.index.Constants.PROCESS_ID;
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @ApplicationScoped
 public class IndexingService {
@@ -70,7 +71,7 @@ public class IndexingService {
         String processId = json.remove(PROCESS_ID).asText();
         Storage<String, ObjectNode> cache = manager.getDomainModelCache(processId);
         if (cache == null) {
-//          Unknown process type, ignore
+            //          Unknown process type, ignore
             LOGGER.debug("Ignoring Kogito cloud event for unknown process: {}", processId);
             return;
         }
@@ -84,7 +85,8 @@ public class IndexingService {
             builder.setAll(json);
         } else {
             copyAllEventData(json, processInstanceId, model, builder);
-            ObjectNode kogito = indexKogitoDomain((ObjectNode) json.get(KOGITO_DOMAIN_ATTRIBUTE), (ObjectNode) model.get(KOGITO_DOMAIN_ATTRIBUTE));
+            ObjectNode kogito = indexKogitoDomain((ObjectNode) json.get(KOGITO_DOMAIN_ATTRIBUTE),
+                    (ObjectNode) model.get(KOGITO_DOMAIN_ATTRIBUTE));
             builder.set(KOGITO_DOMAIN_ATTRIBUTE, kogito);
         }
         cache.put(processInstanceId, builder);
@@ -113,13 +115,15 @@ public class IndexingService {
 
         ArrayNode indexPIArray = (ArrayNode) kogitoEvent.get(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE);
         if (indexPIArray != null) {
-            kogitoBuilder.set(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE, copyToArray(kogitoCache.get(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE), indexPIArray));
+            kogitoBuilder.set(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE,
+                    copyToArray(kogitoCache.get(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE), indexPIArray));
             kogitoBuilder.set(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE, kogitoCache.get(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE));
         }
 
         ArrayNode indexTIArray = (ArrayNode) kogitoEvent.get(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE);
         if (indexTIArray != null) {
-            kogitoBuilder.set(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE, copyToArray(kogitoCache.get(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE), indexTIArray));
+            kogitoBuilder.set(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE,
+                    copyToArray(kogitoCache.get(USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE), indexTIArray));
             kogitoBuilder.set(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE, kogitoCache.get(PROCESS_INSTANCES_DOMAIN_ATTRIBUTE));
         }
 

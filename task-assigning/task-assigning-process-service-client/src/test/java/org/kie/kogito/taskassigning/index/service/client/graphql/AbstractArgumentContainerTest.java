@@ -15,14 +15,15 @@
  */
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.fasterxml.jackson.databind.JsonNode;
 
 abstract class AbstractArgumentContainerTest<T extends ArgumentContainer> {
 

@@ -15,14 +15,14 @@
  */
 package org.kie.kogito.taskassigning.messaging;
 
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 class ReactiveMessagingEventConsumerTest {
 

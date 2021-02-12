@@ -34,7 +34,8 @@ public class ModelConstants {
      * Planning user is defined user for avoid breaking hard constraints. When no user is found that met the task required
      * potential owners set, or the required skills set, etc, the PLANNING_USER is assigned.
      */
-    public static final User PLANNING_USER = new ImmutableUser(PLANNING_USER_ID, true, Collections.emptySet(), Collections.emptyMap());
+    public static final User PLANNING_USER =
+            new ImmutableUser(PLANNING_USER_ID, true, Collections.emptySet(), Collections.emptyMap());
 
     public static final Predicate<String> IS_PLANNING_USER = entityId -> PLANNING_USER.getId().equals(entityId);
 }

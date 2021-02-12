@@ -16,16 +16,16 @@
 
 package org.kie.kogito.persistence.infinispan.cache;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.persistence.api.StorageService;
-
 import static org.kie.kogito.persistence.infinispan.Constants.INFINISPAN_STORAGE;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.persistence.api.StorageService;
 
 class InfinispanCacheShutdownObserverTest {
 

@@ -15,6 +15,12 @@
  */
 package org.kie.kogito.jobs.service.resource;
 
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -22,12 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.jobs.api.Job;
@@ -39,11 +39,13 @@ import org.kie.kogito.jobs.service.scheduler.impl.VertxTimerServiceScheduler;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)
@@ -173,7 +175,7 @@ class JobResourceIT {
     }
 
     @Test
-        //@Disabled("see https://issues.redhat.com/browse/KOGITO-1941")
+    //@Disabled("see https://issues.redhat.com/browse/KOGITO-1941")
     void cancelRunningPeriodicJobTest() throws Exception {
         final String id = UUID.randomUUID().toString();
         int timeMillis = 1000;

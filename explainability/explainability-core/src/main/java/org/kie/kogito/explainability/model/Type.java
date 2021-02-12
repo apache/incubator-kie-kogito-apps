@@ -102,7 +102,8 @@ public enum Type {
             if (value.getUnderlyingObject() instanceof ByteBuffer) {
                 ByteBuffer currentBuffer = (ByteBuffer) value.getUnderlyingObject();
                 byte[] copy = new byte[currentBuffer.array().length];
-                int maxPerturbationSize = Math.min(copy.length, Math.max((int) (copy.length * 0.5), perturbationContext.getNoOfPerturbations()));
+                int maxPerturbationSize =
+                        Math.min(copy.length, Math.max((int) (copy.length * 0.5), perturbationContext.getNoOfPerturbations()));
                 System.arraycopy(currentBuffer.array(), 0, copy, 0, currentBuffer.array().length);
                 int[] indexes = perturbationContext.getRandom().ints(0, copy.length)
                         .limit(maxPerturbationSize).toArray();
@@ -177,7 +178,8 @@ public enum Type {
             double max = DoubleStream.of(doubles).max().orElse(Double.MAX_VALUE);
 
             // feature scaling
-            List<Double> scaledValues = DoubleStream.of(doubles).map(d -> (d - min) / (max - min)).boxed().collect(Collectors.toList());
+            List<Double> scaledValues =
+                    DoubleStream.of(doubles).map(d -> (d - min) / (max - min)).boxed().collect(Collectors.toList());
             double scaledOriginalValue = scaledValues.remove(valueIndex); // extract the scaled original value (it must not appear in encoded values)
 
             // kernel based clustering
@@ -188,7 +190,7 @@ public enum Type {
             List<Double> encodedValues = clusteredValues.stream()
                     .map(d -> (Math.abs(d - threshold) < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
 
-            return encodedValues.stream().map(d -> new double[]{d}).collect(Collectors.toList());
+            return encodedValues.stream().map(d -> new double[] { d }).collect(Collectors.toList());
         }
 
         @Override
@@ -253,7 +255,7 @@ public enum Type {
             java.net.URI newURI;
             try {
                 newURI = new URI(scheme, host, path, fragment);
-                if (uri.equals(newURI)) {  // to avoid "unfortunate" cases where no URI parameter has been perturbed
+                if (uri.equals(newURI)) { // to avoid "unfortunate" cases where no URI parameter has been perturbed
                     newURI = java.net.URI.create("");
                 }
             } catch (URISyntaxException e) {
@@ -299,7 +301,8 @@ public enum Type {
 
         @Override
         public Value<?> randomValue(PerturbationContext perturbationContext) {
-            return new Value<>(LocalTime.of(perturbationContext.getRandom().nextInt(23), perturbationContext.getRandom().nextInt(59)));
+            return new Value<>(
+                    LocalTime.of(perturbationContext.getRandom().nextInt(23), perturbationContext.getRandom().nextInt(59)));
         }
     },
 
@@ -348,7 +351,8 @@ public enum Type {
             double[] vector = value.asVector();
             double[] values = Arrays.copyOf(vector, vector.length);
             if (values.length > 1) {
-                int maxPerturbationSize = Math.min(vector.length, Math.max((int) (vector.length * 0.5), perturbationContext.getNoOfPerturbations()));
+                int maxPerturbationSize = Math.min(vector.length,
+                        Math.max((int) (vector.length * 0.5), perturbationContext.getNoOfPerturbations()));
                 int[] indexes = perturbationContext.getRandom().ints(0, vector.length)
                         .limit(maxPerturbationSize).toArray();
                 for (int idx : indexes) {
@@ -382,7 +386,8 @@ public enum Type {
         public Value<?> drop(Value<?> value) {
             if (value.getUnderlyingObject() instanceof Feature) {
                 Feature underlyingObject = (Feature) value.getUnderlyingObject();
-                value = new Value<>(FeatureFactory.copyOf(underlyingObject, underlyingObject.getType().drop(underlyingObject.getValue())));
+                value = new Value<>(
+                        FeatureFactory.copyOf(underlyingObject, underlyingObject.getType().drop(underlyingObject.getValue())));
             } else {
                 value = new Value<>(null);
             }
@@ -448,7 +453,9 @@ public enum Type {
             List<List<double[]>> multiColumns = new LinkedList<>();
             for (Feature f : composite) {
                 int finalI = i;
-                List<double[]> subColumn = f.getType().encode(f.getValue(), Arrays.stream(values).map(v -> (List<Feature>) v.getUnderlyingObject()).map(l -> l.get(finalI).getValue()).toArray(Value<?>[]::new));
+                List<double[]> subColumn =
+                        f.getType().encode(f.getValue(), Arrays.stream(values).map(v -> (List<Feature>) v.getUnderlyingObject())
+                                .map(l -> l.get(finalI).getValue()).toArray(Value<?>[]::new));
                 multiColumns.add(subColumn);
                 i++;
             }
@@ -475,7 +482,7 @@ public enum Type {
             List<Object> values = new LinkedList<>();
             Type nestedType = types[perturbationContext.getRandom().nextInt(types.length - 1)];
             for (int i = 0; i < 5; i++) {
-                Feature f = new Feature("f_"+i,nestedType, nestedType.randomValue(perturbationContext));
+                Feature f = new Feature("f_" + i, nestedType, nestedType.randomValue(perturbationContext));
                 values.add(f);
             }
             return new Value<>(values);
@@ -548,7 +555,7 @@ public enum Type {
      * Perturb a {@code Value}. Implementations of this method should generate a new {@code Value} whose
      * {@code Value#getUnderlyingObject} should represent a perturbed/changed copy of the original value.
      *
-     * @param value               the value to perturb
+     * @param value the value to perturb
      * @param perturbationContext the context holding metadata about how perturbations should be performed
      * @return the perturbed value
      */

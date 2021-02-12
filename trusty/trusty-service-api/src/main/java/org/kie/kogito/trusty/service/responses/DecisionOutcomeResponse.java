@@ -45,7 +45,9 @@ public class DecisionOutcomeResponse {
     private DecisionOutcomeResponse() {
     }
 
-    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedVariableResponse outcomeResult, Collection<TypedVariableResponse> outcomeInputs, Collection<MessageResponse> messages, boolean hasErrors) {
+    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus,
+            TypedVariableResponse outcomeResult, Collection<TypedVariableResponse> outcomeInputs,
+            Collection<MessageResponse> messages, boolean hasErrors) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
         this.evaluationStatus = evaluationStatus;

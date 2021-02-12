@@ -15,6 +15,16 @@
  */
 package org.kie.kogito.index.graphql;
 
+import static graphql.schema.FieldCoordinates.coordinates;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLNonNull.nonNull;
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
+import static org.kie.kogito.index.graphql.GraphQLObjectTypeMapper.getTypeName;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +32,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+
+import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
+import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
+import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
+import org.kie.kogito.persistence.api.proto.DomainDescriptor;
+import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
@@ -32,23 +50,6 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
-import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
-import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
-import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
-import org.kie.kogito.persistence.api.proto.DomainDescriptor;
-import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static graphql.schema.FieldCoordinates.coordinates;
-import static graphql.schema.GraphQLArgument.newArgument;
-import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static graphql.schema.GraphQLNonNull.nonNull;
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-import static java.util.stream.Collectors.toSet;
-import static org.kie.kogito.index.graphql.GraphQLObjectTypeMapper.getTypeName;
 
 @ApplicationScoped
 public class GraphQLProtoSchemaMapper {
@@ -63,17 +64,22 @@ public class GraphQLProtoSchemaMapper {
         GraphQLSchema schema = schemaManager.getGraphQLSchema();
         schemaManager.transform(builder -> {
             builder.clearAdditionalTypes();
-            Map<String, DomainDescriptor> map = event.getAdditionalTypes().stream().collect(toMap(desc -> getTypeName(desc.getTypeName()), desc -> desc));
+            Map<String, DomainDescriptor> map =
+                    event.getAdditionalTypes().stream().collect(toMap(desc -> getTypeName(desc.getTypeName()), desc -> desc));
             Map<String, GraphQLType> additionalTypes = new ConcurrentHashMap<>();
-            GraphQLObjectType rootType = new GraphQLObjectTypeMapper(schema, additionalTypes, map).apply(event.getDomainDescriptor());
+            GraphQLObjectType rootType =
+                    new GraphQLObjectTypeMapper(schema, additionalTypes, map).apply(event.getDomainDescriptor());
             additionalTypes.put(rootType.getName(), rootType);
-            GraphQLInputObjectType whereArgumentType = new GraphQLInputObjectTypeMapper(schema, additionalTypes).apply(rootType);
+            GraphQLInputObjectType whereArgumentType =
+                    new GraphQLInputObjectTypeMapper(schema, additionalTypes).apply(rootType);
             additionalTypes.put(whereArgumentType.getName(), whereArgumentType);
             GraphQLInputObjectType orderByType = new GraphQLOrderByTypeMapper(schema, additionalTypes).apply(rootType);
             additionalTypes.put(orderByType.getName(), orderByType);
             LOGGER.debug("New GraphQL types: {}", additionalTypes.keySet());
             Set<GraphQLType> newTypes = additionalTypes.entrySet().stream().map(entry -> entry.getValue()).collect(toSet());
-            newTypes.addAll(schema.getAdditionalTypes().stream().filter(type -> additionalTypes.containsKey(((GraphQLNamedType)type).getName()) == false).collect(toSet()));
+            newTypes.addAll(schema.getAdditionalTypes().stream()
+                    .filter(type -> additionalTypes.containsKey(((GraphQLNamedType) type).getName()) == false)
+                    .collect(toSet()));
             builder.additionalTypes(newTypes);
 
             GraphQLObjectType query = schema.getQueryType();
@@ -82,15 +88,18 @@ public class GraphQLProtoSchemaMapper {
             query = query.transform(qBuilder -> {
                 if (qBuilder.hasField(rootType.getName())) {
                     qBuilder.clearFields();
-                    qBuilder.fields(schema.getQueryType().getFieldDefinitions().stream().filter(field -> rootType.getName().equals(field.getName()) == false).collect(toList()));
+                    qBuilder.fields(schema.getQueryType().getFieldDefinitions().stream()
+                            .filter(field -> rootType.getName().equals(field.getName()) == false).collect(toList()));
                 }
 
                 GraphQLQueryParserRegistry.get().registerParser(whereArgumentType);
 
                 GraphQLArgument where = newArgument().name("where").type(whereArgumentType).build();
                 GraphQLArgument orderBy = newArgument().name("orderBy").type(orderByType).build();
-                GraphQLArgument pagination = newArgument().name("pagination").type(new GraphQLTypeReference("Pagination")).build();
-                qBuilder.field(newFieldDefinition().name(rootType.getName()).type(GraphQLList.list(rootType)).arguments(asList(where, orderBy, pagination)));
+                GraphQLArgument pagination =
+                        newArgument().name("pagination").type(new GraphQLTypeReference("Pagination")).build();
+                qBuilder.field(newFieldDefinition().name(rootType.getName()).type(GraphQLList.list(rootType))
+                        .arguments(asList(where, orderBy, pagination)));
             });
             builder.query(query);
 
@@ -102,9 +111,12 @@ public class GraphQLProtoSchemaMapper {
             builder.subscription(subscription);
 
             GraphQLCodeRegistry registry = schema.getCodeRegistry().transform(codeBuilder -> {
-                codeBuilder.dataFetcher(coordinates("Query", rootType.getName()), schemaManager.getDomainModelDataFetcher(event.getProcessId()));
-                codeBuilder.dataFetcher(coordinates("Subscription", rootType.getName() + "Added"), schemaManager.getDomainModelAddedDataFetcher(event.getProcessId()));
-                codeBuilder.dataFetcher(coordinates("Subscription", rootType.getName() + "Updated"), schemaManager.getDomainModelUpdatedDataFetcher(event.getProcessId()));
+                codeBuilder.dataFetcher(coordinates("Query", rootType.getName()),
+                        schemaManager.getDomainModelDataFetcher(event.getProcessId()));
+                codeBuilder.dataFetcher(coordinates("Subscription", rootType.getName() + "Added"),
+                        schemaManager.getDomainModelAddedDataFetcher(event.getProcessId()));
+                codeBuilder.dataFetcher(coordinates("Subscription", rootType.getName() + "Updated"),
+                        schemaManager.getDomainModelUpdatedDataFetcher(event.getProcessId()));
             });
 
             builder.codeRegistry(registry);

@@ -32,8 +32,10 @@ public class ProtostreamProducer {
     @Produces
     FileDescriptorSource kogitoTypesDescriptor() throws IOException {
         FileDescriptorSource source = new FileDescriptorSource();
-        source.addProtoFile(KOGITO_INDEX_PROTO, Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/kogito-index.proto"));
-        source.addProtoFile(KOGITO_TYPES_PROTO, Thread.currentThread().getContextClassLoader().getResourceAsStream("kogito-types.proto"));
+        source.addProtoFile(KOGITO_INDEX_PROTO,
+                Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/kogito-index.proto"));
+        source.addProtoFile(KOGITO_TYPES_PROTO,
+                Thread.currentThread().getContextClassLoader().getResourceAsStream("kogito-types.proto"));
         return source;
     }
 }

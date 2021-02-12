@@ -15,6 +15,11 @@
  */
 package org.kie.kogito.explainability.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -29,11 +34,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class FeatureFactoryTest {
 

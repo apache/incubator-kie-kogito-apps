@@ -15,6 +15,15 @@
  */
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTaskAssignment;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
+import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtilTest.assertTaskWasReleased;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +37,6 @@ import org.kie.kogito.taskassigning.core.model.User;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.optaplanner.core.api.score.director.ScoreDirector;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTaskAssignment;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
-import static org.kie.kogito.taskassigning.core.model.solver.realtime.ProblemFactChangeUtilTest.assertTaskWasReleased;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RemoveUserProblemFactChangeTest {
@@ -80,9 +80,9 @@ class RemoveUserProblemFactChangeTest {
     @Test
     void doChange() {
         List<TaskAssignment> workingUserTasks = Arrays.asList(mockTaskAssignment(TASK_ID1, true),
-                                                              mockTaskAssignment(TASK_ID2, true),
-                                                              mockTaskAssignment(TASK_ID3, false),
-                                                              mockTaskAssignment(TASK_ID4, false));
+                mockTaskAssignment(TASK_ID2, true),
+                mockTaskAssignment(TASK_ID3, false),
+                mockTaskAssignment(TASK_ID4, false));
 
         User workingUser = mockUser(USER_ID_1, workingUserTasks);
         workingUser.setEnabled(true);

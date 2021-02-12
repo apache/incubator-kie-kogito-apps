@@ -16,22 +16,24 @@
 
 package org.kie.kogito.jitexecutor.dmn.api;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
+
 import java.io.IOException;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
 import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.containsString;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
 
 @QuarkusTest
 public class SchemaResourceTest {
 
     @Test
     public void test() throws IOException {
-        final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
+        final String MODEL =
+                new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
         given()
                 .contentType(ContentType.XML)
                 .body(MODEL)

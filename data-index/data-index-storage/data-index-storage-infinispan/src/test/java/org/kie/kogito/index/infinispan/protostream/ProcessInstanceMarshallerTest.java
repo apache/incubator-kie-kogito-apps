@@ -16,21 +16,6 @@
 
 package org.kie.kogito.index.infinispan.protostream;
 
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-
-import org.infinispan.protostream.MessageMarshaller;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.model.Milestone;
-import org.kie.kogito.index.model.NodeInstance;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.ProcessInstanceError;
-import org.kie.kogito.index.model.ProcessInstanceState;
-import org.mockito.InOrder;
-
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +43,21 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+
+import org.infinispan.protostream.MessageMarshaller;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.model.Milestone;
+import org.kie.kogito.index.model.NodeInstance;
+import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.index.model.ProcessInstanceError;
+import org.kie.kogito.index.model.ProcessInstanceState;
+import org.mockito.InOrder;
+
 class ProcessInstanceMarshallerTest {
 
     @Test
@@ -78,7 +78,8 @@ class ProcessInstanceMarshallerTest {
         when(reader.readString(PARENT_PROCESS_INSTANCE_ID)).thenReturn("parentProcessInstanceId");
         when(reader.readString(PROCESS_NAME)).thenReturn("processName");
         when(reader.readObject(ERROR, ProcessInstanceError.class)).thenReturn(null);
-        when(reader.readCollection(eq(ADDONS), any(), eq(String.class))).thenReturn(new HashSet<>(singleton("process-management")));
+        when(reader.readCollection(eq(ADDONS), any(), eq(String.class)))
+                .thenReturn(new HashSet<>(singleton("process-management")));
         when(reader.readDate(LAST_UPDATE)).thenReturn(now);
         when(reader.readString(BUSINESS_KEY)).thenReturn("businessKey");
         when(reader.readCollection(eq(MILESTONES), any(), eq(Milestone.class))).thenReturn(new ArrayList<>());

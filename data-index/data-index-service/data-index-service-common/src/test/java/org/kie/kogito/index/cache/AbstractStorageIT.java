@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.index.cache;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.index.TestUtils.getProcessInstance;
+
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -27,9 +30,6 @@ import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.persistence.api.Storage;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.TestUtils.getProcessInstance;
 
 abstract class AbstractStorageIT {
 
@@ -44,7 +44,8 @@ abstract class AbstractStorageIT {
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectCreatedListener(pi -> cf.complete(pi));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
+        cache.put(processInstanceId,
+                getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
 
         ProcessInstance pi = cf.get(1, TimeUnit.MINUTES);
         assertThat(pi).hasFieldOrPropertyWithValue("id", processInstanceId).hasFieldOrPropertyWithValue("processId", processId);
@@ -58,11 +59,14 @@ abstract class AbstractStorageIT {
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectUpdatedListener(pi -> cf.complete(pi));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
+        cache.put(processInstanceId,
+                getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
+        cache.put(processInstanceId,
+                getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
 
         ProcessInstance pi = cf.get(1, TimeUnit.MINUTES);
-        assertThat(pi).hasFieldOrPropertyWithValue("id", processInstanceId).hasFieldOrPropertyWithValue("state", ProcessInstanceState.COMPLETED.ordinal());
+        assertThat(pi).hasFieldOrPropertyWithValue("id", processInstanceId).hasFieldOrPropertyWithValue("state",
+                ProcessInstanceState.COMPLETED.ordinal());
     }
 
     @Test
@@ -73,7 +77,8 @@ abstract class AbstractStorageIT {
         CompletableFuture<String> cf = new CompletableFuture<>();
         Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
         cache.addObjectRemovedListener(id -> cf.complete(id));
-        cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
+        cache.put(processInstanceId,
+                getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.remove(processInstanceId);
 
         String id = cf.get(1, TimeUnit.MINUTES);

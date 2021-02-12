@@ -15,33 +15,38 @@
  */
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import java.util.Iterator;
-import java.util.stream.Stream;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
-import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.DESCRIPTION;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.NAME;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STARTED;
 
+import java.util.Iterator;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
+import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 class UserTaskInstancesQueryBuilderTest {
 
     private static final StringArgument NAME_ARGUMENT = ArgumentFactory.newStringEqual("nameValue");
     private static final StringArgument DESCRIPTION_ARGUMENT = ArgumentFactory.newStringEqual("descriptionValue");
-    private static final DateArgument STARTED_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-02T07:54:56.883Z"));
+    private static final DateArgument STARTED_ARGUMENT =
+            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-02T07:54:56.883Z"));
     private static final int OFFSET = 1;
     private static final int LIMIT = 2;
 
-    private static final String QUERY_HEADER_WHERE = "query UserTaskInstances($where: UserTaskInstanceArgument){UserTaskInstances(where: $where)";
-    private static final String QUERY_HEADER_WHERE_ORDER_BY = "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy){UserTaskInstances(where: $where, orderBy: $orderBy)";
-    private static final String QUERY_HEADER_WHERE_ORDER_BY_PAGINATION = "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy, $pagination: Pagination){UserTaskInstances(where: $where, orderBy: $orderBy, pagination: $pagination)";
+    private static final String QUERY_HEADER_WHERE =
+            "query UserTaskInstances($where: UserTaskInstanceArgument){UserTaskInstances(where: $where)";
+    private static final String QUERY_HEADER_WHERE_ORDER_BY =
+            "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy){UserTaskInstances(where: $where, orderBy: $orderBy)";
+    private static final String QUERY_HEADER_WHERE_ORDER_BY_PAGINATION =
+            "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy, $pagination: Pagination){UserTaskInstances(where: $where, orderBy: $orderBy, pagination: $pagination)";
 
     private static final String QUERY_NODE_NAME = "query";
     private static final String WHERE_NODE_NAME = "where";
@@ -64,10 +69,10 @@ class UserTaskInstancesQueryBuilderTest {
         assertRequestedFields(queryRoot, NAME, DESCRIPTION, STARTED);
 
         assertVariable(queryRoot,
-                       WHERE_NODE_NAME,
-                       new NodeDef(NAME.getName(), NAME_ARGUMENT),
-                       new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
-                       new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
+                WHERE_NODE_NAME,
+                new NodeDef(NAME.getName(), NAME_ARGUMENT),
+                new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
+                new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
     }
 
     @Test
@@ -84,13 +89,13 @@ class UserTaskInstancesQueryBuilderTest {
         assertRequestedFields(queryRoot, NAME, DESCRIPTION, STARTED);
 
         assertVariable(queryRoot,
-                       WHERE_NODE_NAME,
-                       new NodeDef(NAME.getName(), NAME_ARGUMENT),
-                       new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
-                       new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
+                WHERE_NODE_NAME,
+                new NodeDef(NAME.getName(), NAME_ARGUMENT),
+                new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
+                new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
 
         assertVariable(queryRoot, ORDER_BY_NODE_NAME,
-                       new NodeDef(STARTED.getName(), OrderBy.ASC));
+                new NodeDef(STARTED.getName(), OrderBy.ASC));
     }
 
     @Test
@@ -108,18 +113,18 @@ class UserTaskInstancesQueryBuilderTest {
         assertRequestedFields(queryRoot, NAME, DESCRIPTION, STARTED);
 
         assertVariable(queryRoot,
-                       WHERE_NODE_NAME,
-                       new NodeDef(NAME.getName(), NAME_ARGUMENT),
-                       new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
-                       new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
+                WHERE_NODE_NAME,
+                new NodeDef(NAME.getName(), NAME_ARGUMENT),
+                new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
+                new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
 
         assertVariable(queryRoot, ORDER_BY_NODE_NAME,
-                       new NodeDef(STARTED.getName(), OrderBy.ASC));
+                new NodeDef(STARTED.getName(), OrderBy.ASC));
 
         assertVariable(queryRoot,
-                       PAGINATION_NODE_NAME,
-                       new NodeDef(OFFSET_NODE_NAME, IntNode.valueOf(OFFSET)),
-                       new NodeDef(LIMIT_NODE_NAME, IntNode.valueOf(LIMIT)));
+                PAGINATION_NODE_NAME,
+                new NodeDef(OFFSET_NODE_NAME, IntNode.valueOf(OFFSET)),
+                new NodeDef(LIMIT_NODE_NAME, IntNode.valueOf(LIMIT)));
     }
 
     private void assertQueryHeader(ObjectNode queryRootNode, String queryHeader) {

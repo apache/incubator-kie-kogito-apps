@@ -16,22 +16,24 @@
 
 package org.kie.kogito.index;
 
+import static org.kie.kogito.index.Constants.JOBS_STORAGE;
+import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
+import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
+import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.quarkus.runtime.Startup;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 
-import static org.kie.kogito.index.Constants.JOBS_STORAGE;
-import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
-import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_STORAGE;
-import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_STORAGE;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import io.quarkus.runtime.Startup;
 
 @ApplicationScoped
 @Startup
@@ -39,9 +41,9 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     @Inject
     StorageService cacheService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         //Force caches to be initialized at start up 
         getProcessInstancesCache();
         getUserTaskInstancesCache();

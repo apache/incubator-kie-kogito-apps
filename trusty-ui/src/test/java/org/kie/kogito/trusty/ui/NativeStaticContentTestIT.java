@@ -15,8 +15,9 @@
  */
 package org.kie.kogito.trusty.ui;
 
-import io.quarkus.test.junit.NativeImageTest;
 import org.junit.jupiter.api.Disabled;
+
+import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest
 @Disabled("https://issues.redhat.com/browse/KOGITO-4313 - Native tests are broken")

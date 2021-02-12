@@ -21,7 +21,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class KeycloakAuthenticationFilterProviderTest extends AbstractAuthenticationFilterProviderTest<KeycloakAuthenticationCredentials> {
+class KeycloakAuthenticationFilterProviderTest
+        extends AbstractAuthenticationFilterProviderTest<KeycloakAuthenticationCredentials> {
 
     private static final String SERVER_URL = "SERVER_URL";
     private static final String REALM = "REALM";

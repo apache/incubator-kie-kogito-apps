@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
-import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
-
 import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.ACTUAL_OWNER;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.COMPLETED;
@@ -30,6 +27,9 @@ import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTask
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STARTED;
 import static org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanceArgument.Field.STATE;
 
+import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
+import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
+
 class UserTaskInstanceArgumentTest extends AbstractArgumentContainerTest<UserTaskInstanceArgument> {
 
     private static final StringArgument DESCRIPTION_ARGUMENT = ArgumentFactory.newStringEqual("descriptionValue");
@@ -37,10 +37,13 @@ class UserTaskInstanceArgumentTest extends AbstractArgumentContainerTest<UserTas
     private static final StringArgument PRIORITY_ARGUMENT = ArgumentFactory.newStringEqual("priorityValue");
     private static final StringArgument PROCESS_ID_ARGUMENT = ArgumentFactory.newStringEqual("processIdValue");
     private static final StringArgument ACTUAL_OWNER_ARGUMENT = ArgumentFactory.newStringEqual("actualOwnerValue");
-    private static final DateArgument COMPLETED_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-01T07:54:56.883Z"));
-    private static final DateArgument STARTED_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-02T07:54:56.883Z"));
+    private static final DateArgument COMPLETED_ARGUMENT =
+            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-01T07:54:56.883Z"));
+    private static final DateArgument STARTED_ARGUMENT =
+            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-02T07:54:56.883Z"));
     private static final StringArgument REFERENCE_NAME_ARGUMENT = ArgumentFactory.newStringEqual("referenceNameValue");
-    private static final DateArgument LAST_UPDATE_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-03T07:54:56.883Z"));
+    private static final DateArgument LAST_UPDATE_ARGUMENT =
+            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-03T07:54:56.883Z"));
     private static final StringArgument STATE_ARGUMENT = ArgumentFactory.newStringEqual("stateValue");
 
     @Override

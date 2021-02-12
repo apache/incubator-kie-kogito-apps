@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.trusty.storage.infinispan.testfield;
 
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -22,13 +25,11 @@ import java.util.function.Function;
 
 import org.infinispan.protostream.MessageMarshaller;
 
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
-
 public class ListTestField<M, T> extends AbstractTestField<M, List<T>> {
     private final Class<T> elementClass;
 
-    public ListTestField(String fieldName, List<T> fieldValue, Function<M, List<T>> getter, BiConsumer<M, List<T>> setter, Class<T> elementClass) {
+    public ListTestField(String fieldName, List<T> fieldValue, Function<M, List<T>> getter, BiConsumer<M, List<T>> setter,
+            Class<T> elementClass) {
         super(fieldName, fieldValue, getter, setter);
         this.elementClass = elementClass;
     }

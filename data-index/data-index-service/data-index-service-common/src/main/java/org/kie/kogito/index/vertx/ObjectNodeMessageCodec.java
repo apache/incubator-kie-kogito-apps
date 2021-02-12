@@ -15,18 +15,20 @@
  */
 package org.kie.kogito.index.vertx;
 
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+
 import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.MessageCodec;
 import org.kie.kogito.index.json.DataIndexParsingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.MessageCodec;
 
 @ApplicationScoped
 public class ObjectNodeMessageCodec implements MessageCodec<ObjectNode, ObjectNode> {

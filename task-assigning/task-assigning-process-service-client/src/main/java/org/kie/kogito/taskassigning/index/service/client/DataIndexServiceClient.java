@@ -26,5 +26,6 @@ import org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanc
  */
 public interface DataIndexServiceClient extends Closeable {
 
-    List<UserTaskInstance> findTasks(List<String> state, ZonedDateTime startedAfter, String orderBy, boolean asc, int offset, int limit);
+    List<UserTaskInstance> findTasks(List<String> state, ZonedDateTime startedAfter, String orderBy, boolean asc, int offset,
+            int limit);
 }

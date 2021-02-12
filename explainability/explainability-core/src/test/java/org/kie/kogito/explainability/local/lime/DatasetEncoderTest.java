@@ -15,6 +15,11 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -29,11 +34,6 @@ import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatasetEncoderTest {
 
@@ -178,7 +178,8 @@ class DatasetEncoderTest {
             outputs.add(new Output("o", Type.NUMBER, new Value<>(i % 2 == 0 ? 1d : 0d), 1d));
         }
         Output originalOutput = new Output("o", Type.BOOLEAN, new Value<>(1d), 1d);
-        DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, outputs, originalInput.getFeatures(), originalOutput);
+        DatasetEncoder datasetEncoder =
+                new DatasetEncoder(perturbedInputs, outputs, originalInput.getFeatures(), originalOutput);
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
         assertNotNull(trainingSet);
         assertEquals(10, trainingSet.size());

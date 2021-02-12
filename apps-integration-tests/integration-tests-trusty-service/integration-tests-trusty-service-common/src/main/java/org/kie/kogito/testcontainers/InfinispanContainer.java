@@ -15,10 +15,10 @@
  */
 package org.kie.kogito.testcontainers;
 
+import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
+
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-
-import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 
 public class InfinispanContainer extends GenericContainer<InfinispanContainer> {
 

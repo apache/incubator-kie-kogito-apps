@@ -15,10 +15,11 @@
  */
 package org.kie.kogito.task.console;
 
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 class VertxRouterTest {

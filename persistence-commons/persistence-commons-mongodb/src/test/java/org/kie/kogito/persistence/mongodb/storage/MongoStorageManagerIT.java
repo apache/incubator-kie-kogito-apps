@@ -16,19 +16,20 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
+
 import javax.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.factory.StorageQualifier;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

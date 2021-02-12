@@ -15,6 +15,10 @@
  */
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -23,14 +27,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.infinispan.protostream.MessageMarshaller;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockingDetails;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 abstract class MarshallerTestTemplate<T> {
 
@@ -91,7 +92,9 @@ abstract class MarshallerTestTemplate<T> {
                     : field.getName();
 
             long matches = testFieldNameList.stream().filter(n -> n.equals(serializedFieldName)).count();
-            assertEquals(1, matches, () -> String.format("Field \"%s\" of %s model is not handled properly in the corresponding test", serializedFieldName, modelClass.getSimpleName()));
+            assertEquals(1, matches,
+                    () -> String.format("Field \"%s\" of %s model is not handled properly in the corresponding test",
+                            serializedFieldName, modelClass.getSimpleName()));
         });
     }
 
@@ -101,7 +104,6 @@ abstract class MarshallerTestTemplate<T> {
         }
         return Stream.concat(
                 Arrays.stream(type.getDeclaredFields()).filter(f -> (f.getModifiers() & Modifier.STATIC) == 0),
-                streamAllNonStaticFields(type.getSuperclass())
-        );
+                streamAllNonStaticFields(type.getSuperclass()));
     }
 }

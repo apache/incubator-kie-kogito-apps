@@ -15,10 +15,15 @@
  */
 package org.kie.kogito.trusty.storage.infinispan;
 
+import static org.kie.kogito.trusty.storage.api.model.TypedVariable.COMPONENTS_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.TypedVariable.KIND_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.TypedVariable.NAME_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.TypedVariable.TYPE_REF_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.TypedVariable.VALUE_FIELD;
+
 import java.util.Collections;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.tracing.typedvalue.TypedValue.Kind;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
@@ -28,11 +33,7 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.EnumTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.JsonNodeTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
-import static org.kie.kogito.trusty.storage.api.model.TypedVariable.COMPONENTS_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.TypedVariable.KIND_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.TypedVariable.NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.TypedVariable.TYPE_REF_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.TypedVariable.VALUE_FIELD;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TypedVariableMarshallerTest extends MarshallerTestTemplate<TypedVariable> {
 
@@ -41,8 +42,8 @@ public class TypedVariableMarshallerTest extends MarshallerTestTemplate<TypedVar
             new StringTestField<>(NAME_FIELD, "testName", TypedVariable::getName, TypedVariable::setName),
             new StringTestField<>(TYPE_REF_FIELD, "testTypeRef", TypedVariable::getTypeRef, TypedVariable::setTypeRef),
             new JsonNodeTestField<>(VALUE_FIELD, null, TypedVariable::getValue, TypedVariable::setValue),
-            new CollectionTestField<>(COMPONENTS_FIELD, Collections.emptyList(), TypedVariable::getComponents, TypedVariable::setComponents, TypedVariable.class)
-    );
+            new CollectionTestField<>(COMPONENTS_FIELD, Collections.emptyList(), TypedVariable::getComponents,
+                    TypedVariable::setComponents, TypedVariable.class));
 
     public TypedVariableMarshallerTest() {
         super(TypedVariable.class);

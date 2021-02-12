@@ -16,16 +16,18 @@
 
 package org.kie.kogito.index.service;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.common.ResourceArg;
-import io.quarkus.test.junit.QuarkusTest;
+import static org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource.KOGITO_OIDC_TENANTS;
+
 import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
 import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 
-import static org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource.KOGITO_OIDC_TENANTS;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.ResourceArg;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@QuarkusTestResource(value = KeycloakQuarkusTestResource.class, initArgs = {@ResourceArg(name = KOGITO_OIDC_TENANTS, value = "web-app-tenant")})
+@QuarkusTestResource(value = KeycloakQuarkusTestResource.class,
+        initArgs = { @ResourceArg(name = KOGITO_OIDC_TENANTS, value = "web-app-tenant") })
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)
 class InfinispanKeycloakIntegrationIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
 

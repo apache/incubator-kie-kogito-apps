@@ -54,12 +54,14 @@ public class Saliency {
 
     public List<FeatureImportance> getPositiveFeatures(int k) {
         return perFeatureImportance.stream().sorted((f0, f1) -> Double.compare(
-                Math.abs(f1.getScore()), Math.abs(f0.getScore()))).filter(f -> f.getScore() >= 0).limit(k).collect(Collectors.toList());
+                Math.abs(f1.getScore()), Math.abs(f0.getScore()))).filter(f -> f.getScore() >= 0).limit(k)
+                .collect(Collectors.toList());
     }
 
     public List<FeatureImportance> getNegativeFeatures(int k) {
         return perFeatureImportance.stream().sorted((f0, f1) -> Double.compare(
-                Math.abs(f1.getScore()), Math.abs(f0.getScore()))).filter(f -> f.getScore() < 0).limit(k).collect(Collectors.toList());
+                Math.abs(f1.getScore()), Math.abs(f0.getScore()))).filter(f -> f.getScore() < 0).limit(k)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -89,10 +91,13 @@ public class Saliency {
         // calculate mean feature importance
         for (Map.Entry<Output, List<Saliency>> saliencyEntry : flatten.entrySet()) {
             List<FeatureImportance> result = new ArrayList<>();
-            List<FeatureImportance> fis = saliencyEntry.getValue().stream().map(s -> s.perFeatureImportance).flatMap(Collection::stream).collect(Collectors.toList());
-            Map<Feature, List<FeatureImportance>> collect = fis.stream().collect(Collectors.groupingBy(fi -> FeatureFactory.copyOf(fi.getFeature(), new Value<>(null))));
+            List<FeatureImportance> fis = saliencyEntry.getValue().stream().map(s -> s.perFeatureImportance)
+                    .flatMap(Collection::stream).collect(Collectors.toList());
+            Map<Feature, List<FeatureImportance>> collect = fis.stream()
+                    .collect(Collectors.groupingBy(fi -> FeatureFactory.copyOf(fi.getFeature(), new Value<>(null))));
             for (Map.Entry<Feature, List<FeatureImportance>> entry : collect.entrySet()) {
-                double meanScore = entry.getValue().stream().map(FeatureImportance::getScore).flatMapToDouble(DoubleStream::of).average().orElse(0);
+                double meanScore = entry.getValue().stream().map(FeatureImportance::getScore).flatMapToDouble(DoubleStream::of)
+                        .average().orElse(0);
                 result.add(new FeatureImportance(entry.getKey(), meanScore));
             }
             result.sort(Comparator.comparing(f -> f.getFeature().getName()));

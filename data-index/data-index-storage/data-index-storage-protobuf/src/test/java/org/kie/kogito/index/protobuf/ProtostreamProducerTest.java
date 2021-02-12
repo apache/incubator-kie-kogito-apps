@@ -16,6 +16,11 @@
 
 package org.kie.kogito.index.protobuf;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.kie.kogito.index.protobuf.ProtostreamProducer.KOGITO_INDEX_PROTO;
+import static org.kie.kogito.index.protobuf.ProtostreamProducer.KOGITO_TYPES_PROTO;
+
 import java.io.IOException;
 
 import org.infinispan.protostream.FileDescriptorSource;
@@ -23,11 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.kie.kogito.index.protobuf.ProtostreamProducer.KOGITO_INDEX_PROTO;
-import static org.kie.kogito.index.protobuf.ProtostreamProducer.KOGITO_TYPES_PROTO;
 
 @ExtendWith(MockitoExtension.class)
 class ProtostreamProducerTest {

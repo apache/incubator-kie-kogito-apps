@@ -15,6 +15,18 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
@@ -34,23 +46,12 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.utils.DataUtils;
 
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class PrequalificationDmnPDPExplainerTest {
 
     @Test
     void testPrequalificationDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/Prequalification-1.dmn")));
+        DMNRuntime dmnRuntime = DMNKogito
+                .createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/Prequalification-1.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String NS = "http://www.trisotech.com/definitions/_f31e1f8e-d4ce-4a3a-ac3b-747efa6b3401";
@@ -91,7 +92,8 @@ class PrequalificationDmnPDPExplainerTest {
 
         Random random = new Random();
         for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(),
+                    new PerturbationContext(random, predictionInput.getFeatures().size()));
             predictionInputs.add(new PredictionInput(perturbFeatures));
         }
 

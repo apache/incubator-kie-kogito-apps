@@ -15,6 +15,17 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
@@ -34,28 +45,17 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.utils.DataUtils;
 
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class TrafficViolationDmnPDPExplainerTest {
 
     @Test
     void testTrafficViolationDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
+        DMNRuntime dmnRuntime = DMNKogito
+                .createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/TrafficViolation.dmn")));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String TRAFFIC_VIOLATION_NS = "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF";
         final String TRAFFIC_VIOLATION_NAME = "Traffic Violation";
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, TRAFFIC_VIOLATION_NS, TRAFFIC_VIOLATION_NAME);
-
 
         PredictionProvider model = new DecisionModelWrapper(decisionModel);
         List<PredictionInput> inputs = getInputs();
@@ -91,7 +91,8 @@ class TrafficViolationDmnPDPExplainerTest {
 
         Random random = new Random();
         for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(),
+                    new PerturbationContext(random, predictionInput.getFeatures().size()));
             predictionInputs.add(new PredictionInput(perturbFeatures));
         }
 

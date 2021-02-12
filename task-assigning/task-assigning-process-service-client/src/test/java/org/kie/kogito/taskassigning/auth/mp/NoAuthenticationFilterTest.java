@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.taskassigning.auth.mp;
 
+import static org.mockito.Mockito.verifyNoInteractions;
+
 import java.io.IOException;
 
 import javax.ws.rs.client.ClientRequestContext;
@@ -23,8 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class NoAuthenticationFilterTest {

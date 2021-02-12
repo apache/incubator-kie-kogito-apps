@@ -15,6 +15,11 @@
  */
 package org.kie.kogito.index.graphql;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,8 +36,23 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
+import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
+import org.kie.kogito.index.json.DataIndexParsingException;
+import org.kie.kogito.index.model.Job;
+import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.index.model.ProcessInstanceState;
+import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.Query;
+import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLInputObjectType;
@@ -48,24 +68,6 @@ import io.vertx.axle.core.eventbus.EventBus;
 import io.vertx.axle.core.eventbus.Message;
 import io.vertx.axle.core.eventbus.MessageConsumer;
 import io.vertx.axle.core.eventbus.MessageProducer;
-import org.kie.kogito.index.DataIndexStorageService;
-import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
-import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
-import org.kie.kogito.index.json.DataIndexParsingException;
-import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.ProcessInstanceState;
-import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.query.Query;
-import org.reactivestreams.Publisher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
-import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
 
 @ApplicationScoped
 public class GraphQLSchemaManager {
@@ -94,8 +96,7 @@ public class GraphQLSchemaManager {
                 (GraphQLInputObjectType) schema.getType("ProcessInstanceArgument"),
                 (GraphQLInputObjectType) schema.getType("UserTaskInstanceArgument"),
                 (GraphQLInputObjectType) schema.getType("JobArgument"),
-                (GraphQLInputObjectType) schema.getType("KogitoMetadataArgument")
-        );
+                (GraphQLInputObjectType) schema.getType("KogitoMetadataArgument"));
     }
 
     @PreDestroy
@@ -167,8 +168,9 @@ public class GraphQLSchemaManager {
     private String getServiceUrl(String endpoint, String processId) {
         LOGGER.debug("Process endpoint {}", endpoint);
         if (endpoint.startsWith("/")) {
-            LOGGER.warn("Process '{}' endpoint '{}', does not contain full URL, please review the kogito.service.url system property to point the public URL for this runtime.",
-                        processId, endpoint);
+            LOGGER.warn(
+                    "Process '{}' endpoint '{}', does not contain full URL, please review the kogito.service.url system property to point the public URL for this runtime.",
+                    processId, endpoint);
         }
         String context = getContext(processId);
         LOGGER.debug("Process context {}", context);
@@ -263,11 +265,13 @@ public class GraphQLSchemaManager {
     }
 
     private DataFetcher<Publisher<ObjectNode>> objectCreatedPublisher(String address, Supplier<Storage> cache) {
-        return env -> createPublisher(address, producer -> cache.get().addObjectCreatedListener(ut -> producer.write(getObjectMapper().convertValue(ut, ObjectNode.class))));
+        return env -> createPublisher(address, producer -> cache.get()
+                .addObjectCreatedListener(ut -> producer.write(getObjectMapper().convertValue(ut, ObjectNode.class))));
     }
 
     private DataFetcher<Publisher<ObjectNode>> objectUpdatedPublisher(String address, Supplier<Storage> cache) {
-        return env -> createPublisher(address, producer -> cache.get().addObjectUpdatedListener(ut -> producer.write(getObjectMapper().convertValue(ut, ObjectNode.class))));
+        return env -> createPublisher(address, producer -> cache.get()
+                .addObjectUpdatedListener(ut -> producer.write(getObjectMapper().convertValue(ut, ObjectNode.class))));
     }
 
     private Publisher<ObjectNode> createPublisher(String address, Consumer<MessageProducer<ObjectNode>> consumer) {
@@ -288,11 +292,13 @@ public class GraphQLSchemaManager {
     }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelUpdatedDataFetcher(String processId) {
-        return env -> createPublisher(processId + "Updated", producer -> cacheService.getDomainModelCache(processId).addObjectUpdatedListener(producer::write));
+        return env -> createPublisher(processId + "Updated",
+                producer -> cacheService.getDomainModelCache(processId).addObjectUpdatedListener(producer::write));
     }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelAddedDataFetcher(String processId) {
-        return env -> createPublisher(processId + "Added", producer -> cacheService.getDomainModelCache(processId).addObjectCreatedListener(producer::write));
+        return env -> createPublisher(processId + "Added",
+                producer -> cacheService.getDomainModelCache(processId).addObjectCreatedListener(producer::write));
     }
 
     protected DataFetcher<Collection<ObjectNode>> getDomainModelDataFetcher(String processId) {

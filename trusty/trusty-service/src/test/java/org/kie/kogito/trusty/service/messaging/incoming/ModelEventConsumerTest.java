@@ -15,14 +15,6 @@
  */
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import org.eclipse.microprofile.reactive.messaging.Message;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.trusty.service.TrustyService;
-import org.kie.kogito.trusty.service.TrustyServiceTestUtils;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventWithoutDataJsonString;
@@ -35,6 +27,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.eclipse.microprofile.reactive.messaging.Message;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.service.TrustyServiceTestUtils;
+import org.kie.kogito.trusty.storage.api.model.Decision;
 
 class ModelEventConsumerTest {
 
@@ -69,7 +69,8 @@ class ModelEventConsumerTest {
     void testExceptionsAreCatched() {
         Message<String> message = mockMessage(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)));
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class), any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class),
+                any(Decision.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
     }
 
@@ -86,7 +87,7 @@ class ModelEventConsumerTest {
     }
 
     private void testNumberOfInvocations(final Message<String> message,
-                                         final int wantedNumberOfServiceInvocations) {
+            final int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
         verify(trustyService, times(wantedNumberOfServiceInvocations)).storeModel(any(), any(), any(), any(), any(), any());
         verify(message, times(1)).ack();

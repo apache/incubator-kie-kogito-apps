@@ -16,14 +16,15 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+
 import org.bson.Document;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Document> {
 

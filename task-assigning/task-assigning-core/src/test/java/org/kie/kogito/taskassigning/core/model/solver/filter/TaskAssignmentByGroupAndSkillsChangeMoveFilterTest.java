@@ -15,6 +15,13 @@
  */
 package org.kie.kogito.taskassigning.core.model.solver.filter;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockGroup;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTask;
+import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.stream.Stream;
 
@@ -29,13 +36,6 @@ import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.impl.heuristic.selector.move.generic.ChangeMove;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockGroup;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockTask;
-import static org.kie.kogito.taskassigning.core.model.TestUtil.mockUser;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class TaskAssignmentByGroupAndSkillsChangeMoveFilterTest {
 
@@ -69,25 +69,37 @@ class TaskAssignmentByGroupAndSkillsChangeMoveFilterTest {
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.emptySet()),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.emptySet()),
                                 mockUser(USER, false, Collections.emptyList(), Collections.emptySet())),
                         false),
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.emptySet()),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.emptySet()),
                                 mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
                         true),
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.singleton(SKILL)),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.singleton(SKILL)),
                                 mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
                         false),
 
                 Arguments.of(
                         mockChangeMove(
-                                mockTask(Collections.singletonList(mockUser(USER, true, Collections.emptyList(), Collections.emptySet())), Collections.singleton(SKILL)),
+                                mockTask(
+                                        Collections.singletonList(
+                                                mockUser(USER, true, Collections.emptyList(), Collections.emptySet())),
+                                        Collections.singleton(SKILL)),
                                 mockUser(USER, true, Collections.emptyList(), Collections.singleton(SKILL))),
                         true),
 
@@ -101,8 +113,7 @@ class TaskAssignmentByGroupAndSkillsChangeMoveFilterTest {
                         mockChangeMove(
                                 mockTask(Collections.singletonList(mockGroup(GROUP)), Collections.emptySet()),
                                 mockUser(USER, true, Collections.singletonList(mockGroup(GROUP)), Collections.emptySet())),
-                        true)
-        );
+                        true));
     }
 
     @SuppressWarnings("unchecked")

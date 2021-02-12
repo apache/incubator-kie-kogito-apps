@@ -15,6 +15,13 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
+import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,13 +48,6 @@ import org.kie.kogito.explainability.model.PredictionProviderMetadata;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
-
-import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PartialDependencePlotExplainerTest {
 
@@ -83,7 +83,8 @@ class PartialDependencePlotExplainerTest {
             random.setSeed(seed);
             PredictionProvider modelInfo = TestUtils.getSumSkipModel(0);
             PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
-            List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explainFromMetadata(modelInfo, getMetadata(random));
+            List<PartialDependenceGraph> pdps =
+                    partialDependencePlotProvider.explainFromMetadata(modelInfo, getMetadata(random));
             assertNotNull(pdps);
             for (PartialDependenceGraph pdp : pdps) {
                 assertNotNull(pdp.getFeature());
@@ -130,7 +131,7 @@ class PartialDependencePlotExplainerTest {
                     });
 
             Assertions.assertThrows(TimeoutException.class,
-                                    () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
+                    () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
 
         }
         Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
@@ -147,7 +148,7 @@ class PartialDependencePlotExplainerTest {
             Collection<Prediction> predictions = new ArrayList<>(3);
 
             List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
-                                         "huge donation for you!", "bitcoin for you");
+                    "huge donation for you!", "bitcoin for you");
             for (String text : texts) {
                 List<Feature> features = new ArrayList<>();
                 features.add(FeatureFactory.newFulltextFeature("text", text));

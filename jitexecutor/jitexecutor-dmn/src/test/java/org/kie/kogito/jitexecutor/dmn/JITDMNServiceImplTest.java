@@ -56,7 +56,8 @@ public class JITDMNServiceImplTest {
 
     @Test
     public void testExplainability() throws IOException {
-        String allTypesModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/allTypes.dmn")));
+        String allTypesModel =
+                new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/allTypes.dmn")));
 
         Map<String, Object> context = new HashMap<>();
         context.put("stringInput", "test");

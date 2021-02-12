@@ -15,16 +15,6 @@
  */
 package org.kie.kogito.trusty.service.messaging.incoming;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.kafka.KafkaClient;
-import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-import org.kie.kogito.trusty.service.TrustyService;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCloudEventJsonString;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +23,17 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.storage.api.model.Decision;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
@@ -52,7 +53,8 @@ public class TraceEventConsumerIT {
 
         String executionIdException = "idException";
         String executionIdNoException = "idNoException";
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException), any(String.class), any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException),
+                any(String.class), any(Decision.class));
         doNothing().when(trustyService).processDecision(eq(executionIdNoException), any(String.class), any(Decision.class));
 
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdException)),
@@ -61,6 +63,7 @@ public class TraceEventConsumerIT {
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(executionIdNoException)),
                 KafkaConstants.KOGITO_TRACING_TOPIC);
 
-        verify(trustyService, timeout(3000).times(2)).processDecision(any(String.class), any(String.class), any(Decision.class));
+        verify(trustyService, timeout(3000).times(2)).processDecision(any(String.class), any(String.class),
+                any(Decision.class));
     }
 }

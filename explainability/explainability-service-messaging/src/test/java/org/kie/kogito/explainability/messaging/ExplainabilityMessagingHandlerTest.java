@@ -16,14 +16,21 @@
 
 package org.kie.kogito.explainability.messaging;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cloudevents.jackson.JsonFormat;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,14 +43,9 @@ import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.cloudevents.jackson.JsonFormat;
 
 public class ExplainabilityMessagingHandlerTest {
 
@@ -96,7 +98,8 @@ public class ExplainabilityMessagingHandlerTest {
         return ExplainabilityResultDto.buildSucceeded(UUID.randomUUID().toString(), Collections.emptyMap());
     }
 
-    private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) throws InterruptedException, ExecutionException, TimeoutException {
+    private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations)
+            throws InterruptedException, ExecutionException, TimeoutException {
         handler.handleMessage(message)
                 .toCompletableFuture()
                 .get(1, TimeUnit.SECONDS);
@@ -107,6 +110,7 @@ public class ExplainabilityMessagingHandlerTest {
 
     private String buildCorrectExplainabilityRequestEvent() {
         ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
-        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
+        return ExplainabilityCloudEventBuilder.buildCloudEventJsonString(new ExplainabilityRequestDto("test",
+                "http://localhost:8080", modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
     }
 }

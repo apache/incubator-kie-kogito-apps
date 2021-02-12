@@ -15,10 +15,10 @@
  */
 package org.kie.kogito.taskassigning.core.model;
 
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
+
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.variable.InverseRelationShadowVariable;
-
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.PREVIOUS_ELEMENT;
 
 @PlanningEntity
 public abstract class ChainElement extends IdentifiableElement {

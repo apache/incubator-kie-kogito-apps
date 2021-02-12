@@ -24,7 +24,8 @@ public class DomainModelRegisteredEvent {
     private DomainDescriptor domainDescriptor;
     private List<DomainDescriptor> additionalTypes;
 
-    public DomainModelRegisteredEvent(String processId, DomainDescriptor domainDescriptor, List<DomainDescriptor> additionalTypes) {
+    public DomainModelRegisteredEvent(String processId, DomainDescriptor domainDescriptor,
+            List<DomainDescriptor> additionalTypes) {
         this.processId = processId;
         this.domainDescriptor = domainDescriptor;
         this.additionalTypes = additionalTypes;

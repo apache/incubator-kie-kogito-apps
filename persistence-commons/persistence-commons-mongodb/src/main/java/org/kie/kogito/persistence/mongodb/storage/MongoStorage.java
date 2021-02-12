@@ -16,25 +16,26 @@
 
 package org.kie.kogito.persistence.mongodb.storage;
 
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.in;
+import static java.util.Arrays.asList;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.watchCollection;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.ReplaceOptions;
 import org.bson.Document;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.query.MongoQuery;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.in;
-import static java.util.Arrays.asList;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.storage.StorageUtils.watchCollection;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.ReplaceOptions;
 
 public class MongoStorage<V, E> implements Storage<String, V> {
 
@@ -48,8 +49,9 @@ public class MongoStorage<V, E> implements Storage<String, V> {
 
     String rootType;
 
-    public MongoStorage(MongoCollection<E> mongoCollection, com.mongodb.reactivestreams.client.MongoCollection<E> reactiveMongoCollection,
-                        String rootType, MongoEntityMapper<V, E> mongoEntityMapper) {
+    public MongoStorage(MongoCollection<E> mongoCollection,
+            com.mongodb.reactivestreams.client.MongoCollection<E> reactiveMongoCollection,
+            String rootType, MongoEntityMapper<V, E> mongoEntityMapper) {
         this.mongoCollection = mongoCollection;
         this.rootType = rootType;
         this.mongoEntityMapper = mongoEntityMapper;
@@ -58,17 +60,20 @@ public class MongoStorage<V, E> implements Storage<String, V> {
 
     @Override
     public void addObjectCreatedListener(Consumer<V> consumer) {
-        watchCollection(this.reactiveMongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> consumer.accept(v), this.mongoEntityMapper);
+        watchCollection(this.reactiveMongoCollection, eq(OPERATION_TYPE, "insert"), (k, v) -> consumer.accept(v),
+                this.mongoEntityMapper);
     }
 
     @Override
     public void addObjectUpdatedListener(Consumer<V> consumer) {
-        watchCollection(this.reactiveMongoCollection, in(OPERATION_TYPE, asList("update", "replace")), (k, v) -> consumer.accept(v), this.mongoEntityMapper);
+        watchCollection(this.reactiveMongoCollection, in(OPERATION_TYPE, asList("update", "replace")),
+                (k, v) -> consumer.accept(v), this.mongoEntityMapper);
     }
 
     @Override
     public void addObjectRemovedListener(Consumer<String> consumer) {
-        watchCollection(this.reactiveMongoCollection, eq(OPERATION_TYPE, "delete"), (k, v) -> consumer.accept(k), this.mongoEntityMapper);
+        watchCollection(this.reactiveMongoCollection, eq(OPERATION_TYPE, "delete"), (k, v) -> consumer.accept(k),
+                this.mongoEntityMapper);
     }
 
     @Override
@@ -88,7 +93,8 @@ public class MongoStorage<V, E> implements Storage<String, V> {
 
     @Override
     public V get(String o) {
-        return Optional.ofNullable(this.mongoCollection.find(new Document(MONGO_ID, o)).first()).map(e -> mongoEntityMapper.mapToModel(e)).orElse(null);
+        return Optional.ofNullable(this.mongoCollection.find(new Document(MONGO_ID, o)).first())
+                .map(e -> mongoEntityMapper.mapToModel(e)).orElse(null);
     }
 
     @Override

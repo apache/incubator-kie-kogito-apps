@@ -15,10 +15,10 @@
  */
 package org.kie.kogito.taskassigning.auth.mp;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.auth.KeycloakAuthenticationCredentials;
-
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class KeycloakTokenManagerProviderTest {
 

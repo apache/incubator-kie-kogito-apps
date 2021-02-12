@@ -15,6 +15,10 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.pmml;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInternal.getPMMLRuntime;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,17 +48,14 @@ import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.kie.pmml.api.runtime.PMMLRuntime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInternal.getPMMLRuntime;
-
 class PmmlScorecardCategoricalLimeExplainerTest {
 
     private static PMMLRuntime scorecardCategoricalRuntime;
 
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {
-        scorecardCategoricalRuntime = getPMMLRuntime(ResourceReaderUtils.getResourceAsFile("simplescorecardcategorical/SimpleScorecardCategorical.pmml"));
+        scorecardCategoricalRuntime = getPMMLRuntime(
+                ResourceReaderUtils.getResourceAsFile("simplescorecardcategorical/SimpleScorecardCategorical.pmml"));
         Config.INSTANCE.setAsyncTimeout(5000);
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
@@ -85,8 +86,7 @@ class PmmlScorecardCategoricalLimeExplainerTest {
                 PredictionOutput predictionOutput = new PredictionOutput(List.of(
                         new Output("score", Type.TEXT, new Value<>(score), 1d),
                         new Output("reason1", Type.TEXT, new Value<>(reason1), 1d),
-                        new Output("reason2", Type.TEXT, new Value<>(reason2), 1d)
-                ));
+                        new Output("reason2", Type.TEXT, new Value<>(reason2), 1d)));
                 outputs.add(predictionOutput);
             }
             return outputs;
@@ -107,6 +107,6 @@ class PmmlScorecardCategoricalLimeExplainerTest {
             assertThat(v).isGreaterThan(0d);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                                                                                0.5, 0.5));
+                0.5, 0.5));
     }
 }

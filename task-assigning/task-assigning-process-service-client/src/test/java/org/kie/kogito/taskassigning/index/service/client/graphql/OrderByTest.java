@@ -15,9 +15,9 @@
  */
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
 
 class OrderByTest {
 
