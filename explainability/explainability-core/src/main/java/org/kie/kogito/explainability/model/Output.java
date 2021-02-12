@@ -40,7 +40,6 @@ public class Output {
 
     /**
      * Get the output name
-     * 
      * @return the name
      */
     public String getName() {
@@ -49,7 +48,6 @@ public class Output {
 
     /**
      * Get the score (confidence) associated to this output
-     * 
      * @return the score
      */
     public double getScore() {
@@ -58,7 +56,6 @@ public class Output {
 
     /**
      * Get the output type
-     * 
      * @return the output type
      */
     public Type getType() {
@@ -67,7 +64,6 @@ public class Output {
 
     /**
      * Get the value associated to this output
-     * 
      * @return the output value
      */
     public Value getValue() {

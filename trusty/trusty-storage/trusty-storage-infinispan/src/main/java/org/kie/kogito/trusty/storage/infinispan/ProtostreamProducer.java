@@ -22,9 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import org.infinispan.protostream.FileDescriptorSource;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.infinispan.protostream.FileDescriptorSource;
 
 @ApplicationScoped
 public class ProtostreamProducer {
@@ -35,8 +34,7 @@ public class ProtostreamProducer {
     @Produces
     FileDescriptorSource kogitoTypesDescriptor() throws IOException {
         FileDescriptorSource source = new FileDescriptorSource();
-        source.addProtoFile("decision.proto",
-                Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/decision.proto"));
+        source.addProtoFile("decision.proto", Thread.currentThread().getContextClassLoader().getResourceAsStream("META-INF/decision.proto"));
         return source;
     }
 

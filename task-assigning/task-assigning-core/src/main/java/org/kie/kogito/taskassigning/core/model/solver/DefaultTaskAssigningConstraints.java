@@ -35,15 +35,13 @@ public class DefaultTaskAssigningConstraints {
 
     public static Constraint requiredPotentialOwner(ConstraintFactory constraintFactory, Score<?> constraintWeight) {
         return constraintFactory.from(TaskAssignment.class)
-                .filter(taskAssignment -> !TaskAssigningConditions
-                        .userMeetsPotentialOwnerOrPlanningUserCondition(taskAssignment.getTask(), taskAssignment.getUser()))
+                .filter(taskAssignment -> !TaskAssigningConditions.userMeetsPotentialOwnerOrPlanningUserCondition(taskAssignment.getTask(), taskAssignment.getUser()))
                 .penalize("Required Potential Owner", constraintWeight);
     }
 
     public static Constraint requiredSkills(ConstraintFactory constraintFactory, Score<?> constraintWeight) {
         return constraintFactory.from(TaskAssignment.class)
-                .filter(taskAssignment -> !TaskAssigningConditions
-                        .userMeetsRequiredSkillsOrPlanningUserCondition(taskAssignment.getTask(), taskAssignment.getUser()))
+                .filter(taskAssignment -> !TaskAssigningConditions.userMeetsRequiredSkillsOrPlanningUserCondition(taskAssignment.getTask(), taskAssignment.getUser()))
                 .penalize("Required Skills", constraintWeight);
     }
 
@@ -57,8 +55,8 @@ public class DefaultTaskAssigningConstraints {
         return constraintFactory.from(TaskAssignment.class)
                 .filter(taskAssignment -> PriorityHelper.isHighLevel(taskAssignment.getTask().getPriority()))
                 .penalize("High level priority",
-                        constraintWeight,
-                        TaskAssignment::getEndTimeInMinutes);
+                          constraintWeight,
+                          TaskAssignment::getEndTimeInMinutes);
     }
 
     public static Constraint desiredAffinities(ConstraintFactory constraintFactory, Score<?> constraintWeight) {
@@ -66,32 +64,31 @@ public class DefaultTaskAssigningConstraints {
                 .filter(taskAssignment -> taskAssignment.getUser().isEnabled())
                 .reward("Desired Affinities",
                         constraintWeight,
-                        taskAssignment -> TaskHelper.countMatchingLabels(taskAssignment.getTask(), taskAssignment.getUser(),
-                                DefaultLabels.AFFINITIES.name()));
+                        taskAssignment -> TaskHelper.countMatchingLabels(taskAssignment.getTask(), taskAssignment.getUser(), DefaultLabels.AFFINITIES.name()));
     }
 
     public static Constraint minimizeMakespan(ConstraintFactory constraintFactory, Score<?> constraintWeight) {
         return constraintFactory.from(TaskAssignment.class)
                 .filter(taskAssignment -> taskAssignment.getNextElement() == null)
                 .penalize("Minimize makespan",
-                        constraintWeight,
-                        taskAssignment -> taskAssignment.getEndTimeInMinutes() * taskAssignment.getEndTimeInMinutes());
+                          constraintWeight,
+                          taskAssignment -> taskAssignment.getEndTimeInMinutes() * taskAssignment.getEndTimeInMinutes());
     }
 
     public static Constraint mediumLevelPriority(ConstraintFactory constraintFactory, Score<?> constraintWeight) {
         return constraintFactory.from(TaskAssignment.class)
                 .filter(taskAssignment -> PriorityHelper.isMediumLevel(taskAssignment.getTask().getPriority()))
                 .penalize("Medium level priority",
-                        constraintWeight,
-                        TaskAssignment::getEndTimeInMinutes);
+                          constraintWeight,
+                          TaskAssignment::getEndTimeInMinutes);
     }
 
     public static Constraint lowLevelPriority(ConstraintFactory constraintFactory, Score<?> constraintWeight) {
         return constraintFactory.from(TaskAssignment.class)
                 .filter(taskAssignment -> PriorityHelper.isLowLevel(taskAssignment.getTask().getPriority()))
                 .penalize("Low level priority",
-                        constraintWeight,
-                        TaskAssignment::getEndTimeInMinutes);
+                          constraintWeight,
+                          TaskAssignment::getEndTimeInMinutes);
     }
 
     public static BendableLongScore hardLevelWeight(int hardLevel, long hardScore) {

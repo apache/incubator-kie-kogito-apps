@@ -50,8 +50,7 @@ class ProtoDomainModelProducerTest {
         FileDescriptorRegisteredEvent event = new FileDescriptorRegisteredEvent(fileDescriptor);
         protoDomainModelProducer.onFileDescriptorRegistered(event);
 
-        verify(domainEvent).fire(eq(new DomainModelRegisteredEvent(TestUtils.PROCESS_ID, TestUtils.DOMAIN_DESCRIPTOR,
-                TestUtils.ADDITIONAL_DESCRIPTORS)));
+        verify(domainEvent).fire(eq(new DomainModelRegisteredEvent(TestUtils.PROCESS_ID, TestUtils.DOMAIN_DESCRIPTOR, TestUtils.ADDITIONAL_DESCRIPTORS)));
     }
 
     static FileDescriptor getTestFileDescriptor() {

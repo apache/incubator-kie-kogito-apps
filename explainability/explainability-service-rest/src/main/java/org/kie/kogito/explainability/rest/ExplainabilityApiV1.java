@@ -27,6 +27,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.smallrye.mutiny.Uni;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -38,8 +39,6 @@ import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
-
-import io.smallrye.mutiny.Uni;
 
 @Path("/v1")
 public class ExplainabilityApiV1 {
@@ -58,14 +57,11 @@ public class ExplainabilityApiV1 {
     @POST
     @Path("/explain")
     @APIResponses(value = {
-            @APIResponse(description = "Retrieve the explainability for a given decision.", responseCode = "200",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(type = SchemaType.OBJECT, implementation = ExplainabilityRequestDto.class))),
-            @APIResponse(description = "Bad Request", responseCode = "400",
-                    content = @Content(mediaType = MediaType.TEXT_PLAIN))
-    })
-    @Operation(summary = "Retrieve the explainability for a given decision.",
-            description = "Retrieve the explainability for a given decision.")
+            @APIResponse(description = "Retrieve the explainability for a given decision.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = ExplainabilityRequestDto.class))),
+            @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    }
+    )
+    @Operation(summary = "Retrieve the explainability for a given decision.", description = "Retrieve the explainability for a given decision.")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Uni<Response> explain(@Valid ExplainabilityRequestDto requestDto) {
@@ -77,3 +73,4 @@ public class ExplainabilityApiV1 {
         return Uni.createFrom().completionStage(result);
     }
 }
+

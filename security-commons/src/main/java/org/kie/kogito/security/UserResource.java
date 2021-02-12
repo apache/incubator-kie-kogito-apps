@@ -24,11 +24,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.resteasy.annotations.cache.NoCache;
-
 import io.quarkus.security.Authenticated;
 import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
+import org.jboss.resteasy.annotations.cache.NoCache;
 
 @Path(UserResource.USER_PATH)
 @Authenticated
@@ -80,3 +79,4 @@ public class UserResource {
         }
     }
 }
+

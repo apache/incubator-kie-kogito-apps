@@ -3,6 +3,9 @@ package org.kie.kogito.trusty.service.api;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.service.responses.SalienciesResponse;
@@ -12,10 +15,6 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import io.restassured.filter.log.ResponseLoggingFilter;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -117,9 +116,13 @@ class ExplainabilityApiV1IT {
                 List.of(
                         new Saliency("O1", "Output1", List.of(
                                 new FeatureImportance("Feature1", 0.49384),
-                                new FeatureImportance("Feature2", -0.1084))),
+                                new FeatureImportance("Feature2", -0.1084)
+                        )),
                         new Saliency("O2", "Output2", List.of(
                                 new FeatureImportance("Feature1", 0.0),
-                                new FeatureImportance("Feature2", 0.70293)))));
+                                new FeatureImportance("Feature2", 0.70293)
+                        ))
+                )
+        );
     }
 }

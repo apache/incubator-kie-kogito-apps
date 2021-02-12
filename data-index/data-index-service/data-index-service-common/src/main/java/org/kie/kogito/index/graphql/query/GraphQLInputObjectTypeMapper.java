@@ -19,9 +19,6 @@ package org.kie.kogito.index.graphql.query;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLInputType;
@@ -31,6 +28,8 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
 import static graphql.schema.GraphQLNonNull.nonNull;
@@ -61,18 +60,15 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
     protected Consumer<GraphQLInputObjectType.Builder> build(GraphQLObjectType domain) {
         return builder -> {
             if (mapOperators) {
-                builder.field(newInputObjectField().name("and")
-                        .type(GraphQLList.list(nonNull(new GraphQLTypeReference(getTypeName(domain))))));
-                builder.field(newInputObjectField().name("or")
-                        .type(GraphQLList.list(nonNull(new GraphQLTypeReference(getTypeName(domain))))));
+                builder.field(newInputObjectField().name("and").type(GraphQLList.list(nonNull(new GraphQLTypeReference(getTypeName(domain))))));
+                builder.field(newInputObjectField().name("or").type(GraphQLList.list(nonNull(new GraphQLTypeReference(getTypeName(domain))))));
                 builder.field(newInputObjectField().name("not").type(new GraphQLTypeReference(getTypeName(domain))));
             }
 
             domain.getFieldDefinitions().forEach(field -> {
                 LOGGER.debug("GraphQL mapping field: {}", field.getName());
                 if (KOGITO_DOMAIN_ATTRIBUTE.equals(field.getName())) {
-                    builder.field(newInputObjectField().name(KOGITO_DOMAIN_ATTRIBUTE)
-                            .type(new GraphQLTypeReference("KogitoMetadataArgument"))).build();
+                    builder.field(newInputObjectField().name(KOGITO_DOMAIN_ATTRIBUTE).type(new GraphQLTypeReference("KogitoMetadataArgument"))).build();
                 } else if ("id".equals(field.getName())) {
                     builder.field(newInputObjectField().name("id").type(new GraphQLTypeReference("IdArgument"))).build();
                 } else {
@@ -97,8 +93,7 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
                 String typeName = name + ARGUMENT;
                 GraphQLType schemaType = getExistingType(typeName);
                 if (schemaType == null) {
-                    GraphQLInputObjectType type = new GraphQLInputObjectTypeMapper(getSchema(), getAdditionalTypes(), false)
-                            .apply((GraphQLObjectType) getAdditionalTypes().get(name));
+                    GraphQLInputObjectType type = new GraphQLInputObjectTypeMapper(getSchema(), getAdditionalTypes(), false).apply((GraphQLObjectType) getAdditionalTypes().get(name));
                     getAdditionalTypes().put(typeName, type);
                     return type;
                 } else {

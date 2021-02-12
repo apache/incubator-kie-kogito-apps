@@ -20,7 +20,6 @@ import java.net.URI;
 import java.time.ZonedDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @RegisterForReflection

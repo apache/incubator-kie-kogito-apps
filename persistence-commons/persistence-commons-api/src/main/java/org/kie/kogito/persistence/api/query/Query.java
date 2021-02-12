@@ -27,6 +27,6 @@ public interface Query<T> {
     Query<T> filter(List<AttributeFilter<?>> filters);
 
     Query<T> sort(List<AttributeSort> sortBy);
-
+    
     List<T> execute();
 }

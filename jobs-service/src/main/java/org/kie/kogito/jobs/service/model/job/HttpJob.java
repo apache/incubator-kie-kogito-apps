@@ -19,13 +19,12 @@ package org.kie.kogito.jobs.service.model.job;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import io.quarkus.arc.Arc;
+import io.quarkus.arc.InstanceHandle;
 import org.kie.kogito.jobs.service.executor.HttpJobExecutor;
 import org.kie.kogito.timer.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.quarkus.arc.Arc;
-import io.quarkus.arc.InstanceHandle;
 
 /**
  * The job that sends an HTTP Request based on the {@link HttpJobContext}.
@@ -49,7 +48,6 @@ public class HttpJob implements Job<HttpJobContext> {
     @Override
     public void execute(HttpJobContext ctx) {
         LOGGER.info("Executing for context {}", ctx.getJobDetails());
-        executor.ifPresent(e -> e.execute(CompletableFuture.completedFuture(ctx.getJobDetails()))
-                .thenAccept(j -> LOGGER.debug("Executed {}", j)));
+        executor.ifPresent(e -> e.execute(CompletableFuture.completedFuture(ctx.getJobDetails())).thenAccept(j -> LOGGER.debug("Executed {}", j)));
     }
 }

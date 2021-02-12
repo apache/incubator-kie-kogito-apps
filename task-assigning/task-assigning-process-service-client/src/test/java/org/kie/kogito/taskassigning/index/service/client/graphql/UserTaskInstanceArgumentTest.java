@@ -38,13 +38,10 @@ class UserTaskInstanceArgumentTest extends AbstractArgumentContainerTest<UserTas
     private static final StringArgument PRIORITY_ARGUMENT = ArgumentFactory.newStringEqual("priorityValue");
     private static final StringArgument PROCESS_ID_ARGUMENT = ArgumentFactory.newStringEqual("processIdValue");
     private static final StringArgument ACTUAL_OWNER_ARGUMENT = ArgumentFactory.newStringEqual("actualOwnerValue");
-    private static final DateArgument COMPLETED_ARGUMENT =
-            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-01T07:54:56.883Z"));
-    private static final DateArgument STARTED_ARGUMENT =
-            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-02T07:54:56.883Z"));
+    private static final DateArgument COMPLETED_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-01T07:54:56.883Z"));
+    private static final DateArgument STARTED_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-02T07:54:56.883Z"));
     private static final StringArgument REFERENCE_NAME_ARGUMENT = ArgumentFactory.newStringEqual("referenceNameValue");
-    private static final DateArgument LAST_UPDATE_ARGUMENT =
-            ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-03T07:54:56.883Z"));
+    private static final DateArgument LAST_UPDATE_ARGUMENT = ArgumentFactory.newDateEqual(parseZonedDateTime("2020-12-03T07:54:56.883Z"));
     private static final StringArgument STATE_ARGUMENT = ArgumentFactory.newStringEqual("stateValue");
 
     @Override

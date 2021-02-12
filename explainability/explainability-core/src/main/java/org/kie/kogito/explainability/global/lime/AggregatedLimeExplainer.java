@@ -43,8 +43,7 @@ public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFutur
     }
 
     @Override
-    public CompletableFuture<Map<String, Saliency>> explainFromMetadata(PredictionProvider model,
-            PredictionProviderMetadata metadata) {
+    public CompletableFuture<Map<String, Saliency>> explainFromMetadata(PredictionProvider model, PredictionProviderMetadata metadata) {
         List<PredictionInput> inputs = metadata.getDataDistribution().sample(limeExplainer.getLimeConfig().getNoOfSamples()); // sample inputs from the data distribution
 
         return model.predictAsync(inputs) // execute the model on the inputs
@@ -53,8 +52,7 @@ public class AggregatedLimeExplainer implements GlobalExplainer<CompletableFutur
     }
 
     @Override
-    public CompletableFuture<Map<String, Saliency>> explainFromPredictions(PredictionProvider model,
-            Collection<Prediction> predictions) {
+    public CompletableFuture<Map<String, Saliency>> explainFromPredictions(PredictionProvider model, Collection<Prediction> predictions) {
         return CompletableFuture.completedFuture(predictions)
                 .thenApply(p -> p.stream().map(prediction -> limeExplainer.explainAsync(prediction, model)) // extract saliency for each input
                         .map(CompletableFuture::join) // aggregate all the saliencies

@@ -96,9 +96,8 @@ class ProtoIndexParser implements AnnotationMetadataCreator<EntityIndexDescripto
         for (FieldDescriptor fd : annotatedDescriptor.getFields()) {
             AnnotationElement.Annotation fieldAnnotation = fd.getAnnotations().get(FIELD_ANNOTATION);
             if (fieldAnnotation != null) {
-                String fieldName =
-                        Optional.ofNullable((String) fieldAnnotation.getAttributeValue(FIELD_NAME_ATTRIBUTE).getValue())
-                                .filter(a -> !a.isEmpty()).orElseGet(fd::getName);
+                String fieldName = Optional.ofNullable((String) fieldAnnotation.getAttributeValue(FIELD_NAME_ATTRIBUTE).getValue())
+                        .filter(a -> !a.isEmpty()).orElseGet(fd::getName);
 
                 boolean isIndexed = INDEX_YES.equals(fieldAnnotation.getAttributeValue(FIELD_INDEX_ATTRIBUTE).getValue());
 
@@ -113,15 +112,13 @@ class ProtoIndexParser implements AnnotationMetadataCreator<EntityIndexDescripto
         return new EntityIndexDescriptor(name, indexes, fields);
     }
 
-    static Map<String, EntityIndexDescriptor> createEntityIndexeDescriptors(FileDescriptor desc,
-            Map<String, EntityIndexDescriptor> entityIndexes) {
+    static Map<String, EntityIndexDescriptor> createEntityIndexeDescriptors(FileDescriptor desc, Map<String, EntityIndexDescriptor> entityIndexes) {
         desc.getMessageTypes().forEach(mDesc -> {
             String typeName = mDesc.getFullName();
             EntityIndexDescriptor entityIndex = entityIndexes.get(typeName);
             if (entityIndex != null) {
                 // Add the fields without index
-                Set<String> fieldNames =
-                        entityIndex.getAttributeDescriptors().stream().map(AttributeDescriptor::getName).collect(toSet());
+                Set<String> fieldNames = entityIndex.getAttributeDescriptors().stream().map(AttributeDescriptor::getName).collect(toSet());
                 mDesc.getFields().stream().filter(fDesc -> !fieldNames.contains(fDesc.getName()))
                         .forEach(fDesc -> entityIndex.getAttributeDescriptors().add(createAttributeDescriptor(fDesc, null)));
             }

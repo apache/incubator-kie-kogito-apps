@@ -24,6 +24,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
+import io.restassured.http.ContentType;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.http.WebSocket;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.handler.graphql.ApolloWSMessageType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.DataIndexStorageService;
@@ -34,14 +41,6 @@ import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
 import org.kie.kogito.index.messaging.ReactiveMessagingEventConsumer;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
-
-import io.restassured.http.ContentType;
-import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.WebSocket;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.handler.graphql.ApolloWSMessageType;
 
 import static io.restassured.RestAssured.given;
 import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.COMPLETE;
@@ -92,10 +91,8 @@ abstract class AbstractWebSocketSubscriptionIT {
 
         protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
-        assertProcessInstanceSubscription(processId, processInstanceId, ProcessInstanceState.ACTIVE,
-                "subscription { ProcessInstanceAdded { id, processId, state } }", "ProcessInstanceAdded");
-        assertProcessInstanceSubscription(processId, processInstanceId, ProcessInstanceState.COMPLETED,
-                "subscription { ProcessInstanceUpdated { id, processId, state } }", "ProcessInstanceUpdated");
+        assertProcessInstanceSubscription(processId, processInstanceId, ProcessInstanceState.ACTIVE, "subscription { ProcessInstanceAdded { id, processId, state } }", "ProcessInstanceAdded");
+        assertProcessInstanceSubscription(processId, processInstanceId, ProcessInstanceState.COMPLETED, "subscription { ProcessInstanceUpdated { id, processId, state } }", "ProcessInstanceUpdated");
     }
 
     @Test
@@ -106,11 +103,8 @@ abstract class AbstractWebSocketSubscriptionIT {
 
         protobufService.registerProtoBufferType(getUserTaskProtobufFileContent());
 
-        assertUserTaskInstanceSubscription(taskId, processId, processInstanceId, "InProgress",
-                "subscription { UserTaskInstanceAdded { id, processInstanceId, processId, state } }", "UserTaskInstanceAdded");
-        assertUserTaskInstanceSubscription(taskId, processId, processInstanceId, "Completed",
-                "subscription { UserTaskInstanceUpdated { id, processInstanceId, processId, state } }",
-                "UserTaskInstanceUpdated");
+        assertUserTaskInstanceSubscription(taskId, processId, processInstanceId, "InProgress", "subscription { UserTaskInstanceAdded { id, processInstanceId, processId, state } }", "UserTaskInstanceAdded");
+        assertUserTaskInstanceSubscription(taskId, processId, processInstanceId, "Completed", "subscription { UserTaskInstanceUpdated { id, processInstanceId, processId, state } }", "UserTaskInstanceUpdated");
     }
 
     @Test
@@ -119,10 +113,8 @@ abstract class AbstractWebSocketSubscriptionIT {
         String processId = "deals";
         String processInstanceId = UUID.randomUUID().toString();
 
-        assertJobSubscription(jobId, processId, processInstanceId, "SCHEDULED",
-                "subscription { JobAdded { id, processInstanceId, processId, status } }", "JobAdded");
-        assertJobSubscription(jobId, processId, processInstanceId, "EXECUTED",
-                "subscription { JobUpdated { id, processInstanceId, processId, status } }", "JobUpdated");
+        assertJobSubscription(jobId, processId, processInstanceId, "SCHEDULED", "subscription { JobAdded { id, processInstanceId, processId, status } }", "JobAdded");
+        assertJobSubscription(jobId, processId, processInstanceId, "EXECUTED", "subscription { JobUpdated { id, processInstanceId, processId, status } }", "JobUpdated");
     }
 
     @Test
@@ -132,16 +124,11 @@ abstract class AbstractWebSocketSubscriptionIT {
 
         protobufService.registerProtoBufferType(getProcessProtobufFileContent());
 
-        assertDomainSubscription(processId, processInstanceId, ProcessInstanceState.ACTIVE,
-                "subscription { TravelsAdded { id, traveller { firstName }, metadata { processInstances { state } } } }",
-                "TravelsAdded");
-        assertDomainSubscription(processId, processInstanceId, ProcessInstanceState.COMPLETED,
-                "subscription { TravelsUpdated { id, traveller { firstName }, metadata { processInstances { state } } } }",
-                "TravelsUpdated");
+        assertDomainSubscription(processId, processInstanceId, ProcessInstanceState.ACTIVE, "subscription { TravelsAdded { id, traveller { firstName }, metadata { processInstances { state } } } }", "TravelsAdded");
+        assertDomainSubscription(processId, processInstanceId, ProcessInstanceState.COMPLETED, "subscription { TravelsUpdated { id, traveller { firstName }, metadata { processInstances { state } } } }", "TravelsUpdated");
     }
 
-    private void assertDomainSubscription(String processId, String processInstanceId, ProcessInstanceState state,
-            String subscription, String subscriptionName) throws Exception {
+    private void assertDomainSubscription(String processId, String processInstanceId, ProcessInstanceState state, String subscription, String subscriptionName) throws Exception {
         CompletableFuture<JsonObject> cf = subscribe(subscription);
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels{ id } }\" }")
@@ -160,8 +147,7 @@ abstract class AbstractWebSocketSubscriptionIT {
                 a -> a.node("payload.data." + subscriptionName + ".traveller.firstName").isEqualTo("Maciej"));
     }
 
-    private void assertProcessInstanceSubscription(String processId, String processInstanceId, ProcessInstanceState state,
-            String subscription, String subscriptionName) throws Exception {
+    private void assertProcessInstanceSubscription(String processId, String processInstanceId, ProcessInstanceState state, String subscription, String subscriptionName) throws Exception {
         CompletableFuture<JsonObject> cf = subscribe(subscription);
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels{ id } }\" }")
@@ -180,8 +166,7 @@ abstract class AbstractWebSocketSubscriptionIT {
                 a -> a.node("payload.data." + subscriptionName + ".state").isEqualTo(state.name()));
     }
 
-    private void assertUserTaskInstanceSubscription(String taskId, String processId, String processInstanceId, String state,
-            String subscription, String subscriptionName) throws Exception {
+    private void assertUserTaskInstanceSubscription(String taskId, String processId, String processInstanceId, String state, String subscription, String subscriptionName) throws Exception {
         CompletableFuture<JsonObject> cf = subscribe(subscription);
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Deals{ id } }\" }")
@@ -201,8 +186,7 @@ abstract class AbstractWebSocketSubscriptionIT {
                 a -> a.node("payload.data." + subscriptionName + ".state").isEqualTo(state));
     }
 
-    private void assertJobSubscription(String taskId, String processId, String processInstanceId, String status,
-            String subscription, String subscriptionName) throws Exception {
+    private void assertJobSubscription(String taskId, String processId, String processInstanceId, String status, String subscription, String subscriptionName) throws Exception {
         CompletableFuture<JsonObject> cf = subscribe(subscription);
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Jobs{ id } }\" }")
@@ -238,8 +222,7 @@ abstract class AbstractWebSocketSubscriptionIT {
                     } else if (DATA.getText().equals(type)) {
                         cf.complete(message.toJsonObject());
                     } else {
-                        cf.completeExceptionally(new RuntimeException(
-                                format("Unexpected message type: %s\nMessage: %s", type, message.toString())));
+                        cf.completeExceptionally(new RuntimeException(format("Unexpected message type: %s\nMessage: %s", type, message.toString())));
                     }
                 });
 

@@ -81,8 +81,7 @@ class PartialDependencePlotExplainerTest {
             random.setSeed(seed);
             PredictionProvider modelInfo = TestUtils.getSumSkipModel(0);
             PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
-            List<PartialDependenceGraph> pdps =
-                    partialDependencePlotProvider.explainFromMetadata(modelInfo, getMetadata(random));
+            List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explainFromMetadata(modelInfo, getMetadata(random));
             assertNotNull(pdps);
             for (PartialDependenceGraph pdp : pdps) {
                 assertNotNull(pdp.getFeature());
@@ -129,7 +128,7 @@ class PartialDependencePlotExplainerTest {
                     });
 
             Assertions.assertThrows(TimeoutException.class,
-                    () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
+                                    () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
 
         }
         Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);

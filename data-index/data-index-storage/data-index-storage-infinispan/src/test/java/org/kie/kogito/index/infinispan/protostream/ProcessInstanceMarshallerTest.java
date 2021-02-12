@@ -78,8 +78,7 @@ class ProcessInstanceMarshallerTest {
         when(reader.readString(PARENT_PROCESS_INSTANCE_ID)).thenReturn("parentProcessInstanceId");
         when(reader.readString(PROCESS_NAME)).thenReturn("processName");
         when(reader.readObject(ERROR, ProcessInstanceError.class)).thenReturn(null);
-        when(reader.readCollection(eq(ADDONS), any(), eq(String.class)))
-                .thenReturn(new HashSet<>(singleton("process-management")));
+        when(reader.readCollection(eq(ADDONS), any(), eq(String.class))).thenReturn(new HashSet<>(singleton("process-management")));
         when(reader.readDate(LAST_UPDATE)).thenReturn(now);
         when(reader.readString(BUSINESS_KEY)).thenReturn("businessKey");
         when(reader.readCollection(eq(MILESTONES), any(), eq(Milestone.class))).thenReturn(new ArrayList<>());

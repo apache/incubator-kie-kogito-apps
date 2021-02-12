@@ -18,12 +18,10 @@ package org.kie.kogito.index.vertx;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.vertx.core.buffer.Buffer;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.json.DataIndexParsingException;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import io.vertx.core.buffer.Buffer;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,7 +38,7 @@ public class ObjectNodeMessageCodecTest {
         });
 
         assertThrows(DataIndexParsingException.class,
-                () -> new ObjectNodeMessageCodec().encodeToWire(buffer, mock(ObjectNode.class)));
+                     () -> new ObjectNodeMessageCodec().encodeToWire(buffer, mock(ObjectNode.class)));
     }
 
     @Test
@@ -51,6 +49,6 @@ public class ObjectNodeMessageCodecTest {
         });
 
         assertThrows(DataIndexParsingException.class,
-                () -> new ObjectNodeMessageCodec().decodeFromWire(0, buffer));
+                     () -> new ObjectNodeMessageCodec().decodeFromWire(0, buffer));
     }
 }

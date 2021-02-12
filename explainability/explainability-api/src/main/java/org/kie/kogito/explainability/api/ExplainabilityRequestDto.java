@@ -22,10 +22,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.kie.kogito.tracing.typedvalue.TypedValue;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExplainabilityRequestDto {
@@ -52,8 +51,7 @@ public class ExplainabilityRequestDto {
     private ExplainabilityRequestDto() {
     }
 
-    public ExplainabilityRequestDto(String executionId, String serviceUrl, ModelIdentifierDto modelIdentifier,
-            Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
+    public ExplainabilityRequestDto(String executionId, String serviceUrl, ModelIdentifierDto modelIdentifier, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         this.executionId = executionId;
         this.serviceUrl = serviceUrl;
         this.modelIdentifier = modelIdentifier;

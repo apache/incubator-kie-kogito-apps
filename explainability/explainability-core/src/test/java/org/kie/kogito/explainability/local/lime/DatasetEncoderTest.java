@@ -178,8 +178,7 @@ class DatasetEncoderTest {
             outputs.add(new Output("o", Type.NUMBER, new Value<>(i % 2 == 0 ? 1d : 0d), 1d));
         }
         Output originalOutput = new Output("o", Type.BOOLEAN, new Value<>(1d), 1d);
-        DatasetEncoder datasetEncoder =
-                new DatasetEncoder(perturbedInputs, outputs, originalInput.getFeatures(), originalOutput);
+        DatasetEncoder datasetEncoder = new DatasetEncoder(perturbedInputs, outputs, originalInput.getFeatures(), originalOutput);
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
         assertNotNull(trainingSet);
         assertEquals(10, trainingSet.size());

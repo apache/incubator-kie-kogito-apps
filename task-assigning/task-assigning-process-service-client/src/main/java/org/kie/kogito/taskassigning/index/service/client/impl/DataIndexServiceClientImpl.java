@@ -47,8 +47,7 @@ public class DataIndexServiceClientImpl implements DataIndexServiceClient {
     }
 
     @Override
-    public List<UserTaskInstance> findTasks(List<String> stateIn, ZonedDateTime startedAfter, String orderBy, boolean asc,
-            int offset, int limit) {
+    public List<UserTaskInstance> findTasks(List<String> stateIn, ZonedDateTime startedAfter, String orderBy, boolean asc, int offset, int limit) {
         UserTaskInstancesQueryBuilder queryBuilder = UserTaskInstancesQueryBuilder.newBuilder();
         queryBuilder.fields(UserTaskInstance.Field.values());
         if (stateIn != null) {
@@ -62,8 +61,7 @@ public class DataIndexServiceClientImpl implements DataIndexServiceClient {
             queryBuilder.orderBy(UserTaskInstanceOrderBy.Field.valueOf(orderBy), asc ? OrderBy.ASC : OrderBy.DESC);
         }
         String query = queryBuilder.build();
-        UserTaskInstance[] userTaskInstances =
-                queryService.executeQuery(UserTaskInstancesQueryBuilder.QUERY_NAME, query, UserTaskInstance[].class);
+        UserTaskInstance[] userTaskInstances = queryService.executeQuery(UserTaskInstancesQueryBuilder.QUERY_NAME, query, UserTaskInstance[].class);
         return Arrays.asList(userTaskInstances);
     }
 
@@ -72,3 +70,4 @@ public class DataIndexServiceClientImpl implements DataIndexServiceClient {
         queryService.close();
     }
 }
+

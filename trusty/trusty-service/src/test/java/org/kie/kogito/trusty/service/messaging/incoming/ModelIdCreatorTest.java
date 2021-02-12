@@ -29,16 +29,16 @@ public class ModelIdCreatorTest {
     @ParameterizedTest
     @MethodSource("provideParametersForModelIdCreator")
     void isBlank_ShouldReturnTrueForNullOrBlankStrings(final String groupId,
-            final String artifactId,
-            final String version,
-            final String name,
-            final String namespace,
-            final String expected) {
+                                                       final String artifactId,
+                                                       final String version,
+                                                       final String name,
+                                                       final String namespace,
+                                                       final String expected) {
         assertEquals(expected, ModelIdCreator.makeIdentifier(groupId,
-                artifactId,
-                version,
-                name,
-                namespace));
+                                                             artifactId,
+                                                             version,
+                                                             name,
+                                                             namespace));
     }
 
     private static Stream<Arguments> provideParametersForModelIdCreator() {
@@ -48,6 +48,7 @@ public class ModelIdCreatorTest {
                 Arguments.of(null, "ignore", null, "name", "namespace", "name:namespace"),
                 Arguments.of(null, null, "ignore", "name", "namespace", "name:namespace"),
                 Arguments.of(null, null, null, "name", null, "name:"),
-                Arguments.of(null, null, null, null, "namespace", ":namespace"));
+                Arguments.of(null, null, null, null, "namespace", ":namespace")
+        );
     }
 }

@@ -69,8 +69,7 @@ class TraceEventConsumerTest {
     void testExceptionsAreCatched() {
         Message<String> message = mockMessage(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)));
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class),
-                any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class), any(Decision.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
     }
 

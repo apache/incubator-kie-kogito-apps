@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 import org.kie.kogito.taskassigning.core.TaskAssigningRuntimeException;
 import org.kie.kogito.taskassigning.core.model.ChainElement;
-import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
+import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.api.solver.ProblemFactChange;
@@ -84,9 +84,9 @@ public class AssignTaskProblemFactChange implements ProblemFactChange<TaskAssign
     }
 
     private void processNewTaskAssignment(TaskAssignment newTaskAssignment,
-            ChainElement insertPosition,
-            TaskAssignment insertPositionNextTask,
-            ScoreDirector<TaskAssigningSolution> scoreDirector) {
+                                          ChainElement insertPosition,
+                                          TaskAssignment insertPositionNextTask,
+                                          ScoreDirector<TaskAssigningSolution> scoreDirector) {
 
         TaskAssigningSolution solution = scoreDirector.getWorkingSolution();
         newTaskAssignment.setPreviousElement(insertPosition);
@@ -101,9 +101,9 @@ public class AssignTaskProblemFactChange implements ProblemFactChange<TaskAssign
     }
 
     private void processExistingTaskAssignment(TaskAssignment existingTaskAssignment,
-            ChainElement insertPosition,
-            TaskAssignment insertPositionNextTask,
-            ScoreDirector<TaskAssigningSolution> scoreDirector) {
+                                               ChainElement insertPosition,
+                                               TaskAssignment insertPositionNextTask,
+                                               ScoreDirector<TaskAssigningSolution> scoreDirector) {
         if (insertPosition.getNextElement() != existingTaskAssignment) {
             // relocate the existingTaskAssignment at the desired position
             ChainElement previousElement = existingTaskAssignment.getPreviousElement();
@@ -120,14 +120,12 @@ public class AssignTaskProblemFactChange implements ProblemFactChange<TaskAssign
         scoreDirector.triggerVariableListeners();
     }
 
-    private static User lookupOrAddWorkingUser(User user, ScoreDirector<TaskAssigningSolution> scoreDirector,
-            boolean addIfNotExists) {
+    private static User lookupOrAddWorkingUser(User user, ScoreDirector<TaskAssigningSolution> scoreDirector, boolean addIfNotExists) {
         TaskAssigningSolution solution = scoreDirector.getWorkingSolution();
         User workingUser = scoreDirector.lookUpWorkingObjectOrReturnNull(user);
         if (workingUser == null) {
             if (!addIfNotExists) {
-                throw new TaskAssigningRuntimeException(
-                        String.format("Expected user: %s was not found in current working solution", user));
+                throw new TaskAssigningRuntimeException(String.format("Expected user: %s was not found in current working solution", user));
             } else {
                 // Shallow clone the user list so only workingSolution is affected, not bestSolution
                 solution.setUserList(new ArrayList<>(solution.getUserList()));
@@ -144,7 +142,7 @@ public class AssignTaskProblemFactChange implements ProblemFactChange<TaskAssign
     }
 
     private static TaskAssignment lookupOrPrepareTaskAssignment(TaskAssignment taskAssignment,
-            ScoreDirector<TaskAssigningSolution> scoreDirector) {
+                                                                ScoreDirector<TaskAssigningSolution> scoreDirector) {
         TaskAssignment workingTaskAssignment = scoreDirector.lookUpWorkingObjectOrReturnNull(taskAssignment);
         if (workingTaskAssignment != null) {
             return workingTaskAssignment;
@@ -176,7 +174,6 @@ public class AssignTaskProblemFactChange implements ProblemFactChange<TaskAssign
      * all the previous tasks in the chain are pinned to the same user. For keeping the structure consistency a task
      * assignment Tn is inserted after the last pinned element in the chain. In the example above we have that existing
      * tasks assignments T1, T2 and T3 are pinned.
-     * 
      * @param user the for adding a taskAssignment to.
      * @return the proper ChainElement object were a taskAssignment can be added. This method will never return null.
      */
@@ -191,8 +188,8 @@ public class AssignTaskProblemFactChange implements ProblemFactChange<TaskAssign
     }
 
     private static void setPreviousElementIfApply(TaskAssignment insertPositionNextTask,
-            TaskAssignment previousElement,
-            ScoreDirector<TaskAssigningSolution> scoreDirector) {
+                                                  TaskAssignment previousElement,
+                                                  ScoreDirector<TaskAssigningSolution> scoreDirector) {
         if (insertPositionNextTask != null) {
             scoreDirector.beforeVariableChanged(insertPositionNextTask, PREVIOUS_ELEMENT);
             insertPositionNextTask.setPreviousElement(previousElement);

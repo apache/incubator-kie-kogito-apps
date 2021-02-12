@@ -23,6 +23,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,10 +44,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.reactivestreams.Publisher;
-
-import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
@@ -100,8 +99,7 @@ public abstract class BaseTimerJobSchedulerTest {
         scheduledJob = JobDetails.builder().id(JOB_ID).trigger(trigger).status(SCHEDULED).build();
         scheduled = CompletableFuture.completedFuture(scheduledJob);
         lenient().when(jobRepository.get(JOB_ID)).thenReturn(scheduled);
-        lenient().when(jobRepository.save(any(JobDetails.class)))
-                .thenAnswer(a -> CompletableFuture.completedFuture(a.getArgument(0)));
+        lenient().when(jobRepository.save(any(JobDetails.class))).thenAnswer(a -> CompletableFuture.completedFuture(a.getArgument(0)));
         lenient().when(jobExecutor.execute(any())).thenReturn(scheduled);
 
         errorResponse = JobExecutionResponse.builder()

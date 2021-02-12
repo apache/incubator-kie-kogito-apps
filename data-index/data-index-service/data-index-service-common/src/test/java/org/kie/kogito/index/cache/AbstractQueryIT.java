@@ -73,8 +73,7 @@ abstract class AbstractQueryIT {
         String subProcessInstanceId = UUID.randomUUID().toString();
         ProcessInstance processInstance = getProcessInstance(processId, processInstanceId, ACTIVE.ordinal(), null, null);
         cacheService.getProcessInstancesCache().put(processInstanceId, processInstance);
-        cacheService.getProcessInstancesCache().put(subProcessInstanceId,
-                getProcessInstance(subProcessId, subProcessInstanceId, COMPLETED.ordinal(), processInstanceId, processId));
+        cacheService.getProcessInstancesCache().put(subProcessInstanceId, getProcessInstance(subProcessId, subProcessInstanceId, COMPLETED.ordinal(), processInstanceId, processId));
 
         queryAndAssert(in("state", asList(ACTIVE.ordinal(), COMPLETED.ordinal())), processInstanceId, subProcessInstanceId);
         queryAndAssert(equalTo("state", ACTIVE.ordinal()), processInstanceId);
@@ -102,8 +101,7 @@ abstract class AbstractQueryIT {
     }
 
     private void queryAndAssert(AttributeFilter filter, String... ids) {
-        List<ProcessInstance> instances =
-                cacheService.getProcessInstancesCache().query().filter(singletonList(filter)).execute();
+        List<ProcessInstance> instances = cacheService.getProcessInstancesCache().query().filter(singletonList(filter)).execute();
         assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id").containsExactlyInAnyOrder(ids);
     }
 }

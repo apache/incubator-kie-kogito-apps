@@ -33,8 +33,7 @@ public class GraphQLServiceClientConfig extends ServiceClientConfig {
         return new GraphQLServiceClientConfig.Builder();
     }
 
-    public static class Builder
-            extends ServiceClientConfig.Builder<GraphQLServiceClientConfig, GraphQLServiceClientConfig.Builder> {
+    public static class Builder extends ServiceClientConfig.Builder<GraphQLServiceClientConfig, GraphQLServiceClientConfig.Builder> {
 
         private Builder() {
         }

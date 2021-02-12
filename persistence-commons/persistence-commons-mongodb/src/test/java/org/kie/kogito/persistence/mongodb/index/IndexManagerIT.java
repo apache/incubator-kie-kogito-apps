@@ -29,6 +29,12 @@ import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexModel;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.AfterEach;
@@ -46,14 +52,6 @@ import org.kie.kogito.persistence.api.schema.SchemaType;
 import org.kie.kogito.persistence.mongodb.mock.MockProcessIndexEventListener;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 import org.mockito.ArgumentMatchers;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.IndexModel;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 
 import static io.quarkus.test.junit.QuarkusMock.installMockForType;
 import static java.util.stream.Collectors.toList;
@@ -90,14 +88,12 @@ class IndexManagerIT {
     static void setup_all() {
         AttributeDescriptor flightNumber = new AttributeDescriptor("flightNumber", "string", true);
         IndexDescriptor flightNumberIndex = new IndexDescriptor("flightNumber", List.of("flightNumber"));
-        flightEntityIndexDescriptor =
-                new EntityIndexDescriptor("org.acme.travels.travels.Flight", List.of(flightNumberIndex), List.of(flightNumber));
+        flightEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Flight", List.of(flightNumberIndex), List.of(flightNumber));
 
         AttributeDescriptor hotelName = new AttributeDescriptor("name", "string", true);
         AttributeDescriptor hotelRoom = new AttributeDescriptor("room", "string", true);
         IndexDescriptor hotelNameIndex = new IndexDescriptor("name", List.of("name"));
-        hotelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Hotel", List.of(hotelNameIndex),
-                List.of(hotelName, hotelRoom));
+        hotelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Hotel", List.of(hotelNameIndex), List.of(hotelName, hotelRoom));
 
         AttributeDescriptor flight = new AttributeDescriptor("flight", "Flight", false);
         AttributeDescriptor hotel = new AttributeDescriptor("hotel", "org.acme.travels.travels.Hotel", false);
@@ -108,8 +104,8 @@ class IndexManagerIT {
         IndexDescriptor idIndex = new IndexDescriptor("id", List.of("id"));
         IndexDescriptor metadataIndex = new IndexDescriptor("metadata", List.of("metadata"));
         travelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Travels",
-                List.of(flightIndex, hotelIndex, idIndex, metadataIndex),
-                List.of(flight, hotel, id, metadata));
+                                                                List.of(flightIndex, hotelIndex, idIndex, metadataIndex),
+                                                                List.of(flight, hotel, id, metadata));
 
         errorEntityIndexDescriptor = mockErrorIndexes();
     }
@@ -147,15 +143,14 @@ class IndexManagerIT {
 
         indexManager.onSchemaRegisteredEvent(
                 new SchemaRegisteredEvent(new SchemaDescriptor("test", "test", indexes,
-                        new ProcessDescriptor("test", travelEntityIndexDescriptor.getName())),
-                        new SchemaType("test")));
+                                                               new ProcessDescriptor("test", travelEntityIndexDescriptor.getName())),
+                                          new SchemaType("test")));
 
         MongoCollection<Document> testCollection = indexManager.getCollection("test");
         collections.add(testCollection);
 
         Set<String> testIndexes = StreamSupport.stream(testCollection.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name))
-                .collect(toSet());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toSet());
         assertEquals(getTestIndexNames(), testIndexes);
 
         mockProcessIndexEventListener.assertFire("test", travelEntityIndexDescriptor.getName());
@@ -170,8 +165,7 @@ class IndexManagerIT {
         collections.add(testCollection);
 
         Set<String> indexes = StreamSupport.stream(testCollection.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name))
-                .collect(toSet());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toSet());
         assertEquals(getTestIndexNames(), indexes);
     }
 
@@ -180,8 +174,7 @@ class IndexManagerIT {
         indexManager.getCollectionIndexMapping().put("test1", travelEntityIndexDescriptor.getName());
         indexManager.getCollectionIndexMapping().put("test2", travelEntityIndexDescriptor.getName());
 
-        indexManager
-                .updateIndexes(List.of(travelEntityIndexDescriptor, hotelEntityIndexDescriptor, flightEntityIndexDescriptor));
+        indexManager.updateIndexes(List.of(travelEntityIndexDescriptor, hotelEntityIndexDescriptor, flightEntityIndexDescriptor));
 
         MongoCollection<Document> testCollection1 = indexManager.getCollection("test1");
         MongoCollection<Document> testCollection2 = indexManager.getCollection("test2");
@@ -189,12 +182,10 @@ class IndexManagerIT {
         collections.add(testCollection2);
 
         Set<String> indexes1 = StreamSupport.stream(testCollection1.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name))
-                .collect(toSet());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toSet());
         assertEquals(getTestIndexNames(), indexes1);
         Set<String> indexes2 = StreamSupport.stream(testCollection2.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name))
-                .collect(toSet());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toSet());
         assertEquals(getTestIndexNames(), indexes2);
     }
 
@@ -207,8 +198,7 @@ class IndexManagerIT {
 
         indexManager.updateCollection(collection, travelEntityIndexDescriptor);
         Set<String> indexes = StreamSupport.stream(collection.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name))
-                .collect(toSet());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toSet());
         assertEquals(getTestIndexNames(), indexes);
     }
 
@@ -243,8 +233,7 @@ class IndexManagerIT {
 
         Optional<IndexModel> index = indexManager.createIndex(id, parentField, prefixUUID);
 
-        assertTrue(equalsIndexModels(List.of(index.get()), List.of(
-                new IndexModel(Indexes.ascending(fieldName), new IndexOptions().name(prefixUUID + fieldName).sparse(true)))));
+        assertTrue(equalsIndexModels(List.of(index.get()), List.of(new IndexModel(Indexes.ascending(fieldName), new IndexOptions().name(prefixUUID + fieldName).sparse(true)))));
     }
 
     @Test
@@ -269,8 +258,7 @@ class IndexManagerIT {
         Optional<IndexModel> index = indexManager.createIndex(id, parentField, prefixUUID);
 
         assertTrue(equalsIndexModels(List.of(index.get()),
-                List.of(new IndexModel(Indexes.ascending(indexName + ".test1", indexName + ".test2"),
-                        new IndexOptions().name(prefixUUID + indexName).sparse(true)))));
+                                     List.of(new IndexModel(Indexes.ascending(indexName + ".test1", indexName + ".test2"), new IndexOptions().name(prefixUUID + indexName).sparse(true)))));
     }
 
     @Test
@@ -301,18 +289,12 @@ class IndexManagerIT {
 
     private List<IndexModel> getTestIndexModels() {
         return List.of(
-                new IndexModel(Indexes.ascending("flight"),
-                        new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.flight").sparse(true)),
-                new IndexModel(Indexes.ascending("flight.flightNumber"),
-                        new IndexOptions().name("e325b16a-a10b-32b0-a574-2595902073cb.flightNumber").sparse(true)),
-                new IndexModel(Indexes.ascending("hotel"),
-                        new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.hotel").sparse(true)),
-                new IndexModel(Indexes.ascending("hotel.name"),
-                        new IndexOptions().name("e919c49d-5f0c-3737-a853-67810a3394d0.name").sparse(true)),
-                new IndexModel(Indexes.ascending("id"),
-                        new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.id").sparse(true)),
-                new IndexModel(Indexes.ascending("metadata"),
-                        new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.metadata").sparse(true)));
+                new IndexModel(Indexes.ascending("flight"), new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.flight").sparse(true)),
+                new IndexModel(Indexes.ascending("flight.flightNumber"), new IndexOptions().name("e325b16a-a10b-32b0-a574-2595902073cb.flightNumber").sparse(true)),
+                new IndexModel(Indexes.ascending("hotel"), new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.hotel").sparse(true)),
+                new IndexModel(Indexes.ascending("hotel.name"), new IndexOptions().name("e919c49d-5f0c-3737-a853-67810a3394d0.name").sparse(true)),
+                new IndexModel(Indexes.ascending("id"), new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.id").sparse(true)),
+                new IndexModel(Indexes.ascending("metadata"), new IndexOptions().name("d41d8cd9-8f00-3204-a980-0998ecf8427e.metadata").sparse(true)));
     }
 
     private Set<String> getTestIndexNames() {
@@ -330,10 +312,8 @@ class IndexManagerIT {
     }
 
     private static EntityIndexDescriptor mockErrorIndexes() {
-        List<IndexDescriptor> indexDescriptors = IntStream.rangeClosed(0, 75)
-                .mapToObj(i -> new IndexDescriptor("test" + i, List.of("test" + i))).collect(toList());
-        List<AttributeDescriptor> attributeDescriptors = IntStream.rangeClosed(0, 75)
-                .mapToObj(i -> new AttributeDescriptor("test" + i, "string", true)).collect(toList());
+        List<IndexDescriptor> indexDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new IndexDescriptor("test" + i, List.of("test" + i))).collect(toList());
+        List<AttributeDescriptor> attributeDescriptors = IntStream.rangeClosed(0, 75).mapToObj(i -> new AttributeDescriptor("test" + i, "string", true)).collect(toList());
         return new EntityIndexDescriptor("org.acme.travels.travels.Travels", indexDescriptors, attributeDescriptors);
     }
 }

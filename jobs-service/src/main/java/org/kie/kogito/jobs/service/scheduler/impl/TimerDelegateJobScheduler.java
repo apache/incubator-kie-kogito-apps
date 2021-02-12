@@ -60,13 +60,12 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
 
     @Inject
     public TimerDelegateJobScheduler(ReactiveJobRepository jobRepository,
-            @ConfigProperty(name = "kogito.jobs-service.backoffRetryMillis") long backoffRetryMillis,
-            @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis") long maxIntervalLimitToRetryMillis,
-            @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes") long schedulerChunkInMinutes,
-            @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs") boolean forceExecuteExpiredJobs,
-            HttpJobExecutor httpJobExecutor, VertxTimerServiceScheduler delegate) {
-        super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis, schedulerChunkInMinutes,
-                forceExecuteExpiredJobs);
+                                     @ConfigProperty(name = "kogito.jobs-service.backoffRetryMillis") long backoffRetryMillis,
+                                     @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis") long maxIntervalLimitToRetryMillis,
+                                     @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes") long schedulerChunkInMinutes,
+                                     @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs") boolean forceExecuteExpiredJobs,
+                                     HttpJobExecutor httpJobExecutor, VertxTimerServiceScheduler delegate) {
+        super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis, schedulerChunkInMinutes, forceExecuteExpiredJobs);
         this.httpJobExecutor = httpJobExecutor;
         this.delegate = delegate;
     }
@@ -77,7 +76,7 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
         return ReactiveStreams
                 .of(job)
                 .map(j -> delegate.scheduleJob(new HttpJob(httpJobExecutor), new HttpJobContext(j),
-                        trigger.orElse(j.getTrigger())));
+                                               trigger.orElse(j.getTrigger())));
     }
 
     @Override

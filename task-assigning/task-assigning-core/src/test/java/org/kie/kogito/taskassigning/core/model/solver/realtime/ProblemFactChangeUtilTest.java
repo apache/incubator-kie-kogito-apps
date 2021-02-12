@@ -56,10 +56,10 @@ class ProblemFactChangeUtilTest {
     @BeforeEach
     void setUp() {
         userTasks = Arrays.asList(mockTaskAssignment(TASK_ID1, true),
-                mockTaskAssignment(TASK_ID2, true),
-                mockTaskAssignment(TASK_ID3, false),
-                mockTaskAssignment(TASK_ID4, false),
-                mockTaskAssignment(TASK_ID5, false));
+                                  mockTaskAssignment(TASK_ID2, true),
+                                  mockTaskAssignment(TASK_ID3, false),
+                                  mockTaskAssignment(TASK_ID4, false),
+                                  mockTaskAssignment(TASK_ID5, false));
         user = mockUser(USER_ID, userTasks);
     }
 
@@ -72,10 +72,8 @@ class ProblemFactChangeUtilTest {
     @Test
     void releaseNonPinnedTaskAssignments() {
         ProblemFactChangeUtil.releaseNonPinnedTaskAssignments(user, scoreDirector);
-        userTasks.stream().filter(TaskAssignment::isPinned)
-                .forEach(taskAssignment -> assertTaskWasNotReleased(taskAssignment, scoreDirector));
-        userTasks.stream().filter(taskAssignment -> !taskAssignment.isPinned())
-                .forEach(taskAssignment -> assertTaskWasReleased(taskAssignment, scoreDirector));
+        userTasks.stream().filter(TaskAssignment::isPinned).forEach(taskAssignment -> assertTaskWasNotReleased(taskAssignment, scoreDirector));
+        userTasks.stream().filter(taskAssignment -> !taskAssignment.isPinned()).forEach(taskAssignment -> assertTaskWasReleased(taskAssignment, scoreDirector));
     }
 
     @Test
@@ -94,8 +92,7 @@ class ProblemFactChangeUtilTest {
         assertThat(taskAssignment.isPinned()).as("Invalid pinned status for taskAssignment: %s", taskAssignment).isFalse();
         verify(scoreDirector).afterProblemPropertyChanged(taskAssignment);
         verify(scoreDirector).beforeVariableChanged(taskAssignment, PREVIOUS_ELEMENT);
-        assertThat(taskAssignment.getPreviousElement()).as("Invalid previousElement for taskAssignment: %s", taskAssignment)
-                .isNull();
+        assertThat(taskAssignment.getPreviousElement()).as("Invalid previousElement for taskAssignment: %s", taskAssignment).isNull();
         verify(scoreDirector).afterVariableChanged(taskAssignment, PREVIOUS_ELEMENT);
     }
 
