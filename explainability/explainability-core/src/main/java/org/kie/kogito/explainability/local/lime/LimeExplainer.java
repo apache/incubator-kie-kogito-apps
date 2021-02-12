@@ -16,7 +16,8 @@
 package org.kie.kogito.explainability.local.lime;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -184,11 +185,58 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
                                                            limeInputs.getPerturbedOutputs(),
                                                            linearizedTargetInputFeatures, originalOutput);
-        Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
+        List<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
         // weight the training samples based on the proximity to the target input to explain
         double[] sampleWeights = SampleWeighter.getSampleWeights(linearizedTargetInputFeatures, trainingSet);
 
+        double[] sparseBalanceCoefficients = getSparseBalanceCoefficients(linearizedTargetInputFeatures, trainingSet);
+
+        if (limeConfig.isProximityFilter()) {
+            List<Integer> toRemove = new ArrayList<>();
+            for (int i = trainingSet.size() - 1; i >= 0; i--) {
+                if (sampleWeights[i] < limeConfig.getProximityThreshold()) {
+                    toRemove.add(i);
+                }
+            }
+            if (!toRemove.isEmpty() && trainingSet.size() - toRemove.size() > 10) {
+                for (Integer r : toRemove) {
+                    trainingSet.remove(r.intValue());
+                }
+                Arrays.fill(sampleWeights, 1);
+            }
+        }
+
+        LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
+
+        double loss = linearModel.fit(trainingSet, sampleWeights);
+        if (!Double.isNaN(loss)) {
+            // create the output saliency
+            int i = 0;
+            for (Feature linearizedFeature : linearizedTargetInputFeatures) {
+                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]
+                        * sparseBalanceCoefficients[i]);
+                featureImportanceList.add(featureImportance);
+                i++;
+            }
+        }
+        Saliency saliency = new Saliency(originalOutput, featureImportanceList);
+        result.put(originalOutput.getName(), saliency);
+    }
+
+    /**
+     * Calculate sparse balance feature coefficients.
+     * We consider a sparse feature to be better for training the classifier accurately when it doesn't present a good
+     * balance of 1s and 0s values with respect to 0 and 1 predictions. In fact such features would hardly generate a
+     * well fitting classifier, if taken in isolation.
+     * The generated coefficients are inverse proportional with respect to the no. of features as the above becomes more
+     * impacting when the no. of features is low.
+     *
+     * @param linearizedTargetInputFeatures no of features
+     * @param trainingSet                   training set for the linear classifier
+     * @return sparse balance coefficients
+     */
+    private double[] getSparseBalanceCoefficients(List<Feature> linearizedTargetInputFeatures, List<Pair<double[], Double>> trainingSet) {
         int ts = linearizedTargetInputFeatures.size();
         double[] coefficients = new double[ts];
         Arrays.fill(coefficients, 1);
@@ -211,27 +259,15 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             zeroPredicted = Arrays.stream(zeroPredicted).map(d -> d / trainingSet.size()).toArray();
             onePredicted = Arrays.stream(onePredicted).map(d -> d / trainingSet.size()).toArray();
             for (int i = 0; i < coefficients.length; i++) {
+                // calculate distance from the perfect balance (high is good)
                 double zeroDistance = Math.abs(0.5 - zeroPredicted[i]);
                 double oneDistance = Math.abs(0.5 - onePredicted[i]);
-                double zm = Math.tanh((1e-2 + zeroDistance + oneDistance) / 2 * ts);
+                // coefficient is proportional to distance and inverse proportional to the number of features
+                double zm = Math.tanh((1e-2 + zeroDistance + oneDistance) / (2 * ts));
                 coefficients[i] *= zm;
             }
         }
-
-        LinearModel linearModel = new LinearModel(ts, limeInputs.isClassification());
-        double loss = linearModel.fit(trainingSet, sampleWeights);
-        if (!Double.isNaN(loss)) {
-            // create the output saliency
-            int i = 0;
-            for (Feature linearizedFeature : linearizedTargetInputFeatures) {
-                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]
-                        * coefficients[i]);
-                featureImportanceList.add(featureImportance);
-                i++;
-            }
-        }
-        Saliency saliency = new Saliency(originalOutput, featureImportanceList);
-        result.put(originalOutput.getName(), saliency);
+        return coefficients;
     }
 
     /**

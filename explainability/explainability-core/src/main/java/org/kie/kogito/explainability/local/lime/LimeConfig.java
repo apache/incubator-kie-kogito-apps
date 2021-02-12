@@ -29,6 +29,8 @@ public class LimeConfig {
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
     private static final boolean DEFAULT_PENALIZE_BALANCE_SPARSE = false;
+    private static final boolean DEFAULT_PROXIMITY_FILTER = true;
+    private static final double DEFAULT_PROXIMITY_THRESHOLD = 0.8;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
@@ -56,6 +58,16 @@ public class LimeConfig {
      * Whether to penalize weights whose sparse features encoding is balanced with respect to target output
      */
     private boolean penalizeBalanceSparse = DEFAULT_PENALIZE_BALANCE_SPARSE;
+
+    /**
+     * Whether to prefer filtering by proximity over weighting by proximity when generating samples for the linear model.
+     */
+    private boolean proximityFilter = DEFAULT_PROXIMITY_FILTER;
+
+    /**
+     * The proximity threshold used to filter samples when {@code proximityFilter == true}.
+     */
+    private double proximityThreshold = DEFAULT_PROXIMITY_THRESHOLD;
 
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
@@ -87,6 +99,16 @@ public class LimeConfig {
         return this;
     }
 
+    public LimeConfig withProximityFilter(boolean proximityFilter) {
+        this.proximityFilter = proximityFilter;
+        return this;
+    }
+
+    public LimeConfig withProximityThreshold(double proximityThreshold) {
+        this.proximityThreshold = proximityThreshold;
+        return this;
+    }
+
     public int getNoOfRetries() {
         return noOfRetries;
     }
@@ -110,4 +132,13 @@ public class LimeConfig {
     public boolean isPenalizeBalanceSparse() {
         return penalizeBalanceSparse;
     }
+
+    public boolean isProximityFilter() {
+        return proximityFilter;
+    }
+
+    public double getProximityThreshold() {
+        return proximityThreshold;
+    }
+
 }
