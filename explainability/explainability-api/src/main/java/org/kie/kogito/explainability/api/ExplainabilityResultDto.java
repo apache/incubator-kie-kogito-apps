@@ -38,8 +38,7 @@ public class ExplainabilityResultDto {
     private ExplainabilityResultDto() {
     }
 
-    private ExplainabilityResultDto(String executionId, ExplainabilityStatus status, String statusDetails,
-            Map<String, SaliencyDto> saliencies) {
+    private ExplainabilityResultDto(String executionId, ExplainabilityStatus status, String statusDetails, Map<String, SaliencyDto> saliencies) {
         this.executionId = executionId;
         this.status = status;
         this.statusDetails = statusDetails;

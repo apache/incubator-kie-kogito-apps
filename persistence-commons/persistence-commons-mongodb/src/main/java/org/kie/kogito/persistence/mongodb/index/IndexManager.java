@@ -16,10 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.index;
 
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +31,12 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimaps;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexModel;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import org.bson.Document;
 import org.kie.kogito.persistence.api.schema.EntityIndexDescriptor;
 import org.kie.kogito.persistence.api.schema.IndexDescriptor;
@@ -42,12 +44,9 @@ import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
 import org.kie.kogito.persistence.mongodb.client.MongoClientManager;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.IndexModel;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @ApplicationScoped
 public class IndexManager {
@@ -76,8 +75,7 @@ public class IndexManager {
             indexes.putAll(event.getSchemaDescriptor().getEntityIndexDescriptors());
             updateIndexes(event.getSchemaDescriptor().getEntityIndexDescriptors().values());
 
-            event.getSchemaDescriptor().getProcessDescriptor()
-                    .ifPresent(processDescriptor -> processIndexEvent.fire(new ProcessIndexEvent(processDescriptor)));
+            event.getSchemaDescriptor().getProcessDescriptor().ifPresent(processDescriptor -> processIndexEvent.fire(new ProcessIndexEvent(processDescriptor)));
         }
     }
 
@@ -91,8 +89,9 @@ public class IndexManager {
     }
 
     void updateIndexes(Collection<EntityIndexDescriptor> entityIndexDescriptorList) {
-        entityIndexDescriptorList.forEach(entityIndexDescriptor -> this.getCollectionsWithIndex(entityIndexDescriptor.getName())
-                .forEach(col -> this.updateCollection(this.getCollection(col), entityIndexDescriptor)));
+        entityIndexDescriptorList.forEach(entityIndexDescriptor ->
+                                                  this.getCollectionsWithIndex(entityIndexDescriptor.getName())
+                                                          .forEach(col -> this.updateCollection(this.getCollection(col), entityIndexDescriptor)));
     }
 
     void updateCollection(MongoCollection<Document> collection, EntityIndexDescriptor index) {
@@ -101,12 +100,10 @@ public class IndexManager {
         }
 
         List<IndexModel> parsedIndexes = createIndexForEntity("", index);
-        Map<String, IndexModel> indexNameMap =
-                parsedIndexes.stream().collect(toMap(ind -> ind.getOptions().getName(), identity()));
+        Map<String, IndexModel> indexNameMap = parsedIndexes.stream().collect(toMap(ind -> ind.getOptions().getName(), identity()));
 
         List<String> indexesExists = StreamSupport.stream(collection.listIndexes().spliterator(), false)
-                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name))
-                .collect(toList());
+                .map(document -> document.getString(INDEX_NAME_FIELD)).filter(name -> !DEFAULT_INDEX.equals(name)).collect(toList());
 
         indexesExists.forEach(ind -> {
             if (!indexNameMap.containsKey(ind)) {
@@ -135,8 +132,7 @@ public class IndexManager {
         List<IndexModel> subIndexesToCreate = entityIndexDescriptor.getAttributeDescriptors().parallelStream()
                 .filter(attributeDescriptor -> !attributeDescriptor.isPrimitiveType())
                 .flatMap(attributeDescriptor -> {
-                    String fieldName = parentField.isEmpty() ? attributeDescriptor.getName()
-                            : (parentField + "." + attributeDescriptor.getName());
+                    String fieldName = parentField.isEmpty() ? attributeDescriptor.getName() : (parentField + "." + attributeDescriptor.getName());
                     if (indexes.containsKey(attributeDescriptor.getTypeName())) {
                         return createIndexForEntity(fieldName, indexes.get(attributeDescriptor.getTypeName())).stream();
                     } else if (indexes.containsKey(pkg + attributeDescriptor.getTypeName())) {

@@ -15,9 +15,9 @@
  */
 package org.kie.kogito.testcontainers;
 
-import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
-
 import org.testcontainers.containers.GenericContainer;
+
+import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
 
 public class KogitoServiceContainer extends GenericContainer<KogitoServiceContainer> {
 

@@ -64,8 +64,7 @@ public class JobResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public CompletionStage<ScheduledJob> create(Job job) {
         LOGGER.debug("REST create {}", job);
-        return ReactiveStreams
-                .fromPublisher(scheduler.schedule(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build())))
+        return ReactiveStreams.fromPublisher(scheduler.schedule(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build())))
                 .map(ScheduledJobAdapter::of)
                 .findFirst()
                 .run()
@@ -88,7 +87,8 @@ public class JobResource {
                 || Objects.nonNull(jobToBeMerged.getPriority())
                 || (Objects.nonNull(jobToBeMerged.getRetries()) && jobToBeMerged.getRetries() > 0)
                 || Objects.nonNull(jobToBeMerged.getRecipient())
-                || Objects.nonNull(jobToBeMerged.getStatus())) {
+                || Objects.nonNull(jobToBeMerged.getStatus())
+        ) {
             throw new IllegalArgumentException("Patch an only be applied to the Job scheduling trigger attributes");
         }
 

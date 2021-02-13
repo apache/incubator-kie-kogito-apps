@@ -15,19 +15,13 @@
  */
 package org.kie.kogito.explainability;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonMap;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.BooleanNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.Feature;
@@ -39,14 +33,19 @@ import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import io.vertx.core.json.JsonObject;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConversionUtilsTest {
 
@@ -89,7 +88,7 @@ class ConversionUtilsTest {
         assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
 
         List<TypedValue> values = List.of(new UnitValue("number", new DoubleNode(0d)),
-                new UnitValue("number", new DoubleNode(1d)));
+                                          new UnitValue("number", new DoubleNode(1d)));
         Feature collectionFeature = ConversionUtils.toFeature("name", new CollectionValue("list", values));
         assertNotNull(collectionFeature);
         assertEquals("name", collectionFeature.getName());
@@ -210,7 +209,7 @@ class ConversionUtilsTest {
         assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
 
         List<TypedValue> values = List.of(new UnitValue("number", new DoubleNode(0d)),
-                new UnitValue("number", new DoubleNode(1d)));
+                                          new UnitValue("number", new DoubleNode(1d)));
         assertNotNull(ConversionUtils.toOutput("name", new CollectionValue("list", values)));
     }
 

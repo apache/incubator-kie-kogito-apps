@@ -16,20 +16,19 @@
 
 package org.kie.kogito.index.mongodb.mock;
 
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 
+import io.quarkus.test.Mock;
 import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;
 import org.mockito.Mockito;
 
-import io.quarkus.test.Mock;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @Mock
 @ApplicationScoped

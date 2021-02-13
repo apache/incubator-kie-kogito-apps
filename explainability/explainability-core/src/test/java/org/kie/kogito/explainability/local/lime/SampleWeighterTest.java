@@ -15,8 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -26,6 +24,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SampleWeighterTest {
 

@@ -15,12 +15,6 @@
  */
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +25,12 @@ import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.optaplanner.core.api.score.director.ScoreDirector;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 abstract class AbstractTaskPropertyChangeProblemFactChangeTest<T extends AbstractTaskPropertyChangeProblemFactChange> {

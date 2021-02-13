@@ -40,8 +40,7 @@ public class AddUserProblemFactChange implements ProblemFactChange<TaskAssigning
         final TaskAssigningSolution workingSolution = scoreDirector.getWorkingSolution();
         final User workingUser = scoreDirector.lookUpWorkingObjectOrReturnNull(user);
         if (workingUser != null) {
-            throw new TaskAssigningRuntimeException(
-                    String.format("A user with the given identifier id: %s already exists", user.getId()));
+            throw new TaskAssigningRuntimeException(String.format("A user with the given identifier id: %s already exists", user.getId()));
         }
         // Shallow clone the user list so only workingSolution is affected, not bestSolution
         workingSolution.setUserList(new ArrayList<>(workingSolution.getUserList()));

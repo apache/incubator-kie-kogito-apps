@@ -40,6 +40,7 @@ class DateGreaterThanEqualArgumentTest extends AbstractDateArgumentTest<ZonedDat
     protected Stream<Arguments> createTestValues() {
         return Stream.of(
                 Arguments.of(new TestArgument<>(VALUE, "{\"greaterThanEqual\":\"" + VALUE + "\"}")),
-                Arguments.of(new TestArgument<>(null, "{\"greaterThanEqual\":null}")));
+                Arguments.of(new TestArgument<>(null, "{\"greaterThanEqual\":null}"))
+        );
     }
 }

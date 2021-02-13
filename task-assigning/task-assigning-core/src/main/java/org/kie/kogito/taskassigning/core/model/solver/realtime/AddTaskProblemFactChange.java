@@ -16,8 +16,8 @@
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
 import org.kie.kogito.taskassigning.core.TaskAssigningRuntimeException;
-import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
+import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.api.solver.ProblemFactChange;
 
@@ -42,8 +42,7 @@ public class AddTaskProblemFactChange implements ProblemFactChange<TaskAssigning
         TaskAssigningSolution solution = scoreDirector.getWorkingSolution();
         TaskAssignment workingTaskAssignment = scoreDirector.lookUpWorkingObjectOrReturnNull(taskAssignment);
         if (workingTaskAssignment != null) {
-            throw new TaskAssigningRuntimeException(
-                    String.format("A task assignment with the given identifier id: %s already exists", taskAssignment.getId()));
+            throw new TaskAssigningRuntimeException(String.format("A task assignment with the given identifier id: %s already exists", taskAssignment.getId()));
         }
         scoreDirector.beforeEntityAdded(taskAssignment);
         // Planning entity lists are already cloned by the SolutionCloner, no need to clone.

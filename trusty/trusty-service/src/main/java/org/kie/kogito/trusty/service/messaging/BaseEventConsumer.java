@@ -18,16 +18,14 @@ package org.kie.kogito.trusty.service.messaging;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.cloudevents.CloudEvent;
 
 public abstract class BaseEventConsumer<E> {
 

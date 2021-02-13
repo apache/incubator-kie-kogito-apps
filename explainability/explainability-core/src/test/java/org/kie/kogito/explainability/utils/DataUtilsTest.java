@@ -15,14 +15,7 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -46,6 +39,14 @@ import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 class DataUtilsTest {
 
@@ -108,8 +109,8 @@ class DataUtilsTest {
 
     @Test
     void testEuclideanDistance() {
-        double[] x = new double[] { 1, 1 };
-        double[] y = new double[] { 2, 3 };
+        double[] x = new double[]{1, 1};
+        double[] y = new double[]{2, 3};
         double distance = DataUtils.euclideanDistance(x, y);
         assertEquals(2.236, distance, 1e-3);
 
@@ -118,8 +119,8 @@ class DataUtilsTest {
 
     @Test
     void testHammingDistanceDouble() {
-        double[] x = new double[] { 2, 1 };
-        double[] y = new double[] { 2, 3 };
+        double[] x = new double[]{2, 1};
+        double[] y = new double[]{2, 3};
         double distance = DataUtils.hammingDistance(x, y);
         assertEquals(1, distance, 1e-1);
 
@@ -281,8 +282,7 @@ class DataUtilsTest {
     }
 
     private void assertPerturbDropNumeric(PredictionInput input, int noOfPerturbations) {
-        List<Feature> newFeatures =
-                DataUtils.perturbFeatures(input.getFeatures(), new PerturbationContext(random, noOfPerturbations));
+        List<Feature> newFeatures = DataUtils.perturbFeatures(input.getFeatures(), new PerturbationContext(random, noOfPerturbations));
         int changedFeatures = 0;
         for (int i = 0; i < input.getFeatures().size(); i++) {
             double v = input.getFeatures().get(i).getValue().asNumber();
@@ -296,8 +296,7 @@ class DataUtilsTest {
     }
 
     private void assertPerturbDropString(PredictionInput input, int noOfPerturbations) {
-        List<Feature> newFeatures =
-                DataUtils.perturbFeatures(input.getFeatures(), new PerturbationContext(random, noOfPerturbations));
+        List<Feature> newFeatures = DataUtils.perturbFeatures(input.getFeatures(), new PerturbationContext(random, noOfPerturbations));
         int changedFeatures = 0;
         for (int i = 0; i < input.getFeatures().size(); i++) {
             String v = input.getFeatures().get(i).getValue().asString();
@@ -376,7 +375,7 @@ class DataUtilsTest {
         list.add(FeatureFactory.newNumericalFeature("f2", 13));
         list.add(FeatureFactory.newDurationFeature("f3", Duration.ofDays(13)));
         list.add(FeatureFactory.newTimeFeature("f4", LocalTime.now()));
-        list.add(FeatureFactory.newObjectFeature("f5", new float[] { 0.4f, 0.4f }));
+        list.add(FeatureFactory.newObjectFeature("f5", new float[]{0.4f, 0.4f}));
         list.add(FeatureFactory.newObjectFeature("f6", FeatureFactory.newObjectFeature("nf-0", new Object())));
         Feature f = FeatureFactory.newCompositeFeature("name", list);
         features.add(f);

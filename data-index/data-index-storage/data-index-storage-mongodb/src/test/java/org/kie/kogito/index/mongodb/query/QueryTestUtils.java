@@ -16,23 +16,21 @@
 
 package org.kie.kogito.index.mongodb.query;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 import java.util.function.BiConsumer;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class QueryTestUtils {
 
     static <V> BiConsumer<List<V>, String[]> assertWithIdInOrder() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id")
-                .containsExactly(ids);
+        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id").containsExactly(ids);
     }
 
     static <V> BiConsumer<List<V>, String[]> assertWithId() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id")
-                .containsExactlyInAnyOrder(ids);
+        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id").containsExactlyInAnyOrder(ids);
     }
 
     static BiConsumer<List<String>, String[]> assertWithStringInOrder() {
@@ -44,12 +42,10 @@ class QueryTestUtils {
     }
 
     static BiConsumer<List<ObjectNode>, String[]> assertWithObjectNodeInOrder() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length)
-                .extracting(n -> n.get("id").asText()).containsExactly(ids);
+        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting(n -> n.get("id").asText()).containsExactly(ids);
     }
 
     static BiConsumer<List<ObjectNode>, String[]> assertWithObjectNode() {
-        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length)
-                .extracting(n -> n.get("id").asText()).containsExactlyInAnyOrder(ids);
+        return (instances, ids) -> assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting(n -> n.get("id").asText()).containsExactlyInAnyOrder(ids);
     }
 }

@@ -15,16 +15,15 @@
  */
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
-import static org.kie.kogito.taskassigning.index.service.client.graphql.ArgumentFactory.newPagination;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.kie.kogito.taskassigning.index.service.client.graphql.pagination.PaginationArgument;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import static org.kie.kogito.taskassigning.index.service.client.graphql.ArgumentFactory.newPagination;
 
 public class UserTaskInstancesQueryBuilder extends AbstractQueryBuilder<UserTaskInstancesQueryBuilder> {
 

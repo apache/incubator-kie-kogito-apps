@@ -15,15 +15,15 @@
  */
 package org.kie.kogito.taskassigning.index.service.client.graphql.date;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
-
 import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.kie.kogito.taskassigning.index.service.client.graphql.AbstractArgumentTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
 
 abstract class AbstractDateArgumentTest<V, T extends DateArgument<V>> extends AbstractArgumentTest<V, T> {
 

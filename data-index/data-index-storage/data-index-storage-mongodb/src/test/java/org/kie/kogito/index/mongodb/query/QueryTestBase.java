@@ -25,8 +25,7 @@ import org.kie.kogito.persistence.api.query.AttributeSort;
 
 class QueryTestBase<K, V> {
 
-    void queryAndAssert(BiConsumer<List<V>, String[]> assertConsumer, Storage<K, V> storage, List<AttributeFilter<?>> filters,
-            List<AttributeSort> sort, Integer offset, Integer limit, String... ids) {
+    void queryAndAssert(BiConsumer<List<V>, String[]> assertConsumer, Storage<K, V> storage, List<AttributeFilter<?>> filters, List<AttributeSort> sort, Integer offset, Integer limit, String... ids) {
         assertConsumer.accept(storage.query().filter(filters).sort(sort).offset(offset).limit(limit).execute(), ids);
     }
 }

@@ -15,8 +15,6 @@
  */
 package org.kie.kogito.taskassigning.core;
 
-import static org.optaplanner.examples.common.app.CommonApp.DATA_DIR_SYSTEM_PROPERTY;
-
 import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -27,8 +25,8 @@ import java.util.Set;
 
 import org.kie.kogito.taskassigning.core.model.Group;
 import org.kie.kogito.taskassigning.core.model.Task;
-import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
+import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.examples.common.app.CommonApp;
 import org.optaplanner.examples.common.persistence.AbstractSolutionImporter;
@@ -37,6 +35,8 @@ import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.optaplanner.examples.common.app.CommonApp.DATA_DIR_SYSTEM_PROPERTY;
 
 /**
  * Helper class for generating a set of example solution files. Was used for generating the files below and doesn't need
@@ -71,16 +71,16 @@ public class TaskAssigningGenerator {
 
     private static final StringDataGenerator groupNameGenerator = new StringDataGenerator()
             .addPart(true, 0,
-                    "HR",
-                    "IT",
-                    "PM",
-                    "Sales",
-                    "Legal",
-                    "Marketing",
-                    "Manager",
-                    "Developer",
-                    "Accounting",
-                    "Support");
+                     "HR",
+                     "IT",
+                     "PM",
+                     "Sales",
+                     "Legal",
+                     "Marketing",
+                     "Manager",
+                     "Developer",
+                     "Accounting",
+                     "Support");
 
     private static final StringDataGenerator userNameGenerator = StringDataGenerator.buildFullNames();
 
@@ -107,8 +107,7 @@ public class TaskAssigningGenerator {
         return taskListSize + "tasks-" + userListSize + "users";
     }
 
-    private TaskAssigningSolution createTaskAssigningSolution(String fileName, int taskListSize, int groupListSize,
-            int userListSize) {
+    private TaskAssigningSolution createTaskAssigningSolution(String fileName, int taskListSize, int groupListSize, int userListSize) {
         List<Group> groupList = createGroupList(groupListSize);
         List<User> userList = createUserList(userListSize, groupList);
         List<TaskAssignment> taskAssignmentList = createTaskAssignmentList(taskListSize, userList, groupList);
@@ -118,11 +117,11 @@ public class TaskAssigningGenerator {
         BigInteger fixedFacts = AbstractSolutionImporter.factorial(userListSize - 1);
         BigInteger possibleSolutionSize = (totalFacts == null || fixedFacts == null) ? null : totalFacts.divide(fixedFacts);
         LOGGER.info("TaskAssigningSolution {} has {} tasks, {} groups, and {} users with a search space of {}.",
-                fileName,
-                taskListSize,
-                groupListSize,
-                userListSize,
-                AbstractSolutionImporter.getFlooredPossibleSolutionSize(possibleSolutionSize));
+                    fileName,
+                    taskListSize,
+                    groupListSize,
+                    userListSize,
+                    AbstractSolutionImporter.getFlooredPossibleSolutionSize(possibleSolutionSize));
         return solution;
     }
 
@@ -145,8 +144,7 @@ public class TaskAssigningGenerator {
             String userName = userNameGenerator.generateNextValue();
             User user = new User(userName);
             user.setEnabled(true);
-            int groupListSize =
-                    USER_GROUP_SET_SIZE_MINIMUM + random.nextInt(USER_GROUP_SET_MAXIMUM - USER_GROUP_SET_SIZE_MINIMUM);
+            int groupListSize = USER_GROUP_SET_SIZE_MINIMUM + random.nextInt(USER_GROUP_SET_MAXIMUM - USER_GROUP_SET_SIZE_MINIMUM);
             if (groupListSize > groupList.size()) {
                 groupListSize = groupList.size();
             }
@@ -174,8 +172,7 @@ public class TaskAssigningGenerator {
             TaskAssignment taskAssignment = new TaskAssignment(task);
 
             int groupListIndex = random.nextInt(groupList.size());
-            int groupPotentialOwnersSize = TASK_POTENTIAL_OWNERS_GROUP_SIZE_MINIMUM
-                    + random.nextInt(TASK_POTENTIAL_OWNERS_GROUP_SIZE_MAXIMUM - TASK_POTENTIAL_OWNERS_GROUP_SIZE_MINIMUM);
+            int groupPotentialOwnersSize = TASK_POTENTIAL_OWNERS_GROUP_SIZE_MINIMUM + random.nextInt(TASK_POTENTIAL_OWNERS_GROUP_SIZE_MAXIMUM - TASK_POTENTIAL_OWNERS_GROUP_SIZE_MINIMUM);
             if (groupPotentialOwnersSize > groupList.size()) {
                 groupPotentialOwnersSize = groupList.size();
             }
@@ -185,8 +182,7 @@ public class TaskAssigningGenerator {
             }
 
             int userListIndex = random.nextInt(userList.size());
-            int userPotentialOwnersSize = TASK_POTENTIAL_OWNERS_USER_SIZE_MINIMUM
-                    + random.nextInt(TASK_POTENTIAL_OWNERS_USER_SIZE_MAXIMUM - TASK_POTENTIAL_OWNERS_USER_SIZE_MINIMUM);
+            int userPotentialOwnersSize = TASK_POTENTIAL_OWNERS_USER_SIZE_MINIMUM + random.nextInt(TASK_POTENTIAL_OWNERS_USER_SIZE_MAXIMUM - TASK_POTENTIAL_OWNERS_USER_SIZE_MINIMUM);
             if (userPotentialOwnersSize > userList.size()) {
                 userPotentialOwnersSize = userList.size();
             }

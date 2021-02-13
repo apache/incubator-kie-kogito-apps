@@ -16,11 +16,10 @@
 
 package org.kie.kogito.index.graphql.query;
 
-import org.kie.kogito.index.TestUtils;
-import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
-
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.index.TestUtils;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

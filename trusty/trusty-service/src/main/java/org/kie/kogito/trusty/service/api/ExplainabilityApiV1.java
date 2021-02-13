@@ -52,23 +52,21 @@ public class ExplainabilityApiV1 {
     @GET
     @Path("/{executionId}/explanations/saliencies")
     @APIResponses(value = {
-            @APIResponse(description = "Gets the local explanation of a decision.", responseCode = "200",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON,
-                            schema = @Schema(type = SchemaType.OBJECT,
-                                    implementation = DecisionStructuredInputsResponse.class))),
-            @APIResponse(description = "Bad Request", responseCode = "400",
-                    content = @Content(mediaType = MediaType.TEXT_PLAIN))
+            @APIResponse(description = "Gets the local explanation of a decision.", responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionStructuredInputsResponse.class))),
+            @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(
             summary = "Returns the saliencies for a decision.",
-            description = "Returns the saliencies for a particular decision calculated using the lime algorithm.")
+            description = "Returns the saliencies for a particular decision calculated using the lime algorithm."
+    )
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStructuredInputs(
             @Parameter(
                     name = "executionId",
                     description = "The execution ID.",
                     required = true,
-                    schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
+                    schema = @Schema(implementation = String.class)
+            ) @PathParam("executionId") String executionId) {
         return retrieveExplainabilityResult(executionId)
                 .map(ExplainabilityApiV1::explainabilityResultModelToResponse)
                 .map(Response::ok)
@@ -94,7 +92,8 @@ public class ExplainabilityApiV1 {
                 model.getSaliencies().stream()
                         .map(ExplainabilityApiV1::saliencyModelToResponse)
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())
+        );
     }
 
     static FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
@@ -114,6 +113,7 @@ public class ExplainabilityApiV1 {
                 model.getFeatureImportance().stream()
                         .map(ExplainabilityApiV1::featureImportanceModelToResponse)
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())
+        );
     }
 }

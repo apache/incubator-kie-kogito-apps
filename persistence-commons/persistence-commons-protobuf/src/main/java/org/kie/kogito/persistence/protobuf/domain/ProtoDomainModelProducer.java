@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.persistence.protobuf.domain;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -38,11 +35,14 @@ import org.kie.kogito.persistence.protobuf.FileDescriptorRegisteredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 @ApplicationScoped
 public class ProtoDomainModelProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtoDomainModelProducer.class);
-
+    
     @Inject
     Event<DomainModelRegisteredEvent> domainEvent;
 
@@ -51,15 +51,13 @@ public class ProtoDomainModelProducer {
         String rootMessage = (String) descriptor.getOption("kogito_model").getValue();
         String processId = (String) descriptor.getOption("kogito_id").getValue();
 
-        Map<String, Descriptor> map =
-                descriptor.getMessageTypes().stream().collect(toMap(AnnotatedDescriptorImpl::getName, desc -> desc));
+        Map<String, Descriptor> map = descriptor.getMessageTypes().stream().collect(toMap(AnnotatedDescriptorImpl::getName, desc -> desc));
 
         Descriptor rootDescriptor = map.remove(rootMessage);
 
         DomainDescriptor domain = new DomainDescriptorMapper().apply(rootDescriptor);
 
-        List<DomainDescriptor> additionalTypes =
-                map.values().stream().map(desc -> new DomainDescriptorMapper().apply(desc)).collect(toList());
+        List<DomainDescriptor> additionalTypes = map.values().stream().map(desc -> new DomainDescriptorMapper().apply(desc)).collect(toList());
 
         domainEvent.fire(new DomainModelRegisteredEvent(processId, domain, additionalTypes));
     }
@@ -79,8 +77,7 @@ public class ProtoDomainModelProducer {
             DomainDescriptor domain = new DomainDescriptor();
             LOGGER.debug("Mapping domain from message, type: {}", descriptor.getFullName());
             domain.setTypeName(descriptor.getFullName());
-            domain.setAttributes(
-                    descriptor.getFields().stream().map(fd -> new FieldDescriptorMapper().apply(fd)).collect(toList()));
+            domain.setAttributes(descriptor.getFields().stream().map(fd -> new FieldDescriptorMapper().apply(fd)).collect(toList()));
             return domain;
         }
     }

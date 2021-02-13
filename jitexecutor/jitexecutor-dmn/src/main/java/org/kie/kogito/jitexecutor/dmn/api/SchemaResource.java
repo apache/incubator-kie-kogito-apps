@@ -27,6 +27,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.smallrye.openapi.runtime.io.schema.SchemaWriter;
 import org.eclipse.microprofile.openapi.OASFactory;
 import org.eclipse.microprofile.openapi.models.OpenAPI;
 import org.eclipse.microprofile.openapi.models.media.Schema;
@@ -40,10 +42,6 @@ import org.kie.dmn.openapi.DMNOASGeneratorFactory;
 import org.kie.dmn.openapi.model.DMNOASResult;
 import org.kie.internal.io.ResourceFactory;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import io.smallrye.openapi.runtime.io.schema.SchemaWriter;
-
 @Path("jitdmn/schema")
 public class SchemaResource {
 
@@ -52,8 +50,7 @@ public class SchemaResource {
 
     private static DMNModel modelFromXML(String modelXML) {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
-        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
-                .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration().fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
         return dmnRuntime.getModels().get(0);
     }
 

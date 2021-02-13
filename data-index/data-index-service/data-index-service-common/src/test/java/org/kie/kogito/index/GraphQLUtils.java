@@ -15,12 +15,6 @@
  */
 package org.kie.kogito.index;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.ArrayUtils.insert;
-import static org.kie.kogito.index.TestUtils.readFileContent;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
@@ -32,6 +26,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -40,9 +37,11 @@ import org.kie.kogito.index.model.UserTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.ArrayUtils.insert;
+import static org.kie.kogito.index.TestUtils.readFileContent;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 public class GraphQLUtils {
 
@@ -51,10 +50,8 @@ public class GraphQLUtils {
     private static final Map<String, String> QUERIES = new HashMap<>();
 
     static {
-        QUERY_FIELDS.put(UserTaskInstance.class,
-                getAllFieldsList(UserTaskInstance.class).map(getFieldName()).collect(joining(", ")));
-        QUERY_FIELDS.put(ProcessInstance.class,
-                getAllFieldsList(ProcessInstance.class).map(getFieldName()).collect(joining(", ")));
+        QUERY_FIELDS.put(UserTaskInstance.class, getAllFieldsList(UserTaskInstance.class).map(getFieldName()).collect(joining(", ")));
+        QUERY_FIELDS.put(ProcessInstance.class, getAllFieldsList(ProcessInstance.class).map(getFieldName()).collect(joining(", ")));
         QUERY_FIELDS.put(Job.class, getAllFieldsList(Job.class).map(getFieldName()).collect(joining(", ")));
         QUERY_FIELDS.computeIfPresent(ProcessInstance.class, (k, v) -> v + ", serviceUrl");
         QUERY_FIELDS.computeIfPresent(ProcessInstance.class, (k, v) -> v + ", childProcessInstances { id, processName }");
@@ -62,7 +59,7 @@ public class GraphQLUtils {
 
         try {
             JsonNode node = getObjectMapper().readTree(readFileContent("graphql_queries.json"));
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
+            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext(); ) {
                 Map.Entry<String, JsonNode> entry = it.next();
                 QUERIES.put(entry.getKey(), entry.getValue().toString());
             }
@@ -188,8 +185,7 @@ public class GraphQLUtils {
         return getQuery("DealsByTaskIdNoActualOwner", id);
     }
 
-    private static String getUserTaskInstanceWithArray(String query, List<String> values, String variable, String... args)
-            throws Exception {
+    private static String getUserTaskInstanceWithArray(String query, List<String> values, String variable, String... args) throws Exception {
         String json = getUserTaskInstanceQuery(query, args);
         ObjectNode jsonNode = (ObjectNode) getObjectMapper().readTree(json);
         ArrayNode pg = (ArrayNode) jsonNode.get("variables").get(variable);
@@ -226,23 +222,21 @@ public class GraphQLUtils {
             if (field.getGenericType() instanceof ParameterizedType) {
                 ParameterizedType genericType = (ParameterizedType) field.getGenericType();
                 StringBuilder builder = new StringBuilder();
-                builder.append(Arrays.stream(genericType.getActualTypeArguments())
-                        .filter(type -> type.getTypeName().startsWith("org.kie.kogito.index.model"))
-                        .flatMap(type -> {
-                            try {
-                                return getAllFieldsList(Class.forName(type.getTypeName()));
-                            } catch (Exception ex) {
-                                return Stream.empty();
-                            }
-                        }).map(f -> getFieldName().apply(f)).collect(joining(", ")));
+                builder.append(Arrays.stream(genericType.getActualTypeArguments()).filter(type -> type.getTypeName().startsWith("org.kie.kogito.index.model"))
+                                       .flatMap(type -> {
+                                           try {
+                                               return getAllFieldsList(Class.forName(type.getTypeName()));
+                                           } catch (Exception ex) {
+                                               return Stream.empty();
+                                           }
+                                       }).map(f -> getFieldName().apply(f)).collect(joining(", ")));
                 if (builder.length() > 0) {
                     return field.getName() + " { " + builder.toString() + " }";
                 }
             }
 
             if (field.getType().getName().startsWith("org.kie.kogito.index.model")) {
-                return field.getName() + " { "
-                        + getAllFieldsList(field.getType()).map(f -> getFieldName().apply(f)).collect(joining(", ")) + " }";
+                return field.getName() + " { " + getAllFieldsList(field.getType()).map(f -> getFieldName().apply(f)).collect(joining(", ")) + " }";
             }
 
             return field.getName();

@@ -15,6 +15,13 @@
  */
 package org.kie.kogito.taskassigning.process.service.client;
 
+import java.util.Collections;
+import java.util.Map;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.matching.UrlPattern;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -25,14 +32,6 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.util.Collections;
-import java.util.Map;
-
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.matching.UrlPattern;
-
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class WireMockKeycloakResource implements QuarkusTestResourceLifecycleManager {
 
@@ -55,14 +54,15 @@ public class WireMockKeycloakResource implements QuarkusTestResourceLifecycleMan
         configureFor(wireMockServer.port());
 
         stubFor(post(buildTokenRequestUrl(REALM))
-                .withHeader(CONTENT_TYPE, equalTo(APPLICATION_FORM_URLENCODED))
-                .withBasicAuth(CLIENT_ID, SECRET)
-                .withRequestBody(equalTo(getAuthRequestBody()))
-                .willReturn(aResponse()
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
-                        .withBody(getTokenResult())
+                        .withHeader(CONTENT_TYPE, equalTo(APPLICATION_FORM_URLENCODED))
+                        .withBasicAuth(CLIENT_ID, SECRET)
+                        .withRequestBody(equalTo(getAuthRequestBody()))
+                        .willReturn(aResponse()
+                                            .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                                            .withBody(getTokenResult())
 
-                ));
+                        )
+        );
 
         return Collections.singletonMap(KEY_CLOAK_SERVICE_URL, wireMockServer.baseUrl());
     }

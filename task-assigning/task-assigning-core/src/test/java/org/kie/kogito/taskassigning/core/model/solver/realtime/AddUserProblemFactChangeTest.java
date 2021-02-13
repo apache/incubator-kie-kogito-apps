@@ -15,11 +15,6 @@
  */
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +25,11 @@ import org.kie.kogito.taskassigning.core.model.User;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.optaplanner.core.api.score.director.ScoreDirector;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AddUserProblemFactChangeTest {

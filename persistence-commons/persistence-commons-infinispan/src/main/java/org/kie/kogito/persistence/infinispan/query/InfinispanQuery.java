@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.persistence.infinispan.query;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.joining;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -29,6 +26,9 @@ import org.kie.kogito.persistence.api.query.AttributeSort;
 import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.lang.String.format;
+import static java.util.stream.Collectors.joining;
 
 public class InfinispanQuery<T> implements Query<T> {
 
@@ -90,8 +90,7 @@ public class InfinispanQuery<T> implements Query<T> {
         }
         if (sortBy != null && !sortBy.isEmpty()) {
             queryString.append(" order by ");
-            queryString.append(
-                    sortBy.stream().map(f -> "o." + f.getAttribute() + " " + f.getSort().name()).collect(joining(", ")));
+            queryString.append(sortBy.stream().map(f -> "o." + f.getAttribute() + " " + f.getSort().name()).collect(joining(", ")));
         }
         LOGGER.debug("Executing Infinispan query: {}", queryString);
         org.infinispan.query.dsl.Query query = qf.create(queryString.toString());
@@ -110,29 +109,22 @@ public class InfinispanQuery<T> implements Query<T> {
                 case CONTAINS:
                     return format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString().apply(filter.getValue()));
                 case CONTAINS_ALL:
-                    return (String) ((List) filter.getValue()).stream()
-                            .map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString().apply(o)))
-                            .collect(joining(AND));
+                    return (String) ((List) filter.getValue()).stream().map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString().apply(o))).collect(joining(AND));
                 case CONTAINS_ANY:
-                    return (String) ((List) filter.getValue()).stream()
-                            .map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString().apply(o)))
-                            .collect(joining(OR));
+                    return (String) ((List) filter.getValue()).stream().map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString().apply(o))).collect(joining(OR));
                 case LIKE:
-                    return format("o.%s like %s", filter.getAttribute(), getValueForQueryString().apply(filter.getValue()))
-                            .replaceAll("\\*", "%");
+                    return format("o.%s like %s", filter.getAttribute(), getValueForQueryString().apply(filter.getValue())).replaceAll("\\*", "%");
                 case EQUAL:
                     return format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString().apply(filter.getValue()));
                 case IN:
-                    return format("o.%s in (%s)", filter.getAttribute(),
-                            ((List) filter.getValue()).stream().map(getValueForQueryString()).collect(joining(", ")));
+                    return format("o.%s in (%s)", filter.getAttribute(), ((List) filter.getValue()).stream().map(getValueForQueryString()).collect(joining(", ")));
                 case IS_NULL:
                     return format("o.%s is null", filter.getAttribute());
                 case NOT_NULL:
                     return format("o.%s is not null", filter.getAttribute());
                 case BETWEEN:
                     List<Object> value = (List<Object>) filter.getValue();
-                    return format("o.%s between %s and %s", filter.getAttribute(), getValueForQueryString().apply(value.get(0)),
-                            getValueForQueryString().apply(value.get(1)));
+                    return format("o.%s between %s and %s", filter.getAttribute(), getValueForQueryString().apply(value.get(0)), getValueForQueryString().apply(value.get(1)));
                 case GT:
                     return format("o.%s > %s", filter.getAttribute(), getValueForQueryString().apply(filter.getValue()));
                 case GTE:
@@ -157,6 +149,6 @@ public class InfinispanQuery<T> implements Query<T> {
         return ((List<AttributeFilter<?>>) filter.getValue())
                 .stream()
                 .map(filterStringFunction())
-                .collect(joining(joining, "(", ")"));
+                .collect(joining(joining,  "(", ")"));
     }
 }

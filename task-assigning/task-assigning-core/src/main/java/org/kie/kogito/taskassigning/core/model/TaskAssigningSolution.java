@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.taskassigning.core.model;
 
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.TASK_ASSIGNMENT_RANGE;
-import static org.kie.kogito.taskassigning.core.model.TaskAssignment.USER_RANGE;
-
 import java.util.List;
 
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
@@ -26,6 +23,9 @@ import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.bendablelong.BendableLongScore;
+
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.TASK_ASSIGNMENT_RANGE;
+import static org.kie.kogito.taskassigning.core.model.TaskAssignment.USER_RANGE;
 
 @PlanningSolution
 public class TaskAssigningSolution extends IdentifiableElement {

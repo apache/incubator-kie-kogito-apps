@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -33,10 +35,6 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
-import io.vertx.core.json.JsonObject;
 
 public class ConversionUtils {
 

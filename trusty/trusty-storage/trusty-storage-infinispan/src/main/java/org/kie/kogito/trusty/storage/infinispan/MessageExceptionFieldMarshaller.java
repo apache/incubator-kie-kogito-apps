@@ -17,9 +17,8 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 
-import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
 
 public class MessageExceptionFieldMarshaller extends AbstractModelMarshaller<MessageExceptionField> {
 
@@ -32,7 +31,8 @@ public class MessageExceptionFieldMarshaller extends AbstractModelMarshaller<Mes
         return new MessageExceptionField(
                 reader.readString(MessageExceptionField.CLASS_NAME_FIELD),
                 reader.readString(MessageExceptionField.MESSAGE_FIELD),
-                reader.readObject(MessageExceptionField.CAUSE_FIELD, MessageExceptionField.class));
+                reader.readObject(MessageExceptionField.CAUSE_FIELD, MessageExceptionField.class)
+        );
     }
 
     @Override

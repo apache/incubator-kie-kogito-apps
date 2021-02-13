@@ -15,6 +15,20 @@
  */
 package org.kie.kogito.trusty.service.messaging.incoming;
 
+import javax.inject.Inject;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+import org.kie.kogito.trusty.service.TrustyService;
+import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.Decision;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -26,21 +40,6 @@ import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectD
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildCorrectTraceEvent;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildDecisionWithErrors;
 import static org.kie.kogito.trusty.service.TrustyServiceTestUtils.buildTraceEventWithErrors;
-
-import javax.inject.Inject;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.kafka.KafkaClient;
-import org.kie.kogito.testcontainers.quarkus.InfinispanQuarkusTestResource;
-import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-import org.kie.kogito.trusty.service.TrustyService;
-import org.kie.kogito.trusty.storage.api.TrustyStorageService;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)
@@ -67,7 +66,7 @@ class TraceEventConsumerInfinispanIT {
     @Test
     void testCorrectCloudEvent() {
         kafkaClient.produce(buildCloudEventJsonString(buildCorrectTraceEvent(CORRECT_CLOUDEVENT_ID)),
-                KafkaConstants.KOGITO_TRACING_TOPIC);
+                            KafkaConstants.KOGITO_TRACING_TOPIC);
 
         await()
                 .atMost(5, SECONDS)
@@ -81,7 +80,7 @@ class TraceEventConsumerInfinispanIT {
     @Test
     void testCloudEventWithErrors() {
         kafkaClient.produce(buildCloudEventJsonString(buildTraceEventWithErrors()),
-                KafkaConstants.KOGITO_TRACING_TOPIC);
+                            KafkaConstants.KOGITO_TRACING_TOPIC);
 
         await()
                 .atMost(5, SECONDS)

@@ -16,15 +16,9 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import static java.util.stream.Collectors.toList;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
-import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
-
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -32,7 +26,12 @@ import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import static java.util.stream.Collectors.toList;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.documentToJsonNode;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.instantToZonedDateTime;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.jsonNodeToDocument;
+import static org.kie.kogito.persistence.mongodb.model.ModelUtils.zonedDateTimeToInstant;
 
 public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessInstance, ProcessInstanceEntity> {
 
@@ -61,8 +60,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         entity.setRoles(instance.getRoles());
         entity.setVariables(jsonNodeToDocument(instance.getVariables()));
         entity.setEndpoint(instance.getEndpoint());
-        entity.setNodes(Optional.ofNullable(instance.getNodes())
-                .map(nodes -> nodes.stream().map(this::fromNodeInstance).collect(toList())).orElse(null));
+        entity.setNodes(Optional.ofNullable(instance.getNodes()).map(nodes -> nodes.stream().map(this::fromNodeInstance).collect(toList())).orElse(null));
         entity.setState(instance.getState());
         entity.setStart(zonedDateTimeToInstant(instance.getStart()));
         entity.setEnd(zonedDateTimeToInstant(instance.getEnd()));
@@ -74,8 +72,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         entity.setAddons(instance.getAddons());
         entity.setLastUpdate(zonedDateTimeToInstant(instance.getLastUpdate()));
         entity.setBusinessKey(instance.getBusinessKey());
-        entity.setMilestones(Optional.ofNullable(instance.getMilestones())
-                .map(milestones -> milestones.stream().map(this::fromMilestone).collect(toList())).orElse(null));
+        entity.setMilestones(Optional.ofNullable(instance.getMilestones()).map(milestones -> milestones.stream().map(this::fromMilestone).collect(toList())).orElse(null));
         return entity;
     }
 
@@ -91,8 +88,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         instance.setRoles(entity.getRoles());
         instance.setVariables(documentToJsonNode(entity.getVariables(), JsonNode.class));
         instance.setEndpoint(entity.getEndpoint());
-        instance.setNodes(Optional.ofNullable(entity.getNodes())
-                .map(nodes -> nodes.stream().map(this::toNodeInstance).collect(toList())).orElse(null));
+        instance.setNodes(Optional.ofNullable(entity.getNodes()).map(nodes -> nodes.stream().map(this::toNodeInstance).collect(toList())).orElse(null));
         instance.setState(entity.getState());
         instance.setStart(instantToZonedDateTime(entity.getStart()));
         instance.setEnd(instantToZonedDateTime(entity.getEnd()));
@@ -104,8 +100,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         instance.setAddons(entity.getAddons());
         instance.setLastUpdate(instantToZonedDateTime(entity.getLastUpdate()));
         instance.setBusinessKey(entity.getBusinessKey());
-        instance.setMilestones(Optional.ofNullable(entity.getMilestones())
-                .map(milesteons -> milesteons.stream().map(this::toMilestone).collect(toList())).orElse(null));
+        instance.setMilestones(Optional.ofNullable(entity.getMilestones()).map(milesteons -> milesteons.stream().map(this::toMilestone).collect(toList())).orElse(null));
         return instance;
     }
 

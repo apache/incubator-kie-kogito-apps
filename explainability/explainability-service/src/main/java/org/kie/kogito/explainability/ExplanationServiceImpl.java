@@ -16,9 +16,6 @@
 
 package org.kie.kogito.explainability;
 
-import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
-import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
-
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -40,6 +37,9 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
+import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
 public class ExplanationServiceImpl implements ExplanationService {
@@ -79,7 +79,10 @@ public class ExplanationServiceImpl implements ExplanationService {
                         Map.Entry::getKey,
                         e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
                                 .map(fi -> new FeatureImportanceDto(fi.getFeature().getName(), fi.getScore()))
-                                .collect(Collectors.toList())))));
+                                .collect(Collectors.toList())
+                        )
+                ))
+        );
     }
 
     private static ExplainabilityResultDto createFailedResultDto(String executionId, Throwable throwable) {

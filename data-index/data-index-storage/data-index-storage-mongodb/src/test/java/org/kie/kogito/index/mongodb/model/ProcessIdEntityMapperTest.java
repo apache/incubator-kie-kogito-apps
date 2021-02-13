@@ -16,11 +16,11 @@
 
 package org.kie.kogito.index.mongodb.model;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.index.mongodb.model.ProcessIdEntityMapper.PROCESS_ID_ATTRIBUTE;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
-
-import org.junit.jupiter.api.Test;
 
 class ProcessIdEntityMapperTest {
 

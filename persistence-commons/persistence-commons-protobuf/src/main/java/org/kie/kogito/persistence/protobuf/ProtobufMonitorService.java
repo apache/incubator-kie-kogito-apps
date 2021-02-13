@@ -15,10 +15,6 @@
  */
 package org.kie.kogito.persistence.protobuf;
 
-import static java.lang.String.format;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -43,11 +39,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import io.quarkus.runtime.ShutdownEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.quarkus.runtime.ShutdownEvent;
+import static java.lang.String.format;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 @ApplicationScoped
 public class ProtobufMonitorService {
@@ -90,8 +89,7 @@ public class ProtobufMonitorService {
 
     private void registerFilesFromFolder(Path folderPath) {
         try (Stream<Path> stream = Files.find(folderPath, Integer.MAX_VALUE, (path, attrs) -> protoFileMatcher.matches(path))) {
-            stream.filter(path -> !KOGITO_APPLICATION_PROTO.equals(path.getFileName().toFile().getName()))
-                    .forEach(path -> registerProtoFile().accept(path));
+            stream.filter(path -> !KOGITO_APPLICATION_PROTO.equals(path.getFileName().toFile().getName())).forEach(path -> registerProtoFile().accept(path));
         } catch (IOException ex) {
             throw new ProtobufFileMonitorException(format("Could not read content from proto file folder: %s", folderPath), ex);
         }
@@ -152,8 +150,7 @@ public class ProtobufMonitorService {
                         if (Files.isDirectory(proto)) {
                             registerFilesFromFolder(proto);
                             keys.put(proto.register(ws, ENTRY_MODIFY, ENTRY_CREATE), proto);
-                        } else if (protoFileMatcher.matches(path)
-                                && !KOGITO_APPLICATION_PROTO.equals(path.getFileName().toFile().getName())) {
+                        } else if (protoFileMatcher.matches(path) && !KOGITO_APPLICATION_PROTO.equals(path.getFileName().toFile().getName())) {
                             consumer.accept(proto);
                         }
                     }
