@@ -25,13 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import io.restassured.filter.log.ResponseLoggingFilter;
-import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.decision.event.message.MessageLevel;
@@ -50,6 +43,15 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -182,7 +184,7 @@ class DecisionsApiV1IT {
         assertDecisionStructuredInputResponse(buildDecisionStructuredInputsResponse(ListStatus.FULL), response);
     }
 
-    private <T> void assertCollection(Collection<T> expected, Collection<T> actual, BiConsumer<T,T> itemAssertor) {
+    private <T> void assertCollection(Collection<T> expected, Collection<T> actual, BiConsumer<T, T> itemAssertor) {
         if (expected == null) {
             assertNull(actual);
             return;
@@ -190,7 +192,7 @@ class DecisionsApiV1IT {
         assertSame(expected.size(), actual.size());
         Iterator<T> itExpected = expected.iterator();
         Iterator<T> itActual = actual.iterator();
-        while(itExpected.hasNext() && itActual.hasNext()) {
+        while (itExpected.hasNext() && itActual.hasNext()) {
             itemAssertor.accept(itExpected.next(), itActual.next());
         }
     }
@@ -226,7 +228,6 @@ class DecisionsApiV1IT {
         assertEquals(expected.getExecutedModelName(), actual.getExecutedModelName());
         assertEquals(expected.getExecutedModelNamespace(), actual.getExecutedModelNamespace());
     }
-
 
     private void assertMessageResponse(MessageResponse expected, MessageResponse actual) {
         assertNotNull(actual);
@@ -276,8 +277,7 @@ class DecisionsApiV1IT {
             case FULL:
                 decision.setInputs(List.of(
                         new DecisionInput("1", "first", TypedVariable.buildUnit("first", "FirstInput", mapper.readTree("\"Hello\""))),
-                        new DecisionInput("2", "second", TypedVariable.buildUnit("second", "SecondInput", mapper.readTree("12345")))
-                ));
+                        new DecisionInput("2", "second", TypedVariable.buildUnit("second", "SecondInput", mapper.readTree("12345")))));
         }
 
         switch (outcomesStatus) {
@@ -294,11 +294,7 @@ class DecisionsApiV1IT {
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                                         new MessageExceptionField("TestException", "Test exception message",
-                                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)
-                                        )
-                                ))
-                        )
-                ));
+                                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)))))));
         }
 
         return decision;
@@ -312,17 +308,14 @@ class DecisionsApiV1IT {
                 Collections.emptyList(),
                 List.of(new MessageResponse("WARNING", "INTERNAL", "TEST", "testSrc", "Test message",
                         new MessageExceptionFieldResponse("TestException", "Test exception message",
-                                new MessageExceptionFieldResponse("TestExceptionCause", "Test exception cause message", null)
-                        )
-                )),
-                false
-        );
+                                new MessageExceptionFieldResponse("TestExceptionCause", "Test exception cause message", null)))),
+                false);
     }
 
     private DecisionOutcomesResponse buildDecisionOutcomesResponse(ListStatus outcomesStatus) throws JsonProcessingException {
         switch (outcomesStatus) {
             case NULL:
-                return new DecisionOutcomesResponse(buildExecutionHeaderResponse(),null);
+                return new DecisionOutcomesResponse(buildExecutionHeaderResponse(), null);
             case EMPTY:
                 return new DecisionOutcomesResponse(buildExecutionHeaderResponse(), Collections.emptyList());
             case FULL:
@@ -341,8 +334,7 @@ class DecisionsApiV1IT {
                 ObjectMapper mapper = new ObjectMapper();
                 return new DecisionStructuredInputsResponse(List.of(
                         new TypedVariableResponse("first", "FirstInput", mapper.readTree("\"Hello\""), null),
-                        new TypedVariableResponse("second", "SecondInput", mapper.readTree("12345"), null)
-                ));
+                        new TypedVariableResponse("second", "SecondInput", mapper.readTree("12345"), null)));
         }
         throw new IllegalStateException();
     }
@@ -355,8 +347,7 @@ class DecisionsApiV1IT {
                 null,
                 TEST_MODEL_NAME,
                 TEST_MODEL_NAMESPACE,
-                ExecutionType.DECISION
-        );
+                ExecutionType.DECISION);
     }
 
     private Response get() {

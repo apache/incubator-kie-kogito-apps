@@ -95,7 +95,7 @@ class LimeStabilityTest {
 
             List<Feature> features = new LinkedList<>();
             for (int i = 0; i < 4; i++) {
-                features.add(FeatureFactory.newNumericalFeature("f-"+i,2));
+                features.add(FeatureFactory.newNumericalFeature("f-" + i, 2));
             }
             PredictionProvider model = TestUtils.getEvenSumModel(0);
             assertStable(adaptiveVarianceLE, model, features);

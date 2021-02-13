@@ -343,7 +343,7 @@ class TypeTest {
         values[5] = new Value<>(Double.NaN);
         List<double[]> vectors = Type.NUMBER.encode(target, values);
         assertThat(vectors).isNotEmpty();
-        assertThat(vectors).doesNotContain(new double[]{Double.NaN});
+        assertThat(vectors).doesNotContain(new double[] { Double.NaN });
     }
 
     @ParameterizedTest

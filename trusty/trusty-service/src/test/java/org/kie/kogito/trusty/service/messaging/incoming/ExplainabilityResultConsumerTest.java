@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +37,8 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
+
+import io.cloudevents.CloudEvent;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
@@ -68,12 +69,9 @@ class ExplainabilityResultConsumerTest {
             TEST_EXECUTION_ID, null, null, true, null, null, null,
             List.of(
                     new DecisionInput(TEST_FEATURE_1_ID, TEST_FEATURE_1_NAME, null),
-                    new DecisionInput(TEST_FEATURE_2_ID, TEST_FEATURE_2_NAME, null)
-            ),
+                    new DecisionInput(TEST_FEATURE_2_ID, TEST_FEATURE_2_NAME, null)),
             List.of(
-                    new DecisionOutcome(TEST_OUTCOME_1_ID, TEST_OUTCOME_1_NAME, null, null, null, null)
-            )
-    );
+                    new DecisionOutcome(TEST_OUTCOME_1_ID, TEST_OUTCOME_1_NAME, null, null, null, null)));
 
     private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_1 = new FeatureImportanceDto(TEST_FEATURE_1_NAME, 1d);
     private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_2 = new FeatureImportanceDto(TEST_FEATURE_2_NAME, -1d);
@@ -206,8 +204,7 @@ class ExplainabilityResultConsumerTest {
                 resultDto.getExecutionId(),
                 URI.create("explainabilityResult/test"),
                 resultDto,
-                ExplainabilityResultDto.class
-        ).get();
+                ExplainabilityResultDto.class).get();
     }
 
     public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {

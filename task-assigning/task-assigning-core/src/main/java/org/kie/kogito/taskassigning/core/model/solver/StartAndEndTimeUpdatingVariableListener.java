@@ -18,8 +18,8 @@ package org.kie.kogito.taskassigning.core.model.solver;
 import java.util.Objects;
 
 import org.kie.kogito.taskassigning.core.model.ChainElement;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.optaplanner.core.api.domain.variable.VariableListener;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 
@@ -70,7 +70,7 @@ public class StartAndEndTimeUpdatingVariableListener implements VariableListener
     private static void updateStartAndEndTime(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment sourceTaskAssignment) {
         ChainElement previous = sourceTaskAssignment.getPreviousElement();
         TaskAssignment shadowTaskAssignment = sourceTaskAssignment;
-        Integer previousEndTime = previous == null || !previous.isTaskAssignment() ? 0 : ((TaskAssignment)previous).getEndTimeInMinutes();
+        Integer previousEndTime = previous == null || !previous.isTaskAssignment() ? 0 : ((TaskAssignment) previous).getEndTimeInMinutes();
         Integer startTime = previousEndTime;
         Integer endTime = calculateEndTime(shadowTaskAssignment, startTime);
         while (shadowTaskAssignment != null && !Objects.equals(shadowTaskAssignment.getStartTimeInMinutes(), startTime)) {

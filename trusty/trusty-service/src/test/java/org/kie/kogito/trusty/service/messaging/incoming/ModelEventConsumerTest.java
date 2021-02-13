@@ -86,7 +86,7 @@ class ModelEventConsumerTest {
     }
 
     private void testNumberOfInvocations(final Message<String> message,
-                                         final int wantedNumberOfServiceInvocations) {
+            final int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
         verify(trustyService, times(wantedNumberOfServiceInvocations)).storeModel(any(), any(), any(), any(), any(), any());
         verify(message, times(1)).ack();

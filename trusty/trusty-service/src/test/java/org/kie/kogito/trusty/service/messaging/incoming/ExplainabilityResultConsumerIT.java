@@ -18,10 +18,6 @@ package org.kie.kogito.trusty.service.messaging.incoming;
 import java.net.URI;
 import java.util.Collections;
 
-import io.cloudevents.CloudEvent;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.cloudevents.CloudEventUtils;
@@ -30,6 +26,11 @@ import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.TrustyService;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+
+import io.cloudevents.CloudEvent;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -67,8 +68,7 @@ public class ExplainabilityResultConsumerIT {
                 resultDto.getExecutionId(),
                 URI.create("explainabilityResult/test"),
                 resultDto,
-                ExplainabilityResultDto.class
-        ).orElseThrow(IllegalStateException::new);
+                ExplainabilityResultDto.class).orElseThrow(IllegalStateException::new);
     }
 
     public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
