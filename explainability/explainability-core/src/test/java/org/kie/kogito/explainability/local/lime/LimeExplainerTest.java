@@ -87,7 +87,7 @@ class LimeExplainerTest {
     @Test
     void testSparseBalance() throws InterruptedException, ExecutionException, TimeoutException {
         Random random = new Random();
-        for (int seed = 0; seed < 1; seed++) {
+        for (int seed = 0; seed < 5; seed++) {
             random.setSeed(seed);
             for (int nf = 1; nf < 4; nf++) {
                 LimeConfig limeConfigNoPenalty = new LimeConfig()

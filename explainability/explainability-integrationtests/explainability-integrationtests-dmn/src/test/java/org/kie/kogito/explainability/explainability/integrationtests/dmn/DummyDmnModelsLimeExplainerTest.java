@@ -45,16 +45,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 class DummyDmnModelsLimeExplainerTest {
 
     @Test
     void testFunctional1DMNExplanation()  throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/functionalTest1.dmn")));
-        assertEquals(1, dmnRuntime.getModels().size());
+        assertThat(dmnRuntime.getModels().size()).isEqualTo(1);
 
         final String namespace = "https://kiegroup.org/dmn/_049CD980-1310-4B02-9E90-EFC57059F44A";
         final String name = "functionalTest1";
@@ -82,20 +80,20 @@ class DummyDmnModelsLimeExplainerTest {
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
-                assertNotNull(saliency);
+                assertThat(saliency).isNotNull();
                 List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
                 assertThat(topFeatures.isEmpty()).isFalse();
                 assertThat(topFeatures.get(0).getFeature().getName()).isEqualTo("booleanInput");
             }
-            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.5));
+            assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                    0.5, 0.5)).doesNotThrowAnyException();
         }
     }
 
     @Test
     void testFunctional2DMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/functionalTest2.dmn")));
-        assertEquals(1, dmnRuntime.getModels().size());
+        assertThat(dmnRuntime.getModels().size()).isEqualTo(1);
 
         final String namespace = "https://kiegroup.org/dmn/_049CD980-1310-4B02-9E90-EFC57059F44A";
         final String name = "new-file";
@@ -122,20 +120,20 @@ class DummyDmnModelsLimeExplainerTest {
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
-                assertNotNull(saliency);
+                assertThat(saliency).isNotNull();
                 List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
                 assertThat(topFeatures.isEmpty()).isFalse();
                 assertThat(topFeatures.get(0).getFeature().getName()).isEqualTo("numberInput");
             }
-            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.5));
+            assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                    0.5, 0.5)).doesNotThrowAnyException();
         }
     }
 
     @Test
     void testAllTypesDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/allTypes.dmn")));
-        assertEquals(1, dmnRuntime.getModels().size());
+        assertThat(dmnRuntime.getModels().size()).isEqualTo(1);
 
         final String namespace = "https://kiegroup.org/dmn/_24B9EC8C-2F02-40EB-B6BB-E8CDE82FBF08";
         final String name = "new-file";
@@ -182,10 +180,10 @@ class DummyDmnModelsLimeExplainerTest {
             Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             for (Saliency saliency : saliencyMap.values()) {
-                assertNotNull(saliency);
+                assertThat(saliency).isNotNull();
             }
-            assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.2));
+            assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                    0.5, 0.2)).doesNotThrowAnyException();
         }
     }
 }
