@@ -21,7 +21,7 @@ import java.util.stream.IntStream;
 
 
 public class MatrixUtils {
-    static double zeroThreshold = 1e-9;
+    static final double zeroThreshold = 1e-9;
 
     private MatrixUtils() { throw new IllegalStateException("Utility class"); }
 
