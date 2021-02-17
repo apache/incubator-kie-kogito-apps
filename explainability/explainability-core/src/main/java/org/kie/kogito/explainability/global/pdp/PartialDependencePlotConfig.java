@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.kie.kogito.explainability.global.pdp;
 
-package org.kie.kogito.index.service;
+/**
+ * {@link PartialDependencePlotExplainer} configuration.
+ */
+public class PartialDependencePlotConfig {
 
-import io.quarkus.test.junit.NativeImageTest;
-import org.junit.jupiter.api.Disabled;
+    private static final int DEFAULT_SERIES_LENGTH = 100;
 
-@NativeImageTest
-@Disabled("https://issues.redhat.com/browse/KOGITO-4311 - Injection of beans into a test class using @Inject is not supported in native image tests")
-class NativeInfinispanIndexingServiceIT extends InfinispanIndexingServiceIT {
-    // Execute the same tests but in native mode.
+    private int seriesLength = DEFAULT_SERIES_LENGTH;
+
+    public PartialDependencePlotConfig withSeriesLength(int seriesLength) {
+        this.seriesLength = seriesLength;
+        return this;
+    }
+
+    public int getSeriesLength() {
+        return seriesLength;
+    }
 }
