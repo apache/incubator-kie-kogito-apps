@@ -74,15 +74,10 @@ void setupPrJob(String jobFolder) {
     KogitoJobTemplate.createPRJob(this, jobParams)
 }
 
-void setupQuarkusLTSPrJob(String jobFolder, String quarkusBranch) {
-    def jobParams = getJobParams('kogito-apps.quarkus-lts', jobFolder, 'Jenkinsfile', 'Run on demand tests from apps repository against quarkus LTS')
-    jobParams.pr = [
-        trigger_phrase : '.*[j|J]enkins,? run LTS tests.*',
-        trigger_phrase_only: true,
-        commitContext: "LTS (${quarkusBranch}) tests"
-    ]
-    jobParams.env = [ QUARKUS_BRANCH: quarkusBranch]
-    KogitoJobTemplate.createPRJob(this, jobParams)
+void setupQuarkusLTSPrJob(String jobFolder) {
+    def jobParams = getDefaultJobParams()
+    jobParams.job.folder = jobFolder
+    KogitoJobTemplate.createPRAgainstLTSJob(this, jobParams)
 }
 
 void setupSonarCloudJob(String jobFolder) {
