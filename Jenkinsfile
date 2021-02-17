@@ -149,7 +149,7 @@ void checkoutOptaplannerRepo() {
     }
 }
 
-MavenCommand getMavenCommand(String directory){
+MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion=true){
     mvnCmd = new MavenCommand(this, ['-fae'])
                 .withSettingsXmlId('kogito_release_settings')
                 .inDirectory(directory)
