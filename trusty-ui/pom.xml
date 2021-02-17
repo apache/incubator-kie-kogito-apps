@@ -201,7 +201,11 @@
                   <includes>
                     <include>**/Native*IT.java</include>
                   </includes>
+                  <excludes>
+                    <exclude>**/Keycloak*IT.java</exclude>
+                  </excludes>
                   <systemProperties>
+                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                     <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
                   </systemProperties>
                 </configuration>
