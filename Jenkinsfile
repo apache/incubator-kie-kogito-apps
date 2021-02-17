@@ -45,6 +45,7 @@ pipeline {
                     checkoutQuarkusRepo()
                     getMavenCommand('quarkus', false)
                         .withProperty('quickly')
+                        .run('clean install')
                 }
             }
         }
