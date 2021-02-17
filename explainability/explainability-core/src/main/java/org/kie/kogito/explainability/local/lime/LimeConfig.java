@@ -28,22 +28,24 @@ public class LimeConfig {
     private static final double DEFAULT_SEPARABLE_DATASET_RATIO = 0.99;
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
-    private static final double DEFAULT_KERNEL_WIDTH = 0.675;
+    private static final double DEFAULT_PROXIMITY_KERNEL_WIDTH = 0.675;
+    private static final double DEFAULT_ENCODING_CLUSTER_THRESHOLD = 0.1;
+    private static final double DEFAULT_ENCODING_GAUSSIAN_FILTER_WIDTH = 1;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
     /**
-     * No. of samples to be generated for the local linear model training
+     * No. of samples to be generated for the local linear model training.
      */
     private int noOfSamples = DEFAULT_NO_OF_SAMPLES;
 
     /**
-     * No. of retries while trying to find a (linearly) separable dataset
+     * No. of retries while trying to find a (linearly) separable dataset.
      */
     private int noOfRetries = DEFAULT_NO_OF_RETRIES;
 
     /**
-     * Context object for perturbing features
+     * Context object for perturbing features.
      */
     private PerturbationContext perturbationContext = new PerturbationContext(new SecureRandom(), 1);
 
@@ -51,7 +53,21 @@ public class LimeConfig {
      * Whether the explainer should adapt the variance in the generated (perturbed) data when it's not separable.
      */
     private boolean adaptDatasetVariance = DEFAULT_ADAPT_DATASET_VARIANCE;
-    private double kernelWidth = DEFAULT_KERNEL_WIDTH;
+
+    /**
+     * The width of the kernel used to calculate proximity of sparse vector instances.
+     */
+    private double proximityKernelWidth = DEFAULT_PROXIMITY_KERNEL_WIDTH;
+
+    /**
+     * Threshold used for clustering features in sparse encoding.
+     */
+    private double encodingClusterThreshold = DEFAULT_ENCODING_CLUSTER_THRESHOLD;
+
+    /**
+     * Width of the gaussian kernel used for clustering in sparse encoding.
+     */
+    private double encodingGaussianFilterWidth = DEFAULT_ENCODING_GAUSSIAN_FILTER_WIDTH;
 
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
@@ -78,8 +94,8 @@ public class LimeConfig {
         return this;
     }
 
-    public LimeConfig withKernelWidth(double kernelWidth) {
-        this.kernelWidth = kernelWidth;
+    public LimeConfig withProximityKernelWidth(double proximityKernelWidth) {
+        this.proximityKernelWidth = proximityKernelWidth;
         return this;
     }
 
@@ -103,7 +119,26 @@ public class LimeConfig {
         return separableDatasetRatio;
     }
 
-    public double getKernelWidth() {
-        return kernelWidth;
+    public double getProximityKernelWidth() {
+        return proximityKernelWidth;
+    }
+
+    public double getEncodingClusterThreshold() {
+        return encodingClusterThreshold;
+    }
+
+    public LimeConfig withEncodingClusterThreshold(double encodingClusterThreshold) {
+        this.encodingClusterThreshold = encodingClusterThreshold;
+        return this;
+    }
+
+
+    public double getEncodingGaussianFilterWidth() {
+        return encodingGaussianFilterWidth;
+    }
+
+    public LimeConfig withEncodingGaussianFilterWidth(double encodingGaussianFilterWidth) {
+        this.encodingGaussianFilterWidth = encodingGaussianFilterWidth;
+        return this;
     }
 }
