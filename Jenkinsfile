@@ -36,6 +36,18 @@ pipeline {
                 checkoutRepo('kogito-examples', 'kogito-examples-events')
             }
         }
+        stage('Build quarkus') {
+            when {
+                expression { return getQuarkusBranch() }
+            }
+            steps {
+                script {
+                    checkoutQuarkusRepo()
+                    getMavenCommand('quarkus', false)
+                        .withProperty('quickly')
+                }
+            }
+        }
         stage('Build Runtimes') {
             steps {
                 script {
@@ -59,15 +71,21 @@ pipeline {
         stage('Build Apps') {
             steps {
                 script {
-                    getMavenCommand('kogito-apps')
-                        .withProperty('validate-formatting')
-                        .withProfiles(['run-code-coverage'])
-                        .run('clean install')
+                    if(getQuarkusBranch()) {
+                        // Only run against given quarkus branch
+                        getMavenCommand('kogito-apps')
+                            .run('clean install')
+                    } else {
+                        getMavenCommand('kogito-apps')
+                            .withProperty('validate-formatting')
+                            .withProfiles(['run-code-coverage'])
+                            .run('clean install')
 
-                    getMavenCommand('kogito-apps')
-                        .withOptions(['-e', '-nsu'])
-                        .withProfiles(['sonarcloud-analysis'])
-                        .run('validate')
+                        getMavenCommand('kogito-apps')
+                            .withOptions(['-e', '-nsu'])
+                            .withProfiles(['sonarcloud-analysis'])
+                            .run('validate')
+                    }
                 }
             }
         }
@@ -109,6 +127,12 @@ void checkoutRepo(String repo, String dirName=repo) {
     }
 }
 
+void checkoutQuarkusRepo() {
+    dir('quarkus') {
+        checkout(githubscm.resolveRepository('quarkus', 'quarkusio', getQuarkusBranch(), false))
+    }
+}
+
 void checkoutOptaplannerRepo() {
     String targetBranch = changeTarget
     String [] versionSplit = targetBranch.split("\\.")
@@ -126,7 +150,15 @@ void checkoutOptaplannerRepo() {
 }
 
 MavenCommand getMavenCommand(String directory){
-    return new MavenCommand(this, ['-fae'])
+    mvnCmd = new MavenCommand(this, ['-fae'])
                 .withSettingsXmlId('kogito_release_settings')
                 .inDirectory(directory)
+    if (addQuarkusVersion && getQuarkusBranch()) {
+        mvnCmd.withProperty('version.io.quarkus', '999-SNAPSHOT')
+    }
+    return mvnCmd
+}
+
+String getQuarkusBranch() {
+    return env['QUARKUS_BRANCH']
 }

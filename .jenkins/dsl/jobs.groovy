@@ -41,6 +41,7 @@ if (isMainBranch()) {
     folder(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
 
     setupPrJob(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
+    setupQuarkusLTSPrJob(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER, "${QUARKUS_LTS_VERSION}")
 
     // For BDD runtimes PR job
     folder(bddRuntimesPrFolder)
@@ -70,6 +71,17 @@ if (!isMainBranch()) {
 void setupPrJob(String jobFolder) {
     def jobParams = getDefaultJobParams()
     jobParams.job.folder = jobFolder
+    KogitoJobTemplate.createPRJob(this, jobParams)
+}
+
+void setupQuarkusLTSPrJob(String jobFolder, String quarkusBranch) {
+    def jobParams = getJobParams('kogito-apps.quarkus-lts', jobFolder, 'Jenkinsfile', 'Run on demand tests from apps repository against quarkus LTS')
+    jobParams.pr = [
+        trigger_phrase : '.*[j|J]enkins,? run LTS tests.*',
+        trigger_phrase_only: true,
+        commitContext: "LTS (${quarkusBranch}) tests"
+    ]
+    jobParams.env = [ QUARKUS_BRANCH: quarkusBranch]
     KogitoJobTemplate.createPRJob(this, jobParams)
 }
 
