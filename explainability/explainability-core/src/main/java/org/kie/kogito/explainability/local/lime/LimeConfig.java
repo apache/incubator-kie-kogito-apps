@@ -31,6 +31,7 @@ public class LimeConfig {
     private static final boolean DEFAULT_PENALIZE_BALANCE_SPARSE = false;
     private static final boolean DEFAULT_PROXIMITY_FILTER = true;
     private static final double DEFAULT_PROXIMITY_THRESHOLD = 0.8;
+    private static final Number DEFAULT_PROXIMITY_FILTERED_DATASET_MIN = 10;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
@@ -68,6 +69,14 @@ public class LimeConfig {
      * The proximity threshold used to filter samples when {@code proximityFilter == true}.
      */
     private double proximityThreshold = DEFAULT_PROXIMITY_THRESHOLD;
+
+    /**
+     * Minimum "cut" from the original sparse encoded dataset required in order to apply the proximity filter.
+     * It this is an {@code int} then it would be used as hard minimum number of samples, if it's a {@code double}
+     * (it has to be in the range {@code (0, 1)}, otherwise it will be ignored) it will be used as minimum percentage
+     * from the original sparse encoded dataset.
+     */
+    private Number proximityFilteredDatasetMinimum = DEFAULT_PROXIMITY_FILTERED_DATASET_MIN;
 
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
@@ -141,4 +150,12 @@ public class LimeConfig {
         return proximityThreshold;
     }
 
+    public Number getProximityFilteredDatasetMinimum() {
+        return proximityFilteredDatasetMinimum;
+    }
+
+    public LimeConfig withProximityFilteredDatasetMinimum(Number proximityFilteredDatasetMinimum) {
+        this.proximityFilteredDatasetMinimum = proximityFilteredDatasetMinimum;
+        return this;
+    }
 }

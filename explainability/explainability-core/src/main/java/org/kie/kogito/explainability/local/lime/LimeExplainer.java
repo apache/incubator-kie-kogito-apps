@@ -198,7 +198,19 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                     toRemove.add(i);
                 }
             }
-            if (!toRemove.isEmpty() && trainingSet.size() - toRemove.size() > 10) {
+            boolean enoughSamples;
+            double v = limeConfig.getProximityFilteredDatasetMinimum().doubleValue();
+            if (v % 1 == 0) {
+                enoughSamples = trainingSet.size() - toRemove.size() > v;
+            } else {
+                if (v > 1) {
+                    LOGGER.warn("unexpected value for 'Minimum dataset cut' {}, ignoring it", v);
+                    enoughSamples = false;
+                } else {
+                    enoughSamples = (double) toRemove.size() / (double) trainingSet.size() >= v;
+                }
+            }
+            if (!toRemove.isEmpty() && enoughSamples) {
                 for (Integer r : toRemove) {
                     trainingSet.remove(r.intValue());
                 }
