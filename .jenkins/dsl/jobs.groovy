@@ -77,7 +77,7 @@ void setupPrJob(String jobFolder) {
 void setupQuarkusLTSPrJob(String jobFolder) {
     def jobParams = getDefaultJobParams()
     jobParams.job.folder = jobFolder
-    KogitoJobTemplate.createPRAgainstLTSJob(this, jobParams)
+    KogitoJobTemplate.createQuarkusLTSPRJob(this, jobParams)
 }
 
 void setupSonarCloudJob(String jobFolder) {
