@@ -18,6 +18,8 @@ jest.mock('react-router-dom', () => ({
 }));
 jest.mock('@kogito-tooling/kie-editors-standalone/dist/dmn');
 
+afterAll(() => jest.resetAllMocks());
+
 describe('ModelLookup', () => {
   test('renders the model of an execution', () => {
     (useModelData as jest.Mock).mockReturnValue(modelData);

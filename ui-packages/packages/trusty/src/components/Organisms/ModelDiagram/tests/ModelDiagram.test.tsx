@@ -8,6 +8,8 @@ jest.mock('@kogito-tooling/kie-editors-standalone/dist/dmn', () => ({
   open: () => mockOpenFunction()
 }));
 
+afterAll(() => jest.resetAllMocks());
+
 describe('ModelDiagram', () => {
   test('renders a DMN model', () => {
     mount(<ModelDiagram model={modelDataDMN} />);
