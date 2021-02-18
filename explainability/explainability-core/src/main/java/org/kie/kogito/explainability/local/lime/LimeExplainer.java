@@ -15,10 +15,9 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -154,7 +153,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                                            List<PredictionInput> perturbedInputs,
                                            List<PredictionOutput> predictionOutputs,
                                            boolean strict) {
-        List<LimeInputs> limeInputsList = new LinkedList<>();
+        List<LimeInputs> limeInputsList = new ArrayList<>();
         for (int o = 0; o < actualOutputs.size(); o++) {
             Output currentOutput = actualOutputs.get(o);
             LimeInputs limeInputs = prepareInputs(perturbedInputs, predictionOutputs, linearizedTargetInputFeatures,
@@ -178,7 +177,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
     private void getSaliency(List<Feature> linearizedTargetInputFeatures, Map<String, Saliency> result,
                              LimeInputs limeInputs, Output originalOutput) {
-        List<FeatureImportance> featureImportanceList = new LinkedList<>();
+        List<FeatureImportance> featureImportanceList = new ArrayList<>();
 
         // encode the training data so that it can be fed into the linear model
         DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
@@ -192,30 +191,9 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         double[] sparseBalanceCoefficients = getSparseBalanceCoefficients(linearizedTargetInputFeatures, trainingSet);
 
         if (limeConfig.isProximityFilter()) {
-            List<Integer> toRemove = new ArrayList<>();
-            for (int i = trainingSet.size() - 1; i >= 0; i--) {
-                if (sampleWeights[i] < limeConfig.getProximityThreshold()) {
-                    toRemove.add(i);
-                }
-            }
-            boolean enoughSamples;
-            double v = limeConfig.getProximityFilteredDatasetMinimum().doubleValue();
-            if (v % 1 == 0) {
-                enoughSamples = trainingSet.size() - toRemove.size() > v;
-            } else {
-                if (v > 1) {
-                    LOGGER.warn("unexpected value for 'Minimum dataset cut' {}, ignoring it", v);
-                    enoughSamples = false;
-                } else {
-                    enoughSamples = (double) toRemove.size() / (double) trainingSet.size() >= v;
-                }
-            }
-            if (!toRemove.isEmpty() && enoughSamples) {
-                for (Integer r : toRemove) {
-                    trainingSet.remove(r.intValue());
-                }
-                Arrays.fill(sampleWeights, 1);
-            }
+            ProximityFilter filter = new ProximityFilter(limeConfig.getProximityThreshold(),
+                    limeConfig.getProximityFilteredDatasetMinimum().doubleValue());
+            filter.apply(trainingSet, sampleWeights);
         }
 
         LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
@@ -339,7 +317,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     }
 
     private List<PredictionInput> getPerturbedInputs(List<Feature> features, PerturbationContext perturbationContext) {
-        List<PredictionInput> perturbedInputs = new LinkedList<>();
+        List<PredictionInput> perturbedInputs = new ArrayList<>();
         // as per LIME paper, the dataset size should be at least |features|^2
         double perturbedDataSize = Math.max(limeConfig.getNoOfSamples(), Math.pow(2, features.size()));
         for (int i = 0; i < perturbedDataSize; i++) {
