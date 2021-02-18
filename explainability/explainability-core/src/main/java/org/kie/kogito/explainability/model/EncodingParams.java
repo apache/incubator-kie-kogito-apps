@@ -23,11 +23,11 @@ package org.kie.kogito.explainability.model;
 public class EncodingParams {
 
     private final double numericTypeClusterGaussianFilterWidth;
-    private final double umericTypeClusterThreshold;
+    private final double numericTypeClusterThreshold;
 
-    public EncodingParams(double numericTypeClusterGaussianFilterWidth, double umericTypeClusterThreshold) {
+    public EncodingParams(double numericTypeClusterGaussianFilterWidth, double numericTypeClusterThreshold) {
         this.numericTypeClusterGaussianFilterWidth = numericTypeClusterGaussianFilterWidth;
-        this.umericTypeClusterThreshold = umericTypeClusterThreshold;
+        this.numericTypeClusterThreshold = numericTypeClusterThreshold;
     }
 
     /**
@@ -47,6 +47,6 @@ public class EncodingParams {
      * @return the cluster threshold
      */
     public double getNumericTypeClusterThreshold() {
-        return umericTypeClusterThreshold;
+        return numericTypeClusterThreshold;
     }
 }
