@@ -34,7 +34,7 @@ class ProximityFilter {
     private final double proximityThreshold;
     private final double proximityFilteredDatasetMinimum;
 
-    public ProximityFilter(double proximityThreshold, double proximityFilteredDatasetMinimum) {
+    ProximityFilter(double proximityThreshold, double proximityFilteredDatasetMinimum) {
         this.proximityThreshold = proximityThreshold;
         this.proximityFilteredDatasetMinimum = proximityFilteredDatasetMinimum;
     }

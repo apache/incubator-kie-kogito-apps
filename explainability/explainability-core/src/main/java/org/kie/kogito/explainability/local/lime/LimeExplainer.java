@@ -188,12 +188,18 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         // weight the training samples based on the proximity to the target input to explain
         double[] sampleWeights = SampleWeighter.getSampleWeights(linearizedTargetInputFeatures, trainingSet);
 
-        double[] sparseBalanceCoefficients = getSparseBalanceCoefficients(linearizedTargetInputFeatures, trainingSet);
+        int ts = linearizedTargetInputFeatures.size();
+        double[] featureWeights = new double[ts];
+        Arrays.fill(featureWeights, 1);
+        if (limeConfig.isPenalizeBalanceSparse()) {
+            IndependentSparseFeatureBalanceFilter sparseFeatureBalanceFilter = new IndependentSparseFeatureBalanceFilter();
+            sparseFeatureBalanceFilter.apply(featureWeights, linearizedTargetInputFeatures, trainingSet);
+        }
 
         if (limeConfig.isProximityFilter()) {
-            ProximityFilter filter = new ProximityFilter(limeConfig.getProximityThreshold(),
+            ProximityFilter proximityFilter = new ProximityFilter(limeConfig.getProximityThreshold(),
                     limeConfig.getProximityFilteredDatasetMinimum().doubleValue());
-            filter.apply(trainingSet, sampleWeights);
+            proximityFilter.apply(trainingSet, sampleWeights);
         }
 
         LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification());
@@ -204,59 +210,13 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             int i = 0;
             for (Feature linearizedFeature : linearizedTargetInputFeatures) {
                 FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]
-                        * sparseBalanceCoefficients[i]);
+                        * featureWeights[i]);
                 featureImportanceList.add(featureImportance);
                 i++;
             }
         }
         Saliency saliency = new Saliency(originalOutput, featureImportanceList);
         result.put(originalOutput.getName(), saliency);
-    }
-
-    /**
-     * Calculate sparse balance feature coefficients.
-     * We consider a sparse feature to be better for training the classifier accurately when it doesn't present a good
-     * balance of 1s and 0s values with respect to 0 and 1 predictions. In fact such features would hardly generate a
-     * well fitting classifier, if taken in isolation.
-     * The generated coefficients are proportional with respect to the no. of features as the above becomes more
-     * impacting when the no. of features is low.
-     *
-     * @param linearizedTargetInputFeatures no of features
-     * @param trainingSet                   training set for the linear classifier
-     * @return sparse balance coefficients
-     */
-    private double[] getSparseBalanceCoefficients(List<Feature> linearizedTargetInputFeatures, List<Pair<double[], Double>> trainingSet) {
-        int ts = linearizedTargetInputFeatures.size();
-        double[] coefficients = new double[ts];
-        Arrays.fill(coefficients, 1);
-        if (limeConfig.isPenalizeBalanceSparse() && !trainingSet.isEmpty()) {
-            // calculate per feature class balance
-            double[] zeroPredicted = new double[ts];
-            double[] onePredicted = new double[ts];
-            for (Pair<double[], Double> sample : trainingSet) {
-                double[] sparseVector = sample.getKey();
-                for (int i = 0; i < sparseVector.length; i++) {
-                    double inputValue = sparseVector[i];
-                    Double outputValue = sample.getValue();
-                    if (1 == outputValue) {
-                        onePredicted[i] += inputValue;
-                    } else {
-                        zeroPredicted[i] += inputValue;
-                    }
-                }
-            }
-            zeroPredicted = Arrays.stream(zeroPredicted).map(d -> d / trainingSet.size()).toArray();
-            onePredicted = Arrays.stream(onePredicted).map(d -> d / trainingSet.size()).toArray();
-            for (int i = 0; i < coefficients.length; i++) {
-                // calculate distance from the perfect balance (high is good)
-                double zeroDistance = Math.abs(0.5 - zeroPredicted[i]);
-                double oneDistance = Math.abs(0.5 - onePredicted[i]);
-                // coefficient is proportional to distance and to the number of features (between 0 and 1)
-                double zm = Math.tanh((1e-2 + zeroDistance + oneDistance) + ts / 10d);
-                coefficients[i] *= zm;
-            }
-        }
-        return coefficients;
     }
 
     /**

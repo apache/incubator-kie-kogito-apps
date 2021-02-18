@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.lime;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ class ProximityFilterTest {
         int size = 10;
         List<Pair<double[], Double>> trainingSet = new ArrayList<>();
         double[] weights = new double[size];
-        generateDataForFiltering(size, trainingSet, weights);
+        TestUtils.fillBalancedDataForFiltering(size, trainingSet, weights);
         filter.apply(trainingSet, weights);
         assertThat(trainingSet.size()).isEqualTo(5);
     }
@@ -43,7 +44,7 @@ class ProximityFilterTest {
         int size = 10;
         List<Pair<double[], Double>> trainingSet = new ArrayList<>();
         double[] weights = new double[size];
-        generateDataForFiltering(size, trainingSet, weights);
+        TestUtils.fillBalancedDataForFiltering(size, trainingSet, weights);
         trainingSet.remove(0);
         filter.apply(trainingSet, weights);
         assertThat(trainingSet.size()).isEqualTo(9); // filtering doesn't happen because of non matching sizes
@@ -55,15 +56,4 @@ class ProximityFilterTest {
         assertThatCode(() -> filter.apply(null, null)).doesNotThrowAnyException();
     }
 
-    private void generateDataForFiltering(int size, List<Pair<double[], Double>> trainingSet, double[] weights) {
-        for (int i = 0; i < size; i++) {
-            double[] x = new double[2];
-            for (int j = 0; j < 2; j++) {
-                x[j] = (i + j) % 2 == 0 ? 0 : 1;
-            }
-            Double y = i % 3 == 0 ? 0d : 1d;
-            trainingSet.add(Pair.of(x, y));
-            weights[i] = i % 2 == 0 ? 0.2 : 0.8;
-        }
-    }
 }
