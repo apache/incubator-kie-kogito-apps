@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ModelData } from '../../../types';
+import { StandaloneEditorApi } from '@kogito-tooling/kie-editors-standalone/dist/common/Editor';
 import * as DmnEditor from '@kogito-tooling/kie-editors-standalone/dist/dmn';
 
 const DMN1_2: string = 'http://www.omg.org/spec/DMN/20151101/dmn.xsd';
@@ -13,14 +14,19 @@ const ModelDiagram = (props: ModelDiagramProps) => {
   const type: string = model.type;
 
   useEffect(() => {
+    let editor: StandaloneEditorApi | undefined = undefined;
     if (type === DMN1_2) {
-      DmnEditor.open({
+      editor = DmnEditor.open({
         container: document.getElementById('dmn-editor-container'),
         initialContent: Promise.resolve(model.model),
-        readOnly: false,
-        origin: ''
+        readOnly: true
       });
     }
+    return () => {
+      if (editor) {
+        editor.close();
+      }
+    };
   }, [model]);
 
   return type === DMN1_2 ? makeDMNEditor() : DEFAULT;
