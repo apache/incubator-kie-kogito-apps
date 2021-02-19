@@ -50,10 +50,10 @@ class CounterfactualExplainerTest {
             LoggerFactory.getLogger(CounterfactualExplainerTest.class);
 
     private CounterfactualResult runCounterfactualSearch(List<Output> goal,
-                                                         List<Boolean> constraints,
-                                                         DataDomain dataDomain,
-                                                         List<Feature> features,
-                                                         PredictionProvider model) throws InterruptedException, ExecutionException, TimeoutException {
+            List<Boolean> constraints,
+            DataDomain dataDomain,
+            List<Feature> features,
+            PredictionProvider model) throws InterruptedException, ExecutionException, TimeoutException {
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(steps);
         final SolverConfig solverConfig = CounterfactualConfigurationFactory
                 .builder().withTerminationConfig(terminationConfig).build();
@@ -71,7 +71,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testNonEmptyInput(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -114,7 +114,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testCounterfactualMatch(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -143,9 +143,9 @@ class CounterfactualExplainerTest {
 
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        TestUtils.getSumThresholdModel(center, epsilon));
+                        constraints,
+                        dataDomain, features,
+                        TestUtils.getSumThresholdModel(center, epsilon));
 
         double totalSum = 0;
         for (CounterfactualEntity entity : result.getEntities()) {
@@ -160,8 +160,9 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
-    void testCounterfactualConstrainedMatchUnscaled(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testCounterfactualConstrainedMatchUnscaled(int seed)
+            throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
 
@@ -193,9 +194,9 @@ class CounterfactualExplainerTest {
 
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        TestUtils.getSumThresholdModel(center, epsilon));
+                        constraints,
+                        dataDomain, features,
+                        TestUtils.getSumThresholdModel(center, epsilon));
 
         final List<CounterfactualEntity> counterfactualEntities = result.getEntities();
         double totalSum = 0;
@@ -210,7 +211,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testCounterfactualConstrainedMatchScaled(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -256,9 +257,9 @@ class CounterfactualExplainerTest {
 
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        TestUtils.getSumThresholdModel(center, epsilon));
+                        constraints,
+                        dataDomain, features,
+                        TestUtils.getSumThresholdModel(center, epsilon));
 
         final List<CounterfactualEntity> counterfactualEntities = result.getEntities();
 
@@ -274,7 +275,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testCounterfactualBoolean(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -300,9 +301,9 @@ class CounterfactualExplainerTest {
 
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        TestUtils.getSumThresholdModel(center, epsilon));
+                        constraints,
+                        dataDomain, features,
+                        TestUtils.getSumThresholdModel(center, epsilon));
 
         final List<CounterfactualEntity> counterfactualEntities = result.getEntities();
 
@@ -317,7 +318,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testCounterfactualCategorical(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -339,9 +340,9 @@ class CounterfactualExplainerTest {
 
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        TestUtils.getSymbolicArithmeticModel());
+                        constraints,
+                        dataDomain, features,
+                        TestUtils.getSymbolicArithmeticModel());
 
         final List<CounterfactualEntity> counterfactualEntities = result.getEntities();
 
@@ -385,7 +386,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testCounterfactualMatchThreshold(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -418,9 +419,9 @@ class CounterfactualExplainerTest {
 
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        model);
+                        constraints,
+                        dataDomain, features,
+                        model);
 
         final List<CounterfactualEntity> counterfactualEntities = result.getEntities();
 
@@ -432,7 +433,8 @@ class CounterfactualExplainerTest {
         assertTrue(totalSum <= center + epsilon);
         assertTrue(totalSum >= center - epsilon);
 
-        final List<Feature> cfFeatures = counterfactualEntities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+        final List<Feature> cfFeatures =
+                counterfactualEntities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
         final PredictionInput cfInput = new PredictionInput(cfFeatures);
         final PredictionOutput cfOutput = model.predictAsync(List.of(cfInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
@@ -444,7 +446,7 @@ class CounterfactualExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testCounterfactualMatchNoThreshold(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
@@ -476,9 +478,9 @@ class CounterfactualExplainerTest {
         final PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
-                                        constraints,
-                                        dataDomain, features,
-                                        model);
+                        constraints,
+                        dataDomain, features,
+                        model);
         final List<CounterfactualEntity> counterfactualEntities = result.getEntities();
 
         double totalSum = 0;
@@ -489,7 +491,8 @@ class CounterfactualExplainerTest {
         assertTrue(totalSum <= center + epsilon);
         assertTrue(totalSum >= center - epsilon);
 
-        final List<Feature> cfFeatures = counterfactualEntities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+        final List<Feature> cfFeatures =
+                counterfactualEntities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
         final PredictionInput cfInput = new PredictionInput(cfFeatures);
         final PredictionOutput cfOutput = model.predictAsync(List.of(cfInput))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())

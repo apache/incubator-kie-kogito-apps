@@ -58,7 +58,8 @@ public class CounterfactualConfigurationFactory {
         public SolverConfig build() {
             SolverConfig solverConfig = new SolverConfig();
 
-            solverConfig.withEntityClasses(IntegerEntity.class, DoubleEntity.class, BooleanEntity.class, CategoricalEntity.class);
+            solverConfig.withEntityClasses(IntegerEntity.class, DoubleEntity.class, BooleanEntity.class,
+                    CategoricalEntity.class);
             solverConfig.setSolutionClass(CounterfactualSolution.class);
 
             ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();

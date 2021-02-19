@@ -38,6 +38,7 @@ public class FeatureDomain {
 
     /**
      * Create a {@link FeatureDomain} for a continuous feature
+     * 
      * @param start The start point of the search space
      * @param end The end point of the search space
      * @return A {@link FeatureDomain}
@@ -48,6 +49,7 @@ public class FeatureDomain {
 
     /**
      * Create a {@link FeatureDomain} for a continuous feature
+     * 
      * @param start The start point of the search space
      * @param end The end point of the search space
      * @return A {@link FeatureDomain}
@@ -58,6 +60,7 @@ public class FeatureDomain {
 
     /**
      * Create a {@link FeatureDomain} for a categorical feature
+     * 
      * @param categories A set with all the allowed category values
      * @return A {@link FeatureDomain}
      */
@@ -67,6 +70,7 @@ public class FeatureDomain {
 
     /**
      * Create a {@link FeatureDomain} for a categorical feature
+     * 
      * @param categories A list with all the allowed category values
      * @return A {@link FeatureDomain}
      */
@@ -76,10 +80,11 @@ public class FeatureDomain {
 
     /**
      * Create a {@link FeatureDomain} for a categorical feature
+     * 
      * @param categories All the allowed category values
      * @return A {@link FeatureDomain}
      */
-    public static FeatureDomain categorical(String...categories) {
+    public static FeatureDomain categorical(String... categories) {
         return new FeatureDomain(null, null, new HashSet<>(Arrays.asList(categories)));
     }
 
@@ -95,10 +100,11 @@ public class FeatureDomain {
 
     /**
      * Return whether this is an empty domain
+     * 
      * @return True if empty
      */
     public boolean isEmpty() {
-        return (start==null && end==null && categories==null);
+        return (start == null && end == null && categories == null);
     }
 
     /**
