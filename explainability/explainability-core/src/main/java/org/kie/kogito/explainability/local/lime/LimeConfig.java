@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.security.SecureRandom;
 
+import org.kie.kogito.explainability.model.EncodingParams;
 import org.kie.kogito.explainability.model.PerturbationContext;
 
 /**
@@ -60,14 +61,9 @@ public class LimeConfig {
     private double proximityKernelWidth = DEFAULT_PROXIMITY_KERNEL_WIDTH;
 
     /**
-     * Threshold used for clustering features in sparse encoding.
+     * {@link EncodingParams} used to perform sparse encoding for LIME.
      */
-    private double encodingClusterThreshold = DEFAULT_ENCODING_CLUSTER_THRESHOLD;
-
-    /**
-     * Width of the gaussian kernel used for clustering in sparse encoding.
-     */
-    private double encodingGaussianFilterWidth = DEFAULT_ENCODING_GAUSSIAN_FILTER_WIDTH;
+    private EncodingParams encodingParams = new EncodingParams(DEFAULT_ENCODING_GAUSSIAN_FILTER_WIDTH, DEFAULT_ENCODING_CLUSTER_THRESHOLD);
 
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
@@ -123,22 +119,12 @@ public class LimeConfig {
         return proximityKernelWidth;
     }
 
-    public double getEncodingClusterThreshold() {
-        return encodingClusterThreshold;
+    public EncodingParams getEncodingParams() {
+        return encodingParams;
     }
 
-    public LimeConfig withEncodingClusterThreshold(double encodingClusterThreshold) {
-        this.encodingClusterThreshold = encodingClusterThreshold;
-        return this;
-    }
-
-
-    public double getEncodingGaussianFilterWidth() {
-        return encodingGaussianFilterWidth;
-    }
-
-    public LimeConfig withEncodingGaussianFilterWidth(double encodingGaussianFilterWidth) {
-        this.encodingGaussianFilterWidth = encodingGaussianFilterWidth;
+    public LimeConfig withEncodingParams(EncodingParams encodingParams) {
+        this.encodingParams = encodingParams;
         return this;
     }
 }

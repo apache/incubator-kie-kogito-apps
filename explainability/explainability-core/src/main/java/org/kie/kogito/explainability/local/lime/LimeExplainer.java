@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.LocalExplanationException;
-import org.kie.kogito.explainability.model.EncodingParams;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -180,7 +179,6 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         List<FeatureImportance> featureImportanceList = new LinkedList<>();
 
         // encode the training data so that it can be fed into the linear model
-        EncodingParams encodingParams = new EncodingParams(limeConfig.getEncodingGaussianFilterWidth(), limeConfig.getEncodingClusterThreshold());
         DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
                 limeInputs.getPerturbedOutputs(),
                 linearizedTargetInputFeatures, originalOutput, 

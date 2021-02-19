@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.model.EncodingParams;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -25,10 +25,9 @@ class LimeConfigTest {
     @Test
     void testNumericEncodingParams() {
         LimeConfig config = new LimeConfig()
-                .withEncodingClusterThreshold(0.01)
-                .withEncodingGaussianFilterWidth(2);
-        assertThat(config.getEncodingClusterThreshold()).isEqualTo(0.01);
-        assertThat(config.getEncodingGaussianFilterWidth()).isEqualTo(2);
+                .withEncodingParams(new EncodingParams(0.01, 2));
+        assertThat(config.getEncodingParams().getNumericTypeClusterGaussianFilterWidth()).isEqualTo(0.01);
+        assertThat(config.getEncodingParams().getNumericTypeClusterThreshold()).isEqualTo(2);
     }
 
 }
