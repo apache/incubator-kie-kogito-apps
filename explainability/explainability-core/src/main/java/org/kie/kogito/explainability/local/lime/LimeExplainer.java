@@ -183,7 +183,8 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         EncodingParams encodingParams = new EncodingParams(limeConfig.getEncodingGaussianFilterWidth(), limeConfig.getEncodingClusterThreshold());
         DatasetEncoder datasetEncoder = new DatasetEncoder(limeInputs.getPerturbedInputs(),
                 limeInputs.getPerturbedOutputs(),
-                linearizedTargetInputFeatures, originalOutput, encodingParams);
+                linearizedTargetInputFeatures, originalOutput, 
+                limeConfig.getEncodingParams());
         Collection<Pair<double[], Double>> trainingSet = datasetEncoder.getEncodedTrainingSet();
 
         // weight the training samples based on the proximity to the target input to explain
