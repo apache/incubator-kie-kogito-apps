@@ -18,6 +18,7 @@ package org.kie.kogito.explainability;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -106,6 +107,24 @@ public class TestUtils {
         });
     }
 
+    public static PredictionProvider getSumThresholdModel(double center, double epsilon) {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                double result = 0;
+                for (int i = 0; i < features.size(); i++) {
+                    result += features.get(i).getValue().asNumber();
+                }
+                final boolean inside = (result >= center - epsilon && result <= center + epsilon);
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("inside", Type.BOOLEAN, new Value<>(inside), 1.0 - Math.abs(result - center))));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
+        });
+    }
+
     public static PredictionProvider getDummyTextClassifier() {
         List<String> blackList = Arrays.asList("money", "$", "£", "bitcoin");
         return inputs -> supplyAsync(() -> {
@@ -128,6 +147,48 @@ public class TestUtils {
                 outputs.add(new PredictionOutput(List.of(output)));
             }
             return outputs;
+        });
+    }
+
+    public static PredictionProvider getSymbolicArithmeticModel() {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            final String OPERAND_FEATURE_NAME = "operand";
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                // Find a valid operand feature, if any
+                Optional<String> operand = features.stream().filter(f -> OPERAND_FEATURE_NAME.equals(f.getName()))
+                        .map(f -> f.getValue().asString()).findFirst();
+                if (!operand.isPresent()) {
+                    throw new IllegalArgumentException("No valid operand found in features");
+                }
+                final String operandValue = operand.get();
+                double result = 0;
+                // Apply the found operand to the rest of the features
+                for (Feature feature : features) {
+                    if (!OPERAND_FEATURE_NAME.equals(feature.getName())) {
+                        switch (operandValue) {
+                            case "+":
+                                result += feature.getValue().asNumber();
+                                break;
+                            case "-":
+                                result -= feature.getValue().asNumber();
+                                break;
+                            case "*":
+                                result *= feature.getValue().asNumber();
+                                break;
+                            case "/":
+                                result /= feature.getValue().asNumber();
+                                break;
+                        }
+                    }
+                }
+
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("result", Type.NUMBER, new Value<>(result), 1d)));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
         });
     }
 
@@ -179,9 +240,9 @@ public class TestUtils {
     }
 
     public static void assertLimeStability(PredictionProvider model, Prediction prediction, LimeExplainer limeExplainer,
-                                       int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
+                                           int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, topK,
-                                                                  minimumPositiveStabilityRate, minimumNegativeStabilityRate));
+                                                                                minimumPositiveStabilityRate, minimumNegativeStabilityRate));
     }
 
     public static void fillBalancedDataForFiltering(int size, List<Pair<double[], Double>> trainingSet, double[] weights) {

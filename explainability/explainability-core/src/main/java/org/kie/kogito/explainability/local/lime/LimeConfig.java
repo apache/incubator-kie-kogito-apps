@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.security.SecureRandom;
 
+import org.kie.kogito.explainability.model.EncodingParams;
 import org.kie.kogito.explainability.model.PerturbationContext;
 
 /**
@@ -32,21 +33,24 @@ public class LimeConfig {
     private static final boolean DEFAULT_PROXIMITY_FILTER = true;
     private static final double DEFAULT_PROXIMITY_THRESHOLD = 0.8;
     private static final Number DEFAULT_PROXIMITY_FILTERED_DATASET_MIN = 10;
+    private static final double DEFAULT_PROXIMITY_KERNEL_WIDTH = 0.675;
+    private static final double DEFAULT_ENCODING_CLUSTER_THRESHOLD = 0.1;
+    private static final double DEFAULT_ENCODING_GAUSSIAN_FILTER_WIDTH = 1;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
 
     /**
-     * No. of samples to be generated for the local linear model training
+     * No. of samples to be generated for the local linear model training.
      */
     private int noOfSamples = DEFAULT_NO_OF_SAMPLES;
 
     /**
-     * No. of retries while trying to find a (linearly) separable dataset
+     * No. of retries while trying to find a (linearly) separable dataset.
      */
     private int noOfRetries = DEFAULT_NO_OF_RETRIES;
 
     /**
-     * Context object for perturbing features
+     * Context object for perturbing features.
      */
     private PerturbationContext perturbationContext = new PerturbationContext(new SecureRandom(), 1);
 
@@ -77,6 +81,17 @@ public class LimeConfig {
      * from the original sparse encoded dataset.
      */
     private Number proximityFilteredDatasetMinimum = DEFAULT_PROXIMITY_FILTERED_DATASET_MIN;
+
+    /**
+     * The width of the kernel used to calculate proximity of sparse vector instances.
+     */
+    private double proximityKernelWidth = DEFAULT_PROXIMITY_KERNEL_WIDTH;
+
+    /**
+     * {@link EncodingParams} used to perform sparse encoding for LIME.
+     */
+    private EncodingParams encodingParams = new EncodingParams(DEFAULT_ENCODING_GAUSSIAN_FILTER_WIDTH, DEFAULT_ENCODING_CLUSTER_THRESHOLD);
+
 
     public LimeConfig withSeparableDatasetRatio(double separableDatasetRatio) {
         this.separableDatasetRatio = separableDatasetRatio;
@@ -118,6 +133,11 @@ public class LimeConfig {
         return this;
     }
 
+    public LimeConfig withProximityKernelWidth(double proximityKernelWidth) {
+        this.proximityKernelWidth = proximityKernelWidth;
+        return this;
+    }
+
     public int getNoOfRetries() {
         return noOfRetries;
     }
@@ -156,6 +176,19 @@ public class LimeConfig {
 
     public LimeConfig withProximityFilteredDatasetMinimum(Number proximityFilteredDatasetMinimum) {
         this.proximityFilteredDatasetMinimum = proximityFilteredDatasetMinimum;
+        return this;
+    }
+
+    public double getProximityKernelWidth() {
+        return proximityKernelWidth;
+    }
+
+    public EncodingParams getEncodingParams() {
+        return encodingParams;
+    }
+
+    public LimeConfig withEncodingParams(EncodingParams encodingParams) {
+        this.encodingParams = encodingParams;
         return this;
     }
 }
