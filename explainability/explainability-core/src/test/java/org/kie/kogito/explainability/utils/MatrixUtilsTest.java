@@ -166,7 +166,7 @@ class MatrixUtilsTest {
     // === Matrix Inversion tests ===
     @Test
     void testInvertNormal(){
-        double[][] inv = MatrixUtils.invertSquareMatrix(matSquareNonSingular);
+        double[][] inv = MatrixUtils.invertSquareMatrix(matSquareNonSingular, 1e-9);
         for (int i = 0; i < inv.length; i++) {
             assertArrayEquals(matSNSInv[i], inv[i], 1e-6);
         }
@@ -174,7 +174,7 @@ class MatrixUtilsTest {
 
     @Test
     void testInvertSingular(){
-        assertThrows(ArithmeticException.class, ()-> MatrixUtils.invertSquareMatrix(matSquareSingular));
+        assertThrows(ArithmeticException.class, ()-> MatrixUtils.invertSquareMatrix(matSquareSingular, 1e-9));
     }
 
     // === Jitter Invert Tests ===
@@ -182,7 +182,7 @@ class MatrixUtilsTest {
     void testJitterInvert(){
         // since there's some randomness in jitter invert, let's make sure it's stable
         for (int run=0; run<100; run++) {
-            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10);
+            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10, 1e-9);
 
             // since the output of jitterInvert is non-deterministic for singular matrices, check to make sure
             // key properties of the inverse matrix hold true; namely M*M_inv = Identity

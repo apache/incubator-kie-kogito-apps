@@ -21,7 +21,6 @@ import java.util.stream.IntStream;
 
 
 public class MatrixUtils {
-    static final double zeroThreshold = 1e-9;
 
     private MatrixUtils() { throw new IllegalStateException("Utility class"); }
 
@@ -131,7 +130,7 @@ public class MatrixUtils {
      * Dr. Debabrata DasGupta's description of the algorithm is here:
      * https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm
      */
-    public static double[][] invertSquareMatrix(double[][] x) {
+    public static double[][] invertSquareMatrix(double[][] x, double zeroThreshold) {
         int size = MatrixUtils.getShape(x)[0];
         double[][] copy = new double[size][size];
         for (int i = 0; i < size; i++) {
@@ -153,7 +152,7 @@ public class MatrixUtils {
             double pivotVal = copy[pivot][pivot];
 
             // check if pivotVal is 0, allowing for some floating point error
-            if (Math.abs(pivotVal) < MatrixUtils.zeroThreshold) {
+            if (Math.abs(pivotVal) < zeroThreshold) {
                 throw new ArithmeticException("Matrix is singular and cannot be inverted");
             }
 
@@ -191,11 +190,11 @@ public class MatrixUtils {
      * @return double[][], the inverted matrix
      *
      */
-    public static double[][] jitterInvert(double[][] x, int numRetries) throws ArithmeticException {
+    public static double[][] jitterInvert(double[][] x, int numRetries, double zeroThreshold) {
         double[][] xInv;
         for (int jitterTries=0; jitterTries < numRetries; jitterTries++) {
             try {
-                xInv = MatrixUtils.invertSquareMatrix(x);
+                xInv = MatrixUtils.invertSquareMatrix(x, zeroThreshold);
                 return xInv;
             } catch(ArithmeticException e){
                 // if the inversion is unsuccessful, we can try slightly jittering the matrix.

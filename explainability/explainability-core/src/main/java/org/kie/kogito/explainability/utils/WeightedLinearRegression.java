@@ -81,7 +81,7 @@ public class WeightedLinearRegression {
 
         //invert the coefficient matrix
         try {
-            x = MatrixUtils.jitterInvert(x, 10);
+            x = MatrixUtils.jitterInvert(x, 10, 1e-9);
         } catch (ArithmeticException e) {
             throw new ArithmeticException(
                     "Weighted Linear Regression: Matrix cannot be inverted! " +
