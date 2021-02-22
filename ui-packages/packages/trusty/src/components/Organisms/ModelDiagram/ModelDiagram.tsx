@@ -21,12 +21,10 @@ const ModelDiagram = (props: ModelDiagramProps) => {
         initialContent: Promise.resolve(model.model),
         readOnly: true
       });
-    }
-    return () => {
-      if (editor) {
+      return () => {
         editor.close();
-      }
-    };
+      };
+    }
   }, [model]);
 
   return type === DMN1_2 ? makeDMNEditor() : DEFAULT;
