@@ -15,13 +15,8 @@
  */
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
@@ -37,7 +32,6 @@ import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 import org.infinispan.client.hotrod.RemoteCacheManager;
-import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.kie.kogito.infinispan.health.InfinispanHealthCheck;
 
 import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
@@ -80,7 +74,7 @@ public class InfinispanConfiguration {
                           Instance<RemoteCacheManager> remoteCacheManager,
                           Event<InfinispanInitialized> initializedEvent) {
         isEnabled(persistence)
-                .map(c -> remoteCacheManager.get().administration().getOrCreateCache(JOB_DETAILS, getCacheTemplate()))
+                .map(c -> remoteCacheManager.get().getCache(JOB_DETAILS))
                 .ifPresent(c -> {
                     initializedEvent.fire(new InfinispanInitialized());
                     initialized.set(Boolean.TRUE);
@@ -91,11 +85,4 @@ public class InfinispanConfiguration {
         return initialized.get();
     }
 
-    private XMLStringConfiguration getCacheTemplate() {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(CACHE_TEMPLATE_XML);
-        String xml = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
-        return new XMLStringConfiguration(xml);
-    }
 }
