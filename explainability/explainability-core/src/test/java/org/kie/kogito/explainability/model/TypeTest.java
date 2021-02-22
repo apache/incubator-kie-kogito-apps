@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 class TypeTest {
 
@@ -290,6 +291,7 @@ class TypeTest {
     @ParameterizedTest
     @EnumSource
     void testEncode(Type type) {
+      EncodingParams params = new EncodingParams(1, 0.1);
         for (int seed = 0; seed < 5; seed++) {
             Random random = new Random();
             random.setSeed(seed);
@@ -299,7 +301,7 @@ class TypeTest {
             for (int i = 0; i < values.length; i++) {
                 values[i] = type.randomValue(perturbationContext);
             }
-            List<double[]> vectors = type.encode(target, values);
+            List<double[]> vectors = type.encode(params, target, values);
             assertNotNull(vectors);
             assertEquals(values.length, vectors.size());
             for (double[] vector : vectors) {
@@ -311,9 +313,10 @@ class TypeTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4})
-    void testEncodeNumericSymmetric(int seed) {
+    void testEncodeNumericSymmetric() {
         Random random = new Random();
         random.setSeed(seed);
+        EncodingParams params = new EncodingParams(1, 0.1);
         PerturbationContext perturbationContext = new PerturbationContext(random, random.nextInt());
         Value<?> target = Type.NUMBER.randomValue(perturbationContext);
         Value<?>[] values = new Value<?>[6];
@@ -321,7 +324,7 @@ class TypeTest {
             values[i] = new Value<>(target.asNumber() + target.asNumber() * (1 + i) / 100d);
             values[values.length - 1 - i] = new Value<>(target.asNumber() - target.asNumber() * (1 + i) / 100d);
         }
-        List<double[]> vectors = Type.NUMBER.encode(target, values);
+        List<double[]> vectors = Type.NUMBER.encode(params, target, values);
         assertNotNull(vectors);
         assertEquals(values.length, vectors.size());
         for (int i = 0; i < vectors.size() / 2; i++) {
@@ -331,6 +334,7 @@ class TypeTest {
 
     @Test
     void testEncodeNaN() {
+        EncodingParams params = new EncodingParams(1, 0.1);
         Random random = new Random();
         random.setSeed(4);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
@@ -340,7 +344,7 @@ class TypeTest {
             values[i] = Type.NUMBER.randomValue(perturbationContext);
         }
         values[5] = new Value<>(Double.NaN);
-        List<double[]> vectors = Type.NUMBER.encode(target, values);
+        List<double[]> vectors = Type.NUMBER.encode(params, target, values);
         assertThat(vectors).isNotEmpty();
         assertThat(vectors).doesNotContain(new double[]{Double.NaN});
     }

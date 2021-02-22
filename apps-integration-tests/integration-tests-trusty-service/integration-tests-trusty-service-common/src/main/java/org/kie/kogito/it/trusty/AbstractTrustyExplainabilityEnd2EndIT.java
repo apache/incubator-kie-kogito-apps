@@ -1,19 +1,18 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.it.trusty;
 
 import java.util.List;
@@ -25,9 +24,9 @@ import org.kie.kogito.testcontainers.ExplainabilityServiceMessagingContainer;
 import org.kie.kogito.testcontainers.InfinispanContainer;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.KogitoServiceContainer;
-import org.kie.kogito.testcontainers.TrustyServiceContainer;
-import org.kie.kogito.trusty.service.responses.ExecutionsResponse;
-import org.kie.kogito.trusty.service.responses.SalienciesResponse;
+import org.kie.kogito.testcontainers.InfinispanTrustyServiceContainer;
+import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
+import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.KafkaContainer;
@@ -115,7 +114,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                         .withNetwork(network)
                         .withNetworkAliases(EXPL_SERVICE_ALIAS);
 
-                final TrustyServiceContainer trustyService = new TrustyServiceContainer(INFINISPAN_SERVER_LIST, KAFKA_BOOTSTRAP_SERVERS, true)
+                final InfinispanTrustyServiceContainer trustyService = new InfinispanTrustyServiceContainer(INFINISPAN_SERVER_LIST, KAFKA_BOOTSTRAP_SERVERS, true)
                         .withEnv(TRUSTY_SERVICE_OIDC_AUTH_SERVER_URL_VARIABLE, TRUSTY_SERVICE_OIDC_AUTH_SERVER_URL_VALUE)
                         .withEnv(TRUSTY_SERVICE_OIDC_CLIENT_ID_VARIABLE, TRUSTY_SERVICE_OIDC_CLIENT_ID_VALUE)
                         .withLogConsumer(new Slf4jLogConsumer(LOGGER))

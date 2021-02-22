@@ -59,6 +59,12 @@
       <artifactId>integration-tests-trusty-service-common</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.jboss.logging</groupId>
+      <artifactId>commons-logging-jboss-logging</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -104,7 +110,6 @@
         <artifactId>quarkus-maven-plugin</artifactId>
         <version>${version.io.quarkus}</version>
         <configuration>
-          <uberJar>true</uberJar>
           <skipOriginalJarRename>true</skipOriginalJarRename>
         </configuration>
         <executions>
