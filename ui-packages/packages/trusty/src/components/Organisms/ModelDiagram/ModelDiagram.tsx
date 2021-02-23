@@ -5,6 +5,7 @@ import React from 'react';
 import { ModelData } from '../../../types';
 
 const DMN1_2: string = 'http://www.omg.org/spec/DMN/20151101/dmn.xsd';
+const DMN1_3: string = 'http://www.omg.org/spec/DMN/20180521/MODEL/';
 
 type ModelDiagramProps = {
   model: ModelData;
@@ -12,7 +13,7 @@ type ModelDiagramProps = {
 
 const ModelDiagram = (props: ModelDiagramProps) => {
   const { model } = props;
-  const type: string = model.type;
+  const version: string = model.version;
 
   const editorEnvelopeLocator: EditorEnvelopeLocator = {
     targetOrigin: window.location.origin,
@@ -27,7 +28,7 @@ const ModelDiagram = (props: ModelDiagramProps) => {
     ])
   };
 
-  if (type === DMN1_2) {
+  if (version === DMN1_2 || version === DMN1_3) {
     return makeDMNEditor(model, editorEnvelopeLocator);
   }
 
@@ -35,7 +36,7 @@ const ModelDiagram = (props: ModelDiagramProps) => {
 };
 
 function makeUnknownModel(): JSX.Element {
-  return <div>Unknown model type</div>;
+  return <div>Unsupported model type</div>;
 }
 
 function makeDMNEditor(
