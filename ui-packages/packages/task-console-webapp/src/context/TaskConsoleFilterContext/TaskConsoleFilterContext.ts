@@ -15,7 +15,7 @@
  */
 
 import React, { useContext } from 'react';
-import { getActiveTaskStates } from '../../util/Utils';
+import { getActiveTaskStates } from '../../utils/Utils';
 
 export interface ISortBy {
   index?: number;

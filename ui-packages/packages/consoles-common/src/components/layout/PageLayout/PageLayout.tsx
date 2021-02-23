@@ -25,8 +25,8 @@ import {
 import '../../styles.css';
 
 import { ouiaAttribute } from '@kogito-apps/components-common';
-import PageToolbar from '../toolbar/PageToolbar/PageToolbar';
 import { BrandContext } from '../BrandContext/BrandContext';
+import PageToolbar from '../PageToolbar/PageToolbar';
 
 interface IOwnProps {
   children: React.ReactNode;

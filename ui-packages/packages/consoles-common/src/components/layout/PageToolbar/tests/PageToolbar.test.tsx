@@ -24,7 +24,7 @@ import {
   resetTestKogitoAppContext,
   testHandleLogoutMock,
   testIsTestUserSystemEnabledMock
-} from '../../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
+} from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
 
 jest.mock('../../AboutModalBox/AboutModalBox');
 jest.mock('../../PageToolbarUsersDropdownGroup/PageToolbarUsersDropdownGroup');

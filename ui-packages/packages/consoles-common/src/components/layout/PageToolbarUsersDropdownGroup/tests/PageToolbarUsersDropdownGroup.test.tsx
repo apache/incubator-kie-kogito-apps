@@ -22,8 +22,8 @@ import {
   resetTestKogitoAppContext,
   testIsTestUserSystemEnabledMock,
   testKogitoAppContext
-} from '../../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
-import { TEST_USERS } from '../../../../../environment/auth';
+} from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
+import { TEST_USERS } from '../../../../environment/auth';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;

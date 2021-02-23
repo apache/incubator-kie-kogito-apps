@@ -47,10 +47,7 @@ export const getWrapperAsync = async (
   await act(async () => {
     await wait(0);
   });
-  const promise: Promise<ReactWrapper> = new Promise(resolve => {
-    resolve(wrapper.update().find(name));
-  });
-  return promise;
+  return Promise.resolve(wrapper.update().find(name));
 };
 
 /**
@@ -112,7 +109,6 @@ export interface OUIAProps {
  * @param value value of the attribute
  */
 export const ouiaAttribute = (name: string, value: any) => {
-  // if (ouiaContext.isOuia && value) {
   if (value) {
     return { [name]: value };
   }

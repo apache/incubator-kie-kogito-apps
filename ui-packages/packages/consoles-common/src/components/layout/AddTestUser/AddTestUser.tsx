@@ -35,10 +35,10 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
 import {
   AppContext,
   useKogitoAppContext
-} from '../../../../environment/context/KogitoAppContext';
-import { TestUserContext, TestUserManager } from '../../../../environment/auth';
+} from '../../../environment/context/KogitoAppContext';
+import { TestUserContext, TestUserManager } from '../../../environment/auth';
 
-import { isTestUserSystemEnabled } from '../../../../utils/Utils';
+import { isTestUserSystemEnabled } from '../../../utils/Utils';
 
 interface IOwnProps {
   isOpen: boolean;

@@ -30,7 +30,7 @@ const props = {
   BrandClick: jest.fn()
 };
 
-jest.mock('../../toolbar/PageToolbar/PageToolbar');
+jest.mock('../../PageToolbar/PageToolbar');
 
 describe('PageLayout component tests', () => {
   const isAuthEnabledMock = jest.spyOn(Keycloak, 'isAuthEnabled');

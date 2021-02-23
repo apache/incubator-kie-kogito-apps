@@ -29,8 +29,7 @@ import {
   UserContext,
   ServerUnavailablePage
 } from '@kogito-apps/consoles-common';
-import TaskConsole from './app/TaskConsole/TaskConsole';
-import TaskConsoleRoutes from './app/TaskConsoleRoutes/TaskConsoleRoutes';
+import { TaskConsole, TaskConsoleRoutes } from './components/console';
 
 const appRender = (ctx: UserContext) => {
   const httpLink = new HttpLink({

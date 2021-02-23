@@ -18,13 +18,13 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { Alert, Form } from '@patternfly/react-core';
 import { getWrapper } from '@kogito-apps/components-common';
-import AddTestUser from '../AddTestUser';
 import {
   resetTestKogitoAppContext,
   testIsTestUserSystemEnabledMock,
   testKogitoAppContext
-} from '../../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
-import { TestUserContext } from '../../../../../environment/auth';
+} from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
+import { TestUserContext } from '../../../../environment/auth';
+import AddTestUser from '../AddTestUser';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;

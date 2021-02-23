@@ -20,9 +20,9 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
 import {
   AppContext,
   useKogitoAppContext
-} from '../../../../environment/context/KogitoAppContext';
-import { TestUserContext } from '../../../../environment/auth';
-import { isTestUserSystemEnabled } from '../../../../utils/Utils';
+} from '../../../environment/context/KogitoAppContext';
+import { TestUserContext } from '../../../environment/auth';
+import { isTestUserSystemEnabled } from '../../../utils/Utils';
 
 interface IOwnProps {
   toggleAddUsersModal: () => void;

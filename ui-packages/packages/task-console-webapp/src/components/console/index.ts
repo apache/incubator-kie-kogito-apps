@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-export {
-  default as DataTable,
-  DataTableColumn
-} from './src/components/DataTable/DataTable';
-export * from './src/components/ItemDescriptor/ItemDescriptor';
-export {
-  default as KogitoEmptyState,
-  KogitoEmptyStateType
-} from './src/components/KogitoEmptyState/KogitoEmptyState';
-export { default as KogitoSpinner } from './src/components/KogitoSpinner/KogitoSpinner';
-export { default as LoadMore } from './src/components/LoadMore/LoadMore';
-export * from './src/utils/OuiaUtils';
+export { default as TaskConsole } from './TaskConsole/TaskConsole';
+export { default as TaskConsoleNav } from './TaskConsoleNav/TaskConsoleNav';
+export { default as TaskConsoleRoutes } from './TaskConsoleRoutes/TaskConsoleRoutes';

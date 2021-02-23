@@ -23,9 +23,9 @@ import {
   TextListItem
 } from '@patternfly/react-core';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
-import '../../../styles.css';
-import aboutPageBackground from '../../../../static/kogitoAbout.png';
-import { useBrandContext } from '../../BrandContext/BrandContext';
+import '../../styles.css';
+import aboutPageBackground from '../../../static/kogitoAbout.png';
+import { useBrandContext } from '../BrandContext/BrandContext';
 
 export interface IOwnProps {
   isOpenProp: boolean;
@@ -91,8 +91,8 @@ const AboutModalBox: React.FC<IOwnProps & OUIAProps> = ({
           </TextListItem>
           <TextListItem component="dt">Kogito URL: </TextListItem>
           <TextListItem component="dd">
-            <a href="http://kogito.kie.org" target="_blank" rel="noreferrer">
-              http://kogito.kie.org
+            <a href="https://kogito.kie.org" target="_blank" rel="noreferrer">
+              https://kogito.kie.org
             </a>
           </TextListItem>
           <TextListItem component="dt">Data-Index URL: </TextListItem>

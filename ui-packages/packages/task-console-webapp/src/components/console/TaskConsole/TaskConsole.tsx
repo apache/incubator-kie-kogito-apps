@@ -24,8 +24,9 @@ import {
   UserContext,
   PageLayout
 } from '@kogito-apps/consoles-common';
-import TaskConsoleContextProvider from '../../context/TaskConsoleContext/TaskConsoleContextProvider';
-import taskConsoleLogo from '../../static/taskConsoleLogo.svg';
+
+import TaskConsoleContextProvider from '../../../context/TaskConsoleContext/TaskConsoleContextProvider';
+import taskConsoleLogo from '../../../static/taskConsoleLogo.svg';
 import TaskConsoleNav from '../TaskConsoleNav/TaskConsoleNav';
 
 interface Props {

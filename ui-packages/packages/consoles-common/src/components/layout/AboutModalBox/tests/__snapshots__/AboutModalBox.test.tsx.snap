@@ -168,11 +168,11 @@ exports[`AboutModal component tests snapshot testing 1`] = `
                           data-pf-content="true"
                         >
                           <a
-                            href="http://kogito.kie.org"
+                            href="https://kogito.kie.org"
                             rel="noreferrer"
                             target="_blank"
                           >
-                            http://kogito.kie.org
+                            https://kogito.kie.org
                           </a>
                         </dd>
                         <dt
@@ -470,11 +470,11 @@ exports[`AboutModal component tests snapshot testing 1`] = `
                                       data-pf-content={true}
                                     >
                                       <a
-                                        href="http://kogito.kie.org"
+                                        href="https://kogito.kie.org"
                                         rel="noreferrer"
                                         target="_blank"
                                       >
-                                        http://kogito.kie.org
+                                        https://kogito.kie.org
                                       </a>
                                     </dd>
                                   </TextListItem>

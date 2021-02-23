@@ -30,19 +30,19 @@ import { css } from '@patternfly/react-styles';
 
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
 import AboutModalBox from '../AboutModalBox/AboutModalBox';
-import userImage from '../../../../static/avatar.svg';
+import userImage from '../../../static/avatar.svg';
 import PageToolbarUsersDropdownGroup from '../PageToolbarUsersDropdownGroup/PageToolbarUsersDropdownGroup';
 import AddTestUser from '../AddTestUser/AddTestUser';
 import {
   ANONYMOUS_USER,
   LogoutUserContext,
   supportsLogout
-} from '../../../../environment/auth';
-import { isTestUserSystemEnabled } from '../../../../utils/Utils';
+} from '../../../environment/auth';
+import { isTestUserSystemEnabled } from '../../../utils/Utils';
 import {
   AppContext,
   useKogitoAppContext
-} from '../../../../environment/context/KogitoAppContext';
+} from '../../../environment/context/KogitoAppContext';
 
 const PageToolbar: React.FunctionComponent<OUIAProps> = ({
   ouiaId,
@@ -74,12 +74,10 @@ const PageToolbar: React.FunctionComponent<OUIAProps> = ({
 
   const getUserName = () => {
     if (context) {
-      switch (context.getCurrentUser()) {
-        case ANONYMOUS_USER:
-          return 'Anonymous';
-        default:
-          return context.getCurrentUser().id;
+      if (context.getCurrentUser() === ANONYMOUS_USER) {
+        return 'Anonymous';
       }
+      return context.getCurrentUser().id;
     }
     return 'Anonymous';
   };

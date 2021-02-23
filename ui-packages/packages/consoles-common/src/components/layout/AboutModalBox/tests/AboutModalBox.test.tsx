@@ -17,7 +17,7 @@
 import React from 'react';
 import { getWrapper } from '@kogito-apps/components-common';
 import AboutModal from '../AboutModalBox';
-import { BrandContext } from '../../../BrandContext/BrandContext';
+import { BrandContext } from '../../BrandContext/BrandContext';
 
 const props = {
   isOpenProp: true,
