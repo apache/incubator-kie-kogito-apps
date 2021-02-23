@@ -50,6 +50,7 @@ import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.service.common.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.service.common.responses.ResponseUtils;
+import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,12 +167,12 @@ public class ExecutionsApiV1 {
     @GET
     @Path("/{executionId}/model")
     @APIResponses(value = {
-            @APIResponse(description = "Gets the model associated with an execution.", responseCode = "200", content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(type = SchemaType.STRING))),
+            @APIResponse(description = "Gets the model associated with an execution.", responseCode = "200", content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(type = SchemaType.OBJECT, implementation = DMNModelWithMetadata.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     }
     )
     @Operation(summary = "Gets the model associated with an execution.")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getModel(
             @Parameter(
                     name = "executionId",
@@ -188,7 +189,7 @@ public class ExecutionsApiV1 {
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
     }
 
-    private Optional<String> retrieveModel(String executionId) {
+    private Optional<DMNModelWithMetadata> retrieveModel(String executionId) {
         try {
             Optional<Decision> decision = retrieveDecision(executionId);
             //TODO GAV components are provided but unused. See https://issues.redhat.com/browse/FAI-239

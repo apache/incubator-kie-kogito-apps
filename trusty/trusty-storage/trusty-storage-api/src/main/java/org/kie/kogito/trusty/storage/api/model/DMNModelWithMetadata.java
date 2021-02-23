@@ -1,0 +1,116 @@
+/*
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.kie.kogito.trusty.storage.api.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.kie.kogito.tracing.decision.event.model.ModelEvent;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class DMNModelWithMetadata {
+    public static final String GROUP_ID_FIELD = "groupId";
+    public static final String ARTIFACT_ID_FIELD = "artifactId";
+    public static final String VERSION_FIELD = "version";
+    public static final String NAME_FIELD = "name";
+    public static final String NAMESPACE_FIELD = "namespace";
+    public static final String MODEL_FIELD = "model";
+
+    @JsonProperty(GROUP_ID_FIELD)
+    private String groupId;
+
+    @JsonProperty(ARTIFACT_ID_FIELD)
+    private String artifactId;
+
+    @JsonProperty(VERSION_FIELD)
+    private String version;
+
+    @JsonProperty(NAME_FIELD)
+    private String name;
+
+    @JsonProperty(NAMESPACE_FIELD)
+    private String namespace;
+
+    @JsonProperty(MODEL_FIELD)
+    private String model;
+
+    public DMNModelWithMetadata(){}
+
+    public DMNModelWithMetadata(String groupId, String artifactId, String version, String name, String namespace, String model){
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
+        this.name = name;
+        this.namespace = namespace;
+        this.model = model;
+    }
+
+    public static DMNModelWithMetadata fromCloudEvent(ModelEvent modelEvent){
+        return new DMNModelWithMetadata(modelEvent.getGav().getGroupId(),
+                                        modelEvent.getGav().getArtifactId(),
+                                        modelEvent.getGav().getVersion(),
+                                        modelEvent.getName(),
+                                        modelEvent.getNamespace(),
+                                        modelEvent.getDefinition());
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setArtifactId(String artifactId) {
+        this.artifactId = artifactId;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+}

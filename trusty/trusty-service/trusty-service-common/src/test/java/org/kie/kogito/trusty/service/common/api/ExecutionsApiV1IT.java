@@ -25,12 +25,12 @@ import java.util.List;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
+import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionType;
@@ -46,8 +46,6 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 class ExecutionsApiV1IT {
-
-    private static final String MODEL_DEFINITION = "definition";
 
     @InjectMock
     TrustyService executionService;
@@ -147,15 +145,19 @@ class ExecutionsApiV1IT {
 
     @Test
     void givenARequestWithExistingModelWhenModelEndpointIsCalledThenTheModelIsReturned() {
+        DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "version", "name", "namespace", "definition");
         final Decision decision = mock(Decision.class);
         when(decision.getExecutedModelName()).thenReturn("name");
         when(decision.getExecutedModelNamespace()).thenReturn("namespace");
         when(executionService.getDecisionById(anyString())).thenReturn(decision);
-        when(executionService.getModelById("name:namespace")).thenReturn(MODEL_DEFINITION);
+        when(executionService.getModelById("name:namespace")).thenReturn(dmnModelWithMetadata);
 
-        final Response response = given().contentType(ContentType.TEXT).when().get("/executions/123/model");
-        final String definition = response.getBody().print();
-        assertEquals(MODEL_DEFINITION, definition);
+        DMNModelWithMetadata response = given().contentType(ContentType.TEXT).when().get("/executions/123/model").as(DMNModelWithMetadata.class);
+        assertEquals(dmnModelWithMetadata.getModel(), response.getModel());
+        assertEquals(dmnModelWithMetadata.getGroupId(), response.getGroupId());
+        assertEquals(dmnModelWithMetadata.getNamespace(), response.getNamespace());
+        assertEquals(dmnModelWithMetadata.getName(), response.getName());
+        assertEquals(dmnModelWithMetadata.getArtifactId(), response.getArtifactId());
     }
 
     @Test

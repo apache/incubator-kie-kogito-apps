@@ -29,6 +29,7 @@ import org.kie.kogito.decision.DecisionModelType;
 import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
+import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,12 +64,13 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     protected void internalHandleCloudEvent(CloudEvent cloudEvent, ModelEvent payload) {
         final DecisionModelType modelEventType = payload.getType();
         if (modelEventType == DecisionModelType.DMN) {
-            service.storeModel(payload.getGav().getGroupId(),
-                    payload.getGav().getArtifactId(),
-                    payload.getGav().getVersion(),
-                    payload.getName(),
-                    payload.getNamespace(),
-                    ModelEventConverter.toModel(payload));
+            String identifier = ModelIdCreator.makeIdentifier(payload.getGav().getGroupId(),
+                                                                    payload.getGav().getArtifactId(),
+                                                                    payload.getGav().getVersion(),
+                                                                    payload.getName(),
+                                                                    payload.getNamespace());
+            DMNModelWithMetadata dmnModelWithMetadata = DMNModelWithMetadata.fromCloudEvent(payload);
+            service.storeModel(identifier, dmnModelWithMetadata);
         } else {
             LOG.error("Unsupported DecisionModelType type {}", modelEventType);
         }

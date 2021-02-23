@@ -25,8 +25,10 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdCreator;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 public abstract class AbstractTrustyServiceIT {
@@ -107,8 +109,8 @@ public abstract class AbstractTrustyServiceIT {
         String modelId = "name:namespace";
         storeModel(model);
 
-        String result = trustyService.getModelById(modelId);
-        Assertions.assertEquals(model, result);
+        DMNModelWithMetadata result = trustyService.getModelById(modelId);
+        Assertions.assertEquals(model, result.getModel());
     }
 
     @Test
@@ -132,8 +134,14 @@ public abstract class AbstractTrustyServiceIT {
         return decision;
     }
 
-    private String storeModel(String model) {
-        trustyService.storeModel("groupId", "artifactId", "version", "name", "namespace", model);
-        return model;
+    private DMNModelWithMetadata storeModel(String model) {
+        DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "version", "name", "namespace", model);
+        String identifier = ModelIdCreator.makeIdentifier("groupId",
+                                                          "artifactId",
+                                                          "version",
+                                                          "name",
+                                                          "namespace");
+        trustyService.storeModel(identifier, dmnModelWithMetadata);
+        return dmnModelWithMetadata;
     }
 }

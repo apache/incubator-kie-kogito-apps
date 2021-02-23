@@ -30,10 +30,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdCreator;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.mocks.StorageImplMock;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
@@ -253,7 +255,7 @@ public class TrustyServiceTest {
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(model);
         when(trustyStorageServiceMock.getModelStorage()).thenReturn(storageMock);
 
-        Assertions.assertDoesNotThrow(() -> trustyService.storeModel("groupId", "artifactId", "version", "name", "namespace", model));
+        Assertions.assertDoesNotThrow(() -> trustyService.storeModel(buildDmnModelIdentifier(), buildDmnModel(model)));
     }
 
     @Test
@@ -267,7 +269,7 @@ public class TrustyServiceTest {
         when(storageMock.put(any(Object.class), any(Object.class))).thenReturn(model);
         when(trustyStorageServiceMock.getModelStorage()).thenReturn(storageMock);
 
-        assertThrows(IllegalArgumentException.class, () -> trustyService.storeModel("groupId", "artifactId", "version", "name", "namespace", model));
+        assertThrows(IllegalArgumentException.class, () -> trustyService.storeModel(buildDmnModelIdentifier(), buildDmnModel(model)));
     }
 
     @Test
@@ -279,11 +281,11 @@ public class TrustyServiceTest {
 
         when(trustyStorageServiceMock.getModelStorage()).thenReturn(storageMock);
 
-        trustyService.storeModel("groupId", "artifactId", "version", "name", "namespace", model);
+        trustyService.storeModel(buildDmnModelIdentifier(),buildDmnModel(model));
 
-        String result = trustyService.getModelById(modelId);
+        DMNModelWithMetadata result = trustyService.getModelById(modelId);
 
-        Assertions.assertEquals(model, result);
+        Assertions.assertEquals(model, result.getModel());
     }
 
     @Test
@@ -344,5 +346,13 @@ public class TrustyServiceTest {
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);
 
         assertThrows(IllegalArgumentException.class, () -> trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
+    }
+
+    private DMNModelWithMetadata buildDmnModel(String model){
+        return new DMNModelWithMetadata("groupId", "artifactId", "version", "name", "namespace", model);
+    }
+
+    private String buildDmnModelIdentifier(){
+        return ModelIdCreator.makeIdentifier("groupId", "artifactId", "version", "name", "namespace");
     }
 }
