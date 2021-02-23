@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-export {
-  default as DataTable,
-  DataTableColumn
-} from './src/components/DataTable/DataTable';
-export * from './src/components/ItemDescriptor/ItemDescriptor';
-export {
-  default as KogitoEmptyState,
-  KogitoEmptyStateType
-} from './src/components/KogitoEmptyState/KogitoEmptyState';
-export { default as KogitoSpinner } from './src/components/KogitoSpinner/KogitoSpinner';
-export * from './src/components/LoadMore/LoadMore';
-export * from './src/utils/OuiaUtils';
+.kogito-components-common__load-more {
+    margin-bottom: var(--pf-global--spacer--lg);
+    text-align: center;
+}
+
+.pf-c-spinner.pf-m-md.kogito-components-common__load-more-spinner {
+    overflow:hidden;
+    margin-left: 5px;
+}

@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-export {
-  default as DataTable,
-  DataTableColumn
-} from './src/components/DataTable/DataTable';
-export * from './src/components/ItemDescriptor/ItemDescriptor';
-export {
-  default as KogitoEmptyState,
-  KogitoEmptyStateType
-} from './src/components/KogitoEmptyState/KogitoEmptyState';
-export { default as KogitoSpinner } from './src/components/KogitoSpinner/KogitoSpinner';
-export * from './src/components/LoadMore/LoadMore';
-export * from './src/utils/OuiaUtils';
+import React from 'react';
+
+const MockedItemDescriptor: React.FC = () => {
+  return <></>;
+};
+
+export default MockedItemDescriptor;

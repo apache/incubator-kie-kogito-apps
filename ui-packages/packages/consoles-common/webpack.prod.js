@@ -36,6 +36,9 @@ module.exports = merge(common, {
           ),
           path.resolve(
             '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/components-common/dist/src/components/styles.css'
           )
         ],
         use: [{

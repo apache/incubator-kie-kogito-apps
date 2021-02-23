@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-export {
-  default as DataTable,
-  DataTableColumn
-} from './src/components/DataTable/DataTable';
-export * from './src/components/ItemDescriptor/ItemDescriptor';
-export {
-  default as KogitoEmptyState,
-  KogitoEmptyStateType
-} from './src/components/KogitoEmptyState/KogitoEmptyState';
-export { default as KogitoSpinner } from './src/components/KogitoSpinner/KogitoSpinner';
-export * from './src/components/LoadMore/LoadMore';
-export * from './src/utils/OuiaUtils';
+import React from 'react';
+import { shallow } from 'enzyme';
+import KogitoSpinner from '../KogitoSpinner';
+
+describe('KogitoSpinner component tests', () => {
+  it('snapshot testing with loading test', () => {
+    const wrapper = shallow(
+      <KogitoSpinner
+        spinnerText={'loading...'}
+        ouiaId="kogito-spinner-ouia-id"
+      />
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+});

@@ -1855,14 +1855,6 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@kogito-apps/components-common@file:packages/components-common":
-  version "1.0.0"
-
-"@kogito-apps/consoles-common@file:packages/consoles-common":
-  version "1.0.0"
-  dependencies:
-    "@kogito-apps/components-common" "1.0.0"
-
 "@kogito-apps/management-console@file:packages/management-console":
   version "1.0.0"
   dependencies:
@@ -1871,12 +1863,6 @@
     moment "2.24.0"
     react-json-view "1.19.1"
     react-moment "0.9.7"
-
-"@kogito-apps/task-console-webapp@file:packages/task-console-webapp":
-  version "1.0.0"
-  dependencies:
-    "@kogito-apps/components-common" "1.0.0"
-    "@kogito-apps/consoles-common" "1.0.0"
 
 "@kogito-apps/task-console@file:packages/task-console":
   version "1.0.0"
