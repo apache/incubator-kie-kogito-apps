@@ -17,7 +17,6 @@ package org.kie.kogito.explainability.local.counterfactual;
 
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.PredictionOutput;
-import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 
 import java.util.List;
 
@@ -30,13 +29,13 @@ public class CounterfactualResult {
 
     private List<CounterfactualEntity> entities;
     private List<PredictionOutput> output;
-    private BendableBigDecimalScore score;
+    private boolean valid;
 
     public CounterfactualResult(List<CounterfactualEntity> entities, List<PredictionOutput> output,
-            BendableBigDecimalScore score) {
+            boolean valid) {
         this.entities = entities;
         this.output = output;
-        this.score = score;
+        this.valid = valid;
     }
 
     public List<CounterfactualEntity> getEntities() {
@@ -48,6 +47,6 @@ public class CounterfactualResult {
     }
 
     public boolean isValid() {
-        return score.isFeasible();
+        return valid;
     }
 }
