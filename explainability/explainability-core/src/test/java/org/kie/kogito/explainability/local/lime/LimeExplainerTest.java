@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -69,7 +69,7 @@ class LimeExplainerTest {
             LimeConfig limeConfig = new LimeConfig()
                     .withSamples(10);
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            List<Feature> features = new LinkedList<>();
+            List<Feature> features = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
                 features.add(TestUtils.getMockedNumericFeature(i));
             }
@@ -91,12 +91,13 @@ class LimeExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
         for (int nf = 1; nf < 4; nf++) {
+            int noOfSamples = 100;
             LimeConfig limeConfigNoPenalty = new LimeConfig()
-                    .withSamples(100)
+                    .withSamples(noOfSamples)
                     .withPenalizeBalanceSparse(false);
             LimeExplainer limeExplainerNoPenalty = new LimeExplainer(limeConfigNoPenalty);
 
-            List<Feature> features = new LinkedList<>();
+            List<Feature> features = new ArrayList<>();
             for (int i = 0; i < nf; i++) {
                 features.add(TestUtils.getMockedNumericFeature(i));
             }
@@ -111,10 +112,11 @@ class LimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             assertThat(saliencyMapNoPenalty).isNotNull();
 
-            Saliency saliencyNoPenalty = saliencyMapNoPenalty.get("sum-but0");
+            String decisionName = "sum-but0";
+            Saliency saliencyNoPenalty = saliencyMapNoPenalty.get(decisionName);
 
             LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(100)
+                    .withSamples(noOfSamples)
                     .withPenalizeBalanceSparse(true);
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
 
@@ -122,7 +124,7 @@ class LimeExplainerTest {
                     .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
             assertThat(saliencyMap).isNotNull();
 
-            Saliency saliency = saliencyMap.get("sum-but0");
+            Saliency saliency = saliencyMap.get(decisionName);
 
             for (int i = 0; i < features.size(); i++) {
                 double score = saliency.getPerFeatureImportance().get(i).getScore();
