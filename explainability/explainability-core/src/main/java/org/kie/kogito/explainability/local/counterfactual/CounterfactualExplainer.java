@@ -107,7 +107,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
         final UUID problemId = UUID.randomUUID();
 
-        final CompletableFuture<List<CounterfactualEntity>> cfEntities = CompletableFuture.supplyAsync(() -> {
+        final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
                     SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
@@ -118,8 +118,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 CounterfactualSolution solution;
                 try {
                     // Wait until the solving ends
-                    solution = solverJob.getFinalBestSolution();
-                    return solution.getEntities();
+                    return solverJob.getFinalBestSolution();
                 } catch (ExecutionException e) {
                     logger.error("Solving failed: {}", e.getMessage());
                     throw new IllegalStateException("Prediction returned an error {}", e);
@@ -131,11 +130,12 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         }, this.executor);
 
         final CompletableFuture<List<PredictionOutput>> cfOutputs =
-                cfEntities.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
-                        s.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
-
-        return CompletableFuture.allOf(cfOutputs, cfEntities)
-                .thenApply(v -> new CounterfactualResult(cfEntities.join(), cfOutputs.join()));
+                cfSolution.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
+                        s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
+        return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
+            CounterfactualSolution solution = cfSolution.join();
+            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore());
+        });
     }
 
     public static class Builder {
