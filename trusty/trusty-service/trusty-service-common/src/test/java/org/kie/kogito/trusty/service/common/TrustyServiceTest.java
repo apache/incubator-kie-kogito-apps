@@ -349,7 +349,7 @@ public class TrustyServiceTest {
     }
 
     private DMNModelWithMetadata buildDmnModel(String model){
-        return new DMNModelWithMetadata("groupId", "artifactId", "version", "name", "namespace", model);
+        return new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", model);
     }
 
     private String buildDmnModelIdentifier(){

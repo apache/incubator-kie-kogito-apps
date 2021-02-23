@@ -145,7 +145,7 @@ class ExecutionsApiV1IT {
 
     @Test
     void givenARequestWithExistingModelWhenModelEndpointIsCalledThenTheModelIsReturned() {
-        DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "version", "name", "namespace", "definition");
+        DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", "definition");
         final Decision decision = mock(Decision.class);
         when(decision.getExecutedModelName()).thenReturn("name");
         when(decision.getExecutedModelNamespace()).thenReturn("namespace");

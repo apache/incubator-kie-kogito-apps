@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 import io.cloudevents.jackson.JsonFormat;
 import org.kie.kogito.cloudevents.CloudEventUtils;
-import org.kie.kogito.decision.DecisionModelType;
+import org.kie.kogito.decision.DecisionModelMetadata;
 import org.kie.kogito.tracing.decision.event.message.Message;
 import org.kie.kogito.tracing.decision.event.message.MessageCategory;
 import org.kie.kogito.tracing.decision.event.message.MessageExceptionField;
@@ -455,7 +455,14 @@ public class TrustyServiceTestUtils {
 
     public static ModelEvent buildCorrectModelEvent() {
         final ModelEvent.GAV gav = new ModelEvent.GAV("groupId", "artifactId", "version");
-        return new ModelEvent(gav, "name", "namespace", DecisionModelType.DMN, "definition");
+        return new ModelEvent(gav,
+                              "name",
+                              "namespace",
+                              new DecisionModelMetadata(
+                                      DecisionModelMetadata.Type.DMN,
+                                      "http://www.omg.org/spec/DMN/20151101/dmn.xsd"),
+                              "definition"
+        );
     }
 
     public static String buildCloudEventJsonString(ModelEvent modelEvent) {

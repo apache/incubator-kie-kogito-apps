@@ -172,14 +172,17 @@ message DMNModelWithMetadata {
     optional string artifactId = 2;
 
     /* @Field(store = Store.YES) */
-    optional string version = 3;
+    optional string modelVersion = 3;
 
     /* @Field(store = Store.YES) */
-    optional string name = 4;
+    optional string dmnVersion = 4;
 
     /* @Field(store = Store.YES) */
-    optional string namespace = 5;
+    optional string name = 5;
 
     /* @Field(store = Store.YES) */
-    optional string model = 6;
+    optional string namespace = 6;
+
+    /* @Field(store = Store.YES) */
+    optional string model = 7;
 }

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.kie.kogito.decision.DecisionModelType;
+import org.kie.kogito.decision.DecisionModelMetadata;
 import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
@@ -62,8 +62,8 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
 
     @Override
     protected void internalHandleCloudEvent(CloudEvent cloudEvent, ModelEvent payload) {
-        final DecisionModelType modelEventType = payload.getType();
-        if (modelEventType == DecisionModelType.DMN) {
+        final DecisionModelMetadata decisionModelMetadata = payload.getDecisionModelMetadata();
+        if (decisionModelMetadata.getType().equals(DecisionModelMetadata.Type.DMN)) {
             String identifier = ModelIdCreator.makeIdentifier(payload.getGav().getGroupId(),
                                                                     payload.getGav().getArtifactId(),
                                                                     payload.getGav().getVersion(),
@@ -72,7 +72,7 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
             DMNModelWithMetadata dmnModelWithMetadata = DMNModelWithMetadata.fromCloudEvent(payload);
             service.storeModel(identifier, dmnModelWithMetadata);
         } else {
-            LOG.error("Unsupported DecisionModelType type {}", modelEventType);
+            LOG.error("Unsupported DecisionModelType type {}", decisionModelMetadata.getType());
         }
     }
 }

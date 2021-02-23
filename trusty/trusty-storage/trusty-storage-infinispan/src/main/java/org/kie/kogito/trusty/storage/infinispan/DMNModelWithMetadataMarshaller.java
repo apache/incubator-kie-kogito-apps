@@ -31,7 +31,8 @@ public class DMNModelWithMetadataMarshaller extends AbstractModelMarshaller<DMNM
         return new DMNModelWithMetadata(
                 reader.readString(DMNModelWithMetadata.GROUP_ID_FIELD),
                 reader.readString(DMNModelWithMetadata.ARTIFACT_ID_FIELD),
-                reader.readString(DMNModelWithMetadata.VERSION_FIELD),
+                reader.readString(DMNModelWithMetadata.MODEL_VERSION_FIELD),
+                reader.readString(DMNModelWithMetadata.DMN_VERSION_FIELD),
                 reader.readString(DMNModelWithMetadata.NAME_FIELD),
                 reader.readString(DMNModelWithMetadata.NAMESPACE_FIELD),
                 reader.readString(DMNModelWithMetadata.MODEL_FIELD)
@@ -42,7 +43,8 @@ public class DMNModelWithMetadataMarshaller extends AbstractModelMarshaller<DMNM
     public void writeTo(ProtoStreamWriter writer, DMNModelWithMetadata dmnModelWithMetadata) throws IOException {
         writer.writeString(DMNModelWithMetadata.GROUP_ID_FIELD, dmnModelWithMetadata.getGroupId());
         writer.writeString(DMNModelWithMetadata.ARTIFACT_ID_FIELD, dmnModelWithMetadata.getArtifactId());
-        writer.writeString(DMNModelWithMetadata.VERSION_FIELD, dmnModelWithMetadata.getVersion());
+        writer.writeString(DMNModelWithMetadata.MODEL_VERSION_FIELD, dmnModelWithMetadata.getModelVersion());
+        writer.writeString(DMNModelWithMetadata.DMN_VERSION_FIELD, dmnModelWithMetadata.getDmnVersion());
         writer.writeString(DMNModelWithMetadata.NAME_FIELD, dmnModelWithMetadata.getName());
         writer.writeString(DMNModelWithMetadata.NAMESPACE_FIELD, dmnModelWithMetadata.getNamespace());
         writer.writeString(DMNModelWithMetadata.MODEL_FIELD, dmnModelWithMetadata.getModel());

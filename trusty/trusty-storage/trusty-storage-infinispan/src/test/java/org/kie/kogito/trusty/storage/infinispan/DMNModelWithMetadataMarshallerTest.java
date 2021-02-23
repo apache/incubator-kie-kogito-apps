@@ -25,18 +25,20 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.ARTIFACT_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.DMN_VERSION_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.GROUP_ID_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.MODEL_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.NAMESPACE_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.VERSION_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.MODEL_VERSION_FIELD;
 
 public class DMNModelWithMetadataMarshallerTest extends MarshallerTestTemplate<DMNModelWithMetadata> {
 
     private static final List<AbstractTestField<DMNModelWithMetadata, ?>> TEST_FIELD_LIST = List.of(
             new StringTestField<>(GROUP_ID_FIELD, "groupId", DMNModelWithMetadata::getGroupId, DMNModelWithMetadata::setGroupId),
             new StringTestField<>(ARTIFACT_ID_FIELD, "artifactId", DMNModelWithMetadata::getArtifactId, DMNModelWithMetadata::setArtifactId),
-            new StringTestField<>(VERSION_FIELD, "version", DMNModelWithMetadata::getVersion, DMNModelWithMetadata::setVersion),
+            new StringTestField<>(MODEL_VERSION_FIELD, "modelVersion", DMNModelWithMetadata::getModelVersion, DMNModelWithMetadata::setModelVersion),
+            new StringTestField<>(DMN_VERSION_FIELD, "dmnVersion", DMNModelWithMetadata::getDmnVersion, DMNModelWithMetadata::setDmnVersion),
             new StringTestField<>(NAME_FIELD, "name", DMNModelWithMetadata::getName, DMNModelWithMetadata::setName),
             new StringTestField<>(NAMESPACE_FIELD, "namespace", DMNModelWithMetadata::getNamespace, DMNModelWithMetadata::setNamespace),
             new StringTestField<>(MODEL_FIELD, "model", DMNModelWithMetadata::getModel, DMNModelWithMetadata::setModel)

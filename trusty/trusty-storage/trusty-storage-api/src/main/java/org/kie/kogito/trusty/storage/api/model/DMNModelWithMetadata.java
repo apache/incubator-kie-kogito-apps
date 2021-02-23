@@ -23,7 +23,8 @@ import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 public class DMNModelWithMetadata {
     public static final String GROUP_ID_FIELD = "groupId";
     public static final String ARTIFACT_ID_FIELD = "artifactId";
-    public static final String VERSION_FIELD = "version";
+    public static final String MODEL_VERSION_FIELD = "modelVersion";
+    public static final String DMN_VERSION_FIELD = "dmnVersion";
     public static final String NAME_FIELD = "name";
     public static final String NAMESPACE_FIELD = "namespace";
     public static final String MODEL_FIELD = "model";
@@ -34,8 +35,11 @@ public class DMNModelWithMetadata {
     @JsonProperty(ARTIFACT_ID_FIELD)
     private String artifactId;
 
-    @JsonProperty(VERSION_FIELD)
-    private String version;
+    @JsonProperty(MODEL_VERSION_FIELD)
+    private String modelVersion;
+
+    @JsonProperty(DMN_VERSION_FIELD)
+    private String dmnVersion;
 
     @JsonProperty(NAME_FIELD)
     private String name;
@@ -48,10 +52,11 @@ public class DMNModelWithMetadata {
 
     public DMNModelWithMetadata(){}
 
-    public DMNModelWithMetadata(String groupId, String artifactId, String version, String name, String namespace, String model){
+    public DMNModelWithMetadata(String groupId, String artifactId, String modelVersion, String dmnVersion, String name, String namespace, String model){
         this.groupId = groupId;
         this.artifactId = artifactId;
-        this.version = version;
+        this.modelVersion = modelVersion;
+        this.dmnVersion = dmnVersion;
         this.name = name;
         this.namespace = namespace;
         this.model = model;
@@ -61,6 +66,7 @@ public class DMNModelWithMetadata {
         return new DMNModelWithMetadata(modelEvent.getGav().getGroupId(),
                                         modelEvent.getGav().getArtifactId(),
                                         modelEvent.getGav().getVersion(),
+                                        modelEvent.getDecisionModelMetadata().getSpecVersion(),
                                         modelEvent.getName(),
                                         modelEvent.getNamespace(),
                                         modelEvent.getDefinition());
@@ -74,8 +80,12 @@ public class DMNModelWithMetadata {
         return artifactId;
     }
 
-    public String getVersion() {
-        return version;
+    public String getModelVersion() {
+        return modelVersion;
+    }
+
+    public String getDmnVersion() {
+        return dmnVersion;
     }
 
     public String getName() {
@@ -98,8 +108,12 @@ public class DMNModelWithMetadata {
         this.artifactId = artifactId;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setModelVersion(String modelVersion) {
+        this.modelVersion = modelVersion;
+    }
+
+    public void setDmnVersion(String dmnVersion) {
+        this.dmnVersion = dmnVersion;
     }
 
     public void setName(String name) {

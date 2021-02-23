@@ -13,7 +13,7 @@ type ModelDiagramProps = {
 
 const ModelDiagram = (props: ModelDiagramProps) => {
   const { model } = props;
-  const version: string = model.version;
+  const dmnVersion: string = model.dmnVersion;
 
   const editorEnvelopeLocator: EditorEnvelopeLocator = {
     targetOrigin: window.location.origin,
@@ -28,7 +28,7 @@ const ModelDiagram = (props: ModelDiagramProps) => {
     ])
   };
 
-  if (version === DMN1_2 || version === DMN1_3) {
+  if (dmnVersion === DMN1_2 || dmnVersion === DMN1_3) {
     return makeDMNEditor(model, editorEnvelopeLocator);
   }
 
