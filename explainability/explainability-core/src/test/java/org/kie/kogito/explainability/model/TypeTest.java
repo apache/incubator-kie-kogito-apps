@@ -313,7 +313,7 @@ class TypeTest {
 
     @ParameterizedTest
     @ValueSource(ints = {0, 1, 2, 3, 4})
-    void testEncodeNumericSymmetric() {
+    void testEncodeNumericSymmetric(int seed) {
         Random random = new Random();
         random.setSeed(seed);
         EncodingParams params = new EncodingParams(1, 0.1);
