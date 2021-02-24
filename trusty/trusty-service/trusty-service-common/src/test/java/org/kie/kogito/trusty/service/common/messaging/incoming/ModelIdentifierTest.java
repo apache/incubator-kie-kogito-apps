@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ModelIdCreatorTest {
+public class ModelIdentifierTest {
 
     private static Stream<Arguments> provideParametersForModelIdCreator() {
         return Stream.of(
@@ -45,10 +45,11 @@ public class ModelIdCreatorTest {
                                                        final String name,
                                                        final String namespace,
                                                        final String expected) {
-        assertEquals(expected, ModelIdCreator.makeIdentifier(groupId,
-                                                             artifactId,
-                                                             version,
-                                                             name,
-                                                             namespace));
+        ModelIdentifier modelIdentifier = new ModelIdentifier(groupId,
+                                                              artifactId,
+                                                              version,
+                                                              name,
+                                                              namespace);
+        assertEquals(expected, modelIdentifier.getIdentifier());
     }
 }

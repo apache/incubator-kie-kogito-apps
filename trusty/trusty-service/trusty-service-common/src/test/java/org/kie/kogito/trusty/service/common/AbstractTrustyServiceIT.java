@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdCreator;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
@@ -109,7 +109,7 @@ public abstract class AbstractTrustyServiceIT {
         String modelId = "name:namespace";
         storeModel(model);
 
-        DMNModelWithMetadata result = trustyService.getModelById(modelId);
+        DMNModelWithMetadata result = getModel();
         Assertions.assertEquals(model, result.getModel());
     }
 
@@ -122,8 +122,7 @@ public abstract class AbstractTrustyServiceIT {
 
     @Test
     public void givenNoModelsWhenAModelIsRetrievedThenAnExceptionIsRaised() {
-        String modelId = "name:namespace";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getModelById(modelId));
+        Assertions.assertThrows(IllegalArgumentException.class, this::getModel);
     }
 
     private Decision storeExecution(String executionId, Long timestamp) {
@@ -136,12 +135,21 @@ public abstract class AbstractTrustyServiceIT {
 
     private DMNModelWithMetadata storeModel(String model) {
         DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", model);
-        String identifier = ModelIdCreator.makeIdentifier("groupId",
-                                                          "artifactId",
-                                                          "version",
-                                                          "name",
-                                                          "namespace");
+        ModelIdentifier identifier = new ModelIdentifier("groupId",
+                                                "artifactId",
+                                                "version",
+                                                "name",
+                                                "namespace");
         trustyService.storeModel(identifier, dmnModelWithMetadata);
         return dmnModelWithMetadata;
+    }
+
+    private DMNModelWithMetadata getModel() {
+        ModelIdentifier identifier = new ModelIdentifier("groupId",
+                                                         "artifactId",
+                                                         "version",
+                                                         "name",
+                                                         "namespace");
+        return trustyService.getModelById(identifier);
     }
 }

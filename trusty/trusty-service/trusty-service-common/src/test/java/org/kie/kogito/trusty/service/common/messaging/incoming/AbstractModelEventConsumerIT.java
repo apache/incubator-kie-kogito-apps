@@ -60,9 +60,9 @@ public abstract class AbstractModelEventConsumerIT {
                             KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
         await()
                 .atMost(5, SECONDS)
-                .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getModelById("name:namespace")));
+                .untilAsserted(() -> assertDoesNotThrow(() -> trustyService.getModelById(TrustyServiceTestUtils.getModelIdentifier())));
 
-        DMNModelWithMetadata storedDefinition = trustyService.getModelById("name:namespace");
+        DMNModelWithMetadata storedDefinition = trustyService.getModelById(TrustyServiceTestUtils.getModelIdentifier());
         assertNotNull(storedDefinition);
         assertEquals("definition", storedDefinition.getModel());
         assertEquals("name", storedDefinition.getName());

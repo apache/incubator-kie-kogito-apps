@@ -53,7 +53,7 @@ public class ModelEventConsumerIT {
 
         doThrow(new RuntimeException("Something really bad"))
                 .when(trustyService)
-                .storeModel(anyString(), any(DMNModelWithMetadata.class));
+                .storeModel(any(ModelIdentifier.class), any(DMNModelWithMetadata.class));
 
         kafkaClient.produce(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectModelEvent()),
                             KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
@@ -61,6 +61,6 @@ public class ModelEventConsumerIT {
                             KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
 
         verify(trustyService, timeout(3000).times(2))
-                .storeModel(anyString(), any(DMNModelWithMetadata.class));
+                .storeModel(any(ModelIdentifier.class), any(DMNModelWithMetadata.class));
     }
 }

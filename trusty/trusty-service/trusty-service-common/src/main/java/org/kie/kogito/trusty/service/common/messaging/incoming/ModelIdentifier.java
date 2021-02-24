@@ -21,26 +21,36 @@ import java.util.Objects;
 /**
  * Makes an identifier for a Model. The format is "name:namespace".
  */
-public class ModelIdCreator {
+public class ModelIdentifier {
 
     //TODO GAV components are provided but unused. See https://issues.redhat.com/browse/FAI-239
     private static final String IDENTIFIER_TEMPLATE = "%s:%s";
 
-    @SuppressWarnings("unused")
-    public static String makeIdentifier(final String groupId,
-                                        final String artifactId,
-                                        final String version,
-                                        final String name,
-                                        final String namespace) {
+    private String identifier;
+
+    public ModelIdentifier(final String groupId,
+                           final String artifactId,
+                           final String version,
+                           final String name,
+                           final String namespace) {
+        this.identifier = makeIdentifier(groupId, artifactId, version, name, namespace);
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    private String makeIdentifier(final String groupId,
+                                  final String artifactId,
+                                  final String version,
+                                  final String name,
+                                  final String namespace) {
         return String.format(IDENTIFIER_TEMPLATE,
                              nullable(name),
                              nullable(namespace));
     }
 
-    private static String nullable(final String value) {
+    private String nullable(final String value) {
         return Objects.isNull(value) ? "" : value;
-    }
-
-    private ModelIdCreator() {
     }
 }

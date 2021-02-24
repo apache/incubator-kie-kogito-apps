@@ -64,11 +64,11 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     protected void internalHandleCloudEvent(CloudEvent cloudEvent, ModelEvent payload) {
         final DecisionModelMetadata decisionModelMetadata = payload.getDecisionModelMetadata();
         if (decisionModelMetadata.getType().equals(DecisionModelMetadata.Type.DMN)) {
-            String identifier = ModelIdCreator.makeIdentifier(payload.getGav().getGroupId(),
-                                                                    payload.getGav().getArtifactId(),
-                                                                    payload.getGav().getVersion(),
-                                                                    payload.getName(),
-                                                                    payload.getNamespace());
+            ModelIdentifier identifier = new ModelIdentifier(payload.getGav().getGroupId(),
+                                                               payload.getGav().getArtifactId(),
+                                                               payload.getGav().getVersion(),
+                                                               payload.getName(),
+                                                               payload.getNamespace());
             DMNModelWithMetadata dmnModelWithMetadata = DMNModelWithMetadata.fromCloudEvent(payload);
             service.storeModel(identifier, dmnModelWithMetadata);
         } else {

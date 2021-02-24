@@ -34,6 +34,7 @@ import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.messaging.MessagingUtils;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
@@ -165,21 +166,21 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public void storeModel(String identifier, DMNModelWithMetadata dmnModelWithMetadata){
+    public void storeModel(ModelIdentifier modelIdentifier, DMNModelWithMetadata dmnModelWithMetadata){
         final Storage<String, DMNModelWithMetadata> storage = storageService.getModelStorage();
-        if (storage.containsKey(identifier)) {
-            throw new IllegalArgumentException(String.format("A model with ID %s is already present in the storage.", identifier));
+        if (storage.containsKey(modelIdentifier.getIdentifier())) {
+            throw new IllegalArgumentException(String.format("A model with ID %s is already present in the storage.", modelIdentifier.getIdentifier()));
         }
-        storage.put(identifier, dmnModelWithMetadata);
+        storage.put(modelIdentifier.getIdentifier(), dmnModelWithMetadata);
     }
 
     @Override
-    public DMNModelWithMetadata getModelById(String modelId) {
+    public DMNModelWithMetadata getModelById(ModelIdentifier modelIdentifier) {
         final Storage<String, DMNModelWithMetadata> storage = storageService.getModelStorage();
-        if (!storage.containsKey(modelId)) {
-            throw new IllegalArgumentException(String.format("A model with ID %s does not exist in the storage.", modelId));
+        if (!storage.containsKey(modelIdentifier.getIdentifier())) {
+            throw new IllegalArgumentException(String.format("A model with ID %s does not exist in the storage.", modelIdentifier.getIdentifier()));
         }
-        return storage.get(modelId);
+        return storage.get(modelIdentifier.getIdentifier());
     }
 
     private ModelIdentifierDto createDecisionModelIdentifierDto(Decision decision) {

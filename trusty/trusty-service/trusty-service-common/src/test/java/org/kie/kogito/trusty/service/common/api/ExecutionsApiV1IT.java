@@ -28,6 +28,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
@@ -150,7 +151,7 @@ class ExecutionsApiV1IT {
         when(decision.getExecutedModelName()).thenReturn("name");
         when(decision.getExecutedModelNamespace()).thenReturn("namespace");
         when(executionService.getDecisionById(anyString())).thenReturn(decision);
-        when(executionService.getModelById("name:namespace")).thenReturn(dmnModelWithMetadata);
+        when(executionService.getModelById(any(ModelIdentifier.class))).thenReturn(dmnModelWithMetadata);
 
         DMNModelWithMetadata response = given().contentType(ContentType.TEXT).when().get("/executions/123/model").as(DMNModelWithMetadata.class);
         assertEquals(dmnModelWithMetadata.getModel(), response.getModel());
@@ -169,7 +170,7 @@ class ExecutionsApiV1IT {
 
     @Test
     void givenARequestWithoutExistingModelWhenModelEndpointIsCalledThenBadRequestIsReturned() {
-        when(executionService.getModelById(anyString())).thenThrow(new IllegalArgumentException("Model does not exist."));
+        when(executionService.getModelById(any(ModelIdentifier.class))).thenThrow(new IllegalArgumentException("Model does not exist."));
 
         given().contentType(ContentType.TEXT).when().get("/executions/123/model").then().statusCode(400);
     }

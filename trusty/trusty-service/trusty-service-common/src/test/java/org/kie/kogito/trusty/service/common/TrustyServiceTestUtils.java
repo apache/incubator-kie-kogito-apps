@@ -47,6 +47,7 @@ import org.kie.kogito.tracing.decision.event.trace.TraceType;
 import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
@@ -463,6 +464,10 @@ public class TrustyServiceTestUtils {
                                       "http://www.omg.org/spec/DMN/20151101/dmn.xsd"),
                               "definition"
         );
+    }
+
+    public static ModelIdentifier getModelIdentifier(){
+        return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
     }
 
     public static String buildCloudEventJsonString(ModelEvent modelEvent) {

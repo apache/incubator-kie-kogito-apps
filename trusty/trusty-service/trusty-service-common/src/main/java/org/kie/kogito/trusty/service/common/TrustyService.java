@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common;
 
 import java.time.OffsetDateTime;
 
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -95,18 +96,18 @@ public interface TrustyService {
     /**
      * Stores a Model definition.
      *
-     * @param identifier    The model identifier.
-     * @param dmnModelWithMetadata      The DMNModel to be stored.
+     * @param modelIdentifier      The model identifier.
+     * @param dmnModelWithMetadata The DMNModel to be stored.
      * @throws IllegalArgumentException Throws IllegalArgumentException in case the model is already present in the system.
      */
-    void storeModel(String identifier, DMNModelWithMetadata dmnModelWithMetadata);
+    void storeModel(ModelIdentifier modelIdentifier, DMNModelWithMetadata dmnModelWithMetadata);
 
     /**
-     * Gets a model by model ID.
+     * Gets a model by model id.
      *
-     * @param modelId The model ID.
+     * @param modelIdentifier The model identifier.
      * @return The model definition.
      * @throws IllegalArgumentException Throws IllegalArgumentException in case the modelId is not present in the system.
      */
-    DMNModelWithMetadata getModelById(String modelId);
+    DMNModelWithMetadata getModelById(ModelIdentifier modelIdentifier);
 }
