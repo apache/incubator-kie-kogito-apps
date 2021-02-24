@@ -466,7 +466,7 @@ public class TrustyServiceTestUtils {
         );
     }
 
-    public static ModelIdentifier getModelIdentifier(){
+    public static ModelIdentifier getModelIdentifier() {
         return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
     }
 

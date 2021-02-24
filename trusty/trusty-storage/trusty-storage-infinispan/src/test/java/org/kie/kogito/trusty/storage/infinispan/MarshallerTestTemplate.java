@@ -40,6 +40,16 @@ abstract class MarshallerTestTemplate<T> {
         this.modelClass = modelClass;
     }
 
+    private static Stream<Field> streamAllNonStaticFields(Class<?> type) {
+        if (type == null || Object.class.equals(type)) {
+            return Stream.empty();
+        }
+        return Stream.concat(
+                Arrays.stream(type.getDeclaredFields()).filter(f -> (f.getModifiers() & Modifier.STATIC) == 0),
+                streamAllNonStaticFields(type.getSuperclass())
+        );
+    }
+
     protected abstract T buildEmptyObject();
 
     protected abstract MessageMarshaller<T> buildMarshaller();
@@ -93,15 +103,5 @@ abstract class MarshallerTestTemplate<T> {
             long matches = testFieldNameList.stream().filter(n -> n.equals(serializedFieldName)).count();
             assertEquals(1, matches, () -> String.format("Field \"%s\" of %s model is not handled properly in the corresponding test", serializedFieldName, modelClass.getSimpleName()));
         });
-    }
-
-    private static Stream<Field> streamAllNonStaticFields(Class<?> type) {
-        if (type == null || Object.class.equals(type)) {
-            return Stream.empty();
-        }
-        return Stream.concat(
-                Arrays.stream(type.getDeclaredFields()).filter(f -> (f.getModifiers() & Modifier.STATIC) == 0),
-                streamAllNonStaticFields(type.getSuperclass())
-        );
     }
 }

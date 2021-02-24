@@ -166,7 +166,7 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public void storeModel(ModelIdentifier modelIdentifier, DMNModelWithMetadata dmnModelWithMetadata){
+    public void storeModel(ModelIdentifier modelIdentifier, DMNModelWithMetadata dmnModelWithMetadata) {
         final Storage<String, DMNModelWithMetadata> storage = storageService.getModelStorage();
         if (storage.containsKey(modelIdentifier.getIdentifier())) {
             throw new IllegalArgumentException(String.format("A model with ID %s is already present in the storage.", modelIdentifier.getIdentifier()));

@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
 import java.util.concurrent.CompletionStage;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -65,10 +66,10 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
         final DecisionModelMetadata decisionModelMetadata = payload.getDecisionModelMetadata();
         if (decisionModelMetadata.getType().equals(DecisionModelMetadata.Type.DMN)) {
             ModelIdentifier identifier = new ModelIdentifier(payload.getGav().getGroupId(),
-                                                               payload.getGav().getArtifactId(),
-                                                               payload.getGav().getVersion(),
-                                                               payload.getName(),
-                                                               payload.getNamespace());
+                                                             payload.getGav().getArtifactId(),
+                                                             payload.getGav().getVersion(),
+                                                             payload.getName(),
+                                                             payload.getNamespace());
             DMNModelWithMetadata dmnModelWithMetadata = DMNModelWithMetadata.fromCloudEvent(payload);
             service.storeModel(identifier, dmnModelWithMetadata);
         } else {

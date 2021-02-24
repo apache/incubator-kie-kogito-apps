@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 
 public class JsonNodeTestField<M> extends StringTestField<M> {
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public JsonNodeTestField(String fieldName, JsonNode fieldValue, Function<M, JsonNode> getter, BiConsumer<M, JsonNode> setter) {

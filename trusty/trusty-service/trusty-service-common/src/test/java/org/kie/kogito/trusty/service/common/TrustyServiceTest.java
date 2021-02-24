@@ -281,7 +281,7 @@ public class TrustyServiceTest {
 
         when(trustyStorageServiceMock.getModelStorage()).thenReturn(storageMock);
 
-        trustyService.storeModel(modelIdentifier,buildDmnModel(model));
+        trustyService.storeModel(modelIdentifier, buildDmnModel(model));
 
         DMNModelWithMetadata result = trustyService.getModelById(modelIdentifier);
 
@@ -348,11 +348,11 @@ public class TrustyServiceTest {
         assertThrows(IllegalArgumentException.class, () -> trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
     }
 
-    private DMNModelWithMetadata buildDmnModel(String model){
+    private DMNModelWithMetadata buildDmnModel(String model) {
         return new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", model);
     }
 
-    private ModelIdentifier buildDmnModelIdentifier(){
+    private ModelIdentifier buildDmnModelIdentifier() {
         return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
     }
 }

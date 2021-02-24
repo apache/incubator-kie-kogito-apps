@@ -136,10 +136,10 @@ public abstract class AbstractTrustyServiceIT {
     private DMNModelWithMetadata storeModel(String model) {
         DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", model);
         ModelIdentifier identifier = new ModelIdentifier("groupId",
-                                                "artifactId",
-                                                "version",
-                                                "name",
-                                                "namespace");
+                                                         "artifactId",
+                                                         "version",
+                                                         "name",
+                                                         "namespace");
         trustyService.storeModel(identifier, dmnModelWithMetadata);
         return dmnModelWithMetadata;
     }

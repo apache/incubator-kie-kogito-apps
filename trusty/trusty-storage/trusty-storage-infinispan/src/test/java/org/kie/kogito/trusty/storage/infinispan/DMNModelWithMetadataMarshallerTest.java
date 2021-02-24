@@ -28,9 +28,9 @@ import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.ARTIF
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.DMN_VERSION_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.GROUP_ID_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.MODEL_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.MODEL_VERSION_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.NAMESPACE_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.NAME_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.MODEL_VERSION_FIELD;
 
 public class DMNModelWithMetadataMarshallerTest extends MarshallerTestTemplate<DMNModelWithMetadata> {
 

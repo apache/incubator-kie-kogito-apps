@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
 import java.util.concurrent.CompletionStage;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
