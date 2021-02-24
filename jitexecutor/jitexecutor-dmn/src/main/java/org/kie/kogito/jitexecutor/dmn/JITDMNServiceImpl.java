@@ -40,9 +40,9 @@ import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
-import org.kie.kogito.trusty.service.responses.FeatureImportanceResponse;
-import org.kie.kogito.trusty.service.responses.SalienciesResponse;
-import org.kie.kogito.trusty.service.responses.SaliencyResponse;
+import org.kie.kogito.trusty.service.common.responses.FeatureImportanceResponse;
+import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
+import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,10 +56,18 @@ public class JITDMNServiceImpl implements JITDMNService {
     private static final String EXPLAINABILITY_SUCCEEDED = "SUCCEEDED";
 
     @ConfigProperty(name = "kogito.explainability.lime.sample-size", defaultValue = "300")
-    private static int explainabilityLimeSampleSize;
+    int explainabilityLimeSampleSize;
 
     @ConfigProperty(name = "kogito.explainability.lime.no-of-perturbation", defaultValue = "1")
-    private static int explainabilityLimeNoOfPerturbation;
+    int explainabilityLimeNoOfPerturbation;
+
+    public JITDMNServiceImpl() {
+    }
+
+    public JITDMNServiceImpl(int explainabilityLimeSampleSize, int explainabilityLimeNoOfPerturbation) {
+        this.explainabilityLimeSampleSize = explainabilityLimeSampleSize;
+        this.explainabilityLimeNoOfPerturbation = explainabilityLimeNoOfPerturbation;
+    }
 
     @Override
     public KogitoDMNResult evaluateModel(String modelXML, Map<String, Object> context) {
