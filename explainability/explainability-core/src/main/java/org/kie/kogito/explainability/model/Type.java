@@ -188,7 +188,7 @@ public enum Type {
             List<Double> encodedValues = clusteredValues.stream()
                     .map(d -> (Math.abs(d - threshold) < CLUSTER_THRESHOLD) ? 1d : 0d).collect(Collectors.toList());
 
-            return encodedValues.stream().map(d -> new double[] { d }).collect(Collectors.toList());
+            return encodedValues.stream().map(d -> new double[]{d}).collect(Collectors.toList());
         }
 
         @Override
@@ -253,7 +253,7 @@ public enum Type {
             java.net.URI newURI;
             try {
                 newURI = new URI(scheme, host, path, fragment);
-                if (uri.equals(newURI)) { // to avoid "unfortunate" cases where no URI parameter has been perturbed
+                if (uri.equals(newURI)) {  // to avoid "unfortunate" cases where no URI parameter has been perturbed
                     newURI = java.net.URI.create("");
                 }
             } catch (URISyntaxException e) {
@@ -448,8 +448,7 @@ public enum Type {
             List<List<double[]>> multiColumns = new LinkedList<>();
             for (Feature f : composite) {
                 int finalI = i;
-                List<double[]> subColumn =
-                        f.getType().encode(f.getValue(), Arrays.stream(values).map(v -> (List<Feature>) v.getUnderlyingObject()).map(l -> l.get(finalI).getValue()).toArray(Value<?>[]::new));
+                List<double[]> subColumn = f.getType().encode(f.getValue(), Arrays.stream(values).map(v -> (List<Feature>) v.getUnderlyingObject()).map(l -> l.get(finalI).getValue()).toArray(Value<?>[]::new));
                 multiColumns.add(subColumn);
                 i++;
             }
@@ -476,7 +475,7 @@ public enum Type {
             List<Object> values = new LinkedList<>();
             Type nestedType = types[perturbationContext.getRandom().nextInt(types.length - 1)];
             for (int i = 0; i < 5; i++) {
-                Feature f = new Feature("f_" + i, nestedType, nestedType.randomValue(perturbationContext));
+                Feature f = new Feature("f_"+i,nestedType, nestedType.randomValue(perturbationContext));
                 values.add(f);
             }
             return new Value<>(values);
@@ -549,7 +548,7 @@ public enum Type {
      * Perturb a {@code Value}. Implementations of this method should generate a new {@code Value} whose
      * {@code Value#getUnderlyingObject} should represent a perturbed/changed copy of the original value.
      *
-     * @param value the value to perturb
+     * @param value               the value to perturb
      * @param perturbationContext the context holding metadata about how perturbations should be performed
      * @return the perturbed value
      */

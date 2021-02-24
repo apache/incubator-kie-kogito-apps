@@ -17,10 +17,9 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DecisionInputMarshaller extends AbstractModelMarshaller<DecisionInput> {
 
@@ -33,7 +32,8 @@ public class DecisionInputMarshaller extends AbstractModelMarshaller<DecisionInp
         return new DecisionInput(
                 reader.readString(DecisionInput.ID_FIELD),
                 reader.readString(DecisionInput.NAME_FIELD),
-                reader.readObject(DecisionInput.VALUE_FIELD, TypedVariable.class));
+                reader.readObject(DecisionInput.VALUE_FIELD, TypedVariable.class)
+        );
     }
 
     @Override

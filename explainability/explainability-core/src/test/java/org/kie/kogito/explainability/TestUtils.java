@@ -45,7 +45,7 @@ public class TestUtils {
                 Feature feature = features.get(featureIndex);
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("feature-" + featureIndex, feature.getType(), feature.getValue(),
-                                1d)));
+                                           1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -178,8 +178,8 @@ public class TestUtils {
     }
 
     public static void assertLimeStability(PredictionProvider model, Prediction prediction, LimeExplainer limeExplainer,
-            int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
+                                       int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, topK,
-                minimumPositiveStabilityRate, minimumNegativeStabilityRate));
+                                                                  minimumPositiveStabilityRate, minimumNegativeStabilityRate));
     }
 }

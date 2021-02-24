@@ -43,7 +43,7 @@ class DatasetEncoder {
     private final Output originalOutput;
 
     DatasetEncoder(List<PredictionInput> perturbedInputs, List<Output> perturbedOutputs,
-            List<Feature> targetInputFeatures, Output targetOutput) {
+                   List<Feature> targetInputFeatures, Output targetOutput) {
         this.perturbedInputs = perturbedInputs;
         this.predictedOutputs = perturbedOutputs;
         this.targetInputFeatures = targetInputFeatures;

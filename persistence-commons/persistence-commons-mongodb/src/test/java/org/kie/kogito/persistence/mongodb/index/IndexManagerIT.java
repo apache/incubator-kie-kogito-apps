@@ -29,6 +29,12 @@ import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexModel;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.junit.jupiter.api.AfterEach;
@@ -46,14 +52,6 @@ import org.kie.kogito.persistence.api.schema.SchemaType;
 import org.kie.kogito.persistence.mongodb.mock.MockProcessIndexEventListener;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 import org.mockito.ArgumentMatchers;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.IndexModel;
-import com.mongodb.client.model.IndexOptions;
-import com.mongodb.client.model.Indexes;
-
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
 
 import static io.quarkus.test.junit.QuarkusMock.installMockForType;
 import static java.util.stream.Collectors.toList;
@@ -106,8 +104,8 @@ class IndexManagerIT {
         IndexDescriptor idIndex = new IndexDescriptor("id", List.of("id"));
         IndexDescriptor metadataIndex = new IndexDescriptor("metadata", List.of("metadata"));
         travelEntityIndexDescriptor = new EntityIndexDescriptor("org.acme.travels.travels.Travels",
-                List.of(flightIndex, hotelIndex, idIndex, metadataIndex),
-                List.of(flight, hotel, id, metadata));
+                                                                List.of(flightIndex, hotelIndex, idIndex, metadataIndex),
+                                                                List.of(flight, hotel, id, metadata));
 
         errorEntityIndexDescriptor = mockErrorIndexes();
     }
@@ -145,8 +143,8 @@ class IndexManagerIT {
 
         indexManager.onSchemaRegisteredEvent(
                 new SchemaRegisteredEvent(new SchemaDescriptor("test", "test", indexes,
-                        new ProcessDescriptor("test", travelEntityIndexDescriptor.getName())),
-                        new SchemaType("test")));
+                                                               new ProcessDescriptor("test", travelEntityIndexDescriptor.getName())),
+                                          new SchemaType("test")));
 
         MongoCollection<Document> testCollection = indexManager.getCollection("test");
         collections.add(testCollection);
@@ -260,7 +258,7 @@ class IndexManagerIT {
         Optional<IndexModel> index = indexManager.createIndex(id, parentField, prefixUUID);
 
         assertTrue(equalsIndexModels(List.of(index.get()),
-                List.of(new IndexModel(Indexes.ascending(indexName + ".test1", indexName + ".test2"), new IndexOptions().name(prefixUUID + indexName).sparse(true)))));
+                                     List.of(new IndexModel(Indexes.ascending(indexName + ".test1", indexName + ".test2"), new IndexOptions().name(prefixUUID + indexName).sparse(true)))));
     }
 
     @Test

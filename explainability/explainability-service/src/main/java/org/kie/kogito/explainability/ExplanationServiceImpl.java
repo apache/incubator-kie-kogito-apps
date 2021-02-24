@@ -79,7 +79,10 @@ public class ExplanationServiceImpl implements ExplanationService {
                         Map.Entry::getKey,
                         e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
                                 .map(fi -> new FeatureImportanceDto(fi.getFeature().getName(), fi.getScore()))
-                                .collect(Collectors.toList())))));
+                                .collect(Collectors.toList())
+                        )
+                ))
+        );
     }
 
     private static ExplainabilityResultDto createFailedResultDto(String executionId, Throwable throwable) {

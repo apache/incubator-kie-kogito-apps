@@ -22,6 +22,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +40,6 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -112,11 +111,11 @@ public class TrustyServiceTest {
     @SuppressWarnings("unchecked")
     void givenManyExecutionsThenPaginationWorksProperly() {
         List<Decision> decisions = new ArrayList<>();
-        IntStream.range(0, 10).forEach(x -> {
+        IntStream.range(0,10).forEach(x -> {
             Decision d = new Decision();
             d.setExecutionId(String.valueOf(x));
             decisions.add(d);
-        });
+            });
 
         Query queryMock = mock(Query.class);
         when(queryMock.filter(any(List.class))).thenReturn(queryMock);
@@ -194,16 +193,24 @@ public class TrustyServiceTest {
                         new DecisionInput("1", "Input1", TypedVariable.buildCollection(
                                 "testList", "string", List.of(
                                         TypedVariable.buildUnit(null, "string", toJsonNode("\"ONE\"")),
-                                        TypedVariable.buildUnit(null, "string", toJsonNode("\"TWO\""))))),
+                                        TypedVariable.buildUnit(null, "string", toJsonNode("\"TWO\""))
+                                )
+                        )),
                         new DecisionInput("2", "Input2", TypedVariable.buildStructure(
                                 "author", "Person", List.of(
                                         TypedVariable.buildUnit("Name", "string", toJsonNode("\"George Orwell\"")),
-                                        TypedVariable.buildUnit("Age", "number", toJsonNode("45")))))),
+                                        TypedVariable.buildUnit("Age", "number", toJsonNode("45"))
+                                )
+                        ))
+                ),
                 List.of(
                         new DecisionOutcome(
                                 "OUT1", "Result", "SUCCEEDED",
                                 TypedVariable.buildUnit("Result", "string", toJsonNode("\"YES\"")),
-                                Collections.emptyList(), Collections.emptyList())));
+                                Collections.emptyList(), Collections.emptyList()
+                        )
+                )
+        );
 
         Storage<String, Decision> decisionStorageMock = mock(Storage.class);
         when(decisionStorageMock.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(false);

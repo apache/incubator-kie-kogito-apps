@@ -18,6 +18,7 @@ package org.kie.kogito.persistence.protobuf;
 
 import javax.enterprise.event.Event;
 
+import io.quarkus.runtime.StartupEvent;
 import org.infinispan.protostream.FileDescriptorSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,6 @@ import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import io.quarkus.runtime.StartupEvent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -133,9 +132,7 @@ class ProtobufServiceTest {
 
         assertEquals(testExceptionMessage, exceptionMessage);
 
-        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(
-                new SchemaDescriptor(TestUtils.PROCESS_ID + ".proto", content, getValidEntityIndexDescriptors(true), new ProcessDescriptor(TestUtils.PROCESS_ID, TestUtils.PROCESS_TYPE)),
-                SCHEMA_TYPE));
+        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(new SchemaDescriptor(TestUtils.PROCESS_ID + ".proto", content, getValidEntityIndexDescriptors(true), new ProcessDescriptor(TestUtils.PROCESS_ID, TestUtils.PROCESS_TYPE)), SCHEMA_TYPE));
         verify(domainModelEvent, never()).fire(any(FileDescriptorRegisteredEvent.class));
     }
 
@@ -149,9 +146,7 @@ class ProtobufServiceTest {
             fail("RegisterProtoBufferType failed", e);
         }
 
-        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(
-                new SchemaDescriptor(TestUtils.PROCESS_ID + ".proto", content, getValidEntityIndexDescriptors(true), new ProcessDescriptor(TestUtils.PROCESS_ID, TestUtils.PROCESS_TYPE)),
-                SCHEMA_TYPE));
+        verify(schemaEvent, times(1)).fire(new SchemaRegisteredEvent(new SchemaDescriptor(TestUtils.PROCESS_ID + ".proto", content, getValidEntityIndexDescriptors(true), new ProcessDescriptor(TestUtils.PROCESS_ID, TestUtils.PROCESS_TYPE)), SCHEMA_TYPE));
         verify(domainModelEvent, times(1)).fire(any(FileDescriptorRegisteredEvent.class));
     }
 }

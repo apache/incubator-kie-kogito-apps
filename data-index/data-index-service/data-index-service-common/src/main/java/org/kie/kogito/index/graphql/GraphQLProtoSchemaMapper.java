@@ -23,14 +23,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
-import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
-import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
-import org.kie.kogito.persistence.api.proto.DomainDescriptor;
-import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLCodeRegistry;
 import graphql.schema.GraphQLInputObjectType;
@@ -40,6 +32,13 @@ import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 import graphql.schema.GraphQLTypeReference;
+import org.kie.kogito.index.graphql.query.GraphQLInputObjectTypeMapper;
+import org.kie.kogito.index.graphql.query.GraphQLOrderByTypeMapper;
+import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
+import org.kie.kogito.persistence.api.proto.DomainDescriptor;
+import org.kie.kogito.persistence.api.proto.DomainModelRegisteredEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static graphql.schema.FieldCoordinates.coordinates;
 import static graphql.schema.GraphQLArgument.newArgument;
@@ -74,7 +73,7 @@ public class GraphQLProtoSchemaMapper {
             additionalTypes.put(orderByType.getName(), orderByType);
             LOGGER.debug("New GraphQL types: {}", additionalTypes.keySet());
             Set<GraphQLType> newTypes = additionalTypes.entrySet().stream().map(entry -> entry.getValue()).collect(toSet());
-            newTypes.addAll(schema.getAdditionalTypes().stream().filter(type -> additionalTypes.containsKey(((GraphQLNamedType) type).getName()) == false).collect(toSet()));
+            newTypes.addAll(schema.getAdditionalTypes().stream().filter(type -> additionalTypes.containsKey(((GraphQLNamedType)type).getName()) == false).collect(toSet()));
             builder.additionalTypes(newTypes);
 
             GraphQLObjectType query = schema.getQueryType();

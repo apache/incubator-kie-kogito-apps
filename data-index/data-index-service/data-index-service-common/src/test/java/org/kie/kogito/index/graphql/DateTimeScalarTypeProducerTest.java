@@ -20,11 +20,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-import org.junit.jupiter.api.Test;
-
 import graphql.language.StringValue;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -42,7 +41,7 @@ public class DateTimeScalarTypeProducerTest {
     public void testParseValue() {
         assertThat(dateTimeScalar.getName()).isEqualTo("DateTime");
         assertThat(dateTimeScalar.getCoercing().parseValue(null)).isNull();
-        assertThat(dateTimeScalar.getCoercing().parseValue("2019-11-20T03:14:03.075Z")).isEqualTo(1574219643075l);
+        assertThat(dateTimeScalar.getCoercing().parseValue("2019-11-20T03:14:03.075Z")).isEqualTo(1574219643075l); 
     }
 
     @Test

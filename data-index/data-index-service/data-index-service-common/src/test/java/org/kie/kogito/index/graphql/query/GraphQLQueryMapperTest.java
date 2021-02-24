@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import graphql.schema.GraphQLScalarType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,8 +35,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import graphql.schema.GraphQLScalarType;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -98,7 +97,8 @@ public class GraphQLQueryMapperTest {
                 singletonMap("start", singletonMap("between", emptyMap())),
                 //Enum mapper
                 singletonMap("state", null),
-                singletonMap("state", singletonMap("equal", null)));
+                singletonMap("state", singletonMap("equal", null))
+        );
     }
 
     static Stream<Map<String, Object>> jobProvider() {
@@ -113,7 +113,8 @@ public class GraphQLQueryMapperTest {
                 singletonMap("id", null),
                 singletonMap("id", emptyMap()),
                 singletonMap("id", singletonMap("equal", null)),
-                singletonMap("id", singletonMap("in", emptyList())));
+                singletonMap("id", singletonMap("in", emptyList()))
+        );
     }
 
     @BeforeEach
@@ -143,7 +144,8 @@ public class GraphQLQueryMapperTest {
         assertThat(filter.getValue()).asList().hasSize(3).containsExactly(
                 in("id", asList("adasdasd", "bla")),
                 notNull("id"),
-                equalTo("state", 1));
+                equalTo("state", 1)
+        );
     }
 
     @Test
@@ -195,7 +197,8 @@ public class GraphQLQueryMapperTest {
                 isNull("rootProcessId"),
                 contains("roles", "admin"),
                 containsAll("roles", asList("kogito", "admin")),
-                containsAny("roles", asList("admin", "kogito")));
+                containsAny("roles", asList("admin", "kogito"))
+        );
     }
 
     @ParameterizedTest

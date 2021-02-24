@@ -69,3 +69,4 @@ public class DataIndexServiceClientImpl implements DataIndexServiceClient {
         queryService.close();
     }
 }
+

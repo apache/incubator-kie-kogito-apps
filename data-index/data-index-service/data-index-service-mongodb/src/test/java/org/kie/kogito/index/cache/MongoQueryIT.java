@@ -16,10 +16,9 @@
 
 package org.kie.kogito.index.cache;
 
-import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
-
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)

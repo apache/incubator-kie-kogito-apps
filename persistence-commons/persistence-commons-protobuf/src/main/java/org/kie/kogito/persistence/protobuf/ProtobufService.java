@@ -25,6 +25,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import io.quarkus.runtime.StartupEvent;
 import org.infinispan.protostream.FileDescriptorSource;
 import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.descriptors.Descriptor;
@@ -39,8 +40,6 @@ import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
 import org.kie.kogito.persistence.api.schema.SchemaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.quarkus.runtime.StartupEvent;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toMap;
@@ -76,7 +75,7 @@ public class ProtobufService {
             try {
                 SerializationContext ctx = createSerializationContext(FileDescriptorSource.fromString(name, content));
                 FileDescriptor desc = ctx.getFileDescriptors().get(name);
-                Map<String, EntityIndexDescriptor> entityIndexes = desc.getMessageTypes().stream().map(t -> t.<EntityIndexDescriptor> getProcessedAnnotation(INDEXED_ANNOTATION))
+                Map<String, EntityIndexDescriptor> entityIndexes = desc.getMessageTypes().stream().map(t -> t.<EntityIndexDescriptor>getProcessedAnnotation(INDEXED_ANNOTATION))
                         .filter(Objects::nonNull).collect(toMap(EntityIndexDescriptor::getName, Function.identity()));
                 Map<String, EntityIndexDescriptor> entityIndexDescriptors = createEntityIndexeDescriptors(desc, entityIndexes);
 
@@ -117,7 +116,7 @@ public class ProtobufService {
 
         validateDescriptorField(messageName, descriptor, Constants.KOGITO_DOMAIN_ATTRIBUTE);
 
-        Map<String, EntityIndexDescriptor> entityIndexes = desc.getMessageTypes().stream().map(t -> t.<EntityIndexDescriptor> getProcessedAnnotation(INDEXED_ANNOTATION))
+        Map<String, EntityIndexDescriptor> entityIndexes = desc.getMessageTypes().stream().map(t -> t.<EntityIndexDescriptor>getProcessedAnnotation(INDEXED_ANNOTATION))
                 .filter(Objects::nonNull).collect(toMap(EntityIndexDescriptor::getName, Function.identity()));
         Map<String, EntityIndexDescriptor> entityIndexedDescriptors = createEntityIndexeDescriptors(desc, entityIndexes);
 

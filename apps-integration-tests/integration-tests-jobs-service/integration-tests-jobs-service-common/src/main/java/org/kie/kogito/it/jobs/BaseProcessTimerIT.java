@@ -15,10 +15,9 @@
  */
 package org.kie.kogito.it.jobs;
 
-import org.junit.jupiter.api.Test;
-
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;

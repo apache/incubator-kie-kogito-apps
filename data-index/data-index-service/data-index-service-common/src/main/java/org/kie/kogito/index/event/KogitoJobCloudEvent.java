@@ -17,9 +17,8 @@ package org.kie.kogito.index.event;
 
 import java.net.URI;
 
-import org.kie.kogito.index.model.Job;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.kie.kogito.index.model.Job;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class KogitoJobCloudEvent extends KogitoCloudEvent<Job> {

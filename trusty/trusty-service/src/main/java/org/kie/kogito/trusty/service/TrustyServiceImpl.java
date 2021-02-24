@@ -66,7 +66,8 @@ public class TrustyServiceImpl implements TrustyService {
     public TrustyServiceImpl(
             @ConfigProperty(name = "trusty.explainability.enabled") Boolean isExplainabilityEnabled,
             ExplainabilityRequestProducer explainabilityRequestProducer,
-            TrustyStorageService storageService) {
+            TrustyStorageService storageService
+    ) {
         this.isExplainabilityEnabled = Boolean.TRUE.equals(isExplainabilityEnabled);
         this.explainabilityRequestProducer = explainabilityRequestProducer;
         this.storageService = storageService;
@@ -85,9 +86,10 @@ public class TrustyServiceImpl implements TrustyService {
         filters.add(QueryFilterFactory.greaterThanEqual(Execution.EXECUTION_TIMESTAMP_FIELD, from.toInstant().toEpochMilli()));
         filters.add(QueryFilterFactory.lessThanEqual(Execution.EXECUTION_TIMESTAMP_FIELD, to.toInstant().toEpochMilli()));
         ArrayList result = new ArrayList<>(storage.query()
-                .sort(asList(orderBy(Execution.EXECUTION_TIMESTAMP_FIELD, DESC)))
-                .filter(filters)
-                .execute());
+                                                   .sort(asList(orderBy(Execution.EXECUTION_TIMESTAMP_FIELD, DESC)))
+                                                   .filter(filters)
+                                                   .execute()
+        );
 
         if (result.size() < offset) {
             throw new IllegalArgumentException("Out of bound start offset in result");
@@ -125,12 +127,12 @@ public class TrustyServiceImpl implements TrustyService {
         if (isExplainabilityEnabled) {
             Map<String, TypedValue> inputs = decision.getInputs() != null
                     ? decision.getInputs().stream()
-                            .collect(HashMap::new, (m, v) -> m.put(v.getName(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
+                    .collect(HashMap::new, (m, v) -> m.put(v.getName(), modelToTracingTypedValue(v.getValue())), HashMap::putAll)
                     : Collections.emptyMap();
 
             Map<String, TypedValue> outputs = decision.getOutcomes() != null
                     ? decision.getOutcomes().stream()
-                            .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeName(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
+                    .collect(HashMap::new, (m, v) -> m.put(v.getOutcomeName(), modelToTracingTypedValue(v.getOutcomeResult())), HashMap::putAll)
                     : Collections.emptyMap();
 
             explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(
@@ -138,7 +140,8 @@ public class TrustyServiceImpl implements TrustyService {
                     serviceUrl,
                     createDecisionModelIdentifierDto(decision),
                     inputs,
-                    outputs));
+                    outputs
+            ));
         }
     }
 

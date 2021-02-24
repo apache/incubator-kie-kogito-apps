@@ -19,9 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.persistence.api.query.SortDirection;
-
 import graphql.execution.MergedField;
 import graphql.language.Argument;
 import graphql.language.EnumValue;
@@ -29,6 +26,8 @@ import graphql.language.ObjectField;
 import graphql.language.ObjectValue;
 import graphql.language.VariableReference;
 import graphql.schema.DataFetchingEnvironment;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.persistence.api.query.SortDirection;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
@@ -74,9 +73,10 @@ public class GraphQLQueryOrderParserTest {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(
                 Argument.newArgument().name("orderBy").value(
                         ObjectValue.newObjectValue().objectField(
-                                ObjectField.newObjectField().name("start").value(EnumValue.newEnumValue("ASC").build()).build()).build())
-                        .build()),
-                emptyMap());
+                                ObjectField.newObjectField().name("start").value(EnumValue.newEnumValue("ASC").build()
+                                ).build()
+                        ).build()
+                ).build()), emptyMap());
 
         assertThat(new GraphQLQueryOrderByParser().apply(env))
                 .hasSize(1)
@@ -89,8 +89,8 @@ public class GraphQLQueryOrderParserTest {
     public void testSortUsingVariable() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(
                 Argument.newArgument().name("orderBy").value(
-                        VariableReference.newVariableReference().name("orderBy").build()).build()),
-                singletonMap("orderBy", singletonMap("flight", singletonMap("start", "ASC"))));
+                        VariableReference.newVariableReference().name("orderBy").build()
+                ).build()), singletonMap("orderBy", singletonMap("flight", singletonMap("start", "ASC"))));
 
         assertThat(new GraphQLQueryOrderByParser().apply(env))
                 .hasSize(1)
@@ -107,16 +107,20 @@ public class GraphQLQueryOrderParserTest {
                                 .objectFields(
                                         Arrays.asList(
                                                 ObjectField.newObjectField().name("start").value(EnumValue.newEnumValue("ASC").build()).build(),
-                                                ObjectField.newObjectField().name("end").value(EnumValue.newEnumValue("DESC").build()).build()))
+                                                ObjectField.newObjectField().name("end").value(EnumValue.newEnumValue("DESC").build()).build()
+                                        )
+                                )
                                 .build()
 
-                ).build()), emptyMap());
+                ).build()
+        ), emptyMap());
 
         assertThat(new GraphQLQueryOrderByParser().apply(env))
                 .hasSize(2)
                 .containsExactly(
                         orderBy("start", SortDirection.ASC),
-                        orderBy("end", SortDirection.DESC));
+                        orderBy("end", SortDirection.DESC)
+                );
     }
 
     @Test
@@ -128,17 +132,22 @@ public class GraphQLQueryOrderParserTest {
                                         Arrays.asList(
                                                 ObjectField.newObjectField().name("nodes").value(
                                                         ObjectValue.newObjectValue().objectField(
-                                                                ObjectField.newObjectField().name("name").value(EnumValue.newEnumValue("DESC").build()).build()).build())
-                                                        .build(),
-                                                ObjectField.newObjectField().name("start").value(EnumValue.newEnumValue("ASC").build()).build()))
+                                                                ObjectField.newObjectField().name("name").value(EnumValue.newEnumValue("DESC").build()).build()
+                                                        ).build()
+                                                ).build(),
+                                                ObjectField.newObjectField().name("start").value(EnumValue.newEnumValue("ASC").build()).build()
+                                        )
+                                )
                                 .build()
 
-                ).build()), emptyMap());
+                ).build()
+        ), emptyMap());
 
         assertThat(new GraphQLQueryOrderByParser().apply(env))
                 .hasSize(2)
                 .containsExactly(
                         orderBy("nodes.name", SortDirection.DESC),
-                        orderBy("start", SortDirection.ASC));
+                        orderBy("start", SortDirection.ASC)
+                );
     }
 }

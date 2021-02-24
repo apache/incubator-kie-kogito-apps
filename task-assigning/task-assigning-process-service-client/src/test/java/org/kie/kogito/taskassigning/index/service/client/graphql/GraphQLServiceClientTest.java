@@ -19,11 +19,10 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
-
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.taskassigning.auth.NoAuthenticationCredentials;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -49,7 +48,7 @@ class GraphQLServiceClientTest {
     @Test
     void executeQuery() {
         GraphQLServiceClient client = graphQLServiceClientFactory.newClient(createServiceConfig(),
-                NoAuthenticationCredentials.INSTANCE);
+                                                                            NoAuthenticationCredentials.INSTANCE);
 
         UserTaskInstance[] result = client.executeQuery(QUERY_NAME, USER_TASKS_QUERY_MOCK, UserTaskInstance[].class);
         assertResults(result, USER_TASKS_QUERY_MOCK_RESULT);
@@ -58,7 +57,7 @@ class GraphQLServiceClientTest {
     @Test
     void executeQueryWithFailure() {
         GraphQLServiceClient client = graphQLServiceClientFactory.newClient(createServiceConfig(),
-                NoAuthenticationCredentials.INSTANCE);
+                                                                            NoAuthenticationCredentials.INSTANCE);
 
         assertThatThrownBy(() -> client.executeQuery(QUERY_NAME, USER_TASKS_QUERY_FAILURE_MOCK, UserTaskInstance[].class))
                 .hasMessageStartingWith("An error was produced during query execution:");

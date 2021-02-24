@@ -18,14 +18,13 @@ package org.kie.kogito.index.mongodb.model;
 
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
