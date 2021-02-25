@@ -23,10 +23,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.infinispan.protostream.MessageMarshaller;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;

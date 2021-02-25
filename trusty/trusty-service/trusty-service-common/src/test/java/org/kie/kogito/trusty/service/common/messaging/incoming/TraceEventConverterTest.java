@@ -35,6 +35,9 @@ import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -74,42 +77,34 @@ class TraceEventConverterTest {
     @Test
     void testDecisionHasSucceeded() {
         assertFalse(TraceEventConverter.decisionHasSucceeded(
-                null
-        ), "Decision must be failed if input list is null");
+                null), "Decision must be failed if input list is null");
 
         assertTrue(TraceEventConverter.decisionHasSucceeded(
-                Collections.emptyList()
-        ), "Decision must be succeeeded if input list is empty");
+                Collections.emptyList()), "Decision must be succeeeded if input list is empty");
 
         assertTrue(TraceEventConverter.decisionHasSucceeded(List.of(
                 buildTraceOutputValue(DecisionEvaluationStatus.SUCCEEDED, false),
                 buildTraceOutputValue(DecisionEvaluationStatus.SKIPPED, false),
-                buildTraceOutputValue(DecisionEvaluationStatus.NOT_EVALUATED, false)
-        )), "Decision must be succeeded if there are no outputs with 'FAILED' status or containing error messages");
+                buildTraceOutputValue(DecisionEvaluationStatus.NOT_EVALUATED, false))), "Decision must be succeeded if there are no outputs with 'FAILED' status or containing error messages");
 
         assertFalse(TraceEventConverter.decisionHasSucceeded(List.of(
                 buildTraceOutputValue(DecisionEvaluationStatus.SUCCEEDED, false),
-                buildTraceOutputValue(DecisionEvaluationStatus.FAILED, false)
-        )), "Decision must be failed if at least one output has 'FAILED' status");
+                buildTraceOutputValue(DecisionEvaluationStatus.FAILED, false))), "Decision must be failed if at least one output has 'FAILED' status");
 
         assertFalse(TraceEventConverter.decisionHasSucceeded(List.of(
                 buildTraceOutputValue(DecisionEvaluationStatus.SUCCEEDED, false),
-                buildTraceOutputValue(DecisionEvaluationStatus.SKIPPED, true)
-        )), "Decision must be failed if at least one output contains error messages");
+                buildTraceOutputValue(DecisionEvaluationStatus.SKIPPED, true))), "Decision must be failed if at least one output contains error messages");
 
         assertFalse(TraceEventConverter.decisionHasSucceeded(List.of(
                 buildTraceOutputValue(DecisionEvaluationStatus.SUCCEEDED, false),
-                buildTraceOutputValue(DecisionEvaluationStatus.NOT_EVALUATED, true)
-        )), "Decision must be failed if at least one output contains error messages");
+                buildTraceOutputValue(DecisionEvaluationStatus.NOT_EVALUATED, true))), "Decision must be failed if at least one output contains error messages");
 
         assertFalse(TraceEventConverter.decisionHasSucceeded(List.of(
                 buildTraceOutputValue(DecisionEvaluationStatus.SKIPPED, true),
-                buildTraceOutputValue(DecisionEvaluationStatus.FAILED, false)
-        )), "Decision must be failed if at least one output has 'FAILED' status or contains error messages");
+                buildTraceOutputValue(DecisionEvaluationStatus.FAILED, false))), "Decision must be failed if at least one output has 'FAILED' status or contains error messages");
 
         assertFalse(TraceEventConverter.decisionHasSucceeded(List.of(
                 buildTraceOutputValue(DecisionEvaluationStatus.NOT_EVALUATED, true),
-                buildTraceOutputValue(DecisionEvaluationStatus.FAILED, true)
-        )), "Decision must be failed if at least one output has 'FAILED' status or contains error messages");
+                buildTraceOutputValue(DecisionEvaluationStatus.FAILED, true))), "Decision must be failed if at least one output has 'FAILED' status or contains error messages");
     }
 }

@@ -33,8 +33,7 @@ public class ModelIdentifierTest {
                 Arguments.of(null, "ignore", null, "name", "namespace", "name:namespace"),
                 Arguments.of(null, null, "ignore", "name", "namespace", "name:namespace"),
                 Arguments.of(null, null, null, "name", null, "name:"),
-                Arguments.of(null, null, null, null, "namespace", ":namespace")
-        );
+                Arguments.of(null, null, null, null, "namespace", ":namespace"));
     }
 
     @ParameterizedTest

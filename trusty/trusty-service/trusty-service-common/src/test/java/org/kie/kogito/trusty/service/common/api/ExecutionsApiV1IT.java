@@ -37,6 +37,11 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionType;
 import org.mockito.Mockito;
 
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -95,8 +100,8 @@ class ExecutionsApiV1IT {
     @Test
     void givenARequestWhenExecutionEndpointIsCalledThenTheExecutionHeaderIsReturned() throws ParseException {
         Execution execution = new Execution("test1", "http://localhost:8081/model",
-                                            OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
-                                            true, "name", "model", "namespace", ExecutionType.DECISION);
+                OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).toInstant().toEpochMilli(),
+                true, "name", "model", "namespace", ExecutionType.DECISION);
         Mockito.when(executionService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), any(Integer.class), any(Integer.class), any(String.class)))
                 .thenReturn(new MatchedExecutionHeaders(List.of(execution), 1));
 
@@ -179,8 +184,8 @@ class ExecutionsApiV1IT {
         ArrayList<Execution> executions = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             executions.add(new Execution(String.format("test-%d", i), "test",
-                                         OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).plusDays(i).toInstant().toEpochMilli(),
-                                         true, "name", "model", "namespace", ExecutionType.DECISION));
+                    OffsetDateTime.parse("2020-01-01T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME).plusDays(i).toInstant().toEpochMilli(),
+                    true, "name", "model", "namespace", ExecutionType.DECISION));
         }
         return executions;
     }

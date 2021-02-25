@@ -21,9 +21,6 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cloudevents.CloudEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelMetadata;
@@ -33,6 +30,11 @@ import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.cloudevents.CloudEvent;
 
 @ApplicationScoped
 public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {

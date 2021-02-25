@@ -46,8 +46,8 @@ public class ModelIdentifier {
                                   final String name,
                                   final String namespace) {
         return String.format(IDENTIFIER_TEMPLATE,
-                             nullable(name),
-                             nullable(namespace));
+                nullable(name),
+                nullable(namespace));
     }
 
     private String nullable(final String value) {

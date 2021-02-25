@@ -60,8 +60,7 @@ public class ExplainabilityApiV1 {
                 model.getSaliencies().stream()
                         .map(ExplainabilityApiV1::saliencyModelToResponse)
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList())
-        );
+                        .collect(Collectors.toList()));
     }
 
     static FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
@@ -81,8 +80,7 @@ public class ExplainabilityApiV1 {
                 model.getFeatureImportance().stream()
                         .map(ExplainabilityApiV1::featureImportanceModelToResponse)
                         .filter(Objects::nonNull)
-                        .collect(Collectors.toList())
-        );
+                        .collect(Collectors.toList()));
     }
 
     @GET
