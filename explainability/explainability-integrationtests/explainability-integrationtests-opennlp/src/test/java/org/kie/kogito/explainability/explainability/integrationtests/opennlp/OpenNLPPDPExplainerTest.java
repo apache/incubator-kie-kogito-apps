@@ -52,7 +52,6 @@ class OpenNLPPDPExplainerTest {
 
     @Test
     void testOpenNLPLangDetect() throws Exception {
-
         PartialDependencePlotExplainer partialDependencePlotExplainer = new PartialDependencePlotExplainer();
         InputStream is = getClass().getResourceAsStream("/opennlp/langdetect-183.bin");
         LanguageDetectorModel languageDetectorModel = new LanguageDetectorModel(is);
@@ -75,7 +74,6 @@ class OpenNLPPDPExplainerTest {
             return results;
         });
 
-
         List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
                 "italiani, spaghetti pizza mandolino", "guten tag", "allez les bleus", "daje roma");
 
@@ -89,7 +87,6 @@ class OpenNLPPDPExplainerTest {
         }
         List<PartialDependenceGraph> pdps = partialDependencePlotExplainer.explainFromPredictions(model, predictions);
         assertThat(pdps).isNotEmpty();
-
     }
 
 }
