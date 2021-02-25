@@ -26,10 +26,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import opennlp.tools.langdetect.Language;
-import opennlp.tools.langdetect.LanguageDetector;
-import opennlp.tools.langdetect.LanguageDetectorME;
-import opennlp.tools.langdetect.LanguageDetectorModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -52,6 +48,10 @@ import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
+import opennlp.tools.langdetect.Language;
+import opennlp.tools.langdetect.LanguageDetector;
+import opennlp.tools.langdetect.LanguageDetectorME;
+import opennlp.tools.langdetect.LanguageDetectorModel;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +67,7 @@ class OpenNLPLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testOpenNLPLangDetect(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
@@ -122,7 +122,7 @@ class OpenNLPLimeExplainerTest {
             assertEquals(1d, i1);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 2,
-                                                                                0.8, 0.8));
+                0.8, 0.8));
 
         List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
                                      "italiani, spaghetti pizza mandolino", "guten tag", "allez les bleus", "daje roma");
@@ -136,9 +136,9 @@ class OpenNLPLimeExplainerTest {
         DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
         int k = 2;
         int chunkSize = 5;
-        double precision = ExplainabilityMetrics.getPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(precision).isEqualTo(0.6);
-        double recall = ExplainabilityMetrics.getRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(0.2);
         double f1 = 2 * (precision * recall) / (precision + recall);
         assertThat(f1).isEqualTo(0.3);

@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class DummyModelsLimeExplainerTest {
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testMapOneFeatureToOutputRegression(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
@@ -88,16 +88,16 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "feature-" + idx;
-        double precision = ExplainabilityMetrics.getPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(precision).isEqualTo(0);
-        double recall = ExplainabilityMetrics.getRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
         double f1 = 2 * (precision * recall) / (precision + recall);
         assertThat(f1).isEqualTo(0);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testUnusedFeatureRegression(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
@@ -137,16 +137,16 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "sum-but" + idx;
-        double precision = ExplainabilityMetrics.getPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(precision).isEqualTo(0);
-        double recall = ExplainabilityMetrics.getRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
         double f1 = 2 * (precision * recall) / (precision + recall);
         assertThat(f1).isEqualTo(0);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testMapOneFeatureToOutputClassification(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
@@ -174,7 +174,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testTextSpamClassification(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
@@ -206,7 +206,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testUnusedFeatureClassification(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
@@ -237,7 +237,7 @@ class DummyModelsLimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3, 4})
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testFixedOutput(int seed) throws Exception {
         Random random = new Random();
         random.setSeed(seed);
