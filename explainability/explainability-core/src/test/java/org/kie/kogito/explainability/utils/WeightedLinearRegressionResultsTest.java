@@ -16,18 +16,18 @@
 package org.kie.kogito.explainability.utils;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WeightedLinearRegressionResultsTest {
 
     // check that WLRR works with no intercept, that everything recovers as expected
     @Test
-    void testWLRResultsNoIntercept(){
-        double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}};
-        double[] flatCoef = {5., 1., -1., 3.};
+    void testWLRResultsNoIntercept() {
+        double[][] coefficients = { { 5. }, { 1. }, { -1. }, { 3. } };
+        double[] flatCoef = { 5., 1., -1., 3. };
         WeightedLinearRegressionResults wlrr =
                 new WeightedLinearRegressionResults(coefficients, false, 1.0, .01);
         assertArrayEquals(flatCoef, wlrr.getCoefficients());
@@ -38,9 +38,9 @@ class WeightedLinearRegressionResultsTest {
 
     // check that WLRR works with intercept, that the intercept is extracted from coefficient matrix
     @Test
-    void testWLRResultWithIntercept(){
-        double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}};
-        double[] flatCoef = {5., 1., -1.};
+    void testWLRResultWithIntercept() {
+        double[][] coefficients = { { 5. }, { 1. }, { -1. }, { 3. } };
+        double[] flatCoef = { 5., 1., -1. };
         WeightedLinearRegressionResults wlrr =
                 new WeightedLinearRegressionResults(coefficients, true, 1.0, .01);
         assertArrayEquals(flatCoef, wlrr.getCoefficients());
@@ -51,14 +51,14 @@ class WeightedLinearRegressionResultsTest {
 
     // check that predict correctly computes the linear function
     @Test
-    void testPredictions(){
-        double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}, {5.}};
+    void testPredictions() {
+        double[][] coefficients = { { 5. }, { 1. }, { -1. }, { 3. }, { 5. } };
         double[][] x = {
-                {1., 5., 3., -2},
-                {10.,-1.,0.,4.},
-                {-2, 7.5, 6., -3.3},
+                { 1., 5., 3., -2 },
+                { 10., -1., 0., 4. },
+                { -2, 7.5, 6., -3.3 },
         };
-        double[] y = {6., 66., -13.4};
+        double[] y = { 6., 66., -13.4 };
 
         WeightedLinearRegressionResults wlrr =
                 new WeightedLinearRegressionResults(coefficients, true, 1.0, .01);
@@ -68,16 +68,16 @@ class WeightedLinearRegressionResultsTest {
     // check that predict throws an error if the input matrix has the wrong number of features compared to the number
     // of coefficients
     @Test
-    void testPredictionsWrongNumFeatures(){
-        double[][] coefficients = {{5.}, {1.}, {-1.}, {3.}, {5.}};
+    void testPredictionsWrongNumFeatures() {
+        double[][] coefficients = { { 5. }, { 1. }, { -1. }, { 3. }, { 5. } };
         double[][] x = {
-                {1., 5.},
-                {10.,-1.},
-                {-2, 7.5},
+                { 1., 5. },
+                { 10., -1. },
+                { -2, 7.5 },
         };
 
         WeightedLinearRegressionResults wlrr =
                 new WeightedLinearRegressionResults(coefficients, true, 1.0, .01);
-        assertThrows(IllegalArgumentException.class, ()->wlrr.predict(x));
+        assertThrows(IllegalArgumentException.class, () -> wlrr.predict(x));
     }
 }

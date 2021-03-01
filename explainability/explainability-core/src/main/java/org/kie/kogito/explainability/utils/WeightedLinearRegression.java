@@ -23,36 +23,36 @@ package org.kie.kogito.explainability.utils;
  * We use Dr. Debabrata DasGupta's In-Place Matrix Inversion by Modified Gauss-Jordan algorithm to perform matrix
  * inversion, as described here:
  * https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm,
- * */
+ */
 public class WeightedLinearRegression {
-    private WeightedLinearRegression() { throw new IllegalStateException("Utility class"); }
-
+    private WeightedLinearRegression() {
+        throw new IllegalStateException("Utility class");
+    }
 
     // MAIN ALGORITHM ==================================================================================================
     /**
      * Fit the WLR model to the features.
      *
      * @param features An {@code nsamples features nfeatures} array of doubles;
-     *                 each row contains one datapoint of size [nfeatures]
+     *        each row contains one datapoint of size [nfeatures]
      * @param observations An {@code nsamples} array, where y[n] is the observation for features point n.
      * @param sampleWeights An {@code nsamples} array, where sampleWeights[n] is the weighting of features point n.
      *
      * @return C, an {@code nfeatures} array of coefficients as computed by the regression.
-     * In the case where {@code intercept} is true, the last value of {@code C} is the intercept.
+     *         In the case where {@code intercept} is true, the last value of {@code C} is the intercept.
      *
      */
     public static WeightedLinearRegressionResults fit(
             double[][] features, double[] observations, double[] sampleWeights, boolean intercept)
             throws IllegalArgumentException, ArithmeticException {
         // if we want to compute an intercept, add a dummy feature at last column.
-        int nfeatures = intercept ? features[0].length+1 : features[0].length;
+        int nfeatures = intercept ? features[0].length + 1 : features[0].length;
         int nsamples = observations.length;
 
-        if (features.length != nsamples){
+        if (features.length != nsamples) {
             throw new IllegalArgumentException(
                     String.format("Num sample mismatch: Number of rows in the features (%d)", features.length) +
-                            String.format(" must match number of observations (%d)", nsamples)
-            );
+                            String.format(" must match number of observations (%d)", nsamples));
         }
 
         // add dummy intercept feature if intercept is true
@@ -108,21 +108,21 @@ public class WeightedLinearRegression {
      * If we don't want an intercept, return the feature matrix as is
      *
      * @param features An {@code nsamples features nfeatures} array of doubles; each row contains one
-     *                 datapoint of size [nfeatures]
+     *        datapoint of size [nfeatures]
      * @param intercept A bool value, whether or not we should add the dummy intercept column
      *
      * @return adjustedFeatures: A nsamples x nfeatures if intercept is false or nsamples x (nfeatures+1) matrix
-     * if intercept is true
+     *         if intercept is true
      *
      */
-    private static double[][] adjustFeatureMatrix(double[][] features, boolean intercept){
+    private static double[][] adjustFeatureMatrix(double[][] features, boolean intercept) {
         int nsamples = features.length;
-        int nfeatures = intercept ? features[0].length+1 : features[0].length;
+        int nfeatures = intercept ? features[0].length + 1 : features[0].length;
         double[][] adjustedFeatures = new double[nsamples][nfeatures];
 
         for (int i = 0; i < nsamples; i++) {
             if (intercept) {
-                System.arraycopy(features[i], 0, adjustedFeatures[i], 0,nfeatures - 1);
+                System.arraycopy(features[i], 0, adjustedFeatures[i], 0, nfeatures - 1);
                 adjustedFeatures[i][nfeatures - 1] = 1;
             } else {
                 System.arraycopy(features[i], 0, adjustedFeatures[i], 0, nfeatures);
@@ -131,17 +131,17 @@ public class WeightedLinearRegression {
         return adjustedFeatures;
     }
 
-
     // MODEL METRICS ===================================================================================================
     /**
      * Recover the goodness-of-fit of the WLR model. This is the coefficient of determination, as per:
      * https://en.wikipedia.org/wiki/Multiple_correlation
+     * 
      * @return the coefficient of determination
      */
     private static double getGoodnessOfFit(double[][] features,
-                                    double[] observations,
-                                    double[] sampleWeights,
-                                    double[][] coefficients) {
+            double[] observations,
+            double[] sampleWeights,
+            double[][] coefficients) {
 
         int nfeatures = features[0].length;
         int nsamples = observations.length;
@@ -176,12 +176,13 @@ public class WeightedLinearRegression {
 
     /**
      * Recover the mean square error of the WLR model.
+     * 
      * @return the mean squared error of the model
      */
     private static double getMSE(double[][] features,
-                         double[] observations,
-                         double[] sampleWeights,
-                         double[][] coefficients){
+            double[] observations,
+            double[] sampleWeights,
+            double[][] coefficients) {
 
         int nfeatures = features[0].length;
         int nsamples = observations.length;

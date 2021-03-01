@@ -19,11 +19,11 @@ package org.kie.kogito.explainability.utils;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-
 public class MatrixUtils {
 
-    private MatrixUtils() { throw new IllegalStateException("Utility class"); }
-
+    private MatrixUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * @param x: the double array to return the matrix shape of
@@ -32,21 +32,19 @@ public class MatrixUtils {
     static int[] getShape(double[][] x) {
         int rows = x.length;
         int cols = x[0].length;
-        return new int[]{rows, cols};
+        return new int[] { rows, cols };
     }
 
     static double[] getCol(double[][] x, int i) throws IllegalArgumentException {
         int cols = MatrixUtils.getShape(x)[1];
         if (cols <= i) {
             throw new IllegalArgumentException(
-                    String.format("Column index %d too large, matrix only has %d column(s)", i, cols)
-            );
+                    String.format("Column index %d too large, matrix only has %d column(s)", i, cols));
         }
         return IntStream.range(0, x.length)
                 .mapToDouble(rowIdx -> x[rowIdx][i])
                 .toArray();
     }
-
 
     /**
      * Find the matrix transpose
@@ -66,7 +64,6 @@ public class MatrixUtils {
         return transposed;
     }
 
-
     /**
      * Find the matrix product. Throws an error if the matrix shapes are misaligned
      *
@@ -78,12 +75,10 @@ public class MatrixUtils {
         int[] aShape = MatrixUtils.getShape(a);
         int[] bShape = MatrixUtils.getShape(b);
 
-
         if (aShape[1] != bShape[0]) {
             throw new IllegalArgumentException("# columns of matrix A must match # rows of matrix B" +
                     String.format("Matrix A shape:  %d x %d, ", aShape[0], aShape[1]) +
-                    String.format("Matrix B shape:  %d x %d,", bShape[0], bShape[1])
-            );
+                    String.format("Matrix B shape:  %d x %d,", bShape[0], bShape[1]));
         }
 
         double[][] product = new double[aShape[0]][bShape[1]];
@@ -97,12 +92,11 @@ public class MatrixUtils {
         return product;
     }
 
-
     /**
      * Find the diagonal element at row i with the largest absolute value, where {@code pivotsUsed[i] == 0}
      * This is the pivot value for the Gauss-Jordan algorithm
      *
-     * @param x          a square double[][]; the matrix to find the diagonal element within
+     * @param x a square double[][]; the matrix to find the diagonal element within
      * @param pivotsUsed a boolean[], marking whether a specific index has been used as a pivot yet or not
      * @return the index of the found pivot
      */
@@ -120,15 +114,14 @@ public class MatrixUtils {
         return pivot;
     }
 
-
     /**
      * Inverts the square, non-singular matrix X
      *
      * @param x a square, non-singular double[][] X
      * @return the inverted matrix
-     * <p>
-     * Dr. Debabrata DasGupta's description of the algorithm is here:
-     * https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm
+     *         <p>
+     *         Dr. Debabrata DasGupta's description of the algorithm is here:
+     *         https://www.researchgate.net/publication/271296470_In-Place_Matrix_Inversion_by_Modified_Gauss-Jordan_Algorithm
      */
     public static double[][] invertSquareMatrix(double[][] x, double zeroThreshold) {
         int size = MatrixUtils.getShape(x)[0];
@@ -185,6 +178,7 @@ public class MatrixUtils {
     /**
      * Attempt to invert the given matrix.
      * If the matrix is singular, jitter the values slightly to break singularity
+     * 
      * @param x a square double[][]; the matrix to be inverted
      * @param numRetries the number of times to attempt jittering before giving up
      * @return double[][], the inverted matrix
@@ -192,11 +186,11 @@ public class MatrixUtils {
      */
     public static double[][] jitterInvert(double[][] x, int numRetries, double zeroThreshold) {
         double[][] xInv;
-        for (int jitterTries=0; jitterTries < numRetries; jitterTries++) {
+        for (int jitterTries = 0; jitterTries < numRetries; jitterTries++) {
             try {
                 xInv = MatrixUtils.invertSquareMatrix(x, zeroThreshold);
                 return xInv;
-            } catch(ArithmeticException e){
+            } catch (ArithmeticException e) {
                 // if the inversion is unsuccessful, we can try slightly jittering the matrix.
                 // this will reduce the accuracy of the inversion marginally, but ensures that we get results
                 MatrixUtils.jitterMatrix(x, 1e-8);
@@ -207,16 +201,16 @@ public class MatrixUtils {
         throw new ArithmeticException("Matrix is singular and could not be inverted via jittering");
     }
 
-
     /**
      * Jitters the values of a matrix IN-PLACE by a random number in range (0, delta)
+     * 
      * @param x the matrix to be jittered
      * @param delta the scale of the jittering
      *
      */
-    private static void jitterMatrix(double[][] x, double delta){
-        for (int i=0; i<x.length; i++){
-            for (int j=0; j<x[0].length; j++){
+    private static void jitterMatrix(double[][] x, double delta) {
+        for (int i = 0; i < x.length; i++) {
+            for (int j = 0; j < x[0].length; j++) {
                 x[i][j] += delta * Math.random();
             }
         }

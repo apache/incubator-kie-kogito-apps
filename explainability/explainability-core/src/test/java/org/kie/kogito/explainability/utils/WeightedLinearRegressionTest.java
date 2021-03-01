@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 package org.kie.kogito.explainability.utils;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-
 
 class WeightedLinearRegressionTest {
 
@@ -28,16 +28,16 @@ class WeightedLinearRegressionTest {
     @Test
     void testOverspecifiedNoIntercept() {
         double[][] x = {
-                {1., 10., 3., -4.},
-                {10., 5., -3., 3.7},
-                {14., -6.6, 7., 14.},
-                {-20., 15., 3.3, 1.},
-                {0., 3., -1., 2.2},
-                {17., -3, 0., 7.}
+                { 1., 10., 3., -4. },
+                { 10., 5., -3., 3.7 },
+                { 14., -6.6, 7., 14. },
+                { -20., 15., 3.3, 1. },
+                { 0., 3., -1., 2.2 },
+                { 17., -3, 0., 7. }
         };
-        double[] y = {104., 88.2, 130., 102.4, 35.2, 80.};
-        double[] sampleWeights = {.1, .1, .1, .1, .3, .3};
-        double[] actualCoefs = {4., 10., 8., 6.};
+        double[] y = { 104., 88.2, 130., 102.4, 35.2, 80. };
+        double[] sampleWeights = { .1, .1, .1, .1, .3, .3 };
+        double[] actualCoefs = { 4., 10., 8., 6. };
 
         WeightedLinearRegressionResults wlrr =
                 WeightedLinearRegression.fit(x, y, sampleWeights, false);
@@ -51,16 +51,16 @@ class WeightedLinearRegressionTest {
     @Test
     void testOverspecifiedIntercept() {
         double[][] x = {
-                {1., 10., 3., -4.},
-                {10., 5., -3., 3.7},
-                {14., -6.6, 7., 14.},
-                {-20., 15., 3.3, 1.},
-                {0., 3., -1., 2.2},
-                {17., -3, 0., 7.}
+                { 1., 10., 3., -4. },
+                { 10., 5., -3., 3.7 },
+                { 14., -6.6, 7., 14. },
+                { -20., 15., 3.3, 1. },
+                { 0., 3., -1., 2.2 },
+                { 17., -3, 0., 7. }
         };
-        double[] y = {109., 93.2, 135., 107.4, 40.2, 85.};
-        double[] sampleWeights = {.1, .1, .1, .1, .3, .3};
-        double[] actualCoefs = {4., 10., 8., 6.};
+        double[] y = { 109., 93.2, 135., 107.4, 40.2, 85. };
+        double[] sampleWeights = { .1, .1, .1, .1, .3, .3 };
+        double[] actualCoefs = { 4., 10., 8., 6. };
 
         WeightedLinearRegressionResults wlrr =
                 WeightedLinearRegression.fit(x, y, sampleWeights, true);
@@ -74,16 +74,16 @@ class WeightedLinearRegressionTest {
     @Test
     void testOverspecifiedWithError() {
         double[][] x = {
-                {1., 10., 3.},
-                {10., 5., -3.},
-                {14., -6.6, 7.},
-                {-20., 15., 3.3},
-                {0., 3., -1.},
-                {17., -3, 0.}
+                { 1., 10., 3. },
+                { 10., 5., -3. },
+                { 14., -6.6, 7. },
+                { -20., 15., 3.3 },
+                { 0., 3., -1. },
+                { 17., -3, 0. }
         };
-        double[] y = {131.24777803, 72.68862812, 51.48328659, 105.24910402, 23.76140738, 41.08339528};
-        double[] sampleWeights = {0.11155536, 0.2297424, 0.18834107, 0.30395088, 0.06050119, 0.10590911};
-        double[] actualCoefs = {4., 10., 8.};
+        double[] y = { 131.24777803, 72.68862812, 51.48328659, 105.24910402, 23.76140738, 41.08339528 };
+        double[] sampleWeights = { 0.11155536, 0.2297424, 0.18834107, 0.30395088, 0.06050119, 0.10590911 };
+        double[] actualCoefs = { 4., 10., 8. };
 
         WeightedLinearRegressionResults wlrr =
                 WeightedLinearRegression.fit(x, y, sampleWeights, true);
@@ -101,12 +101,12 @@ class WeightedLinearRegressionTest {
     @Test
     void testUnderspecifiedNoIntercept() {
         double[][] x = {
-                {1., 10., 3., -4.},
-                {10., 5., -3., 3.7},
-                {14., -6.6, 7., 14.},
+                { 1., 10., 3., -4. },
+                { 10., 5., -3., 3.7 },
+                { 14., -6.6, 7., 14. },
         };
-        double[] y = {104., 88.2, 130.};
-        double[] sampleWeights = {.8, .1, .1};
+        double[] y = { 104., 88.2, 130. };
+        double[] sampleWeights = { .8, .1, .1 };
 
         // since there's some randomness in the jitter invert, let's make sure it's stable
         for (int run = 0; run < 100; run++) {
@@ -122,12 +122,12 @@ class WeightedLinearRegressionTest {
     @Test
     void testUnderspecifiedIntercept() {
         double[][] x = {
-                {1., 10., 3., -4.},
-                {10., 5., -3., 3.7},
-                {14., -6.6, 7., 14.},
+                { 1., 10., 3., -4. },
+                { 10., 5., -3., 3.7 },
+                { 14., -6.6, 7., 14. },
         };
-        double[] y = {103., 87.2, 129.};
-        double[] sampleWeights = {.8, .1, .1};
+        double[] y = { 103., 87.2, 129. };
+        double[] sampleWeights = { .8, .1, .1 };
 
         // since there's some randomness in the jitter invert, let's make sure it's stable
         for (int run = 0; run < 100; run++) {
@@ -143,10 +143,10 @@ class WeightedLinearRegressionTest {
     @Test
     void testOneSample() {
         double[][] x = {
-                {1., 2., 3., 4.},
+                { 1., 2., 3., 4. },
         };
-        double[] y = {72.};
-        double[] sampleWeights = {1.};
+        double[] y = { 72. };
+        double[] sampleWeights = { 1. };
 
         assertThrows(ArithmeticException.class,
                 () -> WeightedLinearRegression.fit(x, y, sampleWeights, true));
@@ -156,14 +156,14 @@ class WeightedLinearRegressionTest {
     @Test
     void testOneFeature() {
         double[][] x = {
-                {1.},
-                {4.},
-                {10.},
-                {5.}
+                { 1. },
+                { 4. },
+                { 10. },
+                { 5. }
         };
-        double[] y = {5., 20., 50., 25.,};
-        double[] sampleWeights = {1., 1., 1., 1.};
-        double[] actualCoefs = {5.};
+        double[] y = { 5., 20., 50., 25., };
+        double[] sampleWeights = { 1., 1., 1., 1. };
+        double[] actualCoefs = { 5. };
 
         WeightedLinearRegressionResults wlrr =
                 WeightedLinearRegression.fit(x, y, sampleWeights, false);
@@ -177,28 +177,28 @@ class WeightedLinearRegressionTest {
     @Test
     void testSampleMismatch() {
         double[][] x = {
-                {1., 10., 3., -4.},
-                {10., 5., -3., 3.7},
-                {14., -6.6, 7., 14.},
+                { 1., 10., 3., -4. },
+                { 10., 5., -3., 3.7 },
+                { 14., -6.6, 7., 14. },
         };
-        double[] y = {103., 87.2};
-        double[] sampleWeights = {.8, .1, .1};
+        double[] y = { 103., 87.2 };
+        double[] sampleWeights = { .8, .1, .1 };
 
         // since there's some randomness in the jitter invert, let's make sure it's stable
 
         assertThrows(IllegalArgumentException.class,
-                ()->WeightedLinearRegression.fit(x, y, sampleWeights, true));
+                () -> WeightedLinearRegression.fit(x, y, sampleWeights, true));
     }
 
     @Test
     void testZeroWeights() {
         double[][] x = {
-                {1., 10., 3., -4.},
-                {10., 5., -3., 3.7},
-                {14., -6.6, 7., 14.},
+                { 1., 10., 3., -4. },
+                { 10., 5., -3., 3.7 },
+                { 14., -6.6, 7., 14. },
         };
-        double[] y = {103., 87.2};
-        double[] sampleWeights = {0., 0., 0.};
+        double[] y = { 103., 87.2 };
+        double[] sampleWeights = { 0., 0., 0. };
 
         // since there's some randomness in the jitter invert, let's make sure it's stable
 
