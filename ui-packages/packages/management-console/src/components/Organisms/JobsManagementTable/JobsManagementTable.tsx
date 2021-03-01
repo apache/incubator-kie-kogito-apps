@@ -38,12 +38,15 @@ interface IOwnProps {
   handleCancelModalToggle: () => void;
   setModalTitle: (modalTitle: JSX.Element) => void;
   setModalContent: (modalContent: string) => void;
+  setOffset: (offSet: number) => void;
   setOrderBy: (order: GraphQL.JobOrderBy) => void;
   setSelectedJob: (job: GraphQL.Job) => void;
   selectedJobInstances: GraphQL.Job[];
   setSelectedJobInstances: (job: GraphQL.Job[]) => void;
   sortBy: ISortBy;
   setSortBy: (sortObj: ISortBy) => void;
+  setIsActionPerformed: (isActionPerformed: boolean) => void;
+  isActionPerformed: boolean;
 }
 
 const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
@@ -53,16 +56,30 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
   handleCancelModalToggle,
   setModalTitle,
   setModalContent,
+  setOffset,
   setOrderBy,
   setSelectedJob,
   setSortBy,
   selectedJobInstances,
   setSelectedJobInstances,
   sortBy,
+  setIsActionPerformed,
+  isActionPerformed,
   ouiaId,
   ouiaSafe
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
+
+  useEffect(() => {
+    if (isActionPerformed) {
+      const updatedRows = rows.filter(row => {
+        row.selected = false;
+        return row;
+      });
+      setSelectedJobInstances([]);
+      setRows(updatedRows);
+    }
+  }, [isActionPerformed]);
   const columns = [
     { title: 'Id' },
     { title: 'Status' },
@@ -217,10 +234,11 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
     }
   };
 
-  const onSelect = (event, isSelected, rowId): void => {
+  const onSelect = (event, isSelected, rowId, rowData): void => {
+    setIsActionPerformed(false);
     const copyOfRows = [...rows];
     if (rowId === -1) {
-      copyOfRows.map(row => {
+      copyOfRows.forEach(row => {
         row.selected = isSelected;
         return row;
       });
@@ -228,12 +246,12 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
         setSelectedJobInstances([]);
       } else if (selectedJobInstances.length < data.Jobs.length) {
         /* istanbul ignore else*/
-        setSelectedJobInstances(data.Jobs);
+        setSelectedJobInstances(_.cloneDeep(data.Jobs));
       }
     } else {
       if (copyOfRows[rowId]) {
         copyOfRows[rowId].selected = isSelected;
-        const row = data.Jobs.filter(
+        const row = [...data.Jobs].filter(
           job => job.id === copyOfRows[rowId].rowKey
         );
         const rowData = _.find(selectedJobInstances, [
@@ -262,6 +280,7 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
 
   const onSort = (event, index: number, direction: 'asc' | 'desc'): void => {
     setSortBy({ index, direction });
+    setOffset(0);
     let sortingColumn: string = event.target.innerText;
     sortingColumn = _.camelCase(sortingColumn);
     const obj: GraphQL.JobOrderBy = {};

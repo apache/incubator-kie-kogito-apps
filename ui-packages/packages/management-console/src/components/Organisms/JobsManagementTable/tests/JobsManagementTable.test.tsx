@@ -95,12 +95,15 @@ describe('Jobs management table component tests', () => {
     handleCancelModalToggle: jest.fn(),
     setModalTitle: jest.fn(),
     setModalContent: jest.fn(),
+    setOffset: jest.fn(),
     setOrderBy: jest.fn(),
     setSelectedJob: jest.fn(),
     selectedJobInstances: [],
     setSelectedJobInstances: jest.fn(),
     sortBy: {},
-    setSortBy: jest.fn()
+    setSortBy: jest.fn(),
+    isActionPerformed: true,
+    setIsActionPerformed: jest.fn()
   };
   it('Snapshot with default props', async () => {
     const wrapper = await getWrapperAsync(
@@ -321,5 +324,6 @@ describe('Jobs management table component tests', () => {
     });
     wrapper = wrapper.update();
     expect(props.setSortBy).toBeTruthy();
+    expect(props.setOffset).toHaveBeenCalledWith(0);
   });
 });
