@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
 import java.util.Iterator;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
 import org.kie.kogito.taskassigning.index.service.client.graphql.string.StringArgument;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.taskassigning.TestUtil.parseZonedDateTime;
@@ -41,8 +41,10 @@ class UserTaskInstancesQueryBuilderTest {
     private static final int LIMIT = 2;
 
     private static final String QUERY_HEADER_WHERE = "query UserTaskInstances($where: UserTaskInstanceArgument){UserTaskInstances(where: $where)";
-    private static final String QUERY_HEADER_WHERE_ORDER_BY = "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy){UserTaskInstances(where: $where, orderBy: $orderBy)";
-    private static final String QUERY_HEADER_WHERE_ORDER_BY_PAGINATION = "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy, $pagination: Pagination){UserTaskInstances(where: $where, orderBy: $orderBy, pagination: $pagination)";
+    private static final String QUERY_HEADER_WHERE_ORDER_BY =
+            "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy){UserTaskInstances(where: $where, orderBy: $orderBy)";
+    private static final String QUERY_HEADER_WHERE_ORDER_BY_PAGINATION =
+            "query UserTaskInstances($where: UserTaskInstanceArgument, $orderBy: UserTaskInstanceOrderBy, $pagination: Pagination){UserTaskInstances(where: $where, orderBy: $orderBy, pagination: $pagination)";
 
     private static final String QUERY_NODE_NAME = "query";
     private static final String WHERE_NODE_NAME = "where";
@@ -65,10 +67,10 @@ class UserTaskInstancesQueryBuilderTest {
         assertRequestedFields(queryRoot, NAME, DESCRIPTION, STARTED);
 
         assertVariable(queryRoot,
-                       WHERE_NODE_NAME,
-                       new NodeDef(NAME.getName(), NAME_ARGUMENT),
-                       new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
-                       new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
+                WHERE_NODE_NAME,
+                new NodeDef(NAME.getName(), NAME_ARGUMENT),
+                new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
+                new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
     }
 
     @Test
@@ -85,13 +87,13 @@ class UserTaskInstancesQueryBuilderTest {
         assertRequestedFields(queryRoot, NAME, DESCRIPTION, STARTED);
 
         assertVariable(queryRoot,
-                       WHERE_NODE_NAME,
-                       new NodeDef(NAME.getName(), NAME_ARGUMENT),
-                       new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
-                       new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
+                WHERE_NODE_NAME,
+                new NodeDef(NAME.getName(), NAME_ARGUMENT),
+                new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
+                new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
 
         assertVariable(queryRoot, ORDER_BY_NODE_NAME,
-                       new NodeDef(STARTED.getName(), OrderBy.ASC));
+                new NodeDef(STARTED.getName(), OrderBy.ASC));
     }
 
     @Test
@@ -109,18 +111,18 @@ class UserTaskInstancesQueryBuilderTest {
         assertRequestedFields(queryRoot, NAME, DESCRIPTION, STARTED);
 
         assertVariable(queryRoot,
-                       WHERE_NODE_NAME,
-                       new NodeDef(NAME.getName(), NAME_ARGUMENT),
-                       new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
-                       new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
+                WHERE_NODE_NAME,
+                new NodeDef(NAME.getName(), NAME_ARGUMENT),
+                new NodeDef(DESCRIPTION.getName(), DESCRIPTION_ARGUMENT),
+                new NodeDef(STARTED.getName(), STARTED_ARGUMENT));
 
         assertVariable(queryRoot, ORDER_BY_NODE_NAME,
-                       new NodeDef(STARTED.getName(), OrderBy.ASC));
+                new NodeDef(STARTED.getName(), OrderBy.ASC));
 
         assertVariable(queryRoot,
-                       PAGINATION_NODE_NAME,
-                       new NodeDef(OFFSET_NODE_NAME, IntNode.valueOf(OFFSET)),
-                       new NodeDef(LIMIT_NODE_NAME, IntNode.valueOf(LIMIT)));
+                PAGINATION_NODE_NAME,
+                new NodeDef(OFFSET_NODE_NAME, IntNode.valueOf(OFFSET)),
+                new NodeDef(LIMIT_NODE_NAME, IntNode.valueOf(LIMIT)));
     }
 
     private void assertQueryHeader(ObjectNode queryRootNode, String queryHeader) {

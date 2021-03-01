@@ -1,19 +1,18 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.scheduler.impl;
 
 import java.time.Instant;
@@ -24,7 +23,6 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import io.vertx.mutiny.core.Vertx;
 import org.kie.kogito.jobs.service.model.job.ManageableJobHandle;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.InternalSchedulerService;
@@ -36,9 +34,11 @@ import org.kie.kogito.timer.impl.DefaultTimerJobFactoryManager;
 import org.kie.kogito.timer.impl.TimerJobFactoryManager;
 import org.kie.kogito.timer.impl.TimerJobInstance;
 
+import io.vertx.mutiny.core.Vertx;
+
 @ApplicationScoped
 public class VertxTimerServiceScheduler implements TimerService<ManageableJobHandle>,
-                                                   InternalSchedulerService {
+        InternalSchedulerService {
 
     protected TimerJobFactoryManager jobFactoryManager = DefaultTimerJobFactoryManager.instance;
 
@@ -114,9 +114,7 @@ public class VertxTimerServiceScheduler implements TimerService<ManageableJobHan
         final ZonedDateTime now = DateUtil.now();
         final long delay = calculateDelay(then, now);
         final ManageableJobHandle handle = (ManageableJobHandle) timerJobInstance.getJobHandle();
-        long scheduledId = vertx.setTimer(delay, i ->
-            timerJobInstance.getJob().execute(timerJobInstance.getJobContext())
-        );
+        long scheduledId = vertx.setTimer(delay, i -> timerJobInstance.getJob().execute(timerJobInstance.getJobContext()));
         handle.setId(scheduledId);
         handle.setScheduledTime(now);
     }

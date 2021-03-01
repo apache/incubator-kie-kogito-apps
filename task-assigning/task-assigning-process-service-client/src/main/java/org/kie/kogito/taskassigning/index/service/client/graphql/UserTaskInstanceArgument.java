@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.index.service.client.graphql;
 
 import org.kie.kogito.taskassigning.index.service.client.graphql.date.DateArgument;
@@ -36,22 +35,22 @@ public class UserTaskInstanceArgument extends ArgumentContainer {
         STATE("state", StringArgument.class);
 
         /*
-        The following fields and the corresponding arguments, etc., will be added on-demand if needed.
-        Since current graphql client implementation might be changed in favor of the future data-index-client
-        Quarkus extension.
-
-        ID("id", IdArgument.class),
-        PROCESS_INSTANCE_ID("processInstanceId", IdArgument.class),
-        POTENTIAL_USERS("potentialUsers", StringArrayArgument.class)
-        POTENTIAL_GROUPS("potentialGroups", StringArrayArgument.class)
-        EXCLUDED_USERS("excludedUsers", StringArrayArgument.class)
-        ADMIN_GROUPS("adminGroups", StringArrayArgument.class)
-        ADMIN_USERS("adminUsers", StringArrayArgument.class)
-
-        AND("and", UserTaskInstanceArgument[].class)
-        OR("or", UserTaskInstanceArgument[].class)
-        NOT("not", UserTaskInstanceArgument[].class);
-        */
+         * The following fields and the corresponding arguments, etc., will be added on-demand if needed.
+         * Since current graphql client implementation might be changed in favor of the future data-index-client
+         * Quarkus extension.
+         * 
+         * ID("id", IdArgument.class),
+         * PROCESS_INSTANCE_ID("processInstanceId", IdArgument.class),
+         * POTENTIAL_USERS("potentialUsers", StringArrayArgument.class)
+         * POTENTIAL_GROUPS("potentialGroups", StringArrayArgument.class)
+         * EXCLUDED_USERS("excludedUsers", StringArrayArgument.class)
+         * ADMIN_GROUPS("adminGroups", StringArrayArgument.class)
+         * ADMIN_USERS("adminUsers", StringArrayArgument.class)
+         * 
+         * AND("and", UserTaskInstanceArgument[].class)
+         * OR("or", UserTaskInstanceArgument[].class)
+         * NOT("not", UserTaskInstanceArgument[].class);
+         */
 
         private final String name;
         private final Class<? extends Argument> baseType;

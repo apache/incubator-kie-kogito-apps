@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   componentOuiaProps,
   GraphQL,
@@ -18,7 +18,6 @@ import {
   Bullseye,
   Button,
   Card,
-  CardBody,
   PageSection,
   Toolbar,
   ToolbarContent,
@@ -30,55 +29,29 @@ import {
   OverflowMenuItem,
   OverflowMenuControl,
   Dropdown,
-  KebabToggle
+  KebabToggle,
+  Divider
 } from '@patternfly/react-core';
 import { ISortBy } from '@patternfly/react-table';
+import _ from 'lodash';
 import JobsManagementTable from '../../Organisms/JobsManagementTable/JobsManagementTable';
 import JobsManagementFiters from '../../Organisms/JobsManagementFilters/JobsManagementFilters';
 import JobsPanelDetailsModal from '../../Atoms/JobsPanelDetailsModal/JobsPanelDetailsModal';
 import JobsRescheduleModal from '../../Atoms/JobsRescheduleModal/JobsRescheduleModal';
 import { refetchContext } from '../../contexts';
-import { setTitle, performMultipleCancel } from '../../../utils/Utils';
+import {
+  setTitle,
+  performMultipleCancel,
+  formatForBulkListJob
+} from '../../../utils/Utils';
 import JobsCancelModal from '../../Atoms/JobsCancelModal/JobsCancelModal';
 import { SyncIcon } from '@patternfly/react-icons';
-
-enum JobOperationType {
-  CANCEL = 'CANCEL'
-}
-
-export interface JobsBulkList {
-  [key: string]: GraphQL.Job;
-}
-
-interface IJobOperationResult {
-  successJobs: JobsBulkList;
-  failedJobs: JobsBulkList;
-  ignoredJobs: JobsBulkList;
-}
-interface IJobOperationMessages {
-  successMessage: string;
-  warningMessage?: string;
-  ignoredMessage: string;
-  noJobsMessage: string;
-}
-
-interface IJobOperationFunctions {
-  perform: () => void;
-}
-
-interface IJobOperationResults {
-  [key: string]: IJobOperationResult;
-}
-
-export interface IJobOperation {
-  results: IJobOperationResult;
-  messages: IJobOperationMessages;
-  functions: IJobOperationFunctions;
-}
-
-interface IOperations {
-  [key: string]: IJobOperation;
-}
+import {
+  BulkListType,
+  IOperationResults,
+  IOperations,
+  OperationType
+} from '../../Atoms/BulkList/BulkList';
 
 const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const defaultPageSize: number = 10;
@@ -109,16 +82,17 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
   const [displayTable, setDisplayTable] = useState<boolean>(false);
+  const [isActionPerformed, setIsActionPerformed] = useState(false);
   const [selectedJobInstances, setSelectedJobInstances] = useState<
     GraphQL.Job[]
   >([]);
   const [jobOperationResults, setJobOperationResults] = useState<
-    IJobOperationResults
+    IOperationResults
   >({
     CANCEL: {
-      successJobs: {},
-      failedJobs: {},
-      ignoredJobs: {}
+      successItems: [],
+      failedItems: [],
+      ignoredItems: []
     }
   });
 
@@ -136,10 +110,11 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
 
   const jobOperations: IOperations = {
     CANCEL: {
-      results: jobOperationResults[JobOperationType.CANCEL],
+      type: BulkListType.JOB,
+      results: jobOperationResults[OperationType.CANCEL],
       messages: {
         successMessage: 'Canceled jobs: ',
-        noJobsMessage: 'No jobs were canceled',
+        noItemsMessage: 'No jobs were canceled',
         warningMessage:
           'Note: The job status has been updated. The list may appear inconsistent until you refresh any applied filters.',
         ignoredMessage:
@@ -147,29 +122,30 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
       },
       functions: {
         perform: async () => {
-          const ignoredJobs = {};
-          const remainingJobs = selectedJobInstances.filter(job => {
+          setIsActionPerformed(true);
+          const ignoredJobs = [];
+          const remainingInstances = selectedJobInstances.filter(job => {
             if (
               job.status === GraphQL.JobStatus.Canceled ||
               job.status === GraphQL.JobStatus.Executed
             ) {
-              ignoredJobs[job.id] = job;
+              ignoredJobs.push(job);
             } else {
               return true;
             }
           });
           await performMultipleCancel(
-            remainingJobs,
-            (successJobs, failedJobs) => {
+            remainingInstances,
+            (successJobs: GraphQL.Job[], failedJobs: GraphQL.Job[]) => {
               setModalTitle(setTitle('success', 'Job Cancel'));
               setModalContent('');
               setJobOperationResults({
                 ...jobOperationResults,
-                [JobOperationType.CANCEL]: {
-                  ...jobOperationResults[JobOperationType.CANCEL],
-                  successJobs,
-                  failedJobs,
-                  ignoredJobs
+                [OperationType.CANCEL]: {
+                  ...jobOperationResults[OperationType.CANCEL],
+                  successItems: formatForBulkListJob(successJobs),
+                  failedItems: formatForBulkListJob(failedJobs),
+                  ignoredItems: formatForBulkListJob(ignoredJobs)
                 }
               });
               handleCancelModalToggle();
@@ -194,13 +170,20 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
           Jobs: initData.Jobs.concat(data.Jobs)
         };
         setInitData(tempData);
-        setDisplayTable(true);
+        values.length > 0 && setDisplayTable(true);
       } else {
         setInitData(data);
-        setDisplayTable(true);
+        values.length > 0 && setDisplayTable(true);
       }
     }
   }, [loading]);
+
+  useEffect(() => {
+    if (chips.length === 0) {
+      setIsLoadingMore(false);
+      setLimit(0);
+    }
+  }, [chips]);
 
   const jobManagementButtonSelect = () => {
     setIsKebabOpen(!isKebabOpen);
@@ -243,21 +226,26 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   ];
 
   const onRefresh = (): void => {
-    window.location.reload();
+    refetch();
   };
 
   const onReset = (): void => {
+    setSelectedJobInstances([]);
     setSelectedStatus(defaultStatus);
     setChips(defaultStatus);
-    setValues(defaultStatus);
     setOffset(0);
+    if (_.isEqual(values, defaultStatus)) {
+      refetch();
+    } else {
+      setValues(defaultStatus);
+    }
   };
 
   const dropdownItemsJobsManagementButtons = (): JSX.Element[] => {
     return [
       <DropdownItem
         key="cancel"
-        onClick={jobOperations[JobOperationType.CANCEL].functions.perform}
+        onClick={jobOperations[OperationType.CANCEL].functions.perform}
         isDisabled={selectedJobInstances.length === 0}
       >
         Cancel selected
@@ -271,7 +259,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
         <OverflowMenuItem>
           <Button
             variant="secondary"
-            onClick={jobOperations[JobOperationType.CANCEL].functions.perform}
+            onClick={jobOperations[OperationType.CANCEL].functions.perform}
             isDisabled={selectedJobInstances.length === 0}
           >
             Cancel selected
@@ -296,7 +284,9 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
         id="data-toolbar-with-chip-groups"
         className="pf-m-toggle-group-container"
         collapseListedFiltersBreakpoint="md"
-        clearAllFilters={onReset}
+        clearAllFilters={() => {
+          onReset();
+        }}
         clearFiltersButtonText="Reset to default"
       >
         <ToolbarContent>
@@ -306,7 +296,9 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
             setValues={setValues}
             chips={chips}
             setChips={setChips}
+            setDisplayTable={setDisplayTable}
             setOffset={setOffset}
+            setSelectedJobInstances={setSelectedJobInstances}
           />
           <ToolbarGroup>
             <ToolbarItem>
@@ -314,6 +306,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
                 variant="plain"
                 onClick={() => {
                   onRefresh();
+                  setSelectedJobInstances([]);
                 }}
                 id="refresh-button"
                 ouiaId="refresh-button"
@@ -332,23 +325,6 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     );
   };
 
-  if (data) {
-    if (!loading && values.length > 0 && data.Jobs.length === 0) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/NoData',
-            state: {
-              prev: '/ProcessInstances',
-              title: 'Jobs not found',
-              description: `There are no jobs associated with any process instance.`,
-              buttonText: 'Go to process instance'
-            }
-          }}
-        />
-      );
-    }
-  }
   return (
     <div
       {...componentOuiaProps(
@@ -370,36 +346,45 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
           </PageSection>
           <PageSection>
             {renderToolbar()}
+            <Divider />
             {!loading || isLoadingMore ? (
               <Card>
-                <CardBody>
-                  {displayTable && (
-                    <refetchContext.Provider value={refetch}>
-                      <JobsManagementTable
-                        data={initData}
-                        handleDetailsToggle={handleDetailsToggle}
-                        handleRescheduleToggle={handleRescheduleToggle}
-                        handleCancelModalToggle={handleCancelModalToggle}
-                        setModalTitle={setModalTitle}
-                        setModalContent={setModalContent}
-                        setOrderBy={setOrderBy}
-                        setSelectedJob={setSelectedJob}
-                        setSortBy={setSortBy}
-                        selectedJobInstances={selectedJobInstances}
-                        setSelectedJobInstances={setSelectedJobInstances}
-                        sortBy={sortBy}
-                      />
-                    </refetchContext.Provider>
-                  )}
-                  {chips.length === 0 && (
-                    <KogitoEmptyState
-                      type={KogitoEmptyStateType.Reset}
-                      title="No filter applied."
-                      body="Try applying at least one filter to see results"
-                      onClick={() => onReset()}
+                {displayTable && (
+                  <refetchContext.Provider value={refetch}>
+                    <JobsManagementTable
+                      data={initData}
+                      handleDetailsToggle={handleDetailsToggle}
+                      handleRescheduleToggle={handleRescheduleToggle}
+                      handleCancelModalToggle={handleCancelModalToggle}
+                      setModalTitle={setModalTitle}
+                      setModalContent={setModalContent}
+                      setOffset={setOffset}
+                      setOrderBy={setOrderBy}
+                      setSelectedJob={setSelectedJob}
+                      setSortBy={setSortBy}
+                      selectedJobInstances={selectedJobInstances}
+                      setSelectedJobInstances={setSelectedJobInstances}
+                      sortBy={sortBy}
+                      setIsActionPerformed={setIsActionPerformed}
+                      isActionPerformed={isActionPerformed}
                     />
-                  )}
-                </CardBody>
+                  </refetchContext.Provider>
+                )}
+                {chips.length === 0 && (
+                  <KogitoEmptyState
+                    type={KogitoEmptyStateType.Reset}
+                    title="No filter applied."
+                    body="Try applying at least one filter to see results"
+                    onClick={() => onReset()}
+                  />
+                )}
+                {data.Jobs.length === 0 && chips.length > 0 && offset === 0 && (
+                  <KogitoEmptyState
+                    type={KogitoEmptyStateType.Search}
+                    title="No results found"
+                    body="Try using different filters"
+                  />
+                )}
               </Card>
             ) : (
               <>
@@ -442,7 +427,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
               handleModalToggle={handleCancelModalToggle}
               modalTitle={modalTitle}
               modalContent={modalContent}
-              jobOperations={jobOperations[JobOperationType.CANCEL]}
+              jobOperations={jobOperations[OperationType.CANCEL]}
             />
             {(!loading || isLoadingMore) &&
               (limit === pageSize || isLoadingMore) && (

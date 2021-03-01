@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.core.model.solver;
 
 import java.util.ArrayList;
@@ -70,17 +69,20 @@ class TaskHelperTest {
 
     static Stream<Arguments> testParams() {
         return Stream.of(
-                Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), new LabelsCheckResult(true, 2)),
-                Arguments.of(LABEL_NAME1, new HashSet<>(Collections.singletonList(LABEL_VALUE1)), LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), new LabelsCheckResult(true, 1)),
+                Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)),
+                        new LabelsCheckResult(true, 2)),
+                Arguments.of(LABEL_NAME1, new HashSet<>(Collections.singletonList(LABEL_VALUE1)), LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)),
+                        new LabelsCheckResult(true, 1)),
                 Arguments.of(LABEL_NAME1, Collections.emptySet(), LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), new LabelsCheckResult(true, 0)),
                 Arguments.of(LABEL_NAME1, null, LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), new LabelsCheckResult(true, 0)),
                 Arguments.of(LABEL_NAME1, null, LABEL_NAME1, Collections.emptySet(), new LabelsCheckResult(true, 0)),
                 Arguments.of(LABEL_NAME1, null, LABEL_NAME1, null, new LabelsCheckResult(true, 0)),
-                Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME1, new HashSet<>(Collections.singletonList(LABEL_VALUE2)), new LabelsCheckResult(false, 1)),
+                Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME1, new HashSet<>(Collections.singletonList(LABEL_VALUE2)),
+                        new LabelsCheckResult(false, 1)),
                 Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME1, new HashSet<>(), new LabelsCheckResult(false, 0)),
                 Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME1, null, new LabelsCheckResult(false, 0)),
-                Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME2, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), new LabelsCheckResult(false, 0))
-        );
+                Arguments.of(LABEL_NAME1, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)), LABEL_NAME2, new HashSet<>(Arrays.asList(LABEL_VALUE1, LABEL_VALUE2)),
+                        new LabelsCheckResult(false, 0)));
     }
 
     @BeforeEach
@@ -158,8 +160,8 @@ class TaskHelperTest {
     @ParameterizedTest
     @MethodSource("testParams")
     void hasAllLabels(String taskLabelName, Set<Object> taskLabelValues,
-                      String userLabelName, Set<Object> userLabelValues,
-                      LabelsCheckResult checkResult) {
+            String userLabelName, Set<Object> userLabelValues,
+            LabelsCheckResult checkResult) {
         Task task = mockTask(taskLabelName, taskLabelValues);
         User user = mockUser(userLabelName, userLabelValues);
         assertThat(TaskHelper.hasAllLabels(task, user, taskLabelName)).isEqualTo(checkResult.hasAllLabels);
@@ -168,8 +170,8 @@ class TaskHelperTest {
     @ParameterizedTest
     @MethodSource("testParams")
     void matchingLabels(String taskLabelName, Set<Object> taskLabelValues,
-                        String userLabelName, Set<Object> userLabelValues,
-                        LabelsCheckResult checkResult) {
+            String userLabelName, Set<Object> userLabelValues,
+            LabelsCheckResult checkResult) {
         Task task = mockTask(taskLabelName, taskLabelValues);
         User user = mockUser(userLabelName, userLabelValues);
         assertThat(TaskHelper.countMatchingLabels(task, user, taskLabelName)).isEqualTo(checkResult.matchingLabels);

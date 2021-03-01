@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.repository.impl;
 
 import java.util.List;
@@ -22,8 +21,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
@@ -33,7 +30,6 @@ import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
-import org.kie.kogito.jobs.service.utils.ErrorHandling;
 import org.kie.kogito.jobs.service.utils.FunctionsUtil;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
@@ -120,8 +116,8 @@ public abstract class BaseJobRepositoryTest {
                 .collect(Collectors.toList());
 
         final List<JobDetails> fetched = tested().findByStatusBetweenDatesOrderByPriority(DateUtil.now(),
-                                                                                          DateUtil.now().plusMinutes(5).plusSeconds(1),
-                                                                                          JobStatus.SCHEDULED)
+                DateUtil.now().plusMinutes(5).plusSeconds(1),
+                JobStatus.SCHEDULED)
                 .toList()
                 .run()
                 .toCompletableFuture()
@@ -130,13 +126,12 @@ public abstract class BaseJobRepositoryTest {
         assertThat(fetched.size()).isEqualTo(5);
 
         IntStream.rangeClosed(0, 4).forEach(
-                i -> assertThat(fetched.get(i)).isEqualTo(jobs.get(fetched.size() - 1 - i))
-        );
+                i -> assertThat(fetched.get(i)).isEqualTo(jobs.get(fetched.size() - 1 - i)));
 
         //not found test
         List<JobDetails> fetchedNotFound = tested().findByStatusBetweenDatesOrderByPriority(DateUtil.now(),
-                                                                                            DateUtil.now().plusMinutes(5).plusSeconds(1),
-                                                                                            JobStatus.CANCELED)
+                DateUtil.now().plusMinutes(5).plusSeconds(1),
+                JobStatus.CANCELED)
                 .toList()
                 .run()
                 .toCompletableFuture()
@@ -145,8 +140,8 @@ public abstract class BaseJobRepositoryTest {
         assertThat(fetchedNotFound.size()).isZero();
 
         fetchedNotFound = tested().findByStatusBetweenDatesOrderByPriority(DateUtil.now().plusDays(1),
-                                                                           DateUtil.now().plusDays(2),
-                                                                           JobStatus.SCHEDULED)
+                DateUtil.now().plusDays(2),
+                JobStatus.SCHEDULED)
                 .toList()
                 .run()
                 .toCompletableFuture()

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.index.service.client.graphql.string;
 
 import java.util.stream.Stream;
@@ -42,7 +41,6 @@ class StringLikeArgumentTest extends AbstractStringArgumentTest<String, StringLi
     protected Stream<Arguments> createTestValues() {
         return Stream.of(
                 Arguments.of(new TestArgument<>(VALUE, "{\"like\":\"" + VALUE + "\"}")),
-                Arguments.of(new TestArgument<>(null, "{\"like\":null}"))
-        );
+                Arguments.of(new TestArgument<>(null, "{\"like\":null}")));
     }
 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.process.service.client;
 
 import java.io.Closeable;
@@ -26,8 +25,8 @@ import java.util.Set;
 public interface ProcessServiceClient extends Closeable {
 
     Set<String> getAvailablePhases(String processId, String processInstanceId, String taskId, String workItemId,
-                                   String user, List<String> groups);
+            String user, List<String> groups);
 
     void transitionTask(String processId, String processInstanceId, String taskId, String workItemId, String phase,
-                        String user, List<String> groups);
+            String user, List<String> groups);
 }

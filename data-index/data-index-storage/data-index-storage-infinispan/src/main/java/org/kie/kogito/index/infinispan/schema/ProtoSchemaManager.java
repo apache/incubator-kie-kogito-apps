@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.infinispan.schema;
 
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.infinispan.client.hotrod.RemoteCacheManager;
+import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
 import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.persistence.api.Storage;
@@ -32,6 +33,9 @@ import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
 import org.kie.kogito.persistence.infinispan.cache.ProtobufCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.quarkus.qute.Template;
+import io.quarkus.qute.api.ResourcePath;
 
 import static java.util.Collections.emptyList;
 
@@ -47,7 +51,13 @@ public class ProtoSchemaManager {
     DataIndexStorageService cacheManager;
 
     @Inject
+    RemoteCacheManager manager;
+
+    @Inject
     ProtobufCacheService protobufCacheService;
+
+    @ResourcePath("kogito-cache-default.xml")
+    Template cacheTemplate;
 
     public void onSchemaRegisteredEvent(@Observes SchemaRegisteredEvent event) {
         if (schemaAcceptor.accept(event.getSchemaType())) {
@@ -57,7 +67,10 @@ public class ProtoSchemaManager {
             schemaDescriptor.getProcessDescriptor().ifPresent(processDescriptor -> {
                 cacheManager.getProcessIdModelCache().put(processDescriptor.getProcessId(), processDescriptor.getProcessType());
                 //Initialize domain cache
-                cacheManager.getDomainModelCache(processDescriptor.getProcessId());
+                String cacheName = cacheManager.getDomainModelCacheName(processDescriptor.getProcessId());
+                String cacheTemplateRendered = getTemplateRendered(schemaDescriptor, cacheName);
+                LOGGER.debug("Cache template: \n{}", cacheTemplateRendered);
+                manager.administration().getOrCreateCache(cacheName, new XMLStringConfiguration(cacheTemplateRendered));
             });
             List<String> errors = checkSchemaErrors(cache);
 
@@ -70,6 +83,11 @@ public class ProtoSchemaManager {
                 logProtoCacheKeys();
             }
         }
+    }
+
+    private String getTemplateRendered(SchemaDescriptor schemaDescriptor, String cacheName) {
+        return cacheTemplate.data("cache_name", cacheName)
+                .data("indexed", schemaDescriptor.getEntityIndexDescriptors().keySet()).render();
     }
 
     private List<String> checkSchemaErrors(Storage<String, String> metadataCache) {

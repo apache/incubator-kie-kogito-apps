@@ -31,7 +31,7 @@ public class LogisticRegressionIrisDataExecutor extends AbstractPMMLExecutor {
     private final double petalWidth;
 
     public LogisticRegressionIrisDataExecutor(double sepalLength, double sepalWidth, double petalLength,
-                                              double petalWidth) {
+            double petalWidth) {
         this.sepalLength = sepalLength;
         this.sepalWidth = sepalWidth;
         this.petalLength = petalLength;
@@ -46,5 +46,4 @@ public class LogisticRegressionIrisDataExecutor extends AbstractPMMLExecutor {
         inputData.put("Petal.Width", petalWidth);
         return evaluate(pmmlRuntime, inputData, MODEL_NAME);
     }
-
 }

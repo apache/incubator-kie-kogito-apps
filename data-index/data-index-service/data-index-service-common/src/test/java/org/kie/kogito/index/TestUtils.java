@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index;
 
 import java.io.BufferedInputStream;
@@ -21,11 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
@@ -34,7 +29,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
@@ -48,6 +42,8 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.singleton;
@@ -98,7 +94,8 @@ public final class TestUtils {
         }
     }
 
-    public static KogitoProcessCloudEvent getProcessCloudEvent(String processId, String processInstanceId, ProcessInstanceState status, String rootProcessInstanceId, String rootProcessId, String parentProcessInstanceId) {
+    public static KogitoProcessCloudEvent getProcessCloudEvent(String processId, String processInstanceId, ProcessInstanceState status, String rootProcessInstanceId, String rootProcessId,
+            String parentProcessInstanceId) {
         return KogitoProcessCloudEvent.builder()
                 .id(UUID.randomUUID().toString())
                 .rootProcessInstanceId(rootProcessInstanceId)
@@ -157,8 +154,7 @@ public final class TestUtils {
                         .id(UUID.randomUUID().toString())
                         .name("SimpleMilestone")
                         .status(MilestoneStatus.AVAILABLE.name())
-                        .build()
-        );
+                        .build());
     }
 
     private static JsonNode getProcessInstanceVariables() {
@@ -181,7 +177,8 @@ public final class TestUtils {
         return getUserTaskCloudEvent(taskId, processId, processInstanceId, rootProcessInstanceId, rootProcessId, state, "kogito");
     }
 
-    public static KogitoUserTaskCloudEvent getUserTaskCloudEvent(String taskId, String processId, String processInstanceId, String rootProcessInstanceId, String rootProcessId, String state, String actualOwner) {
+    public static KogitoUserTaskCloudEvent getUserTaskCloudEvent(String taskId, String processId, String processInstanceId, String rootProcessInstanceId, String rootProcessId, String state,
+            String actualOwner) {
         return KogitoUserTaskCloudEvent.builder()
                 .id(UUID.randomUUID().toString())
                 .userTaskInstanceId(taskId)
@@ -226,7 +223,8 @@ public final class TestUtils {
         return job;
     }
 
-    private static UserTaskInstance getUserTaskInstance(String taskId, String processId, String processInstanceId, String rootProcessInstanceId, String rootProcessId, String state, String actualOwner) {
+    private static UserTaskInstance getUserTaskInstance(String taskId, String processId, String processInstanceId, String rootProcessInstanceId, String rootProcessId, String state,
+            String actualOwner) {
         UserTaskInstance task = new UserTaskInstance();
         task.setId(taskId);
         task.setProcessInstanceId(processInstanceId);

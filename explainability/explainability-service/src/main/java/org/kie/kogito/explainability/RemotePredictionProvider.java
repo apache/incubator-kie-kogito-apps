@@ -1,3 +1,18 @@
+/*
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.kie.kogito.explainability;
 
 import java.net.URI;
@@ -9,11 +24,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.client.WebClientOptions;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.ext.web.client.WebClient;
 import org.eclipse.microprofile.context.ThreadContext;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -27,6 +37,12 @@ import org.kie.kogito.explainability.models.ModelIdentifier;
 import org.kie.kogito.explainability.models.PredictInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.WebClientOptions;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.web.client.WebClient;
 
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
@@ -59,8 +75,7 @@ public class RemotePredictionProvider implements PredictionProvider {
                 .setDefaultHost(uri.getHost())
                 .setDefaultPort(port)
                 .setSsl("https".equalsIgnoreCase(uri.getScheme()))
-                .setLogActivity(true)
-        );
+                .setLogActivity(true));
     }
 
     protected PredictionOutput toPredictionOutput(JsonObject mainObj) {
@@ -83,8 +98,8 @@ public class RemotePredictionProvider implements PredictionProvider {
                         .filter(output -> request.getOutputs().containsKey(output.getName())),
                 request.getOutputs().keySet().stream()
                         .filter(key -> !resultOutputNames.contains(key))
-                        .map(key -> new Output(key, Type.UNDEFINED, new Value<>(null), 1d))
-        ).collect(toList());
+                        .map(key -> new Output(key, Type.UNDEFINED, new Value<>(null), 1d)))
+                .collect(toList());
 
         return new PredictionOutput(outputs);
     }

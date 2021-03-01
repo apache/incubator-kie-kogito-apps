@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.core.model.solver;
 
 import java.util.Arrays;
@@ -57,9 +56,9 @@ class DefaultTaskAssigningConstraintProviderTest {
     @BeforeEach
     void setUp() {
         constraintVerifier = ConstraintVerifier.build(new DefaultTaskAssigningConstraintProvider(),
-                                                      TaskAssigningSolution.class,
-                                                      TaskAssignment.class,
-                                                      ChainElement.class);
+                TaskAssigningSolution.class,
+                TaskAssignment.class,
+                ChainElement.class);
     }
 
     @ParameterizedTest
@@ -73,23 +72,23 @@ class DefaultTaskAssigningConstraintProviderTest {
     private static Stream<Arguments> requiredPotentialOwnerParams() {
         return Stream.of(
                 Arguments.of(new User(USER_ID, false, Collections.singleton(new Group(GROUP_ID_1)), Collections.emptyMap()),
-                             Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_1)).build(),
-                             1),
+                        Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_1)).build(),
+                        1),
                 Arguments.of(new User(USER_ID, true, Collections.singleton(new Group(GROUP_ID_1)), Collections.emptyMap()),
-                             Task.newBuilder().build(),
-                             1),
+                        Task.newBuilder().build(),
+                        1),
                 Arguments.of(new User(USER_ID, true, Collections.singleton(new Group(GROUP_ID_1)), Collections.emptyMap()),
-                             Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_2)).build(),
-                             1),
+                        Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_2)).build(),
+                        1),
                 Arguments.of(ModelConstants.PLANNING_USER,
-                             Task.newBuilder().build(),
-                             0),
+                        Task.newBuilder().build(),
+                        0),
                 Arguments.of(ModelConstants.PLANNING_USER,
-                             Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_1)).build(),
-                             0),
+                        Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_1)).build(),
+                        0),
                 Arguments.of(new User(USER_ID, true, Collections.singleton(new Group(GROUP_ID_1)), Collections.emptyMap()),
-                             Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_1)).build(),
-                             0)
+                        Task.newBuilder().potentialGroups(Collections.singleton(GROUP_ID_1)).build(),
+                        0)
 
         );
     }
@@ -105,21 +104,20 @@ class DefaultTaskAssigningConstraintProviderTest {
     private static Stream<Arguments> requiredSkillsParams() {
         return Stream.of(
                 Arguments.of(new User(USER_ID, false, Collections.emptySet(), mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))),
-                             Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
-                             1),
+                        Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
+                        1),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), Collections.emptyMap()),
-                             Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
-                             1),
+                        Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
+                        1),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), mockAttributes(SKILLS.name(), Collections.singleton(SKILL_2))),
-                             Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
-                             1),
+                        Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
+                        1),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))),
-                             Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
-                             0),
+                        Task.newBuilder().attributes(mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))).build(),
+                        0),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), mockAttributes(SKILLS.name(), Collections.singleton(SKILL_1))),
-                             Task.newBuilder().build(),
-                             0)
-        );
+                        Task.newBuilder().build(),
+                        0));
     }
 
     @ParameterizedTest
@@ -133,8 +131,7 @@ class DefaultTaskAssigningConstraintProviderTest {
     private static Stream<Arguments> planningUserAssignmentParams() {
         return Stream.of(
                 Arguments.of(ModelConstants.PLANNING_USER, Task.newBuilder().build(), 1),
-                Arguments.of(new User(), Task.newBuilder().build(), 0)
-        );
+                Arguments.of(new User(), Task.newBuilder().build(), 0));
     }
 
     @ParameterizedTest
@@ -149,8 +146,7 @@ class DefaultTaskAssigningConstraintProviderTest {
         return Stream.of(
                 Arguments.of(new User(), Task.newBuilder().priority(HIGH_PRIORITY).build(), 10, 10),
                 Arguments.of(new User(), Task.newBuilder().priority(MEDIUM_PRIORITY).build(), 10, 0),
-                Arguments.of(new User(), Task.newBuilder().priority(LOW_PRIORITY).build(), 10, 0)
-        );
+                Arguments.of(new User(), Task.newBuilder().priority(LOW_PRIORITY).build(), 10, 0));
     }
 
     @ParameterizedTest
@@ -164,21 +160,20 @@ class DefaultTaskAssigningConstraintProviderTest {
     private static Stream<Arguments> desiredAffinitiesParams() {
         return Stream.of(
                 Arguments.of(new User(USER_ID, false, Collections.emptySet(), mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))),
-                             Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
-                             0),
+                        Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
+                        0),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), Collections.emptyMap()),
-                             Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
-                             0),
+                        Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
+                        0),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_2))),
-                             Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
-                             0),
+                        Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
+                        0),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))),
-                             Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
-                             1),
+                        Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), Collections.singleton(AFFINITY_1))).build(),
+                        1),
                 Arguments.of(new User(USER_ID, true, Collections.emptySet(), mockAttributes(AFFINITIES.name(), new HashSet<>(Arrays.asList(AFFINITY_1, AFFINITY_2)))),
-                             Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), new HashSet<>(Arrays.asList(AFFINITY_1, AFFINITY_2)))).build(),
-                             2)
-        );
+                        Task.newBuilder().attributes(mockAttributes(AFFINITIES.name(), new HashSet<>(Arrays.asList(AFFINITY_1, AFFINITY_2)))).build(),
+                        2));
     }
 
     @ParameterizedTest
@@ -203,8 +198,7 @@ class DefaultTaskAssigningConstraintProviderTest {
 
         return Stream.of(
                 Arguments.of(taskAssignment, 0),
-                Arguments.of(taskAssignmentAtTheEnd, 49)
-        );
+                Arguments.of(taskAssignmentAtTheEnd, 49));
     }
 
     @ParameterizedTest
@@ -219,8 +213,7 @@ class DefaultTaskAssigningConstraintProviderTest {
         return Stream.of(
                 Arguments.of(new User(), Task.newBuilder().priority(HIGH_PRIORITY).build(), 10, 0),
                 Arguments.of(new User(), Task.newBuilder().priority(MEDIUM_PRIORITY).build(), 10, 10),
-                Arguments.of(new User(), Task.newBuilder().priority(LOW_PRIORITY).build(), 10, 0)
-        );
+                Arguments.of(new User(), Task.newBuilder().priority(LOW_PRIORITY).build(), 10, 0));
     }
 
     @ParameterizedTest
@@ -235,8 +228,7 @@ class DefaultTaskAssigningConstraintProviderTest {
         return Stream.of(
                 Arguments.of(new User(), Task.newBuilder().priority(HIGH_PRIORITY).build(), 10, 0),
                 Arguments.of(new User(), Task.newBuilder().priority(MEDIUM_PRIORITY).build(), 10, 0),
-                Arguments.of(new User(), Task.newBuilder().priority(LOW_PRIORITY).build(), 10, 10)
-        );
+                Arguments.of(new User(), Task.newBuilder().priority(LOW_PRIORITY).build(), 10, 10));
     }
 
     private static HashMap<String, Object> mockAttributes(String labelName, Set<Object> values) {

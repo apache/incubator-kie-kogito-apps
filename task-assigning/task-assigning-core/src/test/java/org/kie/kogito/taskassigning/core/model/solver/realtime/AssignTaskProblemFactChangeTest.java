@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.core.model.solver.realtime;
 
 import java.util.ArrayList;
@@ -121,14 +120,14 @@ class AssignTaskProblemFactChangeTest {
         // Expected assignments:
         // User <- TASK_0 <- TASK_1 <- TASK_3 <- TASK_2 <- TASK_4
         doChangeForExistingTaskAssignmentThatBelongsToSameUser(user,
-                                                               taskAssignment,
-                                                               workingTaskAssignment,
-                                                               expectedPreviousElement,
-                                                               Arrays.asList(userTasks.get(0),
-                                                                             userTasks.get(1),
-                                                                             workingTaskAssignment,
-                                                                             userTasks.get(2),
-                                                                             userTasks.get(4)));
+                taskAssignment,
+                workingTaskAssignment,
+                expectedPreviousElement,
+                Arrays.asList(userTasks.get(0),
+                        userTasks.get(1),
+                        workingTaskAssignment,
+                        userTasks.get(2),
+                        userTasks.get(4)));
     }
 
     @Test
@@ -145,21 +144,21 @@ class AssignTaskProblemFactChangeTest {
         // Expected assignments:
         // User <- TASK_0 <- TASK_1 <- TASK_2 <- TASK_3 <- TASK_4
         doChangeForExistingTaskAssignmentThatBelongsToSameUser(user,
-                                                               taskAssignment,
-                                                               workingTaskAssignment,
-                                                               originalPreviousElement,
-                                                               Arrays.asList(userTasks.get(0),
-                                                                             userTasks.get(1),
-                                                                             workingTaskAssignment,
-                                                                             userTasks.get(3),
-                                                                             userTasks.get(4)));
+                taskAssignment,
+                workingTaskAssignment,
+                originalPreviousElement,
+                Arrays.asList(userTasks.get(0),
+                        userTasks.get(1),
+                        workingTaskAssignment,
+                        userTasks.get(3),
+                        userTasks.get(4)));
     }
 
     private void doChangeForExistingTaskAssignmentThatBelongsToSameUser(User user,
-                                                                        TaskAssignment taskAssignment,
-                                                                        TaskAssignment workingTaskAssignment,
-                                                                        TaskAssignment expectedPreviousElement,
-                                                                        List<TaskAssignment> expectedTasksPositions) {
+            TaskAssignment taskAssignment,
+            TaskAssignment workingTaskAssignment,
+            TaskAssignment expectedPreviousElement,
+            List<TaskAssignment> expectedTasksPositions) {
         when(scoreDirector.lookUpWorkingObjectOrReturnNull(user)).thenReturn(user);
         when(scoreDirector.lookUpWorkingObjectOrReturnNull(taskAssignment)).thenReturn(workingTaskAssignment);
         change = new AssignTaskProblemFactChange(taskAssignment, user);
@@ -183,8 +182,8 @@ class AssignTaskProblemFactChangeTest {
         User user1 = buildUser(user1Tasks);
 
         List<TaskAssignment> user2Tasks = Arrays.asList(mockTaskAssignment(USER2_TASK_0, false),
-                                                        mockTaskAssignment(USER2_TASK_1, false),
-                                                        mockTaskAssignment(USER2_TASK_2, false));
+                mockTaskAssignment(USER2_TASK_1, false),
+                mockTaskAssignment(USER2_TASK_2, false));
         User user2 = mockUser("USER_2", user2Tasks);
 
         TaskAssignment taskAssignment = mockTaskAssignment(USER2_TASK_1, false);
@@ -254,10 +253,10 @@ class AssignTaskProblemFactChangeTest {
      */
     private List<TaskAssignment> buildUserTasks() {
         return Arrays.asList(mockTaskAssignment(TASK_0, true),
-                             mockTaskAssignment(TASK_1, true),
-                             mockTaskAssignment(TASK_2, false),
-                             mockTaskAssignment(TASK_3, false),
-                             mockTaskAssignment(TASK_4, false));
+                mockTaskAssignment(TASK_1, true),
+                mockTaskAssignment(TASK_2, false),
+                mockTaskAssignment(TASK_3, false),
+                mockTaskAssignment(TASK_4, false));
     }
 
     private User buildUser(List<TaskAssignment> userTasks) {

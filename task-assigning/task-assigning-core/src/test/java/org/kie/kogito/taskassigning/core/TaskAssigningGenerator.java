@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.core;
 
 import java.io.File;
@@ -26,8 +25,8 @@ import java.util.Set;
 
 import org.kie.kogito.taskassigning.core.model.Group;
 import org.kie.kogito.taskassigning.core.model.Task;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.examples.common.app.CommonApp;
 import org.optaplanner.examples.common.persistence.AbstractSolutionImporter;
@@ -72,16 +71,16 @@ public class TaskAssigningGenerator {
 
     private static final StringDataGenerator groupNameGenerator = new StringDataGenerator()
             .addPart(true, 0,
-                     "HR",
-                     "IT",
-                     "PM",
-                     "Sales",
-                     "Legal",
-                     "Marketing",
-                     "Manager",
-                     "Developer",
-                     "Accounting",
-                     "Support");
+                    "HR",
+                    "IT",
+                    "PM",
+                    "Sales",
+                    "Legal",
+                    "Marketing",
+                    "Manager",
+                    "Developer",
+                    "Accounting",
+                    "Support");
 
     private static final StringDataGenerator userNameGenerator = StringDataGenerator.buildFullNames();
 
@@ -118,11 +117,11 @@ public class TaskAssigningGenerator {
         BigInteger fixedFacts = AbstractSolutionImporter.factorial(userListSize - 1);
         BigInteger possibleSolutionSize = (totalFacts == null || fixedFacts == null) ? null : totalFacts.divide(fixedFacts);
         LOGGER.info("TaskAssigningSolution {} has {} tasks, {} groups, and {} users with a search space of {}.",
-                    fileName,
-                    taskListSize,
-                    groupListSize,
-                    userListSize,
-                    AbstractSolutionImporter.getFlooredPossibleSolutionSize(possibleSolutionSize));
+                fileName,
+                taskListSize,
+                groupListSize,
+                userListSize,
+                AbstractSolutionImporter.getFlooredPossibleSolutionSize(possibleSolutionSize));
         return solution;
     }
 

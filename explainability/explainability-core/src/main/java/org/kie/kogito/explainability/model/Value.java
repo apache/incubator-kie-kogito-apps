@@ -22,10 +22,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Wrapper class for any kind of value part of a prediction input or output.
@@ -73,7 +74,7 @@ public class Value<S> {
 
     @Override
     public String toString() {
-        return "Value{" + underlyingObject + '}';
+        return Objects.toString(underlyingObject);
     }
 
     public double[] asVector() {

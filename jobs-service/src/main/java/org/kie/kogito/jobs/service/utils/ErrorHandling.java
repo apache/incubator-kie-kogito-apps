@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.utils;
 
 import java.util.function.Function;
@@ -27,9 +26,9 @@ import org.slf4j.LoggerFactory;
 public class ErrorHandling {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandling.class);
-    
+
     private ErrorHandling() {
-        
+
     }
 
     /**
@@ -48,7 +47,7 @@ public class ErrorHandling {
         return ReactiveStreams
                 .fromPublisher(function.apply(input))
                 .onError(t -> LOGGER.warn("Error skipped when processing {}.", input, t))
-                .onErrorResumeWithRsPublisher(t -> ReactiveStreams.<R>empty().buildRs())
+                .onErrorResumeWithRsPublisher(t -> ReactiveStreams.<R> empty().buildRs())
                 .buildRs();
     }
 
@@ -67,6 +66,6 @@ public class ErrorHandling {
     public static <R, T> PublisherBuilder<R> skipErrorPublisherBuilder(Function<? super T, PublisherBuilder<R>> function, T input) {
         return function.apply(input)
                 .onError(t -> LOGGER.warn("Error skipped when processing {}.", input, t))
-                .onErrorResumeWithRsPublisher(t -> ReactiveStreams.<R>empty().buildRs());
+                .onErrorResumeWithRsPublisher(t -> ReactiveStreams.<R> empty().buildRs());
     }
 }
