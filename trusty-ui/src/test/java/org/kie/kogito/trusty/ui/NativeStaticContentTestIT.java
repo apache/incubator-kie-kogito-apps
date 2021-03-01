@@ -16,10 +16,8 @@
 package org.kie.kogito.trusty.ui;
 
 import io.quarkus.test.junit.NativeImageTest;
-import org.junit.jupiter.api.Disabled;
 
 @NativeImageTest
-@Disabled("https://issues.redhat.com/browse/KOGITO-4313 - Native tests are broken")
 public class NativeStaticContentTestIT extends StaticContentTest {
     // Execute the same tests but in native mode.
 }

@@ -15,13 +15,8 @@
  */
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
@@ -31,14 +26,14 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.interceptor.Interceptor;
 
-import io.quarkus.runtime.StartupEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
 import org.infinispan.client.hotrod.RemoteCacheManager;
-import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.kie.kogito.infinispan.health.InfinispanHealthCheck;
+
+import io.quarkus.runtime.StartupEvent;
 
 import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
 
@@ -64,9 +59,9 @@ public class InfinispanConfiguration {
     @Produces
     @Readiness
     public HealthCheck infinispanHealthCheck(@ConfigProperty(name = PERSISTENCE_CONFIG_KEY) Optional<String> persistence,
-                                             Instance<RemoteCacheManager> cacheManagerInstance) {
+            Instance<RemoteCacheManager> cacheManagerInstance) {
         return isEnabled(persistence)
-                .<HealthCheck>map(p -> new InfinispanHealthCheck(cacheManagerInstance))
+                .<HealthCheck> map(p -> new InfinispanHealthCheck(cacheManagerInstance))
                 .orElse(() -> HealthCheckResponse.up("In Memory Persistence"));
     }
 
@@ -76,26 +71,19 @@ public class InfinispanConfiguration {
     }
 
     void initializeCaches(@Observes @Priority(Interceptor.Priority.PLATFORM_BEFORE) StartupEvent startupEvent,
-                          @ConfigProperty(name = PERSISTENCE_CONFIG_KEY) Optional<String> persistence,
-                          Instance<RemoteCacheManager> remoteCacheManager,
-                          Event<InfinispanInitialized> initializedEvent) {
+            @ConfigProperty(name = PERSISTENCE_CONFIG_KEY) Optional<String> persistence,
+            Instance<RemoteCacheManager> remoteCacheManager,
+            Event<InfinispanInitialized> initializedEvent) {
         isEnabled(persistence)
-                .map(c -> remoteCacheManager.get().administration().getOrCreateCache(JOB_DETAILS, getCacheTemplate()))
+                .map(c -> remoteCacheManager.get().getCache(JOB_DETAILS))
                 .ifPresent(c -> {
                     initializedEvent.fire(new InfinispanInitialized());
                     initialized.set(Boolean.TRUE);
                 });
     }
 
-    protected Boolean isInitialized(){
+    protected Boolean isInitialized() {
         return initialized.get();
     }
 
-    private XMLStringConfiguration getCacheTemplate() {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(CACHE_TEMPLATE_XML);
-        String xml = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
-        return new XMLStringConfiguration(xml);
-    }
 }
