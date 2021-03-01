@@ -96,7 +96,7 @@ public interface TrustyService {
     /**
      * Stores a Model definition.
      *
-     * @param modelIdentifier      The model identifier.
+     * @param modelIdentifier The model identifier.
      * @param dmnModelWithMetadata The DMNModel to be stored.
      * @throws IllegalArgumentException Throws IllegalArgumentException in case the model is already present in the system.
      */

@@ -47,8 +47,7 @@ abstract class MarshallerTestTemplate<T> {
         }
         return Stream.concat(
                 Arrays.stream(type.getDeclaredFields()).filter(f -> (f.getModifiers() & Modifier.STATIC) == 0),
-                streamAllNonStaticFields(type.getSuperclass())
-        );
+                streamAllNonStaticFields(type.getSuperclass()));
     }
 
     protected abstract T buildEmptyObject();

@@ -82,13 +82,12 @@ public class ResponseUtils {
     public static ExecutionHeaderResponse executionHeaderResponseFrom(Execution execution) {
         OffsetDateTime ldt = OffsetDateTime.ofInstant((Instant.ofEpochMilli(execution.getExecutionTimestamp())), ZoneOffset.UTC);
         return new ExecutionHeaderResponse(execution.getExecutionId(),
-                                           ldt,
-                                           execution.hasSucceeded(),
-                                           execution.getExecutorName(),
-                                           execution.getExecutedModelName(),
-                                           execution.getExecutedModelNamespace(),
-                                           executionTypeFrom(execution.getExecutionType())
-        );
+                ldt,
+                execution.hasSucceeded(),
+                execution.getExecutorName(),
+                execution.getExecutedModelName(),
+                execution.getExecutedModelNamespace(),
+                executionTypeFrom(execution.getExecutionType()));
     }
 
     public static ExecutionType executionTypeFrom(org.kie.kogito.trusty.storage.api.model.ExecutionType executionType) {
@@ -153,9 +152,9 @@ public class ResponseUtils {
         JsonNode responseValue = (isCollectionOfStructures || value.getComponents() == null)
                 ? null
                 : value.getComponents().stream()
-                .map(ResponseUtils::typedVariableResponseFromUnit)
-                .map(TypedVariableResponse::getValue)
-                .collect(OBJECT_MAPPER::createArrayNode, ArrayNode::add, ArrayNode::addAll);
+                        .map(ResponseUtils::typedVariableResponseFromUnit)
+                        .map(TypedVariableResponse::getValue)
+                        .collect(OBJECT_MAPPER::createArrayNode, ArrayNode::add, ArrayNode::addAll);
 
         // create a list of lists of variables with all the values of the sub-components
         // to be placed in the "components" field of the response
@@ -163,9 +162,9 @@ public class ResponseUtils {
         List<JsonNode> responseComponents = (!isCollectionOfStructures || value.getComponents() == null)
                 ? null
                 : value.getComponents().stream()
-                .map(ResponseUtils::typedVariableResponseFromStructure)
-                .map(r -> r.getComponents().stream().collect(OBJECT_MAPPER::createArrayNode, ArrayNode::add, ArrayNode::addAll))
-                .collect(Collectors.toList());
+                        .map(ResponseUtils::typedVariableResponseFromStructure)
+                        .map(r -> r.getComponents().stream().collect(OBJECT_MAPPER::createArrayNode, ArrayNode::add, ArrayNode::addAll))
+                        .collect(Collectors.toList());
 
         return new TypedVariableResponse(value.getName(), value.getTypeRef(), responseValue, responseComponents);
     }

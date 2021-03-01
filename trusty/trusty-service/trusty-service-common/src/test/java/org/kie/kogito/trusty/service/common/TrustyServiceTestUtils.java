@@ -399,13 +399,12 @@ public class TrustyServiceTestUtils {
     public static ModelEvent buildCorrectModelEvent() {
         final ModelEvent.GAV gav = new ModelEvent.GAV("groupId", "artifactId", "version");
         return new ModelEvent(gav,
-                              "name",
-                              "namespace",
-                              new DecisionModelMetadata(
-                                      DecisionModelMetadata.Type.DMN,
-                                      "http://www.omg.org/spec/DMN/20151101/dmn.xsd"),
-                              "definition"
-        );
+                "name",
+                "namespace",
+                new DecisionModelMetadata(
+                        DecisionModelMetadata.Type.DMN,
+                        "http://www.omg.org/spec/DMN/20151101/dmn.xsd"),
+                "definition");
     }
 
     public static ModelIdentifier getModelIdentifier() {

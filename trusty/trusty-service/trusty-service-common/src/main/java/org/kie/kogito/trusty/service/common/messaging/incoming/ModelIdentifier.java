@@ -29,10 +29,10 @@ public class ModelIdentifier {
     private String identifier;
 
     public ModelIdentifier(final String groupId,
-                           final String artifactId,
-                           final String version,
-                           final String name,
-                           final String namespace) {
+            final String artifactId,
+            final String version,
+            final String name,
+            final String namespace) {
         this.identifier = makeIdentifier(groupId, artifactId, version, name, namespace);
     }
 
@@ -41,10 +41,10 @@ public class ModelIdentifier {
     }
 
     private String makeIdentifier(final String groupId,
-                                  final String artifactId,
-                                  final String version,
-                                  final String name,
-                                  final String namespace) {
+            final String artifactId,
+            final String version,
+            final String name,
+            final String namespace) {
         return String.format(IDENTIFIER_TEMPLATE,
                 nullable(name),
                 nullable(namespace));

@@ -18,11 +18,12 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.ARTIFACT_ID_FIELD;
 import static org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata.DMN_VERSION_FIELD;
@@ -41,8 +42,7 @@ public class DMNModelWithMetadataMarshallerTest extends MarshallerTestTemplate<D
             new StringTestField<>(DMN_VERSION_FIELD, "dmnVersion", DMNModelWithMetadata::getDmnVersion, DMNModelWithMetadata::setDmnVersion),
             new StringTestField<>(NAME_FIELD, "name", DMNModelWithMetadata::getName, DMNModelWithMetadata::setName),
             new StringTestField<>(NAMESPACE_FIELD, "namespace", DMNModelWithMetadata::getNamespace, DMNModelWithMetadata::setNamespace),
-            new StringTestField<>(MODEL_FIELD, "model", DMNModelWithMetadata::getModel, DMNModelWithMetadata::setModel)
-    );
+            new StringTestField<>(MODEL_FIELD, "model", DMNModelWithMetadata::getModel, DMNModelWithMetadata::setModel));
 
     public DMNModelWithMetadataMarshallerTest() {
         super(DMNModelWithMetadata.class);

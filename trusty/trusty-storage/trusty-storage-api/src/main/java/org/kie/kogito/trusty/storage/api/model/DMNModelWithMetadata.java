@@ -15,9 +15,10 @@
  */
 package org.kie.kogito.trusty.storage.api.model;
 
+import org.kie.kogito.tracing.decision.event.model.ModelEvent;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DMNModelWithMetadata {
@@ -66,12 +67,12 @@ public class DMNModelWithMetadata {
 
     public static DMNModelWithMetadata fromCloudEvent(ModelEvent modelEvent) {
         return new DMNModelWithMetadata(modelEvent.getGav().getGroupId(),
-                                        modelEvent.getGav().getArtifactId(),
-                                        modelEvent.getGav().getVersion(),
-                                        modelEvent.getDecisionModelMetadata().getSpecVersion(),
-                                        modelEvent.getName(),
-                                        modelEvent.getNamespace(),
-                                        modelEvent.getDefinition());
+                modelEvent.getGav().getArtifactId(),
+                modelEvent.getGav().getVersion(),
+                modelEvent.getDecisionModelMetadata().getSpecVersion(),
+                modelEvent.getName(),
+                modelEvent.getNamespace(),
+                modelEvent.getDefinition());
     }
 
     public String getGroupId() {

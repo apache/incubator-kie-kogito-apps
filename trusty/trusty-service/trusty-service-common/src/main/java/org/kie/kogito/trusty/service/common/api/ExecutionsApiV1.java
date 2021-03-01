@@ -161,7 +161,8 @@ public class ExecutionsApiV1 {
     @GET
     @Path("/{executionId}/model")
     @APIResponses(value = {
-            @APIResponse(description = "Gets the model associated with an execution.", responseCode = "200", content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(type = SchemaType.OBJECT, implementation = DMNModelWithMetadata.class))),
+            @APIResponse(description = "Gets the model associated with an execution.", responseCode = "200",
+                    content = @Content(mediaType = MediaType.TEXT_PLAIN, schema = @Schema(type = SchemaType.OBJECT, implementation = DMNModelWithMetadata.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(summary = "Gets the model associated with an execution.")

@@ -29,8 +29,7 @@ public class MapToListTestField<M, K, V, L> extends ListTestField<M, L> {
             BiConsumer<M, Map<K, V>> setter,
             Class<L> elementClass,
             Function<Map<K, V>, List<L>> mapToList,
-            Function<List<L>, Map<K, V>> listToMap
-    ) {
+            Function<List<L>, Map<K, V>> listToMap) {
         super(fieldName, mapToList.apply(fieldValue), obj -> mapToList.apply(getter.apply(obj)), (obj, value) -> setter.accept(obj, listToMap.apply(value)), elementClass);
     }
 }

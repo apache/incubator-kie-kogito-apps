@@ -39,16 +39,16 @@ public class ModelIdentifierTest {
     @ParameterizedTest
     @MethodSource("provideParametersForModelIdCreator")
     void isBlank_ShouldReturnTrueForNullOrBlankStrings(final String groupId,
-                                                       final String artifactId,
-                                                       final String version,
-                                                       final String name,
-                                                       final String namespace,
-                                                       final String expected) {
+            final String artifactId,
+            final String version,
+            final String name,
+            final String namespace,
+            final String expected) {
         ModelIdentifier modelIdentifier = new ModelIdentifier(groupId,
-                                                              artifactId,
-                                                              version,
-                                                              name,
-                                                              namespace);
+                artifactId,
+                version,
+                name,
+                namespace);
         assertEquals(expected, modelIdentifier.getIdentifier());
     }
 }

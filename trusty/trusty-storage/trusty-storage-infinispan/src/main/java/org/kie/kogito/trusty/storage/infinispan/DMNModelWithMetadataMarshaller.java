@@ -17,8 +17,9 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DMNModelWithMetadataMarshaller extends AbstractModelMarshaller<DMNModelWithMetadata> {
 
@@ -35,8 +36,7 @@ public class DMNModelWithMetadataMarshaller extends AbstractModelMarshaller<DMNM
                 reader.readString(DMNModelWithMetadata.DMN_VERSION_FIELD),
                 reader.readString(DMNModelWithMetadata.NAME_FIELD),
                 reader.readString(DMNModelWithMetadata.NAMESPACE_FIELD),
-                reader.readString(DMNModelWithMetadata.MODEL_FIELD)
-        );
+                reader.readString(DMNModelWithMetadata.MODEL_FIELD));
     }
 
     @Override
