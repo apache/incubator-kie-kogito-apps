@@ -175,19 +175,23 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
   setSelectedInstances={[MockFunction]}
 >
   <TableComposable
-    aria-label="Expandable Table"
+    aria-label="Process List Table"
+    data-ouia-component-type="process-list-table"
+    data-ouia-safe={true}
     variant="compact"
   >
     <TableComposableBase
-      aria-label="Expandable Table"
+      aria-label="Process List Table"
+      data-ouia-component-type="process-list-table"
+      data-ouia-safe={true}
       innerRef={null}
       variant="compact"
     >
       <table
-        aria-label="Expandable Table"
+        aria-label="Process List Table"
         className="pf-c-table pf-m-grid-md pf-m-compact"
         data-ouia-component-id="OUIA-Generated-Table-2"
-        data-ouia-component-type="PF4/Table"
+        data-ouia-component-type="process-list-table"
         data-ouia-safe={true}
         role="grid"
       >
@@ -2906,19 +2910,23 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
   setSelectedInstances={[MockFunction]}
 >
   <TableComposable
-    aria-label="Expandable Table"
+    aria-label="Process List Table"
+    data-ouia-component-type="process-list-table"
+    data-ouia-safe={true}
     variant="compact"
   >
     <TableComposableBase
-      aria-label="Expandable Table"
+      aria-label="Process List Table"
+      data-ouia-component-type="process-list-table"
+      data-ouia-safe={true}
       innerRef={null}
       variant="compact"
     >
       <table
-        aria-label="Expandable Table"
+        aria-label="Process List Table"
         className="pf-c-table pf-m-grid-md pf-m-compact"
         data-ouia-component-id="OUIA-Generated-Table-1"
-        data-ouia-component-type="PF4/Table"
+        data-ouia-component-type="process-list-table"
         data-ouia-safe={true}
         role="grid"
       >

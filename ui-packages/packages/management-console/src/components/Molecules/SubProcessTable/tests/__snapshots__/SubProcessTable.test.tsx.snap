@@ -434,7 +434,7 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
   setSelectedInstances={[MockFunction]}
 >
   <Table
-    aria-label="Simple Table"
+    aria-label="Sub Process Table"
     borders={true}
     canSelectAll={true}
     canSortFavorites={true}
@@ -460,8 +460,10 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
         },
       ]
     }
-    className=""
+    className="kogito-management-console__compact-table"
     contentId="expanded-content"
+    data-ouia-component-type="sub-process-table"
+    data-ouia-safe={true}
     dropdownDirection="down"
     dropdownPosition="right"
     expandId="expandable-toggle"
@@ -659,9 +661,9 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
     variant={null}
   >
     <Provider
-      aria-label="Simple Table"
+      aria-label="Sub Process Table"
       borders={true}
-      className=""
+      className="kogito-management-console__compact-table"
       columns={
         Array [
           Object {
@@ -942,6 +944,8 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
           },
         ]
       }
+      data-ouia-component-type="sub-process-table"
+      data-ouia-safe={true}
       gridBreakPoint="grid-md"
       isStickyHeader={false}
       ouiaSafe={true}
@@ -961,9 +965,11 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
       variant={null}
     >
       <TableComposable
-        aria-label="Simple Table"
+        aria-label="Sub Process Table"
         borders={true}
-        className=""
+        className="kogito-management-console__compact-table"
+        data-ouia-component-type="sub-process-table"
+        data-ouia-safe={true}
         gridBreakPoint="grid-md"
         isStickyHeader={false}
         ouiaSafe={true}
@@ -971,9 +977,11 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
         variant={null}
       >
         <TableComposableBase
-          aria-label="Simple Table"
+          aria-label="Sub Process Table"
           borders={true}
-          className=""
+          className="kogito-management-console__compact-table"
+          data-ouia-component-type="sub-process-table"
+          data-ouia-safe={true}
           gridBreakPoint="grid-md"
           innerRef={null}
           isStickyHeader={false}
@@ -982,10 +990,10 @@ exports[`SubProcessTable tests snapshot of children in table 1`] = `
           variant={null}
         >
           <table
-            aria-label="Simple Table"
-            className="pf-c-table pf-m-grid-md"
+            aria-label="Sub Process Table"
+            className="kogito-management-console__compact-table pf-c-table pf-m-grid-md"
             data-ouia-component-id="OUIA-Generated-Table-2"
-            data-ouia-component-type="PF4/Table"
+            data-ouia-component-type="sub-process-table"
             data-ouia-safe={true}
             role="grid"
           >
