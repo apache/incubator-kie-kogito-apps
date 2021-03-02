@@ -1,10 +1,12 @@
 import {
+  componentOuiaProps,
   EndpointLink,
   GraphQL,
   ItemDescriptor,
   KogitoEmptyState,
   KogitoEmptyStateType,
   KogitoSpinner,
+  OUIAProps,
   ServerErrors
 } from '@kogito-apps/common';
 import { HistoryIcon } from '@patternfly/react-icons';
@@ -23,6 +25,7 @@ import { Checkbox } from '@patternfly/react-core';
 import ProcessInstancesActionsKebab from '../../Atoms/ProcessInstancesActionsKebab/ProcessInstancesActionsKebab';
 import ErrorPopover from '../../Atoms/ErrorPopover/ErrorPopover';
 import { filterType } from '../ProcessListToolbar/ProcessListToolbar';
+import './SubProcessTable.css';
 interface IOwnProps {
   parentProcessId: string;
   filters: filterType;
@@ -36,14 +39,16 @@ interface IOwnProps {
   selectedInstances: GraphQL.ProcessInstance[];
   setSelectableInstances: React.Dispatch<React.SetStateAction<number>>;
 }
-const SubProcessTable: React.FC<IOwnProps> = ({
+const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
   parentProcessId,
   filters,
   initData,
   setInitData,
   setSelectedInstances,
   setSelectableInstances,
-  selectedInstances
+  selectedInstances,
+  ouiaId,
+  ouiaSafe
 }) => {
   const [rows, setRows] = useState<(IRow | string[])[]>([]);
   const { loading, error, data } = GraphQL.useGetChildInstancesQuery({
@@ -257,7 +262,13 @@ const SubProcessTable: React.FC<IOwnProps> = ({
     );
   }
   return (
-    <Table aria-label="Simple Table" cells={columns} rows={rows}>
+    <Table
+      aria-label="Sub Process Table"
+      cells={columns}
+      rows={rows}
+      className="kogito-management-console__compact-table"
+      {...componentOuiaProps(ouiaId, 'sub-process-table', ouiaSafe)}
+    >
       <TableHeader />
       <TableBody />
     </Table>

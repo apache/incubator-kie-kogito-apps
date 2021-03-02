@@ -9,12 +9,14 @@ import {
   ExpandableRowContent
 } from '@patternfly/react-table';
 import {
+  componentOuiaProps,
   EndpointLink,
   GraphQL,
   ItemDescriptor,
   KogitoEmptyState,
   KogitoEmptyStateType,
-  KogitoSpinner
+  KogitoSpinner,
+  OUIAProps
 } from '@kogito-apps/common';
 import {
   checkProcessInstanceState,
@@ -57,7 +59,7 @@ interface RowPairType {
   noPadding?: boolean;
 }
 
-const ProcessListTable: React.FC<IOwnProps> = ({
+const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
   initData,
   loading,
   filters,
@@ -68,7 +70,9 @@ const ProcessListTable: React.FC<IOwnProps> = ({
   selectedInstances,
   setSelectableInstances,
   setIsAllChecked,
-  selectableInstances
+  selectableInstances,
+  ouiaId,
+  ouiaSafe
 }) => {
   const [rowPairs, setRowPairs] = useState<RowPairType[]>([]);
   const columns: string[] = ['Id', 'Status', 'Created', 'Last update', ''];
@@ -282,7 +286,11 @@ const ProcessListTable: React.FC<IOwnProps> = ({
 
   return (
     <React.Fragment>
-      <TableComposable aria-label="Expandable Table" variant={'compact'}>
+      <TableComposable
+        aria-label="Process List Table"
+        variant={'compact'}
+        {...componentOuiaProps(ouiaId, 'process-list-table', ouiaSafe)}
+      >
         <Thead>
           <Tr>
             <Th
