@@ -18,12 +18,14 @@ package org.kie.kogito.taskassigning.core.model.solver.filter;
 import org.kie.kogito.taskassigning.core.model.ChainElement;
 import org.kie.kogito.taskassigning.core.model.DefaultLabels;
 import org.kie.kogito.taskassigning.core.model.ModelConstants;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
 import org.optaplanner.core.api.score.director.ScoreDirector;
 import org.optaplanner.core.impl.heuristic.selector.common.decorator.SelectionFilter;
 import org.optaplanner.core.impl.heuristic.selector.move.generic.ChangeMove;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.hasAllLabels;
 import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotentialOwner;
@@ -33,6 +35,7 @@ import static org.kie.kogito.taskassigning.core.model.solver.TaskHelper.isPotent
  * if UserB is a potential owner for the task and has all the required skills for the task if any, or if it's the
  * planning user.
  */
+@RegisterForReflection
 public class TaskByGroupAndSkillsChangeMoveFilter
         implements SelectionFilter<TaskAssigningSolution, ChangeMove<TaskAssigningSolution>> {
 

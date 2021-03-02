@@ -18,10 +18,12 @@ package org.kie.kogito.taskassigning.core.model.solver;
 import java.util.Objects;
 
 import org.kie.kogito.taskassigning.core.model.ChainElement;
-import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
+import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.optaplanner.core.api.domain.variable.VariableListener;
 import org.optaplanner.core.api.score.director.ScoreDirector;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import static org.kie.kogito.taskassigning.core.model.TaskAssignment.END_TIME_IN_MINUTES;
 import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_IN_MINUTES;
@@ -35,7 +37,15 @@ import static org.kie.kogito.taskassigning.core.model.TaskAssignment.START_TIME_
  * e.g. when sourceTask changes, the startTime and endTime of tasks {sourceTask, Task4, Task5} is recalculated
  * accordingly.
  */
+
+// workaround for https://issues.redhat.com/browse/PLANNER-2308
+// TODO evaluate removing whe the issue is sorted out.
+@RegisterForReflection
 public class StartAndEndTimeUpdatingVariableListener implements VariableListener<TaskAssigningSolution, TaskAssignment> {
+
+    public StartAndEndTimeUpdatingVariableListener() {
+        // required for native execution.
+    }
 
     @Override
     public void beforeEntityAdded(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment taskAssignment) {
@@ -70,7 +80,7 @@ public class StartAndEndTimeUpdatingVariableListener implements VariableListener
     private static void updateStartAndEndTime(final ScoreDirector<TaskAssigningSolution> scoreDirector, final TaskAssignment sourceTaskAssignment) {
         ChainElement previous = sourceTaskAssignment.getPreviousElement();
         TaskAssignment shadowTaskAssignment = sourceTaskAssignment;
-        Integer previousEndTime = previous == null || !previous.isTaskAssignment() ? 0 : ((TaskAssignment)previous).getEndTimeInMinutes();
+        Integer previousEndTime = previous == null || !previous.isTaskAssignment() ? 0 : ((TaskAssignment) previous).getEndTimeInMinutes();
         Integer startTime = previousEndTime;
         Integer endTime = calculateEndTime(shadowTaskAssignment, startTime);
         while (shadowTaskAssignment != null && !Objects.equals(shadowTaskAssignment.getStartTimeInMinutes(), startTime)) {
