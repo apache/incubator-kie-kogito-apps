@@ -77,7 +77,8 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
   const [rowPairs, setRowPairs] = useState<RowPairType[]>([]);
   const columns: string[] = ['Id', 'Status', 'Created', 'Last update', ''];
   const numColumns: number = columns.length;
-
+  const currentPage = { prev: location.pathname };
+  window.localStorage.setItem('state', JSON.stringify(currentPage));
   useEffect(() => {
     const tempRowPairs = [];
     if (!loading && Object.keys(initData).length !== 0) {

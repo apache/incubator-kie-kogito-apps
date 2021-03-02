@@ -56,6 +56,8 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
       rootProcessInstanceId: parentProcessId
     }
   });
+  const currentPage = { prev: location.pathname };
+  window.localStorage.setItem('state', JSON.stringify(currentPage));
   const columns = [
     {
       title: ''
