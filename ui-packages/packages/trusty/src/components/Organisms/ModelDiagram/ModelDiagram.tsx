@@ -2,6 +2,13 @@ import React, { useEffect } from 'react';
 import { ModelData } from '../../../types';
 import { StandaloneEditorApi } from '@kogito-tooling/kie-editors-standalone/dist/common/Editor';
 import * as DmnEditor from '@kogito-tooling/kie-editors-standalone/dist/dmn';
+import {
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateIcon,
+  Title
+} from '@patternfly/react-core';
+import { CubesIcon } from '@patternfly/react-icons';
 
 const DMN1_2: string = 'http://www.omg.org/spec/DMN/20151101/dmn.xsd';
 
@@ -31,7 +38,17 @@ const ModelDiagram = (props: ModelDiagramProps) => {
 };
 
 function makeUnknownModel(): JSX.Element {
-  return <div>Unknown model type</div>;
+  return (
+    <EmptyState>
+      <EmptyStateIcon icon={CubesIcon} />
+      <Title headingLevel="h4" size="lg">
+        Unknown model type
+      </Title>
+      <EmptyStateBody>
+        The type of model is unknown and cannot be rendered.
+      </EmptyStateBody>
+    </EmptyState>
+  );
 }
 
 function makeDMNEditor(): JSX.Element {
