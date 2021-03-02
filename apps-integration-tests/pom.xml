@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>kogito-apps</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0.Final</version>
   </parent>
   <artifactId>apps-integration-tests</artifactId>
   <name>Kogito Apps :: Integration Tests</name>
