@@ -42,10 +42,10 @@ function makeUnknownModel(): JSX.Element {
     <EmptyState>
       <EmptyStateIcon icon={CubesIcon} />
       <Title headingLevel="h4" size="lg">
-        Unknown model type
+        Unsupported model type
       </Title>
       <EmptyStateBody>
-        The type of model is unknown and cannot be rendered.
+        The type of model is unsupported and cannot be rendered.
       </EmptyStateBody>
     </EmptyState>
   );

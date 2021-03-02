@@ -21,7 +21,7 @@ describe('ModelDiagram', () => {
   test('renders a message if the model type is not supported', () => {
     const wrapper = mount(<ModelDiagram model={modelDataUnknown} />);
 
-    expect(wrapper.find('div').text()).toEqual('Unknown model type');
+    expect(wrapper.find('h4').text()).toEqual('Unsupported model type');
   });
 });
 
