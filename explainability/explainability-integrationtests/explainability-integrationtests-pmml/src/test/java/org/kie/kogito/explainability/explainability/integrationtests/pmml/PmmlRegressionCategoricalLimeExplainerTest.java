@@ -23,18 +23,21 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
@@ -61,9 +64,12 @@ class PmmlRegressionCategoricalLimeExplainerTest {
 
     @Test
     void testPMMLRegressionCategorical() throws Exception {
+        String[] categoryOne = new String[]{"red", "blue", "green", "yellow", "grey", "pink", "white", "black"};
+        String[] categoryTwo = new String[]{"classA", "classB", "classC", "NA"};
+
         List<Feature> features = new ArrayList<>();
-        features.add(FeatureFactory.newCategoricalFeature("mapX", "red"));
-        features.add(FeatureFactory.newCategoricalFeature("mapY", "classB"));
+        features.add(FeatureFactory.newCategoricalFeature("mapX", categoryOne[0]));
+        features.add(FeatureFactory.newCategoricalFeature("mapY", categoryTwo[1]));
         PredictionInput input = new PredictionInput(features);
 
         Random random = new Random();
@@ -101,5 +107,23 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
                 0.5, 0.5));
+
+        String decision = "result";
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            List<Feature> fs = new ArrayList<>();
+            fs.add(FeatureFactory.newCategoricalFeature("mapX", categoryOne[i % categoryOne.length]));
+            fs.add(FeatureFactory.newCategoricalFeature("mapY", categoryTwo[i % categoryTwo.length]));
+            inputs.add(new PredictionInput(fs));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 4;
+        int chunkSize = 5;
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        AssertionsForClassTypes.assertThat(precision).isEqualTo(0);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        AssertionsForClassTypes.assertThat(recall).isEqualTo(1);
+        double f1 = 2 * (precision * recall) / (precision + recall);
+        AssertionsForClassTypes.assertThat(f1).isEqualTo(0);
     }
 }

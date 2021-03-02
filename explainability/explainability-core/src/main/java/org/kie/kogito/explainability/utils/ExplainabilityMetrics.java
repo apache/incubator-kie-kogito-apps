@@ -273,32 +273,34 @@ public class ExplainabilityMetrics {
             Output output = prediction.getOutput().getByName(decision);
             Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
                     .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-            Saliency saliency = stringSaliencyMap.get(decision);
-            List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
-                    .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
+            if (stringSaliencyMap.containsKey(decision)) {
+                Saliency saliency = stringSaliencyMap.get(decision);
+                List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
+                        .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
 
-            List<Feature> importantFeatures = new ArrayList<>();
-            for (FeatureImportance featureImportance : topFeatures) {
-                importantFeatures.add(featureImportance.getFeature());
-            }
+                List<Feature> importantFeatures = new ArrayList<>();
+                for (FeatureImportance featureImportance : topFeatures) {
+                    importantFeatures.add(featureImportance.getFeature());
+                }
 
-            PredictionInput input = bottomChunk.get(currentChunk).getInput();
-            List<Feature> features = List.copyOf(input.getFeatures());
-            for (Feature f : importantFeatures) {
-                features = DataUtils.replaceFeatures(f, features);
-            }
-            input = new PredictionInput(features);
+                PredictionInput input = bottomChunk.get(currentChunk).getInput();
+                List<Feature> features = List.copyOf(input.getFeatures());
+                for (Feature f : importantFeatures) {
+                    features = DataUtils.replaceFeatures(f, features);
+                }
+                input = new PredictionInput(features);
 
-            List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
-                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-            PredictionOutput predictionOutput = predictionOutputList.get(0);
-            Output newOutput = predictionOutput.getByName(decision);
-            if (output.getValue().equals(newOutput.getValue())) {
-                tp++;
-            } else {
-                fn++;
+                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
+                        .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+                PredictionOutput predictionOutput = predictionOutputList.get(0);
+                Output newOutput = predictionOutput.getByName(decision);
+                if (output.getValue().equals(newOutput.getValue())) {
+                    tp++;
+                } else {
+                    fn++;
+                }
+                currentChunk++;
             }
-            currentChunk++;
         }
         return tp / (tp + fn);
     }
@@ -337,32 +339,34 @@ public class ExplainabilityMetrics {
             Output output = prediction.getOutput().getByName(decision);
             Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
                     .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-            Saliency saliency = stringSaliencyMap.get(decision);
-            List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
-                    .sorted(Comparator.comparingDouble(FeatureImportance::getScore)).limit(k).collect(Collectors.toList());
+            if (stringSaliencyMap.containsKey(decision)) {
+                Saliency saliency = stringSaliencyMap.get(decision);
+                List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
+                        .sorted(Comparator.comparingDouble(FeatureImportance::getScore)).limit(k).collect(Collectors.toList());
 
-            List<Feature> importantFeatures = new ArrayList<>();
-            for (FeatureImportance featureImportance : topFeatures) {
-                importantFeatures.add(featureImportance.getFeature());
-            }
+                List<Feature> importantFeatures = new ArrayList<>();
+                for (FeatureImportance featureImportance : topFeatures) {
+                    importantFeatures.add(featureImportance.getFeature());
+                }
 
-            PredictionInput input = topChunk.get(currentChunk).getInput();
-            List<Feature> features = List.copyOf(input.getFeatures());
-            for (Feature f : importantFeatures) {
-                features = DataUtils.replaceFeatures(f, features);
-            }
-            input = new PredictionInput(features);
+                PredictionInput input = topChunk.get(currentChunk).getInput();
+                List<Feature> features = List.copyOf(input.getFeatures());
+                for (Feature f : importantFeatures) {
+                    features = DataUtils.replaceFeatures(f, features);
+                }
+                input = new PredictionInput(features);
 
-            List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
-                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-            PredictionOutput predictionOutput = predictionOutputList.get(0);
-            Output newOutput = predictionOutput.getByName(decision);
-            if (!output.getValue().equals(newOutput.getValue())) {
-                tp++;
-            } else {
-                fp++;
+                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
+                        .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+                PredictionOutput predictionOutput = predictionOutputList.get(0);
+                Output newOutput = predictionOutput.getByName(decision);
+                if (!output.getValue().equals(newOutput.getValue())) {
+                    tp++;
+                } else {
+                    fp++;
+                }
+                currentChunk++;
             }
-            currentChunk++;
         }
         return tp / (tp + fp);
     }
