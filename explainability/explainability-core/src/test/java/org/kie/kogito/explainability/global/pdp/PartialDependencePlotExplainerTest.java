@@ -46,6 +46,7 @@ import org.kie.kogito.explainability.utils.DataUtils;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -122,12 +123,8 @@ class PartialDependencePlotExplainerTest {
         PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
         PredictionProvider brokenProvider = inputs -> supplyAsync(
                 () -> {
-                    try {
-                        Thread.sleep(1000);
-                        return Collections.emptyList();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException("this is a test");
-                    }
+                    await().atLeast(1, TimeUnit.SECONDS).until(() -> false);
+                    throw new RuntimeException("this should never happen");
                 });
 
         Assertions.assertThrows(TimeoutException.class,
@@ -136,26 +133,25 @@ class PartialDependencePlotExplainerTest {
         Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
     }
 
-    @Test
-    void testTextClassifier() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testTextClassifier(int seed) throws Exception {
         Random random = new Random();
-        for (int seed = 0; seed < 5; seed++) {
-            random.setSeed(seed);
-            PartialDependencePlotExplainer partialDependencePlotExplainer = new PartialDependencePlotExplainer();
-            PredictionProvider model = TestUtils.getDummyTextClassifier();
-            Collection<Prediction> predictions = new ArrayList<>(3);
+        random.setSeed(seed);
+        PartialDependencePlotExplainer partialDependencePlotExplainer = new PartialDependencePlotExplainer();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        Collection<Prediction> predictions = new ArrayList<>(3);
 
-            List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
-                    "huge donation for you!", "bitcoin for you");
-            for (String text : texts) {
-                List<Feature> features = new ArrayList<>();
-                features.add(FeatureFactory.newFulltextFeature("text", text));
-                PredictionInput predictionInput = new PredictionInput(features);
-                PredictionOutput predictionOutput = model.predictAsync(List.of(predictionInput)).get().get(0);
-                predictions.add(new Prediction(predictionInput, predictionOutput));
-            }
-            List<PartialDependenceGraph> pdps = partialDependencePlotExplainer.explainFromPredictions(model, predictions);
-            assertThat(pdps).isNotEmpty();
+        List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
+                "huge donation for you!", "bitcoin for you");
+        for (String text : texts) {
+            List<Feature> features = new ArrayList<>();
+            features.add(FeatureFactory.newFulltextFeature("text", text));
+            PredictionInput predictionInput = new PredictionInput(features);
+            PredictionOutput predictionOutput = model.predictAsync(List.of(predictionInput)).get().get(0);
+            predictions.add(new Prediction(predictionInput, predictionOutput));
         }
+        List<PartialDependenceGraph> pdps = partialDependencePlotExplainer.explainFromPredictions(model, predictions);
+        assertThat(pdps).isNotEmpty();
     }
 }

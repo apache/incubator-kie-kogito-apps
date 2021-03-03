@@ -52,7 +52,7 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
-public class ExplainabilityMessagingHandlerIT {
+class ExplainabilityMessagingHandlerIT {
 
     private static final String TOPIC_REQUEST = "trusty-explainability-request-test";
     private static final String TOPIC_RESULT = "trusty-explainability-result-test";
@@ -68,7 +68,7 @@ public class ExplainabilityMessagingHandlerIT {
     private ObjectMapper objectMapper;
 
     @Test
-    public void explainabilityRequestIsProcessedAndAResultMessageIsSent() throws Exception {
+    void explainabilityRequestIsProcessedAndAResultMessageIsSent() throws Exception {
         KafkaClient kafkaClient = new KafkaClient(kafkaBootstrapServers);
 
         String executionId = "idException";
@@ -98,6 +98,6 @@ public class ExplainabilityMessagingHandlerIT {
         });
 
         countDownLatch.await(5, TimeUnit.SECONDS);
-        assertEquals(countDownLatch.getCount(), 0);
+        assertEquals(0, countDownLatch.getCount());
     }
 }

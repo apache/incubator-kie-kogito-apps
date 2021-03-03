@@ -124,28 +124,11 @@ class TypeTest {
         assertNotEquals(value, perturbedValue);
     }
 
-    @Test
-    void testPerturbURI() {
+    @ParameterizedTest
+    @ValueSource(strings = {"http://localhost:8080", "http://128.0.0.1:8081", "http://localhost:8080/path#paragraph1"})
+    void testPerturbURI(String param) {
         PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
-        Value<?> value = new Value<>("http://localhost:8080");
-        Feature f = new Feature("name", Type.URI, value);
-        Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
-        assertNotEquals(value, perturbedValue);
-    }
-
-    @Test
-    void testPerturbNonLocalhostURI() {
-        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
-        Value<?> value = new Value<>("http://128.0.0.1:8081");
-        Feature f = new Feature("name", Type.URI, value);
-        Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
-        assertNotEquals(value, perturbedValue);
-    }
-
-    @Test
-    void testPerturbFragmentURI() {
-        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
-        Value<?> value = new Value<>("http://localhost:8080/path#paragraph1");
+        Value<?> value = new Value<>(param);
         Feature f = new Feature("name", Type.URI, value);
         Value<?> perturbedValue = f.getType().perturb(f.getValue(), perturbationContext);
         assertNotEquals(value, perturbedValue);
@@ -344,8 +327,9 @@ class TypeTest {
         }
         values[5] = new Value<>(Double.NaN);
         List<double[]> vectors = Type.NUMBER.encode(params, target, values);
-        assertThat(vectors).isNotEmpty();
-        assertThat(vectors).doesNotContain(new double[] { Double.NaN });
+        assertThat(vectors)
+                .isNotEmpty()
+                .doesNotContain(new double[] { Double.NaN });
     }
 
     @ParameterizedTest

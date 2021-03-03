@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -182,7 +184,9 @@ class MatrixUtilsTest {
     void testJitterInvert() {
         // since there's some randomness in jitter invert, let's make sure it's stable
         for (int run = 0; run < 100; run++) {
-            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10, 1e-9);
+            Random random = new Random();
+            random.setSeed(run);
+            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10, 1e-9, random);
 
             // since the output of jitterInvert is non-deterministic for singular matrices, check to make sure
             // key properties of the inverse matrix hold true; namely M*M_inv = Identity

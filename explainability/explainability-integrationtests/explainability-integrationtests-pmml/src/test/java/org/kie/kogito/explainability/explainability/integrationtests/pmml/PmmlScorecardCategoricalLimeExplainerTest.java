@@ -93,8 +93,9 @@ class PmmlScorecardCategoricalLimeExplainerTest {
 
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        assertThat(predictionOutputs).isNotNull();
-        assertThat(predictionOutputs).isNotEmpty();
+        assertThat(predictionOutputs)
+                .isNotNull()
+                .isNotEmpty();
         PredictionOutput output = predictionOutputs.get(0);
         assertThat(output).isNotNull();
         Prediction prediction = new Prediction(input, output);

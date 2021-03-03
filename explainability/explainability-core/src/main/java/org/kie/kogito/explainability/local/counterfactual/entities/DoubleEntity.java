@@ -46,10 +46,6 @@ public class DoubleEntity implements CounterfactualEntity {
     public DoubleEntity() {
     }
 
-    private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum, boolean constrained) {
-        this(originalValue, featureName, minimum, maximum, null, constrained);
-    }
-
     private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum, FeatureDistribution featureDistribution, boolean constrained) {
         this.proposedValue = originalValue;
         this.originalValue = originalValue;
@@ -119,7 +115,7 @@ public class DoubleEntity implements CounterfactualEntity {
     }
 
     @ValueRangeProvider(id = "doubleRange")
-    public ValueRange getValueRange() {
+    public ValueRange<Double> getValueRange() {
         return ValueRangeFactory.createDoubleValueRange(doubleRangeMinimum, doubleRangeMaximum);
     }
 

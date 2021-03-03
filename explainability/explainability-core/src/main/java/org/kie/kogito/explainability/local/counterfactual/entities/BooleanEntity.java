@@ -103,7 +103,7 @@ public class BooleanEntity implements CounterfactualEntity {
     }
 
     @ValueRangeProvider(id = "booleanRange")
-    public ValueRange getValueRange() {
+    public ValueRange<Boolean> getValueRange() {
         return ValueRangeFactory.createBooleanValueRange();
     }
 

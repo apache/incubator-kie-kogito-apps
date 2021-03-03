@@ -63,39 +63,41 @@ class DatasetEncoder {
         List<Pair<double[], Double>> trainingSet = new LinkedList<>();
         List<List<double[]>> columnData;
         List<PredictionInput> flatInputs = DataUtils.linearizeInputs(perturbedInputs);
-        if (!flatInputs.isEmpty() && !predictedOutputs.isEmpty() && !targetInputFeatures.isEmpty() && originalOutput != null) {
-            columnData = getColumnData(flatInputs, encodingParams);
+        if (flatInputs.isEmpty() || predictedOutputs.isEmpty() || targetInputFeatures.isEmpty() || originalOutput == null) {
+            return trainingSet;
+        }
+        columnData = getColumnData(flatInputs, encodingParams);
 
-            int pi = 0;
-            for (Output output : predictedOutputs) {
-                List<Double> x = new LinkedList<>();
-                for (List<double[]> column : columnData) {
-                    double[] doubles = column.get(pi);
-                    x.addAll(Arrays.asList(ArrayUtils.toObject(doubles)));
-                }
-                double y;
-                if (Type.NUMBER.equals(originalOutput.getType()) || Type.BOOLEAN.equals(originalOutput.getType())) {
-                    y = output.getValue().asNumber();
-                } else {
-                    Object originalObject = originalOutput.getValue().getUnderlyingObject();
-                    Object outputObject = output.getValue().getUnderlyingObject();
-                    if (originalObject == null || outputObject == null) {
-                        y = originalObject == outputObject ? 1d : 0d;
-                    } else {
-                        y = originalObject.equals(outputObject) ? 1d : 0d;
-                    }
-                }
-                double[] input = new double[x.size()];
-                int i = 0;
-                for (Double d : x) {
-                    input[i] = d;
-                    i++;
-                }
-                Pair<double[], Double> sample = new ImmutablePair<>(input, y);
-                trainingSet.add(sample);
-
-                pi++;
+        int pi = 0;
+        for (Output output : predictedOutputs) {
+            List<Double> x = new LinkedList<>();
+            columnData.stream()
+            for (List<double[]> column : columnData) {
+                double[] doubles = column.get(pi);
+                x.addAll(Arrays.asList(ArrayUtils.toObject(doubles)));
             }
+            double y;
+            if (Type.NUMBER.equals(originalOutput.getType()) || Type.BOOLEAN.equals(originalOutput.getType())) {
+                y = output.getValue().asNumber();
+            } else {
+                Object originalObject = originalOutput.getValue().getUnderlyingObject();
+                Object outputObject = output.getValue().getUnderlyingObject();
+                if (originalObject == null || outputObject == null) {
+                    y = originalObject == outputObject ? 1d : 0d;
+                } else {
+                    y = originalObject.equals(outputObject) ? 1d : 0d;
+                }
+            }
+            double[] input = new double[x.size()];
+            int i = 0;
+            for (Double d : x) {
+                input[i] = d;
+                i++;
+            }
+            Pair<double[], Double> sample = new ImmutablePair<>(input, y);
+            trainingSet.add(sample);
+
+            pi++;
         }
         return trainingSet;
     }

@@ -92,7 +92,6 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         long start = System.currentTimeMillis();
         List<PartialDependenceGraph> pdps = new ArrayList<>();
         List<FeatureDistribution> featureDistributions = dataDistribution.asFeatureDistributions();
-        int noOfFeatures = featureDistributions.size();
 
         // fetch entire data distributions for all features
         List<PredictionInput> trainingData = dataDistribution.sample(config.getSeriesLength());
@@ -152,7 +151,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
             List<Value<?>> yValues = collapseMarginalImpacts(valueCounts, outputDecision.getType());
             return new PartialDependenceGraph(feature, outputDecision, xsValues, yValues);
         } else {
-            throw new RuntimeException("cannot produce PDP for null decision");
+            throw new IllegalArgumentException("cannot produce PDP for null decision");
         }
     }
 
@@ -216,12 +215,7 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
     private List<PredictionOutput> getOutputs(PredictionProvider model, List<PredictionInput> predictionInputs)
             throws InterruptedException, ExecutionException, TimeoutException {
         List<PredictionOutput> predictionOutputs;
-        try {
-            predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
-            throw e;
-        }
+        predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         return predictionOutputs;
     }
 

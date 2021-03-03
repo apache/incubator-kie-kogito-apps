@@ -46,10 +46,6 @@ public class IntegerEntity implements CounterfactualEntity {
     public IntegerEntity() {
     }
 
-    private IntegerEntity(Integer originalValue, String featureName, int minimum, int maximum, boolean constrained) {
-        this(originalValue, featureName, minimum, maximum, null, constrained);
-    }
-
     private IntegerEntity(Integer originalValue, String featureName, int minimum, int maximum, FeatureDistribution featureDistribution, boolean constrained) {
         this.proposedValue = originalValue;
         this.originalValue = originalValue;
@@ -108,7 +104,7 @@ public class IntegerEntity implements CounterfactualEntity {
     }
 
     @ValueRangeProvider(id = "intRange")
-    public ValueRange getValueRange() {
+    public ValueRange<Integer> getValueRange() {
         return ValueRangeFactory.createIntValueRange(intRangeMinimum, intRangeMaximum);
     }
 
