@@ -19,7 +19,6 @@ import {
   OUIAProps
 } from '@kogito-apps/common';
 import {
-  checkProcessInstanceState,
   getProcessInstanceDescription,
   ProcessInstanceIconCreator
 } from '../../../utils/Utils';
@@ -198,18 +197,16 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
     clonedInitData.ProcessInstances.forEach(
       (instance: GraphQL.ProcessInstance & { isSelected?: boolean }) => {
         if (processInstance.id === instance.id) {
-          if (!checkProcessInstanceState(instance)) {
-            if (instance.isSelected) {
-              instance.isSelected = false;
-              setSelectedInstances(
-                selectedInstances.filter(
-                  selectedInstance => selectedInstance.id !== instance.id
-                )
-              );
-            } else {
-              instance.isSelected = true;
-              setSelectedInstances([...selectedInstances, instance]);
-            }
+          if (instance.isSelected) {
+            instance.isSelected = false;
+            setSelectedInstances(
+              selectedInstances.filter(
+                selectedInstance => selectedInstance.id !== instance.id
+              )
+            );
+          } else {
+            instance.isSelected = true;
+            setSelectedInstances([...selectedInstances, instance]);
           }
         }
       }
@@ -253,7 +250,10 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
             if (processInstance.id === instance.id) {
               instance.isOpen = false;
               instance.childProcessInstances.forEach(child => {
-                if (!checkProcessInstanceState(child)) {
+                if (
+                  instance.serviceUrl &&
+                  instance.addons.includes('process-management')
+                ) {
                   setSelectableInstances(prev => prev - 1);
                 }
               });

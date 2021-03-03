@@ -23,7 +23,6 @@ import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListTo
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
 import { StaticContext } from 'react-router';
-import { checkProcessInstanceState } from '../../../utils/Utils';
 
 type filterType = {
   status: GraphQL.ProcessInstanceState[];
@@ -218,7 +217,10 @@ const ProcessListPage: React.FC<OUIAProps &
         const newData = initData.ProcessInstances.concat(data.ProcessInstances);
         newData.forEach((process, i) => {
           expanded[i] = false;
-          if (!checkProcessInstanceState(process)) {
+          if (
+            process.serviceUrl &&
+            process.addons.includes('process-management')
+          ) {
             setSelectableInstances(prev => prev + 1);
           }
         });
@@ -226,7 +228,10 @@ const ProcessListPage: React.FC<OUIAProps &
       } else {
         data.ProcessInstances.forEach((process, i) => {
           expanded[i] = false;
-          if (!checkProcessInstanceState(process)) {
+          if (
+            process.serviceUrl &&
+            process.addons.includes('process-management')
+          ) {
             setSelectableInstances(prev => prev + 1);
           }
         });

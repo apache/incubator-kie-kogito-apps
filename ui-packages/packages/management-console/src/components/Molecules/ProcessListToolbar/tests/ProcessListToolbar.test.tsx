@@ -585,7 +585,6 @@ describe('ProcessListToolbar component tests', () => {
       .props()
       ['resetSelected']();
     expect(props.setSelectedInstances).toHaveBeenCalled();
-    expect(props.setSelectableInstances).toHaveBeenCalled();
     expect(props.setIsAllChecked).toHaveBeenCalled();
   });
 });

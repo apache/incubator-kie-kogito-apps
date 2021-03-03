@@ -2776,8 +2776,15 @@ exports[`ProcessListPage tests snapshot test for process list - with expanded 1`
         Array [
           [Function],
         ],
+        Array [
+          [Function],
+        ],
       ],
       "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
         Object {
           "type": "return",
           "value": undefined,

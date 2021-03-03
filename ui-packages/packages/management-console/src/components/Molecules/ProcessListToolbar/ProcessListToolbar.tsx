@@ -29,7 +29,6 @@ import './ProcessListToolbar.css';
 import { GraphQL, OUIAProps, componentOuiaProps } from '@kogito-apps/common';
 import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 import {
-  checkProcessInstanceState,
   formatForBulkListProcessInstance,
   performMultipleAction,
   setTitle
@@ -360,7 +359,8 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
   };
 
   const resetSelected = (): void => {
-    initData.ProcessInstances.forEach(processInstance => {
+    const clonedInitData = _.cloneDeep(initData);
+    clonedInitData.ProcessInstances.forEach(processInstance => {
       processInstance.isSelected = false;
       if (!_.isEmpty(processInstance.childProcessInstances)) {
         processInstance.childProcessInstances.forEach(
@@ -374,7 +374,7 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
     });
     setIsAllChecked(false);
     setSelectedInstances([]);
-    setSelectableInstances(0);
+    setInitData(clonedInitData);
   };
 
   const handleCheckboxSelectClick = (
@@ -395,7 +395,10 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
     if (selection === BulkSelectionType.PARENT) {
       const tempSelectedInstances = [];
       clonedData.ProcessInstances.forEach(instance => {
-        if (!checkProcessInstanceState(instance)) {
+        if (
+          instance.serviceUrl &&
+          instance.addons.includes('process-management')
+        ) {
           instance.isSelected = true;
           tempSelectedInstances.push(instance);
         }
@@ -411,12 +414,18 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
       if (isAllChecked && isCheckBoxClicked) {
         tempSelectedInstances.length = 0;
         clonedData.ProcessInstances.forEach(instance => {
-          if (!checkProcessInstanceState(instance)) {
+          if (
+            instance.serviceUrl &&
+            instance.addons.includes('process-management')
+          ) {
             instance.isSelected = false;
           }
           instance.childProcessInstances.length > 0 &&
             instance.childProcessInstances.forEach(childInstance => {
-              if (!checkProcessInstanceState(childInstance)) {
+              if (
+                childInstance.serviceUrl &&
+                childInstance.addons.includes('process-management')
+              ) {
                 if (instance.isOpen) {
                   childInstance.isSelected = false;
                 }
@@ -425,13 +434,19 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
         });
       } else {
         clonedData.ProcessInstances.forEach(instance => {
-          if (!checkProcessInstanceState(instance)) {
+          if (
+            instance.serviceUrl &&
+            instance.addons.includes('process-management')
+          ) {
             instance.isSelected = true;
             tempSelectedInstances.push(instance);
           }
           instance.childProcessInstances.length > 0 &&
             instance.childProcessInstances.forEach(childInstance => {
-              if (!checkProcessInstanceState(childInstance)) {
+              if (
+                childInstance.serviceUrl &&
+                childInstance.addons.includes('process-management')
+              ) {
                 if (instance.isOpen) {
                   childInstance.isSelected = true;
                   tempSelectedInstances.push(childInstance);

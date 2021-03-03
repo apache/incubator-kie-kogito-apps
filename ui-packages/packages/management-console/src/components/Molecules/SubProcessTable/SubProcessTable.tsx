@@ -12,7 +12,6 @@ import {
 import { HistoryIcon } from '@patternfly/react-icons';
 import { IRow, Table, TableBody, TableHeader } from '@patternfly/react-table';
 import {
-  checkProcessInstanceState,
   getProcessInstanceDescription,
   ProcessInstanceIconCreator
 } from '../../../utils/Utils';
@@ -104,7 +103,10 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
           }
         ) => {
           instance.isSelected = false;
-          if (!checkProcessInstanceState(instance)) {
+          if (
+            instance.serviceUrl &&
+            instance.addons.includes('process-management')
+          ) {
             setSelectableInstances(prev => prev + 1);
           }
         }
@@ -228,18 +230,16 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
       if (instance.id === parentProcessId) {
         instance.childProcessInstances.forEach(childInstance => {
           if (childInstance.id === processInstance.id) {
-            if (!checkProcessInstanceState(childInstance)) {
-              if (childInstance.isSelected) {
-                childInstance.isSelected = false;
-                setSelectedInstances(
-                  selectedInstances.filter(
-                    selectedInstance => selectedInstance.id !== childInstance.id
-                  )
-                );
-              } else {
-                childInstance.isSelected = true;
-                setSelectedInstances([...selectedInstances, childInstance]);
-              }
+            if (childInstance.isSelected) {
+              childInstance.isSelected = false;
+              setSelectedInstances(
+                selectedInstances.filter(
+                  selectedInstance => selectedInstance.id !== childInstance.id
+                )
+              );
+            } else {
+              childInstance.isSelected = true;
+              setSelectedInstances([...selectedInstances, childInstance]);
             }
           }
         });
