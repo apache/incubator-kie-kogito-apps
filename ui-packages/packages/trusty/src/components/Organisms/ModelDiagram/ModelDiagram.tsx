@@ -23,7 +23,7 @@ const ModelDiagram = (props: ModelDiagramProps) => {
 
   useEffect(() => {
     let editor: StandaloneEditorApi | undefined = undefined;
-    if (type === DMN1_2) {
+    if (type === DMN1_2 || dmnVersion === DMN1_3) {
       editor = DmnEditor.open({
         container: document.getElementById('dmn-editor-container'),
         initialContent: Promise.resolve(model.model),
