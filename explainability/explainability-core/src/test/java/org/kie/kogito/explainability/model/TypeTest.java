@@ -125,7 +125,7 @@ class TypeTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"http://localhost:8080", "http://128.0.0.1:8081", "http://localhost:8080/path#paragraph1"})
+    @ValueSource(strings = { "http://localhost:8080", "http://128.0.0.1:8081", "http://localhost:8080/path#paragraph1" })
     void testPerturbURI(String param) {
         PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
         Value<?> value = new Value<>(param);

@@ -154,9 +154,8 @@ class DataUtilsTest {
         assertEquals(features.size(), newFeatures.size());
     }
 
-
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3})
+    @ValueSource(ints = { 0, 1, 2, 3 })
     void testPerturbDropNumeric(int param) {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f0", 1));
@@ -167,7 +166,7 @@ class DataUtilsTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3})
+    @ValueSource(ints = { 0, 1, 2, 3 })
     void testPerturbDropString(int param) {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f0", "foo"));
@@ -179,7 +178,7 @@ class DataUtilsTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 2, 3})
+    @ValueSource(ints = { 0, 1, 2, 3 })
     void testPerturbDropCompositeString(int param) {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f0", "foo"));

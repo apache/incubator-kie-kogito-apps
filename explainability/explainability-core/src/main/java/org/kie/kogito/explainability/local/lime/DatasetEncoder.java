@@ -71,7 +71,6 @@ class DatasetEncoder {
         int pi = 0;
         for (Output output : predictedOutputs) {
             List<Double> x = new LinkedList<>();
-            columnData.stream()
             for (List<double[]> column : columnData) {
                 double[] doubles = column.get(pi);
                 x.addAll(Arrays.asList(ArrayUtils.toObject(doubles)));
