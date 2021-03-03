@@ -25,12 +25,29 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.DataDomain;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.FeatureDomain;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
+import org.kie.kogito.explainability.utils.DataUtils;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
@@ -514,7 +531,7 @@ class CounterfactualExplainerTest {
             throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
         random.setSeed(seed);
-
+        final PerturbationContext perturbationContext = new PerturbationContext(random, 4);
         final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value<>(true), 0.0));
 
         List<Feature> features = new LinkedList<>();
@@ -541,10 +558,12 @@ class CounterfactualExplainerTest {
         final double center = 500.0;
         final double epsilon = 1.0;
 
+        List<Feature> perturbedFeatures = DataUtils.perturbFeatures(features, perturbationContext);
+
         final CounterfactualResult result =
                 runCounterfactualSearch(goal,
                         constraints,
-                        dataDomain, features,
+                        dataDomain, perturbedFeatures,
                         TestUtils.getSumThresholdModel(center, epsilon));
 
         assertFalse(result.isValid());
