@@ -35,7 +35,9 @@ const ModelDiagram = (props: ModelDiagramProps) => {
     }
   }, [model]);
 
-  return dmnVersion === DMN1_2 || dmnVersion === DMN1_3 ? makeDMNEditor() : DEFAULT;
+  return dmnVersion === DMN1_2 || dmnVersion === DMN1_3
+    ? makeDMNEditor()
+    : DEFAULT;
 };
 
 function makeUnknownModel(): JSX.Element {
