@@ -74,10 +74,10 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   const [rowPairs, setRowPairs] = useState<RowPairType[]>([]);
-  const columns: string[] = ['Id', 'Status', 'Created', 'Last update', ''];
-  const numColumns: number = columns.length;
+  const columns: string[] = ['Id', 'Status', 'Created', 'Last update'];
   const currentPage = { prev: location.pathname };
   window.localStorage.setItem('state', JSON.stringify(currentPage));
+
   useEffect(() => {
     const tempRowPairs = [];
     if (!loading && Object.keys(initData).length !== 0) {
@@ -148,7 +148,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
               ),
               processInstance.lastUpdate ? (
                 <span>
-                  <HistoryIcon className="pf-u-mr-sm" /> Updated
+                  <HistoryIcon className="pf-u-mr-sm" /> {'Updated '}
                   <Moment fromNow>
                     {new Date(`${processInstance.lastUpdate}`)}
                   </Moment>
@@ -308,12 +308,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
             <Th>{columns[1]}</Th>
             <Th>{columns[2]}</Th>
             <Th>{columns[3]}</Th>
-            <Th>{columns[4]}</Th>
-            <Th
-              style={{
-                width: '188px'
-              }}
-            />
+            <Th style={{ width: '188px' }}>{columns[4]}</Th>
           </Tr>
         </Thead>
         {!loading && initData && rowPairs.length > 0 ? (
@@ -349,7 +344,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
                     key={`${pairIndex}-child-${++cellIndex}`}
                     dataLabel={columns[cellIndex]}
                     noPadding={rowPairs[pairIndex].noPadding}
-                    colSpan={numColumns}
+                    colSpan={6}
                   >
                     <ExpandableRowContent>
                       {LoadChild(cell, pairIndex)}

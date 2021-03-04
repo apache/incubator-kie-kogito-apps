@@ -319,17 +319,6 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                         </th>
                       </ThBase>
                     </Th>
-                    <Th>
-                      <ThBase
-                        innerRef={null}
-                      >
-                        <th
-                          className=""
-                          onMouseEnter={[Function]}
-                          scope="col"
-                        />
-                      </ThBase>
-                    </Th>
                     <Th
                       style={
                         Object {
@@ -861,16 +850,13 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                       </TdBase>
                     </Td>
                     <Td
-                      dataLabel=""
                       key="0-parent-4"
                     >
                       <TdBase
-                        dataLabel=""
                         innerRef={null}
                       >
                         <td
                           className=""
-                          data-label=""
                         >
                           <t
                             ago={false}
@@ -934,7 +920,8 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 />
                               </svg>
                             </HistoryIcon>
-                             Updated
+                             
+                            Updated 
                             <t
                               ago={false}
                               calendar={false}
@@ -1373,18 +1360,18 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                       </TdBase>
                     </Td>
                     <Td
-                      colSpan={5}
+                      colSpan={6}
                       dataLabel="Status"
                       key="0-child-1"
                     >
                       <TdBase
-                        colSpan={5}
+                        colSpan={6}
                         dataLabel="Status"
                         innerRef={null}
                       >
                         <td
                           className=""
-                          colSpan={5}
+                          colSpan={6}
                           data-label="Status"
                         >
                           <ExpandableRowContent>
@@ -2119,16 +2106,13 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                       </TdBase>
                     </Td>
                     <Td
-                      dataLabel=""
                       key="1-parent-4"
                     >
                       <TdBase
-                        dataLabel=""
                         innerRef={null}
                       >
                         <td
                           className=""
-                          data-label=""
                         >
                           <t
                             ago={false}
@@ -2192,7 +2176,8 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 />
                               </svg>
                             </HistoryIcon>
-                             Updated
+                             
+                            Updated 
                             <t
                               ago={false}
                               calendar={false}
@@ -2626,18 +2611,18 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                       </TdBase>
                     </Td>
                     <Td
-                      colSpan={5}
+                      colSpan={6}
                       dataLabel="Status"
                       key="1-child-1"
                     >
                       <TdBase
-                        colSpan={5}
+                        colSpan={6}
                         dataLabel="Status"
                         innerRef={null}
                       >
                         <td
                           className=""
-                          colSpan={5}
+                          colSpan={6}
                           data-label="Status"
                         >
                           <ExpandableRowContent>
@@ -3059,17 +3044,6 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                         >
                           Last update
                         </th>
-                      </ThBase>
-                    </Th>
-                    <Th>
-                      <ThBase
-                        innerRef={null}
-                      >
-                        <th
-                          className=""
-                          onMouseEnter={[Function]}
-                          scope="col"
-                        />
                       </ThBase>
                     </Th>
                     <Th
@@ -3850,16 +3824,13 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                       </TdBase>
                     </Td>
                     <Td
-                      dataLabel=""
                       key="0-parent-4"
                     >
                       <TdBase
-                        dataLabel=""
                         innerRef={null}
                       >
                         <td
                           className=""
-                          data-label=""
                         >
                           <t
                             ago={false}
@@ -3923,7 +3894,8 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 />
                               </svg>
                             </HistoryIcon>
-                             Updated
+                             
+                            Updated 
                             <t
                               ago={false}
                               calendar={false}
@@ -4384,18 +4356,18 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                       </TdBase>
                     </Td>
                     <Td
-                      colSpan={5}
+                      colSpan={6}
                       dataLabel="Status"
                       key="0-child-1"
                     >
                       <TdBase
-                        colSpan={5}
+                        colSpan={6}
                         dataLabel="Status"
                         innerRef={null}
                       >
                         <td
                           className=""
-                          colSpan={5}
+                          colSpan={6}
                           data-label="Status"
                         >
                           <ExpandableRowContent>
@@ -5130,16 +5102,13 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                       </TdBase>
                     </Td>
                     <Td
-                      dataLabel=""
                       key="1-parent-4"
                     >
                       <TdBase
-                        dataLabel=""
                         innerRef={null}
                       >
                         <td
                           className=""
-                          data-label=""
                         >
                           <t
                             ago={false}
@@ -5203,7 +5172,8 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 />
                               </svg>
                             </HistoryIcon>
-                             Updated
+                             
+                            Updated 
                             <t
                               ago={false}
                               calendar={false}
@@ -5637,18 +5607,18 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                       </TdBase>
                     </Td>
                     <Td
-                      colSpan={5}
+                      colSpan={6}
                       dataLabel="Status"
                       key="1-child-1"
                     >
                       <TdBase
-                        colSpan={5}
+                        colSpan={6}
                         dataLabel="Status"
                         innerRef={null}
                       >
                         <td
                           className=""
-                          colSpan={5}
+                          colSpan={6}
                           data-label="Status"
                         >
                           <ExpandableRowContent>
