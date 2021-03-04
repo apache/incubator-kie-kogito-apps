@@ -16,7 +16,9 @@
 
 package org.kie.kogito.explainability.utils;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 public class MatrixUtils {
@@ -178,13 +180,15 @@ public class MatrixUtils {
     /**
      * Attempt to invert the given matrix.
      * If the matrix is singular, jitter the values slightly to break singularity
-     * 
+     *
      * @param x a square double[][]; the matrix to be inverted
      * @param numRetries the number of times to attempt jittering before giving up
+     * @param zeroThreshold: the threshold to set such that x==0 if abs(x)<zeroThreshold. Use this avoid fp errors
+     * @param random: random number generator
      * @return double[][], the inverted matrix
      *
      */
-    public static double[][] jitterInvert(double[][] x, int numRetries, double zeroThreshold) {
+    public static double[][] jitterInvert(double[][] x, int numRetries, double zeroThreshold, Random random) {
         double[][] xInv;
         for (int jitterTries = 0; jitterTries < numRetries; jitterTries++) {
             try {
@@ -193,7 +197,7 @@ public class MatrixUtils {
             } catch (ArithmeticException e) {
                 // if the inversion is unsuccessful, we can try slightly jittering the matrix.
                 // this will reduce the accuracy of the inversion marginally, but ensures that we get results
-                MatrixUtils.jitterMatrix(x, 1e-8);
+                MatrixUtils.jitterMatrix(x, 1e-8, random);
             }
         }
 
@@ -202,16 +206,29 @@ public class MatrixUtils {
     }
 
     /**
+     * Jitter invert, but with a SecureRandom generator
+     *
+     * @param x a square double[][]; the matrix to be inverted
+     * @param numRetries the number of times to attempt jittering before giving up
+     * @return double[][], the inverted matrix
+     * @param zeroThreshold: the threshold to set such that x==0 if abs(x)<zeroThreshold. Use this avoid fp errors
+     *
+     */
+    public static double[][] jitterInvert(double[][] x, int numRetries, double zeroThreshold) {
+        return jitterInvert(x, numRetries, zeroThreshold, new SecureRandom());
+    }
+
+    /**
      * Jitters the values of a matrix IN-PLACE by a random number in range (0, delta)
-     * 
+     *
      * @param x the matrix to be jittered
      * @param delta the scale of the jittering
      *
      */
-    private static void jitterMatrix(double[][] x, double delta) {
+    private static void jitterMatrix(double[][] x, double delta, Random random) {
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < x[0].length; j++) {
-                x[i][j] += delta * Math.random();
+                x[i][j] += delta * random.nextDouble();
             }
         }
     }
