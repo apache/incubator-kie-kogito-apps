@@ -23,7 +23,7 @@ const ModelDiagram = (props: ModelDiagramProps) => {
 
   useEffect(() => {
     let editor: StandaloneEditorApi | undefined = undefined;
-    if (type === DMN1_2 || dmnVersion === DMN1_3) {
+    if (dmnVersion === DMN1_2 || dmnVersion === DMN1_3) {
       editor = DmnEditor.open({
         container: document.getElementById('dmn-editor-container'),
         initialContent: Promise.resolve(model.model),
@@ -35,7 +35,7 @@ const ModelDiagram = (props: ModelDiagramProps) => {
     }
   }, [model]);
 
-  return type === DMN1_2 || dmnVersion === DMN1_3 ? makeDMNEditor() : DEFAULT;
+  return dmnVersion === DMN1_2 || dmnVersion === DMN1_3 ? makeDMNEditor() : DEFAULT;
 };
 
 function makeUnknownModel(): JSX.Element {
