@@ -441,7 +441,6 @@ public class DataUtils {
         }
     }
 
-
     public static List<Feature> replaceFeatures(Feature featureToUse, List<Feature> existingFeatures) {
         List<Feature> newFeatures = new ArrayList<>();
         for (Feature f : existingFeatures) {

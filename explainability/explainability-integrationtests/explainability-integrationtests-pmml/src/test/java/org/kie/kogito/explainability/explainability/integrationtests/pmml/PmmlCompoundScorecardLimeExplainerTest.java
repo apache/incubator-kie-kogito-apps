@@ -24,7 +24,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.AssertionsForClassTypes;
-import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
@@ -72,7 +71,7 @@ class PmmlCompoundScorecardLimeExplainerTest {
                     .withSamples(300)
                     .withPerturbationContext(new PerturbationContext(random, 1));
 
-            String[] categoryTwo = new String[]{"classA", "classB", "classC", "NA"};
+            String[] categoryTwo = new String[] { "classA", "classB", "classC", "NA" };
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             List<Feature> features = new ArrayList<>(2);
             features.add(FeatureFactory.newNumericalFeature("input1", -50));

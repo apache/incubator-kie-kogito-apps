@@ -64,7 +64,7 @@ class PmmlScorecardCategoricalLimeExplainerTest {
 
     @Test
     void testPMMLScorecardCategorical() throws Exception {
-        String[] category = new String[]{"classA", "classB", "classC", "classD", "classE", "NA"};
+        String[] category = new String[] { "classA", "classB", "classC", "classD", "classE", "NA" };
 
         List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCategoricalFeature("input1", category[0]));

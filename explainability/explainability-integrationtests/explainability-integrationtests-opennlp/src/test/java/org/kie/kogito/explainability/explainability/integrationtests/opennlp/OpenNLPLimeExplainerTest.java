@@ -52,6 +52,7 @@ import opennlp.tools.langdetect.Language;
 import opennlp.tools.langdetect.LanguageDetector;
 import opennlp.tools.langdetect.LanguageDetectorME;
 import opennlp.tools.langdetect.LanguageDetectorModel;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -125,7 +126,7 @@ class OpenNLPLimeExplainerTest {
                 0.8, 0.8));
 
         List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
-                                     "italiani, spaghetti pizza mandolino", "guten tag", "allez les bleus", "daje roma");
+                "italiani, spaghetti pizza mandolino", "guten tag", "allez les bleus", "daje roma");
 
         List<PredictionInput> inputs = new ArrayList<>();
         for (String text : texts) {

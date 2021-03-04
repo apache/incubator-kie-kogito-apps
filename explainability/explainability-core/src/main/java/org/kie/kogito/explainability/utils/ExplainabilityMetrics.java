@@ -15,6 +15,17 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.LocalExplainer;
@@ -30,17 +41,6 @@ import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Utility class providing different methods to evaluate explainability.
@@ -241,8 +241,8 @@ public class ExplainabilityMetrics {
     }
 
     public static double getLocalSaliencyRecall(String decision, PredictionProvider predictionProvider,
-                                                LocalExplainer<Map<String, Saliency>> localExplainer,
-                                                DataDistribution dataDistribution, int k, int chunkSize)
+            LocalExplainer<Map<String, Saliency>> localExplainer,
+            DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
         // see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
         List<PredictionInput> inputs = dataDistribution.getAllSamples();
@@ -306,8 +306,8 @@ public class ExplainabilityMetrics {
     }
 
     public static double getLocalSaliencyPrecision(String decision, PredictionProvider predictionProvider,
-                                                   LocalExplainer<Map<String, Saliency>> localExplainer,
-                                                   DataDistribution dataDistribution, int k, int chunkSize)
+            LocalExplainer<Map<String, Saliency>> localExplainer,
+            DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
         // see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
         List<PredictionInput> inputs = dataDistribution.getAllSamples();

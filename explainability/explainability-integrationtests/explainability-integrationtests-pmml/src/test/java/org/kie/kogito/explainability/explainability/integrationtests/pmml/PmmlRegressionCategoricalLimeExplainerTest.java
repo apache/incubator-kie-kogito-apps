@@ -64,8 +64,8 @@ class PmmlRegressionCategoricalLimeExplainerTest {
 
     @Test
     void testPMMLRegressionCategorical() throws Exception {
-        String[] categoryOne = new String[]{"red", "blue", "green", "yellow", "grey", "pink", "white", "black"};
-        String[] categoryTwo = new String[]{"classA", "classB", "classC", "NA"};
+        String[] categoryOne = new String[] { "red", "blue", "green", "yellow", "grey", "pink", "white", "black" };
+        String[] categoryTwo = new String[] { "classA", "classB", "classC", "NA" };
 
         List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCategoricalFeature("mapX", categoryOne[0]));
