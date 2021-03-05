@@ -35,7 +35,7 @@ class SampleWeighterTest {
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
         List<Feature> features = new LinkedList<>();
         double[] sampleWeights = SampleWeighter.getSampleWeights(features, trainingSet, 0.5);
-        assertEquals(sampleWeights.length, 0);
+        assertEquals(0, sampleWeights.length);
     }
 
     @Test
