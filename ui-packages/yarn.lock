@@ -1909,12 +1909,24 @@
   resolved "https://registry.yarnpkg.com/@kogito-tooling/envelope-bus/-/envelope-bus-0.8.3.tgz#b441d855313ae46a7e629689e730d182e71d52da"
   integrity sha512-ZTQ/wK4iBvBfjYDq/mn9YzbyxcfXoWJlGqBE2cQB3QF1a/0rLnt/0b0qlgBms2XHiuMhgaRiucFf9w0viHbT1w==
 
+"@kogito-tooling/envelope-bus@0.8.6", "@kogito-tooling/envelope-bus@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@kogito-tooling/envelope-bus/-/envelope-bus-0.8.6.tgz#0eed4711a7ca81e55bddba7ead539474780abc57"
+  integrity sha512-BDAyWg/mOQiXNPe0A+OeeKRWxb3do8v0XG79oPfAVktUz92IrB93uGPQjWg5Fq+mknCTP51vBkkH/uRYukWnlQ==
+
 "@kogito-tooling/envelope@0.8.3":
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/@kogito-tooling/envelope/-/envelope-0.8.3.tgz#aef9d55bebfa93798b1b4bf7f1ead4c23fad3f93"
   integrity sha512-XNePowQYpZ1hxfpJqq4aCKF041Ce/76bwRBrn7SnCI92RIDO0OUg55obuLEavkYQr+mv99MZnN/y91/Nun2f0w==
   dependencies:
     "@kogito-tooling/envelope-bus" "0.8.3"
+
+"@kogito-tooling/envelope@^0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@kogito-tooling/envelope/-/envelope-0.8.6.tgz#52ff8bbb148a82c15d8c0273cd5eb0f1451b2cd7"
+  integrity sha512-T7MfZd6jy/kydpz9n5+cABKZ63LGksh3V35VHoTktVHHLZa8CNWhi4+yvsH/xWpxgdsNCsZOkiBVV1LDlgIJoQ==
+  dependencies:
+    "@kogito-tooling/envelope-bus" "0.8.6"
 
 "@kogito-tooling/external-assets-base@0.8.3":
   version "0.8.3"
@@ -9751,10 +9763,17 @@ glob-parent@^3.1.0:
     is-glob "^3.1.0"
     path-dirname "^1.0.0"
 
-glob-parent@^5.0.0, glob-parent@^5.1.0, glob-parent@^5.1.1, glob-parent@~5.1.0:
+glob-parent@^5.0.0, glob-parent@^5.1.0, glob-parent@~5.1.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.1.tgz#b6c1ef417c4e5663ea498f1c45afac6916bbc229"
   integrity sha512-FnI+VGOpnlGHWZxthPGR+QhR78fuiK0sNLkHQv+bL9fQi57lNNdquIbna/WrfROrolq8GK5Ek6BiMwqL/voRYQ==
+  dependencies:
+    is-glob "^4.0.1"
+
+glob-parent@^5.1.1:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
+  integrity sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==
   dependencies:
     is-glob "^4.0.1"
 

@@ -1,0 +1,19 @@
+
+.kogito-management-console-shared--jobsModal__detailsModal {
+    padding: 30px;
+}
+
+.kogito-management-console-shared--jobsModal__text {
+    white-space: nowrap;
+}
+
+.kogito-management-console-shared--jobsModal__ModalBody {
+    height: 400px;
+}
+.react-calendar {
+    width: 300px !important;
+}
+
+.kogito-management-console-shared--jobsModal__TimeNow {
+    margin-top: 10px; 
+}
