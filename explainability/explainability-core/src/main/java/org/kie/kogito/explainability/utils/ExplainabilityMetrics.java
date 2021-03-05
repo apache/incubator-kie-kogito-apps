@@ -305,6 +305,26 @@ public class ExplainabilityMetrics {
         return tp / (tp + fn);
     }
 
+    /**
+     * Evaluate the precision of a local saliency explainer on a given model.
+     * Get the predictions having outputs with the lowest score for the given decision and pair them with predictions
+     * whose outputs are the highest for the same decision.
+     * Get the bottom k (less important) features (according to the saliency) for the less important outputs and
+     * "paste" them on each paired input corresponding to an output with high score (for the target decision).
+     * Perform prediction on the "masked" input, if the output changes that's considered a false negative, otherwise
+     * it's a true positive.
+     *
+     * @param decision
+     * @param predictionProvider
+     * @param localExplainer
+     * @param dataDistribution
+     * @param k
+     * @param chunkSize
+     * @return
+     * @throws InterruptedException
+     * @throws ExecutionException
+     * @throws TimeoutException
+     */
     public static double getLocalSaliencyPrecision(String decision, PredictionProvider predictionProvider,
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
@@ -336,7 +356,6 @@ public class ExplainabilityMetrics {
         int currentChunk = 0;
 
         for (Prediction prediction : bottomChunk) {
-            Output output = prediction.getOutput().getByName(decision);
             Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
                     .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
             if (stringSaliencyMap.containsKey(decision)) {
@@ -349,7 +368,8 @@ public class ExplainabilityMetrics {
                     importantFeatures.add(featureImportance.getFeature());
                 }
 
-                PredictionInput input = topChunk.get(currentChunk).getInput();
+                Prediction topPrediction = topChunk.get(currentChunk);
+                PredictionInput input = topPrediction.getInput();
                 List<Feature> features = List.copyOf(input.getFeatures());
                 for (Feature f : importantFeatures) {
                     features = DataUtils.replaceFeatures(f, features);
@@ -360,7 +380,7 @@ public class ExplainabilityMetrics {
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
                 PredictionOutput predictionOutput = predictionOutputList.get(0);
                 Output newOutput = predictionOutput.getByName(decision);
-                if (!output.getValue().equals(newOutput.getValue())) {
+                if (topPrediction.getOutput().getByName(decision).getValue().equals(newOutput.getValue())) {
                     tp++;
                 } else {
                     fp++;

@@ -138,11 +138,11 @@ class DummyModelsLimeExplainerTest {
         int chunkSize = 10;
         String decision = "sum-but" + idx;
         double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(0);
+        assertThat(precision).isEqualTo(1);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
         double f1 = 2 * (precision * recall) / (precision + recall);
-        assertThat(f1).isEqualTo(0);
+        assertThat(f1).isEqualTo(1);
     }
 
     @ParameterizedTest
@@ -171,6 +171,29 @@ class DummyModelsLimeExplainerTest {
             assertEquals(3, topFeatures.size());
             assertEquals(1d, ExplainabilityMetrics.impactScore(model, prediction, topFeatures));
         }
+        double minimumPositiveStabilityRate = 0.5;
+        double minimumNegativeStabilityRate = 0.5;
+        int topK = 1;
+        TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> fs = new LinkedList<>();
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            inputs.add(new PredictionInput(fs));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 10;
+        String decision = "feature-" + idx;
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(precision).isEqualTo(1);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(recall).isEqualTo(1);
+        double f1 = 2 * (precision * recall) / (precision + recall);
+        assertThat(f1).isEqualTo(1);
     }
 
     @ParameterizedTest
@@ -201,8 +224,27 @@ class DummyModelsLimeExplainerTest {
         }
         int topK = 1;
         double minimumPositiveStabilityRate = 0.5;
-        double minimumNegativeStabilityRate = 0.5;
+        double minimumNegativeStabilityRate = 0.2;
         TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> fs = new LinkedList<>();
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            inputs.add(new PredictionInput(fs));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 10;
+        String decision = "spam";
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(precision).isEqualTo(1);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(recall).isEqualTo(1);
+        double f1 = 2 * (precision * recall) / (precision + recall);
+        assertThat(f1).isEqualTo(1);
     }
 
     @ParameterizedTest
@@ -234,6 +276,25 @@ class DummyModelsLimeExplainerTest {
         double minimumPositiveStabilityRate = 0.5;
         double minimumNegativeStabilityRate = 0.5;
         TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> fs = new LinkedList<>();
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            inputs.add(new PredictionInput(fs));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 10;
+        String decision = "sum-even-but" + idx;
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(precision).isEqualTo(1);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(recall).isEqualTo(1);
+        double f1 = 2 * (precision * recall) / (precision + recall);
+        assertThat(f1).isEqualTo(1);
     }
 
     @ParameterizedTest
@@ -267,5 +328,24 @@ class DummyModelsLimeExplainerTest {
         double minimumPositiveStabilityRate = 0.5;
         double minimumNegativeStabilityRate = 0.5;
         TestUtils.assertLimeStability(model, prediction, limeExplainer, topK, minimumPositiveStabilityRate, minimumNegativeStabilityRate);
+
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> fs = new LinkedList<>();
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            fs.add(TestUtils.getMockedNumericFeature());
+            inputs.add(new PredictionInput(fs));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 10;
+        String decision = "class";
+        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(precision).isEqualTo(1);
+        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(recall).isEqualTo(1);
+        double f1 = 2 * (precision * recall) / (precision + recall);
+        assertThat(f1).isEqualTo(1);
     }
 }
