@@ -336,47 +336,6 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
     setisCheckboxDropdownOpen(!isCheckboxDropdownOpen);
   };
 
-  const onShowMessage = (
-    title: string,
-    successItems: any,
-    failedItems: any,
-    ignoredItems: any,
-    operation: OperationType
-  ) => {
-    setModalTitle(title);
-    setTitleType('success');
-    setOperationType(operation);
-    setOperationResults({
-      ...operationResults,
-      [operation]: {
-        ...operationResults[operation],
-        successItems: formatForBulkListProcessInstance(successItems),
-        failedItems: formatForBulkListProcessInstance(failedItems),
-        ignoredItems: formatForBulkListProcessInstance(ignoredItems)
-      }
-    });
-    handleModalToggle();
-  };
-
-  const resetSelected = (): void => {
-    const clonedInitData = _.cloneDeep(initData);
-    clonedInitData.ProcessInstances.forEach(processInstance => {
-      processInstance.isSelected = false;
-      if (!_.isEmpty(processInstance.childProcessInstances)) {
-        processInstance.childProcessInstances.forEach(
-          (
-            childInstance: GraphQL.ProcessInstance & { isSelected: boolean }
-          ) => {
-            childInstance.isSelected = false;
-          }
-        );
-      }
-    });
-    setIsAllChecked(false);
-    setSelectedInstances([]);
-    setInitData(clonedInitData);
-  };
-
   const handleCheckboxSelectClick = (
     selection: string,
     isCheckBoxClicked: boolean
@@ -460,6 +419,48 @@ const ProcessListToolbar: React.FC<IOwnProps & OUIAProps> = ({
     }
     setInitData(clonedData);
   };
+
+  const onShowMessage = (
+    title: string,
+    successItems: any,
+    failedItems: any,
+    ignoredItems: any,
+    operation: OperationType
+  ) => {
+    setModalTitle(title);
+    setTitleType('success');
+    setOperationType(operation);
+    setOperationResults({
+      ...operationResults,
+      [operation]: {
+        ...operationResults[operation],
+        successItems: formatForBulkListProcessInstance(successItems),
+        failedItems: formatForBulkListProcessInstance(failedItems),
+        ignoredItems: formatForBulkListProcessInstance(ignoredItems)
+      }
+    });
+    handleModalToggle();
+  };
+
+  const resetSelected = (): void => {
+    const clonedInitData = _.cloneDeep(initData);
+    clonedInitData.ProcessInstances.forEach(processInstance => {
+      processInstance.isSelected = false;
+      if (!_.isEmpty(processInstance.childProcessInstances)) {
+        processInstance.childProcessInstances.forEach(
+          (
+            childInstance: GraphQL.ProcessInstance & { isSelected: boolean }
+          ) => {
+            childInstance.isSelected = false;
+          }
+        );
+      }
+    });
+    setIsAllChecked(false);
+    setSelectedInstances([]);
+    setInitData(clonedInitData);
+  };
+
   const checkboxItems = [
     <DropdownItem
       key="none"

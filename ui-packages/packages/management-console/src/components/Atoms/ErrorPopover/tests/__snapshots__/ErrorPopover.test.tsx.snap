@@ -2,6 +2,8 @@
 
 exports[`Errorpopover component tests snapshot testing with error object 1`] = `
 <ErrorPopover
+  onRetryClick={[MockFunction]}
+  onSkipClick={[MockFunction]}
   processInstanceData={
     Object {
       "addons": Array [
@@ -33,23 +35,6 @@ exports[`Errorpopover component tests snapshot testing with error object 1`] = `
     }
   }
 >
-  <MockedProcessListModal
-    handleModalToggle={[Function]}
-    isModalOpen={false}
-    modalContent=""
-    modalTitle={
-      <Title
-        headingLevel="h1"
-        size="2xl"
-      >
-        <span>
-          
-        </span>
-      </Title>
-    }
-    ouiaId="process-e4448857-fa0c-403b-ad69-f0a353458b9d"
-    processName="travels"
-  />
   <Popover
     bodyContent={
       <div>
@@ -260,6 +245,8 @@ exports[`Errorpopover component tests snapshot testing with error object 1`] = `
 
 exports[`Errorpopover component tests snapshot testing without error object 1`] = `
 <ErrorPopover
+  onRetryClick={[MockFunction]}
+  onSkipClick={[MockFunction]}
   processInstanceData={
     Object {
       "addons": Array [
@@ -288,23 +275,6 @@ exports[`Errorpopover component tests snapshot testing without error object 1`] 
     }
   }
 >
-  <MockedProcessListModal
-    handleModalToggle={[Function]}
-    isModalOpen={false}
-    modalContent=""
-    modalTitle={
-      <Title
-        headingLevel="h1"
-        size="2xl"
-      >
-        <span>
-          
-        </span>
-      </Title>
-    }
-    ouiaId="process-e4448857-fa0c-403b-ad69-f0a353458b9d"
-    processName="travels"
-  />
   <Popover
     bodyContent={
       <div>

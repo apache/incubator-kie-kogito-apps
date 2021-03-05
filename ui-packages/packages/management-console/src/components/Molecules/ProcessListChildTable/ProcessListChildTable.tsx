@@ -21,10 +21,10 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import DisablePopup from '../DisablePopup/DisablePopup';
 import { Checkbox } from '@patternfly/react-core';
-import ProcessInstancesActionsKebab from '../../Atoms/ProcessInstancesActionsKebab/ProcessInstancesActionsKebab';
+import ProcessListActionsKebab from '../../Atoms/ProcessListActionsKebab/ProcessListActionsKebab';
 import ErrorPopover from '../../Atoms/ErrorPopover/ErrorPopover';
 import { filterType } from '../ProcessListToolbar/ProcessListToolbar';
-import './SubProcessTable.css';
+import './ProcessListChildTable.css';
 interface IOwnProps {
   parentProcessId: string;
   filters: filterType;
@@ -37,8 +37,11 @@ interface IOwnProps {
   >;
   selectedInstances: GraphQL.ProcessInstance[];
   setSelectableInstances: React.Dispatch<React.SetStateAction<number>>;
+  onSkipClick?: (processInstance: GraphQL.ProcessInstance) => Promise<void>;
+  onRetryClick?: (processInstance: GraphQL.ProcessInstance) => Promise<void>;
+  onAbortClick?: (processInstance: GraphQL.ProcessInstance) => Promise<void>;
 }
-const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
+const ProcessListChildTable: React.FC<IOwnProps & OUIAProps> = ({
   parentProcessId,
   filters,
   initData,
@@ -46,6 +49,9 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
   setSelectedInstances,
   setSelectableInstances,
   selectedInstances,
+  onSkipClick,
+  onRetryClick,
+  onAbortClick,
   ouiaId,
   ouiaSafe
 }) => {
@@ -80,10 +86,10 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
 
   useEffect(() => {
     if (!loading && data) {
-      const clonedInitData = _.cloneDeep(initData);
+      const clonedInitData = JSON.parse(JSON.stringify(initData));
       !_.isEmpty(clonedInitData) &&
-        clonedInitData.ProcessInstances.forEach(processInstance => {
-          if (processInstance.id === parentProcessId) {
+        clonedInitData.ProcessInstances.forEach(processInstanceData => {
+          if (processInstanceData.id === parentProcessId) {
             data.ProcessInstances.forEach(
               (
                 processInstance: GraphQL.ProcessInstance & {
@@ -93,9 +99,10 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
                 processInstance.isSelected = false;
               }
             );
-            processInstance.childProcessInstances = data.ProcessInstances;
+            processInstanceData.childProcessInstances = data.ProcessInstances;
           }
         });
+
       data.ProcessInstances.forEach(
         (
           instance: GraphQL.ProcessInstance & {
@@ -120,7 +127,7 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
     const processInstance =
       !_.isEmpty(initData) &&
       initData.ProcessInstances.find(
-        processInstance => processInstance.id === parentProcessId
+        processInstanceData => processInstanceData.id === parentProcessId
       );
     if (
       !_.isEmpty(processInstance) &&
@@ -188,7 +195,11 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
                 title: (
                   <>
                     {child.state === GraphQL.ProcessInstanceState.Error ? (
-                      <ErrorPopover processInstanceData={child} />
+                      <ErrorPopover
+                        processInstanceData={child}
+                        onRetryClick={onRetryClick}
+                        onSkipClick={onSkipClick}
+                      />
                     ) : (
                       ProcessInstanceIconCreator(child.state)
                     )}
@@ -214,7 +225,14 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
                 )
               },
               {
-                title: <ProcessInstancesActionsKebab processInstance={child} />
+                title: (
+                  <ProcessListActionsKebab
+                    processInstance={child}
+                    onSkipClick={onSkipClick}
+                    onRetryClick={onRetryClick}
+                    onAbortClick={onAbortClick}
+                  />
+                )
               }
             ]
           });
@@ -225,10 +243,10 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
   }, [initData]);
 
   const checkBoxSelect = (processInstance: GraphQL.ProcessInstance): void => {
-    const clonedInitData = _.cloneDeep(initData);
+    const clonedInitData = { ...initData };
     clonedInitData.ProcessInstances.forEach(instance => {
       if (instance.id === parentProcessId) {
-        instance.childProcessInstances.forEach(childInstance => {
+        instance['childProcessInstances'].forEach(childInstance => {
           if (childInstance.id === processInstance.id) {
             if (childInstance.isSelected) {
               childInstance.isSelected = false;
@@ -265,11 +283,16 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
   }
   return (
     <Table
-      aria-label="Sub Process Table"
+      aria-label="Process List Child Table"
       cells={columns}
       rows={rows}
+      variant={'compact'}
       className="kogito-management-console__compact-table"
-      {...componentOuiaProps(ouiaId, 'sub-process-table', ouiaSafe)}
+      {...componentOuiaProps(
+        ouiaId,
+        'process-list-child-table',
+        ouiaSafe ? ouiaSafe : !loading
+      )}
     >
       <TableHeader />
       <TableBody />
@@ -277,4 +300,4 @@ const SubProcessTable: React.FC<IOwnProps & OUIAProps> = ({
   );
 };
 
-export default SubProcessTable;
+export default ProcessListChildTable;

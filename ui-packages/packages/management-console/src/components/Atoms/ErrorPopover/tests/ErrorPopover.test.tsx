@@ -2,14 +2,8 @@ import React from 'react';
 import ErrorPopover from '../ErrorPopover';
 import { GraphQL, getWrapper } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
-import axios from 'axios';
 import { mount } from 'enzyme';
 import { Popover } from '@patternfly/react-core';
-import { act } from 'react-dom/test-utils';
-jest.mock('../../../Atoms/ProcessListModal/ProcessListModal');
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
-
 const props = {
   processInstanceData: {
     id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
@@ -35,7 +29,9 @@ const props = {
       '{"flight":{"arrival":"2019-10-30T22:00:00Z[UTC]","departure":"2019-10-22T22:00:00Z[UTC]","flightNumber":"MX555"},"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
     nodes: [],
     childProcessInstances: []
-  }
+  },
+  onSkipClick: jest.fn(),
+  onRetryClick: jest.fn()
 };
 
 describe('Errorpopover component tests', () => {
@@ -57,73 +53,23 @@ describe('Errorpopover component tests', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  describe('Skip process test', () => {
-    it('Skip call success', async () => {
-      let wrapper = mount(<ErrorPopover {...props} />);
-      mockedAxios.post.mockResolvedValue({});
-      await act(async () => {
-        wrapper
-          .find(Popover)
-          .props()
-          ['footerContent'][0]['props']['onClick']();
-      });
-      wrapper = wrapper.update();
-      expect(
-        wrapper.find('MockedProcessListModal').props()['modalContent']
-      ).toEqual('The process travels was successfully skipped.');
-    });
-
-    it('Skip call failure', async () => {
-      let wrapper = mount(<ErrorPopover {...props} />);
-      mockedAxios.post.mockRejectedValue({
-        message: '404 error'
-      });
-      await act(async () => {
-        wrapper
-          .find(Popover)
-          .props()
-          ['footerContent'][0]['props']['onClick']();
-      });
-      wrapper = wrapper.update();
-      expect(
-        wrapper.find('MockedProcessListModal').props()['modalContent']
-      ).toEqual('The process travels failed to skip. Message: "404 error"');
-    });
+  it('Skip call success', () => {
+    let wrapper = mount(<ErrorPopover {...props} />);
+    wrapper
+      .find(Popover)
+      .props()
+      ['footerContent'][0]['props']['onClick']();
+    wrapper = wrapper.update();
+    expect(props.onSkipClick).toHaveBeenCalled();
   });
 
-  describe('Retry process test', () => {
-    it('Retry call success', async () => {
-      let wrapper = mount(<ErrorPopover {...props} />);
-      mockedAxios.post.mockResolvedValue({});
-      await act(async () => {
-        wrapper
-          .find(Popover)
-          .props()
-          ['footerContent'][1]['props']['onClick']();
-      });
-      wrapper = wrapper.update();
-      expect(
-        wrapper.find('MockedProcessListModal').props()['modalContent']
-      ).toEqual('The process travels was successfully re-executed.');
-    });
-
-    it('Retry call failure', async () => {
-      let wrapper = mount(<ErrorPopover {...props} />);
-      mockedAxios.post.mockRejectedValue({
-        message: '404 error'
-      });
-      await act(async () => {
-        wrapper
-          .find(Popover)
-          .props()
-          ['footerContent'][1]['props']['onClick']();
-      });
-      wrapper = wrapper.update();
-      expect(
-        wrapper.find('MockedProcessListModal').props()['modalContent']
-      ).toEqual(
-        'The process travels failed to re-execute. Message: "404 error"'
-      );
-    });
+  it('Retry call success', () => {
+    let wrapper = mount(<ErrorPopover {...props} />);
+    wrapper
+      .find(Popover)
+      .props()
+      ['footerContent'][1]['props']['onClick']();
+    wrapper = wrapper.update();
+    expect(props.onRetryClick).toHaveBeenCalled();
   });
 });

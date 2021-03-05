@@ -20,19 +20,28 @@ import {
 } from '@kogito-apps/common';
 import {
   getProcessInstanceDescription,
-  ProcessInstanceIconCreator
+  handleAbort,
+  handleRetry,
+  handleSkip,
+  ProcessInstanceIconCreator,
+  setTitle
 } from '../../../utils/Utils';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { HistoryIcon } from '@patternfly/react-icons';
-import SubProcessTable from '../../Molecules/SubProcessTable/SubProcessTable';
+import ProcessListChildTable from '../../Molecules/ProcessListChildTable/ProcessListChildTable';
 import { Checkbox } from '@patternfly/react-core';
 import _ from 'lodash';
 import DisablePopup from '../../Molecules/DisablePopup/DisablePopup';
-import ProcessInstancesActionsKebab from '../../Atoms/ProcessInstancesActionsKebab/ProcessInstancesActionsKebab';
+import ProcessListActionsKebab from '../../Atoms/ProcessListActionsKebab/ProcessListActionsKebab';
 import ErrorPopover from '../../Atoms/ErrorPopover/ErrorPopover';
 import { filterType } from '../../Molecules/ProcessListToolbar/ProcessListToolbar';
+import ProcessListModal from '../../Atoms/ProcessListModal/ProcessListModal';
 
+export enum TitleType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
+}
 interface IOwnProps {
   initData: GraphQL.GetProcessInstancesQuery;
   setInitData: React.Dispatch<
@@ -75,8 +84,98 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
 }) => {
   const [rowPairs, setRowPairs] = useState<RowPairType[]>([]);
   const columns: string[] = ['Id', 'Status', 'Created', 'Last update'];
+  const [modalTitle, setModalTitle] = useState<string>('');
+  const [modalContent, setModalContent] = useState<string>('');
+  const [titleType, setTitleType] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedProcessInstance, setSelectedProcessInstance] = useState<
+    GraphQL.ProcessInstance
+  >(null);
   const currentPage = { prev: location.pathname };
   window.localStorage.setItem('state', JSON.stringify(currentPage));
+
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const onShowMessage = (
+    title: string,
+    content: string,
+    type: TitleType,
+    processInstance
+  ): void => {
+    setSelectedProcessInstance(processInstance);
+    setTitleType(type);
+    setModalTitle(title);
+    setModalContent(content);
+    handleModalToggle();
+  };
+
+  const onSkipClick = async (
+    processInstance: GraphQL.ProcessInstance
+  ): Promise<void> => {
+    await handleSkip(
+      processInstance,
+      () =>
+        onShowMessage(
+          'Skip operation',
+          `The process ${processInstance.processName} was successfully skipped.`,
+          TitleType.SUCCESS,
+          processInstance
+        ),
+      (errorMessage: string) =>
+        onShowMessage(
+          'Skip operation',
+          `The process ${processInstance.processName} failed to skip. Message: ${errorMessage}`,
+          TitleType.FAILURE,
+          processInstance
+        )
+    );
+  };
+
+  const onRetryClick = async (
+    processInstance: GraphQL.ProcessInstance
+  ): Promise<void> => {
+    await handleRetry(
+      processInstance,
+      () =>
+        onShowMessage(
+          'Retry operation',
+          `The process ${processInstance.processName} was successfully re-executed.`,
+          TitleType.SUCCESS,
+          processInstance
+        ),
+      (errorMessage: string) =>
+        onShowMessage(
+          'Retry operation',
+          `The process ${processInstance.processName} failed to re-execute. Message: ${errorMessage}`,
+          TitleType.FAILURE,
+          processInstance
+        )
+    );
+  };
+
+  const onAbortClick = async (
+    processInstance: GraphQL.ProcessInstance
+  ): Promise<void> => {
+    await handleAbort(
+      processInstance,
+      () =>
+        onShowMessage(
+          'Abort operation',
+          `The process ${processInstance.processName} was successfully aborted.`,
+          TitleType.SUCCESS,
+          processInstance
+        ),
+      (errorMessage: string) =>
+        onShowMessage(
+          'Abort operation',
+          `Failed to abort process ${processInstance.processName}. Message: ${errorMessage}`,
+          TitleType.FAILURE,
+          processInstance
+        )
+    );
+  };
 
   useEffect(() => {
     const tempRowPairs = [];
@@ -136,7 +235,11 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
               <>
                 {processInstance.state ===
                 GraphQL.ProcessInstanceState.Error ? (
-                  <ErrorPopover processInstanceData={processInstance} />
+                  <ErrorPopover
+                    processInstanceData={processInstance}
+                    onSkipClick={onSkipClick}
+                    onRetryClick={onRetryClick}
+                  />
                 ) : (
                   ProcessInstanceIconCreator(processInstance.state)
                 )}
@@ -156,8 +259,11 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
               ) : (
                 ''
               ),
-              <ProcessInstancesActionsKebab
+              <ProcessListActionsKebab
                 processInstance={processInstance}
+                onSkipClick={onSkipClick}
+                onRetryClick={onRetryClick}
+                onAbortClick={onAbortClick}
                 key={processInstance.id}
               />
             ],
@@ -169,7 +275,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
     }
   }, [initData]);
 
-  const LoadChild = (
+  const loadChild = (
     parentId: string,
     parentIndex: number
   ): JSX.Element | null => {
@@ -177,7 +283,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
       return null;
     } else {
       return (
-        <SubProcessTable
+        <ProcessListChildTable
           parentProcessId={parentId}
           filters={filters}
           initData={initData}
@@ -185,6 +291,9 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
           setSelectedInstances={setSelectedInstances}
           selectedInstances={selectedInstances}
           setSelectableInstances={setSelectableInstances}
+          onSkipClick={onSkipClick}
+          onRetryClick={onRetryClick}
+          onAbortClick={onAbortClick}
         />
       );
     }
@@ -193,7 +302,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
   const checkBoxSelect = (
     processInstance: GraphQL.ProcessInstance & { isSelected?: boolean }
   ): void => {
-    const clonedInitData = _.cloneDeep(initData);
+    const clonedInitData = { ...initData };
     clonedInitData.ProcessInstances.forEach(
       (instance: GraphQL.ProcessInstance & { isSelected?: boolean }) => {
         if (processInstance.id === instance.id) {
@@ -251,8 +360,8 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
               instance.isOpen = false;
               instance.childProcessInstances.forEach(child => {
                 if (
-                  instance.serviceUrl &&
-                  instance.addons.includes('process-management')
+                  child.serviceUrl &&
+                  child.addons.includes('process-management')
                 ) {
                   setSelectableInstances(prev => prev - 1);
                 }
@@ -287,10 +396,25 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
 
   return (
     <React.Fragment>
+      <ProcessListModal
+        isModalOpen={isModalOpen}
+        handleModalToggle={handleModalToggle}
+        modalTitle={setTitle(titleType, modalTitle)}
+        modalContent={modalContent}
+        processName={
+          selectedProcessInstance && selectedProcessInstance.processName
+        }
+        ouiaId={
+          selectedProcessInstance && 'process-' + selectedProcessInstance.id
+        }
+      />
       <TableComposable
         aria-label="Process List Table"
-        variant={'compact'}
-        {...componentOuiaProps(ouiaId, 'process-list-table', ouiaSafe)}
+        {...componentOuiaProps(
+          ouiaId,
+          'process-list-table',
+          ouiaSafe ? ouiaSafe : !loading
+        )}
       >
         <Thead>
           <Tr>
@@ -347,7 +471,7 @@ const ProcessListTable: React.FC<IOwnProps & OUIAProps> = ({
                     colSpan={6}
                   >
                     <ExpandableRowContent>
-                      {LoadChild(cell, pairIndex)}
+                      {loadChild(cell, pairIndex)}
                     </ExpandableRowContent>
                   </Td>
                 ))}

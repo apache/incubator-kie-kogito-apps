@@ -2,6 +2,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Card,
+  Divider,
   Grid,
   GridItem,
   PageSection
@@ -59,7 +60,7 @@ const ProcessListPage: React.FC<OUIAProps &
           businessKey: []
         }
   );
-  const [businessKeysArray, setBusinessKeysArray] = useState(
+  const [businessKeysArray, setBusinessKeysArray] = useState<string[]>(
     filters.businessKey
   );
   const [statusArray, setStatusArray] = useState<
@@ -190,6 +191,12 @@ const ProcessListPage: React.FC<OUIAProps &
       }
     });
   };
+  const countSelectableInstances = (process, index) => {
+    expanded[index] = false;
+    if (process.serviceUrl && process.addons.includes('process-management')) {
+      setSelectableInstances(prev => prev + 1);
+    }
+  };
 
   useEffect(() => {
     setSelectedInstances([]);
@@ -215,26 +222,12 @@ const ProcessListPage: React.FC<OUIAProps &
       if (offset > 0 && initData.ProcessInstances.length > 0) {
         setIsLoadingMore(false);
         const newData = initData.ProcessInstances.concat(data.ProcessInstances);
-        newData.forEach((process, i) => {
-          expanded[i] = false;
-          if (
-            process.serviceUrl &&
-            process.addons.includes('process-management')
-          ) {
-            setSelectableInstances(prev => prev + 1);
-          }
-        });
+        newData.forEach((process, i) => countSelectableInstances(process, i));
         setInitData({ ProcessInstances: newData });
       } else {
-        data.ProcessInstances.forEach((process, i) => {
-          expanded[i] = false;
-          if (
-            process.serviceUrl &&
-            process.addons.includes('process-management')
-          ) {
-            setSelectableInstances(prev => prev + 1);
-          }
-        });
+        data.ProcessInstances.forEach((process, i) =>
+          countSelectableInstances(process, i)
+        );
         setInitData(data);
       }
     }
@@ -269,7 +262,13 @@ const ProcessListPage: React.FC<OUIAProps &
 
   return (
     <React.Fragment>
-      <div {...componentOuiaProps(ouiaId, 'process-list-page', ouiaSafe)}>
+      <div
+        {...componentOuiaProps(
+          ouiaId,
+          'process-list-page',
+          ouiaSafe ? ouiaSafe : !loading
+        )}
+      >
         <PageSection variant="light">
           <PageTitle title="Process Instances" />
           <Breadcrumb>
@@ -302,6 +301,7 @@ const ProcessListPage: React.FC<OUIAProps &
                       setStatusArray={setStatusArray}
                       setSelectableInstances={setSelectableInstances}
                     />
+                    <Divider />
                   </>
                 )}
                 {filters.status.length > 0 ? (

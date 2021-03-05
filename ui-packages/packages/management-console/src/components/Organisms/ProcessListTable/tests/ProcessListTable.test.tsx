@@ -4,8 +4,15 @@ import ProcessListTable from '../ProcessListTable';
 import { BrowserRouter } from 'react-router-dom';
 import { Button, Checkbox } from '@patternfly/react-core';
 import _ from 'lodash';
-import { act } from 'react-test-renderer';
-jest.mock('../../../Molecules/SubProcessTable/SubProcessTable');
+import { act } from 'react-dom/test-utils';
+import axios from 'axios';
+jest.mock('axios');
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+jest.mock('../../../Molecules/ProcessListChildTable/ProcessListChildTable');
+jest.mock('../../../Atoms/ProcessListModal/ProcessListModal');
+jest.mock('../../../Atoms/ErrorPopover/ErrorPopover');
+jest.mock('../../../Molecules/DisablePopup/DisablePopup');
+jest.mock('../../../Atoms/ProcessListActionsKebab/ProcessListActionsKebab');
 
 const data = {
   ProcessInstances: [
@@ -205,9 +212,11 @@ describe('ProcessListPage tests', () => {
         .find(Button)
         .simulate('click');
     });
-    const SubProcessTable = wrapper.update().find('MockedSubProcessTable');
-    expect(SubProcessTable.exists()).toBeTruthy();
-    expect(SubProcessTable).toMatchSnapshot();
+    const ProcessListChildTable = wrapper
+      .update()
+      .find('MockedProcessListChildTable');
+    expect(ProcessListChildTable.exists()).toBeTruthy();
+    expect(ProcessListChildTable).toMatchSnapshot();
   });
   it('checkbox click tests - selected', async () => {
     const clonedProps = _.cloneDeep(props);
@@ -243,5 +252,146 @@ describe('ProcessListPage tests', () => {
     });
     wrapper = wrapper.update();
     expect(props.setSelectedInstances).toHaveBeenCalled();
+  });
+  describe('skip call tests', () => {
+    const wrapper = getWrapper(
+      <BrowserRouter>
+        <ProcessListTable {...props} />
+      </BrowserRouter>,
+      'ProcessListTable'
+    );
+    it('on skip success', async () => {
+      mockedAxios.post.mockResolvedValue({});
+      await act(async () => {
+        wrapper
+          .find('MockedProcessListActionsKebab')
+          .at(0)
+          .props()
+          ['onSkipClick'](props.initData.ProcessInstances[0]);
+      });
+      const skipSuccessWrapper = wrapper.update();
+      expect(
+        skipSuccessWrapper.find('MockedProcessListModal').exists()
+      ).toBeTruthy();
+      expect(
+        skipSuccessWrapper.find('MockedProcessListModal').props()[
+          'modalContent'
+        ]
+      ).toEqual('The process travels was successfully skipped.');
+    });
+    it('on skip failure', async () => {
+      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      await act(async () => {
+        wrapper
+          .find('MockedProcessListActionsKebab')
+          .at(0)
+          .props()
+          ['onSkipClick'](props.initData.ProcessInstances[0]);
+      });
+      const skipFailureWrapper = wrapper.update();
+      expect(
+        skipFailureWrapper.find('MockedProcessListModal').exists()
+      ).toBeTruthy();
+      expect(
+        skipFailureWrapper.find('MockedProcessListModal').props()[
+          'modalContent'
+        ]
+      ).toEqual('The process travels failed to skip. Message: "404 error"');
+    });
+  });
+
+  describe('Retry call tests', () => {
+    const wrapper = getWrapper(
+      <BrowserRouter>
+        <ProcessListTable {...props} />
+      </BrowserRouter>,
+      'ProcessListTable'
+    );
+    it('on retry success', async () => {
+      mockedAxios.post.mockResolvedValue({});
+      await act(async () => {
+        wrapper
+          .find('MockedProcessListActionsKebab')
+          .at(0)
+          .props()
+          ['onRetryClick'](props.initData.ProcessInstances[0]);
+      });
+      const retrySuccessWrapper = wrapper.update();
+      expect(
+        retrySuccessWrapper.find('MockedProcessListModal').exists()
+      ).toBeTruthy();
+      expect(
+        retrySuccessWrapper.find('MockedProcessListModal').props()[
+          'modalContent'
+        ]
+      ).toEqual('The process travels was successfully re-executed.');
+    });
+    it('on retry failure', async () => {
+      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      await act(async () => {
+        wrapper
+          .find('MockedProcessListActionsKebab')
+          .at(0)
+          .props()
+          ['onRetryClick'](props.initData.ProcessInstances[0]);
+      });
+      const retryFailureWrapper = wrapper.update();
+      expect(
+        retryFailureWrapper.find('MockedProcessListModal').exists()
+      ).toBeTruthy();
+      expect(
+        retryFailureWrapper.find('MockedProcessListModal').props()[
+          'modalContent'
+        ]
+      ).toEqual(
+        'The process travels failed to re-execute. Message: "404 error"'
+      );
+    });
+  });
+  describe('Abort call tests', () => {
+    const wrapper = getWrapper(
+      <BrowserRouter>
+        <ProcessListTable {...props} />
+      </BrowserRouter>,
+      'ProcessListTable'
+    );
+    it('on Abort success', async () => {
+      mockedAxios.delete.mockResolvedValue({});
+      await act(async () => {
+        wrapper
+          .find('MockedProcessListActionsKebab')
+          .at(0)
+          .props()
+          ['onAbortClick'](props.initData.ProcessInstances[0]);
+      });
+      const abortSuccessWrapper = wrapper.update();
+      expect(
+        abortSuccessWrapper.find('MockedProcessListModal').exists()
+      ).toBeTruthy();
+      expect(
+        abortSuccessWrapper.find('MockedProcessListModal').props()[
+          'modalContent'
+        ]
+      ).toEqual('The process travels was successfully aborted.');
+    });
+    it('on retry failure', async () => {
+      mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+      await act(async () => {
+        wrapper
+          .find('MockedProcessListActionsKebab')
+          .at(0)
+          .props()
+          ['onAbortClick'](props.initData.ProcessInstances[0]);
+      });
+      const abortFailureWrapper = wrapper.update();
+      expect(
+        abortFailureWrapper.find('MockedProcessListModal').exists()
+      ).toBeTruthy();
+      expect(
+        abortFailureWrapper.find('MockedProcessListModal').props()[
+          'modalContent'
+        ]
+      ).toEqual('Failed to abort process travels. Message: "404 error"');
+    });
   });
 });

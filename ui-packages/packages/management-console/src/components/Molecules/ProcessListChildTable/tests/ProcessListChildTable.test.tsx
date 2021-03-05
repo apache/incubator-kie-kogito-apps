@@ -1,13 +1,16 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { getWrapperAsync, GraphQL, ServerErrors } from '@kogito-apps/common';
-import { Checkbox, EmptyState } from '@patternfly/react-core';
+import { getWrapperAsync, GraphQL } from '@kogito-apps/common';
+import { Checkbox } from '@patternfly/react-core';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import SubProcessTable from '../SubProcessTable';
+import ProcessListChildTable from '../ProcessListChildTable';
 import _ from 'lodash';
 import { act } from 'react-dom/test-utils';
+jest.mock('../../../Atoms/ErrorPopover/ErrorPopover');
+jest.mock('../../DisablePopup/DisablePopup');
+jest.mock('../../../Atoms/ProcessListActionsKebab/ProcessListActionsKebab');
 
-describe('SubProcessTable tests', () => {
+describe('Process List Child Table tests', () => {
   const childData = {
     id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
     processId: 'travels',
@@ -157,10 +160,10 @@ describe('SubProcessTable tests', () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>
-          <SubProcessTable {...props} />
+          <ProcessListChildTable {...props} />
         </BrowserRouter>
       </MockedProvider>,
-      'SubProcessTable'
+      'ProcessListChildTable'
     );
     expect(wrapper).toMatchSnapshot();
   });
@@ -169,12 +172,12 @@ describe('SubProcessTable tests', () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mockDatawithError} addTypename={false}>
         <BrowserRouter>
-          <SubProcessTable {...props} />
+          <ProcessListChildTable {...props} />
         </BrowserRouter>
       </MockedProvider>,
-      'SubProcessTable'
+      'ProcessListChildTable'
     );
-    const serverErrorComponent = wrapper.update().find(ServerErrors);
+    const serverErrorComponent = wrapper.update().find('ServerErrors');
     expect(serverErrorComponent.exists()).toBeTruthy();
     expect(serverErrorComponent).toMatchSnapshot();
   });
@@ -183,12 +186,12 @@ describe('SubProcessTable tests', () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mockDataWihEmptyResults} addTypename={false}>
         <BrowserRouter>
-          <SubProcessTable {...props} />
+          <ProcessListChildTable {...props} />
         </BrowserRouter>
       </MockedProvider>,
-      'SubProcessTable'
+      'ProcessListChildTable'
     );
-    const emptyState = wrapper.update().find(EmptyState);
+    const emptyState = wrapper.update().find('EmptyState');
     expect(emptyState.exists()).toBeTruthy();
     expect(emptyState).toMatchSnapshot();
   });
@@ -196,10 +199,10 @@ describe('SubProcessTable tests', () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>
-          <SubProcessTable {...props} />
+          <ProcessListChildTable {...props} />
         </BrowserRouter>
       </MockedProvider>,
-      'SubProcessTable'
+      'ProcessListChildTable'
     );
     await act(async () => {
       wrapper
@@ -217,10 +220,10 @@ describe('SubProcessTable tests', () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mockData} addTypename={false}>
         <BrowserRouter>
-          <SubProcessTable {...clonedProps} />
+          <ProcessListChildTable {...clonedProps} />
         </BrowserRouter>
       </MockedProvider>,
-      'SubProcessTable'
+      'ProcessListChildTable'
     );
     await act(async () => {
       wrapper

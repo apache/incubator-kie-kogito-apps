@@ -174,23 +174,38 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
   setSelectableInstances={[MockFunction]}
   setSelectedInstances={[MockFunction]}
 >
+  <MockedProcessListModal
+    handleModalToggle={[Function]}
+    isModalOpen={false}
+    modalContent=""
+    modalTitle={
+      <Title
+        headingLevel="h1"
+        size="2xl"
+      >
+        <span>
+          
+        </span>
+      </Title>
+    }
+    ouiaId={null}
+    processName={null}
+  />
   <TableComposable
     aria-label="Process List Table"
     data-ouia-component-type="process-list-table"
     data-ouia-safe={true}
-    variant="compact"
   >
     <TableComposableBase
       aria-label="Process List Table"
       data-ouia-component-type="process-list-table"
       data-ouia-safe={true}
       innerRef={null}
-      variant="compact"
     >
       <table
         aria-label="Process List Table"
-        className="pf-c-table pf-m-grid-md pf-m-compact"
-        data-ouia-component-id="OUIA-Generated-Table-2"
+        className="pf-c-table pf-m-grid-md"
+        data-ouia-component-id="OUIA-Generated-Table-5"
         data-ouia-component-type="process-list-table"
         data-ouia-safe={true}
         role="grid"
@@ -208,7 +223,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                 >
                   <tr
                     className=""
-                    data-ouia-component-id="OUIA-Generated-TableRow-7"
+                    data-ouia-component-id="OUIA-Generated-TableRow-25"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={false}
@@ -372,7 +387,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                 >
                   <tr
                     className=""
-                    data-ouia-component-id="OUIA-Generated-TableRow-9"
+                    data-ouia-component-id="OUIA-Generated-TableRow-27"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={false}
@@ -421,7 +436,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 aria-label="Details"
                                 aria-labelledby="simple-node0 expand-toggle0"
                                 className="pf-c-button pf-m-plain"
-                                data-ouia-component-id="OUIA-Generated-Button-plain-3"
+                                data-ouia-component-id="OUIA-Generated-Button-plain-9"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={false}
@@ -476,7 +491,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                           className=""
                           data-label="Status"
                         >
-                          <DisablePopup
+                          <MockedDisablePopup
                             component={
                               <Checkbox
                                 aria-label="process-list-checkbox-disabled"
@@ -544,114 +559,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <Tooltip
-                              content="Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up."
-                              data-ouia-component-type="disable-popup"
-                              data-ouia-safe={true}
-                            >
-                              <Popper
-                                appendTo={[Function]}
-                                distance={15}
-                                enableFlip={true}
-                                flipBehavior={
-                                  Array [
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                    "left",
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                  ]
-                                }
-                                isVisible={false}
-                                onBlur={[Function]}
-                                onDocumentClick={false}
-                                onDocumentKeyDown={[Function]}
-                                onFocus={[Function]}
-                                onMouseEnter={[Function]}
-                                onMouseLeave={[Function]}
-                                onTriggerEnter={[Function]}
-                                placement="top"
-                                popper={
-                                  <div
-                                    className="pf-c-tooltip"
-                                    data-ouia-component-type="disable-popup"
-                                    data-ouia-safe={true}
-                                    id="pf-tooltip-3"
-                                    role="tooltip"
-                                    style={
-                                      Object {
-                                        "maxWidth": null,
-                                        "opacity": 0,
-                                        "transition": "opacity 300ms cubic-bezier(.54, 1.5, .38, 1.11)",
-                                      }
-                                    }
-                                  >
-                                    <TooltipArrow />
-                                    <TooltipContent
-                                      isLeftAligned={false}
-                                    >
-                                      Management add-on capability not enabled & missing the kogito.service.url property. Contact your administrator to set up.
-                                    </TooltipContent>
-                                  </div>
-                                }
-                                popperMatchesTriggerWidth={false}
-                                positionModifiers={
-                                  Object {
-                                    "bottom": "pf-m-bottom",
-                                    "left": "pf-m-left",
-                                    "right": "pf-m-right",
-                                    "top": "pf-m-top",
-                                  }
-                                }
-                                trigger={
-                                  <Checkbox
-                                    aria-describedby="pf-tooltip-3"
-                                    aria-label="process-list-checkbox-disabled"
-                                    className=""
-                                    id="checkbox-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    isChecked={false}
-                                    isDisabled={true}
-                                    isValid={true}
-                                    onChange={[Function]}
-                                  />
-                                }
-                                zIndex={9999}
-                              >
-                                <FindRefWrapper
-                                  onFoundRef={[Function]}
-                                >
-                                  <Checkbox
-                                    aria-describedby="pf-tooltip-3"
-                                    aria-label="process-list-checkbox-disabled"
-                                    className=""
-                                    id="checkbox-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    isChecked={false}
-                                    isDisabled={true}
-                                    isValid={true}
-                                    onChange={[Function]}
-                                  >
-                                    <div
-                                      className="pf-c-check"
-                                    >
-                                      <input
-                                        aria-describedby="pf-tooltip-3"
-                                        aria-invalid={false}
-                                        aria-label="process-list-checkbox-disabled"
-                                        className="pf-c-check__input"
-                                        disabled={true}
-                                        id="checkbox-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                        onChange={[Function]}
-                                        type="checkbox"
-                                      />
-                                    </div>
-                                  </Checkbox>
-                                </FindRefWrapper>
-                              </Popper>
-                            </Tooltip>
-                          </DisablePopup>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -735,7 +643,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                               className="pf-c-tooltip"
                                               data-ouia-component-type="item-descriptor"
                                               data-ouia-safe={true}
-                                              id="pf-tooltip-4"
+                                              id="pf-tooltip-9"
                                               role="tooltip"
                                               style={
                                                 Object {
@@ -764,7 +672,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                           }
                                           trigger={
                                             <span
-                                              aria-describedby="pf-tooltip-4"
+                                              aria-describedby="pf-tooltip-9"
                                             >
                                               travels
                                                
@@ -779,7 +687,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                             onFoundRef={[Function]}
                                           >
                                             <span
-                                              aria-describedby="pf-tooltip-4"
+                                              aria-describedby="pf-tooltip-9"
                                             >
                                               travels
                                                
@@ -958,8 +866,11 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                         <td
                           className=""
                         >
-                          <ProcessInstancesActionsKebab
+                          <MockedProcessListActionsKebab
                             key="538f9feb-5a14-4096-b791-2055b38da7c6"
+                            onAbortClick={[Function]}
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstance={
                               Object {
                                 "addons": Array [],
@@ -1016,317 +927,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-4"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-6"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-5"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-5"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Dropdown
-                              aria-label="process instance actions dropdown"
-                              aria-labelledby="process instance actions dropdown"
-                              data-ouia-component-type="process-instance-actions-kebab"
-                              data-ouia-safe={true}
-                              dropdownItems={
-                                Array [
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Abort
-                                  </DropdownItem>,
-                                ]
-                              }
-                              isOpen={false}
-                              isPlain={true}
-                              onSelect={[Function]}
-                              position="right"
-                              toggle={
-                                <KebabToggle
-                                  id="kebab-toggle"
-                                  isDisabled={true}
-                                  onToggle={[Function]}
-                                />
-                              }
-                            >
-                              <DropdownWithContext
-                                aria-label="process instance actions dropdown"
-                                aria-labelledby="process instance actions dropdown"
-                                autoFocus={true}
-                                className=""
-                                data-ouia-component-type="process-instance-actions-kebab"
-                                data-ouia-safe={true}
-                                direction="down"
-                                dropdownItems={
-                                  Array [
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Abort
-                                    </DropdownItem>,
-                                  ]
-                                }
-                                isGrouped={false}
-                                isOpen={false}
-                                isPlain={true}
-                                menuAppendTo="inline"
-                                onSelect={[Function]}
-                                position="right"
-                                toggle={
-                                  <KebabToggle
-                                    id="kebab-toggle"
-                                    isDisabled={true}
-                                    onToggle={[Function]}
-                                  />
-                                }
-                              >
-                                <div
-                                  aria-label="process instance actions dropdown"
-                                  aria-labelledby="process instance actions dropdown"
-                                  className="pf-c-dropdown pf-m-align-right"
-                                  data-ouia-component-id="OUIA-Generated-Dropdown-3"
-                                  data-ouia-component-type="PF4/Dropdown"
-                                  data-ouia-safe={true}
-                                >
-                                  <KebabToggle
-                                    aria-haspopup={true}
-                                    getMenuRef={[Function]}
-                                    id="kebab-toggle"
-                                    isDisabled={true}
-                                    isOpen={false}
-                                    isPlain={true}
-                                    key=".0"
-                                    onEnter={[Function]}
-                                    onToggle={[Function]}
-                                    parentRef={
-                                      Object {
-                                        "current": <div
-                                          aria-label="process instance actions dropdown"
-                                          aria-labelledby="process instance actions dropdown"
-                                          class="pf-c-dropdown pf-m-align-right"
-                                          data-ouia-component-id="OUIA-Generated-Dropdown-3"
-                                          data-ouia-component-type="PF4/Dropdown"
-                                          data-ouia-safe="true"
-                                        >
-                                          <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            aria-label="Actions"
-                                            class="pf-c-dropdown__toggle pf-m-plain"
-                                            disabled=""
-                                            id="kebab-toggle"
-                                            type="button"
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              fill="currentColor"
-                                              height="1em"
-                                              role="img"
-                                              style="vertical-align: -0.125em;"
-                                              viewBox="0 0 192 512"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                              />
-                                            </svg>
-                                          </button>
-                                        </div>,
-                                      }
-                                    }
-                                  >
-                                    <Toggle
-                                      aria-haspopup={true}
-                                      aria-label="Actions"
-                                      bubbleEvent={false}
-                                      className=""
-                                      getMenuRef={[Function]}
-                                      id="kebab-toggle"
-                                      isActive={false}
-                                      isDisabled={true}
-                                      isOpen={false}
-                                      isPlain={true}
-                                      isPrimary={false}
-                                      isSplitButton={false}
-                                      onEnter={[Function]}
-                                      onToggle={[Function]}
-                                      parentRef={
-                                        Object {
-                                          "current": <div
-                                            aria-label="process instance actions dropdown"
-                                            aria-labelledby="process instance actions dropdown"
-                                            class="pf-c-dropdown pf-m-align-right"
-                                            data-ouia-component-id="OUIA-Generated-Dropdown-3"
-                                            data-ouia-component-type="PF4/Dropdown"
-                                            data-ouia-safe="true"
-                                          >
-                                            <button
-                                              aria-expanded="false"
-                                              aria-haspopup="true"
-                                              aria-label="Actions"
-                                              class="pf-c-dropdown__toggle pf-m-plain"
-                                              disabled=""
-                                              id="kebab-toggle"
-                                              type="button"
-                                            >
-                                              <svg
-                                                aria-hidden="true"
-                                                fill="currentColor"
-                                                height="1em"
-                                                role="img"
-                                                style="vertical-align: -0.125em;"
-                                                viewBox="0 0 192 512"
-                                                width="1em"
-                                              >
-                                                <path
-                                                  d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                />
-                                              </svg>
-                                            </button>
-                                          </div>,
-                                        }
-                                      }
-                                    >
-                                      <button
-                                        aria-expanded={false}
-                                        aria-haspopup={true}
-                                        aria-label="Actions"
-                                        className="pf-c-dropdown__toggle pf-m-plain"
-                                        disabled={true}
-                                        id="kebab-toggle"
-                                        onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        type="button"
-                                      >
-                                        <EllipsisVIcon
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
-                                        >
-                                          <svg
-                                            aria-hidden={true}
-                                            aria-labelledby={null}
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style={
-                                              Object {
-                                                "verticalAlign": "-0.125em",
-                                              }
-                                            }
-                                            viewBox="0 0 192 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                            />
-                                          </svg>
-                                        </EllipsisVIcon>
-                                      </button>
-                                    </Toggle>
-                                  </KebabToggle>
-                                </div>
-                              </DropdownWithContext>
-                            </Dropdown>
-                          </ProcessInstancesActionsKebab>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -1343,7 +944,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                 >
                   <tr
                     className="pf-c-table__expandable-row"
-                    data-ouia-component-id="OUIA-Generated-TableRow-10"
+                    data-ouia-component-id="OUIA-Generated-TableRow-28"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={true}
@@ -1408,7 +1009,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                 >
                   <tr
                     className=""
-                    data-ouia-component-id="OUIA-Generated-TableRow-11"
+                    data-ouia-component-id="OUIA-Generated-TableRow-29"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={false}
@@ -1457,7 +1058,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 aria-label="Details"
                                 aria-labelledby="simple-node1 expand-toggle1"
                                 className="pf-c-button pf-m-plain"
-                                data-ouia-component-id="OUIA-Generated-Button-plain-4"
+                                data-ouia-component-id="OUIA-Generated-Button-plain-10"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={false}
@@ -1621,7 +1222,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                               className="pf-c-tooltip"
                                               data-ouia-component-type="item-descriptor"
                                               data-ouia-safe={true}
-                                              id="pf-tooltip-5"
+                                              id="pf-tooltip-10"
                                               role="tooltip"
                                               style={
                                                 Object {
@@ -1650,7 +1251,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                           }
                                           trigger={
                                             <span
-                                              aria-describedby="pf-tooltip-5"
+                                              aria-describedby="pf-tooltip-10"
                                             >
                                               travels
                                                
@@ -1665,7 +1266,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                             onFoundRef={[Function]}
                                           >
                                             <span
-                                              aria-describedby="pf-tooltip-5"
+                                              aria-describedby="pf-tooltip-10"
                                             >
                                               travels
                                                
@@ -1703,7 +1304,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 aria-disabled={false}
                                 aria-label={null}
                                 className="pf-c-button pf-m-link pf-m-inline"
-                                data-ouia-component-id="OUIA-Generated-Button-link-5"
+                                data-ouia-component-id="OUIA-Generated-Button-link-9"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={null}
@@ -1757,7 +1358,9 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                           className=""
                           data-label="Last update"
                         >
-                          <ErrorPopover
+                          <MockedErrorPopover
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstanceData={
                               Object {
                                 "addons": Array [
@@ -1791,317 +1394,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-5"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-7"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-6"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-6"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Popover
-                              bodyContent={
-                                <div>
-                                  Something went wrong
-                                </div>
-                              }
-                              data-ouia-component-type="error-popover"
-                              data-ouia-safe={true}
-                              footerContent={
-                                Array [
-                                  <Button
-                                    className="pf-u-mr-sm"
-                                    id="skip-button"
-                                    onClick={[Function]}
-                                    variant="secondary"
-                                  >
-                                    Skip
-                                  </Button>,
-                                  <Button
-                                    className="pf-u-mr-sm"
-                                    id="retry-button"
-                                    onClick={[Function]}
-                                    variant="secondary"
-                                  >
-                                    Retry
-                                  </Button>,
-                                ]
-                              }
-                              headerContent={
-                                <div>
-                                  Process error
-                                </div>
-                              }
-                              id="538f9feb-5a14-4096-b791-2055b38da7c6"
-                              position="auto"
-                              zIndex={300}
-                            >
-                              <Popper
-                                appendTo={[Function]}
-                                distance={25}
-                                enableFlip={true}
-                                flipBehavior={
-                                  Array [
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                    "left",
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                  ]
-                                }
-                                isVisible={false}
-                                onDocumentClick={[Function]}
-                                onDocumentKeyDown={[Function]}
-                                onTriggerClick={[Function]}
-                                onTriggerEnter={[Function]}
-                                placement="auto"
-                                popper={
-                                  <FocusTrap
-                                    active={false}
-                                    aria-describedby="popover-538f9feb-5a14-4096-b791-2055b38da7c6-body"
-                                    aria-labelledby="popover-538f9feb-5a14-4096-b791-2055b38da7c6-header"
-                                    aria-modal="true"
-                                    className="pf-c-popover"
-                                    data-ouia-component-type="error-popover"
-                                    data-ouia-safe={true}
-                                    focusTrapOptions={
-                                      Object {
-                                        "clickOutsideDeactivates": true,
-                                        "returnFocusOnDeactivate": true,
-                                      }
-                                    }
-                                    onMouseDown={[Function]}
-                                    paused={false}
-                                    role="dialog"
-                                    style={
-                                      Object {
-                                        "maxWidth": null,
-                                        "minWidth": null,
-                                        "opacity": 0,
-                                        "transition": "opacity 300ms cubic-bezier(.54, 1.5, .38, 1.11)",
-                                      }
-                                    }
-                                  >
-                                    <PopoverArrow />
-                                    <PopoverContent>
-                                      <PopoverCloseButton
-                                        aria-label="Close"
-                                        onClose={[Function]}
-                                      />
-                                      <PopoverHeader
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-header"
-                                      >
-                                        <div>
-                                          Process error
-                                        </div>
-                                      </PopoverHeader>
-                                      <PopoverBody
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-body"
-                                      >
-                                        <div>
-                                          Something went wrong
-                                        </div>
-                                      </PopoverBody>
-                                      <PopoverFooter
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-footer"
-                                      >
-                                        <Button
-                                          className="pf-u-mr-sm"
-                                          id="skip-button"
-                                          onClick={[Function]}
-                                          variant="secondary"
-                                        >
-                                          Skip
-                                        </Button>
-                                        <Button
-                                          className="pf-u-mr-sm"
-                                          id="retry-button"
-                                          onClick={[Function]}
-                                          variant="secondary"
-                                        >
-                                          Retry
-                                        </Button>
-                                      </PopoverFooter>
-                                    </PopoverContent>
-                                  </FocusTrap>
-                                }
-                                popperMatchesTriggerWidth={false}
-                                positionModifiers={
-                                  Object {
-                                    "bottom": "pf-m-bottom",
-                                    "left": "pf-m-left",
-                                    "right": "pf-m-right",
-                                    "top": "pf-m-top",
-                                  }
-                                }
-                                trigger={
-                                  <Button
-                                    isInline={true}
-                                    variant="link"
-                                  >
-                                    <React.Fragment>
-                                      <ErrorCircleOIcon
-                                        className="pf-u-mr-sm"
-                                        color="var(--pf-global--danger-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
-                                      />
-                                      Error
-                                    </React.Fragment>
-                                  </Button>
-                                }
-                                zIndex={300}
-                              >
-                                <FindRefWrapper
-                                  onFoundRef={[Function]}
-                                >
-                                  <Button
-                                    isInline={true}
-                                    variant="link"
-                                  >
-                                    <button
-                                      aria-disabled={false}
-                                      aria-label={null}
-                                      className="pf-c-button pf-m-link pf-m-inline"
-                                      data-ouia-component-id="OUIA-Generated-Button-link-6"
-                                      data-ouia-component-type="PF4/Button"
-                                      data-ouia-safe={true}
-                                      disabled={false}
-                                      role={null}
-                                      type="button"
-                                    >
-                                      <ErrorCircleOIcon
-                                        className="pf-u-mr-sm"
-                                        color="var(--pf-global--danger-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
-                                      >
-                                        <svg
-                                          aria-hidden={true}
-                                          aria-labelledby={null}
-                                          className="pf-u-mr-sm"
-                                          fill="var(--pf-global--danger-color--100)"
-                                          height="1em"
-                                          role="img"
-                                          style={
-                                            Object {
-                                              "verticalAlign": "-0.125em",
-                                            }
-                                          }
-                                          viewBox="0 0 1024 1024"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M409.5,319 C406.699326,316.168774 402.882413,314.575614 398.9,314.575614 C394.917587,314.575614 391.100674,316.168774 388.3,319 L319,388.3 C316.168774,391.100674 314.575614,394.917587 314.575614,398.9 C314.575614,402.882413 316.168774,406.699326 319,409.5 L421.5,512 L319,614.5 C316.168774,617.300674 314.575614,621.117587 314.575614,625.1 C314.575614,629.082413 316.168774,632.899326 319,635.7 L388.3,705 C391.100674,707.831226 394.917587,709.424386 398.9,709.424386 C402.882413,709.424386 406.699326,707.831226 409.5,705 L512,602.5 L614.5,705 C620.367618,710.877435 629.877455,710.922082 635.8,705.1 L705.1,635.8 C707.926508,632.970191 709.505822,629.128746 709.48721,625.129169 C709.468267,621.129592 707.852954,617.303145 705,614.5 L602.5,512 L705,409.5 C707.821142,406.720523 709.417879,402.93109 709.436648,398.97079 C709.455417,395.01049 707.89467,391.206092 705.1,388.4 L635.8,319 C629.932382,313.122565 620.422545,313.077918 614.5,318.9 L512,421.5 L409.5,319 Z M512,896 C300.2,896 128,723.9 128,512 C128,300.3 300.2,128 512,128 C723.8,128 896,300.2 896,512 C896,723.8 723.7,896 512,896 Z M512.1,0 C229.7,0 0,229.8 0,512 C0,794.2 229.8,1024 512.1,1024 C794.4,1024 1024,794.3 1024,512 C1024,229.7 794.4,0 512.1,0 Z"
-                                          />
-                                        </svg>
-                                      </ErrorCircleOIcon>
-                                      Error
-                                    </button>
-                                  </Button>
-                                </FindRefWrapper>
-                              </Popper>
-                            </Popover>
-                          </ErrorPopover>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -2214,8 +1507,11 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                         <td
                           className=""
                         >
-                          <ProcessInstancesActionsKebab
+                          <MockedProcessListActionsKebab
                             key="538f9feb-5a14-4096-b791-2055b38da7c6"
+                            onAbortClick={[Function]}
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstance={
                               Object {
                                 "addons": Array [
@@ -2249,335 +1545,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-6"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-8"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-7"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-7"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Dropdown
-                              aria-label="process instance actions dropdown"
-                              aria-labelledby="process instance actions dropdown"
-                              data-ouia-component-type="process-instance-actions-kebab"
-                              data-ouia-safe={true}
-                              dropdownItems={
-                                Array [
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Retry
-                                  </DropdownItem>,
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Skip
-                                  </DropdownItem>,
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Abort
-                                  </DropdownItem>,
-                                ]
-                              }
-                              isOpen={false}
-                              isPlain={true}
-                              onSelect={[Function]}
-                              position="right"
-                              toggle={
-                                <KebabToggle
-                                  id="kebab-toggle"
-                                  isDisabled={false}
-                                  onToggle={[Function]}
-                                />
-                              }
-                            >
-                              <DropdownWithContext
-                                aria-label="process instance actions dropdown"
-                                aria-labelledby="process instance actions dropdown"
-                                autoFocus={true}
-                                className=""
-                                data-ouia-component-type="process-instance-actions-kebab"
-                                data-ouia-safe={true}
-                                direction="down"
-                                dropdownItems={
-                                  Array [
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Retry
-                                    </DropdownItem>,
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Skip
-                                    </DropdownItem>,
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Abort
-                                    </DropdownItem>,
-                                  ]
-                                }
-                                isGrouped={false}
-                                isOpen={false}
-                                isPlain={true}
-                                menuAppendTo="inline"
-                                onSelect={[Function]}
-                                position="right"
-                                toggle={
-                                  <KebabToggle
-                                    id="kebab-toggle"
-                                    isDisabled={false}
-                                    onToggle={[Function]}
-                                  />
-                                }
-                              >
-                                <div
-                                  aria-label="process instance actions dropdown"
-                                  aria-labelledby="process instance actions dropdown"
-                                  className="pf-c-dropdown pf-m-align-right"
-                                  data-ouia-component-id="OUIA-Generated-Dropdown-4"
-                                  data-ouia-component-type="PF4/Dropdown"
-                                  data-ouia-safe={true}
-                                >
-                                  <KebabToggle
-                                    aria-haspopup={true}
-                                    getMenuRef={[Function]}
-                                    id="kebab-toggle"
-                                    isDisabled={false}
-                                    isOpen={false}
-                                    isPlain={true}
-                                    key=".0"
-                                    onEnter={[Function]}
-                                    onToggle={[Function]}
-                                    parentRef={
-                                      Object {
-                                        "current": <div
-                                          aria-label="process instance actions dropdown"
-                                          aria-labelledby="process instance actions dropdown"
-                                          class="pf-c-dropdown pf-m-align-right"
-                                          data-ouia-component-id="OUIA-Generated-Dropdown-4"
-                                          data-ouia-component-type="PF4/Dropdown"
-                                          data-ouia-safe="true"
-                                        >
-                                          <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            aria-label="Actions"
-                                            class="pf-c-dropdown__toggle pf-m-plain"
-                                            id="kebab-toggle"
-                                            type="button"
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              fill="currentColor"
-                                              height="1em"
-                                              role="img"
-                                              style="vertical-align: -0.125em;"
-                                              viewBox="0 0 192 512"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                              />
-                                            </svg>
-                                          </button>
-                                        </div>,
-                                      }
-                                    }
-                                  >
-                                    <Toggle
-                                      aria-haspopup={true}
-                                      aria-label="Actions"
-                                      bubbleEvent={false}
-                                      className=""
-                                      getMenuRef={[Function]}
-                                      id="kebab-toggle"
-                                      isActive={false}
-                                      isDisabled={false}
-                                      isOpen={false}
-                                      isPlain={true}
-                                      isPrimary={false}
-                                      isSplitButton={false}
-                                      onEnter={[Function]}
-                                      onToggle={[Function]}
-                                      parentRef={
-                                        Object {
-                                          "current": <div
-                                            aria-label="process instance actions dropdown"
-                                            aria-labelledby="process instance actions dropdown"
-                                            class="pf-c-dropdown pf-m-align-right"
-                                            data-ouia-component-id="OUIA-Generated-Dropdown-4"
-                                            data-ouia-component-type="PF4/Dropdown"
-                                            data-ouia-safe="true"
-                                          >
-                                            <button
-                                              aria-expanded="false"
-                                              aria-haspopup="true"
-                                              aria-label="Actions"
-                                              class="pf-c-dropdown__toggle pf-m-plain"
-                                              id="kebab-toggle"
-                                              type="button"
-                                            >
-                                              <svg
-                                                aria-hidden="true"
-                                                fill="currentColor"
-                                                height="1em"
-                                                role="img"
-                                                style="vertical-align: -0.125em;"
-                                                viewBox="0 0 192 512"
-                                                width="1em"
-                                              >
-                                                <path
-                                                  d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                />
-                                              </svg>
-                                            </button>
-                                          </div>,
-                                        }
-                                      }
-                                    >
-                                      <button
-                                        aria-expanded={false}
-                                        aria-haspopup={true}
-                                        aria-label="Actions"
-                                        className="pf-c-dropdown__toggle pf-m-plain"
-                                        disabled={false}
-                                        id="kebab-toggle"
-                                        onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        type="button"
-                                      >
-                                        <EllipsisVIcon
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
-                                        >
-                                          <svg
-                                            aria-hidden={true}
-                                            aria-labelledby={null}
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style={
-                                              Object {
-                                                "verticalAlign": "-0.125em",
-                                              }
-                                            }
-                                            viewBox="0 0 192 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                            />
-                                          </svg>
-                                        </EllipsisVIcon>
-                                      </button>
-                                    </Toggle>
-                                  </KebabToggle>
-                                </div>
-                              </DropdownWithContext>
-                            </Dropdown>
-                          </ProcessInstancesActionsKebab>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -2594,7 +1562,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
                 >
                   <tr
                     className="pf-c-table__expandable-row"
-                    data-ouia-component-id="OUIA-Generated-TableRow-12"
+                    data-ouia-component-id="OUIA-Generated-TableRow-30"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={true}
@@ -2646,7 +1614,7 @@ exports[`ProcessListPage tests snapshot test for disabled process and non "error
 `;
 
 exports[`ProcessListPage tests snapshot test for process list - with expanded 1`] = `
-<MockedSubProcessTable
+<MockedProcessListChildTable
   filters={
     Object {
       "businessKey": Array [],
@@ -2752,6 +1720,9 @@ exports[`ProcessListPage tests snapshot test for process list - with expanded 1`
       ],
     }
   }
+  onAbortClick={[Function]}
+  onRetryClick={[Function]}
+  onSkipClick={[Function]}
   parentProcessId="538f9feb-5a14-4096-b791-2055b38da7c6"
   selectedInstances={Array []}
   setInitData={[MockFunction]}
@@ -2761,15 +1732,8 @@ exports[`ProcessListPage tests snapshot test for process list - with expanded 1`
         Array [
           [Function],
         ],
-        Array [
-          [Function],
-        ],
       ],
       "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
         Object {
           "type": "return",
           "value": undefined,
@@ -2901,23 +1865,38 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
   setSelectableInstances={[MockFunction]}
   setSelectedInstances={[MockFunction]}
 >
+  <MockedProcessListModal
+    handleModalToggle={[Function]}
+    isModalOpen={false}
+    modalContent=""
+    modalTitle={
+      <Title
+        headingLevel="h1"
+        size="2xl"
+      >
+        <span>
+          
+        </span>
+      </Title>
+    }
+    ouiaId={null}
+    processName={null}
+  />
   <TableComposable
     aria-label="Process List Table"
     data-ouia-component-type="process-list-table"
     data-ouia-safe={true}
-    variant="compact"
   >
     <TableComposableBase
       aria-label="Process List Table"
       data-ouia-component-type="process-list-table"
       data-ouia-safe={true}
       innerRef={null}
-      variant="compact"
     >
       <table
         aria-label="Process List Table"
-        className="pf-c-table pf-m-grid-md pf-m-compact"
-        data-ouia-component-id="OUIA-Generated-Table-1"
+        className="pf-c-table pf-m-grid-md"
+        data-ouia-component-id="OUIA-Generated-Table-4"
         data-ouia-component-type="process-list-table"
         data-ouia-safe={true}
         role="grid"
@@ -2935,7 +1914,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                 >
                   <tr
                     className=""
-                    data-ouia-component-id="OUIA-Generated-TableRow-1"
+                    data-ouia-component-id="OUIA-Generated-TableRow-19"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={false}
@@ -3099,7 +2078,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                 >
                   <tr
                     className=""
-                    data-ouia-component-id="OUIA-Generated-TableRow-3"
+                    data-ouia-component-id="OUIA-Generated-TableRow-21"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={false}
@@ -3148,7 +2127,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 aria-label="Details"
                                 aria-labelledby="simple-node0 expand-toggle0"
                                 className="pf-c-button pf-m-plain"
-                                data-ouia-component-id="OUIA-Generated-Button-plain-1"
+                                data-ouia-component-id="OUIA-Generated-Button-plain-7"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={false}
@@ -3312,7 +2291,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                               className="pf-c-tooltip"
                                               data-ouia-component-type="item-descriptor"
                                               data-ouia-safe={true}
-                                              id="pf-tooltip-1"
+                                              id="pf-tooltip-7"
                                               role="tooltip"
                                               style={
                                                 Object {
@@ -3341,7 +2320,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                           }
                                           trigger={
                                             <span
-                                              aria-describedby="pf-tooltip-1"
+                                              aria-describedby="pf-tooltip-7"
                                             >
                                               travels
                                                
@@ -3356,7 +2335,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                             onFoundRef={[Function]}
                                           >
                                             <span
-                                              aria-describedby="pf-tooltip-1"
+                                              aria-describedby="pf-tooltip-7"
                                             >
                                               travels
                                                
@@ -3394,7 +2373,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 aria-disabled={false}
                                 aria-label={null}
                                 className="pf-c-button pf-m-link pf-m-inline"
-                                data-ouia-component-id="OUIA-Generated-Button-link-1"
+                                data-ouia-component-id="OUIA-Generated-Button-link-7"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={null}
@@ -3448,7 +2427,9 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                           className=""
                           data-label="Last update"
                         >
-                          <ErrorPopover
+                          <MockedErrorPopover
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstanceData={
                               Object {
                                 "addons": Array [
@@ -3509,317 +2490,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-0"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-2"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-1"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-1"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Popover
-                              bodyContent={
-                                <div>
-                                  Something went wrong
-                                </div>
-                              }
-                              data-ouia-component-type="error-popover"
-                              data-ouia-safe={true}
-                              footerContent={
-                                Array [
-                                  <Button
-                                    className="pf-u-mr-sm"
-                                    id="skip-button"
-                                    onClick={[Function]}
-                                    variant="secondary"
-                                  >
-                                    Skip
-                                  </Button>,
-                                  <Button
-                                    className="pf-u-mr-sm"
-                                    id="retry-button"
-                                    onClick={[Function]}
-                                    variant="secondary"
-                                  >
-                                    Retry
-                                  </Button>,
-                                ]
-                              }
-                              headerContent={
-                                <div>
-                                  Process error
-                                </div>
-                              }
-                              id="538f9feb-5a14-4096-b791-2055b38da7c6"
-                              position="auto"
-                              zIndex={300}
-                            >
-                              <Popper
-                                appendTo={[Function]}
-                                distance={25}
-                                enableFlip={true}
-                                flipBehavior={
-                                  Array [
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                    "left",
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                  ]
-                                }
-                                isVisible={false}
-                                onDocumentClick={[Function]}
-                                onDocumentKeyDown={[Function]}
-                                onTriggerClick={[Function]}
-                                onTriggerEnter={[Function]}
-                                placement="auto"
-                                popper={
-                                  <FocusTrap
-                                    active={false}
-                                    aria-describedby="popover-538f9feb-5a14-4096-b791-2055b38da7c6-body"
-                                    aria-labelledby="popover-538f9feb-5a14-4096-b791-2055b38da7c6-header"
-                                    aria-modal="true"
-                                    className="pf-c-popover"
-                                    data-ouia-component-type="error-popover"
-                                    data-ouia-safe={true}
-                                    focusTrapOptions={
-                                      Object {
-                                        "clickOutsideDeactivates": true,
-                                        "returnFocusOnDeactivate": true,
-                                      }
-                                    }
-                                    onMouseDown={[Function]}
-                                    paused={false}
-                                    role="dialog"
-                                    style={
-                                      Object {
-                                        "maxWidth": null,
-                                        "minWidth": null,
-                                        "opacity": 0,
-                                        "transition": "opacity 300ms cubic-bezier(.54, 1.5, .38, 1.11)",
-                                      }
-                                    }
-                                  >
-                                    <PopoverArrow />
-                                    <PopoverContent>
-                                      <PopoverCloseButton
-                                        aria-label="Close"
-                                        onClose={[Function]}
-                                      />
-                                      <PopoverHeader
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-header"
-                                      >
-                                        <div>
-                                          Process error
-                                        </div>
-                                      </PopoverHeader>
-                                      <PopoverBody
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-body"
-                                      >
-                                        <div>
-                                          Something went wrong
-                                        </div>
-                                      </PopoverBody>
-                                      <PopoverFooter
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-footer"
-                                      >
-                                        <Button
-                                          className="pf-u-mr-sm"
-                                          id="skip-button"
-                                          onClick={[Function]}
-                                          variant="secondary"
-                                        >
-                                          Skip
-                                        </Button>
-                                        <Button
-                                          className="pf-u-mr-sm"
-                                          id="retry-button"
-                                          onClick={[Function]}
-                                          variant="secondary"
-                                        >
-                                          Retry
-                                        </Button>
-                                      </PopoverFooter>
-                                    </PopoverContent>
-                                  </FocusTrap>
-                                }
-                                popperMatchesTriggerWidth={false}
-                                positionModifiers={
-                                  Object {
-                                    "bottom": "pf-m-bottom",
-                                    "left": "pf-m-left",
-                                    "right": "pf-m-right",
-                                    "top": "pf-m-top",
-                                  }
-                                }
-                                trigger={
-                                  <Button
-                                    isInline={true}
-                                    variant="link"
-                                  >
-                                    <React.Fragment>
-                                      <ErrorCircleOIcon
-                                        className="pf-u-mr-sm"
-                                        color="var(--pf-global--danger-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
-                                      />
-                                      Error
-                                    </React.Fragment>
-                                  </Button>
-                                }
-                                zIndex={300}
-                              >
-                                <FindRefWrapper
-                                  onFoundRef={[Function]}
-                                >
-                                  <Button
-                                    isInline={true}
-                                    variant="link"
-                                  >
-                                    <button
-                                      aria-disabled={false}
-                                      aria-label={null}
-                                      className="pf-c-button pf-m-link pf-m-inline"
-                                      data-ouia-component-id="OUIA-Generated-Button-link-2"
-                                      data-ouia-component-type="PF4/Button"
-                                      data-ouia-safe={true}
-                                      disabled={false}
-                                      role={null}
-                                      type="button"
-                                    >
-                                      <ErrorCircleOIcon
-                                        className="pf-u-mr-sm"
-                                        color="var(--pf-global--danger-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
-                                      >
-                                        <svg
-                                          aria-hidden={true}
-                                          aria-labelledby={null}
-                                          className="pf-u-mr-sm"
-                                          fill="var(--pf-global--danger-color--100)"
-                                          height="1em"
-                                          role="img"
-                                          style={
-                                            Object {
-                                              "verticalAlign": "-0.125em",
-                                            }
-                                          }
-                                          viewBox="0 0 1024 1024"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M409.5,319 C406.699326,316.168774 402.882413,314.575614 398.9,314.575614 C394.917587,314.575614 391.100674,316.168774 388.3,319 L319,388.3 C316.168774,391.100674 314.575614,394.917587 314.575614,398.9 C314.575614,402.882413 316.168774,406.699326 319,409.5 L421.5,512 L319,614.5 C316.168774,617.300674 314.575614,621.117587 314.575614,625.1 C314.575614,629.082413 316.168774,632.899326 319,635.7 L388.3,705 C391.100674,707.831226 394.917587,709.424386 398.9,709.424386 C402.882413,709.424386 406.699326,707.831226 409.5,705 L512,602.5 L614.5,705 C620.367618,710.877435 629.877455,710.922082 635.8,705.1 L705.1,635.8 C707.926508,632.970191 709.505822,629.128746 709.48721,625.129169 C709.468267,621.129592 707.852954,617.303145 705,614.5 L602.5,512 L705,409.5 C707.821142,406.720523 709.417879,402.93109 709.436648,398.97079 C709.455417,395.01049 707.89467,391.206092 705.1,388.4 L635.8,319 C629.932382,313.122565 620.422545,313.077918 614.5,318.9 L512,421.5 L409.5,319 Z M512,896 C300.2,896 128,723.9 128,512 C128,300.3 300.2,128 512,128 C723.8,128 896,300.2 896,512 C896,723.8 723.7,896 512,896 Z M512.1,0 C229.7,0 0,229.8 0,512 C0,794.2 229.8,1024 512.1,1024 C794.4,1024 1024,794.3 1024,512 C1024,229.7 794.4,0 512.1,0 Z"
-                                          />
-                                        </svg>
-                                      </ErrorCircleOIcon>
-                                      Error
-                                    </button>
-                                  </Button>
-                                </FindRefWrapper>
-                              </Popper>
-                            </Popover>
-                          </ErrorPopover>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -3932,8 +2603,11 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                         <td
                           className=""
                         >
-                          <ProcessInstancesActionsKebab
+                          <MockedProcessListActionsKebab
                             key="538f9feb-5a14-4096-b791-2055b38da7c6"
+                            onAbortClick={[Function]}
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstance={
                               Object {
                                 "addons": Array [
@@ -3994,335 +2668,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-1"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-3"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-2"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-2"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Dropdown
-                              aria-label="process instance actions dropdown"
-                              aria-labelledby="process instance actions dropdown"
-                              data-ouia-component-type="process-instance-actions-kebab"
-                              data-ouia-safe={true}
-                              dropdownItems={
-                                Array [
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Retry
-                                  </DropdownItem>,
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Skip
-                                  </DropdownItem>,
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Abort
-                                  </DropdownItem>,
-                                ]
-                              }
-                              isOpen={false}
-                              isPlain={true}
-                              onSelect={[Function]}
-                              position="right"
-                              toggle={
-                                <KebabToggle
-                                  id="kebab-toggle"
-                                  isDisabled={false}
-                                  onToggle={[Function]}
-                                />
-                              }
-                            >
-                              <DropdownWithContext
-                                aria-label="process instance actions dropdown"
-                                aria-labelledby="process instance actions dropdown"
-                                autoFocus={true}
-                                className=""
-                                data-ouia-component-type="process-instance-actions-kebab"
-                                data-ouia-safe={true}
-                                direction="down"
-                                dropdownItems={
-                                  Array [
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Retry
-                                    </DropdownItem>,
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Skip
-                                    </DropdownItem>,
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Abort
-                                    </DropdownItem>,
-                                  ]
-                                }
-                                isGrouped={false}
-                                isOpen={false}
-                                isPlain={true}
-                                menuAppendTo="inline"
-                                onSelect={[Function]}
-                                position="right"
-                                toggle={
-                                  <KebabToggle
-                                    id="kebab-toggle"
-                                    isDisabled={false}
-                                    onToggle={[Function]}
-                                  />
-                                }
-                              >
-                                <div
-                                  aria-label="process instance actions dropdown"
-                                  aria-labelledby="process instance actions dropdown"
-                                  className="pf-c-dropdown pf-m-align-right"
-                                  data-ouia-component-id="OUIA-Generated-Dropdown-1"
-                                  data-ouia-component-type="PF4/Dropdown"
-                                  data-ouia-safe={true}
-                                >
-                                  <KebabToggle
-                                    aria-haspopup={true}
-                                    getMenuRef={[Function]}
-                                    id="kebab-toggle"
-                                    isDisabled={false}
-                                    isOpen={false}
-                                    isPlain={true}
-                                    key=".0"
-                                    onEnter={[Function]}
-                                    onToggle={[Function]}
-                                    parentRef={
-                                      Object {
-                                        "current": <div
-                                          aria-label="process instance actions dropdown"
-                                          aria-labelledby="process instance actions dropdown"
-                                          class="pf-c-dropdown pf-m-align-right"
-                                          data-ouia-component-id="OUIA-Generated-Dropdown-1"
-                                          data-ouia-component-type="PF4/Dropdown"
-                                          data-ouia-safe="true"
-                                        >
-                                          <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            aria-label="Actions"
-                                            class="pf-c-dropdown__toggle pf-m-plain"
-                                            id="kebab-toggle"
-                                            type="button"
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              fill="currentColor"
-                                              height="1em"
-                                              role="img"
-                                              style="vertical-align: -0.125em;"
-                                              viewBox="0 0 192 512"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                              />
-                                            </svg>
-                                          </button>
-                                        </div>,
-                                      }
-                                    }
-                                  >
-                                    <Toggle
-                                      aria-haspopup={true}
-                                      aria-label="Actions"
-                                      bubbleEvent={false}
-                                      className=""
-                                      getMenuRef={[Function]}
-                                      id="kebab-toggle"
-                                      isActive={false}
-                                      isDisabled={false}
-                                      isOpen={false}
-                                      isPlain={true}
-                                      isPrimary={false}
-                                      isSplitButton={false}
-                                      onEnter={[Function]}
-                                      onToggle={[Function]}
-                                      parentRef={
-                                        Object {
-                                          "current": <div
-                                            aria-label="process instance actions dropdown"
-                                            aria-labelledby="process instance actions dropdown"
-                                            class="pf-c-dropdown pf-m-align-right"
-                                            data-ouia-component-id="OUIA-Generated-Dropdown-1"
-                                            data-ouia-component-type="PF4/Dropdown"
-                                            data-ouia-safe="true"
-                                          >
-                                            <button
-                                              aria-expanded="false"
-                                              aria-haspopup="true"
-                                              aria-label="Actions"
-                                              class="pf-c-dropdown__toggle pf-m-plain"
-                                              id="kebab-toggle"
-                                              type="button"
-                                            >
-                                              <svg
-                                                aria-hidden="true"
-                                                fill="currentColor"
-                                                height="1em"
-                                                role="img"
-                                                style="vertical-align: -0.125em;"
-                                                viewBox="0 0 192 512"
-                                                width="1em"
-                                              >
-                                                <path
-                                                  d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                />
-                                              </svg>
-                                            </button>
-                                          </div>,
-                                        }
-                                      }
-                                    >
-                                      <button
-                                        aria-expanded={false}
-                                        aria-haspopup={true}
-                                        aria-label="Actions"
-                                        className="pf-c-dropdown__toggle pf-m-plain"
-                                        disabled={false}
-                                        id="kebab-toggle"
-                                        onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        type="button"
-                                      >
-                                        <EllipsisVIcon
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
-                                        >
-                                          <svg
-                                            aria-hidden={true}
-                                            aria-labelledby={null}
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style={
-                                              Object {
-                                                "verticalAlign": "-0.125em",
-                                              }
-                                            }
-                                            viewBox="0 0 192 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                            />
-                                          </svg>
-                                        </EllipsisVIcon>
-                                      </button>
-                                    </Toggle>
-                                  </KebabToggle>
-                                </div>
-                              </DropdownWithContext>
-                            </Dropdown>
-                          </ProcessInstancesActionsKebab>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -4339,7 +2685,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                 >
                   <tr
                     className="pf-c-table__expandable-row"
-                    data-ouia-component-id="OUIA-Generated-TableRow-4"
+                    data-ouia-component-id="OUIA-Generated-TableRow-22"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={true}
@@ -4404,7 +2750,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                 >
                   <tr
                     className=""
-                    data-ouia-component-id="OUIA-Generated-TableRow-5"
+                    data-ouia-component-id="OUIA-Generated-TableRow-23"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={false}
@@ -4453,7 +2799,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 aria-label="Details"
                                 aria-labelledby="simple-node1 expand-toggle1"
                                 className="pf-c-button pf-m-plain"
-                                data-ouia-component-id="OUIA-Generated-Button-plain-2"
+                                data-ouia-component-id="OUIA-Generated-Button-plain-8"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={false}
@@ -4617,7 +2963,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                               className="pf-c-tooltip"
                                               data-ouia-component-type="item-descriptor"
                                               data-ouia-safe={true}
-                                              id="pf-tooltip-2"
+                                              id="pf-tooltip-8"
                                               role="tooltip"
                                               style={
                                                 Object {
@@ -4646,7 +2992,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                           }
                                           trigger={
                                             <span
-                                              aria-describedby="pf-tooltip-2"
+                                              aria-describedby="pf-tooltip-8"
                                             >
                                               travels
                                                
@@ -4661,7 +3007,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                             onFoundRef={[Function]}
                                           >
                                             <span
-                                              aria-describedby="pf-tooltip-2"
+                                              aria-describedby="pf-tooltip-8"
                                             >
                                               travels
                                                
@@ -4699,7 +3045,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 aria-disabled={false}
                                 aria-label={null}
                                 className="pf-c-button pf-m-link pf-m-inline"
-                                data-ouia-component-id="OUIA-Generated-Button-link-3"
+                                data-ouia-component-id="OUIA-Generated-Button-link-8"
                                 data-ouia-component-type="PF4/Button"
                                 data-ouia-safe={true}
                                 disabled={null}
@@ -4753,7 +3099,9 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                           className=""
                           data-label="Last update"
                         >
-                          <ErrorPopover
+                          <MockedErrorPopover
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstanceData={
                               Object {
                                 "addons": Array [
@@ -4787,317 +3135,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-2"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-4"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-3"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-3"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Popover
-                              bodyContent={
-                                <div>
-                                  Something went wrong
-                                </div>
-                              }
-                              data-ouia-component-type="error-popover"
-                              data-ouia-safe={true}
-                              footerContent={
-                                Array [
-                                  <Button
-                                    className="pf-u-mr-sm"
-                                    id="skip-button"
-                                    onClick={[Function]}
-                                    variant="secondary"
-                                  >
-                                    Skip
-                                  </Button>,
-                                  <Button
-                                    className="pf-u-mr-sm"
-                                    id="retry-button"
-                                    onClick={[Function]}
-                                    variant="secondary"
-                                  >
-                                    Retry
-                                  </Button>,
-                                ]
-                              }
-                              headerContent={
-                                <div>
-                                  Process error
-                                </div>
-                              }
-                              id="538f9feb-5a14-4096-b791-2055b38da7c6"
-                              position="auto"
-                              zIndex={300}
-                            >
-                              <Popper
-                                appendTo={[Function]}
-                                distance={25}
-                                enableFlip={true}
-                                flipBehavior={
-                                  Array [
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                    "left",
-                                    "top",
-                                    "right",
-                                    "bottom",
-                                  ]
-                                }
-                                isVisible={false}
-                                onDocumentClick={[Function]}
-                                onDocumentKeyDown={[Function]}
-                                onTriggerClick={[Function]}
-                                onTriggerEnter={[Function]}
-                                placement="auto"
-                                popper={
-                                  <FocusTrap
-                                    active={false}
-                                    aria-describedby="popover-538f9feb-5a14-4096-b791-2055b38da7c6-body"
-                                    aria-labelledby="popover-538f9feb-5a14-4096-b791-2055b38da7c6-header"
-                                    aria-modal="true"
-                                    className="pf-c-popover"
-                                    data-ouia-component-type="error-popover"
-                                    data-ouia-safe={true}
-                                    focusTrapOptions={
-                                      Object {
-                                        "clickOutsideDeactivates": true,
-                                        "returnFocusOnDeactivate": true,
-                                      }
-                                    }
-                                    onMouseDown={[Function]}
-                                    paused={false}
-                                    role="dialog"
-                                    style={
-                                      Object {
-                                        "maxWidth": null,
-                                        "minWidth": null,
-                                        "opacity": 0,
-                                        "transition": "opacity 300ms cubic-bezier(.54, 1.5, .38, 1.11)",
-                                      }
-                                    }
-                                  >
-                                    <PopoverArrow />
-                                    <PopoverContent>
-                                      <PopoverCloseButton
-                                        aria-label="Close"
-                                        onClose={[Function]}
-                                      />
-                                      <PopoverHeader
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-header"
-                                      >
-                                        <div>
-                                          Process error
-                                        </div>
-                                      </PopoverHeader>
-                                      <PopoverBody
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-body"
-                                      >
-                                        <div>
-                                          Something went wrong
-                                        </div>
-                                      </PopoverBody>
-                                      <PopoverFooter
-                                        id="popover-538f9feb-5a14-4096-b791-2055b38da7c6-footer"
-                                      >
-                                        <Button
-                                          className="pf-u-mr-sm"
-                                          id="skip-button"
-                                          onClick={[Function]}
-                                          variant="secondary"
-                                        >
-                                          Skip
-                                        </Button>
-                                        <Button
-                                          className="pf-u-mr-sm"
-                                          id="retry-button"
-                                          onClick={[Function]}
-                                          variant="secondary"
-                                        >
-                                          Retry
-                                        </Button>
-                                      </PopoverFooter>
-                                    </PopoverContent>
-                                  </FocusTrap>
-                                }
-                                popperMatchesTriggerWidth={false}
-                                positionModifiers={
-                                  Object {
-                                    "bottom": "pf-m-bottom",
-                                    "left": "pf-m-left",
-                                    "right": "pf-m-right",
-                                    "top": "pf-m-top",
-                                  }
-                                }
-                                trigger={
-                                  <Button
-                                    isInline={true}
-                                    variant="link"
-                                  >
-                                    <React.Fragment>
-                                      <ErrorCircleOIcon
-                                        className="pf-u-mr-sm"
-                                        color="var(--pf-global--danger-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
-                                      />
-                                      Error
-                                    </React.Fragment>
-                                  </Button>
-                                }
-                                zIndex={300}
-                              >
-                                <FindRefWrapper
-                                  onFoundRef={[Function]}
-                                >
-                                  <Button
-                                    isInline={true}
-                                    variant="link"
-                                  >
-                                    <button
-                                      aria-disabled={false}
-                                      aria-label={null}
-                                      className="pf-c-button pf-m-link pf-m-inline"
-                                      data-ouia-component-id="OUIA-Generated-Button-link-4"
-                                      data-ouia-component-type="PF4/Button"
-                                      data-ouia-safe={true}
-                                      disabled={false}
-                                      role={null}
-                                      type="button"
-                                    >
-                                      <ErrorCircleOIcon
-                                        className="pf-u-mr-sm"
-                                        color="var(--pf-global--danger-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
-                                      >
-                                        <svg
-                                          aria-hidden={true}
-                                          aria-labelledby={null}
-                                          className="pf-u-mr-sm"
-                                          fill="var(--pf-global--danger-color--100)"
-                                          height="1em"
-                                          role="img"
-                                          style={
-                                            Object {
-                                              "verticalAlign": "-0.125em",
-                                            }
-                                          }
-                                          viewBox="0 0 1024 1024"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M409.5,319 C406.699326,316.168774 402.882413,314.575614 398.9,314.575614 C394.917587,314.575614 391.100674,316.168774 388.3,319 L319,388.3 C316.168774,391.100674 314.575614,394.917587 314.575614,398.9 C314.575614,402.882413 316.168774,406.699326 319,409.5 L421.5,512 L319,614.5 C316.168774,617.300674 314.575614,621.117587 314.575614,625.1 C314.575614,629.082413 316.168774,632.899326 319,635.7 L388.3,705 C391.100674,707.831226 394.917587,709.424386 398.9,709.424386 C402.882413,709.424386 406.699326,707.831226 409.5,705 L512,602.5 L614.5,705 C620.367618,710.877435 629.877455,710.922082 635.8,705.1 L705.1,635.8 C707.926508,632.970191 709.505822,629.128746 709.48721,625.129169 C709.468267,621.129592 707.852954,617.303145 705,614.5 L602.5,512 L705,409.5 C707.821142,406.720523 709.417879,402.93109 709.436648,398.97079 C709.455417,395.01049 707.89467,391.206092 705.1,388.4 L635.8,319 C629.932382,313.122565 620.422545,313.077918 614.5,318.9 L512,421.5 L409.5,319 Z M512,896 C300.2,896 128,723.9 128,512 C128,300.3 300.2,128 512,128 C723.8,128 896,300.2 896,512 C896,723.8 723.7,896 512,896 Z M512.1,0 C229.7,0 0,229.8 0,512 C0,794.2 229.8,1024 512.1,1024 C794.4,1024 1024,794.3 1024,512 C1024,229.7 794.4,0 512.1,0 Z"
-                                          />
-                                        </svg>
-                                      </ErrorCircleOIcon>
-                                      Error
-                                    </button>
-                                  </Button>
-                                </FindRefWrapper>
-                              </Popper>
-                            </Popover>
-                          </ErrorPopover>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -5210,8 +3248,11 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                         <td
                           className=""
                         >
-                          <ProcessInstancesActionsKebab
+                          <MockedProcessListActionsKebab
                             key="538f9feb-5a14-4096-b791-2055b38da7c6"
+                            onAbortClick={[Function]}
+                            onRetryClick={[Function]}
+                            onSkipClick={[Function]}
                             processInstance={
                               Object {
                                 "addons": Array [
@@ -5245,335 +3286,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                                 "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-23T22:00:00Z[UTC]\\",\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"hotel\\":{\\"address\\":{\\"city\\":\\"New York\\",\\"country\\":\\"US\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"Bakers\\",\\"zipCode\\":\\"100200\\"},\\"email\\":\\"cristiano@redhat.com\\",\\"firstName\\":\\"Cristiano\\",\\"lastName\\":\\"Nicolai\\",\\"nationality\\":\\"German\\"}}",
                               }
                             }
-                          >
-                            <ProcessListModal
-                              handleModalToggle={[Function]}
-                              isModalOpen={false}
-                              modalContent=""
-                              modalTitle={
-                                <Title
-                                  headingLevel="h1"
-                                  size="2xl"
-                                >
-                                  <span>
-                                    
-                                  </span>
-                                </Title>
-                              }
-                              ouiaId="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                              processName="travels"
-                            >
-                              <Modal
-                                actions={
-                                  Array [
-                                    <Button
-                                      onClick={[Function]}
-                                      variant="primary"
-                                    >
-                                      OK
-                                    </Button>,
-                                  ]
-                                }
-                                appendTo={[Function]}
-                                aria-describedby=""
-                                aria-label="process list modal"
-                                aria-labelledby="process list modal"
-                                className=""
-                                data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                data-ouia-component-type="process-list-modal"
-                                data-ouia-safe={true}
-                                hasNoBodyWrapper={false}
-                                header={
-                                  <Title
-                                    headingLevel="h1"
-                                    size="2xl"
-                                  >
-                                    <span>
-                                      
-                                    </span>
-                                  </Title>
-                                }
-                                isOpen={false}
-                                onClose={[Function]}
-                                ouiaSafe={true}
-                                showClose={true}
-                                title=""
-                                titleIconVariant={null}
-                                titleLabel=""
-                                variant="small"
-                              >
-                                <Portal
-                                  containerInfo={<div />}
-                                >
-                                  <ModalContent
-                                    actions={
-                                      Array [
-                                        <Button
-                                          onClick={[Function]}
-                                          variant="primary"
-                                        >
-                                          OK
-                                        </Button>,
-                                      ]
-                                    }
-                                    aria-describedby=""
-                                    aria-label="process list modal"
-                                    aria-labelledby="process list modal"
-                                    boxId="pf-modal-part-3"
-                                    className=""
-                                    data-ouia-component-id="process-538f9feb-5a14-4096-b791-2055b38da7c6"
-                                    data-ouia-component-type="process-list-modal"
-                                    data-ouia-safe={true}
-                                    descriptorId="pf-modal-part-5"
-                                    hasNoBodyWrapper={false}
-                                    header={
-                                      <Title
-                                        headingLevel="h1"
-                                        size="2xl"
-                                      >
-                                        <span>
-                                          
-                                        </span>
-                                      </Title>
-                                    }
-                                    isOpen={false}
-                                    labelId="pf-modal-part-4"
-                                    onClose={[Function]}
-                                    ouiaId="OUIA-Generated-Modal-small-4"
-                                    ouiaSafe={true}
-                                    showClose={true}
-                                    title=""
-                                    titleIconVariant={null}
-                                    titleLabel=""
-                                    variant="small"
-                                  />
-                                </Portal>
-                              </Modal>
-                            </ProcessListModal>
-                            <Dropdown
-                              aria-label="process instance actions dropdown"
-                              aria-labelledby="process instance actions dropdown"
-                              data-ouia-component-type="process-instance-actions-kebab"
-                              data-ouia-safe={true}
-                              dropdownItems={
-                                Array [
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Retry
-                                  </DropdownItem>,
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Skip
-                                  </DropdownItem>,
-                                  <DropdownItem
-                                    onClick={[Function]}
-                                  >
-                                    Abort
-                                  </DropdownItem>,
-                                ]
-                              }
-                              isOpen={false}
-                              isPlain={true}
-                              onSelect={[Function]}
-                              position="right"
-                              toggle={
-                                <KebabToggle
-                                  id="kebab-toggle"
-                                  isDisabled={false}
-                                  onToggle={[Function]}
-                                />
-                              }
-                            >
-                              <DropdownWithContext
-                                aria-label="process instance actions dropdown"
-                                aria-labelledby="process instance actions dropdown"
-                                autoFocus={true}
-                                className=""
-                                data-ouia-component-type="process-instance-actions-kebab"
-                                data-ouia-safe={true}
-                                direction="down"
-                                dropdownItems={
-                                  Array [
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Retry
-                                    </DropdownItem>,
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Skip
-                                    </DropdownItem>,
-                                    <DropdownItem
-                                      onClick={[Function]}
-                                    >
-                                      Abort
-                                    </DropdownItem>,
-                                  ]
-                                }
-                                isGrouped={false}
-                                isOpen={false}
-                                isPlain={true}
-                                menuAppendTo="inline"
-                                onSelect={[Function]}
-                                position="right"
-                                toggle={
-                                  <KebabToggle
-                                    id="kebab-toggle"
-                                    isDisabled={false}
-                                    onToggle={[Function]}
-                                  />
-                                }
-                              >
-                                <div
-                                  aria-label="process instance actions dropdown"
-                                  aria-labelledby="process instance actions dropdown"
-                                  className="pf-c-dropdown pf-m-align-right"
-                                  data-ouia-component-id="OUIA-Generated-Dropdown-2"
-                                  data-ouia-component-type="PF4/Dropdown"
-                                  data-ouia-safe={true}
-                                >
-                                  <KebabToggle
-                                    aria-haspopup={true}
-                                    getMenuRef={[Function]}
-                                    id="kebab-toggle"
-                                    isDisabled={false}
-                                    isOpen={false}
-                                    isPlain={true}
-                                    key=".0"
-                                    onEnter={[Function]}
-                                    onToggle={[Function]}
-                                    parentRef={
-                                      Object {
-                                        "current": <div
-                                          aria-label="process instance actions dropdown"
-                                          aria-labelledby="process instance actions dropdown"
-                                          class="pf-c-dropdown pf-m-align-right"
-                                          data-ouia-component-id="OUIA-Generated-Dropdown-2"
-                                          data-ouia-component-type="PF4/Dropdown"
-                                          data-ouia-safe="true"
-                                        >
-                                          <button
-                                            aria-expanded="false"
-                                            aria-haspopup="true"
-                                            aria-label="Actions"
-                                            class="pf-c-dropdown__toggle pf-m-plain"
-                                            id="kebab-toggle"
-                                            type="button"
-                                          >
-                                            <svg
-                                              aria-hidden="true"
-                                              fill="currentColor"
-                                              height="1em"
-                                              role="img"
-                                              style="vertical-align: -0.125em;"
-                                              viewBox="0 0 192 512"
-                                              width="1em"
-                                            >
-                                              <path
-                                                d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                              />
-                                            </svg>
-                                          </button>
-                                        </div>,
-                                      }
-                                    }
-                                  >
-                                    <Toggle
-                                      aria-haspopup={true}
-                                      aria-label="Actions"
-                                      bubbleEvent={false}
-                                      className=""
-                                      getMenuRef={[Function]}
-                                      id="kebab-toggle"
-                                      isActive={false}
-                                      isDisabled={false}
-                                      isOpen={false}
-                                      isPlain={true}
-                                      isPrimary={false}
-                                      isSplitButton={false}
-                                      onEnter={[Function]}
-                                      onToggle={[Function]}
-                                      parentRef={
-                                        Object {
-                                          "current": <div
-                                            aria-label="process instance actions dropdown"
-                                            aria-labelledby="process instance actions dropdown"
-                                            class="pf-c-dropdown pf-m-align-right"
-                                            data-ouia-component-id="OUIA-Generated-Dropdown-2"
-                                            data-ouia-component-type="PF4/Dropdown"
-                                            data-ouia-safe="true"
-                                          >
-                                            <button
-                                              aria-expanded="false"
-                                              aria-haspopup="true"
-                                              aria-label="Actions"
-                                              class="pf-c-dropdown__toggle pf-m-plain"
-                                              id="kebab-toggle"
-                                              type="button"
-                                            >
-                                              <svg
-                                                aria-hidden="true"
-                                                fill="currentColor"
-                                                height="1em"
-                                                role="img"
-                                                style="vertical-align: -0.125em;"
-                                                viewBox="0 0 192 512"
-                                                width="1em"
-                                              >
-                                                <path
-                                                  d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                />
-                                              </svg>
-                                            </button>
-                                          </div>,
-                                        }
-                                      }
-                                    >
-                                      <button
-                                        aria-expanded={false}
-                                        aria-haspopup={true}
-                                        aria-label="Actions"
-                                        className="pf-c-dropdown__toggle pf-m-plain"
-                                        disabled={false}
-                                        id="kebab-toggle"
-                                        onClick={[Function]}
-                                        onKeyDown={[Function]}
-                                        type="button"
-                                      >
-                                        <EllipsisVIcon
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
-                                        >
-                                          <svg
-                                            aria-hidden={true}
-                                            aria-labelledby={null}
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style={
-                                              Object {
-                                                "verticalAlign": "-0.125em",
-                                              }
-                                            }
-                                            viewBox="0 0 192 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                            />
-                                          </svg>
-                                        </EllipsisVIcon>
-                                      </button>
-                                    </Toggle>
-                                  </KebabToggle>
-                                </div>
-                              </DropdownWithContext>
-                            </Dropdown>
-                          </ProcessInstancesActionsKebab>
+                          />
                         </td>
                       </TdBase>
                     </Td>
@@ -5590,7 +3303,7 @@ exports[`ProcessListPage tests snapshot test for process list - without expanded
                 >
                   <tr
                     className="pf-c-table__expandable-row"
-                    data-ouia-component-id="OUIA-Generated-TableRow-6"
+                    data-ouia-component-id="OUIA-Generated-TableRow-24"
                     data-ouia-component-type="PF4/TableRow"
                     data-ouia-safe={true}
                     hidden={true}
