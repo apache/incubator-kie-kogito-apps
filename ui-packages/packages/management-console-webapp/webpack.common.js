@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
@@ -11,14 +12,20 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src', 'index.html'),
-      favicon: 'src/favicon.ico'
+      favicon: 'src/favicon.ico',
+      chunks: ['app']
     }),
     new webpack.EnvironmentPlugin({
       KOGITO_DATAINDEX_HTTP_URL: 'http://localhost:4000/graphql',
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Management Console',
       TEST_USER_SYSTEM_ENABLED: false
-    })
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "./envelope", to: "./envelope" }
+      ],
+    }),
   ],
   module: {
     rules: [
@@ -59,6 +66,12 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/components-common/dist/src/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/jobs-management/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
           ),
         ],
         use: {
@@ -118,6 +131,12 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/components-common/dist/src/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/jobs-management/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
           ),
         ],
         use: [
