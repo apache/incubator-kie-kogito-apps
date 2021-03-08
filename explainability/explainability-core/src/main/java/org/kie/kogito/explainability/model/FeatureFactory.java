@@ -45,10 +45,10 @@ public class FeatureFactory {
     public static Feature newFulltextFeature(String name, String text, Function<String, List<String>> tokenizer) {
         List<String> tokens = tokenizer.apply(text);
         List<Feature> tokenFeatures = new ArrayList<>(tokens.size());
-        int feature_position = 1;
+        int featurePosition = 1;
         for (String token : tokens) {
-            tokenFeatures.add(FeatureFactory.newTextFeature(name + "_" + feature_position, token));
-            feature_position++;
+            tokenFeatures.add(FeatureFactory.newTextFeature(name + "_" + featurePosition, token));
+            featurePosition++;
         }
         return FeatureFactory.newCompositeFeature(name, tokenFeatures);
     }

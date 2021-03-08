@@ -89,11 +89,11 @@ class DummyModelsLimeExplainerTest {
         int chunkSize = 10;
         String decision = "feature-" + idx;
         double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(0);
+        assertThat(precision).isZero();
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
         double f1 = 2 * (precision * recall) / (precision + recall);
-        assertThat(f1).isEqualTo(0);
+        assertThat(f1).isZero();
     }
 
     @ParameterizedTest
