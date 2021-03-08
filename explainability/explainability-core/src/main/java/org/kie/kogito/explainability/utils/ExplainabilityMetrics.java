@@ -264,21 +264,7 @@ public class ExplainabilityMetrics {
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // get all samples from the data distribution
-        List<PredictionInput> inputs = dataDistribution.getAllSamples();
-        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
-                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
-
-        // sort the predictions by Output#getScore, in descending order
-        List<Prediction> sorted = predictions.stream().sorted((p1, p2) -> {
-            Output o1 = p1.getOutput().getByName(decision);
-            Output o2 = p2.getOutput().getByName(decision);
-            if (o1 != null && o2 != null) {
-                return Double.compare(o2.getScore(), o1.getScore()); // descending order
-            } else {
-                return 0;
-            }
-        }).collect(Collectors.toList());
+        List<Prediction> sorted = getScoreSortedPredictions(decision, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(chunkSize);
@@ -289,6 +275,7 @@ public class ExplainabilityMetrics {
         for (int i = 0; i < chunkSize; i++) {
             bottomChunk.add(sorted.get(sorted.size() - i - 1));
         }
+
         double tp = 0;
         double fn = 0;
         int currentChunk = 0;
@@ -330,6 +317,26 @@ public class ExplainabilityMetrics {
         return tp / (tp + fn);
     }
 
+    private static List<Prediction> getScoreSortedPredictions(String decision, PredictionProvider predictionProvider,
+                                                              DataDistribution dataDistribution)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        List<PredictionInput> inputs = dataDistribution.getAllSamples();
+        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
+                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
+
+        // sort the predictions by Output#getScore, in descending order
+        return predictions.stream().sorted((p1, p2) -> {
+            Output o1 = p1.getOutput().getByName(decision);
+            Output o2 = p2.getOutput().getByName(decision);
+            if (o1 != null && o2 != null) {
+                return Double.compare(o2.getScore(), o1.getScore());
+            } else {
+                return 0;
+            }
+        }).collect(Collectors.toList());
+    }
+
     /**
      * Evaluate the precision of a local saliency explainer on a given model.
      * Get the predictions having outputs with the lowest score for the given decision and pair them with predictions
@@ -352,19 +359,9 @@ public class ExplainabilityMetrics {
                                                    LocalExplainer<Map<String, Saliency>> localExplainer,
                                                    DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
-        List<PredictionInput> inputs = dataDistribution.getAllSamples();
-        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
-                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
-        List<Prediction> sorted = predictions.stream().sorted((p1, p2) -> {
-            Output o1 = p1.getOutput().getByName(decision);
-            Output o2 = p2.getOutput().getByName(decision);
-            if (o1 != null && o2 != null) {
-                return Double.compare(o2.getScore(), o1.getScore());
-            } else {
-                return 0;
-            }
-        }).collect(Collectors.toList());
+        List<Prediction> sorted = getScoreSortedPredictions(decision, predictionProvider, dataDistribution);
+
+        // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(chunkSize);
         List<Prediction> bottomChunk = new ArrayList<>(chunkSize);
         for (int i = 0; i < chunkSize; i++) {
@@ -373,6 +370,7 @@ public class ExplainabilityMetrics {
         for (int i = 0; i < chunkSize; i++) {
             bottomChunk.add(sorted.get(sorted.size() - i - 1));
         }
+
         double tp = 0;
         double fp = 0;
         int currentChunk = 0;
