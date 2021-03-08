@@ -62,10 +62,10 @@ public class ExplainabilityMetrics {
      * Measure the explainability of an explanation.
      * See paper: "Towards Quantification of Explainability in Explainable Artificial Intelligence Methods" by Islam et al.
      *
-     * @param inputCognitiveChunks  the no. of cognitive chunks (pieces of information) required to generate the
-     *                              explanation (e.g. the no. of explanation inputs)
+     * @param inputCognitiveChunks the no. of cognitive chunks (pieces of information) required to generate the
+     *        explanation (e.g. the no. of explanation inputs)
      * @param outputCognitiveChunks the no. of cognitive chunks generated within the explanation itself
-     * @param interactionRatio      the ratio of interaction (between 0 and 1) required by the explanation
+     * @param interactionRatio the ratio of interaction (between 0 and 1) required by the explanation
      * @return the quantitative explainability measure
      */
     public static double quantifyExplainability(int inputCognitiveChunks, int outputCognitiveChunks, double interactionRatio) {
@@ -79,8 +79,8 @@ public class ExplainabilityMetrics {
      * See paper: Qiu Lin, Zhong, et al. "Do Explanations Reflect Decisions? A Machine-centric Strategy to Quantify the
      * Performance of Explainability Algorithms." 2019.
      *
-     * @param model       the model to be explained
-     * @param prediction  a prediction
+     * @param model the model to be explained
+     * @param prediction a prediction
      * @param topFeatures the list of important features that should be dropped
      * @return the saliency impact
      */
@@ -147,15 +147,15 @@ public class ExplainabilityMetrics {
      * Such an evaluation is intended to measure how stable the explanations are in terms of "are the top k most important
      * positive/negative features always the same for a single prediction?".
      *
-     * @param model                  a model to explain
-     * @param prediction             the prediction on which explanation stability will be evaluated
+     * @param model a model to explain
+     * @param prediction the prediction on which explanation stability will be evaluated
      * @param saliencyLocalExplainer a local saliency explainer
-     * @param topK                   no. of top k positive/negative features for which stability report will be generated
+     * @param topK no. of top k positive/negative features for which stability report will be generated
      * @return a report about stability of all the decisions/predictions (and for each {@code k < topK})
      */
     public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, Prediction prediction,
-                                                                   LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
-                                                                   int topK, int runs)
+            LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
+            int topK, int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
         Map<String, List<Saliency>> saliencies = getMultipleSaliencies(model, prediction, saliencyLocalExplainer, runs);
 
@@ -191,15 +191,15 @@ public class ExplainabilityMetrics {
     /**
      * Get multiple saliencies, aggregated by decision name.
      *
-     * @param model                  the model used to perform predictions
-     * @param prediction             the prediction to explain
+     * @param model the model used to perform predictions
+     * @param prediction the prediction to explain
      * @param saliencyLocalExplainer a local explainer that generates saliences
-     * @param runs                   the no. of explanations to be generated
+     * @param runs the no. of explanations to be generated
      * @return the generated saliencies, aggregated by decision name, across the different runs
      */
     private static Map<String, List<Saliency>> getMultipleSaliencies(PredictionProvider model, Prediction prediction,
-                                                                     LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
-                                                                     int runs)
+            LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
+            int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
         Map<String, List<Saliency>> saliencies = new HashMap<>();
         int skipped = 0;
@@ -250,17 +250,17 @@ public class ExplainabilityMetrics {
      * input the mask features were take from, that's considered a true positive, otherwise it's a false positive.
      * see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
      *
-     * @param decision           decision to evaluate recall for
+     * @param decision decision to evaluate recall for
      * @param predictionProvider the prediction provider to test
-     * @param localExplainer     the explainer to evaluate
-     * @param dataDistribution   the data distribution used to obtain inputs for evaluation
-     * @param k                  the no. of features to extract
-     * @param chunkSize          the size of the chunk of predictions to use for evaluation
+     * @param localExplainer the explainer to evaluate
+     * @param dataDistribution the data distribution used to obtain inputs for evaluation
+     * @param k the no. of features to extract
+     * @param chunkSize the size of the chunk of predictions to use for evaluation
      * @return the saliency recall
      */
     public static double getLocalSaliencyRecall(String decision, PredictionProvider predictionProvider,
-                                                LocalExplainer<Map<String, Saliency>> localExplainer,
-                                                DataDistribution dataDistribution, int k, int chunkSize)
+            LocalExplainer<Map<String, Saliency>> localExplainer,
+            DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // get all samples from the data distribution
@@ -314,7 +314,7 @@ public class ExplainabilityMetrics {
     }
 
     private static List<Prediction> getScoreSortedPredictions(String decision, PredictionProvider predictionProvider,
-                                                              DataDistribution dataDistribution)
+            DataDistribution dataDistribution)
             throws InterruptedException, ExecutionException, TimeoutException {
         List<PredictionInput> inputs = dataDistribution.getAllSamples();
         List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
@@ -343,17 +343,17 @@ public class ExplainabilityMetrics {
      * it's a true positive.
      * see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
      *
-     * @param decision           decision to evaluate recall for
+     * @param decision decision to evaluate recall for
      * @param predictionProvider the prediction provider to test
-     * @param localExplainer     the explainer to evaluate
-     * @param dataDistribution   the data distribution used to obtain inputs for evaluation
-     * @param k                  the no. of features to extract
-     * @param chunkSize          the size of the chunk of predictions to use for evaluation
+     * @param localExplainer the explainer to evaluate
+     * @param dataDistribution the data distribution used to obtain inputs for evaluation
+     * @param k the no. of features to extract
+     * @param chunkSize the size of the chunk of predictions to use for evaluation
      * @return the saliency precision
      */
     public static double getLocalSaliencyPrecision(String decision, PredictionProvider predictionProvider,
-                                                   LocalExplainer<Map<String, Saliency>> localExplainer,
-                                                   DataDistribution dataDistribution, int k, int chunkSize)
+            LocalExplainer<Map<String, Saliency>> localExplainer,
+            DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
         List<Prediction> sorted = getScoreSortedPredictions(decision, predictionProvider, dataDistribution);
 
