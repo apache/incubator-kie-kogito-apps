@@ -189,7 +189,8 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
     };
     await driver.applySorting(sortObj);
     setSortBy(sortObj);
-    await doRefresh();
+    setIsLoading(true);
+    await doQueryTasks(0, pageSize, true, true);
   };
 
   useEffect(() => {

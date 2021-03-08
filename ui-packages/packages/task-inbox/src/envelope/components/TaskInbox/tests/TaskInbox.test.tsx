@@ -304,17 +304,21 @@ describe('TaskInbox tests', () => {
       wait();
     });
 
+    wrapper = wrapper.update().find(TaskInbox);
+
+    expect(wrapper).toMatchSnapshot();
+
     expect(driver.applySorting).toHaveBeenCalled();
 
     const sort = driverApplySortingMock.mock.calls[0][0];
     expect(sort).toHaveProperty('property', 'state');
     expect(sort).toHaveProperty('direction', 'asc');
 
-    expect(driver.refresh).toHaveBeenCalled();
+    expect(driver.query).toHaveBeenLastCalledWith(0, 10);
 
     dataTable = wrapper.find(DataTable);
     expect(dataTable.exists()).toBeTruthy();
-    expect(dataTable.props().data).toHaveLength(15);
+    expect(dataTable.props().data).toHaveLength(10);
   });
 
   it('TaskInbox apply filter', async () => {
