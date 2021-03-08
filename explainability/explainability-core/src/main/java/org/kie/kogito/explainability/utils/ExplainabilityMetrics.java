@@ -240,15 +240,36 @@ public class ExplainabilityMetrics {
         return Pair.of(maxEntry.getKey(), maxEntry.getValue());
     }
 
+    /**
+     * Evaluate the recall of a local saliency explainer on a given model.
+     * Get the predictions having outputs with the highest score for the given decision and pair them with predictions
+     * whose outputs have the lowest score for the same decision.
+     * Get the top k (most important) features (according to the saliency) for the most important outputs and
+     * "paste" them on each paired input corresponding to an output with low score (for the target decision).
+     * Perform prediction on the "masked" input, if the output on the masked input is equals to the output for the
+     * input the mask features were take from, that's considered a true positive, otherwise it's a false positive.
+     * see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
+     *
+     * @param decision decision to evaluate recall for
+     * @param predictionProvider the prediction provider to test
+     * @param localExplainer the explainer to evaluate
+     * @param dataDistribution the data distribution used to obtain inputs for evaluation
+     * @param k the no. of features to extract
+     * @param chunkSize the size of the chunk of predictions to use for evaluation
+     * @return the saliency recall
+     * */
     public static double getLocalSaliencyRecall(String decision, PredictionProvider predictionProvider,
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
-        // see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
+
+        // get all samples from the data distribution
         List<PredictionInput> inputs = dataDistribution.getAllSamples();
         List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
                 .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
         List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
+
+        // sort the predictions by Output#getScore, in descending order
         List<Prediction> sorted = predictions.stream().sorted((p1, p2) -> {
             Output o1 = p1.getOutput().getByName(decision);
             Output o2 = p2.getOutput().getByName(decision);
@@ -258,6 +279,8 @@ public class ExplainabilityMetrics {
                 return 0;
             }
         }).collect(Collectors.toList());
+
+        // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(chunkSize);
         List<Prediction> bottomChunk = new ArrayList<>(chunkSize);
         for (int i = 0; i < chunkSize; i++) {
@@ -269,6 +292,8 @@ public class ExplainabilityMetrics {
         double tp = 0;
         double fn = 0;
         int currentChunk = 0;
+        // for each of the top scored predictions, get the top influencing features and copy them over a low scored
+        // input, then feed the model with this masked input and check the output is equals to the top scored one.
         for (Prediction prediction : topChunk) {
             Output output = prediction.getOutput().getByName(decision);
             Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
@@ -308,28 +333,25 @@ public class ExplainabilityMetrics {
     /**
      * Evaluate the precision of a local saliency explainer on a given model.
      * Get the predictions having outputs with the lowest score for the given decision and pair them with predictions
-     * whose outputs are the highest for the same decision.
+     * whose outputs have the highest score for the same decision.
      * Get the bottom k (less important) features (according to the saliency) for the less important outputs and
      * "paste" them on each paired input corresponding to an output with high score (for the target decision).
      * Perform prediction on the "masked" input, if the output changes that's considered a false negative, otherwise
      * it's a true positive.
+     * see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
      *
-     * @param decision
-     * @param predictionProvider
-     * @param localExplainer
-     * @param dataDistribution
-     * @param k
-     * @param chunkSize
-     * @return
-     * @throws InterruptedException
-     * @throws ExecutionException
-     * @throws TimeoutException
-     */
+     * @param decision decision to evaluate recall for
+     * @param predictionProvider the prediction provider to test
+     * @param localExplainer the explainer to evaluate
+     * @param dataDistribution the data distribution used to obtain inputs for evaluation
+     * @param k the no. of features to extract
+     * @param chunkSize the size of the chunk of predictions to use for evaluation
+     * @return the saliency precision
+     * */
     public static double getLocalSaliencyPrecision(String decision, PredictionProvider predictionProvider,
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
-        // see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
         List<PredictionInput> inputs = dataDistribution.getAllSamples();
         List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
                 .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
@@ -338,7 +360,7 @@ public class ExplainabilityMetrics {
             Output o1 = p1.getOutput().getByName(decision);
             Output o2 = p2.getOutput().getByName(decision);
             if (o1 != null && o2 != null) {
-                return Double.compare(o2.getScore(), o1.getScore()); // descending order
+                return Double.compare(o2.getScore(), o1.getScore());
             } else {
                 return 0;
             }

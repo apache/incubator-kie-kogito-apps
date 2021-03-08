@@ -441,6 +441,14 @@ public class DataUtils {
         }
     }
 
+    /**
+     * Replace an existing feature in a list with another feature.
+     * The feature to be replaced is the one whose name is equals to the name of the feature to use as replacement.
+     *
+     * @param featureToUse feature to use as replacmement
+     * @param existingFeatures list of features containing the feature to be replaced
+     * @return a new list of features having the "replaced" feature
+     */
     public static List<Feature> replaceFeatures(Feature featureToUse, List<Feature> existingFeatures) {
         List<Feature> newFeatures = new ArrayList<>();
         for (Feature f : existingFeatures) {
