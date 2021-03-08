@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -290,19 +290,15 @@ public class ExplainabilityMetrics {
                 List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
                         .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
 
+                PredictionInput input = bottomChunk.get(currentChunk).getInput();
                 List<Feature> importantFeatures = new ArrayList<>();
                 for (FeatureImportance featureImportance : topFeatures) {
                     importantFeatures.add(featureImportance.getFeature());
                 }
 
-                PredictionInput input = bottomChunk.get(currentChunk).getInput();
-                List<Feature> features = List.copyOf(input.getFeatures());
-                for (Feature f : importantFeatures) {
-                    features = DataUtils.replaceFeatures(f, features);
-                }
-                input = new PredictionInput(features);
+                PredictionInput maskedInput = getMaskedInput(importantFeatures, input);
 
-                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
+                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
                 PredictionOutput predictionOutput = predictionOutputList.get(0);
                 Output newOutput = predictionOutput.getByName(decision);
@@ -390,13 +386,10 @@ public class ExplainabilityMetrics {
 
                 Prediction topPrediction = topChunk.get(currentChunk);
                 PredictionInput input = topPrediction.getInput();
-                List<Feature> features = List.copyOf(input.getFeatures());
-                for (Feature f : importantFeatures) {
-                    features = DataUtils.replaceFeatures(f, features);
-                }
-                input = new PredictionInput(features);
 
-                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(input))
+                PredictionInput maskedInput = getMaskedInput(importantFeatures, input);
+
+                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
                 PredictionOutput predictionOutput = predictionOutputList.get(0);
                 Output newOutput = predictionOutput.getByName(decision);
@@ -409,6 +402,14 @@ public class ExplainabilityMetrics {
             }
         }
         return tp / (tp + fp);
+    }
+
+    private static PredictionInput getMaskedInput(List<Feature> importantFeatures, PredictionInput input) {
+        List<Feature> features = List.copyOf(input.getFeatures());
+        for (Feature f : importantFeatures) {
+            features = DataUtils.replaceFeatures(f, features);
+        }
+        return new PredictionInput(features);
     }
 
 }
