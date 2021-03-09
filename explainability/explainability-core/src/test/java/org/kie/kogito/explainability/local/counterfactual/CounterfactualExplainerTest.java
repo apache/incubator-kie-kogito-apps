@@ -32,6 +32,7 @@ import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.*;
 import org.kie.kogito.explainability.utils.DataUtils;
+import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ class CounterfactualExplainerTest {
         final SolverConfig solverConfig = CounterfactualConfigurationFactory
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed(randomSeed);
+        solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         final CounterfactualExplainer explainer = CounterfactualExplainer
                 .builder(goal, constraints, dataDomain)
                 .withSolverConfig(solverConfig)
@@ -91,6 +93,7 @@ class CounterfactualExplainerTest {
         final SolverConfig solverConfig = CounterfactualConfigurationFactory
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed((long) seed);
+        solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
                         .builder(goal, constraints, dataDomain)
