@@ -21,13 +21,13 @@ import org.apache.commons.lang3.StringUtils;
 
 public class TestcontainersUtils {
 
+    private TestcontainersUtils() {
+    }
+
     public static String getImageName(String containerName) {
         String propertyName = "container.image." + containerName;
         return Optional.ofNullable(System.getProperty(propertyName))
                 .filter(StringUtils::isNotBlank)
                 .orElseThrow(() -> new IllegalArgumentException(propertyName + " property should be set in pom.xml"));
-    }
-
-    private TestcontainersUtils() {
     }
 }
