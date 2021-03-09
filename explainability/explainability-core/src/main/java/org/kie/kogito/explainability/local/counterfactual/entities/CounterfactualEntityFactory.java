@@ -17,8 +17,8 @@ package org.kie.kogito.explainability.local.counterfactual.entities;
 
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.domain.FeatureDomain;
 
 public class CounterfactualEntityFactory {
 
