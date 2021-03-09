@@ -333,20 +333,6 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
         values = values.concat(innerTable);
         parentIndex = parentIndex + 2;
       });
-      const rowObject: any = {};
-      if (tableLoading && !isLoadingMore) {
-        rowObject.cells = [
-          {
-            props: { colSpan: 8 },
-            title: (
-              <Bullseye>
-                <KogitoSpinner spinnerText="Loading domain explorer" />
-              </Bullseye>
-            )
-          }
-        ];
-        values.push(rowObject);
-      }
     }
     const finalKeys = parentkeys[0];
     finalKeys && setColumns([...finalKeys]);
@@ -380,28 +366,65 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
     setOrderByObj(obj);
     setRunQuery(true);
   };
+
+  if (displayEmptyState) {
+    rows = [
+      {
+        rowKey: '1',
+        cells: [
+          {
+            props: { colSpan: 8 },
+            title: (
+              <KogitoEmptyState
+                type={KogitoEmptyStateType.Search}
+                title="No data available"
+                body="Selected filters have no data to display. Try other filters."
+              />
+            )
+          }
+        ]
+      }
+    ];
+  }
+  if (tableLoading && !isLoadingMore) {
+    rows = [
+      {
+        rowKey: '1',
+        cells: [
+          {
+            props: { colSpan: 8 },
+            title: <KogitoSpinner spinnerText="Loading domain data..." />
+          }
+        ]
+      }
+    ];
+  }
+
   return (
     <React.Fragment>
-      {displayTable && !displayEmptyState && columns.length && (
-        <Table
-          cells={columns}
-          rows={rows}
-          sortBy={sortBy}
-          onSort={onSort}
-          aria-label="Domain Explorer Table"
-          className="kogito-common--domain-explorer__table"
-          onCollapse={onCollapse}
-          {...componentOuiaProps(
-            ouiaId,
-            'domain-explorer-table',
-            ouiaSafe ? ouiaSafe : !tableLoading && !isLoadingMore
-          )}
-        >
-          <TableHeader />
-          <TableBody rowKey="rowKey" />
-        </Table>
-      )}
-      {!displayTable && (
+      {columns.length &&
+        !filterError &&
+        filterChips.length > 0 &&
+        selected.length > 0 && (
+          <Table
+            cells={columns}
+            rows={rows}
+            sortBy={sortBy}
+            onSort={filterChips.length > 0 && !tableLoading ? onSort : null}
+            aria-label="Domain Explorer Table"
+            className="kogito-common--domain-explorer__table"
+            onCollapse={onCollapse}
+            {...componentOuiaProps(
+              ouiaId,
+              'domain-explorer-table',
+              ouiaSafe ? ouiaSafe : !tableLoading && !isLoadingMore
+            )}
+          >
+            <TableHeader />
+            <TableBody rowKey="rowKey" />
+          </Table>
+        )}
+      {!displayTable && !tableLoading && (
         <Card component={'div'}>
           <CardBody>
             {!displayEmptyState &&
@@ -428,19 +451,6 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
                   </EmptyState>
                 </Bullseye>
               )}
-            {displayEmptyState && (
-              <Bullseye>
-                <EmptyState>
-                  <EmptyStateIcon icon={SearchIcon} />
-                  <Title headingLevel="h5" size="lg">
-                    No data available
-                  </Title>
-                  <EmptyStateBody>
-                    Selected filters have no data to display. Try other filters.
-                  </EmptyStateBody>
-                </EmptyState>
-              </Bullseye>
-            )}
             {!displayEmptyState && !displayTable && filterError && (
               <ServerErrors error={filterError} variant="small" />
             )}
@@ -458,5 +468,4 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
     </React.Fragment>
   );
 };
-
 export default DomainExplorerTable;
