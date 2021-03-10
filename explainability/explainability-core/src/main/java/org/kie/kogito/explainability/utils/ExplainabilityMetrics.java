@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -407,6 +407,32 @@ public class ExplainabilityMetrics {
         }
         if ((tp + fp) > 0) {
             return tp / (tp + fp);
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Get local saliency F1.
+     * See {@link #getLocalSaliencyPrecision(String, PredictionProvider, LocalExplainer, DataDistribution, int, int)}
+     * See {@link #getLocalSaliencyRecall(String, PredictionProvider, LocalExplainer, DataDistribution, int, int)}
+     *
+     * @param decision decision to evaluate recall for
+     * @param predictionProvider the prediction provider to test
+     * @param localExplainer the explainer to evaluate
+     * @param dataDistribution the data distribution used to obtain inputs for evaluation
+     * @param k the no. of features to extract
+     * @param chunkSize the size of the chunk of predictions to use for evaluation
+     * @return the saliency F1
+     */
+    public static double getLocalSaliencyF1(String decision, PredictionProvider predictionProvider,
+            LocalExplainer<Map<String, Saliency>> localExplainer,
+            DataDistribution dataDistribution, int k, int chunkSize)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        double precision = getLocalSaliencyPrecision(decision, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
+        double recall = getLocalSaliencyRecall(decision, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
+        if ((precision + recall) > 0) {
+            return 2 * precision * recall / (precision + recall);
         } else {
             return 0;
         }

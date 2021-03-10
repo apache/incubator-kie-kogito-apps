@@ -123,7 +123,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         AssertionsForClassTypes.assertThat(precision).isBetween(0d, 1d);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         AssertionsForClassTypes.assertThat(recall).isBetween(0d, 1d);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         AssertionsForClassTypes.assertThat(f1).isBetween(0d, 1d);
     }
 }

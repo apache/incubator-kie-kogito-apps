@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ class DummyModelsLimeExplainerTest {
         assertThat(precision).isZero();
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isZero();
     }
 
@@ -141,7 +141,7 @@ class DummyModelsLimeExplainerTest {
         assertThat(precision).isEqualTo(1);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
 
@@ -192,7 +192,7 @@ class DummyModelsLimeExplainerTest {
         assertThat(precision).isEqualTo(1);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
 
@@ -243,7 +243,7 @@ class DummyModelsLimeExplainerTest {
         assertThat(precision).isEqualTo(1);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
 
@@ -293,7 +293,7 @@ class DummyModelsLimeExplainerTest {
         assertThat(precision).isEqualTo(1);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
 
@@ -345,7 +345,7 @@ class DummyModelsLimeExplainerTest {
         assertThat(precision).isEqualTo(1);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(recall).isEqualTo(1);
-        double f1 = 2 * (precision * recall) / (precision + recall);
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
 }
