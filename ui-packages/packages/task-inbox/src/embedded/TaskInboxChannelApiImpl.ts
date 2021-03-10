@@ -45,10 +45,6 @@ export class TaskInboxChannelApiImpl implements TaskInboxChannelApi {
     return this.driver.query(offset, limit);
   }
 
-  taskInbox__refresh(): Promise<UserTaskInstance[]> {
-    return this.driver.refresh();
-  }
-
   taskInbox__openTask(task: UserTaskInstance): void {
     this.driver.openTask(task);
   }

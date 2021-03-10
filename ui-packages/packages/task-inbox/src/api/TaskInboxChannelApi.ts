@@ -50,13 +50,6 @@ export interface TaskInboxChannelApi {
   taskInbox__query(offset: number, limit: number): Promise<UserTaskInstance[]>;
 
   /**
-   * Requests the channel to re query for all the loaded tasks applying the filters and sorting.
-   *
-   * @return a Promise<UserTaskInstance[]> that will be resolved  with the query result
-   */
-  taskInbox__refresh(): Promise<UserTaskInstance[]>;
-
-  /**
    * Notifies the channel that a UserTaskInstance has been opened in TaskInbox
    * @param task
    */

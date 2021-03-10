@@ -38,9 +38,7 @@ import { UserTaskInstance } from '../../../types';
 import TaskInboxToolbar from '../TaskInboxToolbar/TaskInboxToolbar';
 import {
   getDateColumn,
-  getDefaultActiveTaskStates,
   getDefaultColumn,
-  getDefaultTaskStates,
   getTaskDescriptionColumn,
   getTaskStateColumn
 } from '../utils/Utils';
@@ -71,12 +69,12 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  const [allStates] = useState<string[]>(
-    allTaskStates || getDefaultTaskStates()
-  );
-  const [activeStates] = useState<string[]>(
-    activeTaskStates || getDefaultActiveTaskStates()
-  );
+  const [queryFilter, setQueryFilter] = useState<QueryFilter>({
+    taskStates: [],
+    taskNames: []
+  });
+  const [allStates, setAllStates] = useState<string[]>([]);
+  const [activeStates, setActiveStates] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<SortBy>({
     property: 'lastUpdate',
     direction: 'desc'
@@ -113,13 +111,14 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
   const initDefault = async () => {
     const defaultState: TaskInboxState = {
       filters: {
-        taskStates: [...activeStates],
+        taskStates: [...activeTaskStates],
         taskNames: []
       },
       sortBy,
       currentPage: { offset: 0, limit: 10 }
     };
     await driver.setInitialState(defaultState);
+    setQueryFilter(defaultState.filters);
     setIsLoading(true);
     setSortBy(defaultState.sortBy);
     doQueryTasks(0, pageSize, true);
@@ -133,7 +132,7 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
     _loadMore: boolean = false
   ) => {
     setIsLoadingMore(_loadMore);
-    setError(undefined);
+    setError(null);
 
     try {
       const response: UserTaskInstance[] = await driver.query(_offset, _limit);
@@ -155,6 +154,7 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
   };
 
   const doApplyFilter = async (filter: QueryFilter) => {
+    setQueryFilter(filter);
     if (
       !filter ||
       (_.isEmpty(filter.taskStates) && _.isEmpty(filter.taskNames))
@@ -170,16 +170,7 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
 
   const doRefresh = async () => {
     setIsLoading(true);
-    setError(undefined);
-    setIsLoadingMore(false);
-    try {
-      const response: UserTaskInstance[] = await driver.refresh();
-      setTasks(response);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setIsLoading(false);
-    }
+    doQueryTasks(0, pageSize, true, true);
   };
 
   const onSort = async (index: number, direction) => {
@@ -196,10 +187,12 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
   useEffect(() => {
     if (!isEnvelopeConnectedToChannel) {
       setIsLoading(true);
-    } else {
-      if (!initialState) {
-        initDefault();
-      }
+      return;
+    }
+    setAllStates(allTaskStates);
+    setActiveStates(activeTaskStates);
+    if (!initialState) {
+      initDefault();
     }
   }, [isEnvelopeConnectedToChannel]);
 
@@ -207,13 +200,18 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
     return <ServerErrors error={error} variant={'large'} />;
   }
 
-  const mustShowMore: boolean =
-    isLoadingMore || (offset + pageSize === tasks.length && !isLoading);
+  const mustShowMore = (): boolean => {
+    if (!isLoadingMore) {
+      const limit = offset * pageSize + pageSize;
+      return !isLoading && limit === tasks.length;
+    }
+    return true;
+  };
 
   return (
     <div {...componentOuiaProps(ouiaId, 'task-inbox', ouiaSafe)}>
       <TaskInboxToolbar
-        initialState={initialState ? initialState.filters : undefined}
+        activeFilter={queryFilter}
         allTaskStates={allStates}
         activeTaskStates={activeStates}
         applyFilter={doApplyFilter}
@@ -240,7 +238,7 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
             onSorting={onSort}
             LoadingComponent={UserTaskLoadingComponent}
           />
-          {mustShowMore && (
+          {mustShowMore() && (
             <LoadMore
               offset={offset}
               setOffset={setOffset}

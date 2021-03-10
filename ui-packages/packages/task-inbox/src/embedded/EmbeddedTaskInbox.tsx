@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import { EmbeddedEnvelopeFactory } from '@kogito-tooling/envelope/dist/embedded';
 import {

@@ -25,6 +25,5 @@ export interface TaskInboxDriver {
   applyFilter(filter: QueryFilter): Promise<void>;
   applySorting(sortBy: SortBy): Promise<void>;
   query(offset: number, limit: number): Promise<UserTaskInstance[]>;
-  refresh(): Promise<UserTaskInstance[]>;
   openTask(task: UserTaskInstance): void;
 }

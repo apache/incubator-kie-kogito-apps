@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
+import _ from 'lodash';
 import { TaskInboxChannelApi, TaskInboxState } from '../api';
 import TaskInbox from './components/TaskInbox/TaskInbox';
 import TaskInboxEnvelopeViewDriver from './TaskInboxEnvelopeViewDriver';
 import '@patternfly/patternfly/patternfly.css';
+import {
+  getDefaultActiveTaskStates,
+  getDefaultTaskStates
+} from './components/utils/Utils';
 
 export interface TaskInboxEnvelopeViewApi {
   initialize: (
@@ -43,15 +47,23 @@ export const TaskInboxEnvelopeView = React.forwardRef<
     setEnvelopeConnectedToChannel
   ] = useState<boolean>(false);
   const [initialState, setInitialState] = useState<TaskInboxState>();
-  const [allTaskStates, setAllTaskStates] = useState<string[]>();
-  const [activeTaskStates, setActiveTaskStates] = useState<string[]>();
+  const [allTaskStates, setAllTaskStates] = useState<string[]>(
+    getDefaultTaskStates()
+  );
+  const [activeTaskStates, setActiveTaskStates] = useState<string[]>(
+    getDefaultActiveTaskStates()
+  );
   useImperativeHandle(
     forwardedRef,
     () => ({
-      initialize: (initialState?, allTaskStates?, activeTaskStates?) => {
-        setInitialState(initialState);
-        setAllTaskStates(allTaskStates);
-        setActiveTaskStates(activeTaskStates);
+      initialize: (_initialState?, _allTaskStates?, _activeTaskStates?) => {
+        setInitialState(_initialState);
+        if (!_.isEmpty(_allTaskStates)) {
+          setAllTaskStates(_allTaskStates);
+        }
+        if (!_.isEmpty(_activeTaskStates)) {
+          setActiveTaskStates(_activeTaskStates);
+        }
         setEnvelopeConnectedToChannel(true);
       }
     }),

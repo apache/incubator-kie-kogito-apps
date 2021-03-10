@@ -29,6 +29,10 @@ import TaskInbox, { TaskInboxProps } from '../TaskInbox';
 import TaskInboxToolbar from '../../TaskInboxToolbar/TaskInboxToolbar';
 import wait from 'waait';
 import { DropdownToggleAction } from '@patternfly/react-core';
+import {
+  getDefaultActiveTaskStates,
+  getDefaultTaskStates
+} from '../../utils/Utils';
 
 jest.mock('../../TaskInboxToolbar/TaskInboxToolbar');
 
@@ -62,7 +66,6 @@ const getTaskInboxDriver = (items: number): TestTaskInboxDriver => {
   driverApplyFilterMock = jest.spyOn(driver, 'applyFilter');
   driverApplySortingMock = jest.spyOn(driver, 'applySorting');
   driverQueryMock = jest.spyOn(driver, 'query');
-  jest.spyOn(driver, 'refresh');
   jest.spyOn(driver, 'openTask');
   props.driver = driver;
   return driver;
@@ -79,7 +82,9 @@ describe('TaskInbox tests', () => {
     jest.clearAllMocks();
     props = {
       isEnvelopeConnectedToChannel: true,
-      driver: undefined
+      driver: null,
+      allTaskStates: getDefaultTaskStates(),
+      activeTaskStates: getDefaultActiveTaskStates()
     };
   });
 
@@ -389,13 +394,75 @@ describe('TaskInbox tests', () => {
 
     expect(wrapper).toMatchSnapshot();
 
-    const emptyState = wrapper.find(KogitoEmptyState);
+    let emptyState = wrapper.find(KogitoEmptyState);
 
     expect(emptyState.exists()).toBeTruthy();
 
     expect(driver.applyFilter).not.toHaveBeenCalled();
 
-    const dataTable = wrapper.find(DataTable);
+    let dataTable = wrapper.find(DataTable);
     expect(dataTable.exists()).toBeFalsy();
+
+    await act(async () => {
+      emptyState.props().onClick();
+      wait();
+    });
+
+    wrapper = wrapper.update();
+
+    expect(wrapper).toMatchSnapshot();
+
+    emptyState = wrapper.find(KogitoEmptyState);
+    expect(emptyState.exists()).toBeFalsy();
+
+    expect(driver.applyFilter).toHaveBeenCalled();
+
+    dataTable = wrapper.find(DataTable);
+    expect(dataTable.exists()).toBeTruthy();
+  });
+
+  it('TaskInbox refresh', async () => {
+    const driver = getTaskInboxDriver(15);
+
+    let wrapper;
+
+    await act(async () => {
+      wrapper = getTaskInboxWrapper();
+      wait();
+    });
+
+    wrapper = wrapper.update();
+
+    expect(wrapper).toMatchSnapshot();
+
+    expect(driver.setInitialState).toHaveBeenCalled();
+    expect(driver.query).toHaveBeenCalledWith(0, 10);
+
+    let toolbar = wrapper.find(TaskInboxToolbar);
+    expect(toolbar.exists()).toBeTruthy();
+
+    let dataTable = wrapper.find(DataTable);
+    expect(dataTable.exists()).toBeTruthy();
+    expect(dataTable.props().isLoading).toBeFalsy();
+    expect(dataTable.props().data).toHaveLength(10);
+
+    await act(async () => {
+      toolbar.props().refresh();
+      wait();
+    });
+
+    wrapper = wrapper.update();
+
+    expect(wrapper).toMatchSnapshot();
+
+    toolbar = wrapper.find(TaskInboxToolbar);
+    expect(toolbar.exists()).toBeTruthy();
+
+    dataTable = wrapper.find(DataTable);
+    expect(dataTable.exists()).toBeTruthy();
+    expect(dataTable.props().isLoading).toBeFalsy();
+    expect(dataTable.props().data).toHaveLength(10);
+
+    expect(driverQueryMock).toHaveBeenLastCalledWith(0, 10);
   });
 });

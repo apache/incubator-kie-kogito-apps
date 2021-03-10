@@ -56,9 +56,8 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
       ReactDOM.render(
         <TaskInboxEnvelopeView ref={ref} channelApi={envelope.channelApi} />,
         args.container,
-        () => res(() => ref.current!)
+        () => res(() => ref.current)
       );
-      return;
     });
   };
 

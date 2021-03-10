@@ -30,7 +30,6 @@ export interface TaskInboxGatewayApi {
   applySorting(sortBy: SortBy): Promise<void>;
   query(offset: number, limit: number): Promise<UserTaskInstance[]>;
   getTaskById(uuid: string): Promise<UserTaskInstance>;
-  refresh(): Promise<UserTaskInstance[]>;
   openTask: (userTask: UserTaskInstance) => void;
   clearOpenTask: () => Promise<void>;
 }
@@ -107,18 +106,5 @@ export class TaskInboxGatewayApiImpl implements TaskInboxGatewayApi {
           reject(reason);
         });
     });
-  }
-
-  refresh(): Promise<UserTaskInstance[]> {
-    const limit =
-      this._taskInboxState.currentPage.offset +
-      this._taskInboxState.currentPage.limit;
-    return this.queries.getUserTasks(
-      this.user,
-      0,
-      limit,
-      this._taskInboxState.filters,
-      this._taskInboxState.sortBy
-    );
   }
 }

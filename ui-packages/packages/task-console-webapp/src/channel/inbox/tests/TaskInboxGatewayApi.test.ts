@@ -131,23 +131,6 @@ describe('TaskInboxChannelApiImpl tests', () => {
     );
   });
 
-  it('refresh', async () => {
-    gatewayApi.setInitialState(initialState);
-    await gatewayApi.query(0, 10);
-    await gatewayApi.query(10, 10);
-
-    await gatewayApi.refresh();
-
-    expect(queries.getUserTasks).toHaveBeenCalledTimes(3);
-    expect(queries.getUserTasks).toHaveBeenLastCalledWith(
-      user,
-      0,
-      20,
-      initialState.filters,
-      initialState.sortBy
-    );
-  });
-
   it('openTask', () => {
     gatewayApi.openTask(task);
 

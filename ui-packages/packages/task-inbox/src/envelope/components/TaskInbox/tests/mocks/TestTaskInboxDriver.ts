@@ -63,10 +63,6 @@ export default class TestTaskInboxDriver implements TaskInboxDriver {
     return this.doQuery(offset, this.getQueryLimit());
   }
 
-  refresh(): Promise<UserTaskInstance[]> {
-    return this.doQuery(0, this.getQueryLimit());
-  }
-
   private doQuery(start: number, limit: number): Promise<UserTaskInstance[]> {
     const queryLimit = limit > this.tasks.length ? this.tasks.length : limit;
 

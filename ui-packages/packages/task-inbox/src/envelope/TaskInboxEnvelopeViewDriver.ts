@@ -48,10 +48,6 @@ export default class TaskInboxEnvelopeViewDriver implements TaskInboxDriver {
     return this.channelApi.requests.taskInbox__query(offset, limit);
   }
 
-  refresh(): Promise<UserTaskInstance[]> {
-    return this.channelApi.requests.taskInbox__refresh();
-  }
-
   openTask(task: UserTaskInstance): void {
     return this.channelApi.notifications.taskInbox__openTask(task);
   }

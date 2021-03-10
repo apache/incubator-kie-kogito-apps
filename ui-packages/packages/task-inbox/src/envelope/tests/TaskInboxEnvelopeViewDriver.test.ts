@@ -97,12 +97,6 @@ describe('TaskInboxEnvelopeViewDriver tests', () => {
 
       expect(requests.taskInbox__query).toHaveBeenCalledWith(0, 10);
     });
-
-    it('refresh', () => {
-      driver.refresh();
-
-      expect(requests.taskInbox__refresh).toHaveBeenCalled();
-    });
   });
 
   describe('Notifications', () => {

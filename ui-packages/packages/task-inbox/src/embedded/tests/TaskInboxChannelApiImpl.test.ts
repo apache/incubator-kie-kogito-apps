@@ -106,11 +106,6 @@ describe('TaskInboxChannelApiImpl tests', () => {
     expect(driver.query).toHaveBeenCalledWith(0, 10);
   });
 
-  it('taskInbox__refresh', () => {
-    api.taskInbox__refresh();
-    expect(driver.refresh).toHaveBeenCalled();
-  });
-
   it('taskInbox__openTask', () => {
     api.taskInbox__openTask(userTask);
     expect(driver.openTask).toHaveBeenCalledWith(userTask);

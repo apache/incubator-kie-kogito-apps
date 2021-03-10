@@ -99,6 +99,10 @@ describe('TaskInboxToolbar test', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     props = {
+      activeFilter: {
+        taskStates: getDefaultActiveTaskStates(),
+        taskNames: []
+      },
       allTaskStates: getDefaultTaskStates(),
       activeTaskStates: getDefaultActiveTaskStates(),
       applyFilter,

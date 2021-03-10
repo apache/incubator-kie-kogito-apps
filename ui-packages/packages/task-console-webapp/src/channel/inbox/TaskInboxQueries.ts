@@ -55,7 +55,8 @@ export class GraphQLTaskInboxQueries implements TaskInboxQueries {
             offset: offset,
             limit: limit,
             orderBy: getOrderByObject(sortBy)
-          }
+          },
+          fetchPolicy: 'network-only'
         })
         .then(value => {
           resolve(value.data.UserTaskInstances);

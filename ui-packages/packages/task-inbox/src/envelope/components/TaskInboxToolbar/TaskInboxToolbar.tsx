@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Select,
@@ -36,7 +36,7 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
 import { QueryFilter } from '../../../api';
 
 interface TaskInboxToolbarProps {
-  initialState?: QueryFilter;
+  activeFilter: QueryFilter;
   allTaskStates: string[];
   activeTaskStates: string[];
   applyFilter: (filter: QueryFilter) => void;
@@ -49,7 +49,7 @@ enum Category {
 }
 
 const TaskInboxToolbar: React.FC<TaskInboxToolbarProps & OUIAProps> = ({
-  initialState,
+  activeFilter,
   allTaskStates,
   activeTaskStates,
   applyFilter,
@@ -57,26 +57,36 @@ const TaskInboxToolbar: React.FC<TaskInboxToolbarProps & OUIAProps> = ({
   ouiaSafe,
   ouiaId
 }) => {
-  const [allStates] = useState<string[]>(allTaskStates);
-  const [activeStates] = useState<string[]>(activeTaskStates);
-
-  const [filterTaskStates, setFilterTaskStates] = useState<string[]>(
-    initialState ? initialState.taskStates : activeStates
-  );
-  const [filterTaskNames, setFilteraskNames] = useState<string[]>(
-    initialState ? initialState.taskNames : []
-  );
-
   const [isStatusExpanded, setStatusExpanded] = useState(false);
 
-  const [selectedTaskStates, setSelectedTaskStates] = useState<string[]>(
-    initialState ? initialState.taskStates : activeStates
-  );
+  const [allStates, setAllStates] = useState<string[]>([]);
+  const [activeStates, setActiveStates] = useState<string[]>([]);
 
+  // filters currently applied
+  const [filterTaskStates, setFilterTaskStates] = useState<string[]>([]);
+  const [filterTaskNames, setFilterTaskNames] = useState<string[]>([]);
+
+  // filters not applied yet
+  const [selectedTaskStates, setSelectedTaskStates] = useState<string[]>([]);
   const [taskNameInput, setTaskNameInput] = useState<string>('');
+
+  useEffect(() => {
+    setAllStates(allTaskStates);
+    setActiveStates(activeTaskStates);
+    setSelectedTaskStates(activeFilter.taskStates);
+    setFilterTaskStates(activeFilter.taskStates);
+    setFilterTaskNames(activeFilter.taskNames);
+  }, [activeFilter]);
 
   const createStatusMenuItems = () => {
     return allStates.map(state => <SelectOption key={state} value={state} />);
+  };
+
+  const doResetFilter = () => {
+    applyFilter({
+      taskStates: activeStates,
+      taskNames: []
+    });
   };
 
   const onDeleteFilterGroup = (categoryName: Category, value: string): void => {
@@ -95,7 +105,7 @@ const TaskInboxToolbar: React.FC<TaskInboxToolbarProps & OUIAProps> = ({
         _.remove(newFilterTaskNames, (status: string) => {
           return status === value;
         });
-        setFilteraskNames(newFilterTaskNames);
+        setFilterTaskNames(newFilterTaskNames);
         break;
     }
     applyFilter({
@@ -120,37 +130,18 @@ const TaskInboxToolbar: React.FC<TaskInboxToolbarProps & OUIAProps> = ({
     setSelectedTaskStates(filter);
   };
 
-  const onStatusToggle = (isExpandedItem: boolean): void => {
-    setStatusExpanded(isExpandedItem);
-  };
-
-  const onTextBoxChange = (taskName: string): void => {
-    setTaskNameInput(taskName);
-    if (taskName === '') {
-      setTaskNameInput('');
-      return;
-    }
-  };
-
   const doApplyFilter = () => {
-    const taskNames = [...filterTaskNames];
-    if (taskNameInput && !taskNames.includes(taskNameInput)) {
-      taskNames.push(taskNameInput);
-      setFilteraskNames(taskNames);
+    const newTaskNames = [...filterTaskNames];
+    if (taskNameInput && !newTaskNames.includes(taskNameInput)) {
+      newTaskNames.push(taskNameInput);
+      setFilterTaskNames(newTaskNames);
     }
     setFilterTaskStates([...selectedTaskStates]);
     setTaskNameInput('');
     applyFilter({
       taskStates: [...selectedTaskStates],
-      taskNames: taskNames
+      taskNames: newTaskNames
     });
-  };
-
-  const doResetFilter = () => {
-    setFilterTaskStates(activeStates);
-    setSelectedTaskStates(activeStates);
-    setFilteraskNames([]);
-    applyFilter({ taskNames: [], taskStates: activeStates });
   };
 
   const toggleGroupItems = (
@@ -164,7 +155,7 @@ const TaskInboxToolbar: React.FC<TaskInboxToolbarProps & OUIAProps> = ({
           <Select
             variant={SelectVariant.checkbox}
             aria-label="Status"
-            onToggle={onStatusToggle}
+            onToggle={setStatusExpanded}
             onSelect={onSelectTaskState}
             selections={selectedTaskStates}
             isOpen={isStatusExpanded}
@@ -184,7 +175,7 @@ const TaskInboxToolbar: React.FC<TaskInboxToolbarProps & OUIAProps> = ({
               id="taskName"
               type="search"
               aria-label="task name"
-              onChange={onTextBoxChange}
+              onChange={setTaskNameInput}
               placeholder="Filter by Task name"
               value={taskNameInput}
             />
