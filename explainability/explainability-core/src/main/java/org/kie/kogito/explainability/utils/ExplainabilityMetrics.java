@@ -310,7 +310,11 @@ public class ExplainabilityMetrics {
                 currentChunk++;
             }
         }
-        return tp / (tp + fn);
+        if ((tp + fn) > 0) {
+            return tp / (tp + fn);
+        } else {
+            return 0;
+        }
     }
 
     private static List<Prediction> getScoreSortedPredictions(String decision, PredictionProvider predictionProvider,
@@ -401,7 +405,11 @@ public class ExplainabilityMetrics {
                 currentChunk++;
             }
         }
-        return tp / (tp + fp);
+        if ((tp + fp) > 0) {
+            return tp / (tp + fp);
+        } else {
+            return 0;
+        }
     }
 
     private static PredictionInput getMaskedInput(List<Feature> importantFeatures, PredictionInput input) {
