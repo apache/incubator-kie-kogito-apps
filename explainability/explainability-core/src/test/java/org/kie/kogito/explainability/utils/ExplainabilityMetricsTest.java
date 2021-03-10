@@ -154,10 +154,13 @@ class ExplainabilityMetricsTest {
                     throw new RuntimeException("this should never happen");
                 });
 
-        Assertions.assertThrows(TimeoutException.class,
-                () -> ExplainabilityMetrics.impactScore(brokenProvider, emptyPrediction, emptyList()));
+        try {
+            Assertions.assertThrows(IllegalStateException.class,
+                    () -> ExplainabilityMetrics.impactScore(brokenProvider, emptyPrediction, emptyList()));
 
-        Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
-        Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
+        } finally {
+            Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
+            Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
+        }
     }
 }

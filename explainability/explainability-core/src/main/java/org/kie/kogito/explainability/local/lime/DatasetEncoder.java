@@ -109,7 +109,7 @@ class DatasetEncoder {
             int finalT = t;
             // encode all inputs with respect to the target, based on their type
             List<double[]> encode = targetFeature.getType().encode(params, targetFeature.getValue(), perturbedInputs
-                    .stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).toArray(Value<?>[]::new));
+                    .stream().map(predictionInput -> predictionInput.getFeatures().get(finalT).getValue()).toArray(Value[]::new));
             columnData.add(encode);
         }
         return columnData;

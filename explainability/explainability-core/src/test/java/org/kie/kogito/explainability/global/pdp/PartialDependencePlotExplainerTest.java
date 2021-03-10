@@ -71,7 +71,7 @@ class PartialDependencePlotExplainerTest {
             @Override
             public PredictionOutput getOutputShape() {
                 List<Output> outputs = new LinkedList<>();
-                outputs.add(new Output("sum-but0", Type.BOOLEAN, new Value<>(false), 0d));
+                outputs.add(new Output("sum-but0", Type.BOOLEAN, new Value(false), 0d));
                 return new PredictionOutput(outputs);
             }
         };
@@ -125,10 +125,14 @@ class PartialDependencePlotExplainerTest {
                     throw new RuntimeException("this should never happen");
                 });
 
-        Assertions.assertThrows(TimeoutException.class,
-                () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
-        Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
-        Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
+        try {
+            Assertions.assertThrows(TimeoutException.class,
+                    () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
+
+        } finally {
+            Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
+            Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
+        }
     }
 
     @ParameterizedTest

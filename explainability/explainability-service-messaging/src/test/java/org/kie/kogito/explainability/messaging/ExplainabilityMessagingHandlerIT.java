@@ -43,8 +43,8 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -97,7 +97,6 @@ class ExplainabilityMessagingHandlerIT {
             }
         });
 
-        countDownLatch.await(5, TimeUnit.SECONDS);
-        assertEquals(0, countDownLatch.getCount());
+        assertTrue(countDownLatch.await(5, TimeUnit.SECONDS));
     }
 }

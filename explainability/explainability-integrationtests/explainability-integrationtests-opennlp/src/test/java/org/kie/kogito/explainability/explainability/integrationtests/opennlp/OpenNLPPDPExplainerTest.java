@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
@@ -45,12 +46,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class OpenNLPPDPExplainerTest {
 
-    @BeforeAll
-    static void init() {
-        Config.INSTANCE.setAsyncTimeout(5000);
-        Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
-    }
-
     @Test
     void testOpenNLPLangDetect() throws Exception {
 
@@ -70,7 +65,7 @@ class OpenNLPPDPExplainerTest {
                     builder.append(f.getValue().asString());
                 }
                 Language language = languageDetector.predictLanguage(builder.toString());
-                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value<>(language.getLang()), language.getConfidence())));
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value(language.getLang()), language.getConfidence())));
                 results.add(predictionOutput);
             }
             return results;

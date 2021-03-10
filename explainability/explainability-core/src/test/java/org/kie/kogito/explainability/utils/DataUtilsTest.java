@@ -294,7 +294,7 @@ class DataUtilsTest {
     @Test
     void testDropFeature() {
         for (Type t : Type.values()) {
-            Feature target = TestUtils.getMockedFeature(t, new Value<>(1d));
+            Feature target = TestUtils.getMockedFeature(t, new Value(1d));
             List<Feature> features = new LinkedList<>();
             features.add(TestUtils.getMockedNumericFeature());
             features.add(target);
@@ -308,7 +308,7 @@ class DataUtilsTest {
     @Test
     void testDropLinearizedFeature() {
         for (Type t : Type.values()) {
-            Feature target = TestUtils.getMockedFeature(t, new Value<>(1d));
+            Feature target = TestUtils.getMockedFeature(t, new Value(1d));
             List<Feature> features = new LinkedList<>();
             features.add(TestUtils.getMockedNumericFeature());
             features.add(target);
@@ -345,14 +345,14 @@ class DataUtilsTest {
     void toCSV() {
         Feature feature = mock(Feature.class);
         Output output = mock(Output.class);
-        List<Value<?>> x = new ArrayList<>();
-        x.add(new Value<>(1));
-        x.add(new Value<>(2));
-        x.add(new Value<>(3));
-        List<Value<?>> y = new ArrayList<>();
-        y.add(new Value<>(4));
-        y.add(new Value<>(5));
-        y.add(new Value<>(4));
+        List<Value> x = new ArrayList<>();
+        x.add(new Value(1));
+        x.add(new Value(2));
+        x.add(new Value(3));
+        List<Value> y = new ArrayList<>();
+        y.add(new Value(4));
+        y.add(new Value(5));
+        y.add(new Value(4));
         PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature, output, x, y);
         assertDoesNotThrow(() -> DataUtils.toCSV(partialDependenceGraph, Paths.get("target/test-pdp.csv")));
     }

@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
@@ -55,8 +56,6 @@ class PmmlRegressionLimeExplainerTest {
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {
         logisticRegressionIrisRuntime = getPMMLRuntime(ResourceReaderUtils.getResourceAsFile("logisticregressionirisdata/logisticRegressionIrisData.pmml"));
-        Config.INSTANCE.setAsyncTimeout(5000);
-        Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -84,7 +83,7 @@ class PmmlRegressionLimeExplainerTest {
                             features1.get(2).getValue().asNumber(), features1.get(3).getValue().asNumber());
                     PMML4Result result = pmmlModel.execute(logisticRegressionIrisRuntime);
                     String species = result.getResultVariables().get("Species").toString();
-                    PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("species", Type.TEXT, new Value<>(species), 1d)));
+                    PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("species", Type.TEXT, new Value(species), 1d)));
                     outputs.add(predictionOutput);
                 }
                 return outputs;
