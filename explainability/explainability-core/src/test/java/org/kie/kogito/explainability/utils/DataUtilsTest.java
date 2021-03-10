@@ -39,6 +39,8 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
+import javax.xml.crypto.Data;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -446,5 +448,19 @@ class DataUtilsTest {
         y.add(new Value<>(4));
         PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature, output, x, y);
         assertDoesNotThrow(() -> DataUtils.toCSV(partialDependenceGraph, Paths.get("target/test-pdp.csv")));
+    }
+
+    @Test
+    void testReplaceFeature() {
+        List<Feature> features = new ArrayList<>();
+        Feature replacingFeature = FeatureFactory.newTextFeature("f1", "replacement");
+        features.add(FeatureFactory.newTextFeature("f0", "one two three"));
+        features.add(FeatureFactory.newTextFeature("f1", "to be replaced"));
+        features.add(FeatureFactory.newTextFeature("f2", "four five six"));
+        List<Feature> updatedFeatures = DataUtils.replaceFeatures(replacingFeature, features);
+        assertThat(updatedFeatures.get(0)).isEqualTo(features.get(0));
+        assertThat(updatedFeatures.get(2)).isEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1)).isNotEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1).getValue().asString()).isEqualTo("replacement");
     }
 }
