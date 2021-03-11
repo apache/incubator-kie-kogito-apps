@@ -212,7 +212,6 @@ class DummyModelsLimeExplainerTest {
         Prediction prediction = new Prediction(input, outputs.get(0));
         LimeConfig limeConfig = new LimeConfig().withSamples(1000).withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-        System.out.println("TIMEOUT " + Config.INSTANCE.getAsyncTimeout() + " " + Config.INSTANCE.getAsyncTimeUnit());
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (Saliency saliency : saliencyMap.values()) {
