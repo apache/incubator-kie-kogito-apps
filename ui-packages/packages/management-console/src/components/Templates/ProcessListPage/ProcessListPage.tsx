@@ -15,7 +15,8 @@ import {
   ServerErrors,
   LoadMore,
   componentOuiaProps,
-  OUIAProps
+  OUIAProps,
+  constructObject
 } from '@kogito-apps/common';
 import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -24,6 +25,9 @@ import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListTo
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
 import { StaticContext } from 'react-router';
+import _ from 'lodash';
+import { alterOrderByObj } from '../../../utils/Utils';
+import { ISortBy } from '@patternfly/react-table';
 
 type filterType = {
   status: GraphQL.ProcessInstanceState[];
@@ -43,6 +47,9 @@ const ProcessListPage: React.FC<OUIAProps &
   ouiaSafe,
   ...props
 }) => {
+  const defaultOrderBy: GraphQL.ProcessInstanceOrderBy = {
+    lastUpdate: GraphQL.OrderBy.Asc
+  };
   const [defaultPageSize] = useState<number>(10);
   const [initData, setInitData] = useState<GraphQL.GetProcessInstancesQuery>(
     {}
@@ -76,6 +83,10 @@ const ProcessListPage: React.FC<OUIAProps &
   );
   const [selectableInstances, setSelectableInstances] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [sortBy, setSortBy] = useState<ISortBy>({});
+  const [orderBy, setOrderBy] = useState<GraphQL.ProcessInstanceOrderBy>(
+    defaultOrderBy
+  );
   const [
     getProcessInstances,
     { loading, data, error }
@@ -88,6 +99,7 @@ const ProcessListPage: React.FC<OUIAProps &
     getProcessInstances({
       variables: {
         where: queryVariableGenerator(businessKeysArray, statusArray),
+        orderBy,
         offset: 0,
         limit: pageSize
       }
@@ -108,6 +120,7 @@ const ProcessListPage: React.FC<OUIAProps &
             formatSearchWords(props.location.state.filters.businessKey),
             props.location.state.filters.status
           ),
+          orderBy,
           offset: 0,
           limit: pageSize
         }
@@ -116,9 +129,12 @@ const ProcessListPage: React.FC<OUIAProps &
   }, [props.location.state]);
 
   const resetPagination = (): void => {
+    setIsLoading(true);
     setOffset(0);
     setLimit(defaultPageSize);
     setPageSize(defaultPageSize);
+    setSelectableInstances(0);
+    setSelectedInstances([]);
   };
 
   useEffect(() => {
@@ -149,9 +165,6 @@ const ProcessListPage: React.FC<OUIAProps &
   };
 
   const onFilterClick = (arr = filters.status): void => {
-    setIsLoading(true);
-    setSelectableInstances(0);
-    setSelectedInstances([]);
     resetPagination();
     let searchWordsArray = [];
     const copyOfBusinessKeysArray = [...filters.businessKey];
@@ -171,6 +184,7 @@ const ProcessListPage: React.FC<OUIAProps &
     getProcessInstances({
       variables: {
         where: queryVariableGenerator(searchWordsArray, arr),
+        orderBy,
         offset: 0,
         limit: defaultPageSize
       }
@@ -186,6 +200,7 @@ const ProcessListPage: React.FC<OUIAProps &
     getProcessInstances({
       variables: {
         where: queryVariableGenerator(businessKeysArray, statusArray),
+        orderBy,
         offset: initVal,
         limit: _pageSize
       }
@@ -245,7 +260,6 @@ const ProcessListPage: React.FC<OUIAProps &
   }, [initData]);
 
   const resetClick = (): void => {
-    setIsLoading(true);
     setSearchWord('');
     setStatusArray([GraphQL.ProcessInstanceState.Active]);
     setFilters({
@@ -254,6 +268,25 @@ const ProcessListPage: React.FC<OUIAProps &
       businessKey: []
     });
     onFilterClick([GraphQL.ProcessInstanceState.Active]);
+  };
+
+  const onSort = (event, index: number, direction: 'asc' | 'desc'): void => {
+    resetPagination();
+    setSortBy({ index, direction });
+    let sortingColumn: string = event.target.innerText;
+    sortingColumn = _.camelCase(sortingColumn);
+    let obj = {};
+    constructObject(obj, sortingColumn, direction.toUpperCase());
+    obj = alterOrderByObj(obj);
+    setOrderBy(obj);
+    getProcessInstances({
+      variables: {
+        where: queryVariableGenerator(businessKeysArray, statusArray),
+        orderBy: obj,
+        offset: 0,
+        limit: pageSize
+      }
+    });
   };
 
   if (error) {
@@ -299,7 +332,6 @@ const ProcessListPage: React.FC<OUIAProps &
                       setIsAllChecked={setIsAllChecked}
                       statusArray={statusArray}
                       setStatusArray={setStatusArray}
-                      setSelectableInstances={setSelectableInstances}
                     />
                     <Divider />
                   </>
@@ -317,6 +349,8 @@ const ProcessListPage: React.FC<OUIAProps &
                     setSelectableInstances={setSelectableInstances}
                     setIsAllChecked={setIsAllChecked}
                     selectableInstances={selectableInstances}
+                    onSort={onSort}
+                    sortBy={sortBy}
                   />
                 ) : (
                   <KogitoEmptyState
