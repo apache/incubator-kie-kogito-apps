@@ -107,6 +107,7 @@ public class FeatureFactory {
         return new Feature(name, Type.COMPOSITE, new Value(features));
     }
 
+    @SuppressWarnings("unchecked")
     public static Feature parseFeatureValue(String featureName, Object value) {
         if (value instanceof Map) {
             return newCompositeFeature(featureName, (Map<String, Object>) value);
@@ -131,16 +132,18 @@ public class FeatureFactory {
         } else if (value instanceof Feature) {
             return (Feature) value;
         } else if (value instanceof List) {
-            return parseList(featureName, (List) value);
+            return parseList(featureName, (List<Object>) value);
         } else {
             return newObjectFeature(featureName, value);
         }
     }
 
-    private static Feature parseList(String featureName, List value) {
+    private static Feature parseList(String featureName, List<Object> value) {
         if (!value.isEmpty()) {
             if (value.get(0) instanceof Feature) {
-                return newCompositeFeature(featureName, (List<Feature>) value);
+                @SuppressWarnings("unchecked")
+                List<Feature> features = (List<Feature>) (Object) value;
+                return newCompositeFeature(featureName, features);
             } else {
                 List<Feature> fs = IntStream.range(0, value.size())
                         .mapToObj(i -> parseFeatureValue(featureName + "_" + i, value.get(i)))

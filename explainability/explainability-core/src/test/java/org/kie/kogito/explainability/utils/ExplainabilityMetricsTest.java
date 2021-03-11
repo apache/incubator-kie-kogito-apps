@@ -32,6 +32,7 @@ import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -154,10 +155,10 @@ class ExplainabilityMetricsTest {
                     throw new RuntimeException("this should never happen");
                 });
 
+        List<FeatureImportance> emptyFeatures = emptyList();
         try {
             Assertions.assertThrows(IllegalStateException.class,
-                    () -> ExplainabilityMetrics.impactScore(brokenProvider, emptyPrediction, emptyList()));
-
+                    () -> ExplainabilityMetrics.impactScore(brokenProvider, emptyPrediction, emptyFeatures));
         } finally {
             Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
             Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
