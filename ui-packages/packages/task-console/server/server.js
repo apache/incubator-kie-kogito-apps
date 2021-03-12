@@ -42,7 +42,10 @@ app.use(
 
 app.post(
   '/:processId/:processInstanceId/:taskName/:taskId',
-  controller.callCompleteTask
+    async (req, res) => {
+      await timeout(500);
+      controller.callCompleteTask(req, res)
+    }
 );
 
 app.get(

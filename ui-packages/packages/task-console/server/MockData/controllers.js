@@ -3,21 +3,30 @@ const _ = require('lodash');
 const graphQL = require('./graphql');
 const confirmTravelForm = require('./forms/ConfirmTravel');
 const applyForVisaForm = require('./forms/ApplyForVisa');
+const emptyForm = require('./forms/EmptyForm');
 
 const restData = require('./rest');
 
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
   '841b9dba-3d91-4725-9de3-f9f4853b417e'
+];
+
+const taskWithoutForm = [
+    '475e3eb3-1de4-4f68-a146-79c236353a03',
+    '615b9143-1468-4028-b454-6122e2139f5c'
 ]
+
+const taskWithEmptyForm = [
+    '45a73767-5da3-49bf-9c40-d533c3e77ef3',
+    '809aae9e-f0bf-4892-b0c9-4be80664d2aa'
+];
 
 module.exports = controller = {
   callCompleteTask: (req, res) => {
     console.log(
       `......ProcessId:${req.params.processId} --piId:${req.params.processId} --taskId:${req.params.taskId}`
     );
-
-    console.log(req.data);
 
     const processId = restData.process.filter(data => {
       return data.processId === req.params.processId;
@@ -51,6 +60,20 @@ module.exports = controller = {
     });
 
     const clearPhases = task.completed || task.state === 'Aborted';
+
+    if(taskWithEmptyForm.includes(task.id)) {
+      const form = _.cloneDeep(emptyForm);
+      if(clearPhases) {
+        delete form.phases;
+      }
+      res.send(JSON.stringify(form));
+      return;
+    }
+
+    if(taskWithoutForm.includes(task.id)) {
+      res.status(500).send('');
+      return;
+    }
 
     res.send(JSON.stringify(getTaskSchema(task.name, clearPhases)));
   },

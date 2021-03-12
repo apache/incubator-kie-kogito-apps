@@ -21,7 +21,7 @@ module.exports = data = {
         potentialUsers: [],
         inputs: '{"Skippable":"true","trip":{"city":"Boston","country":"US","begin":"2020-02-19T23:00:00.000+01:00","end":"2020-02-26T23:00:00.000+01:00","visaRequired":true},"TaskName":"VisaApplication","NodeName":"Apply for visa","traveller":{"firstName":"Rachel","lastName":"White","email":"rwhite@gorle.com","nationality":"Polish","address":{"street":"Cabalone","city":"Zerf","zipCode":"765756","country":"Poland"}},"Priority":"1"}',
         outputs: '{}',
-        referenceName: "Apply for visa",
+        referenceName: "Apply for visa (Empty Form)",
         lastUpdate: "2020-02-19T11:11:56.282Z",
         endpoint: 'http://localhost:4000/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3'
       },
@@ -122,7 +122,7 @@ module.exports = data = {
       {
         id: "475e3eb3-1de4-4f68-a146-79c236353a03",
         name: "VisaApplication",
-        referenceName: "Apply for visa",
+        referenceName: "Apply for visa (No Form)",
         description: null,
         priority: "1",
         processInstanceId: "5c10ec86-4cf5-4de2-a5ab-d962893f079d",
@@ -172,7 +172,7 @@ module.exports = data = {
       {
         id: "809aae9e-f0bf-4892-b0c9-4be80664d2aa",
         name: "ConfirmTravel",
-        referenceName: "Confirm travel",
+        referenceName: "Confirm travel (Empty Form)",
         description: null,
         priority: "1",
         processInstanceId: "5204b2d2-54ec-4f07-8f8c-3079a1f5fe9b",
@@ -198,7 +198,7 @@ module.exports = data = {
       {
         id: "615b9143-1468-4028-b454-6122e2139f5c",
         name: "ConfirmTravel",
-        referenceName: "Confirm travel",
+        referenceName: "Confirm travel (No Form)",
         description: null,
         priority: "1",
         processInstanceId: "d6685e24-0aad-4e5c-a64f-29e95cae9e5e",
