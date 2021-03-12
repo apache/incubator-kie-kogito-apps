@@ -19,7 +19,7 @@ import {
 import { HelpIcon } from '@patternfly/react-icons';
 import Outcomes from '../../Organisms/Outcomes/Outcomes';
 import InputDataBrowser from '../../Organisms/InputDataBrowser/InputDataBrowser';
-import FeaturesScoreChart from '../../Organisms/FeaturesScoreChart/FeaturesScoreChart';
+// import FeaturesScoreChart from '../../Organisms/FeaturesScoreChart/FeaturesScoreChart';
 import FeaturesScoreTable from '../../Organisms/FeaturesScoreTable/FeaturesScoreTable';
 import ExplanationSwitch from '../../Organisms/ExplanationSwitch/ExplanationSwitch';
 import SkeletonGrid from '../../Molecules/SkeletonGrid/SkeletonGrid';
@@ -33,6 +33,7 @@ import ExplanationError from '../../Molecules/ExplanationError/ExplanationError'
 import EvaluationStatus from '../../Atoms/EvaluationStatus/EvaluationStatus';
 import { ExecutionRouteParams, Outcome, RemoteData } from '../../../types';
 import './Explanation.scss';
+import FeaturesScoreChartAlternative from '../../Organisms/FeaturesScoreChartAlternative/FeaturesScoreChartAlternative';
 
 type ExplanationProps = {
   outcomes: RemoteData<Error, Outcome[]>;
@@ -45,10 +46,11 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
   const [outcomeId, setOutcomeId] = useState<string | null>(null);
   const outcomeDetail = useOutcomeDetail(executionId, outcomeId);
   const saliencies = useSaliencies(executionId);
-  const { featuresScores, topFeaturesScores } = useFeaturesScores(
-    saliencies,
-    outcomeId
-  );
+  const {
+    featuresScores,
+    topFeaturesScores,
+    topFeaturesScoresBySign
+  } = useFeaturesScores(saliencies, outcomeId);
   const [displayChart, setDisplayChart] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
@@ -184,7 +186,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                   <GridItem span={8}>
                     <Card>
                       <CardHeader>
-                        {topFeaturesScores.length ? (
+                        {topFeaturesScoresBySign.length ? (
                           <Title headingLevel="h4" size="xl">
                             Top Features Score Chart
                           </Title>
@@ -200,21 +202,21 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                         )}
                         {saliencies.status === 'SUCCESS' && (
                           <>
-                            {topFeaturesScores.length === 0 && (
+                            {topFeaturesScoresBySign.length === 0 && (
                               <div className="explanation-view__chart">
                                 {displayChart && (
-                                  <FeaturesScoreChart
+                                  <FeaturesScoreChartAlternative
                                     featuresScore={featuresScores}
                                   />
                                 )}
                               </div>
                             )}
-                            {topFeaturesScores.length > 0 && (
+                            {topFeaturesScoresBySign.length > 0 && (
                               <>
                                 <div className="explanation-view__chart">
                                   {displayChart && (
-                                    <FeaturesScoreChart
-                                      featuresScore={topFeaturesScores}
+                                    <FeaturesScoreChartAlternative
+                                      featuresScore={topFeaturesScoresBySign}
                                     />
                                   )}
                                 </div>
@@ -240,7 +242,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                                     </Button>
                                   ]}
                                 >
-                                  <FeaturesScoreChart
+                                  <FeaturesScoreChartAlternative
                                     featuresScore={featuresScores}
                                     large={true}
                                   />
