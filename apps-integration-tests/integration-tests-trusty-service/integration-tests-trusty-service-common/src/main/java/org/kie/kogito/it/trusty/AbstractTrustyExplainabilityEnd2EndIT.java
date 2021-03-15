@@ -23,6 +23,7 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.kie.kogito.testcontainers.ExplainabilityServiceMessagingContainer;
 import org.kie.kogito.testcontainers.InfinispanContainer;
 import org.kie.kogito.testcontainers.InfinispanTrustyServiceContainer;
+import org.kie.kogito.testcontainers.KogitoKafkaContainer;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.KogitoServiceContainer;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
@@ -32,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.utility.DockerImageName;
 
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -100,7 +100,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                         .withNetwork(network)
                         .withNetworkAliases(INFINISPAN_ALIAS);
 
-                final KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:5.4.3"))
+                final KafkaContainer kafka = new KogitoKafkaContainer()
                         .withNetwork(network)
                         .withNetworkAliases(KAFKA_ALIAS);
 
