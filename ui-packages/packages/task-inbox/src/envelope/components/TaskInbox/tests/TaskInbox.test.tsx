@@ -28,11 +28,10 @@ import { userTasks } from './mocks/MockData';
 import TaskInbox, { TaskInboxProps } from '../TaskInbox';
 import TaskInboxToolbar from '../../TaskInboxToolbar/TaskInboxToolbar';
 import wait from 'waait';
-import { DropdownToggleAction } from '@patternfly/react-core';
 import {
   getDefaultActiveTaskStates,
   getDefaultTaskStates
-} from '../../utils/Utils';
+} from '../../utils/TaskInboxUtils';
 
 jest.mock('../../TaskInboxToolbar/TaskInboxToolbar');
 
@@ -43,6 +42,9 @@ const MockedComponent = (): React.ReactElement => {
 jest.mock('@kogito-apps/components-common', () => ({
   ...jest.requireActual('@kogito-apps/components-common'),
   DataTable: () => {
+    return <MockedComponent />;
+  },
+  LoadMore: () => {
     return <MockedComponent />;
   },
   KogitoEmptyState: () => {
@@ -124,8 +126,6 @@ describe('TaskInbox tests', () => {
 
     wrapper = wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
-
     expect(driver.setInitialState).toHaveBeenCalled();
     expect(driver.query).toHaveBeenCalledWith(0, 10);
 
@@ -172,17 +172,11 @@ describe('TaskInbox tests', () => {
     expect(loadMore.exists()).toBeTruthy();
 
     await act(async () => {
-      wrapper
-        .find(DropdownToggleAction)
-        .find('button')
-        .at(0)
-        .simulate('click');
+      loadMore.props().getMoreItems(10, 10);
       wait();
     });
 
     wrapper = wrapper.update().find(TaskInbox);
-
-    expect(wrapper).toMatchSnapshot();
 
     expect(driver.query).toHaveBeenCalledWith(10, 10);
 
@@ -235,8 +229,6 @@ describe('TaskInbox tests', () => {
 
     wrapper = wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
-
     expect(driver.setInitialState).toHaveBeenCalled();
     expect(driver.query).toHaveBeenCalledWith(0, 10);
 
@@ -271,8 +263,6 @@ describe('TaskInbox tests', () => {
 
     wrapper = wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
-
     expect(driver.setInitialState).toHaveBeenCalled();
     expect(driver.query).toHaveBeenCalledWith(0, 10);
 
@@ -283,17 +273,11 @@ describe('TaskInbox tests', () => {
     expect(loadMore.exists()).toBeTruthy();
 
     await act(async () => {
-      wrapper
-        .find(DropdownToggleAction)
-        .find('button')
-        .at(0)
-        .simulate('click');
+      loadMore.props().getMoreItems(10, 10);
       wait();
     });
 
     wrapper = wrapper.update().find(TaskInbox);
-
-    expect(wrapper).toMatchSnapshot();
 
     dataTable = wrapper.find(DataTable);
     expect(dataTable.exists()).toBeTruthy();
@@ -301,17 +285,11 @@ describe('TaskInbox tests', () => {
 
     // sort by state
     await act(async () => {
-      wrapper
-        .find(DataTable)
-        .props()
-        ['onSorting'](3, 'asc');
-
+      dataTable.props().onSorting(3, 'asc');
       wait();
     });
 
     wrapper = wrapper.update().find(TaskInbox);
-
-    expect(wrapper).toMatchSnapshot();
 
     expect(driver.applySorting).toHaveBeenCalled();
 
@@ -336,8 +314,6 @@ describe('TaskInbox tests', () => {
       wait();
     });
 
-    wrapper = wrapper.update();
-
     const toolbar = wrapper.find(TaskInboxToolbar);
 
     expect(toolbar.exists()).toBeTruthy();
@@ -351,8 +327,6 @@ describe('TaskInbox tests', () => {
     });
 
     wrapper = wrapper.update();
-
-    expect(wrapper).toMatchSnapshot();
 
     expect(driver.applyFilter).toHaveBeenCalled();
 
@@ -392,8 +366,6 @@ describe('TaskInbox tests', () => {
 
     wrapper = wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
-
     let emptyState = wrapper.find(KogitoEmptyState);
 
     expect(emptyState.exists()).toBeTruthy();
@@ -409,8 +381,6 @@ describe('TaskInbox tests', () => {
     });
 
     wrapper = wrapper.update();
-
-    expect(wrapper).toMatchSnapshot();
 
     emptyState = wrapper.find(KogitoEmptyState);
     expect(emptyState.exists()).toBeFalsy();
@@ -433,8 +403,6 @@ describe('TaskInbox tests', () => {
 
     wrapper = wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
-
     expect(driver.setInitialState).toHaveBeenCalled();
     expect(driver.query).toHaveBeenCalledWith(0, 10);
 
@@ -452,8 +420,6 @@ describe('TaskInbox tests', () => {
     });
 
     wrapper = wrapper.update();
-
-    expect(wrapper).toMatchSnapshot();
 
     toolbar = wrapper.find(TaskInboxToolbar);
     expect(toolbar.exists()).toBeTruthy();

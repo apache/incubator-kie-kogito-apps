@@ -15,9 +15,9 @@
  */
 
 import React from 'react';
-import { getWrapper } from '@kogito-apps/components-common';
 import { EmbeddedTaskInbox } from '../EmbeddedTaskInbox';
 import { MockedTaskInboxDriver } from './utils/Mocks';
+import { mount } from 'enzyme';
 
 describe('EmbeddedTaskInbox tests', () => {
   it('Snapshot', () => {
@@ -29,11 +29,21 @@ describe('EmbeddedTaskInbox tests', () => {
       activeTaskStates: ['Ready']
     };
 
-    const wrapper = getWrapper(
-      <EmbeddedTaskInbox {...props} />,
-      'EmbeddedTaskInbox'
-    );
+    const wrapper = mount(<EmbeddedTaskInbox {...props} />);
 
     expect(wrapper).toMatchSnapshot();
+
+    expect(wrapper.props().allTaskStates).toStrictEqual(props.allTaskStates);
+    expect(wrapper.props().activeTaskStates).toStrictEqual(
+      props.activeTaskStates
+    );
+    expect(wrapper.props().driver).toStrictEqual(props.driver);
+    expect(wrapper.props().targetOrigin).toStrictEqual(props.targetOrigin);
+    expect(wrapper.props().envelopePath).toStrictEqual(props.envelopePath);
+
+    const iframe = wrapper.find('iframe');
+
+    expect(iframe.exists()).toBeTruthy();
+    expect(iframe.props().src).toBe(props.envelopePath);
   });
 });

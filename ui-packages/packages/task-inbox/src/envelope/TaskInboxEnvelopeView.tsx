@@ -24,7 +24,7 @@ import '@patternfly/patternfly/patternfly.css';
 import {
   getDefaultActiveTaskStates,
   getDefaultTaskStates
-} from './components/utils/Utils';
+} from './components/utils/TaskInboxUtils';
 
 export interface TaskInboxEnvelopeViewApi {
   initialize: (

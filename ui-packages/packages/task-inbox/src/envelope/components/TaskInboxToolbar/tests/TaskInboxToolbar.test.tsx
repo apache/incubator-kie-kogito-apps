@@ -20,7 +20,7 @@ import TaskInboxToolbar from '../TaskInboxToolbar';
 import {
   getDefaultActiveTaskStates,
   getDefaultTaskStates
-} from '../../utils/Utils';
+} from '../../utils/TaskInboxUtils';
 import {
   Chip,
   Select,

@@ -41,7 +41,7 @@ import {
   getDefaultColumn,
   getTaskDescriptionColumn,
   getTaskStateColumn
-} from '../utils/Utils';
+} from '../utils/TaskInboxUtils';
 
 export interface TaskInboxProps {
   isEnvelopeConnectedToChannel: boolean;

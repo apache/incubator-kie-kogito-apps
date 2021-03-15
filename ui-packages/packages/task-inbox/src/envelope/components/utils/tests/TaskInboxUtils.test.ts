@@ -19,7 +19,7 @@ import {
   getDefaultColumn,
   getTaskDescriptionColumn,
   getTaskStateColumn
-} from '../Utils';
+} from '../TaskInboxUtils';
 
 describe('Utils tests', () => {
   it('Test default column', () => {
