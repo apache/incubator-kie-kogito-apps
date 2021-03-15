@@ -519,7 +519,7 @@ class CounterfactualExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
         final PerturbationContext perturbationContext = new PerturbationContext(random, 4);
-        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value<>(true), 0.0));
+        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.0));
 
         List<Feature> features = new LinkedList<>();
         List<FeatureDomain> featureBoundaries = new LinkedList<>();
