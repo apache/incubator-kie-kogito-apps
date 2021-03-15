@@ -23,11 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import org.assertj.core.data.Offset;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
@@ -62,12 +60,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OpenNLPLimeExplainerTest {
 
-    @BeforeAll
-    static void init() {
-        Config.INSTANCE.setAsyncTimeout(5000);
-        Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
-    }
-
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void testOpenNLPLangDetect(int seed) throws Exception {
@@ -92,7 +84,7 @@ class OpenNLPLimeExplainerTest {
                     builder.append(f.getValue().asString());
                 }
                 Language language = languageDetector.predictLanguage(builder.toString());
-                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value<>(language.getLang()), language.getConfidence())));
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(new Output("lang", Type.TEXT, new Value(language.getLang()), language.getConfidence())));
                 results.add(predictionOutput);
             }
             return results;
