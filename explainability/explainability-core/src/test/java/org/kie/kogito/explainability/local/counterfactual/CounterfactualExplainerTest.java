@@ -30,9 +30,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.model.*;
-import org.kie.kogito.explainability.utils.DataUtils;
-import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.DataDomain;
 import org.kie.kogito.explainability.model.Feature;
@@ -41,6 +38,7 @@ import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
 import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -50,12 +48,16 @@ import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
+import org.kie.kogito.explainability.utils.DataUtils;
+import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CounterfactualExplainerTest {
 
@@ -543,16 +545,16 @@ class CounterfactualExplainerTest {
         List<Boolean> constraints = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f-num1", 1.0));
         constraints.add(false);
-        featureBoundaries.add(FeatureDomain.numerical(0.0, 2.0));
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 2.0));
         features.add(FeatureFactory.newNumericalFeature("f-num2", 1.0));
         constraints.add(false);
-        featureBoundaries.add(FeatureDomain.numerical(0.0, 2.0));
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 2.0));
         features.add(FeatureFactory.newNumericalFeature("f-num3", 1.0));
         constraints.add(false);
-        featureBoundaries.add(FeatureDomain.numerical(0.0, 2.0));
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 2.0));
         features.add(FeatureFactory.newNumericalFeature("f-num4", 1.0));
         constraints.add(false);
-        featureBoundaries.add(FeatureDomain.numerical(0.0, 2.0));
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 2.0));
 
         // add a constraint
         constraints.set(0, true);
