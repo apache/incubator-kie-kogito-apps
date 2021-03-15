@@ -73,7 +73,7 @@ module.exports = {
           path.resolve(
             '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
           ),
-          path.resolve('./src/static'),
+          path.resolve('./src/static/'),
         ],
         use: [
           {
