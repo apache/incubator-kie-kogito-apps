@@ -13,13 +13,13 @@ const tasksUnableToTransition = [
 ];
 
 const taskWithoutForm = [
-    '475e3eb3-1de4-4f68-a146-79c236353a03',
-    '615b9143-1468-4028-b454-6122e2139f5c'
-]
+  '475e3eb3-1de4-4f68-a146-79c236353a03',
+  '615b9143-1468-4028-b454-6122e2139f5c'
+];
 
 const taskWithEmptyForm = [
-    '45a73767-5da3-49bf-9c40-d533c3e77ef3',
-    '809aae9e-f0bf-4892-b0c9-4be80664d2aa'
+  '45a73767-5da3-49bf-9c40-d533c3e77ef3',
+  '809aae9e-f0bf-4892-b0c9-4be80664d2aa'
 ];
 
 module.exports = controller = {
@@ -41,9 +41,9 @@ module.exports = controller = {
     } else {
       const phase = req.query.phase;
 
-      if(phase === 'complete') {
+      if (phase === 'complete') {
         task.state = 'Completed';
-        task.completed = new Date().toISOString()
+        task.completed = new Date().toISOString();
       }
 
       res.send(task.inputs);
@@ -61,16 +61,16 @@ module.exports = controller = {
 
     const clearPhases = task.completed || task.state === 'Aborted';
 
-    if(taskWithEmptyForm.includes(task.id)) {
+    if (taskWithEmptyForm.includes(task.id)) {
       const form = _.cloneDeep(emptyForm);
-      if(clearPhases) {
+      if (clearPhases) {
         delete form.phases;
       }
       res.send(JSON.stringify(form));
       return;
     }
 
-    if(taskWithoutForm.includes(task.id)) {
+    if (taskWithoutForm.includes(task.id)) {
       res.status(500).send('');
       return;
     }
@@ -87,10 +87,12 @@ module.exports = controller = {
   }
 };
 
-function getTaskSchema (taskName, clearPhases) {
+function getTaskSchema(taskName, clearPhases) {
   let schema;
 
-  console.log(`Getting Schema for task: ${taskName} --clearPhases: ${clearPhases}`)
+  console.log(
+    `Getting Schema for task: ${taskName} --clearPhases: ${clearPhases}`
+  );
 
   switch (taskName) {
     case 'ConfirmTravel': {
@@ -103,7 +105,7 @@ function getTaskSchema (taskName, clearPhases) {
     }
   }
 
-  if(clearPhases) {
+  if (clearPhases) {
     delete schema.phases;
   }
 

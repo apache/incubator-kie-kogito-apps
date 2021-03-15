@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ const getEmptyTaskFormWrapper = (
   formSubmitSuccessCallback?: () => void,
   formSubmitErrorCallback?: () => void
 ) => {
-  const wrapper = getWrapper(
+  return getWrapper(
     <KogitoAppContextProvider userContext={userContext}>
       <EmptyTaskForm
         formSchema={_.cloneDeep(ApplyForVisaForm)}
@@ -85,8 +85,6 @@ const getEmptyTaskFormWrapper = (
     </KogitoAppContextProvider>,
     'EmptyTaskForm'
   );
-
-  return wrapper.update().find(EmptyTaskForm);
 };
 
 let userContext: UserContext;
@@ -98,8 +96,6 @@ describe('EmptyTaskForm Test', () => {
 
   it('Empty form rendering', async () => {
     const wrapper = getEmptyTaskFormWrapper(userTaskInstance);
-
-    wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 
@@ -119,8 +115,6 @@ describe('EmptyTaskForm Test', () => {
     task.completed = new Date(task.started);
 
     const wrapper = getEmptyTaskFormWrapper(task);
-
-    wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 

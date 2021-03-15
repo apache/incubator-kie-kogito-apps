@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,7 +84,7 @@ const getTaskFormRendererWrapper = (
   formSubmitSuccessCallback?: () => void,
   formSubmitErrorCallback?: () => void
 ) => {
-  const wrapper = getWrapper(
+  return getWrapper(
     <KogitoAppContextProvider userContext={userContext}>
       <TaskFormRenderer
         formSchema={_.cloneDeep(ApplyForVisaForm)}
@@ -95,8 +95,6 @@ const getTaskFormRendererWrapper = (
     </KogitoAppContextProvider>,
     'TaskFormRenderer'
   );
-
-  return wrapper.update().find(TaskFormRenderer);
 };
 
 enum Mode {
@@ -109,15 +107,11 @@ const testSubmitCallbacks = async (mode: Mode) => {
   const formSubmitSuccessCallback = jest.fn();
   const formSubmitErrorCallback = jest.fn();
 
-  let wrapper = getTaskFormRendererWrapper(
+  const wrapper = getTaskFormRendererWrapper(
     userTaskInstance,
     formSubmitSuccessCallback,
     formSubmitErrorCallback
   );
-
-  wrapper = wrapper.update().find(TaskFormRenderer);
-
-  expect(wrapper).toMatchSnapshot();
 
   const renderer = wrapper.find(FormRenderer);
 
@@ -140,10 +134,6 @@ const testSubmitCallbacks = async (mode: Mode) => {
       callback('phase');
     }
   });
-
-  wrapper = wrapper.update().find(TaskFormRenderer);
-
-  expect(wrapper).toMatchSnapshot();
 };
 
 let userContext: UserContext;
@@ -155,8 +145,6 @@ describe('TaskFormRenderer Test', () => {
 
   it('Form rendering', () => {
     const wrapper = getTaskFormRendererWrapper(userTaskInstance);
-
-    wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 
@@ -198,10 +186,6 @@ describe('TaskFormRenderer Test', () => {
       formSubmitErrorCallback
     );
 
-    wrapper = wrapper.update().find(TaskFormRenderer);
-
-    expect(wrapper).toMatchSnapshot();
-
     const renderer = wrapper.find(FormRenderer);
 
     expect(renderer.exists()).toBeTruthy();
@@ -216,8 +200,6 @@ describe('TaskFormRenderer Test', () => {
     });
 
     wrapper = wrapper.update().find(TaskFormRenderer);
-
-    expect(wrapper).toMatchSnapshot();
 
     expect(wrapper.find(FormRenderer).exists()).toBeTruthy();
 
@@ -239,11 +221,7 @@ describe('TaskFormRenderer Test', () => {
       formSubmitErrorCallback
     );
 
-    wrapper = wrapper.update().find(TaskFormRenderer);
-
-    expect(wrapper).toMatchSnapshot();
-
-    const renderer = wrapper.find(FormRenderer);
+    let renderer = wrapper.find(FormRenderer);
 
     expect(renderer.exists()).toBeTruthy();
 
@@ -257,7 +235,9 @@ describe('TaskFormRenderer Test', () => {
 
     wrapper = wrapper.update().find(TaskFormRenderer);
 
-    expect(wrapper).toMatchSnapshot();
+    renderer = wrapper.find(FormRenderer);
+    expect(renderer.exists()).toBeTruthy();
+    expect(renderer.props().readOnly).toBeTruthy();
 
     expect(formSubmitErrorCallback).toBeCalledWith('phase', 'Extra info!');
   });

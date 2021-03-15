@@ -23,7 +23,7 @@ module.exports = ApplyForVisaForm = {
         }
       },
       input: true,
-      required:['city']
+      required: ['city']
     },
     traveller: {
       type: 'object',
@@ -48,7 +48,7 @@ module.exports = ApplyForVisaForm = {
               type: 'string'
             }
           }
-        },
+        }
       },
       disabled: true,
       input: true
@@ -74,5 +74,5 @@ module.exports = ApplyForVisaForm = {
       input: true
     }
   },
-  phases: ['complete',  'release']
+  phases: ['complete', 'release']
 };
