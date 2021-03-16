@@ -21,6 +21,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -599,17 +600,25 @@ class CounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        final Consumer<CounterfactualSolution> assertCounterfactualNotNull = counterfactual -> {
+        final AtomicBoolean finalConsumerCalled = new AtomicBoolean(false);
+
+        final Consumer<CounterfactualSolution> assertIntermediateCounterfactualNotNull = counterfactual -> {
             assertNotNull(counterfactual);
             assertNotNull(counterfactual.getEntities());
+        };
+
+        final Consumer<CounterfactualSolution> assertFinalCounterfactualNotNull = counterfactual -> {
+            assertNotNull(counterfactual);
+            assertNotNull(counterfactual.getEntities());
+            finalConsumerCalled.set(true);
         };
 
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
                         .builder(goal, constraints, dataDomain)
                         .withSolverConfig(solverConfig)
-                        .withIntermediateConsumer(assertCounterfactualNotNull)
-                        .withFinalConsumer(assertCounterfactualNotNull)
+                        .withIntermediateConsumer(assertIntermediateCounterfactualNotNull)
+                        .withFinalConsumer(assertFinalCounterfactualNotNull)
                         .build();
 
         PredictionInput input = new PredictionInput(features);
@@ -625,5 +634,6 @@ class CounterfactualExplainerTest {
         }
 
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
+        assertTrue(finalConsumerCalled.get());
     }
 }
