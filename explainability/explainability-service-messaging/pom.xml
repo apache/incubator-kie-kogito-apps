@@ -105,6 +105,11 @@
           <excludes>
             <exclude>**/Native*IT.java</exclude>
           </excludes>
+          <configuration>
+            <systemPropertyVariables>
+              <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+              <container.image.confluent.kafka>${container.image.confluent.kafka}</container.image.confluent.kafka>
+            </systemPropertyVariables>
         </configuration>
         <executions>
           <execution>
