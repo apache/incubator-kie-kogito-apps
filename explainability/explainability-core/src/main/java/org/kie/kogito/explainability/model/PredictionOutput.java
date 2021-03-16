@@ -33,14 +33,9 @@ public class PredictionOutput {
         return outputs;
     }
 
-    public Output getByName(String name) {
-        Output o = null;
-        for (Output output : outputs) {
-            if (name.equalsIgnoreCase(output.getName())) {
-                o = output;
-                break;
-            }
-        }
-        return o;
+    public Optional<Output> getByName(String name) {
+        return outputs.stream()
+            .filter(output -> name.equalsIgnoreCase(output.getName()))
+            .findFirst();
     }
 }
