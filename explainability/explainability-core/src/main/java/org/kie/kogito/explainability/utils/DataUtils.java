@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +41,7 @@ import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
@@ -443,7 +446,7 @@ public class DataUtils {
 
     /**
      * Persist a {@link PartialDependenceGraph} into a CSV file.
-     * 
+     *
      * @param partialDependenceGraph the PDP to persist
      * @param path the path to the CSV file to be created
      * @throws IOException whether any IO error occurs while writing the CSV
@@ -460,5 +463,42 @@ public class DataUtils {
             }
             outputStream.flush();
         }
+    }
+
+    /**
+     * Read a CSV file into a {@link DataDistribution} object.
+     *
+     * @param file the path to the CSV file
+     * @param schema an ordered list of {@link Type}s as the 'schema', used to determine
+     *        the {@link Type} of each feature / column
+     * @param skipId whether to skip the first column of the CSV (usually the id of each row)
+     * @return the parsed CSV as a {@link DataDistribution}
+     * @throws IOException when failing at reading the CSV file
+     */
+    public static DataDistribution readCSV(Path file, List<Type> schema, boolean skipId) throws IOException {
+        List<PredictionInput> inputs = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            String line;
+            List<String> names = new ArrayList<>(schema.size());
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                if (skipId) {
+                    values = Arrays.copyOfRange(values, 1, values.length);
+                }
+                if (schema.size() == values.length) {
+                    if (names.isEmpty()) {
+                        names.addAll(Arrays.asList(values));
+                    } else {
+                        List<Feature> features = new ArrayList<>();
+                        for (int i = 0; i < schema.size(); i++) {
+                            Type type = schema.get(i);
+                            features.add(new Feature(names.get(i), type, new Value(values[i])));
+                        }
+                        inputs.add(new PredictionInput(features));
+                    }
+                }
+            }
+        }
+        return new PredictionInputsDataDistribution(inputs);
     }
 }
