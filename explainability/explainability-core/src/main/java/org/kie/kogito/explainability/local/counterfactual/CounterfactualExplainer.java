@@ -65,13 +65,11 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     private final Consumer<CounterfactualSolution> intermediateResultsConsumer;
     private final Consumer<CounterfactualSolution> finalResultsConsumer;
 
-    public static Consumer<CounterfactualSolution> defaultIntermediateConsumer = counterfactual -> {
-        logger.debug("Intermediate counterfactual: {}", counterfactual.getEntities());
-    };
+    public static final Consumer<CounterfactualSolution> defaultIntermediateConsumer =
+            counterfactual -> logger.debug("Intermediate counterfactual: {}", counterfactual.getEntities());
 
-    public static Consumer<CounterfactualSolution> defaultFinalConsumer = counterfactual -> {
-        logger.debug("Final counterfactual: {}", counterfactual.getEntities());
-    };
+    public static final Consumer<CounterfactualSolution> defaultFinalConsumer =
+            counterfactual -> logger.debug("Final counterfactual: {}", counterfactual.getEntities());
 
     /**
      * Create a new {@link CounterfactualExplainer} using OptaPlanner as the underlying engine.
