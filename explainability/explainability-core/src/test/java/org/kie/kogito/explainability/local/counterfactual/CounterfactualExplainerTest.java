@@ -603,15 +603,10 @@ class CounterfactualExplainerTest {
         final AtomicBoolean finalConsumerCalled = new AtomicBoolean(false);
 
         final Consumer<CounterfactualSolution> assertIntermediateCounterfactualNotNull = counterfactual -> {
-            assertNotNull(counterfactual);
-            assertNotNull(counterfactual.getEntities());
         };
 
-        final Consumer<CounterfactualSolution> assertFinalCounterfactualNotNull = counterfactual -> {
-            assertNotNull(counterfactual);
-            assertNotNull(counterfactual.getEntities());
-            finalConsumerCalled.set(true);
-        };
+        final Consumer<CounterfactualSolution> assertFinalCounterfactualNotNull =
+                counterfactual -> finalConsumerCalled.set(true);
 
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer

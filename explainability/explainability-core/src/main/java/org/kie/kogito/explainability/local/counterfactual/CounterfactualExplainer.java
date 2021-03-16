@@ -137,7 +137,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
         final UUID problemId = UUID.randomUUID();
 
-        Function<UUID, CounterfactualSolution> initial = (UUID uuid) -> new CounterfactualSolution(entities, model, goal);
+        Function<UUID, CounterfactualSolution> initial = uuid -> new CounterfactualSolution(entities, model, goal);
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
@@ -152,10 +152,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                     return solverJob.getFinalBestSolution();
                 } catch (ExecutionException e) {
                     logger.error("Solving failed: {}", e.getMessage());
-                    throw new IllegalStateException("Prediction returned an error {}", e);
+                    throw new IllegalStateException("Prediction returned an error", e);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Solving failed (Thread interrupted): {}", e);
+                    throw new IllegalStateException("Solving failed (Thread interrupted)", e);
                 }
             }
         }, this.executor);
