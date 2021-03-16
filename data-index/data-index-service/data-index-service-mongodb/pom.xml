@@ -86,6 +86,7 @@
           <systemProperties>
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
+            <container.image.confluent.kafka>${container.image.confluent.kafka}</container.image.confluent.kafka>
           </systemProperties>
         </configuration>
         <executions>
