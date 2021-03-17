@@ -7,7 +7,9 @@ import {
   ChartBar,
   ChartGroup,
   ChartLabel,
-  ChartLegend
+  ChartLegend,
+  ChartBarProps,
+  ChartProps
 } from '@patternfly/react-charts';
 import { Split, SplitItem } from '@patternfly/react-core';
 
@@ -22,6 +24,7 @@ const FeaturesScoreChartAlternative = (
   const { featuresScore, large = false } = props;
   const width = large ? 750 : 480;
   const height = large ? 50 * featuresScore.length : 500;
+  const chartPadding = { top: 60, bottom: 30 };
 
   const scores = useMemo(() => {
     const positives = featuresScore.filter(feature => feature.featureScore > 0);
@@ -37,6 +40,207 @@ const FeaturesScoreChartAlternative = (
     });
     return max ? Math.abs(max.featureScore) : 1;
   }, [featuresScore]);
+
+  // const computeOpacity = useCallback(
+  //   data => {
+  //     const computedOpacity = Math.abs(
+  //       Math.floor((data.datum.featureScore / maxValue) * 100) / 100
+  //     );
+  //     return computedOpacity < 0.25 ? 0.25 : computedOpacity;
+  //   },
+  //   [maxValue]
+  // );
+  //
+  // const computeColor = useCallback(data => {
+  //   return data.datum.featureScore >= 0
+  //     ? 'var(--pf-global--info-color--100)'
+  //     : 'var(--pf-global--palette--orange-300)';
+  // }, []);
+
+  return (
+    <>
+      {scores && (
+        <Split>
+          <SplitItem isFilled={true}>
+            <ScoresBarChart
+              width={width}
+              height={height}
+              scores={scores.positives}
+              sortOrder="descending"
+              yDomain={[0, maxValue]}
+              barWidth={scores.barWidth}
+              maxValue={maxValue}
+              maxNumberOfValues={scores.maxNumberOfValues}
+              padding={{ ...chartPadding, right: 30, left: 90 }}
+              legendTitle="Positive Impact"
+              legendColor="var(--pf-global--info-color--100)"
+            />
+            {/*<Chart*/}
+            {/*  ariaDesc="Importance of different features on the decision"*/}
+            {/*  width={width}*/}
+            {/*  height={height}*/}
+            {/*  domainPadding={{*/}
+            {/*    x: [-scores.barWidth, scores.barWidth],*/}
+            {/*    y: 20*/}
+            {/*  }}*/}
+            {/*  domain={{ x: [0, scores.maxNumberOfValues], y: [0, maxValue] }}*/}
+            {/*  horizontal*/}
+            {/*  padding={{ top: 60, right: 30, bottom: 30, left: 90 }}*/}
+            {/*  animate={{*/}
+            {/*    duration: 400,*/}
+            {/*    onLoad: { duration: 400 }*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  <ChartAxis tickFormat={() => ''} invertAxis={true} />*/}
+
+            {/*  <ChartBar*/}
+            {/*    data={scores.positives}*/}
+            {/*    x="featureName"*/}
+            {/*    y="featureScore"*/}
+            {/*    alignment="middle"*/}
+            {/*    sortKey="featureScore"*/}
+            {/*    sortOrder="descending"*/}
+            {/*    barWidth={scores.barWidth}*/}
+            {/*    style={{*/}
+            {/*      data: {*/}
+            {/*        fill: computeColor,*/}
+            {/*        opacity: computeOpacity*/}
+            {/*      }*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*  <ChartGroup>*/}
+            {/*    {scores.positives.length > 0 &&*/}
+            {/*      scores.positives.map((item, index) => {*/}
+            {/*        return (*/}
+            {/*          <ChartLabel*/}
+            {/*            className={'feature-chart-axis-label'}*/}
+            {/*            datum={{ x: index + 1, y: 0 }}*/}
+            {/*            text={item.featureName.split(' ')}*/}
+            {/*            direction="rtl"*/}
+            {/*            textAnchor={item.featureScore >= 0 ? 'start' : 'end'}*/}
+            {/*            dx={-10 * Math.sign(item.featureScore) || -10}*/}
+            {/*            key={item.featureName}*/}
+            {/*          />*/}
+            {/*        );*/}
+            {/*      })}*/}
+            {/*  </ChartGroup>*/}
+
+            {/*  <ChartLegend*/}
+            {/*    data={[{ name: 'Positive Impact' }]}*/}
+            {/*    colorScale={['var(--pf-global--info-color--100)']}*/}
+            {/*    x={width / 2 - 75}*/}
+            {/*    y={10}*/}
+            {/*  />*/}
+            {/*</Chart>*/}
+          </SplitItem>
+          <SplitItem isFilled={true}>
+            <ScoresBarChart
+              width={width}
+              height={height}
+              scores={scores.negatives}
+              sortOrder="descending"
+              yDomain={[-maxValue, 0]}
+              barWidth={scores.barWidth}
+              maxValue={maxValue}
+              maxNumberOfValues={scores.maxNumberOfValues}
+              padding={{ ...chartPadding, right: 90, left: 30 }}
+              legendTitle="Negative Impact"
+              legendColor="var(--pf-global--palette--orange-300)"
+            />
+            {/*<Chart*/}
+            {/*  ariaDesc="Importance of different features on the decision"*/}
+            {/*  width={width}*/}
+            {/*  height={height}*/}
+            {/*  domainPadding={{*/}
+            {/*    x: [-scores.barWidth, scores.barWidth],*/}
+            {/*    y: 20*/}
+            {/*  }}*/}
+            {/*  domain={{ x: [0, scores.maxNumberOfValues], y: [-maxValue, 0] }}*/}
+            {/*  horizontal*/}
+            {/*  padding={{ top: 60, right: 90, bottom: 30, left: 30 }}*/}
+            {/*  animate={{*/}
+            {/*    duration: 400,*/}
+            {/*    onLoad: { duration: 400 }*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  <ChartAxis tickFormat={() => ''} invertAxis={true} />*/}
+
+            {/*  <ChartBar*/}
+            {/*    data={scores.negatives}*/}
+            {/*    x="featureName"*/}
+            {/*    y="featureScore"*/}
+            {/*    alignment="middle"*/}
+            {/*    sortKey="featureScore"*/}
+            {/*    sortOrder="ascending"*/}
+            {/*    barWidth={scores.barWidth}*/}
+            {/*    style={{*/}
+            {/*      data: {*/}
+            {/*        fill: computeColor,*/}
+            {/*        opacity: computeOpacity*/}
+            {/*      }*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*  <ChartGroup>*/}
+            {/*    {scores.negatives.length > 0 &&*/}
+            {/*      scores.negatives.map((item, index) => {*/}
+            {/*        return (*/}
+            {/*          <ChartLabel*/}
+            {/*            className={'feature-chart-axis-label'}*/}
+            {/*            datum={{ x: index + 1, y: 0 }}*/}
+            {/*            text={item.featureName.split(' ')}*/}
+            {/*            direction="rtl"*/}
+            {/*            textAnchor={item.featureScore >= 0 ? 'start' : 'end'}*/}
+            {/*            dx={-10 * Math.sign(item.featureScore) || -10}*/}
+            {/*            key={item.featureName}*/}
+            {/*          />*/}
+            {/*        );*/}
+            {/*      })}*/}
+            {/*  </ChartGroup>*/}
+
+            {/*  <ChartLegend*/}
+            {/*    data={[{ name: 'Negative Impact' }]}*/}
+            {/*    colorScale={['var(--pf-global--palette--orange-300)']}*/}
+            {/*    x={width / 2 - 75}*/}
+            {/*    y={10}*/}
+            {/*  />*/}
+            {/*</Chart>*/}
+          </SplitItem>
+        </Split>
+      )}
+    </>
+  );
+};
+
+export default FeaturesScoreChartAlternative;
+
+type ScoresBarChartProps = {
+  width: number;
+  height: number;
+  scores: FeatureScores[];
+  sortOrder: ChartBarProps['sortOrder'];
+  yDomain: [number, number];
+  barWidth: number;
+  maxValue: number;
+  maxNumberOfValues: number;
+  padding: ChartProps['padding'];
+  legendTitle: string;
+  legendColor: string;
+};
+
+const ScoresBarChart = (props: ScoresBarChartProps) => {
+  const {
+    width,
+    height,
+    scores,
+    sortOrder,
+    yDomain,
+    barWidth,
+    maxValue,
+    maxNumberOfValues,
+    padding,
+    legendTitle,
+    legendColor
+  } = props;
 
   const computeOpacity = useCallback(
     data => {
@@ -55,131 +259,62 @@ const FeaturesScoreChartAlternative = (
   }, []);
 
   return (
-    <>
-      {scores && (
-        <Split>
-          <SplitItem isFilled>
-            <Chart
-              ariaDesc="Importance of different features on the decision"
-              width={width}
-              height={height}
-              domainPadding={{
-                x: [-scores.barWidth, scores.barWidth],
-                y: 20
-              }}
-              domain={{ x: [0, scores.maxNumberOfValues], y: [0, maxValue] }}
-              horizontal
-              padding={{ top: 60, right: 30, bottom: 30, left: 90 }}
-              animate={{
-                duration: 400,
-                onLoad: { duration: 400 }
-              }}
-            >
-              <ChartAxis tickFormat={() => ''} invertAxis={true} />
+    <Chart
+      ariaDesc="Importance of different features on the decision"
+      width={width}
+      height={height}
+      domainPadding={{
+        x: [-barWidth, barWidth],
+        y: 20
+      }}
+      domain={{ x: [0, maxNumberOfValues], y: yDomain }}
+      horizontal
+      padding={padding}
+      animate={{
+        duration: 400,
+        onLoad: { duration: 400 }
+      }}
+    >
+      <ChartAxis tickFormat={() => ''} invertAxis={true} />
 
-              <ChartBar
-                data={scores.positives}
-                x="featureName"
-                y="featureScore"
-                alignment="middle"
-                sortKey="featureScore"
-                sortOrder="descending"
-                barWidth={scores.barWidth}
-                style={{
-                  data: {
-                    fill: computeColor,
-                    opacity: computeOpacity
-                  }
-                }}
+      <ChartBar
+        data={scores}
+        x="featureName"
+        y="featureScore"
+        alignment="middle"
+        sortKey="featureScore"
+        sortOrder={sortOrder}
+        barWidth={barWidth}
+        style={{
+          data: {
+            fill: computeColor,
+            opacity: computeOpacity
+          }
+        }}
+      />
+      <ChartGroup>
+        {scores.length > 0 &&
+          scores.map((item, index) => {
+            return (
+              <ChartLabel
+                className={'feature-chart-axis-label'}
+                datum={{ x: index + 1, y: 0 }}
+                text={item.featureName.split(' ')}
+                direction="rtl"
+                textAnchor={item.featureScore >= 0 ? 'start' : 'end'}
+                dx={-10 * Math.sign(item.featureScore) || -10}
+                key={item.featureName}
               />
-              <ChartGroup>
-                {scores.positives.length > 0 &&
-                  scores.positives.map((item, index) => {
-                    return (
-                      <ChartLabel
-                        className={'feature-chart-axis-label'}
-                        datum={{ x: index + 1, y: 0 }}
-                        text={item.featureName.split(' ')}
-                        direction="rtl"
-                        textAnchor={item.featureScore >= 0 ? 'start' : 'end'}
-                        dx={-10 * Math.sign(item.featureScore) || -10}
-                        key={item.featureName}
-                      />
-                    );
-                  })}
-              </ChartGroup>
+            );
+          })}
+      </ChartGroup>
 
-              <ChartLegend
-                data={[{ name: 'Positive Impact' }]}
-                colorScale={['var(--pf-global--info-color--100)']}
-                x={width / 2 - 75}
-                y={10}
-              />
-            </Chart>
-          </SplitItem>
-          <SplitItem isFilled>
-            <Chart
-              ariaDesc="Importance of different features on the decision"
-              width={width}
-              height={height}
-              domainPadding={{
-                x: [-scores.barWidth, scores.barWidth],
-                y: 20
-              }}
-              domain={{ x: [0, scores.maxNumberOfValues], y: [-maxValue, 0] }}
-              horizontal
-              padding={{ top: 60, right: 90, bottom: 30, left: 30 }}
-              animate={{
-                duration: 400,
-                onLoad: { duration: 400 }
-              }}
-            >
-              <ChartAxis tickFormat={() => ''} invertAxis={true} />
-
-              <ChartBar
-                data={scores.negatives}
-                x="featureName"
-                y="featureScore"
-                alignment="middle"
-                sortKey="featureScore"
-                sortOrder="ascending"
-                barWidth={scores.barWidth}
-                style={{
-                  data: {
-                    fill: computeColor,
-                    opacity: computeOpacity
-                  }
-                }}
-              />
-              <ChartGroup>
-                {scores.negatives.length > 0 &&
-                  scores.negatives.map((item, index) => {
-                    return (
-                      <ChartLabel
-                        className={'feature-chart-axis-label'}
-                        datum={{ x: index + 1, y: 0 }}
-                        text={item.featureName.split(' ')}
-                        direction="rtl"
-                        textAnchor={item.featureScore >= 0 ? 'start' : 'end'}
-                        dx={-10 * Math.sign(item.featureScore) || -10}
-                        key={item.featureName}
-                      />
-                    );
-                  })}
-              </ChartGroup>
-
-              <ChartLegend
-                data={[{ name: 'Negative Impact' }]}
-                colorScale={['var(--pf-global--palette--orange-300)']}
-                x={width / 2 - 75}
-                y={10}
-              />
-            </Chart>
-          </SplitItem>
-        </Split>
-      )}
-    </>
+      <ChartLegend
+        data={[{ name: legendTitle }]}
+        colorScale={[legendColor]}
+        x={width / 2 - 75}
+        y={10}
+      />
+    </Chart>
   );
 };
-
-export default FeaturesScoreChartAlternative;
