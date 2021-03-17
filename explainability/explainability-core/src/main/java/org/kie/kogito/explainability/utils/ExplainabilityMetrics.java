@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
@@ -279,42 +280,48 @@ public class ExplainabilityMetrics {
             bottomChunk.add(sorted.get(sorted.size() - i - 1));
         }
 
-        double tp = 0;
-        double fn = 0;
+        double truePositives = 0;
+        double falseNegatives = 0;
         int currentChunk = 0;
         // for each of the top scored predictions, get the top influencing features and copy them over a low scored
         // input, then feed the model with this masked input and check the output is equals to the top scored one.
         for (Prediction prediction : topChunk) {
-            Output output = prediction.getOutput().getByName(decision);
-            Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
-                    .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-            if (stringSaliencyMap.containsKey(decision)) {
-                Saliency saliency = stringSaliencyMap.get(decision);
-                List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
-                        .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
-
-                PredictionInput input = bottomChunk.get(currentChunk).getInput();
-                List<Feature> importantFeatures = new ArrayList<>();
-                for (FeatureImportance featureImportance : topFeatures) {
-                    importantFeatures.add(featureImportance.getFeature());
-                }
-
-                PredictionInput maskedInput = getMaskedInput(importantFeatures, input);
-
-                List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
+            Optional<Output> optionalOutput = prediction.getOutput().getByName(decision);
+            if (optionalOutput.isPresent()) {
+                Output output = optionalOutput.get();
+                Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-                PredictionOutput predictionOutput = predictionOutputList.get(0);
-                Output newOutput = predictionOutput.getByName(decision);
-                if (output.getValue().equals(newOutput.getValue())) {
-                    tp++;
-                } else {
-                    fn++;
+                if (stringSaliencyMap.containsKey(decision)) {
+                    Saliency saliency = stringSaliencyMap.get(decision);
+                    List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
+                            .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
+
+                    PredictionInput input = bottomChunk.get(currentChunk).getInput();
+                    List<Feature> importantFeatures = new ArrayList<>();
+                    for (FeatureImportance featureImportance : topFeatures) {
+                        importantFeatures.add(featureImportance.getFeature());
+                    }
+
+                    PredictionInput maskedInput = getMaskedInput(importantFeatures, input);
+
+                    List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
+                            .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+                    PredictionOutput predictionOutput = predictionOutputList.get(0);
+                    Optional<Output> optionalNewOutput = predictionOutput.getByName(decision);
+                    if (optionalNewOutput.isPresent()) {
+                        Output newOutput = optionalOutput.get();
+                        if (output.getValue().equals(newOutput.getValue())) {
+                            truePositives++;
+                        } else {
+                            falseNegatives++;
+                        }
+                    }
+                    currentChunk++;
                 }
-                currentChunk++;
             }
         }
-        if ((tp + fn) > 0) {
-            return tp / (tp + fn);
+        if ((truePositives + falseNegatives) > 0) {
+            return truePositives / (truePositives + falseNegatives);
         } else {
             return 0;
         }
@@ -330,9 +337,11 @@ public class ExplainabilityMetrics {
 
         // sort the predictions by Output#getScore, in descending order
         return predictions.stream().sorted((p1, p2) -> {
-            Output o1 = p1.getOutput().getByName(decision);
-            Output o2 = p2.getOutput().getByName(decision);
-            if (o1 != null && o2 != null) {
+            Optional<Output> optionalOutput1 = p1.getOutput().getByName(decision);
+            Optional<Output> optionalOutput2 = p2.getOutput().getByName(decision);
+            if (optionalOutput1.isPresent() && optionalOutput2.isPresent()) {
+                Output o1 = optionalOutput1.get();
+                Output o2 = optionalOutput2.get();
                 return Double.compare(o2.getScore(), o1.getScore());
             } else {
                 return 0;
@@ -374,8 +383,8 @@ public class ExplainabilityMetrics {
             bottomChunk.add(sorted.get(sorted.size() - i - 1));
         }
 
-        double tp = 0;
-        double fp = 0;
+        double truePositives = 0;
+        double falsePositives = 0;
         int currentChunk = 0;
 
         for (Prediction prediction : bottomChunk) {
@@ -399,17 +408,24 @@ public class ExplainabilityMetrics {
                 List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
                 PredictionOutput predictionOutput = predictionOutputList.get(0);
-                Output newOutput = predictionOutput.getByName(decision);
-                if (topPrediction.getOutput().getByName(decision).getValue().equals(newOutput.getValue())) {
-                    tp++;
-                } else {
-                    fp++;
+                Optional<Output> newOptionalOutput = predictionOutput.getByName(decision);
+                if (newOptionalOutput.isPresent()) {
+                    Output newOutput = newOptionalOutput.get();
+                    Optional<Output> optionalOutput = topPrediction.getOutput().getByName(decision);
+                    if (optionalOutput.isPresent()) {
+                        Output output = optionalOutput.get();
+                        if (output.getValue().equals(newOutput.getValue())) {
+                            truePositives++;
+                        } else {
+                            falsePositives++;
+                        }
+                    }
                 }
                 currentChunk++;
             }
         }
-        if ((tp + fp) > 0) {
-            return tp / (tp + fp);
+        if ((truePositives + falsePositives) > 0) {
+            return truePositives / (truePositives + falsePositives);
         } else {
             return 0;
         }

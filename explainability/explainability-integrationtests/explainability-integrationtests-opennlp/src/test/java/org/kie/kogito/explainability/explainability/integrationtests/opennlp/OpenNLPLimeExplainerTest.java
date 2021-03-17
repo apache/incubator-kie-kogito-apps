@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,8 +133,8 @@ class OpenNLPLimeExplainerTest {
         double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(precision).isEqualTo(0.6);
         double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(0.4, Offset.offset(0.2));
+        assertThat(recall).isEqualTo(0.8, Offset.offset(0.2));
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(f1).isEqualTo(0.4, Offset.offset(0.2));
+        assertThat(f1).isEqualTo(0.8, Offset.offset(0.2));
     }
 }
