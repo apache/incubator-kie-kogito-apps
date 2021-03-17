@@ -1,0 +1,44 @@
+{
+  "goals": [
+    {
+      "name": "deposit",
+      "typeRef": "number",
+      "value": 5000
+    },
+    {
+      "name": "approved",
+      "typeRef": "boolean",
+      "value": true
+    }
+  ],
+  "searchDomains": [
+    {
+      "isFixed": true,
+      "name": "age",
+      "typeRef": "number"
+    },
+    {
+      "isFixed": false,
+      "name": "income",
+      "typeRef": "number",
+      "domain": {
+        "type": "numerical",
+        "lowerBound": 0,
+        "upperBound": 1000
+      }
+    },
+    {
+      "isFixed": false,
+      "name": "taxCode",
+      "typeRef": "string",
+      "domain": {
+        "type": "categorical",
+        "categories": [
+          "A",
+          "B",
+          "C"
+        ]
+      }
+    }
+  ]
+}

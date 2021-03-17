@@ -18,7 +18,7 @@ package org.kie.kogito.explainability.models;
 
 import java.util.Map;
 
-import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 public class ExplainabilityRequest {
@@ -57,7 +57,7 @@ public class ExplainabilityRequest {
         return outputs;
     }
 
-    public static ExplainabilityRequest from(ExplainabilityRequestDto dto) {
+    public static ExplainabilityRequest from(BaseExplainabilityRequestDto dto) {
         return new ExplainabilityRequest(
                 dto.getExecutionId(),
                 dto.getServiceUrl(),

@@ -31,13 +31,14 @@ import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.mocks.StorageImplMock;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
+import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
-import org.kie.kogito.trusty.storage.api.model.TypedVariable;
+import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -57,6 +58,7 @@ public class TrustyServiceTest {
     private static final String TEST_EXECUTION_ID = "executionId";
     private static final String TEST_MODEL = "definition";
     private static final String TEST_MODEL_ID = "name:namespace";
+    private static final String TEST_SOURCE_URL = "http://localhost:8080/model/service";
     private static final String TEST_SERVICE_URL = "http://localhost:8080/model";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -194,21 +196,21 @@ public class TrustyServiceTest {
         trustyService.enableExplainability();
 
         Decision decision = new Decision(
-                TEST_EXECUTION_ID, TEST_SERVICE_URL, 1591692950000L, true,
+                TEST_EXECUTION_ID, TEST_SOURCE_URL, TEST_SERVICE_URL, 1591692950000L, true,
                 null, "model", "modelNamespace",
                 List.of(
-                        new DecisionInput("1", "Input1", TypedVariable.buildCollection(
+                        new DecisionInput("1", "Input1", TypedVariableWithValue.buildCollection(
                                 "testList", "string", List.of(
-                                        TypedVariable.buildUnit(null, "string", toJsonNode("\"ONE\"")),
-                                        TypedVariable.buildUnit(null, "string", toJsonNode("\"TWO\""))))),
-                        new DecisionInput("2", "Input2", TypedVariable.buildStructure(
+                                        TypedVariableWithValue.buildUnit(null, "string", toJsonNode("\"ONE\"")),
+                                        TypedVariableWithValue.buildUnit(null, "string", toJsonNode("\"TWO\""))))),
+                        new DecisionInput("2", "Input2", TypedVariableWithValue.buildStructure(
                                 "author", "Person", List.of(
-                                        TypedVariable.buildUnit("Name", "string", toJsonNode("\"George Orwell\"")),
-                                        TypedVariable.buildUnit("Age", "number", toJsonNode("45")))))),
+                                        TypedVariableWithValue.buildUnit("Name", "string", toJsonNode("\"George Orwell\"")),
+                                        TypedVariableWithValue.buildUnit("Age", "number", toJsonNode("45")))))),
                 List.of(
                         new DecisionOutcome(
                                 "OUT1", "Result", "SUCCEEDED",
-                                TypedVariable.buildUnit("Result", "string", toJsonNode("\"YES\"")),
+                                TypedVariableWithValue.buildUnit("Result", "string", toJsonNode("\"YES\"")),
                                 Collections.emptyList(), Collections.emptyList())));
 
         Storage<String, Decision> decisionStorageMock = mock(Storage.class);
@@ -216,7 +218,7 @@ public class TrustyServiceTest {
 
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorageMock);
 
-        trustyService.processDecision(TEST_EXECUTION_ID, TEST_SERVICE_URL, decision);
+        trustyService.processDecision(TEST_EXECUTION_ID, decision);
 
         verify(explainabilityRequestProducerMock).sendEvent(any());
     }
@@ -234,7 +236,7 @@ public class TrustyServiceTest {
 
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorageMock);
 
-        assertThrows(IllegalArgumentException.class, () -> trustyService.processDecision(TEST_EXECUTION_ID, TEST_SERVICE_URL, decision));
+        assertThrows(IllegalArgumentException.class, () -> trustyService.processDecision(TEST_EXECUTION_ID, decision));
 
         verify(explainabilityRequestProducerMock, never()).sendEvent(any());
     }
@@ -296,10 +298,10 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultWhenStoreModelIsCalledThenNoExceptionsAreThrown() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
-        Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
+        LIMEExplainabilityResult result = new LIMEExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
+        Storage<String, BaseExplainabilityResult> storageMock = mock(Storage.class);
 
-        when(storageMock.put(eq(TEST_EXECUTION_ID), any(ExplainabilityResult.class))).thenReturn(result);
+        when(storageMock.put(eq(TEST_EXECUTION_ID), any(BaseExplainabilityResult.class))).thenReturn(result);
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);
 
         Assertions.assertDoesNotThrow(() -> trustyService.storeExplainabilityResult(TEST_EXECUTION_ID, result));
@@ -308,11 +310,11 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultWhenStoreModelIsCalledMoreThanOnceForSameModelThenExceptionIsThrown() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
-        Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
+        LIMEExplainabilityResult result = new LIMEExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
+        Storage<String, BaseExplainabilityResult> storageMock = mock(Storage.class);
 
         when(storageMock.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
-        when(storageMock.put(eq(TEST_EXECUTION_ID), any(ExplainabilityResult.class))).thenReturn(result);
+        when(storageMock.put(eq(TEST_EXECUTION_ID), any(BaseExplainabilityResult.class))).thenReturn(result);
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);
 
         assertThrows(IllegalArgumentException.class, () -> trustyService.storeExplainabilityResult(TEST_EXECUTION_ID, result));
@@ -320,8 +322,8 @@ public class TrustyServiceTest {
 
     @Test
     void givenAnExplainabilityResultWhenAnExplainabilityResultIsStoredAndRetrievedByIdThenTheOriginalObjectIsReturned() {
-        ExplainabilityResult result = new ExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
-        Storage<String, ExplainabilityResult> storageMock = new StorageImplMock<>(String.class);
+        LIMEExplainabilityResult result = new LIMEExplainabilityResult(TEST_EXECUTION_ID, ExplainabilityStatus.SUCCEEDED, null, Collections.emptyList());
+        Storage<String, BaseExplainabilityResult> storageMock = new StorageImplMock<>(String.class);
 
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);
 
@@ -333,7 +335,7 @@ public class TrustyServiceTest {
     @Test
     @SuppressWarnings("unchecked")
     void givenAnExplainabilityResultNotStoredWhenRetrievedByIdThenExceptionIsThrown() {
-        Storage<String, ExplainabilityResult> storageMock = mock(Storage.class);
+        Storage<String, BaseExplainabilityResult> storageMock = mock(Storage.class);
 
         when(storageMock.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(false);
         when(trustyStorageServiceMock.getExplainabilityResultStorage()).thenReturn(storageMock);

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
-import org.kie.kogito.trusty.storage.api.model.TypedVariable;
+import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 import com.fasterxml.jackson.databind.node.TextNode;
 
@@ -32,7 +32,7 @@ import static java.util.Collections.singletonList;
 
 class MessagingUtilsTest {
 
-    TypedVariable typedVariable = new TypedVariable(TypedValue.Kind.UNIT, "name", "string", new TextNode("sample"), emptyList());
+    TypedVariableWithValue typedVariable = new TypedVariableWithValue(TypedValue.Kind.UNIT, "name", "string", new TextNode("sample"), emptyList());
 
     @Test
     void modelToTracingTypedValue() {
