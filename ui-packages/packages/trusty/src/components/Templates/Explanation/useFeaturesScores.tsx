@@ -44,17 +44,14 @@ const useFeaturesScores = (
             feature => feature.featureScore < 0
           );
           if (positiveFeatures.length > 5 || negativeFeatures.length > 5) {
-            const a = [
+            setTopFeaturesScoresBySign([
               ...(positiveFeatures.length > 5
                 ? positiveFeatures.slice(positiveFeatures.length - 5)
                 : positiveFeatures),
               ...(negativeFeatures.length > 5
                 ? negativeFeatures.slice(negativeFeatures.length - 5)
                 : negativeFeatures)
-            ];
-            console.log('top feature scores by sign');
-            console.log(a);
-            setTopFeaturesScoresBySign(a);
+            ]);
           }
         }
       }

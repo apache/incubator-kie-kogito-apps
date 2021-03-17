@@ -27,14 +27,15 @@ const FeaturesScoreChartAlternative = (
     const positives = featuresScore.filter(feature => feature.featureScore > 0);
     const negatives = featuresScore.filter(feature => feature.featureScore < 0);
     const maxNumberOfValues = Math.max(positives.length, negatives.length);
-    return { positives, negatives, maxNumberOfValues };
+    const barWidth = (height - 90) / maxNumberOfValues / 2;
+    return { positives, negatives, maxNumberOfValues, barWidth };
   }, [featuresScore]);
 
   const maxValue = useMemo(() => {
     const max = maxBy(featuresScore, item => {
       return Math.abs(item.featureScore);
     });
-    return max ? max.featureScore : 1;
+    return max ? Math.abs(max.featureScore) : 1;
   }, [featuresScore]);
 
   const computeOpacity = useCallback(
@@ -62,7 +63,10 @@ const FeaturesScoreChartAlternative = (
               ariaDesc="Importance of different features on the decision"
               width={width}
               height={height}
-              domainPadding={{ x: [-30, 40], y: 20 }}
+              domainPadding={{
+                x: [-scores.barWidth, scores.barWidth],
+                y: 20
+              }}
               domain={{ x: [0, scores.maxNumberOfValues], y: [0, maxValue] }}
               horizontal
               padding={{ top: 60, right: 30, bottom: 30, left: 90 }}
@@ -78,9 +82,9 @@ const FeaturesScoreChartAlternative = (
                 x="featureName"
                 y="featureScore"
                 alignment="middle"
-                barWidth={40}
                 sortKey="featureScore"
                 sortOrder="descending"
+                barWidth={scores.barWidth}
                 style={{
                   data: {
                     fill: computeColor,
@@ -118,7 +122,10 @@ const FeaturesScoreChartAlternative = (
               ariaDesc="Importance of different features on the decision"
               width={width}
               height={height}
-              domainPadding={{ x: [-30, 40], y: 20 }}
+              domainPadding={{
+                x: [-scores.barWidth, scores.barWidth],
+                y: 20
+              }}
               domain={{ x: [0, scores.maxNumberOfValues], y: [-maxValue, 0] }}
               horizontal
               padding={{ top: 60, right: 90, bottom: 30, left: 30 }}
@@ -134,9 +141,9 @@ const FeaturesScoreChartAlternative = (
                 x="featureName"
                 y="featureScore"
                 alignment="middle"
-                barWidth={40}
                 sortKey="featureScore"
                 sortOrder="ascending"
+                barWidth={scores.barWidth}
                 style={{
                   data: {
                     fill: computeColor,
