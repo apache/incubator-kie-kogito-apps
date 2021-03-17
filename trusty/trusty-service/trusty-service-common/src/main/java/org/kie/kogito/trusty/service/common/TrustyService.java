@@ -17,9 +17,13 @@
 package org.kie.kogito.trusty.service.common;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequestResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
@@ -110,4 +114,17 @@ public interface TrustyService {
      * @throws IllegalArgumentException Throws IllegalArgumentException in case the modelId is not present in the system.
      */
     DMNModelWithMetadata getModelById(ModelIdentifier modelIdentifier);
+
+    /**
+     * Requests calculation of the Counterfactuals for an execution.
+     *
+     * @param executionId The execution ID.
+     * @param goals The outputs that are desired from the Counterfactual calculation.
+     * @param searchDomains The domains that the Counterfactual calculation can search.
+     * @return A wrapper for the calculation request.
+     * @throws IllegalArgumentException Throws IllegalArgumentException the executionId is not present in the system.
+     */
+    CounterfactualRequestResult requestCounterfactuals(String executionId,
+            List<CounterfactualGoal> goals,
+            List<CounterfactualSearchDomain> searchDomains);
 }

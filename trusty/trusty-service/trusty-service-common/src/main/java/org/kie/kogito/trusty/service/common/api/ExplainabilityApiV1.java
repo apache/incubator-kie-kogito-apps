@@ -16,12 +16,15 @@
 
 package org.kie.kogito.trusty.service.common.api;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -36,10 +39,15 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.kie.kogito.trusty.service.common.TrustyService;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.FeatureImportanceResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequestResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
@@ -83,18 +91,25 @@ public class ExplainabilityApiV1 {
                         .collect(Collectors.toList()));
     }
 
+    static CounterfactualRequestResponse counterfactualRequestToResponse(CounterfactualRequestResult request) {
+        if (request == null) {
+            return null;
+        }
+        return new CounterfactualRequestResponse(request.getExecutionId(), request.getCounterfactualId());
+    }
+
     @GET
     @Path("/{executionId}/explanations/saliencies")
     @APIResponses(value = {
-            @APIResponse(description = "Gets the local explanation of a decision.", responseCode = "200",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionStructuredInputsResponse.class))),
+            @APIResponse(description = "Gets the saliencies for a decision.", responseCode = "200",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = CounterfactualRequestResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(
             summary = "Returns the saliencies for a decision.",
             description = "Returns the saliencies for a particular decision calculated using the lime algorithm.")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getStructuredInputs(
+    public Response getSaliencies(
             @Parameter(
                     name = "executionId",
                     description = "The execution ID.",
@@ -110,6 +125,49 @@ public class ExplainabilityApiV1 {
     private Optional<ExplainabilityResult> retrieveExplainabilityResult(String executionId) {
         try {
             return Optional.ofNullable(trustyService.getExplainabilityResultById(executionId));
+        } catch (IllegalArgumentException ex) {
+            return Optional.empty();
+        }
+    }
+
+    @POST
+    @Path("/{executionId}/explanations/counterfactuals")
+    @APIResponses(value = {
+            @APIResponse(description = "UUID, counterfactualId, for the calculation request.", responseCode = "200",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionStructuredInputsResponse.class))),
+            @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
+    })
+    @Operation(
+            summary = "Request calculation of the counterfactuals for a decision.",
+            description = "Requests calculation of the counterfactuals for a particular decision. Results of the calculation " +
+                    "can be obtained by GETing /{executionId}/explanations/counterfactuals/{counterfactualId}/results")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response requestCounterfactuals(
+            @Parameter(
+                    name = "executionId",
+                    description = "The execution ID.",
+                    required = true,
+                    schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId,
+            @Parameter(
+                    name = "Counterfactual request",
+                    description = "The definition of a request to calculate a decision's Counterfactuals.",
+                    required = true,
+                    schema = @Schema(implementation = CounterfactualRequest.class)) CounterfactualRequest request) {
+        List<CounterfactualGoal> goals = request.getGoals();
+        List<CounterfactualSearchDomain> searchDomains = request.getSearchDomains();
+        return requestCounterfactualsForExecution(executionId, goals, searchDomains)
+                .map(ExplainabilityApiV1::counterfactualRequestToResponse)
+                .map(Response::ok)
+                .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
+                .build();
+    }
+
+    private Optional<CounterfactualRequestResult> requestCounterfactualsForExecution(String executionId,
+            List<CounterfactualGoal> goals,
+            List<CounterfactualSearchDomain> searchDomains) {
+        try {
+            return Optional.ofNullable(trustyService.requestCounterfactuals(executionId, goals, searchDomains));
         } catch (IllegalArgumentException ex) {
             return Optional.empty();
         }

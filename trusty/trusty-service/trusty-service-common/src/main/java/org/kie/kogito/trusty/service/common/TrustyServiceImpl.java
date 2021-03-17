@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -37,7 +38,10 @@ import org.kie.kogito.trusty.service.common.messaging.MessagingUtils;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequestResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.Execution;
@@ -178,6 +182,25 @@ public class TrustyServiceImpl implements TrustyService {
             throw new IllegalArgumentException(String.format("A model with ID %s does not exist in the storage.", modelIdentifier.getIdentifier()));
         }
         return storage.get(modelIdentifier.getIdentifier());
+    }
+
+    @Override
+    public CounterfactualRequestResult requestCounterfactuals(String executionId,
+            List<CounterfactualGoal> goals,
+            List<CounterfactualSearchDomain> searchDomains) {
+        // TODO See https://issues.redhat.com/browse/FAI-438. Re-purpose ExplainabilityRequestDto for CF (and LIME)
+        // Decision decision = getDecisionById(executionId);
+        // Storage<String, Counterfactual> counterfactualStorage = storageService.getCounterfactualStorage();
+        // counterfactualStorage.put(executionId, convert(desiredOutputs), convert(searchDomains));
+        //
+        // explainabilityRequestProducer.sendEvent(new ExplainabilityRequestDto(
+        //      executionId,
+        //      serviceUrl,
+        //      createDecisionModelIdentifierDto(decision),
+        //      inputs,
+        //      outputs));
+
+        return new CounterfactualRequestResult(executionId, UUID.randomUUID().toString());
     }
 
     private ModelIdentifierDto createDecisionModelIdentifierDto(Decision decision) {
