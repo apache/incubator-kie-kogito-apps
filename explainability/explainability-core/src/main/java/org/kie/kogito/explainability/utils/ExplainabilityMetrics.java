@@ -439,6 +439,8 @@ public class ExplainabilityMetrics {
 
     /**
      * Get local saliency F1.
+     *
+     * see <a href="https://en.wikipedia.org/wiki/F-score"/>
      * See {@link #getLocalSaliencyPrecision(String, PredictionProvider, LocalExplainer, DataDistribution, int, int)}
      * See {@link #getLocalSaliencyRecall(String, PredictionProvider, LocalExplainer, DataDistribution, int, int)}
      *
@@ -456,7 +458,7 @@ public class ExplainabilityMetrics {
             throws InterruptedException, ExecutionException, TimeoutException {
         double precision = getLocalSaliencyPrecision(outputName, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
         double recall = getLocalSaliencyRecall(outputName, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
-        if ((precision + recall) > 0) {
+        if (Double.isFinite(precision + recall) && (precision + recall) > 0) {
             return 2 * precision * recall / (precision + recall);
         } else {
             return 0;
