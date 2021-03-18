@@ -19,7 +19,6 @@ import {
 import { HelpIcon } from '@patternfly/react-icons';
 import Outcomes from '../../Organisms/Outcomes/Outcomes';
 import InputDataBrowser from '../../Organisms/InputDataBrowser/InputDataBrowser';
-// import FeaturesScoreChart from '../../Organisms/FeaturesScoreChart/FeaturesScoreChart';
 import FeaturesScoreTable from '../../Organisms/FeaturesScoreTable/FeaturesScoreTable';
 import ExplanationSwitch from '../../Organisms/ExplanationSwitch/ExplanationSwitch';
 import SkeletonGrid from '../../Molecules/SkeletonGrid/SkeletonGrid';
