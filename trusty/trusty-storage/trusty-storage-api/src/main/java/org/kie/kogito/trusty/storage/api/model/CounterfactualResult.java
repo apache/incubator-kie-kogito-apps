@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.trusty.service.common.responses;
+
+package org.kie.kogito.trusty.storage.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CounterfactualRequestResponse {
+public class CounterfactualResult {
 
     public static final String EXECUTION_ID_FIELD = "executionId";
     public static final String COUNTERFACTUAL_ID_FIELD = "counterfactualId";
@@ -30,10 +31,10 @@ public class CounterfactualRequestResponse {
     @JsonProperty(COUNTERFACTUAL_ID_FIELD)
     private String counterfactualId;
 
-    public CounterfactualRequestResponse() {
+    public CounterfactualResult() {
     }
 
-    public CounterfactualRequestResponse(String executionId, String counterfactualId) {
+    public CounterfactualResult(String executionId, String counterfactualId) {
         this.executionId = executionId;
         this.counterfactualId = counterfactualId;
     }
@@ -42,8 +43,15 @@ public class CounterfactualRequestResponse {
         return executionId;
     }
 
+    public void setExecutionId(String executionId) {
+        this.executionId = executionId;
+    }
+
     public String getCounterfactualId() {
         return counterfactualId;
     }
 
+    public void setCounterfactualId(String counterfactualId) {
+        this.counterfactualId = counterfactualId;
+    }
 }

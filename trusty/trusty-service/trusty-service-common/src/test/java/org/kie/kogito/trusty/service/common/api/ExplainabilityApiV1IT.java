@@ -32,10 +32,10 @@ import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.service.common.requests.DomainCategorical;
 import org.kie.kogito.trusty.service.common.requests.DomainNumerical;
-import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualRequestResult;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
@@ -87,8 +87,8 @@ class ExplainabilityApiV1IT {
                                 new FeatureImportance("Feature2", 0.70293)))));
     }
 
-    private static CounterfactualRequestResult buildValidCounterfactualRequest() {
-        return new CounterfactualRequestResult(TEST_EXECUTION_ID, TEST_COUNTERFACTUAL_ID);
+    private static CounterfactualResult buildValidCounterfactualRequest() {
+        return new CounterfactualResult(TEST_EXECUTION_ID, TEST_COUNTERFACTUAL_ID);
     }
 
     @Test
@@ -201,13 +201,13 @@ class ExplainabilityApiV1IT {
                 .build();
         JsonObject params = Json.createObjectBuilder().add("goals", goals).add("searchDomains", searchDomains).build();
 
-        CounterfactualRequestResponse response = given()
+        CounterfactualResponse response = given()
                 .filter(new RequestLoggingFilter())
                 .filter(new ResponseLoggingFilter())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(params.toString())
                 .when().post("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/counterfactuals")
-                .as(CounterfactualRequestResponse.class);
+                .as(CounterfactualResponse.class);
 
         assertNotNull(response);
         assertNotNull(response.getExecutionId());

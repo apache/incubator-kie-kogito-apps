@@ -15,9 +15,11 @@
  */
 package org.kie.kogito.trusty.service.common.requests;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CounterfactualGoal {
 
     @JsonProperty("name")

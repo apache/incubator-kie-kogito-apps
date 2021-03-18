@@ -23,7 +23,7 @@ import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualRequestResult;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
@@ -124,7 +124,7 @@ public interface TrustyService {
      * @return A wrapper for the calculation request.
      * @throws IllegalArgumentException Throws IllegalArgumentException the executionId is not present in the system.
      */
-    CounterfactualRequestResult requestCounterfactuals(String executionId,
+    CounterfactualResult requestCounterfactuals(String executionId,
             List<CounterfactualGoal> goals,
             List<CounterfactualSearchDomain> searchDomains);
 }

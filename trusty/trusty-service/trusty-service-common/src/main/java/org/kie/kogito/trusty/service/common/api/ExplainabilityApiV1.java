@@ -42,12 +42,12 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
-import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.FeatureImportanceResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualRequestResult;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
 import org.kie.kogito.trusty.storage.api.model.Saliency;
@@ -91,18 +91,18 @@ public class ExplainabilityApiV1 {
                         .collect(Collectors.toList()));
     }
 
-    static CounterfactualRequestResponse counterfactualRequestToResponse(CounterfactualRequestResult request) {
+    static CounterfactualResponse counterfactualRequestToResponse(CounterfactualResult request) {
         if (request == null) {
             return null;
         }
-        return new CounterfactualRequestResponse(request.getExecutionId(), request.getCounterfactualId());
+        return new CounterfactualResponse(request.getExecutionId(), request.getCounterfactualId());
     }
 
     @GET
     @Path("/{executionId}/explanations/saliencies")
     @APIResponses(value = {
             @APIResponse(description = "Gets the saliencies for a decision.", responseCode = "200",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = CounterfactualRequestResponse.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = SalienciesResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(
@@ -163,7 +163,7 @@ public class ExplainabilityApiV1 {
                 .build();
     }
 
-    private Optional<CounterfactualRequestResult> requestCounterfactualsForExecution(String executionId,
+    private Optional<CounterfactualResult> requestCounterfactualsForExecution(String executionId,
             List<CounterfactualGoal> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         try {
