@@ -459,7 +459,7 @@ public class ExplainabilityMetrics {
         if (Double.isFinite(precision + recall) && (precision + recall) > 0) {
             return 2 * precision * recall / (precision + recall);
         } else {
-            return 0;
+            return Double.NaN;
         }
     }
 
