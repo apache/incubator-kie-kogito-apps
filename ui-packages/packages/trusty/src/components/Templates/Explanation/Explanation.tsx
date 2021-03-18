@@ -23,7 +23,6 @@ import InputDataBrowser from '../../Organisms/InputDataBrowser/InputDataBrowser'
 import FeaturesScoreTable from '../../Organisms/FeaturesScoreTable/FeaturesScoreTable';
 import ExplanationSwitch from '../../Organisms/ExplanationSwitch/ExplanationSwitch';
 import SkeletonGrid from '../../Molecules/SkeletonGrid/SkeletonGrid';
-import SkeletonTornadoChart from '../../Molecules/SkeletonTornadoChart/SkeletonTornadoChart';
 import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import useFeaturesScores from './useFeaturesScores';
 import useOutcomeDetail from './useOutcomeDetail';
@@ -31,9 +30,10 @@ import useSaliencies from './useSaliencies';
 import ExplanationUnavailable from '../../Molecules/ExplanationUnavailable/ExplanationUnavailable';
 import ExplanationError from '../../Molecules/ExplanationError/ExplanationError';
 import EvaluationStatus from '../../Atoms/EvaluationStatus/EvaluationStatus';
+import SkeletonDoubleBarChart from '../../Molecules/SkeletonDoubleBarChart/SkeletonDoubleBarChart';
+import FeaturesScoreChartBySign from '../../Organisms/FeaturesScoreChartBySign/FeaturesScoreChartBySign';
 import { ExecutionRouteParams, Outcome, RemoteData } from '../../../types';
 import './Explanation.scss';
-import FeaturesScoreChartAlternative from '../../Organisms/FeaturesScoreChartAlternative/FeaturesScoreChartAlternative';
 
 type ExplanationProps = {
   outcomes: RemoteData<Error, Outcome[]>;
@@ -198,14 +198,17 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                       </CardHeader>
                       <CardBody>
                         {saliencies.status === 'LOADING' && (
-                          <SkeletonTornadoChart valuesCount={10} height={400} />
+                          <SkeletonDoubleBarChart
+                            valuesCount={5}
+                            height={400}
+                          />
                         )}
                         {saliencies.status === 'SUCCESS' && (
                           <>
                             {topFeaturesScoresBySign.length === 0 && (
                               <div className="explanation-view__chart">
                                 {displayChart && (
-                                  <FeaturesScoreChartAlternative
+                                  <FeaturesScoreChartBySign
                                     featuresScore={featuresScores}
                                   />
                                 )}
@@ -215,7 +218,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                               <>
                                 <div className="explanation-view__chart">
                                   {displayChart && (
-                                    <FeaturesScoreChartAlternative
+                                    <FeaturesScoreChartBySign
                                       featuresScore={topFeaturesScoresBySign}
                                     />
                                   )}
@@ -242,7 +245,7 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
                                     </Button>
                                   ]}
                                 >
-                                  <FeaturesScoreChartAlternative
+                                  <FeaturesScoreChartBySign
                                     featuresScore={featuresScores}
                                     large={true}
                                   />
