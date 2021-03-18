@@ -103,7 +103,7 @@ class DummyDmnModelsLimeExplainerTest {
             assertThat(precision).isBetween(0d, 1d);
             double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
             assertThat(recall).isBetween(0d, 1d);
-            double f1 = 2 * (precision * recall) / (precision + recall);
+            double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
             assertThat(f1).isBetween(0d, 1d);
         }
     }
@@ -159,7 +159,7 @@ class DummyDmnModelsLimeExplainerTest {
             assertThat(precision).isBetween(0d, 1d);
             double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
             assertThat(recall).isBetween(0d, 1d);
-            double f1 = 2 * (precision * recall) / (precision + recall);
+            double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
             assertThat(f1).isBetween(0d, 1d);
         }
     }
@@ -231,7 +231,7 @@ class DummyDmnModelsLimeExplainerTest {
             assertThat(precision).isBetween(0d, 1d);
             double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
             assertThat(recall).isBetween(0d, 1d);
-            double f1 = 2 * (precision * recall) / (precision + recall);
+            double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
             assertThat(f1).isBetween(0d, 1d);
         }
     }
