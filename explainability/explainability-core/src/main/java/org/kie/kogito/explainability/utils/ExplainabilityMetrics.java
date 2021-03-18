@@ -254,7 +254,7 @@ public class ExplainabilityMetrics {
      * input the mask features were take from, that's considered a true positive, otherwise it's a false positive.
      * see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
      *
-     * @param decision decision to evaluate recall for
+     * @param outputName decision to evaluate recall for
      * @param predictionProvider the prediction provider to test
      * @param localExplainer the explainer to evaluate
      * @param dataDistribution the data distribution used to obtain inputs for evaluation
@@ -262,13 +262,13 @@ public class ExplainabilityMetrics {
      * @param chunkSize the size of the chunk of predictions to use for evaluation
      * @return the saliency recall
      */
-    public static double getLocalSaliencyRecall(String decision, PredictionProvider predictionProvider,
+    public static double getLocalSaliencyRecall(String outputName, PredictionProvider predictionProvider,
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // get all samples from the data distribution
-        List<Prediction> sorted = getScoreSortedPredictions(decision, predictionProvider, dataDistribution);
+        List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(chunkSize);
@@ -286,13 +286,13 @@ public class ExplainabilityMetrics {
         // for each of the top scored predictions, get the top influencing features and copy them over a low scored
         // input, then feed the model with this masked input and check the output is equals to the top scored one.
         for (Prediction prediction : topChunk) {
-            Optional<Output> optionalOutput = prediction.getOutput().getByName(decision);
+            Optional<Output> optionalOutput = prediction.getOutput().getByName(outputName);
             if (optionalOutput.isPresent()) {
                 Output output = optionalOutput.get();
                 Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-                if (stringSaliencyMap.containsKey(decision)) {
-                    Saliency saliency = stringSaliencyMap.get(decision);
+                if (stringSaliencyMap.containsKey(outputName)) {
+                    Saliency saliency = stringSaliencyMap.get(outputName);
                     List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
                             .sorted((f1, f2) -> Double.compare(f2.getScore(), f1.getScore())).limit(k).collect(Collectors.toList());
 
@@ -307,7 +307,7 @@ public class ExplainabilityMetrics {
                     List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                             .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
                     PredictionOutput predictionOutput = predictionOutputList.get(0);
-                    Optional<Output> optionalNewOutput = predictionOutput.getByName(decision);
+                    Optional<Output> optionalNewOutput = predictionOutput.getByName(outputName);
                     if (optionalNewOutput.isPresent()) {
                         Output newOutput = optionalOutput.get();
                         if (output.getValue().equals(newOutput.getValue())) {
@@ -327,7 +327,7 @@ public class ExplainabilityMetrics {
         }
     }
 
-    private static List<Prediction> getScoreSortedPredictions(String decision, PredictionProvider predictionProvider,
+    private static List<Prediction> getScoreSortedPredictions(String outputName, PredictionProvider predictionProvider,
             DataDistribution dataDistribution)
             throws InterruptedException, ExecutionException, TimeoutException {
         List<PredictionInput> inputs = dataDistribution.getAllSamples();
@@ -337,8 +337,8 @@ public class ExplainabilityMetrics {
 
         // sort the predictions by Output#getScore, in descending order
         return predictions.stream().sorted((p1, p2) -> {
-            Optional<Output> optionalOutput1 = p1.getOutput().getByName(decision);
-            Optional<Output> optionalOutput2 = p2.getOutput().getByName(decision);
+            Optional<Output> optionalOutput1 = p1.getOutput().getByName(outputName);
+            Optional<Output> optionalOutput2 = p2.getOutput().getByName(outputName);
             if (optionalOutput1.isPresent() && optionalOutput2.isPresent()) {
                 Output o1 = optionalOutput1.get();
                 Output o2 = optionalOutput2.get();
@@ -359,7 +359,7 @@ public class ExplainabilityMetrics {
      * it's a true positive.
      * see Section 3.2.1 of https://openreview.net/attachment?id=B1xBAA4FwH&name=original_pdf
      *
-     * @param decision decision to evaluate recall for
+     * @param outputName decision to evaluate recall for
      * @param predictionProvider the prediction provider to test
      * @param localExplainer the explainer to evaluate
      * @param dataDistribution the data distribution used to obtain inputs for evaluation
@@ -367,11 +367,11 @@ public class ExplainabilityMetrics {
      * @param chunkSize the size of the chunk of predictions to use for evaluation
      * @return the saliency precision
      */
-    public static double getLocalSaliencyPrecision(String decision, PredictionProvider predictionProvider,
+    public static double getLocalSaliencyPrecision(String outputName, PredictionProvider predictionProvider,
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
-        List<Prediction> sorted = getScoreSortedPredictions(decision, predictionProvider, dataDistribution);
+        List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(chunkSize);
@@ -390,8 +390,8 @@ public class ExplainabilityMetrics {
         for (Prediction prediction : bottomChunk) {
             Map<String, Saliency> stringSaliencyMap = localExplainer.explainAsync(prediction, predictionProvider)
                     .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-            if (stringSaliencyMap.containsKey(decision)) {
-                Saliency saliency = stringSaliencyMap.get(decision);
+            if (stringSaliencyMap.containsKey(outputName)) {
+                Saliency saliency = stringSaliencyMap.get(outputName);
                 List<FeatureImportance> topFeatures = saliency.getPerFeatureImportance().stream()
                         .sorted(Comparator.comparingDouble(FeatureImportance::getScore)).limit(k).collect(Collectors.toList());
 
@@ -408,10 +408,10 @@ public class ExplainabilityMetrics {
                 List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
                 PredictionOutput predictionOutput = predictionOutputList.get(0);
-                Optional<Output> newOptionalOutput = predictionOutput.getByName(decision);
+                Optional<Output> newOptionalOutput = predictionOutput.getByName(outputName);
                 if (newOptionalOutput.isPresent()) {
                     Output newOutput = newOptionalOutput.get();
-                    Optional<Output> optionalOutput = topPrediction.getOutput().getByName(decision);
+                    Optional<Output> optionalOutput = topPrediction.getOutput().getByName(outputName);
                     if (optionalOutput.isPresent()) {
                         Output output = optionalOutput.get();
                         if (output.getValue().equals(newOutput.getValue())) {
@@ -436,7 +436,7 @@ public class ExplainabilityMetrics {
      * See {@link #getLocalSaliencyPrecision(String, PredictionProvider, LocalExplainer, DataDistribution, int, int)}
      * See {@link #getLocalSaliencyRecall(String, PredictionProvider, LocalExplainer, DataDistribution, int, int)}
      *
-     * @param decision decision to evaluate recall for
+     * @param outputName decision to evaluate recall for
      * @param predictionProvider the prediction provider to test
      * @param localExplainer the explainer to evaluate
      * @param dataDistribution the data distribution used to obtain inputs for evaluation
@@ -444,12 +444,12 @@ public class ExplainabilityMetrics {
      * @param chunkSize the size of the chunk of predictions to use for evaluation
      * @return the saliency F1
      */
-    public static double getLocalSaliencyF1(String decision, PredictionProvider predictionProvider,
+    public static double getLocalSaliencyF1(String outputName, PredictionProvider predictionProvider,
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
-        double precision = getLocalSaliencyPrecision(decision, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
-        double recall = getLocalSaliencyRecall(decision, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
+        double precision = getLocalSaliencyPrecision(outputName, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
+        double recall = getLocalSaliencyRecall(outputName, predictionProvider, localExplainer, dataDistribution, k, chunkSize);
         if ((precision + recall) > 0) {
             return 2 * precision * recall / (precision + recall);
         } else {
