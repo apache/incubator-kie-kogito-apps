@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { OUIAProps } from '@kogito-apps/components-common';
 import { EmbeddedTaskInbox } from '@kogito-apps/task-inbox';
 import { TaskInboxGatewayApi } from '../../../../../channel/inbox';
@@ -23,9 +24,25 @@ import {
   getActiveTaskStates,
   getAllTaskStates
 } from '../../../../../utils/Utils';
+import { GraphQL } from '@kogito-apps/consoles-common';
+import UserTaskInstance = GraphQL.UserTaskInstance;
 
 const TaskInboxContainer: React.FC<OUIAProps> = () => {
+  const history = useHistory();
   const gatewayApi: TaskInboxGatewayApi = useTaskInboxGatewayApi();
+
+  useEffect(() => {
+    const unsubscriber = gatewayApi.onOpenTaskListen({
+      onOpen(task: UserTaskInstance) {
+        history.push(`/TaskDetails/${task.id}`);
+      }
+    });
+
+    return () => {
+      unsubscriber.unSubscribe();
+    };
+  }, []);
+
   return (
     <EmbeddedTaskInbox
       initialState={gatewayApi.taskInboxState}
