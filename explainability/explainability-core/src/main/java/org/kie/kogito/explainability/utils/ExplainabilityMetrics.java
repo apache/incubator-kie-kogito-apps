@@ -323,6 +323,7 @@ public class ExplainabilityMetrics {
         if ((truePositives + falseNegatives) > 0) {
             return truePositives / (truePositives + falseNegatives);
         } else {
+            // if topChunk is empty or the target output (by name) is not an output of the model.
             return 0;
         }
     }
@@ -427,6 +428,7 @@ public class ExplainabilityMetrics {
         if ((truePositives + falsePositives) > 0) {
             return truePositives / (truePositives + falsePositives);
         } else {
+            // if bottomChunk is empty or the target output (by name) is not an output of the model.
             return 0;
         }
     }
