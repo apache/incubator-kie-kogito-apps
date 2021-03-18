@@ -115,7 +115,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                     SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
                 CounterfactualSolution problem =
-                        new CounterfactualSolution(entities, model, goal);
+                        new CounterfactualSolution(entities, model, goal, UUID.randomUUID());
 
                 SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(this.id, problem);
                 CounterfactualSolution solution;
@@ -137,7 +137,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                         s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
-            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(), UUID.randomUUID());
+            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(), solution.getCounterfactualId());
         });
     }
 
