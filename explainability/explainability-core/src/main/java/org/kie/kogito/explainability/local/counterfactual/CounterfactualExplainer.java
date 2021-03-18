@@ -28,15 +28,7 @@ import java.util.stream.IntStream;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.model.DataDistribution;
-import org.kie.kogito.explainability.model.DataDomain;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.*;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
@@ -60,6 +52,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     private final SolverConfig solverConfig;
     private final Executor executor;
     private final DataDistribution dataDistribution;
+    private final UUID id;
 
     /**
      * Create a new {@link CounterfactualExplainer} using OptaPlanner as the underlying engine.
@@ -74,6 +67,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      * @param dataDomain A {@link DataDomain} which specifies the search space domain
      * @param contraints A list specifying by index which features are constrained
      * @param goal A collection of {@link Output} representing the desired outcome
+     * @param id A unique counterfactual search {@link UUID}
      * @param solverConfig An OptaPlanner {@link SolverConfig} configuration
      */
     protected CounterfactualExplainer(DataDistribution dataDistribution,
@@ -81,12 +75,14 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             List<Boolean> contraints,
             List<Output> goal,
             SolverConfig solverConfig,
+            UUID id,
             Executor executor) {
         this.dataDistribution = dataDistribution;
         this.dataDomain = dataDomain;
         this.constraints = contraints;
         this.goal = goal;
         this.solverConfig = solverConfig;
+        this.id = id;
         this.executor = executor;
     }
 
@@ -114,8 +110,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
         final List<CounterfactualEntity> entities = createEntities(prediction.getInput());
 
-        final UUID problemId = UUID.randomUUID();
-
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
                     SolverManager.create(solverConfig, new SolverManagerConfig())) {
@@ -123,7 +117,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 CounterfactualSolution problem =
                         new CounterfactualSolution(entities, model, goal);
 
-                SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(problemId, problem);
+                SolverJob<CounterfactualSolution, UUID> solverJob = solverManager.solve(this.id, problem);
                 CounterfactualSolution solution;
                 try {
                     // Wait until the solving ends
@@ -143,7 +137,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                         s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
-            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible());
+            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(), UUID.randomUUID());
         });
     }
 
@@ -155,6 +149,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         private DataDistribution dataDistribution = null;
         private Executor executor = ForkJoinPool.commonPool();
         private SolverConfig solverConfig = null;
+        private UUID id = null;
 
         private Builder(List<Output> goal, List<Boolean> constraints, DataDomain dataDomain) {
             this.goal = goal;
@@ -177,16 +172,25 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             return this;
         }
 
+        public Builder withId(UUID id) {
+            this.id = id;
+            return this;
+        }
+
         public CounterfactualExplainer build() {
             // Create a default solver configuration if none provided
             if (this.solverConfig == null) {
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
+            }
+            if (this.id == null) {
+                this.id = UUID.randomUUID();
             }
             return new CounterfactualExplainer(dataDistribution,
                     dataDomain,
                     constraints,
                     goal,
                     solverConfig,
+                    id,
                     executor);
         }
     }

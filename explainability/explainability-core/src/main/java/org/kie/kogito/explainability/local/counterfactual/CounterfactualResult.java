@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -30,12 +31,14 @@ public class CounterfactualResult {
     private List<CounterfactualEntity> entities;
     private List<PredictionOutput> output;
     private boolean valid;
+    private UUID id;
 
     public CounterfactualResult(List<CounterfactualEntity> entities, List<PredictionOutput> output,
-            boolean valid) {
+            boolean valid, UUID id) {
         this.entities = entities;
         this.output = output;
         this.valid = valid;
+        this.id = id;
     }
 
     public List<CounterfactualEntity> getEntities() {
@@ -48,5 +51,9 @@ public class CounterfactualResult {
 
     public boolean isValid() {
         return valid;
+    }
+
+    public UUID getId() {
+        return id;
     }
 }
