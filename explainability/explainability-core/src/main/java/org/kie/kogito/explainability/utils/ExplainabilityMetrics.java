@@ -326,7 +326,7 @@ public class ExplainabilityMetrics {
             return truePositives / (truePositives + falseNegatives);
         } else {
             // if topChunk is empty or the target output (by name) is not an output of the model.
-            return 0;
+            return Double.NaN;
         }
     }
 
@@ -433,7 +433,7 @@ public class ExplainabilityMetrics {
             return truePositives / (truePositives + falsePositives);
         } else {
             // if bottomChunk is empty or the target output (by name) is not an output of the model.
-            return 0;
+            return Double.NaN;
         }
     }
 
