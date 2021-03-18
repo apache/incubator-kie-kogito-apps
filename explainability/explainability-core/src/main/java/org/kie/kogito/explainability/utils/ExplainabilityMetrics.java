@@ -306,14 +306,16 @@ public class ExplainabilityMetrics {
 
                     List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                             .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-                    PredictionOutput predictionOutput = predictionOutputList.get(0);
-                    Optional<Output> optionalNewOutput = predictionOutput.getByName(outputName);
-                    if (optionalNewOutput.isPresent()) {
-                        Output newOutput = optionalOutput.get();
-                        if (output.getValue().equals(newOutput.getValue())) {
-                            truePositives++;
-                        } else {
-                            falseNegatives++;
+                    if (!predictionOutputList.isEmpty()) {
+                        PredictionOutput predictionOutput = predictionOutputList.get(0);
+                        Optional<Output> optionalNewOutput = predictionOutput.getByName(outputName);
+                        if (optionalNewOutput.isPresent()) {
+                            Output newOutput = optionalOutput.get();
+                            if (output.getValue().equals(newOutput.getValue())) {
+                                truePositives++;
+                            } else {
+                                falseNegatives++;
+                            }
                         }
                     }
                     currentChunk++;
@@ -408,17 +410,19 @@ public class ExplainabilityMetrics {
 
                 List<PredictionOutput> predictionOutputList = predictionProvider.predictAsync(List.of(maskedInput))
                         .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-                PredictionOutput predictionOutput = predictionOutputList.get(0);
-                Optional<Output> newOptionalOutput = predictionOutput.getByName(outputName);
-                if (newOptionalOutput.isPresent()) {
-                    Output newOutput = newOptionalOutput.get();
-                    Optional<Output> optionalOutput = topPrediction.getOutput().getByName(outputName);
-                    if (optionalOutput.isPresent()) {
-                        Output output = optionalOutput.get();
-                        if (output.getValue().equals(newOutput.getValue())) {
-                            truePositives++;
-                        } else {
-                            falsePositives++;
+                if (!predictionOutputList.isEmpty()) {
+                    PredictionOutput predictionOutput = predictionOutputList.get(0);
+                    Optional<Output> newOptionalOutput = predictionOutput.getByName(outputName);
+                    if (newOptionalOutput.isPresent()) {
+                        Output newOutput = newOptionalOutput.get();
+                        Optional<Output> optionalOutput = topPrediction.getOutput().getByName(outputName);
+                        if (optionalOutput.isPresent()) {
+                            Output output = optionalOutput.get();
+                            if (output.getValue().equals(newOutput.getValue())) {
+                                truePositives++;
+                            } else {
+                                falsePositives++;
+                            }
                         }
                     }
                 }
