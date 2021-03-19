@@ -189,6 +189,12 @@ const DomainExplorer: React.FC<IOwnProps & OUIAProps> = ({
     }
   }, [columnPickerType, selections.length > 0]);
 
+  useEffect(() => {
+    if (filterChips.length === 0) {
+      setDisplayTable(false);
+    }
+  }, [filterChips]);
+
   const onDeleteChip = (type = '', id = '') => {
     if (type) {
       setFilterChips(prev => prev.filter(item => item !== id));

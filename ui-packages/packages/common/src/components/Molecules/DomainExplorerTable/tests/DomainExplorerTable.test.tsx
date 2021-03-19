@@ -339,7 +339,7 @@ describe('Domain Explorer Table Component', () => {
         .find('h5')
         .first()
         .text()
-    ).toEqual('No data available');
+    ).toEqual('No results found');
   });
   it('check null value for process instance attributes', async () => {
     const isLoadingMore = false;

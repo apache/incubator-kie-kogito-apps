@@ -155,7 +155,11 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
         const rest = k.length ? ' / ' + i : i;
         if (data[i] === null) {
           !tempKeys.includes(k + rest) &&
-            tempKeys.push({ title: k + rest, transforms: [sortable] });
+            tempKeys.push({
+              title: k + rest,
+              transforms:
+                !tableLoading || !displayEmptyState ? [sortable] : null
+            });
           if (rest.hasOwnProperty) {
             tempValue.push(data[i]);
           }
@@ -167,7 +171,11 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
         } else {
           if (rest !== '__typename' && !rest.match('/ __typename')) {
             !tempKeys.includes(k + rest) &&
-              tempKeys.push({ title: k + rest, transforms: [sortable] });
+              tempKeys.push({
+                title: k + rest,
+                transforms:
+                  !tableLoading || !displayEmptyState ? [sortable] : null
+              });
             if (rest.hasOwnProperty) {
               tempValue.push(data[i].toString());
             }
@@ -335,7 +343,13 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
       });
     }
     const finalKeys = parentkeys[0];
-    finalKeys && setColumns([...finalKeys]);
+    if (displayEmptyState) {
+      const newColumns = [...finalKeys];
+      newColumns.unshift({ title: '', props: { style: { width: '96px' } } });
+      setColumns(newColumns);
+    } else {
+      finalKeys && setColumns([...finalKeys]);
+    }
     if (offset > 0) {
       setRows(prev => [...prev, ...values]);
     } else {
@@ -351,7 +365,7 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
       parentIndex = lastObj.parent + 2;
     }
     initLoad();
-  }, [tableContent]);
+  }, [tableContent, displayEmptyState]);
 
   const onCollapse = (event, rowKey, isOpen) => {
     rows[rowKey].isOpen = isOpen;
@@ -377,8 +391,8 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
             title: (
               <KogitoEmptyState
                 type={KogitoEmptyStateType.Search}
-                title="No data available"
-                body="Selected filters have no data to display. Try other filters."
+                title="No results found"
+                body="Try using different filters"
               />
             )
           }
@@ -410,7 +424,7 @@ const DomainExplorerTable: React.FC<IOwnProps & OUIAProps> = ({
             cells={columns}
             rows={rows}
             sortBy={sortBy}
-            onSort={filterChips.length > 0 && !tableLoading ? onSort : null}
+            onSort={onSort}
             aria-label="Domain Explorer Table"
             className="kogito-common--domain-explorer__table"
             onCollapse={onCollapse}
