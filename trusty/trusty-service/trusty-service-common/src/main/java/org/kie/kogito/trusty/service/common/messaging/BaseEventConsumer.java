@@ -22,6 +22,7 @@ import java.util.concurrent.CompletionStage;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.trusty.service.common.TrustyService;
+import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,20 +37,27 @@ public abstract class BaseEventConsumer<E> {
 
     protected final TrustyService service;
     private final ObjectMapper mapper;
+    private final RecoverableExceptionsProvider recoverableExceptionsProvider;
 
-    protected BaseEventConsumer() {
-        this(null, null);
+    public BaseEventConsumer() {
+        this(null, null, null);
     }
 
-    public BaseEventConsumer(final TrustyService service, ObjectMapper mapper) {
+    public BaseEventConsumer(final TrustyService service, ObjectMapper mapper, RecoverableExceptionsProvider recoverableExceptionsProvider) {
         this.service = service;
         this.mapper = mapper;
+        this.recoverableExceptionsProvider = recoverableExceptionsProvider;
     }
 
     protected CompletionStage<Void> handleMessage(final Message<String> message) {
         try {
             CloudEventUtils.decode(message.getPayload()).ifPresent(this::handleCloudEvent);
         } catch (Exception e) {
+            System.out.println("SUCAAAA");
+            if (recoverableExceptionsProvider.isRecoverable(e)) {
+                LOG.error("A recoverable exception occurred. A nack is sent and the application is put into an unhealthy state", e);
+                return message.nack(e);
+            }
             LOG.error("Something unexpected happened during the processing of an Event. The event is discarded.", e);
         }
         return message.ack();

@@ -31,6 +31,7 @@ import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
+import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
@@ -80,6 +81,7 @@ class ExplainabilityResultConsumerTest {
     private static final ExplainabilityResultDto TEST_RESULT_DTO = ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, singletonMap(TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO));
 
     private TrustyService trustyService;
+    private RecoverableExceptionsProvider recoverableExceptionsProvider;
     private ExplainabilityResultConsumer consumer;
 
     public static CloudEvent buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
@@ -103,7 +105,8 @@ class ExplainabilityResultConsumerTest {
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new ExplainabilityResultConsumer(trustyService, TrustyServiceTestUtils.MAPPER);
+        recoverableExceptionsProvider = mock(RecoverableExceptionsProvider.class);
+        consumer = new ExplainabilityResultConsumer(trustyService, TrustyServiceTestUtils.MAPPER, recoverableExceptionsProvider);
     }
 
     @Test

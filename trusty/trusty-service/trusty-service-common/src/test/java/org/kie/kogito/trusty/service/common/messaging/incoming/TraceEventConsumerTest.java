@@ -16,12 +16,18 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
+import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,12 +40,14 @@ import static org.mockito.Mockito.when;
 class TraceEventConsumerTest {
 
     private TrustyService trustyService;
+    private RecoverableExceptionsProvider recoverableExceptionsProvider;
     private TraceEventConsumer consumer;
 
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new TraceEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER);
+        recoverableExceptionsProvider = mock(RecoverableExceptionsProvider.class);
+        consumer = new TraceEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER, recoverableExceptionsProvider);
     }
 
     @Test
@@ -66,6 +74,22 @@ class TraceEventConsumerTest {
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class), any(Decision.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
+    }
+
+    @Test
+    void testMessageIsNacked() throws InterruptedException {
+        when(recoverableExceptionsProvider.isRecoverable(any())).thenReturn(true);
+        Message<String> message = Message.of(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        message.withNack(x -> {
+            System.out.println("SUCA");
+            countDownLatch.countDown();
+            return CompletableFuture.completedFuture(null);
+        });
+
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class), any(Decision.class));
+        consumer.handleMessage(message);
+        Assert.assertTrue(countDownLatch.await(10, TimeUnit.SECONDS));
     }
 
     @Test

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
+import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,12 +35,14 @@ import static org.mockito.Mockito.when;
 class ModelEventConsumerTest {
 
     private TrustyService trustyService;
+    private RecoverableExceptionsProvider recoverableExceptionsProvider;
     private ModelEventConsumer consumer;
 
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        consumer = new ModelEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER);
+        recoverableExceptionsProvider = mock(RecoverableExceptionsProvider.class);
+        consumer = new ModelEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER, recoverableExceptionsProvider);
     }
 
     @Test
