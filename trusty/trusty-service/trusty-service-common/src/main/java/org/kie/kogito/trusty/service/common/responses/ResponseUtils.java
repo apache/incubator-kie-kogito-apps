@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
@@ -122,11 +123,11 @@ public class ResponseUtils {
                 messageExceptionFieldResponseFrom(message.getException()));
     }
 
-    public static TypedVariableResponse typedVariableResponseFrom(DecisionInput input) {
+    public static TypedVariableWithValue typedVariableResponseFrom(DecisionInput input) {
         return input != null ? typedVariableResponseFrom(input.getValue()) : null;
     }
 
-    public static TypedVariableResponse typedVariableResponseFrom(TypedVariable value) {
+    public static TypedVariableWithValue typedVariableResponseFrom(TypedVariable value) {
         if (value == null) {
             return null;
         }
@@ -143,7 +144,7 @@ public class ResponseUtils {
         throw new IllegalStateException(String.format("TypedVariable of kind %s can't be converted to TypedVariableResponse", value.getKind()));
     }
 
-    private static TypedVariableResponse typedVariableResponseFromCollection(TypedVariable value) {
+    private static TypedVariableWithValue typedVariableResponseFromCollection(TypedVariable value) {
         boolean isCollectionOfStructures = value.getComponents() != null && value.getComponents().stream().anyMatch(t -> t.getKind() == STRUCTURE);
 
         // create array of all the values of the components
@@ -153,7 +154,7 @@ public class ResponseUtils {
                 ? null
                 : value.getComponents().stream()
                         .map(ResponseUtils::typedVariableResponseFromUnit)
-                        .map(TypedVariableResponse::getValue)
+                        .map(TypedVariableWithValue::getValue)
                         .collect(OBJECT_MAPPER::createArrayNode, ArrayNode::add, ArrayNode::addAll);
 
         // create a list of lists of variables with all the values of the sub-components
@@ -166,18 +167,18 @@ public class ResponseUtils {
                         .map(r -> r.getComponents().stream().collect(OBJECT_MAPPER::createArrayNode, ArrayNode::add, ArrayNode::addAll))
                         .collect(Collectors.toList());
 
-        return new TypedVariableResponse(value.getName(), value.getTypeRef(), responseValue, responseComponents);
+        return new TypedVariableWithValue(value.getName(), value.getTypeRef(), responseValue, responseComponents);
     }
 
-    private static TypedVariableResponse typedVariableResponseFromStructure(TypedVariable value) {
+    private static TypedVariableWithValue typedVariableResponseFromStructure(TypedVariable value) {
         List<JsonNode> components = value.getComponents() == null
                 ? null
                 : value.getComponents().stream().map(ResponseUtils::typedVariableResponseFrom).<JsonNode> map(OBJECT_MAPPER::valueToTree).collect(Collectors.toList());
-        return new TypedVariableResponse(value.getName(), value.getTypeRef(), null, components);
+        return new TypedVariableWithValue(value.getName(), value.getTypeRef(), null, components);
     }
 
-    private static TypedVariableResponse typedVariableResponseFromUnit(TypedVariable value) {
-        return new TypedVariableResponse(value.getName(), value.getTypeRef(), value.getValue(), null);
+    private static TypedVariableWithValue typedVariableResponseFromUnit(TypedVariable value) {
+        return new TypedVariableWithValue(value.getName(), value.getTypeRef(), value.getValue(), null);
     }
 
     private static <T, U> Collection<U> collectionFrom(Collection<T> input, Function<T, U> mapper) {

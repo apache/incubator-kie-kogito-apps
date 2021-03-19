@@ -17,6 +17,8 @@ package org.kie.kogito.trusty.service.common.requests;
 
 import java.util.List;
 
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CounterfactualRequest {
 
     @JsonProperty("goals")
-    private List<CounterfactualGoal> goals;
+    private List<TypedVariableWithValue> goals;
 
     @JsonProperty("searchDomains")
     private List<CounterfactualSearchDomain> searchDomains;
@@ -32,13 +34,13 @@ public class CounterfactualRequest {
     private CounterfactualRequest() {
     }
 
-    public CounterfactualRequest(List<CounterfactualGoal> goals,
+    public CounterfactualRequest(List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         this.goals = goals;
         this.searchDomains = searchDomains;
     }
 
-    public List<CounterfactualGoal> getGoals() {
+    public List<TypedVariableWithValue> getGoals() {
         return goals;
     }
 

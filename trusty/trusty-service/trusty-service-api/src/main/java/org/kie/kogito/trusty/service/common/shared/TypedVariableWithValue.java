@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.common.responses;
+package org.kie.kogito.trusty.service.common.shared;
 
-import java.util.Collection;
-
-import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
-public class DecisionStructuredInputsResponse {
+public class TypedVariableWithValue extends AbstractTypedVariable {
 
-    @JsonProperty("inputs")
-    private Collection<TypedVariableWithValue> inputs;
+    @JsonProperty("value")
+    private JsonNode value;
 
-    private DecisionStructuredInputsResponse() {
+    protected TypedVariableWithValue() {
+        super();
     }
 
-    public DecisionStructuredInputsResponse(Collection<TypedVariableWithValue> inputs) {
-        this.inputs = inputs;
+    public TypedVariableWithValue(String name, String typeRef, JsonNode value, List<JsonNode> components) {
+        super(name, typeRef, components);
+        this.value = value;
     }
 
-    public Collection<TypedVariableWithValue> getInputs() {
-        return inputs;
+    public JsonNode getValue() {
+        return value;
     }
 }

@@ -36,7 +36,7 @@ import org.kie.kogito.trusty.service.common.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionType;
 import org.kie.kogito.trusty.service.common.responses.MessageExceptionFieldResponse;
 import org.kie.kogito.trusty.service.common.responses.MessageResponse;
-import org.kie.kogito.trusty.service.common.responses.TypedVariableResponse;
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
@@ -250,7 +250,7 @@ class DecisionsApiV1IT {
         }
     }
 
-    private void assertTypedVariableResponse(TypedVariableResponse expected, TypedVariableResponse actual) {
+    private void assertTypedVariableResponse(TypedVariableWithValue expected, TypedVariableWithValue actual) {
         assertNotNull(actual);
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getTypeRef(), actual.getTypeRef());
@@ -304,7 +304,7 @@ class DecisionsApiV1IT {
         ObjectMapper mapper = new ObjectMapper();
         return new DecisionOutcomeResponse(
                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                new TypedVariableResponse("result", "ResType", mapper.readTree("\"The First Outcome\""), null),
+                new TypedVariableWithValue("result", "ResType", mapper.readTree("\"The First Outcome\""), null),
                 Collections.emptyList(),
                 List.of(new MessageResponse("WARNING", "INTERNAL", "TEST", "testSrc", "Test message",
                         new MessageExceptionFieldResponse("TestException", "Test exception message",
@@ -333,8 +333,8 @@ class DecisionsApiV1IT {
             case FULL:
                 ObjectMapper mapper = new ObjectMapper();
                 return new DecisionStructuredInputsResponse(List.of(
-                        new TypedVariableResponse("first", "FirstInput", mapper.readTree("\"Hello\""), null),
-                        new TypedVariableResponse("second", "SecondInput", mapper.readTree("12345"), null)));
+                        new TypedVariableWithValue("first", "FirstInput", mapper.readTree("\"Hello\""), null),
+                        new TypedVariableWithValue("second", "SecondInput", mapper.readTree("12345"), null)));
         }
         throw new IllegalStateException();
     }

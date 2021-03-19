@@ -39,7 +39,6 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
@@ -47,6 +46,7 @@ import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsRe
 import org.kie.kogito.trusty.service.common.responses.FeatureImportanceResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
@@ -154,7 +154,7 @@ public class ExplainabilityApiV1 {
                     description = "The definition of a request to calculate a decision's Counterfactuals.",
                     required = true,
                     schema = @Schema(implementation = CounterfactualRequest.class)) CounterfactualRequest request) {
-        List<CounterfactualGoal> goals = request.getGoals();
+        List<TypedVariableWithValue> goals = request.getGoals();
         List<CounterfactualSearchDomain> searchDomains = request.getSearchDomains();
         return requestCounterfactualsForExecution(executionId, goals, searchDomains)
                 .map(ExplainabilityApiV1::counterfactualRequestToResponse)
@@ -164,7 +164,7 @@ public class ExplainabilityApiV1 {
     }
 
     private Optional<CounterfactualResult> requestCounterfactualsForExecution(String executionId,
-            List<CounterfactualGoal> goals,
+            List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         try {
             return Optional.ofNullable(trustyService.requestCounterfactuals(executionId, goals, searchDomains));

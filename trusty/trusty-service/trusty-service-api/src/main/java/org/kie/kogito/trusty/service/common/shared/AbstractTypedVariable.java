@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.kie.kogito.trusty.service.common.responses;
+package org.kie.kogito.trusty.service.common.shared;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class TypedVariableResponse {
+public abstract class AbstractTypedVariable {
 
     @JsonProperty("name")
     private String name;
@@ -29,19 +28,15 @@ public class TypedVariableResponse {
     @JsonProperty("typeRef")
     private String typeRef;
 
-    @JsonProperty("value")
-    private JsonNode value;
-
     @JsonProperty("components")
     private List<JsonNode> components;
 
-    private TypedVariableResponse() {
+    protected AbstractTypedVariable() {
     }
 
-    public TypedVariableResponse(String name, String typeRef, JsonNode value, List<JsonNode> components) {
+    public AbstractTypedVariable(String name, String typeRef, List<JsonNode> components) {
         this.name = name;
         this.typeRef = typeRef;
-        this.value = value;
         this.components = components;
     }
 
@@ -51,10 +46,6 @@ public class TypedVariableResponse {
 
     public String getTypeRef() {
         return typeRef;
-    }
-
-    public JsonNode getValue() {
-        return value;
     }
 
     public List<JsonNode> getComponents() {

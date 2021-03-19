@@ -15,20 +15,19 @@
  */
 package org.kie.kogito.trusty.service.common.requests;
 
+import java.util.List;
+
+import org.kie.kogito.trusty.service.common.shared.AbstractTypedVariable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CounterfactualSearchDomain {
+public class CounterfactualSearchDomain extends AbstractTypedVariable {
 
     @JsonProperty("isFixed")
     private boolean isFixed;
-
-    @JsonProperty("name")
-    private String name;
-
-    @JsonProperty("typeRef")
-    private String typeRef;
 
     @JsonProperty("domain")
     private Domain domain;
@@ -36,23 +35,18 @@ public class CounterfactualSearchDomain {
     private CounterfactualSearchDomain() {
     }
 
-    public CounterfactualSearchDomain(boolean isFixed, String name, String typeRef, Domain domain) {
+    public CounterfactualSearchDomain(String name,
+            String typeRef,
+            List<JsonNode> components,
+            boolean isFixed,
+            Domain domain) {
+        super(name, typeRef, components);
         this.isFixed = isFixed;
-        this.name = name;
-        this.typeRef = typeRef;
         this.domain = domain;
     }
 
     public boolean isFixed() {
         return isFixed;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTypeRef() {
-        return typeRef;
     }
 
     public Domain getDomain() {

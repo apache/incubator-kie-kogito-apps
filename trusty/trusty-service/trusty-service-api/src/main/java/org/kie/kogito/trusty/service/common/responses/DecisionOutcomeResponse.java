@@ -18,6 +18,8 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.util.Collection;
 
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DecisionOutcomeResponse {
@@ -32,10 +34,10 @@ public class DecisionOutcomeResponse {
     private String evaluationStatus;
 
     @JsonProperty("outcomeResult")
-    private TypedVariableResponse outcomeResult;
+    private TypedVariableWithValue outcomeResult;
 
     @JsonProperty("outcomeInputs")
-    private Collection<TypedVariableResponse> outcomeInputs;
+    private Collection<TypedVariableWithValue> outcomeInputs;
 
     @JsonProperty("messages")
     private Collection<MessageResponse> messages;
@@ -46,7 +48,7 @@ public class DecisionOutcomeResponse {
     private DecisionOutcomeResponse() {
     }
 
-    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedVariableResponse outcomeResult, Collection<TypedVariableResponse> outcomeInputs,
+    public DecisionOutcomeResponse(String outcomeId, String outcomeName, String evaluationStatus, TypedVariableWithValue outcomeResult, Collection<TypedVariableWithValue> outcomeInputs,
             Collection<MessageResponse> messages, boolean hasErrors) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
@@ -69,11 +71,11 @@ public class DecisionOutcomeResponse {
         return evaluationStatus;
     }
 
-    public TypedVariableResponse getOutcomeResult() {
+    public TypedVariableWithValue getOutcomeResult() {
         return outcomeResult;
     }
 
-    public Collection<TypedVariableResponse> getOutcomeInputs() {
+    public Collection<TypedVariableWithValue> getOutcomeInputs() {
         return outcomeInputs;
     }
 

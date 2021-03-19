@@ -21,6 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import static org.kie.kogito.trusty.service.common.responses.ResponseUtils.typedVariableResponseFrom;
 
-class TypedVariableResponseTest {
+class TypedVariableWithValueTest {
 
     private static final String FIELD_COMPONENTS = "components";
     private static final String FIELD_NAME = "name";
@@ -86,7 +87,7 @@ class TypedVariableResponseTest {
 
     @Test
     void testCollection() throws JsonProcessingException {
-        TypedVariableResponse response = typedVariableResponseFrom(buildTestCollection());
+        TypedVariableWithValue response = typedVariableResponseFrom(buildTestCollection());
 
         Assertions.assertEquals(VAR_NAME_COLLECTION, response.getName());
         Assertions.assertEquals(TYPE_REF_STRING, response.getTypeRef());
@@ -105,7 +106,7 @@ class TypedVariableResponseTest {
 
     @Test
     void testCollectionOfStructures() throws JsonProcessingException {
-        TypedVariableResponse response = typedVariableResponseFrom(buildTestCollectionOfStructures());
+        TypedVariableWithValue response = typedVariableResponseFrom(buildTestCollectionOfStructures());
 
         Assertions.assertEquals(VAR_NAME_COLLECTION, response.getName());
         Assertions.assertEquals(TYPE_REF_STRUCT, response.getTypeRef());
@@ -157,7 +158,7 @@ class TypedVariableResponseTest {
 
     @Test
     void testStructure() throws JsonProcessingException {
-        TypedVariableResponse response = typedVariableResponseFrom(buildTestStructure());
+        TypedVariableWithValue response = typedVariableResponseFrom(buildTestStructure());
 
         Assertions.assertEquals(VAR_NAME_STRUCT, response.getName());
         Assertions.assertEquals(TYPE_REF_STRUCT, response.getTypeRef());
@@ -189,7 +190,7 @@ class TypedVariableResponseTest {
 
     @Test
     void testUnit() throws JsonProcessingException {
-        TypedVariableResponse response = typedVariableResponseFrom(buildTestUnitVariable());
+        TypedVariableWithValue response = typedVariableResponseFrom(buildTestUnitVariable());
 
         Assertions.assertEquals(VAR_NAME_UNIT, response.getName());
         Assertions.assertEquals(TYPE_REF_STRING, response.getTypeRef());

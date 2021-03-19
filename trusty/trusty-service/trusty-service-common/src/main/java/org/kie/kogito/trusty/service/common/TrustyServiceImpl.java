@@ -38,8 +38,8 @@ import org.kie.kogito.trusty.service.common.messaging.MessagingUtils;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
-import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
@@ -186,7 +186,7 @@ public class TrustyServiceImpl implements TrustyService {
 
     @Override
     public CounterfactualResult requestCounterfactuals(String executionId,
-            List<CounterfactualGoal> goals,
+            List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         // TODO See https://issues.redhat.com/browse/FAI-438. Re-purpose ExplainabilityRequestDto for CF (and LIME)
         // Decision decision = getDecisionById(executionId);

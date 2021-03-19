@@ -28,13 +28,13 @@ import javax.ws.rs.core.MediaType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.requests.CounterfactualGoal;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.service.common.requests.DomainCategorical;
 import org.kie.kogito.trusty.service.common.requests.DomainNumerical;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
+import org.kie.kogito.trusty.service.common.shared.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
@@ -154,7 +154,7 @@ class ExplainabilityApiV1IT {
     @Test
     @SuppressWarnings("unchecked")
     void testCounterfactualRequest() {
-        ArgumentCaptor<List<CounterfactualGoal>> goalsCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List<TypedVariableWithValue>> goalsCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List<CounterfactualSearchDomain>> searchDomainsCaptor = ArgumentCaptor.forClass(List.class);
 
         mockServiceWithCounterfactualRequest();
@@ -216,16 +216,16 @@ class ExplainabilityApiV1IT {
         assertEquals(response.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
 
         verify(executionService).requestCounterfactuals(eq(TEST_EXECUTION_ID), goalsCaptor.capture(), searchDomainsCaptor.capture());
-        List<CounterfactualGoal> goalsParameter = goalsCaptor.getValue();
+        List<TypedVariableWithValue> goalsParameter = goalsCaptor.getValue();
         assertNotNull(goalsParameter);
         assertEquals(2, goalsParameter.size());
 
-        CounterfactualGoal goal1 = goalsParameter.get(0);
+        TypedVariableWithValue goal1 = goalsParameter.get(0);
         assertEquals("deposit", goal1.getName());
         assertEquals("number", goal1.getTypeRef());
         assertEquals(5000, goal1.getValue().asInt());
 
-        CounterfactualGoal goal2 = goalsParameter.get(1);
+        TypedVariableWithValue goal2 = goalsParameter.get(1);
         assertEquals("approved", goal2.getName());
         assertEquals("boolean", goal2.getTypeRef());
         assertEquals(Boolean.TRUE, goal2.getValue().asBoolean());
