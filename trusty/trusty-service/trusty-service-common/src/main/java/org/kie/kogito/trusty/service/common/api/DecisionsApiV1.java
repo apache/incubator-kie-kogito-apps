@@ -72,7 +72,7 @@ public class DecisionsApiV1 {
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
         return retrieveDecision(executionId)
                 .map(obj -> Response.ok(ResponseUtils.executionHeaderResponseFrom(obj)).build())
-                .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
+                .orElseGet(this::buildBadRequestResponse);
     }
 
     @GET
@@ -90,11 +90,10 @@ public class DecisionsApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        Optional<Decision> decision = retrieveDecision(executionId);
-        if (decision.isPresent() && decision.get().getInputs() != null) {
-            return Response.ok(new DecisionStructuredInputsResponse(decision.get().getInputs().stream().map(DecisionInput::getValue).collect(Collectors.toList()))).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
+
+        return retrieveDecision(executionId)
+                .map(this::extractStructuredInputsResponse)
+                .orElseGet(this::buildBadRequestResponse);
     }
 
     @GET
@@ -112,12 +111,9 @@ public class DecisionsApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        Optional<Decision> decision = retrieveDecision(executionId);
-        if (decision.isPresent()) {
-            DecisionOutcomesResponse response = new DecisionOutcomesResponse(ResponseUtils.executionHeaderResponseFrom(decision.get()), decision.get().getOutcomes());
-            return Response.ok(response).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
+        return retrieveDecision(executionId)
+                .map(obj -> Response.ok(new DecisionOutcomesResponse(ResponseUtils.executionHeaderResponseFrom(obj), obj.getOutcomes())).build())
+                .orElseGet(this::buildBadRequestResponse);
     }
 
     @GET
@@ -140,16 +136,32 @@ public class DecisionsApiV1 {
                     description = "The outcome ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("outcomeId") String outcomeId) {
-        Optional<Decision> decision = retrieveDecision(executionId);
-        if (decision.isPresent()) {
-            DecisionOutcome decisionOutcome = decision.get()
-                    .getOutcomes()
+        return retrieveDecision(executionId)
+                .map(obj -> extractOutcomeByIdResponse(obj, outcomeId))
+                .orElseGet(this::buildBadRequestResponse);
+    }
+
+    private Response extractStructuredInputsResponse(Decision decision) {
+        if (decision.getInputs() != null) {
+            return Response.ok(new DecisionStructuredInputsResponse(decision.getInputs().stream().map(DecisionInput::getValue).collect(Collectors.toList()))).build();
+        }
+        return buildBadRequestResponse();
+    }
+
+    private Response extractOutcomeByIdResponse(Decision decision, String outcomeId) {
+        if (decision.getOutcomes() != null) {
+            Optional<DecisionOutcome> decisionOutcome = decision.getOutcomes()
                     .stream()
                     .filter(outcome -> outcomeId != null && outcomeId.equals(outcome.getOutcomeId()))
-                    .findFirst()
-                    .orElse(null);
-            return Response.ok(decisionOutcome).build();
+                    .findFirst();
+            if (decisionOutcome.isPresent()) {
+                return Response.ok(decisionOutcome).build();
+            }
         }
+        return buildBadRequestResponse();
+    }
+
+    private Response buildBadRequestResponse() {
         return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 

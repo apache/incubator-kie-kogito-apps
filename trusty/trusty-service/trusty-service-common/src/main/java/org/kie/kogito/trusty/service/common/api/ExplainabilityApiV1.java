@@ -60,13 +60,9 @@ public class ExplainabilityApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        Optional<ExplainabilityResult> explainabilityResultOpt = retrieveExplainabilityResult(executionId);
-        if (explainabilityResultOpt.isPresent()) {
-            ExplainabilityResult explainabilityResult = explainabilityResultOpt.get();
-            SalienciesResponse salienciesResponse = new SalienciesResponse(explainabilityResult);
-            return Response.ok(salienciesResponse).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
+        return retrieveExplainabilityResult(executionId)
+                .map(obj -> Response.ok(new SalienciesResponse(obj)).build())
+                .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
     }
 
     private Optional<ExplainabilityResult> retrieveExplainabilityResult(String executionId) {
