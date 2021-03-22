@@ -71,12 +71,12 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             final Feature f = entity.asFeature();
             builder.append(String.format("%s=%s (d:%f)", f.getName(), f.getValue().getUnderlyingObject(), entityDistance));
 
-            if (entity.isConstrained() && (entity.isChanged())) {
-                secondaryHardScore -= 1;
-            }
-
-            if (entityDistance > 0.0) {
+            if (entity.isChanged()) {
                 secondarySoftscore -= 1;
+
+                if (entity.isConstrained()) {
+                    secondaryHardScore -= 1;
+                }
             }
         }
 
