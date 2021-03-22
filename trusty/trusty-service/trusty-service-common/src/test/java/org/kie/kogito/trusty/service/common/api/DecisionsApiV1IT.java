@@ -115,7 +115,7 @@ class DecisionsApiV1IT {
         assertBadRequestWithoutDecision("/structuredInputs");
     }
 
-    //    @Test
+    @Test
     void testGetOutcomeById() throws Exception {
         assertGetOutcomeByIdCorrectResponse(ListStatus.FULL);
         assertBadRequestWithDecision("/outcomes/" + TEST_OUTCOME_ID, ListStatus.FULL, ListStatus.EMPTY);
@@ -131,7 +131,6 @@ class DecisionsApiV1IT {
 
     private void assertBadRequestWithDecision(String path, ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
         mockServiceWithDecision(inputsStatus, outcomesStatus);
-        get(path).prettyPrint();
         get(path).then().statusCode(400);
     }
 
