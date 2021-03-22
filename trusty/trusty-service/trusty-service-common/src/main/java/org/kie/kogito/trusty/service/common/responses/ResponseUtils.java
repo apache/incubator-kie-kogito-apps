@@ -24,9 +24,6 @@ import org.kie.kogito.trusty.storage.api.model.Execution;
 
 public class ResponseUtils {
 
-    //    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-    //            .registerModule(JsonFormat.getCloudEventJacksonModule());
-
     private ResponseUtils() {
     }
 
