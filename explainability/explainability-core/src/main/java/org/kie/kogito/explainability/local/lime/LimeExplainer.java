@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -211,7 +211,18 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             // create the output saliency
             int i = 0;
             for (Feature linearizedFeature : linearizedTargetInputFeatures) {
-                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, linearModel.getWeights()[i]
+                double[] weights = linearModel.getWeights();
+                if (limeConfig.isNormalizeWeights() && weights.length > 0) {
+                    double max = Arrays.stream(weights).max().orElse(1);
+                    double min = Arrays.stream(weights).min().orElse(0);
+                    if (max != min) {
+                        for (int k = 0; k < weights.length; k++) {
+                            weights[k] = weights[k] / (max - min);
+                        }
+                    }
+                }
+
+                FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, weights[i]
                         * featureWeights[i]);
                 featureImportanceList.add(featureImportance);
                 i++;
