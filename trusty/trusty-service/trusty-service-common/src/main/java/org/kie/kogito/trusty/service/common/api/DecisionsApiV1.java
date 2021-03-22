@@ -17,7 +17,7 @@
 package org.kie.kogito.trusty.service.common.api;
 
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -35,12 +35,13 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.responses.DecisionOutcomeResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionOutcomesResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionHeaderResponse;
 import org.kie.kogito.trusty.service.common.responses.ResponseUtils;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionInput;
+import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 
 @Path("executions/decisions")
 public class DecisionsApiV1 {
@@ -69,7 +70,9 @@ public class DecisionsApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        return handleDecisionRequest(executionId, ResponseUtils::executionHeaderResponseFrom);
+        return retrieveDecision(executionId)
+                .map(obj -> Response.ok(ResponseUtils.executionHeaderResponseFrom(obj)).build())
+                .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
     }
 
     @GET
@@ -87,7 +90,11 @@ public class DecisionsApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        return handleDecisionRequest(executionId, ResponseUtils::decisionStructuredInputsResponseFrom);
+        Optional<Decision> decision = retrieveDecision(executionId);
+        if (decision.isPresent() && decision.get().getInputs() != null) {
+            return Response.ok(new DecisionStructuredInputsResponse(decision.get().getInputs().stream().map(DecisionInput::getValue).collect(Collectors.toList()))).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 
     @GET
@@ -105,14 +112,19 @@ public class DecisionsApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        return handleDecisionRequest(executionId, ResponseUtils::decisionOutcomesResponseFrom);
+        Optional<Decision> decision = retrieveDecision(executionId);
+        if (decision.isPresent()) {
+            DecisionOutcomesResponse response = new DecisionOutcomesResponse(ResponseUtils.executionHeaderResponseFrom(decision.get()), decision.get().getOutcomes());
+            return Response.ok(response).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 
     @GET
     @Path("/{executionId}/outcomes/{outcomeId}")
     @APIResponses(value = {
             @APIResponse(description = "Gets a specific outcome of a decision.", responseCode = "200",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionOutcomeResponse.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = DecisionOutcome.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(summary = "Gets a specific outcome of a decision.")
@@ -128,19 +140,17 @@ public class DecisionsApiV1 {
                     description = "The outcome ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("outcomeId") String outcomeId) {
-        return handleDecisionRequest(executionId, decision -> decision.getOutcomes() == null ? null
-                : decision.getOutcomes().stream()
-                        .filter(outcome -> outcomeId != null && outcomeId.equals(outcome.getOutcomeId()))
-                        .findFirst()
-                        .map(ResponseUtils::decisionOutcomeResponseFrom)
-                        .orElse(null));
-    }
-
-    private Response handleDecisionRequest(String executionId, Function<Decision, Object> transformer) {
-        return retrieveDecision(executionId)
-                .map(transformer)
-                .map(obj -> Response.ok(obj).build())
-                .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
+        Optional<Decision> decision = retrieveDecision(executionId);
+        if (decision.isPresent()) {
+            DecisionOutcome decisionOutcome = decision.get()
+                    .getOutcomes()
+                    .stream()
+                    .filter(outcome -> outcomeId != null && outcomeId.equals(outcome.getOutcomeId()))
+                    .findFirst()
+                    .orElse(null);
+            return Response.ok(decisionOutcome).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 
     private Optional<Decision> retrieveDecision(String executionId) {
