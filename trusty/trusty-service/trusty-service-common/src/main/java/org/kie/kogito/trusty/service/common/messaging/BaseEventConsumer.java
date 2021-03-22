@@ -53,7 +53,6 @@ public abstract class BaseEventConsumer<E> {
         try {
             CloudEventUtils.decode(message.getPayload()).ifPresent(this::handleCloudEvent);
         } catch (Exception e) {
-            System.out.println("SUCAAAA");
             if (recoverableExceptionsProvider.isRecoverable(e)) {
                 LOG.error("A recoverable exception occurred. A nack is sent and the application is put into an unhealthy state", e);
                 return message.nack(e);

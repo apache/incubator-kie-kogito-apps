@@ -82,7 +82,6 @@ class TraceEventConsumerTest {
         Message<String> message = Message.of(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
         CountDownLatch countDownLatch = new CountDownLatch(1);
         message.withNack(x -> {
-            System.out.println("SUCA");
             countDownLatch.countDown();
             return CompletableFuture.completedFuture(null);
         });
