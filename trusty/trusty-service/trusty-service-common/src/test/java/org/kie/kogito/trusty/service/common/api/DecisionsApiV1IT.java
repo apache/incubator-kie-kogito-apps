@@ -95,7 +95,7 @@ class DecisionsApiV1IT {
         assertGetStructuredInputsCorrectEmptyResponse(ListStatus.FULL);
         assertGetStructuredInputsCorrectEmptyResponse(ListStatus.EMPTY);
         assertGetStructuredInputsCorrectEmptyResponse(ListStatus.NULL);
-        //        assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.FULL);
+        assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.FULL);
         assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.EMPTY);
         assertBadRequestWithDecision("/structuredInputs", ListStatus.NULL, ListStatus.NULL);
         assertBadRequestWithoutDecision("/structuredInputs");
