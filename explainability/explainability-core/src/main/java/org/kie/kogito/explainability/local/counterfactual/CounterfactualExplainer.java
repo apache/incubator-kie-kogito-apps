@@ -71,17 +71,17 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      * A customizable OptaPlanner solver configuration can be passed using a {@link SolverConfig}.
      *
      * @param dataDistribution Characteristics of the data distribution as {@link DataDistribution}, if available
-     * @param dataDomain A {@link DataDomain} which specifies the search space domain
-     * @param contraints A list specifying by index which features are constrained
-     * @param goal A collection of {@link Output} representing the desired outcome
-     * @param solverConfig An OptaPlanner {@link SolverConfig} configuration
+     * @param dataDomain       A {@link DataDomain} which specifies the search space domain
+     * @param contraints       A list specifying by index which features are constrained
+     * @param goal             A collection of {@link Output} representing the desired outcome
+     * @param solverConfig     An OptaPlanner {@link SolverConfig} configuration
      */
     protected CounterfactualExplainer(DataDistribution dataDistribution,
-            DataDomain dataDomain,
-            List<Boolean> contraints,
-            List<Output> goal,
-            SolverConfig solverConfig,
-            Executor executor) {
+                                      DataDomain dataDomain,
+                                      List<Boolean> contraints,
+                                      List<Output> goal,
+                                      SolverConfig solverConfig,
+                                      Executor executor) {
         this.dataDistribution = dataDistribution;
         this.dataDomain = dataDomain;
         this.constraints = contraints;
@@ -118,7 +118,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
-                    SolverManager.create(solverConfig, new SolverManagerConfig())) {
+                         SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
                 CounterfactualSolution problem =
                         new CounterfactualSolution(entities, model, goal);
@@ -183,11 +183,11 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
             }
             return new CounterfactualExplainer(dataDistribution,
-                    dataDomain,
-                    constraints,
-                    goal,
-                    solverConfig,
-                    executor);
+                                               dataDomain,
+                                               constraints,
+                                               goal,
+                                               solverConfig,
+                                               executor);
         }
     }
 }
