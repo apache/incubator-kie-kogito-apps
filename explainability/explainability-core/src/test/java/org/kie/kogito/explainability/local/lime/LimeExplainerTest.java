@@ -141,8 +141,12 @@ class LimeExplainerTest {
 
     @Test
     void testNormalizedWeights() throws InterruptedException, ExecutionException, TimeoutException {
+        Random random = new Random();
+        random.setSeed(4);
         LimeConfig limeConfig = new LimeConfig()
-                .withNormalizeWeights(true);
+                .withNormalizeWeights(true)
+                .withPerturbationContext(new PerturbationContext(random, 2))
+                .withSamples(10);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         int nf = 4;
         List<Feature> features = new ArrayList<>();
@@ -164,6 +168,7 @@ class LimeExplainerTest {
         Saliency saliency = saliencyMap.get(decisionName);
         List<FeatureImportance> perFeatureImportance = saliency.getPerFeatureImportance();
         for (FeatureImportance featureImportance : perFeatureImportance) {
+            System.err.println(featureImportance);
             assertThat(featureImportance.getScore()).isBetween(-1d, 1d);
         }
 
