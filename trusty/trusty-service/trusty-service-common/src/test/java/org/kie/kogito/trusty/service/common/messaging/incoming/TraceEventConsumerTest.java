@@ -16,12 +16,7 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,18 +72,13 @@ class TraceEventConsumerTest {
     }
 
     @Test
-    void testMessageIsNacked() throws InterruptedException {
+    void testMessageIsNacked() {
         when(recoverableExceptionsProvider.isRecoverable(any())).thenReturn(true);
-        Message<String> message = Message.of(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        message.withNack(x -> {
-            countDownLatch.countDown();
-            return CompletableFuture.completedFuture(null);
-        });
+        Message<String> message = mockMessage(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeDecision(any(String.class), any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(String.class), any(Decision.class));
         consumer.handleMessage(message);
-        Assert.assertTrue(countDownLatch.await(10, TimeUnit.SECONDS));
+        verify(message, times(1)).nack(any());
     }
 
     @Test
