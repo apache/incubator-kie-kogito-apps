@@ -140,7 +140,7 @@ message SaliencyModel {
     optional string outcomeName = 2;
 
     /* @Field(store = Store.YES) */
-    repeated FeatureImportanceModel featureImportanceModel = 3;
+    repeated FeatureImportanceModel featureImportance = 3;
 }
 
 /* @Indexed */

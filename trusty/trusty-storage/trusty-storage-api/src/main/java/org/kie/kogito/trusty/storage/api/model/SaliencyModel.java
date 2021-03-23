@@ -34,15 +34,15 @@ public class SaliencyModel {
     private String outcomeName;
 
     @JsonProperty(FEATURE_IMPORTANCE_FIELD)
-    private List<FeatureImportanceModel> featureImportanceModel;
+    private List<FeatureImportanceModel> featureImportance;
 
     public SaliencyModel() {
     }
 
-    public SaliencyModel(String outcomeId, String outcomeName, List<FeatureImportanceModel> featureImportanceModel) {
+    public SaliencyModel(String outcomeId, String outcomeName, List<FeatureImportanceModel> featureImportance) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
-        this.featureImportanceModel = featureImportanceModel;
+        this.featureImportance = featureImportance;
     }
 
     public String getOutcomeId() {
@@ -62,10 +62,10 @@ public class SaliencyModel {
     }
 
     public List<FeatureImportanceModel> getFeatureImportance() {
-        return featureImportanceModel;
+        return featureImportance;
     }
 
-    public void setFeatureImportance(List<FeatureImportanceModel> featureImportanceModel) {
-        this.featureImportanceModel = featureImportanceModel;
+    public void setFeatureImportance(List<FeatureImportanceModel> featureImportance) {
+        this.featureImportance = featureImportance;
     }
 }
