@@ -86,7 +86,7 @@ describe('Explanation', () => {
     let sortedFeatures;
     if (saliencies.status === 'SUCCESS') {
       sortedFeatures = orderBy(
-        saliencies.data.saliencies[0].featureImportanceModel,
+        saliencies.data.saliencies[0].featureImportance,
         item => Math.abs(item.featureScore),
         'asc'
       );
@@ -193,7 +193,7 @@ const saliencies = {
     saliencies: [
       {
         outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
-        featureImportanceModel: [
+        featureImportance: [
           {
             featureName: 'Liabilities',
             featureScore: 0.6780527129423648
@@ -206,7 +206,7 @@ const saliencies = {
       },
       {
         outcomeId: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
-        featureImportanceModel: [
+        featureImportance: [
           {
             featureName: 'Liabilities',
             featureScore: 0.6780527129423648
@@ -227,11 +227,11 @@ const noSaliencies = {
     saliencies: [
       {
         outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
-        featureImportanceModel: []
+        featureImportance: []
       },
       {
         outcomeId: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
-        featureImportanceModel: []
+        featureImportance: []
       }
     ]
   } as Saliencies
