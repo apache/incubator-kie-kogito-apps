@@ -39,7 +39,7 @@ public abstract class BaseEventConsumer<E> {
     private final ObjectMapper mapper;
     private final RecoverableExceptionsProvider recoverableExceptionsProvider;
 
-    public BaseEventConsumer() {
+    protected BaseEventConsumer() {
         this(null, null, null);
     }
 
