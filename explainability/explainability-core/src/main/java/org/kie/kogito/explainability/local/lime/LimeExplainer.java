@@ -213,13 +213,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             for (Feature linearizedFeature : linearizedTargetInputFeatures) {
                 double[] weights = linearModel.getWeights();
                 if (limeConfig.isNormalizeWeights() && weights.length > 0) {
-                    double max = Arrays.stream(weights).max().orElse(1);
-                    double min = Arrays.stream(weights).min().orElse(0);
-                    if (max != min) {
-                        for (int k = 0; k < weights.length; k++) {
-                            weights[k] = weights[k] / (max - min);
-                        }
-                    }
+                    normalizeWeights(weights);
                 }
 
                 FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, weights[i]
@@ -230,6 +224,16 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         }
         Saliency saliency = new Saliency(originalOutput, featureImportanceList);
         result.put(originalOutput.getName(), saliency);
+    }
+
+    private void normalizeWeights(double[] weights) {
+        double max = Arrays.stream(weights).max().orElse(1);
+        double min = Arrays.stream(weights).min().orElse(0);
+        if (max != min) {
+            for (int k = 0; k < weights.length; k++) {
+                weights[k] = weights[k] / (max - min);
+            }
+        }
     }
 
     /**
