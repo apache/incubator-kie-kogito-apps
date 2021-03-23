@@ -40,9 +40,7 @@ import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
-import org.kie.kogito.trusty.service.common.responses.FeatureImportanceResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
-import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,18 +102,18 @@ public class JITDMNServiceImpl implements JITDMNService {
                     new SalienciesResponse(EXPLAINABILITY_FAILED, EXPLAINABILITY_FAILED_MESSAGE, null));
         }
 
-        List<SaliencyResponse> saliencyResponses = buildSalienciesResponse(dmnEvaluator.getDmnModel(), saliencyMap);
+        List<org.kie.kogito.trusty.storage.api.model.Saliency> saliencyResponses = buildSalienciesResponse(dmnEvaluator.getDmnModel(), saliencyMap);
 
         return new DMNResultWithExplanation(
                 new KogitoDMNResult(dmnEvaluator.getNamespace(), dmnEvaluator.getName(), dmnResult),
                 new SalienciesResponse(EXPLAINABILITY_SUCCEEDED, null, saliencyResponses));
     }
 
-    private List<SaliencyResponse> buildSalienciesResponse(DMNModel dmnModel, Map<String, Saliency> saliencyMap) {
-        List<SaliencyResponse> saliencyResponses = new ArrayList<>();
+    private List<org.kie.kogito.trusty.storage.api.model.Saliency> buildSalienciesResponse(DMNModel dmnModel, Map<String, Saliency> saliencyMap) {
+        List<org.kie.kogito.trusty.storage.api.model.Saliency> saliencyResponses = new ArrayList<>();
         for (Map.Entry<String, Saliency> entry : saliencyMap.entrySet()) {
             DecisionNode decisionByName = dmnModel.getDecisionByName(entry.getKey());
-            saliencyResponses.add(new SaliencyResponse(
+            saliencyResponses.add(new org.kie.kogito.trusty.storage.api.model.Saliency(
                     decisionByName.getId(),
                     decisionByName.getName(),
                     entry.getValue().getPerFeatureImportance().stream()
@@ -126,10 +124,10 @@ public class JITDMNServiceImpl implements JITDMNService {
         return saliencyResponses;
     }
 
-    private static FeatureImportanceResponse featureImportanceModelToResponse(FeatureImportance model) {
+    private static org.kie.kogito.trusty.storage.api.model.FeatureImportance featureImportanceModelToResponse(FeatureImportance model) {
         if (model == null) {
             return null;
         }
-        return new FeatureImportanceResponse(model.getFeature().getName(), model.getScore());
+        return new org.kie.kogito.trusty.storage.api.model.FeatureImportance(model.getFeature().getName(), model.getScore());
     }
 }
