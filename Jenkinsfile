@@ -104,7 +104,7 @@ pipeline {
     post {
         always {
             script {
-                archiveArtifacts artifacts: 'kogito-apps/management-console/target/*-runner.jar, kogito-apps/data-index/data-index-service/target/*-runner.jar, kogito-apps/jobs-service/target/*-runner.jar', fingerprint: true
+                archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
                 junit '**/**/junit.xml'
                 junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
             }
