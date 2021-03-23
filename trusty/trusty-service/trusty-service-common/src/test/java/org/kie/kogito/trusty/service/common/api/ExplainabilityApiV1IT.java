@@ -24,8 +24,8 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
-import org.kie.kogito.trusty.storage.api.model.FeatureImportance;
-import org.kie.kogito.trusty.storage.api.model.Saliency;
+import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
+import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -54,12 +54,12 @@ class ExplainabilityApiV1IT {
                 ExplainabilityStatus.SUCCEEDED,
                 null,
                 List.of(
-                        new Saliency("O1", "Output1", List.of(
-                                new FeatureImportance("Feature1", 0.49384),
-                                new FeatureImportance("Feature2", -0.1084))),
-                        new Saliency("O2", "Output2", List.of(
-                                new FeatureImportance("Feature1", 0.0),
-                                new FeatureImportance("Feature2", 0.70293)))));
+                        new SaliencyModel("O1", "Output1", List.of(
+                                new FeatureImportanceModel("Feature1", 0.49384),
+                                new FeatureImportanceModel("Feature2", -0.1084))),
+                        new SaliencyModel("O2", "Output2", List.of(
+                                new FeatureImportanceModel("Feature1", 0.0),
+                                new FeatureImportanceModel("Feature2", 0.70293)))));
     }
 
     @Test
@@ -74,7 +74,7 @@ class ExplainabilityApiV1IT {
         assertNotNull(response.getSaliencies());
         assertSame(2, response.getSaliencies().size());
 
-        List<Saliency> sortedSaliencies = response.getSaliencies().stream()
+        List<SaliencyModel> sortedSaliencies = response.getSaliencies().stream()
                 .sorted((s1, s2) -> new CompareToBuilder().append(s1.getOutcomeName(), s2.getOutcomeName()).toComparison())
                 .collect(Collectors.toList());
 

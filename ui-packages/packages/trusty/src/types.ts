@@ -76,7 +76,7 @@ export interface FeatureScores {
 
 export interface Saliency {
   outcomeId: string;
-  featureImportance: FeatureScores[];
+  featureImportanceModel: FeatureScores[];
 }
 export interface Saliencies {
   status: 'SUCCEEDED' | 'FAILED';

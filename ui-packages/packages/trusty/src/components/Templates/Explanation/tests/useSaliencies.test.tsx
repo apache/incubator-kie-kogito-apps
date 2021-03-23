@@ -19,7 +19,7 @@ describe('useSaliencies', () => {
         saliencies: [
           {
             outcomeId: '12345',
-            featureImportance: [
+            featureImportanceModel: [
               {
                 featureName: 'Liabilities',
                 featureScore: 0.6780527129423648

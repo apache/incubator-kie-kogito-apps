@@ -91,7 +91,7 @@ It is possible to _execute and explain_ a DMN model given a particular context. 
       {
         "outcomeId": "_1D69C44E-D782-492A-A50D-740B444F1993",
         "outcomeName": "sum",
-        "featureImportance": [
+        "featureImportanceModel": [
           {
             "featureName": "n",
             "featureScore": 0

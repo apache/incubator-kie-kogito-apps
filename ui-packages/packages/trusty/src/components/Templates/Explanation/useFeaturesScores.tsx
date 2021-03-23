@@ -16,14 +16,14 @@ const useFeaturesScores = (
       if (saliencies.data.status === 'SUCCEEDED') {
         const selectedExplanation = find(
           saliencies.data.saliencies,
-          saliency => {
-            return saliency.outcomeId === outcomeId;
+          saliencyModel => {
+            return saliencyModel.outcomeId === outcomeId;
           }
         );
 
         if (selectedExplanation) {
           const sortedFeatures = orderBy(
-            selectedExplanation.featureImportance,
+            selectedExplanation.featureImportanceModel,
             item => Math.abs(item.featureScore),
             'asc'
           );

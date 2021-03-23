@@ -15,7 +15,7 @@ describe('useFeaturesScores', () => {
     let sortedFeatures;
     if (saliencies.status === 'SUCCESS') {
       sortedFeatures = orderBy(
-        saliencies.data.saliencies[0].featureImportance,
+        saliencies.data.saliencies[0].featureImportanceModel,
         item => Math.abs(item.featureScore),
         'asc'
       );
@@ -32,7 +32,7 @@ const saliencies = {
     saliencies: [
       {
         outcomeId: 'b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000',
-        featureImportance: [
+        featureImportanceModel: [
           {
             featureName: 'Liabilities',
             featureScore: 0.6780527129423648
