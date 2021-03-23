@@ -117,7 +117,7 @@ const ProcessListPage: React.FC<OUIAProps &
       getProcessInstances({
         variables: {
           where: queryVariableGenerator(
-            formatSearchWords(props.location.state.filters.businessKey),
+            props.location.state.filters.businessKey,
             props.location.state.filters.status
           ),
           orderBy,
@@ -151,7 +151,7 @@ const ProcessListPage: React.FC<OUIAProps &
       return {
         parentProcessInstanceId: { isNull: true },
         state: { in: _statusArray },
-        or: _searchWordsArray
+        or: formatSearchWords(_searchWordsArray)
       };
     }
   };
@@ -166,7 +166,6 @@ const ProcessListPage: React.FC<OUIAProps &
 
   const onFilterClick = (arr = filters.status): void => {
     resetPagination();
-    let searchWordsArray = [];
     const copyOfBusinessKeysArray = [...filters.businessKey];
     /* istanbul ignore if */
     if (searchWord.length !== 0) {
@@ -174,16 +173,15 @@ const ProcessListPage: React.FC<OUIAProps &
         copyOfBusinessKeysArray.push(searchWord);
       }
     }
-    searchWordsArray = formatSearchWords(copyOfBusinessKeysArray);
     setIsLoadingMore(false);
     setIsError(false);
     setSelectedInstances([]);
     setIsAllChecked(false);
     setInitData({});
-    setBusinessKeysArray(searchWordsArray);
+    setBusinessKeysArray(copyOfBusinessKeysArray);
     getProcessInstances({
       variables: {
-        where: queryVariableGenerator(searchWordsArray, arr),
+        where: queryVariableGenerator(copyOfBusinessKeysArray, arr),
         orderBy,
         offset: 0,
         limit: defaultPageSize
