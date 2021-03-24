@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.taskassigning.user.service.api;
+package org.kie.kogito.taskassigning.data.processing;
 
-public interface Group {
-
-    String getId();
+public interface TaskProcessor {
 
 }

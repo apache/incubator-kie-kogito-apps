@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.taskassigning.user.service.api;
+package org.kie.kogito.taskassigning.service.event;
 
-import java.util.Map;
-import java.util.Set;
+import org.kie.kogito.taskassigning.service.TaskData;
 
-public interface User {
+public class TaskDataEvent extends DataEvent<TaskData> {
 
-    String getId();
+    public TaskDataEvent(TaskData data) {
+        super(DataEventType.TASK_DATA_EVENT, data, data.getLastUpdate());
+    }
 
-    Set<Group> getGroups();
-
-    Map<String, Object> getAttributes();
-
+    public String getTaskId() {
+        return data.getId();
+    }
 }

@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.taskassigning.user.service.api;
+package org.kie.kogito.taskassigning.service.event;
 
 import java.util.List;
 
-public interface UserServiceConnector {
+public interface TaskAssigningServiceEventConsumer {
 
-    List<User> findAllUsers();
+    void pause();
 
-    User findUser(String id);
+    void resume();
+
+    List<DataEvent<?>> pollEvents();
+
+    int queuedEvents();
+
+    void accept(DataEvent<?> dataEvent);
+
 }
