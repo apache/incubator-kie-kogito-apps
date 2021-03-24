@@ -28,7 +28,16 @@ import java.util.stream.IntStream;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.DataDomain;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.config.solver.SolverConfig;
@@ -107,7 +116,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
         final UUID problemId = UUID.randomUUID();
 
-        final CompletableFuture<List<CounterfactualEntity>> cfEntities = CompletableFuture.supplyAsync(() -> {
+        final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
                     SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
@@ -118,24 +127,24 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 CounterfactualSolution solution;
                 try {
                     // Wait until the solving ends
-                    solution = solverJob.getFinalBestSolution();
-                    return solution.getEntities();
+                    return solverJob.getFinalBestSolution();
                 } catch (ExecutionException e) {
                     logger.error("Solving failed: {}", e.getMessage());
-                    throw new IllegalStateException("Prediction returned an error {}", e);
+                    throw new IllegalStateException("Prediction returned an error", e);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    throw new IllegalStateException("Solving failed (Thread interrupted): {}", e);
+                    throw new IllegalStateException("Solving failed (Thread interrupted)", e);
                 }
             }
         }, this.executor);
 
         final CompletableFuture<List<PredictionOutput>> cfOutputs =
-                cfEntities.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
-                        s.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
-
-        return CompletableFuture.allOf(cfOutputs, cfEntities)
-                .thenApply(v -> new CounterfactualResult(cfEntities.join(), cfOutputs.join()));
+                cfSolution.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
+                        s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
+        return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
+            CounterfactualSolution solution = cfSolution.join();
+            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible());
+        });
     }
 
     public static class Builder {

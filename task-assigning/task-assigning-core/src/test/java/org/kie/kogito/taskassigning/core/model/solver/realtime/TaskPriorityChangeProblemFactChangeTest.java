@@ -40,5 +40,6 @@ class TaskPriorityChangeProblemFactChangeTest extends AbstractTaskPropertyChange
     @Override
     protected void verifyValuesWhereApplied() {
         assertThat(workingTaskAssignment.getTask().getPriority()).isEqualTo(NEW_PRIORITY);
+        assertThat(task.getPriority()).isEqualTo(CURRENT_PRIORITY);
     }
 }

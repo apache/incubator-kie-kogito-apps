@@ -18,6 +18,8 @@ package org.kie.kogito.explainability.model;
 import java.util.Collections;
 import java.util.List;
 
+import org.kie.kogito.explainability.model.domain.FeatureDomain;
+
 /**
  * Information about feature domains of data used for training a model.
  */
