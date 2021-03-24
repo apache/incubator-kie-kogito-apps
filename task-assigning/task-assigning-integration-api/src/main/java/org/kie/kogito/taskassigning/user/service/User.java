@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.taskassigning.service.messaging;
+package org.kie.kogito.taskassigning.user.service;
 
-import java.util.List;
-import java.util.function.Consumer;
+import java.util.Map;
+import java.util.Set;
 
-public interface UserTaskEventConsumer extends Consumer<UserTaskEvent> {
+public interface User {
 
-    void pause();
+    String getId();
 
-    void resume();
+    Set<Group> getGroups();
 
-    List<UserTaskEvent> pollEvents();
-
-    int queuedEvents();
+    Map<String, Object> getAttributes();
 
 }
