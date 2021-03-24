@@ -13,7 +13,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
         "outcomeId": "_12268B68-94A1-4960-B4C8-0B6071AFDE58",
         "outcomeName": "Mortgage Approval",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Mortgage Approval",
           "typeRef": "boolean",
           "value": true,
@@ -26,7 +26,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
         "outcomeId": "_9CFF8C35-4EB3-451E-874C-DB27A5A424C0",
         "outcomeName": "Risk Score",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Risk Score",
           "typeRef": "number",
           "value": 21.7031851958099,
@@ -59,7 +59,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                   "outcomeId": "_12268B68-94A1-4960-B4C8-0B6071AFDE58",
                   "outcomeName": "Mortgage Approval",
                   "outcomeResult": Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Mortgage Approval",
                     "typeRef": "boolean",
                     "value": true,
@@ -104,7 +104,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         key="Mortgage Approval"
                         property={
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Mortgage Approval",
                             "typeRef": "boolean",
                             "value": true,
@@ -197,7 +197,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                   "outcomeId": "_9CFF8C35-4EB3-451E-874C-DB27A5A424C0",
                   "outcomeName": "Risk Score",
                   "outcomeResult": Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Risk Score",
                     "typeRef": "number",
                     "value": 21.7031851958099,
@@ -242,7 +242,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         key="Risk Score"
                         property={
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Risk Score",
                             "typeRef": "number",
                             "value": 21.7031851958099,
@@ -343,43 +343,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
           "components": Array [
             Array [
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Product",
                 "typeRef": "string",
                 "value": "Lender B - ARM5/1-Standard",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Recommendation",
                 "typeRef": "string",
                 "value": "Good",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Note Amount",
                 "typeRef": "string",
                 "value": "$273,775.90",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Interest Rate",
                 "typeRef": "string",
                 "value": "3.8",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Monthly Payment",
                 "typeRef": "string",
                 "value": "$1,267.90",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Cash to Close",
                 "typeRef": "string",
                 "value": "$1,267.90",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Required Credit Score",
                 "typeRef": "number",
                 "value": 720,
@@ -387,43 +387,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
             ],
             Array [
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Product",
                 "typeRef": "string",
                 "value": "Lender C - Fixed30-Standard",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Recommendation",
                 "typeRef": "string",
                 "value": "Best",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Note Amount",
                 "typeRef": "string",
                 "value": "$274,599.40",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Interest Rate",
                 "typeRef": "string",
                 "value": "3.88",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Monthly Payment",
                 "typeRef": "string",
                 "value": "$1,291.27",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Cash to Close",
                 "typeRef": "string",
                 "value": "$75,491.99",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Required Credit Score",
                 "typeRef": "number",
                 "value": 680,
@@ -465,43 +465,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                     "components": Array [
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender B - ARM5/1-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Good",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$273,775.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.8",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 720,
@@ -509,43 +509,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       ],
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender C - Fixed30-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Best",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$274,599.40",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.88",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,291.27",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$75,491.99",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 680,
@@ -599,43 +599,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         subListItem={
                           Array [
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Product",
                               "typeRef": "string",
                               "value": "Lender B - ARM5/1-Standard",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Recommendation",
                               "typeRef": "string",
                               "value": "Good",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Note Amount",
                               "typeRef": "string",
                               "value": "$273,775.90",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Interest Rate",
                               "typeRef": "string",
                               "value": "3.8",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Monthly Payment",
                               "typeRef": "string",
                               "value": "$1,267.90",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Cash to Close",
                               "typeRef": "string",
                               "value": "$1,267.90",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Required Credit Score",
                               "typeRef": "number",
                               "value": 720,
@@ -985,43 +985,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                     "components": Array [
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender B - ARM5/1-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Good",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$273,775.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.8",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 720,
@@ -1029,43 +1029,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       ],
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender C - Fixed30-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Best",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$274,599.40",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.88",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,291.27",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$75,491.99",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 680,
@@ -1119,43 +1119,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         subListItem={
                           Array [
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Product",
                               "typeRef": "string",
                               "value": "Lender C - Fixed30-Standard",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Recommendation",
                               "typeRef": "string",
                               "value": "Best",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Note Amount",
                               "typeRef": "string",
                               "value": "$274,599.40",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Interest Rate",
                               "typeRef": "string",
                               "value": "3.88",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Monthly Payment",
                               "typeRef": "string",
                               "value": "$1,291.27",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Cash to Close",
                               "typeRef": "string",
                               "value": "$75,491.99",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Required Credit Score",
                               "typeRef": "number",
                               "value": 680,
@@ -1505,7 +1505,7 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
         "outcomeId": "_12268B68-94A1-4960-B4C8-0B6071AFDE58",
         "outcomeName": "Mortgage Approval",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Mortgage Approval",
           "typeRef": "boolean",
           "value": true,
@@ -1540,7 +1540,7 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
                 key="Mortgage Approval"
                 property={
                   Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Mortgage Approval",
                     "typeRef": "boolean",
                     "value": true,
@@ -1807,19 +1807,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
             Object {
               "components": Array [
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Loan Amount",
                   "typeRef": "number",
                   "value": 540000,
                 },
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Repayment Rate",
                   "typeRef": "number",
                   "value": 900,
                 },
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Loan Eligibility",
                   "typeRef": "boolean",
                   "value": true,
@@ -1832,13 +1832,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
             Object {
               "components": Array [
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Loan amount",
                   "typeRef": "number",
                   "value": 340000,
                 },
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Repayment rate",
                   "typeRef": "number",
                   "value": 2000,
@@ -1846,13 +1846,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                 Object {
                   "components": Array [
                     Object {
-                      "components": Array [],
+                      "components": null,
                       "name": "Loan amount",
                       "typeRef": "number",
                       "value": 390000,
                     },
                     Object {
-                      "components": Array [],
+                      "components": null,
                       "name": "Repayment rate",
                       "typeRef": "number",
                       "value": 5000,
@@ -1904,19 +1904,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                       Object {
                         "components": Array [
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Loan Amount",
                             "typeRef": "number",
                             "value": 540000,
                           },
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Repayment Rate",
                             "typeRef": "number",
                             "value": 900,
                           },
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Loan Eligibility",
                             "typeRef": "boolean",
                             "value": true,
@@ -1929,13 +1929,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                       Object {
                         "components": Array [
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Loan amount",
                             "typeRef": "number",
                             "value": 340000,
                           },
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Repayment rate",
                             "typeRef": "number",
                             "value": 2000,
@@ -1943,13 +1943,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                           Object {
                             "components": Array [
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Loan amount",
                                 "typeRef": "number",
                                 "value": 390000,
                               },
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Repayment rate",
                                 "typeRef": "number",
                                 "value": 5000,
@@ -2014,19 +2014,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               Object {
                                 "components": Array [
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Loan Amount",
                                     "typeRef": "number",
                                     "value": 540000,
                                   },
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Repayment Rate",
                                     "typeRef": "number",
                                     "value": 900,
                                   },
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Loan Eligibility",
                                     "typeRef": "boolean",
                                     "value": true,
@@ -2039,13 +2039,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               Object {
                                 "components": Array [
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Loan amount",
                                     "typeRef": "number",
                                     "value": 340000,
                                   },
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Repayment rate",
                                     "typeRef": "number",
                                     "value": 2000,
@@ -2053,13 +2053,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   Object {
                                     "components": Array [
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan amount",
                                         "typeRef": "number",
                                         "value": 390000,
                                       },
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Repayment rate",
                                         "typeRef": "number",
                                         "value": 5000,
@@ -2107,19 +2107,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 Object {
                                   "components": Array [
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Loan Amount",
                                       "typeRef": "number",
                                       "value": 540000,
                                     },
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Repayment Rate",
                                       "typeRef": "number",
                                       "value": 900,
                                     },
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Loan Eligibility",
                                       "typeRef": "boolean",
                                       "value": true,
@@ -2154,7 +2154,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Loan Amount"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan Amount",
                                         "typeRef": "number",
                                         "value": 540000,
@@ -2210,7 +2210,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Repayment Rate"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Repayment Rate",
                                         "typeRef": "number",
                                         "value": 900,
@@ -2266,7 +2266,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Loan Eligibility"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan Eligibility",
                                         "typeRef": "boolean",
                                         "value": true,
@@ -2328,13 +2328,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 Object {
                                   "components": Array [
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Loan amount",
                                       "typeRef": "number",
                                       "value": 340000,
                                     },
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Repayment rate",
                                       "typeRef": "number",
                                       "value": 2000,
@@ -2342,13 +2342,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     Object {
                                       "components": Array [
                                         Object {
-                                          "components": Array [],
+                                          "components": null,
                                           "name": "Loan amount",
                                           "typeRef": "number",
                                           "value": 390000,
                                         },
                                         Object {
-                                          "components": Array [],
+                                          "components": null,
                                           "name": "Repayment rate",
                                           "typeRef": "number",
                                           "value": 5000,
@@ -2388,7 +2388,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Loan amount"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan amount",
                                         "typeRef": "number",
                                         "value": 340000,
@@ -2444,7 +2444,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Repayment rate"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Repayment rate",
                                         "typeRef": "number",
                                         "value": 2000,
@@ -2503,13 +2503,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       Object {
                                         "components": Array [
                                           Object {
-                                            "components": Array [],
+                                            "components": null,
                                             "name": "Loan amount",
                                             "typeRef": "number",
                                             "value": 390000,
                                           },
                                           Object {
-                                            "components": Array [],
+                                            "components": null,
                                             "name": "Repayment rate",
                                             "typeRef": "number",
                                             "value": 5000,
@@ -2544,7 +2544,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                           key="Loan amount"
                                           property={
                                             Object {
-                                              "components": Array [],
+                                              "components": null,
                                               "name": "Loan amount",
                                               "typeRef": "number",
                                               "value": 390000,
@@ -2600,7 +2600,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                           key="Repayment rate"
                                           property={
                                             Object {
-                                              "components": Array [],
+                                              "components": null,
                                               "name": "Repayment rate",
                                               "typeRef": "number",
                                               "value": 5000,
@@ -2734,13 +2734,13 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
         "outcomeResult": Object {
           "components": Array [
             Object {
-              "components": Array [],
+              "components": null,
               "name": "Auth Code",
               "typeRef": "tAuthCode",
               "value": "Authorized",
             },
             Object {
-              "components": Array [],
+              "components": null,
               "name": "Amount",
               "typeRef": "number",
               "value": 10000,
@@ -2780,13 +2780,13 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                   "outcomeResult": Object {
                     "components": Array [
                       Object {
-                        "components": Array [],
+                        "components": null,
                         "name": "Auth Code",
                         "typeRef": "tAuthCode",
                         "value": "Authorized",
                       },
                       Object {
-                        "components": Array [],
+                        "components": null,
                         "name": "Amount",
                         "typeRef": "number",
                         "value": 10000,
@@ -2839,13 +2839,13 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                           Object {
                             "components": Array [
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Auth Code",
                                 "typeRef": "tAuthCode",
                                 "value": "Authorized",
                               },
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Amount",
                                 "typeRef": "number",
                                 "value": 10000,
@@ -2880,7 +2880,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                               key="Auth Code"
                               property={
                                 Object {
-                                  "components": Array [],
+                                  "components": null,
                                   "name": "Auth Code",
                                   "typeRef": "tAuthCode",
                                   "value": "Authorized",
@@ -2936,7 +2936,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                               key="Amount"
                               property={
                                 Object {
-                                  "components": Array [],
+                                  "components": null,
                                   "name": "Amount",
                                   "typeRef": "number",
                                   "value": 10000,
@@ -3062,7 +3062,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
         "outcomeId": "_ff34378e-fe90-4c58-9f7f-b9ce5767a415",
         "outcomeName": "Merchant Blacklist",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Merchant Blacklist",
           "typeRef": "string",
           "value": Array [
@@ -3099,7 +3099,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                   "outcomeId": "_ff34378e-fe90-4c58-9f7f-b9ce5767a415",
                   "outcomeName": "Merchant Blacklist",
                   "outcomeResult": Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Merchant Blacklist",
                     "typeRef": "string",
                     "value": Array [
@@ -3148,7 +3148,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                         key="Merchant Blacklist"
                         property={
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Merchant Blacklist",
                             "typeRef": "string",
                             "value": Array [
