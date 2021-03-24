@@ -17,6 +17,7 @@
 package org.kie.kogito.trusty.service.common;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.tracing.decision.event.model.ModelEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
+import org.kie.kogito.tracing.decision.event.trace.TraceHeader;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
@@ -74,13 +76,13 @@ public class TrustyServiceTestUtils {
 
     public static TraceEvent buildCorrectTraceEvent(String executionId) {
         TraceEvent traceEvent = readResource("/events/correctTraceEvent.json", TraceEvent.class);
-        traceEvent.getHeader().setExecutionId(executionId);
+        setExecutionId(traceEvent, executionId);
         return traceEvent;
     }
 
     public static TraceEvent buildTraceEventWithNullType(String cloudEventId) {
         TraceEvent traceEvent = readResource("/events/traceEventWithNullType.json", TraceEvent.class);
-        traceEvent.getHeader().setExecutionId(cloudEventId);
+        setExecutionId(traceEvent, cloudEventId);
         return traceEvent;
     }
 
@@ -112,6 +114,17 @@ public class TrustyServiceTestUtils {
 
     public static ModelIdentifier getModelIdentifier() {
         return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
+    }
+
+    private static void setExecutionId(TraceEvent traceEvent, String executionId) {
+        try {
+            TraceHeader traceHeader = traceEvent.getHeader();
+            Field member_name = traceHeader.getClass().getDeclaredField("executionId");
+            member_name.setAccessible(true);
+            member_name.set(traceHeader, executionId);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            throw new RuntimeException("can't inject execution id in trace header");
+        }
     }
 
     private static <T> T readResource(String name, Class<T> clazz) {
