@@ -32,7 +32,7 @@ import org.kie.kogito.explainability.api.FeatureImportanceDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
@@ -59,8 +59,8 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
     }
 
     @Inject
-    public ExplainabilityResultConsumer(TrustyService service, ObjectMapper mapper, RecoverableExceptionsProvider recoverableExceptionsProvider) {
-        super(service, mapper, recoverableExceptionsProvider);
+    public ExplainabilityResultConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
+        super(service, mapper, storageExceptionsProvider);
     }
 
     protected static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto, Decision decision) {

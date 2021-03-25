@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.trusty.service.common;
+
+package org.kie.kogito.trusty.storage.infinispan;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.infinispan.client.hotrod.exceptions.HotRodClientException;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 
-import io.quarkus.test.Mock;
-
-@Mock
 @ApplicationScoped
-public class RecoverableExceptionsProviderMock implements RecoverableExceptionsProvider {
-    @Override
-    public boolean isRecoverable(Throwable e) {
-        return false;
+public class InfinispanStorageExceptionsProviderImpl implements StorageExceptionsProvider {
+    public boolean isConnectionException(Throwable e) {
+        return e instanceof HotRodClientException;
     }
 }

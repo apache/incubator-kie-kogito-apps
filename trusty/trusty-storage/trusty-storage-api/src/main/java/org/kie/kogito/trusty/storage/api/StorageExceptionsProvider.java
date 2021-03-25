@@ -15,6 +15,6 @@
  */
 package org.kie.kogito.trusty.storage.api;
 
-public interface RecoverableExceptionsProvider {
-    boolean isRecoverable(Throwable e);
+public interface StorageExceptionsProvider {
+    boolean isConnectionException(Throwable e);
 }

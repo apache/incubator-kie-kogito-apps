@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.kie.kogito.trusty.storage.redis;
+package org.kie.kogito.trusty.service.common;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 
-import redis.clients.jedis.exceptions.JedisConnectionException;
-import redis.clients.jedis.exceptions.JedisExhaustedPoolException;
+import io.quarkus.test.Mock;
 
+@Mock
 @ApplicationScoped
-public class RedisRecoverableExceptionsProviderImpl implements RecoverableExceptionsProvider {
-    public boolean isRecoverable(Throwable e) {
-        return e instanceof JedisConnectionException || e instanceof JedisExhaustedPoolException;
+public class StorageExceptionsProviderMock implements StorageExceptionsProvider {
+    @Override
+    public boolean isConnectionException(Throwable e) {
+        return false;
     }
 }

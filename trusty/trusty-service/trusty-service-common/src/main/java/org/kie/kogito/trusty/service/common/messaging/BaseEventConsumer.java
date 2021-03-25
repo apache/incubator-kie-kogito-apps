@@ -22,7 +22,7 @@ import java.util.concurrent.CompletionStage;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,23 +37,23 @@ public abstract class BaseEventConsumer<E> {
 
     protected final TrustyService service;
     private final ObjectMapper mapper;
-    private final RecoverableExceptionsProvider recoverableExceptionsProvider;
+    private final StorageExceptionsProvider storageExceptionsProvider;
 
     protected BaseEventConsumer() {
         this(null, null, null);
     }
 
-    public BaseEventConsumer(final TrustyService service, ObjectMapper mapper, RecoverableExceptionsProvider recoverableExceptionsProvider) {
+    public BaseEventConsumer(final TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
         this.service = service;
         this.mapper = mapper;
-        this.recoverableExceptionsProvider = recoverableExceptionsProvider;
+        this.storageExceptionsProvider = storageExceptionsProvider;
     }
 
     protected CompletionStage<Void> handleMessage(final Message<String> message) {
         try {
             CloudEventUtils.decode(message.getPayload()).ifPresent(this::handleCloudEvent);
         } catch (Exception e) {
-            if (recoverableExceptionsProvider.isRecoverable(e)) {
+            if (storageExceptionsProvider.isConnectionException(e)) {
                 LOG.error("A recoverable exception occurred. A nack is sent and the application is put into an unhealthy state", e);
                 return message.nack(e);
             }

@@ -27,7 +27,7 @@ import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
 import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +48,8 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     }
 
     @Inject
-    public TraceEventConsumer(TrustyService service, ObjectMapper mapper, RecoverableExceptionsProvider recoverableExceptionsProvider) {
-        super(service, mapper, recoverableExceptionsProvider);
+    public TraceEventConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
+        super(service, mapper, storageExceptionsProvider);
     }
 
     @Override

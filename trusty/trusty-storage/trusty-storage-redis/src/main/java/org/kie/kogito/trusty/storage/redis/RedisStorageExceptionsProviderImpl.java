@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.trusty.storage.infinispan;
+package org.kie.kogito.trusty.storage.redis;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.infinispan.client.hotrod.exceptions.HotRodClientException;
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
+
+import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.exceptions.JedisExhaustedPoolException;
 
 @ApplicationScoped
-public class InfinispanRecoverableExceptionsProviderImpl implements RecoverableExceptionsProvider {
-    public boolean isRecoverable(Throwable e) {
-        return e instanceof HotRodClientException;
+public class RedisStorageExceptionsProviderImpl implements StorageExceptionsProvider {
+    public boolean isConnectionException(Throwable e) {
+        return e instanceof JedisConnectionException || e instanceof JedisExhaustedPoolException;
     }
 }

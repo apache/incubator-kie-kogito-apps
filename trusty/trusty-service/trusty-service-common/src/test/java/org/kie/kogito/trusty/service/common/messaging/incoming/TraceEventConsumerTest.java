@@ -22,7 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
-import org.kie.kogito.trusty.storage.api.RecoverableExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -35,14 +35,14 @@ import static org.mockito.Mockito.when;
 class TraceEventConsumerTest {
 
     private TrustyService trustyService;
-    private RecoverableExceptionsProvider recoverableExceptionsProvider;
+    private StorageExceptionsProvider storageExceptionsProvider;
     private TraceEventConsumer consumer;
 
     @BeforeEach
     void setup() {
         trustyService = mock(TrustyService.class);
-        recoverableExceptionsProvider = mock(RecoverableExceptionsProvider.class);
-        consumer = new TraceEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER, recoverableExceptionsProvider);
+        storageExceptionsProvider = mock(StorageExceptionsProvider.class);
+        consumer = new TraceEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER, storageExceptionsProvider);
     }
 
     @Test
@@ -73,7 +73,7 @@ class TraceEventConsumerTest {
 
     @Test
     void testMessageIsNacked() {
-        when(recoverableExceptionsProvider.isRecoverable(any())).thenReturn(true);
+        when(storageExceptionsProvider.isConnectionException(any())).thenReturn(true);
         Message<String> message = mockMessage(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(String.class), any(Decision.class));
