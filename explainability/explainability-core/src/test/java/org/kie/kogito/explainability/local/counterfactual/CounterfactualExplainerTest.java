@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.counterfactual;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -633,8 +634,9 @@ class CounterfactualExplainerTest {
     }
 
     /**
-     * The test rationale is to is find the solution to (f-num1 + f-num2 = 10), for f-num1 and
-     * f-num2 in [0, 10]. All the possible solutions will have the distance, but the sparsity
+     * The test rationale is to find the solution to (f-num1 + f-num2 = 10), for f-num1 with an initial
+     * value of 0 and f-num2 with an initial value of 5 and both varying in [0, 10].
+     * All the possible solutions will have the same distance, but the sparsity
      * criteria will select the ones which leave one of the inputs (either f-num1 or f-num2) unchanged.
      *
      * @param seed
@@ -650,9 +652,9 @@ class CounterfactualExplainerTest {
         random.setSeed(seed);
         final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.0));
 
-        List<Feature> features = new LinkedList<>();
-        List<FeatureDomain> featureBoundaries = new LinkedList<>();
-        List<Boolean> constraints = new LinkedList<>();
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureBoundaries = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
         features.add(FeatureFactory.newNumericalFeature("f-num1", 0));
         featureBoundaries.add(NumericalFeatureDomain.create(0, 10));
         constraints.add(false);
