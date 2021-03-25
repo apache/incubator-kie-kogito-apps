@@ -13,7 +13,7 @@ describe('Outcomes', () => {
     const wrapper = mount(<Outcomes {...outcomesProps} />);
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('OutcomeCard')).toHaveLength(2);
+    expect(wrapper.find('OutcomeCard')).toHaveLength(3);
     expect(
       wrapper
         .find('h4.outcome-cards__card__title')
@@ -38,6 +38,18 @@ describe('Outcomes', () => {
         .at(1)
         .text()
     ).toMatch('21.7031851958099');
+    expect(
+      wrapper
+        .find('h4.outcome-cards__card__title')
+        .at(2)
+        .text()
+    ).toMatch('Client Score');
+    expect(
+      wrapper
+        .find('.outcome__property__value--bigger')
+        .at(2)
+        .text()
+    ).toMatch('Null');
   });
 
   test('handles clicks on the explanation link', () => {
@@ -284,6 +296,19 @@ const outcomesProps = {
         name: 'Risk Score',
         typeRef: 'number',
         value: 21.7031851958099,
+        components: null
+      },
+      messages: [],
+      hasErrors: false
+    },
+    {
+      outcomeId: '_d361c79e-8c06-4504-bdb2-d6b90b915166',
+      outcomeName: 'Client Score',
+      evaluationStatus: 'SUCCEEDED',
+      outcomeResult: {
+        name: 'Client Score',
+        typeRef: 'number',
+        value: null,
         components: null
       },
       messages: [],
