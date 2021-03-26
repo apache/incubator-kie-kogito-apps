@@ -16,6 +16,7 @@
 
 package org.kie.kogito.persistence.redis;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -28,9 +29,16 @@ import io.redisearch.Client;
 public class RedisClientManager {
 
     @ConfigProperty(name = "kogito.persistence.redis.url", defaultValue = "http://localhost:6379")
-    private URL url;
+    private String urlConfig;
 
     public Client getClient(String indexName) {
+        // Workaround for https://github.com/quarkusio/quarkus/issues/12447
+        URL url = null;
+        try {
+            url = new URL(urlConfig);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
         return new io.redisearch.client.Client(indexName, url.getHost(), url.getPort());
     }
 }
