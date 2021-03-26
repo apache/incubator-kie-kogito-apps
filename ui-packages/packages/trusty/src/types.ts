@@ -1,8 +1,15 @@
 export type RemoteData<E, D> =
-  | { status: 'NOT_ASKED' }
-  | { status: 'LOADING' }
-  | { status: 'FAILURE'; error: E }
-  | { status: 'SUCCESS'; data: D };
+  | { status: RemoteDataStatus.NOT_ASKED }
+  | { status: RemoteDataStatus.LOADING }
+  | { status: RemoteDataStatus.FAILURE; error: E }
+  | { status: RemoteDataStatus.SUCCESS; data: D };
+
+export enum RemoteDataStatus {
+  NOT_ASKED,
+  LOADING,
+  FAILURE,
+  SUCCESS
+}
 
 export interface Execution {
   executionId: string;

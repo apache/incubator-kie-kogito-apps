@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   FeatureScores,
   RemoteData,
+  RemoteDataStatus,
   Saliencies,
   SaliencyStatus
 } from '../../../types';
@@ -20,7 +21,7 @@ const useFeaturesScores = (
   >([]);
 
   useEffect(() => {
-    if (saliencies.status === 'SUCCESS' && outcomeId) {
+    if (saliencies.status === RemoteDataStatus.SUCCESS && outcomeId) {
       if (saliencies.data.status === SaliencyStatus.SUCCEEDED) {
         const selectedExplanation = find(
           saliencies.data.saliencies,
