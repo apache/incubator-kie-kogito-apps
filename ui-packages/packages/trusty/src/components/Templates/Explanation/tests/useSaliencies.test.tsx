@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import useSaliencies from '../useSaliencies';
 import * as api from '../../../../utils/api/httpClient';
-import { Saliencies } from '../../../../types';
+import { Saliencies, SaliencyStatus } from '../../../../types';
 import { act } from 'react-test-renderer';
 
 const flushPromises = () => new Promise(setImmediate);
@@ -15,7 +15,7 @@ describe('useSaliencies', () => {
   test('retrieves explanation info of an execution', async () => {
     const saliencies = {
       data: {
-        status: 'SUCCEEDED',
+        status: SaliencyStatus.SUCCEEDED,
         saliencies: [
           {
             outcomeId: '12345',

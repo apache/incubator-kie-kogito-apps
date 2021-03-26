@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { FeatureScores, RemoteData, Saliencies } from '../../../types';
+import {
+  FeatureScores,
+  RemoteData,
+  Saliencies,
+  SaliencyStatus
+} from '../../../types';
 import { orderBy, find } from 'lodash';
 
 const useFeaturesScores = (
@@ -16,7 +21,7 @@ const useFeaturesScores = (
 
   useEffect(() => {
     if (saliencies.status === 'SUCCESS' && outcomeId) {
-      if (saliencies.data.status === 'SUCCEEDED') {
+      if (saliencies.data.status === SaliencyStatus.SUCCEEDED) {
         const selectedExplanation = find(
           saliencies.data.saliencies,
           saliency => {

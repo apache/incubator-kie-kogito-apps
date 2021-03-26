@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 import useFeaturesScores from '../useFeaturesScores';
-import { RemoteData, Saliencies } from '../../../../types';
+import { RemoteData, Saliencies, SaliencyStatus } from '../../../../types';
 import { orderBy } from 'lodash';
 
 describe('useFeaturesScores', () => {
@@ -28,7 +28,7 @@ describe('useFeaturesScores', () => {
 const saliencies = {
   status: 'SUCCESS',
   data: {
-    status: 'SUCCEEDED',
+    status: SaliencyStatus.SUCCEEDED,
     saliencies: [
       {
         outcomeId: 'b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000',

@@ -80,8 +80,14 @@ export interface Saliency {
   outcomeId: string;
   featureImportance: FeatureScores[];
 }
+export enum SaliencyStatus {
+  SUCCEEDED = 'SUCCEEDED',
+  FAILED = 'FAILED'
+}
+export type SaliencyStatusStrings = keyof typeof SaliencyStatus;
+
 export interface Saliencies {
-  status: 'SUCCEEDED' | 'FAILED';
+  status: SaliencyStatusStrings;
   statusDetail: string;
   saliencies: Saliency[];
 }

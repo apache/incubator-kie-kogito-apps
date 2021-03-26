@@ -5,7 +5,13 @@ import { orderBy } from 'lodash';
 import Explanation from '../Explanation';
 import useOutcomeDetail from '../useOutcomeDetail';
 import useSaliencies from '../useSaliencies';
-import { ItemObject, Outcome, RemoteData, Saliencies } from '../../../../types';
+import {
+  ItemObject,
+  Outcome,
+  RemoteData,
+  Saliencies,
+  SaliencyStatus
+} from '../../../../types';
 
 const executionId = 'b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000';
 
@@ -189,7 +195,7 @@ const outcomeDetail = {
 const saliencies = {
   status: 'SUCCESS',
   data: {
-    status: 'SUCCEEDED',
+    status: SaliencyStatus.SUCCEEDED,
     saliencies: [
       {
         outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
@@ -223,7 +229,7 @@ const saliencies = {
 const noSaliencies = {
   status: 'SUCCESS',
   data: {
-    status: 'SUCCEEDED',
+    status: SaliencyStatus.SUCCEEDED,
     saliencies: [
       {
         outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',

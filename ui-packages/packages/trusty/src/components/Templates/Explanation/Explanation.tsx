@@ -31,7 +31,12 @@ import ExplanationError from '../../Molecules/ExplanationError/ExplanationError'
 import EvaluationStatus from '../../Atoms/EvaluationStatus/EvaluationStatus';
 import SkeletonDoubleBarChart from '../../Molecules/SkeletonDoubleBarChart/SkeletonDoubleBarChart';
 import FeaturesScoreChartBySign from '../../Organisms/FeaturesScoreChartBySign/FeaturesScoreChartBySign';
-import { ExecutionRouteParams, Outcome, RemoteData } from '../../../types';
+import {
+  ExecutionRouteParams,
+  Outcome,
+  RemoteData,
+  SaliencyStatus
+} from '../../../types';
 import './Explanation.scss';
 
 type ExplanationProps = {
@@ -283,9 +288,9 @@ const Explanation = ({ outcomes }: ExplanationProps) => {
               )}
               {saliencies.status === 'SUCCESS' && (
                 <>
-                  {saliencies.data.status === 'SUCCEEDED' &&
+                  {saliencies.data.status === SaliencyStatus.SUCCEEDED &&
                     featuresScores.length === 0 && <ExplanationUnavailable />}
-                  {saliencies.data.status === 'FAILED' && (
+                  {saliencies.data.status === SaliencyStatus.FAILED && (
                     <ExplanationError
                       statusDetail={saliencies.data.statusDetail}
                     />
