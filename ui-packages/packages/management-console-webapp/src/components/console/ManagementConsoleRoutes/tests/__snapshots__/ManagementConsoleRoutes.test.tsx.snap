@@ -9,6 +9,83 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
         Object {
           "isExact": true,
           "params": Object {},
+          "path": "/ProcessList",
+          "url": "/ProcessList",
+        }
+      }
+      exact={true}
+      location={
+        Object {
+          "hash": "",
+          "pathname": "/ProcessList",
+          "search": "",
+          "state": undefined,
+        }
+      }
+      path="/ProcessList"
+    >
+      <MockedProcessListPage
+        history={
+          Object {
+            "action": "REPLACE",
+            "block": [Function],
+            "canGo": [Function],
+            "createHref": [Function],
+            "entries": Array [
+              Object {
+                "hash": "",
+                "pathname": "/ProcessList",
+                "search": "",
+                "state": undefined,
+              },
+            ],
+            "go": [Function],
+            "goBack": [Function],
+            "goForward": [Function],
+            "index": 0,
+            "length": 1,
+            "listen": [Function],
+            "location": Object {
+              "hash": "",
+              "pathname": "/ProcessList",
+              "search": "",
+              "state": undefined,
+            },
+            "push": [Function],
+            "replace": [Function],
+          }
+        }
+        location={
+          Object {
+            "hash": "",
+            "pathname": "/ProcessList",
+            "search": "",
+            "state": undefined,
+          }
+        }
+        match={
+          Object {
+            "isExact": true,
+            "params": Object {},
+            "path": "/ProcessList",
+            "url": "/ProcessList",
+          }
+        }
+      />
+    </Route>
+  </Switch>
+</ManagementConsoleRoutes>
+`;
+
+exports[`ManagementConsoleRoutes tests jobs management page test 1`] = `
+<ManagementConsoleRoutes>
+  <Switch>
+    <Route
+      component={[Function]}
+      computedMatch={
+        Object {
+          "isExact": true,
+          "params": Object {},
           "path": "/JobsManagement",
           "url": "/JobsManagement",
         }
@@ -27,7 +104,7 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
       <MockedJobsManagementPage
         history={
           Object {
-            "action": "REPLACE",
+            "action": "POP",
             "block": [Function],
             "canGo": [Function],
             "createHref": [Function],

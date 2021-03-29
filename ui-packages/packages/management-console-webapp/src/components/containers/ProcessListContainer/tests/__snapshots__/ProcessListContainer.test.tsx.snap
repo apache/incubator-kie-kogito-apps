@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProcessListContainer tests Snapshot 1`] = `
+<ProcessListContainer>
+  <ForwardRef
+    driver={
+      ProcessListGatewayApiImpl {
+        "_ProcessListState": Object {
+          "filters": Object {
+            "businessKey": Array [],
+            "status": Array [],
+          },
+          "sortBy": Object {},
+        },
+        "applyFilter": [Function],
+        "applySorting": [Function],
+        "initialLoad": [Function],
+        "queries": Object {
+          "getChildProcessInstances": [MockFunction],
+          "getProcessInstances": [MockFunction],
+        },
+      }
+    }
+    envelopePath="/envelope/process-list.html"
+    targetOrigin="http://localhost"
+  >
+    <ForwardRef>
+      <iframe
+        src="/envelope/process-list.html"
+        style={
+          Object {
+            "border": "none",
+            "display": "flex",
+            "flex": 1,
+            "flexDirection": "column",
+            "height": "100%",
+            "margin": 0,
+            "overflow": "hidden",
+            "padding": 0,
+            "width": "100%",
+          }
+        }
+        title="X"
+      />
+    </ForwardRef>
+  </ForwardRef>
+</ProcessListContainer>
+`;
