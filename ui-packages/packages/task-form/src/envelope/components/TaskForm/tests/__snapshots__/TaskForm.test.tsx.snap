@@ -47,6 +47,9 @@ exports[`TaskForm Test Empty Task Form rendering 1`] = `
   }
 >
   <MockedEmptyTaskForm
+    data-ouia-component-id="task-form-empty-form"
+    data-ouia-component-type="task-form"
+    data-ouia-safe={true}
     enabled={true}
     formSchema={
       Object {
@@ -136,7 +139,9 @@ exports[`TaskForm Test Empty state 1`] = `
 >
   <KogitoEmptyState
     body="Cannot find form for task  Apply for visa (45a73)"
-    ouiaId="task-form-no-form"
+    data-ouia-component-id="task-form-no-form"
+    data-ouia-component-type="empty-task-form"
+    data-ouia-safe={true}
     title="No form to show"
     type={3}
   >
@@ -182,12 +187,14 @@ exports[`TaskForm Test Envelope not connected 1`] = `
   }
 >
   <Bullseye
-    data-ouia-component-type="loading-task-form-spinner"
+    data-ouia-component-id="task-form-loading-spinner"
+    data-ouia-component-type="task-form"
     data-ouia-safe={true}
   >
     <div
       className="pf-l-bullseye"
-      data-ouia-component-type="loading-task-form-spinner"
+      data-ouia-component-id="task-form-loading-spinner"
+      data-ouia-component-type="task-form"
       data-ouia-safe={true}
     >
       <KogitoSpinner
@@ -248,6 +255,9 @@ exports[`TaskForm Test Task Form rendering 1`] = `
   }
 >
   <MockedTaskFormRenderer
+    data-ouia-component-id="task-form-form-renderer"
+    data-ouia-component-type="task-form"
+    data-ouia-safe={true}
     enabled={true}
     formData={null}
     formSchema={

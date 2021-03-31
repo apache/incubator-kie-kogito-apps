@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { OUIAProps } from '@kogito-apps/components-common';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import UserTaskInstance = GraphQL.UserTaskInstance;
 import { EmbeddedTaskForm, TaskFormSchema } from '@kogito-apps/task-form';
@@ -38,6 +38,7 @@ const TaskFormContainer: React.FC<Props & OUIAProps> = ({
 
   return (
     <EmbeddedTaskForm
+      {...componentOuiaProps(ouiaId, 'task-form-container', ouiaSafe)}
       userTask={userTask}
       driver={{
         doSubmit(phase?: string, payload?: any): Promise<any> {

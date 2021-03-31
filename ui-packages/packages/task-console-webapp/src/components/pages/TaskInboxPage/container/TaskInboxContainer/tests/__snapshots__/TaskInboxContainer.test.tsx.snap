@@ -18,6 +18,8 @@ exports[`TaskInboxContainer tests Snapshot 1`] = `
         "Skipped",
       ]
     }
+    data-ouia-component-type="task-inbox-container"
+    data-ouia-safe={true}
     driver={
       TaskInboxGatewayApiImpl {
         "listeners": Array [

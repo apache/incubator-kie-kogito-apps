@@ -81,7 +81,11 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
   if (isLoading) {
     return (
       <Bullseye
-        {...componentOuiaProps(ouiaId, 'loading-task-form-spinner', ouiaSafe)}
+        {...componentOuiaProps(
+          (ouiaId ? ouiaId : 'task-form') + '-loading-spinner',
+          'task-form',
+          ouiaSafe
+        )}
       >
         <KogitoSpinner
           spinnerText={`Loading task form...`}
@@ -97,8 +101,8 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
       return (
         <Bullseye
           {...componentOuiaProps(
-            ouiaId,
-            'submitting-task-form-spinner',
+            (ouiaId ? ouiaId : 'task-form') + '-submit-spinner',
+            'task-form',
             ouiaSafe
           )}
         >
@@ -135,6 +139,11 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
     if (_.isEmpty(taskFormSchema.properties)) {
       return (
         <EmptyTaskForm
+          {...componentOuiaProps(
+            (ouiaId ? ouiaId : 'task-form') + '-empty-form',
+            'task-form',
+            ouiaSafe
+          )}
           userTask={userTask}
           enabled={formState == State.READY}
           formSchema={taskFormSchema}
@@ -145,6 +154,11 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
 
     return (
       <TaskFormRenderer
+        {...componentOuiaProps(
+          (ouiaId ? ouiaId : 'task-form') + '-form-renderer',
+          'task-form',
+          ouiaSafe
+        )}
         userTask={userTask}
         formSchema={taskFormSchema}
         formData={formData}
@@ -161,8 +175,11 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
       body={`Cannot find form for task  ${
         userTask.referenceName
       } (${userTask.id.substring(0, 5)})`}
-      ouiaId={(ouiaId ? ouiaId : 'task-form') + '-no-form'}
-      ouiaSafe={ouiaSafe}
+      {...componentOuiaProps(
+        (ouiaId ? ouiaId : 'task-form') + '-no-form',
+        'empty-task-form',
+        ouiaSafe
+      )}
     />
   );
 };

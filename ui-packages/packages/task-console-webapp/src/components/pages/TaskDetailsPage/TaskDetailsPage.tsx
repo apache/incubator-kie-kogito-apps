@@ -67,7 +67,7 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
   const [error, setError] = useState();
 
   useEffect(() => {
-    return ouiaPageTypeAndObjectId('user-task-details', taskId);
+    return ouiaPageTypeAndObjectId('task-details-page', taskId);
   });
 
   const loatTask = async () => {
@@ -127,7 +127,11 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
   if (isLoading) {
     return (
       <PageSection
-        {...componentOuiaProps(ouiaId, 'task-details-spinner', ouiaSafe)}
+        {...componentOuiaProps(
+          'spinner' + (ouiaId ? '-' + ouiaId : ''),
+          'task-details-page-section',
+          ouiaSafe
+        )}
       >
         <Grid hasGutter md={1} className={'kogito-task-console__full-size'}>
           <GridItem span={12} className={'kogito-task-console__full-size'}>
@@ -147,7 +151,11 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
   if (error) {
     return (
       <PageSection
-        {...componentOuiaProps(ouiaId, 'task-details-error', ouiaSafe)}
+        {...componentOuiaProps(
+          'error' + (ouiaId ? '-' + ouiaId : ''),
+          'task-details-page-section',
+          ouiaSafe
+        )}
       >
         <Grid hasGutter md={1} className={'kogito-task-console__full-size'}>
           <GridItem span={12} className={'kogito-task-console__full-size'}>
@@ -167,7 +175,11 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
   if (!userTask) {
     return (
       <PageSection
-        {...componentOuiaProps(ouiaId, 'task-details-error', ouiaSafe)}
+        {...componentOuiaProps(
+          'empty' + (ouiaId ? '-' + ouiaId : ''),
+          'task-details-page-section',
+          ouiaSafe
+        )}
       >
         <Grid hasGutter md={1} className={'kogito-task-console__full-size'}>
           <GridItem span={12} className={'kogito-task-console__full-size'}>
@@ -186,7 +198,14 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
 
   return (
     <React.Fragment>
-      <PageSection variant="light">
+      <PageSection
+        variant="light"
+        {...componentOuiaProps(
+          'header' + (ouiaId ? '-' + ouiaId : ''),
+          'task-details-page-section',
+          ouiaSafe
+        )}
+      >
         <Breadcrumb>
           <BreadcrumbItem>
             <Link
@@ -214,7 +233,13 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
           </div>
         )}
       </PageSection>
-      <PageSection>
+      <PageSection
+        {...componentOuiaProps(
+          'content' + (ouiaId ? '-' + ouiaId : ''),
+          'task-details-page-section',
+          ouiaSafe
+        )}
+      >
         <Grid hasGutter md={1} className={'kogito-task-console__full-size'}>
           <GridItem span={12} className={'kogito-task-console__full-size'}>
             <Card className={'kogito-task-console__full-size'}>

@@ -32,6 +32,8 @@ exports[`TaskFormContainer tests Snapshot 1`] = `
   }
 >
   <ForwardRef
+    data-ouia-component-type="task-form-container"
+    data-ouia-safe={true}
     driver={
       Object {
         "doSubmit": [Function],

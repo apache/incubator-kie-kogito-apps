@@ -42,12 +42,14 @@ exports[`TaskDetailsPage tests Empty state 1`] = `
   }
 >
   <PageSection
-    data-ouia-component-type="task-details-error"
+    data-ouia-component-id="empty"
+    data-ouia-component-type="task-details-page-section"
     data-ouia-safe={true}
   >
     <section
       className="pf-c-page__main-section"
-      data-ouia-component-type="task-details-error"
+      data-ouia-component-id="empty"
+      data-ouia-component-type="task-details-page-section"
       data-ouia-safe={true}
     >
       <Grid
@@ -135,10 +137,16 @@ exports[`TaskDetailsPage tests Error notification 1`] = `
   }
 >
   <PageSection
+    data-ouia-component-id="header"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
     variant="light"
   >
     <section
       className="pf-c-page__main-section pf-m-light"
+      data-ouia-component-id="header"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Breadcrumb>
         <MockedComponent />
@@ -217,9 +225,16 @@ exports[`TaskDetailsPage tests Error notification 1`] = `
       </div>
     </section>
   </PageSection>
-  <PageSection>
+  <PageSection
+    data-ouia-component-id="content"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-id="content"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Grid
         className="kogito-task-console__full-size"
@@ -337,10 +352,16 @@ exports[`TaskDetailsPage tests Error notification 2`] = `
   }
 >
   <PageSection
+    data-ouia-component-id="header"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
     variant="light"
   >
     <section
       className="pf-c-page__main-section pf-m-light"
+      data-ouia-component-id="header"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Breadcrumb>
         <MockedComponent />
@@ -401,9 +422,16 @@ exports[`TaskDetailsPage tests Error notification 2`] = `
       </Flex>
     </section>
   </PageSection>
-  <PageSection>
+  <PageSection
+    data-ouia-component-id="content"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-id="content"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Grid
         className="kogito-task-console__full-size"
@@ -521,12 +549,14 @@ exports[`TaskDetailsPage tests Error state 1`] = `
   }
 >
   <PageSection
-    data-ouia-component-type="task-details-error"
+    data-ouia-component-id="error"
+    data-ouia-component-type="task-details-page-section"
     data-ouia-safe={true}
   >
     <section
       className="pf-c-page__main-section"
-      data-ouia-component-type="task-details-error"
+      data-ouia-component-id="error"
+      data-ouia-component-type="task-details-page-section"
       data-ouia-safe={true}
     >
       <Grid
@@ -613,10 +643,16 @@ exports[`TaskDetailsPage tests Normal State 1`] = `
   }
 >
   <PageSection
+    data-ouia-component-id="header"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
     variant="light"
   >
     <section
       className="pf-c-page__main-section pf-m-light"
+      data-ouia-component-id="header"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Breadcrumb>
         <MockedComponent />
@@ -677,9 +713,16 @@ exports[`TaskDetailsPage tests Normal State 1`] = `
       </Flex>
     </section>
   </PageSection>
-  <PageSection>
+  <PageSection
+    data-ouia-component-id="content"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-id="content"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Grid
         className="kogito-task-console__full-size"
@@ -797,10 +840,16 @@ exports[`TaskDetailsPage tests Success notification 1`] = `
   }
 >
   <PageSection
+    data-ouia-component-id="header"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
     variant="light"
   >
     <section
       className="pf-c-page__main-section pf-m-light"
+      data-ouia-component-id="header"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Breadcrumb>
         <MockedComponent />
@@ -879,9 +928,16 @@ exports[`TaskDetailsPage tests Success notification 1`] = `
       </div>
     </section>
   </PageSection>
-  <PageSection>
+  <PageSection
+    data-ouia-component-id="content"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-id="content"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Grid
         className="kogito-task-console__full-size"
@@ -999,10 +1055,16 @@ exports[`TaskDetailsPage tests Success notification 2`] = `
   }
 >
   <PageSection
+    data-ouia-component-id="header"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
     variant="light"
   >
     <section
       className="pf-c-page__main-section pf-m-light"
+      data-ouia-component-id="header"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Breadcrumb>
         <MockedComponent />
@@ -1063,9 +1125,16 @@ exports[`TaskDetailsPage tests Success notification 2`] = `
       </Flex>
     </section>
   </PageSection>
-  <PageSection>
+  <PageSection
+    data-ouia-component-id="content"
+    data-ouia-component-type="task-details-page-section"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-id="content"
+      data-ouia-component-type="task-details-page-section"
+      data-ouia-safe={true}
     >
       <Grid
         className="kogito-task-console__full-size"
