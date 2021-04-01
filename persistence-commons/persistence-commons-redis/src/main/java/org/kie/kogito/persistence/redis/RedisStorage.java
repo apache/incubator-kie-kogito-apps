@@ -90,6 +90,7 @@ public class RedisStorage<V> implements Storage<String, V> {
             Map<String, Object> mappedValue = JsonUtils.getMapper().convertValue(value, Map.class);
             for (String fieldName : indexedFields) {
                 if (mappedValue.get(fieldName) != null) { // If a field is indexed, its value can not be null: it has to be filtered out
+                    // Indexed values have to be escaped according to https://github.com/RediSearch/RediSearch/issues/1148
                     document.put(fieldName, Sanificator.sanitize(mappedValue.get(fieldName)));
                 }
             }
