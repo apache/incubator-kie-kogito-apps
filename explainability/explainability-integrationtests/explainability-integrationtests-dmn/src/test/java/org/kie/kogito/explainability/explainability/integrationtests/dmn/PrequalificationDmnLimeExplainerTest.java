@@ -110,13 +110,9 @@ class PrequalificationDmnLimeExplainerTest {
             }
             DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
             int k = 2;
-            int chunkSize = 5;
-            double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-            AssertionsForClassTypes.assertThat(precision).isBetween(0d, 1d);
-            double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-            AssertionsForClassTypes.assertThat(recall).isBetween(0d, 1d);
+            int chunkSize = 2;
             double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-            AssertionsForClassTypes.assertThat(f1).isBetween(0d, 1d);
+            AssertionsForClassTypes.assertThat(f1).isBetween(0.5d, 1d);
         }
     }
 }
