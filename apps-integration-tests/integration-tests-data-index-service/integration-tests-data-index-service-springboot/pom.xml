@@ -42,6 +42,12 @@
       <artifactId>spring-kafka</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${version.io.rest-assured.springboot}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-events-spring-boot-addon</artifactId>
     </dependency>
