@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.event.CloudEventExtensionConstants;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
@@ -43,7 +44,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("state", 2)
                 .hasFieldOrPropertyWithValue("rootProcessId", "travels")
                 .hasFieldOrPropertyWithValue("rootProcessInstanceId", "f8868a2e-1bbb-47eb-93cf-fa46ff9dbfee")
-                .hasFieldOrPropertyWithValue("kogitoAddons", "jobs-management,prometheus-monitoring,process-management")
+                .hasFieldOrPropertyWithValue(CloudEventExtensionConstants.ADDONS, "jobs-management,prometheus-monitoring,process-management")
                 .hasFieldOrPropertyWithValue("time", ZonedDateTime.parse("2019-08-20T19:26:02.110668Z[UTC]", DateTimeFormatter.ISO_DATE_TIME))
                 .hasFieldOrPropertyWithValue("type", "ProcessInstanceEvent")
                 .hasFieldOrPropertyWithValue("source", URI.create("/hotelBooking"))
@@ -60,7 +61,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("specVersion", "1.0")
                 .hasFieldOrPropertyWithValue("contentType", null)
                 .hasFieldOrPropertyWithValue("schemaURL", null)
-                .hasFieldOrPropertyWithValue("kogitoReferenceId", null);
+                .hasFieldOrPropertyWithValue(CloudEventExtensionConstants.PROCESS_REFERENCE_ID, null);
         softly.assertThat(event.getData().getNodes().get(0))
                 .hasFieldOrPropertyWithValue("id", "54e66e2f-2acd-4d47-b8e6-991cb6372ad8")
                 .hasFieldOrPropertyWithValue("exit", ZonedDateTime.parse("2019-08-20T19:26:02.092Z[UTC]", DateTimeFormatter.ISO_DATE_TIME))
@@ -89,7 +90,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("processInstanceId", null)
                 .hasFieldOrPropertyWithValue("rootProcessId", "travels")
                 .hasFieldOrPropertyWithValue("rootProcessInstanceId", null)
-                .hasFieldOrPropertyWithValue("kogitoAddons", null)
+                .hasFieldOrPropertyWithValue(CloudEventExtensionConstants.ADDONS, null)
                 .hasFieldOrPropertyWithValue("type", "ProcessInstanceEvent")
                 .hasFieldOrPropertyWithValue("data.id", null)
                 .hasFieldOrPropertyWithValue("data.processId", "hotelBooking")
@@ -100,7 +101,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("specVersion", "1.0")
                 .hasFieldOrPropertyWithValue("contentType", null)
                 .hasFieldOrPropertyWithValue("schemaURL", null)
-                .hasFieldOrPropertyWithValue("kogitoReferenceId", null);
+                .hasFieldOrPropertyWithValue(CloudEventExtensionConstants.PROCESS_REFERENCE_ID, null);
 
         softly.assertAll();
     }
@@ -118,7 +119,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("processInstanceId", "f78fb147-ec22-4478-a592-3063add9f956")
                 .hasFieldOrPropertyWithValue("rootProcessId", null)
                 .hasFieldOrPropertyWithValue("rootProcessInstanceId", null)
-                .hasFieldOrPropertyWithValue("kogitoAddons", "jobs-management,prometheus-monitoring,process-management")
+                .hasFieldOrPropertyWithValue(CloudEventExtensionConstants.ADDONS, "jobs-management,prometheus-monitoring,process-management")
                 .hasFieldOrPropertyWithValue("time", ZonedDateTime.parse("2019-08-30T11:48:37.857915Z[UTC]", DateTimeFormatter.ISO_DATE_TIME))
                 .hasFieldOrPropertyWithValue("type", "UserTaskInstanceEvent")
                 .hasFieldOrPropertyWithValue("source", URI.create("http://localhost:8080/travels"))
@@ -126,7 +127,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("specVersion", "1.0")
                 .hasFieldOrPropertyWithValue("schemaURL", null)
                 .hasFieldOrPropertyWithValue("contentType", null)
-                .hasFieldOrPropertyWithValue("kogitoReferenceId", null)
+                .hasFieldOrPropertyWithValue(CloudEventExtensionConstants.PROCESS_REFERENCE_ID, null)
                 .hasFieldOrPropertyWithValue("data.id", "228d5922-5e88-4bfa-8329-7116a5cbe58b")
                 .hasFieldOrPropertyWithValue("data.processId", "travels")
                 .hasFieldOrPropertyWithValue("data.processInstanceId", "f78fb147-ec22-4478-a592-3063add9f956")
