@@ -67,6 +67,11 @@ export MP_MESSAGING_INCOMING_KOGITO_TRACING_MODEL_FAILURE_STRATEGY=ignore
 ```
 the application discards all the events even if it would be possible to recover them in a second moment. This prevents the trusty service to stay in an unhealthy status waiting for redeployment.
 
+In addition to that, if you would like to ignore the type of the exception and nack the message if **any** exception is raised, you can set the variable
+```bash
+export TRUSTY_MESSAGING_NACK_ON_ANY_EXCEPTION=true
+```
+
 ### Explainability service
 
 The explainability service provides local and global explaination. 

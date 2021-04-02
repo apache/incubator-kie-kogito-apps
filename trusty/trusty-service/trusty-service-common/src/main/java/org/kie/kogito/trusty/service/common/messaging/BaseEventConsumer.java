@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service.common.messaging;
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.trusty.service.common.TrustyService;
@@ -39,6 +40,9 @@ public abstract class BaseEventConsumer<E> {
     private final ObjectMapper mapper;
     private final StorageExceptionsProvider storageExceptionsProvider;
 
+    @ConfigProperty(name = "trusty.messaging.nack_on_any_exception", defaultValue = "false")
+    private boolean failOnAllExceptions;
+
     protected BaseEventConsumer() {
         this(null, null, null);
     }
@@ -53,8 +57,8 @@ public abstract class BaseEventConsumer<E> {
         try {
             CloudEventUtils.decode(message.getPayload()).ifPresent(this::handleCloudEvent);
         } catch (Exception e) {
-            if (storageExceptionsProvider.isConnectionException(e)) {
-                LOG.error("A recoverable exception occurred. A nack is sent and the application is put into an unhealthy state", e);
+            if (storageExceptionsProvider.isConnectionException(e) || failOnAllExceptions) {
+                LOG.error("A critical exception occurred. A nack is sent and the application will react according to the specified failure strategy.", e);
                 return message.nack(e);
             }
             LOG.error("Something unexpected happened during the processing of an Event. The event is discarded.", e);

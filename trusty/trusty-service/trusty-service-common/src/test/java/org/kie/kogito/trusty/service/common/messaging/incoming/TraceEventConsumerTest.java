@@ -16,6 +16,8 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.lang.reflect.Field;
+
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +75,21 @@ class TraceEventConsumerTest {
 
     @Test
     void testMessageIsNacked() {
-        when(storageExceptionsProvider.isConnectionException(any())).thenReturn(true);
+        when(storageExceptionsProvider.isConnectionException(any(RuntimeException.class))).thenReturn(false);
+        Message<String> message = mockMessage(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
+
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(String.class), any(Decision.class));
+        consumer.handleMessage(message);
+        verify(message, times(1)).ack();
+    }
+
+    @Test
+    void testMessageIsNackedIfFailOnAnyExceptionPropertyIsTrue() throws NoSuchFieldException, IllegalAccessException {
+        Field member_name = consumer.getClass().getSuperclass().getDeclaredField("failOnAllExceptions");
+        member_name.setAccessible(true);
+        member_name.set(consumer, true);
+
+        when(storageExceptionsProvider.isConnectionException(any(RuntimeException.class))).thenReturn(false);
         Message<String> message = mockMessage(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(String.class), any(Decision.class));
