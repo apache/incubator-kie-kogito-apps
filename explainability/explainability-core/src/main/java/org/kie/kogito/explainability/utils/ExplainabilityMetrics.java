@@ -271,14 +271,8 @@ public class ExplainabilityMetrics {
         List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
-        List<Prediction> topChunk = new ArrayList<>(chunkSize);
-        List<Prediction> bottomChunk = new ArrayList<>(chunkSize);
-        for (int i = 0; i < chunkSize; i++) {
-            topChunk.add(sorted.get(i));
-        }
-        for (int i = 0; i < chunkSize; i++) {
-            bottomChunk.add(sorted.get(sorted.size() - i - 1));
-        }
+        List<Prediction> topChunk = new ArrayList<>(sorted.subList(0, chunkSize));
+        List<Prediction> bottomChunk = new ArrayList<>(sorted.subList(sorted.size() - chunkSize, sorted.size()));
 
         double truePositives = 0;
         double falseNegatives = 0;
@@ -381,14 +375,8 @@ public class ExplainabilityMetrics {
         List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
-        List<Prediction> topChunk = new ArrayList<>(chunkSize);
-        List<Prediction> bottomChunk = new ArrayList<>(chunkSize);
-        for (int i = 0; i < chunkSize; i++) {
-            topChunk.add(sorted.get(i));
-        }
-        for (int i = 0; i < chunkSize; i++) {
-            bottomChunk.add(sorted.get(sorted.size() - i - 1));
-        }
+        List<Prediction> topChunk = new ArrayList<>(sorted.subList(0, chunkSize));
+        List<Prediction> bottomChunk = new ArrayList<>(sorted.subList(sorted.size() - chunkSize, sorted.size()));
 
         double truePositives = 0;
         double falsePositives = 0;
