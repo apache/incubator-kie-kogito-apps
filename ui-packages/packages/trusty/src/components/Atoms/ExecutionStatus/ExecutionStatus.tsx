@@ -9,7 +9,7 @@ type ExecutionStatusProps = {
 const ExecutionStatus = (props: ExecutionStatusProps) => {
   const { result } = props;
   return (
-    <span className="execution=status">
+    <span className="execution-status">
       {result === 'success' && (
         <>
           <CheckCircleIcon
