@@ -198,7 +198,6 @@ exports[`TaskForm Test Envelope not connected 1`] = `
       data-ouia-safe={true}
     >
       <KogitoSpinner
-        ouiaId="task-form-spinner-loading"
         spinnerText="Loading task form..."
       >
         <MockedComponent />

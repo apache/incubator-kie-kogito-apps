@@ -16,7 +16,7 @@
 
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
-import EmptyTaskForm from '../EmptyTaskForm/EmptyTaskForm';
+import { Bullseye } from '@patternfly/react-core';
 import {
   componentOuiaProps,
   KogitoEmptyState,
@@ -27,7 +27,7 @@ import {
 import { UserTaskInstance } from '@kogito-apps/task-inbox';
 import { TaskFormDriver } from '../../../api';
 import { TaskFormSchema } from '../../../types';
-import { Bullseye } from '@patternfly/react-core';
+import EmptyTaskForm from '../EmptyTaskForm/EmptyTaskForm';
 import TaskFormRenderer from '../TaskFormRenderer/TaskFormRenderer';
 import {
   readSchemaAssignments,
@@ -41,6 +41,7 @@ export interface TaskFormProps {
 }
 
 enum State {
+  LOADING,
   READY,
   SUBMITTING,
   SUBMITTED
@@ -53,13 +54,12 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [formData, setFormData] = useState<any>(null);
   const [taskFormSchema, setTaskFormSchema] = useState<TaskFormSchema>(null);
   const [taskFormAssignments, setTaskFormAssignments] = useState<
     TaskDataAssignments
   >();
-  const [formState, setFormState] = useState<State>(State.READY);
+  const [formState, setFormState] = useState<State>(State.LOADING);
 
   useEffect(() => {
     if (isEnvelopeConnectedToChannel) {
@@ -72,26 +72,22 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
       const schema = await driver.getTaskFormSchema();
       setTaskFormAssignments(readSchemaAssignments(schema));
       setTaskFormSchema(schema);
-      setIsLoading(false);
+      setFormState(State.READY);
     } catch (err) {
-      setIsLoading(false);
+      setFormState(State.READY);
     }
   };
 
-  if (isLoading) {
+  if (formState === State.LOADING) {
     return (
       <Bullseye
         {...componentOuiaProps(
           (ouiaId ? ouiaId : 'task-form') + '-loading-spinner',
           'task-form',
-          ouiaSafe
+          true
         )}
       >
-        <KogitoSpinner
-          spinnerText={`Loading task form...`}
-          ouiaId={(ouiaId ? ouiaId : 'task-form') + '-spinner-loading'}
-          ouiaSafe={ouiaSafe}
-        />
+        <KogitoSpinner spinnerText={`Loading task form...`} />
       </Bullseye>
     );
   }
@@ -103,15 +99,13 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
           {...componentOuiaProps(
             (ouiaId ? ouiaId : 'task-form') + '-submit-spinner',
             'task-form',
-            ouiaSafe
+            true
           )}
         >
           <KogitoSpinner
             spinnerText={`Submitting for task ${
               userTask.referenceName
             } (${userTask.id.substring(0, 5)})`}
-            ouiaId={(ouiaId ? ouiaId : 'task-form') + '-spinner-submitting'}
-            ouiaSafe={ouiaSafe}
           />
         </Bullseye>
       );

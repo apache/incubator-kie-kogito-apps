@@ -87,7 +87,7 @@ module.exports = controller = {
     }
 
     if (taskWithoutForm.includes(task.id)) {
-      res.status(500).send('');
+      res.status(500).send('Error: cannot load form');
       return;
     }
 
