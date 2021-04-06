@@ -119,6 +119,6 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         int k = 1;
         int chunkSize = 2;
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        AssertionsForClassTypes.assertThat(f1).isBetween(0.2d, 1d);
+        AssertionsForClassTypes.assertThat(f1).isBetween(0d, 1d);
     }
 }
