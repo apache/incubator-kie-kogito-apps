@@ -7,8 +7,15 @@ import {
   IRow,
   ICell
 } from '@patternfly/react-table';
+import { Button } from '@patternfly/react-core';
+import { PlusCircleIcon } from '@patternfly/react-icons';
 
-const CounterfactualTable = () => {
+interface CounterfactualTableProps {
+  onOpenConstraints: () => void;
+}
+
+const CounterfactualTable = (props: CounterfactualTableProps) => {
+  const { onOpenConstraints } = props;
   const columns: (ICell | string)[] = [
     { title: 'Data Type', cellTransforms: [headerCol()] },
     'Input Constraint',
@@ -22,7 +29,17 @@ const CounterfactualTable = () => {
           <div>one</div>
           <div>two</div>
         </div>,
-        'two',
+        <>
+          <Button
+            key={2}
+            variant={'link'}
+            isInline={true}
+            onClick={onOpenConstraints}
+            icon={<PlusCircleIcon />}
+          >
+            Add constraint
+          </Button>
+        </>,
         'a',
         'four'
       ]
