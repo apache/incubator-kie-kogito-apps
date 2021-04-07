@@ -1,0 +1,10 @@
+.counterfactual-outcome {
+  margin: var(--pf-global--spacer--lg) 0;
+  &:first-child {
+    margin-top: var(--pf-global--spacer--md);
+  }
+  &__value {
+    padding: var(--pf-global--spacer--md) 0 var(--pf-global--spacer--md)
+      var(--pf-global--spacer--lg);
+  }
+}

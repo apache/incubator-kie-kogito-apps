@@ -29,6 +29,7 @@ import Explanation from '../Explanation/Explanation';
 import InputData from '../InputData/InputData';
 import ModelLookup from '../ModelLookup/ModelLookup';
 import './AuditDetail.scss';
+import Counterfactual from '../Counterfactual/Counterfactual';
 
 const AuditDetail = () => {
   const { path, url } = useRouteMatch();
@@ -55,6 +56,10 @@ const AuditDetail = () => {
       }
       newNav.push({ url: '/input-data', desc: 'Input Data' });
       newNav.push({ url: '/model-lookup', desc: 'Model Lookup' });
+      newNav.push({
+        url: '/counterfactual-analysis',
+        desc: 'Counterfactual Analysis'
+      });
       setThirdLevelNav(newNav);
     }
   }, [outcomes]);
@@ -104,6 +109,9 @@ const AuditDetail = () => {
         </Route>
         <Route path={`${path}/model-lookup`}>
           <ModelLookup />
+        </Route>
+        <Route path={`${path}/counterfactual-analysis`}>
+          <Counterfactual />
         </Route>
         <Route exact path={`${path}/`}>
           {outcomes.status === RemoteDataStatus.SUCCESS &&

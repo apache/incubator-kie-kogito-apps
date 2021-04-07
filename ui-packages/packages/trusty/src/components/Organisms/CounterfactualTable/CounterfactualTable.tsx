@@ -1,0 +1,72 @@
+import React, { useState } from 'react';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  headerCol,
+  IRow,
+  ICell
+} from '@patternfly/react-table';
+
+const CounterfactualTable = () => {
+  const columns: (ICell | string)[] = [
+    { title: 'Data Type', cellTransforms: [headerCol()] },
+    'Input Constraint',
+    { title: 'Original input' },
+    'Counterfactual result'
+  ];
+  const [rows, setRows] = useState<IRow[]>([
+    {
+      cells: [
+        <div key={1}>
+          <div>one</div>
+          <div>two</div>
+        </div>,
+        'two',
+        'a',
+        'four'
+      ]
+    },
+    {
+      cells: ['a', 'two', 'k', 'four']
+    },
+    {
+      cells: ['p', 'two', 'b', 'four']
+    }
+  ]);
+
+  const onSelect = (
+    event: React.FormEvent<HTMLInputElement>,
+    isSelected: boolean,
+    rowId: number
+  ) => {
+    let updatedRows;
+    if (rowId === -1) {
+      updatedRows = rows.map(oneRow => {
+        oneRow.selected = isSelected;
+        return oneRow;
+      });
+    } else {
+      updatedRows = [...rows];
+      updatedRows[rowId].selected = isSelected;
+    }
+    setRows(updatedRows);
+  };
+
+  return (
+    <>
+      <Table
+        onSelect={onSelect}
+        canSelectAll={true}
+        aria-label="Selectable Table"
+        cells={columns}
+        rows={rows}
+      >
+        <TableHeader />
+        <TableBody />
+      </Table>
+    </>
+  );
+};
+
+export default CounterfactualTable;
