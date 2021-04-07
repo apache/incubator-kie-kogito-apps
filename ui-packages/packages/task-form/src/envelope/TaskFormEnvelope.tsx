@@ -17,8 +17,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { EnvelopeBus } from '@kogito-tooling/envelope-bus/dist/api';
+import { Envelope, EnvelopeDivConfig } from '@kogito-tooling/envelope';
 import { TaskFormChannelApi, TaskFormEnvelopeApi } from '../api';
-import { Envelope } from '@kogito-tooling/envelope';
 import { TaskFormEnvelopeContext } from './TaskFormEnvelopeContext';
 import {
   TaskFormEnvelopeView,
@@ -33,7 +33,11 @@ import { TaskFormEnvelopeApiImpl } from './TaskFormEnvelopeApiImpl';
  * @param args.bus: The implementation of a `bus` that knows how to send messages to the Channel.
  *
  */
-export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
+export function init(args: {
+  config: EnvelopeDivConfig;
+  container: HTMLDivElement;
+  bus: EnvelopeBus;
+}) {
   /**
    * Creates a new generic Envelope, typed with the right interfaces.
    */
@@ -42,7 +46,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
     TaskFormChannelApi,
     TaskFormEnvelopeViewApi,
     TaskFormEnvelopeContext
-  >(args.bus);
+  >(args.bus, args.config);
 
   /**
    * Function that knows how to render a TaskForm.

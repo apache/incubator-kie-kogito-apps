@@ -35,7 +35,7 @@ import { Envelope, EnvelopeDivConfig } from '@kogito-tooling/envelope';
  */
 export function init(args: {
   config: EnvelopeDivConfig;
-  container: HTMLElement;
+  container: HTMLDivElement;
   bus: EnvelopeBus;
 }) {
   /**

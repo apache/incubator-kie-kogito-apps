@@ -39,7 +39,6 @@ describe('EmbeddedTaskInbox tests', () => {
     );
     expect(wrapper.props().driver).toStrictEqual(props.driver);
     expect(wrapper.props().targetOrigin).toStrictEqual(props.targetOrigin);
-    expect(wrapper.props().envelopePath).toStrictEqual(props.envelopePath);
 
     const contentDiv = wrapper.find('div');
 
