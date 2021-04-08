@@ -9,9 +9,10 @@ import {
 } from '@patternfly/react-table';
 import { Button } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
+import { CFSearchInput } from '../../Templates/Counterfactual/Counterfactual';
 
 interface CounterfactualTableProps {
-  onOpenConstraints: () => void;
+  onOpenConstraints: (input: CFSearchInput) => void;
 }
 
 const CounterfactualTable = (props: CounterfactualTableProps) => {
@@ -23,43 +24,39 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     'Original Input',
     'Counterfactual result'
   ];
-  const [rows, setRows] = useState([
+  const [rows, setRows] = useState<CFSearchInput[]>([
     {
       name: 'Credit Score',
       typeRef: 'number',
       value: 738,
-      components: null,
       isFixed: true
     },
     {
       name: 'Down Payment',
       typeRef: 'number',
       value: 70000,
-      components: null,
       isFixed: true
     },
     {
       name: 'Purchase Price',
       typeRef: 'number',
       value: 34000,
-      components: null,
       isFixed: true
     },
     {
       name: 'Monthly Tax Payment',
       typeRef: 'number',
       value: 0.2,
-      components: null,
       isFixed: true
     },
     {
       name: 'Monthly Insurance Payment',
       typeRef: 'number',
       value: 0.15,
-      components: null,
       isFixed: true
     }
-  ]);
+  ] as CFSearchInput[]);
+
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
 
   const onSelectAll = (event, isSelected) => {
@@ -97,6 +94,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
       }
     }
   };
+
   return (
     <>
       <TableComposable aria-label="Counterfactual Table">
@@ -130,7 +128,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                 <Button
                   variant={'link'}
                   isInline={true}
-                  onClick={onOpenConstraints}
+                  onClick={() => onOpenConstraints(row)}
                   icon={<PlusCircleIcon />}
                   isDisabled={row.isFixed}
                 >

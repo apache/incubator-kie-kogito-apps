@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import {
   Button,
   Drawer,
-  DrawerActions,
-  DrawerCloseButton,
   DrawerContent,
   DrawerContentBody,
-  DrawerHead,
-  DrawerPanelBody,
   DrawerPanelContent,
   Hint,
   HintBody,
@@ -20,30 +16,19 @@ import {
 } from '@patternfly/react-core';
 import CounterfactualTable from '../../Organisms/CounterfactualTable/CounterfactualTable';
 import CounterfactualToolbar from '../../Organisms/CounterfactualToolbar/CounterfactualToolbar';
+import CounterfactualInputDomainEdit from '../../Organisms/CounterfactualInputDomainEdit/CounterfactualInputDomainEdit';
 import './Counterfactual.scss';
 
 const Counterfactual = () => {
   const [isSidePanelExpanded, setIsSidePanelExpanded] = useState(false);
+  const [inputDomain, setInputDomain] = useState<CFSearchInput>();
 
   const panelContent = (
     <DrawerPanelContent widths={{ default: 'width_33' }}>
-      <DrawerHead>
-        <Title headingLevel="h4" size="xl">
-          Constraint
-        </Title>
-        <DrawerActions>
-          <DrawerCloseButton onClick={() => setIsSidePanelExpanded(false)} />
-        </DrawerActions>
-      </DrawerHead>
-      <DrawerPanelBody>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis,
-        deleniti sint? Eius nobis quibusdam voluptates. Ad alias blanditiis
-        consequatur dolore facilis ipsa iste itaque mollitia, necessitatibus
-        omnis pariatur quo veritatis. Lorem ipsum dolor sit amet, consectetur
-        adipisicing elit. A consectetur cumque deleniti dicta dolor, incidunt
-        necessitatibus neque nostrum nulla omnis, quaerat quos temporibus
-        voluptatem? Dolorum eum labore maiores quo! Dicta.
-      </DrawerPanelBody>
+      <CounterfactualInputDomainEdit
+        input={inputDomain}
+        onClose={() => setIsSidePanelExpanded(false)}
+      />
     </DrawerPanelContent>
   );
   return (
@@ -75,9 +60,10 @@ const Counterfactual = () => {
                 <StackItem>
                   <CounterfactualToolbar />
                   <CounterfactualTable
-                    onOpenConstraints={() =>
-                      setIsSidePanelExpanded(!isSidePanelExpanded)
-                    }
+                    onOpenConstraints={input => {
+                      setInputDomain(input);
+                      setIsSidePanelExpanded(!isSidePanelExpanded);
+                    }}
                   />
                 </StackItem>
               </Stack>
@@ -90,3 +76,23 @@ const Counterfactual = () => {
 };
 
 export default Counterfactual;
+
+export interface CFSearchDomain {
+  isFixed: boolean;
+  name: string;
+  typeRef: 'number' | 'string' | 'boolean';
+  domain:
+    | {
+        type: 'numerical';
+        lowerBound: 0;
+        upperBound: 1000;
+      }
+    | {
+        type: 'categorical';
+        categories: string[];
+      };
+}
+
+export interface CFSearchInput extends CFSearchDomain {
+  value: number | string | boolean;
+}
