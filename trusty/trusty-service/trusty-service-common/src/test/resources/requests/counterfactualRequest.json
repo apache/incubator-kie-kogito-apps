@@ -1,11 +1,13 @@
 {
   "goals": [
     {
+      "kind":"UNIT",
       "name": "deposit",
       "typeRef": "number",
       "value": 5000
     },
     {
+      "kind":"UNIT",
       "name": "approved",
       "typeRef": "boolean",
       "value": true
@@ -13,11 +15,13 @@
   ],
   "searchDomains": [
     {
+      "kind":"UNIT",
       "isFixed": true,
       "name": "age",
       "typeRef": "number"
     },
     {
+      "kind":"UNIT",
       "isFixed": false,
       "name": "income",
       "typeRef": "number",
@@ -28,6 +32,7 @@
       }
     },
     {
+      "kind":"UNIT",
       "isFixed": false,
       "name": "taxCode",
       "typeRef": "string",

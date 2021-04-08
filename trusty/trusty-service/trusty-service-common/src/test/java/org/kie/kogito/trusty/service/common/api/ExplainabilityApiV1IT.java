@@ -17,12 +17,14 @@
 package org.kie.kogito.trusty.service.common.api;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
@@ -55,6 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.trusty.service.common.TrustyServiceTestUtils.getCounterfactualJsonRequest;
+import static org.kie.kogito.trusty.service.common.TrustyServiceTestUtils.getCounterfactualWithStructuredModelJsonRequest;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -172,11 +175,13 @@ class ExplainabilityApiV1IT {
         assertEquals(2, goalsParameter.size());
 
         TypedVariableWithValue goal1 = goalsParameter.get(0);
+        assertEquals(TypedValue.Kind.UNIT, goal1.getKind());
         assertEquals("deposit", goal1.getName());
         assertEquals("number", goal1.getTypeRef());
         assertEquals(5000, goal1.getValue().asInt());
 
         TypedVariableWithValue goal2 = goalsParameter.get(1);
+        assertEquals(TypedValue.Kind.UNIT, goal2.getKind());
         assertEquals("approved", goal2.getName());
         assertEquals("boolean", goal2.getTypeRef());
         assertEquals(Boolean.TRUE, goal2.getValue().asBoolean());
@@ -187,12 +192,14 @@ class ExplainabilityApiV1IT {
 
         CounterfactualSearchDomain domain1 = searchDomainsParameter.get(0);
         assertTrue(domain1.isFixed());
+        assertEquals(TypedValue.Kind.UNIT, domain1.getKind());
         assertEquals("age", domain1.getName());
         assertEquals("number", domain1.getTypeRef());
         assertNull(domain1.getDomain());
 
         CounterfactualSearchDomain domain2 = searchDomainsParameter.get(1);
         assertFalse(domain2.isFixed());
+        assertEquals(TypedValue.Kind.UNIT, domain2.getKind());
         assertEquals("income", domain2.getName());
         assertEquals("number", domain2.getTypeRef());
         assertNotNull(domain2.getDomain());
@@ -203,6 +210,7 @@ class ExplainabilityApiV1IT {
 
         CounterfactualSearchDomain domain3 = searchDomainsParameter.get(2);
         assertFalse(domain3.isFixed());
+        assertEquals(TypedValue.Kind.UNIT, domain3.getKind());
         assertEquals("taxCode", domain3.getName());
         assertEquals("string", domain3.getTypeRef());
         assertNotNull(domain3.getDomain());
@@ -210,6 +218,103 @@ class ExplainabilityApiV1IT {
         CounterfactualDomainCategorical domain3Def = (CounterfactualDomainCategorical) domain3.getDomain();
         assertEquals(3, domain3Def.getCategories().size());
         assertTrue(domain3Def.getCategories().stream().map(JsonNode::asText).collect(Collectors.toList()).containsAll(Arrays.asList("A", "B", "C")));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void testCounterfactualRequestWithStructuredModel() {
+        ArgumentCaptor<List<TypedVariableWithValue>> goalsCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List<CounterfactualSearchDomain>> searchDomainsCaptor = ArgumentCaptor.forClass(List.class);
+
+        mockServiceWithCounterfactualRequest();
+
+        CounterfactualResponse response = given()
+                .filter(new RequestLoggingFilter())
+                .filter(new ResponseLoggingFilter())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(getCounterfactualWithStructuredModelJsonRequest())
+                .when().post("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/counterfactuals")
+                .as(CounterfactualResponse.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getExecutionId());
+        assertNotNull(response.getCounterfactualId());
+        assertEquals(response.getExecutionId(), TEST_EXECUTION_ID);
+        assertEquals(response.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
+
+        verify(executionService).requestCounterfactuals(eq(TEST_EXECUTION_ID), goalsCaptor.capture(), searchDomainsCaptor.capture());
+        List<TypedVariableWithValue> goalsParameter = goalsCaptor.getValue();
+        assertNotNull(goalsParameter);
+        assertEquals(1, goalsParameter.size());
+
+        TypedVariableWithValue goal1 = goalsParameter.get(0);
+        assertEquals(TypedValue.Kind.STRUCTURE, goal1.getKind());
+        assertEquals("Fine", goal1.getName());
+        assertEquals("tFine", goal1.getTypeRef());
+        assertEquals(2, goal1.getComponents().size());
+
+        Iterator<TypedVariableWithValue> goal1ChildIterator = goal1.getComponents().iterator();
+        TypedVariableWithValue goal1Child1 = goal1ChildIterator.next();
+        TypedVariableWithValue goal1Child2 = goal1ChildIterator.next();
+
+        assertEquals(TypedValue.Kind.UNIT, goal1Child1.getKind());
+        assertEquals("Amount", goal1Child1.getName());
+        assertEquals("number", goal1Child1.getTypeRef());
+        assertEquals(100, goal1Child1.getValue().asInt());
+        assertNull(goal1Child1.getComponents());
+
+        assertEquals(TypedValue.Kind.UNIT, goal1Child2.getKind());
+        assertEquals("Points", goal1Child2.getName());
+        assertEquals("number", goal1Child2.getTypeRef());
+        assertEquals(0, goal1Child2.getValue().asInt());
+        assertNull(goal1Child2.getComponents());
+
+        List<CounterfactualSearchDomain> searchDomainsParameter = searchDomainsCaptor.getValue();
+        assertNotNull(searchDomainsParameter);
+        assertEquals(1, searchDomainsParameter.size());
+
+        CounterfactualSearchDomain domain1 = searchDomainsParameter.get(0);
+        assertFalse(domain1.isFixed());
+        assertEquals(TypedValue.Kind.STRUCTURE, domain1.getKind());
+        assertEquals("Violation", domain1.getName());
+        assertEquals("tViolation", domain1.getTypeRef());
+        assertNull(domain1.getDomain());
+        assertEquals(3, domain1.getComponents().size());
+
+        Iterator<CounterfactualSearchDomain> domain1ChildIterator = domain1.getComponents().iterator();
+        CounterfactualSearchDomain domain1Child1 = domain1ChildIterator.next();
+        CounterfactualSearchDomain domain1Child2 = domain1ChildIterator.next();
+        CounterfactualSearchDomain domain1Child3 = domain1ChildIterator.next();
+
+        assertFalse(domain1Child1.isFixed());
+        assertEquals(TypedValue.Kind.UNIT, domain1Child1.getKind());
+        assertEquals("Type", domain1Child1.getName());
+        assertEquals("string", domain1Child1.getTypeRef());
+        assertNotNull(domain1Child1.getDomain());
+        assertTrue(domain1Child1.getDomain() instanceof CounterfactualDomainCategorical);
+        CounterfactualDomainCategorical domain1Child1Def = (CounterfactualDomainCategorical) domain1Child1.getDomain();
+        assertEquals(2, domain1Child1Def.getCategories().size());
+        assertTrue(domain1Child1Def.getCategories().stream().map(JsonNode::asText).collect(Collectors.toList()).containsAll(Arrays.asList("speed", "driving under the influence")));
+
+        assertFalse(domain1Child2.isFixed());
+        assertEquals(TypedValue.Kind.UNIT, domain1Child2.getKind());
+        assertEquals("Actual Speed", domain1Child2.getName());
+        assertEquals("number", domain1Child2.getTypeRef());
+        assertNotNull(domain1Child2.getDomain());
+        assertTrue(domain1Child2.getDomain() instanceof CounterfactualDomainNumerical);
+        CounterfactualDomainNumerical domain1Child2Def = (CounterfactualDomainNumerical) domain1Child2.getDomain();
+        assertEquals(0, domain1Child2Def.getLowerBound());
+        assertEquals(100, domain1Child2Def.getUpperBound());
+
+        assertFalse(domain1Child3.isFixed());
+        assertEquals(TypedValue.Kind.UNIT, domain1Child3.getKind());
+        assertEquals("Speed Limit", domain1Child3.getName());
+        assertEquals("number", domain1Child3.getTypeRef());
+        assertNotNull(domain1Child3.getDomain());
+        assertTrue(domain1Child3.getDomain() instanceof CounterfactualDomainNumerical);
+        CounterfactualDomainNumerical domain1Child3Def = (CounterfactualDomainNumerical) domain1Child3.getDomain();
+        assertEquals(0, domain1Child3Def.getLowerBound());
+        assertEquals(100, domain1Child3Def.getUpperBound());
     }
 
     private void mockServiceWithExplainabilityResult() {

@@ -120,6 +120,10 @@ public class TrustyServiceTestUtils {
         return readResourceAsString("/requests/counterfactualRequest.json");
     }
 
+    public static String getCounterfactualWithStructuredModelJsonRequest() {
+        return readResourceAsString("/requests/counterfactualWithStructuredModelRequest.json");
+    }
+
     public static ModelIdentifier getModelIdentifier() {
         return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
     }
