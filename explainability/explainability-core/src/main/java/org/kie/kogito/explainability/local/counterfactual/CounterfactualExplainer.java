@@ -30,7 +30,15 @@ import java.util.stream.IntStream;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.DataDomain;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
@@ -57,6 +65,9 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     private final UUID id;
     private final Consumer<CounterfactualSolution> intermediateResultsConsumer;
     private final Consumer<CounterfactualSolution> finalResultsConsumer;
+
+    public static final Consumer<CounterfactualSolution> assignId =
+            counterfactual -> counterfactual.setCounterfactualId(UUID.randomUUID());
 
     public static final Consumer<CounterfactualSolution> defaultIntermediateConsumer =
             counterfactual -> logger.debug("Intermediate counterfactual: {}", counterfactual.getEntities());
@@ -131,16 +142,18 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
         final UUID problemId = UUID.randomUUID();
 
-        Function<UUID, CounterfactualSolution> initial = uuid -> new CounterfactualSolution(entities, model, goal);
+        Function<UUID, CounterfactualSolution> initial = uuid -> new CounterfactualSolution(entities, model, goal, uuid);
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
                     SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
-                        solverManager.solveAndListen(problemId, initial, intermediateResultsConsumer, finalResultsConsumer,
+                        solverManager.solveAndListen(problemId,
+                                initial,
+                                assignId.andThen(intermediateResultsConsumer),
+                                assignId.andThen(finalResultsConsumer),
                                 null);
-                CounterfactualSolution solution;
                 try {
                     // Wait until the solving ends
                     return solverJob.getFinalBestSolution();
@@ -159,7 +172,8 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                         s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
-            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(), solution.getCounterfactualId());
+            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(),
+                    solution.getCounterfactualId());
         });
 
     }

@@ -43,6 +43,10 @@ public class CounterfactualSolution {
 
     private BendableBigDecimalScore score;
 
+    public void setCounterfactualId(UUID counterfactualId) {
+        this.counterfactualId = counterfactualId;
+    }
+
     private UUID counterfactualId;
 
     protected CounterfactualSolution() {

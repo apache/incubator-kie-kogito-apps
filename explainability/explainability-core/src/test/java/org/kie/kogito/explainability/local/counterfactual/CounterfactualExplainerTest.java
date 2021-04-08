@@ -15,9 +15,11 @@
  */
 package org.kie.kogito.explainability.local.counterfactual;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -32,7 +34,21 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.DataDomain;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
@@ -43,7 +59,10 @@ import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CounterfactualExplainerTest {
 
@@ -615,5 +634,70 @@ class CounterfactualExplainerTest {
 
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
         assertTrue(finalConsumerCalled.get());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testIntermediateUniqueIds(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+        Random random = new Random();
+        random.setSeed(seed);
+
+        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.1));
+        List<Feature> features = new LinkedList<>();
+        List<FeatureDomain> featureBoundaries = new LinkedList<>();
+        List<Boolean> constraints = new LinkedList<>();
+        features.add(FeatureFactory.newNumericalFeature("f-num1", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num2", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num3", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num4", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+
+        final DataDomain dataDomain = new DataDomain(featureBoundaries);
+
+        final double center = 500.0;
+        final double epsilon = 1e-10;
+
+        final PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
+        final TerminationConfig terminationConfig =
+                new TerminationConfig().withScoreCalculationCountLimit(100_000L);
+        // for the purpose of this test, only a few steps are necessary
+        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+                .builder().withTerminationConfig(terminationConfig).build();
+        solverConfig.setRandomSeed((long) seed);
+        solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
+
+        final List<UUID> intermediateIds = new ArrayList<>();
+
+        final Consumer<CounterfactualSolution> captureIntermediateIds = counterfactual -> {
+            intermediateIds.add(counterfactual.getCounterfactualId());
+        };
+
+        final CounterfactualExplainer counterfactualExplainer =
+                CounterfactualExplainer
+                        .builder(goal, constraints, dataDomain)
+                        .withSolverConfig(solverConfig)
+                        .withIntermediateConsumer(captureIntermediateIds)
+                        .build();
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionOutput output = model.predictAsync(List.of(input))
+                .get(predictionTimeOut, predictionTimeUnit)
+                .get(0);
+        Prediction prediction = new Prediction(input, output);
+        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
+            logger.debug("Entity: {}", entity);
+        }
+
+        // all intermediate Ids must be distinct
+        assertEquals((int) intermediateIds.stream().distinct().count(), intermediateIds.size());
     }
 }
