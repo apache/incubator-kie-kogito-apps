@@ -25,13 +25,22 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualDomainNumericalDto;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitDto;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.mocks.StorageImplMock;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
@@ -40,13 +49,20 @@ import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
+import org.mockito.ArgumentCaptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.IntNode;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -57,7 +73,6 @@ public class TrustyServiceTest {
 
     private static final String TEST_EXECUTION_ID = "executionId";
     private static final String TEST_MODEL = "definition";
-    private static final String TEST_MODEL_ID = "name:namespace";
     private static final String TEST_SOURCE_URL = "http://localhost:8080/model/service";
     private static final String TEST_SERVICE_URL = "http://localhost:8080/model";
 
@@ -112,8 +127,8 @@ public class TrustyServiceTest {
 
         MatchedExecutionHeaders result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
 
-        Assertions.assertEquals(1, result.getExecutions().size());
-        Assertions.assertEquals(decision.getExecutionId(), result.getExecutions().get(0).getExecutionId());
+        assertEquals(1, result.getExecutions().size());
+        assertEquals(decision.getExecutionId(), result.getExecutions().get(0).getExecutionId());
     }
 
     @Test
@@ -144,13 +159,13 @@ public class TrustyServiceTest {
 
         MatchedExecutionHeaders result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 3, 5, "");
 
-        Assertions.assertEquals(3, result.getExecutions().size());
-        Assertions.assertEquals(decisions.size(), result.getAvailableResults());
+        assertEquals(3, result.getExecutions().size());
+        assertEquals(decisions.size(), result.getAvailableResults());
 
         result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 5, "");
 
-        Assertions.assertEquals(5, result.getExecutions().size());
-        Assertions.assertEquals(decisions.size(), result.getAvailableResults());
+        assertEquals(5, result.getExecutions().size());
+        assertEquals(decisions.size(), result.getAvailableResults());
     }
 
     @Test
@@ -168,8 +183,8 @@ public class TrustyServiceTest {
 
         MatchedExecutionHeaders result = trustyService.getExecutionHeaders(OffsetDateTime.now().minusDays(1), OffsetDateTime.now(), 100, 0, "");
 
-        Assertions.assertEquals(0, result.getExecutions().size());
-        Assertions.assertEquals(0, result.getAvailableResults());
+        assertEquals(0, result.getExecutions().size());
+        assertEquals(0, result.getAvailableResults());
     }
 
     @Test
@@ -187,7 +202,7 @@ public class TrustyServiceTest {
 
         Decision result = trustyService.getDecisionById(TEST_EXECUTION_ID);
 
-        Assertions.assertEquals(TEST_EXECUTION_ID, result.getExecutionId());
+        assertEquals(TEST_EXECUTION_ID, result.getExecutionId());
     }
 
     @Test
@@ -280,7 +295,7 @@ public class TrustyServiceTest {
 
         DMNModelWithMetadata result = trustyService.getModelById(modelIdentifier);
 
-        Assertions.assertEquals(model, result.getModel());
+        assertEquals(model, result.getModel());
     }
 
     @Test
@@ -329,7 +344,7 @@ public class TrustyServiceTest {
 
         trustyService.storeExplainabilityResult(TEST_EXECUTION_ID, result);
 
-        Assertions.assertEquals(result, trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
+        assertEquals(result, trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
     }
 
     @Test
@@ -343,6 +358,121 @@ public class TrustyServiceTest {
         assertThrows(IllegalArgumentException.class, () -> trustyService.getExplainabilityResultById(TEST_EXECUTION_ID));
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenNoStoredExecutionWhenCounterfactualRequestIsMadeThenExceptionIsThrown() {
+        Storage<String, Decision> decisionStorage = mock(Storage.class);
+
+        when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(false);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
+
+        assertThrows(IllegalArgumentException.class, () -> trustyService.requestCounterfactuals(TEST_EXECUTION_ID, Collections.emptyList(), Collections.emptyList()));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenStoredExecutionWhenCounterfactualRequestIsMadeThenRequestIsStored() {
+        Storage<String, Decision> decisionStorage = mock(Storage.class);
+        Storage<String, Counterfactual> counterfactualStorage = mock(Storage.class);
+        ArgumentCaptor<Counterfactual> counterfactualArgumentCaptor = ArgumentCaptor.forClass(Counterfactual.class);
+
+        when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
+        when(trustyStorageServiceMock.getCounterfactualStorage()).thenReturn(counterfactualStorage);
+        when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(TrustyServiceTestUtils.buildCorrectDecision(TEST_EXECUTION_ID));
+
+        trustyService.requestCounterfactuals(TEST_EXECUTION_ID, Collections.emptyList(), Collections.emptyList());
+
+        verify(counterfactualStorage).put(anyString(), counterfactualArgumentCaptor.capture());
+        Counterfactual counterfactual = counterfactualArgumentCaptor.getValue();
+        assertNotNull(counterfactual);
+        assertEquals(TEST_EXECUTION_ID, counterfactual.getExecutionId());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenStoredExecutionWhenCounterfactualRequestIsMadeThenExplainabilityEventIsEmitted() {
+        Storage<String, Decision> decisionStorage = mock(Storage.class);
+        Storage<String, Counterfactual> counterfactualStorage = mock(Storage.class);
+        ArgumentCaptor<BaseExplainabilityRequestDto> explainabilityEventArgumentCaptor = ArgumentCaptor.forClass(BaseExplainabilityRequestDto.class);
+
+        when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
+        when(trustyStorageServiceMock.getCounterfactualStorage()).thenReturn(counterfactualStorage);
+        when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(TrustyServiceTestUtils.buildCorrectDecision(TEST_EXECUTION_ID));
+
+        trustyService.requestCounterfactuals(TEST_EXECUTION_ID, Collections.emptyList(), Collections.emptyList());
+
+        verify(explainabilityRequestProducerMock).sendEvent(explainabilityEventArgumentCaptor.capture());
+        BaseExplainabilityRequestDto event = explainabilityEventArgumentCaptor.getValue();
+        assertNotNull(event);
+        assertTrue(event instanceof CounterfactualExplainabilityRequestDto);
+        CounterfactualExplainabilityRequestDto request = (CounterfactualExplainabilityRequestDto) event;
+        assertEquals(TEST_EXECUTION_ID, request.getExecutionId());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void givenStoredExecutionWhenCounterfactualRequestIsMadeThenExplainabilityEventHasCorrectPaytload() {
+        Storage<String, Decision> decisionStorage = mock(Storage.class);
+        Storage<String, Counterfactual> counterfactualStorage = mock(Storage.class);
+        ArgumentCaptor<BaseExplainabilityRequestDto> explainabilityEventArgumentCaptor = ArgumentCaptor.forClass(BaseExplainabilityRequestDto.class);
+
+        Decision decision = new Decision(
+                TEST_EXECUTION_ID, TEST_SOURCE_URL, TEST_SERVICE_URL, 0L, true,
+                null, "model", "modelNamespace",
+                List.of(
+                        new DecisionInput("IN1", "yearsOfService", TypedVariableWithValue.buildUnit(
+                                "yearsOfService", "integer", new IntNode(10)))),
+                List.of(
+                        new DecisionOutcome(
+                                "OUT1", "salary", "SUCCEEDED",
+                                TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(1000)),
+                                Collections.emptyList(), Collections.emptyList())));
+
+        when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
+        when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
+        when(trustyStorageServiceMock.getCounterfactualStorage()).thenReturn(counterfactualStorage);
+        when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(decision);
+
+        trustyService.requestCounterfactuals(TEST_EXECUTION_ID,
+                List.of(new TypedVariableWithValue(TypedValue.Kind.UNIT, "salary", "integer", new IntNode(2000), null)),
+                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT, "yearsOfService", "integer", Collections.emptyList(), Boolean.FALSE, new CounterfactualDomainNumerical(10, 30))));
+
+        verify(explainabilityRequestProducerMock).sendEvent(explainabilityEventArgumentCaptor.capture());
+        BaseExplainabilityRequestDto event = explainabilityEventArgumentCaptor.getValue();
+        CounterfactualExplainabilityRequestDto request = (CounterfactualExplainabilityRequestDto) event;
+        assertEquals(TEST_EXECUTION_ID, request.getExecutionId());
+        assertEquals(TEST_SERVICE_URL, request.getServiceUrl());
+
+        //Check original input value has been copied into CF request
+        assertEquals(1, request.getInputs().size());
+        assertTrue(request.getInputs().containsKey("yearsOfService"));
+        assertEquals(decision.getInputs().iterator().next().getValue().getValue().asInt(),
+                request.getInputs().get("yearsOfService").toUnit().getValue().asInt());
+
+        //Check CF goals have been copied into CF request
+        assertEquals(1, request.getOutputs().size());
+        assertTrue(request.getOutputs().containsKey("salary"));
+        assertEquals(2000,
+                request.getOutputs().get("salary").toUnit().getValue().asInt());
+
+        //Check CF search domains have been copied into CF request
+        assertEquals(1, request.getSearchDomains().size());
+        assertTrue(request.getSearchDomains().containsKey("yearsOfService"));
+        CounterfactualSearchDomainDto searchDomain = request.getSearchDomains().get("yearsOfService");
+        assertTrue(searchDomain instanceof CounterfactualSearchDomainUnitDto);
+
+        CounterfactualSearchDomainUnitDto unit = (CounterfactualSearchDomainUnitDto) searchDomain;
+        assertFalse(unit.isFixed());
+        assertNotNull(unit.getDomain());
+        assertTrue(unit.getDomain() instanceof CounterfactualDomainNumericalDto);
+
+        CounterfactualDomainNumericalDto numerical = (CounterfactualDomainNumericalDto) unit.getDomain();
+        assertEquals(10, numerical.getLowerBound());
+        assertEquals(30, numerical.getUpperBound());
+    }
+
     private DMNModelWithMetadata buildDmnModel(String model) {
         return new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", model);
     }
@@ -350,4 +480,5 @@ public class TrustyServiceTest {
     private ModelIdentifier buildDmnModelIdentifier() {
         return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
     }
+
 }

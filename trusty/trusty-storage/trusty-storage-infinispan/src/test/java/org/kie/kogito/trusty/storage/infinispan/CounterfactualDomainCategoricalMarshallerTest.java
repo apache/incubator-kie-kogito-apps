@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.trusty.storage.infinispan;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,7 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.MappedCollectionTestFi
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical.CATEGORIES;
@@ -38,7 +38,7 @@ public class CounterfactualDomainCategoricalMarshallerTest extends MarshallerTes
 
     private static final List<AbstractTestField<CounterfactualDomainCategorical, ?>> TEST_FIELD_LIST = List.of(
             new MappedCollectionTestField<>(CATEGORIES,
-                    Collections.emptyList(),
+                    List.of(new TextNode("A"), new TextNode("B")),
                     CounterfactualDomainCategorical::getCategories,
                     CounterfactualDomainCategorical::setCategories,
                     MARSHALLER::safeJsonFromString,

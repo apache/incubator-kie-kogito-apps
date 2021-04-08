@@ -190,8 +190,11 @@ public class TrustyServiceImpl implements TrustyService {
     public Counterfactual requestCounterfactuals(String executionId,
             List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
+        Storage<String, Decision> storage = storageService.getDecisionsStorage();
+        if (!storage.containsKey(executionId)) {
+            throw new IllegalArgumentException(String.format("A decision with ID %s is not present in the storage. Counterfactuals cannot be requested.", executionId));
+        }
         Counterfactual counterfactual = storeCounterfactualRequest(executionId, goals, searchDomains);
-
         sendCounterfactualRequestEvent(executionId, goals, searchDomains);
 
         return counterfactual;
