@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-export interface IFormAction {
-  name: string;
+import { FormAction } from '../FormActionsUtils';
 
-  execute?(): void;
-}
-
-export interface IFormSubmitHandler {
-  getActions(): IFormAction[];
+export interface FormSubmitHandler {
+  getActions(): FormAction[];
 
   doSubmit(data: any): void;
 }

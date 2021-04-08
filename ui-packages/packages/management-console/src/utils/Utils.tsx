@@ -447,21 +447,23 @@ export const getSvg = async (data, setSvg, setSvgError): Promise<void> => {
       const temp = <SVG src={res.data} />;
       setSvg(temp);
     })
-    .catch(async error =>
-      axios
-        .get(
-          `${data.ProcessInstances[0].serviceUrl}/svg/processes/${data.ProcessInstances[0].processId}/instances/${data.ProcessInstances[0].id}`
-        )
-        .then(res => {
-          const temp = <SVG src={res.data} />;
-          setSvg(temp);
-        })
-        .catch(err => {
-          if (err.response && err.response.status !== 404) {
-            setSvgError(err.message);
-          }
-        })
-    );
+    .catch(async error => {
+      if (data.ProcessInstances[0].serviceUrl) {
+        axios
+          .get(
+            `${data.ProcessInstances[0].serviceUrl}/svg/processes/${data.ProcessInstances[0].processId}/instances/${data.ProcessInstances[0].id}`
+          )
+          .then(res => {
+            const temp = <SVG src={res.data} />;
+            setSvg(temp);
+          })
+          .catch(err => {
+            if (err.response && err.response.status !== 404) {
+              setSvgError(err.message);
+            }
+          });
+      }
+    });
 };
 
 export const formatForBulkListProcessInstance = (
@@ -515,4 +517,18 @@ export const checkProcessInstanceState = (
   } else {
     return true;
   }
+};
+
+export const alterOrderByObj = (orderByObj): GraphQL.ProcessInstanceOrderBy => {
+  if (orderByObj['id']) {
+    orderByObj['processName'] = orderByObj['id'];
+    delete orderByObj['id'];
+  } else if (orderByObj['status']) {
+    orderByObj['state'] = orderByObj['status'];
+    delete orderByObj['status'];
+  } else if (orderByObj['created']) {
+    orderByObj['start'] = orderByObj['created'];
+    delete orderByObj['created'];
+  }
+  return orderByObj;
 };

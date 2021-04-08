@@ -18,7 +18,7 @@ package org.kie.kogito.testcontainers;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
+import static org.kie.kogito.testcontainers.TestContainersUtils.getImageName;
 
 public class InfinispanContainer extends GenericContainer<InfinispanContainer> {
 
@@ -27,6 +27,7 @@ public class InfinispanContainer extends GenericContainer<InfinispanContainer> {
         addEnv("USER", "admin");
         addEnv("PASS", "admin");
         addExposedPort(11222);
-        waitingFor(Wait.forLogMessage(".*ISPN080001.*", 1));
+        waitingFor(Wait.forLogMessage(".*ISPN080001.*", 1))
+                .withStartupTimeout(Constants.DEFAULT_TIMEOUT);
     }
 }

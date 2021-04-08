@@ -18,7 +18,7 @@ package org.kie.kogito.testcontainers;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-import static org.kie.kogito.testcontainers.TestcontainersUtils.getImageName;
+import static org.kie.kogito.testcontainers.TestContainersUtils.getImageName;
 
 public class ExplainabilityServiceMessagingContainer extends GenericContainer<ExplainabilityServiceMessagingContainer> {
 
@@ -27,6 +27,7 @@ public class ExplainabilityServiceMessagingContainer extends GenericContainer<Ex
         addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaBootstrapServers);
         addEnv("TRUSTY_EXPLAINABILITY_NUMBEROFSAMPLES", String.valueOf(numberOfSamples));
         addExposedPort(8080);
-        waitingFor(Wait.forLogMessage(".*Successfully joined group.*", 1));
+        waitingFor(Wait.forLogMessage(".*Successfully joined group.*", 1))
+                .withStartupTimeout(Constants.DEFAULT_TIMEOUT);
     }
 }

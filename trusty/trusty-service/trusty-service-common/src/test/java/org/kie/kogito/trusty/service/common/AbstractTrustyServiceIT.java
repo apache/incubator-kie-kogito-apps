@@ -27,9 +27,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
-import org.kie.kogito.trusty.storage.api.TrustyStorageService;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 
 public abstract class AbstractTrustyServiceIT {
 
@@ -123,6 +123,23 @@ public abstract class AbstractTrustyServiceIT {
     @Test
     public void givenNoModelsWhenAModelIsRetrievedThenAnExceptionIsRaised() {
         Assertions.assertThrows(IllegalArgumentException.class, this::getModel);
+    }
+
+    @Test
+    public void searchExecutionsByPrefixTest() {
+        String executionId = "da8ad1e9-a679-4ded-a6d5-53fd019e7002";
+        Long executionTimestamp = 1617270053L;
+        Instant instant = Instant.ofEpochMilli(executionTimestamp);
+        storeExecution(executionId, executionTimestamp);
+
+        MatchedExecutionHeaders executionHeaders = trustyService.getExecutionHeaders(
+                OffsetDateTime.ofInstant(instant.minusMillis(1), ZoneOffset.UTC),
+                OffsetDateTime.ofInstant(instant.plusMillis(1), ZoneOffset.UTC),
+                10,
+                0,
+                "da8ad1e9-a679");
+
+        Assertions.assertEquals(1, executionHeaders.getExecutions().size());
     }
 
     private Decision storeExecution(String executionId, Long timestamp) {

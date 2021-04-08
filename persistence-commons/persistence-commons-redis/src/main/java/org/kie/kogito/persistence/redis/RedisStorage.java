@@ -19,7 +19,6 @@ package org.kie.kogito.persistence.redis;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import org.kie.kogito.persistence.api.Storage;
@@ -91,7 +90,8 @@ public class RedisStorage<V> implements Storage<String, V> {
             Map<String, Object> mappedValue = JsonUtils.getMapper().convertValue(value, Map.class);
             for (String fieldName : indexedFields) {
                 if (mappedValue.get(fieldName) != null) { // If a field is indexed, its value can not be null: it has to be filtered out
-                    document.put(fieldName, mappedValue.get(fieldName));
+                    // Indexed values have to be escaped according to https://github.com/RediSearch/RediSearch/issues/1148
+                    document.put(fieldName, Sanitizer.sanitize(mappedValue.get(fieldName)));
                 }
             }
         }
@@ -121,7 +121,7 @@ public class RedisStorage<V> implements Storage<String, V> {
     }
 
     @Override
-    public Set<Map.Entry<String, V>> entrySet() {
+    public Map<String, V> entries() {
         throw new UnsupportedOperationException("entrySet operation not supported for Redis.");
     }
 
