@@ -16,8 +16,7 @@
 package org.kie.kogito.explainability.utils;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -29,6 +28,8 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
@@ -449,16 +450,15 @@ public class DataUtils {
      * @throws IOException whether any IO error occurs while writing the CSV
      */
     public static void toCSV(PartialDependenceGraph partialDependenceGraph, Path path) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(path)) {
+        try (Writer writer = Files.newBufferedWriter(path)) {
             List<Value> xAxis = partialDependenceGraph.getX();
             List<Value> yAxis = partialDependenceGraph.getY();
-            outputStream.write("feature,output\n".getBytes(StandardCharsets.UTF_8));
+            CSVFormat format = CSVFormat.DEFAULT.withHeader(
+                    partialDependenceGraph.getFeature().getName(), partialDependenceGraph.getOutput().getName());
+            CSVPrinter printer = new CSVPrinter(writer, format);
             for (int i = 0; i < xAxis.size(); i++) {
-                String line = xAxis.get(i).asString().replace(",", "") + ',' +
-                        yAxis.get(i).asString().replace(",", "") + '\n';
-                outputStream.write(line.getBytes(StandardCharsets.UTF_8));
+                printer.printRecord(xAxis.get(i).asString(), yAxis.get(i).asString());
             }
-            outputStream.flush();
         }
     }
 }

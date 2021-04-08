@@ -48,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DataUtilsTest {
 
@@ -344,7 +345,9 @@ class DataUtilsTest {
     @Test
     void toCSV() {
         Feature feature = mock(Feature.class);
+        when(feature.getName()).thenReturn("feature-1");
         Output output = mock(Output.class);
+        when(output.getName()).thenReturn("decision-1");
         List<Value> x = new ArrayList<>();
         x.add(new Value(1));
         x.add(new Value(2));
