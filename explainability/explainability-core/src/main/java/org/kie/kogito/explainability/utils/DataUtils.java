@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -30,6 +31,7 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
@@ -40,6 +42,7 @@ import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
@@ -460,5 +463,34 @@ public class DataUtils {
                 printer.printRecord(xAxis.get(i).asString(), yAxis.get(i).asString());
             }
         }
+    }
+
+    /**
+     * Read a CSV file into a {@link DataDistribution} object.
+     *
+     * @param file the path to the CSV file
+     * @param schema an ordered list of {@link Type}s as the 'schema', used to determine
+     *        the {@link Type} of each feature / column
+     * @return the parsed CSV as a {@link DataDistribution}
+     * @throws IOException when failing at reading the CSV file
+     */
+    public static DataDistribution readCSV(Path file, List<Type> schema) throws IOException {
+        List<PredictionInput> inputs = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
+            for (CSVRecord record : records) {
+                int size = record.size();
+                if (schema.size() == size) {
+                    List<Feature> features = new ArrayList<>();
+                    for (int i = 0; i < size; i++) {
+                        String s = record.get(i);
+                        Type type = schema.get(i);
+                        features.add(new Feature(record.getParser().getHeaderNames().get(i), type, new Value(s)));
+                    }
+                    inputs.add(new PredictionInput(features));
+                }
+            }
+        }
+        return new PredictionInputsDataDistribution(inputs);
     }
 }
