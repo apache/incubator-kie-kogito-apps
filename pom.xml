@@ -119,7 +119,7 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-csv</artifactId>
-        <version>${version.commons-csv}</version>
+        <version>${version.org.apache.commons.csv}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
