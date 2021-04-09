@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -500,6 +501,7 @@ public class DataUtils {
      *        the {@link Type} of each feature / column
      * @return the parsed CSV as a {@link DataDistribution}
      * @throws IOException when failing at reading the CSV file
+     * @throws MalformedInputException if any record in CSV has different size with respect to the specified schema
      */
     public static DataDistribution readCSV(Path file, List<Type> schema) throws IOException {
         List<PredictionInput> inputs = new ArrayList<>();
@@ -515,6 +517,8 @@ public class DataUtils {
                         features.add(new Feature(record.getParser().getHeaderNames().get(i), type, new Value(s)));
                     }
                     inputs.add(new PredictionInput(features));
+                } else {
+                    throw new MalformedInputException(size);
                 }
             }
         }
