@@ -16,7 +16,6 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 
@@ -90,8 +89,8 @@ public class UserTaskInstanceEntityMapper implements MongoEntityMapper<UserTaskI
         instance.setProcessId(entity.getProcessId());
         instance.setRootProcessId(entity.getRootProcessId());
         instance.setRootProcessInstanceId(entity.getRootProcessInstanceId());
-        instance.setInputs(documentToJsonNode(entity.getInputs(), JsonNode.class));
-        instance.setOutputs(documentToJsonNode(entity.getOutputs(), JsonNode.class));
+        instance.setInputs(documentToJsonNode(entity.getInputs()));
+        instance.setOutputs(documentToJsonNode(entity.getOutputs()));
         instance.setEndpoint(entity.getEndpoint());
         return instance;
     }

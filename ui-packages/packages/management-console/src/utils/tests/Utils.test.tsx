@@ -17,7 +17,9 @@ import {
   performMultipleCancel,
   getSvg,
   formatForBulkListProcessInstance,
-  formatForBulkListJob
+  formatForBulkListJob,
+  checkProcessInstanceState,
+  alterOrderByObj
 } from '../Utils';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
@@ -833,6 +835,33 @@ describe('uitility function testing', () => {
       await getSvg(data, setSvg, setSvgError);
       expect(setSvg).toHaveBeenCalledWith(null);
     });
+    it('check api response when call to management console fails ', async () => {
+      mockedAxios.get.mockImplementationOnce(() =>
+        Promise.reject({
+          error: mockedAxios.get.mockResolvedValue({
+            data:
+              '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></g></g></svg>',
+            status: 200,
+            statusText: 'OK'
+          })
+        })
+      );
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalled();
+    });
+    it('check api response when, call to both management console and runtimes fails ', async () => {
+      mockedAxios.get.mockImplementationOnce(() =>
+        Promise.reject({
+          error: mockedAxios.get.mockRejectedValue({
+            err: {
+              response: { status: 500 }
+            }
+          })
+        })
+      );
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalled();
+    });
   });
   it('test format process instance for bulklist function', () => {
     const testProcessInstance = [
@@ -929,5 +958,36 @@ describe('uitility function testing', () => {
         errorMessage: null
       }
     ]);
+  });
+  it('test checkProcessInstanceState method', () => {
+    const testProcessInstance1 = {
+      state: GraphQL.ProcessInstanceState.Active,
+      addons: ['process-management'],
+      serviceUrl: 'http://localhost:4000'
+    };
+    const testProcessInstance2 = {
+      state: GraphQL.ProcessInstanceState.Aborted,
+      addons: [],
+      serviceUrl: null
+    };
+    const falseResult = checkProcessInstanceState(testProcessInstance1);
+    const trueResult = checkProcessInstanceState(testProcessInstance2);
+    expect(falseResult).toBeFalsy();
+    expect(trueResult).toBeTruthy();
+  });
+
+  it('test alterOrderByObj method', () => {
+    const orderById = { id: GraphQL.OrderBy.Desc };
+    const orderByStatus = { status: GraphQL.OrderBy.Desc };
+    const orderByCreated = { created: GraphQL.OrderBy.Desc };
+    expect(alterOrderByObj(orderById)).toEqual({
+      processName: GraphQL.OrderBy.Desc
+    });
+    expect(alterOrderByObj(orderByStatus)).toEqual({
+      state: GraphQL.OrderBy.Desc
+    });
+    expect(alterOrderByObj(orderByCreated)).toEqual({
+      start: GraphQL.OrderBy.Desc
+    });
   });
 });

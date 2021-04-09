@@ -1,42 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Jobs management page tests mock data with empty response 1`] = `
-<JobsManagementPage
-  ouiaId={null}
-  ouiaSafe={true}
->
-  <Redirect
-    to={
-      Object {
-        "pathname": "/NoData",
-        "state": Object {
-          "buttonText": "Go to process instance",
-          "description": "There are no jobs associated with any process instance.",
-          "prev": "/ProcessInstances",
-          "title": "Jobs not found",
-        },
-      }
-    }
-  >
-    <Lifecycle
-      onMount={[Function]}
-      onUpdate={[Function]}
-      to={
-        Object {
-          "pathname": "/NoData",
-          "state": Object {
-            "buttonText": "Go to process instance",
-            "description": "There are no jobs associated with any process instance.",
-            "prev": "/ProcessInstances",
-            "title": "Jobs not found",
-          },
-        }
-      }
-    />
-  </Redirect>
-</JobsManagementPage>
-`;
-
 exports[`Jobs management page tests mock data with error response 1`] = `
 <JobsManagementPage
   ouiaId={null}
@@ -131,6 +94,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                       ]
                     }
                     setChips={[Function]}
+                    setDisplayTable={[Function]}
                     setOffset={[Function]}
                     setSelectedJobInstances={[Function]}
                     setSelectedStatus={[Function]}
@@ -164,6 +128,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                 disabled={false}
                                 id="refresh-button"
                                 onClick={[Function]}
+                                role={null}
                                 type="button"
                               >
                                 <SyncIcon>
@@ -260,14 +225,14 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                   >
                                     <div
                                       className="pf-c-dropdown"
-                                      data-ouia-component-id={9}
+                                      data-ouia-component-id="OUIA-Generated-Dropdown-1"
                                       data-ouia-component-type="PF4/Dropdown"
                                       data-ouia-safe={true}
                                     >
                                       <KebabToggle
                                         aria-haspopup={true}
                                         getMenuRef={[Function]}
-                                        id="pf-dropdown-toggle-id-3"
+                                        id="pf-dropdown-toggle-id-4"
                                         isOpen={false}
                                         isPlain={true}
                                         key=".0"
@@ -277,7 +242,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                           Object {
                                             "current": <div
                                               class="pf-c-dropdown"
-                                              data-ouia-component-id="9"
+                                              data-ouia-component-id="OUIA-Generated-Dropdown-1"
                                               data-ouia-component-type="PF4/Dropdown"
                                               data-ouia-safe="true"
                                             >
@@ -286,7 +251,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                                 aria-haspopup="true"
                                                 aria-label="Actions"
                                                 class="pf-c-dropdown__toggle pf-m-plain"
-                                                id="pf-dropdown-toggle-id-3"
+                                                id="pf-dropdown-toggle-id-4"
                                                 type="button"
                                               >
                                                 <svg
@@ -300,7 +265,6 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                                 >
                                                   <path
                                                     d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                    transform=""
                                                   />
                                                 </svg>
                                               </button>
@@ -314,7 +278,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                           bubbleEvent={false}
                                           className=""
                                           getMenuRef={[Function]}
-                                          id="pf-dropdown-toggle-id-3"
+                                          id="pf-dropdown-toggle-id-4"
                                           isActive={false}
                                           isDisabled={false}
                                           isOpen={false}
@@ -327,7 +291,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                             Object {
                                               "current": <div
                                                 class="pf-c-dropdown"
-                                                data-ouia-component-id="9"
+                                                data-ouia-component-id="OUIA-Generated-Dropdown-1"
                                                 data-ouia-component-type="PF4/Dropdown"
                                                 data-ouia-safe="true"
                                               >
@@ -336,7 +300,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                                   aria-haspopup="true"
                                                   aria-label="Actions"
                                                   class="pf-c-dropdown__toggle pf-m-plain"
-                                                  id="pf-dropdown-toggle-id-3"
+                                                  id="pf-dropdown-toggle-id-4"
                                                   type="button"
                                                 >
                                                   <svg
@@ -350,7 +314,6 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                                   >
                                                     <path
                                                       d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                      transform=""
                                                     />
                                                   </svg>
                                                 </button>
@@ -364,7 +327,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                             aria-label="Actions"
                                             className="pf-c-dropdown__toggle pf-m-plain"
                                             disabled={false}
-                                            id="pf-dropdown-toggle-id-3"
+                                            id="pf-dropdown-toggle-id-4"
                                             onClick={[Function]}
                                             onKeyDown={[Function]}
                                             type="button"
@@ -390,7 +353,6 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                                               >
                                                 <path
                                                   d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                  transform=""
                                                 />
                                               </svg>
                                             </EllipsisVIcon>
@@ -421,7 +383,7 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                     Object {
                       "current": <div
                         class="pf-c-toolbar__expandable-content"
-                        id="data-toolbar-with-chip-groups-expandable-content-4"
+                        id="data-toolbar-with-chip-groups-expandable-content-5"
                       >
                         <div
                           class="pf-c-toolbar__group"
@@ -429,13 +391,13 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
                       </div>,
                     }
                   }
-                  id="data-toolbar-with-chip-groups-expandable-content-4"
+                  id="data-toolbar-with-chip-groups-expandable-content-5"
                   isExpanded={false}
                   showClearFiltersButton={false}
                 >
                   <div
                     className="pf-c-toolbar__expandable-content"
-                    id="data-toolbar-with-chip-groups-expandable-content-4"
+                    id="data-toolbar-with-chip-groups-expandable-content-5"
                   >
                     <ForwardRef>
                       <ToolbarGroupWithRef
@@ -490,291 +452,285 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
             </ToolbarChipGroupContent>
           </div>
         </Toolbar>
+        <Divider>
+          <hr
+            className="pf-c-divider"
+          />
+        </Divider>
         <Card>
           <article
             className="pf-c-card"
-            data-ouia-component-id={10}
+            data-ouia-component-id="OUIA-Generated-Card-1"
             data-ouia-component-type="PF4/Card"
             data-ouia-safe={true}
+            id=""
           >
-            <CardBody>
-              <div
-                className="pf-c-card__body"
-              >
-                <JobsManagementTable
-                  data={
+            <JobsManagementTable
+              data={
+                Object {
+                  "Jobs": Array [
                     Object {
-                      "Jobs": Array [
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 2,
-                          "expirationTime": null,
-                          "id": "6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-                          "lastUpdate": "2020-08-27T03:35:50.147Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 1,
-                          "rootProcessId": null,
-                          "scheduledId": "0",
-                          "status": "EXECUTED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 6,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 3,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "SCHEDULED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 0,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "2234dde-npce1-2908-b3131-6123c675a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 2,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "CANCELED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 3,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": 30300,
-                          "repeatLimit": 3,
-                          "retries": 7,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "ERROR",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 2,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "bff4ee-11qw23-6675-po987-qwedfrt45a0fa_5",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 15,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "RETRY",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 0,
-                          "expirationTime": "2020-08-29T04:35:54.631Z",
-                          "id": "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0",
-                          "lastUpdate": "2020-08-29T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 2,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "SCHEDULED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 0,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "dad3aa88-5c1e-4858-a919-uey23c675a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "e4448857-fa0c-403b-ad69-f0a353458b9d",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 5,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "SCHEDULED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 5,
-                          "expirationTime": null,
-                          "id": "6e74a570-31c8-4020-bd70-o413be2cb625f3_0",
-                          "lastUpdate": "2020-08-27T03:35:50.147Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 0,
-                          "rootProcessId": null,
-                          "scheduledId": "0",
-                          "status": "EXECUTED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 7,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "dad3aa88-5c1e-4858-a919-61ai21c675a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 0,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "SCHEDULED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 3,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "2234dde-npce1-2908-b3131-i15333c675a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 0,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "CANCELED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 2,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "T3113e-vbg43-2234-lo89-u8103214ra0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": 30300,
-                          "repeatLimit": 3,
-                          "retries": 0,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "ERROR",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 9,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "bff4ee-11qw23-6675-po987-qwedfrt45a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 0,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "RETRY",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 1,
-                          "expirationTime": "2020-08-29T04:35:54.631Z",
-                          "id": "eff4ee-11qw23-6675-pokau97-ql10s5ut45a0fa_0",
-                          "lastUpdate": "2020-08-29T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 0,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "SCHEDULED",
-                        },
-                        Object {
-                          "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
-                          "endpoint": "http://localhost:4000/jobs",
-                          "executionCounter": 8,
-                          "expirationTime": "2020-08-27T04:35:54.631Z",
-                          "id": "dad3aa88-5c1e-4858-a919-781ns75a0fa_0",
-                          "lastUpdate": "2020-08-27T03:35:54.635Z",
-                          "priority": 0,
-                          "processId": "travels",
-                          "processInstanceId": "e4448857-fa0c-403b-ad69-f0a353458b9d",
-                          "repeatInterval": null,
-                          "repeatLimit": null,
-                          "retries": 0,
-                          "rootProcessId": "",
-                          "scheduledId": null,
-                          "status": "SCHEDULED",
-                        },
-                      ],
-                    }
-                  }
-                  handleCancelModalToggle={[Function]}
-                  handleDetailsToggle={[Function]}
-                  handleRescheduleToggle={[Function]}
-                  isActionPerformed={false}
-                  selectedJobInstances={Array []}
-                  setIsActionPerformed={[Function]}
-                  setModalContent={[Function]}
-                  setModalTitle={[Function]}
-                  setOrderBy={[Function]}
-                  setSelectedJob={[Function]}
-                  setSelectedJobInstances={[Function]}
-                  setSortBy={[Function]}
-                  sortBy={
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 2,
+                      "expirationTime": null,
+                      "id": "6e74a570-31c8-4020-bd70-19be2cb625f3_0",
+                      "lastUpdate": "2020-08-27T03:35:50.147Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 1,
+                      "rootProcessId": null,
+                      "scheduledId": "0",
+                      "status": "EXECUTED",
+                    },
                     Object {
-                      "direction": "asc",
-                      "index": 6,
-                    }
-                  }
-                />
-                <KogitoEmptyState
-                  body="Try applying at least one filter to see results"
-                  onClick={[Function]}
-                  title="No filter applied."
-                  type={2}
-                >
-                  <MockedKogitoEmptyState />
-                </KogitoEmptyState>
-              </div>
-            </CardBody>
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 6,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 3,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "SCHEDULED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 0,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "2234dde-npce1-2908-b3131-6123c675a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 2,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "CANCELED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 3,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": 30300,
+                      "repeatLimit": 3,
+                      "retries": 7,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "ERROR",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 2,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "bff4ee-11qw23-6675-po987-qwedfrt45a0fa_5",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 15,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "RETRY",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 0,
+                      "expirationTime": "2020-08-29T04:35:54.631Z",
+                      "id": "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0",
+                      "lastUpdate": "2020-08-29T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 2,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "SCHEDULED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 0,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "dad3aa88-5c1e-4858-a919-uey23c675a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "e4448857-fa0c-403b-ad69-f0a353458b9d",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 5,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "SCHEDULED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 5,
+                      "expirationTime": null,
+                      "id": "6e74a570-31c8-4020-bd70-o413be2cb625f3_0",
+                      "lastUpdate": "2020-08-27T03:35:50.147Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 0,
+                      "rootProcessId": null,
+                      "scheduledId": "0",
+                      "status": "EXECUTED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 7,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "dad3aa88-5c1e-4858-a919-61ai21c675a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 0,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "SCHEDULED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 3,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "2234dde-npce1-2908-b3131-i15333c675a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 0,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "CANCELED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 2,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "T3113e-vbg43-2234-lo89-u8103214ra0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": 30300,
+                      "repeatLimit": 3,
+                      "retries": 0,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "ERROR",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 9,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "bff4ee-11qw23-6675-po987-qwedfrt45a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 0,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "RETRY",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 1,
+                      "expirationTime": "2020-08-29T04:35:54.631Z",
+                      "id": "eff4ee-11qw23-6675-pokau97-ql10s5ut45a0fa_0",
+                      "lastUpdate": "2020-08-29T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 0,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "SCHEDULED",
+                    },
+                    Object {
+                      "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+                      "endpoint": "http://localhost:4000/jobs",
+                      "executionCounter": 8,
+                      "expirationTime": "2020-08-27T04:35:54.631Z",
+                      "id": "dad3aa88-5c1e-4858-a919-781ns75a0fa_0",
+                      "lastUpdate": "2020-08-27T03:35:54.635Z",
+                      "priority": 0,
+                      "processId": "travels",
+                      "processInstanceId": "e4448857-fa0c-403b-ad69-f0a353458b9d",
+                      "repeatInterval": null,
+                      "repeatLimit": null,
+                      "retries": 0,
+                      "rootProcessId": "",
+                      "scheduledId": null,
+                      "status": "SCHEDULED",
+                    },
+                  ],
+                }
+              }
+              handleCancelModalToggle={[Function]}
+              handleDetailsToggle={[Function]}
+              handleRescheduleToggle={[Function]}
+              isActionPerformed={false}
+              loading={false}
+              selectedJobInstances={Array []}
+              setIsActionPerformed={[Function]}
+              setModalContent={[Function]}
+              setModalTitle={[Function]}
+              setOffset={[Function]}
+              setOrderBy={[Function]}
+              setSelectedJob={[Function]}
+              setSelectedJobInstances={[Function]}
+              setSortBy={[Function]}
+              sortBy={
+                Object {
+                  "direction": "asc",
+                  "index": 6,
+                }
+              }
+            />
           </article>
         </Card>
         <MockedJobsPanelDetailsModal
@@ -909,4 +865,87 @@ exports[`Jobs management page tests snapshot test with mock data 1`] = `
     </PageSection>
   </div>
 </JobsManagementPage>
+`;
+
+exports[`Jobs management page tests test click handler on empty state & empty state snapshot 1`] = `
+<EmptyState
+  variant="full"
+>
+  <div
+    className="pf-c-empty-state"
+  >
+    <div
+      className="pf-c-empty-state__content"
+    >
+      <EmptyStateIcon
+        color="var(--pf-global--warning-color--100)"
+        icon={[Function]}
+      >
+        <ExclamationTriangleIcon
+          aria-hidden="true"
+          className="pf-c-empty-state__icon"
+          color="var(--pf-global--warning-color--100)"
+          noVerticalAlign={false}
+          size="sm"
+        >
+          <svg
+            aria-hidden="true"
+            aria-labelledby={null}
+            className="pf-c-empty-state__icon"
+            fill="var(--pf-global--warning-color--100)"
+            height="1em"
+            role="img"
+            style={
+              Object {
+                "verticalAlign": "-0.125em",
+              }
+            }
+            viewBox="0 0 576 512"
+            width="1em"
+          >
+            <path
+              d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"
+            />
+          </svg>
+        </ExclamationTriangleIcon>
+      </EmptyStateIcon>
+      <Title
+        headingLevel="h5"
+        size="lg"
+      >
+        <h5
+          className="pf-c-title pf-m-lg"
+        >
+          No filter applied.
+        </h5>
+      </Title>
+      <EmptyStateBody>
+        <div
+          className="pf-c-empty-state__body"
+        >
+          Try applying at least one filter to see results
+        </div>
+      </EmptyStateBody>
+      <Button
+        onClick={[Function]}
+        variant="link"
+      >
+        <button
+          aria-disabled={false}
+          aria-label={null}
+          className="pf-c-button pf-m-link"
+          data-ouia-component-id="OUIA-Generated-Button-link-6"
+          data-ouia-component-type="PF4/Button"
+          data-ouia-safe={true}
+          disabled={false}
+          onClick={[Function]}
+          role={null}
+          type="button"
+        >
+          Reset to default
+        </button>
+      </Button>
+    </div>
+  </div>
+</EmptyState>
 `;

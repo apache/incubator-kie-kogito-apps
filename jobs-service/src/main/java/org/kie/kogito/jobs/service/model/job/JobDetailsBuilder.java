@@ -1,19 +1,18 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
@@ -99,7 +98,7 @@ public class JobDetailsBuilder {
 
     public JobDetails build() {
         return new JobDetails(id, correlationId, status, lastUpdate, retries, executionCounter, scheduledId, payload,
-                              recipient, trigger, type, priority);
+                recipient, trigger, type, priority);
     }
 
     public JobDetailsBuilder of(JobDetails jobDetails) {
@@ -127,10 +126,9 @@ public class JobDetailsBuilder {
         return this;
     }
 
-
     public JobDetailsBuilder merge(JobDetails jobDetails) {
         final Optional<JobDetails> j = Optional.ofNullable(jobDetails);
-        return  scheduledId(j.map(JobDetails::getScheduledId).orElse(scheduledId))
+        return scheduledId(j.map(JobDetails::getScheduledId).orElse(scheduledId))
                 .retries(j.map(JobDetails::getRetries).orElse(retries))
                 .status(j.map(JobDetails::getStatus).orElse(status))
                 .id(j.map(JobDetails::getId).orElse(id))

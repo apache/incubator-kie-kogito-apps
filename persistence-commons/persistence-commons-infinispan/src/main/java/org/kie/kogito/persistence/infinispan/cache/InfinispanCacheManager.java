@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.persistence.infinispan.cache;
 
 import java.util.Optional;
@@ -106,7 +105,7 @@ public class InfinispanCacheManager implements StorageService {
     }
 
     @Override
-    public <T> Storage<String, T> getCacheWithDataFormat(String name, Class<T> type, String rootType) {
+    public <T> Storage<String, T> getCache(String name, Class<T> type, String rootType) {
         return new StorageImpl<>(getOrCreateCache(name).withDataFormat(jsonDataFormat), rootType);
     }
 }

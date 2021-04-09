@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.core.model.solver.condition;
 
 import java.util.Collections;
@@ -51,45 +50,44 @@ class TaskAssigningConditionsTest {
     static Stream<Arguments> testParams() {
         return Stream.of(
                 Arguments.of(mockTask(Collections.emptyList(), Collections.emptySet()),
-                             null,
-                             new ConditionsCheckResult(false, false)),
+                        null,
+                        new ConditionsCheckResult(false, false)),
 
                 Arguments.of(mockTask(Collections.emptyList(), Collections.emptySet()),
-                             ModelConstants.PLANNING_USER,
-                             new ConditionsCheckResult(true, true)),
+                        ModelConstants.PLANNING_USER,
+                        new ConditionsCheckResult(true, true)),
 
                 Arguments.of(mockTask(Collections.emptyList(), Collections.emptySet()),
-                             mockUser(USER1, false, Collections.emptyList(), Collections.emptySet()),
-                             new ConditionsCheckResult(false, false)),
+                        mockUser(USER1, false, Collections.emptyList(), Collections.emptySet()),
+                        new ConditionsCheckResult(false, false)),
 
                 Arguments.of(mockTask(Collections.emptyList(), Collections.emptySet()),
-                             mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
-                             new ConditionsCheckResult(false, true)),
+                        mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
+                        new ConditionsCheckResult(false, true)),
 
                 Arguments.of(mockTask(Collections.singletonList(mockUser(USER1, true, Collections.emptyList(), Collections.emptySet())), Collections.emptySet()),
-                             mockUser(USER1, false, Collections.emptyList(), Collections.emptySet()),
-                             new ConditionsCheckResult(false, false)),
+                        mockUser(USER1, false, Collections.emptyList(), Collections.emptySet()),
+                        new ConditionsCheckResult(false, false)),
 
                 Arguments.of(mockTask(Collections.singletonList(mockUser(USER1, true, Collections.emptyList(), Collections.emptySet())), Collections.emptySet()),
-                             mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
-                             new ConditionsCheckResult(true, true)),
+                        mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
+                        new ConditionsCheckResult(true, true)),
 
                 Arguments.of(mockTask(Collections.singletonList(mockUser(USER1, true, Collections.emptyList(), Collections.emptySet())), Collections.singleton(SKILL1)),
-                             mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
-                             new ConditionsCheckResult(true, false)),
+                        mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
+                        new ConditionsCheckResult(true, false)),
 
                 Arguments.of(mockTask(Collections.singletonList(mockUser(USER1, true, Collections.emptyList(), Collections.emptySet())), Collections.singleton(SKILL1)),
-                             mockUser(USER1, true, Collections.emptyList(), Collections.singleton(SKILL1)),
-                             new ConditionsCheckResult(true, true)),
+                        mockUser(USER1, true, Collections.emptyList(), Collections.singleton(SKILL1)),
+                        new ConditionsCheckResult(true, true)),
 
                 Arguments.of(mockTask(Collections.singletonList(mockGroup(GROUP1)), Collections.emptySet()),
-                             mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
-                             new ConditionsCheckResult(false, true)),
+                        mockUser(USER1, true, Collections.emptyList(), Collections.emptySet()),
+                        new ConditionsCheckResult(false, true)),
 
                 Arguments.of(mockTask(Collections.singletonList(mockGroup(GROUP1)), Collections.emptySet()),
-                             mockUser(USER1, true, Collections.singletonList(mockGroup(GROUP1)), Collections.emptySet()),
-                             new ConditionsCheckResult(true, true))
-        );
+                        mockUser(USER1, true, Collections.singletonList(mockGroup(GROUP1)), Collections.emptySet()),
+                        new ConditionsCheckResult(true, true)));
     }
 
     @ParameterizedTest

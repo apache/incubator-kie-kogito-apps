@@ -1,7 +1,5 @@
 package org.kie.kogito.trusty.storage.api.model;
 
-option indexed_by_default = true;
-
 /* @Indexed */
 message Decision {
 
@@ -109,11 +107,11 @@ message ExplainabilityResult {
     optional string statusDetails = 3;
 
     /* @Field(store = Store.YES) */
-    repeated Saliency saliencies = 4;
+    repeated SaliencyModel saliencies = 4;
 }
 
 /* @Indexed */
-message FeatureImportance {
+message FeatureImportanceModel {
     /* @Field(store = Store.YES) */
     optional string featureName = 1;
 
@@ -134,7 +132,7 @@ message MessageExceptionField {
 }
 
 /* @Indexed */
-message Saliency {
+message SaliencyModel {
     /* @Field(store = Store.YES) */
     optional string outcomeId = 1;
 
@@ -142,7 +140,7 @@ message Saliency {
     optional string outcomeName = 2;
 
     /* @Field(store = Store.YES) */
-    repeated FeatureImportance featureImportance = 3;
+    repeated FeatureImportanceModel featureImportance = 3;
 }
 
 /* @Indexed */
@@ -161,4 +159,28 @@ message TypedVariable {
 
     /* @Field(store = Store.YES) */
     repeated TypedVariable components = 5;
+}
+
+/* @Indexed */
+message DMNModelWithMetadata {
+    /* @Field(store = Store.YES) */
+    optional string groupId = 1;
+
+    /* @Field(store = Store.YES) */
+    optional string artifactId = 2;
+
+    /* @Field(store = Store.YES) */
+    optional string modelVersion = 3;
+
+    /* @Field(store = Store.YES) */
+    optional string dmnVersion = 4;
+
+    /* @Field(store = Store.YES) */
+    optional string name = 5;
+
+    /* @Field(store = Store.YES) */
+    optional string namespace = 6;
+
+    /* @Field(store = Store.YES) */
+    optional string model = 7;
 }

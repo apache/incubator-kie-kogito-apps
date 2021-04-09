@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.security;
 
 import java.security.Principal;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import io.quarkus.security.credential.Credential;
+import org.junit.jupiter.api.Test;
+
 import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import static java.util.Arrays.asList;
 
 class UserResourceTest {
 
@@ -38,8 +34,8 @@ class UserResourceTest {
     void meTest() {
         UserResource userResourceTest = new UserResource();
 
-        String userName= "testName";
-        String testToken= "testToken";
+        String userName = "testName";
+        String testToken = "testToken";
         Set roles = new HashSet<String>();
         roles.add("role1");
         Principal mockPrincipal = mock(Principal.class);

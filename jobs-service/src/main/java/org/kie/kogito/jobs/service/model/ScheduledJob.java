@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.model;
 
 import java.time.ZonedDateTime;
@@ -38,18 +37,18 @@ public class ScheduledJob extends Job {
     }
 
     private ScheduledJob(Optional<Job> job,
-                         Optional<ZonedDateTime> expirationTime) {
+            Optional<ZonedDateTime> expirationTime) {
         super(job.map(Job::getId).orElse(null),
-              expirationTime.orElse(job.map(Job::getExpirationTime).orElse(null)),
-              job.map(Job::getPriority).orElse(null),
-              job.map(Job::getCallbackEndpoint).orElse(null),
-              job.map(Job::getProcessInstanceId).orElse(null),
-              job.map(Job::getRootProcessInstanceId).orElse(null),
-              job.map(Job::getProcessId).orElse(null),
-              job.map(Job::getRootProcessId).orElse(null),
-              job.map(Job::getRepeatInterval).orElse(null),
-              job.map(Job::getRepeatLimit).orElse(null),
-              job.map(Job::getNodeInstanceId).orElse(null));
+                expirationTime.orElse(job.map(Job::getExpirationTime).orElse(null)),
+                job.map(Job::getPriority).orElse(null),
+                job.map(Job::getCallbackEndpoint).orElse(null),
+                job.map(Job::getProcessInstanceId).orElse(null),
+                job.map(Job::getRootProcessInstanceId).orElse(null),
+                job.map(Job::getProcessId).orElse(null),
+                job.map(Job::getRootProcessId).orElse(null),
+                job.map(Job::getRepeatInterval).orElse(null),
+                job.map(Job::getRepeatLimit).orElse(null),
+                job.map(Job::getNodeInstanceId).orElse(null));
     }
 
     public String getScheduledId() {
@@ -142,18 +141,18 @@ public class ScheduledJob extends Job {
         private ScheduledJobBuilder mergeJob(Job mergeJob) {
             final Optional<Job> j = Optional.ofNullable(mergeJob);
             return job(JobBuilder.builder()
-                               .id(j.map(Job::getId).orElse(job.getId()))
-                               .repeatInterval(j.map(Job::getRepeatInterval).orElse(job.getRepeatInterval()))
-                               .repeatLimit(j.map(Job::getRepeatLimit).orElse(job.getRepeatLimit()))
-                               .priority(j.map(Job::getPriority).orElse(job.getPriority()))
-                               .callbackEndpoint(j.map(Job::getCallbackEndpoint).orElse(job.getCallbackEndpoint()))
-                               .rootProcessId(j.map(Job::getRootProcessId).orElse(job.getRootProcessId()))
-                               .processId(j.map(Job::getProcessId).orElse(job.getProcessId()))
-                               .rootProcessInstanceId(j.map(Job::getRootProcessInstanceId).orElse(job.getRootProcessInstanceId()))
-                               .processInstanceId(j.map(Job::getProcessInstanceId).orElse(job.getProcessInstanceId()))
-                               .expirationTime(j.map(Job::getExpirationTime).orElse(job.getExpirationTime()))
-                               .nodeInstanceId(j.map(Job::getNodeInstanceId).orElse(job.getNodeInstanceId()))
-                               .build());
+                    .id(j.map(Job::getId).orElse(job.getId()))
+                    .repeatInterval(j.map(Job::getRepeatInterval).orElse(job.getRepeatInterval()))
+                    .repeatLimit(j.map(Job::getRepeatLimit).orElse(job.getRepeatLimit()))
+                    .priority(j.map(Job::getPriority).orElse(job.getPriority()))
+                    .callbackEndpoint(j.map(Job::getCallbackEndpoint).orElse(job.getCallbackEndpoint()))
+                    .rootProcessId(j.map(Job::getRootProcessId).orElse(job.getRootProcessId()))
+                    .processId(j.map(Job::getProcessId).orElse(job.getProcessId()))
+                    .rootProcessInstanceId(j.map(Job::getRootProcessInstanceId).orElse(job.getRootProcessInstanceId()))
+                    .processInstanceId(j.map(Job::getProcessInstanceId).orElse(job.getProcessInstanceId()))
+                    .expirationTime(j.map(Job::getExpirationTime).orElse(job.getExpirationTime()))
+                    .nodeInstanceId(j.map(Job::getNodeInstanceId).orElse(job.getNodeInstanceId()))
+                    .build());
         }
 
         public ScheduledJobBuilder scheduledId(String scheduledId) {

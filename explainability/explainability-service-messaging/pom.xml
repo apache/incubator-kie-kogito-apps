@@ -59,11 +59,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-container-image-jib</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.google.cloud.tools</groupId>
-      <artifactId>jib-core</artifactId>
-      <version>${version.apps.jib-core}</version>
-    </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -92,6 +87,9 @@
       <plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
+        <configuration>
+          <skipOriginalJarRename>true</skipOriginalJarRename>
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -107,6 +105,10 @@
           <excludes>
             <exclude>**/Native*IT.java</exclude>
           </excludes>
+          <systemPropertyVariables>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <container.image.kafka>${container.image.kafka}</container.image.kafka>
+          </systemPropertyVariables>
         </configuration>
         <executions>
           <execution>
@@ -141,19 +143,11 @@
           <name>native</name>
         </property>
       </activation>
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
       <build>
         <plugins>
-          <plugin>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>native-image</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <artifactId>maven-failsafe-plugin</artifactId>
             <executions>

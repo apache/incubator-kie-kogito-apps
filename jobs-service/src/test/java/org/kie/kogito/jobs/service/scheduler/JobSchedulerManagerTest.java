@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.scheduler;
 
 import java.time.ZonedDateTime;
@@ -21,8 +20,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import io.quarkus.runtime.StartupEvent;
-import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +36,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import io.quarkus.runtime.StartupEvent;
+import io.vertx.mutiny.core.Vertx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -83,9 +83,9 @@ class JobSchedulerManagerTest {
                 .build();
 
         lenient().when(repository.findByStatusBetweenDatesOrderByPriority(any(ZonedDateTime.class),
-                                                                          any(ZonedDateTime.class),
-                                                                          any(JobStatus.class),
-                                                                          any(JobStatus.class)))
+                any(ZonedDateTime.class),
+                any(JobStatus.class),
+                any(JobStatus.class)))
                 .thenReturn(ReactiveStreams.of(scheduledJob));
         lenient().when(scheduler.scheduled(JOB_ID))
                 .thenReturn(Optional.empty());

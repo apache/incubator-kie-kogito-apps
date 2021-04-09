@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,21 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.executor;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import io.smallrye.mutiny.Uni;
-import io.vertx.core.http.HttpMethod;
-import io.vertx.mutiny.core.MultiMap;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.core.buffer.Buffer;
-import io.vertx.mutiny.ext.web.client.HttpRequest;
-import io.vertx.mutiny.ext.web.client.HttpResponse;
-import io.vertx.mutiny.ext.web.client.WebClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
@@ -42,6 +33,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import io.smallrye.mutiny.Uni;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.mutiny.core.MultiMap;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.core.buffer.Buffer;
+import io.vertx.mutiny.ext.web.client.HttpRequest;
+import io.vertx.mutiny.ext.web.client.HttpResponse;
+import io.vertx.mutiny.ext.web.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -87,11 +87,11 @@ class HttpJobExecutorTest {
                         .executionCounter(1).build();
 
         Map queryParams = assertExecuteAndReturnQueryParams(request, params, scheduledJob, false);
-        assertThat(queryParams).hasSize(1).containsEntry("limit","8");
+        assertThat(queryParams).hasSize(1).containsEntry("limit", "8");
     }
 
     private Map assertExecuteAndReturnQueryParams(@Mock HttpRequest<Buffer> request, @Mock MultiMap params,
-                                                  JobDetails scheduledJob, boolean mockError) {
+            JobDetails scheduledJob, boolean mockError) {
         when(webClient.request(HttpMethod.POST, 8080, "localhost", "/endpoint")).thenReturn(request);
         when(request.queryParams()).thenReturn(params);
         HttpResponse response = mock(HttpResponse.class);

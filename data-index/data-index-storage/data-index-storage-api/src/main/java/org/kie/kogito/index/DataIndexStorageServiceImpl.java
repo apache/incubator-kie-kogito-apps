@@ -20,13 +20,15 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.quarkus.runtime.Startup;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import io.quarkus.runtime.Startup;
 
 import static org.kie.kogito.index.Constants.JOBS_STORAGE;
 import static org.kie.kogito.index.Constants.PROCESS_ID_MODEL_STORAGE;
@@ -39,9 +41,9 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
 
     @Inject
     StorageService cacheService;
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         //Force caches to be initialized at start up 
         getProcessInstancesCache();
         getUserTaskInstancesCache();
@@ -67,7 +69,12 @@ public class DataIndexStorageServiceImpl implements DataIndexStorageService {
     @Override
     public Storage<String, ObjectNode> getDomainModelCache(String processId) {
         String rootType = getProcessIdModelCache().get(processId);
-        return rootType == null ? null : cacheService.getCacheWithDataFormat(processId + "_domain", ObjectNode.class, rootType);
+        return rootType == null ? null : cacheService.getCache(getDomainModelCacheName(processId), ObjectNode.class, rootType);
+    }
+
+    @Override
+    public String getDomainModelCacheName(String processId) {
+        return processId + "_domain";
     }
 
     @Override

@@ -20,6 +20,7 @@ interface IOwnProps {
       | ((chip: GraphQL.JobStatus[]) => GraphQL.JobStatus[])
       | GraphQL.JobStatus[]
   ) => void;
+  setDisplayTable: (displayTable: boolean) => void;
   setValues: (
     values:
       | ((value: GraphQL.JobStatus[]) => GraphQL.JobStatus[])
@@ -34,6 +35,7 @@ const JobsManagementFilters: React.FC<IOwnProps & OUIAProps> = ({
   setSelectedStatus,
   chips,
   setChips,
+  setDisplayTable,
   setValues,
   setOffset,
   setSelectedJobInstances,
@@ -67,14 +69,21 @@ const JobsManagementFilters: React.FC<IOwnProps & OUIAProps> = ({
     setChips(selectedStatus);
     setValues(selectedStatus);
     setSelectedJobInstances([]);
+    selectedStatus.length > 0 && setDisplayTable(true);
   };
 
   const onDelete = (type: string = '', id: string = ''): void => {
+    const chipsCopy = [...chips];
+    const tempChips = chipsCopy.filter(item => item !== id);
     setOffset(0);
     setSelectedJobInstances([]);
     setChips(prev => prev.filter(item => item !== id));
     setSelectedStatus(prev => prev.filter(item => item !== id));
-    setValues(prev => prev.filter(item => item !== id));
+    if (tempChips.length > 0) {
+      setValues(prev => prev.filter(item => item !== id));
+    } else {
+      setDisplayTable(false);
+    }
   };
 
   return (

@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.taskassigning.core.model.solver.realtime.executable;
 
 import java.util.ArrayList;
@@ -55,8 +54,8 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
         private Consumer<TaskAssigningSolution> solutionBeforeChangesConsumer;
 
         WorkingSolutionAwareProblemFactChange(TaskAssignment taskAssignment,
-                                              User user,
-                                              Consumer<TaskAssigningSolution> solutionBeforeChangesConsumer) {
+                User user,
+                Consumer<TaskAssigningSolution> solutionBeforeChangesConsumer) {
             super(taskAssignment, user);
             this.solutionBeforeChangesConsumer = solutionBeforeChangesConsumer;
         }
@@ -77,8 +76,8 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
 
         ProgrammedAssignTaskProblemFactChange(TaskAssignment taskAssignment, User user) {
             setChange(new WorkingSolutionAwareProblemFactChange(taskAssignment,
-                                                                user,
-                                                                workingSolution -> printSolution(workingSolution, workingSolutionBeforeChange)));
+                    user,
+                    workingSolution -> printSolution(workingSolution, workingSolutionBeforeChange)));
         }
 
         String workingSolutionBeforeChangeAsString() {
@@ -252,18 +251,18 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
     }
 
     private void assignTaskProblemFactChange(TaskAssigningSolution solution,
-                                             String solutionResource,
-                                             String testType,
-                                             List<ProgrammedAssignTaskProblemFactChange> programmedChanges) throws Exception {
+            String solutionResource,
+            String testType,
+            List<ProgrammedAssignTaskProblemFactChange> programmedChanges) throws Exception {
         TaskAssigningSolution initialSolution = executeSequentialChanges(solution, programmedChanges);
         if (writeTestFiles()) {
             writeProblemFactChangesTestFiles(initialSolution,
-                                             solutionResource,
-                                             "AssignTaskExecutableProblemFactChangeTest.assignTaskProblemFactChangeTest",
-                                             testType,
-                                             programmedChanges,
-                                             ProgrammedAssignTaskProblemFactChange::workingSolutionBeforeChangeAsString,
-                                             ProgrammedAssignTaskProblemFactChange::solutionAfterChangeAsString);
+                    solutionResource,
+                    "AssignTaskExecutableProblemFactChangeTest.assignTaskProblemFactChangeTest",
+                    testType,
+                    programmedChanges,
+                    ProgrammedAssignTaskProblemFactChange::workingSolutionBeforeChangeAsString,
+                    ProgrammedAssignTaskProblemFactChange::solutionAfterChangeAsString);
         }
 
         //each partial solution must have the change that was applied on it.
@@ -288,6 +287,7 @@ class AssignTaskExecutableProblemFactChangeTest extends AbstractExecutableProble
      * asserts that the assignment defined by the change is not violated (exists in) by the solution.
      * The assignment defined in the change must also be pinned in the produced solution as well as any other
      * previous assignment for the given user.
+     * 
      * @param change The change that was executed for producing the solution.
      * @param solution The produced solution.
      */

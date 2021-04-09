@@ -18,7 +18,9 @@ package org.kie.kogito.explainability;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -45,7 +47,7 @@ public class TestUtils {
                 Feature feature = features.get(featureIndex);
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("feature-" + featureIndex, feature.getType(), feature.getValue(),
-                                           1d)));
+                                1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -64,7 +66,7 @@ public class TestUtils {
                     }
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
-                        List.of(new Output("sum-but" + skipFeatureIndex, Type.NUMBER, new Value<>(result), 1d)));
+                        List.of(new Output("sum-but" + skipFeatureIndex, Type.NUMBER, new Value(result), 1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -79,7 +81,7 @@ public class TestUtils {
                 Feature feature = features.get(featureIndex);
                 double v = feature.getValue().asNumber();
                 PredictionOutput predictionOutput = new PredictionOutput(
-                        List.of(new Output("feature-" + featureIndex, Type.BOOLEAN, new Value<>(v % 2 == 0), 1d)));
+                        List.of(new Output("feature-" + featureIndex, Type.BOOLEAN, new Value(v % 2 == 0), 1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -98,7 +100,25 @@ public class TestUtils {
                     }
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
-                        List.of(new Output("sum-even-but" + skipFeatureIndex, Type.BOOLEAN, new Value<>(((int) result) % 2 == 0), 1d)));
+                        List.of(new Output("sum-even-but" + skipFeatureIndex, Type.BOOLEAN, new Value(((int) result) % 2 == 0), 1d)));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
+        });
+    }
+
+    public static PredictionProvider getSumThresholdModel(double center, double epsilon) {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                double result = 0;
+                for (int i = 0; i < features.size(); i++) {
+                    result += features.get(i).getValue().asNumber();
+                }
+                final boolean inside = (result >= center - epsilon && result <= center + epsilon);
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("inside", Type.BOOLEAN, new Value(inside), 1.0 - Math.abs(result - center))));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
@@ -123,10 +143,52 @@ public class TestUtils {
                         }
                     }
                 }
-                Output output = new Output("spam", Type.BOOLEAN, new Value<>(spam), 1d);
+                Output output = new Output("spam", Type.BOOLEAN, new Value(spam), 1d);
                 outputs.add(new PredictionOutput(List.of(output)));
             }
             return outputs;
+        });
+    }
+
+    public static PredictionProvider getSymbolicArithmeticModel() {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            final String OPERAND_FEATURE_NAME = "operand";
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                // Find a valid operand feature, if any
+                Optional<String> operand = features.stream().filter(f -> OPERAND_FEATURE_NAME.equals(f.getName()))
+                        .map(f -> f.getValue().asString()).findFirst();
+                if (!operand.isPresent()) {
+                    throw new IllegalArgumentException("No valid operand found in features");
+                }
+                final String operandValue = operand.get();
+                double result = 0;
+                // Apply the found operand to the rest of the features
+                for (Feature feature : features) {
+                    if (!OPERAND_FEATURE_NAME.equals(feature.getName())) {
+                        switch (operandValue) {
+                            case "+":
+                                result += feature.getValue().asNumber();
+                                break;
+                            case "-":
+                                result -= feature.getValue().asNumber();
+                                break;
+                            case "*":
+                                result *= feature.getValue().asNumber();
+                                break;
+                            case "/":
+                                result /= feature.getValue().asNumber();
+                                break;
+                        }
+                    }
+                }
+
+                PredictionOutput predictionOutput = new PredictionOutput(
+                        List.of(new Output("result", Type.NUMBER, new Value(result), 1d)));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
         });
     }
 
@@ -134,7 +196,7 @@ public class TestUtils {
         return inputs -> supplyAsync(() -> {
             List<PredictionOutput> outputs = new LinkedList<>();
             for (PredictionInput ignored : inputs) {
-                Output output = new Output("class", Type.BOOLEAN, new Value<>(false), 1d);
+                Output output = new Output("class", Type.BOOLEAN, new Value(false), 1d);
                 outputs.add(new PredictionOutput(List.of(output)));
             }
             return outputs;
@@ -145,7 +207,7 @@ public class TestUtils {
         return getMockedNumericFeature(1d);
     }
 
-    public static Feature getMockedFeature(Type type, Value<?> v) {
+    public static Feature getMockedFeature(Type type, Value v) {
         Feature f = mock(Feature.class);
         when(f.getType()).thenReturn(type);
         when(f.getName()).thenReturn("f-" + type.name());
@@ -157,7 +219,7 @@ public class TestUtils {
         Feature f = mock(Feature.class);
         when(f.getType()).thenReturn(Type.TEXT);
         when(f.getName()).thenReturn("f-text");
-        Value<String> value = mock(Value.class);
+        Value value = mock(Value.class);
         when(value.getUnderlyingObject()).thenReturn(s);
         when(value.asNumber()).thenReturn(Double.NaN);
         when(value.asString()).thenReturn(s);
@@ -169,7 +231,7 @@ public class TestUtils {
         Feature f = mock(Feature.class);
         when(f.getType()).thenReturn(Type.NUMBER);
         when(f.getName()).thenReturn("f-num");
-        Value<Double> value = mock(Value.class);
+        Value value = mock(Value.class);
         when(value.getUnderlyingObject()).thenReturn(d);
         when(value.asNumber()).thenReturn(d);
         when(value.asString()).thenReturn(String.valueOf(d));
@@ -178,8 +240,20 @@ public class TestUtils {
     }
 
     public static void assertLimeStability(PredictionProvider model, Prediction prediction, LimeExplainer limeExplainer,
-                                       int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
+            int topK, double minimumPositiveStabilityRate, double minimumNegativeStabilityRate) {
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, topK,
-                                                                  minimumPositiveStabilityRate, minimumNegativeStabilityRate));
+                minimumPositiveStabilityRate, minimumNegativeStabilityRate));
+    }
+
+    public static void fillBalancedDataForFiltering(int size, List<Pair<double[], Double>> trainingSet, double[] weights) {
+        for (int i = 0; i < size; i++) {
+            double[] x = new double[2];
+            for (int j = 0; j < 2; j++) {
+                x[j] = (i + j) % 2 == 0 ? 0 : 1;
+            }
+            Double y = i % 3 == 0 ? 0d : 1d;
+            trainingSet.add(Pair.of(x, y));
+            weights[i] = i % 2 == 0 ? 0.2 : 0.8;
+        }
     }
 }

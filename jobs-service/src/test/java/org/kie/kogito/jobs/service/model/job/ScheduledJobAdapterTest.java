@@ -1,19 +1,18 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
@@ -56,10 +55,10 @@ class ScheduledJobAdapterTest {
     @BeforeAll
     public static void before() throws Exception {
         payload = new ObjectMapper().writeValueAsString(new ProcessPayload(PROCESS_INSTANCE_ID,
-                                                                           ROOT_PROCESS_INSTANCE_ID,
-                                                                           PROCESS_ID,
-                                                                           ROOT_PROCESS_ID,
-                                                                           NODE_INSTANCE_ID));
+                ROOT_PROCESS_INSTANCE_ID,
+                PROCESS_ID,
+                ROOT_PROCESS_ID,
+                NODE_INSTANCE_ID));
     }
 
     @Test
@@ -133,16 +132,16 @@ class ScheduledJobAdapterTest {
     private ScheduledJob.ScheduledJobBuilder getScheduledJobCommonBuilder(JobBuilder jobBuilder) {
         return ScheduledJob.builder()
                 .job(jobBuilder
-                             .id(ID)
-                             .priority(PRIORITY)
-                             .expirationTime(TIME)
-                             .callbackEndpoint(ENDPOINT)
-                             .rootProcessId(ROOT_PROCESS_ID)
-                             .rootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
-                             .processId(PROCESS_ID)
-                             .processInstanceId(PROCESS_INSTANCE_ID)
-                             .nodeInstanceId(NODE_INSTANCE_ID)
-                             .build())
+                        .id(ID)
+                        .priority(PRIORITY)
+                        .expirationTime(TIME)
+                        .callbackEndpoint(ENDPOINT)
+                        .rootProcessId(ROOT_PROCESS_ID)
+                        .rootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .processId(PROCESS_ID)
+                        .processInstanceId(PROCESS_INSTANCE_ID)
+                        .nodeInstanceId(NODE_INSTANCE_ID)
+                        .build())
                 .executionCounter(COUNTER)
                 .retries(RETRIES)
                 .scheduledId(SCHEDULED_ID)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.service;
 
 import java.net.URI;
@@ -28,8 +27,6 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -42,6 +39,11 @@ import org.kie.kogito.index.model.MilestoneStatus;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
@@ -245,7 +247,7 @@ abstract class AbstractIndexingServiceIT {
                 .body("data.Travels[0].flight.flightNumber", is("MX555"));
 
         KogitoProcessCloudEvent subProcessStartEvent = getProcessCloudEvent(subProcessId, subProcessInstanceId, ACTIVE, processInstanceId, processId, processInstanceId);
-        subProcessStartEvent.getData().setVariables(getObjectMapper().readTree("{ \"traveller\":{\"firstName\":\"Maciej\", \"email\":\"mail@mail.com\", \"nationality\":\"Polish\"} }"));
+        subProcessStartEvent.getData().setVariables((ObjectNode) getObjectMapper().readTree("{ \"traveller\":{\"firstName\":\"Maciej\", \"email\":\"mail@mail.com\", \"nationality\":\"Polish\"} }"));
         subProcessStartEvent.setSource(URI.create("/" + subProcessId));
         indexProcessCloudEvent(subProcessStartEvent);
 
@@ -435,15 +437,13 @@ abstract class AbstractIndexingServiceIT {
     private void indexProcessCloudEvent(KogitoProcessCloudEvent event) throws Exception {
         CompletableFuture.allOf(
                 consumer.onProcessInstanceEvent(() -> event).toCompletableFuture(),
-                consumer.onProcessInstanceDomainEvent(() -> event).toCompletableFuture()
-        ).get();
+                consumer.onProcessInstanceDomainEvent(() -> event).toCompletableFuture()).get();
     }
 
     private void indexUserTaskCloudEvent(KogitoUserTaskCloudEvent event) throws Exception {
         CompletableFuture.allOf(
                 consumer.onUserTaskInstanceEvent(() -> event).toCompletableFuture(),
-                consumer.onUserTaskInstanceDomainEvent(() -> event).toCompletableFuture()
-        ).get();
+                consumer.onUserTaskInstanceDomainEvent(() -> event).toCompletableFuture()).get();
     }
 
     @Test
@@ -602,8 +602,7 @@ abstract class AbstractIndexingServiceIT {
 
         CompletableFuture.allOf(
                 consumer.onProcessInstanceDomainEvent(() -> processEvent).toCompletableFuture(),
-                consumer.onUserTaskInstanceDomainEvent(() -> userTaskEvent).toCompletableFuture()
-        ).get();
+                consumer.onUserTaskInstanceDomainEvent(() -> userTaskEvent).toCompletableFuture()).get();
 
         given().contentType(ContentType.JSON)
                 .body(getTravelsByProcessInstanceId(processInstanceId))
@@ -684,7 +683,8 @@ abstract class AbstractIndexingServiceIT {
 
         KogitoProcessCloudEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null);
         endEvent.getData().setEnd(ZonedDateTime.now());
-        endEvent.getData().setVariables(getObjectMapper().readTree("{ \"traveller\":{\"firstName\":\"Maciej\"},\"hotel\":{\"name\":\"Ibis\"},\"flight\":{\"arrival\":\"2019-08-20T22:12:57.340Z\",\"departure\":\"2019-08-20T07:12:57.340Z\",\"flightNumber\":\"QF444\"} }"));
+        endEvent.getData().setVariables((ObjectNode) getObjectMapper().readTree(
+                "{ \"traveller\":{\"firstName\":\"Maciej\"},\"hotel\":{\"name\":\"Ibis\"},\"flight\":{\"arrival\":\"2019-08-20T22:12:57.340Z\",\"departure\":\"2019-08-20T07:12:57.340Z\",\"flightNumber\":\"QF444\"} }"));
         indexProcessCloudEvent(endEvent);
 
         validateProcessInstance(getProcessInstanceByIdAndState(processInstanceId, COMPLETED), endEvent);

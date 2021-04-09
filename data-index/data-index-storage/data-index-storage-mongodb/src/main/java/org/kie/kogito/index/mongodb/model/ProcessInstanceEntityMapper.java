@@ -18,7 +18,6 @@ package org.kie.kogito.index.mongodb.model;
 
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -86,7 +85,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         instance.setId(entity.getId());
         instance.setProcessId(entity.getProcessId());
         instance.setRoles(entity.getRoles());
-        instance.setVariables(documentToJsonNode(entity.getVariables(), JsonNode.class));
+        instance.setVariables(documentToJsonNode(entity.getVariables()));
         instance.setEndpoint(entity.getEndpoint());
         instance.setNodes(Optional.ofNullable(entity.getNodes()).map(nodes -> nodes.stream().map(this::toNodeInstance).collect(toList())).orElse(null));
         instance.setState(entity.getState());

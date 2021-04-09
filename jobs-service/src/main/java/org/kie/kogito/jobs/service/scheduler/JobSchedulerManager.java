@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.scheduler;
 
 import java.util.Optional;
@@ -25,8 +24,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.interceptor.Interceptor;
 
-import io.quarkus.runtime.StartupEvent;
-import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -38,13 +35,16 @@ import org.kie.kogito.jobs.service.utils.ErrorHandling;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.quarkus.runtime.StartupEvent;
+import io.vertx.mutiny.core.Vertx;
+
 @ApplicationScoped
 public class JobSchedulerManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobSchedulerManager.class);
 
     /**
-     * The current chunk size  in minutes the scheduler handles, it is used to keep a limit number of jobs scheduled
+     * The current chunk size in minutes the scheduler handles, it is used to keep a limit number of jobs scheduled
      * in the in-memory scheduler.
      */
     @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes")
@@ -75,10 +75,10 @@ public class JobSchedulerManager {
     void onStartup(@Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) StartupEvent startupEvent) {
         if (loadJobIntervalInMinutes > schedulerChunkInMinutes) {
             LOGGER.warn("The loadJobIntervalInMinutes ({}) cannot be greater than schedulerChunkInMinutes ({}), " +
-                                "setting value {} for both",
-                        loadJobIntervalInMinutes,
-                        schedulerChunkInMinutes,
-                        schedulerChunkInMinutes);
+                    "setting value {} for both",
+                    loadJobIntervalInMinutes,
+                    schedulerChunkInMinutes,
+                    schedulerChunkInMinutes);
             loadJobIntervalInMinutes = schedulerChunkInMinutes;
         }
 
@@ -103,13 +103,12 @@ public class JobSchedulerManager {
                         .orElseGet(() -> {
                             LOGGER.info("Loading scheduled jobs completed !");
                             return null;
-                        })
-                );
+                        }));
     }
 
     private PublisherBuilder<JobDetails> loadJobsInCurrentChunk() {
         return repository.findByStatusBetweenDatesOrderByPriority(DateUtil.now().minusMinutes(loadJobFromCurrentTimeIntervalInMinutes),
-                                                                  DateUtil.now().plusMinutes(schedulerChunkInMinutes),
-                                                                  JobStatus.SCHEDULED, JobStatus.RETRY);
+                DateUtil.now().plusMinutes(schedulerChunkInMinutes),
+                JobStatus.SCHEDULED, JobStatus.RETRY);
     }
 }

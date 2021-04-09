@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.graphql;
 
 import java.time.ZoneOffset;
@@ -21,10 +20,11 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import org.junit.jupiter.api.Test;
+
 import graphql.language.StringValue;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
-import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -42,7 +42,7 @@ public class DateTimeScalarTypeProducerTest {
     public void testParseValue() {
         assertThat(dateTimeScalar.getName()).isEqualTo("DateTime");
         assertThat(dateTimeScalar.getCoercing().parseValue(null)).isNull();
-        assertThat(dateTimeScalar.getCoercing().parseValue("2019-11-20T03:14:03.075Z")).isEqualTo(1574219643075l); 
+        assertThat(dateTimeScalar.getCoercing().parseValue("2019-11-20T03:14:03.075Z")).isEqualTo(1574219643075l);
     }
 
     @Test

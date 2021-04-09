@@ -22,8 +22,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.FileDescriptorSource;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ApplicationScoped
 public class ProtostreamProducer {
@@ -60,7 +61,7 @@ public class ProtostreamProducer {
 
     @Produces
     org.infinispan.protostream.MessageMarshaller featureImportanceMarshaller() {
-        return new FeatureImportanceMarshaller(mapper);
+        return new FeatureImportanceModelMarshaller(mapper);
     }
 
     @Produces
@@ -75,11 +76,16 @@ public class ProtostreamProducer {
 
     @Produces
     org.infinispan.protostream.MessageMarshaller saliencyMarshaller() {
-        return new SaliencyMarshaller(mapper);
+        return new SaliencyModelMarshaller(mapper);
     }
 
     @Produces
     org.infinispan.protostream.MessageMarshaller typedValueMarshaller() {
         return new TypedVariableMarshaller(mapper);
+    }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller dmnModelMarshaller() {
+        return new DMNModelWithMetadataMarshaller(mapper);
     }
 }

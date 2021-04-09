@@ -27,13 +27,26 @@ pipeline {
             steps {
                 sh 'export XAUTHORITY=$HOME/.Xauthority'
                 sh 'chmod 600 $HOME/.vnc/passwd'
-                
+
                 checkoutRepo('kogito-runtimes')
                 checkoutOptaplannerRepo()
                 checkoutRepo('kogito-apps')
                 checkoutRepo('kogito-examples')
                 checkoutRepo('kogito-examples', 'kogito-examples-persistence')
                 checkoutRepo('kogito-examples', 'kogito-examples-events')
+            }
+        }
+        stage('Build quarkus') {
+            when {
+                expression { return getQuarkusBranch() }
+            }
+            steps {
+                script {
+                    checkoutQuarkusRepo()
+                    getMavenCommand('quarkus', false)
+                        .withProperty('quickly')
+                        .run('clean install')
+                }
             }
         }
         stage('Build Runtimes') {
@@ -49,7 +62,6 @@ pipeline {
         stage('Build OptaPlanner') {
             steps {
                 script {
-                    // Skip unnecessary plugins to save time.
                     getMavenCommand('optaplanner')
                         .withProperty('quickly')
                         .run('clean install')
@@ -59,10 +71,28 @@ pipeline {
         stage('Build Apps') {
             steps {
                 script {
-                    getMavenCommand('kogito-apps')
-                        .withProfiles(['run-code-coverage'])
-                        .run('clean install')
-
+                    mvnCmd = getMavenCommand('kogito-apps', true, true)
+                    if (isNormalPRCheck()) {
+                        mvnCmd.withProperty('validate-formatting')
+                            .withProfiles(['run-code-coverage'])
+                    }
+                    mvnCmd.run('clean install')
+                }
+            }
+            post {
+                cleanup {
+                    script {
+                        cleanContainers()
+                    }
+                }
+            }
+        }
+        stage('Analyze Apps by SonarCloud') {
+            when {
+                expression { isNormalPRCheck() }
+            }
+            steps {
+                script {
                     getMavenCommand('kogito-apps')
                         .withOptions(['-e', '-nsu'])
                         .withProfiles(['sonarcloud-analysis'])
@@ -73,10 +103,11 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: 'kogito-apps/management-console/target/*-runner.jar, kogito-apps/data-index/data-index-service/target/*-runner.jar, kogito-apps/jobs-service/target/*-runner.jar', fingerprint: true
-            junit '**/**/junit.xml'
-            junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
-            cleanWs()
+            script {
+                archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
+                junit '**/**/junit.xml'
+                junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
+            }
         }
         failure {
             script {
@@ -93,6 +124,11 @@ pipeline {
                 mailer.sendEmail_fixedPR()
             }
         }
+        cleanup {
+            script {
+                util.cleanNode('docker')
+            }
+        }
     }
 }
 
@@ -102,24 +138,58 @@ void checkoutRepo(String repo, String dirName=repo) {
     }
 }
 
+void checkoutQuarkusRepo() {
+    dir('quarkus') {
+        checkout(githubscm.resolveRepository('quarkus', 'quarkusio', getQuarkusBranch(), false))
+    }
+}
+
 void checkoutOptaplannerRepo() {
     String targetBranch = changeTarget
     String [] versionSplit = targetBranch.split("\\.")
-    if(versionSplit.length == 3 
+    if (versionSplit.length == 3
         && versionSplit[0].isNumber()
         && versionSplit[1].isNumber()
        && versionSplit[2] == 'x') {
         targetBranch = "${Integer.parseInt(versionSplit[0]) + 7}.${versionSplit[1]}.x"
     } else {
         echo "Cannot parse changeTarget as release branch so going further with current value: ${changeTarget}"
-    }
+       }
     dir('optaplanner') {
         githubscm.checkoutIfExists('optaplanner', changeAuthor, changeBranch, 'kiegroup', targetBranch, true)
     }
 }
 
-MavenCommand getMavenCommand(String directory){
-    return new MavenCommand(this, ['-fae'])
+MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion=true, boolean canNative = false) {
+    mvnCmd = new MavenCommand(this, ['-fae'])
                 .withSettingsXmlId('kogito_release_settings')
+                // add timestamp to Maven logs
+                .withOptions(['-Dorg.slf4j.simpleLogger.showDateTime=true', '-Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS'])
                 .inDirectory(directory)
+    if (addQuarkusVersion && getQuarkusBranch()) {
+        mvnCmd.withProperty('version.io.quarkus', '999-SNAPSHOT')
+    }
+    if (canNative && isNative()) {
+        mvnCmd.withProfiles(['native'])
+            .withProperty('quarkus.native.container-build', true)
+            .withProperty('quarkus.native.container-runtime', 'docker')
+            .withProperty('quarkus.profile', 'native') // Added due to https://github.com/quarkusio/quarkus/issues/13341
+    }
+    return mvnCmd
+}
+
+void cleanContainers() {
+    cloud.cleanContainersAndImages('docker')
+}
+
+boolean isNative() {
+    return env['NATIVE'] && env['NATIVE'].toBoolean()
+}
+
+String getQuarkusBranch() {
+    return env['QUARKUS_BRANCH']
+}
+
+boolean isNormalPRCheck() {
+    return !(getQuarkusBranch() || isNative())
 }

@@ -2,6 +2,7 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Card,
+  Divider,
   Grid,
   GridItem,
   PageSection
@@ -14,7 +15,8 @@ import {
   ServerErrors,
   LoadMore,
   componentOuiaProps,
-  OUIAProps
+  OUIAProps,
+  constructObject
 } from '@kogito-apps/common';
 import React, { useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -23,6 +25,9 @@ import ProcessListToolbar from '../../Molecules/ProcessListToolbar/ProcessListTo
 import './ProcessListPage.css';
 import ProcessListTable from '../../Organisms/ProcessListTable/ProcessListTable';
 import { StaticContext } from 'react-router';
+import _ from 'lodash';
+import { alterOrderByObj } from '../../../utils/Utils';
+import { ISortBy } from '@patternfly/react-table';
 
 type filterType = {
   status: GraphQL.ProcessInstanceState[];
@@ -42,17 +47,18 @@ const ProcessListPage: React.FC<OUIAProps &
   ouiaSafe,
   ...props
 }) => {
+  const defaultOrderBy: GraphQL.ProcessInstanceOrderBy = {
+    lastUpdate: GraphQL.OrderBy.Asc
+  };
   const [defaultPageSize] = useState<number>(10);
   const [initData, setInitData] = useState<GraphQL.GetProcessInstancesQuery>(
     {}
   );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [limit, setLimit] = useState<number>(defaultPageSize);
   const [offset, setOffset] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
-  const [businessKeysArray, setBusinessKeysArray] = useState([]);
   const [filters, setFilters] = useState<filterType>(
     props.location.state
       ? { ...props.location.state.filters }
@@ -61,6 +67,9 @@ const ProcessListPage: React.FC<OUIAProps &
           businessKey: []
         }
   );
+  const [businessKeysArray, setBusinessKeysArray] = useState<string[]>(
+    filters.businessKey
+  );
   const [statusArray, setStatusArray] = useState<
     GraphQL.ProcessInstanceState[]
   >(filters.status);
@@ -68,9 +77,16 @@ const ProcessListPage: React.FC<OUIAProps &
     GraphQL.ProcessInstance[]
   >([]);
   const [searchWord, setSearchWord] = useState<string>('');
-  const [selectedNumber, setSelectedNumber] = useState<number>(0);
   const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
-
+  const [expanded, setExpanded] = React.useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const [selectableInstances, setSelectableInstances] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [sortBy, setSortBy] = useState<ISortBy>({});
+  const [orderBy, setOrderBy] = useState<GraphQL.ProcessInstanceOrderBy>(
+    defaultOrderBy
+  );
   const [
     getProcessInstances,
     { loading, data, error }
@@ -78,24 +94,47 @@ const ProcessListPage: React.FC<OUIAProps &
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true
   });
-
   useEffect(() => {
     window.history.pushState(null, '');
+    getProcessInstances({
+      variables: {
+        where: queryVariableGenerator(businessKeysArray, statusArray),
+        orderBy,
+        offset: 0,
+        limit: pageSize
+      }
+    });
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     if (props.location.state) {
       if (props.location.state.filters) {
         setFilters(props.location.state.filters);
         setStatusArray(props.location.state.filters.status);
+        setBusinessKeysArray(props.location.state.filters.businessKey);
       }
+      getProcessInstances({
+        variables: {
+          where: queryVariableGenerator(
+            props.location.state.filters.businessKey,
+            props.location.state.filters.status
+          ),
+          orderBy,
+          offset: 0,
+          limit: pageSize
+        }
+      });
     }
   }, [props.location.state]);
 
-  const resetPagination = () => {
+  const resetPagination = (): void => {
+    setIsLoading(true);
     setOffset(0);
     setLimit(defaultPageSize);
     setPageSize(defaultPageSize);
+    setSelectableInstances(0);
+    setSelectedInstances([]);
   };
 
   useEffect(() => {
@@ -112,86 +151,113 @@ const ProcessListPage: React.FC<OUIAProps &
       return {
         parentProcessInstanceId: { isNull: true },
         state: { in: _statusArray },
-        or: _searchWordsArray
+        or: formatSearchWords(_searchWordsArray)
       };
     }
   };
 
-  const onFilterClick = (arr = filters.status) => {
+  const formatSearchWords = (searchWords: string[]) => {
+    const tempSearchWordsArray = [];
+    searchWords.forEach(word => {
+      tempSearchWordsArray.push({ businessKey: { like: word } });
+    });
+    return tempSearchWordsArray;
+  };
+
+  const onFilterClick = (arr = filters.status): void => {
     resetPagination();
-    const searchWordsArray = [];
     const copyOfBusinessKeysArray = [...filters.businessKey];
     /* istanbul ignore if */
-
     if (searchWord.length !== 0) {
       if (!copyOfBusinessKeysArray.includes(searchWord)) {
         copyOfBusinessKeysArray.push(searchWord);
       }
     }
-    copyOfBusinessKeysArray.forEach(word => {
-      const tempBusinessKeys = { businessKey: { like: word } };
-      searchWordsArray.push(tempBusinessKeys);
-    });
-    setIsLoading(true);
     setIsLoadingMore(false);
     setIsError(false);
     setSelectedInstances([]);
     setIsAllChecked(false);
-    setSelectedNumber(0);
     setInitData({});
-    setBusinessKeysArray(searchWordsArray);
+    setBusinessKeysArray(copyOfBusinessKeysArray);
     getProcessInstances({
       variables: {
-        where: queryVariableGenerator(searchWordsArray, arr),
+        where: queryVariableGenerator(copyOfBusinessKeysArray, arr),
+        orderBy,
         offset: 0,
         limit: defaultPageSize
       }
     });
   };
 
-  const onGetMoreInstances = (initVal, _pageSize) => {
+  const onGetMoreInstances = (initVal: number, _pageSize: number): void => {
+    setIsLoading(false);
+    setSelectableInstances(0);
+    setSelectedInstances([]);
     setIsLoadingMore(true);
     setPageSize(_pageSize);
     getProcessInstances({
       variables: {
         where: queryVariableGenerator(businessKeysArray, statusArray),
+        orderBy,
         offset: initVal,
         limit: _pageSize
       }
     });
   };
+  const countSelectableInstances = (process, index) => {
+    expanded[index] = false;
+    if (process.serviceUrl && process.addons.includes('process-management')) {
+      setSelectableInstances(prev => prev + 1);
+    }
+  };
 
   useEffect(() => {
     setSelectedInstances([]);
-    if (isLoadingMore === undefined || !isLoadingMore) {
-      setIsLoading(loading);
-    }
+    setSelectableInstances(0);
+    setIsAllChecked(false);
     setSearchWord('');
     if (!loading && data !== undefined) {
+      setIsLoading(false);
       data.ProcessInstances.forEach(
         (
           instance: GraphQL.ProcessInstance & {
-            isChecked: boolean;
+            isSelected: boolean;
+            childProcessInstances: GraphQL.ProcessInstance[];
             isOpen: boolean;
           }
         ) => {
-          instance.isChecked = false;
+          instance.isSelected = false;
           instance.isOpen = false;
+          instance.childProcessInstances = [];
         }
       );
       setLimit(data.ProcessInstances.length);
       if (offset > 0 && initData.ProcessInstances.length > 0) {
         setIsLoadingMore(false);
-        initData.ProcessInstances = initData.ProcessInstances.concat(
-          data.ProcessInstances
-        );
+        const newData = initData.ProcessInstances.concat(data.ProcessInstances);
+        newData.forEach((process, i) => countSelectableInstances(process, i));
+        setInitData({ ProcessInstances: newData });
       } else {
+        data.ProcessInstances.forEach((process, i) =>
+          countSelectableInstances(process, i)
+        );
         setInitData(data);
       }
     }
   }, [data]);
 
-  const resetClick = () => {
+  useEffect(() => {
+    if (
+      selectedInstances.length === selectableInstances &&
+      selectableInstances !== 0
+    ) {
+      setIsAllChecked(true);
+    } else {
+      setIsAllChecked(false);
+    }
+  }, [initData]);
+
+  const resetClick = (): void => {
     setSearchWord('');
     setStatusArray([GraphQL.ProcessInstanceState.Active]);
     setFilters({
@@ -202,12 +268,38 @@ const ProcessListPage: React.FC<OUIAProps &
     onFilterClick([GraphQL.ProcessInstanceState.Active]);
   };
 
+  const onSort = (event, index: number, direction: 'asc' | 'desc'): void => {
+    resetPagination();
+    setSortBy({ index, direction });
+    let sortingColumn: string = event.target.innerText;
+    sortingColumn = _.camelCase(sortingColumn);
+    let obj = {};
+    constructObject(obj, sortingColumn, direction.toUpperCase());
+    obj = alterOrderByObj(obj);
+    setOrderBy(obj);
+    getProcessInstances({
+      variables: {
+        where: queryVariableGenerator(businessKeysArray, statusArray),
+        orderBy: obj,
+        offset: 0,
+        limit: pageSize
+      }
+    });
+  };
+
   if (error) {
     return <ServerErrors error={error} variant="large" />;
   }
+
   return (
     <React.Fragment>
-      <div {...componentOuiaProps(ouiaId, 'process-list-page', ouiaSafe)}>
+      <div
+        {...componentOuiaProps(
+          ouiaId,
+          'process-list-page',
+          ouiaSafe ? ouiaSafe : !loading
+        )}
+      >
         <PageSection variant="light">
           <PageTitle title="Process Instances" />
           <Breadcrumb>
@@ -236,38 +328,37 @@ const ProcessListPage: React.FC<OUIAProps &
                       searchWord={searchWord}
                       isAllChecked={isAllChecked}
                       setIsAllChecked={setIsAllChecked}
-                      selectedNumber={selectedNumber}
-                      setSelectedNumber={setSelectedNumber}
                       statusArray={statusArray}
                       setStatusArray={setStatusArray}
                     />
+                    <Divider />
                   </>
                 )}
                 {filters.status.length > 0 ? (
                   <ProcessListTable
                     initData={initData}
-                    setInitData={setInitData}
-                    setLimit={setLimit}
-                    isLoading={isLoading}
-                    setIsError={setIsError}
-                    pageSize={defaultPageSize}
-                    selectedInstances={selectedInstances}
-                    setSelectedInstances={setSelectedInstances}
+                    loading={isLoading}
                     filters={filters}
+                    setInitData={setInitData}
+                    expanded={expanded}
+                    setExpanded={setExpanded}
+                    setSelectedInstances={setSelectedInstances}
+                    selectedInstances={selectedInstances}
+                    setSelectableInstances={setSelectableInstances}
                     setIsAllChecked={setIsAllChecked}
-                    setSelectedNumber={setSelectedNumber}
-                    selectedNumber={selectedNumber}
+                    selectableInstances={selectableInstances}
+                    onSort={onSort}
+                    sortBy={sortBy}
                   />
                 ) : (
                   <KogitoEmptyState
                     type={KogitoEmptyStateType.Reset}
-                    title="No status is selected"
-                    body="Try selecting at least one status to see results"
+                    title="No filters applied."
+                    body="Try applying at least one filter to see results"
                     onClick={resetClick}
                   />
                 )}
-                {(!loading || isLoadingMore) &&
-                  !isLoading &&
+                {(!isLoading || isLoadingMore) &&
                   initData !== undefined &&
                   (limit === pageSize || isLoadingMore) &&
                   filters.status.length > 0 && (

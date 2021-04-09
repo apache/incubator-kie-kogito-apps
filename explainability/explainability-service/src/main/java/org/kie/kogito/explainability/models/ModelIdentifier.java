@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.explainability.models;
 
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 
 public class ModelIdentifier extends ModelIdentifierDto {
 
-    public ModelIdentifier(){}
+    public ModelIdentifier() {
+    }
 
-    public ModelIdentifier(String resourceType, String resourceId){
+    public ModelIdentifier(String resourceType, String resourceId) {
         super(resourceType, resourceId);
     }
 
     public static ModelIdentifier from(ModelIdentifierDto dto) {
         return new ModelIdentifier(
                 dto.getResourceType(),
-                dto.getResourceId()
-        );
+                dto.getResourceId());
     }
 }

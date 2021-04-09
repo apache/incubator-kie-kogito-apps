@@ -1,35 +1,35 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.model.job;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import static org.kie.kogito.jobs.service.utils.DateUtil.toDate;
 
@@ -51,32 +51,32 @@ public class ScheduledJobAdapter {
         final ProcessPayload payload = payloadDeserialize(jobDetails.getPayload());
         return ScheduledJob.builder()
                 .job(new JobBuilder()
-                             .id(jobDetails.getId())
-                             .priority(jobDetails.getPriority())
-                             .expirationTime(Optional.ofNullable(jobDetails.getTrigger())
-                                                     .map(Trigger::hasNextFireTime)
-                                                     .map(DateUtil::fromDate)
-                                                     .orElse(null))
-                             .callbackEndpoint(Optional.ofNullable(jobDetails.getRecipient())
-                                                       .map(Recipient.HTTPRecipient.class::cast)
-                                                       .map(Recipient.HTTPRecipient::getEndpoint)
-                                                       .orElse(null))
-                             .repeatLimit(Optional.ofNullable(jobDetails.getTrigger())
-                                                  .filter(IntervalTrigger.class::isInstance)
-                                                  .map(IntervalTrigger.class::cast)
-                                                  .map(IntervalTrigger::getRepeatLimit)
-                                                  .orElse(null))
-                             .repeatInterval(Optional.ofNullable(jobDetails.getTrigger())
-                                                     .filter(IntervalTrigger.class::isInstance)
-                                                     .map(IntervalTrigger.class::cast)
-                                                     .map(IntervalTrigger::getPeriod)
-                                                     .orElse(null))
-                             .rootProcessId(payload.getRootProcessId())
-                             .rootProcessInstanceId(payload.getRootProcessInstanceId())
-                             .processId(payload.getProcessId())
-                             .processInstanceId(payload.getProcessInstanceId())
-                             .nodeInstanceId(payload.getNodeInstanceId())
-                             .build())
+                        .id(jobDetails.getId())
+                        .priority(jobDetails.getPriority())
+                        .expirationTime(Optional.ofNullable(jobDetails.getTrigger())
+                                .map(Trigger::hasNextFireTime)
+                                .map(DateUtil::fromDate)
+                                .orElse(null))
+                        .callbackEndpoint(Optional.ofNullable(jobDetails.getRecipient())
+                                .map(Recipient.HTTPRecipient.class::cast)
+                                .map(Recipient.HTTPRecipient::getEndpoint)
+                                .orElse(null))
+                        .repeatLimit(Optional.ofNullable(jobDetails.getTrigger())
+                                .filter(IntervalTrigger.class::isInstance)
+                                .map(IntervalTrigger.class::cast)
+                                .map(IntervalTrigger::getRepeatLimit)
+                                .orElse(null))
+                        .repeatInterval(Optional.ofNullable(jobDetails.getTrigger())
+                                .filter(IntervalTrigger.class::isInstance)
+                                .map(IntervalTrigger.class::cast)
+                                .map(IntervalTrigger::getPeriod)
+                                .orElse(null))
+                        .rootProcessId(payload.getRootProcessId())
+                        .rootProcessInstanceId(payload.getRootProcessInstanceId())
+                        .processId(payload.getProcessId())
+                        .processInstanceId(payload.getProcessInstanceId())
+                        .nodeInstanceId(payload.getNodeInstanceId())
+                        .build())
                 .scheduledId(jobDetails.getScheduledId())
                 .status(jobDetails.getStatus())
                 .executionCounter(jobDetails.getExecutionCounter())
@@ -92,8 +92,8 @@ public class ScheduledJobAdapter {
                 .executionCounter(scheduledJob.getExecutionCounter())
                 .lastUpdate(scheduledJob.getLastUpdate())
                 .recipient(Optional.ofNullable(scheduledJob.getCallbackEndpoint())
-                                   .map(Recipient.HTTPRecipient::new)
-                                   .orElse(null))
+                        .map(Recipient.HTTPRecipient::new)
+                        .orElse(null))
                 .retries(scheduledJob.getRetries())
                 .scheduledId(scheduledJob.getScheduledId())
                 .status(scheduledJob.getStatus())
@@ -108,16 +108,16 @@ public class ScheduledJobAdapter {
         return Optional.ofNullable(scheduledJob)
                 .filter(job -> Objects.nonNull(job.getExpirationTime()))
                 .map(job -> job.hasInterval()
-                        .<Trigger>map(interval -> new IntervalTrigger(0l,
-                                                                      toDate(scheduledJob.getExpirationTime()),
-                                                                      null,
-                                                                      scheduledJob.getRepeatLimit(),
-                                                                      0,
-                                                                      interval,
-                                                                      null,
-                                                                      null))
+                        .<Trigger> map(interval -> new IntervalTrigger(0l,
+                                toDate(scheduledJob.getExpirationTime()),
+                                null,
+                                scheduledJob.getRepeatLimit(),
+                                0,
+                                interval,
+                                null,
+                                null))
                         .orElse(new PointInTimeTrigger(scheduledJob.getExpirationTime().toInstant().toEpochMilli(),
-                                                       null, null)))
+                                null, null)))
                 .orElse(null);
     }
 
@@ -134,10 +134,10 @@ public class ScheduledJobAdapter {
                 return null;
             }
             return OBJECT_MAPPER.writeValueAsString(new ProcessPayload(scheduledJob.getProcessInstanceId(),
-                                                                       scheduledJob.getRootProcessInstanceId(),
-                                                                       scheduledJob.getProcessId(),
-                                                                       scheduledJob.getRootProcessId(),
-                                                                       scheduledJob.getNodeInstanceId()));
+                    scheduledJob.getRootProcessInstanceId(),
+                    scheduledJob.getProcessId(),
+                    scheduledJob.getRootProcessId(),
+                    scheduledJob.getNodeInstanceId()));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -169,7 +169,7 @@ public class ScheduledJobAdapter {
         }
 
         public ProcessPayload(String processInstanceId, String rootProcessInstanceId, String processId,
-                              String rootProcessId, String nodeInstanceId) {
+                String rootProcessId, String nodeInstanceId) {
             this.processInstanceId = processInstanceId;
             this.rootProcessInstanceId = rootProcessInstanceId;
             this.processId = processId;

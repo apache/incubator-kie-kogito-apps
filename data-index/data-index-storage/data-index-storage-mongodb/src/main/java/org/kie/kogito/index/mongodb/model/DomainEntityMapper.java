@@ -16,10 +16,11 @@
 
 package org.kie.kogito.index.mongodb.model;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bson.Document;
 import org.kie.kogito.persistence.mongodb.model.ModelUtils;
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MONGO_ID;
@@ -55,9 +56,9 @@ public class DomainEntityMapper implements MongoEntityMapper<ObjectNode, Documen
         if (idObj != null) {
             ObjectNode result = MAPPER.createObjectNode();
             result.put(ID, idObj.toString());
-            result.setAll(ModelUtils.documentToJsonNode(entity, ObjectNode.class));
+            result.setAll(ModelUtils.documentToJsonNode(entity));
             return result;
         }
-        return ModelUtils.documentToJsonNode(entity, ObjectNode.class);
+        return ModelUtils.documentToJsonNode(entity);
     }
 }

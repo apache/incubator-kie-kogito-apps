@@ -16,7 +16,6 @@
   <description>Kogito Apps</description>
 
   <properties>
-    <version.apps.jib-core>0.17.0</version.apps.jib-core>
     <version.frontend.plugin>1.9.1</version.frontend.plugin>
     <version.node>v12.16.2</version.node>
     <version.npm>6.10.3</version.npm>
@@ -27,13 +26,19 @@
 
     <!-- external containers used for testing -->
     <container.image.infinispan>quay.io/infinispan/server:${version.org.infinispan}</container.image.infinispan>
+    <container.image.redis>redislabs/redisearch:${version.org.redis}</container.image.redis>
     <!-- internal containers used for testing (built by maven using quarkus-container-image-jib) -->
     <container.image.explainability-service-messaging>org.kie.kogito/explainability-service-messaging:${project.version}</container.image.explainability-service-messaging>
     <container.image.jobs-service>org.kie.kogito/jobs-service:${project.version}</container.image.jobs-service>
+    <container.image.data-index-service-infinispan>org.kie.kogito/data-index-service-infinispan:${project.version}</container.image.data-index-service-infinispan>
+    <container.image.data-index-service-mongodb>org.kie.kogito/data-index-service-mongodb:${project.version}</container.image.data-index-service-mongodb>
+    <container.image.trusty-service-infinispan>org.kie.kogito/trusty-service-infinispan:${project.version}</container.image.trusty-service-infinispan>
     <container.image.trusty-service>org.kie.kogito/trusty-service:${project.version}</container.image.trusty-service>
 
     <!-- OptaPlanner version -->
-    <version.org.optaplanner>8.3.0-SNAPSHOT</version.org.optaplanner>
+    <version.org.optaplanner>8.6.0-SNAPSHOT</version.org.optaplanner>
+
+    <version.org.jredisearch>2.0.0</version.org.jredisearch>
   </properties>
 
   <repositories>
@@ -95,6 +100,21 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>com.redislabs</groupId>
+        <artifactId>jredisearch</artifactId>
+        <version>${version.org.jredisearch}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers</artifactId>
+        <version>${version.org.testcontainers}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>kafka</artifactId>
+        <version>${version.org.testcontainers}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -130,7 +150,6 @@
       <modules>
         <module>persistence-commons</module>
         <module>jobs-service</module>
-        <module>data-index</module>
         <module>ui-packages</module>
         <module>security-commons</module>
         <module>management-console</module>

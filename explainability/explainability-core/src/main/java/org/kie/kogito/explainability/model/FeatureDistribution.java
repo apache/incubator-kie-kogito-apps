@@ -25,14 +25,15 @@ public interface FeatureDistribution {
     /**
      * Get the feature associated with this distribution.
      * Such features are expected to have {@code null} {@code Values}
+     * 
      * @return the feature associated with this distribution
      */
     Feature getFeature();
 
-    Value<?> sample();
+    Value sample();
 
-    List<Value<?>> sample(int sampleSize);
+    List<Value> sample(int sampleSize);
 
-    List<Value<?>> getAllSamples();
+    List<Value> getAllSamples();
 
 }

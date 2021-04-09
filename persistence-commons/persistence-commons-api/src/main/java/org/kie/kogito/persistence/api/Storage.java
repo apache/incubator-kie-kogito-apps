@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.persistence.api;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import org.kie.kogito.persistence.api.query.Query;
@@ -63,7 +61,7 @@ public interface Storage<K, V> {
     /**
      * Puts an element with a key. If an element with the same key is already present in the storage, then it is replaced.
      *
-     * @param key   The key.
+     * @param key The key.
      * @param value The value.
      * @return The value.
      */
@@ -90,7 +88,7 @@ public interface Storage<K, V> {
      *
      * @return The key-value pair set of the elements in the storage.
      */
-    Set<Map.Entry<K, V>> entrySet();
+    Map<K, V> entries();
 
     /**
      * Erase all the elements in the storage.

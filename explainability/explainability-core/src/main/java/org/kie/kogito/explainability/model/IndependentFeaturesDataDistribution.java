@@ -54,10 +54,10 @@ public class IndependentFeaturesDataDistribution implements DataDistribution {
     public List<PredictionInput> getAllSamples() {
         List<Collection<Feature>> featureEnumerations = new ArrayList<>(featureDistributions.size());
         for (FeatureDistribution featureDistribution : featureDistributions) {
-            List<Value<?>> allValues = featureDistribution.getAllSamples();
+            List<Value> allValues = featureDistribution.getAllSamples();
             List<Feature> currentFeatures = new ArrayList<>(allValues.size());
             Feature feature = featureDistribution.getFeature();
-            for (Value<?> v : allValues) {
+            for (Value v : allValues) {
                 Feature f = FeatureFactory.copyOf(feature, v);
                 currentFeatures.add(f);
             }
@@ -80,7 +80,7 @@ public class IndependentFeaturesDataDistribution implements DataDistribution {
     }
 
     private static <T> void getElementsAtDepth(List<Collection<T>> valueEnumerations, Collection<List<T>> combinedValues, int depth,
-                                               List<T> currentItem) {
+            List<T> currentItem) {
         if (depth == valueEnumerations.size()) {
             combinedValues.add(currentItem);
         } else {

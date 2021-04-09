@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   componentOuiaProps,
   GraphQL,
   KogitoEmptyState,
   KogitoEmptyStateType,
-  KogitoSpinner,
   LoadMore,
   ouiaPageTypeAndObjectId,
   OUIAProps,
@@ -15,10 +14,8 @@ import PageTitle from '../../Molecules/PageTitle/PageTitle';
 import {
   Breadcrumb,
   BreadcrumbItem,
-  Bullseye,
   Button,
   Card,
-  CardBody,
   PageSection,
   Toolbar,
   ToolbarContent,
@@ -30,9 +27,11 @@ import {
   OverflowMenuItem,
   OverflowMenuControl,
   Dropdown,
-  KebabToggle
+  KebabToggle,
+  Divider
 } from '@patternfly/react-core';
 import { ISortBy } from '@patternfly/react-table';
+import _ from 'lodash';
 import JobsManagementTable from '../../Organisms/JobsManagementTable/JobsManagementTable';
 import JobsManagementFiters from '../../Organisms/JobsManagementFilters/JobsManagementFilters';
 import JobsPanelDetailsModal from '../../Atoms/JobsPanelDetailsModal/JobsPanelDetailsModal';
@@ -80,7 +79,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [pageSize, setPageSize] = useState<number>(defaultPageSize);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [isKebabOpen, setIsKebabOpen] = useState<boolean>(false);
-  const [displayTable, setDisplayTable] = useState<boolean>(false);
+  const [displayTable, setDisplayTable] = useState<boolean>(true);
   const [isActionPerformed, setIsActionPerformed] = useState(false);
   const [selectedJobInstances, setSelectedJobInstances] = useState<
     GraphQL.Job[]
@@ -94,7 +93,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
       ignoredItems: []
     }
   });
-
+  const [isRefreshed, setIsRefreshed] = useState<boolean>(false);
   const { loading, data, error, refetch } = GraphQL.useGetJobsWithFiltersQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
@@ -163,19 +162,30 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     if (!loading && data && Object.keys(data).length > 0) {
       setDisplayTable(false);
       setLimit(data.Jobs.length);
-      if (offset > 0 && initData.Jobs.length > 0) {
+      if (offset > 0 && initData.Jobs.length > 0 && !isRefreshed) {
         setIsLoadingMore(false);
         const tempData: GraphQL.GetJobsWithFiltersQuery = {
           Jobs: initData.Jobs.concat(data.Jobs)
         };
         setInitData(tempData);
-        setDisplayTable(true);
+        values.length > 0 && setDisplayTable(true);
       } else {
         setInitData(data);
-        setDisplayTable(true);
+        values.length > 0 && setDisplayTable(true);
       }
     }
+    setIsRefreshed(false);
   }, [loading]);
+
+  useEffect(() => {
+    setOffset(0);
+    if (chips.length === 0) {
+      setDisplayTable(false);
+      setSelectedJobInstances([]);
+      setIsLoadingMore(false);
+      setLimit(0);
+    }
+  }, [chips]);
 
   const jobManagementButtonSelect = () => {
     setIsKebabOpen(!isKebabOpen);
@@ -218,15 +228,22 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   ];
 
   const onRefresh = (): void => {
-    window.location.reload();
+    setIsRefreshed(true);
+    setOffset(0);
+    refetch();
   };
 
   const onReset = (): void => {
+    setDisplayTable(true);
     setSelectedJobInstances([]);
     setSelectedStatus(defaultStatus);
     setChips(defaultStatus);
-    setValues(defaultStatus);
     setOffset(0);
+    if (_.isEqual(values, defaultStatus)) {
+      refetch();
+    } else {
+      setValues(defaultStatus);
+    }
   };
 
   const dropdownItemsJobsManagementButtons = (): JSX.Element[] => {
@@ -274,7 +291,6 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
         collapseListedFiltersBreakpoint="md"
         clearAllFilters={() => {
           onReset();
-          setSelectedJobInstances([]);
         }}
         clearFiltersButtonText="Reset to default"
       >
@@ -285,6 +301,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
             setValues={setValues}
             chips={chips}
             setChips={setChips}
+            setDisplayTable={setDisplayTable}
             setOffset={setOffset}
             setSelectedJobInstances={setSelectedJobInstances}
           />
@@ -313,23 +330,6 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     );
   };
 
-  if (data) {
-    if (!loading && values.length > 0 && data.Jobs.length === 0) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/NoData',
-            state: {
-              prev: '/ProcessInstances',
-              title: 'Jobs not found',
-              description: `There are no jobs associated with any process instance.`,
-              buttonText: 'Go to process instance'
-            }
-          }}
-        />
-      );
-    }
-  }
   return (
     <div
       {...componentOuiaProps(
@@ -351,50 +351,38 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
           </PageSection>
           <PageSection>
             {renderToolbar()}
-            {!loading || isLoadingMore ? (
-              <Card>
-                <CardBody>
-                  {displayTable && (
-                    <refetchContext.Provider value={refetch}>
-                      <JobsManagementTable
-                        data={initData}
-                        handleDetailsToggle={handleDetailsToggle}
-                        handleRescheduleToggle={handleRescheduleToggle}
-                        handleCancelModalToggle={handleCancelModalToggle}
-                        setModalTitle={setModalTitle}
-                        setModalContent={setModalContent}
-                        setOrderBy={setOrderBy}
-                        setSelectedJob={setSelectedJob}
-                        setSortBy={setSortBy}
-                        selectedJobInstances={selectedJobInstances}
-                        setSelectedJobInstances={setSelectedJobInstances}
-                        sortBy={sortBy}
-                        setIsActionPerformed={setIsActionPerformed}
-                        isActionPerformed={isActionPerformed}
-                      />
-                    </refetchContext.Provider>
-                  )}
-                  {chips.length === 0 && (
-                    <KogitoEmptyState
-                      type={KogitoEmptyStateType.Reset}
-                      title="No filter applied."
-                      body="Try applying at least one filter to see results"
-                      onClick={() => onReset()}
-                    />
-                  )}
-                </CardBody>
-              </Card>
-            ) : (
-              <>
-                {!isLoadingMore && (
-                  <Card>
-                    <Bullseye>
-                      <KogitoSpinner spinnerText="Loading jobs list..." />
-                    </Bullseye>
-                  </Card>
-                )}
-              </>
-            )}
+            <Divider />
+            <Card>
+              {displayTable ? (
+                <refetchContext.Provider value={refetch}>
+                  <JobsManagementTable
+                    data={initData}
+                    handleDetailsToggle={handleDetailsToggle}
+                    handleRescheduleToggle={handleRescheduleToggle}
+                    handleCancelModalToggle={handleCancelModalToggle}
+                    setModalTitle={setModalTitle}
+                    setModalContent={setModalContent}
+                    setOffset={setOffset}
+                    setOrderBy={setOrderBy}
+                    setSelectedJob={setSelectedJob}
+                    setSortBy={setSortBy}
+                    selectedJobInstances={selectedJobInstances}
+                    setSelectedJobInstances={setSelectedJobInstances}
+                    sortBy={sortBy}
+                    setIsActionPerformed={setIsActionPerformed}
+                    isActionPerformed={isActionPerformed}
+                    loading={isLoadingMore ? false : loading}
+                  />
+                </refetchContext.Provider>
+              ) : (
+                <KogitoEmptyState
+                  type={KogitoEmptyStateType.Reset}
+                  title="No filter applied."
+                  body="Try applying at least one filter to see results"
+                  onClick={() => onReset()}
+                />
+              )}
+            </Card>
             {selectedJob && Object.keys(selectedJob).length > 0 && (
               <JobsPanelDetailsModal
                 actionType="Job Details"
