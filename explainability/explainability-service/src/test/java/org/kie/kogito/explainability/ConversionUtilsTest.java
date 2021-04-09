@@ -204,10 +204,10 @@ class ConversionUtilsTest {
         assertEquals(Type.COMPOSITE, name1.getType());
         assertTrue(name1.getValue().getUnderlyingObject() instanceof List);
         @SuppressWarnings("unchecked")
-        List<Feature> features = (List<Feature>) name1.getValue().getUnderlyingObject();
-        assertEquals(1, features.size());
-        assertEquals(Type.TEXT, features.get(0).getType());
-        assertEquals("stringValue", features.get(0).getValue().getUnderlyingObject());
+        List<Output> outputs = (List<Output>) name1.getValue().getUnderlyingObject();
+        assertEquals(1, outputs.size());
+        assertEquals(Type.TEXT, outputs.get(0).getType());
+        assertEquals("stringValue", outputs.get(0).getValue().getUnderlyingObject());
 
         List<TypedValue> values = List.of(new UnitValue("number", new DoubleNode(0d)),
                 new UnitValue("number", new DoubleNode(1d)));
