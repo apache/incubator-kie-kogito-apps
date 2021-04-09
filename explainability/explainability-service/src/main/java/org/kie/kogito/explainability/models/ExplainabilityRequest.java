@@ -19,6 +19,7 @@ package org.kie.kogito.explainability.models;
 import java.util.Map;
 
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityRequestDto;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 public class ExplainabilityRequest {
@@ -29,7 +30,7 @@ public class ExplainabilityRequest {
     private final Map<String, TypedValue> inputs;
     private final Map<String, TypedValue> outputs;
 
-    public ExplainabilityRequest(String executionId, String serviceUrl, ModelIdentifier modelIdentifier, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
+    private ExplainabilityRequest(String executionId, String serviceUrl, ModelIdentifier modelIdentifier, Map<String, TypedValue> inputs, Map<String, TypedValue> outputs) {
         this.executionId = executionId;
         this.serviceUrl = serviceUrl;
         this.modelIdentifier = modelIdentifier;
@@ -58,11 +59,15 @@ public class ExplainabilityRequest {
     }
 
     public static ExplainabilityRequest from(BaseExplainabilityRequestDto dto) {
-        return new ExplainabilityRequest(
-                dto.getExecutionId(),
-                dto.getServiceUrl(),
-                ModelIdentifier.from(dto.getModelIdentifier()),
-                dto.getInputs(),
-                dto.getOutputs());
+        if (dto instanceof LIMEExplainabilityRequestDto) {
+            return new ExplainabilityRequest(
+                    dto.getExecutionId(),
+                    dto.getServiceUrl(),
+                    ModelIdentifier.from(dto.getModelIdentifier()),
+                    dto.getInputs(),
+                    dto.getOutputs());
+        }
+        //TODO ExplanationServiceImpl only supports a LIME LocalExplainer so we need to fail fast for other types.
+        throw new IllegalArgumentException(String.format("Explainability result for '%s' is not supported", dto.getClass().getName()));
     }
 }

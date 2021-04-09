@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.explainability.ExplanationServiceImpl.FAILED_STATUS_DETAILS;
 import static org.kie.kogito.explainability.TestUtils.EXECUTION_ID;
 import static org.kie.kogito.explainability.TestUtils.FEATURE_IMPORTANCE_1;
-import static org.kie.kogito.explainability.TestUtils.REQUEST;
+import static org.kie.kogito.explainability.TestUtils.LIME_REQUEST;
 import static org.kie.kogito.explainability.TestUtils.SALIENCY;
 import static org.kie.kogito.explainability.TestUtils.SALIENCY_MAP;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +66,7 @@ class ExplanationServiceImplTest {
         when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock)))
                 .thenReturn(CompletableFuture.completedFuture(SALIENCY_MAP));
 
-        LIMEExplainabilityResultDto resultDto = (LIMEExplainabilityResultDto) assertDoesNotThrow(() -> explanationService.explainAsync(REQUEST, predictionProviderMock)
+        LIMEExplainabilityResultDto resultDto = (LIMEExplainabilityResultDto) assertDoesNotThrow(() -> explanationService.explainAsync(LIME_REQUEST, predictionProviderMock)
                 .toCompletableFuture()
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()));
 
@@ -90,7 +90,7 @@ class ExplanationServiceImplTest {
         when(localExplainerMock.explainAsync(any(Prediction.class), eq(predictionProviderMock)))
                 .thenThrow(RuntimeException.class);
 
-        LIMEExplainabilityResultDto resultDto = (LIMEExplainabilityResultDto) assertDoesNotThrow(() -> explanationService.explainAsync(REQUEST, predictionProviderMock)
+        LIMEExplainabilityResultDto resultDto = (LIMEExplainabilityResultDto) assertDoesNotThrow(() -> explanationService.explainAsync(LIME_REQUEST, predictionProviderMock)
                 .toCompletableFuture()
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit()));
 

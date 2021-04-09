@@ -20,6 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityRequestDto;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -30,9 +36,6 @@ import org.kie.kogito.explainability.models.ExplainabilityRequest;
 import org.kie.kogito.explainability.models.ModelIdentifier;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
-
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
@@ -61,13 +64,18 @@ public class TestUtils {
     public static final Map<String, Saliency> SALIENCY_MAP = singletonMap("key", SALIENCY);
 
     public static final Map<String, TypedValue> INPUTS = new HashMap<>();
+
     static {
         INPUTS.put("input1", new UnitValue("string", new TextNode("value")));
         INPUTS.put("input2", new UnitValue("number", new DoubleNode(10)));
     }
 
+    public static final Map<String, CounterfactualSearchDomainDto> SEARCH_DOMAINS = new HashMap<>();
+
     public static final Map<String, TypedValue> OUTPUTS = singletonMap("output1", new UnitValue("string", new TextNode("output")));
 
-    public static final ExplainabilityRequest REQUEST = new ExplainabilityRequest(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS);
+    public static final BaseExplainabilityRequestDto COUNTERFACTUAL_REQUEST_DTO = new CounterfactualExplainabilityRequestDto(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS, SEARCH_DOMAINS);
+    public static final BaseExplainabilityRequestDto LIME_REQUEST_DTO = new LIMEExplainabilityRequestDto(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS);
+    public static final ExplainabilityRequest LIME_REQUEST = ExplainabilityRequest.from(LIME_REQUEST_DTO);
 
 }
