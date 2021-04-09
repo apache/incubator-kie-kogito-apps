@@ -60,6 +60,9 @@ module.exports = {
           path.resolve(
               '../../node_modules/@kogito-apps/consoles-common/dist/src/static'
           ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/task-form/dist/static'
+          ),
           path.resolve('./src/static')
         ],
         use: {
@@ -116,6 +119,9 @@ module.exports = {
           ),
           path.resolve(
               '../../node_modules/@kogito-apps/consoles-common/dist/src/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/task-form/dist/static'
           )
         ],
         use: [

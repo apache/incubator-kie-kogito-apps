@@ -26,6 +26,8 @@ import {
 } from './TaskFormEnvelopeView';
 import { TaskFormEnvelopeApiImpl } from './TaskFormEnvelopeApiImpl';
 
+import './styles.css';
+
 /**
  * Function that starts an Envelope application.
  *
@@ -57,6 +59,7 @@ export function init(args: {
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<TaskFormEnvelopeViewApi>();
     return new Promise<() => TaskFormEnvelopeViewApi>(res => {
+      args.container.className = 'kogito-task-form-container';
       ReactDOM.render(
         <TaskFormEnvelopeView ref={ref} channelApi={envelope.channelApi} />,
         args.container,
