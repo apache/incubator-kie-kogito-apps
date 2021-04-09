@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CounterfactualResponse {
+public class CounterfactualRequestResponse {
 
     public static final String EXECUTION_ID_FIELD = "executionId";
     public static final String COUNTERFACTUAL_ID_FIELD = "counterfactualId";
@@ -30,10 +30,10 @@ public class CounterfactualResponse {
     @JsonProperty(COUNTERFACTUAL_ID_FIELD)
     private String counterfactualId;
 
-    public CounterfactualResponse() {
+    public CounterfactualRequestResponse() {
     }
 
-    public CounterfactualResponse(String executionId, String counterfactualId) {
+    public CounterfactualRequestResponse(String executionId, String counterfactualId) {
         this.executionId = executionId;
         this.counterfactualId = counterfactualId;
     }

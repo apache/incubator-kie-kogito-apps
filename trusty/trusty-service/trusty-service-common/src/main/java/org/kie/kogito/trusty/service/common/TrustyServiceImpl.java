@@ -41,7 +41,7 @@ import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityRequestProducer;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -187,28 +187,28 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public Counterfactual requestCounterfactuals(String executionId,
+    public CounterfactualRequest requestCounterfactuals(String executionId,
             List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         if (!storage.containsKey(executionId)) {
             throw new IllegalArgumentException(String.format("A decision with ID %s is not present in the storage. Counterfactuals cannot be requested.", executionId));
         }
-        Counterfactual counterfactual = storeCounterfactualRequest(executionId, goals, searchDomains);
+        CounterfactualRequest counterfactualRequest = storeCounterfactualRequest(executionId, goals, searchDomains);
         sendCounterfactualRequestEvent(executionId, goals, searchDomains);
 
-        return counterfactual;
+        return counterfactualRequest;
     }
 
-    protected Counterfactual storeCounterfactualRequest(String executionId,
+    protected CounterfactualRequest storeCounterfactualRequest(String executionId,
             List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         String counterfactualId = UUID.randomUUID().toString();
-        Counterfactual counterfactual = new Counterfactual(executionId, counterfactualId, goals, searchDomains);
-        Storage<String, Counterfactual> storage = storageService.getCounterfactualStorage();
-        storage.put(counterfactualId, counterfactual);
+        CounterfactualRequest counterfactualRequest = new CounterfactualRequest(executionId, counterfactualId, goals, searchDomains);
+        Storage<String, CounterfactualRequest> storage = storageService.getCounterfactualRequestStorage();
+        storage.put(counterfactualId, counterfactualRequest);
 
-        return counterfactual;
+        return counterfactualRequest;
     }
 
     protected void sendCounterfactualRequestEvent(String executionId,
@@ -241,23 +241,23 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     @Override
-    public List<Counterfactual> getCounterfactuals(String executionId) {
-        Storage<String, Counterfactual> counterfactualStorage = storageService.getCounterfactualStorage();
+    public List<CounterfactualRequest> getCounterfactualRequests(String executionId) {
+        Storage<String, CounterfactualRequest> storage = storageService.getCounterfactualRequestStorage();
 
-        AttributeFilter<String> filterExecutionId = QueryFilterFactory.equalTo(Counterfactual.EXECUTION_ID_FIELD, executionId);
-        List<Counterfactual> counterfactuals = counterfactualStorage.query().filter(Collections.singletonList(filterExecutionId)).execute();
+        AttributeFilter<String> filterExecutionId = QueryFilterFactory.equalTo(CounterfactualRequest.EXECUTION_ID_FIELD, executionId);
+        List<CounterfactualRequest> counterfactuals = storage.query().filter(Collections.singletonList(filterExecutionId)).execute();
 
         return List.copyOf(counterfactuals);
     }
 
     @Override
-    public Counterfactual getCounterfactual(String executionId, String counterfactualId) {
-        Storage<String, Counterfactual> counterfactualStorage = storageService.getCounterfactualStorage();
+    public CounterfactualRequest getCounterfactualRequest(String executionId, String counterfactualId) {
+        Storage<String, CounterfactualRequest> storage = storageService.getCounterfactualRequestStorage();
 
-        AttributeFilter<String> filterExecutionId = QueryFilterFactory.equalTo(Counterfactual.EXECUTION_ID_FIELD, executionId);
-        AttributeFilter<String> filterCounterfactualId = QueryFilterFactory.equalTo(Counterfactual.COUNTERFACTUAL_ID_FIELD, counterfactualId);
+        AttributeFilter<String> filterExecutionId = QueryFilterFactory.equalTo(CounterfactualRequest.EXECUTION_ID_FIELD, executionId);
+        AttributeFilter<String> filterCounterfactualId = QueryFilterFactory.equalTo(CounterfactualRequest.COUNTERFACTUAL_ID_FIELD, counterfactualId);
         List<AttributeFilter<?>> filters = List.of(filterExecutionId, filterCounterfactualId);
-        List<Counterfactual> counterfactuals = counterfactualStorage.query().filter(filters).execute();
+        List<CounterfactualRequest> counterfactuals = storage.query().filter(filters).execute();
 
         if (counterfactuals.isEmpty()) {
             throw new IllegalArgumentException(String.format("Counterfactual for Execution Id '%s' and Counterfactual Id '%s' does not exist in the storage.", executionId, counterfactualId));

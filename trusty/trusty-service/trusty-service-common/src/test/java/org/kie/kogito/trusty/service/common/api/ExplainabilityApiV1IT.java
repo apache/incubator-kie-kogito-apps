@@ -26,10 +26,10 @@ import javax.ws.rs.core.MediaType;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
@@ -90,8 +90,8 @@ class ExplainabilityApiV1IT {
                                 new FeatureImportanceModel("Feature2", 0.70293)))));
     }
 
-    private static Counterfactual buildValidCounterfactual() {
-        return new Counterfactual(TEST_EXECUTION_ID, TEST_COUNTERFACTUAL_ID);
+    private static CounterfactualRequest buildValidCounterfactual() {
+        return new CounterfactualRequest(TEST_EXECUTION_ID, TEST_COUNTERFACTUAL_ID);
     }
 
     @Test
@@ -155,13 +155,13 @@ class ExplainabilityApiV1IT {
 
         mockServiceWithCounterfactualRequest();
 
-        CounterfactualResponse response = given()
+        CounterfactualRequestResponse response = given()
                 .filter(new RequestLoggingFilter())
                 .filter(new ResponseLoggingFilter())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(getCounterfactualJsonRequest())
                 .when().post("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/counterfactuals")
-                .as(CounterfactualResponse.class);
+                .as(CounterfactualRequestResponse.class);
 
         assertNotNull(response);
         assertNotNull(response.getExecutionId());
@@ -228,13 +228,13 @@ class ExplainabilityApiV1IT {
 
         mockServiceWithCounterfactualRequest();
 
-        CounterfactualResponse response = given()
+        CounterfactualRequestResponse response = given()
                 .filter(new RequestLoggingFilter())
                 .filter(new ResponseLoggingFilter())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(getCounterfactualWithStructuredModelJsonRequest())
                 .when().post("/executions/decisions/" + TEST_EXECUTION_ID + "/explanations/counterfactuals")
-                .as(CounterfactualResponse.class);
+                .as(CounterfactualRequestResponse.class);
 
         assertNotNull(response);
         assertNotNull(response.getExecutionId());

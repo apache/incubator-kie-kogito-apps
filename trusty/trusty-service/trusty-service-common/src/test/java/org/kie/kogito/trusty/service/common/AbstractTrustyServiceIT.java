@@ -31,7 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
@@ -59,7 +59,7 @@ public abstract class AbstractTrustyServiceIT {
 
     @BeforeEach
     public void setup() {
-        trustyStorageService.getCounterfactualStorage().clear();
+        trustyStorageService.getCounterfactualRequestStorage().clear();
         trustyStorageService.getCounterfactualResultStorage().clear();
         trustyStorageService.getExplainabilityResultStorage().clear();
         trustyStorageService.getDecisionsStorage().clear();
@@ -167,13 +167,13 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution1";
         storeExecution(executionId, 0L);
 
-        Counterfactual request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
 
         assertNotNull(request);
         assertEquals(request.getExecutionId(), executionId);
         assertNotNull(request.getCounterfactualId());
 
-        Counterfactual result = trustyService.getCounterfactual(executionId, request.getCounterfactualId());
+        CounterfactualRequest result = trustyService.getCounterfactualRequest(executionId, request.getCounterfactualId());
         assertNotNull(result);
         assertEquals(request.getExecutionId(), result.getExecutionId());
         assertEquals(request.getCounterfactualId(), result.getCounterfactualId());
@@ -184,10 +184,10 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution2";
         storeExecution(executionId, 0L);
 
-        Counterfactual request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
-        Counterfactual request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
 
-        List<Counterfactual> result = trustyService.getCounterfactuals(executionId);
+        List<CounterfactualRequest> result = trustyService.getCounterfactualRequests(executionId);
         assertNotNull(result);
         assertEquals(2, result.size());
         assertTrue(result.stream().anyMatch(c -> c.getCounterfactualId().equals(request1.getCounterfactualId())));
@@ -199,14 +199,14 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution3";
         storeExecution(executionId, 0L);
 
-        Counterfactual request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
-        Counterfactual request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
 
-        Counterfactual result1 = trustyService.getCounterfactual(executionId, request1.getCounterfactualId());
+        CounterfactualRequest result1 = trustyService.getCounterfactualRequest(executionId, request1.getCounterfactualId());
         assertNotNull(result1);
         assertEquals(request1.getCounterfactualId(), result1.getCounterfactualId());
 
-        Counterfactual result2 = trustyService.getCounterfactual(executionId, request2.getCounterfactualId());
+        CounterfactualRequest result2 = trustyService.getCounterfactualRequest(executionId, request2.getCounterfactualId());
         assertNotNull(result2);
         assertEquals(request2.getCounterfactualId(), result2.getCounterfactualId());
     }
@@ -219,17 +219,17 @@ public abstract class AbstractTrustyServiceIT {
         String executionId2 = "myCFExecution2";
         storeExecution(executionId2, 0L);
 
-        Counterfactual request1 = trustyService.requestCounterfactuals(executionId1, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request1 = trustyService.requestCounterfactuals(executionId1, Collections.emptyList(), Collections.emptyList());
         assertNotNull(request1);
         assertEquals(request1.getExecutionId(), executionId1);
         assertNotNull(request1.getCounterfactualId());
 
-        Counterfactual request2 = trustyService.requestCounterfactuals(executionId2, Collections.emptyList(), Collections.emptyList());
+        CounterfactualRequest request2 = trustyService.requestCounterfactuals(executionId2, Collections.emptyList(), Collections.emptyList());
         assertNotNull(request2);
         assertEquals(request2.getExecutionId(), executionId2);
         assertNotNull(request2.getCounterfactualId());
 
-        Counterfactual result1 = trustyService.getCounterfactual(executionId1, request1.getCounterfactualId());
+        CounterfactualRequest result1 = trustyService.getCounterfactualRequest(executionId1, request1.getCounterfactualId());
         assertNotNull(result1);
         assertEquals(request1.getExecutionId(), result1.getExecutionId());
         assertEquals(request1.getCounterfactualId(), result1.getCounterfactualId());
@@ -243,7 +243,7 @@ public abstract class AbstractTrustyServiceIT {
         TypedVariableWithValue goal1 = TypedVariableWithValue.buildUnit("field1", "typeRef1", new IntNode(25));
         TypedVariableWithValue goal2 = TypedVariableWithValue.buildUnit("field2", "typeRef2", new IntNode(99));
 
-        Counterfactual request = trustyService.requestCounterfactuals(executionId, List.of(goal1, goal2), Collections.emptyList());
+        CounterfactualRequest request = trustyService.requestCounterfactuals(executionId, List.of(goal1, goal2), Collections.emptyList());
 
         assertNotNull(request);
         assertEquals(request.getExecutionId(), executionId);
@@ -253,7 +253,7 @@ public abstract class AbstractTrustyServiceIT {
         assertCounterfactualGoal(goal1, requestGoals.get(0));
         assertCounterfactualGoal(goal2, requestGoals.get(1));
 
-        Counterfactual result = trustyService.getCounterfactual(executionId, request.getCounterfactualId());
+        CounterfactualRequest result = trustyService.getCounterfactualRequest(executionId, request.getCounterfactualId());
         assertNotNull(result);
         assertEquals(request.getExecutionId(), result.getExecutionId());
         assertEquals(request.getCounterfactualId(), result.getCounterfactualId());
@@ -276,7 +276,7 @@ public abstract class AbstractTrustyServiceIT {
 
         CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildUnit("field1", "typeRef1", true, new CounterfactualDomainNumerical(1.0, 2.0));
 
-        Counterfactual request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
+        CounterfactualRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
         assertNotNull(request);
         assertEquals(request.getExecutionId(), executionId);
@@ -285,7 +285,7 @@ public abstract class AbstractTrustyServiceIT {
         List<CounterfactualSearchDomain> requestSearchDomains = new ArrayList<>(request.getSearchDomains());
         assertCounterfactualSearchDomainNumerical(searchDomain, requestSearchDomains.get(0));
 
-        Counterfactual result = trustyService.getCounterfactual(executionId, request.getCounterfactualId());
+        CounterfactualRequest result = trustyService.getCounterfactualRequest(executionId, request.getCounterfactualId());
         assertNotNull(result);
         assertEquals(request.getExecutionId(), result.getExecutionId());
         assertEquals(request.getCounterfactualId(), result.getCounterfactualId());
@@ -320,7 +320,7 @@ public abstract class AbstractTrustyServiceIT {
         Collection<JsonNode> categories = List.of(new TextNode("A"), new TextNode("B"));
         CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildUnit("field1", "typeRef1", true, new CounterfactualDomainCategorical(categories));
 
-        Counterfactual request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
+        CounterfactualRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
         assertNotNull(request);
         assertEquals(request.getExecutionId(), executionId);
@@ -329,7 +329,7 @@ public abstract class AbstractTrustyServiceIT {
         List<CounterfactualSearchDomain> requestSearchDomains = new ArrayList<>(request.getSearchDomains());
         assertCounterfactualSearchDomainCategorical(searchDomain, requestSearchDomains.get(0));
 
-        Counterfactual result = trustyService.getCounterfactual(executionId, request.getCounterfactualId());
+        CounterfactualRequest result = trustyService.getCounterfactualRequest(executionId, request.getCounterfactualId());
         assertNotNull(result);
         assertEquals(request.getExecutionId(), result.getExecutionId());
         assertEquals(request.getCounterfactualId(), result.getCounterfactualId());

@@ -18,7 +18,7 @@ package org.kie.kogito.trusty.storage.common;
 
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -53,11 +53,11 @@ public interface TrustyStorageService {
     Storage<String, DMNModelWithMetadata> getModelStorage();
 
     /**
-     * Gets the Counterfactual storage.
+     * Gets the Counterfactual requests storage.
      *
      * @return The Storage for Counterfactual requests.
      */
-    Storage<String, Counterfactual> getCounterfactualStorage();
+    Storage<String, CounterfactualRequest> getCounterfactualRequestStorage();
 
     /**
      * Gets the Counterfactual results storage.

@@ -38,11 +38,10 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
-import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
@@ -87,7 +86,7 @@ public class ExplainabilityApiV1 {
     @Path("/{executionId}/explanations/counterfactuals")
     @APIResponses(value = {
             @APIResponse(description = "UUID, counterfactualId, for the calculation request.", responseCode = "200",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = CounterfactualResponse.class))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.OBJECT, implementation = CounterfactualRequestResponse.class))),
             @APIResponse(description = "Bad Request", responseCode = "400", content = @Content(mediaType = MediaType.TEXT_PLAIN))
     })
     @Operation(
@@ -106,19 +105,19 @@ public class ExplainabilityApiV1 {
                     name = "Counterfactual request",
                     description = "The definition of a request to calculate a decision's Counterfactuals.",
                     required = true,
-                    schema = @Schema(implementation = CounterfactualRequest.class)) CounterfactualRequest request) {
+                    schema = @Schema(implementation = org.kie.kogito.trusty.service.common.requests.CounterfactualRequest.class)) org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request) {
         List<TypedVariableWithValue> goals = request.getGoals();
         List<CounterfactualSearchDomain> searchDomains = request.getSearchDomains();
         return requestCounterfactualsForExecution(executionId, goals, searchDomains)
-                .map(obj -> new CounterfactualResponse(obj.getExecutionId(), obj.getCounterfactualId()))
+                .map(obj -> new CounterfactualRequestResponse(obj.getExecutionId(), obj.getCounterfactualId()))
                 .map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();
     }
 
-    private Optional<Counterfactual> requestCounterfactualsForExecution(String executionId,
-            List<TypedVariableWithValue> goals,
-            List<CounterfactualSearchDomain> searchDomains) {
+    private Optional<CounterfactualRequest> requestCounterfactualsForExecution(String executionId,
+                                                                               List<TypedVariableWithValue> goals,
+                                                                               List<CounterfactualSearchDomain> searchDomains) {
         try {
             return Optional.ofNullable(trustyService.requestCounterfactuals(executionId, goals, searchDomains));
         } catch (IllegalArgumentException ex) {
@@ -143,16 +142,16 @@ public class ExplainabilityApiV1 {
                     description = "The execution ID.",
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
-        return getCounterfactualsForExecution(executionId)
-                .map(obj -> obj.stream().map(cf -> new CounterfactualResponse(cf.getExecutionId(), cf.getCounterfactualId())).collect(Collectors.toList()))
+        return getCounterfactualRequestsForExecution(executionId)
+                .map(obj -> obj.stream().map(cf -> new CounterfactualRequestResponse(cf.getExecutionId(), cf.getCounterfactualId())).collect(Collectors.toList()))
                 .map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();
     }
 
-    private Optional<List<Counterfactual>> getCounterfactualsForExecution(String executionId) {
+    private Optional<List<CounterfactualRequest>> getCounterfactualRequestsForExecution(String executionId) {
         try {
-            return Optional.ofNullable(trustyService.getCounterfactuals(executionId));
+            return Optional.ofNullable(trustyService.getCounterfactualRequests(executionId));
         } catch (IllegalArgumentException ex) {
             return Optional.empty();
         }
@@ -181,15 +180,15 @@ public class ExplainabilityApiV1 {
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("counterfactualId") String counterfactualId) {
         return getCounterfactualForExecution(executionId, counterfactualId)
-                .map(obj -> new CounterfactualResponse(obj.getExecutionId(), obj.getCounterfactualId()))
+                .map(obj -> new CounterfactualRequestResponse(obj.getExecutionId(), obj.getCounterfactualId()))
                 .map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();
     }
 
-    private Optional<Counterfactual> getCounterfactualForExecution(String executionId, String counterfactualId) {
+    private Optional<CounterfactualRequest> getCounterfactualForExecution(String executionId, String counterfactualId) {
         try {
-            return Optional.ofNullable(trustyService.getCounterfactual(executionId, counterfactualId));
+            return Optional.ofNullable(trustyService.getCounterfactualRequest(executionId, counterfactualId));
         } catch (IllegalArgumentException ex) {
             return Optional.empty();
         }

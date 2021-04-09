@@ -18,32 +18,32 @@ package org.kie.kogito.trusty.storage.infinispan;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CounterfactualMarshaller extends AbstractModelMarshaller<Counterfactual> {
+public class CounterfactualMarshaller extends AbstractModelMarshaller<CounterfactualRequest> {
 
     public CounterfactualMarshaller(ObjectMapper mapper) {
-        super(mapper, Counterfactual.class);
+        super(mapper, CounterfactualRequest.class);
     }
 
     @Override
-    public Counterfactual readFrom(ProtoStreamReader reader) throws IOException {
-        return new Counterfactual(
-                reader.readString(Counterfactual.EXECUTION_ID_FIELD),
-                reader.readString(Counterfactual.COUNTERFACTUAL_ID_FIELD),
-                reader.readCollection(Counterfactual.COUNTERFACTUAL_GOALS, new ArrayList<>(), TypedVariableWithValue.class),
-                reader.readCollection(Counterfactual.COUNTERFACTUAL_SEARCH_DOMAINS, new ArrayList<>(), CounterfactualSearchDomain.class));
+    public CounterfactualRequest readFrom(ProtoStreamReader reader) throws IOException {
+        return new CounterfactualRequest(
+                reader.readString(CounterfactualRequest.EXECUTION_ID_FIELD),
+                reader.readString(CounterfactualRequest.COUNTERFACTUAL_ID_FIELD),
+                reader.readCollection(CounterfactualRequest.COUNTERFACTUAL_GOALS, new ArrayList<>(), TypedVariableWithValue.class),
+                reader.readCollection(CounterfactualRequest.COUNTERFACTUAL_SEARCH_DOMAINS, new ArrayList<>(), CounterfactualSearchDomain.class));
     }
 
     @Override
-    public void writeTo(ProtoStreamWriter writer, Counterfactual input) throws IOException {
-        writer.writeString(Counterfactual.EXECUTION_ID_FIELD, input.getExecutionId());
-        writer.writeString(Counterfactual.COUNTERFACTUAL_ID_FIELD, input.getCounterfactualId());
-        writer.writeCollection(Counterfactual.COUNTERFACTUAL_GOALS, input.getGoals(), TypedVariableWithValue.class);
-        writer.writeCollection(Counterfactual.COUNTERFACTUAL_SEARCH_DOMAINS, input.getSearchDomains(), CounterfactualSearchDomain.class);
+    public void writeTo(ProtoStreamWriter writer, CounterfactualRequest input) throws IOException {
+        writer.writeString(CounterfactualRequest.EXECUTION_ID_FIELD, input.getExecutionId());
+        writer.writeString(CounterfactualRequest.COUNTERFACTUAL_ID_FIELD, input.getCounterfactualId());
+        writer.writeCollection(CounterfactualRequest.COUNTERFACTUAL_GOALS, input.getGoals(), TypedVariableWithValue.class);
+        writer.writeCollection(CounterfactualRequest.COUNTERFACTUAL_SEARCH_DOMAINS, input.getSearchDomains(), CounterfactualSearchDomain.class);
     }
 }

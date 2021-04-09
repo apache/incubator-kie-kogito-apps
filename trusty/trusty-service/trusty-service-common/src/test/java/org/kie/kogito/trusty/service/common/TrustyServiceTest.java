@@ -38,7 +38,7 @@ import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityReq
 import org.kie.kogito.trusty.service.common.mocks.StorageImplMock;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
@@ -373,18 +373,18 @@ public class TrustyServiceTest {
     @SuppressWarnings("unchecked")
     void givenStoredExecutionWhenCounterfactualRequestIsMadeThenRequestIsStored() {
         Storage<String, Decision> decisionStorage = mock(Storage.class);
-        Storage<String, Counterfactual> counterfactualStorage = mock(Storage.class);
-        ArgumentCaptor<Counterfactual> counterfactualArgumentCaptor = ArgumentCaptor.forClass(Counterfactual.class);
+        Storage<String, CounterfactualRequest> counterfactualStorage = mock(Storage.class);
+        ArgumentCaptor<CounterfactualRequest> counterfactualArgumentCaptor = ArgumentCaptor.forClass(CounterfactualRequest.class);
 
         when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
-        when(trustyStorageServiceMock.getCounterfactualStorage()).thenReturn(counterfactualStorage);
+        when(trustyStorageServiceMock.getCounterfactualRequestStorage()).thenReturn(counterfactualStorage);
         when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(TrustyServiceTestUtils.buildCorrectDecision(TEST_EXECUTION_ID));
 
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID, Collections.emptyList(), Collections.emptyList());
 
         verify(counterfactualStorage).put(anyString(), counterfactualArgumentCaptor.capture());
-        Counterfactual counterfactual = counterfactualArgumentCaptor.getValue();
+        CounterfactualRequest counterfactual = counterfactualArgumentCaptor.getValue();
         assertNotNull(counterfactual);
         assertEquals(TEST_EXECUTION_ID, counterfactual.getExecutionId());
     }
@@ -393,12 +393,12 @@ public class TrustyServiceTest {
     @SuppressWarnings("unchecked")
     void givenStoredExecutionWhenCounterfactualRequestIsMadeThenExplainabilityEventIsEmitted() {
         Storage<String, Decision> decisionStorage = mock(Storage.class);
-        Storage<String, Counterfactual> counterfactualStorage = mock(Storage.class);
+        Storage<String, CounterfactualRequest> counterfactualStorage = mock(Storage.class);
         ArgumentCaptor<BaseExplainabilityRequestDto> explainabilityEventArgumentCaptor = ArgumentCaptor.forClass(BaseExplainabilityRequestDto.class);
 
         when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
-        when(trustyStorageServiceMock.getCounterfactualStorage()).thenReturn(counterfactualStorage);
+        when(trustyStorageServiceMock.getCounterfactualRequestStorage()).thenReturn(counterfactualStorage);
         when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(TrustyServiceTestUtils.buildCorrectDecision(TEST_EXECUTION_ID));
 
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID, Collections.emptyList(), Collections.emptyList());
@@ -415,7 +415,7 @@ public class TrustyServiceTest {
     @SuppressWarnings("unchecked")
     void givenStoredExecutionWhenCounterfactualRequestIsMadeThenExplainabilityEventHasCorrectPaytload() {
         Storage<String, Decision> decisionStorage = mock(Storage.class);
-        Storage<String, Counterfactual> counterfactualStorage = mock(Storage.class);
+        Storage<String, CounterfactualRequest> counterfactualStorage = mock(Storage.class);
         ArgumentCaptor<BaseExplainabilityRequestDto> explainabilityEventArgumentCaptor = ArgumentCaptor.forClass(BaseExplainabilityRequestDto.class);
 
         Decision decision = new Decision(
@@ -432,7 +432,7 @@ public class TrustyServiceTest {
 
         when(decisionStorage.containsKey(eq(TEST_EXECUTION_ID))).thenReturn(true);
         when(trustyStorageServiceMock.getDecisionsStorage()).thenReturn(decisionStorage);
-        when(trustyStorageServiceMock.getCounterfactualStorage()).thenReturn(counterfactualStorage);
+        when(trustyStorageServiceMock.getCounterfactualRequestStorage()).thenReturn(counterfactualStorage);
         when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(decision);
 
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID,

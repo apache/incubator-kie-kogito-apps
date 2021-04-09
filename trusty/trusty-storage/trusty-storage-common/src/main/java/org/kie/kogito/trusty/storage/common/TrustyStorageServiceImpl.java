@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -49,8 +49,8 @@ public class TrustyStorageServiceImpl implements TrustyStorageService {
     }
 
     @Override
-    public Storage<String, Counterfactual> getCounterfactualStorage() {
-        return storageService.getCache(COUNTERFACTUALS_STORAGE, Counterfactual.class);
+    public Storage<String, CounterfactualRequest> getCounterfactualRequestStorage() {
+        return storageService.getCache(COUNTERFACTUALS_STORAGE, CounterfactualRequest.class);
     }
 
     @Override

@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.messaging;
 
 import java.util.Collections;
 
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
+@Disabled("Counterfactuals Explainability requests are not currently handled.")
 class ExplainabilityMessagingHandlerCounterfactualsIT extends BaseExplainabilityMessagingHandlerIT {
 
     @Override

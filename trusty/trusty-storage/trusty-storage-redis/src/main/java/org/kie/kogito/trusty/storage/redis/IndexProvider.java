@@ -30,8 +30,8 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.runtime.Startup;
 import io.redisearch.Schema;
 
-import static org.kie.kogito.trusty.storage.api.model.Counterfactual.COUNTERFACTUAL_ID_FIELD;
-import static org.kie.kogito.trusty.storage.api.model.Counterfactual.EXECUTION_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.CounterfactualRequest.COUNTERFACTUAL_ID_FIELD;
+import static org.kie.kogito.trusty.storage.api.model.CounterfactualRequest.EXECUTION_ID_FIELD;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.COUNTERFACTUALS_STORAGE;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.COUNTERFACTUAL_RESULTS_STORAGE;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.DECISIONS_STORAGE;

@@ -22,7 +22,7 @@ import java.util.List;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -123,26 +123,26 @@ public interface TrustyService {
      * @return A empty Counterfactual representing the request.
      * @throws IllegalArgumentException Throws IllegalArgumentException the executionId is not present in the system.
      */
-    Counterfactual requestCounterfactuals(String executionId,
+    CounterfactualRequest requestCounterfactuals(String executionId,
             List<TypedVariableWithValue> goals,
             List<CounterfactualSearchDomain> searchDomains);
 
     /**
-     * Requests all Counterfactuals for an execution.
+     * Get all Counterfactual requests for an execution.
      *
      * @param executionId The execution ID.
      * @return A list of all of the Counterfactuals for the execution.
      * @throws IllegalArgumentException Throws IllegalArgumentException the executionId is not present in the system.
      */
-    List<Counterfactual> getCounterfactuals(String executionId);
+    List<CounterfactualRequest> getCounterfactualRequests(String executionId);
 
     /**
-     * Request a specific Counterfactual for an execution.
+     * Gets a specific Counterfactual request for an execution.
      *
      * @param executionId The execution ID.
      * @param counterfactualId The Counterfactual ID.
-     * @return A specific Counterfactual for the execution.
+     * @return A specific Counterfactual request for the execution.
      * @throws IllegalArgumentException Throws IllegalArgumentException the executionId or counterfactualId are not present in the system.
      */
-    Counterfactual getCounterfactual(String executionId, String counterfactualId);
+    CounterfactualRequest getCounterfactualRequest(String executionId, String counterfactualId);
 }

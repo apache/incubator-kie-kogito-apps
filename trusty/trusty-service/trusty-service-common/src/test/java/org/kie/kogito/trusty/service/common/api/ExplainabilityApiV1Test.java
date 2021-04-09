@@ -25,9 +25,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
-import org.kie.kogito.trusty.service.common.responses.CounterfactualResponse;
-import org.kie.kogito.trusty.storage.api.model.Counterfactual;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,7 +60,7 @@ public class ExplainabilityApiV1Test {
     public void testRequestCounterfactualsWhenExecutionDoesNotExist() {
         when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenThrow(new IllegalArgumentException());
 
-        CounterfactualRequest request = new CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
+        org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request = new org.kie.kogito.trusty.service.common.requests.CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
 
         Response response = explainabilityEndpoint.requestCounterfactuals(EXECUTION_ID, request);
         assertNotNull(response);
@@ -70,24 +69,24 @@ public class ExplainabilityApiV1Test {
 
     @Test
     public void testRequestCounterfactualsWhenExecutionDoesExist() {
-        when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenReturn(new Counterfactual(EXECUTION_ID, COUNTERFACTUAL_ID));
+        when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenReturn(new CounterfactualRequest(EXECUTION_ID, COUNTERFACTUAL_ID));
 
-        CounterfactualRequest request = new CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
+        org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request = new org.kie.kogito.trusty.service.common.requests.CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
 
         Response response = explainabilityEndpoint.requestCounterfactuals(EXECUTION_ID, request);
         assertNotNull(response);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         Object entity = response.getEntity();
         assertNotNull(entity);
-        assertTrue(entity instanceof CounterfactualResponse);
-        CounterfactualResponse counterfactualResponse = (CounterfactualResponse) entity;
-        assertEquals(EXECUTION_ID, counterfactualResponse.getExecutionId());
-        assertEquals(COUNTERFACTUAL_ID, counterfactualResponse.getCounterfactualId());
+        assertTrue(entity instanceof CounterfactualRequestResponse);
+        CounterfactualRequestResponse counterfactualRequestResponse = (CounterfactualRequestResponse) entity;
+        assertEquals(EXECUTION_ID, counterfactualRequestResponse.getExecutionId());
+        assertEquals(COUNTERFACTUAL_ID, counterfactualRequestResponse.getCounterfactualId());
     }
 
     @Test
     public void testGetAllCounterfactualsWhenExecutionDoesNotExist() {
-        when(trustyService.getCounterfactuals(anyString())).thenThrow(new IllegalArgumentException());
+        when(trustyService.getCounterfactualRequests(anyString())).thenThrow(new IllegalArgumentException());
 
         Response response = explainabilityEndpoint.getAllCounterfactuals(EXECUTION_ID);
         assertNotNull(response);
@@ -97,7 +96,7 @@ public class ExplainabilityApiV1Test {
     @Test
     @SuppressWarnings({ "unchecked" })
     public void testGetAllCounterfactualsWhenExecutionDoesExist() {
-        when(trustyService.getCounterfactuals(anyString())).thenReturn(List.of(new Counterfactual(EXECUTION_ID, COUNTERFACTUAL_ID)));
+        when(trustyService.getCounterfactualRequests(anyString())).thenReturn(List.of(new CounterfactualRequest(EXECUTION_ID, COUNTERFACTUAL_ID)));
 
         Response response = explainabilityEndpoint.getAllCounterfactuals(EXECUTION_ID);
         assertNotNull(response);
@@ -105,17 +104,17 @@ public class ExplainabilityApiV1Test {
         Object entity = response.getEntity();
         assertNotNull(entity);
         assertTrue(entity instanceof List);
-        List<CounterfactualResponse> counterfactualResponse = (List) entity;
-        assertEquals(1, counterfactualResponse.size());
+        List<CounterfactualRequestResponse> counterfactualRequestResponse = (List) entity;
+        assertEquals(1, counterfactualRequestResponse.size());
 
-        CounterfactualResponse counterfactual = counterfactualResponse.get(0);
+        CounterfactualRequestResponse counterfactual = counterfactualRequestResponse.get(0);
         assertEquals(EXECUTION_ID, counterfactual.getExecutionId());
         assertEquals(COUNTERFACTUAL_ID, counterfactual.getCounterfactualId());
     }
 
     @Test
     public void testGetCounterfactualWhenExecutionDoesNotExist() {
-        when(trustyService.getCounterfactual(anyString(), anyString())).thenThrow(new IllegalArgumentException());
+        when(trustyService.getCounterfactualRequest(anyString(), anyString())).thenThrow(new IllegalArgumentException());
 
         Response response = explainabilityEndpoint.getCounterfactual(EXECUTION_ID, COUNTERFACTUAL_ID);
         assertNotNull(response);
@@ -124,16 +123,16 @@ public class ExplainabilityApiV1Test {
 
     @Test
     public void testGetCounterfactualWhenExecutionDoesExist() {
-        when(trustyService.getCounterfactual(anyString(), anyString())).thenReturn(new Counterfactual(EXECUTION_ID, COUNTERFACTUAL_ID));
+        when(trustyService.getCounterfactualRequest(anyString(), anyString())).thenReturn(new CounterfactualRequest(EXECUTION_ID, COUNTERFACTUAL_ID));
 
         Response response = explainabilityEndpoint.getCounterfactual(EXECUTION_ID, COUNTERFACTUAL_ID);
         assertNotNull(response);
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         Object entity = response.getEntity();
         assertNotNull(entity);
-        assertTrue(entity instanceof CounterfactualResponse);
-        CounterfactualResponse counterfactualResponse = (CounterfactualResponse) entity;
-        assertEquals(EXECUTION_ID, counterfactualResponse.getExecutionId());
-        assertEquals(COUNTERFACTUAL_ID, counterfactualResponse.getCounterfactualId());
+        assertTrue(entity instanceof CounterfactualRequestResponse);
+        CounterfactualRequestResponse counterfactualRequestResponse = (CounterfactualRequestResponse) entity;
+        assertEquals(EXECUTION_ID, counterfactualRequestResponse.getExecutionId());
+        assertEquals(COUNTERFACTUAL_ID, counterfactualRequestResponse.getCounterfactualId());
     }
 }
