@@ -382,4 +382,18 @@ class DataUtilsTest {
         assertThat(dataDistribution).isNotNull();
         assertThat(dataDistribution.getAllSamples()).hasSize(10);
     }
+
+    @Test
+    void testReplaceFeature() {
+        List<Feature> features = new ArrayList<>();
+        Feature replacingFeature = FeatureFactory.newTextFeature("f1", "replacement");
+        features.add(FeatureFactory.newTextFeature("f0", "one two three"));
+        features.add(FeatureFactory.newTextFeature("f1", "to be replaced"));
+        features.add(FeatureFactory.newTextFeature("f2", "four five six"));
+        List<Feature> updatedFeatures = DataUtils.replaceFeatures(replacingFeature, features);
+        assertThat(updatedFeatures.get(0)).isEqualTo(features.get(0));
+        assertThat(updatedFeatures.get(2)).isEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1)).isNotEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1).getValue().asString()).isEqualTo("replacement");
+    }
 }
