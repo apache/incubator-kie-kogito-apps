@@ -8,8 +8,13 @@ import {
   Tr
 } from '@patternfly/react-table';
 import { Button } from '@patternfly/react-core';
-import { PlusCircleIcon } from '@patternfly/react-icons';
+import {
+  AngleLeftIcon,
+  AngleRightIcon,
+  PlusCircleIcon
+} from '@patternfly/react-icons';
 import { CFSearchInput } from '../../Templates/Counterfactual/Counterfactual';
+import './CounterfactualTable.scss';
 
 interface CounterfactualTableProps {
   onOpenConstraints: (input: CFSearchInput) => void;
@@ -59,6 +64,35 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
 
+  const cfResults: Array<Array<unknown>> = [
+    [33, 44, 56, 43],
+    [12, 4, 3, 2],
+    [1000, 1300, 1250, 1650],
+    [500, 540, 420, 502],
+    ['ALFA', 'BETA', 'GAMMA', 'DELTA']
+  ];
+
+  const [displayedResultsIndex, setDisplayedResultsIndex] = useState(0);
+  const [displayedResults, setDisplayedResults] = useState(
+    cfResults.map(result => result.slice(0, 2))
+  );
+
+  const slideResults = (action: 'next' | 'prev') => {
+    let newIndex;
+    switch (action) {
+      case 'prev':
+        newIndex = displayedResultsIndex - 1;
+        break;
+      case 'next':
+        newIndex = displayedResultsIndex + 1;
+        break;
+    }
+    setDisplayedResultsIndex(newIndex);
+    setDisplayedResults(
+      cfResults.map(result => result.slice(newIndex, newIndex + 2))
+    );
+  };
+
   const onSelectAll = (event, isSelected) => {
     setAreAllRowsSelected(isSelected);
     setRows(
@@ -97,7 +131,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 
   return (
     <>
-      <TableComposable aria-label="Counterfactual Table">
+      <TableComposable aria-label="Counterfactual Table" className="cf-table">
         <Thead>
           <Tr>
             <Th
@@ -109,7 +143,48 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
             <Th width={20}>{columns[0]}</Th>
             <Th width={20}>{columns[1]}</Th>
             <Th width={20}>{columns[2]}</Th>
-            <Th width={20}>{columns[3]}</Th>
+            {displayedResults[0].map((result, index) => (
+              <Th
+                width={20}
+                key={`result ${index}`}
+                className={
+                  index === 0
+                    ? 'cf-table__result-head--first'
+                    : index === displayedResults[0].length - 1
+                    ? 'cf-table__result-head--last'
+                    : ''
+                }
+              >
+                {index === 0 && (
+                  <Button
+                    variant="link"
+                    isInline={true}
+                    aria-label="Previous results"
+                    className="cf-table__result-head__slider"
+                    isDisabled={displayedResultsIndex === index}
+                    onClick={() => slideResults('prev')}
+                  >
+                    <AngleLeftIcon />
+                  </Button>
+                )}
+                <span>Counterfactual Result</span>
+                {index === displayedResults[0].length - 1 && (
+                  <Button
+                    variant="link"
+                    isInline={true}
+                    aria-label="Next results"
+                    className="cf-table__result-head__slider"
+                    isDisabled={
+                      cfResults[0].length ===
+                      displayedResultsIndex + displayedResults[0].length
+                    }
+                    onClick={() => slideResults('next')}
+                  >
+                    <AngleRightIcon />
+                  </Button>
+                )}
+              </Th>
+            ))}
           </Tr>
         </Thead>
         <Tbody>
@@ -123,8 +198,8 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                   isSelected: !row.isFixed
                 }}
               />
-              <Td key="input name">{row.name}</Td>
-              <Td key="input constraint">
+              <Td key={`${rowIndex}_1`}>{row.name}</Td>
+              <Td key={`${rowIndex}_2`}>
                 <Button
                   variant={'link'}
                   isInline={true}
@@ -135,8 +210,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                   Add constraint
                 </Button>
               </Td>
-              <Td key="input original value">{row.value}</Td>
-              <Td key="result">No available results</Td>
+              <Td key={`${rowIndex}_3`}>{row.value}</Td>
+              {displayedResults[rowIndex].map((value, index) => (
+                <Td key={`${rowIndex}_${index + 4}`}>{value}</Td>
+              ))}
             </Tr>
           ))}
         </Tbody>

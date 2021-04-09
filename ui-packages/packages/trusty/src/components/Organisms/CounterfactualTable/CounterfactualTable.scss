@@ -1,0 +1,25 @@
+.cf-table {
+  &__result-head {
+    overflow: visible !important;
+    &__slider {
+      font-size: 1.5rem;
+      position: absolute;
+      top: 13px;
+    }
+    &--first,
+    &--last {
+      @extend .cf-table__result-head;
+    }
+    &--first {
+      .cf-table__result-head__slider {
+        left: -20px;
+      }
+    }
+    &--last {
+      padding-right: 30px !important;
+      .cf-table__result-head__slider {
+        right: 15px;
+      }
+    }
+  }
+}
