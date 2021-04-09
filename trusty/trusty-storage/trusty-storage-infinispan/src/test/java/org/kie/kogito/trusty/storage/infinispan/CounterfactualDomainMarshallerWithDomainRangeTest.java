@@ -22,47 +22,47 @@ import java.util.function.Function;
 
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.EnumTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.ObjectTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomain.NUMERICAL;
+import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomain.RANGE;
 import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomain.TYPE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CounterfactualDomainMarshallerWithDomainNumericalTest extends MarshallerTestTemplate<CounterfactualDomain> {
+public class CounterfactualDomainMarshallerWithDomainRangeTest extends MarshallerTestTemplate<CounterfactualDomain> {
 
-    private static final CounterfactualDomainNumerical domain = new CounterfactualDomainNumerical();
+    private static final CounterfactualDomainRange domain = new CounterfactualDomainRange();
 
-    private static final Function<CounterfactualDomain, CounterfactualDomainNumerical> getter = mock(Function.class);
+    private static final Function<CounterfactualDomain, CounterfactualDomainRange> getter = mock(Function.class);
 
-    private static final BiConsumer<CounterfactualDomain, CounterfactualDomainNumerical> setter = mock(BiConsumer.class);
+    private static final BiConsumer<CounterfactualDomain, CounterfactualDomainRange> setter = mock(BiConsumer.class);
 
     private static final List<AbstractTestField<CounterfactualDomain, ?>> TEST_FIELD_LIST = List.of(
             new EnumTestField<>(TYPE,
-                    CounterfactualDomain.Type.NUMERICAL,
+                    CounterfactualDomain.Type.RANGE,
                     CounterfactualDomain::getType,
                     CounterfactualDomain::setType,
                     CounterfactualDomain.Type.class),
-            new ObjectTestField<>(NUMERICAL,
+            new ObjectTestField<>(RANGE,
                     domain,
                     getter,
                     setter,
-                    CounterfactualDomainNumerical.class));
+                    CounterfactualDomainRange.class));
 
-    public CounterfactualDomainMarshallerWithDomainNumericalTest() {
+    public CounterfactualDomainMarshallerWithDomainRangeTest() {
         super(CounterfactualDomain.class);
         when(getter.apply(any())).thenReturn(domain);
     }
 
     @Override
-    protected CounterfactualDomainNumerical buildEmptyObject() {
+    protected CounterfactualDomainRange buildEmptyObject() {
         return domain;
     }
 
@@ -71,7 +71,7 @@ public class CounterfactualDomainMarshallerWithDomainNumericalTest extends Marsh
         return new CounterfactualDomainMarshaller(new ObjectMapper()) {
             @Override
             public CounterfactualDomain readFrom(ProtoStreamReader reader) throws IOException {
-                when(reader.readObject(eq(NUMERICAL), any())).thenReturn(domain);
+                when(reader.readObject(eq(RANGE), any())).thenReturn(domain);
                 return super.readFrom(reader);
             }
         };

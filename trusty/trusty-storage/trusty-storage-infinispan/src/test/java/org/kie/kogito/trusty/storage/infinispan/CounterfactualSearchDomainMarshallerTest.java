@@ -21,7 +21,7 @@ import java.util.List;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.BooleanTestField;
@@ -31,6 +31,7 @@ import org.kie.kogito.trusty.storage.infinispan.testfield.ObjectTestField;
 import org.kie.kogito.trusty.storage.infinispan.testfield.StringTestField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.IntNode;
 
 import static org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain.DOMAIN;
 import static org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain.IS_FIXED;
@@ -48,7 +49,7 @@ public class CounterfactualSearchDomainMarshallerTest extends MarshallerTestTemp
             new CollectionTestField<>(COMPONENTS_FIELD, Collections.emptyList(), CounterfactualSearchDomain::getComponents, CounterfactualSearchDomain::setComponents,
                     CounterfactualSearchDomain.class),
             new BooleanTestField<>(IS_FIXED, Boolean.TRUE, CounterfactualSearchDomain::isFixed, CounterfactualSearchDomain::setFixed),
-            new ObjectTestField<>(DOMAIN, new CounterfactualDomainNumerical(1.0, 2.0), CounterfactualSearchDomain::getDomain, CounterfactualSearchDomain::setDomain,
+            new ObjectTestField<>(DOMAIN, new CounterfactualDomainRange(new IntNode(1), new IntNode(2)), CounterfactualSearchDomain::getDomain, CounterfactualSearchDomain::setDomain,
                     CounterfactualDomain.class));
 
     public CounterfactualSearchDomainMarshallerTest() {

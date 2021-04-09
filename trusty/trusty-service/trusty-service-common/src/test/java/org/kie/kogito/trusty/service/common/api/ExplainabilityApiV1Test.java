@@ -60,7 +60,8 @@ public class ExplainabilityApiV1Test {
     public void testRequestCounterfactualsWhenExecutionDoesNotExist() {
         when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenThrow(new IllegalArgumentException());
 
-        org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request = new org.kie.kogito.trusty.service.common.requests.CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
+        org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request =
+                new org.kie.kogito.trusty.service.common.requests.CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
 
         Response response = explainabilityEndpoint.requestCounterfactuals(EXECUTION_ID, request);
         assertNotNull(response);
@@ -71,7 +72,8 @@ public class ExplainabilityApiV1Test {
     public void testRequestCounterfactualsWhenExecutionDoesExist() {
         when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenReturn(new CounterfactualRequest(EXECUTION_ID, COUNTERFACTUAL_ID));
 
-        org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request = new org.kie.kogito.trusty.service.common.requests.CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
+        org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request =
+                new org.kie.kogito.trusty.service.common.requests.CounterfactualRequest(Collections.emptyList(), Collections.emptyList());
 
         Response response = explainabilityEndpoint.requestCounterfactuals(EXECUTION_ID, request);
         assertNotNull(response);

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.CounterfactualDomainCategoricalDto;
-import org.kie.kogito.explainability.api.CounterfactualDomainNumericalDto;
+import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainCollectionDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainStructureDto;
@@ -32,11 +32,12 @@ import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitDto;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import static java.util.Arrays.asList;
@@ -117,13 +118,13 @@ class MessagingUtilsTest {
     }
 
     @Test
-    void modelToCounterfactualSearchDomainDto_Unit_Numerical() {
+    void modelToCounterfactualSearchDomainDto_Unit_Range() {
         CounterfactualSearchDomain searchDomain = new CounterfactualSearchDomain(TypedValue.Kind.UNIT,
                 "age",
                 "integer",
                 emptyList(),
                 Boolean.TRUE,
-                new CounterfactualDomainNumerical(18, 65));
+                new CounterfactualDomainRange(new IntNode(18), new IntNode(65)));
 
         CounterfactualSearchDomainDto searchDomainDto = MessagingUtils.modelToCounterfactualSearchDomainDto(searchDomain);
         assertNotNull(searchDomainDto);
@@ -137,11 +138,11 @@ class MessagingUtilsTest {
         assertFalse(unit.isStructure());
         assertTrue(unit.isFixed());
         assertNotNull(unit.getDomain());
-        assertTrue(unit.getDomain() instanceof CounterfactualDomainNumericalDto);
+        assertTrue(unit.getDomain() instanceof CounterfactualDomainRangeDto);
 
-        CounterfactualDomainNumericalDto numerical = (CounterfactualDomainNumericalDto) unit.getDomain();
-        assertEquals(18, numerical.getLowerBound());
-        assertEquals(65, numerical.getUpperBound());
+        CounterfactualDomainRangeDto range = (CounterfactualDomainRangeDto) unit.getDomain();
+        assertEquals(18, range.getLowerBound().asInt());
+        assertEquals(65, range.getUpperBound().asInt());
     }
 
     @Test
@@ -149,9 +150,14 @@ class MessagingUtilsTest {
         CounterfactualSearchDomain searchDomain = new CounterfactualSearchDomain(TypedValue.Kind.COLLECTION,
                 "weights",
                 "collection",
-                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT, "weight", "integer", Collections.emptyList(), Boolean.TRUE, new CounterfactualDomainNumerical(10, 20))),
+                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT,
+                        "weight",
+                        "integer",
+                        Collections.emptyList(),
+                        Boolean.TRUE,
+                        new CounterfactualDomainRange(new IntNode(10), new IntNode(20)))),
                 Boolean.TRUE,
-                new CounterfactualDomainNumerical(18, 65));
+                new CounterfactualDomainRange(new IntNode(18), new IntNode(65)));
 
         CounterfactualSearchDomainDto searchDomainDto = MessagingUtils.modelToCounterfactualSearchDomainDto(searchDomain);
         assertNotNull(searchDomainDto);
@@ -171,11 +177,11 @@ class MessagingUtilsTest {
         CounterfactualSearchDomainUnitDto unit = (CounterfactualSearchDomainUnitDto) item0;
         assertTrue(unit.isFixed());
         assertNotNull(unit.getDomain());
-        assertTrue(unit.getDomain() instanceof CounterfactualDomainNumericalDto);
+        assertTrue(unit.getDomain() instanceof CounterfactualDomainRangeDto);
 
-        CounterfactualDomainNumericalDto numerical = (CounterfactualDomainNumericalDto) unit.getDomain();
-        assertEquals(10, numerical.getLowerBound());
-        assertEquals(20, numerical.getUpperBound());
+        CounterfactualDomainRangeDto range = (CounterfactualDomainRangeDto) unit.getDomain();
+        assertEquals(10, range.getLowerBound().asInt());
+        assertEquals(20, range.getUpperBound().asInt());
     }
 
     @Test
@@ -183,9 +189,14 @@ class MessagingUtilsTest {
         CounterfactualSearchDomain searchDomain = new CounterfactualSearchDomain(TypedValue.Kind.STRUCTURE,
                 "employee",
                 "Employee",
-                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT, "salary", "integer", Collections.emptyList(), Boolean.TRUE, new CounterfactualDomainNumerical(1000, 2000))),
+                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT,
+                        "salary",
+                        "integer",
+                        Collections.emptyList(),
+                        Boolean.TRUE,
+                        new CounterfactualDomainRange(new IntNode(1000), new IntNode(2000)))),
                 Boolean.TRUE,
-                new CounterfactualDomainNumerical(18, 65));
+                new CounterfactualDomainRange(new IntNode(18), new IntNode(65)));
 
         CounterfactualSearchDomainDto searchDomainDto = MessagingUtils.modelToCounterfactualSearchDomainDto(searchDomain);
         assertNotNull(searchDomainDto);
@@ -206,10 +217,10 @@ class MessagingUtilsTest {
         CounterfactualSearchDomainUnitDto unit = (CounterfactualSearchDomainUnitDto) salary;
         assertTrue(unit.isFixed());
         assertNotNull(unit.getDomain());
-        assertTrue(unit.getDomain() instanceof CounterfactualDomainNumericalDto);
+        assertTrue(unit.getDomain() instanceof CounterfactualDomainRangeDto);
 
-        CounterfactualDomainNumericalDto numerical = (CounterfactualDomainNumericalDto) unit.getDomain();
-        assertEquals(1000, numerical.getLowerBound());
-        assertEquals(2000, numerical.getUpperBound());
+        CounterfactualDomainRangeDto range = (CounterfactualDomainRangeDto) unit.getDomain();
+        assertEquals(1000, range.getLowerBound().asInt());
+        assertEquals(2000, range.getUpperBound().asInt());
     }
 }

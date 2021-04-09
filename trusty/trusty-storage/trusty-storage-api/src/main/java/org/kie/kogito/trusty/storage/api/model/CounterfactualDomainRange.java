@@ -16,36 +16,37 @@
 package org.kie.kogito.trusty.storage.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
-public class CounterfactualDomainNumerical extends CounterfactualDomain {
+public class CounterfactualDomainRange extends CounterfactualDomain {
 
     public static final String LOWER_BOUND = "lowerBound";
     public static final String UPPER_BOUND = "upperBound";
 
     @JsonProperty(LOWER_BOUND)
-    private double lowerBound;
+    private JsonNode lowerBound;
 
     @JsonProperty(UPPER_BOUND)
-    private double upperBound;
+    private JsonNode upperBound;
 
-    public CounterfactualDomainNumerical() {
+    public CounterfactualDomainRange() {
     }
 
-    public CounterfactualDomainNumerical(double lowerBound, double upperBound) {
+    public CounterfactualDomainRange(JsonNode lowerBound, JsonNode upperBound) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
 
     @Override
     public Type getType() {
-        return Type.NUMERICAL;
+        return Type.RANGE;
     }
 
-    public Double getLowerBound() {
+    public JsonNode getLowerBound() {
         return this.lowerBound;
     }
 
-    public Double getUpperBound() {
+    public JsonNode getUpperBound() {
         return this.upperBound;
     }
 
@@ -53,19 +54,19 @@ public class CounterfactualDomainNumerical extends CounterfactualDomain {
     // Test methods
     //-------------
 
-    public void setLowerBound(double lowerBound) {
+    public void setLowerBound(JsonNode lowerBound) {
         this.lowerBound = lowerBound;
     }
 
-    public void setUpperBound(double upperBound) {
+    public void setUpperBound(JsonNode upperBound) {
         this.upperBound = upperBound;
     }
 
     @Override
     public String toString() {
-        return "DomainNumerical{" +
-                "lowerBound=" + lowerBound +
-                ", upperBound=" + upperBound +
+        return "DomainRange{" +
+                "lowerBound=" + lowerBound.asText() +
+                ", upperBound=" + upperBound.asText() +
                 "}";
     }
 }

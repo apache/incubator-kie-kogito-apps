@@ -20,39 +20,40 @@ import java.util.stream.Collectors;
 
 import org.infinispan.protostream.MessageMarshaller;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.infinispan.testfield.AbstractTestField;
-import org.kie.kogito.trusty.storage.infinispan.testfield.DoubleTestField;
+import org.kie.kogito.trusty.storage.infinispan.testfield.JsonNodeTestField;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.IntNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical.LOWER_BOUND;
-import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical.UPPER_BOUND;
+import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange.LOWER_BOUND;
+import static org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange.UPPER_BOUND;
 
-public class CounterfactualDomainNumericalMarshallerTest extends MarshallerTestTemplate<CounterfactualDomainNumerical> {
+public class CounterfactualDomainRangeMarshallerTest extends MarshallerTestTemplate<CounterfactualDomainRange> {
 
-    private static final List<AbstractTestField<CounterfactualDomainNumerical, ?>> TEST_FIELD_LIST = List.of(
-            new DoubleTestField<>(LOWER_BOUND, 1.0, CounterfactualDomainNumerical::getLowerBound, CounterfactualDomainNumerical::setLowerBound),
-            new DoubleTestField<>(UPPER_BOUND, 2.0, CounterfactualDomainNumerical::getUpperBound, CounterfactualDomainNumerical::setUpperBound));
+    private static final List<AbstractTestField<CounterfactualDomainRange, ?>> TEST_FIELD_LIST = List.of(
+            new JsonNodeTestField<>(LOWER_BOUND, new IntNode(1), CounterfactualDomainRange::getLowerBound, CounterfactualDomainRange::setLowerBound),
+            new JsonNodeTestField<>(UPPER_BOUND, new IntNode(2), CounterfactualDomainRange::getUpperBound, CounterfactualDomainRange::setUpperBound));
 
-    public CounterfactualDomainNumericalMarshallerTest() {
-        super(CounterfactualDomainNumerical.class);
+    public CounterfactualDomainRangeMarshallerTest() {
+        super(CounterfactualDomainRange.class);
     }
 
     @Override
-    protected CounterfactualDomainNumerical buildEmptyObject() {
-        return new CounterfactualDomainNumerical();
+    protected CounterfactualDomainRange buildEmptyObject() {
+        return new CounterfactualDomainRange();
     }
 
     @Override
-    protected MessageMarshaller<CounterfactualDomainNumerical> buildMarshaller() {
-        return new CounterfactualDomainNumericalMarshaller(new ObjectMapper());
+    protected MessageMarshaller<CounterfactualDomainRange> buildMarshaller() {
+        return new CounterfactualDomainRangeMarshaller(new ObjectMapper());
     }
 
     @Override
-    protected List<AbstractTestField<CounterfactualDomainNumerical, ?>> getTestFieldList() {
+    protected List<AbstractTestField<CounterfactualDomainRange, ?>> getTestFieldList() {
         return TEST_FIELD_LIST;
     }
 

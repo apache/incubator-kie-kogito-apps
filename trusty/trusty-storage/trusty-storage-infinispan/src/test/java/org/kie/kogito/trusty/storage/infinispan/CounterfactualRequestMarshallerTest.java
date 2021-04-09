@@ -39,7 +39,8 @@ public class CounterfactualRequestMarshallerTest extends MarshallerTestTemplate<
             new StringTestField<>(EXECUTION_ID_FIELD, "executionId", CounterfactualRequest::getExecutionId, CounterfactualRequest::setExecutionId),
             new StringTestField<>(COUNTERFACTUAL_ID_FIELD, "test", CounterfactualRequest::getCounterfactualId, CounterfactualRequest::setCounterfactualId),
             new CollectionTestField<>(COUNTERFACTUAL_GOALS, Collections.emptyList(), CounterfactualRequest::getGoals, CounterfactualRequest::setGoals, TypedVariableWithValue.class),
-            new CollectionTestField<>(COUNTERFACTUAL_SEARCH_DOMAINS, Collections.emptyList(), CounterfactualRequest::getSearchDomains, CounterfactualRequest::setSearchDomains, CounterfactualSearchDomain.class));
+            new CollectionTestField<>(COUNTERFACTUAL_SEARCH_DOMAINS, Collections.emptyList(), CounterfactualRequest::getSearchDomains, CounterfactualRequest::setSearchDomains,
+                    CounterfactualSearchDomain.class));
 
     public CounterfactualRequestMarshallerTest() {
         super(CounterfactualRequest.class);

@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,8 +36,8 @@ public class CounterfactualDomainMarshaller extends AbstractModelMarshaller<Coun
         switch (type) {
             case CATEGORICAL:
                 return reader.readObject(CounterfactualDomain.CATEGORICAL, CounterfactualDomainCategorical.class);
-            case NUMERICAL:
-                return reader.readObject(CounterfactualDomain.NUMERICAL, CounterfactualDomainNumerical.class);
+            case RANGE:
+                return reader.readObject(CounterfactualDomain.RANGE, CounterfactualDomainRange.class);
         }
         throw new IllegalArgumentException(String.format("An unexpected CounterfactualDomain.Type '%s' was detected.", type));
     }
@@ -48,8 +48,8 @@ public class CounterfactualDomainMarshaller extends AbstractModelMarshaller<Coun
 
         if (input instanceof CounterfactualDomainCategorical) {
             writer.writeObject(CounterfactualDomain.CATEGORICAL, (CounterfactualDomainCategorical) input, CounterfactualDomainCategorical.class);
-        } else if (input instanceof CounterfactualDomainNumerical) {
-            writer.writeObject(CounterfactualDomain.NUMERICAL, (CounterfactualDomainNumerical) input, CounterfactualDomainNumerical.class);
+        } else if (input instanceof CounterfactualDomainRange) {
+            writer.writeObject(CounterfactualDomain.RANGE, (CounterfactualDomainRange) input, CounterfactualDomainRange.class);
         }
     }
 }

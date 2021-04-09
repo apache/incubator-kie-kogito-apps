@@ -23,14 +23,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         use = JsonTypeInfo.Id.NAME,
         property = CounterfactualDomain.TYPE)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CounterfactualDomainNumerical.class, name = CounterfactualDomain.NUMERICAL),
+        @JsonSubTypes.Type(value = CounterfactualDomainRange.class, name = CounterfactualDomain.RANGE),
         @JsonSubTypes.Type(value = CounterfactualDomainCategorical.class, name = CounterfactualDomain.CATEGORICAL)
 })
 public abstract class CounterfactualDomain {
 
     public static final String TYPE = "type";
     public static final String CATEGORICAL = "categorical";
-    public static final String NUMERICAL = "numerical";
+    public static final String RANGE = "range";
 
     @JsonProperty(TYPE)
     @SuppressWarnings("unused")
@@ -40,7 +40,7 @@ public abstract class CounterfactualDomain {
 
     public enum Type {
         CATEGORICAL,
-        NUMERICAL
+        RANGE
     }
 
     //-------------

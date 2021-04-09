@@ -16,22 +16,23 @@
 package org.kie.kogito.explainability.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
-public class CounterfactualDomainNumericalDto extends CounterfactualDomainDto {
+public class CounterfactualDomainRangeDto extends CounterfactualDomainDto {
 
     public static final String LOWER_BOUND_FIELD = "lowerBound";
     public static final String UPPER_BOUND_FIELD = "upperBound";
 
     @JsonProperty(LOWER_BOUND_FIELD)
-    private double lowerBound;
+    private JsonNode lowerBound;
 
     @JsonProperty(UPPER_BOUND_FIELD)
-    private double upperBound;
+    private JsonNode upperBound;
 
-    public CounterfactualDomainNumericalDto() {
+    public CounterfactualDomainRangeDto() {
     }
 
-    public CounterfactualDomainNumericalDto(double lowerBound, double upperBound) {
+    public CounterfactualDomainRangeDto(JsonNode lowerBound, JsonNode upperBound) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
@@ -41,11 +42,11 @@ public class CounterfactualDomainNumericalDto extends CounterfactualDomainDto {
         return Type.NUMERICAL;
     }
 
-    public Double getLowerBound() {
+    public JsonNode getLowerBound() {
         return this.lowerBound;
     }
 
-    public Double getUpperBound() {
+    public JsonNode getUpperBound() {
         return this.upperBound;
     }
 }

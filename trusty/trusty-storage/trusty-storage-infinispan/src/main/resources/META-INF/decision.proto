@@ -189,7 +189,7 @@ message DMNModelWithMetadata {
 }
 
 /* @Indexed */
-message Counterfactual {
+message CounterfactualRequest {
 
     /* @Field(store = Store.YES) */
     optional string executionId = 1;
@@ -215,7 +215,7 @@ message CounterfactualDomain {
     optional CounterfactualDomainCategorical categorical = 2;
 
     /* @Field(store = Store.YES) */
-    optional CounterfactualDomainNumerical numerical = 3;
+    optional CounterfactualDomainRange range = 3;
 
 }
 
@@ -227,13 +227,13 @@ message CounterfactualDomainCategorical {
 }
 
 /* @Indexed */
-message CounterfactualDomainNumerical {
+message CounterfactualDomainRange {
 
     /* @Field(store = Store.YES) */
-    optional double lowerBound = 1;
+    optional string lowerBound = 1;
 
     /* @Field(store = Store.YES) */
-    optional double upperBound = 2;
+    optional string upperBound = 2;
 }
 
 /* @Indexed */

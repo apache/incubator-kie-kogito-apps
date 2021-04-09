@@ -105,8 +105,8 @@ public class ProtostreamProducer {
     }
 
     @Produces
-    org.infinispan.protostream.MessageMarshaller counterfactualDomainNumericalMarshaller() {
-        return new CounterfactualDomainNumericalMarshaller(mapper);
+    org.infinispan.protostream.MessageMarshaller counterfactualDomainRangeMarshaller() {
+        return new CounterfactualDomainRangeMarshaller(mapper);
     }
 
     @Produces

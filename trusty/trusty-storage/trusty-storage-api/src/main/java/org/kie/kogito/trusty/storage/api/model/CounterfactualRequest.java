@@ -50,9 +50,9 @@ public class CounterfactualRequest {
     }
 
     public CounterfactualRequest(String executionId,
-                                 String counterfactualId,
-                                 Collection<TypedVariableWithValue> goals,
-                                 Collection<CounterfactualSearchDomain> searchDomains) {
+            String counterfactualId,
+            Collection<TypedVariableWithValue> goals,
+            Collection<CounterfactualSearchDomain> searchDomains) {
         this.executionId = executionId;
         this.counterfactualId = counterfactualId;
         this.goals = goals;

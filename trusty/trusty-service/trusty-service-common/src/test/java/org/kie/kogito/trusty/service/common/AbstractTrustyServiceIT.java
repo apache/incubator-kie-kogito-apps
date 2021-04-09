@@ -31,10 +31,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -270,11 +270,14 @@ public abstract class AbstractTrustyServiceIT {
     }
 
     @Test
-    public void testCounterfactuals_StoreSingleAndRetrieveSingleWithSearchDomainNumerical() {
+    public void testCounterfactuals_StoreSingleAndRetrieveSingleWithSearchDomainRange() {
         String executionId = "myCFExecution1";
         storeExecution(executionId, 0L);
 
-        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildUnit("field1", "typeRef1", true, new CounterfactualDomainNumerical(1.0, 2.0));
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildUnit("field1",
+                "typeRef1",
+                true,
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
 
         CounterfactualRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
@@ -283,7 +286,7 @@ public abstract class AbstractTrustyServiceIT {
         assertNotNull(request.getCounterfactualId());
         assertEquals(1, request.getSearchDomains().size());
         List<CounterfactualSearchDomain> requestSearchDomains = new ArrayList<>(request.getSearchDomains());
-        assertCounterfactualSearchDomainNumerical(searchDomain, requestSearchDomains.get(0));
+        assertCounterfactualSearchDomainRange(searchDomain, requestSearchDomains.get(0));
 
         CounterfactualRequest result = trustyService.getCounterfactualRequest(executionId, request.getCounterfactualId());
         assertNotNull(result);
@@ -291,25 +294,25 @@ public abstract class AbstractTrustyServiceIT {
         assertEquals(request.getCounterfactualId(), result.getCounterfactualId());
         assertEquals(1, result.getSearchDomains().size());
         List<CounterfactualSearchDomain> resultSearchDomains = new ArrayList<>(result.getSearchDomains());
-        assertCounterfactualSearchDomainNumerical(searchDomain, resultSearchDomains.get(0));
+        assertCounterfactualSearchDomainRange(searchDomain, resultSearchDomains.get(0));
     }
 
-    private void assertCounterfactualSearchDomainNumerical(CounterfactualSearchDomain expectedSearchDomain, CounterfactualSearchDomain actualSearchDomain) {
+    private void assertCounterfactualSearchDomainRange(CounterfactualSearchDomain expectedSearchDomain, CounterfactualSearchDomain actualSearchDomain) {
         assertEquals(expectedSearchDomain.getName(), actualSearchDomain.getName());
         assertEquals(expectedSearchDomain.getTypeRef(), actualSearchDomain.getTypeRef());
         assertEquals(expectedSearchDomain.isFixed(), actualSearchDomain.isFixed());
-        assertCounterfactualDomainNumerical(expectedSearchDomain.getDomain(), actualSearchDomain.getDomain());
+        assertCounterfactualDomainRange(expectedSearchDomain.getDomain(), actualSearchDomain.getDomain());
     }
 
-    private void assertCounterfactualDomainNumerical(CounterfactualDomain expectedDomain, CounterfactualDomain actualDomain) {
-        assertTrue(expectedDomain instanceof CounterfactualDomainNumerical);
-        assertTrue(actualDomain instanceof CounterfactualDomainNumerical);
+    private void assertCounterfactualDomainRange(CounterfactualDomain expectedDomain, CounterfactualDomain actualDomain) {
+        assertTrue(expectedDomain instanceof CounterfactualDomainRange);
+        assertTrue(actualDomain instanceof CounterfactualDomainRange);
 
-        CounterfactualDomainNumerical expectedDomainNumerical = (CounterfactualDomainNumerical) expectedDomain;
-        CounterfactualDomainNumerical actualDomainNumerical = (CounterfactualDomainNumerical) actualDomain;
+        CounterfactualDomainRange expectedDomainRange = (CounterfactualDomainRange) expectedDomain;
+        CounterfactualDomainRange actualDomainRange = (CounterfactualDomainRange) actualDomain;
 
-        assertEquals(expectedDomainNumerical.getLowerBound(), actualDomainNumerical.getLowerBound());
-        assertEquals(expectedDomainNumerical.getUpperBound(), actualDomainNumerical.getUpperBound());
+        assertEquals(expectedDomainRange.getLowerBound(), actualDomainRange.getLowerBound());
+        assertEquals(expectedDomainRange.getUpperBound(), actualDomainRange.getUpperBound());
     }
 
     @Test

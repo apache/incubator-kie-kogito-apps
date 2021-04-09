@@ -27,7 +27,7 @@ import org.kie.kogito.explainability.api.CounterfactualSearchDomainStructureDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitDto;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
@@ -90,9 +90,9 @@ public class MessagingUtils {
             case CATEGORICAL:
                 CounterfactualDomainCategorical categorical = (CounterfactualDomainCategorical) domain;
                 return new org.kie.kogito.explainability.api.CounterfactualDomainCategoricalDto(categorical.getCategories());
-            case NUMERICAL:
-                CounterfactualDomainNumerical numerical = (CounterfactualDomainNumerical) domain;
-                return new org.kie.kogito.explainability.api.CounterfactualDomainNumericalDto(numerical.getLowerBound(), numerical.getUpperBound());
+            case RANGE:
+                CounterfactualDomainRange range = (CounterfactualDomainRange) domain;
+                return new org.kie.kogito.explainability.api.CounterfactualDomainRangeDto(range.getLowerBound(), range.getUpperBound());
         }
         throw new IllegalStateException("Can't convert CounterfactualDomain of type " + domain.getType() + " to org.kie.kogito.explainability.api.CounterfactualDomain");
     }

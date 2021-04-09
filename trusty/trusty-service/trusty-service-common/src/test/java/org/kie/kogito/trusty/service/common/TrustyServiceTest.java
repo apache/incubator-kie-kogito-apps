@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
-import org.kie.kogito.explainability.api.CounterfactualDomainNumericalDto;
+import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitDto;
@@ -38,8 +38,8 @@ import org.kie.kogito.trusty.service.common.messaging.outgoing.ExplainabilityReq
 import org.kie.kogito.trusty.service.common.mocks.StorageImplMock;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -437,7 +437,12 @@ public class TrustyServiceTest {
 
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID,
                 List.of(new TypedVariableWithValue(TypedValue.Kind.UNIT, "salary", "integer", new IntNode(2000), null)),
-                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT, "yearsOfService", "integer", Collections.emptyList(), Boolean.FALSE, new CounterfactualDomainNumerical(10, 30))));
+                List.of(new CounterfactualSearchDomain(TypedValue.Kind.UNIT,
+                        "yearsOfService",
+                        "integer",
+                        Collections.emptyList(),
+                        Boolean.FALSE,
+                        new CounterfactualDomainRange(new IntNode(10), new IntNode(30)))));
 
         verify(explainabilityRequestProducerMock).sendEvent(explainabilityEventArgumentCaptor.capture());
         BaseExplainabilityRequestDto event = explainabilityEventArgumentCaptor.getValue();
@@ -466,11 +471,11 @@ public class TrustyServiceTest {
         CounterfactualSearchDomainUnitDto unit = (CounterfactualSearchDomainUnitDto) searchDomain;
         assertFalse(unit.isFixed());
         assertNotNull(unit.getDomain());
-        assertTrue(unit.getDomain() instanceof CounterfactualDomainNumericalDto);
+        assertTrue(unit.getDomain() instanceof CounterfactualDomainRangeDto);
 
-        CounterfactualDomainNumericalDto numerical = (CounterfactualDomainNumericalDto) unit.getDomain();
-        assertEquals(10, numerical.getLowerBound());
-        assertEquals(30, numerical.getUpperBound());
+        CounterfactualDomainRangeDto range = (CounterfactualDomainRangeDto) unit.getDomain();
+        assertEquals(10, range.getLowerBound().asInt());
+        assertEquals(30, range.getUpperBound().asInt());
     }
 
     private DMNModelWithMetadata buildDmnModel(String model) {

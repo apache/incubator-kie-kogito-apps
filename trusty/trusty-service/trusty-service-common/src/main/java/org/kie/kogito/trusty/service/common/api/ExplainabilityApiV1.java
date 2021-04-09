@@ -105,7 +105,8 @@ public class ExplainabilityApiV1 {
                     name = "Counterfactual request",
                     description = "The definition of a request to calculate a decision's Counterfactuals.",
                     required = true,
-                    schema = @Schema(implementation = org.kie.kogito.trusty.service.common.requests.CounterfactualRequest.class)) org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request) {
+                    schema = @Schema(
+                            implementation = org.kie.kogito.trusty.service.common.requests.CounterfactualRequest.class)) org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request) {
         List<TypedVariableWithValue> goals = request.getGoals();
         List<CounterfactualSearchDomain> searchDomains = request.getSearchDomains();
         return requestCounterfactualsForExecution(executionId, goals, searchDomains)
@@ -116,8 +117,8 @@ public class ExplainabilityApiV1 {
     }
 
     private Optional<CounterfactualRequest> requestCounterfactualsForExecution(String executionId,
-                                                                               List<TypedVariableWithValue> goals,
-                                                                               List<CounterfactualSearchDomain> searchDomains) {
+            List<TypedVariableWithValue> goals,
+            List<CounterfactualSearchDomain> searchDomains) {
         try {
             return Optional.ofNullable(trustyService.requestCounterfactuals(executionId, goals, searchDomains));
         } catch (IllegalArgumentException ex) {

@@ -29,9 +29,9 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainNumerical;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
@@ -39,7 +39,6 @@ import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 import org.mockito.ArgumentCaptor;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -70,8 +69,6 @@ class ExplainabilityApiV1IT {
     private static final String TEST_EXECUTION_ID = "executionId";
 
     private static final String TEST_COUNTERFACTUAL_ID = "counterfactualId";
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @InjectMock
     TrustyService executionService;
@@ -203,10 +200,10 @@ class ExplainabilityApiV1IT {
         assertEquals("income", domain2.getName());
         assertEquals("number", domain2.getTypeRef());
         assertNotNull(domain2.getDomain());
-        assertTrue(domain2.getDomain() instanceof CounterfactualDomainNumerical);
-        CounterfactualDomainNumerical domain2Def = (CounterfactualDomainNumerical) domain2.getDomain();
-        assertEquals(0, domain2Def.getLowerBound());
-        assertEquals(1000, domain2Def.getUpperBound());
+        assertTrue(domain2.getDomain() instanceof CounterfactualDomainRange);
+        CounterfactualDomainRange domain2Def = (CounterfactualDomainRange) domain2.getDomain();
+        assertEquals(0, domain2Def.getLowerBound().asInt());
+        assertEquals(1000, domain2Def.getUpperBound().asInt());
 
         CounterfactualSearchDomain domain3 = searchDomainsParameter.get(2);
         assertFalse(domain3.isFixed());
@@ -301,20 +298,20 @@ class ExplainabilityApiV1IT {
         assertEquals("Actual Speed", domain1Child2.getName());
         assertEquals("number", domain1Child2.getTypeRef());
         assertNotNull(domain1Child2.getDomain());
-        assertTrue(domain1Child2.getDomain() instanceof CounterfactualDomainNumerical);
-        CounterfactualDomainNumerical domain1Child2Def = (CounterfactualDomainNumerical) domain1Child2.getDomain();
-        assertEquals(0, domain1Child2Def.getLowerBound());
-        assertEquals(100, domain1Child2Def.getUpperBound());
+        assertTrue(domain1Child2.getDomain() instanceof CounterfactualDomainRange);
+        CounterfactualDomainRange domain1Child2Def = (CounterfactualDomainRange) domain1Child2.getDomain();
+        assertEquals(0, domain1Child2Def.getLowerBound().asInt());
+        assertEquals(100, domain1Child2Def.getUpperBound().asInt());
 
         assertFalse(domain1Child3.isFixed());
         assertEquals(TypedValue.Kind.UNIT, domain1Child3.getKind());
         assertEquals("Speed Limit", domain1Child3.getName());
         assertEquals("number", domain1Child3.getTypeRef());
         assertNotNull(domain1Child3.getDomain());
-        assertTrue(domain1Child3.getDomain() instanceof CounterfactualDomainNumerical);
-        CounterfactualDomainNumerical domain1Child3Def = (CounterfactualDomainNumerical) domain1Child3.getDomain();
-        assertEquals(0, domain1Child3Def.getLowerBound());
-        assertEquals(100, domain1Child3Def.getUpperBound());
+        assertTrue(domain1Child3.getDomain() instanceof CounterfactualDomainRange);
+        CounterfactualDomainRange domain1Child3Def = (CounterfactualDomainRange) domain1Child3.getDomain();
+        assertEquals(0, domain1Child3Def.getLowerBound().asInt());
+        assertEquals(100, domain1Child3Def.getUpperBound().asInt());
     }
 
     private void mockServiceWithExplainabilityResult() {
