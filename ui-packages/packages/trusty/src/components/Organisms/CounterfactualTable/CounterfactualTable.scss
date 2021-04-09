@@ -1,6 +1,13 @@
 .cf-table {
   &__result-head {
     overflow: visible !important;
+    padding-right: 50px !important;
+    span {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     &__slider {
       font-size: 1.5rem;
       position: absolute;
@@ -16,7 +23,6 @@
       }
     }
     &--last {
-      padding-right: 30px !important;
       .cf-table__result-head__slider {
         right: 15px;
       }

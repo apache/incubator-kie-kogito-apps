@@ -198,8 +198,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                   isSelected: !row.isFixed
                 }}
               />
-              <Td key={`${rowIndex}_1`}>{row.name}</Td>
-              <Td key={`${rowIndex}_2`}>
+              <Td key={`${rowIndex}_1`} dataLabel={columns[0]}>
+                {row.name}
+              </Td>
+              <Td key={`${rowIndex}_2`} dataLabel={columns[1]}>
                 <Button
                   variant={'link'}
                   isInline={true}
@@ -210,9 +212,16 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                   Add constraint
                 </Button>
               </Td>
-              <Td key={`${rowIndex}_3`}>{row.value}</Td>
+              <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>
+                {row.value}
+              </Td>
               {displayedResults[rowIndex].map((value, index) => (
-                <Td key={`${rowIndex}_${index + 4}`}>{value}</Td>
+                <Td
+                  key={`${rowIndex}_${index + 4}`}
+                  dataLabel={'Counterfactual Result'}
+                >
+                  {value}
+                </Td>
               ))}
             </Tr>
           ))}
