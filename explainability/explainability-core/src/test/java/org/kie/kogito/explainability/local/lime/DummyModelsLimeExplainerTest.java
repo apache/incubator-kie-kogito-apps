@@ -88,10 +88,6 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "feature-" + idx;
-        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isZero();
-        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(1);
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isZero();
     }
@@ -137,10 +133,6 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "sum-but" + idx;
-        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(1);
-        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(1);
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
@@ -188,10 +180,6 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "feature-" + idx;
-        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(1);
-        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(1);
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
@@ -239,10 +227,6 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "spam";
-        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(1);
-        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(1);
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
@@ -289,10 +273,6 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "sum-even-but" + idx;
-        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(1);
-        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(1);
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
@@ -341,10 +321,6 @@ class DummyModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 10;
         String decision = "class";
-        double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(precision).isEqualTo(1);
-        double recall = ExplainabilityMetrics.getLocalSaliencyRecall(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(recall).isEqualTo(1);
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
         assertThat(f1).isEqualTo(1);
     }
