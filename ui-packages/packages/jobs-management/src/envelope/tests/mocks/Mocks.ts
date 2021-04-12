@@ -23,7 +23,7 @@ import {
   JobsManagementChannelApi,
   JobsManagementEnvelopeApi
 } from '../../../api';
-import { Job, JobStatus } from '../../../types';
+import { Job, JobStatus } from '@kogito-apps/management-console-shared';
 import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
 import { JobsManagementEnvelopeViewApi } from '../../JobsManagementEnvelopeView';
 

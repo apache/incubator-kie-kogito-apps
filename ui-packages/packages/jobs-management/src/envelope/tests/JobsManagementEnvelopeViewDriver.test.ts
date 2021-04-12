@@ -21,7 +21,7 @@ import {
 import { MockedMessageBusClientApi } from './mocks/Mocks';
 import JobsManagementEnvelopeViewDriver from '../JobsManagementEnvelopeViewDriver';
 import { JobsManagementChannelApi } from '../../api';
-import { Job, JobStatus } from '../../types';
+import { Job, JobStatus } from '@kogito-apps/management-console-shared';
 
 let channelApi: MessageBusClientApi<JobsManagementChannelApi>;
 let requests: Pick<

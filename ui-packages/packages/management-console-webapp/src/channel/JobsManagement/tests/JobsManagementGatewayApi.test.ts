@@ -15,7 +15,7 @@
  */
 
 import { JobsManagementQueries } from '../JobsManagementQueries';
-import { Job, JobStatus } from '@kogito-apps/jobs-management';
+import { Job, JobStatus } from '@kogito-apps/management-console-shared';
 import {
   JobsManagementGatewayApi,
   JobsManagementGatewayApiImpl
@@ -98,7 +98,7 @@ describe('JobsManagementChannelApiImpl tests', () => {
   it('cancelJob', async () => {
     const modalTitle = 'failure';
     const modalContent =
-      'The job: eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0 failed to cancel. Error message: Request failed with status code 500';
+      'The job: eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0 failed to cancel. Error message: Network Error';
     const result = await gatewayApi.cancelJob(job);
 
     expect(result).toEqual({ modalTitle, modalContent });

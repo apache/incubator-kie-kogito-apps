@@ -51,3 +51,7 @@
 .kogito-jobs-management__table .pf-c-table__action {
     text-align: right;
 }
+
+.kogito-jobs-management__emptyState {
+    margin-top: 100px;
+}

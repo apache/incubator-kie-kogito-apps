@@ -33,11 +33,11 @@ import {
 } from '@kogito-apps/components-common';
 import {
   setTitle,
-  constructObject
+  constructObject,
+  Job
 } from '@kogito-apps/management-console-shared';
 import Moment from 'react-moment';
 import _ from 'lodash';
-import { Job } from '../../../types';
 import { JobsIconCreator } from '../../../utils/utils';
 import { JobsManagementDriver, SortBy } from '../../../api';
 import { HistoryIcon } from '@patternfly/react-icons';

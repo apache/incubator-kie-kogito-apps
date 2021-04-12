@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
+import { JobsManagementChannelApi, JobsManagementDriver, SortBy } from '../api';
 import {
-  JobsManagementChannelApi,
-  JobsManagementDriver,
-  SortBy,
+  Job,
+  JobStatus,
   BulkCancel,
   JobCancel
-} from '../api';
-import { Job, JobStatus } from '../types';
+} from '@kogito-apps/management-console-shared';
 
 export class JobsManagementChannelApiImpl implements JobsManagementChannelApi {
   constructor(private readonly driver: JobsManagementDriver) {}

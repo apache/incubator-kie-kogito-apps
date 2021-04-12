@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
+import { SortBy } from '@kogito-apps/jobs-management';
 import {
-  QueryFilter,
   Job,
-  SortBy,
+  JobStatus,
   BulkCancel,
   JobCancel
-} from '@kogito-apps/jobs-management';
+} from '@kogito-apps/management-console-shared';
 import { JobsManagementQueries } from './JobsManagementQueries';
 import { performMultipleCancel, jobCancel } from '../../apis/apis';
-import { GraphQL } from '@kogito-apps/consoles-common';
 
 export interface JobsManagementGatewayApi {
   jobsManagementState: any;
-  initialLoad: (filter: GraphQL.JobStatus[], orderBy: SortBy) => Promise<void>;
-  applyFilter: (filter: GraphQL.JobStatus[]) => Promise<void>;
-  bulkCancel: (jobsToBeActioned: GraphQL.Job[]) => Promise<BulkCancel>;
-  cancelJob: (job: Pick<GraphQL.Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
+  initialLoad: (filter: JobStatus[], orderBy: SortBy) => Promise<void>;
+  applyFilter: (filter: JobStatus[]) => Promise<void>;
+  bulkCancel: (jobsToBeActioned: Job[]) => Promise<BulkCancel>;
+  cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
   rescheduleJob: () => Promise<void>;
   sortBy: (orderBy: SortBy) => Promise<void>;
   query(offset: number, limit: number): Promise<Job[]>;
 }
 export interface JobsManagementState {
-  filters: QueryFilter;
+  filters: JobStatus[];
   orderBy: SortBy | any;
 }
 export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
@@ -52,20 +51,18 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
     return this._JobsManagementState;
   }
 
-  initialLoad = (filter: QueryFilter, orderBy: SortBy): Promise<any> => {
+  initialLoad = (filter: JobStatus[], orderBy: SortBy): Promise<any> => {
     this._JobsManagementState.filters = filter;
     this._JobsManagementState.orderBy = orderBy;
     return Promise.resolve();
   };
 
-  applyFilter = (filter: QueryFilter): Promise<void> => {
+  applyFilter = (filter: JobStatus[]): Promise<void> => {
     this._JobsManagementState.filters = filter;
     return Promise.resolve();
   };
 
-  cancelJob = async (
-    job: Pick<GraphQL.Job, 'id' | 'endpoint'>
-  ): Promise<JobCancel> => {
+  cancelJob = async (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
     const cancelResult: JobCancel = await jobCancel(job);
     return cancelResult;
   };
@@ -75,7 +72,7 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
   };
 
   bulkCancel = (
-    jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[]
+    jobsToBeActioned: (Job & { errorMessage?: string })[]
   ): Promise<BulkCancel> => {
     return performMultipleCancel(jobsToBeActioned);
   };

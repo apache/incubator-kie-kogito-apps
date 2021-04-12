@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-import { Job, JobStatus } from '../types';
-import { SortBy, BulkCancel, JobCancel } from './JobsManagementEnvelopeApi';
+import {
+  Job,
+  JobStatus,
+  BulkCancel,
+  JobCancel
+} from '@kogito-apps/management-console-shared';
+import { SortBy } from './JobsManagementEnvelopeApi';
 export interface JobsManagementDriver {
   initialLoad(filter: JobStatus[], orderBy: SortBy): Promise<void>;
   applyFilter(filter: JobStatus[]): Promise<void>;

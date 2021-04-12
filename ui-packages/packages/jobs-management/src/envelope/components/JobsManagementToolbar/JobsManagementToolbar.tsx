@@ -37,9 +37,10 @@ import { SyncIcon } from '@patternfly/react-icons';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
 import {
   IOperations,
-  OperationType
+  OperationType,
+  JobStatus,
+  Job
 } from '@kogito-apps/management-console-shared';
-import { JobStatus, Job } from '../../../types';
 import { JobsManagementDriver } from '../../../api';
 import '../styles.css';
 

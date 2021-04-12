@@ -17,7 +17,7 @@
 import { act } from 'react-dom/test-utils';
 import reactApollo from 'react-apollo';
 import { GraphQLJobsManagementQueries } from '../JobsManagementQueries';
-import { GraphQL } from '@kogito-apps/consoles-common';
+import { JobStatus } from '@kogito-apps/management-console-shared';
 jest.mock('apollo-client');
 
 jest.mock('react-apollo', () => {
@@ -44,7 +44,7 @@ const mGraphQLResponse = {
         retries: 2,
         rootProcessId: '',
         scheduledId: null,
-        status: GraphQL.JobStatus.Scheduled
+        status: JobStatus.Scheduled
       }
     ]
   }
@@ -62,7 +62,7 @@ describe('JobsManagementQueries tests', () => {
 
   const offset = 0;
   const limit = 10;
-  const filters = [GraphQL.JobStatus.Scheduled];
+  const filters = [JobStatus.Scheduled];
   const orderBy: any = { lastUpdate: 'ASC' };
 
   beforeEach(() => {

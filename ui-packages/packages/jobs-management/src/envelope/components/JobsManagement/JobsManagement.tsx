@@ -17,7 +17,6 @@
 import React, { useState } from 'react';
 import { Button, CardTitle, Divider } from '@patternfly/react-core';
 import { ISortBy } from '@patternfly/react-table';
-import { Job, JobStatus } from '../../../types';
 import {
   ServerErrors,
   KogitoEmptyState,
@@ -35,12 +34,15 @@ import {
   IOperationResults,
   IOperations,
   OperationType,
-  formatForBulkListJob
+  formatForBulkListJob,
+  Job,
+  JobStatus
 } from '@kogito-apps/management-console-shared';
 import { JobsManagementDriver, OrderBy, SortBy } from '../../../api';
 import JobsManagementTable from '../JobsManagementTable/JobsManagementTable';
 import JobsManagementToolbar from '../JobsManagementToolbar/JobsManagementToolbar';
 import { doQueryContext } from '../../contexts/contexts';
+import '../styles.css';
 
 interface JobsManagementProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -95,6 +97,7 @@ const JobsManagement: React.FC<JobsManagementProps & OUIAProps> = ({
   });
 
   const onRefresh = async (): Promise<void> => {
+    setIsLoading(true);
     await driver.initialLoad(selectedStatus, orderBy);
     setSortBy(defaultSortBy);
     setOffset(0);
@@ -291,7 +294,7 @@ const JobsManagement: React.FC<JobsManagementProps & OUIAProps> = ({
           ) : (
             <>
               {selectedStatus.length === 0 && (
-                <div>
+                <div className="kogito-jobs-management__emptyState">
                   <KogitoEmptyState
                     type={KogitoEmptyStateType.Reset}
                     title="No filter applied."

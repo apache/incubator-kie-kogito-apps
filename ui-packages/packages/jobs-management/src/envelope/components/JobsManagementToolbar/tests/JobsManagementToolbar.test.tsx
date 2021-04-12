@@ -18,7 +18,7 @@ import React from 'react';
 import { getWrapper } from '@kogito-apps/components-common';
 import { act } from 'react-dom/test-utils';
 import JobsManagementToolbar from '../JobsManagementToolbar';
-import { Job, JobStatus } from '../../../../types';
+import { Job, JobStatus } from '@kogito-apps/management-console-shared';
 import { MockedJobsManagementDriver } from '../../../../api/mocks/MockedJobsManagementDriver';
 
 describe('Jobs Management toolbar tests', () => {

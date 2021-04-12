@@ -15,14 +15,15 @@
  */
 
 import { ApolloClient } from 'apollo-client';
-import { SortBy, QueryFilter, Job } from '@kogito-apps/jobs-management';
+import { SortBy } from '@kogito-apps/jobs-management';
+import { Job, JobStatus } from '@kogito-apps/management-console-shared';
 import { GraphQL } from '@kogito-apps/consoles-common';
 
 export interface JobsManagementQueries {
   getJobs(
     start: number,
     end: number,
-    filters: QueryFilter,
+    filters: JobStatus[],
     sortBy: SortBy | any
   ): Promise<Job[]>;
 }
@@ -37,7 +38,7 @@ export class GraphQLJobsManagementQueries implements JobsManagementQueries {
   async getJobs(
     offset: number,
     limit: number,
-    filters: QueryFilter,
+    filters: JobStatus[],
     orderBy: SortBy
   ): Promise<Job[]> {
     try {

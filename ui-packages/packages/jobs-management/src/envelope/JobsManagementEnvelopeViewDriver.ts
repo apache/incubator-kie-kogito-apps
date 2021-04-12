@@ -15,14 +15,13 @@
  */
 
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import { Job, JobStatus } from '../types';
 import {
-  SortBy,
+  Job,
+  JobStatus,
   BulkCancel,
-  JobCancel,
-  JobsManagementChannelApi,
-  JobsManagementDriver
-} from '../api';
+  JobCancel
+} from '@kogito-apps/management-console-shared';
+import { SortBy, JobsManagementChannelApi, JobsManagementDriver } from '../api';
 
 export default class JobsManagementEnvelopeViewDriver
   implements JobsManagementDriver {

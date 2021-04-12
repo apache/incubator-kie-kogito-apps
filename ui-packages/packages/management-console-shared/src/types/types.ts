@@ -41,3 +41,13 @@ export type Job = {
   endpoint: string;
   nodeInstanceId?: string;
 };
+
+export interface BulkCancel {
+  successJobs: Job[];
+  failedJobs: Job[];
+}
+
+export interface JobCancel {
+  modalTitle: string;
+  modalContent: string;
+}

@@ -18,10 +18,11 @@ import React from 'react';
 import { getWrapper, getWrapperAsync } from '@kogito-apps/components-common';
 import { MockedJobsManagementDriver } from '../../../../api/mocks/MockedJobsManagementDriver';
 import JobsManagement from '../JobsManagement';
-import { JobStatus } from '../../../../types';
+import { JobStatus } from '@kogito-apps/management-console-shared';
 import { OrderBy } from '../../../../api';
 import { Jobs } from '../__mocks__/mockData';
 import { act } from 'react-dom/test-utils';
+import { doQueryContext } from '../../../contexts/contexts';
 
 jest.mock('../../JobsManagementToolbar/JobsManagementToolbar');
 jest.mock('../../JobsManagementTable/JobsManagementTable');
@@ -33,6 +34,15 @@ const MockedLoadMore = (): React.ReactElement => {
 const MockedJobsCancelModal = (): React.ReactElement => {
   return <></>;
 };
+
+const MockedJobsDetailsModal = (): React.ReactElement => {
+  return <></>;
+};
+
+const MockedJobsRescheduleModal = (): React.ReactElement => {
+  return <></>;
+};
+
 jest.mock('@kogito-apps/components-common', () => ({
   ...jest.requireActual('@kogito-apps/components-common'),
   LoadMore: () => {
@@ -44,6 +54,12 @@ jest.mock('@kogito-apps/management-console-shared', () => ({
   ...jest.requireActual('@kogito-apps/management-console-shared'),
   JobsCancelModal: () => {
     return <MockedJobsCancelModal />;
+  },
+  JobsDetailsModal: () => {
+    return <MockedJobsDetailsModal />;
+  },
+  JobsRescheduleModal: () => {
+    return <MockedJobsRescheduleModal />;
   }
 }));
 describe('JobsManagement component tests', () => {
@@ -162,10 +178,19 @@ describe('JobsManagement component tests', () => {
       wrapper
         .find('MockedJobsManagementTable')
         .props()
+        ['setSelectedJob'](Jobs[0]);
+    });
+    wrapper = wrapper.update();
+    await act(async () => {
+      wrapper
+        .find('MockedJobsManagementTable')
+        .props()
         ['handleDetailsToggle']();
     });
     wrapper = wrapper.update();
-    console.log('wrapper', wrapper.debug());
+    expect(wrapper.find('JobsDetailsModal').props()['isModalOpen']).toEqual(
+      true
+    );
   });
 
   it('Test Job reschedule modal', async () => {
@@ -173,27 +198,31 @@ describe('JobsManagement component tests', () => {
     await props.driver.query.mockImplementationOnce(() =>
       Promise.resolve(Jobs)
     );
-    let wrapper = getWrapper(<JobsManagement {...props} />, 'JobsManagement');
+    const doQueryJobs = jest.fn();
+    const wrapper = getWrapper(
+      <doQueryContext.Provider value={doQueryJobs}>
+        <JobsManagement {...props} />
+      </doQueryContext.Provider>,
+      'JobsManagement'
+    );
     await act(async () => {
       wrapper
         .find('MockedJobsManagementTable')
         .props()
         ['handleRescheduleToggle']();
     });
-    wrapper = wrapper.update();
-    await act(async () => {
-      wrapper
-        .find('JobsCancelModal')
-        .props()
-        ['handleModalToggle']();
-    });
-    console.log('wrapper', wrapper.debug());
   });
 
   it('Test Bulk cancel method', async () => {
     // @ts-ignore
     await props.driver.query.mockImplementationOnce(() =>
       Promise.resolve(Jobs)
+    );
+    const successJobs = [];
+    const failedJobs = [];
+    // @ts-ignore
+    await props.driver.bulkCancel.mockImplementationOnce(() =>
+      Promise.resolve({ successJobs, failedJobs })
     );
     let wrapper = getWrapper(<JobsManagement {...props} />, 'JobsManagement');
     let jobOperations;
@@ -205,6 +234,6 @@ describe('JobsManagement component tests', () => {
     });
 
     wrapper = wrapper.update();
-    console.log('wrapper', wrapper.debug());
+    expect(props.driver.bulkCancel).toHaveBeenCalled();
   });
 });

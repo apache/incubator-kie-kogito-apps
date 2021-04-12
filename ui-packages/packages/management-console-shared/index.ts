@@ -20,3 +20,5 @@ export { default as JobsRescheduleModal } from './src/components/JobsRescheduleM
 export * from './src/components/BulkList/BulkList';
 
 export * from './src/utils/Utils';
+
+export * from './src/types';

@@ -1,5 +1,3 @@
-import { Job } from '../types';
-
 /*
  * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
@@ -18,16 +16,10 @@ import { Job } from '../types';
 export interface JobsManagementEnvelopeApi {
   jobsManagement__init(association: Association);
 }
-// eslint-disable-next-line  @typescript-eslint/no-empty-interface
-export interface JobFilter {}
-
 export interface Association {
   origin: string;
   envelopeServerId: string;
 }
-
-// eslint-disable-next-line  @typescript-eslint/no-empty-interface
-export interface QueryFilter {}
 
 export enum OrderBy {
   ASC = 'ASC',
@@ -45,14 +37,4 @@ export interface SortBy {
 export interface QueryPage {
   offset: number;
   limit: number;
-}
-
-export interface BulkCancel {
-  successJobs: Job[];
-  failedJobs: Job[];
-}
-
-export interface JobCancel {
-  modalTitle: string;
-  modalContent: string;
 }

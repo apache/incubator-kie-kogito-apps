@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { JobStatus } from '../../types';
+import { JobStatus } from '@kogito-apps/management-console-shared';
 import { JobsIconCreator } from '../utils';
 const children = 'children';
 

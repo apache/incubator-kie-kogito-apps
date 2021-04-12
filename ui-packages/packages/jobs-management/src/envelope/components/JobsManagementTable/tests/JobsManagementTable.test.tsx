@@ -25,10 +25,30 @@ import {
 import { act } from 'react-dom/test-utils';
 import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core';
 import { SelectColumn } from '@patternfly/react-table';
-import { JobStatus } from '../../../../types';
+import { JobStatus } from '@kogito-apps/management-console-shared';
 import { MockedJobsManagementDriver } from '../../../../api/mocks/MockedJobsManagementDriver';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+
+const MockedIcon = (): React.ReactElement => {
+  return <></>;
+};
+
+jest.mock('@patternfly/react-icons', () => ({
+  ...jest.requireActual('@patternfly/react-icons'),
+  HistoryIcon: () => {
+    return <MockedIcon />;
+  },
+  ClockIcon: () => {
+    return <MockedIcon />;
+  },
+  BanIcon: () => {
+    return <MockedIcon />;
+  },
+  CheckCircleIcon: () => {
+    return <MockedIcon />;
+  }
+}));
 
 describe('Jobs management table component tests', () => {
   const props = {

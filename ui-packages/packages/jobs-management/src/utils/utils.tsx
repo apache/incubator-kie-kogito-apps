@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { JobStatus } from '../types';
+import { JobStatus } from '@kogito-apps/management-console-shared';
 import {
   CheckCircleIcon,
   BanIcon,
