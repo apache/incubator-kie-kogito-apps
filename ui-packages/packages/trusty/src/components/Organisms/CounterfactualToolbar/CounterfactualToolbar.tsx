@@ -7,8 +7,14 @@ import {
   ToolbarItem
 } from '@patternfly/react-core';
 import CounterfactualOutcomeSelection from '../CounterfactualOutcomeSelection/CounterfactualOutcomeSelection';
+import { CFGoal } from '../../Templates/Counterfactual/Counterfactual';
 
-const CounterfactualToolbar = () => {
+type CounterfactualToolbarProps = {
+  goals: CFGoal[];
+};
+
+const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
+  const { goals } = props;
   const [isOutcomeSelectionOpen, setIsOutcomeSelectionOpen] = useState(false);
   const toggleOutcomeSelection = () => {
     setIsOutcomeSelectionOpen(!isOutcomeSelectionOpen);
@@ -18,6 +24,7 @@ const CounterfactualToolbar = () => {
       <CounterfactualOutcomeSelection
         isOpen={isOutcomeSelectionOpen}
         onClose={toggleOutcomeSelection}
+        goals={goals}
       />
       <Toolbar id="toolbar">
         <ToolbarContent>
