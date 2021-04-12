@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.utils;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,22 +26,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RandomChoiceTest {
     List<String> obj = List.of("a", "b", "c", "d", "e");
+    Random rn = new Random();
 
     @Test
-    public void testOnlyOneWeight() {
+    void testOnlyOneWeight() {
         // if only one weight is nonzero, all samples should be equal to the object corresponding to that weight
         List<String> output = List.of("c", "c", "c");
         List<Double> weights = List.of(0., 0., 1., 0., 0.);
         RandomChoice<String> rc = new RandomChoice<>(obj, weights);
-        assertEquals(output, rc.sample(3));
+        assertEquals(output, rc.sample(3, rn));
     }
 
     @Test
-    public void testTwoWeight() {
+    void testTwoWeight() {
         // if two weights are nonzero, all samples should correspond to one of those two objects
         List<Double> weights = List.of(1., 0., 1., 0., 0.);
         RandomChoice<String> rc = new RandomChoice<>(obj, weights);
-        List<String> sample = rc.sample(5);
+        List<String> sample = rc.sample(5, rn);
         for (int i = 0; i < sample.size(); i++) {
             assertTrue((sample.get(i).equals("a") || sample.get(i).equals("c")));
         }
@@ -48,18 +50,18 @@ public class RandomChoiceTest {
     }
 
     @Test
-    public void weightMismatch() {
+    void weightMismatch() {
         // if the weights don't match, raise error
         List<Double> weights = List.of(1., 1., 0.);
         assertThrows(IllegalArgumentException.class, () -> new RandomChoice<>(obj, weights));
     }
 
     @Test
-    public void testUniform() {
+    void testUniform() {
         RandomChoice<String> rc = new RandomChoice<>(obj);
 
         for (int test = 0; test < 100; test++) {
-            List<String> sample = rc.sample(1000);
+            List<String> sample = rc.sample(1000, rn);
 
             //find the total number of samples of each object
             HashMap<String, Integer> results = new HashMap<>();
@@ -80,12 +82,12 @@ public class RandomChoiceTest {
     }
 
     @Test
-    public void testMultiWeight() {
+    void testMultiWeight() {
         List<Double> weights = List.of(5., 4., 3., 2., 1.);
         RandomChoice<String> rc = new RandomChoice<>(obj, weights);
 
         for (int test = 0; test < 100; test++) {
-            List<String> sample = rc.sample(1000);
+            List<String> sample = rc.sample(1000, rn);
 
             //find the total number of samples of each object
             HashMap<String, Integer> results = new HashMap<>();

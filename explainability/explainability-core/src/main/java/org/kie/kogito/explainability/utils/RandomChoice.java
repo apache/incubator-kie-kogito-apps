@@ -20,7 +20,6 @@ import java.util.*;
 
 public class RandomChoice<T> {
     NavigableMap<Double, T> sampleSet = new TreeMap<>();
-    Random rn = new Random();
     double totalWeights = 0.;
 
     /**
@@ -66,7 +65,7 @@ public class RandomChoice<T> {
      * @param n The number of samples to take
      *
      */
-    public List<T> sample(int n) {
+    public List<T> sample(int n, Random rn) {
         List<T> output = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             // generate a random number between 0 and sum(weights)
