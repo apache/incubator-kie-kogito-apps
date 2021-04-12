@@ -61,7 +61,7 @@ public class RandomChoice<T> {
     }
 
     /**
-     * Draw samples wihtout replacement from the specified objects according to the weights
+     * Draw samples with replacement from the specified objects according to the weights, if applicable
      *
      * @param n The number of samples to take
      *
