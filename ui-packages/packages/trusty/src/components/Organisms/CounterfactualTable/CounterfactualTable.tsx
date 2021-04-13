@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Td,
   Thead,
@@ -13,15 +13,21 @@ import {
   AngleRightIcon,
   PlusCircleIcon
 } from '@patternfly/react-icons';
-import { CFSearchInput } from '../../Templates/Counterfactual/Counterfactual';
+import {
+  CFDispatch,
+  CFSearchInput
+} from '../../Templates/Counterfactual/Counterfactual';
 import './CounterfactualTable.scss';
+import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
 
 interface CounterfactualTableProps {
-  onOpenConstraints: (input: CFSearchInput) => void;
+  inputs: CFSearchInput[];
+  onOpenInputDomainEdit: (input: CFSearchInput, inputIndex: number) => void;
 }
 
 const CounterfactualTable = (props: CounterfactualTableProps) => {
-  const { onOpenConstraints } = props;
+  const { inputs, onOpenInputDomainEdit } = props;
+  const dispatch = useContext(CFDispatch);
 
   const columns = [
     'Data Type',
@@ -29,38 +35,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     'Original Input',
     'Counterfactual result'
   ];
-  const [rows, setRows] = useState<CFSearchInput[]>([
-    {
-      name: 'Credit Score',
-      typeRef: 'number',
-      value: 738,
-      isFixed: true
-    },
-    {
-      name: 'Down Payment',
-      typeRef: 'number',
-      value: 70000,
-      isFixed: true
-    },
-    {
-      name: 'Purchase Price',
-      typeRef: 'number',
-      value: 34000,
-      isFixed: true
-    },
-    {
-      name: 'Monthly Tax Payment',
-      typeRef: 'number',
-      value: 0.2,
-      isFixed: true
-    },
-    {
-      name: 'Monthly Insurance Payment',
-      typeRef: 'number',
-      value: 0.15,
-      isFixed: true
-    }
-  ] as CFSearchInput[]);
+  const [rows, setRows] = useState<CFSearchInput[]>(inputs);
 
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
 
@@ -93,41 +68,24 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     );
   };
 
-  const onSelectAll = (event, isSelected) => {
-    setAreAllRowsSelected(isSelected);
-    setRows(
-      rows.map(row => {
-        row.isFixed = !isSelected;
-        return row;
-      })
-    );
+  const onSelectAll = (event, isSelected: boolean) => {
+    dispatch({
+      type: 'toggleAllInputs',
+      payload: { selected: isSelected }
+    });
   };
 
   const onSelect = (event, isSelected, rowId) => {
-    setRows(
-      rows.map((row, index) => {
-        if (index === rowId) {
-          row.isFixed = !isSelected;
-        }
-        return row;
-      })
-    );
-    if (!isSelected && areAllRowsSelected) {
-      setAreAllRowsSelected(false);
-    } else if (isSelected && !areAllRowsSelected) {
-      let allSelected = true;
-      for (let i = 0; i < rows.length; i++) {
-        if (i !== rowId) {
-          if (rows[i].isFixed === true) {
-            allSelected = false;
-          }
-        }
-      }
-      if (allSelected) {
-        setAreAllRowsSelected(true);
-      }
-    }
+    dispatch({
+      type: 'toggleInput',
+      payload: { searchInputIndex: rowId }
+    });
   };
+
+  useEffect(() => {
+    setRows(inputs);
+    setAreAllRowsSelected(inputs.find(input => input.isFixed) === undefined);
+  }, [inputs]);
 
   return (
     <>
@@ -205,11 +163,15 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                 <Button
                   variant={'link'}
                   isInline={true}
-                  onClick={() => onOpenConstraints(row)}
-                  icon={<PlusCircleIcon />}
+                  onClick={() => onOpenInputDomainEdit(row, rowIndex)}
+                  icon={!row.domain && <PlusCircleIcon />}
                   isDisabled={row.isFixed}
                 >
-                  Add constraint
+                  {row.domain ? (
+                    <CounterfactualInputDomain input={row} />
+                  ) : (
+                    <>Constraint</>
+                  )}
                 </Button>
               </Td>
               <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>

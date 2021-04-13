@@ -19,17 +19,21 @@ import {
 import CounterfactualTable from '../../Organisms/CounterfactualTable/CounterfactualTable';
 import CounterfactualToolbar from '../../Organisms/CounterfactualToolbar/CounterfactualToolbar';
 import CounterfactualInputDomainEdit from '../../Organisms/CounterfactualInputDomainEdit/CounterfactualInputDomainEdit';
+import CounterfactualOutcomesSelected from '../../Molecules/CounterfactualsOutcomesSelected/CounterfactualOutcomesSelected';
+import { cfInitialState, cfReducer } from './counterfactualReducer';
 import { ItemObject } from '../../../types';
 import './Counterfactual.scss';
-import CounterfactualOutcomesSelected from '../../Molecules/CounterfactualsOutcomesSelected/CounterfactualOutcomesSelected';
 
 const Counterfactual = () => {
   const [state, dispatch] = useReducer(cfReducer, cfInitialState);
   const [isSidePanelExpanded, setIsSidePanelExpanded] = useState(false);
-  const [inputDomain, setInputDomain] = useState<CFSearchInput>();
+  const [inputDomainEdit, setInputDomainEdit] = useState<{
+    input: CFSearchInput;
+    inputIndex: number;
+  }>();
 
-  const handleConstraintEdit = (input: CFSearchInput) => {
-    setInputDomain(input);
+  const handleInputDomainEdit = (input: CFSearchInput, inputIndex: number) => {
+    setInputDomainEdit({ input, inputIndex });
     if (!isSidePanelExpanded) {
       setIsSidePanelExpanded(true);
     }
@@ -37,10 +41,13 @@ const Counterfactual = () => {
 
   const panelContent = (
     <DrawerPanelContent widths={{ default: 'width_33' }}>
-      <CounterfactualInputDomainEdit
-        input={inputDomain}
-        onClose={() => setIsSidePanelExpanded(false)}
-      />
+      {inputDomainEdit && (
+        <CounterfactualInputDomainEdit
+          input={inputDomainEdit.input}
+          inputIndex={inputDomainEdit.inputIndex}
+          onClose={() => setIsSidePanelExpanded(false)}
+        />
+      )}
     </DrawerPanelContent>
   );
 
@@ -84,7 +91,8 @@ const Counterfactual = () => {
                   <StackItem>
                     <CounterfactualToolbar goals={state.goals} />
                     <CounterfactualTable
-                      onOpenConstraints={handleConstraintEdit}
+                      inputs={state.searchDomains}
+                      onOpenInputDomainEdit={handleInputDomainEdit}
                     />
                   </StackItem>
                 </Stack>
@@ -99,55 +107,17 @@ const Counterfactual = () => {
 
 export default Counterfactual;
 
-const cfInitialState: CFState = {
-  goals: [
-    {
-      id: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
-      name: 'Mortgage Approval',
-      typeRef: 'boolean',
-      value: true,
-      originalValue: true,
-      isFixed: true
-    },
-    {
-      id: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
-      name: 'Risk Score',
-      typeRef: 'number',
-      value: 150,
-      originalValue: 150,
-      isFixed: true
-    }
-  ],
-  searchDomains: []
-};
-
-type cfActions =
-  | { type: 'selectOutcomes'; payload: CFGoal[] }
-  | { type: 'decrement'; payload: string };
-
-const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
-  switch (action.type) {
-    case 'selectOutcomes':
-      return { ...state, goals: action.payload };
-    case 'decrement':
-      // return { count: state.count - Number(action.payload) };
-      return { goals: [], searchDomains: [] };
-    default:
-      throw new Error();
-  }
-};
-
 export const CFDispatch = React.createContext(null);
 
 export interface CFSearchDomain {
   isFixed: boolean;
   name: string;
   typeRef: 'number' | 'string' | 'boolean';
-  domain:
+  domain?:
     | {
         type: 'numerical';
-        lowerBound: 0;
-        upperBound: 1000;
+        lowerBound?: number;
+        upperBound?: number;
       }
     | {
         type: 'categorical';
@@ -164,8 +134,3 @@ export type CFGoal = Pick<ItemObject, 'name' | 'typeRef' | 'value'> & {
   originalValue: ItemObject['value'];
   id: string;
 };
-
-export interface CFState {
-  goals: CFGoal[];
-  searchDomains: CFSearchDomain[];
-}

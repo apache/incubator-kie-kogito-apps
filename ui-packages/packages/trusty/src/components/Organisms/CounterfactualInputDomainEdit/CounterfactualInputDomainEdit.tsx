@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   ActionList,
   ActionListItem,
@@ -21,25 +21,46 @@ import {
   TextInput,
   Title
 } from '@patternfly/react-core';
-import { CFSearchInput } from '../../Templates/Counterfactual/Counterfactual';
+import {
+  CFDispatch,
+  CFSearchInput
+} from '../../Templates/Counterfactual/Counterfactual';
 
 type CounterfactualInputDomainEditProps = {
   input: CFSearchInput;
+  inputIndex: number;
   onClose: () => void;
 };
 
 const CounterfactualInputDomainEdit = (
   props: CounterfactualInputDomainEditProps
 ) => {
-  const { input, onClose } = props;
-  const [min, setMin] = useState(650);
-  const [max, setMax] = useState(900);
+  const dispatch = useContext(CFDispatch);
+  const { input, inputIndex, onClose } = props;
+  const [min, setMin] = useState(
+    input.domain && input.domain.type === 'numerical'
+      ? input.domain.lowerBound
+      : undefined
+  );
+  const [max, setMax] = useState(
+    input.domain && input.domain.type === 'numerical'
+      ? input.domain.upperBound
+      : undefined
+  );
 
   const handleMinChange = value => {
     setMin(Number(value));
   };
   const handleMaxChange = value => {
     setMax(Number(value));
+  };
+
+  const handleApply = () => {
+    dispatch({
+      type: 'setInputNumericDomain',
+      payload: { inputIndex, range: { min, max } }
+    });
+    onClose();
   };
 
   return (
@@ -66,9 +87,16 @@ const CounterfactualInputDomainEdit = (
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>Default Constraints</DescriptionListTerm>
-                <DescriptionListDescription>300-500</DescriptionListDescription>
+                <DescriptionListTerm>Original Value</DescriptionListTerm>
+                <DescriptionListDescription>
+                  {input.value.toString()}
+                </DescriptionListDescription>
               </DescriptionListGroup>
+              {/* @kelvah: we do not have default constraints for now*/}
+              {/*<DescriptionListGroup>*/}
+              {/*  <DescriptionListTerm>Default Constraints</DescriptionListTerm>*/}
+              {/*  <DescriptionListDescription>300-500</DescriptionListDescription>*/}
+              {/*</DescriptionListGroup>*/}
             </DescriptionList>
           </StackItem>
           <StackItem>
@@ -89,7 +117,7 @@ const CounterfactualInputDomainEdit = (
                       type="number"
                       id="min"
                       name="min"
-                      value={min}
+                      value={min || ''}
                       onChange={handleMinChange}
                     />
                   </FormGroup>
@@ -101,7 +129,7 @@ const CounterfactualInputDomainEdit = (
                       type="number"
                       id="max"
                       name="max"
-                      value={max}
+                      value={max || ''}
                       onChange={handleMaxChange}
                     />
                   </FormGroup>
@@ -112,7 +140,11 @@ const CounterfactualInputDomainEdit = (
           <StackItem style={{ marginTop: 'var(--pf-global--spacer--md)' }}>
             <ActionList>
               <ActionListItem>
-                <Button variant="primary" id="save-button" onClick={onClose}>
+                <Button
+                  variant="primary"
+                  id="save-button"
+                  onClick={handleApply}
+                >
                   Apply
                 </Button>
               </ActionListItem>
