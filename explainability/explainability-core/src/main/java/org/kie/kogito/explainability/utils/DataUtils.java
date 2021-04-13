@@ -17,12 +17,11 @@ package org.kie.kogito.explainability.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.Writer;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +30,9 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
@@ -479,16 +481,15 @@ public class DataUtils {
      * @throws IOException whether any IO error occurs while writing the CSV
      */
     public static void toCSV(PartialDependenceGraph partialDependenceGraph, Path path) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(path)) {
+        try (Writer writer = Files.newBufferedWriter(path)) {
             List<Value> xAxis = partialDependenceGraph.getX();
             List<Value> yAxis = partialDependenceGraph.getY();
-            outputStream.write("feature,output\n".getBytes(StandardCharsets.UTF_8));
+            CSVFormat format = CSVFormat.DEFAULT.withHeader(
+                    partialDependenceGraph.getFeature().getName(), partialDependenceGraph.getOutput().getName());
+            CSVPrinter printer = new CSVPrinter(writer, format);
             for (int i = 0; i < xAxis.size(); i++) {
-                String line = xAxis.get(i).asString().replace(",", "") + ',' +
-                        yAxis.get(i).asString().replace(",", "") + '\n';
-                outputStream.write(line.getBytes(StandardCharsets.UTF_8));
+                printer.printRecord(xAxis.get(i).asString(), yAxis.get(i).asString());
             }
-            outputStream.flush();
         }
     }
 
@@ -498,31 +499,26 @@ public class DataUtils {
      * @param file the path to the CSV file
      * @param schema an ordered list of {@link Type}s as the 'schema', used to determine
      *        the {@link Type} of each feature / column
-     * @param skipId whether to skip the first column of the CSV (usually the id of each row)
      * @return the parsed CSV as a {@link DataDistribution}
      * @throws IOException when failing at reading the CSV file
+     * @throws MalformedInputException if any record in CSV has different size with respect to the specified schema
      */
-    public static DataDistribution readCSV(Path file, List<Type> schema, boolean skipId) throws IOException {
+    public static DataDistribution readCSV(Path file, List<Type> schema) throws IOException {
         List<PredictionInput> inputs = new ArrayList<>();
         try (BufferedReader reader = Files.newBufferedReader(file)) {
-            String line;
-            List<String> names = new ArrayList<>(schema.size());
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-                if (skipId) {
-                    values = Arrays.copyOfRange(values, 1, values.length);
-                }
-                if (schema.size() == values.length) {
-                    if (names.isEmpty()) {
-                        names.addAll(Arrays.asList(values));
-                    } else {
-                        List<Feature> features = new ArrayList<>();
-                        for (int i = 0; i < schema.size(); i++) {
-                            Type type = schema.get(i);
-                            features.add(new Feature(names.get(i), type, new Value(values[i])));
-                        }
-                        inputs.add(new PredictionInput(features));
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
+            for (CSVRecord record : records) {
+                int size = record.size();
+                if (schema.size() == size) {
+                    List<Feature> features = new ArrayList<>();
+                    for (int i = 0; i < size; i++) {
+                        String s = record.get(i);
+                        Type type = schema.get(i);
+                        features.add(new Feature(record.getParser().getHeaderNames().get(i), type, new Value(s)));
                     }
+                    inputs.add(new PredictionInput(features));
+                } else {
+                    throw new MalformedInputException(size);
                 }
             }
         }
