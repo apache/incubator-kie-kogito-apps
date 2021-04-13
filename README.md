@@ -1,5 +1,5 @@
 # Kogito Apps
-
+ 
 ## Contributing to Kogito
 
 All contributions are welcome! Before you start please read the [contribution guide](https://github.com/kiegroup/kogito-runtimes/blob/master/CONTRIBUTING.md).
