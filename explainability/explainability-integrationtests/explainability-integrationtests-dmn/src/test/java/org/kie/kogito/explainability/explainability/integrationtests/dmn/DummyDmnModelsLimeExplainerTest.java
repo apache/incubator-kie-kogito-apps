@@ -26,6 +26,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.kogito.decision.DecisionModel;
 import org.kie.kogito.dmn.DMNKogito;
@@ -53,8 +55,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 
 class DummyDmnModelsLimeExplainerTest {
 
-    @Test
-    void testFunctional1DMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testFunctional1DMNExplanation(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/functionalTest1.dmn")));
         assertThat(dmnRuntime.getModels().size()).isEqualTo(1);
 
@@ -74,38 +77,37 @@ class DummyDmnModelsLimeExplainerTest {
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            random.setSeed(i);
-            PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(10)
-                    .withPerturbationContext(perturbationContext);
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            for (Saliency saliency : saliencyMap.values()) {
-                assertThat(saliency).isNotNull();
-                List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
-                assertThat(topFeatures.isEmpty()).isFalse();
-                assertThat(topFeatures.get(0).getFeature().getName()).isEqualTo("booleanInput");
-            }
-            assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.5)).doesNotThrowAnyException();
-            String decision = "decision";
-            List<PredictionInput> inputs = new ArrayList<>();
-            for (int n = 0; n < 10; n++) {
-                inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
-            }
-            DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
-            int k = 2;
-            int chunkSize = 5;
-            double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-            assertThat(f1).isBetween(0d, 1d);
+        random.setSeed(seed);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(10)
+                .withPerturbationContext(perturbationContext);
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        for (Saliency saliency : saliencyMap.values()) {
+            assertThat(saliency).isNotNull();
+            List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
+            assertThat(topFeatures.isEmpty()).isFalse();
+            assertThat(topFeatures.get(0).getFeature().getName()).isEqualTo("booleanInput");
         }
+        assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                0.5, 0.5)).doesNotThrowAnyException();
+        String decision = "decision";
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int n = 0; n < 10; n++) {
+            inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 5;
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(f1).isBetween(0d, 1d);
     }
 
-    @Test
-    void testFunctional2DMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testFunctional2DMNExplanation(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/functionalTest2.dmn")));
         assertThat(dmnRuntime.getModels().size()).isEqualTo(1);
 
@@ -125,39 +127,38 @@ class DummyDmnModelsLimeExplainerTest {
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            random.setSeed(i);
-            PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(10)
-                    .withPerturbationContext(perturbationContext);
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            for (Saliency saliency : saliencyMap.values()) {
-                assertThat(saliency).isNotNull();
-                List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
-                assertThat(topFeatures.isEmpty()).isFalse();
-                assertThat(topFeatures.get(0).getFeature().getName()).isEqualTo("numberInput");
-            }
-            assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.5)).doesNotThrowAnyException();
-
-            String decision = "decision";
-            List<PredictionInput> inputs = new ArrayList<>();
-            for (int n = 0; n < 10; n++) {
-                inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
-            }
-            DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
-            int k = 2;
-            int chunkSize = 5;
-            double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-            assertThat(f1).isBetween(0d, 1d);
+        random.setSeed(seed);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(10)
+                .withPerturbationContext(perturbationContext);
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        for (Saliency saliency : saliencyMap.values()) {
+            assertThat(saliency).isNotNull();
+            List<FeatureImportance> topFeatures = saliency.getPositiveFeatures(2);
+            assertThat(topFeatures.isEmpty()).isFalse();
+            assertThat(topFeatures.get(0).getFeature().getName()).isEqualTo("numberInput");
         }
+        assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                0.5, 0.5)).doesNotThrowAnyException();
+
+        String decision = "decision";
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int n = 0; n < 10; n++) {
+            inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 5;
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(f1).isBetween(0d, 1d);
     }
 
-    @Test
-    void testAllTypesDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testAllTypesDMNExplanation(int seed) throws ExecutionException, InterruptedException, TimeoutException {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/allTypes.dmn")));
         assertThat(dmnRuntime.getModels().size()).isEqualTo(1);
 
@@ -196,31 +197,29 @@ class DummyDmnModelsLimeExplainerTest {
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         Prediction prediction = new Prediction(predictionInput, predictionOutputs.get(0));
         Random random = new Random();
-        for (int i = 0; i < 5; i++) {
-            random.setSeed(i);
-            PerturbationContext perturbationContext = new PerturbationContext(random, 3);
-            LimeConfig limeConfig = new LimeConfig()
-                    .withSamples(100)
-                    .withPerturbationContext(perturbationContext);
-            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
-                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-            for (Saliency saliency : saliencyMap.values()) {
-                assertThat(saliency).isNotNull();
-            }
-            assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-                    0.5, 0.2)).doesNotThrowAnyException();
-
-            String decision = "myDecision";
-            List<PredictionInput> inputs = new ArrayList<>();
-            for (int n = 0; n < 10; n++) {
-                inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
-            }
-            DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
-            int k = 2;
-            int chunkSize = 5;
-            double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-            assertThat(f1).isBetween(0d, 1d);
+        random.setSeed(seed);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 3);
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(100)
+                .withPerturbationContext(perturbationContext);
+        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        for (Saliency saliency : saliencyMap.values()) {
+            assertThat(saliency).isNotNull();
         }
+        assertThatCode(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
+                0.5, 0.2)).doesNotThrowAnyException();
+
+        String decision = "myDecision";
+        List<PredictionInput> inputs = new ArrayList<>();
+        for (int n = 0; n < 10; n++) {
+            inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
+        }
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        int k = 2;
+        int chunkSize = 5;
+        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
+        assertThat(f1).isBetween(0d, 1d);
     }
 }
