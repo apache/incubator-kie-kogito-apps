@@ -1,8 +1,15 @@
-import { CFGoal, CFSearchDomain, CFSearchInput } from './Counterfactual';
+import {
+  CFGoal,
+  CFSearchDomain,
+  CFSearchInput,
+  CFStatus
+} from './Counterfactual';
 
 export interface CFState {
   goals: CFGoal[];
   searchDomains: CFSearchInput[];
+  status: CFStatus;
+  results: number[][];
 }
 
 export const cfInitialState: CFState = {
@@ -11,8 +18,8 @@ export const cfInitialState: CFState = {
       id: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
       name: 'Mortgage Approval',
       typeRef: 'boolean',
-      value: true,
-      originalValue: true,
+      value: false,
+      originalValue: false,
       isFixed: true
     },
     {
@@ -55,11 +62,16 @@ export const cfInitialState: CFState = {
       value: 0.15,
       isFixed: true
     }
-  ]
+  ],
+  status: {
+    isDisabled: false,
+    isRunning: false
+  },
+  results: []
 };
 
 export type cfActions =
-  | { type: 'selectOutcomes'; payload: CFGoal[] }
+  | { type: 'setOutcomes'; payload: CFGoal[] }
   | {
       type: 'toggleInput';
       payload: {
@@ -81,11 +93,18 @@ export type cfActions =
           max?: number;
         };
       };
+    }
+  | {
+      type: 'setStatus';
+      payload: {
+        isDisabled?: boolean;
+        isRunning?: boolean;
+      };
     };
 
 export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
   switch (action.type) {
-    case 'selectOutcomes':
+    case 'setOutcomes':
       return { ...state, goals: action.payload };
     case 'toggleInput':
       return {
@@ -119,6 +138,11 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
               }
             : input
         )
+      };
+    case 'setStatus':
+      return {
+        ...state,
+        status: { ...state.status, ...action.payload }
       };
     default:
       throw new Error();

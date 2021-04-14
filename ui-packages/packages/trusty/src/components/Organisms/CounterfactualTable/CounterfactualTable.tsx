@@ -17,8 +17,8 @@ import {
   CFDispatch,
   CFSearchInput
 } from '../../Templates/Counterfactual/Counterfactual';
-import './CounterfactualTable.scss';
 import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
+import './CounterfactualTable.scss';
 
 interface CounterfactualTableProps {
   inputs: CFSearchInput[];

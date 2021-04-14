@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   Button,
   Drawer,
@@ -20,7 +20,7 @@ import CounterfactualTable from '../../Organisms/CounterfactualTable/Counterfact
 import CounterfactualToolbar from '../../Organisms/CounterfactualToolbar/CounterfactualToolbar';
 import CounterfactualInputDomainEdit from '../../Organisms/CounterfactualInputDomainEdit/CounterfactualInputDomainEdit';
 import CounterfactualOutcomesSelected from '../../Molecules/CounterfactualsOutcomesSelected/CounterfactualOutcomesSelected';
-import { cfInitialState, cfReducer } from './counterfactualReducer';
+import { cfActions, cfInitialState, cfReducer } from './counterfactualReducer';
 import { ItemObject } from '../../../types';
 import './Counterfactual.scss';
 
@@ -38,6 +38,21 @@ const Counterfactual = () => {
       setIsSidePanelExpanded(true);
     }
   };
+
+  useEffect(() => {
+    if (
+      state.searchDomains.filter(domain => !domain.isFixed).length > 0 &&
+      state.goals.filter(goal => !goal.isFixed).length > 0
+    ) {
+      if (state.status.isDisabled) {
+        dispatch({ type: 'setStatus', payload: { isDisabled: false } });
+      }
+    } else {
+      if (!state.status.isDisabled) {
+        dispatch({ type: 'setStatus', payload: { isDisabled: true } });
+      }
+    }
+  }, [state.searchDomains, state.goals, state.status.isDisabled]);
 
   const panelContent = (
     <DrawerPanelContent widths={{ default: 'width_33' }}>
@@ -89,7 +104,10 @@ const Counterfactual = () => {
                     </Hint>
                   </StackItem>
                   <StackItem>
-                    <CounterfactualToolbar goals={state.goals} />
+                    <CounterfactualToolbar
+                      status={state.status}
+                      goals={state.goals}
+                    />
                     <CounterfactualTable
                       inputs={state.searchDomains}
                       onOpenInputDomainEdit={handleInputDomainEdit}
@@ -107,7 +125,7 @@ const Counterfactual = () => {
 
 export default Counterfactual;
 
-export const CFDispatch = React.createContext(null);
+export const CFDispatch = React.createContext<React.Dispatch<cfActions>>(null);
 
 export interface CFSearchDomain {
   isFixed: boolean;
@@ -134,3 +152,8 @@ export type CFGoal = Pick<ItemObject, 'name' | 'typeRef' | 'value'> & {
   originalValue: ItemObject['value'];
   id: string;
 };
+
+export interface CFStatus {
+  isDisabled: boolean;
+  isRunning: boolean;
+}

@@ -4,38 +4,60 @@ import {
   ButtonVariant,
   Toolbar,
   ToolbarContent,
-  ToolbarItem
+  ToolbarItem,
+  Tooltip
 } from '@patternfly/react-core';
 import CounterfactualOutcomeSelection from '../CounterfactualOutcomeSelection/CounterfactualOutcomeSelection';
-import { CFGoal } from '../../Templates/Counterfactual/Counterfactual';
+import {
+  CFGoal,
+  CFStatus
+} from '../../Templates/Counterfactual/Counterfactual';
 
 type CounterfactualToolbarProps = {
+  status: CFStatus;
   goals: CFGoal[];
 };
 
 const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
-  const { goals } = props;
+  const { goals, status } = props;
   const [isOutcomeSelectionOpen, setIsOutcomeSelectionOpen] = useState(false);
   const toggleOutcomeSelection = () => {
     setIsOutcomeSelectionOpen(!isOutcomeSelectionOpen);
   };
+  const runTooltipRef = React.useRef();
   return (
     <>
-      <CounterfactualOutcomeSelection
-        isOpen={isOutcomeSelectionOpen}
-        onClose={toggleOutcomeSelection}
-        goals={goals}
-      />
+      {isOutcomeSelectionOpen && (
+        <CounterfactualOutcomeSelection
+          isOpen={isOutcomeSelectionOpen}
+          onClose={toggleOutcomeSelection}
+          goals={goals}
+        />
+      )}
       <Toolbar id="toolbar">
         <ToolbarContent>
           <ToolbarItem>
-            <Button
-              variant={ButtonVariant.primary}
-              aria-label="Run Counterfactual Analysis"
-              isDisabled={true}
-            >
-              Run Counterfactual
-            </Button>
+            {/*wrapping the Button in a div because disabled elements do not emit events*/}
+            <div ref={runTooltipRef}>
+              <Button
+                variant={ButtonVariant.primary}
+                aria-label="Run Counterfactual Analysis"
+                isDisabled={status.isDisabled}
+              >
+                Run Counterfactual
+              </Button>
+            </div>
+            {status.isDisabled && (
+              <Tooltip
+                content={
+                  <div>
+                    Select both an Outcome and Data Inputs to run a
+                    counterfactual analysis
+                  </div>
+                }
+                reference={runTooltipRef}
+              />
+            )}
           </ToolbarItem>
           <ToolbarItem>
             <Button variant="secondary" onClick={toggleOutcomeSelection}>

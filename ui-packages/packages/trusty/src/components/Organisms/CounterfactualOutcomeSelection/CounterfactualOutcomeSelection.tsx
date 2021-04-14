@@ -34,7 +34,7 @@ const CounterfactualOutcomeSelection = (
         : goal
     );
     setEditingGoals(cleanedGoals);
-    dispatch({ type: 'selectOutcomes', payload: cleanedGoals });
+    dispatch({ type: 'setOutcomes', payload: cleanedGoals });
     onClose();
   };
 
