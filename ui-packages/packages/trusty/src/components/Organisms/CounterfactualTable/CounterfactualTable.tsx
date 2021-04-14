@@ -7,7 +7,7 @@ import {
   TableComposable,
   Tr
 } from '@patternfly/react-table';
-import { Button } from '@patternfly/react-core';
+import { Button, Skeleton } from '@patternfly/react-core';
 import {
   AngleLeftIcon,
   AngleRightIcon,
@@ -15,20 +15,23 @@ import {
 } from '@patternfly/react-icons';
 import {
   CFDispatch,
-  CFSearchInput
+  CFResult,
+  CFSearchInput,
+  CFStatus
 } from '../../Templates/Counterfactual/Counterfactual';
 import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
 import './CounterfactualTable.scss';
 
 interface CounterfactualTableProps {
   inputs: CFSearchInput[];
+  results: CFResult[];
+  status: CFStatus;
   onOpenInputDomainEdit: (input: CFSearchInput, inputIndex: number) => void;
 }
 
 const CounterfactualTable = (props: CounterfactualTableProps) => {
-  const { inputs, onOpenInputDomainEdit } = props;
+  const { inputs, results, status, onOpenInputDomainEdit } = props;
   const dispatch = useContext(CFDispatch);
-
   const columns = [
     'Data Type',
     'Input Constraint',
@@ -36,21 +39,18 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     'Counterfactual result'
   ];
   const [rows, setRows] = useState<CFSearchInput[]>(inputs);
-
   const [areAllRowsSelected, setAreAllRowsSelected] = useState(false);
-
-  const cfResults: Array<Array<unknown>> = [
-    [33, 44, 56, 43],
-    [12, 4, 3, 2],
-    [1000, 1300, 1250, 1650],
-    [500, 540, 420, 502],
-    ['ALFA', 'BETA', 'GAMMA', 'DELTA']
-  ];
-
+  // displayed results are the visible portion of cf results
   const [displayedResultsIndex, setDisplayedResultsIndex] = useState(0);
   const [displayedResults, setDisplayedResults] = useState(
-    cfResults.map(result => result.slice(0, 2))
+    results.map(result => result.slice(0, 2))
   );
+
+  const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState();
+
+  useEffect(() => {
+    setIsInputSelectionEnabled(status.executionStatus === 'NOT_STARTED');
+  }, [status]);
 
   const slideResults = (action: 'next' | 'prev') => {
     let newIndex;
@@ -64,7 +64,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     }
     setDisplayedResultsIndex(newIndex);
     setDisplayedResults(
-      cfResults.map(result => result.slice(newIndex, newIndex + 2))
+      results.map(result => result.slice(newIndex, newIndex + 2))
     );
   };
 
@@ -87,62 +87,81 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     setAreAllRowsSelected(inputs.find(input => input.isFixed) === undefined);
   }, [inputs]);
 
+  useEffect(() => {
+    setDisplayedResults(
+      results.map(result =>
+        result.slice(displayedResultsIndex, displayedResultsIndex + 2)
+      )
+    );
+  }, [results, displayedResultsIndex]);
+
   return (
     <>
       <TableComposable aria-label="Counterfactual Table" className="cf-table">
         <Thead>
           <Tr>
-            <Th
-              select={{
-                onSelect: onSelectAll,
-                isSelected: areAllRowsSelected
-              }}
-            />
+            {isInputSelectionEnabled ? (
+              <Th
+                select={{
+                  onSelect: onSelectAll,
+                  isSelected: areAllRowsSelected
+                }}
+              />
+            ) : (
+              <Th />
+            )}
+
             <Th width={20}>{columns[0]}</Th>
             <Th width={20}>{columns[1]}</Th>
             <Th width={20}>{columns[2]}</Th>
-            {displayedResults[0].map((result, index) => (
-              <Th
-                width={20}
-                key={`result ${index}`}
-                className={
-                  index === 0
-                    ? 'cf-table__result-head--first'
-                    : index === displayedResults[0].length - 1
-                    ? 'cf-table__result-head--last'
-                    : ''
-                }
-              >
-                {index === 0 && (
-                  <Button
-                    variant="link"
-                    isInline={true}
-                    aria-label="Previous results"
-                    className="cf-table__result-head__slider"
-                    isDisabled={displayedResultsIndex === index}
-                    onClick={() => slideResults('prev')}
-                  >
-                    <AngleLeftIcon />
-                  </Button>
-                )}
+            {displayedResults.length > 0 &&
+              displayedResults[0].map((result, index) => (
+                <Th
+                  width={20}
+                  key={`result ${index}`}
+                  className={
+                    index === 0
+                      ? 'cf-table__result-head--first'
+                      : index === displayedResults[0].length - 1
+                      ? 'cf-table__result-head--last'
+                      : ''
+                  }
+                >
+                  {index === 0 && (
+                    <Button
+                      variant="link"
+                      isInline={true}
+                      aria-label="Previous results"
+                      className="cf-table__result-head__slider"
+                      isDisabled={displayedResultsIndex === index}
+                      onClick={() => slideResults('prev')}
+                    >
+                      <AngleLeftIcon />
+                    </Button>
+                  )}
+                  <span>Counterfactual Result</span>
+                  {index === displayedResults[0].length - 1 && (
+                    <Button
+                      variant="link"
+                      isInline={true}
+                      aria-label="Next results"
+                      className="cf-table__result-head__slider"
+                      isDisabled={
+                        results[0].length ===
+                        displayedResultsIndex + displayedResults[0].length
+                      }
+                      onClick={() => slideResults('next')}
+                    >
+                      <AngleRightIcon />
+                    </Button>
+                  )}
+                </Th>
+              ))}
+            {displayedResults.length === 0 && (
+              <Th width={20} key="results">
                 <span>Counterfactual Result</span>
-                {index === displayedResults[0].length - 1 && (
-                  <Button
-                    variant="link"
-                    isInline={true}
-                    aria-label="Next results"
-                    className="cf-table__result-head__slider"
-                    isDisabled={
-                      cfResults[0].length ===
-                      displayedResultsIndex + displayedResults[0].length
-                    }
-                    onClick={() => slideResults('next')}
-                  >
-                    <AngleRightIcon />
-                  </Button>
-                )}
               </Th>
-            ))}
+            )}
           </Tr>
         </Thead>
         <Tbody>
@@ -153,7 +172,8 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                 select={{
                   rowIndex,
                   onSelect,
-                  isSelected: !row.isFixed
+                  isSelected: !row.isFixed,
+                  disable: !isInputSelectionEnabled
                 }}
               />
               <Td key={`${rowIndex}_1`} dataLabel={columns[0]}>
@@ -165,7 +185,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                   isInline={true}
                   onClick={() => onOpenInputDomainEdit(row, rowIndex)}
                   icon={!row.domain && <PlusCircleIcon />}
-                  isDisabled={row.isFixed}
+                  isDisabled={row.isFixed || !isInputSelectionEnabled}
                 >
                   {row.domain ? (
                     <CounterfactualInputDomain input={row} />
@@ -177,14 +197,25 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
               <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>
                 {row.value}
               </Td>
-              {displayedResults[rowIndex].map((value, index) => (
-                <Td
-                  key={`${rowIndex}_${index + 4}`}
-                  dataLabel={'Counterfactual Result'}
-                >
-                  {value}
-                </Td>
-              ))}
+              {displayedResults.length > 0 &&
+                displayedResults[rowIndex].map((value, index) => (
+                  <Td
+                    key={`${rowIndex}_${index + 4}`}
+                    dataLabel={'Counterfactual Result'}
+                  >
+                    {value}
+                  </Td>
+                ))}
+              {displayedResults.length === 0 &&
+                status.executionStatus === 'RUNNING' && (
+                  <Td key="results loading">
+                    <Skeleton width="50%" screenreaderText="Loading results" />
+                  </Td>
+                )}
+              {displayedResults.length === 0 &&
+                status.executionStatus === 'NOT_STARTED' && (
+                  <Td key="results loading">No available results</Td>
+                )}
             </Tr>
           ))}
         </Tbody>

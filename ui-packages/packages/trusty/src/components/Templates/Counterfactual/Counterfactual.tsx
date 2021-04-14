@@ -54,6 +54,27 @@ const Counterfactual = () => {
     }
   }, [state.searchDomains, state.goals, state.status.isDisabled]);
 
+  useEffect(() => {
+    if (state.status.executionStatus === 'RUNNING') {
+      setTimeout(() => {
+        dispatch({
+          type: 'setResults',
+          payload: {
+            results: cfResultsdemo
+          }
+        });
+      }, 4000);
+      setTimeout(() => {
+        dispatch({
+          type: 'setStatus',
+          payload: {
+            executionStatus: 'RUN'
+          }
+        });
+      }, 10000);
+    }
+  }, [state.status.executionStatus]);
+
   const panelContent = (
     <DrawerPanelContent widths={{ default: 'width_33' }}>
       {inputDomainEdit && (
@@ -110,6 +131,8 @@ const Counterfactual = () => {
                     />
                     <CounterfactualTable
                       inputs={state.searchDomains}
+                      results={state.results}
+                      status={state.status}
                       onOpenInputDomainEdit={handleInputDomainEdit}
                     />
                   </StackItem>
@@ -153,7 +176,18 @@ export type CFGoal = Pick<ItemObject, 'name' | 'typeRef' | 'value'> & {
   id: string;
 };
 
+export type CFResult = Array<unknown>;
+
 export interface CFStatus {
   isDisabled: boolean;
-  isRunning: boolean;
+  executionStatus: 'RUN' | 'RUNNING' | 'NOT_STARTED';
+  lastExecutionTime: null | string;
 }
+
+const cfResultsdemo: CFResult[] = [
+  [33, 44, 56, 43],
+  [12, 4, 3, 2],
+  [1000, 1300, 1250, 1650],
+  [500, 540, 420, 502],
+  ['ALFA', 'BETA', 'GAMMA', 'DELTA']
+];

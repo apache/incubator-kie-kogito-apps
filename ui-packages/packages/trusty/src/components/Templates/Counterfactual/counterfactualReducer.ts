@@ -1,5 +1,6 @@
 import {
   CFGoal,
+  CFResult,
   CFSearchDomain,
   CFSearchInput,
   CFStatus
@@ -9,7 +10,7 @@ export interface CFState {
   goals: CFGoal[];
   searchDomains: CFSearchInput[];
   status: CFStatus;
-  results: number[][];
+  results: CFResult[];
 }
 
 export const cfInitialState: CFState = {
@@ -65,7 +66,8 @@ export const cfInitialState: CFState = {
   ],
   status: {
     isDisabled: false,
-    isRunning: false
+    executionStatus: 'NOT_STARTED',
+    lastExecutionTime: null
   },
   results: []
 };
@@ -96,9 +98,12 @@ export type cfActions =
     }
   | {
       type: 'setStatus';
+      payload: Partial<CFStatus>;
+    }
+  | {
+      type: 'setResults';
       payload: {
-        isDisabled?: boolean;
-        isRunning?: boolean;
+        results: CFResult[];
       };
     };
 
@@ -138,6 +143,11 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
               }
             : input
         )
+      };
+    case 'setResults':
+      return {
+        ...state,
+        results: action.payload.results
       };
     case 'setStatus':
       return {
