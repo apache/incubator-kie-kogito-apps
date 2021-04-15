@@ -17,8 +17,9 @@ import CounterfactualInputDomainEdit from '../../Organisms/CounterfactualInputDo
 import CounterfactualOutcomesSelected from '../../Molecules/CounterfactualsOutcomesSelected/CounterfactualOutcomesSelected';
 import { cfActions, cfInitialState, cfReducer } from './counterfactualReducer';
 import { ItemObject } from '../../../types';
-import './Counterfactual.scss';
 import CounterfactualHint from '../../Molecules/CounterfactualHint/CounterfactualHint';
+import CounterfactualExecutionInfo from '../../Molecules/CounterfactualExecutionInfo/CounterfactualExecutionInfo';
+import './Counterfactual.scss';
 
 const Counterfactual = () => {
   const [state, dispatch] = useReducer(cfReducer, cfInitialState);
@@ -104,6 +105,13 @@ const Counterfactual = () => {
                       <FlexItem>
                         <CounterfactualOutcomesSelected goals={state.goals} />
                       </FlexItem>
+                      {state.status.executionStatus === 'RUN' && (
+                        <FlexItem>
+                          <CounterfactualExecutionInfo
+                            results={state.results}
+                          />
+                        </FlexItem>
+                      )}
                     </Flex>
                   </StackItem>
                   <CounterfactualHint
