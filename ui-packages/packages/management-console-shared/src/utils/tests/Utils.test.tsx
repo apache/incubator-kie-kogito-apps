@@ -14,15 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  constructObject,
-  formatForBulkListJob,
-  handleJobReschedule,
-  setTitle
-} from '../Utils';
-import axios from 'axios';
-jest.mock('axios');
-const mockedAxios = axios as jest.Mocked<typeof axios>;
+import { constructObject, formatForBulkListJob, setTitle } from '../Utils';
 const children = 'children';
 
 export enum JobStatus {
@@ -44,102 +36,6 @@ describe('Management-console-shared utils tests', () => {
     );
   });
 
-  it('test reschedule function', async () => {
-    mockedAxios.patch.mockResolvedValue({
-      status: 200,
-      statusText: 'OK',
-      data: {
-        callbackEndpoint:
-          'http://localhost:8080/management/jobs/travels/instances/9865268c-64d7-3a44-8972-7325b295f7cc/timers/58180644-2fdf-4261-83f2-f4e783d308a3_0',
-        executionCounter: 0,
-        executionResponse: null,
-        expirationTime: '2020-10-16T10:17:22.879Z',
-        id: '58180644-2fdf-4261-83f2-f4e783d308a3_0',
-        lastUpdate: '2020-10-07T07:41:31.467Z',
-        priority: 0,
-        processId: 'travels',
-        processInstanceId: '9865268c-64d7-3a44-8972-7325b295f7cc',
-        repeatInterval: null,
-        repeatLimit: null,
-        retries: 0,
-        rootProcessId: null,
-        rootProcessInstanceId: null,
-        scheduledId: null,
-        status: 'SCHEDULED'
-      }
-    });
-    const job = {
-      id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
-      processId: 'travels',
-      processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
-      rootProcessId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
-      status: JobStatus.Executed,
-      priority: 0,
-      callbackEndpoint:
-        'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
-      repeatInterval: 1,
-      repeatLimit: 3,
-      scheduledId: '0',
-      retries: 0,
-      lastUpdate: '2020-08-27T03:35:50.147Z',
-      expirationTime: '2020-08-27T03:35:50.147Z'
-    };
-    const repeatInterval = 2;
-    const repeatLimit = 1;
-    const rescheduleClicked = false;
-    const setRescheduleClicked = jest.fn();
-    const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
-    const refetch = jest.fn();
-    const setErrorMessage = jest.fn();
-    await handleJobReschedule(
-      job,
-      repeatInterval,
-      repeatLimit,
-      rescheduleClicked,
-      setErrorMessage,
-      setRescheduleClicked,
-      scheduleDate,
-      refetch
-    );
-    expect(setRescheduleClicked).toHaveBeenCalled();
-  });
-  it('test error response for reschedule function', async () => {
-    mockedAxios.patch.mockRejectedValue({ message: '403 error' });
-    const job = {
-      id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
-      processId: 'travels',
-      processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
-      rootProcessId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
-      status: JobStatus.Executed,
-      priority: 0,
-      callbackEndpoint:
-        'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
-      repeatInterval: 1,
-      repeatLimit: 3,
-      scheduledId: '0',
-      retries: 0,
-      lastUpdate: '2020-08-27T03:35:50.147Z',
-      expirationTime: '2020-08-27T03:35:50.147Z'
-    };
-    const repeatInterval = null;
-    const repeatLimit = null;
-    const rescheduleClicked = false;
-    const setRescheduleClicked = jest.fn();
-    const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
-    const refetch = jest.fn();
-    const setErrorMessage = jest.fn();
-    await handleJobReschedule(
-      job,
-      repeatInterval,
-      repeatLimit,
-      rescheduleClicked,
-      setErrorMessage,
-      setRescheduleClicked,
-      scheduleDate,
-      refetch
-    );
-    expect(setRescheduleClicked).toHaveBeenCalled();
-  });
   it('Test constructObject function', () => {
     const obj = {};
     const keys = 'trip,country,equal';

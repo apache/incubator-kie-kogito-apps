@@ -45,8 +45,18 @@ export default class JobsManagementEnvelopeViewDriver
     return this.channelApi.requests.jobList_cancelJob(job);
   }
 
-  rescheduleJob(job: Job): Promise<void> {
-    return this.channelApi.requests.jobList_rescheduleJob(job);
+  rescheduleJob(
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> {
+    return this.channelApi.requests.jobList_rescheduleJob(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
   }
 
   sortBy(orderBy: SortBy): Promise<void> {

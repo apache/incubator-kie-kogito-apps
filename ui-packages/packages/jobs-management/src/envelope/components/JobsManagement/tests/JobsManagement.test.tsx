@@ -22,7 +22,6 @@ import { JobStatus } from '@kogito-apps/management-console-shared';
 import { OrderBy } from '../../../../api';
 import { Jobs } from '../__mocks__/mockData';
 import { act } from 'react-dom/test-utils';
-import { doQueryContext } from '../../../contexts/contexts';
 
 jest.mock('../../JobsManagementToolbar/JobsManagementToolbar');
 jest.mock('../../JobsManagementTable/JobsManagementTable');
@@ -198,13 +197,7 @@ describe('JobsManagement component tests', () => {
     await props.driver.query.mockImplementationOnce(() =>
       Promise.resolve(Jobs)
     );
-    const doQueryJobs = jest.fn();
-    const wrapper = getWrapper(
-      <doQueryContext.Provider value={doQueryJobs}>
-        <JobsManagement {...props} />
-      </doQueryContext.Provider>,
-      'JobsManagement'
-    );
+    const wrapper = getWrapper(<JobsManagement {...props} />, 'JobsManagement');
     await act(async () => {
       wrapper
         .find('MockedJobsManagementTable')

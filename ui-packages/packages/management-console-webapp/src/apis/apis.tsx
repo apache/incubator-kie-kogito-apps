@@ -50,3 +50,35 @@ export const jobCancel = async (
     return { modalTitle, modalContent };
   }
 };
+
+export const handleJobReschedule = async (
+  job,
+  repeatInterval: number | string,
+  repeatLimit: number | string,
+  scheduleDate: Date
+): Promise<{ modalTitle: string; modalContent: string }> => {
+  let modalTitle: string;
+  let modalContent: string;
+  let parameter = {};
+  if (repeatInterval === null && repeatLimit === null) {
+    parameter = {
+      expirationTime: new Date(scheduleDate)
+    };
+  } else {
+    parameter = {
+      expirationTime: new Date(scheduleDate),
+      repeatInterval,
+      repeatLimit
+    };
+  }
+  try {
+    await axios.patch(`${job.endpoint}/${job.id}`, parameter);
+    modalTitle = 'success';
+    modalContent = `Reschedule of job: ${job.id} is successful`;
+    return { modalTitle, modalContent };
+  } catch (error) {
+    modalTitle = 'failure';
+    modalContent = `Reschedule of job ${job.id} failed. Message: ${error.message}`;
+    return { modalTitle, modalContent };
+  }
+};

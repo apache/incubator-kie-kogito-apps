@@ -1,3 +1,19 @@
+/*
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import React from 'react';
 import {
   Modal,
@@ -10,35 +26,33 @@ import {
   TextContent,
   Text
 } from '@patternfly/react-core';
-import { GraphQL } from '@kogito-apps/consoles-common';
+import { Job } from '../../types';
 import { OutlinedClockIcon } from '@patternfly/react-icons';
 import DateTimePicker from 'react-datetime-picker';
-import { handleJobReschedule, setTitle } from '../../utils/Utils';
+import { setTitle } from '../../utils/Utils';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/components-common';
 import '../styles.css';
 
 interface IOwnProps {
   actionType: string;
-  modalTitle: JSX.Element;
   isModalOpen: boolean;
   handleModalToggle: () => void;
   modalAction: JSX.Element[];
-  job: GraphQL.Job;
-  rescheduleClicked?: boolean;
-  setRescheduleClicked?: (rescheduleClicked: boolean) => void;
-  doQueryContext: any;
+  job: Job;
+  rescheduleError: string;
+  setRescheduleError: (rescheduleError: string) => void;
+  handleJobReschedule: any;
 }
 
 const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
   job,
-  rescheduleClicked,
-  setRescheduleClicked,
   actionType,
   modalAction,
-  modalTitle,
   isModalOpen,
   handleModalToggle,
-  doQueryContext,
+  rescheduleError,
+  setRescheduleError,
+  handleJobReschedule,
   ouiaId,
   ouiaSafe
 }) => {
@@ -52,8 +66,6 @@ const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
     job.repeatLimit
   );
   const [errorModalOpen, setErrorModalOpen] = React.useState<boolean>(false);
-
-  const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   const handleIntervalChange = (value: number | string): void => {
     setRepeatInterval(value);
@@ -70,20 +82,11 @@ const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
   const handleTimeNow = (): void => {
     setScheduleDate(new Date());
   };
-  const doQuery = React.useContext(doQueryContext);
 
   const onApplyReschedule = async (): Promise<void> => {
-    await handleJobReschedule(
-      job,
-      repeatInterval,
-      repeatLimit,
-      rescheduleClicked,
-      setErrorMessage,
-      setRescheduleClicked,
-      scheduleDate,
-      doQuery
-    );
+    await handleJobReschedule(job, repeatInterval, repeatLimit, scheduleDate);
   };
+
   const applyAction: JSX.Element[] = [
     <Button
       key="apply-selection"
@@ -164,23 +167,24 @@ const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
     <Button
       key="confirm-selection"
       variant="primary"
-      onClick={handleErrorModal}
+      onClick={() => {
+        handleErrorModal();
+        setRescheduleError('');
+      }}
     >
       OK
     </Button>
   ];
 
   React.useEffect(() => {
-    errorMessage.length > 0 && handleErrorModal();
-  }, [errorMessage]);
-
-  const errorString: string = `Reschedule of job ${job.id} failed. Message: ${errorMessage}`;
+    rescheduleError.length > 0 && handleErrorModal();
+  }, [rescheduleError]);
 
   const errorModalContent = (): JSX.Element => {
     return (
       <ModalBoxBody>
         <TextContent>
-          <Text>{errorString}</Text>
+          <Text>{rescheduleError}</Text>
         </TextContent>
       </ModalBoxBody>
     );
@@ -189,10 +193,10 @@ const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
     <>
       <Modal
         variant={ModalVariant.small}
-        aria-labelledby={actionType + ' modal'}
+        aria-labelledby={'actionType' + ' modal'}
         aria-label={actionType + ' modal'}
         title=""
-        header={modalTitle}
+        header={setTitle('success', 'Job Reschedule')}
         isOpen={isModalOpen}
         onClose={handleModalToggle}
         actions={[...applyAction, ...modalAction]}

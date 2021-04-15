@@ -22,7 +22,11 @@ import {
   JobCancel
 } from '@kogito-apps/management-console-shared';
 import { JobsManagementQueries } from './JobsManagementQueries';
-import { performMultipleCancel, jobCancel } from '../../apis/apis';
+import {
+  performMultipleCancel,
+  jobCancel,
+  handleJobReschedule
+} from '../../apis/apis';
 
 export interface JobsManagementGatewayApi {
   jobsManagementState: any;
@@ -30,7 +34,12 @@ export interface JobsManagementGatewayApi {
   applyFilter: (filter: JobStatus[]) => Promise<void>;
   bulkCancel: (jobsToBeActioned: Job[]) => Promise<BulkCancel>;
   cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
-  rescheduleJob: () => Promise<void>;
+  rescheduleJob: (
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ) => Promise<{ modalTitle: string; modalContent: string }>;
   sortBy: (orderBy: SortBy) => Promise<void>;
   query(offset: number, limit: number): Promise<Job[]>;
 }
@@ -67,8 +76,19 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
     return cancelResult;
   };
 
-  rescheduleJob = () => {
-    return Promise.resolve();
+  rescheduleJob = async (
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> => {
+    const rescheduleResult = await handleJobReschedule(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
+    return rescheduleResult;
   };
 
   bulkCancel = (

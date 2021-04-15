@@ -20,12 +20,7 @@ module.exports = {
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Management Console',
       TEST_USER_SYSTEM_ENABLED: false
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: "./envelope", to: "./envelope" }
-      ],
-    }),
+    })
   ],
   module: {
     rules: [

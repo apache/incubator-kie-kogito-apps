@@ -37,8 +37,8 @@ export type Job = {
   scheduledId: string;
   retries: number;
   lastUpdate: Date;
-  executionCounter: number;
-  endpoint: string;
+  executionCounter?: number;
+  endpoint?: string;
   nodeInstanceId?: string;
 };
 

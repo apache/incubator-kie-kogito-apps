@@ -26,7 +26,12 @@ export interface JobsManagementDriver {
   applyFilter(filter: JobStatus[]): Promise<void>;
   bulkCancel(jobsToBeActioned: Job[]): Promise<BulkCancel>;
   cancelJob(job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel>;
-  rescheduleJob(job: Job): Promise<void>;
+  rescheduleJob(
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }>;
   sortBy(orderBy: SortBy): Promise<void>;
   query(offset: number, limit: number): Promise<Job[]>;
 }

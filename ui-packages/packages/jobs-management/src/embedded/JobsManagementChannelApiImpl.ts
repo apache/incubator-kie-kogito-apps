@@ -41,8 +41,18 @@ export class JobsManagementChannelApiImpl implements JobsManagementChannelApi {
     return this.driver.cancelJob(job);
   }
 
-  jobList_rescheduleJob(job: Job): Promise<void> {
-    return this.driver.rescheduleJob(job);
+  jobList_rescheduleJob(
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> {
+    return this.driver.rescheduleJob(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
   }
 
   jobList_sortBy(orderBy: SortBy): Promise<void> {

@@ -3,15 +3,15 @@
 exports[`Job reschedule modal tests test job reschedule modal 1`] = `
 <JobsRescheduleModal
   actionType="Job Reschedule"
-  doQueryContext={[MockFunction]}
+  handleJobReschedule={[MockFunction]}
   handleModalToggle={[MockFunction]}
   isModalOpen={true}
   job={
     Object {
       "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-      "expirationTime": "2020-08-27T03:35:50.147Z",
+      "expirationTime": 2020-08-27T03:35:50.147Z,
       "id": "6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-      "lastUpdate": "2020-08-27T03:35:50.147Z",
+      "lastUpdate": 2020-08-27T03:35:50.147Z,
       "priority": 0,
       "processId": "travels",
       "processInstanceId": "5c56eeff-4cbf-3313-a325-4c895e0afced",
@@ -32,17 +32,8 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
       </Button>,
     ]
   }
-  modalTitle={
-    <React.Fragment>
-      <InfoCircleIcon
-        className="pf-u-mr-sm"
-        color="var(--pf-global--info-color--100)"
-        noVerticalAlign={false}
-        size="sm"
-      />
-      Jobs Reschedule
-    </React.Fragment>
-  }
+  rescheduleError="404 Not found"
+  setRescheduleError={[MockFunction]}
 >
   <Modal
     actions={
@@ -64,21 +55,26 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
     appendTo={[Function]}
     aria-describedby=""
     aria-label="Job Reschedule modal"
-    aria-labelledby="Job Reschedule modal"
+    aria-labelledby="actionType modal"
     className=""
     data-ouia-component-type="job-reschedule-modal"
     data-ouia-safe={true}
     hasNoBodyWrapper={false}
     header={
-      <React.Fragment>
+      <Title
+        headingLevel="h1"
+        size="2xl"
+      >
         <InfoCircleIcon
           className="pf-u-mr-sm"
           color="var(--pf-global--info-color--100)"
           noVerticalAlign={false}
           size="sm"
         />
-        Jobs Reschedule
-      </React.Fragment>
+        <span>
+          Job Reschedule
+        </span>
+      </Title>
     }
     isOpen={true}
     onClose={[MockFunction]}
@@ -91,7 +87,9 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
   >
     <Portal
       containerInfo={
-        <div>
+        <div
+          aria-hidden="true"
+        >
           <div
             class="pf-c-backdrop"
           >
@@ -101,7 +99,7 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
               <div
                 aria-describedby="pf-modal-part-2"
                 aria-label="Job Reschedule modal"
-                aria-labelledby="pf-modal-part-0 Job Reschedule modal"
+                aria-labelledby="pf-modal-part-0 actionType modal"
                 aria-modal="true"
                 class="pf-c-modal-box pf-m-sm"
                 data-ouia-component-id="OUIA-Generated-Modal-small-1"
@@ -136,21 +134,27 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
                 <header
                   class="pf-c-modal-box__header"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="pf-u-mr-sm"
-                    fill="var(--pf-global--info-color--100)"
-                    height="1em"
-                    role="img"
-                    style="vertical-align: -0.125em;"
-                    viewBox="0 0 512 512"
-                    width="1em"
+                  <h1
+                    class="pf-c-title pf-m-2xl"
                   >
-                    <path
-                      d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
-                    />
-                  </svg>
-                  Jobs Reschedule
+                    <svg
+                      aria-hidden="true"
+                      class="pf-u-mr-sm"
+                      fill="var(--pf-global--info-color--100)"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                      />
+                    </svg>
+                    <span>
+                      Job Reschedule
+                    </span>
+                  </h1>
                 </header>
                 <div
                   class="pf-c-modal-box__body"
@@ -332,7 +336,7 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
         }
         aria-describedby=""
         aria-label="Job Reschedule modal"
-        aria-labelledby="Job Reschedule modal"
+        aria-labelledby="actionType modal"
         boxId="pf-modal-part-0"
         className=""
         data-ouia-component-type="job-reschedule-modal"
@@ -340,15 +344,20 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
         descriptorId="pf-modal-part-2"
         hasNoBodyWrapper={false}
         header={
-          <React.Fragment>
+          <Title
+            headingLevel="h1"
+            size="2xl"
+          >
             <InfoCircleIcon
               className="pf-u-mr-sm"
               color="var(--pf-global--info-color--100)"
               noVerticalAlign={false}
               size="sm"
             />
-            Jobs Reschedule
-          </React.Fragment>
+            <span>
+              Job Reschedule
+            </span>
+          </Title>
         }
         isOpen={true}
         labelId="pf-modal-part-1"
@@ -381,7 +390,7 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
                 <ModalBox
                   aria-describedby="pf-modal-part-2"
                   aria-label="Job Reschedule modal"
-                  aria-labelledby="pf-modal-part-0 Job Reschedule modal"
+                  aria-labelledby="pf-modal-part-0 actionType modal"
                   className=""
                   data-ouia-component-id="OUIA-Generated-Modal-small-1"
                   data-ouia-component-type="PF4/ModalContent"
@@ -393,7 +402,7 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
                   <div
                     aria-describedby="pf-modal-part-2"
                     aria-label="Job Reschedule modal"
-                    aria-labelledby="pf-modal-part-0 Job Reschedule modal"
+                    aria-labelledby="pf-modal-part-0 actionType modal"
                     aria-modal="true"
                     className="pf-c-modal-box pf-m-sm"
                     data-ouia-component-id="OUIA-Generated-Modal-small-1"
@@ -457,33 +466,44 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
                       <header
                         className="pf-c-modal-box__header"
                       >
-                        <InfoCircleIcon
-                          className="pf-u-mr-sm"
-                          color="var(--pf-global--info-color--100)"
-                          noVerticalAlign={false}
-                          size="sm"
+                        <Title
+                          headingLevel="h1"
+                          size="2xl"
                         >
-                          <svg
-                            aria-hidden={true}
-                            aria-labelledby={null}
-                            className="pf-u-mr-sm"
-                            fill="var(--pf-global--info-color--100)"
-                            height="1em"
-                            role="img"
-                            style={
-                              Object {
-                                "verticalAlign": "-0.125em",
-                              }
-                            }
-                            viewBox="0 0 512 512"
-                            width="1em"
+                          <h1
+                            className="pf-c-title pf-m-2xl"
                           >
-                            <path
-                              d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
-                            />
-                          </svg>
-                        </InfoCircleIcon>
-                        Jobs Reschedule
+                            <InfoCircleIcon
+                              className="pf-u-mr-sm"
+                              color="var(--pf-global--info-color--100)"
+                              noVerticalAlign={false}
+                              size="sm"
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                className="pf-u-mr-sm"
+                                fill="var(--pf-global--info-color--100)"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 512 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                                />
+                              </svg>
+                            </InfoCircleIcon>
+                            <span>
+                              Job Reschedule
+                            </span>
+                          </h1>
+                        </Title>
                       </header>
                     </ModalBoxHeader>
                     <ModalBoxBody
@@ -854,7 +874,7 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
         </span>
       </Title>
     }
-    isOpen={false}
+    isOpen={true}
     onClose={[Function]}
     ouiaSafe={true}
     showClose={true}
@@ -867,7 +887,112 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
       containerInfo={
         <div
           aria-hidden="true"
-        />
+        >
+          <div
+            class="pf-c-backdrop"
+          >
+            <div
+              class="pf-l-bullseye"
+            >
+              <div
+                aria-describedby="pf-modal-part-3"
+                aria-label="Reschedule error modal"
+                aria-labelledby="pf-modal-part-1 Reschedule error modal"
+                aria-modal="true"
+                class="pf-c-modal-box pf-m-sm"
+                data-ouia-component-id="OUIA-Generated-Modal-small-2"
+                data-ouia-component-type="PF4/ModalContent"
+                data-ouia-safe="true"
+                id="pf-modal-part-1"
+                role="dialog"
+              >
+                <button
+                  aria-disabled="false"
+                  aria-label="Close"
+                  class="pf-c-button pf-m-plain"
+                  data-ouia-component-id="OUIA-Generated-Button-plain-2"
+                  data-ouia-component-type="PF4/Button"
+                  data-ouia-safe="true"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 352 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                    />
+                  </svg>
+                </button>
+                <header
+                  class="pf-c-modal-box__header"
+                >
+                  <h1
+                    class="pf-c-title pf-m-2xl"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="pf-u-mr-sm"
+                      fill="var(--pf-global--danger-color--100)"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                      />
+                    </svg>
+                    <span>
+                      Job Reschedule
+                    </span>
+                  </h1>
+                </header>
+                <div
+                  class="pf-c-modal-box__body"
+                  data-ouia-component-type="job-reschedule-error-modal"
+                  data-ouia-safe="true"
+                  id="pf-modal-part-3"
+                >
+                  <div
+                    class="pf-c-modal-box__body"
+                  >
+                    <div
+                      class="pf-c-content"
+                    >
+                      <p
+                        class=""
+                        data-pf-content="true"
+                      >
+                        404 Not found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <footer
+                  class="pf-c-modal-box__footer"
+                >
+                  <button
+                    aria-disabled="false"
+                    class="pf-c-button pf-m-primary"
+                    data-ouia-component-id="OUIA-Generated-Button-primary-3"
+                    data-ouia-component-type="PF4/Button"
+                    data-ouia-safe="true"
+                    type="button"
+                  >
+                    OK
+                  </button>
+                </footer>
+              </div>
+            </div>
+          </div>
+        </div>
       }
     >
       <ModalContent
@@ -906,7 +1031,7 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
             </span>
           </Title>
         }
-        isOpen={false}
+        isOpen={true}
         labelId="pf-modal-part-2"
         onClose={[Function]}
         ouiaId="OUIA-Generated-Modal-small-2"
@@ -916,7 +1041,209 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
         titleIconVariant={null}
         titleLabel=""
         variant="small"
-      />
+      >
+        <Backdrop>
+          <div
+            className="pf-c-backdrop"
+          >
+            <FocusTrap
+              active={true}
+              className="pf-l-bullseye"
+              focusTrapOptions={
+                Object {
+                  "clickOutsideDeactivates": true,
+                }
+              }
+              paused={false}
+            >
+              <div
+                className="pf-l-bullseye"
+              >
+                <ModalBox
+                  aria-describedby="pf-modal-part-3"
+                  aria-label="Reschedule error modal"
+                  aria-labelledby="pf-modal-part-1 Reschedule error modal"
+                  className=""
+                  data-ouia-component-id="OUIA-Generated-Modal-small-2"
+                  data-ouia-component-type="PF4/ModalContent"
+                  data-ouia-safe={true}
+                  id="pf-modal-part-1"
+                  style={Object {}}
+                  variant="small"
+                >
+                  <div
+                    aria-describedby="pf-modal-part-3"
+                    aria-label="Reschedule error modal"
+                    aria-labelledby="pf-modal-part-1 Reschedule error modal"
+                    aria-modal="true"
+                    className="pf-c-modal-box pf-m-sm"
+                    data-ouia-component-id="OUIA-Generated-Modal-small-2"
+                    data-ouia-component-type="PF4/ModalContent"
+                    data-ouia-safe={true}
+                    id="pf-modal-part-1"
+                    role="dialog"
+                    style={Object {}}
+                  >
+                    <ModalBoxCloseButton
+                      onClose={[Function]}
+                    >
+                      <Button
+                        aria-label="Close"
+                        className=""
+                        onClick={[Function]}
+                        variant="plain"
+                      >
+                        <button
+                          aria-disabled={false}
+                          aria-label="Close"
+                          className="pf-c-button pf-m-plain"
+                          data-ouia-component-id="OUIA-Generated-Button-plain-2"
+                          data-ouia-component-type="PF4/Button"
+                          data-ouia-safe={true}
+                          disabled={false}
+                          onClick={[Function]}
+                          role={null}
+                          type="button"
+                        >
+                          <TimesIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              fill="currentColor"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 352 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                              />
+                            </svg>
+                          </TimesIcon>
+                        </button>
+                      </Button>
+                    </ModalBoxCloseButton>
+                    <ModalBoxHeader
+                      help={null}
+                    >
+                      <header
+                        className="pf-c-modal-box__header"
+                      >
+                        <Title
+                          headingLevel="h1"
+                          size="2xl"
+                        >
+                          <h1
+                            className="pf-c-title pf-m-2xl"
+                          >
+                            <InfoCircleIcon
+                              className="pf-u-mr-sm"
+                              color="var(--pf-global--danger-color--100)"
+                              noVerticalAlign={false}
+                              size="sm"
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                className="pf-u-mr-sm"
+                                fill="var(--pf-global--danger-color--100)"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 512 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                                />
+                              </svg>
+                            </InfoCircleIcon>
+                            <span>
+                              Job Reschedule
+                            </span>
+                          </h1>
+                        </Title>
+                      </header>
+                    </ModalBoxHeader>
+                    <ModalBoxBody
+                      data-ouia-component-type="job-reschedule-error-modal"
+                      data-ouia-safe={true}
+                      id="pf-modal-part-3"
+                    >
+                      <div
+                        className="pf-c-modal-box__body"
+                        data-ouia-component-type="job-reschedule-error-modal"
+                        data-ouia-safe={true}
+                        id="pf-modal-part-3"
+                      >
+                        <ModalBoxBody>
+                          <div
+                            className="pf-c-modal-box__body"
+                          >
+                            <TextContent>
+                              <div
+                                className="pf-c-content"
+                              >
+                                <Text>
+                                  <p
+                                    className=""
+                                    data-pf-content={true}
+                                  >
+                                    404 Not found
+                                  </p>
+                                </Text>
+                              </div>
+                            </TextContent>
+                          </div>
+                        </ModalBoxBody>
+                      </div>
+                    </ModalBoxBody>
+                    <ModalBoxFooter>
+                      <footer
+                        className="pf-c-modal-box__footer"
+                      >
+                        <Button
+                          key="confirm-selection"
+                          onClick={[Function]}
+                          variant="primary"
+                        >
+                          <button
+                            aria-disabled={false}
+                            aria-label={null}
+                            className="pf-c-button pf-m-primary"
+                            data-ouia-component-id="OUIA-Generated-Button-primary-3"
+                            data-ouia-component-type="PF4/Button"
+                            data-ouia-safe={true}
+                            disabled={false}
+                            onClick={[Function]}
+                            role={null}
+                            type="button"
+                          >
+                            OK
+                          </button>
+                        </Button>
+                      </footer>
+                    </ModalBoxFooter>
+                  </div>
+                </ModalBox>
+              </div>
+            </FocusTrap>
+          </div>
+        </Backdrop>
+      </ModalContent>
     </Portal>
   </Modal>
 </JobsRescheduleModal>
@@ -925,15 +1252,15 @@ exports[`Job reschedule modal tests test job reschedule modal 1`] = `
 exports[`Job reschedule modal tests test reschedule with null interval/limit 1`] = `
 <JobsRescheduleModal
   actionType="Job Reschedule"
-  doQueryContext={[MockFunction]}
+  handleJobReschedule={[MockFunction]}
   handleModalToggle={[MockFunction]}
   isModalOpen={true}
   job={
     Object {
       "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-      "expirationTime": "2020-08-27T03:35:50.147Z",
+      "expirationTime": 2020-08-27T03:35:50.147Z,
       "id": "6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-      "lastUpdate": "2020-08-27T03:35:50.147Z",
+      "lastUpdate": 2020-08-27T03:35:50.147Z,
       "priority": 0,
       "processId": "travels",
       "processInstanceId": "5c56eeff-4cbf-3313-a325-4c895e0afced",
@@ -954,17 +1281,8 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
       </Button>,
     ]
   }
-  modalTitle={
-    <React.Fragment>
-      <InfoCircleIcon
-        className="pf-u-mr-sm"
-        color="var(--pf-global--info-color--100)"
-        noVerticalAlign={false}
-        size="sm"
-      />
-      Jobs Reschedule
-    </React.Fragment>
-  }
+  rescheduleError="404 Not found"
+  setRescheduleError={[MockFunction]}
 >
   <Modal
     actions={
@@ -986,21 +1304,26 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
     appendTo={[Function]}
     aria-describedby=""
     aria-label="Job Reschedule modal"
-    aria-labelledby="Job Reschedule modal"
+    aria-labelledby="actionType modal"
     className=""
     data-ouia-component-type="job-reschedule-modal"
     data-ouia-safe={true}
     hasNoBodyWrapper={false}
     header={
-      <React.Fragment>
+      <Title
+        headingLevel="h1"
+        size="2xl"
+      >
         <InfoCircleIcon
           className="pf-u-mr-sm"
           color="var(--pf-global--info-color--100)"
           noVerticalAlign={false}
           size="sm"
         />
-        Jobs Reschedule
-      </React.Fragment>
+        <span>
+          Job Reschedule
+        </span>
+      </Title>
     }
     isOpen={true}
     onClose={[MockFunction]}
@@ -1013,7 +1336,9 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
   >
     <Portal
       containerInfo={
-        <div>
+        <div
+          aria-hidden="true"
+        >
           <div
             class="pf-c-backdrop"
           >
@@ -1023,7 +1348,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
               <div
                 aria-describedby="pf-modal-part-4"
                 aria-label="Job Reschedule modal"
-                aria-labelledby="pf-modal-part-2 Job Reschedule modal"
+                aria-labelledby="pf-modal-part-2 actionType modal"
                 aria-modal="true"
                 class="pf-c-modal-box pf-m-sm"
                 data-ouia-component-id="OUIA-Generated-Modal-small-3"
@@ -1036,7 +1361,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                   aria-disabled="false"
                   aria-label="Close"
                   class="pf-c-button pf-m-plain"
-                  data-ouia-component-id="OUIA-Generated-Button-plain-2"
+                  data-ouia-component-id="OUIA-Generated-Button-plain-3"
                   data-ouia-component-type="PF4/Button"
                   data-ouia-safe="true"
                   type="button"
@@ -1058,21 +1383,27 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                 <header
                   class="pf-c-modal-box__header"
                 >
-                  <svg
-                    aria-hidden="true"
-                    class="pf-u-mr-sm"
-                    fill="var(--pf-global--info-color--100)"
-                    height="1em"
-                    role="img"
-                    style="vertical-align: -0.125em;"
-                    viewBox="0 0 512 512"
-                    width="1em"
+                  <h1
+                    class="pf-c-title pf-m-2xl"
                   >
-                    <path
-                      d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
-                    />
-                  </svg>
-                  Jobs Reschedule
+                    <svg
+                      aria-hidden="true"
+                      class="pf-u-mr-sm"
+                      fill="var(--pf-global--info-color--100)"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                      />
+                    </svg>
+                    <span>
+                      Job Reschedule
+                    </span>
+                  </h1>
                 </header>
                 <div
                   class="pf-c-modal-box__body"
@@ -1111,7 +1442,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                           <button
                             aria-disabled="false"
                             class="pf-c-button pf-m-primary kogito-management-console-shared--jobsModal__TimeNow"
-                            data-ouia-component-id="OUIA-Generated-Button-primary-3"
+                            data-ouia-component-id="OUIA-Generated-Button-primary-4"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe="true"
                             id="Time-now"
@@ -1224,7 +1555,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                   <button
                     aria-disabled="false"
                     class="pf-c-button pf-m-primary"
-                    data-ouia-component-id="OUIA-Generated-Button-primary-4"
+                    data-ouia-component-id="OUIA-Generated-Button-primary-5"
                     data-ouia-component-type="PF4/Button"
                     data-ouia-safe="true"
                     id="apply-button"
@@ -1268,7 +1599,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
         }
         aria-describedby=""
         aria-label="Job Reschedule modal"
-        aria-labelledby="Job Reschedule modal"
+        aria-labelledby="actionType modal"
         boxId="pf-modal-part-2"
         className=""
         data-ouia-component-type="job-reschedule-modal"
@@ -1276,15 +1607,20 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
         descriptorId="pf-modal-part-4"
         hasNoBodyWrapper={false}
         header={
-          <React.Fragment>
+          <Title
+            headingLevel="h1"
+            size="2xl"
+          >
             <InfoCircleIcon
               className="pf-u-mr-sm"
               color="var(--pf-global--info-color--100)"
               noVerticalAlign={false}
               size="sm"
             />
-            Jobs Reschedule
-          </React.Fragment>
+            <span>
+              Job Reschedule
+            </span>
+          </Title>
         }
         isOpen={true}
         labelId="pf-modal-part-3"
@@ -1317,7 +1653,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                 <ModalBox
                   aria-describedby="pf-modal-part-4"
                   aria-label="Job Reschedule modal"
-                  aria-labelledby="pf-modal-part-2 Job Reschedule modal"
+                  aria-labelledby="pf-modal-part-2 actionType modal"
                   className=""
                   data-ouia-component-id="OUIA-Generated-Modal-small-3"
                   data-ouia-component-type="PF4/ModalContent"
@@ -1329,7 +1665,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                   <div
                     aria-describedby="pf-modal-part-4"
                     aria-label="Job Reschedule modal"
-                    aria-labelledby="pf-modal-part-2 Job Reschedule modal"
+                    aria-labelledby="pf-modal-part-2 actionType modal"
                     aria-modal="true"
                     className="pf-c-modal-box pf-m-sm"
                     data-ouia-component-id="OUIA-Generated-Modal-small-3"
@@ -1352,7 +1688,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                           aria-disabled={false}
                           aria-label="Close"
                           className="pf-c-button pf-m-plain"
-                          data-ouia-component-id="OUIA-Generated-Button-plain-2"
+                          data-ouia-component-id="OUIA-Generated-Button-plain-3"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
@@ -1393,33 +1729,44 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                       <header
                         className="pf-c-modal-box__header"
                       >
-                        <InfoCircleIcon
-                          className="pf-u-mr-sm"
-                          color="var(--pf-global--info-color--100)"
-                          noVerticalAlign={false}
-                          size="sm"
+                        <Title
+                          headingLevel="h1"
+                          size="2xl"
                         >
-                          <svg
-                            aria-hidden={true}
-                            aria-labelledby={null}
-                            className="pf-u-mr-sm"
-                            fill="var(--pf-global--info-color--100)"
-                            height="1em"
-                            role="img"
-                            style={
-                              Object {
-                                "verticalAlign": "-0.125em",
-                              }
-                            }
-                            viewBox="0 0 512 512"
-                            width="1em"
+                          <h1
+                            className="pf-c-title pf-m-2xl"
                           >
-                            <path
-                              d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
-                            />
-                          </svg>
-                        </InfoCircleIcon>
-                        Jobs Reschedule
+                            <InfoCircleIcon
+                              className="pf-u-mr-sm"
+                              color="var(--pf-global--info-color--100)"
+                              noVerticalAlign={false}
+                              size="sm"
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                className="pf-u-mr-sm"
+                                fill="var(--pf-global--info-color--100)"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 512 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                                />
+                              </svg>
+                            </InfoCircleIcon>
+                            <span>
+                              Job Reschedule
+                            </span>
+                          </h1>
+                        </Title>
                       </header>
                     </ModalBoxHeader>
                     <ModalBoxBody
@@ -1511,7 +1858,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                                           aria-disabled={false}
                                           aria-label={null}
                                           className="pf-c-button pf-m-primary kogito-management-console-shared--jobsModal__TimeNow"
-                                          data-ouia-component-id="OUIA-Generated-Button-primary-3"
+                                          data-ouia-component-id="OUIA-Generated-Button-primary-4"
                                           data-ouia-component-type="PF4/Button"
                                           data-ouia-safe={true}
                                           disabled={false}
@@ -1728,7 +2075,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-primary"
-                            data-ouia-component-id="OUIA-Generated-Button-primary-4"
+                            data-ouia-component-id="OUIA-Generated-Button-primary-5"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -1804,7 +2151,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
         </span>
       </Title>
     }
-    isOpen={false}
+    isOpen={true}
     onClose={[Function]}
     ouiaSafe={true}
     showClose={true}
@@ -1817,7 +2164,112 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
       containerInfo={
         <div
           aria-hidden="true"
-        />
+        >
+          <div
+            class="pf-c-backdrop"
+          >
+            <div
+              class="pf-l-bullseye"
+            >
+              <div
+                aria-describedby="pf-modal-part-5"
+                aria-label="Reschedule error modal"
+                aria-labelledby="pf-modal-part-3 Reschedule error modal"
+                aria-modal="true"
+                class="pf-c-modal-box pf-m-sm"
+                data-ouia-component-id="OUIA-Generated-Modal-small-4"
+                data-ouia-component-type="PF4/ModalContent"
+                data-ouia-safe="true"
+                id="pf-modal-part-3"
+                role="dialog"
+              >
+                <button
+                  aria-disabled="false"
+                  aria-label="Close"
+                  class="pf-c-button pf-m-plain"
+                  data-ouia-component-id="OUIA-Generated-Button-plain-4"
+                  data-ouia-component-type="PF4/Button"
+                  data-ouia-safe="true"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style="vertical-align: -0.125em;"
+                    viewBox="0 0 352 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                    />
+                  </svg>
+                </button>
+                <header
+                  class="pf-c-modal-box__header"
+                >
+                  <h1
+                    class="pf-c-title pf-m-2xl"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="pf-u-mr-sm"
+                      fill="var(--pf-global--danger-color--100)"
+                      height="1em"
+                      role="img"
+                      style="vertical-align: -0.125em;"
+                      viewBox="0 0 512 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                      />
+                    </svg>
+                    <span>
+                      Job Reschedule
+                    </span>
+                  </h1>
+                </header>
+                <div
+                  class="pf-c-modal-box__body"
+                  data-ouia-component-type="job-reschedule-error-modal"
+                  data-ouia-safe="true"
+                  id="pf-modal-part-5"
+                >
+                  <div
+                    class="pf-c-modal-box__body"
+                  >
+                    <div
+                      class="pf-c-content"
+                    >
+                      <p
+                        class=""
+                        data-pf-content="true"
+                      >
+                        404 Not found
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <footer
+                  class="pf-c-modal-box__footer"
+                >
+                  <button
+                    aria-disabled="false"
+                    class="pf-c-button pf-m-primary"
+                    data-ouia-component-id="OUIA-Generated-Button-primary-6"
+                    data-ouia-component-type="PF4/Button"
+                    data-ouia-safe="true"
+                    type="button"
+                  >
+                    OK
+                  </button>
+                </footer>
+              </div>
+            </div>
+          </div>
+        </div>
       }
     >
       <ModalContent
@@ -1856,7 +2308,7 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
             </span>
           </Title>
         }
-        isOpen={false}
+        isOpen={true}
         labelId="pf-modal-part-4"
         onClose={[Function]}
         ouiaId="OUIA-Generated-Modal-small-4"
@@ -1866,7 +2318,209 @@ exports[`Job reschedule modal tests test reschedule with null interval/limit 1`]
         titleIconVariant={null}
         titleLabel=""
         variant="small"
-      />
+      >
+        <Backdrop>
+          <div
+            className="pf-c-backdrop"
+          >
+            <FocusTrap
+              active={true}
+              className="pf-l-bullseye"
+              focusTrapOptions={
+                Object {
+                  "clickOutsideDeactivates": true,
+                }
+              }
+              paused={false}
+            >
+              <div
+                className="pf-l-bullseye"
+              >
+                <ModalBox
+                  aria-describedby="pf-modal-part-5"
+                  aria-label="Reschedule error modal"
+                  aria-labelledby="pf-modal-part-3 Reschedule error modal"
+                  className=""
+                  data-ouia-component-id="OUIA-Generated-Modal-small-4"
+                  data-ouia-component-type="PF4/ModalContent"
+                  data-ouia-safe={true}
+                  id="pf-modal-part-3"
+                  style={Object {}}
+                  variant="small"
+                >
+                  <div
+                    aria-describedby="pf-modal-part-5"
+                    aria-label="Reschedule error modal"
+                    aria-labelledby="pf-modal-part-3 Reschedule error modal"
+                    aria-modal="true"
+                    className="pf-c-modal-box pf-m-sm"
+                    data-ouia-component-id="OUIA-Generated-Modal-small-4"
+                    data-ouia-component-type="PF4/ModalContent"
+                    data-ouia-safe={true}
+                    id="pf-modal-part-3"
+                    role="dialog"
+                    style={Object {}}
+                  >
+                    <ModalBoxCloseButton
+                      onClose={[Function]}
+                    >
+                      <Button
+                        aria-label="Close"
+                        className=""
+                        onClick={[Function]}
+                        variant="plain"
+                      >
+                        <button
+                          aria-disabled={false}
+                          aria-label="Close"
+                          className="pf-c-button pf-m-plain"
+                          data-ouia-component-id="OUIA-Generated-Button-plain-4"
+                          data-ouia-component-type="PF4/Button"
+                          data-ouia-safe={true}
+                          disabled={false}
+                          onClick={[Function]}
+                          role={null}
+                          type="button"
+                        >
+                          <TimesIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              fill="currentColor"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 352 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                              />
+                            </svg>
+                          </TimesIcon>
+                        </button>
+                      </Button>
+                    </ModalBoxCloseButton>
+                    <ModalBoxHeader
+                      help={null}
+                    >
+                      <header
+                        className="pf-c-modal-box__header"
+                      >
+                        <Title
+                          headingLevel="h1"
+                          size="2xl"
+                        >
+                          <h1
+                            className="pf-c-title pf-m-2xl"
+                          >
+                            <InfoCircleIcon
+                              className="pf-u-mr-sm"
+                              color="var(--pf-global--danger-color--100)"
+                              noVerticalAlign={false}
+                              size="sm"
+                            >
+                              <svg
+                                aria-hidden={true}
+                                aria-labelledby={null}
+                                className="pf-u-mr-sm"
+                                fill="var(--pf-global--danger-color--100)"
+                                height="1em"
+                                role="img"
+                                style={
+                                  Object {
+                                    "verticalAlign": "-0.125em",
+                                  }
+                                }
+                                viewBox="0 0 512 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+                                />
+                              </svg>
+                            </InfoCircleIcon>
+                            <span>
+                              Job Reschedule
+                            </span>
+                          </h1>
+                        </Title>
+                      </header>
+                    </ModalBoxHeader>
+                    <ModalBoxBody
+                      data-ouia-component-type="job-reschedule-error-modal"
+                      data-ouia-safe={true}
+                      id="pf-modal-part-5"
+                    >
+                      <div
+                        className="pf-c-modal-box__body"
+                        data-ouia-component-type="job-reschedule-error-modal"
+                        data-ouia-safe={true}
+                        id="pf-modal-part-5"
+                      >
+                        <ModalBoxBody>
+                          <div
+                            className="pf-c-modal-box__body"
+                          >
+                            <TextContent>
+                              <div
+                                className="pf-c-content"
+                              >
+                                <Text>
+                                  <p
+                                    className=""
+                                    data-pf-content={true}
+                                  >
+                                    404 Not found
+                                  </p>
+                                </Text>
+                              </div>
+                            </TextContent>
+                          </div>
+                        </ModalBoxBody>
+                      </div>
+                    </ModalBoxBody>
+                    <ModalBoxFooter>
+                      <footer
+                        className="pf-c-modal-box__footer"
+                      >
+                        <Button
+                          key="confirm-selection"
+                          onClick={[Function]}
+                          variant="primary"
+                        >
+                          <button
+                            aria-disabled={false}
+                            aria-label={null}
+                            className="pf-c-button pf-m-primary"
+                            data-ouia-component-id="OUIA-Generated-Button-primary-6"
+                            data-ouia-component-type="PF4/Button"
+                            data-ouia-safe={true}
+                            disabled={false}
+                            onClick={[Function]}
+                            role={null}
+                            type="button"
+                          >
+                            OK
+                          </button>
+                        </Button>
+                      </footer>
+                    </ModalBoxFooter>
+                  </div>
+                </ModalBox>
+              </div>
+            </FocusTrap>
+          </div>
+        </Backdrop>
+      </ModalContent>
     </Portal>
   </Modal>
 </JobsRescheduleModal>

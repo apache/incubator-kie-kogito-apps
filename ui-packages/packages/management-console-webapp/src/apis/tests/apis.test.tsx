@@ -17,7 +17,7 @@
 import axios from 'axios';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import wait from 'waait';
-import { jobCancel, performMultipleCancel } from '../apis';
+import { handleJobReschedule, jobCancel, performMultipleCancel } from '../apis';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 describe('bulk cancel tests', () => {
@@ -142,5 +142,90 @@ describe('job cancel tests', () => {
     const cancelResult = await jobCancel(job);
     await wait(0);
     expect(cancelResult).toEqual(expectedResult);
+  });
+
+  it('test reschedule function', async () => {
+    mockedAxios.patch.mockResolvedValue({
+      status: 200,
+      statusText: 'OK',
+      data: {
+        callbackEndpoint:
+          'http://localhost:8080/management/jobs/travels/instances/9865268c-64d7-3a44-8972-7325b295f7cc/timers/58180644-2fdf-4261-83f2-f4e783d308a3_0',
+        executionCounter: 0,
+        executionResponse: null,
+        expirationTime: '2020-10-16T10:17:22.879Z',
+        id: '58180644-2fdf-4261-83f2-f4e783d308a3_0',
+        lastUpdate: '2020-10-07T07:41:31.467Z',
+        priority: 0,
+        processId: 'travels',
+        processInstanceId: '9865268c-64d7-3a44-8972-7325b295f7cc',
+        repeatInterval: null,
+        repeatLimit: null,
+        retries: 0,
+        rootProcessId: null,
+        rootProcessInstanceId: null,
+        scheduledId: null,
+        status: 'SCHEDULED'
+      }
+    });
+    const job = {
+      id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+      processId: 'travels',
+      processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+      rootProcessId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+      status: GraphQL.JobStatus.Executed,
+      priority: 0,
+      callbackEndpoint:
+        'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+      repeatInterval: 1,
+      repeatLimit: 3,
+      scheduledId: '0',
+      retries: 0,
+      lastUpdate: '2020-08-27T03:35:50.147Z',
+      expirationTime: '2020-08-27T03:35:50.147Z'
+    };
+    const repeatInterval = 2;
+    const repeatLimit = 1;
+    const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
+    const modalTitle = 'success';
+    const modalContent = `Reschedule of job: ${job.id} is successful`;
+    const result = await handleJobReschedule(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
+    expect(result).toEqual({ modalTitle, modalContent });
+  });
+  it('test error response for reschedule function', async () => {
+    mockedAxios.patch.mockRejectedValue({ message: '403 error' });
+    const job = {
+      id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+      processId: 'travels',
+      processInstanceId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+      rootProcessId: '5c56eeff-4cbf-3313-a325-4c895e0afced',
+      status: GraphQL.JobStatus.Executed,
+      priority: 0,
+      callbackEndpoint:
+        'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
+      repeatInterval: 1,
+      repeatLimit: 3,
+      scheduledId: '0',
+      retries: 0,
+      lastUpdate: '2020-08-27T03:35:50.147Z',
+      expirationTime: '2020-08-27T03:35:50.147Z'
+    };
+    const repeatInterval = null;
+    const repeatLimit = null;
+    const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
+    const modalTitle = 'failure';
+    const modalContent = `Reschedule of job ${job.id} failed. Message: 403 error`;
+    const result = await handleJobReschedule(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
+    expect(result).toEqual({ modalTitle, modalContent });
   });
 });

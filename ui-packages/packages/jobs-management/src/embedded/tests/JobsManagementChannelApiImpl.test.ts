@@ -77,8 +77,16 @@ describe('JobsManagementChannelApiImpl tests', () => {
   });
 
   it('jobList__rescheduleJob', () => {
-    api.jobList_rescheduleJob(Jobs);
-    expect(driver.rescheduleJob).toHaveBeenCalledWith(Jobs);
+    const repeatInterval = 0;
+    const repeatLimit = 0;
+    const scheduleDate = new Date('2021-08-27T03:35:50.147Z');
+    api.jobList_rescheduleJob(Jobs, repeatInterval, repeatLimit, scheduleDate);
+    expect(driver.rescheduleJob).toHaveBeenCalledWith(
+      Jobs,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
   });
 
   it('jobList__sortBy', () => {

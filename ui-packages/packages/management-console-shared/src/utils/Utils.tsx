@@ -15,7 +15,6 @@
  */
 
 import React from 'react';
-import axios from 'axios';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { Title, TitleSizes } from '@patternfly/react-core';
 import { BulkListItem } from '../components/BulkList/BulkList';
@@ -52,40 +51,6 @@ export const setTitle = (
       <span>{titleText}</span>
     </Title>
   );
-};
-
-export const handleJobReschedule = async (
-  job,
-  repeatInterval: number | string,
-  repeatLimit: number | string,
-  rescheduleClicked: boolean,
-  setErrorMessage: (errorMessage: string) => void,
-  setRescheduleClicked: (rescheduleClicked: boolean) => void,
-  scheduleDate: Date,
-  doQuery
-): Promise<void> => {
-  let parameter = {};
-  if (repeatInterval === null && repeatLimit === null) {
-    parameter = {
-      expirationTime: new Date(scheduleDate)
-    };
-  } else {
-    parameter = {
-      expirationTime: new Date(scheduleDate),
-      repeatInterval,
-      repeatLimit
-    };
-  }
-  try {
-    await axios.patch(`${job.endpoint}/${job.id}`, parameter).then(res => {
-      setRescheduleClicked(!rescheduleClicked);
-      doQuery(0, 10);
-    });
-  } catch (error) {
-    setRescheduleClicked(!rescheduleClicked);
-    setErrorMessage(error.message);
-    doQuery(0, 10);
-  }
 };
 
 // function adds new property to existing object

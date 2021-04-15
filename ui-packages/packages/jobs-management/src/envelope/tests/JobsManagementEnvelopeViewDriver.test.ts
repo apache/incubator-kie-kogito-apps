@@ -107,9 +107,17 @@ describe('JobsManagementEnvelopeViewDriver tests', () => {
     });
 
     it('rescheduleJob', () => {
-      driver.rescheduleJob(Jobs);
+      const repeatInterval = 0;
+      const repeatLimit = 0;
+      const scheduleDate = new Date('2021-08-27T03:35:50.147Z');
+      driver.rescheduleJob(Jobs, repeatInterval, repeatLimit, scheduleDate);
 
-      expect(requests.jobList_rescheduleJob).toHaveBeenCalledWith(Jobs);
+      expect(requests.jobList_rescheduleJob).toHaveBeenCalledWith(
+        Jobs,
+        repeatInterval,
+        repeatLimit,
+        scheduleDate
+      );
     });
 
     it('cancelJob', () => {

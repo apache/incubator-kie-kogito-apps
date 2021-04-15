@@ -9,9 +9,9 @@ exports[`Job details modal tests Snapshot testing 1`] = `
     Object {
       "callbackEndpoint": "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
       "executionCounter": 6,
-      "expirationTime": "2020-08-27T03:35:50.147Z",
+      "expirationTime": 2020-08-27T03:35:50.147Z,
       "id": "6e74a570-31c8-4020-bd70-19be2cb625f3_0",
-      "lastUpdate": "2020-08-27T03:35:50.147Z",
+      "lastUpdate": 2020-08-27T03:35:50.147Z,
       "priority": 0,
       "processId": "travels",
       "processInstanceId": "5c56eeff-4cbf-3313-a325-4c895e0afced",
@@ -393,7 +393,7 @@ exports[`Job details modal tests Snapshot testing 1`] = `
                               class="pf-l-split__item"
                             >
                               <time
-                                datetime="1598499350147"
+                                datetime="1598499350000"
                               >
                                 in 2 months
                               </time>
@@ -1029,7 +1029,7 @@ exports[`Job details modal tests Snapshot testing 1`] = `
                                                 withTitle={false}
                                               >
                                                 <time
-                                                  dateTime={"2020-08-27T03:35:50.147Z"}
+                                                  dateTime={"2020-08-27T03:35:50.000Z"}
                                                 >
                                                   in 2 months
                                                 </time>

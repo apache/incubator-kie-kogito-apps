@@ -41,7 +41,6 @@ import {
 import { JobsManagementDriver, OrderBy, SortBy } from '../../../api';
 import JobsManagementTable from '../JobsManagementTable/JobsManagementTable';
 import JobsManagementToolbar from '../JobsManagementToolbar/JobsManagementToolbar';
-import { doQueryContext } from '../../contexts/contexts';
 import '../styles.css';
 
 interface JobsManagementProps {
@@ -85,6 +84,7 @@ const JobsManagement: React.FC<JobsManagementProps & OUIAProps> = ({
   const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState<boolean>(
     false
   );
+  const [rescheduleError, setRescheduleError] = useState<string>('');
   const [selectedJob, setSelectedJob] = useState<any>({});
   const [jobOperationResults, setJobOperationResults] = useState<
     IOperationResults
@@ -243,6 +243,29 @@ const JobsManagement: React.FC<JobsManagementProps & OUIAProps> = ({
     initLoad();
   };
 
+  const handleJobReschedule = async (
+    job,
+    repeatInterval,
+    repeatLimit,
+    scheduleDate
+  ) => {
+    const response = await driver.rescheduleJob(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
+    if (response && response.modalTitle === 'success') {
+      handleRescheduleToggle();
+      setIsLoading(true);
+      doQueryJobs(0, 10);
+    } else if (response && response.modalTitle === 'failure') {
+      handleRescheduleToggle();
+      setRescheduleError(response.modalContent);
+      setIsLoading(true);
+      doQueryJobs(0, 10);
+    }
+  };
   return (
     <div
       {...componentOuiaProps(
@@ -331,19 +354,16 @@ const JobsManagement: React.FC<JobsManagementProps & OUIAProps> = ({
         />
       )}
       {selectedJob && Object.keys(selectedJob).length > 0 && (
-        <doQueryContext.Provider value={doQueryJobs}>
-          <JobsRescheduleModal
-            actionType="Job Reschedule"
-            modalTitle={setTitle('success', 'Job Reschedule')}
-            isModalOpen={isRescheduleModalOpen}
-            handleModalToggle={handleRescheduleToggle}
-            modalAction={rescheduleActions}
-            job={selectedJob}
-            setRescheduleClicked={setIsRescheduleModalOpen}
-            rescheduleClicked={isRescheduleModalOpen}
-            doQueryContext={doQueryContext}
-          />
-        </doQueryContext.Provider>
+        <JobsRescheduleModal
+          actionType="Job Reschedule"
+          isModalOpen={isRescheduleModalOpen}
+          handleModalToggle={handleRescheduleToggle}
+          modalAction={rescheduleActions}
+          job={selectedJob}
+          rescheduleError={rescheduleError}
+          setRescheduleError={setRescheduleError}
+          handleJobReschedule={handleJobReschedule}
+        />
       )}
       <JobsCancelModal
         actionType="Job Cancel"
