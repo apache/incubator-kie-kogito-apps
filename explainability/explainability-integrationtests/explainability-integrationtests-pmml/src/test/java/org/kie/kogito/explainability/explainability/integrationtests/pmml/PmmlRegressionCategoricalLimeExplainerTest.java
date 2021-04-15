@@ -74,6 +74,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(500)
                 .withAdaptiveVariance(true)
+                .withPenalizeBalanceSparse(false)
                 .withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = inputs -> CompletableFuture.supplyAsync(() -> {
@@ -109,7 +110,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
 
         String decision = "result";
         List<PredictionInput> inputs = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 100; i++) {
             List<Feature> fs = new ArrayList<>();
             fs.add(FeatureFactory.newCategoricalFeature("mapX", categoryOne[i % categoryOne.length]));
             fs.add(FeatureFactory.newCategoricalFeature("mapY", categoryTwo[i % categoryTwo.length]));
@@ -117,8 +118,8 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         }
         DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
         int k = 1;
-        int chunkSize = 2;
+        int chunkSize = 5;
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        AssertionsForClassTypes.assertThat(f1).isBetween(0d, 1d);
+        AssertionsForClassTypes.assertThat(f1).isBetween(0.3d, 1d);
     }
 }

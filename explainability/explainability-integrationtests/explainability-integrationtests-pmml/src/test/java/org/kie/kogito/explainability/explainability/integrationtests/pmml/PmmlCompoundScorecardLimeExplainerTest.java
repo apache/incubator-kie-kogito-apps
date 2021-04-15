@@ -112,7 +112,7 @@ class PmmlCompoundScorecardLimeExplainerTest {
 
             String decision = "score";
             List<PredictionInput> inputs = new ArrayList<>();
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 100; i++) {
                 List<Feature> fs = new ArrayList<>();
                 fs.add(FeatureFactory.newNumericalFeature("input1", i + 1));
                 fs.add(FeatureFactory.newCategoricalFeature("input2", categoryTwo[i % categoryTwo.length]));
@@ -120,9 +120,9 @@ class PmmlCompoundScorecardLimeExplainerTest {
             }
             DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
             int k = 1;
-            int chunkSize = 2;
+            int chunkSize = 5;
             double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-            AssertionsForClassTypes.assertThat(f1).isBetween(0d, 1d);
+            AssertionsForClassTypes.assertThat(f1).isBetween(0.3d, 1d);
         }
     }
 }

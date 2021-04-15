@@ -101,7 +101,7 @@ class DummyDmnModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 5;
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(f1).isBetween(0d, 1d);
+        assertThat(f1).isBetween(0.3d, 1d);
     }
 
     @ParameterizedTest
@@ -152,7 +152,7 @@ class DummyDmnModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 5;
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(f1).isBetween(0d, 1d);
+        assertThat(f1).isBetween(0.3d, 1d);
     }
 
     @ParameterizedTest
@@ -219,6 +219,6 @@ class DummyDmnModelsLimeExplainerTest {
         int k = 2;
         int chunkSize = 5;
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        assertThat(f1).isBetween(0d, 1d);
+        assertThat(f1).isBetween(0.3d, 1d);
     }
 }
