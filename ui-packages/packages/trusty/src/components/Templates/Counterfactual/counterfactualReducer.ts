@@ -1,4 +1,5 @@
 import {
+  CFAnalysisResetType,
   CFGoal,
   CFResult,
   CFSearchDomain,
@@ -65,7 +66,7 @@ export const cfInitialState: CFState = {
     }
   ],
   status: {
-    isDisabled: false,
+    isDisabled: true,
     executionStatus: 'NOT_STARTED',
     lastExecutionTime: null
   },
@@ -104,6 +105,12 @@ export type cfActions =
       type: 'setResults';
       payload: {
         results: CFResult[];
+      };
+    }
+  | {
+      type: 'resetAnalysis';
+      payload: {
+        resetType: CFAnalysisResetType;
       };
     };
 
@@ -154,6 +161,14 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
         ...state,
         status: { ...state.status, ...action.payload }
       };
+    case 'resetAnalysis':
+      switch (action.payload.resetType) {
+        case 'NEW':
+          return cfInitialState;
+        case 'EDIT':
+          return { ...state, status: cfInitialState.status, results: [] };
+      }
+      break;
     default:
       throw new Error();
   }

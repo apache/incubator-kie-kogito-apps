@@ -1,16 +1,11 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import {
-  Button,
   Drawer,
   DrawerContent,
   DrawerContentBody,
   DrawerPanelContent,
   Flex,
   FlexItem,
-  Hint,
-  HintBody,
-  HintFooter,
-  HintTitle,
   PageSection,
   Stack,
   StackItem,
@@ -23,6 +18,7 @@ import CounterfactualOutcomesSelected from '../../Molecules/CounterfactualsOutco
 import { cfActions, cfInitialState, cfReducer } from './counterfactualReducer';
 import { ItemObject } from '../../../types';
 import './Counterfactual.scss';
+import CounterfactualHint from '../../Molecules/CounterfactualHint/CounterfactualHint';
 
 const Counterfactual = () => {
   const [state, dispatch] = useReducer(cfReducer, cfInitialState);
@@ -110,20 +106,9 @@ const Counterfactual = () => {
                       </FlexItem>
                     </Flex>
                   </StackItem>
-                  <StackItem>
-                    <Hint>
-                      <HintTitle>Create a counterfactual</HintTitle>
-                      <HintBody>
-                        Select a desired counterfactual Outcome; one or more
-                        Data Types, and modify the input constraints.
-                      </HintBody>
-                      <HintFooter>
-                        <Button variant="link" isInline>
-                          Select Outcome
-                        </Button>
-                      </HintFooter>
-                    </Hint>
-                  </StackItem>
+                  <CounterfactualHint
+                    isVisible={state.status.executionStatus === 'NOT_STARTED'}
+                  />
                   <StackItem>
                     <CounterfactualToolbar
                       status={state.status}
@@ -183,6 +168,8 @@ export interface CFStatus {
   executionStatus: 'RUN' | 'RUNNING' | 'NOT_STARTED';
   lastExecutionTime: null | string;
 }
+
+export type CFAnalysisResetType = 'NEW' | 'EDIT';
 
 const cfResultsdemo: CFResult[] = [
   [33, 44, 56, 43],

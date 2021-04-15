@@ -89,9 +89,11 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 
   useEffect(() => {
     setDisplayedResults(
-      results.map(result =>
-        result.slice(displayedResultsIndex, displayedResultsIndex + 2)
-      )
+      results.length
+        ? results.map(result =>
+            result.slice(displayedResultsIndex, displayedResultsIndex + 2)
+          )
+        : []
     );
   }, [results, displayedResultsIndex]);
 
@@ -147,8 +149,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                       aria-label="Next results"
                       className="cf-table__result-head__slider"
                       isDisabled={
+                        results[0] &&
                         results[0].length ===
-                        displayedResultsIndex + displayedResults[0].length
+                          displayedResultsIndex + displayedResults[0].length
                       }
                       onClick={() => slideResults('next')}
                     >

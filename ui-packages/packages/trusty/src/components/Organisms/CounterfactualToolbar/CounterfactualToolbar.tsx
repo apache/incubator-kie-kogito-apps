@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Button,
   ButtonVariant,
+  Modal,
+  ModalVariant,
   Progress,
   ProgressSize,
   Toolbar,
@@ -11,6 +13,7 @@ import {
 } from '@patternfly/react-core';
 import CounterfactualOutcomeSelection from '../CounterfactualOutcomeSelection/CounterfactualOutcomeSelection';
 import {
+  CFAnalysisResetType,
   CFDispatch,
   CFGoal,
   CFStatus
@@ -24,6 +27,10 @@ type CounterfactualToolbarProps = {
 const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
   const { goals, status } = props;
   const [isOutcomeSelectionOpen, setIsOutcomeSelectionOpen] = useState(false);
+  const [CFResetType, setCFResetType] = useState<CFAnalysisResetType>();
+  const [isConfirmNewCFDialogOpen, setIsConfirmNewCFDialogOpen] = useState(
+    false
+  );
   const dispatch = useContext(CFDispatch);
 
   const runTooltipRef = React.useRef();
@@ -41,6 +48,30 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
     });
   };
 
+  const handleNewCF = () => {
+    setIsConfirmNewCFDialogOpen(true);
+    setCFResetType('NEW');
+  };
+
+  const handleEditSearchDomain = () => {
+    setIsConfirmNewCFDialogOpen(true);
+    setCFResetType('EDIT');
+  };
+
+  const handleNewCFModalClose = () => {
+    setIsConfirmNewCFDialogOpen(false);
+    setCFResetType(undefined);
+  };
+
+  const setupNewCF = () => {
+    dispatch({ type: 'resetAnalysis', payload: { resetType: CFResetType } });
+    handleNewCFModalClose();
+  };
+
+  const handleCFReset = () => {
+    dispatch({ type: 'resetAnalysis', payload: { resetType: 'NEW' } });
+  };
+
   return (
     <>
       {isOutcomeSelectionOpen && (
@@ -50,7 +81,25 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
           goals={goals}
         />
       )}
-      <Toolbar id="toolbar">
+      <Modal
+        variant={ModalVariant.small}
+        titleIconVariant="warning"
+        title="Results will be cleared"
+        isOpen={isConfirmNewCFDialogOpen}
+        onClose={handleNewCFModalClose}
+        actions={[
+          <Button key="confirm" variant="primary" onClick={setupNewCF}>
+            Continue
+          </Button>,
+          <Button key="cancel" variant="link" onClick={handleNewCFModalClose}>
+            Cancel
+          </Button>
+        ]}
+      >
+        If you start a New Counterfactual analysis, or Edit the existing one,
+        any results will be cleared and cannot be retrieved.
+      </Modal>
+      <Toolbar id="toolbar" style={{ minHeight: 80 }}>
         <ToolbarContent>
           {status.executionStatus === 'NOT_STARTED' && (
             <>
@@ -85,9 +134,22 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
               </ToolbarItem>
               <ToolbarItem variant="separator" />
               <ToolbarItem>
-                <Button variant="link" isInline={true}>
-                  Reset
-                </Button>
+                <Tooltip
+                  content={
+                    <div>
+                      Clear selections and reset all selections to their initial
+                      state
+                    </div>
+                  }
+                >
+                  <Button
+                    variant="link"
+                    isInline={true}
+                    onClick={handleCFReset}
+                  >
+                    Reset
+                  </Button>
+                </Tooltip>
               </ToolbarItem>
             </>
           )}
@@ -97,13 +159,13 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                 <Button
                   variant={ButtonVariant.primary}
                   aria-label="New Counterfactual Analysis"
-                  onClick={handleRun}
+                  onClick={handleNewCF}
                 >
                   New Counterfactual
                 </Button>
               </ToolbarItem>
               <ToolbarItem>
-                <Button variant="secondary" onClick={toggleOutcomeSelection}>
+                <Button variant="secondary" onClick={handleEditSearchDomain}>
                   Edit Counterfactual
                 </Button>
               </ToolbarItem>
