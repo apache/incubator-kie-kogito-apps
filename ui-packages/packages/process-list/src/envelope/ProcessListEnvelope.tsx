@@ -18,7 +18,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { EnvelopeBus } from '@kogito-tooling/envelope-bus/dist/api';
 import { ProcessListChannelApi, ProcessListEnvelopeApi } from '../api';
-import { Envelope } from '@kogito-tooling/envelope';
+import { Envelope, EnvelopeDivConfig } from '@kogito-tooling/envelope';
 import { ProcessListEnvelopeContext } from './ProcessListEnvelopeContext';
 import {
   ProcessListEnvelopeView,
@@ -33,7 +33,11 @@ import { ProcessListEnvelopeApiImpl } from './ProcessListEnvelopeApiImpl';
  * @param args.bus: The implementation of a `bus` that knows how to send messages to the Channel.
  *
  */
-export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
+export function init(args: {
+  config: EnvelopeDivConfig;
+  container: HTMLDivElement;
+  bus: EnvelopeBus;
+}) {
   /**
    * Creates a new generic Envelope, typed with the right interfaces.
    */
@@ -42,7 +46,7 @@ export function init(args: { container: HTMLElement; bus: EnvelopeBus }) {
     ProcessListChannelApi,
     ProcessListEnvelopeViewApi,
     ProcessListEnvelopeContext
-  >(args.bus);
+  >(args.bus, args.config);
 
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<ProcessListEnvelopeViewApi>();

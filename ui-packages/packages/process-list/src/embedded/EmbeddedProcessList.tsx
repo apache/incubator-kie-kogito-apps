@@ -24,10 +24,12 @@ import {
   ProcessListDriver
 } from '../api';
 import { ProcessListChannelApiImpl } from './ProcessListChannelApiImpl';
+import { ContainerType } from '@kogito-tooling/envelope/dist/api';
+import { init } from '../envelope';
+import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
 
 export interface Props {
   targetOrigin: string;
-  envelopePath: string;
   driver: ProcessListDriver;
 }
 
@@ -38,8 +40,25 @@ export const EmbeddedProcessList = React.forwardRef<ProcessListApi, Props>(
         envelopeServer: EnvelopeServer<
           ProcessListChannelApi,
           ProcessListEnvelopeApi
-        >
+        >,
+        container: () => HTMLDivElement
       ) => {
+        init({
+          config: {
+            containerType: ContainerType.DIV,
+            envelopeId: envelopeServer.id
+          },
+          container: container(),
+          bus: {
+            postMessage<D, Type>(
+              message: EnvelopeBusMessage<D, Type>,
+              targetOrigin?: string,
+              transfer?: any
+            ) {
+              window.parent.postMessage(message, '*', transfer);
+            }
+          }
+        });
         return envelopeServer.envelopeApi.requests.processList__init({
           origin: envelopeServer.origin,
           envelopeServerId: envelopeServer.id
@@ -61,10 +80,10 @@ export const EmbeddedProcessList = React.forwardRef<ProcessListApi, Props>(
     const EmbeddedEnvelope = useMemo(() => {
       return EmbeddedEnvelopeFactory({
         api: new ProcessListChannelApiImpl(props.driver),
-        envelopePath: props.envelopePath,
         origin: props.targetOrigin,
         refDelegate,
-        pollInit
+        pollInit,
+        config: { containerType: ContainerType.DIV }
       });
     }, []);
 

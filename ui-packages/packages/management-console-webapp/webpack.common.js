@@ -7,8 +7,7 @@ const BG_IMAGES_DIRNAME = 'bgimages';
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src', 'index.tsx'),
-    'envelope/process-list': './src/envelope/process-list.ts'
+    app: path.resolve(__dirname, 'src', 'index.tsx')
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -21,12 +20,7 @@ module.exports = {
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Management Console',
       TEST_USER_SYSTEM_ENABLED: false
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: "./envelope", to: "./envelope" }
-      ],
-    }),
+    })
   ],
   module: {
     rules: [

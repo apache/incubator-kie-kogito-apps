@@ -778,6 +778,8 @@ exports[`ProcessListTable test initial render with data 1`] = `
                           >
                             <Button
                               component="a"
+                              data-ouia-component-type="endpoint-link"
+                              data-ouia-safe={true}
                               href="http://localhost:4000"
                               isInline={true}
                               target="_blank"
@@ -1211,6 +1213,8 @@ exports[`ProcessListTable test initial render with data 1`] = `
                           >
                             <Button
                               component="a"
+                              data-ouia-component-type="endpoint-link"
+                              data-ouia-safe={true}
                               href="http://localhost:4000"
                               isInline={true}
                               target="_blank"

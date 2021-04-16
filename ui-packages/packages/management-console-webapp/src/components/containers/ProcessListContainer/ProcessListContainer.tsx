@@ -26,7 +26,6 @@ const ProcessListContainer: React.FC<OUIAProps> = () => {
     <EmbeddedProcessList
       driver={gatewayApi}
       targetOrigin={window.location.origin}
-      envelopePath={'/envelope/process-list.html'}
     />
   );
 };

@@ -21,27 +21,10 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
         },
       }
     }
-    envelopePath="/envelope/process-list.html"
     targetOrigin="http://localhost"
   >
     <ForwardRef>
-      <iframe
-        src="/envelope/process-list.html"
-        style={
-          Object {
-            "border": "none",
-            "display": "flex",
-            "flex": 1,
-            "flexDirection": "column",
-            "height": "100%",
-            "margin": 0,
-            "overflow": "hidden",
-            "padding": 0,
-            "width": "100%",
-          }
-        }
-        title="X"
-      />
+      <div />
     </ForwardRef>
   </ForwardRef>
 </ProcessListContainer>
