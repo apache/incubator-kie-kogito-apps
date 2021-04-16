@@ -6,6 +6,11 @@ changeAuthor = env.ghprbPullAuthorLogin ?: CHANGE_AUTHOR
 changeBranch = env.ghprbSourceBranch ?: CHANGE_BRANCH
 changeTarget = env.ghprbTargetBranch ?: CHANGE_TARGET
 
+quarkusRepo = 'quarkus'
+kogitoRuntimesRepo = 'kogito-runtimes'
+optaplannerRepo = 'optaplanner'
+kogitoAppsRepo = 'kogito-apps'
+
 pipeline {
     agent {
         label 'kie-rhel7 && kie-mem16g'
@@ -28,9 +33,9 @@ pipeline {
                 sh 'export XAUTHORITY=$HOME/.Xauthority'
                 sh 'chmod 600 $HOME/.vnc/passwd'
 
-                checkoutKogitoRepo('kogito-runtimes')
+                checkoutKogitoRepo(kogitoRuntimesRepo)
                 checkoutOptaplannerRepo()
-                checkoutKogitoRepo('kogito-apps')
+                checkoutKogitoRepo(kogitoAppsRepo)
             }
         }
         stage('Build quarkus') {
@@ -40,68 +45,55 @@ pipeline {
             steps {
                 script {
                     checkoutQuarkusRepo()
-                    getMavenCommand('quarkus', false)
-                        .withProperty('quickly')
-                        .run('clean install')
+                    runQuickBuild(quarkusRepo)
                 }
             }
         }
         stage('Build Runtimes') {
             steps {
                 script {
-                    getMavenCommand('kogito-runtimes')
-                        .skipTests(true)
-                        .withProperty('skipITs', true)
-                        .run('clean install')
+                    runQuickBuild(kogitoRuntimesRepo)
                 }
             }
         }
         stage('Build OptaPlanner') {
             steps {
                 script {
-                    getMavenCommand('optaplanner')
-                        .withProperty('quickly')
-                        .run('clean install')
+                    runQuickBuild(optaplannerRepo)
                 }
             }
         }
-        stage('Build Apps') {
+        stage('Apps Build&Test') {
             steps {
                 script {
-                    mvnCmd = getMavenCommand('kogito-apps', true, true)
                     if (isNormalPRCheck()) {
-                        mvnCmd.withProperty('validate-formatting')
-                            .withProfiles(['run-code-coverage'])
+                        runUnitTests({ mvnCmd -> mvnCmd.withProperty('validate-formatting').withProfiles(['run-code-coverage']) })
+                        runSonarcloudAnalysis()
                     } else {
-                        mvnCmd.withProperty('skipUI')
+                        runUnitTests()
                     }
-                    mvnCmd.run('clean install')
                 }
             }
             post {
                 always {
                     script {
-                        archiveArtifacts artifacts: '**/target/*-runner.jar,**/target/*-runner', fingerprint: true
-                        junit '**/target/surefire-reports/**/*.xml,**/target/failsafe-reports/**/*.xml'
-                    }
-                }
-                cleanup {
-                    script {
-                        cleanContainers()
+                        archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
                     }
                 }
             }
         }
-        stage('Analyze Apps by SonarCloud') {
-            when {
-                expression { isNormalPRCheck() }
-            }
+
+        stage('Apps Integration tests') {
             steps {
                 script {
-                    getMavenCommand('kogito-apps')
-                        .withOptions(['-e', '-nsu'])
-                        .withProfiles(['sonarcloud-analysis'])
-                        .run('validate')
+                    runIntegrationTests(kogitoAppsRepo)
+                }
+            }
+            post {
+                always {
+                    script {
+                        archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
+                    }
                 }
             }
         }
@@ -170,9 +162,14 @@ String getTargetBranch(Integer addToMajor) {
     return targetBranch
 }
 
-MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion=true, boolean canNative = false) {
-    mvnCmd = new MavenCommand(this, ['-fae'])
+void checkoutQuarkusRepo() {
+    checkoutRepo(quarkusRepo, 'quarkusio', getQuarkusBranch())
+}
+
+MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion = true, boolean canNative = true) {
+    def mvnCmd = new MavenCommand(this, ['-fae'])
                 .withSettingsXmlId('kogito_release_settings')
+                .withSnapshotsDisabledInSettings()
                 .withProperty('java.net.preferIPv4Stack', true)
                 .inDirectory(directory)
     if (addQuarkusVersion && getQuarkusBranch()) {
@@ -185,6 +182,10 @@ MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion=true, b
             .withProperty('quarkus.profile', 'native') // Added due to https://github.com/quarkusio/quarkus/issues/13341
     }
     return mvnCmd
+}
+
+void saveReports() {
+    junit '**/**/junit.xml, **/target/surefire-reports/**/*.xml,**/target/failsafe-reports/**/*.xml'
 }
 
 void cleanContainers() {
@@ -221,4 +222,58 @@ boolean isUpstreamOptaplannerProject() {
 
 Integer getTimeoutValue() {
     return isNative() ? 360 : 180
+}
+
+void runQuickBuild(String project) {
+    getMavenCommand(project, false, false)
+            .withProperty('quickly')
+            .run('clean install')
+}
+
+void runUnitTests(Closure alterMvnCmd = null) {
+    def mvnCmd = getMavenCommand(kogitoAppsRepo)
+                    .withProperty('quickTests')
+
+    if (alterMvnCmd) {
+        alterMvnCmd(mvnCmd)
+    }
+
+    runMavenTests(mvnCmd, 'clean install')
+}
+
+void runSonarcloudAnalysis(Closure alterMvnCmd = null) {
+    def mvnCmd = getMavenCommand(kogitoAppsRepo)
+        .withOptions(['-e', '-nsu'])
+        .withProfiles(['sonarcloud-analysis'])
+
+    if (alterMvnCmd) {
+        alterMvnCmd(mvnCmd)
+    }
+
+    mvnCmd.run('validate')
+}
+
+void runIntegrationTests(List profiles=[], Closure alterMvnCmd = null) {
+    String profileSuffix = profiles ? "-${profiles.join('-')}" : ''
+    String itFolder = "${kogitoAppsRepo}-it${profileSuffix}"
+    sh "cp -r ${kogitoAppsRepo} ${itFolder}"
+    
+    def mvnCmd = getMavenCommand(itFolder)
+
+    if (alterMvnCmd) {
+        alterMvnCmd(mvnCmd)
+    }
+
+    runMavenTests(mvnCmd.withProfiles(profiles), 'verify')
+}
+
+void runMavenTests(MavenCommand mvnCmd, String mvnRunCmd) {
+    try {
+        mvnCmd.run(mvnRunCmd)
+    } catch (err) {
+        throw err
+    } finally {
+        saveReports()
+        cleanContainers()
+    }
 }
