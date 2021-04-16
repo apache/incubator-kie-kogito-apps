@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
@@ -39,6 +40,7 @@ import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled
 class LimeStabilityTest {
 
     static final double TOP_FEATURE_THRESHOLD = 0.9;
