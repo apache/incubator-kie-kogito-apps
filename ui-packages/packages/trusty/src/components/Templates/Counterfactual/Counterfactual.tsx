@@ -147,16 +147,18 @@ export interface CFSearchDomain {
   isFixed: boolean;
   name: string;
   typeRef: 'number' | 'string' | 'boolean';
-  domain?:
-    | {
-        type: 'numerical';
-        lowerBound?: number;
-        upperBound?: number;
-      }
-    | {
-        type: 'categorical';
-        categories: string[];
-      };
+  domain?: CFNumericalDomain | CFCategoricalDomain;
+}
+
+export interface CFNumericalDomain {
+  type: 'numerical';
+  lowerBound?: number;
+  upperBound?: number;
+}
+
+export interface CFCategoricalDomain {
+  type: 'categorical';
+  categories: string[];
 }
 
 export interface CFSearchInput extends CFSearchDomain {

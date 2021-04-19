@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ActionList,
   ActionListItem,
+  Alert,
   Button,
   DescriptionList,
   DescriptionListDescription,
@@ -23,6 +24,7 @@ import {
 } from '@patternfly/react-core';
 import {
   CFDispatch,
+  CFNumericalDomain,
   CFSearchInput
 } from '../../Templates/Counterfactual/Counterfactual';
 
@@ -37,30 +39,70 @@ const CounterfactualInputDomainEdit = (
 ) => {
   const dispatch = useContext(CFDispatch);
   const { input, inputIndex, onClose } = props;
-  const [min, setMin] = useState(
-    input.domain && input.domain.type === 'numerical'
-      ? input.domain.lowerBound
-      : undefined
-  );
-  const [max, setMax] = useState(
-    input.domain && input.domain.type === 'numerical'
-      ? input.domain.upperBound
-      : undefined
-  );
-
-  const handleMinChange = value => {
-    setMin(Number(value));
-  };
-  const handleMaxChange = value => {
-    setMax(Number(value));
-  };
+  const [inputDomain, setInputDomain] = useState(input.domain);
+  const [validation, setValidation] = useState({ isValid: true, message: '' });
 
   const handleApply = () => {
-    dispatch({
-      type: 'setInputNumericDomain',
-      payload: { inputIndex, range: { min, max } }
-    });
-    onClose();
+    const updatedValidation = validateDomain(inputDomain);
+    if (updatedValidation.isValid) {
+      dispatch({
+        type: 'setInputDomain',
+        payload: { inputIndex, domain: inputDomain }
+      });
+      onClose();
+    }
+    setValidation(updatedValidation);
+  };
+
+  const onNumericDomainUpdate = (
+    min: number | undefined,
+    max: number | undefined
+  ) => {
+    let updatedDomain = inputDomain
+      ? ({ ...inputDomain } as CFNumericalDomain)
+      : ({ type: 'numerical' } as CFNumericalDomain);
+    if (typeof min === 'number') {
+      updatedDomain = { ...updatedDomain, lowerBound: min };
+    } else {
+      delete updatedDomain.lowerBound;
+    }
+    if (typeof max === 'number') {
+      updatedDomain = { ...updatedDomain, upperBound: max };
+    } else {
+      delete updatedDomain.upperBound;
+    }
+    if (typeof min !== 'number' && typeof max !== 'number') {
+      updatedDomain = null;
+    }
+    setInputDomain(updatedDomain);
+  };
+
+  const validateDomain = (domain: CFSearchInput['domain']) => {
+    if (domain && domain.type === 'numerical') {
+      return validateNumericDomain(domain);
+    } else {
+      return { isValid: true, message: '' };
+    }
+  };
+
+  const validateNumericDomain = (numericDomain: CFNumericalDomain) => {
+    const result = { isValid: true, message: '' };
+
+    if (
+      (numericDomain.lowerBound === undefined &&
+        numericDomain.upperBound !== undefined) ||
+      (numericDomain.upperBound === undefined &&
+        numericDomain.lowerBound !== undefined)
+    ) {
+      result.isValid = false;
+      result.message = 'Please provide both min and max values';
+    }
+    if (numericDomain.lowerBound > numericDomain.upperBound) {
+      result.isValid = false;
+      result.message = 'Minimum value cannot be higher than maximum value';
+    }
+
+    return result;
   };
 
   return (
@@ -108,34 +150,11 @@ const CounterfactualInputDomainEdit = (
             </Title>
           </StackItem>
           <StackItem>
-            <Form>
-              <Split hasGutter={true}>
-                <SplitItem>
-                  <FormGroup label="Minimum Value" isRequired fieldId="min">
-                    <TextInput
-                      isRequired
-                      type="number"
-                      id="min"
-                      name="min"
-                      value={min || ''}
-                      onChange={handleMinChange}
-                    />
-                  </FormGroup>
-                </SplitItem>
-                <SplitItem>
-                  <FormGroup label="Maximum Value" isRequired fieldId="max">
-                    <TextInput
-                      isRequired
-                      type="number"
-                      id="max"
-                      name="max"
-                      value={max || ''}
-                      onChange={handleMaxChange}
-                    />
-                  </FormGroup>
-                </SplitItem>
-              </Split>
-            </Form>
+            <CounterfactualNumericalDomainEdit
+              inputDomain={inputDomain as CFNumericalDomain}
+              onUpdate={onNumericDomainUpdate}
+              validation={validation}
+            />
           </StackItem>
           <StackItem style={{ marginTop: 'var(--pf-global--spacer--md)' }}>
             <ActionList>
@@ -162,3 +181,73 @@ const CounterfactualInputDomainEdit = (
 };
 
 export default CounterfactualInputDomainEdit;
+
+type CounterfactualNumericalDomainEditProps = {
+  inputDomain: CFNumericalDomain;
+  onUpdate: (min: number | undefined, max: number | undefined) => void;
+  validation: CFConstraintValidation;
+};
+
+const CounterfactualNumericalDomainEdit = (
+  props: CounterfactualNumericalDomainEditProps
+) => {
+  const { inputDomain, onUpdate, validation } = props;
+  const [min, setMin] = useState(
+    inputDomain ? inputDomain.lowerBound : undefined
+  );
+  const [max, setMax] = useState(
+    inputDomain ? inputDomain.upperBound : undefined
+  );
+
+  const handleMinChange = value => {
+    onUpdate(value === '' ? undefined : Number(value), max);
+  };
+
+  const handleMaxChange = value => {
+    onUpdate(min, value === '' ? undefined : Number(value));
+  };
+
+  useEffect(() => {
+    setMin(inputDomain ? inputDomain.lowerBound : undefined);
+    setMax(inputDomain ? inputDomain.upperBound : undefined);
+  }, [inputDomain]);
+
+  return (
+    <Form>
+      {!validation.isValid && (
+        <Alert variant="danger" isInline title={validation.message} />
+      )}
+      <Split hasGutter={true}>
+        <SplitItem>
+          <FormGroup label="Minimum Value" isRequired fieldId="min">
+            <TextInput
+              isRequired
+              type="number"
+              id="min"
+              name="min"
+              value={min !== undefined ? min : ''}
+              onChange={handleMinChange}
+            />
+          </FormGroup>
+        </SplitItem>
+        <SplitItem>
+          <FormGroup label="Maximum Value" isRequired fieldId="max">
+            <TextInput
+              isRequired
+              type="number"
+              id="max"
+              name="max"
+              value={max !== undefined ? max : ''}
+              onChange={handleMaxChange}
+            />
+          </FormGroup>
+        </SplitItem>
+      </Split>
+    </Form>
+  );
+};
+
+interface CFConstraintValidation {
+  isValid: boolean;
+  message: string;
+}

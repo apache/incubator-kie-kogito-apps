@@ -2,7 +2,6 @@ import {
   CFAnalysisResetType,
   CFGoal,
   CFResult,
-  CFSearchDomain,
   CFSearchInput,
   CFStatus
 } from './Counterfactual';
@@ -59,9 +58,9 @@ export const cfInitialState: CFState = {
       isFixed: true
     },
     {
-      name: 'Monthly Insurance Payment',
-      typeRef: 'number',
-      value: 0.15,
+      name: 'Loan Type',
+      typeRef: 'string',
+      value: 'ALFA',
       isFixed: true
     }
   ],
@@ -88,13 +87,10 @@ export type cfActions =
       };
     }
   | {
-      type: 'setInputNumericDomain';
+      type: 'setInputDomain';
       payload: {
         inputIndex: number;
-        range: {
-          min?: number;
-          max?: number;
-        };
+        domain: CFSearchInput['domain'];
       };
     }
   | {
@@ -135,18 +131,14 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
           isFixed: !action.payload.selected
         }))
       };
-    case 'setInputNumericDomain':
+    case 'setInputDomain':
       return {
         ...state,
         searchDomains: state.searchDomains.map((input, index) =>
           index === action.payload.inputIndex
             ? {
                 ...input,
-                domain: {
-                  type: 'numerical',
-                  lowerBound: action.payload.range.min,
-                  upperBound: action.payload.range.max
-                } as CFSearchDomain['domain']
+                domain: action.payload.domain
               }
             : input
         )
