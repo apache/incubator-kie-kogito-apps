@@ -22,43 +22,6 @@ exports[`ProcessListPage tests Snapshot 1`] = `
       <section
         className="pf-c-page__main-section pf-m-light"
       >
-        <PageTitle
-          title="Process List"
-        >
-          <Flex
-            data-ouia-component-type="page-title"
-            data-ouia-safe={true}
-          >
-            <div
-              className="pf-l-flex"
-              data-ouia-component-type="page-title"
-              data-ouia-safe={true}
-            >
-              <FlexItem
-                spacer={
-                  Object {
-                    "default": "spacerSm",
-                  }
-                }
-              >
-                <div
-                  className="pf-m-spacer-sm"
-                >
-                  <Title
-                    headingLevel="h1"
-                    size="4xl"
-                  >
-                    <h1
-                      className="pf-c-title pf-m-4xl"
-                    >
-                      Process List
-                    </h1>
-                  </Title>
-                </div>
-              </FlexItem>
-            </div>
-          </Flex>
-        </PageTitle>
         <Breadcrumb>
           <nav
             aria-label="Breadcrumb"
@@ -136,6 +99,43 @@ exports[`ProcessListPage tests Snapshot 1`] = `
             </ol>
           </nav>
         </Breadcrumb>
+        <PageTitle
+          title="Process List"
+        >
+          <Flex
+            data-ouia-component-type="page-title"
+            data-ouia-safe={true}
+          >
+            <div
+              className="pf-l-flex"
+              data-ouia-component-type="page-title"
+              data-ouia-safe={true}
+            >
+              <FlexItem
+                spacer={
+                  Object {
+                    "default": "spacerSm",
+                  }
+                }
+              >
+                <div
+                  className="pf-m-spacer-sm"
+                >
+                  <Title
+                    headingLevel="h1"
+                    size="4xl"
+                  >
+                    <h1
+                      className="pf-c-title pf-m-4xl"
+                    >
+                      Process List
+                    </h1>
+                  </Title>
+                </div>
+              </FlexItem>
+            </div>
+          </Flex>
+        </PageTitle>
       </section>
     </PageSection>
   </PageSectionHeader>

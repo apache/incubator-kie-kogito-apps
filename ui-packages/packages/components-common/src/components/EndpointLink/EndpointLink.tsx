@@ -30,25 +30,23 @@ const EndpointLink: React.FC<IOwnProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  return (
-    <>
-      {serviceUrl !== null ? (
-        <Button
-          component={'a'}
-          variant={'link'}
-          target={'_blank'}
-          href={`${serviceUrl}`}
-          isInline={true}
-          {...componentOuiaProps(ouiaId, 'endpoint-link', ouiaSafe)}
-        >
-          {isLinkShown ? serviceUrl : linkLabel || 'Endpoint'}
-          {<ExternalLinkAltIcon className="pf-u-ml-xs" />}
-        </Button>
-      ) : (
-        ''
-      )}
-    </>
-  );
+  if (serviceUrl) {
+    return (
+      <Button
+        component={'a'}
+        variant={'link'}
+        target={'_blank'}
+        href={`${serviceUrl}`}
+        isInline={true}
+        {...componentOuiaProps(ouiaId, 'endpoint-link', ouiaSafe)}
+      >
+        {isLinkShown ? serviceUrl : linkLabel || 'Endpoint'}
+        {<ExternalLinkAltIcon className="pf-u-ml-xs" />}
+      </Button>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default EndpointLink;
