@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  ProcessInstance,
-  ProcessInstanceFilter,
-  SortBy
-} from '@kogito-apps/process-list';
+import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
 
 export interface ProcessListGatewayApi {

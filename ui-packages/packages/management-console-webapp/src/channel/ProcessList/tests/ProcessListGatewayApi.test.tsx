@@ -16,11 +16,13 @@
 
 import {
   OrderBy,
-  ProcessInstance,
   ProcessInstanceFilter,
-  ProcessInstanceState,
   SortBy
 } from '@kogito-apps/process-list';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 import {
   ProcessListGatewayApi,
   ProcessListGatewayApiImpl

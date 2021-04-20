@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ProcessInstance, ProcessInstanceState } from '../../../../types';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 
 export const processInstances: ProcessInstance[] = [
   {

@@ -19,7 +19,10 @@ import {
   RequestPropertyNames
 } from '@kogito-tooling/envelope-bus/dist/api';
 import { ProcessListChannelApi, ProcessListEnvelopeApi } from '../../../api';
-import { ProcessInstance, ProcessInstanceState } from '../../../types';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
 import { ProcessListEnvelopeViewApi } from '../../ProcessListEnvelopeView';
 

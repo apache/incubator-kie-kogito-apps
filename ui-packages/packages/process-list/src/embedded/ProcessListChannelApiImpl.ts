@@ -20,7 +20,7 @@ import {
   ProcessListDriver,
   SortBy
 } from '../api';
-import { ProcessInstance } from '../types';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 
 export class ProcessListChannelApiImpl implements ProcessListChannelApi {
   constructor(private readonly driver: ProcessListDriver) {}

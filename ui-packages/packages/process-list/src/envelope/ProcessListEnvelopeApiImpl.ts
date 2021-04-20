@@ -20,7 +20,6 @@ import {
   Association,
   ProcessListChannelApi,
   ProcessListEnvelopeApi
-  //   ProcessListInitArgs
 } from '../api';
 import { ProcessListEnvelopeContext } from './ProcessListEnvelopeContext';
 export class ProcessListEnvelopeApiImpl implements ProcessListEnvelopeApi {

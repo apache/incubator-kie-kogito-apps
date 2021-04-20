@@ -15,7 +15,7 @@
  */
 
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import { ProcessInstance } from '../types';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import {
   ProcessInstanceFilter,
   ProcessListChannelApi,

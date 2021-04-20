@@ -27,7 +27,7 @@ import {
   ProcessListChannelApi,
   SortBy
 } from '../../api';
-import { ProcessInstanceState } from '../../types';
+import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 
 let channelApi: MessageBusClientApi<ProcessListChannelApi>;
 let requests: Pick<

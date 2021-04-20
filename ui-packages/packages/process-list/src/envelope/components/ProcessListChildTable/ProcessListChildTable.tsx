@@ -17,7 +17,7 @@
 import { ProcessListDriver } from '../../../api';
 import { IRow, Table, TableBody, TableHeader } from '@patternfly/react-table';
 import React, { useEffect, useState } from 'react';
-import { ProcessInstance } from '../../../types/types';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import _ from 'lodash';
 import {
   ServerErrors,

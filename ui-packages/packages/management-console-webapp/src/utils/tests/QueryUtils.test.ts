@@ -1,4 +1,4 @@
-import { ProcessInstanceState } from '@kogito-apps/process-list';
+import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 import { buildProcessListWhereArgument } from '../QueryUtils';
 
 describe('QueryUtils test', () => {

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ProcessInstance, ProcessInstanceState } from '../../../types/types';
 import React from 'react';
 import {
   OnRunningIcon,
@@ -22,7 +21,10 @@ import {
   PausedIcon,
   ErrorCircleOIcon
 } from '@patternfly/react-icons';
-
+import {
+  ProcessInstanceState,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 export const ProcessInstanceIconCreator = (
   state: ProcessInstanceState
 ): JSX.Element => {

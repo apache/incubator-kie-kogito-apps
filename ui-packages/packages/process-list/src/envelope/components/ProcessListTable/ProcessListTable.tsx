@@ -25,7 +25,7 @@ import {
   ISortBy
 } from '@patternfly/react-table';
 import _ from 'lodash';
-import { ProcessInstance } from '../../../types/types';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import ProcessListChildTable from '../ProcessListChildTable/ProcessListChildTable';
 import {
   ItemDescriptor,

@@ -16,7 +16,7 @@
 import React from 'react';
 import { getWrapper } from '@kogito-apps/components-common';
 import ProcessListToolbar from '../ProcessListToolbar';
-import { ProcessInstanceState } from '../../../../types';
+import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 import { act } from 'react-dom/test-utils';
 import {
   Select,

@@ -60,6 +60,9 @@ module.exports = {
           path.resolve('./src/static'),
           path.resolve(
             '../../node_modules/@kogito-apps/consoles-common/dist/src/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
           )
         ],
         use: {

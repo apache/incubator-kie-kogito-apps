@@ -19,7 +19,10 @@ import {
   ProcessListDriver
 } from '../../../api';
 import React, { useEffect, useState } from 'react';
-import { ProcessInstance, ProcessInstanceState } from '../../../types/types';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 import ProcessListTable from '../ProcessListTable/ProcessListTable';
 import ProcessListToolbar from '../ProcessListToolbar/ProcessListToolbar';
 import {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ProcessInstance } from '../types';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import { ProcessInstanceFilter, SortBy } from './ProcessListEnvelopeApi';
 export interface ProcessListChannelApi {
   processList__initialLoad(

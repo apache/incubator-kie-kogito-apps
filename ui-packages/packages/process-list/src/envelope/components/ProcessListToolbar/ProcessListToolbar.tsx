@@ -31,7 +31,7 @@ import {
 } from '@patternfly/react-core';
 import { FilterIcon, SyncIcon } from '@patternfly/react-icons';
 import _ from 'lodash';
-import { ProcessInstanceState } from '../../../types/types';
+import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 import { ProcessInstanceFilter } from '../../../api';
 import '../styles.css';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';

@@ -17,7 +17,10 @@
 import { ProcessListChannelApiImpl } from '../ProcessListChannelApiImpl';
 import { OrderBy, ProcessListDriver } from '../../api';
 import { MockedProcessListDriver } from './utils/Mocks';
-import { ProcessInstance, ProcessInstanceState } from '../../types';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 
 const initialState = {
   filters: {

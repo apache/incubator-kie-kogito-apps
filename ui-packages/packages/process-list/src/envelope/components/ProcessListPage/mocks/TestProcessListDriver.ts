@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ProcessInstance } from '../../../../types/types';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import {
   ProcessInstanceFilter,
   ProcessListDriver,

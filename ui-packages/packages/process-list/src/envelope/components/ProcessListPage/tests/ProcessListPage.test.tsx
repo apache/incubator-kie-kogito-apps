@@ -21,7 +21,7 @@ import { processInstances } from '../mocks/Mocks';
 import wait from 'waait';
 import { SortByDirection } from '@patternfly/react-table';
 import { act } from 'react-dom/test-utils';
-import { ProcessInstanceState } from '../../../../types';
+import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 
 jest.mock('../../ProcessListTable/ProcessListTable');
 jest.mock('../../ProcessListToolbar/ProcessListToolbar');

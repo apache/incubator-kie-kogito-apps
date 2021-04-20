@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ProcessInstanceState, ProcessInstance } from '../../../../types/types';
+import {
+  ProcessInstanceState,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import {
   alterOrderByObj,
   getProcessInstanceDescription,

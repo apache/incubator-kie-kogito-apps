@@ -15,11 +15,8 @@
  */
 
 import { ApolloClient } from 'apollo-client';
-import {
-  SortBy,
-  ProcessInstance,
-  ProcessInstanceFilter
-} from '@kogito-apps/process-list';
+import { SortBy, ProcessInstanceFilter } from '@kogito-apps/process-list';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import { buildProcessListWhereArgument } from '../../utils/QueryUtils';
 
@@ -57,7 +54,8 @@ export class GraphQLProcessListQueries implements ProcessListQueries {
             offset: offset,
             limit: limit,
             orderBy: sortBy
-          }
+          },
+          fetchPolicy: 'network-only'
         })
         .then(value => {
           resolve(value.data.ProcessInstances);
