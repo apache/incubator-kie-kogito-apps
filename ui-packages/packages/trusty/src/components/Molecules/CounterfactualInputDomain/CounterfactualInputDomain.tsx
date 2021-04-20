@@ -17,6 +17,18 @@ const CounterfactualInputDomain = ({
         </span>
       );
       break;
+    case 'categorical':
+      domain = (
+        <span>
+          {input.domain.categories.map((category, index, list) => (
+            <span key={index}>
+              {category}
+              {index === list.length - 1 ? '' : ','}{' '}
+            </span>
+          ))}
+        </span>
+      );
+      break;
     default:
       domain = '';
   }

@@ -46,7 +46,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     results.map(result => result.slice(0, 2))
   );
 
-  const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState();
+  const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState<
+    boolean
+  >();
 
   useEffect(() => {
     setIsInputSelectionEnabled(status.executionStatus === 'NOT_STARTED');
