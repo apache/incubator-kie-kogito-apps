@@ -29,6 +29,7 @@ import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.LIMEPrediction;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -100,12 +101,13 @@ class LimeStabilityTest {
         assertStable(adaptiveVarianceLE, model, features);
     }
 
-    private void assertStable(LimeExplainer limeExplainer, PredictionProvider model, List<Feature> featureList) throws Exception {
+    private void assertStable(LimeExplainer limeExplainer, PredictionProvider model, List<Feature> featureList)
+            throws Exception {
         PredictionInput input = new PredictionInput(featureList);
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (PredictionOutput predictionOutput : predictionOutputs) {
-            Prediction prediction = new Prediction(input, predictionOutput);
+            Prediction prediction = new LIMEPrediction(input, predictionOutput);
             List<Saliency> saliencies = new LinkedList<>();
             for (int i = 0; i < 100; i++) {
                 Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
@@ -114,8 +116,10 @@ class LimeStabilityTest {
             }
             // check that the topmost important feature is stable
             List<String> names = new LinkedList<>();
-            saliencies.stream().map(s -> s.getPositiveFeatures(1)).filter(f -> !f.isEmpty()).forEach(f -> names.add(f.get(0).getFeature().getName()));
-            Map<String, Long> frequencyMap = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            saliencies.stream().map(s -> s.getPositiveFeatures(1)).filter(f -> !f.isEmpty())
+                    .forEach(f -> names.add(f.get(0).getFeature().getName()));
+            Map<String, Long> frequencyMap =
+                    names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
             boolean topFeature = false;
             for (Map.Entry<String, Long> entry : frequencyMap.entrySet()) {
                 if (entry.getValue() >= TOP_FEATURE_THRESHOLD) {
@@ -131,7 +135,8 @@ class LimeStabilityTest {
                 double v = ExplainabilityMetrics.impactScore(model, prediction, saliency.getTopFeatures(2));
                 impacts.add(v);
             }
-            Map<Double, Long> impactMap = impacts.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            Map<Double, Long> impactMap =
+                    impacts.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
             boolean topImpact = false;
             for (Map.Entry<Double, Long> entry : impactMap.entrySet()) {
                 if (entry.getValue() >= TOP_FEATURE_THRESHOLD) {

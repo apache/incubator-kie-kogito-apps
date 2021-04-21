@@ -31,6 +31,7 @@ import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.LIMEPrediction;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.Prediction;
@@ -151,7 +152,7 @@ class PartialDependencePlotExplainerTest {
             features.add(FeatureFactory.newFulltextFeature("text", text));
             PredictionInput predictionInput = new PredictionInput(features);
             PredictionOutput predictionOutput = model.predictAsync(List.of(predictionInput)).get().get(0);
-            predictions.add(new Prediction(predictionInput, predictionOutput));
+            predictions.add(new LIMEPrediction(predictionInput, predictionOutput));
         }
         List<PartialDependenceGraph> pdps = partialDependencePlotExplainer.explainFromPredictions(model, predictions);
         assertThat(pdps).isNotEmpty();

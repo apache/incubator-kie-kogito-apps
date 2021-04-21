@@ -32,6 +32,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
+import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.DataDomain;
 import org.kie.kogito.explainability.model.Feature;
@@ -42,6 +43,7 @@ import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -81,14 +83,13 @@ class CounterfactualExplainerTest {
         solverConfig.setRandomSeed(randomSeed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         final CounterfactualExplainer explainer = CounterfactualExplainer
-                .builder(goal, constraints, dataDomain)
+                .builder()
                 .withSolverConfig(solverConfig)
                 .build();
         final PredictionInput input = new PredictionInput(features);
-        PredictionOutput output = model.predictAsync(List.of(input))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
-                .get(0);
-        Prediction prediction = new Prediction(input, output);
+        PredictionOutput output = new PredictionOutput(goal);
+        PredictionFeatureDomain domain = new PredictionFeatureDomain(dataDomain.getFeatureDomains());
+        Prediction prediction = new CounterfactualPrediction(input, output, domain, constraints, null, null, null);
         return explainer.explainAsync(prediction, model)
                 .get(predictionTimeOut, predictionTimeUnit);
     }
@@ -117,16 +118,18 @@ class CounterfactualExplainerTest {
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
-                        .builder(goal, constraints, dataDomain)
+                        .builder()
                         .withSolverConfig(solverConfig)
                         .build();
 
-        PredictionInput input = new PredictionInput(features);
         PredictionProvider model = TestUtils.getSumSkipModel(0);
-        PredictionOutput output = model.predictAsync(List.of(input))
-                .get(predictionTimeOut, predictionTimeUnit)
-                .get(0);
-        Prediction prediction = new Prediction(input, output);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionOutput output = new PredictionOutput(goal);
+        Prediction prediction =
+                new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null,
+                        null, null);
+
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
@@ -610,18 +613,15 @@ class CounterfactualExplainerTest {
 
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
-                        .builder(goal, constraints, dataDomain)
+                        .builder()
                         .withSolverConfig(solverConfig)
-                        .withIntermediateConsumer(assertIntermediateCounterfactualNotNull)
-                        .withFinalConsumer(assertFinalCounterfactualNotNull)
                         .build();
 
         PredictionInput input = new PredictionInput(features);
         PredictionProvider model = TestUtils.getSumSkipModel(0);
-        PredictionOutput output = model.predictAsync(List.of(input))
-                .get(predictionTimeOut, predictionTimeUnit)
-                .get(0);
-        Prediction prediction = new Prediction(input, output);
+        PredictionOutput output = new PredictionOutput(goal);
+        Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
+                constraints, null, assertIntermediateCounterfactualNotNull, assertFinalCounterfactualNotNull);
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
