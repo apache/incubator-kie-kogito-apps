@@ -186,5 +186,6 @@ const cfResultsdemo: CFResult[] = [
   [12, 4, 3, 2],
   [1000, 1300, 1250, 1650],
   [500, 540, 420, 502],
-  ['ALFA', 'BETA', 'GAMMA', 'DELTA']
+  ['ALFA', 'BETA', 'GAMMA', 'DELTA'],
+  [true, true, true, true]
 ];

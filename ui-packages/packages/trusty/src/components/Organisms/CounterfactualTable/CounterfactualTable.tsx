@@ -84,6 +84,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     });
   };
 
+  const canAddConstraint = (input: CFSearchInput) => {
+    return input.typeRef !== 'boolean';
+  };
+
   useEffect(() => {
     setRows(inputs);
     setAreAllRowsSelected(inputs.find(input => input.isFixed) === undefined);
@@ -185,19 +189,21 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                 {row.name}
               </Td>
               <Td key={`${rowIndex}_2`} dataLabel={columns[1]}>
-                <Button
-                  variant={'link'}
-                  isInline={true}
-                  onClick={() => onOpenInputDomainEdit(row, rowIndex)}
-                  icon={!row.domain && <PlusCircleIcon />}
-                  isDisabled={row.isFixed || !isInputSelectionEnabled}
-                >
-                  {row.domain ? (
-                    <CounterfactualInputDomain input={row} />
-                  ) : (
-                    <>Constraint</>
-                  )}
-                </Button>
+                {canAddConstraint(row) && (
+                  <Button
+                    variant={'link'}
+                    isInline={true}
+                    onClick={() => onOpenInputDomainEdit(row, rowIndex)}
+                    icon={!row.domain && <PlusCircleIcon />}
+                    isDisabled={row.isFixed || !isInputSelectionEnabled}
+                  >
+                    {row.domain ? (
+                      <CounterfactualInputDomain input={row} />
+                    ) : (
+                      <>Constraint</>
+                    )}
+                  </Button>
+                )}
               </Td>
               <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>
                 {row.value}

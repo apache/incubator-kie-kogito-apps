@@ -30,6 +30,14 @@ export const cfInitialState: CFState = {
       value: 150,
       originalValue: 150,
       isFixed: true
+    },
+    {
+      id: '_4CSS8C35-4EB3-451E-874C-DB27A5A346W1',
+      name: 'Mortgage Category',
+      typeRef: 'string',
+      value: 'Product A',
+      originalValue: 'Product A',
+      isFixed: true
     }
   ],
   searchDomains: [
@@ -61,6 +69,12 @@ export const cfInitialState: CFState = {
       name: 'Loan Type',
       typeRef: 'string',
       value: 'ALFA',
+      isFixed: true
+    },
+    {
+      name: 'First Time Client',
+      typeRef: 'boolean',
+      value: 'true',
       isFixed: true
     }
   ],

@@ -56,14 +56,13 @@ const CounterfactualOutcomeSelection = (
           </Button>
         ]}
       >
-        <CounterfactualOutcomeEdit
-          goal={editingGoals[0]}
-          onUpdateGoal={updateGoal}
-        />
-        <CounterfactualOutcomeEdit
-          goal={editingGoals[1]}
-          onUpdateGoal={updateGoal}
-        />
+        {editingGoals.map((goal, index) => (
+          <CounterfactualOutcomeEdit
+            key={index}
+            goal={goal}
+            onUpdateGoal={updateGoal}
+          />
+        ))}
       </Modal>
     </>
   );

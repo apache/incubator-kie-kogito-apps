@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Checkbox, Switch, Touchspin } from '@patternfly/react-core';
+import { Checkbox, Switch, TextInput, Touchspin } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
 import { CFGoal } from '../../Templates/Counterfactual/Counterfactual';
 import './CounterfactualOutcomeEdit.scss';
@@ -39,6 +39,15 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
     case 'number':
       valueEdit = (
         <CounterfactualOutcomeNumber
+          goal={goal}
+          isDisabled={!isChecked}
+          onUpdateGoal={onUpdateGoal}
+        />
+      );
+      break;
+    case 'string':
+      valueEdit = (
+        <CounterfactualOutcomeString
           goal={goal}
           isDisabled={!isChecked}
           onUpdateGoal={onUpdateGoal}
@@ -137,6 +146,26 @@ const CounterfactualOutcomeNumber = (
       plusBtnAriaLabel="plus"
       isDisabled={isDisabled}
       widthChars={touchSpinWidth}
+    />
+  );
+};
+
+const CounterfactualOutcomeString = (
+  props: CounterfactualOutcomeValueProps
+) => {
+  const { goal, isDisabled, onUpdateGoal } = props;
+
+  const handleChange = (value: string) => {
+    onUpdateGoal({ ...goal, value });
+  };
+
+  return (
+    <TextInput
+      id={uuid()}
+      value={goal.value as string}
+      onChange={handleChange}
+      isDisabled={isDisabled}
+      style={{ width: 250 }}
     />
   );
 };

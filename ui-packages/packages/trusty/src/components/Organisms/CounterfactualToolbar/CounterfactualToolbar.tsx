@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Button,
   ButtonVariant,
@@ -32,6 +32,11 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
     false
   );
   const dispatch = useContext(CFDispatch);
+
+  const areOutcomesSelected = useMemo(
+    () => goals.filter(goal => !goal.isFixed).length > 0,
+    [goals]
+  );
 
   const runTooltipRef = React.useRef();
 
@@ -129,7 +134,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
               </ToolbarItem>
               <ToolbarItem>
                 <Button variant="secondary" onClick={toggleOutcomeSelection}>
-                  Select Outcome
+                  {areOutcomesSelected ? 'Edit Outcome' : 'Select Outcome'}
                 </Button>
               </ToolbarItem>
               <ToolbarItem variant="separator" />
