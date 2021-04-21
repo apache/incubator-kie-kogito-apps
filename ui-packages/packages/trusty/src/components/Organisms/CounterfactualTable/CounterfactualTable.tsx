@@ -214,7 +214,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                     key={`${rowIndex}_${index + 4}`}
                     dataLabel={'Counterfactual Result'}
                   >
-                    {value}
+                    {value.toString()}
                   </Td>
                 ))}
               {displayedResults.length === 0 &&

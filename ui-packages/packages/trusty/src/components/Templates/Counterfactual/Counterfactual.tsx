@@ -106,11 +106,7 @@ const Counterfactual = () => {
                         <CounterfactualOutcomesSelected goals={state.goals} />
                       </FlexItem>
                       {state.status.executionStatus === 'RUN' && (
-                        <FlexItem>
-                          <CounterfactualExecutionInfo
-                            results={state.results}
-                          />
-                        </FlexItem>
+                        <CounterfactualExecutionInfo results={state.results} />
                       )}
                     </Flex>
                   </StackItem>
