@@ -46,11 +46,11 @@ public class FeatureImportanceModel {
         this.featureName = featureName;
     }
 
-    public Double getScore() {
+    public Double getFeatureScore() {
         return featureScore;
     }
 
-    public void setScore(Double score) {
+    public void setFeatureScore(Double score) {
         this.featureScore = score;
     }
 }
