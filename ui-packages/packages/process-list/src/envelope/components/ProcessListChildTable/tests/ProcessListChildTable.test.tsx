@@ -19,7 +19,7 @@ import { act } from 'react-dom/test-utils';
 import TestProcessListDriver from '../../ProcessListPage/mocks/TestProcessListDriver';
 import { childProcessInstances } from '../mocks/Mocks';
 import ProcessListChildTable from '../ProcessListChildTable';
-
+Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };

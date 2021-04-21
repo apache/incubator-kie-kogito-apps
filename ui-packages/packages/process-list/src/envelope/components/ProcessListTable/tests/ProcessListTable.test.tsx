@@ -22,7 +22,7 @@ import ProcessListTable from '../ProcessListTable';
 import { Button } from '@patternfly/react-core';
 
 jest.mock('../../ProcessListChildTable/ProcessListChildTable');
-
+Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };

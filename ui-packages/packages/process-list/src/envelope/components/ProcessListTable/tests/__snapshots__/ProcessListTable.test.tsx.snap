@@ -905,7 +905,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
                             <time
                               dateTime={"2019-10-22T03:40:44.000Z"}
                             >
-                              a year ago
+                              8 months ago
                             </time>
                           </t>
                         </td>
@@ -969,7 +969,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
                               <time
                                 dateTime={"2019-10-22T03:40:44.000Z"}
                               >
-                                a year ago
+                                8 months ago
                               </time>
                             </t>
                           </span>
@@ -1340,7 +1340,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
                             <time
                               dateTime={"2019-10-22T03:40:44.000Z"}
                             >
-                              a year ago
+                              8 months ago
                             </time>
                           </t>
                         </td>
@@ -1404,7 +1404,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
                               <time
                                 dateTime={"2019-10-22T03:40:44.000Z"}
                               >
-                                a year ago
+                                8 months ago
                               </time>
                             </t>
                           </span>

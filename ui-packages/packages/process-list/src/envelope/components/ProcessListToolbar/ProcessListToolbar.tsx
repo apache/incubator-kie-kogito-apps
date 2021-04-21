@@ -35,11 +35,11 @@ import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 import { ProcessInstanceFilter } from '../../../api';
 import '../styles.css';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
+
 enum Category {
   STATUS = 'Status',
   BUSINESS_KEY = 'Business key'
 }
-
 interface ProcessListToolbarProps {
   filters: ProcessInstanceFilter;
   setFilters: React.Dispatch<React.SetStateAction<ProcessInstanceFilter>>;
@@ -104,6 +104,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
   };
 
   const onApplyFilter = () => {
+    setBusinessKeyInput('');
     const clonedBusinessKeyArray = [...filters.businessKey];
     if (
       businessKeyInput &&

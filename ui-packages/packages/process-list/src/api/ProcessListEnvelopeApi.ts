@@ -16,7 +16,7 @@
 export interface ProcessListEnvelopeApi {
   processList__init(association: Association);
 }
-// eslint-disable-next-line  @typescript-eslint/no-empty-interface
+
 export interface ProcessInstanceFilter {
   status: string[];
   businessKey?: string[];

@@ -49,6 +49,7 @@
       ${path.to.packages}/task-form/coverage/lcov.info,
       ${path.to.packages}/task-details/coverage/lcov.info,
       ${path.to.packages}/task-console-webapp/coverage/lcov.info
+      ${path.to.packages}/process-list/coverage/lcov.info
     </sonar.javascript.lcov.reportPaths>
   </properties>
   <build>
@@ -92,6 +93,9 @@
             </fileset>
             <fileset>
               <directory>packages/task-console-webapp/node_modules</directory>
+            </fileset>
+             <fileset>
+              <directory>packages/process-list/node_modules</directory>
             </fileset>
           </filesets>
         </configuration>

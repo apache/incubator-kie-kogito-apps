@@ -29,8 +29,9 @@ import { ProcessListEnvelopeApiImpl } from './ProcessListEnvelopeApiImpl';
 /**
  * Function that starts an Envelope application.
  *
- * @param args.container: The HTML element in which the Todo List View will render
+ * @param args.container: The HTML element in which the process list View will render
  * @param args.bus: The implementation of a `bus` that knows how to send messages to the Channel.
+ * @param args.config: The config which contains the container type and the envelope id.
  *
  */
 export function init(args: {
