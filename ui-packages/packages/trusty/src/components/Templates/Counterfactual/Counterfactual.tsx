@@ -19,6 +19,7 @@ import { cfActions, cfInitialState, cfReducer } from './counterfactualReducer';
 import { ItemObject } from '../../../types';
 import CounterfactualHint from '../../Molecules/CounterfactualHint/CounterfactualHint';
 import CounterfactualExecutionInfo from '../../Molecules/CounterfactualExecutionInfo/CounterfactualExecutionInfo';
+import CounterfactualSuccessMessage from '../../Molecules/CounterfactualSuccessMessage/CounterfactualSuccessMessage';
 import './Counterfactual.scss';
 
 const Counterfactual = () => {
@@ -113,6 +114,7 @@ const Counterfactual = () => {
                   <CounterfactualHint
                     isVisible={state.status.executionStatus === 'NOT_STARTED'}
                   />
+                  <CounterfactualSuccessMessage status={state.status} />
                   <StackItem>
                     <CounterfactualToolbar
                       status={state.status}
