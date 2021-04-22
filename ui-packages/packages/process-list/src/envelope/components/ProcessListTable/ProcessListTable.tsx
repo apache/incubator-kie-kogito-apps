@@ -56,7 +56,11 @@ interface ProcessListTableProps {
     }>
   >;
   driver: ProcessListDriver;
-  onSort: (event: any, index: number, direction: 'desc' | 'asc') => void;
+  onSort: (
+    event: React.SyntheticEvent<EventTarget>,
+    index: number,
+    direction: 'desc' | 'asc'
+  ) => void;
   sortBy: ISortBy;
 }
 
@@ -133,7 +137,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     }
   };
 
-  const onToggle = (pairIndex: number, pair: any): void => {
+  const onToggle = (pairIndex: number): void => {
     setExpanded({
       ...expanded,
       [pairIndex]: !expanded[pairIndex]
@@ -186,7 +190,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
                   expand={{
                     rowIndex: pairIndex,
                     isExpanded: expanded[pairIndex],
-                    onToggle: event => onToggle(pairIndex, pair)
+                    onToggle: () => onToggle(pairIndex)
                   }}
                 />
                 {pair.parent.map((cell, cellIndex) => (

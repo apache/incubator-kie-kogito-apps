@@ -75,7 +75,7 @@ describe('ProcessListChildTable test', () => {
       driver,
       parentProcessId: 'e4448857-fa0c-403b-ad69-f0a353458b9d'
     };
-    driverGetChildQueryMock.mockImplementation(args => {
+    driverGetChildQueryMock.mockImplementation(() => {
       throw new Error('404 error');
     });
     let wrapper;
@@ -101,7 +101,7 @@ describe('ProcessListChildTable test', () => {
       driver,
       parentProcessId: 'e4448857-fa0c-403b-ad69-f0a353458b9d'
     };
-    driverGetChildQueryMock.mockImplementation(args => {
+    driverGetChildQueryMock.mockImplementation(() => {
       return Promise.resolve([]);
     });
     let wrapper;

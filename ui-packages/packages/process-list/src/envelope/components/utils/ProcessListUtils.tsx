@@ -75,7 +75,11 @@ export const ProcessInstanceIconCreator = (
 
 export const getProcessInstanceDescription = (
   processInstance: ProcessInstance
-) => {
+): {
+  id: string;
+  name: string;
+  description: string;
+} => {
   return {
     id: processInstance.id,
     name: processInstance.processName,
@@ -83,7 +87,9 @@ export const getProcessInstanceDescription = (
   };
 };
 
-export const alterOrderByObj = (orderByObj): any => {
+export const alterOrderByObj = (orderByObj: {
+  [key: string]: string;
+}): { [key: string]: string } => {
   if (orderByObj['id']) {
     orderByObj['processName'] = orderByObj['id'];
     delete orderByObj['id'];

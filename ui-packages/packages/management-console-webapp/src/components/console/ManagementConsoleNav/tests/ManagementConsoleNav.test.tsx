@@ -23,7 +23,7 @@ describe('ManagementConsoleNav tests', () => {
   it('Snapshot testing with process list props', () => {
     const wrapper = getWrapper(
       <MemoryRouter>
-        <ManagementConsoleNav pathname={'/ProcessList'} />
+        <ManagementConsoleNav pathname={'/ProcessInstances'} />
       </MemoryRouter>,
       'ManagementConsoleNav'
     );
@@ -31,7 +31,7 @@ describe('ManagementConsoleNav tests', () => {
     expect(wrapper).toMatchSnapshot();
 
     const managementConsoleNav = wrapper.findWhere(
-      nested => nested.key() === 'process-list-nav'
+      nested => nested.key() === 'process-instances-nav'
     );
 
     expect(managementConsoleNav.exists()).toBeTruthy();

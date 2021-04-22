@@ -32,8 +32,8 @@ const ProcessListPage: React.FC<OUIAProps> = () => {
   return (
     <React.Fragment>
       <PageSectionHeader
-        titleText="Process List"
-        breadcrumbText={['Home', 'process-list']}
+        titleText="Process Instances"
+        breadcrumbText={['Home', 'process-instances']}
         breadcrumbPath={['/']}
       />
       <PageSection>

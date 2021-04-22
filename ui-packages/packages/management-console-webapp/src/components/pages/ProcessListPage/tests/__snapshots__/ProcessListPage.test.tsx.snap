@@ -11,10 +11,10 @@ exports[`ProcessListPage tests Snapshot 1`] = `
     breadcrumbText={
       Array [
         "Home",
-        "process-list",
+        "process-instances",
       ]
     }
-    titleText="Process List"
+    titleText="Process Instances"
   >
     <PageSection
       variant="light"
@@ -93,14 +93,14 @@ exports[`ProcessListPage tests Snapshot 1`] = `
                       </svg>
                     </AngleRightIcon>
                   </span>
-                  process-list
+                  process-instances
                 </li>
               </BreadcrumbItem>
             </ol>
           </nav>
         </Breadcrumb>
         <PageTitle
-          title="Process List"
+          title="Process Instances"
         >
           <Flex
             data-ouia-component-type="page-title"
@@ -128,7 +128,7 @@ exports[`ProcessListPage tests Snapshot 1`] = `
                     <h1
                       className="pf-c-title pf-m-4xl"
                     >
-                      Process List
+                      Process Instances
                     </h1>
                   </Title>
                 </div>

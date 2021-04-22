@@ -16,8 +16,7 @@
 
 import {
   MessageBusClientApi,
-  RequestPropertyNames,
-  NotificationPropertyNames
+  RequestPropertyNames
 } from '@kogito-tooling/envelope-bus/dist/api';
 import { MockedMessageBusClientApi } from './mocks/Mocks';
 import ProcessListEnvelopeViewDriver from '../ProcessListEnvelopeViewDriver';
@@ -34,11 +33,6 @@ let requests: Pick<
   ProcessListChannelApi,
   RequestPropertyNames<ProcessListChannelApi>
 >;
-//@ts-ignore
-let notifications: Pick<
-  ProcessListChannelApi,
-  NotificationPropertyNames<ProcessListChannelApi>
->;
 let driver: ProcessListEnvelopeViewDriver;
 
 describe('ProcessListEnvelopeViewDriver tests', () => {
@@ -46,7 +40,6 @@ describe('ProcessListEnvelopeViewDriver tests', () => {
     jest.clearAllMocks();
     channelApi = new MockedMessageBusClientApi();
     requests = channelApi.requests;
-    notifications = channelApi.notifications;
     driver = new ProcessListEnvelopeViewDriver(channelApi);
   });
 

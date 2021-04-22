@@ -23,8 +23,12 @@ import ProcessDetailsPage from '../../pages/ProcessDetailsPage/ProcessDetailsPag
 const ManagementConsoleRoutes: React.FC = () => {
   return (
     <Switch>
-      <Route exact path="/" render={() => <Redirect to="/ProcessList" />} />
-      <Route exact path="/ProcessList" component={ProcessListPage} />
+      <Route
+        exact
+        path="/"
+        render={() => <Redirect to="/ProcessInstances" />}
+      />
+      <Route exact path="/ProcessInstances" component={ProcessListPage} />
       <Route exact path="/JobsManagement" component={JobsManagementPage} />
       <Route exact path="/Process/:instanceID" component={ProcessDetailsPage} />
       <Route

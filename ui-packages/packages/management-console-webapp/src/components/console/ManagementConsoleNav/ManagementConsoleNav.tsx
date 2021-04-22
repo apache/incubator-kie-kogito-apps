@@ -28,14 +28,14 @@ const ManagementConsoleNav: React.FC<IOwnProps> = ({ pathname }) => {
     <Nav aria-label="Nav" theme="dark">
       <NavList>
         <NavItem
-          key={'process-list-nav'}
-          isActive={pathname === '/ProcessList'}
+          key={'process-instances-nav'}
+          isActive={pathname === '/ProcessInstances'}
         >
           <Link
-            to="/ProcessList"
-            {...ouiaAttribute('data-ouia-navigation-name', 'process-list')}
+            to="/ProcessInstances"
+            {...ouiaAttribute('data-ouia-navigation-name', 'process-instances')}
           >
-            Process List
+            Process Instances
           </Link>
         </NavItem>
         <NavItem

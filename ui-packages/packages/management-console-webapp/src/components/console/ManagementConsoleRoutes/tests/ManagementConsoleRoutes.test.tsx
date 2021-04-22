@@ -54,7 +54,7 @@ describe('ManagementConsoleRoutes tests', () => {
   });
   it('process list test', () => {
     const wrapper = getWrapper(
-      <MemoryRouter keyLength={0} initialEntries={['/ProcessList']}>
+      <MemoryRouter keyLength={0} initialEntries={['/ProcessInstances']}>
         <ManagementConsoleRoutes />
       </MemoryRouter>,
       'ManagementConsoleRoutes'

@@ -43,8 +43,10 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
   OUIAProps> = ({ parentProcessId, driver, ouiaId, ouiaSafe }) => {
   const [rows, setRows] = useState<(IRow | string[])[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showNoDataEmptyState, setShowNoDataEmptyState] = useState(false);
-  const [error, setError] = useState(undefined);
+  const [showNoDataEmptyState, setShowNoDataEmptyState] = useState<boolean>(
+    false
+  );
+  const [error, setError] = useState<string>(undefined);
   const columns = [
     {
       title: 'Id'
@@ -60,7 +62,7 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     }
   ];
 
-  const createRows = processInstances => {
+  const createRows = (processInstances: ProcessInstance[]): void => {
     if (!_.isEmpty(processInstances)) {
       const tempRows = [];
       processInstances.forEach((child: ProcessInstance) => {
@@ -114,7 +116,7 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     }
   };
 
-  const getChildProcessInstances = async () => {
+  const getChildProcessInstances = async (): Promise<void> => {
     try {
       setIsLoading(true);
       const response = await driver.getChildProcessesQuery(parentProcessId);

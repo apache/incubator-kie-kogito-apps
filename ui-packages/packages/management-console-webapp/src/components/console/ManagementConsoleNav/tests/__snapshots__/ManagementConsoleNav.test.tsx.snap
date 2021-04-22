@@ -28,7 +28,7 @@ exports[`ManagementConsoleNav tests Snapshot testing with jobs management props 
         >
           <NavItem
             isActive={false}
-            key="process-list-nav"
+            key="process-instances-nav"
           >
             <li
               className="pf-c-nav__item"
@@ -39,26 +39,26 @@ exports[`ManagementConsoleNav tests Snapshot testing with jobs management props 
               <Link
                 aria-current={null}
                 className="pf-c-nav__link"
-                data-ouia-navigation-name="process-list"
+                data-ouia-navigation-name="process-instances"
                 onClick={[Function]}
-                to="/ProcessList"
+                to="/ProcessInstances"
               >
                 <LinkAnchor
                   aria-current={null}
                   className="pf-c-nav__link"
-                  data-ouia-navigation-name="process-list"
-                  href="/ProcessList"
+                  data-ouia-navigation-name="process-instances"
+                  href="/ProcessInstances"
                   navigate={[Function]}
                   onClick={[Function]}
                 >
                   <a
                     aria-current={null}
                     className="pf-c-nav__link"
-                    data-ouia-navigation-name="process-list"
-                    href="/ProcessList"
+                    data-ouia-navigation-name="process-instances"
+                    href="/ProcessInstances"
                     onClick={[Function]}
                   >
-                    Process List
+                    Process Instances
                   </a>
                 </LinkAnchor>
               </Link>
@@ -111,7 +111,7 @@ exports[`ManagementConsoleNav tests Snapshot testing with jobs management props 
 
 exports[`ManagementConsoleNav tests Snapshot testing with process list props 1`] = `
 <ManagementConsoleNav
-  pathname="/ProcessList"
+  pathname="/ProcessInstances"
 >
   <Nav
     aria-label="Nav"
@@ -137,7 +137,7 @@ exports[`ManagementConsoleNav tests Snapshot testing with process list props 1`]
         >
           <NavItem
             isActive={true}
-            key="process-list-nav"
+            key="process-instances-nav"
           >
             <li
               className="pf-c-nav__item"
@@ -148,26 +148,26 @@ exports[`ManagementConsoleNav tests Snapshot testing with process list props 1`]
               <Link
                 aria-current="page"
                 className="pf-c-nav__link pf-m-current"
-                data-ouia-navigation-name="process-list"
+                data-ouia-navigation-name="process-instances"
                 onClick={[Function]}
-                to="/ProcessList"
+                to="/ProcessInstances"
               >
                 <LinkAnchor
                   aria-current="page"
                   className="pf-c-nav__link pf-m-current"
-                  data-ouia-navigation-name="process-list"
-                  href="/ProcessList"
+                  data-ouia-navigation-name="process-instances"
+                  href="/ProcessInstances"
                   navigate={[Function]}
                   onClick={[Function]}
                 >
                   <a
                     aria-current="page"
                     className="pf-c-nav__link pf-m-current"
-                    data-ouia-navigation-name="process-list"
-                    href="/ProcessList"
+                    data-ouia-navigation-name="process-instances"
+                    href="/ProcessInstances"
                     onClick={[Function]}
                   >
-                    Process List
+                    Process Instances
                   </a>
                 </LinkAnchor>
               </Link>

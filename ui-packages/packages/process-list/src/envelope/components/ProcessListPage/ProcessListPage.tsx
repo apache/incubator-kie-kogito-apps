@@ -55,7 +55,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
   const [processInstances, setProcessInstances] = useState<ProcessInstance[]>(
     []
   );
-  const [error, setError] = useState(undefined);
+  const [error, setError] = useState<string>(undefined);
   const [filters, setFilters] = useState<ProcessInstanceFilter>({
     status: [ProcessInstanceState.Active],
     businessKey: []
@@ -89,7 +89,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     doQuery(0, 10, true);
   };
 
-  const countExpandableRows = processInstances => {
+  const countExpandableRows = (processInstances: ProcessInstance[]) => {
     processInstances.forEach(
       (processInstance, index) => (expanded[index] = false)
     );
@@ -101,7 +101,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     _resetProcesses: boolean,
     _resetPagination: boolean = false,
     _loadMore: boolean = false
-  ) => {
+  ): Promise<void> => {
     setIsLoadingMore(_loadMore);
     try {
       const response: ProcessInstance[] = await driver.query(_offset, _limit);
@@ -125,7 +125,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     }
   };
 
-  const applyFilter = async filter => {
+  const applyFilter = async (filter: ProcessInstanceFilter): Promise<void> => {
     setIsLoading(true);
     await driver.applyFilter(filter);
     doQuery(0, defaultPageSize, true, true);
@@ -146,12 +146,12 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     doQuery(0, defaultPageSize, true, true);
   };
 
-  const doRefresh = async () => {
+  const doRefresh = async (): Promise<void> => {
     setIsLoading(true);
     doQuery(0, defaultPageSize, true, true);
   };
 
-  const doResetFilters = () => {
+  const doResetFilters = (): void => {
     const defaultFilters: ProcessInstanceFilter = {
       status: [ProcessInstanceState.Active],
       businessKey: []

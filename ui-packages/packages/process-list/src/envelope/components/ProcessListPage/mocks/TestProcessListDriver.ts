@@ -34,7 +34,7 @@ export default class TestProcessListDriver implements ProcessListDriver {
     this.processInstances = processInstances;
     this.childProcessInstances = childProcessInstances;
   }
-
+  /* eslint-disable  @typescript-eslint/no-unused-vars */
   private doSetState(processListFilter: ProcessInstanceFilter, sortBy: SortBy) {
     // do nothing
   }
@@ -64,7 +64,7 @@ export default class TestProcessListDriver implements ProcessListDriver {
   ): Promise<ProcessInstance[]> {
     return Promise.resolve(this.childProcessInstances.slice(0, 10));
   }
-
+  /* eslint-enable  @typescript-eslint/no-unused-vars */
   private doQuery(start: number, limit: number): Promise<ProcessInstance[]> {
     const queryLimit =
       limit > this.processInstances.length

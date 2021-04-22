@@ -31,7 +31,7 @@ export default class ProcessListEnvelopeViewDriver
   initialLoad(filter: ProcessInstanceFilter, sortBy: SortBy): Promise<void> {
     return this.channelApi.requests.processList__initialLoad(filter, sortBy);
   }
-  applyFilter(filter: any): Promise<void> {
+  applyFilter(filter: ProcessInstanceFilter): Promise<void> {
     return this.channelApi.requests.processList__applyFilter(filter);
   }
   applySorting(sortBy: SortBy): Promise<void> {

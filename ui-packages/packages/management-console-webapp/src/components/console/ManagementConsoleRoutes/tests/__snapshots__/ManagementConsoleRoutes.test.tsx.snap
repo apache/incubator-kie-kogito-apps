@@ -9,20 +9,20 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
         Object {
           "isExact": true,
           "params": Object {},
-          "path": "/ProcessList",
-          "url": "/ProcessList",
+          "path": "/ProcessInstances",
+          "url": "/ProcessInstances",
         }
       }
       exact={true}
       location={
         Object {
           "hash": "",
-          "pathname": "/ProcessList",
+          "pathname": "/ProcessInstances",
           "search": "",
           "state": undefined,
         }
       }
-      path="/ProcessList"
+      path="/ProcessInstances"
     >
       <MockedProcessListPage
         history={
@@ -34,7 +34,7 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
             "entries": Array [
               Object {
                 "hash": "",
-                "pathname": "/ProcessList",
+                "pathname": "/ProcessInstances",
                 "search": "",
                 "state": undefined,
               },
@@ -47,7 +47,7 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
             "listen": [Function],
             "location": Object {
               "hash": "",
-              "pathname": "/ProcessList",
+              "pathname": "/ProcessInstances",
               "search": "",
               "state": undefined,
             },
@@ -58,7 +58,7 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
         location={
           Object {
             "hash": "",
-            "pathname": "/ProcessList",
+            "pathname": "/ProcessInstances",
             "search": "",
             "state": undefined,
           }
@@ -67,8 +67,8 @@ exports[`ManagementConsoleRoutes tests Test Jobs management route 1`] = `
           Object {
             "isExact": true,
             "params": Object {},
-            "path": "/ProcessList",
-            "url": "/ProcessList",
+            "path": "/ProcessInstances",
+            "url": "/ProcessInstances",
           }
         }
       />
@@ -491,20 +491,20 @@ exports[`ManagementConsoleRoutes tests process list test 1`] = `
         Object {
           "isExact": true,
           "params": Object {},
-          "path": "/ProcessList",
-          "url": "/ProcessList",
+          "path": "/ProcessInstances",
+          "url": "/ProcessInstances",
         }
       }
       exact={true}
       location={
         Object {
           "hash": "",
-          "pathname": "/ProcessList",
+          "pathname": "/ProcessInstances",
           "search": "",
           "state": undefined,
         }
       }
-      path="/ProcessList"
+      path="/ProcessInstances"
     >
       <MockedProcessListPage
         history={
@@ -516,7 +516,7 @@ exports[`ManagementConsoleRoutes tests process list test 1`] = `
             "entries": Array [
               Object {
                 "hash": "",
-                "pathname": "/ProcessList",
+                "pathname": "/ProcessInstances",
                 "search": "",
                 "state": undefined,
               },
@@ -529,7 +529,7 @@ exports[`ManagementConsoleRoutes tests process list test 1`] = `
             "listen": [Function],
             "location": Object {
               "hash": "",
-              "pathname": "/ProcessList",
+              "pathname": "/ProcessInstances",
               "search": "",
               "state": undefined,
             },
@@ -540,7 +540,7 @@ exports[`ManagementConsoleRoutes tests process list test 1`] = `
         location={
           Object {
             "hash": "",
-            "pathname": "/ProcessList",
+            "pathname": "/ProcessInstances",
             "search": "",
             "state": undefined,
           }
@@ -549,8 +549,8 @@ exports[`ManagementConsoleRoutes tests process list test 1`] = `
           Object {
             "isExact": true,
             "params": Object {},
-            "path": "/ProcessList",
-            "url": "/ProcessList",
+            "path": "/ProcessInstances",
+            "url": "/ProcessInstances",
           }
         }
       />

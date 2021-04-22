@@ -103,7 +103,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
     });
   };
 
-  const onApplyFilter = () => {
+  const onApplyFilter = (): void => {
     setBusinessKeyInput('');
     const clonedBusinessKeyArray = [...filters.businessKey];
     if (
@@ -123,13 +123,13 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
     });
   };
 
-  const onEnterClicked = event => {
+  const onEnterClicked = (event: React.KeyboardEvent<EventTarget>): void => {
     if (event.key === 'Enter') {
       businessKeyInput.length > 0 && onApplyFilter();
     }
   };
 
-  const resetAllFilters = () => {
+  const resetAllFilters = (): void => {
     const defaultFilters = {
       status: [ProcessInstanceState.Active],
       businessKey: []
@@ -139,7 +139,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
     applyFilter(defaultFilters);
   };
 
-  const statusMenuItems = [
+  const statusMenuItems: JSX.Element[] = [
     <SelectOption key="ACTIVE" value="ACTIVE" />,
     <SelectOption key="COMPLETED" value="COMPLETED" />,
     <SelectOption key="ERROR" value="ERROR" />,
@@ -147,7 +147,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
     <SelectOption key="SUSPENDED" value="SUSPENDED" />
   ];
 
-  const toggleGroupItems = (
+  const toggleGroupItems: JSX.Element = (
     <React.Fragment>
       <ToolbarGroup variant="filter-group">
         <ToolbarFilter
@@ -201,7 +201,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
     </React.Fragment>
   );
 
-  const toolbarItems = (
+  const toolbarItems: JSX.Element = (
     <React.Fragment>
       <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
         {toggleGroupItems}
