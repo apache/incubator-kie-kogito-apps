@@ -37,9 +37,20 @@ const Counterfactual = () => {
     }
   };
 
+  const areInputsSelected = (inputs: CFSearchInput[]) => {
+    // filtering all non fixed inputs
+    const selectedInputs = inputs.filter(domain => !domain.isFixed);
+    // checking if all inputs have a domain specified (with the exception of
+    // boolean, which do not require one)
+    return (
+      selectedInputs.length > 0 &&
+      selectedInputs.every(input => input.domain || input.typeRef === 'boolean')
+    );
+  };
+
   useEffect(() => {
     if (
-      state.searchDomains.filter(domain => !domain.isFixed).length > 0 &&
+      areInputsSelected(state.searchDomains) &&
       state.goals.filter(goal => !goal.isFixed).length > 0
     ) {
       if (state.status.isDisabled) {
