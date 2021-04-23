@@ -19,7 +19,8 @@ def getDefaultJobParams() {
             credentials: "${GIT_AUTHOR_CREDENTIALS_ID}",
             token_credentials: "${GIT_AUTHOR_TOKEN_CREDENTIALS_ID}"
         ],
-        env: [:]
+        env: [:],
+        pr: [:]
     ]
 }
 
@@ -34,18 +35,34 @@ def getJobParams(String jobName, String jobFolder, String jenkinsfileName, Strin
     return jobParams
 }
 
+Map getMultijobPRConfig() {
+    return [
+        jobs : [
+            [
+                id: 'Tests',
+                primary: true
+            ]
+        ]
+    ]
+}
+
 def bddRuntimesPrFolder = "${KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER}/${KogitoConstants.KOGITO_DSL_RUNTIMES_BDD_FOLDER}"
 def nightlyBranchFolder = "${KogitoConstants.KOGITO_DSL_NIGHTLY_FOLDER}/${JOB_BRANCH_FOLDER}"
 def releaseBranchFolder = "${KogitoConstants.KOGITO_DSL_RELEASE_FOLDER}/${JOB_BRANCH_FOLDER}"
 
 if (isMainBranch()) {
-    folder(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
+    // Normal PR checks
+    setupPrJob()
+    setupQuarkusLTSPrJob()
+    setupNativePrJob()
 
-    setupPrJob(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
-    setupQuarkusLTSPrJob(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
-    setupNativePrJob(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
+    // Multijob PR checks
+    setupMultijobPrDefaultChecks()
+    setupMultijobPrNativeChecks()
+    setupMultijobPrLTSChecks()
 
     // For BDD runtimes PR job
+    folder(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
     folder(bddRuntimesPrFolder)
 
     setupDeployJob(bddRuntimesPrFolder, KogitoJobType.PR)
@@ -70,25 +87,40 @@ if (!isMainBranch()) {
 // Methods
 /////////////////////////////////////////////////////////////////
 
-void setupPrJob(String jobFolder) {
+void setupPrJob() {
     def jobParams = getDefaultJobParams()
-    jobParams.job.folder = jobFolder
-    jobParams.env.put('TIMEOUT_VALUE', 120)
+    jobParams.pr.ignore_for_labels = [ KogitoConstants.KOGITO_PR_MULTIJOB_LABEL ]
     KogitoJobTemplate.createPRJob(this, jobParams)
 }
 
-void setupQuarkusLTSPrJob(String jobFolder) {
+void setupQuarkusLTSPrJob() {
     def jobParams = getDefaultJobParams()
-    jobParams.job.folder = jobFolder
-    jobParams.env.put('TIMEOUT_VALUE', 120)
+    jobParams.pr.ignore_for_labels = [ KogitoConstants.KOGITO_PR_MULTIJOB_LABEL ]
     KogitoJobTemplate.createQuarkusLTSPRJob(this, jobParams)
 }
 
-void setupNativePrJob(String jobFolder) {
+void setupNativePrJob() {
     def jobParams = getDefaultJobParams()
-    jobParams.job.folder = jobFolder
-    jobParams.env.put('TIMEOUT_VALUE', 360)
+    jobParams.pr.ignore_for_labels = [ KogitoConstants.KOGITO_PR_MULTIJOB_LABEL ]
     KogitoJobTemplate.createNativePRJob(this, jobParams)
+}
+
+void setupMultijobPrDefaultChecks() {
+    KogitoJobTemplate.createMultijobPRJobs(this, getMultijobPRConfig()) {
+        return getDefaultJobParams()
+    }
+}
+
+void setupMultijobPrNativeChecks() {
+    KogitoJobTemplate.createMultijobNativePRJobs(this, getMultijobPRConfig()) {
+        return getDefaultJobParams()
+    }
+}
+
+void setupMultijobPrLTSChecks() {
+    KogitoJobTemplate.createMultijobLTSPRJobs(this, getMultijobPRConfig()) {
+        return getDefaultJobParams()
+    }
 }
 
 void setupSonarCloudJob(String jobFolder) {

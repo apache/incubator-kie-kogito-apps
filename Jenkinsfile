@@ -16,7 +16,7 @@ pipeline {
     }
     options {
         timestamps()
-        timeout(time: env.TIMEOUT_VALUE, unit: 'MINUTES')
+        timeout(time: getTimeoutValue(), unit: 'MINUTES')
     }
     environment {
         MAVEN_OPTS = '-Xms1024m -Xmx4g'
@@ -186,6 +186,18 @@ String getQuarkusBranch() {
     return env['QUARKUS_BRANCH']
 }
 
+boolean isDownstream() {
+    return env['DOWNSTREAM'] && env['DOWNSTREAM'].toBoolean()
+}
+
 boolean isNormalPRCheck() {
-    return !(getQuarkusBranch() || isNative())
+    return !(isDownstream() || getQuarkusBranch() || isNative())
+}
+
+boolean isMultijobPRCheck() {
+    return env['MULTIJOB_PR_CHECK'] && env['MULTIJOB_PR_CHECK'].toBoolean()
+}
+
+Integer getTimeoutValue() {
+    return isNative() ? 360 : 120
 }
