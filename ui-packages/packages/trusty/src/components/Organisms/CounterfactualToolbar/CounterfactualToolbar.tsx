@@ -18,6 +18,7 @@ import {
   CFGoal,
   CFStatus
 } from '../../Templates/Counterfactual/Counterfactual';
+import './CounterfactualToolbar.scss';
 
 type CounterfactualToolbarProps = {
   status: CFStatus;
@@ -104,7 +105,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
         If you start a New Counterfactual analysis, or Edit the existing one,
         any results will be cleared and cannot be retrieved.
       </Modal>
-      <Toolbar id="toolbar" style={{ minHeight: 80 }}>
+      <Toolbar id="cf-toolbar">
         <ToolbarContent>
           {status.executionStatus === 'NOT_STARTED' && (
             <>
