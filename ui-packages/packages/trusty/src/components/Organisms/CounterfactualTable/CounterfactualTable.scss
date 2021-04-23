@@ -24,8 +24,15 @@
     }
     &--last {
       .cf-table__result-head__slider {
-        right: 15px;
+        right: 5px;
       }
+    }
+  }
+  &__result-value {
+    &--changed {
+      @extend .cf-table__result-value;
+      background-color: var(--pf-global--palette--blue-50);
+      clip-path: inset(5px 5px);
     }
   }
 }

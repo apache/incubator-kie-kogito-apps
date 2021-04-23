@@ -74,7 +74,7 @@ export const cfInitialState: CFState = {
     {
       name: 'First Time Client',
       typeRef: 'boolean',
-      value: 'true',
+      value: true,
       isFixed: true
     }
   ],

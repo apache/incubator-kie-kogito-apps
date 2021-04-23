@@ -1,9 +1,12 @@
 .counterfactual {
+  &__divider {
+    padding-left: var(--pf-c-page__main-section--xl--PaddingLeft);
+    padding-right: var(--pf-c-page__main-section--xl--PaddingLeft);
+  }
   &__section {
     height: 100%;
   }
   &__drawer {
     --pf-c-drawer__content--BackgroundColor: transparent;
-    border-top: 1px solid var(--pf-c-page__main-section--BackgroundColor);
   }
 }

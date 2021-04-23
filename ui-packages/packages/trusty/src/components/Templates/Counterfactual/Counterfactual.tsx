@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import {
+  Divider,
   Drawer,
   DrawerContent,
   DrawerContentBody,
@@ -69,7 +70,7 @@ const Counterfactual = () => {
         dispatch({
           type: 'setResults',
           payload: {
-            results: cfResultsdemo
+            results: getCFResultsDemo(state.searchDomains, 4)
           }
         });
       }, 4000);
@@ -82,7 +83,7 @@ const Counterfactual = () => {
         });
       }, 10000);
     }
-  }, [state.status.executionStatus]);
+  }, [state.status.executionStatus, state.searchDomains]);
 
   const panelContent = (
     <DrawerPanelContent widths={{ default: 'width_33' }}>
@@ -98,13 +99,14 @@ const Counterfactual = () => {
 
   return (
     <CFDispatch.Provider value={dispatch}>
+      <Divider className="counterfactual__divider" />
       <Drawer
         isExpanded={isSidePanelExpanded}
         className="counterfactual__drawer"
       >
         <DrawerContent panelContent={panelContent}>
-          <DrawerContentBody>
-            <PageSection variant="default" isFilled={true}>
+          <DrawerContentBody style={{ display: 'flex' }}>
+            <PageSection variant="light" isFilled={true}>
               <section className="counterfactual__section">
                 <Stack hasGutter>
                   <StackItem>
@@ -190,11 +192,36 @@ export interface CFStatus {
 
 export type CFAnalysisResetType = 'NEW' | 'EDIT';
 
-const cfResultsdemo: CFResult[] = [
-  [33, 44, 56, 43],
-  [12, 4, 3, 2],
-  [1000, 1300, 1250, 1650],
-  [500, 540, 420, 502],
-  ['ALFA', 'BETA', 'GAMMA', 'DELTA'],
-  [true, true, true, true]
-];
+const getCFResultsDemo = (inputs: CFSearchInput[], count: number) => {
+  const results = [];
+  inputs.map(input => {
+    const row = new Array(count > 0 ? count : 1);
+    for (let i = 0; i < row.length; i++) {
+      row[i] = input.isFixed ? input.value : generateCFValue(input);
+    }
+    results.push(row);
+  });
+  return results;
+};
+
+const generateCFValue = (input: CFSearchInput) => {
+  switch (input.typeRef) {
+    case 'boolean':
+      return !input.value;
+    case 'number':
+      return (
+        Math.floor(
+          Math.random() *
+            (Math.ceil((input.domain as CFNumericalDomain).upperBound) -
+              Math.ceil((input.domain as CFNumericalDomain).lowerBound))
+        ) + Math.ceil((input.domain as CFNumericalDomain).lowerBound)
+      );
+    case 'string':
+      return (input.domain as CFCategoricalDomain).categories[
+        Math.floor(
+          Math.random() *
+            (input.domain as CFCategoricalDomain).categories.length
+        )
+      ];
+  }
+};

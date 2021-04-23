@@ -189,13 +189,16 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                 {row.name}
               </Td>
               <Td key={`${rowIndex}_2`} dataLabel={columns[1]}>
-                {canAddConstraint(row) && (
+                {!isInputSelectionEnabled && row.domain && (
+                  <CounterfactualInputDomain input={row} />
+                )}
+                {isInputSelectionEnabled && canAddConstraint(row) && (
                   <Button
                     variant={'link'}
                     isInline={true}
                     onClick={() => onOpenInputDomainEdit(row, rowIndex)}
                     icon={!row.domain && <PlusCircleIcon />}
-                    isDisabled={row.isFixed || !isInputSelectionEnabled}
+                    isDisabled={row.isFixed}
                   >
                     {row.domain ? (
                       <CounterfactualInputDomain input={row} />
@@ -213,6 +216,11 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                   <Td
                     key={`${rowIndex}_${index + 4}`}
                     dataLabel={'Counterfactual Result'}
+                    className={
+                      value !== row.value
+                        ? 'cf-table__result-value--changed'
+                        : 'cf-table__result-value'
+                    }
                   >
                     {value.toString()}
                   </Td>
