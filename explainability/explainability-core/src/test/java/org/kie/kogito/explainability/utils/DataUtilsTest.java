@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,8 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.GenericFeatureDistribution;
+import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
@@ -347,29 +350,23 @@ class DataUtilsTest {
     void testBootstrap() {
         List<Value> values = new ArrayList<>();
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 4; i++) {
             values.add(Type.NUMBER.randomValue(perturbationContext));
         }
-        double[] means = new double[100];
-        double[] stdDevs = new double[100];
-        double[] mins = new double[100];
-        double[] maxs = new double[100];
-        for (int i = 0; i < 100; i++) {
-            List<Value> sampledValues = DataUtils.sampleWithReplacement(values, 5, random);
-            double mean = DataUtils.getMean(sampledValues.stream().mapToDouble(Value::asNumber).toArray());
-            double stdDev = DataUtils.getStdDev(sampledValues.stream().mapToDouble(Value::asNumber).toArray(), mean);
-            double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
-            double max = sampledValues.stream().mapToDouble(Value::asNumber).max().orElse(Double.MAX_VALUE);
-            means[i] = mean;
-            stdDevs[i] = stdDev;
-            mins[i] = min;
-            maxs[i] = max;
-        }
-        double finalMean = DataUtils.getMean(means);
-        double finalStdDev = DataUtils.getMean(stdDevs);
-        double finalMin = DataUtils.getMean(mins);
-        double finalMax = DataUtils.getMean(maxs);
-        double[] distribution = DataUtils.generateData(finalMean, finalStdDev, 10, random);
+        List<Feature> features = new ArrayList<>();
+        Feature mockedNumericFeature = TestUtils.getMockedNumericFeature();
+        features.add(mockedNumericFeature);
+        DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(List.of(
+                new GenericFeatureDistribution(mockedNumericFeature, values)));
+        Map<String, FeatureDistribution> featureDistributionMap = DataUtils.boostrapFeatureDistributions(features,
+                dataDistribution, random, 10);
+        assertThat(featureDistributionMap).isNotNull();
+        assertThat(featureDistributionMap).isNotEmpty();
+        FeatureDistribution actual = featureDistributionMap.get(mockedNumericFeature.getName());
+        assertThat(actual).isNotNull();
+        List<Value> allSamples = actual.getAllSamples();
+        assertThat(allSamples).isNotNull();
+        assertThat(allSamples).hasSize(10);
     }
 
     @Test
