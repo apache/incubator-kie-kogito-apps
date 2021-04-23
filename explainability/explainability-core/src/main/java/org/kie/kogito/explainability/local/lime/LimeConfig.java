@@ -216,4 +216,8 @@ public class LimeConfig {
     public boolean isNormalizeWeights() {
         return normalizeWeights;
     }
+
+    public DataDistribution getDataDistribution() {
+        return dataDistribution;
+    }
 }

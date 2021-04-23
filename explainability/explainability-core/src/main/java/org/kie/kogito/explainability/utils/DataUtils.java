@@ -22,9 +22,12 @@ import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -167,6 +170,21 @@ public class DataUtils {
      * @return a perturbed copy of the input features
      */
     public static List<Feature> perturbFeatures(List<Feature> originalFeatures, PerturbationContext perturbationContext) {
+        return perturbFeatures(originalFeatures, perturbationContext, Collections.emptyMap());
+    }
+
+    /**
+     * Perform perturbations on a fixed number of features in the given input.
+     * A map of feature distributions to draw (all, none or some of them) is given.
+     * Which feature will be perturbed is non deterministic.
+     *
+     * @param originalFeatures the input features that need to be perturbed
+     * @param perturbationContext the perturbation context
+     * @param featureDistributionsMap the map of feature distributions
+     * @return a perturbed copy of the input features
+     */
+    public static List<Feature> perturbFeatures(List<Feature> originalFeatures, PerturbationContext perturbationContext,
+            Map<String, FeatureDistribution> featureDistributionsMap) {
         List<Feature> newFeatures = new ArrayList<>(originalFeatures);
         if (!newFeatures.isEmpty()) {
             // perturb at most in the range [|features|/2), noOfPerturbations]
@@ -185,8 +203,14 @@ public class DataUtils {
                         .distinct().limit(perturbationSize).toArray();
                 for (int index : indexesToBePerturbed) {
                     Feature feature = newFeatures.get(index);
+                    Value newValue;
+                    if (featureDistributionsMap.containsKey(feature.getName())) {
+                        newValue = featureDistributionsMap.get(feature.getName()).sample();
+                    } else {
+                        newValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+                    }
                     Feature perturbedFeature =
-                            FeatureFactory.copyOf(feature, feature.getType().perturb(feature.getValue(), perturbationContext));
+                            FeatureFactory.copyOf(feature, newValue);
                     newFeatures.set(index, perturbedFeature);
                 }
             }
@@ -523,5 +547,46 @@ public class DataUtils {
             }
         }
         return new PredictionInputsDataDistribution(inputs);
+    }
+
+    public static Map<String, FeatureDistribution> boostrapFeatureDistributions(List<Feature> features,
+            DataDistribution dataDistribution,
+            Random random,
+            int featureDistributionSize) {
+        Map<String, FeatureDistribution> featureDistributions = new HashMap<>();
+        int noOfDraws = 100;
+        int sampleSize = 5;
+        int featureIndex = 0;
+        for (FeatureDistribution featureDistribution : dataDistribution.asFeatureDistributions()) {
+            Feature feature = features.get(featureIndex);
+            if (Type.NUMBER.equals(feature.getType())) {
+                List<Value> values = featureDistribution.getAllSamples();
+                double[] means = new double[noOfDraws];
+                double[] stdDevs = new double[noOfDraws];
+                double[] mins = new double[noOfDraws];
+                double[] maxs = new double[noOfDraws];
+                for (int i = 0; i < noOfDraws; i++) {
+                    List<Value> sampledValues = DataUtils.sampleWithReplacement(values, sampleSize, random);
+                    double mean = DataUtils.getMean(sampledValues.stream().mapToDouble(Value::asNumber).toArray());
+                    double stdDev = DataUtils.getStdDev(sampledValues.stream().mapToDouble(Value::asNumber).toArray(), mean);
+                    double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
+                    double max = sampledValues.stream().mapToDouble(Value::asNumber).max().orElse(Double.MAX_VALUE);
+                    means[i] = mean;
+                    stdDevs[i] = stdDev;
+                    mins[i] = min;
+                    maxs[i] = max;
+                }
+                double finalMean = DataUtils.getMean(means);
+                double finalStdDev = DataUtils.getMean(stdDevs);
+                double finalMin = DataUtils.getMean(mins);
+                double finalMax = DataUtils.getMean(maxs);
+                double[] doubles = DataUtils.generateData(finalMean, finalStdDev, featureDistributionSize, random);
+                double[] boundedData = Arrays.stream(doubles).map(d -> Math.min(Math.max(d, finalMin), finalMax)).toArray();
+                NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, boundedData);
+                featureDistributions.put(feature.getName(), numericFeatureDistribution);
+            }
+            featureIndex++;
+        }
+        return featureDistributions;
     }
 }
