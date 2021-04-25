@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -53,8 +54,9 @@ public class CounterfactualPrediction extends BasePrediction {
             List<Boolean> constraints,
             DataDistribution dataDistribution,
             Consumer<CounterfactualSolution> intermediateConsumer,
-            Consumer<CounterfactualSolution> finalConsumer) {
-        super(input, output);
+            Consumer<CounterfactualSolution> finalConsumer,
+            UUID id) {
+        super(input, output, id);
         this.domain = domain;
         this.constraints = constraints;
         this.dataDistribution = dataDistribution;

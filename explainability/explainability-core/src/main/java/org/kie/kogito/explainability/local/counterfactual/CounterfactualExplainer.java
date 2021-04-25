@@ -67,6 +67,11 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public static final Consumer<CounterfactualSolution> defaultFinalConsumer =
             counterfactual -> logger.debug("Final counterfactual: {}", counterfactual.getEntities());
 
+    public CounterfactualExplainer() {
+        this.solverConfig = CounterfactualConfigurationFactory.builder().build();
+        this.executor = ForkJoinPool.commonPool();
+    }
+
     /**
      * Create a new {@link CounterfactualExplainer} using OptaPlanner as the underlying engine.
      * The data distribution information (if available) will be used to scale the features during the search.
@@ -163,8 +168,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public static class Builder {
         private Executor executor = ForkJoinPool.commonPool();
         private SolverConfig solverConfig = null;
-        private Consumer<CounterfactualSolution> intermediateConsumer = null;
-        private Consumer<CounterfactualSolution> finalConsumer = null;
 
         private Builder() {
         }
@@ -183,13 +186,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             // Create a default solver configuration if none provided
             if (this.solverConfig == null) {
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
-            }
-            if (this.intermediateConsumer == null) {
-                this.intermediateConsumer = defaultIntermediateConsumer;
-            }
-
-            if (this.finalConsumer == null) {
-                this.finalConsumer = defaultFinalConsumer;
             }
             return new CounterfactualExplainer(
                     solverConfig,

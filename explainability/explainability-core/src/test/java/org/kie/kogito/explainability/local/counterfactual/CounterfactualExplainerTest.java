@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.local.counterfactual;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -89,7 +90,8 @@ class CounterfactualExplainerTest {
         final PredictionInput input = new PredictionInput(features);
         PredictionOutput output = new PredictionOutput(goal);
         PredictionFeatureDomain domain = new PredictionFeatureDomain(dataDomain.getFeatureDomains());
-        Prediction prediction = new CounterfactualPrediction(input, output, domain, constraints, null, null, null);
+        Prediction prediction =
+                new CounterfactualPrediction(input, output, domain, constraints, null, null, null, UUID.randomUUID());
         return explainer.explainAsync(prediction, model)
                 .get(predictionTimeOut, predictionTimeUnit);
     }
@@ -128,7 +130,7 @@ class CounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction =
                 new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null,
-                        null, null);
+                        null, null, UUID.randomUUID());
 
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -621,7 +623,8 @@ class CounterfactualExplainerTest {
         PredictionProvider model = TestUtils.getSumSkipModel(0);
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
-                constraints, null, assertIntermediateCounterfactualNotNull, assertFinalCounterfactualNotNull);
+                constraints, null, assertIntermediateCounterfactualNotNull, assertFinalCounterfactualNotNull,
+                UUID.randomUUID());
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
