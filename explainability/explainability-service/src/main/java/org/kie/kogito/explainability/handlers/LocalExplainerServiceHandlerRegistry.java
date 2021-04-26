@@ -17,12 +17,14 @@ package org.kie.kogito.explainability.handlers;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.local.LocalExplainer;
@@ -34,14 +36,17 @@ public class LocalExplainerServiceHandlerRegistry {
 
     public static final String SERVICE_HANDLER_NOT_FOUND_ERROR_MESSAGE = "LocalExplainerServiceHandler could not be found for '%s'";
 
-    private Instance<LocalExplainerServiceHandler<?, ?, ?>> explanationHandlers;
+    private PredictionProviderFactory predictionProviderFactory;
+    private Instance<LocalExplainerServiceHandler<?, ?, ?, ?>> explanationHandlers;
 
     protected LocalExplainerServiceHandlerRegistry() {
         //CDI proxy
     }
 
     @Inject
-    public LocalExplainerServiceHandlerRegistry(@Any Instance<LocalExplainerServiceHandler<?, ?, ?>> explanationHandlers) {
+    public LocalExplainerServiceHandlerRegistry(PredictionProviderFactory predictionProviderFactory,
+            @Any Instance<LocalExplainerServiceHandler<?, ?, ?, ?>> explanationHandlers) {
+        this.predictionProviderFactory = predictionProviderFactory;
         this.explanationHandlers = explanationHandlers;
     }
 
@@ -52,7 +57,7 @@ public class LocalExplainerServiceHandlerRegistry {
      * @return The request used by Explainability Service
      */
     public <R extends BaseExplainabilityRequest, D extends BaseExplainabilityRequestDto> R explainabilityRequestFrom(D dto) {
-        LocalExplainerServiceHandler<?, ?, ?> explanationHandler = getLocalExplainerDto(dto.getClass())
+        LocalExplainerServiceHandler<?, ?, ?, ?> explanationHandler = getLocalExplainerDto(dto.getClass())
                 .orElseThrow(() -> new IllegalArgumentException(String.format(SERVICE_HANDLER_NOT_FOUND_ERROR_MESSAGE, dto.getClass().getName())));
 
         return cast(explanationHandler.explainabilityRequestFrom(castDto(dto)));
@@ -66,27 +71,30 @@ public class LocalExplainerServiceHandlerRegistry {
      * - {@link LocalExplainerServiceHandler#createFailedResultDto(BaseExplainabilityRequest, Throwable)}
      *
      * @param request The explanation request.
-     * @param model The prediction model to explain. See {@link PredictionProvider}
+     * @param intermediateResultsConsumer A consumer of intermediate results provided by the explainer.
      * @return
      */
-    public <R extends BaseExplainabilityRequest> CompletableFuture<BaseExplainabilityResultDto> explainAsyncWithResults(R request,
-            PredictionProvider model) {
+    public <R extends BaseExplainabilityRequest, S extends BaseExplainabilityResultDto> CompletableFuture<BaseExplainabilityResultDto> explainAsyncWithResults(R request,
+            Consumer<S> intermediateResultsConsumer) {
 
-        LocalExplainerServiceHandler<?, ?, ?> explanationHandler = getLocalExplainer(request.getClass())
+        LocalExplainerServiceHandler<?, ?, ?, ?> explanationHandler = getLocalExplainer(request.getClass())
                 .orElseThrow(() -> new IllegalArgumentException(String.format(SERVICE_HANDLER_NOT_FOUND_ERROR_MESSAGE, request.getClass().getName())));
 
         try {
-            return explanationHandler.explainAsyncWithResults(cast(request), model);
+            PredictionProvider predictionProvider = predictionProviderFactory.createPredictionProvider(request);
+            return explanationHandler.explainAsyncWithResults(cast(request),
+                    predictionProvider,
+                    castConsumer(intermediateResultsConsumer));
         } catch (Exception e) {
             return CompletableFuture.completedFuture(explanationHandler.createFailedResultDto(cast(request), e));
         }
     }
 
-    private <T extends BaseExplainabilityRequest> Optional<LocalExplainerServiceHandler<?, ?, ?>> getLocalExplainer(Class<T> type) {
+    private <T extends BaseExplainabilityRequest> Optional<LocalExplainerServiceHandler<?, ?, ?, ?>> getLocalExplainer(Class<T> type) {
         return this.explanationHandlers.stream().filter(explainer -> explainer.supports(type)).findFirst();
     }
 
-    private <T extends BaseExplainabilityRequestDto> Optional<LocalExplainerServiceHandler<?, ?, ?>> getLocalExplainerDto(Class<T> type) {
+    private <T extends BaseExplainabilityRequestDto> Optional<LocalExplainerServiceHandler<?, ?, ?, ?>> getLocalExplainerDto(Class<T> type) {
         return this.explanationHandlers.stream().filter(explainer -> explainer.supportsDto(type)).findFirst();
     }
 
@@ -98,6 +106,11 @@ public class LocalExplainerServiceHandlerRegistry {
     @SuppressWarnings("unchecked")
     private <T extends BaseExplainabilityRequestDto> T castDto(BaseExplainabilityRequestDto type) {
         return (T) type;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <S extends BaseExplainabilityResultDto> Consumer<S> castConsumer(Consumer<?> consumer) {
+        return (Consumer<S>) consumer;
     }
 
 }

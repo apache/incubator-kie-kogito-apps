@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.handlers;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -44,7 +45,7 @@ import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
-public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler<Map<String, Saliency>, LIMEExplainabilityRequest, LIMEExplainabilityRequestDto> {
+public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler<Map<String, Saliency>, Void, LIMEExplainabilityRequest, LIMEExplainabilityRequestDto> {
 
     private final LimeExplainer explainer;
 
@@ -96,12 +97,28 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
     }
 
     @Override
+    public BaseExplainabilityResultDto createIntermediateResultDto(LIMEExplainabilityRequest request, Void result) {
+        throw new UnsupportedOperationException("Intermediate results are not supported by LIME.");
+    }
+
+    @Override
     public BaseExplainabilityResultDto createFailedResultDto(LIMEExplainabilityRequest request, Throwable throwable) {
         return LIMEExplainabilityResultDto.buildFailed(request.getExecutionId(), throwable.getMessage());
     }
 
     @Override
-    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model) {
-        return explainer.explainAsync(prediction, model);
+    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
+            PredictionProvider predictionProvider) {
+        return explainer.explainAsync(prediction,
+                predictionProvider);
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
+            PredictionProvider predictionProvider,
+            Consumer<Void> intermediateResultsConsumer) {
+        return explainer.explainAsync(prediction,
+                predictionProvider,
+                intermediateResultsConsumer);
     }
 }

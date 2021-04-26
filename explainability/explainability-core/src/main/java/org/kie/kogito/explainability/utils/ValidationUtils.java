@@ -45,7 +45,7 @@ public class ValidationUtils {
      * @throws ValidationException if either positive or negative stability scores are lower than minimum for any decision
      */
     public static void validateLocalSaliencyStability(PredictionProvider model, Prediction prediction,
-            LocalExplainer<Map<String, Saliency>> explainer,
+            LocalExplainer<Map<String, Saliency>, Void> explainer,
             int topK, double minimumPositiveStabilityScore,
             double minimumNegativeStabilityScore)
             throws ValidationException, InterruptedException, ExecutionException, TimeoutException {

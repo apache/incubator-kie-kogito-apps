@@ -17,6 +17,8 @@ package org.kie.kogito.trusty.storage.api.model;
 
 import java.util.Collection;
 
+import javax.validation.constraints.NotNull;
+
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -29,9 +31,11 @@ public class CounterfactualSearchDomain extends TypedVariable<CounterfactualSear
     public static final String DOMAIN = "domain";
 
     @JsonProperty(IS_FIXED)
+    @NotNull(message = "isFixed object must be provided.")
     private Boolean isFixed;
 
     @JsonProperty(DOMAIN)
+    @NotNull(message = "domain object must be provided.")
     private CounterfactualDomain domain;
 
     public static CounterfactualSearchDomain buildCollection(String name, String typeRef, Collection<CounterfactualSearchDomain> components,
@@ -55,12 +59,12 @@ public class CounterfactualSearchDomain extends TypedVariable<CounterfactualSear
     public CounterfactualSearchDomain() {
     }
 
-    public CounterfactualSearchDomain(TypedValue.Kind kind,
-            String name,
-            String typeRef,
+    public CounterfactualSearchDomain(@NotNull TypedValue.Kind kind,
+            @NotNull String name,
+            @NotNull String typeRef,
             Collection<CounterfactualSearchDomain> components,
-            Boolean isFixed,
-            CounterfactualDomain domain) {
+            @NotNull Boolean isFixed,
+            @NotNull CounterfactualDomain domain) {
         super(kind, name, typeRef, components);
         this.isFixed = isFixed;
         this.domain = domain;

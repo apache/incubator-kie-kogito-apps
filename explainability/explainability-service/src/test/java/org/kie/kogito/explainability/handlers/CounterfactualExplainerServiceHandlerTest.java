@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
@@ -36,19 +36,25 @@ import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualSolution;
+import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
 import org.kie.kogito.explainability.models.CounterfactualExplainabilityRequest;
 import org.kie.kogito.explainability.models.ModelIdentifier;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.StructureValue;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
+import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 
 import com.fasterxml.jackson.databind.node.IntNode;
 
@@ -128,11 +134,13 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyMap(),
                 Collections.emptyMap());
 
-        CounterfactualPrediction prediction = (CounterfactualPrediction) handler.getPrediction(request);
+        Prediction prediction = handler.getPrediction(request);
+        assertTrue(prediction instanceof CounterfactualPrediction);
+        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
 
-        assertTrue(prediction.getInput().getFeatures().isEmpty());
-        assertTrue(prediction.getOutput().getOutputs().isEmpty());
-        assertTrue(prediction.getDomain().getFeatureDomains().isEmpty());
+        assertTrue(counterfactualPrediction.getInput().getFeatures().isEmpty());
+        assertTrue(counterfactualPrediction.getOutput().getOutputs().isEmpty());
+        assertTrue(counterfactualPrediction.getDomain().getFeatureDomains().isEmpty());
     }
 
     @Test
@@ -146,17 +154,19 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyMap(),
                 Collections.emptyMap());
 
-        CounterfactualPrediction prediction = (CounterfactualPrediction) handler.getPrediction(request);
+        Prediction prediction = handler.getPrediction(request);
+        assertTrue(prediction instanceof CounterfactualPrediction);
+        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
 
-        assertEquals(1, prediction.getInput().getFeatures().size());
-        Optional<Feature> oInput1 = prediction.getInput().getFeatures().stream().filter(f -> f.getName().equals("input1")).findFirst();
+        assertEquals(1, counterfactualPrediction.getInput().getFeatures().size());
+        Optional<Feature> oInput1 = counterfactualPrediction.getInput().getFeatures().stream().filter(f -> f.getName().equals("input1")).findFirst();
         assertTrue(oInput1.isPresent());
         Feature input1 = oInput1.get();
         assertEquals(Type.NUMBER, input1.getType());
         assertEquals(20, input1.getValue().asNumber());
 
-        assertTrue(prediction.getOutput().getOutputs().isEmpty());
-        assertTrue(prediction.getDomain().getFeatureDomains().isEmpty());
+        assertTrue(counterfactualPrediction.getOutput().getOutputs().isEmpty());
+        assertTrue(counterfactualPrediction.getDomain().getFeatureDomains().isEmpty());
     }
 
     @Test
@@ -198,18 +208,20 @@ public class CounterfactualExplainerServiceHandlerTest {
                         new UnitValue("number", new IntNode(20))),
                 Collections.emptyMap());
 
-        CounterfactualPrediction prediction = (CounterfactualPrediction) handler.getPrediction(request);
+        Prediction prediction = handler.getPrediction(request);
+        assertTrue(prediction instanceof CounterfactualPrediction);
+        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
 
-        assertEquals(1, prediction.getOutput().getOutputs().size());
-        Optional<Output> oOutput1 = prediction.getOutput().getOutputs().stream().filter(f -> f.getName().equals("output1")).findFirst();
+        assertEquals(1, counterfactualPrediction.getOutput().getOutputs().size());
+        Optional<Output> oOutput1 = counterfactualPrediction.getOutput().getOutputs().stream().filter(f -> f.getName().equals("output1")).findFirst();
         assertTrue(oOutput1.isPresent());
         Output output1 = oOutput1.get();
         assertEquals(Type.NUMBER, output1.getType());
         assertEquals(20, output1.getValue().asNumber());
 
-        assertTrue(prediction.getInput().getFeatures().isEmpty());
-        assertTrue(prediction.getDomain().getFeatureDomains().isEmpty());
-        assertTrue(prediction.getConstraints().isEmpty());
+        assertTrue(counterfactualPrediction.getInput().getFeatures().isEmpty());
+        assertTrue(counterfactualPrediction.getDomain().getFeatureDomains().isEmpty());
+        assertTrue(counterfactualPrediction.getConstraints().isEmpty());
     }
 
     @Test
@@ -253,17 +265,19 @@ public class CounterfactualExplainerServiceHandlerTest {
                                 true,
                                 new CounterfactualDomainRangeDto(new IntNode(10), new IntNode(20)))));
 
-        CounterfactualPrediction prediction = (CounterfactualPrediction) handler.getPrediction(request);
+        Prediction prediction = handler.getPrediction(request);
+        assertTrue(prediction instanceof CounterfactualPrediction);
+        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
 
-        assertEquals(1, prediction.getDomain().getFeatureDomains().size());
-        FeatureDomain featureDomain1 = prediction.getDomain().getFeatureDomains().get(0);
+        assertEquals(1, counterfactualPrediction.getDomain().getFeatureDomains().size());
+        FeatureDomain featureDomain1 = counterfactualPrediction.getDomain().getFeatureDomains().get(0);
         assertEquals(10, featureDomain1.getLowerBound());
         assertEquals(20, featureDomain1.getUpperBound());
 
-        assertTrue(prediction.getInput().getFeatures().isEmpty());
-        assertTrue(prediction.getOutput().getOutputs().isEmpty());
-        assertEquals(1, prediction.getConstraints().size());
-        assertTrue(prediction.getConstraints().get(0));
+        assertTrue(counterfactualPrediction.getInput().getFeatures().isEmpty());
+        assertTrue(counterfactualPrediction.getOutput().getOutputs().isEmpty());
+        assertEquals(1, counterfactualPrediction.getConstraints().size());
+        assertTrue(counterfactualPrediction.getConstraints().get(0));
     }
 
     @Test
@@ -302,9 +316,64 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    @Disabled("See https://issues.redhat.com/browse/FAI-439")
-    //TODO When the results are passed back to TrustyService this will be completed.
     public void testCreateSucceededResultDto() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        CounterfactualResult counterfactuals = new CounterfactualResult(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+                List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
+                true,
+                UUID.fromString(SOLUTION_ID),
+                UUID.fromString(EXECUTION_ID));
+
+        BaseExplainabilityResultDto base = handler.createSucceededResultDto(request, counterfactuals);
+        assertTrue(base instanceof CounterfactualExplainabilityResultDto);
+        CounterfactualExplainabilityResultDto result = (CounterfactualExplainabilityResultDto) base;
+
+        assertEquals(ExplainabilityStatus.SUCCEEDED, result.getStatus());
+        assertEquals(EXECUTION_ID, result.getExecutionId());
+        assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
+        assertEquals(1, result.getInputs().size());
+        assertTrue(result.getInputs().containsKey("input1"));
+        TypedValue input1 = result.getInputs().get("input1");
+        assertEquals(Double.class.getSimpleName(), input1.getType());
+        assertEquals(TypedValue.Kind.UNIT, input1.getKind());
+        assertEquals(123.0, input1.toUnit().getValue().asDouble());
+
+        assertEquals(1, result.getOutputs().size());
+        assertTrue(result.getOutputs().containsKey("output1"));
+        TypedValue output1 = result.getOutputs().get("output1");
+        assertEquals(Double.class.getSimpleName(), output1.getType());
+        assertEquals(TypedValue.Kind.UNIT, output1.getKind());
+        assertEquals(555.0, output1.toUnit().getValue().asDouble());
+    }
+
+    @Test
+    public void testCreateSucceededResultDtoWithNullPredictions() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(),
+                null,
+                true,
+                UUID.fromString(SOLUTION_ID),
+                UUID.fromString(EXECUTION_ID));
+
+        assertThrows(NullPointerException.class, () -> handler.createSucceededResultDto(request, counterfactuals));
+    }
+
+    @Test
+    public void testCreateSucceededResultDtoWithEmptyPredictions() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 COUNTERFACTUAL_ID,
                 SERVICE_URL,
@@ -319,14 +388,63 @@ public class CounterfactualExplainerServiceHandlerTest {
                 UUID.fromString(SOLUTION_ID),
                 UUID.fromString(EXECUTION_ID));
 
-        BaseExplainabilityResultDto base = handler.createSucceededResultDto(request, counterfactuals);
+        assertThrows(IllegalStateException.class, () -> handler.createSucceededResultDto(request, counterfactuals));
+    }
+
+    @Test
+    public void testCreateSucceededResultDtoWithMoreThanOnePrediction() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(),
+                List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0))),
+                        new PredictionOutput(List.of(new Output("output2", Type.NUMBER, new Value(777.0d), 2.0)))),
+                true,
+                UUID.fromString(SOLUTION_ID),
+                UUID.fromString(EXECUTION_ID));
+
+        assertThrows(IllegalStateException.class, () -> handler.createSucceededResultDto(request, counterfactuals));
+    }
+
+    @Test
+    public void testCreateIntermediateResultDto() {
+        PredictionProvider predictionProvider = mock(PredictionProvider.class);
+        BendableBigDecimalScore score = BendableBigDecimalScore.zero(0, 0);
+
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        CounterfactualSolution counterfactuals = new CounterfactualSolution(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+                predictionProvider,
+                List.of(new Output("goal1", Type.NUMBER, new Value(27.0d), 1.0)),
+                UUID.fromString(SOLUTION_ID),
+                UUID.fromString(EXECUTION_ID));
+        counterfactuals.setScore(score);
+
+        BaseExplainabilityResultDto base = handler.createIntermediateResultDto(request, counterfactuals);
         assertTrue(base instanceof CounterfactualExplainabilityResultDto);
         CounterfactualExplainabilityResultDto result = (CounterfactualExplainabilityResultDto) base;
 
         assertEquals(ExplainabilityStatus.SUCCEEDED, result.getStatus());
         assertEquals(EXECUTION_ID, result.getExecutionId());
         assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
-        assertTrue(result.getInputs().isEmpty());
+        assertEquals(1, result.getInputs().size());
+        assertTrue(result.getInputs().containsKey("input1"));
+        TypedValue input1 = result.getInputs().get("input1");
+        assertEquals(Double.class.getSimpleName(), input1.getType());
+        assertEquals(TypedValue.Kind.UNIT, input1.getKind());
+        assertEquals(123.0, input1.toUnit().getValue().asDouble());
+
         assertTrue(result.getOutputs().isEmpty());
     }
 
@@ -353,10 +471,22 @@ public class CounterfactualExplainerServiceHandlerTest {
     @Test
     public void testExplainAsyncDelegation() {
         Prediction prediction = mock(Prediction.class);
-        PredictionProvider model = mock(PredictionProvider.class);
+        PredictionProvider predictionProvider = mock(PredictionProvider.class);
 
-        handler.explainAsync(prediction, model);
+        handler.explainAsync(prediction, predictionProvider);
 
-        verify(explainer).explainAsync(eq(prediction), eq(model));
+        verify(explainer).explainAsync(eq(prediction), eq(predictionProvider));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testExplainAsyncWithConsumerDelegation() {
+        Prediction prediction = mock(Prediction.class);
+        PredictionProvider predictionProvider = mock(PredictionProvider.class);
+        Consumer<CounterfactualSolution> callback = mock(Consumer.class);
+
+        handler.explainAsync(prediction, predictionProvider, callback);
+
+        verify(explainer).explainAsync(eq(prediction), eq(predictionProvider), eq(callback));
     }
 }

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -55,7 +56,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
  * - perturbing numerical features is done by sampling from a standard normal distribution centered around the value of the feature value associated with the prediction to be explained
  * - numerical features are max-min scaled and clustered via a gaussian kernel
  */
-public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
+public class LimeExplainer implements LocalExplainer<Map<String, Saliency>, Void> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LimeExplainer.class);
 
@@ -75,6 +76,14 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
     @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model) {
+        return explainAsync(prediction, model, unused -> {
+            /* NOP */});
+    }
+
+    @Override
+    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
+            PredictionProvider model,
+            Consumer<Void> intermediateResultsConsumer) {
         PredictionInput originalInput = prediction.getInput();
         if (originalInput.getFeatures().isEmpty()) {
             throw new LocalExplanationException("cannot explain a prediction whose input is empty");
