@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,7 +40,6 @@ import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
-import org.kie.kogito.tracing.typedvalue.UnitValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -216,33 +214,6 @@ public class ConversionUtils {
             }
         }
         return Optional.empty();
-    }
-
-    public static Map<String, TypedValue> fromFeatureList(List<Feature> values) {
-        return fromList(values, ConversionUtils::fromFeature);
-    }
-
-    public static Map<String, TypedValue> fromOutputList(List<Output> values) {
-        return fromList(values, ConversionUtils::fromOutput);
-    }
-
-    private static <T> Map<String, TypedValue> fromList(List<T> values, Function<T, TypedValue> unitConverter) {
-        if (values == null) {
-            return Collections.emptyMap();
-        }
-        //TODO We need to be able to convert back to Map from List
-        return values.stream()
-                .map(unitConverter)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap((k) -> "???", (v) -> v));
-    }
-
-    private static TypedValue fromFeature(Feature feature) {
-        return new UnitValue(feature.getValue().asString());
-    }
-
-    private static TypedValue fromOutput(Output output) {
-        return new UnitValue(output.getValue().asString());
     }
 
 }

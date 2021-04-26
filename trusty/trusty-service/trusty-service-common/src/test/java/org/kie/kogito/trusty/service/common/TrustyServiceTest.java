@@ -432,7 +432,7 @@ public class TrustyServiceTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void givenStoredExecutionWhenCounterfactualRequestIsMadeThenExplainabilityEventHasCorrectPaytload() {
+    void givenStoredExecutionWhenCounterfactualRequestIsMadeThenExplainabilityEventHasCorrectPayload() {
         Storage<String, Decision> decisionStorage = mock(Storage.class);
         Storage<String, CounterfactualExplainabilityRequest> counterfactualStorage = mock(Storage.class);
         ArgumentCaptor<BaseExplainabilityRequestDto> explainabilityEventArgumentCaptor = ArgumentCaptor.forClass(BaseExplainabilityRequestDto.class);

@@ -23,13 +23,21 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.LIMEExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
+import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
 import org.kie.kogito.explainability.models.LIMEExplainabilityRequest;
 import org.kie.kogito.explainability.models.ModelIdentifier;
@@ -42,8 +50,9 @@ import com.fasterxml.jackson.databind.node.IntNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 public class LimeExplainerServiceHandlerTest {
 
@@ -93,16 +102,6 @@ public class LimeExplainerServiceHandlerTest {
         assertEquals(requestDto.getModelIdentifier().getResourceType(), request.getModelIdentifier().getResourceType());
         assertEquals(requestDto.getInputs(), request.getInputs());
         assertEquals(requestDto.getOutputs(), request.getOutputs());
-    }
-
-    @Test
-    public void testGetContext() {
-        LIMEExplainabilityRequest request = mock(LIMEExplainabilityRequest.class);
-        when(request.getExecutionId()).thenReturn(EXECUTION_ID);
-
-        LimeContext context = handler.getContext(request);
-
-        assertEquals(EXECUTION_ID, context.getExecutionId());
     }
 
     @Test
@@ -209,4 +208,62 @@ public class LimeExplainerServiceHandlerTest {
         assertEquals(Type.NUMBER, output3Child.getType());
         assertEquals(100, output3Child.getValue().asNumber());
     }
+
+    @Test
+    public void testCreateSucceededResultDto() {
+        LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        Map<String, Saliency> saliencies = Map.of("s1",
+                new Saliency(new Output("salary", Type.NUMBER),
+                        List.of(new FeatureImportance(new Feature("age", Type.NUMBER, new Value(25.0)), 5.0),
+                                new FeatureImportance(new Feature("dependents", Type.NUMBER, new Value(2)), -11.0))));
+
+        BaseExplainabilityResultDto base = handler.createSucceededResultDto(request, saliencies);
+        assertTrue(base instanceof LIMEExplainabilityResultDto);
+        LIMEExplainabilityResultDto result = (LIMEExplainabilityResultDto) base;
+
+        assertEquals(ExplainabilityStatus.SUCCEEDED, result.getStatus());
+        assertEquals(EXECUTION_ID, result.getExecutionId());
+        assertEquals(1, result.getSaliencies().size());
+        assertTrue(result.getSaliencies().containsKey("s1"));
+
+        SaliencyDto dto = result.getSaliencies().get("s1");
+        assertEquals(2, dto.getFeatureImportance().size());
+        assertEquals("age", dto.getFeatureImportance().get(0).getFeatureName());
+        assertEquals(5.0, dto.getFeatureImportance().get(0).getScore());
+        assertEquals("dependents", dto.getFeatureImportance().get(1).getFeatureName());
+        assertEquals(-11.0, dto.getFeatureImportance().get(1).getScore());
+    }
+
+    @Test
+    public void testCreateFailedResultDto() {
+        LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        BaseExplainabilityResultDto base = handler.createFailedResultDto(request, new NullPointerException("Something went wrong"));
+        assertTrue(base instanceof LIMEExplainabilityResultDto);
+        LIMEExplainabilityResultDto result = (LIMEExplainabilityResultDto) base;
+
+        assertEquals(ExplainabilityStatus.FAILED, result.getStatus());
+        assertEquals("Something went wrong", result.getStatusDetails());
+        assertEquals(EXECUTION_ID, result.getExecutionId());
+    }
+
+    @Test
+    public void testExplainAsyncDelegation() {
+        Prediction prediction = mock(Prediction.class);
+        PredictionProvider model = mock(PredictionProvider.class);
+
+        handler.explainAsync(prediction, model);
+
+        verify(explainer).explainAsync(eq(prediction), eq(model));
+    }
+
 }

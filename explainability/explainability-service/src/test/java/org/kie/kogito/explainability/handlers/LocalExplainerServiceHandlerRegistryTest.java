@@ -66,7 +66,7 @@ public class LocalExplainerServiceHandlerRegistryTest {
         counterfactualExplainerServiceHandler = spy(new CounterfactualExplainerServiceHandler(counterfactualExplainer));
         predictionProvider = mock(PredictionProvider.class);
 
-        Instance<LocalExplainerServiceHandler<?, ?, ?, ?>> explanationHandlers = mock(Instance.class);
+        Instance<LocalExplainerServiceHandler<?, ?, ?>> explanationHandlers = mock(Instance.class);
         when(explanationHandlers.stream()).thenReturn(Stream.of(limeExplainerServiceHandler, counterfactualExplainerServiceHandler));
         registry = new LocalExplainerServiceHandlerRegistry(explanationHandlers);
     }

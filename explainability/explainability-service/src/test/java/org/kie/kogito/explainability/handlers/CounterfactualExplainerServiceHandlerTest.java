@@ -21,18 +21,24 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityResultDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainCollectionDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainStructureDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitDto;
+import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
@@ -48,8 +54,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 public class CounterfactualExplainerServiceHandlerTest {
 
@@ -105,18 +112,6 @@ public class CounterfactualExplainerServiceHandlerTest {
         assertEquals(requestDto.getInputs(), request.getInputs());
         assertEquals(requestDto.getOutputs(), request.getOutputs());
         assertEquals(requestDto.getSearchDomains(), request.getSearchDomains());
-    }
-
-    @Test
-    public void testGetContext() {
-        CounterfactualExplainabilityRequest request = mock(CounterfactualExplainabilityRequest.class);
-        when(request.getExecutionId()).thenReturn(EXECUTION_ID);
-        when(request.getCounterfactualId()).thenReturn(COUNTERFACTUAL_ID);
-
-        CounterfactualContext context = handler.getContext(request);
-
-        assertEquals(EXECUTION_ID, context.getExecutionId());
-        assertEquals(COUNTERFACTUAL_ID, context.getCounterfactualId());
     }
 
     @Test
@@ -297,5 +292,60 @@ public class CounterfactualExplainerServiceHandlerTest {
                                         new CounterfactualDomainRangeDto(new IntNode(10), new IntNode(20)))))));
 
         assertThrows(IllegalArgumentException.class, () -> handler.getPrediction(request));
+    }
+
+    @Test
+    @Disabled("See https://issues.redhat.com/browse/FAI-439")
+    //TODO When the results are passed back to TrustyService this will be completed.
+    public void testCreateSucceededResultDto() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(), Collections.emptyList(), true);
+
+        BaseExplainabilityResultDto base = handler.createSucceededResultDto(request, counterfactuals);
+        assertTrue(base instanceof CounterfactualExplainabilityResultDto);
+        CounterfactualExplainabilityResultDto result = (CounterfactualExplainabilityResultDto) base;
+
+        assertEquals(ExplainabilityStatus.SUCCEEDED, result.getStatus());
+        assertEquals(EXECUTION_ID, result.getExecutionId());
+        assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
+        assertTrue(result.getInputs().isEmpty());
+        assertTrue(result.getOutputs().isEmpty());
+    }
+
+    @Test
+    public void testCreateFailedResultDto() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap());
+
+        BaseExplainabilityResultDto base = handler.createFailedResultDto(request, new NullPointerException("Something went wrong"));
+        assertTrue(base instanceof CounterfactualExplainabilityResultDto);
+        CounterfactualExplainabilityResultDto result = (CounterfactualExplainabilityResultDto) base;
+
+        assertEquals(ExplainabilityStatus.FAILED, result.getStatus());
+        assertEquals("Something went wrong", result.getStatusDetails());
+        assertEquals(EXECUTION_ID, result.getExecutionId());
+        assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
+    }
+
+    @Test
+    public void testExplainAsyncDelegation() {
+        Prediction prediction = mock(Prediction.class);
+        PredictionProvider model = mock(PredictionProvider.class);
+
+        handler.explainAsync(prediction, model);
+
+        verify(explainer).explainAsync(eq(prediction), eq(model));
     }
 }

@@ -34,14 +34,14 @@ public class LocalExplainerServiceHandlerRegistry {
 
     public static final String SERVICE_HANDLER_NOT_FOUND_ERROR_MESSAGE = "LocalExplainerServiceHandler could not be found for '%s'";
 
-    private Instance<LocalExplainerServiceHandler<?, ?, ?, ?>> explanationHandlers;
+    private Instance<LocalExplainerServiceHandler<?, ?, ?>> explanationHandlers;
 
     protected LocalExplainerServiceHandlerRegistry() {
         //CDI proxy
     }
 
     @Inject
-    public LocalExplainerServiceHandlerRegistry(@Any Instance<LocalExplainerServiceHandler<?, ?, ?, ?>> explanationHandlers) {
+    public LocalExplainerServiceHandlerRegistry(@Any Instance<LocalExplainerServiceHandler<?, ?, ?>> explanationHandlers) {
         this.explanationHandlers = explanationHandlers;
     }
 
@@ -52,7 +52,7 @@ public class LocalExplainerServiceHandlerRegistry {
      * @return The request used by Explainability Service
      */
     public <R extends BaseExplainabilityRequest, D extends BaseExplainabilityRequestDto> R explainabilityRequestFrom(D dto) {
-        LocalExplainerServiceHandler<?, ?, ?, ?> explanationHandler = getLocalExplainerDto(dto.getClass())
+        LocalExplainerServiceHandler<?, ?, ?> explanationHandler = getLocalExplainerDto(dto.getClass())
                 .orElseThrow(() -> new IllegalArgumentException(String.format(SERVICE_HANDLER_NOT_FOUND_ERROR_MESSAGE, dto.getClass().getName())));
 
         return cast(explanationHandler.explainabilityRequestFrom(castDto(dto)));
@@ -72,7 +72,7 @@ public class LocalExplainerServiceHandlerRegistry {
     public <R extends BaseExplainabilityRequest> CompletableFuture<BaseExplainabilityResultDto> explainAsyncWithResults(R request,
             PredictionProvider model) {
 
-        LocalExplainerServiceHandler<?, ?, ?, ?> explanationHandler = getLocalExplainer(request.getClass())
+        LocalExplainerServiceHandler<?, ?, ?> explanationHandler = getLocalExplainer(request.getClass())
                 .orElseThrow(() -> new IllegalArgumentException(String.format(SERVICE_HANDLER_NOT_FOUND_ERROR_MESSAGE, request.getClass().getName())));
 
         try {
@@ -82,11 +82,11 @@ public class LocalExplainerServiceHandlerRegistry {
         }
     }
 
-    private <T extends BaseExplainabilityRequest> Optional<LocalExplainerServiceHandler<?, ?, ?, ?>> getLocalExplainer(Class<T> type) {
+    private <T extends BaseExplainabilityRequest> Optional<LocalExplainerServiceHandler<?, ?, ?>> getLocalExplainer(Class<T> type) {
         return this.explanationHandlers.stream().filter(explainer -> explainer.supports(type)).findFirst();
     }
 
-    private <T extends BaseExplainabilityRequestDto> Optional<LocalExplainerServiceHandler<?, ?, ?, ?>> getLocalExplainerDto(Class<T> type) {
+    private <T extends BaseExplainabilityRequestDto> Optional<LocalExplainerServiceHandler<?, ?, ?>> getLocalExplainerDto(Class<T> type) {
         return this.explanationHandlers.stream().filter(explainer -> explainer.supportsDto(type)).findFirst();
     }
 

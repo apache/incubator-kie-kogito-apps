@@ -43,7 +43,7 @@ import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
-public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler<Map<String, Saliency>, LIMEExplainabilityRequest, LIMEExplainabilityRequestDto, LimeContext> {
+public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler<Map<String, Saliency>, LIMEExplainabilityRequest, LIMEExplainabilityRequestDto> {
 
     private final LimeExplainer explainer;
 
@@ -73,11 +73,6 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
     }
 
     @Override
-    public LimeContext getContext(LIMEExplainabilityRequest request) {
-        return new LimeContext(request.getExecutionId());
-    }
-
-    @Override
     public Prediction getPrediction(LIMEExplainabilityRequest request) {
         Map<String, TypedValue> inputs = request.getInputs();
         Map<String, TypedValue> outputs = request.getOutputs();
@@ -90,9 +85,8 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
     @Override
     public BaseExplainabilityResultDto createSucceededResultDto(LIMEExplainabilityRequest request,
             Map<String, Saliency> result) {
-        LimeContext context = getContext(request);
         return LIMEExplainabilityResultDto.buildSucceeded(
-                context.getExecutionId(),
+                request.getExecutionId(),
                 result.entrySet().stream().collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> new SaliencyDto(e.getValue().getPerFeatureImportance().stream()
@@ -102,8 +96,7 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
 
     @Override
     public BaseExplainabilityResultDto createFailedResultDto(LIMEExplainabilityRequest request, Throwable throwable) {
-        LimeContext context = getContext(request);
-        return LIMEExplainabilityResultDto.buildFailed(context.getExecutionId(), throwable.getMessage());
+        return LIMEExplainabilityResultDto.buildFailed(request.getExecutionId(), throwable.getMessage());
     }
 
     @Override

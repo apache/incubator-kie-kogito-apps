@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.handlers;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.kie.kogito.explainability.ConversionUtils;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
@@ -56,7 +56,7 @@ import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
 public class CounterfactualExplainerServiceHandler
-        implements LocalExplainerServiceHandler<CounterfactualResult, CounterfactualExplainabilityRequest, CounterfactualExplainabilityRequestDto, CounterfactualContext> {
+        implements LocalExplainerServiceHandler<CounterfactualResult, CounterfactualExplainabilityRequest, CounterfactualExplainabilityRequestDto> {
 
     private final CounterfactualExplainer explainer;
 
@@ -85,11 +85,6 @@ public class CounterfactualExplainerServiceHandler
                 dto.getInputs(),
                 dto.getOutputs(),
                 dto.getSearchDomains());
-    }
-
-    @Override
-    public CounterfactualContext getContext(CounterfactualExplainabilityRequest request) {
-        return new CounterfactualContext(request.getExecutionId(), request.getCounterfactualId());
     }
 
     @Override
@@ -129,9 +124,11 @@ public class CounterfactualExplainerServiceHandler
     }
 
     @Override
+    @SuppressWarnings("unused")
+    //TODO See https://issues.redhat.com/browse/FAI-439
+    //When the results are passed back to TrustyService this will be completed.
     public BaseExplainabilityResultDto createSucceededResultDto(CounterfactualExplainabilityRequest request,
             CounterfactualResult result) {
-        CounterfactualContext context = getContext(request);
         List<Feature> features = result.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
         List<PredictionOutput> predictionOutputs = result.getOutput();
         if (Objects.isNull(predictionOutputs)) {
@@ -147,19 +144,19 @@ public class CounterfactualExplainerServiceHandler
                     request.getExecutionId(),
                     request.getCounterfactualId()));
         }
+
         List<Output> outputs = predictionOutputs.get(0).getOutputs();
-        return CounterfactualExplainabilityResultDto.buildSucceeded(context.getExecutionId(),
-                context.getCounterfactualId(),
+        return CounterfactualExplainabilityResultDto.buildSucceeded(request.getExecutionId(),
+                request.getCounterfactualId(),
                 result.isValid(),
-                ConversionUtils.fromFeatureList(features),
-                ConversionUtils.fromOutputList(outputs));
+                Collections.emptyMap(),
+                Collections.emptyMap());
     }
 
     @Override
     public BaseExplainabilityResultDto createFailedResultDto(CounterfactualExplainabilityRequest request, Throwable throwable) {
-        CounterfactualContext context = getContext(request);
-        return CounterfactualExplainabilityResultDto.buildFailed(context.getExecutionId(),
-                context.getCounterfactualId(),
+        return CounterfactualExplainabilityResultDto.buildFailed(request.getExecutionId(),
+                request.getCounterfactualId(),
                 throwable.getMessage());
     }
 

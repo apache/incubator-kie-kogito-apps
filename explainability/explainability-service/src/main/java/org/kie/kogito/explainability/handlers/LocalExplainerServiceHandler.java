@@ -30,9 +30,8 @@ import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
  *
  * @param <R> the type of the local explanation request
  * @param <T> the type of local explanation generated
- * @param <C> the type of context needed by the local explanation
  */
-public interface LocalExplainerServiceHandler<T, R extends BaseExplainabilityRequest, D extends BaseExplainabilityRequestDto, C extends LocalExplainerServiceHandler.Context>
+public interface LocalExplainerServiceHandler<T, R extends BaseExplainabilityRequest, D extends BaseExplainabilityRequestDto>
         extends LocalExplainer<T> {
 
     /**
@@ -63,12 +62,6 @@ public interface LocalExplainerServiceHandler<T, R extends BaseExplainabilityReq
      * @return The request used by Explainability Service
      */
     R explainabilityRequestFrom(D dto);
-
-    /**
-     * @param request
-     * @return
-     */
-    C getContext(R request);
 
     /**
      * Gets a Prediction object from the request for the LocalExplainer. It should contain all the necessary
@@ -116,11 +109,4 @@ public interface LocalExplainerServiceHandler<T, R extends BaseExplainabilityReq
      */
     BaseExplainabilityResultDto createFailedResultDto(R request, Throwable throwable);
 
-    /**
-     * Context of the Explainability request
-     */
-    interface Context {
-
-        String getExecutionId();
-    }
 }
