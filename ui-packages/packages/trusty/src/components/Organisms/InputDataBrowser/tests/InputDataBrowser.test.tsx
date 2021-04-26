@@ -1,11 +1,14 @@
 import React from 'react';
 import InputDataBrowser from '../InputDataBrowser';
-import { shallow, mount } from 'enzyme';
-import { ItemObject, RemoteData } from '../../../../types';
+import { mount, shallow } from 'enzyme';
+import { ItemObject, RemoteData, RemoteDataStatus } from '../../../../types';
 
 describe('InputDataBrowser', () => {
   test('renders a loading animation while fetching data', () => {
-    const inputData = { status: 'LOADING' } as RemoteData<Error, ItemObject[]>;
+    const inputData = { status: RemoteDataStatus.LOADING } as RemoteData<
+      Error,
+      ItemObject[]
+    >;
     const wrapper = shallow(<InputDataBrowser inputData={inputData} />);
 
     expect(wrapper).toMatchSnapshot();
@@ -13,14 +16,19 @@ describe('InputDataBrowser', () => {
 
   test('renders a list of inputs', () => {
     const inputData = {
-      status: 'SUCCESS',
+      status: RemoteDataStatus.SUCCESS,
       data: [
-        { name: 'Asset Score', typeRef: 'number', value: 738, components: [] },
+        {
+          name: 'Asset Score',
+          typeRef: 'number',
+          value: 738,
+          components: null
+        },
         {
           name: 'Asset Amount',
           typeRef: 'number',
           value: 700,
-          components: []
+          components: null
         },
         {
           name: 'Property',
@@ -31,7 +39,7 @@ describe('InputDataBrowser', () => {
               name: 'Purchase Price',
               typeRef: 'number',
               value: 34000,
-              components: []
+              components: null
             }
           ]
         }

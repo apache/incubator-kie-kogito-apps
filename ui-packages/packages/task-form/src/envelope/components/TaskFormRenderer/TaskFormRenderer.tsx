@@ -17,7 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
-import { UserTaskInstance } from '@kogito-apps/task-inbox';
+import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskFormSchema } from '../../../types';
 
 import { FormAction } from '../utils';
@@ -79,7 +79,7 @@ const TaskFormRenderer: React.FC<IOwnProps & OUIAProps> = ({
   };
 
   return (
-    <div {...componentOuiaProps(ouiaId, 'task-form', ouiaSafe)}>
+    <div {...componentOuiaProps(ouiaId, 'task-form-renderer', ouiaSafe)}>
       <FormRenderer
         formSchema={formSchema}
         model={formData || generateFormData(userTask)}
