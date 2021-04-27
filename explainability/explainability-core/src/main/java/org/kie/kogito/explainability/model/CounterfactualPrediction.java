@@ -34,7 +34,6 @@ public class CounterfactualPrediction extends BasePrediction {
     private final DataDistribution dataDistribution;
 
     private final Consumer<CounterfactualSolution> intermediateConsumer;
-    private final Consumer<CounterfactualSolution> finalConsumer;
 
     public CounterfactualPrediction(PredictionInput input,
             PredictionOutput output) {
@@ -45,7 +44,6 @@ public class CounterfactualPrediction extends BasePrediction {
                 .collect(Collectors.toList());
         this.dataDistribution = null;
         this.intermediateConsumer = null;
-        this.finalConsumer = null;
     }
 
     public CounterfactualPrediction(PredictionInput input,
@@ -54,14 +52,12 @@ public class CounterfactualPrediction extends BasePrediction {
             List<Boolean> constraints,
             DataDistribution dataDistribution,
             Consumer<CounterfactualSolution> intermediateConsumer,
-            Consumer<CounterfactualSolution> finalConsumer,
             UUID executionId) {
         super(input, output, executionId);
         this.domain = domain;
         this.constraints = constraints;
         this.dataDistribution = dataDistribution;
         this.intermediateConsumer = intermediateConsumer;
-        this.finalConsumer = finalConsumer;
     }
 
     public PredictionFeatureDomain getDomain() {
@@ -78,10 +74,6 @@ public class CounterfactualPrediction extends BasePrediction {
 
     public Consumer<CounterfactualSolution> getIntermediateConsumer() {
         return intermediateConsumer;
-    }
-
-    public Consumer<CounterfactualSolution> getFinalConsumer() {
-        return finalConsumer;
     }
 
 }

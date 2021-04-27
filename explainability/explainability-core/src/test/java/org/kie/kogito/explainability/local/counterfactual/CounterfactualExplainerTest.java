@@ -23,7 +23,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -93,7 +92,7 @@ class CounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         PredictionFeatureDomain domain = new PredictionFeatureDomain(dataDomain.getFeatureDomains());
         Prediction prediction =
-                new CounterfactualPrediction(input, output, domain, constraints, null, null, null, UUID.randomUUID());
+                new CounterfactualPrediction(input, output, domain, constraints, null, null, UUID.randomUUID());
         return explainer.explainAsync(prediction, model)
                 .get(predictionTimeOut, predictionTimeUnit);
     }
@@ -132,7 +131,7 @@ class CounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction =
                 new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null,
-                        null, null, UUID.randomUUID());
+                        null, UUID.randomUUID());
 
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -607,13 +606,8 @@ class CounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        final AtomicBoolean finalConsumerCalled = new AtomicBoolean(false);
-
         final Consumer<CounterfactualSolution> assertIntermediateCounterfactualNotNull = counterfactual -> {
         };
-
-        final Consumer<CounterfactualSolution> assertFinalCounterfactualNotNull =
-                counterfactual -> finalConsumerCalled.set(true);
 
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
@@ -625,7 +619,7 @@ class CounterfactualExplainerTest {
         PredictionProvider model = TestUtils.getSumSkipModel(0);
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
-                constraints, null, assertIntermediateCounterfactualNotNull, assertFinalCounterfactualNotNull,
+                constraints, null, assertIntermediateCounterfactualNotNull,
                 UUID.randomUUID());
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -634,7 +628,6 @@ class CounterfactualExplainerTest {
         }
 
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
-        assertTrue(finalConsumerCalled.get());
     }
 
     @ParameterizedTest
@@ -695,7 +688,7 @@ class CounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         final UUID executionId = UUID.randomUUID();
         Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
-                constraints, null, captureIntermediateIds.andThen(captureExecutionIds), null, executionId);
+                constraints, null, captureIntermediateIds.andThen(captureExecutionIds), executionId);
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
 

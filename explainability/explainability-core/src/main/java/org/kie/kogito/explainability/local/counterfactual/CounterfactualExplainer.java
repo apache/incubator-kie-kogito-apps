@@ -64,9 +64,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public static final Consumer<CounterfactualSolution> defaultIntermediateConsumer =
             counterfactual -> logger.debug("Intermediate counterfactual: {}", counterfactual.getEntities());
 
-    public static final Consumer<CounterfactualSolution> defaultFinalConsumer =
-            counterfactual -> logger.debug("Final counterfactual: {}", counterfactual.getEntities());
-
     public static final Consumer<CounterfactualSolution> assignCounterfactualId =
             counterfactual -> {
                 counterfactual.setCounterfactualId(UUID.randomUUID());
@@ -86,8 +83,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      * minimum prediction score for a counterfactual to be considered.
      * A customizable OptaPlanner solver configuration can be passed using a {@link SolverConfig}.
      * A {@link Consumer<CounterfactualSolution>} should be provided for the intermediate and final search results.
-     * Note that the final counterfactual is always returned by the prediction method itself, which means that the
-     * consumer for the final counterfactual can be used to other purposes.
      *
      * @param solverConfig An OptaPlanner {@link SolverConfig} configuration
      */
@@ -140,13 +135,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 final Consumer<CounterfactualSolution> intermediateResultsConsumer =
                         cfPrediction.getIntermediateConsumer() == null ? defaultIntermediateConsumer
                                 : cfPrediction.getIntermediateConsumer();
-                final Consumer<CounterfactualSolution> finalResultsConsumer =
-                        cfPrediction.getFinalConsumer() == null ? defaultFinalConsumer : cfPrediction.getFinalConsumer();
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
                         solverManager.solveAndListen(executionId, initial,
                                 assignCounterfactualId.andThen(intermediateResultsConsumer),
-                                assignCounterfactualId.andThen(finalResultsConsumer),
                                 null);
                 try {
                     // Wait until the solving ends
