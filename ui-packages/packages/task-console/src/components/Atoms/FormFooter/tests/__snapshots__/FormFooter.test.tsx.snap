@@ -15,9 +15,14 @@ exports[`Form Footer test testing action click 1`] = `
     ]
   }
 >
-  <ActionGroup>
+  <ActionGroup
+    data-ouia-component-type="form-footer"
+    data-ouia-safe={true}
+  >
     <div
       className="pf-c-form__group pf-m-action"
+      data-ouia-component-type="form-footer"
+      data-ouia-safe={true}
     >
       <div
         className="pf-c-form__group-control"
@@ -26,6 +31,7 @@ exports[`Form Footer test testing action click 1`] = `
           className="pf-c-form__actions"
         >
           <Button
+            isDisabled={false}
             key="submit-Complete"
             onClick={[Function]}
             type="submit"
@@ -35,17 +41,19 @@ exports[`Form Footer test testing action click 1`] = `
               aria-disabled={false}
               aria-label={null}
               className="pf-c-button pf-m-primary"
-              data-ouia-component-id={3}
+              data-ouia-component-id="OUIA-Generated-Button-primary-2"
               data-ouia-component-type="PF4/Button"
               data-ouia-safe={true}
               disabled={false}
               onClick={[Function]}
+              role={null}
               type="submit"
             >
               Complete
             </button>
           </Button>
           <Button
+            isDisabled={false}
             key="submit-Release"
             onClick={[Function]}
             type="submit"
@@ -55,11 +63,12 @@ exports[`Form Footer test testing action click 1`] = `
               aria-disabled={false}
               aria-label={null}
               className="pf-c-button pf-m-secondary"
-              data-ouia-component-id={4}
+              data-ouia-component-id="OUIA-Generated-Button-secondary-3"
               data-ouia-component-type="PF4/Button"
               data-ouia-safe={true}
               disabled={false}
               onClick={[Function]}
+              role={null}
               type="submit"
             >
               Release
@@ -91,9 +100,14 @@ exports[`Form Footer test testing showing actions 1`] = `
     ]
   }
 >
-  <ActionGroup>
+  <ActionGroup
+    data-ouia-component-type="form-footer"
+    data-ouia-safe={true}
+  >
     <div
       className="pf-c-form__group pf-m-action"
+      data-ouia-component-type="form-footer"
+      data-ouia-safe={true}
     >
       <div
         className="pf-c-form__group-control"
@@ -102,6 +116,7 @@ exports[`Form Footer test testing showing actions 1`] = `
           className="pf-c-form__actions"
         >
           <Button
+            isDisabled={false}
             key="submit-Complete"
             onClick={[Function]}
             type="submit"
@@ -111,17 +126,19 @@ exports[`Form Footer test testing showing actions 1`] = `
               aria-disabled={false}
               aria-label={null}
               className="pf-c-button pf-m-primary"
-              data-ouia-component-id={0}
+              data-ouia-component-id="OUIA-Generated-Button-primary-1"
               data-ouia-component-type="PF4/Button"
               data-ouia-safe={true}
               disabled={false}
               onClick={[Function]}
+              role={null}
               type="submit"
             >
               Complete
             </button>
           </Button>
           <Button
+            isDisabled={false}
             key="submit-Abort"
             onClick={[Function]}
             type="submit"
@@ -131,17 +148,19 @@ exports[`Form Footer test testing showing actions 1`] = `
               aria-disabled={false}
               aria-label={null}
               className="pf-c-button pf-m-secondary"
-              data-ouia-component-id={1}
+              data-ouia-component-id="OUIA-Generated-Button-secondary-1"
               data-ouia-component-type="PF4/Button"
               data-ouia-safe={true}
               disabled={false}
               onClick={[Function]}
+              role={null}
               type="submit"
             >
               Abort
             </button>
           </Button>
           <Button
+            isDisabled={false}
             key="submit-Release"
             onClick={[Function]}
             type="submit"
@@ -151,11 +170,12 @@ exports[`Form Footer test testing showing actions 1`] = `
               aria-disabled={false}
               aria-label={null}
               className="pf-c-button pf-m-secondary"
-              data-ouia-component-id={2}
+              data-ouia-component-id="OUIA-Generated-Button-secondary-2"
               data-ouia-component-type="PF4/Button"
               data-ouia-safe={true}
               disabled={false}
               onClick={[Function]}
+              role={null}
               type="submit"
             >
               Release

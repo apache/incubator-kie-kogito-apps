@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.graphql.query;
 
 import java.util.Collection;
@@ -24,6 +23,10 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.graphql.GraphQLSchemaManager;
+import org.kie.kogito.persistence.protobuf.ProtobufService;
+
 import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInputObjectField;
@@ -31,9 +34,6 @@ import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchemaElement;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.graphql.GraphQLSchemaManager;
-import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 import static io.restassured.RestAssured.given;
 import static java.lang.String.format;
@@ -61,7 +61,8 @@ abstract class AbstractGraphQLQueryOrderByIT {
 
     @Test
     void testProcessInstancesSortUsingVariable() {
-        given().contentType(ContentType.JSON).body("{ \"query\" : \"query ($sort: ProcessInstanceOrderBy) { ProcessInstances(orderBy: $sort){ id } }\", \"variables\" : { \"sort\" : { \"start\": \"ASC\", \"processId\": \"DESC\" } } }")
+        given().contentType(ContentType.JSON).body(
+                "{ \"query\" : \"query ($sort: ProcessInstanceOrderBy) { ProcessInstances(orderBy: $sort){ id } }\", \"variables\" : { \"sort\" : { \"start\": \"ASC\", \"processId\": \"DESC\" } } }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200).body("data.ProcessInstances", isA(Collection.class));
     }
@@ -87,11 +88,12 @@ abstract class AbstractGraphQLQueryOrderByIT {
     void testTravelsSortUsingVariable() throws Exception {
         protobufService.registerProtoBufferType(getTestProtobufFileContent());
 
-        given().contentType(ContentType.JSON).body("{ \"query\" : \"query ($sort: TravelsOrderBy) { Travels(orderBy: $sort){ id } }\", \"variables\" : { \"sort\" : { \"flight\": { \"arrival\" : \"ASC\" }, \"metadata\" : { \"lastUpdate\" : \"DESC\" } } } }")
+        given().contentType(ContentType.JSON).body(
+                "{ \"query\" : \"query ($sort: TravelsOrderBy) { Travels(orderBy: $sort){ id } }\", \"variables\" : { \"sort\" : { \"flight\": { \"arrival\" : \"ASC\" }, \"metadata\" : { \"lastUpdate\" : \"DESC\" } } } }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200).body("data.Travels", isA(Collection.class));
     }
-    
+
     private void testSortBy(String root) {
         GraphQLObjectType queryType = manager.getGraphQLSchema().getQueryType();
 

@@ -21,10 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.mongodb.mock.MockMongoEntityMapper;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.persistence.mongodb.model.ModelUtils.MAPPER;
@@ -54,7 +55,7 @@ class ModelUtilsTest {
         Document document = new Document().append("testKey1", "testValue1")
                 .append("testKey2", "testValue2");
 
-        assertEquals(object, ModelUtils.documentToJsonNode(document, ObjectNode.class));
+        assertEquals(object, ModelUtils.documentToJsonNode(document));
     }
 
     @Test

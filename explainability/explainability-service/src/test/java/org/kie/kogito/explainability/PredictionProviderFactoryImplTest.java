@@ -15,14 +15,15 @@
  */
 package org.kie.kogito.explainability;
 
-import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.context.ThreadContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.PredictionProvider;
 
-import static org.kie.kogito.explainability.TestUtils.REQUEST;
+import io.vertx.mutiny.core.Vertx;
+
+import static org.kie.kogito.explainability.TestUtils.LIME_REQUEST;
 
 class PredictionProviderFactoryImplTest {
 
@@ -32,7 +33,7 @@ class PredictionProviderFactoryImplTest {
                 Vertx.vertx(),
                 ThreadContext.builder().build(),
                 ManagedExecutor.builder().build());
-        PredictionProvider predictionProvider = factory.createPredictionProvider(REQUEST);
+        PredictionProvider predictionProvider = factory.createPredictionProvider(LIME_REQUEST);
         Assertions.assertNotNull(predictionProvider);
         Assertions.assertTrue(predictionProvider instanceof RemotePredictionProvider);
     }

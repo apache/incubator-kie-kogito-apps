@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SVG from 'react-inlinesvg';
 import {
   OnRunningIcon,
   CheckCircleIcon,
@@ -14,13 +15,11 @@ import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 import ProcessInstance = GraphQL.ProcessInstance;
 import JobStatus = GraphQL.JobStatus;
-import {
-  ProcessInstanceBulkList,
-  OperationType
-} from '../components/Molecules/ProcessListToolbar/ProcessListToolbar';
 import { Title, TitleSizes } from '@patternfly/react-core';
-import { JobsBulkList } from '../components/Templates/JobsManagementPage/JobsManagementPage';
-
+import {
+  BulkListItem,
+  OperationType
+} from '../components/Atoms/BulkList/BulkList';
 export interface TriggerableNode {
   id: number;
   name: string;
@@ -242,47 +241,47 @@ export const handleNodeInstanceCancel = (
 };
 
 export const performMultipleAction = async (
-  instanceToBeActioned: ProcessInstanceBulkList,
+  instanceToBeActioned: (GraphQL.ProcessInstance & { errorMessage?: string })[],
   multiActionResult: (
-    successInstances: ProcessInstanceBulkList,
-    failedInstances: ProcessInstanceBulkList
+    successInstances: GraphQL.ProcessInstance[],
+    failedInstances: (GraphQL.ProcessInstance & { errorMessage?: string })[]
   ) => void,
   processType: OperationType
 ) => {
-  const successInstances = {};
-  const failedInstances = {};
-  for (const id of Object.keys(instanceToBeActioned)) {
+  const successInstances = [];
+  const failedInstances = [];
+  for (const instance of instanceToBeActioned) {
     if (processType === OperationType.ABORT) {
       await handleAbort(
-        instanceToBeActioned[id],
+        instance,
         () => {
-          successInstances[id] = instanceToBeActioned[id];
+          successInstances.push(instance);
         },
         errorMessage => {
-          failedInstances[id] = instanceToBeActioned[id];
-          failedInstances[id].errorMessage = errorMessage;
+          instance.errorMessage = errorMessage;
+          failedInstances.push(instance);
         }
       );
     } else if (processType === OperationType.SKIP) {
       await handleSkip(
-        instanceToBeActioned[id],
+        instance,
         () => {
-          successInstances[id] = instanceToBeActioned[id];
+          successInstances.push(instance);
         },
         errorMessage => {
-          failedInstances[id] = instanceToBeActioned[id];
-          failedInstances[id].errorMessage = errorMessage;
+          instance.errorMessage = errorMessage;
+          failedInstances.push(instance);
         }
       );
     } else if (processType === OperationType.RETRY) {
       await handleRetry(
-        instanceToBeActioned[id],
+        instance,
         () => {
-          successInstances[id] = instanceToBeActioned[id];
+          successInstances.push(instance);
         },
         errorMessage => {
-          failedInstances[id] = instanceToBeActioned[id];
-          failedInstances[id].errorMessage = errorMessage;
+          instance.errorMessage = errorMessage;
+          failedInstances.push(instance);
         }
       );
     }
@@ -383,15 +382,17 @@ export const handleNodeTrigger = async (
 };
 
 export const getTriggerableNodes = async (
-  processInstance: Pick<GraphQL.ProcessInstance, 'processId' | 'serviceUrl'>
-): Promise<TriggerableNode[]> => {
+  processInstance: Pick<GraphQL.ProcessInstance, 'processId' | 'serviceUrl'>,
+  successCallback: (resultNodes: TriggerableNode[]) => void,
+  failureCallback: (errorMessage: string) => void
+): Promise<void> => {
   try {
     const result = await axios.get(
       `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/nodes`
     );
-    return result.data;
+    successCallback(result.data);
   } catch (error) {
-    return [];
+    failureCallback(error.message);
   }
 };
 
@@ -418,21 +419,116 @@ export const jobCancel = async (
 export const performMultipleCancel = async (
   jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
   multiActionResult: (
-    successJobs: JobsBulkList,
-    failedJobs: JobsBulkList
+    successJobs: GraphQL.Job[],
+    failedJobs: GraphQL.Job[]
   ) => void
 ) => {
-  const successJobs = {};
-  const failedJobs = {};
+  const successJobs = [];
+  const failedJobs = [];
   for (const job of jobsToBeActioned) {
     try {
       await axios.delete(`${job.endpoint}/${job.id}`);
-      successJobs[job.id] = job;
+      successJobs.push(job);
     } catch (error) {
-      job.errorMessage = error.errorMessage;
-      failedJobs[job.id] = job;
-      failedJobs[job.id].errorMessage = JSON.stringify(error.message);
+      job.errorMessage = JSON.stringify(error.message);
+      failedJobs.push(job);
     }
   }
   multiActionResult(successJobs, failedJobs);
+};
+
+export const getSvg = async (data, setSvg, setSvgError): Promise<void> => {
+  setSvg(null);
+  await axios
+    .get(
+      `/svg/processes/${data.ProcessInstances[0].processId}/instances/${data.ProcessInstances[0].id}`
+    )
+    .then(res => {
+      const temp = <SVG src={res.data} />;
+      setSvg(temp);
+    })
+    .catch(async error => {
+      if (data.ProcessInstances[0].serviceUrl) {
+        axios
+          .get(
+            `${data.ProcessInstances[0].serviceUrl}/svg/processes/${data.ProcessInstances[0].processId}/instances/${data.ProcessInstances[0].id}`
+          )
+          .then(res => {
+            const temp = <SVG src={res.data} />;
+            setSvg(temp);
+          })
+          .catch(err => {
+            if (err.response && err.response.status !== 404) {
+              setSvgError(err.message);
+            }
+          });
+      }
+    });
+};
+
+export const formatForBulkListProcessInstance = (
+  processInstanceList: (GraphQL.ProcessInstance & { errorMessage?: string })[]
+): BulkListItem[] => {
+  const formattedItems: BulkListItem[] = [];
+  processInstanceList.forEach(
+    (item: GraphQL.ProcessInstance & { errorMessage?: string }) => {
+      const formattedObj: BulkListItem = {
+        id: item.id,
+        description: item.businessKey,
+        name: item.processName,
+        errorMessage: item.errorMessage ? item.errorMessage : null
+      };
+      formattedItems.push(formattedObj);
+    }
+  );
+  return formattedItems;
+};
+
+export const formatForBulkListJob = (
+  jobsList: (GraphQL.Job & { errorMessage?: string })[]
+): BulkListItem[] => {
+  const formattedItems: BulkListItem[] = [];
+  jobsList.forEach((item: GraphQL.Job & { errorMessage?: string }) => {
+    const formattedObj: BulkListItem = {
+      id: item.id,
+      name: item.processId,
+      description: item.id,
+      errorMessage: item.errorMessage ? item.errorMessage : null
+    };
+    formattedItems.push(formattedObj);
+  });
+  return formattedItems;
+};
+
+export const checkProcessInstanceState = (
+  processInstance: Pick<
+    GraphQL.ProcessInstance,
+    'state' | 'addons' | 'serviceUrl'
+  >
+): boolean => {
+  if (
+    (processInstance.state === 'ERROR' ||
+      processInstance.state === 'ACTIVE' ||
+      processInstance.state === 'SUSPENDED') &&
+    processInstance.addons.includes('process-management') &&
+    processInstance.serviceUrl
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const alterOrderByObj = (orderByObj): GraphQL.ProcessInstanceOrderBy => {
+  if (orderByObj['id']) {
+    orderByObj['processName'] = orderByObj['id'];
+    delete orderByObj['id'];
+  } else if (orderByObj['status']) {
+    orderByObj['state'] = orderByObj['status'];
+    delete orderByObj['status'];
+  } else if (orderByObj['created']) {
+    orderByObj['start'] = orderByObj['created'];
+    delete orderByObj['created'];
+  }
+  return orderByObj;
 };

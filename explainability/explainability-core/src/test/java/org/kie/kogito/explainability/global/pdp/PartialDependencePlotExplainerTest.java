@@ -15,17 +15,25 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.FakeRandom;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.global.GlobalExplanationException;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -34,15 +42,9 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.utils.DataUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -50,78 +52,108 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PartialDependencePlotExplainerTest {
 
-    PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
-    PredictionProviderMetadata metadata = new PredictionProviderMetadata() {
-        @Override
-        public DataDistribution getDataDistribution() {
-            return DataUtils.generateRandomDataDistribution(3, 100, new FakeRandom());
-        }
+    private PredictionProviderMetadata getMetadata(Random random) {
+        return new PredictionProviderMetadata() {
+            @Override
+            public DataDistribution getDataDistribution() {
+                return DataUtils.generateRandomDataDistribution(3, 100, random);
+            }
 
-        @Override
-        public PredictionInput getInputShape() {
-            List<Feature> features = new LinkedList<>();
-            features.add(FeatureFactory.newNumericalFeature("f0", 0));
-            features.add(FeatureFactory.newNumericalFeature("f1", 0));
-            features.add(FeatureFactory.newNumericalFeature("f2", 0));
-            return new PredictionInput(features);
-        }
+            @Override
+            public PredictionInput getInputShape() {
+                List<Feature> features = new LinkedList<>();
+                features.add(FeatureFactory.newNumericalFeature("f0", 0));
+                features.add(FeatureFactory.newNumericalFeature("f1", 0));
+                features.add(FeatureFactory.newNumericalFeature("f2", 0));
+                return new PredictionInput(features);
+            }
 
-        @Override
-        public PredictionOutput getOutputShape() {
-            List<Output> outputs = new LinkedList<>();
-            outputs.add(new Output("spam", Type.BOOLEAN, new Value<>(false), 0d));
-            return new PredictionOutput(outputs);
-        }
-    };
+            @Override
+            public PredictionOutput getOutputShape() {
+                List<Output> outputs = new LinkedList<>();
+                outputs.add(new Output("sum-but0", Type.BOOLEAN, new Value(false), 0d));
+                return new PredictionOutput(outputs);
+            }
+        };
+    }
 
-    @Test
-    void testPdpNumericClassifier() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testPdpNumericClassifier(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
         PredictionProvider modelInfo = TestUtils.getSumSkipModel(0);
-        List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explain(modelInfo, metadata);
+        PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
+        List<PartialDependenceGraph> pdps = partialDependencePlotProvider.explainFromMetadata(modelInfo, getMetadata(random));
         assertNotNull(pdps);
         for (PartialDependenceGraph pdp : pdps) {
             assertNotNull(pdp.getFeature());
             assertNotNull(pdp.getX());
             assertNotNull(pdp.getY());
-            assertEquals(pdp.getX().length, pdp.getY().length);
+            assertEquals(pdp.getX().size(), pdp.getY().size());
             assertGraph(pdp);
         }
         // the first feature is always skipped by the model, so the predictions are not affected, hence PDP Y values are constant
         PartialDependenceGraph fixedFeatureGraph = pdps.get(0);
-        assertEquals(1, Arrays.stream(fixedFeatureGraph.getY()).distinct().count());
+        assertEquals(1, fixedFeatureGraph.getY().stream().distinct().count());
 
-        // the other two instead change but in the same way, due the behaviour of FakeRandom in generating data/distributions
-        assertArrayEquals(pdps.get(1).getY(), pdps.get(2).getY());
+        // the other two instead vary in Y values
+        assertThat(pdps.get(1).getY().stream().distinct().count()).isGreaterThan(1);
+        assertThat(pdps.get(2).getY().stream().distinct().count()).isGreaterThan(1);
     }
 
     private void assertGraph(PartialDependenceGraph pdp) {
-        for (int i = 0; i < pdp.getX().length; i++) {
-            assertNotEquals(Double.NaN, pdp.getY()[i]);
+        for (int i = 0; i < pdp.getX().size(); i++) {
+            assertNotEquals(Double.NaN, pdp.getY().get(i).asNumber());
             if (i > 0) {
-                assertTrue(pdp.getX()[i] > pdp.getX()[i - 1]);
+                assertTrue(pdp.getX().get(i).asNumber() >= pdp.getX().get(i - 1).asNumber());
             }
         }
     }
 
-    @Test
-    void testBrokenPredict() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testBrokenPredict(int seed) {
+        Random random = new Random();
+        random.setSeed(seed);
         Config.INSTANCE.setAsyncTimeout(1);
         Config.INSTANCE.setAsyncTimeUnit(TimeUnit.MILLISECONDS);
-
+        PartialDependencePlotExplainer partialDependencePlotProvider = new PartialDependencePlotExplainer();
         PredictionProvider brokenProvider = inputs -> supplyAsync(
                 () -> {
-                    try {
-                        Thread.sleep(1000);
-                        return Collections.emptyList();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException("this is a test");
-                    }
+                    await().atLeast(1, TimeUnit.SECONDS).until(() -> false);
+                    throw new RuntimeException("this should never happen");
                 });
 
-        Assertions.assertThrows(TimeoutException.class,
-                                () -> partialDependencePlotProvider.explain(brokenProvider, metadata));
+        try {
+            Assertions.assertThrows(TimeoutException.class,
+                    () -> partialDependencePlotProvider.explainFromMetadata(brokenProvider, getMetadata(random)));
 
-        Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
-        Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
+        } finally {
+            Config.INSTANCE.setAsyncTimeout(Config.DEFAULT_ASYNC_TIMEOUT);
+            Config.INSTANCE.setAsyncTimeUnit(Config.DEFAULT_ASYNC_TIMEUNIT);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testTextClassifier(int seed) throws Exception {
+        Random random = new Random();
+        random.setSeed(seed);
+        PartialDependencePlotExplainer partialDependencePlotExplainer = new PartialDependencePlotExplainer();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        Collection<Prediction> predictions = new ArrayList<>(3);
+
+        List<String> texts = List.of("we want your money", "please reply quickly", "you are the lucky winner",
+                "huge donation for you!", "bitcoin for you");
+        for (String text : texts) {
+            List<Feature> features = new ArrayList<>();
+            features.add(FeatureFactory.newFulltextFeature("text", text));
+            PredictionInput predictionInput = new PredictionInput(features);
+            PredictionOutput predictionOutput = model.predictAsync(List.of(predictionInput)).get().get(0);
+            predictions.add(new Prediction(predictionInput, predictionOutput));
+        }
+        List<PartialDependenceGraph> pdps = partialDependencePlotExplainer.explainFromPredictions(model, predictions);
+        assertThat(pdps).isNotEmpty();
     }
 }

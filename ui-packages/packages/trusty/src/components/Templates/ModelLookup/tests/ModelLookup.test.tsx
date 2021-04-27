@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import ModelLookup from '../ModelLookup';
 import useModelData from '../useModelData';
 import { MemoryRouter } from 'react-router';
-import { ModelData } from '../../../../types';
+import { ModelData, RemoteDataStatus } from '../../../../types';
 
 jest.mock('../useModelData');
 jest.mock('react-router-dom', () => ({
@@ -16,6 +16,9 @@ jest.mock('react-router-dom', () => ({
     url: '/audit/:executionType/:executionId/model-lookup'
   })
 }));
+jest.mock('@kogito-tooling/kie-editors-standalone/dist/dmn');
+
+afterAll(() => jest.resetAllMocks());
 
 describe('ModelLookup', () => {
   test('renders the model of an execution', () => {
@@ -46,17 +49,19 @@ describe('ModelLookup', () => {
 });
 
 const modelData = {
-  status: 'SUCCESS',
+  status: RemoteDataStatus.SUCCESS,
   data: {
     executionId: 'b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000',
     deploymentDate: '01012020',
     modelId: '1234567890',
     name: 'myMortgage',
     namespace: 'modelNameSpace',
+    dmnVersion: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
+    modelVersion: '',
     type: 'http://www.omg.org/spec/DMN/20151101/dmn.xsd',
     serviceIdentifier: {
       groupId: 'groupId',
-      artifactId: 'artifacrtId',
+      artifactId: 'artifactId',
       version: 'version'
     },
     model:

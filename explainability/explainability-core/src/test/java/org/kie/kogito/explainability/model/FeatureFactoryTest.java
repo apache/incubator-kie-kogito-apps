@@ -89,7 +89,7 @@ class FeatureFactoryTest {
     @Test
     void testCurrencyFeature() {
         String name = "some-name";
-        Currency currency = Currency.getInstance(Locale.getDefault());
+        Currency currency = Currency.getInstance(Locale.ITALY);
         Feature feature = FeatureFactory.newCurrencyFeature(name, currency);
         assertFeature(Type.CURRENCY, currency, feature);
     }
@@ -168,7 +168,7 @@ class FeatureFactoryTest {
     @Test
     void testCopySame() {
         for (Type type : Type.values()) {
-            Value<?> v = new Value<>("1");
+            Value v = new Value("1");
             Feature feature = new Feature("name", type, v);
             Feature copy = FeatureFactory.copyOf(feature, v);
             assertEquals(feature, copy);
@@ -178,9 +178,9 @@ class FeatureFactoryTest {
     @Test
     void testCopyDifferent() {
         for (Type type : Type.values()) {
-            Value<?> v = new Value<>("1");
+            Value v = new Value("1");
             Feature feature = new Feature("name", type, v);
-            Feature copy = FeatureFactory.copyOf(feature, new Value<>("2"));
+            Feature copy = FeatureFactory.copyOf(feature, new Value("2"));
             assertNotEquals(feature, copy);
         }
     }

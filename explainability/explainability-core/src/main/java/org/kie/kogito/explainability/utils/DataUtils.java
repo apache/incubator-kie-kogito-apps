@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,36 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.MalformedInputException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
+import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
@@ -49,9 +66,9 @@ public class DataUtils {
      * If a same number is added to all values the mean also changes by the same number so we add {@code mean - m1} to
      * all numbers.
      *
-     * @param mean         desired mean
+     * @param mean desired mean
      * @param stdDeviation desired standard deviation
-     * @param size         size of the array
+     * @param size size of the array
      * @return the generated data
      */
     public static double[] generateData(double mean, double stdDeviation, int size, Random random) {
@@ -72,8 +89,8 @@ public class DataUtils {
         }
 
         // get the new mean
-        double newMean = generatedDataStdDev != 0 ? generatedDataMean * stdDeviation / generatedDataStdDev :
-                generatedDataMean * stdDeviation;
+        double newMean = generatedDataStdDev != 0 ? generatedDataMean * stdDeviation / generatedDataStdDev
+                : generatedDataMean * stdDeviation;
 
         // force desired mean
         for (int i = 0; i < size; i++) {
@@ -83,7 +100,7 @@ public class DataUtils {
         return data;
     }
 
-    static double getMean(double[] data) {
+    public static double getMean(double[] data) {
         double m = 0;
         for (double datum : data) {
             m += datum;
@@ -92,7 +109,7 @@ public class DataUtils {
         return m;
     }
 
-    static double getStdDev(double[] data, double mean) {
+    public static double getStdDev(double[] data, double mean) {
         double d = 0;
         for (double datum : data) {
             d += Math.pow(datum - mean, 2);
@@ -105,8 +122,8 @@ public class DataUtils {
     /**
      * Generate equally {@code size} sampled values between {@code min} and {@code max}.
      *
-     * @param min  minimum value
-     * @param max  maximum value
+     * @param min minimum value
+     * @param max maximum value
      * @param size dataset size
      * @return the generated data
      */
@@ -145,7 +162,7 @@ public class DataUtils {
      * Perform perturbations on a fixed number of features in the given input.
      * Which feature will be perturbed is non deterministic.
      *
-     * @param originalFeatures    the input features that need to be perturbed
+     * @param originalFeatures the input features that need to be perturbed
      * @param perturbationContext the perturbation context
      * @return a perturbed copy of the input features
      */
@@ -160,16 +177,16 @@ public class DataUtils {
             int perturbationSize = 0;
             if (lowerBound == upperBound) {
                 perturbationSize = lowerBound;
-            }
-            else if (upperBound > lowerBound) {
-                perturbationSize = perturbationContext.getRandom().ints(1, lowerBound, upperBound).findFirst().orElse(1);
+            } else if (upperBound > lowerBound) {
+                perturbationSize = perturbationContext.getRandom().ints(1, lowerBound, 1 + upperBound).findFirst().orElse(1);
             }
             if (perturbationSize > 0) {
                 int[] indexesToBePerturbed = perturbationContext.getRandom().ints(0, newFeatures.size())
                         .distinct().limit(perturbationSize).toArray();
                 for (int index : indexesToBePerturbed) {
                     Feature feature = newFeatures.get(index);
-                    Feature perturbedFeature = FeatureFactory.copyOf(feature, feature.getType().perturb(feature.getValue(), perturbationContext));
+                    Feature perturbedFeature =
+                            FeatureFactory.copyOf(feature, feature.getType().perturb(feature.getValue(), perturbationContext));
                     newFeatures.set(index, perturbedFeature);
                 }
             }
@@ -181,7 +198,7 @@ public class DataUtils {
      * Drop a given feature from a list of existing features.
      *
      * @param features the existing features
-     * @param target   the feature to drop
+     * @param target the feature to drop
      * @return a new list of features having the target feature dropped
      */
     public static List<Feature> dropFeature(List<Feature> features, Feature target) {
@@ -189,11 +206,11 @@ public class DataUtils {
         for (Feature sourceFeature : features) {
             String sourceFeatureName = sourceFeature.getName();
             Type sourceFeatureType = sourceFeature.getType();
-            Value<?> sourceFeatureValue = sourceFeature.getValue();
+            Value sourceFeatureValue = sourceFeature.getValue();
             Feature f;
             if (target.getName().equals(sourceFeatureName)) {
                 if (target.getType().equals(sourceFeatureType) && target.getValue().equals(sourceFeatureValue)) {
-                    Value<?> droppedValue = sourceFeatureType.drop(sourceFeatureValue);
+                    Value droppedValue = sourceFeatureType.drop(sourceFeatureValue);
                     f = FeatureFactory.copyOf(sourceFeature, droppedValue);
                 } else {
                     f = dropOnLinearizedFeatures(target, sourceFeature);
@@ -215,7 +232,7 @@ public class DataUtils {
      * Drop a target feature from a "linearized" version of a source feature.
      * Any of such linearized features are eventually dropped if they match on associated name, type and value.
      *
-     * @param target        the target feature
+     * @param target the target feature
      * @param sourceFeature the source feature
      * @return the source feature having one of its underlying "linearized" values eventually dropped
      */
@@ -225,7 +242,8 @@ public class DataUtils {
         int i = 0;
         for (Feature linearizedFeature : linearizedFeatures) {
             if (target.getValue().equals(linearizedFeature.getValue())) {
-                linearizedFeatures.set(i, FeatureFactory.copyOf(linearizedFeature, linearizedFeature.getType().drop(target.getValue())));
+                linearizedFeatures.set(i,
+                        FeatureFactory.copyOf(linearizedFeature, linearizedFeature.getType().drop(target.getValue())));
                 f = FeatureFactory.newCompositeFeature(target.getName(), linearizedFeatures);
                 break;
             } else {
@@ -307,8 +325,8 @@ public class DataUtils {
     /**
      * Calculate the Gaussian kernel of a given value.
      *
-     * @param x     Gaussian kernel input value
-     * @param mu    mean
+     * @param x Gaussian kernel input value
+     * @param mu mean
      * @param sigma variance
      * @return the Gaussian filtered value
      */
@@ -319,7 +337,7 @@ public class DataUtils {
     /**
      * Calculate exponentially smoothed kernel of a given value (e.g. distance between two points).
      *
-     * @param x     value to smooth
+     * @param x value to smooth
      * @param width kernel width
      * @return the exponentially smoothed value
      */
@@ -328,23 +346,9 @@ public class DataUtils {
     }
 
     /**
-     * Calculate distribution statistics for an array of numbers.
-     *
-     * @param doubles an array of numbers
-     * @return feature distribution statistics
-     */
-    public static FeatureDistribution getFeatureDistribution(double[] doubles) {
-        double min = DoubleStream.of(doubles).min().orElse(0);
-        double max = DoubleStream.of(doubles).max().orElse(0);
-        double mean = getMean(doubles);
-        double stdDev = getStdDev(doubles, mean);
-        return new FeatureDistribution(min, max, mean, stdDev);
-    }
-
-    /**
      * Generate a random data distribution.
      *
-     * @param noOfFeatures     number of features
+     * @param noOfFeatures number of features
      * @param distributionSize number of samples for each feature
      * @return a data distribution
      */
@@ -352,10 +356,11 @@ public class DataUtils {
         List<FeatureDistribution> featureDistributions = new LinkedList<>();
         for (int i = 0; i < noOfFeatures; i++) {
             double[] doubles = generateData(random.nextDouble(), random.nextDouble(), distributionSize, random);
-            FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
+            Feature feature = FeatureFactory.newNumericalFeature("f_" + i, Double.NaN);
+            FeatureDistribution featureDistribution = new NumericFeatureDistribution(feature, doubles);
             featureDistributions.add(featureDistribution);
         }
-        return new DataDistribution(featureDistributions);
+        return new IndependentFeaturesDataDistribution(featureDistributions);
     }
 
     /**
@@ -407,5 +412,116 @@ public class DataUtils {
         } else {
             flattenedFeatures.add(f);
         }
+    }
+
+    /**
+     * Build Predictions from PredictionInputs and PredictionOutputs.
+     *
+     * @param inputs prediction inputs
+     * @param os prediction outputs
+     * @return a list of predictions
+     */
+    public static List<Prediction> getPredictions(List<PredictionInput> inputs, List<PredictionOutput> os) {
+        return IntStream.range(0, os.size())
+                .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
+    }
+
+    /**
+     * Sample (with replacement) from a list of values.
+     *
+     * @param values the list to sample from
+     * @param sampleSize the no. of samples to draw
+     * @param random a random instance
+     * @param <T> the type of values to sample
+     * @return a list of sampled values
+     */
+    public static <T> List<T> sampleWithReplacement(List<T> values, int sampleSize, Random random) {
+        if (sampleSize <= 0 || values.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return random
+                    .ints(sampleSize, 0, values.size())
+                    .mapToObj(values::get)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Replace an existing feature in a list with another feature.
+     * The feature to be replaced is the one whose name is equals to the name of the feature to use as replacement.
+     *
+     * @param featureToUse feature to use as replacmement
+     * @param existingFeatures list of features containing the feature to be replaced
+     * @return a new list of features having the "replaced" feature
+     */
+    public static List<Feature> replaceFeatures(Feature featureToUse, List<Feature> existingFeatures) {
+        List<Feature> newFeatures = new ArrayList<>();
+        for (Feature f : existingFeatures) {
+            Feature newFeature;
+            if (f.getName().equals(featureToUse.getName())) {
+                newFeature = FeatureFactory.copyOf(f, featureToUse.getValue());
+            } else {
+                if (Type.COMPOSITE == f.getType()) {
+                    List<Feature> elements = (List<Feature>) f.getValue().getUnderlyingObject();
+                    newFeature = FeatureFactory.newCompositeFeature(f.getName(), replaceFeatures(featureToUse, elements));
+                } else {
+                    newFeature = FeatureFactory.copyOf(f, f.getValue());
+                }
+            }
+            newFeatures.add(newFeature);
+        }
+        return newFeatures;
+    }
+
+    /**
+     * Persist a {@link PartialDependenceGraph} into a CSV file.
+     * 
+     * @param partialDependenceGraph the PDP to persist
+     * @param path the path to the CSV file to be created
+     * @throws IOException whether any IO error occurs while writing the CSV
+     */
+    public static void toCSV(PartialDependenceGraph partialDependenceGraph, Path path) throws IOException {
+        try (Writer writer = Files.newBufferedWriter(path)) {
+            List<Value> xAxis = partialDependenceGraph.getX();
+            List<Value> yAxis = partialDependenceGraph.getY();
+            CSVFormat format = CSVFormat.DEFAULT.withHeader(
+                    partialDependenceGraph.getFeature().getName(), partialDependenceGraph.getOutput().getName());
+            CSVPrinter printer = new CSVPrinter(writer, format);
+            for (int i = 0; i < xAxis.size(); i++) {
+                printer.printRecord(xAxis.get(i).asString(), yAxis.get(i).asString());
+            }
+        }
+    }
+
+    /**
+     * Read a CSV file into a {@link DataDistribution} object.
+     *
+     * @param file the path to the CSV file
+     * @param schema an ordered list of {@link Type}s as the 'schema', used to determine
+     *        the {@link Type} of each feature / column
+     * @return the parsed CSV as a {@link DataDistribution}
+     * @throws IOException when failing at reading the CSV file
+     * @throws MalformedInputException if any record in CSV has different size with respect to the specified schema
+     */
+    public static DataDistribution readCSV(Path file, List<Type> schema) throws IOException {
+        List<PredictionInput> inputs = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
+            for (CSVRecord record : records) {
+                int size = record.size();
+                if (schema.size() == size) {
+                    List<Feature> features = new ArrayList<>();
+                    for (int i = 0; i < size; i++) {
+                        String s = record.get(i);
+                        Type type = schema.get(i);
+                        features.add(new Feature(record.getParser().getHeaderNames().get(i), type, new Value(s)));
+                    }
+                    inputs.add(new PredictionInput(features));
+                } else {
+                    throw new MalformedInputException(size);
+                }
+            }
+        }
+        return new PredictionInputsDataDistribution(inputs);
     }
 }

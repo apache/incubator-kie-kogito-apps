@@ -23,6 +23,11 @@
     </dependency>
 
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-jib</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-service-common</artifactId>
       <type>test-jar</type>
@@ -72,7 +77,7 @@
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
         <configuration>
-          <uberJar>true</uberJar>
+          <skipOriginalJarRename>true</skipOriginalJarRename>
         </configuration>
         <executions>
           <execution>
@@ -85,39 +90,26 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/*Native*IT.java</exclude>
-          </excludes>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
-            <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
-          </systemPropertyVariables>
-        </configuration>
         <executions>
           <execution>
-            <id>infinispan-default</id>
+            <id>default</id>
             <goals>
               <goal>integration-test</goal>
             </goals>
             <configuration>
-              <includes>
-                <include>**/Infinispan*IT.java</include>
-              </includes>
               <excludes combine.children="append"> <!-- Add the exclude to existing ones -->
                 <exclude>**/*Keycloak*IT.java</exclude> <!-- Separate execution for this one -->
               </excludes>
             </configuration>
           </execution>
           <execution>
-            <id>infinispan-testWithKeycloak</id>
+            <id>testWithKeycloak</id>
             <goals>
               <goal>integration-test</goal>
             </goals>
             <configuration>
               <includes>
-                <include>**/InfinispanKeycloak*IT.java</include>
+                <include>**/KeycloakInfinispan*IT.java</include>
               </includes>
               <systemPropertyVariables>
                 <quarkus.test.profile>keycloak-test</quarkus.test.profile>
@@ -135,63 +127,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-maven-plugin</artifactId>
-            <configuration>
-              <uberJar>true</uberJar>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>infinispan-native-tests</id>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-                <configuration>
-                  <includes>
-                    <include>**/InfinispanNative*IT.java</include>
-                  </includes>
-                  <systemPropertyVariables>
-                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                  </systemPropertyVariables>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

@@ -28,7 +28,7 @@ class ValueTest {
 
     @Test
     void testNumericValue() {
-        Value<Double> numericValue = new Value<>(1.1);
+        Value numericValue = new Value(1.1);
         assertNotNull(numericValue.getUnderlyingObject());
         assertEquals(1.1, numericValue.getUnderlyingObject());
         assertNotNull(numericValue.asString());
@@ -36,7 +36,7 @@ class ValueTest {
         assertEquals(1.1, numericValue.asNumber());
         double[] vector = numericValue.asVector();
         assertNotNull(vector);
-        assertArrayEquals(new double[]{1.1}, vector);
+        assertArrayEquals(new double[] { 1.1 }, vector);
     }
 
     @Test
@@ -45,7 +45,7 @@ class ValueTest {
         doubles[0] = 0.1;
         doubles[1] = 0.2;
         doubles[2] = 0.3;
-        Value<double[]> vectorValue = new Value<>(doubles);
+        Value vectorValue = new Value(doubles);
         assertNotNull(vectorValue.getUnderlyingObject());
         assertEquals(doubles, vectorValue.getUnderlyingObject());
         assertNotNull(vectorValue.asString());
@@ -63,7 +63,7 @@ class ValueTest {
         doubles[1] = 0.2;
         doubles[2] = 0.3;
         String vectorString = Arrays.toString(doubles);
-        Value<String> vectorValue = new Value<>(vectorString);
+        Value vectorValue = new Value(vectorString);
         assertNotNull(vectorValue.getUnderlyingObject());
         assertEquals(vectorString, vectorValue.getUnderlyingObject());
         assertNotNull(vectorValue.asString());
@@ -82,7 +82,7 @@ class ValueTest {
         doubles[2] = 0.3;
         String vectorString = Arrays.toString(doubles);
         ByteBuffer byteBuffer = ByteBuffer.wrap(vectorString.getBytes());
-        Value<ByteBuffer> vectorValue = new Value<>(byteBuffer);
+        Value vectorValue = new Value(byteBuffer);
         assertNotNull(vectorValue.getUnderlyingObject());
         assertEquals(byteBuffer, vectorValue.getUnderlyingObject());
         assertNotNull(vectorValue.asString());
@@ -96,7 +96,7 @@ class ValueTest {
     @Test
     void testStringVectorValue() {
         String vectorString = "0.1 0.2 0.3";
-        Value<String> vectorValue = new Value<>(vectorString);
+        Value vectorValue = new Value(vectorString);
         assertNotNull(vectorValue.getUnderlyingObject());
         assertEquals(vectorString, vectorValue.getUnderlyingObject());
         assertNotNull(vectorValue.asString());
@@ -104,13 +104,13 @@ class ValueTest {
         assertEquals(Double.NaN, vectorValue.asNumber());
         double[] vector = vectorValue.asVector();
         assertNotNull(vector);
-        assertArrayEquals(new double[]{0.1, 0.2, 0.3}, vector);
+        assertArrayEquals(new double[] { 0.1, 0.2, 0.3 }, vector);
     }
 
     @Test
     void testStringVectorValueWithTabs() {
         String vectorString = "0.1  0.2 0.3";
-        Value<String> vectorValue = new Value<>(vectorString);
+        Value vectorValue = new Value(vectorString);
         assertNotNull(vectorValue.getUnderlyingObject());
         assertEquals(vectorString, vectorValue.getUnderlyingObject());
         assertNotNull(vectorValue.asString());
@@ -118,7 +118,6 @@ class ValueTest {
         assertEquals(Double.NaN, vectorValue.asNumber());
         double[] vector = vectorValue.asVector();
         assertNotNull(vector);
-        assertArrayEquals(new double[]{0.1, 0.2, 0.3}, vector);
+        assertArrayEquals(new double[] { 0.1, 0.2, 0.3 }, vector);
     }
-
 }

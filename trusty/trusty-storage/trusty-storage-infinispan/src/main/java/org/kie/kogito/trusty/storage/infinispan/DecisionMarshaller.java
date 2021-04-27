@@ -19,12 +19,13 @@ package org.kie.kogito.trusty.storage.infinispan;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionType;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
 
@@ -41,14 +42,14 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
         return new Decision(
                 reader.readString(Execution.EXECUTION_ID_FIELD),
                 reader.readString(Execution.SOURCE_URL_FIELD),
+                reader.readString(Execution.SERVICE_URL_FIELD),
                 reader.readLong(Execution.EXECUTION_TIMESTAMP_FIELD),
                 reader.readBoolean(Execution.HAS_SUCCEEDED_FIELD),
                 reader.readString(Execution.EXECUTOR_NAME_FIELD),
                 reader.readString(Execution.EXECUTED_MODEL_NAME_FIELD),
                 reader.readString(Execution.EXECUTED_MODEL_NAMESPACE_FIELD),
                 reader.readCollection(Decision.INPUTS_FIELD, new ArrayList<>(), DecisionInput.class),
-                reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class)
-        );
+                reader.readCollection(Decision.OUTCOMES_FIELD, new ArrayList<>(), DecisionOutcome.class));
     }
 
     @Override
@@ -56,6 +57,7 @@ public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
         writer.writeString(Execution.EXECUTION_TYPE_FIELD, stringFromEnum(input.getExecutionType()));
         writer.writeString(Execution.EXECUTION_ID_FIELD, input.getExecutionId());
         writer.writeString(Execution.SOURCE_URL_FIELD, input.getSourceUrl());
+        writer.writeString(Execution.SERVICE_URL_FIELD, input.getServiceUrl());
         writer.writeLong(Execution.EXECUTION_TIMESTAMP_FIELD, input.getExecutionTimestamp());
         writer.writeBoolean(Execution.HAS_SUCCEEDED_FIELD, input.hasSucceeded());
         writer.writeString(Execution.EXECUTOR_NAME_FIELD, input.getExecutorName());

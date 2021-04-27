@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.infinispan.protostream;
 
 import java.io.IOException;
 import java.util.HashSet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class UserTaskInstanceMarshaller extends AbstractMarshaller implements MessageMarshaller<UserTaskInstance> {
 
@@ -73,8 +74,8 @@ public class UserTaskInstanceMarshaller extends AbstractMarshaller implements Me
         ut.setExcludedUsers(reader.readCollection(EXCLUDED_USERS, new HashSet<>(), String.class));
         ut.setPotentialGroups(reader.readCollection(POTENTIAL_GROUPS, new HashSet<>(), String.class));
         ut.setPotentialUsers(reader.readCollection(POTENTIAL_USERS, new HashSet<>(), String.class));
-        ut.setInputs(jsonFromString(reader.readString(INPUTS)));
-        ut.setOutputs(jsonFromString(reader.readString(OUTPUTS)));
+        ut.setInputs((ObjectNode) jsonFromString(reader.readString(INPUTS)));
+        ut.setOutputs((ObjectNode) jsonFromString(reader.readString(OUTPUTS)));
         ut.setReferenceName(reader.readString(REFERENCE_NAME));
         ut.setLastUpdate(dateToZonedDateTime(reader.readDate(LAST_UPDATE)));
         ut.setEndpoint(reader.readString(ENDPOINT));

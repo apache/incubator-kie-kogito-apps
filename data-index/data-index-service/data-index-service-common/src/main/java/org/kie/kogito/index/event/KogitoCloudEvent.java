@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.event;
 
 import java.net.URI;
 import java.time.ZonedDateTime;
+
+import org.kie.kogito.event.CloudEventExtensionConstants;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,7 +26,7 @@ public abstract class KogitoCloudEvent<T> {
 
     //Cloud Event attributes
     @JsonProperty("specversion")
-    private String specVersion = "0.3";
+    private String specVersion = "1.0";
     private String type;
     private URI source;
     private String id;
@@ -36,15 +37,17 @@ public abstract class KogitoCloudEvent<T> {
     private T data;
 
     //Extensions
-    @JsonProperty("kogitoProcessinstanceId")
+    @JsonProperty(CloudEventExtensionConstants.PROCESS_INSTANCE_ID)
     private String processInstanceId;
-    @JsonProperty("kogitoProcessId")
+    @JsonProperty(CloudEventExtensionConstants.PROCESS_ID)
     private String processId;
-    @JsonProperty("kogitoRootProcessinstanceId")
+    @JsonProperty(CloudEventExtensionConstants.PROCESS_ROOT_PROCESS_INSTANCE_ID)
     private String rootProcessInstanceId;
-    @JsonProperty("kogitoRootProcessId")
+    @JsonProperty(CloudEventExtensionConstants.PROCESS_ROOT_PROCESS_ID)
     private String rootProcessId;
+    @JsonProperty(CloudEventExtensionConstants.PROCESS_REFERENCE_ID)
     private String kogitoReferenceId;
+    @JsonProperty(CloudEventExtensionConstants.ADDONS)
     private String kogitoAddons;
 
     public String getSpecVersion() {
@@ -181,12 +184,12 @@ public abstract class KogitoCloudEvent<T> {
                 ", contentType='" + contentType + '\'' +
                 ", subject='" + subject + '\'' +
                 ", data=" + data +
-                ", processInstanceId='" + processInstanceId + '\'' +
-                ", processId='" + processId + '\'' +
-                ", rootProcessInstanceId='" + rootProcessInstanceId + '\'' +
-                ", rootProcessId='" + rootProcessId + '\'' +
-                ", kogitoReferenceId='" + kogitoReferenceId + '\'' +
-                ", kogitoAddons='" + kogitoAddons + '\'' +
+                ", " + CloudEventExtensionConstants.PROCESS_INSTANCE_ID + "='" + processInstanceId + '\'' +
+                ", " + CloudEventExtensionConstants.PROCESS_ID + "='" + processId + '\'' +
+                ", " + CloudEventExtensionConstants.PROCESS_ROOT_PROCESS_INSTANCE_ID + "='" + rootProcessInstanceId + '\'' +
+                ", " + CloudEventExtensionConstants.PROCESS_ROOT_PROCESS_ID + "='" + rootProcessId + '\'' +
+                ", " + CloudEventExtensionConstants.PROCESS_REFERENCE_ID + "='" + kogitoReferenceId + '\'' +
+                ", " + CloudEventExtensionConstants.ADDONS + "='" + kogitoAddons + '\'' +
                 '}';
     }
 }

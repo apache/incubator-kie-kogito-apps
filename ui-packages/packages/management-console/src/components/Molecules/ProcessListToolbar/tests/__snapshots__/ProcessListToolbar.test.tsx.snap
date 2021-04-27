@@ -17,9 +17,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
       ],
     }
   }
-  getProcessInstances={[MockFunction]}
-  handleAbortModalToggle={[MockFunction]}
-  handleCheckAll={[MockFunction]}
   initData={
     Object {
       "ProcessInstances": Array [
@@ -29,54 +26,24 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
             "prometheus-monitoring",
             "process-management",
           ],
-          "childDataList": Array [
+          "childProcessInstances": Array [
             Object {
               "addons": Array [
                 "process-management",
               ],
-              "businessKey": null,
+              "businessKey": "T1234FlightBooking02",
               "childProcessInstances": Array [],
               "end": "2019-10-22T05:40:44.089Z",
               "endpoint": "http://localhost:4000",
               "error": Object {
-                "message": "Something went wrong",
-                "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                "message": "some thing went wrong",
+                "nodeDefinitionId": "a23e6c20-02c2-4c2b-8c5c-e988a0adf823",
               },
-              "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
-              "nodes": Array [
-                Object {
-                  "definitionId": "EndEvent_1",
-                  "enter": "2019-10-22T04:43:01.144Z",
-                  "exit": "2019-10-22T04:43:01.144Z",
-                  "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
-                  "name": "End Event 1",
-                  "nodeId": "1",
-                  "type": "EndNode",
-                },
-                Object {
-                  "definitionId": "ServiceTask_1",
-                  "enter": "2019-10-22T04:43:01.144Z",
-                  "exit": "2019-10-22T04:43:01.144Z",
-                  "id": "2f588da5-a323-4111-9017-3093ef9319d1",
-                  "name": "Book flight",
-                  "nodeId": "2",
-                  "type": "WorkItemNode",
-                },
-                Object {
-                  "definitionId": "StartEvent_1",
-                  "enter": "2019-10-22T04:43:01.144Z",
-                  "exit": "2019-10-22T04:43:01.144Z",
-                  "id": "6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2",
-                  "name": "StartProcess",
-                  "nodeId": "3",
-                  "type": "StartNode",
-                },
-              ],
-              "parentProcessInstance": Object {
-                "businessKey": null,
-                "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                "processName": "travels",
-              },
+              "id": "a23e6c20-02c2-4c2b-8c5c-e988a0adf862",
+              "isSelected": false,
+              "latUpdate": "2019-10-22T03:40:44.089Z",
+              "nodes": Array [],
+              "parentProcessInstance": null,
               "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
               "processId": "flightBooking",
               "processName": "FlightBooking",
@@ -85,56 +52,34 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
               "serviceUrl": "http://localhost:4000",
               "start": "2019-10-22T03:40:44.089Z",
               "state": "ERROR",
-              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
+              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Bangalore\\",\\"country\\":\\"India\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Bangalore\\",\\"country\\":\\"US\\",\\"street\\":\\"Bangalore\\",\\"zipCode\\":\\"560093\\"},\\"email\\":\\"ajaganat@redhat.com\\",\\"firstName\\":\\"Ajay\\",\\"lastName\\":\\"Jaganathan\\",\\"nationality\\":\\"US\\"}}",
             },
             Object {
               "addons": Array [
                 "process-management",
               ],
-              "businessKey": null,
+              "businessKey": "T1234FlightBooking021111",
               "childProcessInstances": Array [],
               "end": "2019-10-22T05:40:44.089Z",
               "endpoint": "http://localhost:4000",
               "error": Object {
-                "message": "Something went wrong",
-                "nodeDefinitionId": "a1e139d5-81c77-48c9-84ae-34578e90433n",
+                "message": "some thing went wrong",
+                "nodeDefinitionId": "a23e6c20-02c2-4c2b-8c5c-e988a0adf823",
               },
-              "id": "ceebdeb-b975-46e2-a9a0-6a86bf7ac21e",
-              "nodes": Array [
-                Object {
-                  "definitionId": "EndEvent_1",
-                  "enter": "2019-10-22T04:43:01.144Z",
-                  "exit": "2019-10-22T04:43:01.144Z",
-                  "id": "7244ba1b-75ec-4789-8c65-499a0c5b1a6f",
-                  "name": "End Event 1",
-                  "nodeId": "1",
-                  "type": "EndNode",
-                },
-              ],
-              "parentProcessInstance": Object {
-                "businessKey": null,
-                "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-                "processName": "travels",
-              },
+              "id": "a23e6c20-02c2-4c2b-8c5c-e988a0adf86211223344",
+              "isSelected": false,
+              "latUpdate": "2019-10-22T03:40:44.089Z",
+              "nodes": Array [],
+              "parentProcessInstance": null,
               "parentProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-              "processId": "flightBooking",
+              "processId": "flightBooking1111",
               "processName": "FlightBooking",
               "roles": Array [],
               "rootProcessInstanceId": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
               "serviceUrl": "http://localhost:4000",
               "start": "2019-10-22T03:40:44.089Z",
-              "state": "COMPLETED",
-              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
-            },
-          ],
-          "childProcessInstances": Array [
-            Object {
-              "id": "c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e",
-              "processName": "FlightBooking",
-            },
-            Object {
-              "id": "2d962eef-45b8-48a9-ad4e-9cde0ad6af88",
-              "processName": "HotelBooking",
+              "state": "ERROR",
+              "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Bangalore\\",\\"country\\":\\"India\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Bangalore\\",\\"country\\":\\"US\\",\\"street\\":\\"Bangalore\\",\\"zipCode\\":\\"560093\\"},\\"email\\":\\"ajaganat@redhat.com\\",\\"firstName\\":\\"Ajay\\",\\"lastName\\":\\"Jaganathan\\",\\"nationality\\":\\"US\\"}}",
             },
           ],
           "end": null,
@@ -145,22 +90,16 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
           },
           "id": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
           "isOpen": "true",
-          "nodes": Array [
-            Object {
-              "definitionId": "CallActivity_2",
-              "enter": "2019-10-22T04:43:01.143Z",
-              "exit": "2019-10-22T04:43:01.146Z",
-              "id": "7cdeba99-cd36-4425-980d-e59d44769a3e",
-              "name": "Book Flight",
-              "type": "SubProcessNode",
-            },
-          ],
+          "isSelected": false,
+          "lastUpdate": "2019-10-22T03:40:44.089Z",
+          "nodes": Array [],
           "parentProcessInstance": null,
           "parentProcessInstanceId": null,
           "processId": "travels",
           "processName": "travels",
           "roles": Array [],
           "rootProcessInstanceId": null,
+          "serviceUrl": "http://localhost:4000",
           "start": "2019-10-22T03:40:44.089Z",
           "state": "ACTIVE",
           "variables": "{\\"flight\\":{\\"arrival\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"departure\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"flightNumber\\":\\"MX555\\"},\\"hotel\\":{\\"address\\":{\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"street\\":\\"street\\",\\"zipCode\\":\\"12345\\"},\\"bookingNumber\\":\\"XX-012345\\",\\"name\\":\\"Perfect hotel\\",\\"phone\\":\\"09876543\\"},\\"trip\\":{\\"begin\\":\\"2019-10-22T22:00:00Z[UTC]\\",\\"city\\":\\"Berlin\\",\\"country\\":\\"Germany\\",\\"end\\":\\"2019-10-30T22:00:00Z[UTC]\\",\\"visaRequired\\":false},\\"traveller\\":{\\"address\\":{\\"city\\":\\"Karkow\\",\\"country\\":\\"Poland\\",\\"street\\":\\"palna\\",\\"zipCode\\":\\"200300\\"},\\"email\\":\\"rob@redhat.com\\",\\"firstName\\":\\"Rob\\",\\"lastName\\":\\"Rob\\",\\"nationality\\":\\"Polish\\"}}",
@@ -169,26 +108,15 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
     }
   }
   isAllChecked={true}
-  pageSize={10}
   searchWord="Tra"
-  selectedInstances={Object {}}
-  selectedNumber={0}
-  setAbortedMessageObj={[MockFunction]}
-  setCompletedMessageObj={[MockFunction]}
-  setFilteredData={[MockFunction]}
+  selectedInstances={Array []}
   setFilters={[MockFunction]}
   setInitData={[MockFunction]}
   setIsAllChecked={[MockFunction]}
-  setIsClearAllClicked={[MockFunction]}
-  setIsStatusSelected={[MockFunction]}
-  setLimit={[MockFunction]}
-  setModalTitle={[MockFunction]}
-  setOffset={[MockFunction]}
   setSearchWord={[MockFunction]}
+  setSelectableInstances={[MockFunction]}
   setSelectedInstances={[MockFunction]}
-  setSelectedNumber={[MockFunction]}
   setStatusArray={[MockFunction]}
-  setTitleType={[MockFunction]}
   statusArray={
     Array [
       "ACTIVE",
@@ -269,11 +197,12 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                       aria-haspopup={false}
                       aria-label="Show Filters"
                       className="pf-c-button pf-m-plain"
-                      data-ouia-component-id={8}
+                      data-ouia-component-id="OUIA-Generated-Button-plain-1"
                       data-ouia-component-type="PF4/Button"
                       data-ouia-safe={true}
                       disabled={false}
                       onClick={[Function]}
+                      role={null}
                       type="button"
                     >
                       <FilterIcon
@@ -297,7 +226,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                         >
                           <path
                             d="M487.976 0H24.028C2.71 0-8.047 25.866 7.058 40.971L192 225.941V432c0 7.831 3.821 15.17 10.237 19.662l80 55.98C298.02 518.69 320 507.493 320 487.98V225.941l184.947-184.97C520.021 25.896 509.338 0 487.976 0z"
-                            transform=""
                           />
                         </svg>
                       </FilterIcon>
@@ -349,6 +277,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                             position="left"
                             toggle={
                               <DropdownToggle
+                                isDisabled={false}
                                 onToggle={[Function]}
                                 splitButtonItems={
                                   Array [
@@ -402,6 +331,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               position="left"
                               toggle={
                                 <DropdownToggle
+                                  isDisabled={false}
                                   onToggle={[Function]}
                                   splitButtonItems={
                                     Array [
@@ -423,7 +353,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                             >
                               <div
                                 className="pf-c-dropdown"
-                                data-ouia-component-id={1}
+                                data-ouia-component-id="OUIA-Generated-Dropdown-1"
                                 data-ouia-component-type="PF4/Dropdown"
                                 data-ouia-safe={true}
                               >
@@ -431,6 +361,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                   aria-haspopup={true}
                                   getMenuRef={[Function]}
                                   id="pf-dropdown-toggle-id-0"
+                                  isDisabled={false}
                                   isOpen={false}
                                   isPlain={false}
                                   key=".0"
@@ -440,7 +371,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                     Object {
                                       "current": <div
                                         class="pf-c-dropdown"
-                                        data-ouia-component-id="1"
+                                        data-ouia-component-id="OUIA-Generated-Dropdown-1"
                                         data-ouia-component-type="PF4/Dropdown"
                                         data-ouia-safe="true"
                                       >
@@ -455,6 +386,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                               aria-invalid="false"
                                               aria-label="Select all"
                                               checked=""
+                                              data-ouia-component-id="OUIA-Generated-DropdownToggleCheckbox-1"
+                                              data-ouia-component-type="PF4/DropdownToggleCheckbox"
+                                              data-ouia-safe="true"
                                               id="select-all-checkbox"
                                               type="checkbox"
                                             />
@@ -464,6 +398,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                             aria-haspopup="true"
                                             aria-label="Select"
                                             class="pf-c-dropdown__toggle-button"
+                                            data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                                            data-ouia-component-type="PF4/DropdownToggle"
+                                            data-ouia-safe="true"
                                             id="pf-dropdown-toggle-id-0"
                                             type="button"
                                           >
@@ -482,7 +419,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                               >
                                                 <path
                                                   d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                                  transform=""
                                                 />
                                               </svg>
                                             </span>
@@ -526,6 +462,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                           aria-invalid={false}
                                           aria-label="Select all"
                                           checked={true}
+                                          data-ouia-component-id="OUIA-Generated-DropdownToggleCheckbox-1"
+                                          data-ouia-component-type="PF4/DropdownToggleCheckbox"
+                                          data-ouia-safe={true}
                                           disabled={false}
                                           id="select-all-checkbox"
                                           onChange={[Function]}
@@ -538,6 +477,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                       aria-label="Select"
                                       bubbleEvent={false}
                                       className=""
+                                      data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                                      data-ouia-component-type="PF4/DropdownToggle"
+                                      data-ouia-safe={true}
                                       getMenuRef={[Function]}
                                       id="pf-dropdown-toggle-id-0"
                                       isActive={false}
@@ -552,7 +494,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                         Object {
                                           "current": <div
                                             class="pf-c-dropdown"
-                                            data-ouia-component-id="1"
+                                            data-ouia-component-id="OUIA-Generated-Dropdown-1"
                                             data-ouia-component-type="PF4/Dropdown"
                                             data-ouia-safe="true"
                                           >
@@ -567,6 +509,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                                   aria-invalid="false"
                                                   aria-label="Select all"
                                                   checked=""
+                                                  data-ouia-component-id="OUIA-Generated-DropdownToggleCheckbox-1"
+                                                  data-ouia-component-type="PF4/DropdownToggleCheckbox"
+                                                  data-ouia-safe="true"
                                                   id="select-all-checkbox"
                                                   type="checkbox"
                                                 />
@@ -576,6 +521,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                                 aria-haspopup="true"
                                                 aria-label="Select"
                                                 class="pf-c-dropdown__toggle-button"
+                                                data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                                                data-ouia-component-type="PF4/DropdownToggle"
+                                                data-ouia-safe="true"
                                                 id="pf-dropdown-toggle-id-0"
                                                 type="button"
                                               >
@@ -594,7 +542,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                                   >
                                                     <path
                                                       d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                                      transform=""
                                                     />
                                                   </svg>
                                                 </span>
@@ -609,6 +556,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                         aria-haspopup={true}
                                         aria-label="Select"
                                         className="pf-c-dropdown__toggle-button"
+                                        data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                                        data-ouia-component-type="PF4/DropdownToggle"
+                                        data-ouia-safe={true}
                                         disabled={false}
                                         id="pf-dropdown-toggle-id-0"
                                         onClick={[Function]}
@@ -639,7 +589,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                             >
                                               <path
                                                 d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                                transform=""
                                               />
                                             </svg>
                                           </CaretDownIcon>
@@ -680,12 +629,15 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                             <Select
                               aria-label="Status"
                               aria-labelledby=""
+                              chipGroupComponent={null}
                               className=""
                               clearSelectionsAriaLabel="Clear all"
                               createText="Create"
                               customBadgeText={null}
                               customContent={null}
                               direction="down"
+                              favorites={Array []}
+                              favoritesLabel="Favorites"
                               hasInlineFilter={false}
                               id="status-select"
                               inlineFilterPlaceholderText={null}
@@ -726,7 +678,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               >
                                 <div
                                   className="pf-c-select"
-                                  data-ouia-component-id={9}
+                                  data-ouia-component-id="OUIA-Generated-Select-checkbox-2"
                                   data-ouia-component-type="PF4/Select"
                                   data-ouia-safe={true}
                                 >
@@ -746,6 +698,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                         "current": null,
                                       }
                                     }
+                                    onClickTypeaheadToggleButton={[Function]}
                                     onClose={[Function]}
                                     onEnter={[Function]}
                                     onToggle={[Function]}
@@ -753,7 +706,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                       Object {
                                         "current": <div
                                           class="pf-c-select"
-                                          data-ouia-component-id="9"
+                                          data-ouia-component-id="OUIA-Generated-Select-checkbox-2"
                                           data-ouia-component-type="PF4/Select"
                                           data-ouia-safe="true"
                                         >
@@ -796,7 +749,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                               >
                                                 <path
                                                   d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                                  transform=""
                                                 />
                                               </svg>
                                             </span>
@@ -860,7 +812,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                           >
                                             <path
                                               d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                              transform=""
                                             />
                                           </svg>
                                         </CaretDownIcon>
@@ -884,165 +835,169 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               >
                                 <div
                                   class="pf-c-chip-group pf-m-category"
+                                  data-ouia-component-type="PF4/ChipGroup"
+                                  data-ouia-safe="true"
                                 >
-                                  <span
-                                    aria-hidden="true"
-                                    class="pf-c-chip-group__label"
-                                    id="pf-random-id-2"
+                                  <div
+                                    class="pf-c-chip-group__main"
                                   >
-                                    Status
-                                  </span>
-                                  <ul
-                                    aria-labelledby="pf-random-id-2"
-                                    class="pf-c-chip-group__list"
-                                    role="list"
-                                  >
-                                    <li
-                                      class="pf-c-chip-group__list-item"
+                                    <span
+                                      aria-hidden="true"
+                                      class="pf-c-chip-group__label"
+                                      id="pf-random-id-2"
                                     >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="22"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
+                                      Status
+                                    </span>
+                                    <ul
+                                      aria-labelledby="pf-random-id-2"
+                                      class="pf-c-chip-group__list"
+                                      role="list"
+                                    >
+                                      <li
+                                        class="pf-c-chip-group__list-item"
                                       >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-3"
-                                        >
-                                          ACTIVE
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="23"
-                                          data-ouia-component-type="PF4/Button"
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-1"
+                                          data-ouia-component-type="PF4/Chip"
                                           data-ouia-safe="true"
-                                          id="remove_pf-random-id-3"
+                                        >
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-3"
+                                          >
+                                            ACTIVE
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-3"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                      <li
+                                        class="pf-c-chip-group__list-item"
+                                      >
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-2"
+                                          data-ouia-component-type="PF4/Chip"
+                                          data-ouia-safe="true"
+                                        >
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-4"
+                                          >
+                                            COMPLETED
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-4"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                      <li
+                                        class="pf-c-chip-group__list-item"
+                                      >
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-3"
+                                          data-ouia-component-type="PF4/Chip"
+                                          data-ouia-safe="true"
+                                        >
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-5"
+                                          >
+                                            ERROR
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-5"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                      <li
+                                        class="pf-c-chip-group__list-item"
+                                      >
+                                        <button
+                                          class="pf-c-chip pf-m-overflow"
+                                          data-ouia-component-id="OUIA-Generated-Chip-4"
+                                          data-ouia-component-type="PF4/OverflowChip"
+                                          data-ouia-safe="true"
                                           type="button"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
+                                          <span
+                                            class="pf-c-chip__text"
                                           >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
+                                            2 more
+                                          </span>
                                         </button>
-                                      </div>
-                                    </li>
-                                    <li
-                                      class="pf-c-chip-group__list-item"
-                                    >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="24"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
-                                      >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-4"
-                                        >
-                                          COMPLETED
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="25"
-                                          data-ouia-component-type="PF4/Button"
-                                          data-ouia-safe="true"
-                                          id="remove_pf-random-id-4"
-                                          type="button"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
-                                        </button>
-                                      </div>
-                                    </li>
-                                    <li
-                                      class="pf-c-chip-group__list-item"
-                                    >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="26"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
-                                      >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-5"
-                                        >
-                                          ERROR
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="27"
-                                          data-ouia-component-type="PF4/Button"
-                                          data-ouia-safe="true"
-                                          id="remove_pf-random-id-5"
-                                          type="button"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
-                                        </button>
-                                      </div>
-                                    </li>
-                                    <li
-                                      class="pf-c-chip-group__list-item"
-                                    >
-                                      <button
-                                        class="pf-c-chip pf-m-overflow"
-                                        data-ouia-component-id="28"
-                                        data-ouia-component-type="PF4/OverflowChip"
-                                        data-ouia-safe="true"
-                                      >
-                                        <span
-                                          class="pf-c-chip__text"
-                                        >
-                                          2 more
-                                        </span>
-                                      </button>
-                                    </li>
-                                  </ul>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                               <div
@@ -1050,63 +1005,68 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               >
                                 <div
                                   class="pf-c-chip-group pf-m-category"
+                                  data-ouia-component-type="PF4/ChipGroup"
+                                  data-ouia-safe="true"
                                 >
-                                  <span
-                                    aria-hidden="true"
-                                    class="pf-c-chip-group__label"
-                                    id="pf-random-id-7"
+                                  <div
+                                    class="pf-c-chip-group__main"
                                   >
-                                    Business key
-                                  </span>
-                                  <ul
-                                    aria-labelledby="pf-random-id-7"
-                                    class="pf-c-chip-group__list"
-                                    role="list"
-                                  >
-                                    <li
-                                      class="pf-c-chip-group__list-item"
+                                    <span
+                                      aria-hidden="true"
+                                      class="pf-c-chip-group__label"
+                                      id="pf-random-id-7"
                                     >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="29"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
+                                      Business key
+                                    </span>
+                                    <ul
+                                      aria-labelledby="pf-random-id-7"
+                                      class="pf-c-chip-group__list"
+                                      role="list"
+                                    >
+                                      <li
+                                        class="pf-c-chip-group__list-item"
                                       >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-8"
-                                        >
-                                          tra
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="30"
-                                          data-ouia-component-type="PF4/Button"
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-5"
+                                          data-ouia-component-type="PF4/Chip"
                                           data-ouia-safe="true"
-                                          id="remove_pf-random-id-8"
-                                          type="button"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-8"
                                           >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
-                                        </button>
-                                      </div>
-                                    </li>
-                                  </ul>
+                                            tra
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-8"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1136,294 +1096,304 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                 >
                                   <div
                                     className="pf-c-chip-group pf-m-category"
+                                    data-ouia-component-type="PF4/ChipGroup"
+                                    data-ouia-safe={true}
                                   >
-                                    <span
-                                      aria-hidden="true"
-                                      className="pf-c-chip-group__label"
-                                      id="pf-random-id-2"
+                                    <div
+                                      className="pf-c-chip-group__main"
                                     >
-                                      Status
-                                    </span>
-                                    <ul
-                                      aria-labelledby="pf-random-id-2"
-                                      className="pf-c-chip-group__list"
-                                      role="list"
-                                    >
-                                      <li
-                                        className="pf-c-chip-group__list-item"
-                                        key="0"
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-chip-group__label"
+                                        id="pf-random-id-2"
                                       >
-                                        <Chip
-                                          className=""
-                                          closeBtnAriaLabel="close"
-                                          component="div"
-                                          isOverflowChip={false}
-                                          isReadOnly={false}
-                                          key=".$ACTIVE"
-                                          onClick={[Function]}
-                                          tooltipPosition="top"
+                                        Status
+                                      </span>
+                                      <ul
+                                        aria-labelledby="pf-random-id-2"
+                                        className="pf-c-chip-group__list"
+                                        role="list"
+                                      >
+                                        <li
+                                          className="pf-c-chip-group__list-item"
+                                          key="0"
                                         >
-                                          <GenerateId
-                                            prefix="pf-random-id-"
+                                          <Chip
+                                            className=""
+                                            closeBtnAriaLabel="close"
+                                            component="div"
+                                            isOverflowChip={false}
+                                            isReadOnly={false}
+                                            key=".$ACTIVE"
+                                            onClick={[Function]}
+                                            tooltipPosition="top"
                                           >
-                                            <div
-                                              className="pf-c-chip"
-                                              data-ouia-component-id={22}
-                                              data-ouia-component-type="PF4/Chip"
-                                              data-ouia-safe={true}
+                                            <GenerateId
+                                              prefix="pf-random-id-"
                                             >
-                                              <span
-                                                className="pf-c-chip__text"
-                                                id="pf-random-id-3"
+                                              <div
+                                                className="pf-c-chip"
+                                                data-ouia-component-id="OUIA-Generated-Chip-1"
+                                                data-ouia-component-type="PF4/Chip"
+                                                data-ouia-safe={true}
                                               >
-                                                ACTIVE
-                                              </span>
-                                              <Button
-                                                aria-label="close"
-                                                aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
-                                                id="remove_pf-random-id-3"
-                                                onClick={[Function]}
-                                                variant="plain"
-                                              >
-                                                <button
-                                                  aria-disabled={false}
+                                                <span
+                                                  className="pf-c-chip__text"
+                                                  id="pf-random-id-3"
+                                                >
+                                                  ACTIVE
+                                                </span>
+                                                <Button
                                                   aria-label="close"
                                                   aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
-                                                  className="pf-c-button pf-m-plain"
-                                                  data-ouia-component-id={23}
-                                                  data-ouia-component-type="PF4/Button"
-                                                  data-ouia-safe={true}
-                                                  disabled={false}
                                                   id="remove_pf-random-id-3"
                                                   onClick={[Function]}
-                                                  type="button"
+                                                  ouiaId="close"
+                                                  variant="plain"
                                                 >
-                                                  <TimesIcon
-                                                    aria-hidden="true"
-                                                    color="currentColor"
-                                                    noVerticalAlign={false}
-                                                    size="sm"
+                                                  <button
+                                                    aria-disabled={false}
+                                                    aria-label="close"
+                                                    aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
+                                                    className="pf-c-button pf-m-plain"
+                                                    data-ouia-component-id="close"
+                                                    data-ouia-component-type="PF4/Button"
+                                                    data-ouia-safe={true}
+                                                    disabled={false}
+                                                    id="remove_pf-random-id-3"
+                                                    onClick={[Function]}
+                                                    role={null}
+                                                    type="button"
                                                   >
-                                                    <svg
+                                                    <TimesIcon
                                                       aria-hidden="true"
-                                                      aria-labelledby={null}
-                                                      fill="currentColor"
-                                                      height="1em"
-                                                      role="img"
-                                                      style={
-                                                        Object {
-                                                          "verticalAlign": "-0.125em",
-                                                        }
-                                                      }
-                                                      viewBox="0 0 352 512"
-                                                      width="1em"
+                                                      color="currentColor"
+                                                      noVerticalAlign={false}
+                                                      size="sm"
                                                     >
-                                                      <path
-                                                        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                                        transform=""
-                                                      />
-                                                    </svg>
-                                                  </TimesIcon>
-                                                </button>
-                                              </Button>
-                                            </div>
-                                          </GenerateId>
-                                        </Chip>
-                                      </li>
-                                      <li
-                                        className="pf-c-chip-group__list-item"
-                                        key="1"
-                                      >
-                                        <Chip
-                                          className=""
-                                          closeBtnAriaLabel="close"
-                                          component="div"
-                                          isOverflowChip={false}
-                                          isReadOnly={false}
-                                          key=".$COMPLETED"
-                                          onClick={[Function]}
-                                          tooltipPosition="top"
+                                                      <svg
+                                                        aria-hidden="true"
+                                                        aria-labelledby={null}
+                                                        fill="currentColor"
+                                                        height="1em"
+                                                        role="img"
+                                                        style={
+                                                          Object {
+                                                            "verticalAlign": "-0.125em",
+                                                          }
+                                                        }
+                                                        viewBox="0 0 352 512"
+                                                        width="1em"
+                                                      >
+                                                        <path
+                                                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                                        />
+                                                      </svg>
+                                                    </TimesIcon>
+                                                  </button>
+                                                </Button>
+                                              </div>
+                                            </GenerateId>
+                                          </Chip>
+                                        </li>
+                                        <li
+                                          className="pf-c-chip-group__list-item"
+                                          key="1"
                                         >
-                                          <GenerateId
-                                            prefix="pf-random-id-"
+                                          <Chip
+                                            className=""
+                                            closeBtnAriaLabel="close"
+                                            component="div"
+                                            isOverflowChip={false}
+                                            isReadOnly={false}
+                                            key=".$COMPLETED"
+                                            onClick={[Function]}
+                                            tooltipPosition="top"
                                           >
-                                            <div
-                                              className="pf-c-chip"
-                                              data-ouia-component-id={24}
-                                              data-ouia-component-type="PF4/Chip"
-                                              data-ouia-safe={true}
+                                            <GenerateId
+                                              prefix="pf-random-id-"
                                             >
-                                              <span
-                                                className="pf-c-chip__text"
-                                                id="pf-random-id-4"
+                                              <div
+                                                className="pf-c-chip"
+                                                data-ouia-component-id="OUIA-Generated-Chip-2"
+                                                data-ouia-component-type="PF4/Chip"
+                                                data-ouia-safe={true}
                                               >
-                                                COMPLETED
-                                              </span>
-                                              <Button
-                                                aria-label="close"
-                                                aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
-                                                id="remove_pf-random-id-4"
-                                                onClick={[Function]}
-                                                variant="plain"
-                                              >
-                                                <button
-                                                  aria-disabled={false}
+                                                <span
+                                                  className="pf-c-chip__text"
+                                                  id="pf-random-id-4"
+                                                >
+                                                  COMPLETED
+                                                </span>
+                                                <Button
                                                   aria-label="close"
                                                   aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
-                                                  className="pf-c-button pf-m-plain"
-                                                  data-ouia-component-id={25}
-                                                  data-ouia-component-type="PF4/Button"
-                                                  data-ouia-safe={true}
-                                                  disabled={false}
                                                   id="remove_pf-random-id-4"
                                                   onClick={[Function]}
-                                                  type="button"
+                                                  ouiaId="close"
+                                                  variant="plain"
                                                 >
-                                                  <TimesIcon
-                                                    aria-hidden="true"
-                                                    color="currentColor"
-                                                    noVerticalAlign={false}
-                                                    size="sm"
+                                                  <button
+                                                    aria-disabled={false}
+                                                    aria-label="close"
+                                                    aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
+                                                    className="pf-c-button pf-m-plain"
+                                                    data-ouia-component-id="close"
+                                                    data-ouia-component-type="PF4/Button"
+                                                    data-ouia-safe={true}
+                                                    disabled={false}
+                                                    id="remove_pf-random-id-4"
+                                                    onClick={[Function]}
+                                                    role={null}
+                                                    type="button"
                                                   >
-                                                    <svg
+                                                    <TimesIcon
                                                       aria-hidden="true"
-                                                      aria-labelledby={null}
-                                                      fill="currentColor"
-                                                      height="1em"
-                                                      role="img"
-                                                      style={
-                                                        Object {
-                                                          "verticalAlign": "-0.125em",
-                                                        }
-                                                      }
-                                                      viewBox="0 0 352 512"
-                                                      width="1em"
+                                                      color="currentColor"
+                                                      noVerticalAlign={false}
+                                                      size="sm"
                                                     >
-                                                      <path
-                                                        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                                        transform=""
-                                                      />
-                                                    </svg>
-                                                  </TimesIcon>
-                                                </button>
-                                              </Button>
-                                            </div>
-                                          </GenerateId>
-                                        </Chip>
-                                      </li>
-                                      <li
-                                        className="pf-c-chip-group__list-item"
-                                        key="2"
-                                      >
-                                        <Chip
-                                          className=""
-                                          closeBtnAriaLabel="close"
-                                          component="div"
-                                          isOverflowChip={false}
-                                          isReadOnly={false}
-                                          key=".$ERROR"
-                                          onClick={[Function]}
-                                          tooltipPosition="top"
+                                                      <svg
+                                                        aria-hidden="true"
+                                                        aria-labelledby={null}
+                                                        fill="currentColor"
+                                                        height="1em"
+                                                        role="img"
+                                                        style={
+                                                          Object {
+                                                            "verticalAlign": "-0.125em",
+                                                          }
+                                                        }
+                                                        viewBox="0 0 352 512"
+                                                        width="1em"
+                                                      >
+                                                        <path
+                                                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                                        />
+                                                      </svg>
+                                                    </TimesIcon>
+                                                  </button>
+                                                </Button>
+                                              </div>
+                                            </GenerateId>
+                                          </Chip>
+                                        </li>
+                                        <li
+                                          className="pf-c-chip-group__list-item"
+                                          key="2"
                                         >
-                                          <GenerateId
-                                            prefix="pf-random-id-"
+                                          <Chip
+                                            className=""
+                                            closeBtnAriaLabel="close"
+                                            component="div"
+                                            isOverflowChip={false}
+                                            isReadOnly={false}
+                                            key=".$ERROR"
+                                            onClick={[Function]}
+                                            tooltipPosition="top"
                                           >
-                                            <div
-                                              className="pf-c-chip"
-                                              data-ouia-component-id={26}
-                                              data-ouia-component-type="PF4/Chip"
-                                              data-ouia-safe={true}
+                                            <GenerateId
+                                              prefix="pf-random-id-"
                                             >
-                                              <span
-                                                className="pf-c-chip__text"
-                                                id="pf-random-id-5"
+                                              <div
+                                                className="pf-c-chip"
+                                                data-ouia-component-id="OUIA-Generated-Chip-3"
+                                                data-ouia-component-type="PF4/Chip"
+                                                data-ouia-safe={true}
                                               >
-                                                ERROR
-                                              </span>
-                                              <Button
-                                                aria-label="close"
-                                                aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
-                                                id="remove_pf-random-id-5"
-                                                onClick={[Function]}
-                                                variant="plain"
-                                              >
-                                                <button
-                                                  aria-disabled={false}
+                                                <span
+                                                  className="pf-c-chip__text"
+                                                  id="pf-random-id-5"
+                                                >
+                                                  ERROR
+                                                </span>
+                                                <Button
                                                   aria-label="close"
                                                   aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
-                                                  className="pf-c-button pf-m-plain"
-                                                  data-ouia-component-id={27}
-                                                  data-ouia-component-type="PF4/Button"
-                                                  data-ouia-safe={true}
-                                                  disabled={false}
                                                   id="remove_pf-random-id-5"
                                                   onClick={[Function]}
-                                                  type="button"
+                                                  ouiaId="close"
+                                                  variant="plain"
                                                 >
-                                                  <TimesIcon
-                                                    aria-hidden="true"
-                                                    color="currentColor"
-                                                    noVerticalAlign={false}
-                                                    size="sm"
+                                                  <button
+                                                    aria-disabled={false}
+                                                    aria-label="close"
+                                                    aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
+                                                    className="pf-c-button pf-m-plain"
+                                                    data-ouia-component-id="close"
+                                                    data-ouia-component-type="PF4/Button"
+                                                    data-ouia-safe={true}
+                                                    disabled={false}
+                                                    id="remove_pf-random-id-5"
+                                                    onClick={[Function]}
+                                                    role={null}
+                                                    type="button"
                                                   >
-                                                    <svg
+                                                    <TimesIcon
                                                       aria-hidden="true"
-                                                      aria-labelledby={null}
-                                                      fill="currentColor"
-                                                      height="1em"
-                                                      role="img"
-                                                      style={
-                                                        Object {
-                                                          "verticalAlign": "-0.125em",
-                                                        }
-                                                      }
-                                                      viewBox="0 0 352 512"
-                                                      width="1em"
+                                                      color="currentColor"
+                                                      noVerticalAlign={false}
+                                                      size="sm"
                                                     >
-                                                      <path
-                                                        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                                        transform=""
-                                                      />
-                                                    </svg>
-                                                  </TimesIcon>
-                                                </button>
-                                              </Button>
-                                            </div>
-                                          </GenerateId>
-                                        </Chip>
-                                      </li>
-                                      <li
-                                        className="pf-c-chip-group__list-item"
-                                      >
-                                        <Chip
-                                          className=""
-                                          closeBtnAriaLabel="close"
-                                          component="button"
-                                          isOverflowChip={true}
-                                          isReadOnly={false}
-                                          onClick={[Function]}
-                                          tooltipPosition="top"
+                                                      <svg
+                                                        aria-hidden="true"
+                                                        aria-labelledby={null}
+                                                        fill="currentColor"
+                                                        height="1em"
+                                                        role="img"
+                                                        style={
+                                                          Object {
+                                                            "verticalAlign": "-0.125em",
+                                                          }
+                                                        }
+                                                        viewBox="0 0 352 512"
+                                                        width="1em"
+                                                      >
+                                                        <path
+                                                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                                        />
+                                                      </svg>
+                                                    </TimesIcon>
+                                                  </button>
+                                                </Button>
+                                              </div>
+                                            </GenerateId>
+                                          </Chip>
+                                        </li>
+                                        <li
+                                          className="pf-c-chip-group__list-item"
                                         >
-                                          <GenerateId
-                                            prefix="pf-random-id-"
+                                          <Chip
+                                            className=""
+                                            closeBtnAriaLabel="close"
+                                            component="button"
+                                            isOverflowChip={true}
+                                            isReadOnly={false}
+                                            onClick={[Function]}
+                                            tooltipPosition="top"
                                           >
-                                            <button
-                                              className="pf-c-chip pf-m-overflow"
-                                              data-ouia-component-id={28}
-                                              data-ouia-component-type="PF4/OverflowChip"
-                                              data-ouia-safe={true}
-                                              onClick={[Function]}
+                                            <GenerateId
+                                              prefix="pf-random-id-"
                                             >
-                                              <span
-                                                className="pf-c-chip__text"
+                                              <button
+                                                className="pf-c-chip pf-m-overflow"
+                                                data-ouia-component-id="OUIA-Generated-Chip-4"
+                                                data-ouia-component-type="PF4/OverflowChip"
+                                                data-ouia-safe={true}
+                                                onClick={[Function]}
+                                                type="button"
                                               >
-                                                2 more
-                                              </span>
-                                            </button>
-                                          </GenerateId>
-                                        </Chip>
-                                      </li>
-                                    </ul>
+                                                <span
+                                                  className="pf-c-chip__text"
+                                                >
+                                                  2 more
+                                                </span>
+                                              </button>
+                                            </GenerateId>
+                                          </Chip>
+                                        </li>
+                                      </ul>
+                                    </div>
                                   </div>
                                 </GenerateId>
                               </ChipGroup>
@@ -1453,7 +1423,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               <div
                                 className="pf-c-input-group"
                               >
-                                <ForwardRef
+                                <TextInput
                                   aria-label="business key"
                                   id="businessKey"
                                   isDisabled={false}
@@ -1470,6 +1440,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                     id="businessKey"
                                     innerRef={null}
                                     isDisabled={false}
+                                    isLeftTruncated={false}
                                     isReadOnly={false}
                                     isRequired={false}
                                     name="businessKey"
@@ -1487,7 +1458,9 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                       disabled={false}
                                       id="businessKey"
                                       name="businessKey"
+                                      onBlur={[Function]}
                                       onChange={[Function]}
+                                      onFocus={[Function]}
                                       onKeyPress={[Function]}
                                       placeholder="Filter by business key"
                                       readOnly={false}
@@ -1496,7 +1469,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                       value="Tra"
                                     />
                                   </TextInputBase>
-                                </ForwardRef>
+                                </TextInput>
                               </div>
                             </InputGroup>
                           </div>
@@ -1513,165 +1486,169 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               >
                                 <div
                                   class="pf-c-chip-group pf-m-category"
+                                  data-ouia-component-type="PF4/ChipGroup"
+                                  data-ouia-safe="true"
                                 >
-                                  <span
-                                    aria-hidden="true"
-                                    class="pf-c-chip-group__label"
-                                    id="pf-random-id-2"
+                                  <div
+                                    class="pf-c-chip-group__main"
                                   >
-                                    Status
-                                  </span>
-                                  <ul
-                                    aria-labelledby="pf-random-id-2"
-                                    class="pf-c-chip-group__list"
-                                    role="list"
-                                  >
-                                    <li
-                                      class="pf-c-chip-group__list-item"
+                                    <span
+                                      aria-hidden="true"
+                                      class="pf-c-chip-group__label"
+                                      id="pf-random-id-2"
                                     >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="22"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
+                                      Status
+                                    </span>
+                                    <ul
+                                      aria-labelledby="pf-random-id-2"
+                                      class="pf-c-chip-group__list"
+                                      role="list"
+                                    >
+                                      <li
+                                        class="pf-c-chip-group__list-item"
                                       >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-3"
-                                        >
-                                          ACTIVE
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="23"
-                                          data-ouia-component-type="PF4/Button"
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-1"
+                                          data-ouia-component-type="PF4/Chip"
                                           data-ouia-safe="true"
-                                          id="remove_pf-random-id-3"
+                                        >
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-3"
+                                          >
+                                            ACTIVE
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-3"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                      <li
+                                        class="pf-c-chip-group__list-item"
+                                      >
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-2"
+                                          data-ouia-component-type="PF4/Chip"
+                                          data-ouia-safe="true"
+                                        >
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-4"
+                                          >
+                                            COMPLETED
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-4"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                      <li
+                                        class="pf-c-chip-group__list-item"
+                                      >
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-3"
+                                          data-ouia-component-type="PF4/Chip"
+                                          data-ouia-safe="true"
+                                        >
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-5"
+                                          >
+                                            ERROR
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-5"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                      <li
+                                        class="pf-c-chip-group__list-item"
+                                      >
+                                        <button
+                                          class="pf-c-chip pf-m-overflow"
+                                          data-ouia-component-id="OUIA-Generated-Chip-4"
+                                          data-ouia-component-type="PF4/OverflowChip"
+                                          data-ouia-safe="true"
                                           type="button"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
+                                          <span
+                                            class="pf-c-chip__text"
                                           >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
+                                            2 more
+                                          </span>
                                         </button>
-                                      </div>
-                                    </li>
-                                    <li
-                                      class="pf-c-chip-group__list-item"
-                                    >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="24"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
-                                      >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-4"
-                                        >
-                                          COMPLETED
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="25"
-                                          data-ouia-component-type="PF4/Button"
-                                          data-ouia-safe="true"
-                                          id="remove_pf-random-id-4"
-                                          type="button"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
-                                        </button>
-                                      </div>
-                                    </li>
-                                    <li
-                                      class="pf-c-chip-group__list-item"
-                                    >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="26"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
-                                      >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-5"
-                                        >
-                                          ERROR
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="27"
-                                          data-ouia-component-type="PF4/Button"
-                                          data-ouia-safe="true"
-                                          id="remove_pf-random-id-5"
-                                          type="button"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
-                                        </button>
-                                      </div>
-                                    </li>
-                                    <li
-                                      class="pf-c-chip-group__list-item"
-                                    >
-                                      <button
-                                        class="pf-c-chip pf-m-overflow"
-                                        data-ouia-component-id="28"
-                                        data-ouia-component-type="PF4/OverflowChip"
-                                        data-ouia-safe="true"
-                                      >
-                                        <span
-                                          class="pf-c-chip__text"
-                                        >
-                                          2 more
-                                        </span>
-                                      </button>
-                                    </li>
-                                  </ul>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                               <div
@@ -1679,63 +1656,68 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               >
                                 <div
                                   class="pf-c-chip-group pf-m-category"
+                                  data-ouia-component-type="PF4/ChipGroup"
+                                  data-ouia-safe="true"
                                 >
-                                  <span
-                                    aria-hidden="true"
-                                    class="pf-c-chip-group__label"
-                                    id="pf-random-id-7"
+                                  <div
+                                    class="pf-c-chip-group__main"
                                   >
-                                    Business key
-                                  </span>
-                                  <ul
-                                    aria-labelledby="pf-random-id-7"
-                                    class="pf-c-chip-group__list"
-                                    role="list"
-                                  >
-                                    <li
-                                      class="pf-c-chip-group__list-item"
+                                    <span
+                                      aria-hidden="true"
+                                      class="pf-c-chip-group__label"
+                                      id="pf-random-id-7"
                                     >
-                                      <div
-                                        class="pf-c-chip"
-                                        data-ouia-component-id="29"
-                                        data-ouia-component-type="PF4/Chip"
-                                        data-ouia-safe="true"
+                                      Business key
+                                    </span>
+                                    <ul
+                                      aria-labelledby="pf-random-id-7"
+                                      class="pf-c-chip-group__list"
+                                      role="list"
+                                    >
+                                      <li
+                                        class="pf-c-chip-group__list-item"
                                       >
-                                        <span
-                                          class="pf-c-chip__text"
-                                          id="pf-random-id-8"
-                                        >
-                                          tra
-                                        </span>
-                                        <button
-                                          aria-disabled="false"
-                                          aria-label="close"
-                                          aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
-                                          class="pf-c-button pf-m-plain"
-                                          data-ouia-component-id="30"
-                                          data-ouia-component-type="PF4/Button"
+                                        <div
+                                          class="pf-c-chip"
+                                          data-ouia-component-id="OUIA-Generated-Chip-5"
+                                          data-ouia-component-type="PF4/Chip"
                                           data-ouia-safe="true"
-                                          id="remove_pf-random-id-8"
-                                          type="button"
                                         >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 352 512"
-                                            width="1em"
+                                          <span
+                                            class="pf-c-chip__text"
+                                            id="pf-random-id-8"
                                           >
-                                            <path
-                                              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                              transform=""
-                                            />
-                                          </svg>
-                                        </button>
-                                      </div>
-                                    </li>
-                                  </ul>
+                                            tra
+                                          </span>
+                                          <button
+                                            aria-disabled="false"
+                                            aria-label="close"
+                                            aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
+                                            class="pf-c-button pf-m-plain"
+                                            data-ouia-component-id="close"
+                                            data-ouia-component-type="PF4/Button"
+                                            data-ouia-safe="true"
+                                            id="remove_pf-random-id-8"
+                                            type="button"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              fill="currentColor"
+                                              height="1em"
+                                              role="img"
+                                              style="vertical-align: -0.125em;"
+                                              viewBox="0 0 352 512"
+                                              width="1em"
+                                            >
+                                              <path
+                                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1765,101 +1747,108 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                 >
                                   <div
                                     className="pf-c-chip-group pf-m-category"
+                                    data-ouia-component-type="PF4/ChipGroup"
+                                    data-ouia-safe={true}
                                   >
-                                    <span
-                                      aria-hidden="true"
-                                      className="pf-c-chip-group__label"
-                                      id="pf-random-id-7"
+                                    <div
+                                      className="pf-c-chip-group__main"
                                     >
-                                      Business key
-                                    </span>
-                                    <ul
-                                      aria-labelledby="pf-random-id-7"
-                                      className="pf-c-chip-group__list"
-                                      role="list"
-                                    >
-                                      <li
-                                        className="pf-c-chip-group__list-item"
-                                        key="0"
+                                      <span
+                                        aria-hidden="true"
+                                        className="pf-c-chip-group__label"
+                                        id="pf-random-id-7"
                                       >
-                                        <Chip
-                                          className=""
-                                          closeBtnAriaLabel="close"
-                                          component="div"
-                                          isOverflowChip={false}
-                                          isReadOnly={false}
-                                          key=".$tra"
-                                          onClick={[Function]}
-                                          tooltipPosition="top"
+                                        Business key
+                                      </span>
+                                      <ul
+                                        aria-labelledby="pf-random-id-7"
+                                        className="pf-c-chip-group__list"
+                                        role="list"
+                                      >
+                                        <li
+                                          className="pf-c-chip-group__list-item"
+                                          key="0"
                                         >
-                                          <GenerateId
-                                            prefix="pf-random-id-"
+                                          <Chip
+                                            className=""
+                                            closeBtnAriaLabel="close"
+                                            component="div"
+                                            isOverflowChip={false}
+                                            isReadOnly={false}
+                                            key=".$tra"
+                                            onClick={[Function]}
+                                            tooltipPosition="top"
                                           >
-                                            <div
-                                              className="pf-c-chip"
-                                              data-ouia-component-id={29}
-                                              data-ouia-component-type="PF4/Chip"
-                                              data-ouia-safe={true}
+                                            <GenerateId
+                                              prefix="pf-random-id-"
                                             >
-                                              <span
-                                                className="pf-c-chip__text"
-                                                id="pf-random-id-8"
+                                              <div
+                                                className="pf-c-chip"
+                                                data-ouia-component-id="OUIA-Generated-Chip-5"
+                                                data-ouia-component-type="PF4/Chip"
+                                                data-ouia-safe={true}
                                               >
-                                                tra
-                                              </span>
-                                              <Button
-                                                aria-label="close"
-                                                aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
-                                                id="remove_pf-random-id-8"
-                                                onClick={[Function]}
-                                                variant="plain"
-                                              >
-                                                <button
-                                                  aria-disabled={false}
+                                                <span
+                                                  className="pf-c-chip__text"
+                                                  id="pf-random-id-8"
+                                                >
+                                                  tra
+                                                </span>
+                                                <Button
                                                   aria-label="close"
                                                   aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
-                                                  className="pf-c-button pf-m-plain"
-                                                  data-ouia-component-id={30}
-                                                  data-ouia-component-type="PF4/Button"
-                                                  data-ouia-safe={true}
-                                                  disabled={false}
                                                   id="remove_pf-random-id-8"
                                                   onClick={[Function]}
-                                                  type="button"
+                                                  ouiaId="close"
+                                                  variant="plain"
                                                 >
-                                                  <TimesIcon
-                                                    aria-hidden="true"
-                                                    color="currentColor"
-                                                    noVerticalAlign={false}
-                                                    size="sm"
+                                                  <button
+                                                    aria-disabled={false}
+                                                    aria-label="close"
+                                                    aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
+                                                    className="pf-c-button pf-m-plain"
+                                                    data-ouia-component-id="close"
+                                                    data-ouia-component-type="PF4/Button"
+                                                    data-ouia-safe={true}
+                                                    disabled={false}
+                                                    id="remove_pf-random-id-8"
+                                                    onClick={[Function]}
+                                                    role={null}
+                                                    type="button"
                                                   >
-                                                    <svg
+                                                    <TimesIcon
                                                       aria-hidden="true"
-                                                      aria-labelledby={null}
-                                                      fill="currentColor"
-                                                      height="1em"
-                                                      role="img"
-                                                      style={
-                                                        Object {
-                                                          "verticalAlign": "-0.125em",
-                                                        }
-                                                      }
-                                                      viewBox="0 0 352 512"
-                                                      width="1em"
+                                                      color="currentColor"
+                                                      noVerticalAlign={false}
+                                                      size="sm"
                                                     >
-                                                      <path
-                                                        d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                                        transform=""
-                                                      />
-                                                    </svg>
-                                                  </TimesIcon>
-                                                </button>
-                                              </Button>
-                                            </div>
-                                          </GenerateId>
-                                        </Chip>
-                                      </li>
-                                    </ul>
+                                                      <svg
+                                                        aria-hidden="true"
+                                                        aria-labelledby={null}
+                                                        fill="currentColor"
+                                                        height="1em"
+                                                        role="img"
+                                                        style={
+                                                          Object {
+                                                            "verticalAlign": "-0.125em",
+                                                          }
+                                                        }
+                                                        viewBox="0 0 352 512"
+                                                        width="1em"
+                                                      >
+                                                        <path
+                                                          d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                                        />
+                                                      </svg>
+                                                    </TimesIcon>
+                                                  </button>
+                                                </Button>
+                                              </div>
+                                            </GenerateId>
+                                          </Chip>
+                                        </li>
+                                      </ul>
+                                    </div>
                                   </div>
                                 </GenerateId>
                               </ChipGroup>
@@ -1881,12 +1870,13 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                               aria-disabled={false}
                               aria-label={null}
                               className="pf-c-button pf-m-primary"
-                              data-ouia-component-id={3}
+                              data-ouia-component-id="OUIA-Generated-Button-primary-1"
                               data-ouia-component-type="PF4/Button"
                               data-ouia-safe={true}
                               disabled={false}
                               id="apply-filter-button"
                               onClick={[Function]}
+                              role={null}
                               type="button"
                             >
                               Apply filter
@@ -1924,12 +1914,13 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                           aria-disabled={false}
                           aria-label="Refresh list"
                           className="pf-c-button pf-m-plain"
-                          data-ouia-component-id={4}
+                          data-ouia-component-id="OUIA-Generated-Button-plain-2"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           id="refresh-button"
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           <SyncIcon
@@ -1953,7 +1944,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                             >
                               <path
                                 d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z"
-                                transform=""
                               />
                             </svg>
                           </SyncIcon>
@@ -2072,7 +2062,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                             >
                               <div
                                 className="pf-c-dropdown"
-                                data-ouia-component-id={19}
+                                data-ouia-component-id="OUIA-Generated-Dropdown-2"
                                 data-ouia-component-type="PF4/Dropdown"
                                 data-ouia-safe={true}
                               >
@@ -2089,7 +2079,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                     Object {
                                       "current": <div
                                         class="pf-c-dropdown"
-                                        data-ouia-component-id="19"
+                                        data-ouia-component-id="OUIA-Generated-Dropdown-2"
                                         data-ouia-component-type="PF4/Dropdown"
                                         data-ouia-safe="true"
                                       >
@@ -2112,7 +2102,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                           >
                                             <path
                                               d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                              transform=""
                                             />
                                           </svg>
                                         </button>
@@ -2139,7 +2128,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                       Object {
                                         "current": <div
                                           class="pf-c-dropdown"
-                                          data-ouia-component-id="19"
+                                          data-ouia-component-id="OUIA-Generated-Dropdown-2"
                                           data-ouia-component-type="PF4/Dropdown"
                                           data-ouia-safe="true"
                                         >
@@ -2162,7 +2151,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                             >
                                               <path
                                                 d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                transform=""
                                               />
                                             </svg>
                                           </button>
@@ -2202,7 +2190,6 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                                         >
                                           <path
                                             d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                            transform=""
                                           />
                                         </svg>
                                       </EllipsisVIcon>
@@ -2252,7 +2239,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                       <button
                         aria-disabled="false"
                         class="pf-c-button pf-m-link pf-m-inline"
-                        data-ouia-component-id="20"
+                        data-ouia-component-id="OUIA-Generated-Button-link-1"
                         data-ouia-component-type="PF4/Button"
                         data-ouia-safe="true"
                         type="button"
@@ -2319,11 +2306,12 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline"
-                            data-ouia-component-id={20}
+                            data-ouia-component-id="OUIA-Generated-Button-link-1"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
                             onClick={[Function]}
+                            role={null}
                             type="button"
                           >
                             Reset to default
@@ -2354,165 +2342,169 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                 >
                   <div
                     class="pf-c-chip-group pf-m-category"
+                    data-ouia-component-type="PF4/ChipGroup"
+                    data-ouia-safe="true"
                   >
-                    <span
-                      aria-hidden="true"
-                      class="pf-c-chip-group__label"
-                      id="pf-random-id-2"
+                    <div
+                      class="pf-c-chip-group__main"
                     >
-                      Status
-                    </span>
-                    <ul
-                      aria-labelledby="pf-random-id-2"
-                      class="pf-c-chip-group__list"
-                      role="list"
-                    >
-                      <li
-                        class="pf-c-chip-group__list-item"
+                      <span
+                        aria-hidden="true"
+                        class="pf-c-chip-group__label"
+                        id="pf-random-id-2"
                       >
-                        <div
-                          class="pf-c-chip"
-                          data-ouia-component-id="22"
-                          data-ouia-component-type="PF4/Chip"
-                          data-ouia-safe="true"
+                        Status
+                      </span>
+                      <ul
+                        aria-labelledby="pf-random-id-2"
+                        class="pf-c-chip-group__list"
+                        role="list"
+                      >
+                        <li
+                          class="pf-c-chip-group__list-item"
                         >
-                          <span
-                            class="pf-c-chip__text"
-                            id="pf-random-id-3"
-                          >
-                            ACTIVE
-                          </span>
-                          <button
-                            aria-disabled="false"
-                            aria-label="close"
-                            aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
-                            class="pf-c-button pf-m-plain"
-                            data-ouia-component-id="23"
-                            data-ouia-component-type="PF4/Button"
+                          <div
+                            class="pf-c-chip"
+                            data-ouia-component-id="OUIA-Generated-Chip-1"
+                            data-ouia-component-type="PF4/Chip"
                             data-ouia-safe="true"
-                            id="remove_pf-random-id-3"
+                          >
+                            <span
+                              class="pf-c-chip__text"
+                              id="pf-random-id-3"
+                            >
+                              ACTIVE
+                            </span>
+                            <button
+                              aria-disabled="false"
+                              aria-label="close"
+                              aria-labelledby="remove_pf-random-id-3 pf-random-id-3"
+                              class="pf-c-button pf-m-plain"
+                              data-ouia-component-id="close"
+                              data-ouia-component-type="PF4/Button"
+                              data-ouia-safe="true"
+                              id="remove_pf-random-id-3"
+                              type="button"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style="vertical-align: -0.125em;"
+                                viewBox="0 0 352 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </li>
+                        <li
+                          class="pf-c-chip-group__list-item"
+                        >
+                          <div
+                            class="pf-c-chip"
+                            data-ouia-component-id="OUIA-Generated-Chip-2"
+                            data-ouia-component-type="PF4/Chip"
+                            data-ouia-safe="true"
+                          >
+                            <span
+                              class="pf-c-chip__text"
+                              id="pf-random-id-4"
+                            >
+                              COMPLETED
+                            </span>
+                            <button
+                              aria-disabled="false"
+                              aria-label="close"
+                              aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
+                              class="pf-c-button pf-m-plain"
+                              data-ouia-component-id="close"
+                              data-ouia-component-type="PF4/Button"
+                              data-ouia-safe="true"
+                              id="remove_pf-random-id-4"
+                              type="button"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style="vertical-align: -0.125em;"
+                                viewBox="0 0 352 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </li>
+                        <li
+                          class="pf-c-chip-group__list-item"
+                        >
+                          <div
+                            class="pf-c-chip"
+                            data-ouia-component-id="OUIA-Generated-Chip-3"
+                            data-ouia-component-type="PF4/Chip"
+                            data-ouia-safe="true"
+                          >
+                            <span
+                              class="pf-c-chip__text"
+                              id="pf-random-id-5"
+                            >
+                              ERROR
+                            </span>
+                            <button
+                              aria-disabled="false"
+                              aria-label="close"
+                              aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
+                              class="pf-c-button pf-m-plain"
+                              data-ouia-component-id="close"
+                              data-ouia-component-type="PF4/Button"
+                              data-ouia-safe="true"
+                              id="remove_pf-random-id-5"
+                              type="button"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style="vertical-align: -0.125em;"
+                                viewBox="0 0 352 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </li>
+                        <li
+                          class="pf-c-chip-group__list-item"
+                        >
+                          <button
+                            class="pf-c-chip pf-m-overflow"
+                            data-ouia-component-id="OUIA-Generated-Chip-4"
+                            data-ouia-component-type="PF4/OverflowChip"
+                            data-ouia-safe="true"
                             type="button"
                           >
-                            <svg
-                              aria-hidden="true"
-                              fill="currentColor"
-                              height="1em"
-                              role="img"
-                              style="vertical-align: -0.125em;"
-                              viewBox="0 0 352 512"
-                              width="1em"
+                            <span
+                              class="pf-c-chip__text"
                             >
-                              <path
-                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                transform=""
-                              />
-                            </svg>
+                              2 more
+                            </span>
                           </button>
-                        </div>
-                      </li>
-                      <li
-                        class="pf-c-chip-group__list-item"
-                      >
-                        <div
-                          class="pf-c-chip"
-                          data-ouia-component-id="24"
-                          data-ouia-component-type="PF4/Chip"
-                          data-ouia-safe="true"
-                        >
-                          <span
-                            class="pf-c-chip__text"
-                            id="pf-random-id-4"
-                          >
-                            COMPLETED
-                          </span>
-                          <button
-                            aria-disabled="false"
-                            aria-label="close"
-                            aria-labelledby="remove_pf-random-id-4 pf-random-id-4"
-                            class="pf-c-button pf-m-plain"
-                            data-ouia-component-id="25"
-                            data-ouia-component-type="PF4/Button"
-                            data-ouia-safe="true"
-                            id="remove_pf-random-id-4"
-                            type="button"
-                          >
-                            <svg
-                              aria-hidden="true"
-                              fill="currentColor"
-                              height="1em"
-                              role="img"
-                              style="vertical-align: -0.125em;"
-                              viewBox="0 0 352 512"
-                              width="1em"
-                            >
-                              <path
-                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                transform=""
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </li>
-                      <li
-                        class="pf-c-chip-group__list-item"
-                      >
-                        <div
-                          class="pf-c-chip"
-                          data-ouia-component-id="26"
-                          data-ouia-component-type="PF4/Chip"
-                          data-ouia-safe="true"
-                        >
-                          <span
-                            class="pf-c-chip__text"
-                            id="pf-random-id-5"
-                          >
-                            ERROR
-                          </span>
-                          <button
-                            aria-disabled="false"
-                            aria-label="close"
-                            aria-labelledby="remove_pf-random-id-5 pf-random-id-5"
-                            class="pf-c-button pf-m-plain"
-                            data-ouia-component-id="27"
-                            data-ouia-component-type="PF4/Button"
-                            data-ouia-safe="true"
-                            id="remove_pf-random-id-5"
-                            type="button"
-                          >
-                            <svg
-                              aria-hidden="true"
-                              fill="currentColor"
-                              height="1em"
-                              role="img"
-                              style="vertical-align: -0.125em;"
-                              viewBox="0 0 352 512"
-                              width="1em"
-                            >
-                              <path
-                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                transform=""
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </li>
-                      <li
-                        class="pf-c-chip-group__list-item"
-                      >
-                        <button
-                          class="pf-c-chip pf-m-overflow"
-                          data-ouia-component-id="28"
-                          data-ouia-component-type="PF4/OverflowChip"
-                          data-ouia-safe="true"
-                        >
-                          <span
-                            class="pf-c-chip__text"
-                          >
-                            2 more
-                          </span>
-                        </button>
-                      </li>
-                    </ul>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -2520,63 +2512,68 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                 >
                   <div
                     class="pf-c-chip-group pf-m-category"
+                    data-ouia-component-type="PF4/ChipGroup"
+                    data-ouia-safe="true"
                   >
-                    <span
-                      aria-hidden="true"
-                      class="pf-c-chip-group__label"
-                      id="pf-random-id-7"
+                    <div
+                      class="pf-c-chip-group__main"
                     >
-                      Business key
-                    </span>
-                    <ul
-                      aria-labelledby="pf-random-id-7"
-                      class="pf-c-chip-group__list"
-                      role="list"
-                    >
-                      <li
-                        class="pf-c-chip-group__list-item"
+                      <span
+                        aria-hidden="true"
+                        class="pf-c-chip-group__label"
+                        id="pf-random-id-7"
                       >
-                        <div
-                          class="pf-c-chip"
-                          data-ouia-component-id="29"
-                          data-ouia-component-type="PF4/Chip"
-                          data-ouia-safe="true"
+                        Business key
+                      </span>
+                      <ul
+                        aria-labelledby="pf-random-id-7"
+                        class="pf-c-chip-group__list"
+                        role="list"
+                      >
+                        <li
+                          class="pf-c-chip-group__list-item"
                         >
-                          <span
-                            class="pf-c-chip__text"
-                            id="pf-random-id-8"
-                          >
-                            tra
-                          </span>
-                          <button
-                            aria-disabled="false"
-                            aria-label="close"
-                            aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
-                            class="pf-c-button pf-m-plain"
-                            data-ouia-component-id="30"
-                            data-ouia-component-type="PF4/Button"
+                          <div
+                            class="pf-c-chip"
+                            data-ouia-component-id="OUIA-Generated-Chip-5"
+                            data-ouia-component-type="PF4/Chip"
                             data-ouia-safe="true"
-                            id="remove_pf-random-id-8"
-                            type="button"
                           >
-                            <svg
-                              aria-hidden="true"
-                              fill="currentColor"
-                              height="1em"
-                              role="img"
-                              style="vertical-align: -0.125em;"
-                              viewBox="0 0 352 512"
-                              width="1em"
+                            <span
+                              class="pf-c-chip__text"
+                              id="pf-random-id-8"
                             >
-                              <path
-                                d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
-                                transform=""
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      </li>
-                    </ul>
+                              tra
+                            </span>
+                            <button
+                              aria-disabled="false"
+                              aria-label="close"
+                              aria-labelledby="remove_pf-random-id-8 pf-random-id-8"
+                              class="pf-c-button pf-m-plain"
+                              data-ouia-component-id="close"
+                              data-ouia-component-type="PF4/Button"
+                              data-ouia-safe="true"
+                              id="remove_pf-random-id-8"
+                              type="button"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                fill="currentColor"
+                                height="1em"
+                                role="img"
+                                style="vertical-align: -0.125em;"
+                                viewBox="0 0 352 512"
+                                width="1em"
+                              >
+                                <path
+                                  d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+                                />
+                              </svg>
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2596,7 +2593,7 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                 <button
                   aria-disabled="false"
                   class="pf-c-button pf-m-link pf-m-inline"
-                  data-ouia-component-id="21"
+                  data-ouia-component-id="OUIA-Generated-Button-link-2"
                   data-ouia-component-type="PF4/Button"
                   data-ouia-safe="true"
                   type="button"
@@ -2666,11 +2663,12 @@ exports[`ProcessListToolbar component tests Snapshot tests 1`] = `
                   aria-disabled={false}
                   aria-label={null}
                   className="pf-c-button pf-m-link pf-m-inline"
-                  data-ouia-component-id={21}
+                  data-ouia-component-id="OUIA-Generated-Button-link-2"
                   data-ouia-component-type="PF4/Button"
                   data-ouia-safe={true}
                   disabled={false}
                   onClick={[Function]}
+                  role={null}
                   type="button"
                 >
                   Reset to default
@@ -2722,6 +2720,7 @@ Array [
         position="left"
         toggle={
           <DropdownToggle
+            isDisabled={true}
             onToggle={[Function]}
             splitButtonItems={
               Array [
@@ -2730,7 +2729,7 @@ Array [
                   className=""
                   id="select-all-checkbox"
                   isChecked={true}
-                  isDisabled={false}
+                  isDisabled={true}
                   isValid={true}
                   onChange={[Function]}
                 />,
@@ -2775,6 +2774,7 @@ Array [
           position="left"
           toggle={
             <DropdownToggle
+              isDisabled={true}
               onToggle={[Function]}
               splitButtonItems={
                 Array [
@@ -2783,7 +2783,7 @@ Array [
                     className=""
                     id="select-all-checkbox"
                     isChecked={true}
-                    isDisabled={false}
+                    isDisabled={true}
                     isValid={true}
                     onChange={[Function]}
                   />,
@@ -2796,7 +2796,7 @@ Array [
         >
           <div
             className="pf-c-dropdown"
-            data-ouia-component-id={32}
+            data-ouia-component-id="OUIA-Generated-Dropdown-3"
             data-ouia-component-type="PF4/Dropdown"
             data-ouia-safe={true}
           >
@@ -2804,6 +2804,7 @@ Array [
               aria-haspopup={true}
               getMenuRef={[Function]}
               id="pf-dropdown-toggle-id-2"
+              isDisabled={true}
               isOpen={false}
               isPlain={false}
               key=".0"
@@ -2813,12 +2814,12 @@ Array [
                 Object {
                   "current": <div
                     class="pf-c-dropdown"
-                    data-ouia-component-id="32"
+                    data-ouia-component-id="OUIA-Generated-Dropdown-3"
                     data-ouia-component-type="PF4/Dropdown"
                     data-ouia-safe="true"
                   >
                     <div
-                      class="pf-c-dropdown__toggle pf-m-split-button"
+                      class="pf-c-dropdown__toggle pf-m-split-button pf-m-disabled"
                     >
                       <label
                         class="pf-c-dropdown__toggle-check"
@@ -2828,6 +2829,10 @@ Array [
                           aria-invalid="false"
                           aria-label="Select all"
                           checked=""
+                          data-ouia-component-id="OUIA-Generated-DropdownToggleCheckbox-2"
+                          data-ouia-component-type="PF4/DropdownToggleCheckbox"
+                          data-ouia-safe="true"
+                          disabled=""
                           id="select-all-checkbox"
                           type="checkbox"
                         />
@@ -2837,6 +2842,10 @@ Array [
                         aria-haspopup="true"
                         aria-label="Select"
                         class="pf-c-dropdown__toggle-button"
+                        data-ouia-component-id="OUIA-Generated-DropdownToggle-2"
+                        data-ouia-component-type="PF4/DropdownToggle"
+                        data-ouia-safe="true"
+                        disabled=""
                         id="pf-dropdown-toggle-id-2"
                         type="button"
                       >
@@ -2855,7 +2864,6 @@ Array [
                           >
                             <path
                               d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                              transform=""
                             />
                           </svg>
                         </span>
@@ -2871,7 +2879,7 @@ Array [
                     className=""
                     id="select-all-checkbox"
                     isChecked={true}
-                    isDisabled={false}
+                    isDisabled={true}
                     isValid={true}
                     onChange={[Function]}
                   />,
@@ -2879,14 +2887,14 @@ Array [
               }
             >
               <div
-                className="pf-c-dropdown__toggle pf-m-split-button"
+                className="pf-c-dropdown__toggle pf-m-split-button pf-m-disabled"
               >
                 <DropdownToggleCheckbox
                   aria-label="Select all"
                   className=""
                   id="select-all-checkbox"
                   isChecked={true}
-                  isDisabled={false}
+                  isDisabled={true}
                   isValid={true}
                   key="split-checkbox"
                   onChange={[Function]}
@@ -2899,7 +2907,10 @@ Array [
                       aria-invalid={false}
                       aria-label="Select all"
                       checked={true}
-                      disabled={false}
+                      data-ouia-component-id="OUIA-Generated-DropdownToggleCheckbox-2"
+                      data-ouia-component-type="PF4/DropdownToggleCheckbox"
+                      data-ouia-safe={true}
+                      disabled={true}
                       id="select-all-checkbox"
                       onChange={[Function]}
                       type="checkbox"
@@ -2911,10 +2922,13 @@ Array [
                   aria-label="Select"
                   bubbleEvent={false}
                   className=""
+                  data-ouia-component-id="OUIA-Generated-DropdownToggle-2"
+                  data-ouia-component-type="PF4/DropdownToggle"
+                  data-ouia-safe={true}
                   getMenuRef={[Function]}
                   id="pf-dropdown-toggle-id-2"
                   isActive={false}
-                  isDisabled={false}
+                  isDisabled={true}
                   isOpen={false}
                   isPlain={false}
                   isPrimary={false}
@@ -2925,12 +2939,12 @@ Array [
                     Object {
                       "current": <div
                         class="pf-c-dropdown"
-                        data-ouia-component-id="32"
+                        data-ouia-component-id="OUIA-Generated-Dropdown-3"
                         data-ouia-component-type="PF4/Dropdown"
                         data-ouia-safe="true"
                       >
                         <div
-                          class="pf-c-dropdown__toggle pf-m-split-button"
+                          class="pf-c-dropdown__toggle pf-m-split-button pf-m-disabled"
                         >
                           <label
                             class="pf-c-dropdown__toggle-check"
@@ -2940,6 +2954,10 @@ Array [
                               aria-invalid="false"
                               aria-label="Select all"
                               checked=""
+                              data-ouia-component-id="OUIA-Generated-DropdownToggleCheckbox-2"
+                              data-ouia-component-type="PF4/DropdownToggleCheckbox"
+                              data-ouia-safe="true"
+                              disabled=""
                               id="select-all-checkbox"
                               type="checkbox"
                             />
@@ -2949,6 +2967,10 @@ Array [
                             aria-haspopup="true"
                             aria-label="Select"
                             class="pf-c-dropdown__toggle-button"
+                            data-ouia-component-id="OUIA-Generated-DropdownToggle-2"
+                            data-ouia-component-type="PF4/DropdownToggle"
+                            data-ouia-safe="true"
+                            disabled=""
                             id="pf-dropdown-toggle-id-2"
                             type="button"
                           >
@@ -2967,7 +2989,6 @@ Array [
                               >
                                 <path
                                   d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                  transform=""
                                 />
                               </svg>
                             </span>
@@ -2982,7 +3003,10 @@ Array [
                     aria-haspopup={true}
                     aria-label="Select"
                     className="pf-c-dropdown__toggle-button"
-                    disabled={false}
+                    data-ouia-component-id="OUIA-Generated-DropdownToggle-2"
+                    data-ouia-component-type="PF4/DropdownToggle"
+                    data-ouia-safe={true}
+                    disabled={true}
                     id="pf-dropdown-toggle-id-2"
                     onClick={[Function]}
                     onKeyDown={[Function]}
@@ -3012,7 +3036,6 @@ Array [
                         >
                           <path
                             d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                            transform=""
                           />
                         </svg>
                       </CaretDownIcon>
@@ -3037,12 +3060,15 @@ Array [
       <Select
         aria-label="Status"
         aria-labelledby=""
+        chipGroupComponent={null}
         className=""
         clearSelectionsAriaLabel="Clear all"
         createText="Create"
         customBadgeText={null}
         customContent={null}
         direction="down"
+        favorites={Array []}
+        favoritesLabel="Favorites"
         hasInlineFilter={false}
         id="status-select"
         inlineFilterPlaceholderText={null}
@@ -3075,7 +3101,7 @@ Array [
         >
           <div
             className="pf-c-select"
-            data-ouia-component-id={40}
+            data-ouia-component-id="OUIA-Generated-Select-checkbox-4"
             data-ouia-component-type="PF4/Select"
             data-ouia-safe={true}
           >
@@ -3095,6 +3121,7 @@ Array [
                   "current": null,
                 }
               }
+              onClickTypeaheadToggleButton={[Function]}
               onClose={[Function]}
               onEnter={[Function]}
               onToggle={[Function]}
@@ -3102,7 +3129,7 @@ Array [
                 Object {
                   "current": <div
                     class="pf-c-select"
-                    data-ouia-component-id="40"
+                    data-ouia-component-id="OUIA-Generated-Select-checkbox-4"
                     data-ouia-component-type="PF4/Select"
                     data-ouia-safe="true"
                   >
@@ -3136,7 +3163,6 @@ Array [
                         >
                           <path
                             d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                            transform=""
                           />
                         </svg>
                       </span>
@@ -3191,7 +3217,6 @@ Array [
                     >
                       <path
                         d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                        transform=""
                       />
                     </svg>
                   </CaretDownIcon>
@@ -3214,7 +3239,7 @@ Array [
         <div
           className="pf-c-input-group"
         >
-          <ForwardRef
+          <TextInput
             aria-label="business key"
             id="businessKey"
             isDisabled={true}
@@ -3231,6 +3256,7 @@ Array [
               id="businessKey"
               innerRef={null}
               isDisabled={true}
+              isLeftTruncated={false}
               isReadOnly={false}
               isRequired={false}
               name="businessKey"
@@ -3248,7 +3274,9 @@ Array [
                 disabled={true}
                 id="businessKey"
                 name="businessKey"
+                onBlur={[Function]}
                 onChange={[Function]}
+                onFocus={[Function]}
                 onKeyPress={[Function]}
                 placeholder="Filter by business key"
                 readOnly={false}
@@ -3257,7 +3285,7 @@ Array [
                 value="Tra"
               />
             </TextInputBase>
-          </ForwardRef>
+          </TextInput>
         </div>
       </InputGroup>
     </div>
@@ -3276,12 +3304,13 @@ Array [
           aria-disabled={true}
           aria-label={null}
           className="pf-c-button pf-m-primary pf-m-disabled"
-          data-ouia-component-id={34}
+          data-ouia-component-id="OUIA-Generated-Button-primary-2"
           data-ouia-component-type="PF4/Button"
           data-ouia-safe={true}
           disabled={true}
           id="apply-filter-button"
           onClick={[Function]}
+          role={null}
           tabIndex={null}
           type="button"
         >
@@ -3305,12 +3334,13 @@ Array [
           aria-disabled={true}
           aria-label="Refresh list"
           className="pf-c-button pf-m-plain pf-m-disabled"
-          data-ouia-component-id={35}
+          data-ouia-component-id="OUIA-Generated-Button-plain-4"
           data-ouia-component-type="PF4/Button"
           data-ouia-safe={true}
           disabled={true}
           id="refresh-button"
           onClick={[Function]}
+          role={null}
           tabIndex={null}
           type="button"
         >
@@ -3335,7 +3365,6 @@ Array [
             >
               <path
                 d="M440.65 12.57l4 82.77A247.16 247.16 0 0 0 255.83 8C134.73 8 33.91 94.92 12.29 209.82A12 12 0 0 0 24.09 224h49.05a12 12 0 0 0 11.67-9.26 175.91 175.91 0 0 1 317-56.94l-101.46-4.86a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12H500a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12h-47.37a12 12 0 0 0-11.98 12.57zM255.83 432a175.61 175.61 0 0 1-146-77.8l101.8 4.87a12 12 0 0 0 12.57-12v-47.4a12 12 0 0 0-12-12H12a12 12 0 0 0-12 12V500a12 12 0 0 0 12 12h47.35a12 12 0 0 0 12-12.6l-4.15-82.57A247.17 247.17 0 0 0 255.83 504c121.11 0 221.93-86.92 243.55-201.82a12 12 0 0 0-11.8-14.18h-49.05a12 12 0 0 0-11.67 9.26A175.86 175.86 0 0 1 255.83 432z"
-                transform=""
               />
             </svg>
           </SyncIcon>

@@ -13,6 +13,7 @@ const TestWrapper = () => {
     GraphQL.JobStatus.Scheduled
   ]);
   const [, setMockValues] = React.useState([GraphQL.JobStatus.Scheduled]);
+  const [, setMockSelectedJobInstances] = React.useState([]);
 
   return (
     <Toolbar
@@ -28,7 +29,10 @@ const TestWrapper = () => {
           setSelectedStatus={setMockState}
           chips={mockChips}
           setChips={setMockChips}
+          setDisplayTable={jest.fn()}
           setValues={setMockValues}
+          setOffset={jest.fn()}
+          setSelectedJobInstances={setMockSelectedJobInstances}
         />
       </ToolbarContent>
     </Toolbar>
@@ -40,7 +44,10 @@ describe('Jobs management filters component tests', () => {
     setSelectedStatus: jest.fn(),
     chips: [GraphQL.JobStatus.Scheduled],
     setChips: jest.fn(),
-    setValues: jest.fn()
+    setDisplayTable: jest.fn(),
+    setValues: jest.fn(),
+    setOffset: jest.fn(),
+    setSelectedJobInstances: jest.fn()
   };
   it('Snapshot with default props', () => {
     const wrapper = mount(
@@ -127,7 +134,7 @@ describe('Jobs management filters component tests', () => {
       wrapper.find('JobsManagementFilters').props()['selectedStatus'].length
     ).toEqual(0);
   });
-  it('test select component props', async () => {
+  it('test select component props with selection', async () => {
     let wrapper = mount(<TestWrapper />);
     const event2: any = { target: { id: 'pf-random-id-2-EXECUTED' } };
     await act(async () => {
@@ -141,5 +148,23 @@ describe('Jobs management filters component tests', () => {
     expect(
       wrapper.find('JobsManagementFilters').props()['selectedStatus'].length
     ).toEqual(2);
+    expect(
+      wrapper.find('JobsManagementFilters').props()['selectedStatus']
+    ).toContain('EXECUTED');
+  });
+  it('test select component props with De-selection', async () => {
+    let wrapper = mount(<TestWrapper />);
+    const event2: any = { target: { id: 'pf-random-id-2-SCHEDULED' } };
+    await act(async () => {
+      wrapper
+        .find('#status-select')
+        .first()
+        .props()
+        ['onSelect'](event2);
+    });
+    wrapper = wrapper.update();
+    expect(
+      wrapper.find('JobsManagementFilters').props()['selectedStatus'].length
+    ).toEqual(0);
   });
 });

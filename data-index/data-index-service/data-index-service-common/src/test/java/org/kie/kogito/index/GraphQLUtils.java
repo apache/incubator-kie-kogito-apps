@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index;
 
 import java.lang.reflect.Field;
@@ -27,9 +26,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -37,6 +33,10 @@ import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
@@ -60,7 +60,7 @@ public class GraphQLUtils {
 
         try {
             JsonNode node = getObjectMapper().readTree(readFileContent("graphql_queries.json"));
-            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext(); ) {
+            for (Iterator<Map.Entry<String, JsonNode>> it = node.fields(); it.hasNext();) {
                 Map.Entry<String, JsonNode> entry = it.next();
                 QUERIES.put(entry.getKey(), entry.getValue().toString());
             }
@@ -132,6 +132,10 @@ public class GraphQLUtils {
 
     public static String getUserTaskInstanceByIdAndActualOwner(String id, String actualOwner) {
         return getUserTaskInstanceQuery("UserTaskInstanceByIdAndActualOwner", id, actualOwner);
+    }
+
+    public static String getUserTaskInstanceByIdAndProcessId(String id, String processId) {
+        return getUserTaskInstanceQuery("UserTaskInstanceByIdAndProcessId", id, processId);
     }
 
     public static String getUserTaskInstanceByIdNoActualOwner(String id) {
@@ -220,13 +224,13 @@ public class GraphQLUtils {
                 ParameterizedType genericType = (ParameterizedType) field.getGenericType();
                 StringBuilder builder = new StringBuilder();
                 builder.append(Arrays.stream(genericType.getActualTypeArguments()).filter(type -> type.getTypeName().startsWith("org.kie.kogito.index.model"))
-                                       .flatMap(type -> {
-                                           try {
-                                               return getAllFieldsList(Class.forName(type.getTypeName()));
-                                           } catch (Exception ex) {
-                                               return Stream.empty();
-                                           }
-                                       }).map(f -> getFieldName().apply(f)).collect(joining(", ")));
+                        .flatMap(type -> {
+                            try {
+                                return getAllFieldsList(Class.forName(type.getTypeName()));
+                            } catch (Exception ex) {
+                                return Stream.empty();
+                            }
+                        }).map(f -> getFieldName().apply(f)).collect(joining(", ")));
                 if (builder.length() > 0) {
                     return field.getName() + " { " + builder.toString() + " }";
                 }

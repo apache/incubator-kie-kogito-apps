@@ -16,17 +16,21 @@
 
 package org.kie.kogito.explainability;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.explainability.local.LocalExplainer;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.Saliency;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.security.SecureRandom;
+import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import java.util.Map;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.kie.kogito.explainability.local.LocalExplainer;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Saliency;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class LimeExplainerProducer {
@@ -47,6 +51,9 @@ public class LimeExplainerProducer {
     @Produces
     public LocalExplainer<Map<String, Saliency>> produce() {
         LOG.debug("LimeExplainer created (numberOfSamples={}, numberOfPerturbations={})", numberOfSamples, numberOfPerturbations);
-        return new LimeExplainer(numberOfSamples, numberOfPerturbations);
+        LimeConfig limeConfig = new LimeConfig()
+                .withSamples(numberOfSamples)
+                .withPerturbationContext(new PerturbationContext(new SecureRandom(), numberOfPerturbations));
+        return new LimeExplainer(limeConfig);
     }
 }

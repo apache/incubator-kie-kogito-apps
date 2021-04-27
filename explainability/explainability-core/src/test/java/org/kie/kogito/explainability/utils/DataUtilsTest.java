@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,41 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DataUtilsTest {
 
@@ -92,15 +102,18 @@ class DataUtilsTest {
 
     @Test
     void testGaussianKernel() {
-        double x = 0.218;
+        double x = 0;
         double k = DataUtils.gaussianKernel(x, 0, 1);
+        assertEquals(0.398, k, 1e-3);
+        x = 0.218;
+        k = DataUtils.gaussianKernel(x, 0, 1);
         assertEquals(0.389, k, 1e-3);
     }
 
     @Test
     void testEuclideanDistance() {
-        double[] x = new double[]{1, 1};
-        double[] y = new double[]{2, 3};
+        double[] x = new double[] { 1, 1 };
+        double[] y = new double[] { 2, 3 };
         double distance = DataUtils.euclideanDistance(x, y);
         assertEquals(2.236, distance, 1e-3);
 
@@ -109,8 +122,8 @@ class DataUtilsTest {
 
     @Test
     void testHammingDistanceDouble() {
-        double[] x = new double[]{2, 1};
-        double[] y = new double[]{2, 3};
+        double[] x = new double[] { 2, 1 };
+        double[] y = new double[] { 2, 3 };
         double distance = DataUtils.hammingDistance(x, y);
         assertEquals(1, distance, 1e-1);
 
@@ -143,132 +156,39 @@ class DataUtilsTest {
         assertEquals(features.size(), newFeatures.size());
     }
 
-    @Test
-    void testPerturbDropNumericZero() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newNumericalFeature("f0", 1));
-        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
-        features.add(FeatureFactory.newNumericalFeature("f2", 5));
-        PredictionInput input = new PredictionInput(features);
-        assertPerturbDropNumeric(input, 0);
-    }
-
-    @Test
-    void testPerturbDropNumericOne() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3 })
+    void testPerturbDropNumeric(int param) {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f0", 1));
         features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
         features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
         PredictionInput input = new PredictionInput(features);
-        assertPerturbDropNumeric(input, 1);
+        assertPerturbDropNumeric(input, param);
     }
 
-    @Test
-    void testPerturbDropNumericTwo() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newNumericalFeature("f0", 1));
-        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
-        features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
-        PredictionInput input = new PredictionInput(features);
-        assertPerturbDropNumeric(input, 2);
-    }
-
-    @Test
-    void testPerturbDropNumericThree() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newNumericalFeature("f0", 1));
-        features.add(FeatureFactory.newNumericalFeature("f1", 3.14));
-        features.add(FeatureFactory.newNumericalFeature("f2", 0.55));
-        PredictionInput input = new PredictionInput(features);
-        assertPerturbDropNumeric(input, 3);
-    }
-
-    @Test
-    void testPerturbDropStringZero() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3 })
+    void testPerturbDropString(int param) {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f0", "foo"));
         features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
         features.add(FeatureFactory.newTextFeature("f2", " "));
         features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
         PredictionInput input = new PredictionInput(features);
-        assertPerturbDropString(input, 0);
+        assertPerturbDropString(input, param);
     }
 
-    @Test
-    void testPerturbDropStringOne() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f0", "foo"));
-        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f2", " "));
-        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
-        PredictionInput input = new PredictionInput(features);
-        assertPerturbDropString(input, 1);
-    }
-
-    @Test
-    void testPerturbDropStringTwo() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f0", "foo"));
-        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f2", " "));
-        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
-        PredictionInput input = new PredictionInput(features);
-        assertPerturbDropString(input, 2);
-    }
-
-    @Test
-    void testPerturbDropStringThree() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f0", "foo"));
-        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f2", " "));
-        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
-        PredictionInput input = new PredictionInput(features);
-        assertPerturbDropString(input, 3);
-    }
-
-    @Test
-    void testPerturbDropCompositeStringZero() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3 })
+    void testPerturbDropCompositeString(int param) {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newTextFeature("f0", "foo"));
         features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
         features.add(FeatureFactory.newTextFeature("f2", " "));
         features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
         PredictionInput input = new PredictionInput(List.of(FeatureFactory.newCompositeFeature("composite", features)));
-        assertPerturbDropString(input, 0);
-    }
-
-    @Test
-    void testPerturbDropCompositeStringOne() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f0", "foo"));
-        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f2", " "));
-        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
-        PredictionInput input = new PredictionInput(List.of(FeatureFactory.newCompositeFeature("composite", features)));
-        assertPerturbDropString(input, 1);
-    }
-
-    @Test
-    void testPerturbDropCompositeStringTwo() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f0", "foo"));
-        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f2", " "));
-        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
-        PredictionInput input = new PredictionInput(List.of(FeatureFactory.newCompositeFeature("composite", features)));
-        assertPerturbDropString(input, 2);
-    }
-
-    @Test
-    void testPerturbDropCompositeStringThree() {
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newTextFeature("f0", "foo"));
-        features.add(FeatureFactory.newTextFeature("f1", "foo bar"));
-        features.add(FeatureFactory.newTextFeature("f2", " "));
-        features.add(FeatureFactory.newTextFeature("f3", "foo bar "));
-        PredictionInput input = new PredictionInput(List.of(FeatureFactory.newCompositeFeature("composite", features)));
-        assertPerturbDropString(input, 3);
+        assertPerturbDropString(input, param);
     }
 
     private void assertPerturbDropNumeric(PredictionInput input, int noOfPerturbations) {
@@ -282,7 +202,7 @@ class DataUtilsTest {
             }
         }
         assertThat(changedFeatures).isBetween((int) Math.min(noOfPerturbations, input.getFeatures().size() * 0.5),
-                                              (int) Math.max(noOfPerturbations, input.getFeatures().size() * 0.5));
+                (int) Math.max(noOfPerturbations, input.getFeatures().size() * 0.5));
     }
 
     private void assertPerturbDropString(PredictionInput input, int noOfPerturbations) {
@@ -296,7 +216,7 @@ class DataUtilsTest {
             }
         }
         assertThat(changedFeatures).isBetween((int) Math.min(noOfPerturbations, input.getFeatures().size() * 0.5),
-                                              (int) Math.max(noOfPerturbations, input.getFeatures().size() * 0.5));
+                (int) Math.max(noOfPerturbations, input.getFeatures().size() * 0.5));
     }
 
     @Test
@@ -330,18 +250,10 @@ class DataUtilsTest {
     void testRandomDistributionGeneration() {
         DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(10, 10, random);
         assertNotNull(dataDistribution);
-        assertNotNull(dataDistribution.getFeatureDistributions());
-        for (FeatureDistribution featureDistribution : dataDistribution.getFeatureDistributions()) {
+        assertNotNull(dataDistribution.asFeatureDistributions());
+        for (FeatureDistribution featureDistribution : dataDistribution.asFeatureDistributions()) {
             assertNotNull(featureDistribution);
         }
-    }
-
-    @Test
-    void testGetFeatureDistribution() {
-        double[] doubles = new double[10];
-        Arrays.fill(doubles, 1);
-        FeatureDistribution featureDistribution = DataUtils.getFeatureDistribution(doubles);
-        assertNotNull(featureDistribution);
     }
 
     @Test
@@ -373,7 +285,7 @@ class DataUtilsTest {
         list.add(FeatureFactory.newNumericalFeature("f2", 13));
         list.add(FeatureFactory.newDurationFeature("f3", Duration.ofDays(13)));
         list.add(FeatureFactory.newTimeFeature("f4", LocalTime.now()));
-        list.add(FeatureFactory.newObjectFeature("f5", new float[]{0.4f, 0.4f}));
+        list.add(FeatureFactory.newObjectFeature("f5", new float[] { 0.4f, 0.4f }));
         list.add(FeatureFactory.newObjectFeature("f6", FeatureFactory.newObjectFeature("nf-0", new Object())));
         Feature f = FeatureFactory.newCompositeFeature("name", list);
         features.add(f);
@@ -384,7 +296,7 @@ class DataUtilsTest {
     @Test
     void testDropFeature() {
         for (Type t : Type.values()) {
-            Feature target = TestUtils.getMockedFeature(t, new Value<>(1d));
+            Feature target = TestUtils.getMockedFeature(t, new Value(1d));
             List<Feature> features = new LinkedList<>();
             features.add(TestUtils.getMockedNumericFeature());
             features.add(target);
@@ -398,7 +310,7 @@ class DataUtilsTest {
     @Test
     void testDropLinearizedFeature() {
         for (Type t : Type.values()) {
-            Feature target = TestUtils.getMockedFeature(t, new Value<>(1d));
+            Feature target = TestUtils.getMockedFeature(t, new Value(1d));
             List<Feature> features = new LinkedList<>();
             features.add(TestUtils.getMockedNumericFeature());
             features.add(target);
@@ -408,5 +320,80 @@ class DataUtilsTest {
             Feature newFeature = DataUtils.dropOnLinearizedFeatures(target, source);
             assertNotEquals(source, newFeature);
         }
+    }
+
+    @Test
+    void testSampleWithReplacement() {
+        List<Double> emptyValues = new ArrayList<>();
+        List<Double> emptySamples = DataUtils.sampleWithReplacement(emptyValues, 1, random);
+        assertNotNull(emptySamples);
+        assertEquals(0, emptySamples.size());
+
+        List<Double> values = Arrays.stream(DataUtils.generateData(0, 1, 100, random)).boxed().collect(Collectors.toList());
+        int sampleSize = 10;
+        List<Double> samples = DataUtils.sampleWithReplacement(values, sampleSize, random);
+        assertNotNull(samples);
+        assertEquals(sampleSize, samples.size());
+        assertThat(values).contains(samples.get(random.nextInt(sampleSize - 1)));
+
+        int largerSampleSize = 300;
+        List<Double> largerSamples = DataUtils.sampleWithReplacement(values, largerSampleSize, random);
+        assertThat(largerSamples).isNotNull();
+        assertThat(largerSampleSize).isEqualTo(largerSamples.size());
+        assertThat(values).contains(largerSamples.get(random.nextInt(largerSampleSize - 1)));
+    }
+
+    @Test
+    void toCSV() {
+        Feature feature = mock(Feature.class);
+        when(feature.getName()).thenReturn("feature-1");
+        Output output = mock(Output.class);
+        when(output.getName()).thenReturn("decision-1");
+        List<Value> x = new ArrayList<>();
+        x.add(new Value(1));
+        x.add(new Value(2));
+        x.add(new Value(3));
+        List<Value> y = new ArrayList<>();
+        y.add(new Value(4));
+        y.add(new Value(5));
+        y.add(new Value(4));
+        PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature, output, x, y);
+        assertDoesNotThrow(() -> DataUtils.toCSV(partialDependenceGraph, Paths.get("target/test-pdp.csv")));
+    }
+
+    @Test
+    void testReadCsv() throws IOException {
+        List<Type> schema = new ArrayList<>();
+        schema.add(Type.CATEGORICAL);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.NUMBER);
+        schema.add(Type.NUMBER);
+        DataDistribution dataDistribution = DataUtils.readCSV(
+                Paths.get(getClass().getResource("/mini-train.csv").getFile()), schema);
+        assertThat(dataDistribution).isNotNull();
+        assertThat(dataDistribution.getAllSamples()).hasSize(10);
+    }
+
+    @Test
+    void testReplaceFeature() {
+        List<Feature> features = new ArrayList<>();
+        Feature replacingFeature = FeatureFactory.newTextFeature("f1", "replacement");
+        features.add(FeatureFactory.newTextFeature("f0", "one two three"));
+        features.add(FeatureFactory.newTextFeature("f1", "to be replaced"));
+        features.add(FeatureFactory.newTextFeature("f2", "four five six"));
+        List<Feature> updatedFeatures = DataUtils.replaceFeatures(replacingFeature, features);
+        assertThat(updatedFeatures.get(0)).isEqualTo(features.get(0));
+        assertThat(updatedFeatures.get(2)).isEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1)).isNotEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1).getValue().asString()).isEqualTo("replacement");
     }
 }

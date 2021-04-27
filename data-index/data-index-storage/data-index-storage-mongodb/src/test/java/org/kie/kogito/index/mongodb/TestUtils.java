@@ -25,9 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Milestone;
@@ -37,6 +34,9 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
@@ -58,7 +58,9 @@ public class TestUtils {
         pi.setNodes(createNodeInstances(timeInterval));
         pi.setState(status);
         pi.setStart(Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC));
-        pi.setEnd(status == ProcessInstanceState.COMPLETED.ordinal() ? Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC).plus(1, ChronoUnit.HOURS) : null);
+        pi.setEnd(status == ProcessInstanceState.COMPLETED.ordinal()
+                ? Instant.ofEpochMilli(ZonedDateTime.now().toInstant().toEpochMilli() + timeInterval).atZone(ZoneOffset.UTC).plus(1, ChronoUnit.HOURS)
+                : null);
         if (ProcessInstanceState.ERROR.ordinal() == status) {
             pi.setError(new ProcessInstanceError("StartEvent_1", "Something went wrong"));
         }
@@ -112,7 +114,7 @@ public class TestUtils {
         return MAPPER.valueToTree(json);
     }
 
-    private static JsonNode createProcessInstanceVariables() {
+    private static ObjectNode createProcessInstanceVariables() {
         return createDomainData(null, "Bar", "Swi");
     }
 
@@ -136,7 +138,8 @@ public class TestUtils {
         return job;
     }
 
-    public static UserTaskInstance createUserTaskInstance(String taskId, String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, String state, long timeInterval) {
+    public static UserTaskInstance createUserTaskInstance(String taskId, String processInstanceId, String processId, String rootProcessInstanceId, String rootProcessId, String state,
+            long timeInterval) {
         UserTaskInstance task = new UserTaskInstance();
         task.setId(taskId);
         task.setProcessInstanceId(processInstanceId);

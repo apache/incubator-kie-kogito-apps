@@ -1,19 +1,18 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.explainability;
 
 import java.util.ArrayList;
@@ -26,8 +25,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.vertx.core.json.JsonObject;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
@@ -36,6 +33,10 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import io.vertx.core.json.JsonObject;
 
 public class ConversionUtils {
 
@@ -62,7 +63,7 @@ public class ConversionUtils {
         } else if (value.isCollection()) {
             return FeatureFactory.newCompositeFeature(name, toFeatureList(name, value.toCollection()));
         } else {
-            throw new RuntimeException(String.format("unexpected value kind %s", value.getKind()));
+            throw new IllegalArgumentException(String.format("unexpected value kind %s", value.getKind()));
         }
     }
 
@@ -107,7 +108,7 @@ public class ConversionUtils {
 
     protected static Output toOutput(String name, Object value) {
         if (value instanceof JsonObject) {
-            return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList((JsonObject) value)), 1d);
+            return new Output(name, Type.COMPOSITE, new Value(toFeatureList((JsonObject) value)), 1d);
         }
         return toTypeValuePair(value)
                 .map(p -> new Output(name, p.getLeft(), p.getRight(), 1d))
@@ -120,9 +121,9 @@ public class ConversionUtils {
                     .map(p -> new Output(name, p.getLeft(), p.getRight(), 1d))
                     .orElse(null);
         } else if (value.isStructure()) {
-            return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList(value.toStructure().getValue())), 1d);
+            return new Output(name, Type.COMPOSITE, new Value(toFeatureList(value.toStructure().getValue())), 1d);
         } else if (value.isCollection()) {
-            return new Output(name, Type.COMPOSITE, new Value<>(toFeatureList(name, value.toCollection())), 1d);
+            return new Output(name, Type.COMPOSITE, new Value(toFeatureList(name, value.toCollection())), 1d);
         }
         return null;
     }
@@ -135,28 +136,28 @@ public class ConversionUtils {
         return toList(values, ConversionUtils::toOutput);
     }
 
-    protected static Optional<Pair<Type, Value<Object>>> toTypeValuePair(Object value) {
+    protected static Optional<Pair<Type, Value>> toTypeValuePair(Object value) {
         if (value instanceof Boolean) {
-            return Optional.of(Pair.of(Type.BOOLEAN, new Value<>(value)));
+            return Optional.of(Pair.of(Type.BOOLEAN, new Value(value)));
         }
         if (value instanceof Number) {
-            return Optional.of(Pair.of(Type.NUMBER, new Value<>(((Number) value).doubleValue())));
+            return Optional.of(Pair.of(Type.NUMBER, new Value(((Number) value).doubleValue())));
         }
         if (value instanceof String) {
-            return Optional.of(Pair.of(Type.TEXT, new Value<>(value)));
+            return Optional.of(Pair.of(Type.TEXT, new Value(value)));
         }
         return Optional.empty();
     }
 
-    public static Optional<Pair<Type, Value<Object>>> toTypeValuePair(JsonNode jsonValue) {
+    public static Optional<Pair<Type, Value>> toTypeValuePair(JsonNode jsonValue) {
         if (jsonValue.isBoolean()) {
-            return Optional.of(Pair.of(Type.BOOLEAN, new Value<>(jsonValue.asBoolean())));
+            return Optional.of(Pair.of(Type.BOOLEAN, new Value(jsonValue.asBoolean())));
         }
         if (jsonValue.isNumber()) {
-            return Optional.of(Pair.of(Type.NUMBER, new Value<>(jsonValue.asDouble())));
+            return Optional.of(Pair.of(Type.NUMBER, new Value(jsonValue.asDouble())));
         }
         if (jsonValue.isTextual()) {
-            return Optional.of(Pair.of(Type.TEXT, new Value<>(jsonValue.asText())));
+            return Optional.of(Pair.of(Type.TEXT, new Value(jsonValue.asText())));
         }
         return Optional.empty();
     }

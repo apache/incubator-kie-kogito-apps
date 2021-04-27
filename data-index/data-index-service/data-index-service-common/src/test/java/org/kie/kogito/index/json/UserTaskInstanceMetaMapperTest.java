@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.json;
 
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,7 +61,6 @@ public class UserTaskInstanceMetaMapperTest {
                 a -> a.node(utPrefix + "[0].potentialUsers[0]").isEqualTo(event.getData().getPotentialUsers().stream().findFirst().get()),
                 a -> a.node(utPrefix + "[0].started").isEqualTo(event.getData().getStarted().toInstant().toEpochMilli()),
                 a -> a.node(utPrefix + "[0].completed").isEqualTo(event.getData().getCompleted().toInstant().toEpochMilli()),
-                a -> a.node(utPrefix + "[0].lastUpdate").isEqualTo(event.getData().getLastUpdate().toInstant().toEpochMilli())
-        );
+                a -> a.node(utPrefix + "[0].lastUpdate").isEqualTo(event.getData().getLastUpdate().toInstant().toEpochMilli()));
     }
 }

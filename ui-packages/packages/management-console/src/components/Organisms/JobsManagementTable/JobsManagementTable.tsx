@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableHeader, IRow } from '@patternfly/react-table';
-import { OUIAProps, componentOuiaProps, GraphQL } from '@kogito-apps/common';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  IRow,
+  sortable,
+  ISortBy
+} from '@patternfly/react-table';
+import {
+  OUIAProps,
+  componentOuiaProps,
+  GraphQL,
+  constructObject,
+  KogitoSpinner,
+  KogitoEmptyState,
+  KogitoEmptyStateType
+} from '@kogito-apps/common';
 import { Tooltip } from '@patternfly/react-core';
 import { JobsIconCreator, jobCancel } from '../../../utils/Utils';
 import Moment from 'react-moment';
 import { HistoryIcon } from '@patternfly/react-icons';
 import { refetchContext } from '../../contexts';
 import _ from 'lodash';
-
+import './JobsManagementTable.css';
 interface ActionsMeta {
   title: string;
   onClick: (event, rowId, rowData, extra) => void;
@@ -20,15 +35,22 @@ interface RetrievedValueType {
   jobType: string;
 }
 interface IOwnProps {
-  data: GraphQL.GetAllJobsQuery;
+  data: GraphQL.GetJobsWithFiltersQuery;
   handleDetailsToggle: () => void;
   handleRescheduleToggle: () => void;
   handleCancelModalToggle: () => void;
   setModalTitle: (modalTitle: JSX.Element) => void;
   setModalContent: (modalContent: string) => void;
+  setOffset: (offSet: number) => void;
+  setOrderBy: (order: GraphQL.JobOrderBy) => void;
   setSelectedJob: (job: GraphQL.Job) => void;
   selectedJobInstances: GraphQL.Job[];
   setSelectedJobInstances: (job: GraphQL.Job[]) => void;
+  sortBy: ISortBy;
+  setSortBy: (sortObj: ISortBy) => void;
+  setIsActionPerformed: (isActionPerformed: boolean) => void;
+  isActionPerformed: boolean;
+  loading: boolean;
 }
 
 const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
@@ -38,16 +60,54 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
   handleCancelModalToggle,
   setModalTitle,
   setModalContent,
+  setOffset,
+  setOrderBy,
   setSelectedJob,
+  setSortBy,
   selectedJobInstances,
   setSelectedJobInstances,
+  sortBy,
+  setIsActionPerformed,
+  isActionPerformed,
+  loading,
   ouiaId,
   ouiaSafe
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
+  useEffect(() => {
+    if (isActionPerformed) {
+      const updatedRows = rows.filter(row => {
+        row.selected = false;
+        return row;
+      });
+      setSelectedJobInstances([]);
+      setRows(updatedRows);
+    }
+  }, [isActionPerformed]);
+  const columns = [
+    { title: 'Id' },
+    { title: 'Status' },
+    { title: 'Expiration time' },
+    { title: 'Retries' },
+    { title: 'Execution counter' },
+    { title: 'Last update' }
+  ];
   const editableJobStatus: string[] = ['SCHEDULED', 'ERROR'];
-  const columns: string[] = ['Id', 'Status', 'Expiration time', 'Last update'];
   const jobRow: IRow[] = [];
+
+  const checkNotEmpty = () => {
+    if (data && data.Jobs && data.Jobs.length > 0 && !loading) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  columns.forEach(column => {
+    column['props'] = { className: 'pf-u-text-align-center' };
+    if (checkNotEmpty() && column.title !== 'Id') {
+      column['transforms'] = [sortable];
+    }
+  });
 
   const handleJobDetails = (id): void => {
     const job = data.Jobs.find(job => job.id === id);
@@ -63,9 +123,9 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
 
   const refetch = React.useContext(refetchContext);
 
-  const handleCancelAction = (id): void => {
+  const handleCancelAction = async (id): Promise<void> => {
     const job = data.Jobs.find(job => job.id === id);
-    jobCancel(job, setModalTitle, setModalContent, refetch);
+    await jobCancel(job, setModalTitle, setModalContent, refetch);
     handleCancelModalToggle();
   };
 
@@ -108,7 +168,7 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
         const ele = {
           title: (
             <Tooltip content={job.id}>
-              <span>{job.id}</span>
+              <span>{job.id.substring(0, 7)}</span>
             </Tooltip>
           )
         };
@@ -152,31 +212,81 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
           )
         };
         tempRows.push(ele);
+      } else {
+        const ele = {
+          title: <span>{job[item]}</span>
+        };
+        tempRows.push(ele);
       }
     }
     return { tempRows, jobType };
   };
 
   const tableContent = (): void => {
-    data.Jobs.map(job => {
-      const retrievedValue = getValues(job);
-      jobRow.push({
-        cells: retrievedValue.tempRows,
-        type: retrievedValue.jobType,
-        rowKey: job.id,
-        selected: false
+    !loading &&
+      !_.isEmpty(data) &&
+      data.Jobs.map(job => {
+        const retrievedValue = getValues(
+          _.pick(job, [
+            'id',
+            'status',
+            'expirationTime',
+            'retries',
+            'executionCounter',
+            'lastUpdate'
+          ])
+        );
+        jobRow.push({
+          cells: retrievedValue.tempRows,
+          type: retrievedValue.jobType,
+          rowKey: job.id,
+          selected: false
+        });
       });
-    });
-    /* istanbul ignore else */
-    if (jobRow) {
-      setRows(prev => [...prev, ...jobRow]);
+    if (loading) {
+      const tempRows = [
+        {
+          rowKey: '1',
+          cells: [
+            {
+              props: { colSpan: 8 },
+              title: <KogitoSpinner spinnerText={'Loading jobs list...'} />
+            }
+          ]
+        }
+      ];
+      setRows(tempRows);
+    } else {
+      if (jobRow.length === 0) {
+        const tempRows = [
+          {
+            rowKey: '1',
+            cells: [
+              {
+                props: { colSpan: 8 },
+                title: (
+                  <KogitoEmptyState
+                    type={KogitoEmptyStateType.Search}
+                    title="No results found"
+                    body="Try using different filters"
+                  />
+                )
+              }
+            ]
+          }
+        ];
+        setRows(tempRows);
+      } else {
+        setRows(prev => [...prev, ...jobRow]);
+      }
     }
   };
 
-  const onSelect = (event, isSelected, rowId): void => {
+  const onSelect = (event, isSelected, rowId, rowData): void => {
+    setIsActionPerformed(false);
     const copyOfRows = [...rows];
     if (rowId === -1) {
-      copyOfRows.map(row => {
+      copyOfRows.forEach(row => {
         row.selected = isSelected;
         return row;
       });
@@ -184,12 +294,12 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
         setSelectedJobInstances([]);
       } else if (selectedJobInstances.length < data.Jobs.length) {
         /* istanbul ignore else*/
-        setSelectedJobInstances(data.Jobs);
+        setSelectedJobInstances(_.cloneDeep(data.Jobs));
       }
     } else {
       if (copyOfRows[rowId]) {
         copyOfRows[rowId].selected = isSelected;
-        const row = data.Jobs.filter(
+        const row = [...data.Jobs].filter(
           job => job.id === copyOfRows[rowId].rowKey
         );
         const rowData = _.find(selectedJobInstances, [
@@ -212,26 +322,35 @@ const JobsManagementTable: React.FC<IOwnProps & OUIAProps> = ({
   };
 
   useEffect(() => {
+    setRows([]);
     tableContent();
-  }, [data]);
+  }, [loading, data]);
+
+  const onSort = (event, index: number, direction: 'asc' | 'desc'): void => {
+    setSortBy({ index, direction });
+    setOffset(0);
+    let sortingColumn: string = event.target.innerText;
+    sortingColumn = _.camelCase(sortingColumn);
+    const obj: GraphQL.JobOrderBy = {};
+    constructObject(obj, sortingColumn, direction.toUpperCase());
+    setOrderBy(obj);
+  };
 
   return (
-    <>
-      {rows.length > 0 && (
-        <Table
-          onSelect={onSelect}
-          cells={columns}
-          rows={rows}
-          actionResolver={actionResolver}
-          aria-label="Jobs management Table"
-          className="kogito-common--domain-explorer__table"
-          {...componentOuiaProps(ouiaId, 'jobs-management-table', ouiaSafe)}
-        >
-          <TableHeader />
-          <TableBody rowKey="rowKey" />
-        </Table>
-      )}
-    </>
+    <Table
+      onSelect={checkNotEmpty() ? onSelect : null}
+      cells={columns}
+      rows={rows}
+      sortBy={sortBy}
+      onSort={onSort}
+      actionResolver={checkNotEmpty() ? actionResolver : null}
+      aria-label="Jobs management Table"
+      className="kogito-management-console--jobsManagement__table"
+      {...componentOuiaProps(ouiaId, 'jobs-management-table', ouiaSafe)}
+    >
+      <TableHeader />
+      <TableBody rowKey="rowKey" />
+    </Table>
   );
 };
 

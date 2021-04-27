@@ -70,6 +70,7 @@ export namespace GraphQL {
   export type JobArgument = {
     and?: Maybe<Array<JobArgument>>;
     or?: Maybe<Array<JobArgument>>;
+    not?: Maybe<JobArgument>;
     id?: Maybe<IdArgument>;
     processId?: Maybe<StringArgument>;
     processInstanceId?: Maybe<IdArgument>;
@@ -402,6 +403,7 @@ export namespace GraphQL {
     description?: Maybe<StringArgument>;
     name?: Maybe<StringArgument>;
     priority?: Maybe<StringArgument>;
+    processId?: Maybe<StringArgument>;
     processInstanceId?: Maybe<IdArgument>;
     actualOwner?: Maybe<StringArgument>;
     potentialUsers?: Maybe<StringArrayArgument>;
@@ -660,6 +662,7 @@ export namespace GraphQL {
 
   export type GetProcessInstancesQueryVariables = Exact<{
     where?: Maybe<ProcessInstanceArgument>;
+    orderBy?: Maybe<ProcessInstanceOrderBy>;
     offset?: Maybe<Scalars['Int']>;
     limit?: Maybe<Scalars['Int']>;
   }>;
@@ -1117,17 +1120,21 @@ export namespace GraphQL {
             | 'lastUpdate'
             | 'endpoint'
             | 'nodeInstanceId'
+            | 'executionCounter'
           >
         >
       >
     >;
   };
 
-  export type GetAllJobsQueryVariables = Exact<{
+  export type GetJobsWithFiltersQueryVariables = Exact<{
     values?: Maybe<Array<Maybe<JobStatus>>>;
+    orderBy?: Maybe<JobOrderBy>;
+    offset?: Maybe<Scalars['Int']>;
+    limit?: Maybe<Scalars['Int']>;
   }>;
 
-  export type GetAllJobsQuery = { __typename?: 'Query' } & {
+  export type GetJobsWithFiltersQuery = { __typename?: 'Query' } & {
     Jobs?: Maybe<
       Array<
         Maybe<
@@ -1147,6 +1154,7 @@ export namespace GraphQL {
             | 'retries'
             | 'lastUpdate'
             | 'endpoint'
+            | 'executionCounter'
           >
         >
       >
@@ -1156,11 +1164,13 @@ export namespace GraphQL {
   export const GetProcessInstancesDocument = gql`
     query getProcessInstances(
       $where: ProcessInstanceArgument
+      $orderBy: ProcessInstanceOrderBy
       $offset: Int
       $limit: Int
     ) {
       ProcessInstances(
         where: $where
+        orderBy: $orderBy
         pagination: { offset: $offset, limit: $limit }
       ) {
         id
@@ -1196,6 +1206,7 @@ export namespace GraphQL {
    * const { data, loading, error } = useGetProcessInstancesQuery({
    *   variables: {
    *      where: // value for 'where'
+   *      orderBy: // value for 'orderBy'
    *      offset: // value for 'offset'
    *      limit: // value for 'limit'
    *   },
@@ -2024,6 +2035,7 @@ export namespace GraphQL {
         lastUpdate
         endpoint
         nodeInstanceId
+        executionCounter
       }
     }
   `;
@@ -2076,9 +2088,18 @@ export namespace GraphQL {
     GetJobsByProcessInstanceIdQuery,
     GetJobsByProcessInstanceIdQueryVariables
   >;
-  export const GetAllJobsDocument = gql`
-    query getAllJobs($values: [JobStatus]) {
-      Jobs(where: { status: { in: $values } }) {
+  export const GetJobsWithFiltersDocument = gql`
+    query getJobsWithFilters(
+      $values: [JobStatus]
+      $orderBy: JobOrderBy
+      $offset: Int
+      $limit: Int
+    ) {
+      Jobs(
+        where: { status: { in: $values } }
+        orderBy: $orderBy
+        pagination: { offset: $offset, limit: $limit }
+      ) {
         id
         processId
         processInstanceId
@@ -2093,54 +2114,60 @@ export namespace GraphQL {
         retries
         lastUpdate
         endpoint
+        executionCounter
       }
     }
   `;
 
   /**
-   * __useGetAllJobsQuery__
+   * __useGetJobsWithFiltersQuery__
    *
-   * To run a query within a React component, call `useGetAllJobsQuery` and pass it any options that fit your needs.
-   * When your component renders, `useGetAllJobsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+   * To run a query within a React component, call `useGetJobsWithFiltersQuery` and pass it any options that fit your needs.
+   * When your component renders, `useGetJobsWithFiltersQuery` returns an object from Apollo Client that contains loading, error, and data properties
    * you can use to render your UI.
    *
    * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
    *
    * @example
-   * const { data, loading, error } = useGetAllJobsQuery({
+   * const { data, loading, error } = useGetJobsWithFiltersQuery({
    *   variables: {
    *      values: // value for 'values'
+   *      orderBy: // value for 'orderBy'
+   *      offset: // value for 'offset'
+   *      limit: // value for 'limit'
    *   },
    * });
    */
-  export function useGetAllJobsQuery(
+  export function useGetJobsWithFiltersQuery(
     baseOptions?: ApolloReactHooks.QueryHookOptions<
-      GetAllJobsQuery,
-      GetAllJobsQueryVariables
+      GetJobsWithFiltersQuery,
+      GetJobsWithFiltersQueryVariables
     >
   ) {
-    return ApolloReactHooks.useQuery<GetAllJobsQuery, GetAllJobsQueryVariables>(
-      GetAllJobsDocument,
-      baseOptions
-    );
+    return ApolloReactHooks.useQuery<
+      GetJobsWithFiltersQuery,
+      GetJobsWithFiltersQueryVariables
+    >(GetJobsWithFiltersDocument, baseOptions);
   }
-  export function useGetAllJobsLazyQuery(
+  export function useGetJobsWithFiltersLazyQuery(
     baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-      GetAllJobsQuery,
-      GetAllJobsQueryVariables
+      GetJobsWithFiltersQuery,
+      GetJobsWithFiltersQueryVariables
     >
   ) {
     return ApolloReactHooks.useLazyQuery<
-      GetAllJobsQuery,
-      GetAllJobsQueryVariables
-    >(GetAllJobsDocument, baseOptions);
+      GetJobsWithFiltersQuery,
+      GetJobsWithFiltersQueryVariables
+    >(GetJobsWithFiltersDocument, baseOptions);
   }
-  export type GetAllJobsQueryHookResult = ReturnType<typeof useGetAllJobsQuery>;
-  export type GetAllJobsLazyQueryHookResult = ReturnType<
-    typeof useGetAllJobsLazyQuery
+  export type GetJobsWithFiltersQueryHookResult = ReturnType<
+    typeof useGetJobsWithFiltersQuery
   >;
-  export type GetAllJobsQueryResult = ApolloReactCommon.QueryResult<
-    GetAllJobsQuery,
-    GetAllJobsQueryVariables
+  export type GetJobsWithFiltersLazyQueryHookResult = ReturnType<
+    typeof useGetJobsWithFiltersLazyQuery
+  >;
+  export type GetJobsWithFiltersQueryResult = ApolloReactCommon.QueryResult<
+    GetJobsWithFiltersQuery,
+    GetJobsWithFiltersQueryVariables
   >;
 }

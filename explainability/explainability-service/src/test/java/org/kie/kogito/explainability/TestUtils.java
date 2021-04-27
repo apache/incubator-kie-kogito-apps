@@ -16,8 +16,14 @@
 
 package org.kie.kogito.explainability;
 
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityRequestDto;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
@@ -29,9 +35,8 @@ import org.kie.kogito.explainability.models.ModelIdentifier;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.databind.node.DoubleNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
@@ -47,10 +52,10 @@ public class TestUtils {
 
     public static final ModelIdentifier MODEL_IDENTIFIER = new ModelIdentifier("dmn", "name:namespace");
 
-    public static final Value<Boolean> VALUE = new Value<>(true);
+    public static final Value VALUE = new Value(true);
 
-    public static final FeatureImportance FEATURE_IMPORTANCE_1 = new FeatureImportance(new Feature("input1", Type.NUMBER, new Value<>(1)), 0.6);
-    public static final FeatureImportance FEATURE_IMPORTANCE_2 = new FeatureImportance(new Feature("input2", Type.NUMBER, new Value<>(2)), 0.5);
+    public static final FeatureImportance FEATURE_IMPORTANCE_1 = new FeatureImportance(new Feature("input1", Type.NUMBER, new Value(1)), 0.6);
+    public static final FeatureImportance FEATURE_IMPORTANCE_2 = new FeatureImportance(new Feature("input2", Type.NUMBER, new Value(2)), 0.5);
 
     public static final List<FeatureImportance> FEATURE_IMPORTANCES = asList(FEATURE_IMPORTANCE_1, FEATURE_IMPORTANCE_2);
 
@@ -60,13 +65,19 @@ public class TestUtils {
     public static final Map<String, Saliency> SALIENCY_MAP = singletonMap("key", SALIENCY);
 
     public static final Map<String, TypedValue> INPUTS = new HashMap<>();
+
     static {
         INPUTS.put("input1", new UnitValue("string", new TextNode("value")));
         INPUTS.put("input2", new UnitValue("number", new DoubleNode(10)));
     }
 
+    public static final Map<String, CounterfactualSearchDomainDto> SEARCH_DOMAINS = new HashMap<>();
+
     public static final Map<String, TypedValue> OUTPUTS = singletonMap("output1", new UnitValue("string", new TextNode("output")));
 
-    public static final ExplainabilityRequest REQUEST = new ExplainabilityRequest(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS);
+    public static final BaseExplainabilityRequestDto COUNTERFACTUAL_REQUEST_DTO =
+            new CounterfactualExplainabilityRequestDto(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS, SEARCH_DOMAINS);
+    public static final BaseExplainabilityRequestDto LIME_REQUEST_DTO = new LIMEExplainabilityRequestDto(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS);
+    public static final ExplainabilityRequest LIME_REQUEST = ExplainabilityRequest.from(LIME_REQUEST_DTO);
 
 }

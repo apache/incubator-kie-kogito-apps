@@ -15,18 +15,19 @@
  */
 package org.kie.kogito.explainability;
 
-import io.vertx.core.json.JsonObject;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.ext.web.client.WebClient;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
+import io.vertx.core.json.JsonObject;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.web.client.WebClient;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
@@ -37,11 +38,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.explainability.TestUtils.REQUEST;
+import static org.kie.kogito.explainability.TestUtils.LIME_REQUEST;
 
 class RemotePredictionProviderTest {
 
-    RemotePredictionProvider predictionProvider = new RemotePredictionProvider(REQUEST, null, null, null) {
+    RemotePredictionProvider predictionProvider = new RemotePredictionProvider(LIME_REQUEST, null, null, null) {
         @Override
         protected WebClient getClient(Vertx vertx, URI uri) {
             return null;
@@ -56,16 +57,16 @@ class RemotePredictionProviderTest {
 
         PredictionOutput predictionOutput = predictionProvider.toPredictionOutput(new JsonObject(predictionMap));
         assertNotNull(predictionOutput);
-        assertEquals(REQUEST.getOutputs().size(), predictionOutput.getOutputs().size());
+        assertEquals(LIME_REQUEST.getOutputs().size(), predictionOutput.getOutputs().size());
         assertEquals(Type.UNDEFINED, predictionOutput.getOutputs().get(0).getType());
     }
 
     @Test
     void toMap() {
         // simple test
-        Feature simple = new Feature("simple", Type.NUMBER, new Value<>(10));
-        Feature undefined = new Feature("undefined", Type.UNDEFINED, new Value<>(simple));
-        Feature composite = new Feature("composite", Type.COMPOSITE, new Value<>(asList(simple, undefined)));
+        Feature simple = new Feature("simple", Type.NUMBER, new Value(10));
+        Feature undefined = new Feature("undefined", Type.UNDEFINED, new Value(simple));
+        Feature composite = new Feature("composite", Type.COMPOSITE, new Value(asList(simple, undefined)));
         List<Feature> features1 = asList(simple, undefined, composite);
 
         Map<String, Object> result1 = predictionProvider.toMap(features1);
@@ -79,8 +80,8 @@ class RemotePredictionProviderTest {
         assertTrue(result1.get("composite") instanceof Map);
 
         // context test
-        Feature context = new Feature("context", Type.COMPOSITE, new Value<>(singletonList(simple)));
-        Feature simple2 = new Feature("simple2", Type.BOOLEAN, new Value<>(true));
+        Feature context = new Feature("context", Type.COMPOSITE, new Value(singletonList(simple)));
+        Feature simple2 = new Feature("simple2", Type.BOOLEAN, new Value(true));
         List<Feature> features2 = asList(simple2, context);
 
         Map<String, Object> result2 = predictionProvider.toMap(features2);
@@ -91,7 +92,7 @@ class RemotePredictionProviderTest {
         assertFalse(result2.containsKey("simple2"));
 
         // multiple nesting test
-        Feature nestedComposite = new Feature("nestedComposite", Type.COMPOSITE, new Value<>(asList(simple, composite)));
+        Feature nestedComposite = new Feature("nestedComposite", Type.COMPOSITE, new Value(asList(simple, composite)));
         List<Feature> features3 = asList(simple, nestedComposite);
         Map<String, Object> result3 = predictionProvider.toMap(features3);
 

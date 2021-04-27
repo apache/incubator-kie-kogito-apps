@@ -15,17 +15,17 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.PredictionInput;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.model.Feature;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SampleWeighterTest {
@@ -34,8 +34,8 @@ class SampleWeighterTest {
     void testSamplingEmptyDataset() {
         Collection<Pair<double[], Double>> trainingSet = new LinkedList<>();
         List<Feature> features = new LinkedList<>();
-        PredictionInput targetInput = new PredictionInput(features);
-        SampleWeighter.getSampleWeights(targetInput, trainingSet);
+        double[] sampleWeights = SampleWeighter.getSampleWeights(features, trainingSet, 0.5);
+        assertEquals(0, sampleWeights.length);
     }
 
     @Test
@@ -52,8 +52,7 @@ class SampleWeighterTest {
             Pair<double[], Double> doubles = Pair.of(vector, 0d);
             trainingSet.add(doubles);
         }
-        PredictionInput targetInput = new PredictionInput(features);
-        double[] weights = SampleWeighter.getSampleWeights(targetInput, trainingSet);
+        double[] weights = SampleWeighter.getSampleWeights(features, trainingSet, 0.5);
         // check that weights decrease with the distance from the 1 vector (the target instance)
         for (int i = 0; i < weights.length - 1; i++) {
             assertTrue(weights[i] > weights[i + 1]);

@@ -44,45 +44,47 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <!-- ensure dependent modules were built, but not added in the classpath -->
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>explainability-service-messaging</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>trusty-service</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+  
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <dependencies>
-            <!-- ensure dependent modules were built, but not added in the classpath -->
-            <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>explainability-service-messaging</artifactId>
-              <version>${project.version}</version>
-              <scope>runtime</scope>
-            </dependency>
-            <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>trusty-service</artifactId>
-              <version>${project.version}</version>
-              <scope>runtime</scope>
-            </dependency>
-          </dependencies>
           <configuration>
-            <systemPropertyVariables>
-              <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
-              <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
-              <container.image.explainability-service-messaging>${container.image.explainability-service-messaging}</container.image.explainability-service-messaging>
+            <systemPropertyVariables combine.children="append">
               <container.image.kogito-service>${container.image.kogito-service}</container.image.kogito-service>
-              <container.image.trusty-service>${container.image.trusty-service}</container.image.trusty-service>
             </systemPropertyVariables>
-            <classesDirectory>${project.build.outputDirectory}</classesDirectory>
           </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
       </plugins>
     </pluginManagement>

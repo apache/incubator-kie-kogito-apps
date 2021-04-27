@@ -39,14 +39,16 @@ public class FeatureFactory {
     }
 
     public static Feature newTextFeature(String name, String text) {
-        return new Feature(name, Type.TEXT, new Value<>(text));
+        return new Feature(name, Type.TEXT, new Value(text));
     }
 
     public static Feature newFulltextFeature(String name, String text, Function<String, List<String>> tokenizer) {
         List<String> tokens = tokenizer.apply(text);
         List<Feature> tokenFeatures = new ArrayList<>(tokens.size());
+        int featurePosition = 1;
         for (String token : tokens) {
-            tokenFeatures.add(FeatureFactory.newTextFeature(name, token));
+            tokenFeatures.add(FeatureFactory.newTextFeature(name + "_" + featurePosition, token));
+            featurePosition++;
         }
         return FeatureFactory.newCompositeFeature(name, tokenFeatures);
     }
@@ -56,43 +58,43 @@ public class FeatureFactory {
     }
 
     public static Feature newCategoricalFeature(String name, String category) {
-        return new Feature(name, Type.CATEGORICAL, new Value<>(category));
+        return new Feature(name, Type.CATEGORICAL, new Value(category));
     }
 
     public static Feature newNumericalFeature(String name, Number number) {
-        return new Feature(name, Type.NUMBER, new Value<>(number));
+        return new Feature(name, Type.NUMBER, new Value(number));
     }
 
     public static Feature newBooleanFeature(String name, Boolean truthValue) {
-        return new Feature(name, Type.BOOLEAN, new Value<>(truthValue));
+        return new Feature(name, Type.BOOLEAN, new Value(truthValue));
     }
 
     public static Feature newCurrencyFeature(String name, Currency currency) {
-        return new Feature(name, Type.CURRENCY, new Value<>(currency));
+        return new Feature(name, Type.CURRENCY, new Value(currency));
     }
 
     public static Feature newBinaryFeature(String name, ByteBuffer byteBuffer) {
-        return new Feature(name, Type.BINARY, new Value<>(byteBuffer));
+        return new Feature(name, Type.BINARY, new Value(byteBuffer));
     }
 
     public static Feature newURIFeature(String name, URI uri) {
-        return new Feature(name, Type.URI, new Value<>(uri));
+        return new Feature(name, Type.URI, new Value(uri));
     }
 
     public static Feature newDurationFeature(String name, Duration duration) {
-        return new Feature(name, Type.DURATION, new Value<>(duration));
+        return new Feature(name, Type.DURATION, new Value(duration));
     }
 
     public static Feature newTimeFeature(String name, LocalTime time) {
-        return new Feature(name, Type.TIME, new Value<>(time));
+        return new Feature(name, Type.TIME, new Value(time));
     }
 
     public static Feature newVectorFeature(String name, double... doubles) {
-        return new Feature(name, Type.VECTOR, new Value<>(doubles));
+        return new Feature(name, Type.VECTOR, new Value(doubles));
     }
 
     public static Feature newObjectFeature(String name, Object object) {
-        return new Feature(name, Type.UNDEFINED, new Value<>(object));
+        return new Feature(name, Type.UNDEFINED, new Value(object));
     }
 
     public static Feature newCompositeFeature(String name, Map<String, Object> map) {
@@ -104,10 +106,11 @@ public class FeatureFactory {
     }
 
     public static Feature newCompositeFeature(String name, List<Feature> features) {
-        return new Feature(name, Type.COMPOSITE, new Value<>(features));
+        return new Feature(name, Type.COMPOSITE, new Value(features));
     }
 
-    private static Feature parseFeatureValue(String featureName, Object value) {
+    @SuppressWarnings("unchecked")
+    public static Feature parseFeatureValue(String featureName, Object value) {
         if (value instanceof Map) {
             return newCompositeFeature(featureName, (Map<String, Object>) value);
         } else if (value instanceof double[]) {
@@ -131,16 +134,18 @@ public class FeatureFactory {
         } else if (value instanceof Feature) {
             return (Feature) value;
         } else if (value instanceof List) {
-            return parseList(featureName, (List<?>) value);
+            return parseList(featureName, (List<Object>) value);
         } else {
             return newObjectFeature(featureName, value);
         }
     }
 
-    private static Feature parseList(String featureName, List<?> value) {
+    private static Feature parseList(String featureName, List<Object> value) {
         if (!value.isEmpty()) {
             if (value.get(0) instanceof Feature) {
-                return newCompositeFeature(featureName, (List<Feature>) value);
+                @SuppressWarnings("unchecked")
+                List<Feature> features = (List<Feature>) (Object) value;
+                return newCompositeFeature(featureName, features);
             } else {
                 List<Feature> fs = IntStream.range(0, value.size())
                         .mapToObj(i -> parseFeatureValue(featureName + "_" + i, value.get(i)))
@@ -156,10 +161,10 @@ public class FeatureFactory {
      * Create a copy of a {@code Feature} but with a different {@code Value}.
      *
      * @param feature the Feature to copy
-     * @param value   the Value to inject
+     * @param value the Value to inject
      * @return a copy of the input Feature but having the given Value
      */
-    public static Feature copyOf(Feature feature, Value<?> value) {
+    public static Feature copyOf(Feature feature, Value value) {
         return new Feature(feature.getName(), feature.getType(), value);
     }
 }

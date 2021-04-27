@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import io.restassured.http.ContentType;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +27,8 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -61,13 +62,13 @@ abstract class AbstractReactiveMessagingEventConsumerKafkaIT {
 
     @Test
     void testProcessInstanceEvent() throws Exception {
+        protobufService.registerProtoBufferType(getTestProtobufFileContent());
+
         sendProcessInstanceEvent();
 
         String processInstanceId = "c2fa5c5e-3002-44c7-aef7-bce82297e3fe";
 
-        protobufService.registerProtoBufferType(getTestProtobufFileContent());
-
-        given().contentType(ContentType.JSON).body("{ \"query\" : \"{Travels{ id } }\" }")
+        given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels { id } }\" }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200)
                 .body("data.Travels", isA(Collection.class));
@@ -77,40 +78,36 @@ abstract class AbstractReactiveMessagingEventConsumerKafkaIT {
         await()
                 .atMost(5, SECONDS)
                 .untilAsserted(() -> {
-                                   given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
-                                           .when().post("/graphql")
-                                           .then().log().ifValidationFails().statusCode(200)
-                                           .body("data.ProcessInstances.size()", is(1))
-                                           .body("data.ProcessInstances[0].id", is(processInstanceId));
-                               }
-                );
+                    given().contentType(ContentType.JSON).body("{ \"query\" : \"{ ProcessInstances { id } }\" }")
+                            .when().post("/graphql")
+                            .then().log().ifValidationFails().statusCode(200)
+                            .body("data.ProcessInstances.size()", is(1))
+                            .body("data.ProcessInstances[0].id", is(processInstanceId));
+                });
 
         await()
                 .atMost(5, SECONDS)
                 .untilAsserted(() -> {
-                                   given().contentType(ContentType.JSON).body("{ \"query\" : \"{Travels{ id } }\" }")
-                                           .when().post("/graphql")
-                                           .then().log().ifValidationFails().statusCode(200)
-                                           .body("data.Travels[0].id", is("f8868a2e-1bbb-47eb-93cf-fa46ff9dbfee"));
-                               }
-                );
+                    given().contentType(ContentType.JSON).body("{ \"query\" : \"{ Travels { id } }\" }")
+                            .when().post("/graphql")
+                            .then().log().ifValidationFails().statusCode(200)
+                            .body("data.Travels[0].id", is("f8868a2e-1bbb-47eb-93cf-fa46ff9dbfee"));
+                });
 
         await()
                 .atMost(5, SECONDS)
                 .untilAsserted(() -> {
-                                   given()
-                                           .when().get("/metrics")
-                                           .then().log().ifValidationFails().statusCode(200)
-                                           .body(containsString("base_mp_messaging_message_count_total{channel=\"kogito-processdomain-events\"} 2.0"),
-                                                 containsString("base_mp_messaging_message_count_total{channel=\"kogito-processinstances-events\"} 2.0"));
-                               }
-                );
+                    given()
+                            .when().get("/metrics")
+                            .then().log().ifValidationFails().statusCode(200)
+                            .body(containsString("base_mp_messaging_message_count_total{channel=\"kogito-processdomain-events\"} 2.0"),
+                                    containsString("base_mp_messaging_message_count_total{channel=\"kogito-processinstances-events\"} 2.0"));
+                });
     }
 
     private void sendProcessInstanceEvent() throws Exception {
         String json = readFileContent("process_instance_event.json");
         kafkaClient.produce(json, "kogito-processinstances-events");
-        return;
     }
 
     protected abstract String getTestProtobufFileContent() throws Exception;

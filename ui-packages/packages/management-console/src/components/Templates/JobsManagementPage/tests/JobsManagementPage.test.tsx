@@ -4,6 +4,8 @@ import { getWrapperAsync, GraphQL } from '@kogito-apps/common';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
+import { JobsData } from '../mockData/JobsMockData';
+import { Button } from '@patternfly/react-core';
 
 jest.mock('../../../Organisms/JobsManagementTable/JobsManagementTable');
 jest.mock('../../../Organisms/JobsManagementFilters/JobsManagementFilters');
@@ -13,6 +15,7 @@ jest.mock('../../../Atoms/JobsCancelModal/JobsCancelModal');
 const MockedServerErrors = (): React.ReactElement => {
   return <></>;
 };
+
 jest.mock('@kogito-apps/common', () => ({
   ...jest.requireActual('@kogito-apps/common'),
   ServerErrors: () => {
@@ -39,84 +42,50 @@ jest.mock('@patternfly/react-icons', () => ({
   }
 }));
 describe('Jobs management page tests', () => {
+  const mockOffset1: number = 0;
+  const mockLimit1: number = 10;
+  const mockOffset2: number = 10;
+  const mockLimit2: number = 10;
+
+  const props = {
+    ouiaId: null,
+    ouiaSafe: true
+  };
+
   const mocks = [
     {
       request: {
-        query: GraphQL.GetAllJobsDocument,
-        variables: { values: ['SCHEDULED'] }
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          },
+          offset: 0,
+          limit: 10
+        }
       },
       result: {
         data: {
-          Jobs: [
-            {
-              callbackEndpoint:
-                'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0',
-              endpoint: 'http://localhost:4000/jobs',
-              expirationTime: null,
-              id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
-              lastUpdate: '2020-08-27T03:35:50.147Z',
-              priority: 0,
-              processId: 'travels',
-              processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
-              repeatInterval: null,
-              repeatLimit: null,
-              retries: 0,
-              rootProcessId: null,
-              scheduledId: '0',
-              status: GraphQL.JobStatus.Executed,
-              __typename: 'Job'
-            },
-            {
-              callbackEndpoint:
-                'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
-              endpoint: 'http://localhost:4000/jobs',
-              expirationTime: '2020-08-27T04:35:54.631Z',
-              id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
-              lastUpdate: '2020-08-27T03:35:54.635Z',
-              priority: 0,
-              processId: 'travels',
-              processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
-              repeatInterval: null,
-              repeatLimit: null,
-              retries: 0,
-              rootProcessId: '',
-              scheduledId: null,
-              status: GraphQL.JobStatus.Scheduled,
-              __typename: 'Job'
-            },
-            {
-              callbackEndpoint:
-                'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
-              endpoint: 'http://localhost:4000/jobs',
-              expirationTime: '2020-08-27T04:35:54.631Z',
-              id: '2234dde-npce1-2908-b3131-6123c675a0fa_0',
-              lastUpdate: '2020-08-27T03:35:54.635Z',
-              priority: 0,
-              processId: 'travels',
-              processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
-              repeatInterval: null,
-              repeatLimit: null,
-              retries: 0,
-              rootProcessId: '',
-              scheduledId: null,
-              status: GraphQL.JobStatus.Canceled,
-              __typename: 'Job'
-            }
-          ]
+          Jobs: JobsData
         }
       }
-    }
-  ];
-
-  const mocks2 = [
+    },
     {
       request: {
-        query: GraphQL.GetAllJobsDocument,
-        variables: { values: ['SCHEDULED'] }
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          },
+          offset: 0,
+          limit: 10
+        }
       },
       result: {
         data: {
-          Jobs: []
+          Jobs: JobsData
         }
       }
     }
@@ -125,13 +94,98 @@ describe('Jobs management page tests', () => {
   const mocks3 = [
     {
       request: {
-        query: GraphQL.GetAllJobsDocument,
-        variables: { values: ['SCHEDULED'] }
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          },
+          offset: 0,
+          limit: 10
+        }
       },
       result: {
         data: null,
         error: {
           message: 'Expected a value of type JobStatus but received: CANCELLED'
+        }
+      }
+    }
+  ];
+  const mockData = [...JobsData];
+  const mocks4 = [
+    {
+      request: {
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          offset: 0,
+          limit: 10,
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
+      },
+      result: {
+        data: {
+          Jobs: mockData.splice(mockOffset1 - mockLimit1, mockLimit1)
+        }
+      }
+    },
+    {
+      request: {
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          offset: 0,
+          limit: 10,
+          values: ['SCHEDULED'],
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
+      },
+      result: {
+        data: {
+          Jobs: mockData.slice(0, 20)
+        }
+      }
+    }
+  ];
+  const mockData2 = [...JobsData];
+  const mocks5: any = [
+    {
+      request: {
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          limit: 10,
+          offset: 0,
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
+      },
+      result: {
+        data: {
+          Jobs: mockData2.splice(mockOffset2 - mockLimit2, mockLimit2)
+        }
+      }
+    },
+    {
+      request: {
+        query: GraphQL.GetJobsWithFiltersDocument,
+        variables: {
+          values: ['SCHEDULED'],
+          limit: 10,
+          offset: 0,
+          orderBy: {
+            lastUpdate: GraphQL.OrderBy.Asc
+          }
+        }
+      },
+      result: {
+        data: {
+          Jobs: mockData2.splice(mockOffset2 - mockLimit2, mockLimit2)
         }
       }
     }
@@ -150,7 +204,7 @@ describe('Jobs management page tests', () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <JobsManagementPage />
+          <JobsManagementPage {...props} />
         </BrowserRouter>
       </MockedProvider>,
       'JobsManagementPage'
@@ -164,33 +218,12 @@ describe('Jobs management page tests', () => {
         .simulate('click');
     });
   });
-  it('mock data with empty response', async () => {
-    const wrapper = await getWrapperAsync(
-      <MockedProvider mocks={mocks2} addTypename={false}>
-        <BrowserRouter>
-          <JobsManagementPage />
-        </BrowserRouter>
-      </MockedProvider>,
-      'JobsManagementPage'
-    );
-    expect(wrapper).toMatchSnapshot();
-    const redirectObj = {
-      pathname: '/NoData',
-      state: {
-        buttonText: 'Go to process instance',
-        description: 'There are no jobs associated with any process instance.',
-        prev: '/ProcessInstances',
-        title: 'Jobs not found'
-      }
-    };
-    expect(wrapper.find('Redirect').props()['to']).toEqual(redirectObj);
-  });
 
   it('mock data with error response', async () => {
     const wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks3} addTypename={false}>
         <BrowserRouter>
-          <JobsManagementPage />
+          <JobsManagementPage {...props} />
         </BrowserRouter>
       </MockedProvider>,
       'JobsManagementPage'
@@ -202,7 +235,7 @@ describe('Jobs management page tests', () => {
     let wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <JobsManagementPage />
+          <JobsManagementPage {...props} />
         </BrowserRouter>
       </MockedProvider>,
       'JobsManagementPage'
@@ -242,7 +275,7 @@ describe('Jobs management page tests', () => {
     let wrapper = await getWrapperAsync(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
-          <JobsManagementPage />
+          <JobsManagementPage {...props} />
         </BrowserRouter>
       </MockedProvider>,
       'JobsManagementPage'
@@ -265,5 +298,111 @@ describe('Jobs management page tests', () => {
         .children()
         .contains('Cancel selected')
     ).toBeTruthy();
+  });
+  it('test click handler on empty state & empty state snapshot', async () => {
+    let wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks5} addTypename={false}>
+        <BrowserRouter>
+          <JobsManagementPage {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+      'JobsManagementPage'
+    );
+    await act(async () => {
+      wrapper
+        .find('JobsManagementFilters')
+        .props()
+        ['setChips']([]);
+    });
+    wrapper = wrapper.update();
+    const emptyState = wrapper.find('EmptyState');
+    expect(emptyState.exists()).toBeTruthy();
+    expect(emptyState).toMatchSnapshot();
+    await act(async () => {
+      emptyState.find(Button).simulate('click');
+    });
+    wrapper = wrapper.update();
+    const defaultChip: string[] = ['SCHEDULED'];
+    expect(wrapper.find('JobsManagementFilters').props()['chips']).toEqual(
+      defaultChip
+    );
+    expect(
+      wrapper.find('JobsManagementFilters').props()['selectedStatus']
+    ).toEqual(defaultChip);
+  });
+  it('Test pagination with mock responses with offset 0', async () => {
+    let wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks4} addTypename={false}>
+        <BrowserRouter>
+          <JobsManagementPage {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+      'JobsManagementPage'
+    );
+    wrapper = wrapper.update();
+    const tempJobs = wrapper.find('JobsManagementTable').props()['data'];
+    expect(tempJobs[Object.keys(tempJobs)[0]].length).toEqual(10);
+    await act(async () => {
+      wrapper
+        .find('LoadMore')
+        .props()
+        ['getMoreItems'](0, 10);
+    });
+    wrapper = wrapper.update();
+    expect(wrapper.find('LoadMore').props()['isLoadingMore']).toEqual(true);
+  });
+  it('Test pagination with mock responses with offset 10', async () => {
+    let wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks5} addTypename={false}>
+        <BrowserRouter>
+          <JobsManagementPage />
+        </BrowserRouter>
+      </MockedProvider>,
+      'JobsManagementPage'
+    );
+    wrapper = wrapper.update();
+    const tempJobs = wrapper.find('JobsManagementTable').props()['data'];
+    expect(tempJobs[Object.keys(tempJobs)[0]].length).toEqual(10);
+    await act(async () => {
+      wrapper
+        .find('LoadMore')
+        .props()
+        ['getMoreItems'](0, 10);
+    });
+    wrapper = wrapper.update();
+    expect(wrapper.find('LoadMore').props()['isLoadingMore']).toEqual(true);
+    await act(async () => {
+      wrapper
+        .find('LoadMore')
+        .find('button')
+        .first()
+        .simulate('click');
+    });
+    wrapper = wrapper.update();
+    expect(mocks5[0].request.variables.offset).toEqual(0);
+  });
+  it('test clearAllFilters on toolbar', async () => {
+    let wrapper = await getWrapperAsync(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <JobsManagementPage {...props} />
+        </BrowserRouter>
+      </MockedProvider>,
+      'JobsManagementPage'
+    );
+    await act(async () => {
+      wrapper
+        .find('Toolbar')
+        .props()
+        ['clearAllFilters']();
+    });
+    wrapper = wrapper.update();
+    const defaultChip: string[] = ['SCHEDULED'];
+    expect(wrapper.find('JobsManagementFilters').props()['chips']).toEqual(
+      defaultChip
+    );
+    expect(
+      wrapper.find('JobsManagementFilters').props()['selectedStatus']
+    ).toEqual(defaultChip);
   });
 });

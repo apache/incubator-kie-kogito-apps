@@ -20,21 +20,23 @@ import { AutoFields, AutoForm, ErrorsField } from 'uniforms-patternfly';
 import FormFooter from '../../Atoms/FormFooter/FormFooter';
 import ModelConversionTool from '../../../util/uniforms/ModelConversionTool';
 import { DefaultFormValidator } from '../../../util/uniforms/FormValidator';
-import { IFormSubmitHandler } from '../../../util/uniforms/FormSubmitHandler/FormSubmitHandler';
-import { FormSchema } from '../../../util/uniforms/FormSchema';
+import { FormSubmitHandler } from '../../../util/uniforms/FormSubmitHandler/FormSubmitHandler';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/common';
 
 interface IOwnProps {
-  formSchema: FormSchema;
+  formSchema: any;
   model?: any;
   readOnly: boolean;
-  formSubmitHandler: IFormSubmitHandler;
+  formSubmitHandler: FormSubmitHandler;
 }
 
-const FormRenderer: React.FC<IOwnProps> = ({
+const FormRenderer: React.FC<IOwnProps & OUIAProps> = ({
   formSchema,
   model,
   readOnly,
-  formSubmitHandler
+  formSubmitHandler,
+  ouiaId,
+  ouiaSafe
 }) => {
   const validator = new DefaultFormValidator(formSchema);
 
@@ -58,6 +60,7 @@ const FormRenderer: React.FC<IOwnProps> = ({
       schema={bridge}
       showInlineError={true}
       onSubmit={formModel => formSubmitHandler.doSubmit(formModel)}
+      {...componentOuiaProps(ouiaId, 'form-renderer', ouiaSafe)}
     >
       <ErrorsField />
       <AutoFields />

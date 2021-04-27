@@ -86,7 +86,7 @@ module.exports ={ ProcessInstanceData : [
     rootProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
     roles: [],
     state: 'ERROR',
-    addons: ['jobs-management', 'prometheus-monitoring'],
+    addons: ['jobs-management', 'prometheus-monitoring','process-management'],
     serviceUrl: 'http://localhost:4000',
     endpoint: 'http://localhost:4000',
     error: {
@@ -613,7 +613,7 @@ module.exports ={ ProcessInstanceData : [
     rootProcessInstanceId: '538f9feb-5a14-4096-b791-2055b38da7c6',
     roles: [],
     state: 'ERROR',
-    addons: ['prometheus-monitoring'],
+    addons: ['prometheus-monitoring','process-management'],
     serviceUrl: 'http://localhost:4000',
     endpoint: 'http://localhost:4000',
     start: '2019-10-22T03:40:44.089Z',
@@ -670,7 +670,7 @@ module.exports ={ ProcessInstanceData : [
     rootProcessInstanceId: '538f9feb-5a14-4096-b791-2055b38da7c6',
     processName: 'HotelBooking',
     roles: [],
-    state: 'ABORTED',
+    state: 'ERROR',
     addons: ['process-management'],
     start: '2019-10-22T03:40:44.089Z',
     end: '2019-10-22T05:40:44.089Z',
@@ -841,7 +841,7 @@ module.exports ={ ProcessInstanceData : [
     roles: [],
     state: 'ACTIVE',
     rootProcessInstanceId: null,
-    serviceUrl: 'http://localhost:4000',
+    serviceUrl: 'http://localhost:4002',
     endpoint: 'http://localhost:4000',
     addons: ['jobs-management', 'prometheus-monitoring', 'process-management'],
     error: {
@@ -948,6 +948,113 @@ module.exports ={ ProcessInstanceData : [
         businessKey: null
       }
     ]
+  },
+  {
+    id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b11111',
+    processId: 'travels',
+    businessKey: null,
+    parentProcessInstanceId: null,
+    parentProcessInstance: null,
+    processName: 'travels(no-service-url)',
+    roles: [],
+    state: 'ACTIVE',
+    rootProcessInstanceId: null,
+    serviceUrl: null,
+    endpoint: 'http://localhost:4000',
+    addons: ['jobs-management', 'prometheus-monitoring', 'process-management'],
+    error: {
+      nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
+      message: 'Something went wrong'
+    },
+    start: '2019-10-22T03:40:44.089Z',
+    end: null,
+    variables:
+      '{"flight":{"arrival":"2019-10-30T22:00:00Z[UTC]","departure":"2019-10-22T22:00:00Z[UTC]","flightNumber":"MX555"},"hotel":{"address":{"city":"Berlin","country":"Germany","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Berlin","country":"Germany","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"traveller":{"address":{"city":"Karkow","country":"Poland","street":"palna","zipCode":"200300"},"email":"rob@redhat.com","firstName":"Rob","lastName":"Rob","nationality":"Polish"}}',
+    nodes: [
+      {
+        nodeId: '1',
+        name: 'Book Flight',
+        definitionId: 'CallActivity_2',
+        id: '7cdeba99-cd36-4425-980d-e59d44769a3e',
+        enter: '2019-10-22T04:43:01.143Z',
+        exit: '2019-10-22T04:43:01.146Z',
+        type: 'SubProcessNode'
+      },
+      {
+        nodeId: '2',
+        name: 'Confirm travel',
+        definitionId: 'UserTask_2',
+        id: '843bd287-fb6e-4ee7-a304-ba9b430e52d8',
+        enter: '2019-10-22T04:43:01.148Z',
+        exit: null,
+        type: 'HumanTaskNode'
+      },
+      {
+        nodeId: '3',
+        name: 'Join',
+        definitionId: 'ParallelGateway_2',
+        id: 'fd2e12d5-6a4b-4c75-9f31-028d3f032a95',
+        enter: '2019-10-22T04:43:01.148Z',
+        exit: '2019-10-22T04:43:01.148Z',
+        type: 'Join'
+      },
+      {
+        nodeId: '4',
+        name: 'Book Hotel',
+        definitionId: 'CallActivity_1',
+        id: '7f7d74c1-78f7-49be-b5ad-8d132f46a49c',
+        enter: '2019-10-22T04:43:01.146Z',
+        exit: '2019-10-22T04:43:01.148Z',
+        type: 'SubProcessNode'
+      },
+      {
+        nodeId: '5',
+        name: 'Book',
+        definitionId: 'ParallelGateway_1',
+        id: 'af0d984c-4abd-4f5c-83a8-426e6b3d102a',
+        enter: '2019-10-22T04:43:01.143Z',
+        exit: '2019-10-22T04:43:01.146Z',
+        type: 'Split'
+      },
+      {
+        nodeId: '6',
+        name: 'Join',
+        definitionId: 'ExclusiveGateway_2',
+        id: 'b2761011-3043-4f48-82bd-1395bf651a91',
+        enter: '2019-10-22T04:43:01.143Z',
+        exit: '2019-10-22T04:43:01.143Z',
+        type: 'Join'
+      },
+      {
+        nodeId: '7',
+        name: 'is visa required',
+        definitionId: 'ExclusiveGateway_1',
+        id: 'a91a2600-d0cd-46ff-a6c6-b3081612d1af',
+        enter: '2019-10-22T04:43:01.143Z',
+        exit: '2019-10-22T04:43:01.143Z',
+        type: 'Split'
+      },
+      {
+        nodeId: '8',
+        name: 'Visa check',
+        definitionId: 'BusinessRuleTask_1',
+        id: '1baa5de4-47cc-45a8-8323-005388191e4f',
+        enter: '2019-10-22T04:43:01.135Z',
+        exit: '2019-10-22T04:43:01.143Z',
+        type: 'RuleSetNode'
+      },
+      {
+        nodeId: '9',
+        name: 'StartProcess',
+        definitionId: 'StartEvent_1',
+        id: '90e5a337-1c26-4fcc-8ee2-d20e6ba2a1a3',
+        enter: '2019-10-22T04:43:01.135Z',
+        exit: '2019-10-22T04:43:01.135Z',
+        type: 'StartNode'
+      }
+    ],
+    milestones: [],
+    childProcessInstances: []
   },
   {
     id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0blmnop',
@@ -1714,7 +1821,7 @@ module.exports ={ ProcessInstanceData : [
     rootProcessInstanceId: null,
     serviceUrl:'http://localhost:4000',
     endpoint: 'http://localhost:4000/',
-    addons: [],
+    addons: ['process-management'],
     error: {
       nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-3459188e90433n',
       message: 'Something went wrong'
@@ -3143,15 +3250,141 @@ JobsData:[
     repeatInterval: null,
     repeatLimit: null,
     scheduledId: "0",
+    retries: 1,
+    lastUpdate: "2020-08-27T03:35:50.147Z",
+    expirationTime: null,
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: 'fd2e12d5-6a4b-4c75-9f31-028d3f032a95',
+    executionCounter: 2
+  },
+  {
+    id: "dad3aa88-5c1e-4858-a919-6123c675a0fa_1",
+    processId: "travels",
+    processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+    rootProcessId: "",
+    status: "SCHEDULED",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    repeatInterval: null,
+    repeatLimit: null,
+    scheduledId: null,
+    retries: 3,
+    lastUpdate: "2020-07-27T03:35:54.635Z",
+    expirationTime: "2020-08-27T04:35:54.631Z",
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: '843bd287-fb6e-4ee7-a304-ba9b430e52d8',
+    executionCounter: 6
+  },
+  {
+    id: "2234dde-npce1-2908-b3131-6123c675a0fa_0",
+    processId: "travels",
+    processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+    rootProcessId: "",
+    status: "CANCELED",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    repeatInterval: null,
+    repeatLimit: null,
+    scheduledId: null,
+    retries: 2,
+    lastUpdate: "2020-08-27T03:35:54.635Z",
+    expirationTime: "2020-08-27T04:35:54.631Z",
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: '7f7d74c1-78f7-49be-b5ad-8d132f46a49c',
+    executionCounter: 0
+  },
+  {
+    id: "T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0",
+    processId: "travels",
+    processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+    rootProcessId: "",
+    status: "ERROR",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    repeatInterval: 30300,
+    repeatLimit: 3,
+    scheduledId: null,
+    retries: 7,
+    lastUpdate: "2020-08-27T03:35:54.635Z",
+    expirationTime: "2020-08-27T04:35:54.631Z",
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: 'af0d984c-4abd-4f5c-83a8-426e6b3d102a',
+    executionCounter: 3
+  },
+  {
+    id: "bff4ee-11qw23-6675-po987-qwedfrt45a0fa_5",
+    processId: "travels",
+    processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+    rootProcessId: "",
+    status: "RETRY",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    repeatInterval: null,
+    repeatLimit: null,
+    scheduledId: null,
+    retries: 15,
+    lastUpdate: "2020-08-27T03:35:54.635Z",
+    expirationTime: "2020-08-27T04:35:54.631Z",
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: 'b2761011-3043-4f48-82bd-1395bf651a91',
+    executionCounter: 2
+  },
+  {
+    id: "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0",
+    processId: "travels",
+    processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+    rootProcessId: "",
+    status: "SCHEDULED",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    repeatInterval: null,
+    repeatLimit: null,
+    scheduledId: null,
+    retries: 2,
+    lastUpdate: "2020-06-29T03:35:54.635Z",
+    expirationTime: "2020-08-29T04:35:54.631Z",
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: null,
+    executionCounter: 0
+  },
+  {
+    id: "dad3aa88-5c1e-4858-a919-uey23c675a0fa_0",
+    processId: "travels",
+    processInstanceId: "e4448857-fa0c-403b-ad69-f0a353458b9d",
+    rootProcessId: "",
+    status: "SCHEDULED",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    repeatInterval: null,
+    repeatLimit: null,
+    scheduledId: null,
+    retries: 5,
+    lastUpdate: "2020-08-27T03:35:54.635Z",
+    expirationTime: "2020-08-27T04:35:54.631Z",
+    endpoint: 'http://localhost:4000/jobs',
+    nodeInstanceId: '08c153e8-2766-4675-81f7-29943efdf411',
+    executionCounter: 0
+  },
+  {
+    id: "6e74a570-31c8-4020-bd70-o413be2cb625f3_0",
+    processId: "travels",
+    processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+    rootProcessId: null,
+    status: "EXECUTED",
+    priority: 0,
+    callbackEndpoint: "http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/6e74a570-31c8-4020-bd70-19be2cb625f3_0",
+    repeatInterval: null,
+    repeatLimit: null,
+    scheduledId: "0",
     retries: 0,
     lastUpdate: "2020-08-27T03:35:50.147Z",
     expirationTime: null,
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: 'fd2e12d5-6a4b-4c75-9f31-028d3f032a95'
-    
+    nodeInstanceId: 'fd2e12d5-6a4b-4c75-9f31-028d3f032a95',
+    executionCounter: 5
   },
   {
-    id: "dad3aa88-5c1e-4858-a919-6123c675a0fa_0",
+    id: "dad3aa88-5c1e-4858-a919-61ai21c675a0fa_0",
     processId: "travels",
     processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
     rootProcessId: "",
@@ -3165,10 +3398,11 @@ JobsData:[
     lastUpdate: "2020-08-27T03:35:54.635Z",
     expirationTime: "2020-08-27T04:35:54.631Z",
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: '843bd287-fb6e-4ee7-a304-ba9b430e52d8'
+    nodeInstanceId: '843bd287-fb6e-4ee7-a304-ba9b430e52d8',
+    executionCounter: 7
   },
   {
-    id: "2234dde-npce1-2908-b3131-6123c675a0fa_0",
+    id: "2234dde-npce1-2908-b3131-i15333c675a0fa_0",
     processId: "travels",
     processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
     rootProcessId: "",
@@ -3182,10 +3416,11 @@ JobsData:[
     lastUpdate: "2020-08-27T03:35:54.635Z",
     expirationTime: "2020-08-27T04:35:54.631Z",
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: '7f7d74c1-78f7-49be-b5ad-8d132f46a49c'
+    nodeInstanceId: '7f7d74c1-78f7-49be-b5ad-8d132f46a49c',
+    executionCounter: 3
   },
   {
-    id: "T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0",
+    id: "T3113e-vbg43-2234-lo89-u8103214ra0fa_0",
     processId: "travels",
     processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
     rootProcessId: "",
@@ -3199,7 +3434,8 @@ JobsData:[
     lastUpdate: "2020-08-27T03:35:54.635Z",
     expirationTime: "2020-08-27T04:35:54.631Z",
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: 'af0d984c-4abd-4f5c-83a8-426e6b3d102a'
+    nodeInstanceId: 'af0d984c-4abd-4f5c-83a8-426e6b3d102a',
+    executionCounter: 2
   },
   {
     id: "bff4ee-11qw23-6675-po987-qwedfrt45a0fa_0",
@@ -3216,10 +3452,11 @@ JobsData:[
     lastUpdate: "2020-08-27T03:35:54.635Z",
     expirationTime: "2020-08-27T04:35:54.631Z",
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: 'b2761011-3043-4f48-82bd-1395bf651a91'
+    nodeInstanceId: 'b2761011-3043-4f48-82bd-1395bf651a91',
+    executionCounter: 9
   },
   {
-    id: "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0",
+    id: "eff4ee-11qw23-6675-pokau97-ql10s5ut45a0fa_0",
     processId: "travels",
     processInstanceId: "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
     rootProcessId: "",
@@ -3233,10 +3470,11 @@ JobsData:[
     lastUpdate: "2020-08-29T03:35:54.635Z",
     expirationTime: "2020-08-29T04:35:54.631Z",
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: null
+    nodeInstanceId: null,
+    executionCounter: 1
   },
   {
-    id: "dad3aa88-5c1e-4858-a919-uey23c675a0fa_0",
+    id: "dad3aa88-5c1e-4858-a919-781ns75a0fa_0",
     processId: "travels",
     processInstanceId: "e4448857-fa0c-403b-ad69-f0a353458b9d",
     rootProcessId: "",
@@ -3250,7 +3488,8 @@ JobsData:[
     lastUpdate: "2020-08-27T03:35:54.635Z",
     expirationTime: "2020-08-27T04:35:54.631Z",
     endpoint: 'http://localhost:4000/jobs',
-    nodeInstanceId: '08c153e8-2766-4675-81f7-29943efdf411'
+    nodeInstanceId: '08c153e8-2766-4675-81f7-29943efdf411',
+    executionCounter: 8
   }
 ]
 }

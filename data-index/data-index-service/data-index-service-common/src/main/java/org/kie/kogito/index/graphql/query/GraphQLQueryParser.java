@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.graphql.query;
 
 import java.util.HashMap;
@@ -38,11 +37,12 @@ public class GraphQLQueryParser implements Function<Object, List<AttributeFilter
 
     @Override
     public List<AttributeFilter<?>> apply(Object where) {
-        return where == null ? emptyList() : ((Map<String, Object>) where).entrySet().stream()
-                .filter(entry -> mapper.containsKey(entry.getKey()) && entry.getValue() != null)
-                .flatMap(entry -> mapper.get(entry.getKey()).apply(entry.getValue()))
-                .filter(Objects::nonNull)
-                .collect(toList());
+        return where == null ? emptyList()
+                : ((Map<String, Object>) where).entrySet().stream()
+                        .filter(entry -> mapper.containsKey(entry.getKey()) && entry.getValue() != null)
+                        .flatMap(entry -> mapper.get(entry.getKey()).apply(entry.getValue()))
+                        .filter(Objects::nonNull)
+                        .collect(toList());
     }
 
     @Override

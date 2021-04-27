@@ -120,8 +120,13 @@ const ProcessDetailsTimeline: React.FC<IOwnProps & OUIAProps> = ({
     handleRescheduleToggle();
   };
 
-  const handleCancelAction = (job: GraphQL.Job): void => {
-    jobCancel(job, setCancelModalTitle, setModalContent, jobsResponse.refetch);
+  const handleCancelAction = async (job: GraphQL.Job): Promise<void> => {
+    await jobCancel(
+      job,
+      setCancelModalTitle,
+      setModalContent,
+      jobsResponse.refetch
+    );
     handleCancelModalToggle();
   };
 
@@ -154,54 +159,61 @@ const ProcessDetailsTimeline: React.FC<IOwnProps & OUIAProps> = ({
   ];
 
   const renderJobActions = (id, options) => {
-    return jobsResponse.data.Jobs.map(job => {
-      if (id === job.nodeInstanceId && editableJobStatus.includes(job.status)) {
-        return [
-          ...options,
-          <DropdownItem
-            key="job-details"
-            id="job-details"
-            component="button"
-            onClick={() => handleJobDetails(job)}
-          >
-            Job Details
-          </DropdownItem>,
-          <DropdownItem
-            key="job-reschedule"
-            id="job-reschedule"
-            component="button"
-            onClick={() => handleJobReschedule(job)}
-          >
-            Job Reschedule
-          </DropdownItem>,
-          <DropdownItem
-            key="job-cancel"
-            id="job-cancel"
-            component="button"
-            onClick={() => handleCancelAction(job)}
-          >
-            Job Cancel
-          </DropdownItem>
-        ];
-      } else if (
-        id === job.nodeInstanceId &&
-        !editableJobStatus.includes(job.status)
-      ) {
-        return [
-          ...options,
-          <DropdownItem
-            key="job-details"
-            id="job-details"
-            component="button"
-            onClick={() => handleJobDetails(job)}
-          >
-            Job Details
-          </DropdownItem>
-        ];
-      } else {
-        return [];
-      }
-    });
+    if (jobsResponse.data.Jobs.length > 0) {
+      return jobsResponse.data.Jobs.map(job => {
+        if (
+          id === job.nodeInstanceId &&
+          editableJobStatus.includes(job.status)
+        ) {
+          return [
+            ...options,
+            <DropdownItem
+              key="job-details"
+              id="job-details"
+              component="button"
+              onClick={() => handleJobDetails(job)}
+            >
+              Job Details
+            </DropdownItem>,
+            <DropdownItem
+              key="job-reschedule"
+              id="job-reschedule"
+              component="button"
+              onClick={() => handleJobReschedule(job)}
+            >
+              Job Reschedule
+            </DropdownItem>,
+            <DropdownItem
+              key="job-cancel"
+              id="job-cancel"
+              component="button"
+              onClick={() => handleCancelAction(job)}
+            >
+              Job Cancel
+            </DropdownItem>
+          ];
+        } else if (
+          id === job.nodeInstanceId &&
+          !editableJobStatus.includes(job.status)
+        ) {
+          return [
+            ...options,
+            <DropdownItem
+              key="job-details"
+              id="job-details"
+              component="button"
+              onClick={() => handleJobDetails(job)}
+            >
+              Job Details
+            </DropdownItem>
+          ];
+        } else {
+          return [];
+        }
+      });
+    } else {
+      return options;
+    }
   };
 
   const dropdownItems = (processInstanceData, node): JSX.Element[] => {
@@ -346,10 +358,10 @@ const ProcessDetailsTimeline: React.FC<IOwnProps & OUIAProps> = ({
   };
 
   const renderTimerIcon = (id: string): JSX.Element => {
-    return jobsResponse.data.Jobs.map(job => {
+    return jobsResponse.data.Jobs.map((job, idx) => {
       if (id === job.nodeInstanceId) {
         return (
-          <Tooltip content={'Node has job'}>
+          <Tooltip content={'Node has job'} key={idx}>
             <OutlinedClockIcon
               className="pf-u-ml-sm"
               color="var(--pf-global--icon--Color--dark)"

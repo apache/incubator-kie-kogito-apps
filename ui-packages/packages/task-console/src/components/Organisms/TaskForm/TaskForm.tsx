@@ -29,11 +29,12 @@ import {
   ITaskConsoleContext,
   useTaskConsoleContext
 } from '../../../context/TaskConsoleContext/TaskConsoleContext';
-import FormRenderer from '../../Molecules/FormRenderer/FormRenderer';
-import { TaskFormSubmitHandler } from '../../../util/uniforms/TaskFormSubmitHandler/TaskFormSubmitHandler';
 import { FormSchema } from '../../../util/uniforms/FormSchema';
 import { getTaskSchemaEndPoint } from '../../../util/Utils';
 import UserTaskInstance = GraphQL.UserTaskInstance;
+import { OUIAProps } from '@kogito-apps/common';
+import EmptyTaskForm from '../EmptyTaskForm/EmptyTaskForm';
+import TaskFormRenderer from '../TaskFormRenderer/TaskFormRenderer';
 
 interface IOwnProps {
   userTaskInstance?: UserTaskInstance;
@@ -41,21 +42,20 @@ interface IOwnProps {
   onSubmitError: (message: string, details?: string) => void;
 }
 
-const TaskForm: React.FC<IOwnProps> = ({
+const TaskForm: React.FC<IOwnProps & OUIAProps> = ({
   userTaskInstance,
   onSubmitSuccess,
-  onSubmitError
+  onSubmitError,
+  ouiaId,
+  ouiaSafe
 }) => {
   // tslint:disable: no-floating-promises
   const context: ITaskConsoleContext<UserTaskInstance> = useTaskConsoleContext();
   const appContext: AppContext = useKogitoAppContext();
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [stateUserTask, setStateUserTask] = useState<UserTaskInstance>();
   const [taskFormSchema, setTaskFormSchema] = useState<FormSchema>(null);
-  const [formOutput, setFormOutput] = useState<any>(null);
 
   if (!stateUserTask) {
     if (userTaskInstance) {
@@ -82,9 +82,7 @@ const TaskForm: React.FC<IOwnProps> = ({
         .get(endpoint, {
           headers: {
             'Content-Type': 'application/json',
-            Accept: 'application/json',
-            crossorigin: 'true',
-            'Access-Control-Allow-Origin': '*'
+            Accept: 'application/json'
           }
         })
         .then(res => {
@@ -104,68 +102,38 @@ const TaskForm: React.FC<IOwnProps> = ({
       return (
         <KogitoSpinner
           spinnerText={'Loading form for task: ' + stateUserTask.name}
+          ouiaId={(ouiaId ? ouiaId : 'task-form') + '-spinner-loading'}
+          ouiaSafe={ouiaSafe}
         />
       );
-    }
-
-    if (isSubmitting) {
-      return <KogitoSpinner spinnerText={'Submitting form...'} />;
     }
 
     if (taskFormSchema) {
       const notifySuccess = (phase: string) => {
         onSubmitSuccess(phase);
-        setIsSubmitting(false);
-        setSubmitted(true);
       };
 
       const notifyError = (phase: string, error?: string) => {
         onSubmitError(phase, error);
-        setIsSubmitting(false);
       };
 
-      const formSubmitHandler = new TaskFormSubmitHandler(
-        stateUserTask,
-        taskFormSchema,
-        appContext.getCurrentUser(),
-        output => {
-          setFormOutput(output);
-          setIsSubmitting(true);
-        },
-        phase => notifySuccess(phase),
-        (phase, errorMessage) => notifyError(phase, errorMessage)
-      );
-
-      const toJSON = (value: string) => {
-        if (value) {
-          try {
-            return JSON.parse(value);
-          } catch (e) {
-            // do nothing
-          }
-        }
-        return {};
-      };
-
-      const generateFormData = () => {
-        const taskInputs = toJSON(stateUserTask.inputs);
-        if (!stateUserTask.outputs) {
-          return taskInputs;
-        }
-
-        const taskOutputs = formOutput || toJSON(stateUserTask.outputs);
-
-        return _.merge(taskInputs, taskOutputs);
-      };
-
-      const formData = generateFormData();
+      if (_.isEmpty(taskFormSchema.properties)) {
+        return (
+          <EmptyTaskForm
+            task={userTaskInstance}
+            formSchema={taskFormSchema}
+            onSubmitSuccess={notifySuccess}
+            onSubmitError={notifyError}
+          />
+        );
+      }
 
       return (
-        <FormRenderer
+        <TaskFormRenderer
+          task={stateUserTask}
           formSchema={taskFormSchema}
-          model={formData}
-          readOnly={submitted}
-          formSubmitHandler={formSubmitHandler}
+          onSubmitSuccess={notifySuccess}
+          onSubmitError={notifyError}
         />
       );
     }
@@ -176,6 +144,8 @@ const TaskForm: React.FC<IOwnProps> = ({
       type={KogitoEmptyStateType.Info}
       title="No form to show"
       body="Cannot find form"
+      ouiaId={(ouiaId ? ouiaId : 'task-form') + '-no-form'}
+      ouiaSafe={ouiaSafe}
     />
   );
 };

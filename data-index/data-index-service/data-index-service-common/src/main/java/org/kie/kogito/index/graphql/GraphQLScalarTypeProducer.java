@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.graphql;
 
 import java.time.DateTimeException;
@@ -27,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
+import graphql.language.StringValue;
 import graphql.schema.Coercing;
 import graphql.schema.CoercingSerializeException;
 import graphql.schema.GraphQLScalarType;
@@ -70,19 +70,28 @@ public class GraphQLScalarTypeProducer {
                         } else if (input instanceof Long) {
                             dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli((Long) input), ZoneOffset.UTC);
                         } else {
-                            throw new CoercingSerializeException("Expected something we can convert to 'java.time.OffsetDateTime' but was '" + (input == null ? "null" : input.getClass().getName()) + "'.");
+                            throw new CoercingSerializeException(
+                                    "Expected something we can convert to 'java.time.OffsetDateTime' but was '" + (input == null ? "null" : input.getClass().getName()) + "'.");
                         }
                         return formatDateTime(dateTime);
                     }
 
                     @Override
                     public Object parseValue(Object input) {
-                        return input == null ? null : parseDateTime((String) input).truncatedTo(ChronoUnit.MILLIS).toInstant().toEpochMilli();
+                        return input == null ? null : getDateTimeAsLong((String) input);
+                    }
+
+                    private long getDateTimeAsLong(String input) {
+                        return parseDateTime(input).truncatedTo(ChronoUnit.MILLIS).toInstant().toEpochMilli();
                     }
 
                     @Override
                     public Object parseLiteral(Object input) {
-                        return null;
+                        if (input instanceof StringValue) {
+                            return getDateTimeAsLong(((StringValue) input).getValue());
+                        } else {
+                            return null;
+                        }
                     }
                 })
                 .build();

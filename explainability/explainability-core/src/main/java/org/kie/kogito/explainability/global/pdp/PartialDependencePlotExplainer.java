@@ -15,100 +15,102 @@
  */
 package org.kie.kogito.explainability.global.pdp;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
 import org.kie.kogito.explainability.model.DataDistribution;
+import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.PredictionProviderMetadata;
-import org.kie.kogito.explainability.utils.DataUtils;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Generates the partial dependence plot for the features of a {@link PredictionProvider}.
- * This currently only works with models that work on {@code Feature}s of {@code Type.Number}.
- * While a strict PD implementation would need the whole training set used to train the model, this implementation seeks
- * to reproduce an approximate version of the training data by means of data distribution information (min, max, mean,
- * stdDev).
  * <p>
  * see also https://christophm.github.io/interpretable-ml-book/pdp.html
  */
 public class PartialDependencePlotExplainer implements GlobalExplainer<List<PartialDependenceGraph>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
-    private static final int DEFAULT_SERIES_LENGTH = 100;
 
-    private final int seriesLength;
-    private final Random random;
+    private final PartialDependencePlotConfig config;
 
     /**
-     * Create a PDP provider.
+     * Create a PDP explainer with given configuration.
      *
-     * @param seriesLength the no. of data points sampled for each given feature.
-     * @param random       random number generator
+     * @param config the PDP configuration.
      */
-    public PartialDependencePlotExplainer(int seriesLength, Random random) {
-        this.seriesLength = seriesLength;
-        this.random = random;
+    public PartialDependencePlotExplainer(PartialDependencePlotConfig config) {
+        this.config = config;
     }
 
     /**
-     * Create a PDP provider.
-     * <p>
-     * Each feature is sampled {@code DEFAULT_SERIES_LENGTH} times.
+     * Create a PDP explainer with the default {@link PartialDependencePlotConfig}.
      */
     public PartialDependencePlotExplainer() {
-        this(DEFAULT_SERIES_LENGTH, new SecureRandom());
+        this(new PartialDependencePlotConfig());
     }
 
     @Override
-    public List<PartialDependenceGraph> explain(PredictionProvider model, PredictionProviderMetadata metadata) throws InterruptedException, ExecutionException, TimeoutException {
+    public List<PartialDependenceGraph> explainFromMetadata(PredictionProvider model, PredictionProviderMetadata metadata)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        return explainFromDataDistribution(model, metadata.getOutputShape().getOutputs().size(), metadata.getDataDistribution());
+    }
+
+    @Override
+    public List<PartialDependenceGraph> explainFromPredictions(PredictionProvider model, Collection<Prediction> predictions)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        int outputSize = predictions.isEmpty() ? 0 : predictions.stream().findAny().map(p -> p.getOutput().getOutputs().size()).orElse(0);
+        List<PredictionInput> inputs = predictions.stream().map(Prediction::getInput).collect(Collectors.toList());
+        return explainFromDataDistribution(model, outputSize, new PredictionInputsDataDistribution(inputs));
+    }
+
+    private List<PartialDependenceGraph> explainFromDataDistribution(PredictionProvider model, int outputSize,
+            DataDistribution dataDistribution)
+            throws InterruptedException, ExecutionException, TimeoutException {
         long start = System.currentTimeMillis();
-
         List<PartialDependenceGraph> pdps = new ArrayList<>();
-        DataDistribution dataDistribution = metadata.getDataDistribution();
-        int noOfFeatures = metadata.getInputShape().getFeatures().size();
+        List<FeatureDistribution> featureDistributions = dataDistribution.asFeatureDistributions();
 
-        List<FeatureDistribution> featureDistributions = dataDistribution.getFeatureDistributions();
-        for (int featureIndex = 0; featureIndex < noOfFeatures; featureIndex++) {
-            for (int outputIndex = 0; outputIndex < metadata.getOutputShape().getOutputs().size(); outputIndex++) {
-                // generate samples for the feature under analysis
-                double[] featureXSvalues = DataUtils.generateSamples(featureDistributions.get(featureIndex).getMin(),
-                                                                     featureDistributions.get(featureIndex).getMax(), seriesLength);
+        // fetch entire data distributions for all features
+        List<PredictionInput> trainingData = dataDistribution.sample(config.getSeriesLength());
 
-                // generate data distributions for all features
-                double[][] trainingData = generateDistributions(noOfFeatures, featureDistributions);
+        // create a PDP for each feature
+        for (FeatureDistribution featureDistribution : featureDistributions) {
+            // generate (further) samples for the feature under analysis
+            // TBD: maybe just reuse trainingData
+            List<Value> xsValues = featureDistribution.sample(config.getSeriesLength()).stream()
+                    .sorted(Comparator.comparing(Value::asString)) // sort alphanumerically (if Value#asNumber is NaN)
+                    .sorted((v1, v2) -> Comparator.comparingDouble(Value::asNumber).compare(v1, v2)) // sort by natural order
+                    .distinct() // drop duplicates
+                    .collect(Collectors.toList());
+            List<Feature> featureXSvalues = xsValues.stream() // transform sampled Values into Features
+                    .map(v -> FeatureFactory.copyOf(featureDistribution.getFeature(), v)).collect(Collectors.toList());
 
-                double[] marginalImpacts = new double[featureXSvalues.length];
-                for (int i = 0; i < featureXSvalues.length; i++) {
-                    List<PredictionInput> predictionInputs = prepareInputs(noOfFeatures, featureIndex, featureXSvalues,
-                                                                           trainingData, i);
-                    List<PredictionOutput> predictionOutputs = getOutputs(model, predictionInputs);
-                    // prediction requests are batched per value of feature 'Xs' under analysis
-                    for (PredictionOutput predictionOutput : predictionOutputs) {
-                        Output output = predictionOutput.getOutputs().get(outputIndex);
-                        // use numerical output when possible, otherwise only use the score
-                        double v = output.getValue().asNumber();
-                        if (Double.isNaN(v)) { // check the output can be converted to a proper number
-                            v = output.getScore();
-                        }
-                        marginalImpacts[i] += v / (double) seriesLength;
-                    }
-                }
-                PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(metadata.getInputShape().getFeatures().get(featureIndex),
-                                                                                           featureXSvalues, marginalImpacts);
+            // create a PDP for each feature and each output
+            for (int outputIndex = 0; outputIndex < outputSize; outputIndex++) {
+                PartialDependenceGraph partialDependenceGraph = getPartialDependenceGraph(model, trainingData, xsValues,
+                        featureXSvalues, outputIndex);
                 pdps.add(partialDependenceGraph);
             }
         }
@@ -117,69 +119,145 @@ public class PartialDependencePlotExplainer implements GlobalExplainer<List<Part
         return pdps;
     }
 
+    private PartialDependenceGraph getPartialDependenceGraph(PredictionProvider model,
+            List<PredictionInput> trainingData,
+            List<Value> xsValues,
+            List<Feature> featureXSvalues, int outputIndex)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        Output outputDecision = null;
+        Feature feature = null;
+        // each feature value of the feature under analysis should have a corresponding output value (composed by the marginal impacts of the other features)
+        List<Map<Value, Long>> valueCounts = new ArrayList<>(featureXSvalues.size());
+        for (int i = 0; i < featureXSvalues.size(); i++) {
+            // initialize an empty feature to use in the generated PDP
+            if (feature == null) {
+                feature = FeatureFactory.copyOf(featureXSvalues.get(i), new Value(null));
+            }
+            List<PredictionInput> predictionInputs = prepareInputs(featureXSvalues.get(i), trainingData);
+            List<PredictionOutput> predictionOutputs = getOutputs(model, predictionInputs);
+            // prediction requests are batched per value of feature 'Xs' under analysis
+            for (PredictionOutput predictionOutput : predictionOutputs) {
+                Output output = predictionOutput.getOutputs().get(outputIndex);
+                if (outputDecision == null) {
+                    outputDecision = new Output(output.getName(), output.getType());
+                }
+                // update output value counts
+                updateValueCounts(valueCounts, i, output);
+            }
+        }
+
+        if (outputDecision != null) {
+            List<Value> yValues = collapseMarginalImpacts(valueCounts, outputDecision.getType());
+            return new PartialDependenceGraph(feature, outputDecision, xsValues, yValues);
+        } else {
+            throw new IllegalArgumentException("cannot produce PDP for null decision");
+        }
+    }
+
+    /**
+     * Collapse value counts into marginal impacts.
+     * For numbers ({@code Type.NUMBER.equals(type))} this is just the average of each value at each feature value.
+     * For all other types the final {@link Value} is just the most frequent.
+     *
+     * @param valueCounts the frequency of each value at each position
+     * @param type the type of the output
+     * @return the marginal impacts
+     */
+    private List<Value> collapseMarginalImpacts(List<Map<Value, Long>> valueCounts, Type type) {
+        List<Value> yValues = new ArrayList<>();
+        if (Type.NUMBER.equals(type)) {
+            List<Double> doubles = valueCounts.stream()
+                    .map(v -> v.entrySet().stream()
+                            .map(e -> e.getKey().asNumber() * e.getValue() / config.getSeriesLength()).mapToDouble(d -> d).sum())
+                    .collect(Collectors.toList());
+            yValues = doubles.stream().map(Value::new).collect(Collectors.toList());
+        } else {
+            for (Map<Value, Long> item : valueCounts) {
+                long max = 0;
+                String output = null;
+                for (Map.Entry<Value, Long> entry : item.entrySet()) {
+                    if (entry.getValue() > max) {
+                        max = entry.getValue();
+                        output = entry.getKey().asString();
+                    }
+                }
+                yValues.add(new Value(output));
+            }
+        }
+        return yValues;
+    }
+
+    private void updateValueCounts(List<Map<Value, Long>> valueCounts, int featureValueIndex, Output output) {
+        Value categoricalOutput = output.getValue();
+        if (valueCounts.size() <= featureValueIndex) {
+            Map<Value, Long> classCount = new HashMap<>();
+            classCount.put(categoricalOutput, 1L);
+            valueCounts.add(classCount);
+        } else {
+            Map<Value, Long> classCount = valueCounts.get(featureValueIndex);
+            if (classCount.containsKey(categoricalOutput)) {
+                classCount.put(categoricalOutput, classCount.get(categoricalOutput) + 1);
+            } else {
+                classCount.put(categoricalOutput, 1L);
+            }
+            valueCounts.set(featureValueIndex, classCount);
+        }
+    }
+
     /**
      * Perform batch predictions on the model.
      *
-     * @param model            the model to be queried
+     * @param model the model to be queried
      * @param predictionInputs a batch of inputs
      * @return a batch of outputs
      */
     private List<PredictionOutput> getOutputs(PredictionProvider model, List<PredictionInput> predictionInputs)
             throws InterruptedException, ExecutionException, TimeoutException {
         List<PredictionOutput> predictionOutputs;
-        try {
-            predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            LOGGER.error("Impossible to obtain prediction {}", e.getMessage());
-            throw e;
-        }
+        predictionOutputs = model.predictAsync(predictionInputs).get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         return predictionOutputs;
     }
 
     /**
-     * Generate inputs for a particular feature, using a specific discrete value from the data distribution of the
-     * feature under analysis for that particular feature and values from a training data distribution (which we sample)
+     * Generate inputs for a particular feature, using 1) a specific discrete value from the data distribution of the
+     * feature under analysis for that particular feature and 2) values from a training data distribution (which we sample)
      * for all the other feature values.
+     * The resulting list of prediction inputs will have the very same value for the feature under analysis, and values
+     * from the training data for all other features.
      *
-     * @param noOfFeatures    number of features in an input
-     * @param featureIndex    the index of the feature under analysis
-     * @param featureXSvalues discrete values of the feature under analysis
-     * @param trainingData    training data for all the features
-     * @param i               index of the specific discrete value of the feature under analysis to be evaluated
+     * @param featureXs specific value of the feature under analysis
+     * @param trainingData training data
      * @return a list of prediction inputs
      */
-    private List<PredictionInput> prepareInputs(int noOfFeatures, int featureIndex, double[] featureXSvalues,
-                                                double[][] trainingData, int i) {
-        List<PredictionInput> predictionInputs = new ArrayList<>(seriesLength);
-        double[] inputs = new double[noOfFeatures];
-        inputs[featureIndex] = featureXSvalues[i];
-        for (int j = 0; j < seriesLength; j++) {
-            for (int f = 0; f < noOfFeatures; f++) {
-                if (f != featureIndex) {
-                    inputs[f] = trainingData[f][j];
-                }
-            }
-            PredictionInput input = new PredictionInput(DataUtils.doublesToFeatures(inputs));
-            predictionInputs.add(input);
+    private List<PredictionInput> prepareInputs(Feature featureXs,
+            List<PredictionInput> trainingData) {
+        List<PredictionInput> predictionInputs = new ArrayList<>(config.getSeriesLength());
+
+        for (PredictionInput trainingSample : trainingData) {
+            List<Feature> features = trainingSample.getFeatures();
+            List<Feature> newFeatures = replaceFeatures(featureXs, features);
+            predictionInputs.add(new PredictionInput(newFeatures));
         }
         return predictionInputs;
     }
 
-    /**
-     * Sample training data distributions from each feature distribution.
-     *
-     * @param noOfFeatures         number of features
-     * @param featureDistributions feature distributions
-     * @return a matrix of numbers with {@code #noOfFeatures} rows and {@code #seriesLength} columns
-     */
-    private double[][] generateDistributions(int noOfFeatures, List<FeatureDistribution> featureDistributions) {
-        double[][] trainingData = new double[noOfFeatures][seriesLength];
-        for (int i = 0; i < noOfFeatures; i++) {
-            double[] featureData = DataUtils.generateData(featureDistributions.get(i).getMean(),
-                                                          featureDistributions.get(i).getStdDev(), seriesLength,
-                                                          random);
-            trainingData[i] = featureData;
+    private List<Feature> replaceFeatures(Feature featureXs, List<Feature> features) {
+        List<Feature> newFeatures = new ArrayList<>();
+        for (Feature f : features) {
+            Feature newFeature;
+            if (f.getName().equals(featureXs.getName())) {
+                newFeature = FeatureFactory.copyOf(f, featureXs.getValue());
+            } else {
+                if (Type.COMPOSITE == f.getType()) {
+                    @SuppressWarnings("unchecked")
+                    List<Feature> elements = (List<Feature>) f.getValue().getUnderlyingObject();
+                    newFeature = FeatureFactory.newCompositeFeature(f.getName(), replaceFeatures(featureXs, elements));
+                } else {
+                    newFeature = FeatureFactory.copyOf(f, f.getValue());
+                }
+            }
+            newFeatures.add(newFeature);
         }
-        return trainingData;
+        return newFeatures;
     }
 }

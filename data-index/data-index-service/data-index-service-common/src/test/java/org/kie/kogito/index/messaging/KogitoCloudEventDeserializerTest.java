@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.messaging;
 
 import java.net.URI;
@@ -58,7 +57,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("data.rootProcessId", "travels")
                 .hasFieldOrPropertyWithValue("data.start", ZonedDateTime.parse("2019-08-20T19:26:02.091Z[UTC]", DateTimeFormatter.ISO_DATE_TIME))
                 .hasFieldOrPropertyWithValue("data.state", 2)
-                .hasFieldOrPropertyWithValue("specVersion", "0.3")
+                .hasFieldOrPropertyWithValue("specVersion", "1.0")
                 .hasFieldOrPropertyWithValue("contentType", null)
                 .hasFieldOrPropertyWithValue("schemaURL", null)
                 .hasFieldOrPropertyWithValue("kogitoReferenceId", null);
@@ -74,7 +73,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("id", "_18950AC4-664B-465E-B99E-766D38D362BF")
                 .hasFieldOrPropertyWithValue("name", "AutoStartMilestone")
                 .hasFieldOrPropertyWithValue("status", "AVAILABLE");
-        
+
         softly.assertAll();
     }
 
@@ -98,7 +97,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("data.processId", "hotelBooking")
                 .hasFieldOrPropertyWithValue("data.rootProcessInstanceId", null)
                 .hasFieldOrPropertyWithValue("data.rootProcessId", "travels")
-                .hasFieldOrPropertyWithValue("specVersion", "0.3")
+                .hasFieldOrPropertyWithValue("specVersion", "1.0")
                 .hasFieldOrPropertyWithValue("contentType", null)
                 .hasFieldOrPropertyWithValue("schemaURL", null)
                 .hasFieldOrPropertyWithValue("kogitoReferenceId", null);
@@ -124,7 +123,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("type", "UserTaskInstanceEvent")
                 .hasFieldOrPropertyWithValue("source", URI.create("http://localhost:8080/travels"))
                 .hasFieldOrPropertyWithValue("subject", null)
-                .hasFieldOrPropertyWithValue("specVersion", "0.3")
+                .hasFieldOrPropertyWithValue("specVersion", "1.0")
                 .hasFieldOrPropertyWithValue("schemaURL", null)
                 .hasFieldOrPropertyWithValue("contentType", null)
                 .hasFieldOrPropertyWithValue("kogitoReferenceId", null)
@@ -172,7 +171,7 @@ public class KogitoCloudEventDeserializerTest {
                 .hasFieldOrPropertyWithValue("data.id", "8350b8b6-c5d9-432d-a339-a9fc85f642d4_0")
                 .hasFieldOrPropertyWithValue("data.processId", "timerscycle")
                 .hasFieldOrPropertyWithValue("data.processInstanceId", "7c1d9b38-b462-47c5-8bf2-d9154f54957b")
-                .hasFieldOrPropertyWithValue("data.nodeInstanceId","54e66e2f-2acd-4d47-b8e6-991cb6372ad8")
+                .hasFieldOrPropertyWithValue("data.nodeInstanceId", "54e66e2f-2acd-4d47-b8e6-991cb6372ad8")
                 .hasFieldOrPropertyWithValue("data.rootProcessInstanceId", null)
                 .hasFieldOrPropertyWithValue("data.rootProcessId", null)
                 .hasFieldOrPropertyWithValue("data.repeatInterval", 1000L)

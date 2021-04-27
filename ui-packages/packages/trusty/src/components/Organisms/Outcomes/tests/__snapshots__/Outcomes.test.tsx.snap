@@ -13,7 +13,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
         "outcomeId": "_12268B68-94A1-4960-B4C8-0B6071AFDE58",
         "outcomeName": "Mortgage Approval",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Mortgage Approval",
           "typeRef": "boolean",
           "value": true,
@@ -26,10 +26,23 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
         "outcomeId": "_9CFF8C35-4EB3-451E-874C-DB27A5A424C0",
         "outcomeName": "Risk Score",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Risk Score",
           "typeRef": "number",
           "value": 21.7031851958099,
+        },
+      },
+      Object {
+        "evaluationStatus": "SUCCEEDED",
+        "hasErrors": false,
+        "messages": Array [],
+        "outcomeId": "_d361c79e-8c06-4504-bdb2-d6b90b915166",
+        "outcomeName": "Client Score",
+        "outcomeResult": Object {
+          "components": null,
+          "name": "Client Score",
+          "typeRef": "number",
+          "value": null,
         },
       },
     ]
@@ -59,7 +72,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                   "outcomeId": "_12268B68-94A1-4960-B4C8-0B6071AFDE58",
                   "outcomeName": "Mortgage Approval",
                   "outcomeResult": Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Mortgage Approval",
                     "typeRef": "boolean",
                     "value": true,
@@ -73,9 +86,10 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={0}
+                  data-ouia-component-id="OUIA-Generated-Card-1"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -103,7 +117,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         key="Mortgage Approval"
                         property={
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Mortgage Approval",
                             "typeRef": "boolean",
                             "value": true,
@@ -140,11 +154,12 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={1}
+                          data-ouia-component-id="OUIA-Generated-Button-link-1"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -169,7 +184,6 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -196,7 +210,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                   "outcomeId": "_9CFF8C35-4EB3-451E-874C-DB27A5A424C0",
                   "outcomeName": "Risk Score",
                   "outcomeResult": Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Risk Score",
                     "typeRef": "number",
                     "value": 21.7031851958099,
@@ -210,9 +224,10 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={2}
+                  data-ouia-component-id="OUIA-Generated-Card-2"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -240,7 +255,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                         key="Risk Score"
                         property={
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Risk Score",
                             "typeRef": "number",
                             "value": 21.7031851958099,
@@ -277,11 +292,12 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={3}
+                          data-ouia-component-id="OUIA-Generated-Button-link-2"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -306,7 +322,146 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
+                              />
+                            </svg>
+                          </LongArrowAltRightIcon>
+                        </button>
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </article>
+              </Card>
+            </OutcomeCard>
+          </div>
+        </GalleryItem>
+        <GalleryItem
+          key="2"
+        >
+          <div>
+            <OutcomeCard
+              onExplanation={[MockFunction]}
+              outcome={
+                Object {
+                  "evaluationStatus": "SUCCEEDED",
+                  "hasErrors": false,
+                  "messages": Array [],
+                  "outcomeId": "_d361c79e-8c06-4504-bdb2-d6b90b915166",
+                  "outcomeName": "Client Score",
+                  "outcomeResult": Object {
+                    "components": null,
+                    "name": "Client Score",
+                    "typeRef": "number",
+                    "value": null,
+                  },
+                }
+              }
+            >
+              <Card
+                className="outcome-cards__card outcome-cards__card--list-view"
+                isHoverable={true}
+              >
+                <article
+                  className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
+                  data-ouia-component-id="OUIA-Generated-Card-3"
+                  data-ouia-component-type="PF4/Card"
+                  data-ouia-safe={true}
+                  id=""
+                >
+                  <CardHeader>
+                    <div
+                      className="pf-c-card__header"
+                    >
+                      <Title
+                        className="outcome-cards__card__title"
+                        headingLevel="h4"
+                        size="xl"
+                      >
+                        <h4
+                          className="pf-c-title pf-m-xl outcome-cards__card__title"
+                        >
+                          Client Score
+                        </h4>
+                      </Title>
+                    </div>
+                  </CardHeader>
+                  <CardBody>
+                    <div
+                      className="pf-c-card__body"
+                    >
+                      <OutcomeProperty
+                        hidePropertyName={true}
+                        key="Client Score"
+                        property={
+                          Object {
+                            "components": null,
+                            "name": "Client Score",
+                            "typeRef": "number",
+                            "value": null,
+                          }
+                        }
+                      >
+                        <div
+                          className="outcome__property__value--bigger"
+                        >
+                          <FormattedValue
+                            value={null}
+                          >
+                            <span
+                              className="formatted-value"
+                            >
+                              <em>
+                                Null
+                              </em>
+                            </span>
+                          </FormattedValue>
+                        </div>
+                      </OutcomeProperty>
+                    </div>
+                  </CardBody>
+                  <CardFooter>
+                    <div
+                      className="pf-c-card__footer"
+                    >
+                      <Button
+                        className="outcome-cards__card__explanation-link"
+                        isInline={true}
+                        onClick={[Function]}
+                        variant="link"
+                      >
+                        <button
+                          aria-disabled={false}
+                          aria-label={null}
+                          className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
+                          data-ouia-component-id="OUIA-Generated-Button-link-3"
+                          data-ouia-component-type="PF4/Button"
+                          data-ouia-safe={true}
+                          disabled={false}
+                          onClick={[Function]}
+                          role={null}
+                          type="button"
+                        >
+                          View Details 
+                          <LongArrowAltRightIcon
+                            color="currentColor"
+                            noVerticalAlign={false}
+                            size="sm"
+                          >
+                            <svg
+                              aria-hidden={true}
+                              aria-labelledby={null}
+                              fill="currentColor"
+                              height="1em"
+                              role="img"
+                              style={
+                                Object {
+                                  "verticalAlign": "-0.125em",
+                                }
+                              }
+                              viewBox="0 0 448 512"
+                              width="1em"
+                            >
+                              <path
+                                d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -341,43 +496,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
           "components": Array [
             Array [
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Product",
                 "typeRef": "string",
                 "value": "Lender B - ARM5/1-Standard",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Recommendation",
                 "typeRef": "string",
                 "value": "Good",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Note Amount",
                 "typeRef": "string",
                 "value": "$273,775.90",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Interest Rate",
                 "typeRef": "string",
                 "value": "3.8",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Monthly Payment",
                 "typeRef": "string",
                 "value": "$1,267.90",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Cash to Close",
                 "typeRef": "string",
                 "value": "$1,267.90",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Required Credit Score",
                 "typeRef": "number",
                 "value": 720,
@@ -385,43 +540,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
             ],
             Array [
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Product",
                 "typeRef": "string",
                 "value": "Lender C - Fixed30-Standard",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Recommendation",
                 "typeRef": "string",
                 "value": "Best",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Note Amount",
                 "typeRef": "string",
                 "value": "$274,599.40",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Interest Rate",
                 "typeRef": "string",
                 "value": "3.88",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Monthly Payment",
                 "typeRef": "string",
                 "value": "$1,291.27",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Cash to Close",
                 "typeRef": "string",
                 "value": "$75,491.99",
               },
               Object {
-                "components": Array [],
+                "components": null,
                 "name": "Required Credit Score",
                 "typeRef": "number",
                 "value": 680,
@@ -447,7 +602,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
         <GalleryItem
-          key="19"
+          key="21"
         >
           <div>
             <OutcomeCard
@@ -463,43 +618,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                     "components": Array [
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender B - ARM5/1-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Good",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$273,775.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.8",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 720,
@@ -507,43 +662,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       ],
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender C - Fixed30-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Best",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$274,599.40",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.88",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,291.27",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$75,491.99",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 680,
@@ -564,9 +719,10 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={12}
+                  data-ouia-component-id="OUIA-Generated-Card-9"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -596,43 +752,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         subListItem={
                           Array [
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Product",
                               "typeRef": "string",
                               "value": "Lender B - ARM5/1-Standard",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Recommendation",
                               "typeRef": "string",
                               "value": "Good",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Note Amount",
                               "typeRef": "string",
                               "value": "$273,775.90",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Interest Rate",
                               "typeRef": "string",
                               "value": "3.8",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Monthly Payment",
                               "typeRef": "string",
                               "value": "$1,267.90",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Cash to Close",
                               "typeRef": "string",
                               "value": "$1,267.90",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Required Credit Score",
                               "typeRef": "number",
                               "value": 720,
@@ -642,7 +798,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       >
                         <Split
                           className="outcome__property"
-                          key="21"
+                          key="23"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -680,7 +836,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="22"
+                          key="24"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -718,7 +874,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="23"
+                          key="25"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -756,7 +912,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="24"
+                          key="26"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -794,7 +950,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="25"
+                          key="27"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -832,7 +988,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="26"
+                          key="28"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -870,7 +1026,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="27"
+                          key="29"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -923,11 +1079,12 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={13}
+                          data-ouia-component-id="OUIA-Generated-Button-link-9"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -952,7 +1109,6 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -966,7 +1122,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
           </div>
         </GalleryItem>
         <GalleryItem
-          key="20"
+          key="22"
         >
           <div>
             <OutcomeCard
@@ -982,43 +1138,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                     "components": Array [
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender B - ARM5/1-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Good",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$273,775.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.8",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$1,267.90",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 720,
@@ -1026,43 +1182,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       ],
                       Array [
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Product",
                           "typeRef": "string",
                           "value": "Lender C - Fixed30-Standard",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Recommendation",
                           "typeRef": "string",
                           "value": "Best",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Note Amount",
                           "typeRef": "string",
                           "value": "$274,599.40",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Interest Rate",
                           "typeRef": "string",
                           "value": "3.88",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Monthly Payment",
                           "typeRef": "string",
                           "value": "$1,291.27",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Cash to Close",
                           "typeRef": "string",
                           "value": "$75,491.99",
                         },
                         Object {
-                          "components": Array [],
+                          "components": null,
                           "name": "Required Credit Score",
                           "typeRef": "number",
                           "value": 680,
@@ -1083,9 +1239,10 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={14}
+                  data-ouia-component-id="OUIA-Generated-Card-10"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -1115,43 +1272,43 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         subListItem={
                           Array [
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Product",
                               "typeRef": "string",
                               "value": "Lender C - Fixed30-Standard",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Recommendation",
                               "typeRef": "string",
                               "value": "Best",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Note Amount",
                               "typeRef": "string",
                               "value": "$274,599.40",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Interest Rate",
                               "typeRef": "string",
                               "value": "3.88",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Monthly Payment",
                               "typeRef": "string",
                               "value": "$1,291.27",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Cash to Close",
                               "typeRef": "string",
                               "value": "$75,491.99",
                             },
                             Object {
-                              "components": Array [],
+                              "components": null,
                               "name": "Required Credit Score",
                               "typeRef": "number",
                               "value": 680,
@@ -1161,7 +1318,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       >
                         <Split
                           className="outcome__property"
-                          key="28"
+                          key="30"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1199,7 +1356,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="29"
+                          key="31"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1237,7 +1394,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="30"
+                          key="32"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1275,7 +1432,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="31"
+                          key="33"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1313,7 +1470,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="32"
+                          key="34"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1351,7 +1508,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="33"
+                          key="35"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1389,7 +1546,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                         </Split>
                         <Split
                           className="outcome__property"
-                          key="34"
+                          key="36"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -1442,11 +1599,12 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={15}
+                          data-ouia-component-id="OUIA-Generated-Button-link-10"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -1471,7 +1629,6 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -1501,7 +1658,7 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
         "outcomeId": "_12268B68-94A1-4960-B4C8-0B6071AFDE58",
         "outcomeName": "Mortgage Approval",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Mortgage Approval",
           "typeRef": "boolean",
           "value": true,
@@ -1514,7 +1671,7 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
     className="outcomes"
   >
     <LightCard
-      key="52"
+      key="54"
     >
       <Card
         className=""
@@ -1522,9 +1679,10 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
       >
         <article
           className="pf-c-card"
-          data-ouia-component-id={20}
+          data-ouia-component-id="OUIA-Generated-Card-13"
           data-ouia-component-type="PF4/Card"
           data-ouia-safe={true}
+          id=""
         >
           <CardBody>
             <div
@@ -1535,7 +1693,7 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
                 key="Mortgage Approval"
                 property={
                   Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Mortgage Approval",
                     "typeRef": "boolean",
                     "value": true,
@@ -1544,7 +1702,7 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
               >
                 <Split
                   className="outcome__property"
-                  key="53"
+                  key="55"
                 >
                   <div
                     className="pf-l-split outcome__property"
@@ -1618,7 +1776,7 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
         <GalleryItem
-          key="51"
+          key="53"
         >
           <div>
             <OutcomeCard
@@ -1640,9 +1798,10 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={18}
+                  data-ouia-component-id="OUIA-Generated-Card-12"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -1708,7 +1867,6 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                                   >
                                     <path
                                       d="M512 76v360c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12V284.1L276.5 440.6c-20.6 17.2-52.5 2.8-52.5-24.6V284.1L52.5 440.6C31.9 457.8 0 443.4 0 416V96c0-27.4 31.9-41.7 52.5-24.6L224 226.8V96c0-27.4 31.9-41.7 52.5-24.6L448 226.8V76c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12z"
-                                      transform=""
                                     />
                                   </svg>
                                 </FastForwardIcon>
@@ -1737,11 +1895,12 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={19}
+                          data-ouia-component-id="OUIA-Generated-Button-link-12"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -1766,7 +1925,6 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -1802,19 +1960,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
             Object {
               "components": Array [
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Loan Amount",
                   "typeRef": "number",
                   "value": 540000,
                 },
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Repayment Rate",
                   "typeRef": "number",
                   "value": 900,
                 },
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Loan Eligibility",
                   "typeRef": "boolean",
                   "value": true,
@@ -1827,13 +1985,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
             Object {
               "components": Array [
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Loan amount",
                   "typeRef": "number",
                   "value": 340000,
                 },
                 Object {
-                  "components": Array [],
+                  "components": null,
                   "name": "Repayment rate",
                   "typeRef": "number",
                   "value": 2000,
@@ -1841,13 +1999,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                 Object {
                   "components": Array [
                     Object {
-                      "components": Array [],
+                      "components": null,
                       "name": "Loan amount",
                       "typeRef": "number",
                       "value": 390000,
                     },
                     Object {
-                      "components": Array [],
+                      "components": null,
                       "name": "Repayment rate",
                       "typeRef": "number",
                       "value": 5000,
@@ -1882,7 +2040,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
         <GalleryItem
-          key="35"
+          key="37"
         >
           <div>
             <OutcomeCard
@@ -1899,19 +2057,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                       Object {
                         "components": Array [
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Loan Amount",
                             "typeRef": "number",
                             "value": 540000,
                           },
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Repayment Rate",
                             "typeRef": "number",
                             "value": 900,
                           },
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Loan Eligibility",
                             "typeRef": "boolean",
                             "value": true,
@@ -1924,13 +2082,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                       Object {
                         "components": Array [
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Loan amount",
                             "typeRef": "number",
                             "value": 340000,
                           },
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Repayment rate",
                             "typeRef": "number",
                             "value": 2000,
@@ -1938,13 +2096,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                           Object {
                             "components": Array [
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Loan amount",
                                 "typeRef": "number",
                                 "value": 390000,
                               },
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Repayment rate",
                                 "typeRef": "number",
                                 "value": 5000,
@@ -1973,9 +2131,10 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={16}
+                  data-ouia-component-id="OUIA-Generated-Card-11"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -2008,19 +2167,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               Object {
                                 "components": Array [
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Loan Amount",
                                     "typeRef": "number",
                                     "value": 540000,
                                   },
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Repayment Rate",
                                     "typeRef": "number",
                                     "value": 900,
                                   },
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Loan Eligibility",
                                     "typeRef": "boolean",
                                     "value": true,
@@ -2033,13 +2192,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               Object {
                                 "components": Array [
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Loan amount",
                                     "typeRef": "number",
                                     "value": 340000,
                                   },
                                   Object {
-                                    "components": Array [],
+                                    "components": null,
                                     "name": "Repayment rate",
                                     "typeRef": "number",
                                     "value": 2000,
@@ -2047,13 +2206,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   Object {
                                     "components": Array [
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan amount",
                                         "typeRef": "number",
                                         "value": 390000,
                                       },
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Repayment rate",
                                         "typeRef": "number",
                                         "value": 5000,
@@ -2077,7 +2236,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                       >
                         <div
                           className="outcome__title outcome__title--struct"
-                          key="39"
+                          key="41"
                         >
                           <span
                             className="outcome__property__name"
@@ -2101,19 +2260,19 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 Object {
                                   "components": Array [
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Loan Amount",
                                       "typeRef": "number",
                                       "value": 540000,
                                     },
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Repayment Rate",
                                       "typeRef": "number",
                                       "value": 900,
                                     },
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Loan Eligibility",
                                       "typeRef": "boolean",
                                       "value": true,
@@ -2127,7 +2286,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                             >
                               <div
                                 className="outcome__title outcome__title--struct"
-                                key="40"
+                                key="42"
                               >
                                 <span
                                   className="outcome__property__name"
@@ -2148,7 +2307,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Loan Amount"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan Amount",
                                         "typeRef": "number",
                                         "value": 540000,
@@ -2157,7 +2316,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
-                                      key="41"
+                                      key="43"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
@@ -2204,7 +2363,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Repayment Rate"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Repayment Rate",
                                         "typeRef": "number",
                                         "value": 900,
@@ -2213,7 +2372,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
-                                      key="42"
+                                      key="44"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
@@ -2260,7 +2419,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Loan Eligibility"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan Eligibility",
                                         "typeRef": "boolean",
                                         "value": true,
@@ -2269,7 +2428,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
-                                      key="43"
+                                      key="45"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
@@ -2322,13 +2481,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 Object {
                                   "components": Array [
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Loan amount",
                                       "typeRef": "number",
                                       "value": 340000,
                                     },
                                     Object {
-                                      "components": Array [],
+                                      "components": null,
                                       "name": "Repayment rate",
                                       "typeRef": "number",
                                       "value": 2000,
@@ -2336,13 +2495,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     Object {
                                       "components": Array [
                                         Object {
-                                          "components": Array [],
+                                          "components": null,
                                           "name": "Loan amount",
                                           "typeRef": "number",
                                           "value": 390000,
                                         },
                                         Object {
-                                          "components": Array [],
+                                          "components": null,
                                           "name": "Repayment rate",
                                           "typeRef": "number",
                                           "value": 5000,
@@ -2361,7 +2520,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                             >
                               <div
                                 className="outcome__title outcome__title--struct"
-                                key="45"
+                                key="47"
                               >
                                 <span
                                   className="outcome__property__name"
@@ -2382,7 +2541,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Loan amount"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Loan amount",
                                         "typeRef": "number",
                                         "value": 340000,
@@ -2391,7 +2550,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
-                                      key="46"
+                                      key="48"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
@@ -2438,7 +2597,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     key="Repayment rate"
                                     property={
                                       Object {
-                                        "components": Array [],
+                                        "components": null,
                                         "name": "Repayment rate",
                                         "typeRef": "number",
                                         "value": 2000,
@@ -2447,7 +2606,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
-                                      key="47"
+                                      key="49"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
@@ -2497,13 +2656,13 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       Object {
                                         "components": Array [
                                           Object {
-                                            "components": Array [],
+                                            "components": null,
                                             "name": "Loan amount",
                                             "typeRef": "number",
                                             "value": 390000,
                                           },
                                           Object {
-                                            "components": Array [],
+                                            "components": null,
                                             "name": "Repayment rate",
                                             "typeRef": "number",
                                             "value": 5000,
@@ -2517,7 +2676,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <div
                                       className="outcome__title outcome__title--struct"
-                                      key="48"
+                                      key="50"
                                     >
                                       <span
                                         className="outcome__property__name"
@@ -2538,7 +2697,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                           key="Loan amount"
                                           property={
                                             Object {
-                                              "components": Array [],
+                                              "components": null,
                                               "name": "Loan amount",
                                               "typeRef": "number",
                                               "value": 390000,
@@ -2547,7 +2706,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         >
                                           <Split
                                             className="outcome__property"
-                                            key="49"
+                                            key="51"
                                           >
                                             <div
                                               className="pf-l-split outcome__property"
@@ -2594,7 +2753,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                           key="Repayment rate"
                                           property={
                                             Object {
-                                              "components": Array [],
+                                              "components": null,
                                               "name": "Repayment rate",
                                               "typeRef": "number",
                                               "value": 5000,
@@ -2603,7 +2762,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         >
                                           <Split
                                             className="outcome__property"
-                                            key="50"
+                                            key="52"
                                           >
                                             <div
                                               className="pf-l-split outcome__property"
@@ -2665,11 +2824,12 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={17}
+                          data-ouia-component-id="OUIA-Generated-Button-link-11"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -2694,7 +2854,6 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -2728,13 +2887,13 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
         "outcomeResult": Object {
           "components": Array [
             Object {
-              "components": Array [],
+              "components": null,
               "name": "Auth Code",
               "typeRef": "tAuthCode",
               "value": "Authorized",
             },
             Object {
-              "components": Array [],
+              "components": null,
               "name": "Amount",
               "typeRef": "number",
               "value": 10000,
@@ -2759,7 +2918,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
         <GalleryItem
-          key="4"
+          key="6"
         >
           <div>
             <OutcomeCard
@@ -2774,13 +2933,13 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                   "outcomeResult": Object {
                     "components": Array [
                       Object {
-                        "components": Array [],
+                        "components": null,
                         "name": "Auth Code",
                         "typeRef": "tAuthCode",
                         "value": "Authorized",
                       },
                       Object {
-                        "components": Array [],
+                        "components": null,
                         "name": "Amount",
                         "typeRef": "number",
                         "value": 10000,
@@ -2799,9 +2958,10 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={8}
+                  data-ouia-component-id="OUIA-Generated-Card-7"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -2832,13 +2992,13 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                           Object {
                             "components": Array [
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Auth Code",
                                 "typeRef": "tAuthCode",
                                 "value": "Authorized",
                               },
                               Object {
-                                "components": Array [],
+                                "components": null,
                                 "name": "Amount",
                                 "typeRef": "number",
                                 "value": 10000,
@@ -2852,7 +3012,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                       >
                         <div
                           className="outcome__title outcome__title--struct"
-                          key="6"
+                          key="8"
                         >
                           <span
                             className="outcome__property__name"
@@ -2873,7 +3033,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                               key="Auth Code"
                               property={
                                 Object {
-                                  "components": Array [],
+                                  "components": null,
                                   "name": "Auth Code",
                                   "typeRef": "tAuthCode",
                                   "value": "Authorized",
@@ -2882,7 +3042,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             >
                               <Split
                                 className="outcome__property"
-                                key="7"
+                                key="9"
                               >
                                 <div
                                   className="pf-l-split outcome__property"
@@ -2929,7 +3089,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                               key="Amount"
                               property={
                                 Object {
-                                  "components": Array [],
+                                  "components": null,
                                   "name": "Amount",
                                   "typeRef": "number",
                                   "value": 10000,
@@ -2938,7 +3098,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             >
                               <Split
                                 className="outcome__property"
-                                key="8"
+                                key="10"
                               >
                                 <div
                                   className="pf-l-split outcome__property"
@@ -2994,11 +3154,12 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={9}
+                          data-ouia-component-id="OUIA-Generated-Button-link-7"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -3023,7 +3184,6 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>
@@ -3055,7 +3215,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
         "outcomeId": "_ff34378e-fe90-4c58-9f7f-b9ce5767a415",
         "outcomeName": "Merchant Blacklist",
         "outcomeResult": Object {
-          "components": Array [],
+          "components": null,
           "name": "Merchant Blacklist",
           "typeRef": "string",
           "value": Array [
@@ -3079,7 +3239,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
         className="pf-l-gallery pf-m-gutter outcome-cards"
       >
         <GalleryItem
-          key="9"
+          key="11"
         >
           <div>
             <OutcomeCard
@@ -3092,7 +3252,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                   "outcomeId": "_ff34378e-fe90-4c58-9f7f-b9ce5767a415",
                   "outcomeName": "Merchant Blacklist",
                   "outcomeResult": Object {
-                    "components": Array [],
+                    "components": null,
                     "name": "Merchant Blacklist",
                     "typeRef": "string",
                     "value": Array [
@@ -3110,9 +3270,10 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id={10}
+                  data-ouia-component-id="OUIA-Generated-Card-8"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
+                  id=""
                 >
                   <CardHeader>
                     <div
@@ -3140,7 +3301,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                         key="Merchant Blacklist"
                         property={
                           Object {
-                            "components": Array [],
+                            "components": null,
                             "name": "Merchant Blacklist",
                             "typeRef": "string",
                             "value": Array [
@@ -3153,7 +3314,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                       >
                         <Split
                           className="outcome__property"
-                          key="10"
+                          key="12"
                         >
                           <div
                             className="pf-l-split outcome__property"
@@ -3201,7 +3362,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                                         className="formatted-list"
                                       >
                                         <FormattedValue
-                                          key="12"
+                                          key="14"
                                           value="ILLICITCORP"
                                         >
                                           <span
@@ -3211,13 +3372,13 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                                           </span>
                                         </FormattedValue>
                                         <span
-                                          key="13"
+                                          key="15"
                                         >
                                           ,
                                           <br />
                                         </span>
                                         <FormattedValue
-                                          key="15"
+                                          key="17"
                                           value="SLIMSHADY"
                                         >
                                           <span
@@ -3227,13 +3388,13 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                                           </span>
                                         </FormattedValue>
                                         <span
-                                          key="16"
+                                          key="18"
                                         >
                                           ,
                                           <br />
                                         </span>
                                         <FormattedValue
-                                          key="18"
+                                          key="20"
                                           value="TAINTEDTHINGS"
                                         >
                                           <span
@@ -3267,11 +3428,12 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                           aria-disabled={false}
                           aria-label={null}
                           className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                          data-ouia-component-id={11}
+                          data-ouia-component-id="OUIA-Generated-Button-link-8"
                           data-ouia-component-type="PF4/Button"
                           data-ouia-safe={true}
                           disabled={false}
                           onClick={[Function]}
+                          role={null}
                           type="button"
                         >
                           View Details 
@@ -3296,7 +3458,6 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                             >
                               <path
                                 d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z"
-                                transform=""
                               />
                             </svg>
                           </LongArrowAltRightIcon>

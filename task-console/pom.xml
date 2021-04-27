@@ -49,6 +49,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-qute</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -69,7 +73,7 @@
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
         <configuration>
-          <uberJar>true</uberJar>
+          <skipOriginalJarRename>true</skipOriginalJarRename>
         </configuration>
         <executions>
           <execution>
@@ -102,6 +106,9 @@
               <resources>
                 <resource>
                   <directory>${path.to.frontend.app}/dist</directory>
+                  <excludes>
+                    <exclude>index.html</exclude>
+                  </excludes>
                   <filtering>false</filtering>
                 </resource>
               </resources>
@@ -119,6 +126,9 @@
           <name>native</name>
         </property>
       </activation>
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -129,7 +139,10 @@
                   <goal>integration-test</goal>
                   <goal>verify</goal>
                 </goals>
-                <configuration>
+                <configuration combine.self="override">
+                  <includes>
+                    <include>**/Native*IT.java</include>
+                  </includes>
                   <systemProperties>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                   </systemProperties>
@@ -139,9 +152,6 @@
           </plugin>
         </plugins>
       </build>
-      <properties>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
     </profile>
   </profiles>
 </project>

@@ -5,7 +5,14 @@ import { orderBy } from 'lodash';
 import Explanation from '../Explanation';
 import useOutcomeDetail from '../useOutcomeDetail';
 import useSaliencies from '../useSaliencies';
-import { ItemObject, Outcome, RemoteData, Saliencies } from '../../../../types';
+import {
+  ItemObject,
+  Outcome,
+  RemoteData,
+  RemoteDataStatus,
+  Saliencies,
+  SaliencyStatus
+} from '../../../../types';
 
 const executionId = 'b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000';
 
@@ -25,13 +32,13 @@ jest.mock('react-router-dom', () => ({
 describe('Explanation', () => {
   test('renders animations while fetching data', () => {
     const loadingOutcomes = {
-      status: 'LOADING'
+      status: RemoteDataStatus.LOADING
     } as RemoteData<Error, Outcome[]>;
     const loadingOutcomeDetail = {
-      status: 'LOADING'
+      status: RemoteDataStatus.LOADING
     } as RemoteData<Error, ItemObject[]>;
     const loadingSaliencies = {
-      status: 'LOADING'
+      status: RemoteDataStatus.LOADING
     } as RemoteData<Error, Saliencies>;
 
     (useOutcomeDetail as jest.Mock).mockReturnValue(loadingOutcomeDetail);
@@ -61,7 +68,7 @@ describe('Explanation', () => {
     expect(
       wrapper.find('.explanation-view__outcome SkeletonGrid')
     ).toHaveLength(1);
-    expect(wrapper.find('SkeletonTornadoChart')).toHaveLength(1);
+    expect(wrapper.find('SkeletonDoubleBarChart')).toHaveLength(1);
     expect(
       wrapper.find('.explanation-view__score-table SkeletonGrid')
     ).toHaveLength(1);
@@ -84,7 +91,7 @@ describe('Explanation', () => {
       </MemoryRouter>
     );
     let sortedFeatures;
-    if (saliencies.status === 'SUCCESS') {
+    if (saliencies.status === RemoteDataStatus.SUCCESS) {
       sortedFeatures = orderBy(
         saliencies.data.saliencies[0].featureImportance,
         item => Math.abs(item.featureScore),
@@ -100,10 +107,12 @@ describe('Explanation', () => {
     expect(wrapper.find('ExplanationSwitch')).toHaveLength(1);
     expect(
       wrapper.find('ExplanationSwitch').prop('outcomesList')
-    ).toStrictEqual(outcomes.status === 'SUCCESS' && outcomes.data);
-    expect(wrapper.find('FeaturesScoreChart')).toHaveLength(1);
+    ).toStrictEqual(
+      outcomes.status === RemoteDataStatus.SUCCESS && outcomes.data
+    );
+    expect(wrapper.find('FeaturesScoreChartBySign')).toHaveLength(1);
     expect(
-      wrapper.find('FeaturesScoreChart').prop('featuresScore')
+      wrapper.find('FeaturesScoreChartBySign').prop('featuresScore')
     ).toStrictEqual(sortedFeatures);
     expect(wrapper.find('FeaturesScoreTable')).toHaveLength(1);
     expect(
@@ -132,14 +141,14 @@ describe('Explanation', () => {
       </MemoryRouter>
     );
 
-    expect(wrapper.find('FeaturesScoreChart')).toHaveLength(0);
+    expect(wrapper.find('FeaturesScoreChartBySign')).toHaveLength(0);
     expect(wrapper.find('FeaturesScoreTable')).toHaveLength(0);
     expect(wrapper.find('ExplanationUnavailable')).toHaveLength(1);
   });
 });
 
 const outcomes = {
-  status: 'SUCCESS',
+  status: RemoteDataStatus.SUCCESS,
   data: [
     {
       outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
@@ -170,7 +179,7 @@ const outcomes = {
   ]
 } as RemoteData<Error, Outcome[]>;
 const outcomeDetail = {
-  status: 'SUCCESS',
+  status: RemoteDataStatus.SUCCESS,
   data: [
     {
       name: 'Asset Score',
@@ -187,9 +196,9 @@ const outcomeDetail = {
   ]
 } as RemoteData<Error, ItemObject[]>;
 const saliencies = {
-  status: 'SUCCESS',
+  status: RemoteDataStatus.SUCCESS,
   data: {
-    status: 'SUCCEEDED',
+    status: SaliencyStatus.SUCCEEDED,
     saliencies: [
       {
         outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
@@ -221,9 +230,9 @@ const saliencies = {
   } as Saliencies
 } as RemoteData<Error, Saliencies>;
 const noSaliencies = {
-  status: 'SUCCESS',
+  status: RemoteDataStatus.SUCCESS,
   data: {
-    status: 'SUCCEEDED',
+    status: SaliencyStatus.SUCCEEDED,
     saliencies: [
       {
         outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',

@@ -20,11 +20,14 @@ interface IOwnProps {
       | ((chip: GraphQL.JobStatus[]) => GraphQL.JobStatus[])
       | GraphQL.JobStatus[]
   ) => void;
+  setDisplayTable: (displayTable: boolean) => void;
   setValues: (
     values:
       | ((value: GraphQL.JobStatus[]) => GraphQL.JobStatus[])
       | GraphQL.JobStatus[]
   ) => void;
+  setOffset: (offSet: number) => void;
+  setSelectedJobInstances: (selectedJobInstnaces: GraphQL.Job[]) => void;
 }
 
 const JobsManagementFilters: React.FC<IOwnProps & OUIAProps> = ({
@@ -32,12 +35,14 @@ const JobsManagementFilters: React.FC<IOwnProps & OUIAProps> = ({
   setSelectedStatus,
   chips,
   setChips,
+  setDisplayTable,
   setValues,
+  setOffset,
+  setSelectedJobInstances,
   ouiaId,
   ouiaSafe
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
   const statusMenuItems: JSX.Element[] = [
     <SelectOption key="CANCELED" value="CANCELED" />,
     <SelectOption key="ERROR" value="ERROR" />,
@@ -52,7 +57,7 @@ const JobsManagementFilters: React.FC<IOwnProps & OUIAProps> = ({
 
   const onSelect = (event, selection: GraphQL.JobStatus): void => {
     let selectionText = event.target.id;
-    selectionText = selectionText.split('pf-random-id-2-')[1];
+    selectionText = selectionText.split('pf-random-id-')[1].split('-')[1];
     if (selectedStatus.includes(selectionText)) {
       setSelectedStatus(prev => prev.filter(item => item !== selectionText));
     } else {
@@ -63,12 +68,22 @@ const JobsManagementFilters: React.FC<IOwnProps & OUIAProps> = ({
   const onApplyFilter = (): void => {
     setChips(selectedStatus);
     setValues(selectedStatus);
+    setSelectedJobInstances([]);
+    selectedStatus.length > 0 && setDisplayTable(true);
   };
 
   const onDelete = (type: string = '', id: string = ''): void => {
+    const chipsCopy = [...chips];
+    const tempChips = chipsCopy.filter(item => item !== id);
+    setOffset(0);
+    setSelectedJobInstances([]);
     setChips(prev => prev.filter(item => item !== id));
     setSelectedStatus(prev => prev.filter(item => item !== id));
-    setValues(prev => prev.filter(item => item !== id));
+    if (tempChips.length > 0) {
+      setValues(prev => prev.filter(item => item !== id));
+    } else {
+      setDisplayTable(false);
+    }
   };
 
   return (

@@ -11,77 +11,50 @@
   <name>Kogito :: Explainability Integration Tests PMML</name>
   
   <dependencies>
+
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>explainability-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- TODO : move dependencies below to kogito-pmml once DROOLS-5491 is fixed -->
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-evaluator-assembler</artifactId>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-mvel</artifactId>
       <version>${version.org.kie7}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-evaluator-core</artifactId>
-      <version>${version.org.kie7}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-regression-model</artifactId>
-      <version>${version.org.kie7}</version>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-pmml</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.kie.kogito</groupId>
+          <artifactId>drools-core-static</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>drools-core-dynamic</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-regression-compiler</artifactId>
-      <version>${version.org.kie7}</version>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-regression-evaluator</artifactId>
-      <version>${version.org.kie7}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-drools-common</artifactId>
-      <version>${version.org.kie7}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-drools-scorecard-model</artifactId>
-      <version>${version.org.kie7}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-drools-scorecard-compiler</artifactId>
-      <version>${version.org.kie7}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-pmml-models-drools-scorecard-evaluator</artifactId>
-      <version>${version.org.kie7}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-test-util</artifactId>
-      <version>${version.org.kie7}</version>
-      <scope>test</scope>
-    </dependency>
+
   </dependencies>
 
 </project>

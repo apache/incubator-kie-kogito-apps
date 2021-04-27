@@ -14,14 +14,19 @@ import {
   getTriggerableNodes,
   jobCancel,
   getJobsDescription,
-  performMultipleCancel
+  performMultipleCancel,
+  getSvg,
+  formatForBulkListProcessInstance,
+  formatForBulkListJob,
+  checkProcessInstanceState,
+  alterOrderByObj
 } from '../Utils';
 import { GraphQL } from '@kogito-apps/common';
 import ProcessInstanceState = GraphQL.ProcessInstanceState;
 import JobStatus = GraphQL.JobStatus;
 import axios from 'axios';
 import wait from 'waait';
-import { OperationType } from '../../components/Molecules/ProcessListToolbar/ProcessListToolbar';
+import { OperationType } from '../../components/Atoms/BulkList/BulkList';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 const children = 'children';
@@ -266,13 +271,18 @@ describe('uitility function testing', () => {
   });
 
   describe('handle multiple abort click tests', () => {
-    const instanceToBeActioned = {
-      '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
+    const instanceToBeActioned = [
+      {
         id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
         processId: 'trav',
-        serviceUrl: 'http://localhost:4000'
+        serviceUrl: 'http://localhost:4000',
+        state: GraphQL.ProcessInstanceState.Active,
+        endpoint: 'http://localhost:4000',
+        nodes: [],
+        start: '2020-10-22T04:43:01.148Z',
+        lastUpdate: '2020-11-22T04:43:01.148Z'
       }
-    } as any;
+    ];
     it('executes multi-abort process successfully', async () => {
       const onMultiActionResult = jest.fn();
       mockedAxios.delete.mockResolvedValue({});
@@ -294,22 +304,25 @@ describe('uitility function testing', () => {
         OperationType.ABORT
       );
       await wait(0);
-      expect(
-        onMultiActionResult.mock.calls[0][1][
-          '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
-        ]['errorMessage']
-      ).toEqual('"404 error"');
+      expect(onMultiActionResult.mock.calls[0][1][0].errorMessage).toEqual(
+        '"404 error"'
+      );
     });
   });
 
   describe('handle multiple skip click tests', () => {
-    const instanceToBeActioned = {
-      '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
+    const instanceToBeActioned = [
+      {
         id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
         processId: 'trav',
-        serviceUrl: 'http://localhost:4000'
+        serviceUrl: 'http://localhost:4000',
+        state: GraphQL.ProcessInstanceState.Error,
+        endpoint: 'http://localhost:4000',
+        nodes: [],
+        start: '2020-10-22T04:43:01.148Z',
+        lastUpdate: '2020-11-22T04:43:01.148Z'
       }
-    } as any;
+    ];
     it('executes multi-skip process successfully', async () => {
       const onMultiActionResult = jest.fn();
       mockedAxios.post.mockResolvedValue({});
@@ -331,22 +344,25 @@ describe('uitility function testing', () => {
         OperationType.SKIP
       );
       await wait(0);
-      expect(
-        onMultiActionResult.mock.calls[0][1][
-          '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
-        ]['errorMessage']
-      ).toEqual('"404 error"');
+      expect(onMultiActionResult.mock.calls[0][1][0].errorMessage).toEqual(
+        '"404 error"'
+      );
     });
   });
 
   describe('handle multiple retry click tests', () => {
-    const instanceToBeActioned = {
-      '8035b580-6ae4-4aa8-9ec0-e18e19809e0b': {
+    const instanceToBeActioned = [
+      {
         id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
         processId: 'trav',
-        serviceUrl: 'http://localhost:4000'
+        serviceUrl: 'http://localhost:4000',
+        state: GraphQL.ProcessInstanceState.Error,
+        endpoint: 'http://localhost:4000',
+        nodes: [],
+        start: '2020-10-22T04:43:01.148Z',
+        lastUpdate: '2020-11-22T04:43:01.148Z'
       }
-    } as any;
+    ];
     it('executes multi-retry process successfully', async () => {
       const onMultiActionResult = jest.fn();
       mockedAxios.post.mockResolvedValue({});
@@ -368,11 +384,9 @@ describe('uitility function testing', () => {
         OperationType.RETRY
       );
       await wait(0);
-      expect(
-        onMultiActionResult.mock.calls[0][1][
-          '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
-        ]['errorMessage']
-      ).toEqual('"404 error"');
+      expect(onMultiActionResult.mock.calls[0][1][0].errorMessage).toEqual(
+        '"404 error"'
+      );
     });
   });
   describe('test utilities of process variables', () => {
@@ -652,15 +666,29 @@ describe('uitility function testing', () => {
       mockedAxios.get.mockResolvedValue({
         data: mockTriggerableNodes
       });
-      const result = await getTriggerableNodes(processInstance);
-      expect(result).toStrictEqual(mockTriggerableNodes);
+      const successCallback = jest.fn();
+      const failureCallback = jest.fn();
+      await getTriggerableNodes(
+        processInstance,
+        successCallback,
+        failureCallback
+      );
+      expect(successCallback).toHaveBeenCalled();
+      expect(successCallback.mock.calls[0][0]).toStrictEqual(
+        mockTriggerableNodes
+      );
     });
     it('fails to retrieve the list of nodes', async () => {
-      mockedAxios.get.mockResolvedValue({
-        data: []
-      });
-      const result = await getTriggerableNodes(processInstance);
-      expect(result).toStrictEqual([]);
+      mockedAxios.get.mockRejectedValue({ message: '403 error' });
+      const successCallback = jest.fn();
+      const failureCallback = jest.fn();
+      await getTriggerableNodes(
+        processInstance,
+        successCallback,
+        failureCallback
+      );
+      expect(failureCallback).toHaveBeenCalled();
+      expect(failureCallback.mock.calls[0][0]).toEqual('403 error');
     });
   });
 
@@ -752,15 +780,214 @@ describe('uitility function testing', () => {
       await performMultipleCancel(bulkJobs, result);
       await wait(0);
       expect(result.mock.calls[0][0]).toBeDefined();
-      expect(result.mock.calls[0][1]).toEqual({});
+      expect(result.mock.calls[0][1]).toEqual([]);
     });
     it('bulk cancel failure', async () => {
       mockedAxios.delete.mockRejectedValue({});
       const result = jest.fn();
       await performMultipleCancel(bulkJobs, result);
       await wait(0);
-      expect(result.mock.calls[0][0]).toEqual({});
+      expect(result.mock.calls[0][0]).toEqual([]);
       expect(result.mock.calls[0][1]).toBeDefined();
+    });
+  });
+  describe('test utility of svg panel', () => {
+    const data = {
+      ProcessInstances: [
+        {
+          callbackEndpoint:
+            'http://localhost:8080/management/jobs/travels/instances/9865268c-64d7-3a44-8972-7325b295f7cc/timers/58180644-2fdf-4261-83f2-f4e783d308a3_0',
+          executionCounter: 0,
+          executionResponse: null,
+          expirationTime: '2020-10-16T10:17:22.879Z',
+          id: '58180644-2fdf-4261-83f2-f4e783d308a3_0',
+          lastUpdate: '2020-10-07T07:41:31.467Z',
+          priority: 0,
+          processId: 'travels',
+          processInstanceId: '9865268c-64d7-3a44-8972-7325b295f7cc',
+          repeatInterval: null,
+          repeatLimit: null,
+          retries: 0,
+          rootProcessId: null,
+          rootProcessInstanceId: null,
+          scheduledId: null,
+          status: 'SCHEDULED'
+        }
+      ]
+    };
+    const setSvg = jest.fn();
+    const setSvgError = jest.fn();
+    it('handle api to get svg', async () => {
+      mockedAxios.get.mockResolvedValue({
+        data:
+          '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></g></g></svg>',
+        status: 200,
+        statusText: 'OK'
+      });
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalled();
+    });
+    it('handle api to get svg', async () => {
+      const errorResponse404 = {
+        response: { status: 404 }
+      };
+      mockedAxios.get.mockRejectedValue(errorResponse404);
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalledWith(null);
+    });
+    it('check api response when call to management console fails ', async () => {
+      mockedAxios.get.mockImplementationOnce(() =>
+        Promise.reject({
+          error: mockedAxios.get.mockResolvedValue({
+            data:
+              '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></g></g></svg>',
+            status: 200,
+            statusText: 'OK'
+          })
+        })
+      );
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalled();
+    });
+    it('check api response when, call to both management console and runtimes fails ', async () => {
+      mockedAxios.get.mockImplementationOnce(() =>
+        Promise.reject({
+          error: mockedAxios.get.mockRejectedValue({
+            err: {
+              response: { status: 500 }
+            }
+          })
+        })
+      );
+      await getSvg(data, setSvg, setSvgError);
+      expect(setSvg).toHaveBeenCalled();
+    });
+  });
+  it('test format process instance for bulklist function', () => {
+    const testProcessInstance = [
+      {
+        id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
+        processId: 'travels',
+        businessKey: 'T1234',
+        parentProcessInstanceId: null,
+        parentProcessInstance: null,
+        processName: 'travels',
+        roles: [],
+        state: GraphQL.ProcessInstanceState.Active,
+        rootProcessInstanceId: null,
+        addons: [
+          'jobs-management',
+          'prometheus-monitoring',
+          'process-management'
+        ],
+        start: '2019-10-22T03:40:44.089Z',
+        lastUpdate: '2019-10-22T03:40:44.089Z',
+        end: '2019-10-22T05:40:44.089Z',
+        serviceUrl: 'http://localhost:4000',
+        endpoint: 'http://localhost:4000',
+        nodes: [],
+        milestones: [],
+        childProcessInstances: [],
+        errorMessage: '404 error'
+      }
+    ];
+    const testResultWithError = formatForBulkListProcessInstance(
+      testProcessInstance
+    );
+    expect(testResultWithError).toEqual([
+      {
+        id: testProcessInstance[0].id,
+        name: testProcessInstance[0].processName,
+        description: testProcessInstance[0].businessKey,
+        errorMessage: testProcessInstance[0].errorMessage
+      }
+    ]);
+    const testResultWithoutError = formatForBulkListProcessInstance([
+      { ...testProcessInstance[0], errorMessage: null }
+    ]);
+    expect(testResultWithoutError).toEqual([
+      {
+        id: testProcessInstance[0].id,
+        name: testProcessInstance[0].processName,
+        description: testProcessInstance[0].businessKey,
+        errorMessage: null
+      }
+    ]);
+  });
+
+  it('test format job for bulklist function', () => {
+    const testJob = [
+      {
+        id: 'dad3aa88-5c1e-4858-a919-uey23c675a0fa_0',
+        processId: 'travels',
+        processInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
+        rootProcessId: '',
+        status: GraphQL.JobStatus.Scheduled,
+        priority: 0,
+        callbackEndpoint:
+          'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+        repeatInterval: null,
+        repeatLimit: null,
+        scheduledId: null,
+        retries: 5,
+        lastUpdate: '2020-08-27T03:35:54.635Z',
+        expirationTime: '2020-08-27T04:35:54.631Z',
+        endpoint: 'http://localhost:4000/jobs',
+        nodeInstanceId: '08c153e8-2766-4675-81f7-29943efdf411',
+        executionCounter: 1,
+        errorMessage: '403 error'
+      }
+    ];
+    const testResultWithError = formatForBulkListJob(testJob);
+    expect(testResultWithError).toEqual([
+      {
+        id: testJob[0].id,
+        name: testJob[0].processId,
+        description: testJob[0].id,
+        errorMessage: testJob[0].errorMessage
+      }
+    ]);
+    const testResultWithoutError = formatForBulkListJob([
+      { ...testJob[0], errorMessage: null }
+    ]);
+    expect(testResultWithoutError).toEqual([
+      {
+        id: testJob[0].id,
+        name: testJob[0].processId,
+        description: testJob[0].id,
+        errorMessage: null
+      }
+    ]);
+  });
+  it('test checkProcessInstanceState method', () => {
+    const testProcessInstance1 = {
+      state: GraphQL.ProcessInstanceState.Active,
+      addons: ['process-management'],
+      serviceUrl: 'http://localhost:4000'
+    };
+    const testProcessInstance2 = {
+      state: GraphQL.ProcessInstanceState.Aborted,
+      addons: [],
+      serviceUrl: null
+    };
+    const falseResult = checkProcessInstanceState(testProcessInstance1);
+    const trueResult = checkProcessInstanceState(testProcessInstance2);
+    expect(falseResult).toBeFalsy();
+    expect(trueResult).toBeTruthy();
+  });
+
+  it('test alterOrderByObj method', () => {
+    const orderById = { id: GraphQL.OrderBy.Desc };
+    const orderByStatus = { status: GraphQL.OrderBy.Desc };
+    const orderByCreated = { created: GraphQL.OrderBy.Desc };
+    expect(alterOrderByObj(orderById)).toEqual({
+      processName: GraphQL.OrderBy.Desc
+    });
+    expect(alterOrderByObj(orderByStatus)).toEqual({
+      state: GraphQL.OrderBy.Desc
+    });
+    expect(alterOrderByObj(orderByCreated)).toEqual({
+      start: GraphQL.OrderBy.Desc
     });
   });
 });

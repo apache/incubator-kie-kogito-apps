@@ -1,19 +1,18 @@
 /*
- *  Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-
 package org.kie.kogito.explainability.messaging;
 
 import java.io.IOException;
@@ -25,23 +24,25 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cloudevents.CloudEvent;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.subjects.PublishSubject;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
+import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.explainability.ExplanationService;
 import org.kie.kogito.explainability.PredictionProviderFactory;
-import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
-import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.models.ExplainabilityRequest;
-import org.kie.kogito.tracing.decision.event.CloudEventUtils;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.cloudevents.CloudEvent;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.subjects.PublishSubject;
 
 @ApplicationScoped
 public class ExplainabilityMessagingHandler {
@@ -85,12 +86,12 @@ public class ExplainabilityMessagingHandler {
     }
 
     private CompletionStage<Void> handleCloudEvent(CloudEvent cloudEvent) {
-        ExplainabilityRequestDto requestDto;
+        BaseExplainabilityRequestDto requestDto;
         try {
-            requestDto = objectMapper.readValue(cloudEvent.getData(), ExplainabilityRequestDto.class);
+            requestDto = objectMapper.readValue(cloudEvent.getData(), BaseExplainabilityRequestDto.class);
         } catch (IOException e) {
-             LOGGER.error("Unable to deserialize CloudEvent data as ExplainabilityRequest", e);
-             return CompletableFuture.completedFuture(null);
+            LOGGER.error("Unable to deserialize CloudEvent data as ExplainabilityRequest", e);
+            return CompletableFuture.completedFuture(null);
         }
         if (requestDto == null) {
             LOGGER.error("Received CloudEvent with id {} from {} with empty data", cloudEvent.getId(), cloudEvent.getSource());
@@ -108,10 +109,10 @@ public class ExplainabilityMessagingHandler {
     }
 
     // Outgoing
-    public Void sendEvent(ExplainabilityResultDto result) {
+    public Void sendEvent(BaseExplainabilityResultDto result) {
         LOGGER.info("Explainability service emits explainability for execution with ID {}", result.getExecutionId());
         Optional<String> optPayload = CloudEventUtils
-                .build(result.getExecutionId(), URI_PRODUCER, result, ExplainabilityResultDto.class)
+                .build(result.getExecutionId(), URI_PRODUCER, result, BaseExplainabilityResultDto.class)
                 .flatMap(CloudEventUtils::encode);
         if (optPayload.isPresent()) {
             eventSubject.onNext(optPayload.get());

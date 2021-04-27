@@ -17,9 +17,10 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.utils.DataUtils;
 
 /**
@@ -27,16 +28,27 @@ import org.kie.kogito.explainability.utils.DataUtils;
  */
 class SampleWeighter {
 
-    private static final double SIGMA = 0.75;
+    private SampleWeighter() {
+        // utility class
+    }
 
-    static double[] getSampleWeights(PredictionInput targetInput, Collection<Pair<double[], Double>> training) {
-        int noOfFeatures = targetInput.getFeatures().size();
+    /**
+     * Obtain sample weights for a training set, given a list of target input features to compare with.
+     * 
+     * @param targetInputFeatures target input features
+     * @param training the (sparse) training set
+     * @param kernelWidth the width of the kernel used to calculate the proximity
+     * @return a weight for each sample in the training set
+     */
+    static double[] getSampleWeights(List<Feature> targetInputFeatures, Collection<Pair<double[], Double>> training,
+            double kernelWidth) {
+        int noOfFeatures = targetInputFeatures.size();
         double[] x = new double[noOfFeatures];
         Arrays.fill(x, 1);
 
         return training.stream().map(Pair::getLeft)
                 .map(d -> DataUtils.euclideanDistance(x, d)) // calculate euclidean distance between target and sample points
-                .map(d -> DataUtils.exponentialSmoothingKernel(d, SIGMA * Math.sqrt(noOfFeatures))) // transform distance into proximity using an exponential smoothing kernel
+                .map(d -> DataUtils.exponentialSmoothingKernel(d, kernelWidth)) // transform distance into proximity using an exponential smoothing kernel
                 .mapToDouble(Double::doubleValue).toArray(); // output to an array
     }
 }
