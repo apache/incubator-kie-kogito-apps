@@ -10,3 +10,4 @@ dependencies:
     dependencies:
       - project: kiegroup/kogito-apps
       - project: kiegroup/kogito-runtimes
+
