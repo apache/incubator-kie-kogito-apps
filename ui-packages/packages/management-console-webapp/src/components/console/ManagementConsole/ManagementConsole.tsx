@@ -61,15 +61,15 @@ const ManagementConsole: React.FC<IOwnProps> = ({
     <ApolloProvider client={apolloClient}>
       <KogitoAppContextProvider userContext={userContext}>
         <ProcessListContextProvider apolloClient={apolloClient}>
-        <ProcessDetailsContextProvider apolloClient={apolloClient}>
-          <JobsManagementContextProvider apolloClient={apolloClient}>
-            <BrowserRouter>
-              <Switch>
-                <Route path="/" render={renderPage} />
-              </Switch>
-            </BrowserRouter>
-          </JobsManagementContextProvider>
-        </ProcessDetailsContextProvider>
+          <ProcessDetailsContextProvider apolloClient={apolloClient}>
+            <JobsManagementContextProvider apolloClient={apolloClient}>
+              <BrowserRouter>
+                <Switch>
+                  <Route path="/" render={renderPage} />
+                </Switch>
+              </BrowserRouter>
+            </JobsManagementContextProvider>
+          </ProcessDetailsContextProvider>
         </ProcessListContextProvider>
       </KogitoAppContextProvider>
     </ApolloProvider>
