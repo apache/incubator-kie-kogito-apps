@@ -19,17 +19,17 @@ import java.util.UUID;
 
 public abstract class BasePrediction implements Prediction {
     private final PredictionInput input;
-    private final UUID id;
+    private final UUID executionId;
     private final PredictionOutput output;
 
     public BasePrediction(PredictionInput input, PredictionOutput output) {
         this(input, output, UUID.randomUUID());
     }
 
-    public BasePrediction(PredictionInput input, PredictionOutput output, UUID id) {
+    public BasePrediction(PredictionInput input, PredictionOutput output, UUID executionId) {
         this.input = input;
         this.output = output;
-        this.id = id;
+        this.executionId = executionId;
     }
 
     @Override
@@ -43,7 +43,7 @@ public abstract class BasePrediction implements Prediction {
     }
 
     @Override
-    public UUID getId() {
-        return id;
+    public UUID getExecutionId() {
+        return executionId;
     }
 }

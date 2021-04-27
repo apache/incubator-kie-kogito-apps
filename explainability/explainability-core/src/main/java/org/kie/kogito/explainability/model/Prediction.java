@@ -26,5 +26,5 @@ public interface Prediction {
 
     PredictionOutput getOutput();
 
-    UUID getId();
+    UUID getExecutionId();
 }

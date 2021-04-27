@@ -55,8 +55,8 @@ public class CounterfactualPrediction extends BasePrediction {
             DataDistribution dataDistribution,
             Consumer<CounterfactualSolution> intermediateConsumer,
             Consumer<CounterfactualSolution> finalConsumer,
-            UUID id) {
-        super(input, output, id);
+            UUID executionId) {
+        super(input, output, executionId);
         this.domain = domain;
         this.constraints = constraints;
         this.dataDistribution = dataDistribution;
