@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Button,
   ButtonVariant,
@@ -33,13 +33,6 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
     false
   );
   const dispatch = useContext(CFDispatch);
-
-  const areOutcomesSelected = useMemo(
-    () => goals.filter(goal => !goal.isFixed).length > 0,
-    [goals]
-  );
-
-  const runTooltipRef = React.useRef();
 
   const toggleOutcomeSelection = () => {
     setIsOutcomeSelectionOpen(!isOutcomeSelectionOpen);
@@ -110,43 +103,57 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
           {status.executionStatus === 'NOT_STARTED' && (
             <>
               <ToolbarItem>
-                {/*wrapping the Button in a div because disabled elements do not emit events*/}
-                <div ref={runTooltipRef}>
+                <Tooltip
+                  content={
+                    status.isDisabled ? (
+                      <div>
+                        Select Inputs an set up Outcomes to run a counterfactual
+                        analysis.
+                      </div>
+                    ) : (
+                      <div>
+                        Run the counterfactual analysis based on selected Inputs
+                        and Outcomes.
+                      </div>
+                    )
+                  }
+                  entryDelay={1000}
+                >
                   <Button
                     variant={ButtonVariant.primary}
                     aria-label="Run Counterfactual Analysis"
-                    isDisabled={status.isDisabled}
                     onClick={handleRun}
+                    isAriaDisabled={status.isDisabled}
                   >
                     Run Counterfactual
                   </Button>
-                </div>
-                {status.isDisabled && (
-                  <Tooltip
-                    content={
-                      <div>
-                        Select both an Outcome and Data Inputs to run a
-                        counterfactual analysis
-                      </div>
-                    }
-                    reference={runTooltipRef}
-                  />
-                )}
+                </Tooltip>
               </ToolbarItem>
               <ToolbarItem>
-                <Button variant="secondary" onClick={toggleOutcomeSelection}>
-                  {areOutcomesSelected ? 'Edit Outcome' : 'Select Outcome'}
-                </Button>
+                <Tooltip
+                  content={
+                    <div>
+                      Sets the desired decision outcomes for a counterfactual
+                      analysis.
+                    </div>
+                  }
+                  entryDelay={1000}
+                >
+                  <Button variant="secondary" onClick={toggleOutcomeSelection}>
+                    Set Up Outcomes
+                  </Button>
+                </Tooltip>
               </ToolbarItem>
               <ToolbarItem variant="separator" />
               <ToolbarItem>
                 <Tooltip
                   content={
                     <div>
-                      Clear selections and reset all selections to their initial
-                      state
+                      Clear all selections and reverts them to their initial
+                      state.
                     </div>
                   }
+                  entryDelay={1000}
                 >
                   <Button
                     variant="link"
@@ -162,18 +169,37 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
           {status.executionStatus === 'RUN' && (
             <>
               <ToolbarItem>
-                <Button
-                  variant={ButtonVariant.primary}
-                  aria-label="New Counterfactual Analysis"
-                  onClick={handleNewCF}
+                <Tooltip
+                  content={
+                    <div>
+                      Clear all and set up a new Counterfactual analysis.
+                    </div>
+                  }
+                  entryDelay={1000}
                 >
-                  New Counterfactual
-                </Button>
+                  <Button
+                    variant={ButtonVariant.primary}
+                    aria-label="New Counterfactual Analysis"
+                    onClick={handleNewCF}
+                  >
+                    New Counterfactual
+                  </Button>
+                </Tooltip>
               </ToolbarItem>
               <ToolbarItem>
-                <Button variant="secondary" onClick={handleEditSearchDomain}>
-                  Edit Counterfactual
-                </Button>
+                <Tooltip
+                  content={
+                    <div>
+                      Edit Inputs and Outcomes to rerun a counterfactual
+                      analysis.
+                    </div>
+                  }
+                  entryDelay={1000}
+                >
+                  <Button variant="secondary" onClick={handleEditSearchDomain}>
+                    Edit Counterfactual
+                  </Button>
+                </Tooltip>
               </ToolbarItem>
             </>
           )}

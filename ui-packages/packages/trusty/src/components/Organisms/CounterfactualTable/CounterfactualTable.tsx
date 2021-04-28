@@ -45,9 +45,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   const { inputs, results, status, onOpenInputDomainEdit } = props;
   const dispatch = useContext(CFDispatch);
   const columns = [
-    'Data Type',
-    'Input Constraint',
-    'Original Input',
+    'Input',
+    'Constraint',
+    'Input Value',
     'Counterfactual result'
   ];
   const [rows, setRows] = useState<CFSearchInput[]>(inputs);
@@ -197,9 +197,29 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                           <Th />
                         )}
 
-                        <Th>{columns[0]}</Th>
-                        <Th>{columns[1]}</Th>
-                        <Th>{columns[2]}</Th>
+                        <Th
+                          info={{
+                            tooltip: 'Inputs to the decision model.'
+                          }}
+                        >
+                          {columns[0]}
+                        </Th>
+                        <Th
+                          info={{
+                            tooltip:
+                              'Limits the data used in the counterfactual.'
+                          }}
+                        >
+                          {columns[1]}
+                        </Th>
+                        <Th
+                          info={{
+                            tooltip:
+                              'The original input value used by the decision model.'
+                          }}
+                        >
+                          {columns[2]}
+                        </Th>
                         {displayedResults.length > 1 && (
                           <Th className="cf-table__slider-cell">
                             <Button

@@ -42,14 +42,14 @@ const CounterfactualOutcomeSelection = (
     <>
       <Modal
         variant={ModalVariant.medium}
-        aria-label="Counterfactual desired outcome"
-        title="Select a desired outcome"
+        aria-label="Counterfactual desired outcomes"
+        title="Modify Outcome"
         isOpen={isOpen}
         onClose={onClose}
-        description="Select and define one or more outcomes for the counterfactual analysis."
+        description="Use the fields below to define the desired counterfactual outcomes."
         actions={[
           <Button key="confirm" variant="primary" onClick={handleApply}>
-            Select
+            Confirm
           </Button>,
           <Button key="cancel" variant="link" onClick={onClose}>
             Cancel

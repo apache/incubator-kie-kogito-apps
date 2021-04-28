@@ -2,8 +2,19 @@
   &__result-value {
     &--changed {
       @extend .cf-table__result-value;
-      background-color: var(--pf-global--palette--blue-50);
-      clip-path: inset(5px 5px);
+      position: relative;
+      z-index: 1;
+      &:after {
+        background-color: var(--pf-global--palette--blue-50);
+        content: '';
+        display: block;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        right: 5px;
+        bottom: 5px;
+        z-index: -1;
+      }
     }
   }
   &__slider-cell {
@@ -20,6 +31,13 @@
 @media screen and (min-width: 768px) {
   .cf-table--with-results {
     table-layout: fixed;
+    // separate border collapse needed to keep border bottom in thead th's with position sticky
+    border-collapse: separate;
+
+    thead tr {
+      // removing tr border and setting it to sticky th's and td's
+      --pf-c-table--border-width--base: 0;
+    }
 
     thead tr td,
     thead tr th {
@@ -28,6 +46,13 @@
       top: 0;
       background-clip: padding-box;
       background-color: #ffffff;
+      border-bottom: var(--pf-global--BorderWidth--sm) solid
+        var(--pf-c-table--BorderColor);
+    }
+
+    tbody td {
+      border-bottom: var(--pf-global--BorderWidth--sm) solid
+        var(--pf-c-table--BorderColor);
     }
 
     thead th:nth-child(-n + 5),
@@ -150,6 +175,7 @@
 
 .cf-table__scroll-area {
   margin-top: 15px;
+  margin-right: -15px !important;
 }
 
 @media screen and (min-width: 1600px) {
