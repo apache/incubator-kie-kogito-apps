@@ -1,6 +1,6 @@
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
@@ -66,8 +66,14 @@ module.exports = {
             '../../node_modules/@kogito-apps/jobs-management/dist/static'
           ),
           path.resolve(
+            '../../node_modules/@kogito-apps/process-details/dist/static'
+          ),
+          path.resolve(
             '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
           ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/process-list/dist/static'
+          )
         ],
         use: {
           loader: 'file-loader',
@@ -131,8 +137,14 @@ module.exports = {
             '../../node_modules/@kogito-apps/jobs-management/dist/static'
           ),
           path.resolve(
+            '../../node_modules/@kogito-apps/process-details/dist/static'
+          ),
+          path.resolve(
             '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
           ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/process-list/dist/static'
+          )
         ],
         use: [
           {
