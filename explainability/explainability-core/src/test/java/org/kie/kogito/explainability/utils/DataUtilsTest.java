@@ -353,13 +353,11 @@ class DataUtilsTest {
         for (int i = 0; i < 4; i++) {
             values.add(Type.NUMBER.randomValue(perturbationContext));
         }
-        List<Feature> features = new ArrayList<>();
         Feature mockedNumericFeature = TestUtils.getMockedNumericFeature();
-        features.add(mockedNumericFeature);
         DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(List.of(
                 new GenericFeatureDistribution(mockedNumericFeature, values)));
-        Map<String, FeatureDistribution> featureDistributionMap = DataUtils.boostrapFeatureDistributions(features,
-                dataDistribution, random, 10);
+        Map<String, FeatureDistribution> featureDistributionMap = DataUtils.boostrapFeatureDistributions(dataDistribution,
+                random, 10, 1, 500);
         assertThat(featureDistributionMap).isNotNull();
         assertThat(featureDistributionMap).isNotEmpty();
         FeatureDistribution actual = featureDistributionMap.get(mockedNumericFeature.getName());

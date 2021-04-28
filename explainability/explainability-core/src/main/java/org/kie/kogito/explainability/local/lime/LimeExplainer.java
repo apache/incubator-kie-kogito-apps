@@ -310,8 +310,9 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         double perturbedDataSize = Math.max(limeConfig.getNoOfSamples(), Math.pow(2, features.size()));
 
         // generate feature distributions, if possible
-        Map<String, FeatureDistribution> featureDistributionsMap = DataUtils.boostrapFeatureDistributions(features,
-                limeConfig.getDataDistribution(), perturbationContext.getRandom(), 2 * (int) perturbedDataSize);
+        Map<String, FeatureDistribution> featureDistributionsMap = DataUtils.boostrapFeatureDistributions(
+                limeConfig.getDataDistribution(), perturbationContext.getRandom(), 2 * (int) perturbedDataSize,
+                1, limeConfig.getNoOfSamples());
 
         for (int i = 0; i < perturbedDataSize; i++) {
             List<Feature> newFeatures = DataUtils.perturbFeatures(features, perturbationContext, featureDistributionsMap);
