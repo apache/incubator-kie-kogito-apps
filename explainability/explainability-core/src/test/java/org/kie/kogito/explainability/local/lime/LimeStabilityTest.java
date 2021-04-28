@@ -29,13 +29,13 @@ import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.LIMEPrediction;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -107,7 +107,7 @@ class LimeStabilityTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (PredictionOutput predictionOutput : predictionOutputs) {
-            Prediction prediction = new LIMEPrediction(input, predictionOutput);
+            Prediction prediction = new SimplePrediction(input, predictionOutput);
             List<Saliency> saliencies = new LinkedList<>();
             for (int i = 0; i < 100; i++) {
                 Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)

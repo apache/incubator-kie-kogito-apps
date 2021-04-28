@@ -31,7 +31,6 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.FeatureImportance;
-import org.kie.kogito.explainability.model.LIMEPrediction;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -39,6 +38,7 @@ import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -61,7 +61,7 @@ class DummyModelsLimeExplainerTest {
         PredictionProvider model = TestUtils.getFeaturePassModel(idx);
         List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction prediction = new LIMEPrediction(input, outputs.get(0));
+        Prediction prediction = new SimplePrediction(input, outputs.get(0));
 
         LimeConfig limeConfig = new LimeConfig().withSamples(100).withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
@@ -114,7 +114,7 @@ class DummyModelsLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
         List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction prediction = new LIMEPrediction(input, outputs.get(0));
+        Prediction prediction = new SimplePrediction(input, outputs.get(0));
         LimeConfig limeConfig = new LimeConfig().withSamples(10)
                 .withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
@@ -167,7 +167,7 @@ class DummyModelsLimeExplainerTest {
         PredictionProvider model = TestUtils.getEvenFeatureModel(idx);
         List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction prediction = new LIMEPrediction(input, outputs.get(0));
+        Prediction prediction = new SimplePrediction(input, outputs.get(0));
 
         LimeConfig limeConfig = new LimeConfig().withSamples(100)
                 .withPerturbationContext(new PerturbationContext(random, 2));
@@ -222,7 +222,7 @@ class DummyModelsLimeExplainerTest {
         PredictionProvider model = TestUtils.getDummyTextClassifier();
         List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction prediction = new LIMEPrediction(input, outputs.get(0));
+        Prediction prediction = new SimplePrediction(input, outputs.get(0));
 
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(100).withPerturbationContext(new PerturbationContext(random, 1));
@@ -277,7 +277,7 @@ class DummyModelsLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
         List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction prediction = new LIMEPrediction(input, outputs.get(0));
+        Prediction prediction = new SimplePrediction(input, outputs.get(0));
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(100).withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
@@ -330,7 +330,7 @@ class DummyModelsLimeExplainerTest {
         PredictionInput input = new PredictionInput(features);
         List<PredictionOutput> outputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction prediction = new LIMEPrediction(input, outputs.get(0));
+        Prediction prediction = new SimplePrediction(input, outputs.get(0));
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
