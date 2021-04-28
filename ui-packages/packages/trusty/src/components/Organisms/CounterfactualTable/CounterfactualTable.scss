@@ -1,38 +1,159 @@
 .cf-table {
-  &__result-head {
-    overflow: visible !important;
-    padding-right: 50px !important;
-    span {
-      display: block;
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    &__slider {
-      font-size: 1.5rem;
-      position: absolute;
-      top: 13px;
-    }
-    &--first,
-    &--last {
-      @extend .cf-table__result-head;
-    }
-    &--first {
-      .cf-table__result-head__slider {
-        left: -20px;
-      }
-    }
-    &--last {
-      .cf-table__result-head__slider {
-        right: 5px;
-      }
-    }
-  }
   &__result-value {
     &--changed {
       @extend .cf-table__result-value;
       background-color: var(--pf-global--palette--blue-50);
       clip-path: inset(5px 5px);
     }
+  }
+  &__slider-cell {
+    padding: 0;
+    &__slider {
+      font-size: 1.5rem;
+      position: absolute;
+      bottom: 8px;
+      left: 2px;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .cf-table--with-results {
+    table-layout: fixed;
+
+    thead tr td,
+    thead tr th {
+      position: sticky;
+      z-index: 9999;
+      top: 0;
+      background-clip: padding-box;
+      background-color: #ffffff;
+    }
+
+    thead th:nth-child(-n + 5),
+    thead td:nth-child(-n + 5),
+    thead th:last-child.cf-table__slider-cell {
+      z-index: 10000;
+    }
+
+    tbody td:nth-child(-n + 5),
+    tbody td:last-child.cf-table__slider-cell {
+      background-clip: padding-box;
+      background-color: #ffffff;
+      position: sticky;
+      z-index: 9999;
+    }
+
+    thead th:first-child,
+    thead td:first-child,
+    tbody td:first-child {
+      left: 0;
+      width: 53px;
+    }
+    thead th:nth-child(2),
+    tbody td:nth-child(2) {
+      left: 53px;
+    }
+    thead th:nth-child(3),
+    tbody td:nth-child(3) {
+      left: 253px;
+    }
+    thead th:nth-child(4),
+    tbody td:nth-child(4) {
+      left: 453px;
+    }
+    thead th:nth-child(5),
+    tbody td:nth-child(5) {
+      left: 652px;
+    }
+    thead th:last-child.cf-table__slider-cell,
+    tbody td:last-child.cf-table__slider-cell {
+      right: 0;
+    }
+
+    thead th:not(:first-child):not(.cf-table__slider-cell),
+    tbody td:not(:first-child):not(.cf-table__slider-cell) {
+      width: 200px;
+    }
+    thead th.cf-table__slider-cell,
+    thead td.cf-table__slider-cell {
+      width: 30px;
+    }
+  }
+
+  .cf-table-container {
+    &--with-results {
+      position: relative;
+      height: 100%;
+      overflow: auto;
+    }
+  }
+
+  .cf-table-outer-container {
+    overflow: hidden;
+    height: calc(100% - 80px);
+  }
+
+  .cf-table-inner-container {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .cf-table--with-results {
+    thead th:nth-child(2),
+    tbody td:nth-child(2) {
+      left: 53px;
+    }
+    thead th:nth-child(3),
+    tbody td:nth-child(3) {
+      left: 302px;
+    }
+    thead th:nth-child(4),
+    tbody td:nth-child(4) {
+      left: 552px;
+    }
+    thead th:nth-child(5),
+    tbody td:nth-child(5) {
+      left: 801px;
+    }
+    thead th:not(:first-child):not(.cf-table__slider-cell),
+    tbody td:not(:first-child):not(.cf-table__slider-cell) {
+      width: 250px;
+    }
+  }
+}
+
+.cf-table__scroll-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  z-index: 30000;
+  &--vertical,
+  &--horizontal {
+    @extend .cf-table__scroll-thumb;
+  }
+}
+
+.cf-table__scroll-track {
+  &--horizontal {
+    top: 0;
+    right: 40px;
+    width: calc(100% - 600px - 53px - 70px);
+  }
+  &--vertical {
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
+}
+
+.cf-table__scroll-area {
+  margin-top: 15px;
+}
+
+@media screen and (min-width: 1600px) {
+  .cf-table__scroll-track--horizontal {
+    width: calc(100% - 750px - 53px - 70px);
   }
 }

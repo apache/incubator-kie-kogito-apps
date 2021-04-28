@@ -76,6 +76,42 @@ export const cfInitialState: CFState = {
       typeRef: 'boolean',
       value: true,
       isFixed: true
+    },
+    {
+      name: 'Demo input with a long name',
+      typeRef: 'number',
+      value: 100,
+      isFixed: true
+    },
+    {
+      name: 'Demo input again',
+      typeRef: 'number',
+      value: 2,
+      isFixed: true
+    },
+    {
+      name: 'Demo input only',
+      typeRef: 'number',
+      value: 44,
+      isFixed: true
+    },
+    {
+      name: 'Demo input for fun',
+      typeRef: 'number',
+      value: 13,
+      isFixed: true
+    },
+    {
+      name: 'Demo input rate',
+      typeRef: 'number',
+      value: 90,
+      isFixed: true
+    },
+    {
+      name: 'Demo input w/ huge number',
+      typeRef: 'number',
+      value: 4110000,
+      isFixed: true
     }
   ],
   status: {
