@@ -64,10 +64,8 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public static final Consumer<CounterfactualSolution> defaultIntermediateConsumer =
             counterfactual -> logger.debug("Intermediate counterfactual: {}", counterfactual.getEntities());
 
-    public static final Consumer<CounterfactualSolution> assignCounterfactualId =
-            counterfactual -> {
-                counterfactual.setSolutionId(UUID.randomUUID());
-            };
+    public static final Consumer<CounterfactualSolution> assignSolutionId =
+            counterfactual -> counterfactual.setSolutionId(UUID.randomUUID());
 
     public CounterfactualExplainer() {
         this.solverConfig = CounterfactualConfigurationFactory.builder().build();
@@ -138,7 +136,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
                         solverManager.solveAndListen(executionId, initial,
-                                assignCounterfactualId.andThen(intermediateResultsConsumer),
+                                assignSolutionId.andThen(intermediateResultsConsumer),
                                 null);
                 try {
                     // Wait until the solving ends
