@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.counterfactual;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,10 +70,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public CounterfactualExplainer() {
         this.solverConfig = CounterfactualConfigurationFactory.builder().build();
         this.executor = ForkJoinPool.commonPool();
-    }
-
-    public CounterfactualExplainer() {
-        this(null, null, Collections.emptyList(), Collections.emptyList(), null, null, null, null);
     }
 
     /**
