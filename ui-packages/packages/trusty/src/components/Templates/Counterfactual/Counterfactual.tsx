@@ -126,7 +126,13 @@ const Counterfactual = () => {
             panelContent={panelContent}
             style={{ height: containerHeight }}
           >
-            <DrawerContentBody style={{ display: 'flex', height: '100%' }}>
+            <DrawerContentBody
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%'
+              }}
+            >
               <PageSection variant="light" isFilled={true}>
                 <section className="counterfactual__section">
                   <Stack hasGutter>

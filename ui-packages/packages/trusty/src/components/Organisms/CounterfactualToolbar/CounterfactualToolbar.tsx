@@ -117,7 +117,6 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                       </div>
                     )
                   }
-                  entryDelay={1000}
                 >
                   <Button
                     variant={ButtonVariant.primary}
@@ -137,7 +136,6 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                       analysis.
                     </div>
                   }
-                  entryDelay={1000}
                 >
                   <Button variant="secondary" onClick={toggleOutcomeSelection}>
                     Set Up Outcomes
@@ -153,7 +151,6 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                       state.
                     </div>
                   }
-                  entryDelay={1000}
                 >
                   <Button
                     variant="link"
@@ -175,7 +172,6 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                       Clear all and set up a new Counterfactual analysis.
                     </div>
                   }
-                  entryDelay={1000}
                 >
                   <Button
                     variant={ButtonVariant.primary}
@@ -194,7 +190,6 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                       analysis.
                     </div>
                   }
-                  entryDelay={1000}
                 >
                   <Button variant="secondary" onClick={handleEditSearchDomain}>
                     Edit Counterfactual
