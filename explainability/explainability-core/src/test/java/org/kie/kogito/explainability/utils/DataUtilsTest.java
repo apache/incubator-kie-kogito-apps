@@ -357,7 +357,7 @@ class DataUtilsTest {
         DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(List.of(
                 new GenericFeatureDistribution(mockedNumericFeature, values)));
         Map<String, FeatureDistribution> featureDistributionMap = DataUtils.boostrapFeatureDistributions(dataDistribution,
-                random, 10, 1, 500);
+                perturbationContext, 10, 1, 500);
         assertThat(featureDistributionMap).isNotNull();
         assertThat(featureDistributionMap).isNotEmpty();
         FeatureDistribution actual = featureDistributionMap.get(mockedNumericFeature.getName());

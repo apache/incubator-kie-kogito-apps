@@ -555,16 +555,14 @@ public class DataUtils {
      * data points are sampled from a normal distribution (see {@link #generateData(double, double, int, Random)}).
      *
      * @param dataDistribution data distribution to take feature values from
-     * @param random random
+     * @param perturbationContext perturbation context
      * @param featureDistributionSize desired size of generated feature distributions
      * @param draws number of times sampling from feature values is performed
      * @param sampleSize size of each sample draw
      * @return a map feature name -> generated feature distribution
      */
     public static Map<String, FeatureDistribution> boostrapFeatureDistributions(DataDistribution dataDistribution,
-            Random random,
-            int featureDistributionSize, int draws,
-            int sampleSize) {
+            PerturbationContext perturbationContext, int featureDistributionSize, int draws, int sampleSize) {
         Map<String, FeatureDistribution> featureDistributions = new HashMap<>();
         for (FeatureDistribution featureDistribution : dataDistribution.asFeatureDistributions()) {
             Feature feature = featureDistribution.getFeature();
@@ -575,7 +573,7 @@ public class DataUtils {
                 double[] mins = new double[draws];
                 double[] maxs = new double[draws];
                 for (int i = 0; i < draws; i++) {
-                    List<Value> sampledValues = DataUtils.sampleWithReplacement(values, sampleSize, random);
+                    List<Value> sampledValues = DataUtils.sampleWithReplacement(values, sampleSize, perturbationContext.getRandom());
                     double mean = DataUtils.getMean(sampledValues.stream().mapToDouble(Value::asNumber).toArray());
                     double stdDev = Math.pow(DataUtils.getStdDev(sampledValues.stream().mapToDouble(Value::asNumber).toArray(), mean), 2);
                     double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
@@ -589,7 +587,7 @@ public class DataUtils {
                 double finalStdDev = Math.sqrt(DataUtils.getMean(stdDevs));
                 double finalMin = DataUtils.getMean(mins);
                 double finalMax = DataUtils.getMean(maxs);
-                double[] doubles = DataUtils.generateData(finalMean, finalStdDev, featureDistributionSize, random);
+                double[] doubles = DataUtils.generateData(finalMean, finalStdDev, featureDistributionSize, perturbationContext.getRandom());
                 double[] boundedData = Arrays.stream(doubles).map(d -> Math.min(Math.max(d, finalMin), finalMax)).toArray();
                 NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, boundedData);
                 featureDistributions.put(feature.getName(), numericFeatureDistribution);
