@@ -671,7 +671,7 @@ class CounterfactualExplainerTest {
         final List<UUID> executionIds = new ArrayList<>();
 
         final Consumer<CounterfactualSolution> captureIntermediateIds = counterfactual -> {
-            intermediateIds.add(counterfactual.getCounterfactualId());
+            intermediateIds.add(counterfactual.getSolutionId());
         };
 
         final Consumer<CounterfactualSolution> captureExecutionIds = counterfactual -> {

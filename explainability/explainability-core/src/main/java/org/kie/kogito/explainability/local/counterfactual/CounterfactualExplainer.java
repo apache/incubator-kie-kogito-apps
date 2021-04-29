@@ -66,7 +66,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
     public static final Consumer<CounterfactualSolution> assignCounterfactualId =
             counterfactual -> {
-                counterfactual.setCounterfactualId(UUID.randomUUID());
+                counterfactual.setSolutionId(UUID.randomUUID());
             };
 
     public CounterfactualExplainer() {
@@ -159,7 +159,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
             return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(),
-                    solution.getCounterfactualId(), solution.getExecutionId());
+                    solution.getSolutionId(), solution.getExecutionId());
         });
 
     }

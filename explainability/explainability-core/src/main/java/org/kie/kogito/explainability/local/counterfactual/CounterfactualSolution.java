@@ -43,7 +43,7 @@ public class CounterfactualSolution {
 
     private BendableBigDecimalScore score;
 
-    private UUID counterfactualId;
+    private UUID solutionId;
     private UUID executionId;
 
     protected CounterfactualSolution() {
@@ -53,12 +53,12 @@ public class CounterfactualSolution {
             List<CounterfactualEntity> entities,
             PredictionProvider model,
             List<Output> goal,
-            UUID counterfactualId,
+            UUID solutionId,
             UUID executionId) {
         this.entities = entities;
         this.model = model;
         this.goal = goal;
-        this.counterfactualId = counterfactualId;
+        this.solutionId = solutionId;
         this.executionId = executionId;
     }
 
@@ -83,12 +83,12 @@ public class CounterfactualSolution {
         return entities;
     }
 
-    public void setCounterfactualId(UUID counterfactualId) {
-        this.counterfactualId = counterfactualId;
+    public void setSolutionId(UUID solutionId) {
+        this.solutionId = solutionId;
     }
 
-    public UUID getCounterfactualId() {
-        return counterfactualId;
+    public UUID getSolutionId() {
+        return solutionId;
     }
 
     public UUID getExecutionId() {
