@@ -40,6 +40,9 @@ module.exports = merge(common, {
           path.resolve(
             '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css'
           ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/task-console-shared/dist/envelope/styles.css'
+          )
         ],
         use: ['style-loader', 'css-loader']
       }
