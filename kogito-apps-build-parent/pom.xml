@@ -134,12 +134,6 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-apps-ui-packages</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
                 <groupId>org.optaplanner</groupId>
                 <artifactId>optaplanner-bom</artifactId>
                 <version>${version.org.optaplanner}</version>
@@ -158,18 +152,17 @@
             </dependency>
 
             <dependency>
+                <groupId>org.apache.opennlp</groupId>
+                <artifactId>opennlp-tools</artifactId>
+                <version>${version.org.apache.opennlp}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.skyscreamer</groupId>
                 <artifactId>jsonassert</artifactId>
                 <version>${version.org.skyscreamer}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.apache.opennlp</groupId>
-                <artifactId>opennlp-tools</artifactId>
-                <version>${version.org.apache.opennlp}</version>
-                <scope>test</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
