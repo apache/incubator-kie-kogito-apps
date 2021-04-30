@@ -61,7 +61,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     private final SolverConfig solverConfig;
     private final Executor executor;
 
-    public static final Consumer<CounterfactualSolution> defaultIntermediateConsumer =
+    public static final Consumer<CounterfactualResult> defaultIntermediateConsumer =
             counterfactual -> logger.debug("Intermediate counterfactual: {}", counterfactual.getEntities());
 
     public static final Consumer<CounterfactualSolution> assignSolutionId =
@@ -111,6 +111,16 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 }).collect(Collectors.toList());
     }
 
+    private Consumer<CounterfactualSolution> createSolutionConsumer(PredictionProvider model,
+            Consumer<CounterfactualResult> consumer) {
+        return cfs -> model.predictAsync(List.of(new PredictionInput(
+                cfs.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))).thenApply(
+                        predictionOutputs -> new CounterfactualResult(cfs.getEntities(), predictionOutputs,
+                                cfs.getScore().isFeasible(),
+                                cfs.getSolutionId(), cfs.getExecutionId()))
+                .thenAccept(consumer);
+    }
+
     @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction, PredictionProvider model) {
         CounterfactualPrediction cfPrediction = (CounterfactualPrediction) prediction;
@@ -130,13 +140,13 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
                     SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
-                final Consumer<CounterfactualSolution> intermediateResultsConsumer =
+                final Consumer<CounterfactualResult> intermediateResultsConsumer =
                         cfPrediction.getIntermediateConsumer() == null ? defaultIntermediateConsumer
                                 : cfPrediction.getIntermediateConsumer();
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
                         solverManager.solveAndListen(executionId, initial,
-                                assignSolutionId.andThen(intermediateResultsConsumer),
+                                assignSolutionId.andThen(createSolutionConsumer(model, intermediateResultsConsumer)),
                                 null);
                 try {
                     // Wait until the solving ends
