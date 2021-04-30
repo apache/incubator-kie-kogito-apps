@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { UserTaskInstance } from '@kogito-apps/task-console-shared';
+
 export interface TaskDetailsEnvelopeApi {
   taskDetails__init(
     association: Association,
@@ -28,29 +30,4 @@ export interface Association {
 
 export interface TaskDetailsInitArgs {
   task: UserTaskInstance;
-}
-
-export interface UserTaskInstance {
-  id: string;
-  description?: string;
-  name?: string;
-  priority?: string;
-  processInstanceId: string;
-  processId: string;
-  rootProcessInstanceId?: string;
-  rootProcessId?: string;
-  state: string;
-  actualOwner?: string;
-  adminGroups?: string[];
-  adminUsers?: string[];
-  completed?: Date;
-  started: Date;
-  excludedUsers?: string[];
-  potentialGroups?: string[];
-  potentialUsers?: string[];
-  inputs?: string;
-  outputs?: string;
-  referenceName?: string;
-  lastUpdate: Date;
-  endpoint?: string;
 }
