@@ -1,29 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Checkbox, Switch, TextInput, Touchspin } from '@patternfly/react-core';
+import {
+  FormGroup,
+  Switch,
+  TextInput,
+  Touchspin
+} from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
 import { CFGoal } from '../../Templates/Counterfactual/Counterfactual';
-import './CounterfactualOutcomeEdit.scss';
 
 interface CounterfactualOutcomeEditProps {
   goal: CFGoal;
+  index: number;
   onUpdateGoal: (goal: CFGoal) => void;
 }
 
 const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
-  const { goal, onUpdateGoal } = props;
-  const [isChecked, setIsChecked] = useState<boolean>();
-
-  const handleChange = (checked: boolean) => {
-    if (checked) {
-      onUpdateGoal({ ...goal, isFixed: !checked });
-    } else {
-      onUpdateGoal({ ...goal, isFixed: !checked, value: goal.originalValue });
-    }
-  };
-
-  useEffect(() => {
-    setIsChecked(!goal.isFixed);
-  }, [goal.isFixed]);
+  const { goal, index, onUpdateGoal } = props;
 
   let valueEdit;
   switch (goal.typeRef) {
@@ -31,7 +23,7 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
       valueEdit = (
         <CounterfactualOutcomeBoolean
           goal={goal}
-          isDisabled={!isChecked}
+          index={index}
           onUpdateGoal={onUpdateGoal}
         />
       );
@@ -40,7 +32,7 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
       valueEdit = (
         <CounterfactualOutcomeNumber
           goal={goal}
-          isDisabled={!isChecked}
+          index={index}
           onUpdateGoal={onUpdateGoal}
         />
       );
@@ -49,7 +41,7 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
       valueEdit = (
         <CounterfactualOutcomeString
           goal={goal}
-          isDisabled={!isChecked}
+          index={index}
           onUpdateGoal={onUpdateGoal}
         />
       );
@@ -60,32 +52,18 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
   }
 
   return (
-    <section className="counterfactual-outcome">
-      <Checkbox
-        label={goal.name}
-        isChecked={isChecked}
-        onChange={handleChange}
-        aria-label={goal.name}
-        id={goal.name}
-        name={goal.name}
-      />
-      <section className="counterfactual-outcome__value">{valueEdit}</section>
-    </section>
+    <FormGroup label={goal.name} fieldId={goal.id}>
+      {valueEdit}
+    </FormGroup>
   );
 };
 
 export default CounterfactualOutcomeEdit;
 
-interface CounterfactualOutcomeValueProps
-  extends CounterfactualOutcomeEditProps {
-  isDisabled: boolean;
-  onUpdateGoal: (goal: CFGoal) => void;
-}
-
 const CounterfactualOutcomeBoolean = (
-  props: CounterfactualOutcomeValueProps
+  props: CounterfactualOutcomeEditProps
 ) => {
-  const { goal, isDisabled, onUpdateGoal } = props;
+  const { goal, onUpdateGoal } = props;
   const [booleanValue, setBooleanValue] = useState(goal.value as boolean);
 
   useEffect(() => {
@@ -103,15 +81,12 @@ const CounterfactualOutcomeBoolean = (
       labelOff="False"
       isChecked={booleanValue}
       onChange={handleChange}
-      isDisabled={isDisabled}
     />
   );
 };
 
-const CounterfactualOutcomeNumber = (
-  props: CounterfactualOutcomeValueProps
-) => {
-  const { goal, isDisabled, onUpdateGoal } = props;
+const CounterfactualOutcomeNumber = (props: CounterfactualOutcomeEditProps) => {
+  const { goal, index, onUpdateGoal } = props;
   const [numberValue, setNumberValue] = useState<number>();
 
   const touchSpinWidth = useMemo(() => String(goal.value).length + 2, [
@@ -140,20 +115,18 @@ const CounterfactualOutcomeNumber = (
       onMinus={onMinus}
       onChange={onChange}
       onPlus={onPlus}
-      inputName={`${goal.name} value`}
+      inputName={`goal-${index}-${goal.name}`}
+      id={`goal-${index}-${goal.name}`}
       inputAriaLabel="`${outcome.outcomeName} input`"
       minusBtnAriaLabel="minus"
       plusBtnAriaLabel="plus"
-      isDisabled={isDisabled}
       widthChars={touchSpinWidth}
     />
   );
 };
 
-const CounterfactualOutcomeString = (
-  props: CounterfactualOutcomeValueProps
-) => {
-  const { goal, isDisabled, onUpdateGoal } = props;
+const CounterfactualOutcomeString = (props: CounterfactualOutcomeEditProps) => {
+  const { goal, index, onUpdateGoal } = props;
 
   const handleChange = (value: string) => {
     onUpdateGoal({ ...goal, value });
@@ -161,10 +134,10 @@ const CounterfactualOutcomeString = (
 
   return (
     <TextInput
-      id={uuid()}
+      id={`goal-${index}-${goal.name}`}
+      name={`goal-${index}-${goal.name}`}
       value={goal.value as string}
       onChange={handleChange}
-      isDisabled={isDisabled}
       style={{ width: 250 }}
     />
   );

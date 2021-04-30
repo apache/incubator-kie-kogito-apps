@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Button, Modal, ModalVariant } from '@patternfly/react-core';
+import { Button, Form, Modal, ModalVariant } from '@patternfly/react-core';
 import CounterfactualOutcomeEdit from '../../Molecules/CounterfactualOutcomeEdit/CounterfactualOutcomeEdit';
 import {
   CFDispatch,
   CFGoal
 } from '../../Templates/Counterfactual/Counterfactual';
+import './CounterfactualOutcomeSelection.scss';
 
 type CounterfactualOutcomeSelection = {
   isOpen: boolean;
@@ -21,7 +22,12 @@ const CounterfactualOutcomeSelection = (
 
   const updateGoal = (updatedGoal: CFGoal) => {
     const updatedGoals = editingGoals.map(goal =>
-      goal.id === updatedGoal.id ? updatedGoal : goal
+      goal.id === updatedGoal.id
+        ? {
+            ...updatedGoal,
+            isFixed: updatedGoal.value === updatedGoal.originalValue
+          }
+        : goal
     );
     setEditingGoals(updatedGoals);
   };
@@ -56,13 +62,16 @@ const CounterfactualOutcomeSelection = (
           </Button>
         ]}
       >
-        {editingGoals.map((goal, index) => (
-          <CounterfactualOutcomeEdit
-            key={index}
-            goal={goal}
-            onUpdateGoal={updateGoal}
-          />
-        ))}
+        <Form className="counterfactual__outcomes-form">
+          {editingGoals.map((goal, index) => (
+            <CounterfactualOutcomeEdit
+              key={index}
+              goal={goal}
+              index={index}
+              onUpdateGoal={updateGoal}
+            />
+          ))}
+        </Form>
       </Modal>
     </>
   );
