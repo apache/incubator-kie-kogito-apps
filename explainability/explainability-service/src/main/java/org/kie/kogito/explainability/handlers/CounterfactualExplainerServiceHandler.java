@@ -52,6 +52,7 @@ import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
+import static org.kie.kogito.explainability.ConversionUtils.toFeatureConstraintList;
 import static org.kie.kogito.explainability.ConversionUtils.toFeatureDomainList;
 import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
@@ -104,11 +105,12 @@ public class CounterfactualExplainerServiceHandler
         PredictionInput input = new PredictionInput(toFeatureList(originalInputs));
         PredictionOutput output = new PredictionOutput(toOutputList(requiredOutputs));
         PredictionFeatureDomain featureDomain = new PredictionFeatureDomain(toFeatureDomainList(searchDomains));
+        List<Boolean> featureConstraints = toFeatureConstraintList(searchDomains);
 
         return new CounterfactualPrediction(input,
                 output,
                 featureDomain,
-                Collections.emptyList(),
+                featureConstraints,
                 null,
                 null,
                 UUID.fromString(request.getExecutionId()));

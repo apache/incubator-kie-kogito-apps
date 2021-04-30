@@ -82,6 +82,14 @@ public class ConversionUtils {
         }
     }
 
+    public static Boolean toFeatureConstraint(String name, CounterfactualSearchDomainDto domain) {
+        if (domain.isUnit()) {
+            return domain.toUnit().isFixed();
+        } else {
+            throw new IllegalArgumentException(String.format("Unsupported CounterfactualSearchDomain kind %s", domain.getKind()));
+        }
+    }
+
     protected static List<Feature> toFeatureList(String name, CollectionValue collectionValue) {
         Collection<TypedValue> values = collectionValue.getValue();
         List<Feature> list = new ArrayList<>(values.size());
@@ -103,6 +111,10 @@ public class ConversionUtils {
 
     public static List<FeatureDomain> toFeatureDomainList(Map<String, CounterfactualSearchDomainDto> searchDomains) {
         return toList(searchDomains, ConversionUtils::toFeatureDomain);
+    }
+
+    public static List<Boolean> toFeatureConstraintList(Map<String, CounterfactualSearchDomainDto> searchDomains) {
+        return toList(searchDomains, ConversionUtils::toFeatureConstraint);
     }
 
     public static <T> List<T> toList(JsonObject mainObj, BiFunction<String, Object, T> unitConverter) {

@@ -209,6 +209,7 @@ public class CounterfactualExplainerServiceHandlerTest {
 
         assertTrue(prediction.getInput().getFeatures().isEmpty());
         assertTrue(prediction.getDomain().getFeatureDomains().isEmpty());
+        assertTrue(prediction.getConstraints().isEmpty());
     }
 
     @Test
@@ -261,6 +262,8 @@ public class CounterfactualExplainerServiceHandlerTest {
 
         assertTrue(prediction.getInput().getFeatures().isEmpty());
         assertTrue(prediction.getOutput().getOutputs().isEmpty());
+        assertEquals(1, prediction.getConstraints().size());
+        assertTrue(prediction.getConstraints().get(0));
     }
 
     @Test
