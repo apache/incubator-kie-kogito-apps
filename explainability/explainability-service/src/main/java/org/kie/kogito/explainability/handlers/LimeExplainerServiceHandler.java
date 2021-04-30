@@ -34,6 +34,7 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
 import org.kie.kogito.explainability.models.LIMEExplainabilityRequest;
 import org.kie.kogito.explainability.models.ModelIdentifier;
@@ -79,7 +80,7 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
 
         PredictionInput input = new PredictionInput(toFeatureList(inputs));
         PredictionOutput output = new PredictionOutput(toOutputList(outputs));
-        return new Prediction(input, output);
+        return new SimplePrediction(input, output);
     }
 
     @Override

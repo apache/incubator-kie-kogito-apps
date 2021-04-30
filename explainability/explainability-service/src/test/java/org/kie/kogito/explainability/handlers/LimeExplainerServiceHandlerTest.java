@@ -116,7 +116,6 @@ public class LimeExplainerServiceHandlerTest {
 
         assertTrue(prediction.getInput().getFeatures().isEmpty());
         assertTrue(prediction.getOutput().getOutputs().isEmpty());
-        assertTrue(prediction.getDomain().getFeatureDomains().isEmpty());
     }
 
     @Test

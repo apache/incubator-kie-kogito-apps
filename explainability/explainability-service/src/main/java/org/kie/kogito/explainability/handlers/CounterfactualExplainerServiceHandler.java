@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ import org.kie.kogito.explainability.api.CounterfactualSearchDomainStructureDto;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
+import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
@@ -103,7 +105,13 @@ public class CounterfactualExplainerServiceHandler
         PredictionOutput output = new PredictionOutput(toOutputList(requiredOutputs));
         PredictionFeatureDomain featureDomain = new PredictionFeatureDomain(toFeatureDomainList(searchDomains));
 
-        return new Prediction(input, output, featureDomain);
+        return new CounterfactualPrediction(input,
+                output,
+                featureDomain,
+                Collections.emptyList(),
+                null,
+                null,
+                UUID.fromString(request.getExecutionId()));
     }
 
     private boolean isUnsupportedModel(Map<String, TypedValue> originalInputs,

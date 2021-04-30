@@ -16,8 +16,6 @@
 
 package org.kie.kogito.explainability.handlers;
 
-import java.util.Collections;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
@@ -33,6 +31,6 @@ public class CounterfactualExplainerProducer {
     @Produces
     public CounterfactualExplainer produce() {
         LOG.debug("CounterfactualExplainer created");
-        return CounterfactualExplainer.builder(Collections.emptyList(), Collections.emptyList(), null).build();
+        return CounterfactualExplainer.builder().build();
     }
 }
