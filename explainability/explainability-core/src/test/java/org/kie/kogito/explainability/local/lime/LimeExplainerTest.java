@@ -209,7 +209,7 @@ class LimeExplainerTest {
         PredictionOutput output = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
                 .get(0);
-        Prediction prediction = new Prediction(input, output);
+        Prediction prediction = new SimplePrediction(input, output);
 
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
