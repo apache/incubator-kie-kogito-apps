@@ -15,79 +15,190 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.model.*;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixUtilsTest {
     // === Make some matrices to use in tests ===
-    private static final double[][] matOneElem = {
+    double[][] matOneElem = {
             { 5. },
     };
-    private static final double[][] matRowVector = {
+    double[] vector = { 5., 6., 7 };
+    double[][] matRowVector = {
             { 5., 6., 7, },
     };
-    private static final double[][] matColVector = {
+    double[][] matColVector = {
             { 5. },
             { 6. },
             { 7, },
     };
 
-    private static final double[][] vectorProdRowCol = { { 110. } };
-    private static final double[][] vectorProdColRow = {
+    double[][] vectorProdRowCol = { { 110. } };
+    double[][] vectorProdColRow = {
             { 25., 30., 35. },
             { 30., 36., 42. },
             { 35., 42., 49. }
     };
 
-    private static final double[][] mat4X3 = {
+    double[][] mat4X3 = {
             { 1., 2., 3. },
             { 10., 5., -3. },
             { 14., -6.6, 7. },
             { 0., 5., -3. }
     };
-    private static final double[][] mat3X4 = {
+    double[][] mat3X4 = {
             { 1., 10., 14., 0. },
             { 2, 5., -6.6, 5. },
             { 3., -3, 7., -3 }
     };
-    private static final double[][] mat3X5 = {
+
+    double[][] mat3X5 = {
             { 1., 10., 3., -4., 0. },
             { 10., 5., -3., 3.7, 1. },
             { 14., -6.6, 7., 14., 3. },
     };
 
-    private static final double[][] mat43X35Product = {
+    double[][] mat3X5get013 = {
+            { 1., 10., -4. },
+            { 10., 5., 3.7, },
+            { 14., -6.6, 14. },
+    };
+    double[][] mat3X5get03130 = {
+            { 1., -4, 10., -4., 1 },
+            { 10., 3.7, 5., 3.7, 10 },
+            { 14., 14., -6.6, 14., 14. },
+    };
+
+    double[][] mat43X35Product = {
             { 63., .2, 18., 45.4, 11. },
             { 18., 144.8, -6., -63.5, -4. },
             { 46., 60.8, 110.8, 17.58, 14.4 },
             { 8., 44.8, -36., -23.5, -4. }
     };
 
-    private static final double[][] matSquareNonSingular = {
+    double[][] matSquareNonSingular = {
             { 1., 2., 3. },
             { 10., 5., -3. },
             { 14., -6.6, 7. },
     };
-    private static final double[][] matSNSInv = {
+    double[][] matSNSInv = {
             { -0.02464332, 0.05479896, 0.03404669 },
             { 0.18158236, 0.05674449, -0.05350195 },
             { 0.22049287, -0.05609598, 0.02431907 }
     };
 
-    private static final double[][] matSquareSingular = {
+    double[][] matSquareSingular = {
             { 1., 2., 3. },
             { 4., 5., 6. },
             { 7., 8., 9. },
     };
-    private static final double[][] identity = {
+    double[][] identity = {
             { 1., 0., 0. },
             { 0., 1., 0. },
             { 0., 0., 1. },
     };
+
+    double[][] matIdentityPlusVector = {
+            { 6., 6., 7. },
+            { 5., 7., 7. },
+            { 5., 6., 8. },
+    };
+
+    double[][] mssPlusIdentity = {
+            { 2., 2., 3. },
+            { 4., 6., 6. },
+            { 7., 8., 10. },
+    };
+    double[][] mssMinusIdentity = {
+            { 0., 2., 3. },
+            { 4., 4., 6. },
+            { 7., 8., 8. },
+    };
+    double[] mssSumRow = { 12., 15., 18. };
+    double[] mssSumCol = { 6., 15., 24. };
+    Random rn = new Random();
+
+    // === Matrix creation tests ===
+    @Test
+    void testPICreation() {
+        // use the mat 3x5 as our list of prediction inputs
+        List<Feature> fs = new ArrayList<>();
+        for (int j = 0; j < 5; j++) {
+            fs.add(FeatureFactory.newNumericalFeature("f", mat3X5[0][j]));
+        }
+        PredictionInput pi = new PredictionInput(fs);
+        double[][] converted = MatrixUtils.matrixFromPredictionInput(pi);
+        assertArrayEquals(mat3X5[0], converted[0]);
+    }
+
+    @Test
+    void testPIListCreation() {
+        // use the mat 3x5 as our list of prediction inputs
+        List<PredictionInput> ps = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            List<Feature> fs = new ArrayList<>();
+            for (int j = 0; j < 5; j++) {
+                fs.add(FeatureFactory.newNumericalFeature("f", mat3X5[i][j]));
+            }
+            ps.add(new PredictionInput(fs));
+        }
+
+        double[][] converted = MatrixUtils.matrixFromPredictionInput(ps);
+        assertArrayEquals(mat3X5, converted);
+    }
+
+    @Test
+    void testPOCreation() {
+        // use the mat 3x5 as our list of prediction inputs
+        List<Output> os = new ArrayList<>();
+        for (int j = 0; j < 5; j++) {
+            Value v = new Value(mat3X5[0][j]);
+            os.add(new Output("o", Type.NUMBER, v, 0.0));
+            ;
+        }
+        PredictionOutput po = new PredictionOutput(os);
+        double[][] converted = MatrixUtils.matrixFromPredictionOutput(po);
+        assertArrayEquals(mat3X5[0], converted[0]);
+    }
+
+    @Test
+    void testPOListCreation() {
+        // use the mat 3x5 as our list of prediction outputs
+        List<PredictionOutput> ps = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            List<Output> os = new ArrayList<>();
+            for (int j = 0; j < 5; j++) {
+                Value v = new Value(mat3X5[i][j]);
+                os.add(new Output("o", Type.NUMBER, v, 0.0));
+            }
+            ps.add(new PredictionOutput(os));
+        }
+
+        double[][] converted = MatrixUtils.matrixFromPredictionOutput(ps);
+        assertArrayEquals(mat3X5, converted);
+    }
+
+    @Test
+    void testRowVectorCreation() {
+        double[][] converted = MatrixUtils.rowVector(vector);
+        for (int i = 0; i < converted.length; i++) {
+            assertEquals(converted[0][i], vector[i]);
+        }
+    }
+
+    @Test
+    void testColVectorCreation() {
+        double[][] converted = MatrixUtils.columnVector(vector);
+        for (int i = 0; i < converted.length; i++) {
+            assertEquals(converted[i][0], vector[i]);
+        }
+    }
 
     // === Shape Tests ===
     @Test
@@ -97,6 +208,12 @@ class MatrixUtilsTest {
     }
 
     // === getColumn Tests ===
+
+    @Test
+    void testGetColTooBig() {
+        assertThrows(IllegalArgumentException.class, () -> MatrixUtils.getCol(mat3X4, 10));
+    }
+
     @Test
     void testGetCol() {
         double[] col = MatrixUtils.getCol(mat3X4, 1);
@@ -104,8 +221,24 @@ class MatrixUtilsTest {
     }
 
     @Test
-    void testGetColTooBig() {
-        assertThrows(IllegalArgumentException.class, () -> MatrixUtils.getCol(mat3X4, 10));
+    void testGetCols() {
+        double[][] output = MatrixUtils.getCols(mat3X5, List.of(0, 1, 3));
+        for (int i = 0; i < mat3X5get013.length; i++) {
+            assertArrayEquals(mat3X5get013[i], output[i]);
+        }
+    }
+
+    @Test
+    void testGetDupCols() {
+        double[][] output = MatrixUtils.getCols(mat3X5, List.of(0, 3, 1, 3, 0));
+        for (int i = 0; i < mat3X5get03130.length; i++) {
+            assertArrayEquals(mat3X5get03130[i], output[i]);
+        }
+    }
+
+    @Test
+    void testGetColsTooBig() {
+        assertThrows(IllegalArgumentException.class, () -> MatrixUtils.getCols(mat3X5, List.of(0, 6)));
     }
 
     // === Transpose Tests ===
@@ -133,7 +266,72 @@ class MatrixUtilsTest {
         }
     }
 
+    // === Matrix Sum Tests ===
+    @Test
+    void testIntraSumRow() {
+        double[] sum = MatrixUtils.sum(matSquareSingular, MatrixUtils.axis.ROW);
+        assertArrayEquals(mssSumRow, sum, 1e-6);
+    }
+
+    @Test
+    void testIntraSumCol() {
+        double[] sum = MatrixUtils.sum(matSquareSingular, MatrixUtils.axis.COLUMN);
+        assertArrayEquals(mssSumCol, sum, 1e-6);
+    }
+
+    @Test
+    void testMatSum() {
+        double[][] sum = MatrixUtils.matrixSum(matSquareSingular, identity);
+        for (int i = 0; i < sum.length; i++) {
+            assertArrayEquals(mssPlusIdentity[i], sum[i], 1e-6);
+        }
+    }
+
+    @Test
+    void testMatDiff() {
+        double[][] diff = MatrixUtils.matrixDifference(matSquareSingular, identity);
+        for (int i = 0; i < diff.length; i++) {
+            assertArrayEquals(mssMinusIdentity[i], diff[i], 1e-6);
+        }
+    }
+
+    @Test
+    void testMatRowSum() {
+        double[][] sum = MatrixUtils.matrixRowSum(identity, vector);
+        for (int i = 0; i < sum.length; i++) {
+            assertArrayEquals(matIdentityPlusVector[i], sum[i], 1e-6);
+        }
+    }
+
+    @Test
+    void testMatRowDiff() {
+        double[][] diff = MatrixUtils.matrixRowDifference(matIdentityPlusVector, vector);
+        for (int i = 0; i < diff.length; i++) {
+            assertArrayEquals(identity[i], diff[i], 1e-6);
+        }
+    }
+
     // === Matrix Multiplication Tests ===
+    @Test
+    void testMatMulScalar() {
+        double[][] prod = MatrixUtils.matrixMultiply(mat4X3, 3.0);
+        for (int i = 0; i < prod.length; i++) {
+            for (int j = 0; j < prod[0].length; j++) {
+                assertEquals(mat4X3[i][j] * 3.0, prod[i][j], 1e-6);
+            }
+        }
+    }
+
+    @Test
+    void testMatMulByZero() {
+        double[][] prod = MatrixUtils.matrixMultiply(mat4X3, 0.0);
+        for (int i = 0; i < prod.length; i++) {
+            for (int j = 0; j < prod[0].length; j++) {
+                assertEquals(mat4X3[i][j] * 0.0, prod[i][j], 1e-6);
+            }
+        }
+    }
+
     @Test
     void testMatMulNormal() {
         double[][] prod = MatrixUtils.matrixMultiply(mat4X3, mat3X5);
@@ -168,7 +366,7 @@ class MatrixUtilsTest {
     // === Matrix Inversion tests ===
     @Test
     void testInvertNormal() {
-        double[][] inv = MatrixUtils.invertSquareMatrix(matSquareNonSingular, 1e-9);
+        double[][] inv = MatrixUtils.jitterInvert(matSquareNonSingular, 1, 1e-9, rn);
         for (int i = 0; i < inv.length; i++) {
             assertArrayEquals(matSNSInv[i], inv[i], 1e-6);
         }
@@ -176,7 +374,7 @@ class MatrixUtilsTest {
 
     @Test
     void testInvertSingular() {
-        assertThrows(ArithmeticException.class, () -> MatrixUtils.invertSquareMatrix(matSquareSingular, 1e-9));
+        assertThrows(ArithmeticException.class, () -> MatrixUtils.jitterInvert(matSquareSingular, 1, 1e-9, rn));
     }
 
     // === Jitter Invert Tests ===
@@ -184,9 +382,7 @@ class MatrixUtilsTest {
     void testJitterInvert() {
         // since there's some randomness in jitter invert, let's make sure it's stable
         for (int run = 0; run < 100; run++) {
-            Random random = new Random();
-            random.setSeed(run);
-            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10, 1e-9, random);
+            double[][] inv = MatrixUtils.jitterInvert(matSquareSingular, 10, 1e-9, rn);
 
             // since the output of jitterInvert is non-deterministic for singular matrices, check to make sure
             // key properties of the inverse matrix hold true; namely M*M_inv = Identity
