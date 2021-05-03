@@ -16,7 +16,9 @@
 
 import { GraphQL } from '@kogito-apps/consoles-common';
 import axios from 'axios';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 
+//Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
   jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[]
 ) => {
@@ -34,6 +36,7 @@ export const performMultipleCancel = async (
   return { successJobs, failedJobs };
 };
 
+//Rest Api to Cancel a Job
 export const jobCancel = async (
   job: Pick<GraphQL.Job, 'id' | 'endpoint'>
 ): Promise<{ modalTitle: string; modalContent: string }> => {
@@ -51,6 +54,7 @@ export const jobCancel = async (
   }
 };
 
+// Rest Api to Reschedule a Job
 export const handleJobReschedule = async (
   job,
   repeatInterval: number | string,
@@ -81,4 +85,31 @@ export const handleJobReschedule = async (
     modalContent = `Reschedule of job ${job.id} failed. Message: ${error.message}`;
     return { modalTitle, modalContent };
   }
+};
+
+// Rest Api to fetch Process Diagram
+export const getSvg = async (data: ProcessInstance): Promise<any> => {
+  return axios
+    .get(`/svg/processes/${data.processId}/instances/${data.id}`)
+    .then(res => {
+      return { svg: res.data };
+    })
+    .catch(async error => {
+      /* istanbul ignore else*/
+      if (data.serviceUrl) {
+        return axios
+          .get(
+            `${data.serviceUrl}/svg/processes/${data.processId}/instances/${data.id}`
+          )
+          .then(res => {
+            return { svg: res.data };
+          })
+          .catch(err => {
+            /* istanbul ignore else*/
+            if (err.response && err.response.status !== 404) {
+              return { error: err.message };
+            }
+          });
+      }
+    });
 };
