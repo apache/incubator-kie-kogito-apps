@@ -40,10 +40,18 @@ import {
   ServerErrors
 } from '@kogito-apps/components-common';
 import {
+  Job,
   ProcessInstance,
-  ProcessInstanceState
+  ProcessInstanceState,
+  setTitle,
+  SvgSuccessResponse,
+  SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
 import { ProcessDetailsDriver } from '../../../api';
+import ProcessDiagram from '../ProcessDiagram/ProcessDiagram';
+import JobsPanel from '../JobsPanel/JobsPanel';
+import ProcessDetailsErrorModal from '../ProcessDetailsErrorModal/ProcessDetailsErrorModal';
+import SVG from 'react-inlinesvg';
 import '../styles.css';
 
 interface ProcessDetailsProps {
@@ -52,12 +60,15 @@ interface ProcessDetailsProps {
   id: string;
 }
 
+type svgResponse = SvgSuccessResponse | SvgErrorResponse;
+
 const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
   id
 }) => {
   const [data, setData] = useState<any>({});
+  const [jobs, setJobs] = useState<Job[]>([]);
   //@ts-ignore
   const [updateJson, setUpdateJson] = useState<any>({});
   //@ts-ignore
@@ -67,16 +78,19 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [confirmationModal, setConfirmationModal] = useState<boolean>(false);
   const [variableError, setVariableError] = useState();
-  //@ts-ignore
   const [svg, setSvg] = useState(null);
+  const [svgError, setSvgError] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [svgErrorModalOpen, setSvgErrorModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const initLoad = async (): Promise<void> => {
     setIsLoading(true);
     try {
       const response: ProcessInstance = await driver.processDetailsQuery(id);
+      const jobsResponse: Job[] = await driver.jobsQuery(id);
       response && setData(response);
+      jobsResponse && setJobs(jobsResponse);
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -84,7 +98,46 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     }
   };
 
+  const handleSvgErrorModal = () => {
+    setSvgErrorModalOpen(!svgErrorModalOpen);
+  };
+
+  const errorModalAction: JSX.Element[] = [
+    <Button
+      key="confirm-selection"
+      variant="primary"
+      onClick={handleSvgErrorModal}
+    >
+      OK
+    </Button>
+  ];
+
   useEffect(() => {
+    const handleSvgApi = async () => {
+      if (data && data.id === id) {
+        const response: svgResponse = await driver.getProcessDiagram(data);
+        if (response && response.svg) {
+          const temp = <SVG src={response.svg} />;
+          setSvg(temp);
+        } else if (response && response.error) {
+          setSvgError(response.error);
+        }
+      }
+    };
+    /* istanbul ignore else*/
+    if (isEnvelopeConnectedToChannel) {
+      handleSvgApi();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (svgError && svgError.length > 0) {
+      setSvgErrorModalOpen(true);
+    }
+  }, [svgError]);
+
+  useEffect(() => {
+    /* istanbul ignore else*/
     if (isEnvelopeConnectedToChannel) {
       initLoad();
     }
@@ -95,6 +148,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   };
 
   const updateVariablesButton = (): JSX.Element => {
+    /* istanbul ignore else*/
     if (data.serviceUrl !== null) {
       return (
         <Button
@@ -163,7 +217,12 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex>
         <FlexItem>
-          {svg !== null && svg.props.src && <Card> Process Diagram</Card>}
+          {svg !== null && svg.props.src && (
+            <Card>
+              {' '}
+              <ProcessDiagram svg={svg} />{' '}
+            </Card>
+          )}
         </FlexItem>
       </Flex>
     );
@@ -379,7 +438,9 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
                   flex={{ default: 'flex_1' }}
                 >
                   <FlexItem>Process Timeline</FlexItem>
-                  <FlexItem>Jobs Panel</FlexItem>
+                  <FlexItem>
+                    <JobsPanel jobs={jobs} driver={driver} />
+                  </FlexItem>
                   {data.addons.includes('process-management') &&
                     data.state !== ProcessInstanceState.Completed &&
                     data.state !== ProcessInstanceState.Aborted &&
@@ -394,6 +455,16 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
             </>
           ) : (
             <KogitoSpinner spinnerText="Loading process details..." />
+          )}
+          {svgErrorModalOpen && (
+            <ProcessDetailsErrorModal
+              errorString={svgError}
+              errorModalOpen={svgErrorModalOpen}
+              errorModalAction={errorModalAction}
+              handleErrorModal={handleSvgErrorModal}
+              label="svg error modal"
+              title={setTitle('failure', 'Process Diagram')}
+            />
           )}
         </>
       ) : (

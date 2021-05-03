@@ -16,7 +16,13 @@
 
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import { ProcessDetailsChannelApi, ProcessDetailsDriver } from '../api';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  ProcessInstance,
+  Job,
+  JobCancel,
+  SvgSuccessResponse,
+  SvgErrorResponse
+} from '@kogito-apps/management-console-shared';
 
 export default class ProcessDetailsEnvelopeViewDriver
   implements ProcessDetailsDriver {
@@ -24,11 +30,35 @@ export default class ProcessDetailsEnvelopeViewDriver
     private readonly channelApi: MessageBusClientApi<ProcessDetailsChannelApi>
   ) {}
 
-  initialLoad(): Promise<void> {
-    return this.channelApi.requests.processDetails__initialLoad();
+  getProcessDiagram(
+    data: ProcessInstance
+  ): Promise<SvgSuccessResponse | SvgErrorResponse> {
+    return this.channelApi.requests.processDetails__getProcessDiagram(data);
+  }
+
+  cancelJob(job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> {
+    return this.channelApi.requests.processDetails__cancelJob(job);
+  }
+
+  rescheduleJob(
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> {
+    return this.channelApi.requests.processDetails__rescheduleJob(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
   }
 
   processDetailsQuery(id: string): Promise<ProcessInstance> {
     return this.channelApi.requests.processDetails__processDetailsQuery(id);
+  }
+
+  jobsQuery(id: string): Promise<Job[]> {
+    return this.channelApi.requests.processDetails__jobsQuery(id);
   }
 }
