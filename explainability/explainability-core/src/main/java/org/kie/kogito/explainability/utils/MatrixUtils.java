@@ -95,7 +95,7 @@ public class MatrixUtils {
      * @return double[][] array, the converted matrix
      */
     public static double[][] rowVector(double[] v) {
-        double[][] out = new double[1][v.length];
+        var out = new double[1][v.length];
         out[0] = v;
         return out;
     }
@@ -107,8 +107,8 @@ public class MatrixUtils {
      * @return double[][] array, the converted matrix
      */
     public static double[][] columnVector(double[] v) {
-        double[][] out = new double[v.length][1];
-        for (int i = 0; i < v.length; i++) {
+        var out = new double[v.length][1];
+        for (var i = 0; i < v.length; i++) {
             out[i][0] = v[i];
         }
         return out;
@@ -136,7 +136,7 @@ public class MatrixUtils {
      */
     public static double[] getCol(double[][] x, int i) {
         int cols = MatrixUtils.getShape(x)[1];
-        if (cols <= i | i < 0) {
+        if (cols <= i || i < 0) {
             throw new IllegalArgumentException(
                     String.format("Column index %d too large, matrix only has %d column(s)", i, cols));
         }
@@ -155,17 +155,16 @@ public class MatrixUtils {
      * @return matrix, each column corresponding to the ith column from idxs.
      */
     public static double[][] getCols(double[][] x, List<Integer> idxs) {
-        if (idxs.size() == 0) {
+        if (idxs.isEmpty()) {
             throw new IllegalArgumentException("Empty column idxs passed to getCols");
         }
 
         int[] shape = MatrixUtils.getShape(x);
-        double[][] out = new double[shape[0]][idxs.size()];
+        var out = new double[shape[0]][idxs.size()];
 
-        int setCols = 0;
-        for (int i = 0; i < shape[0]; i++) {
-            for (int col = 0; col < idxs.size(); col++) {
-                if (idxs.get(col) >= shape[1] | idxs.get(col) < 0) {
+        for (var i = 0; i < shape[0]; i++) {
+            for (var col = 0; col < idxs.size(); col++) {
+                if (idxs.get(col) >= shape[1] || idxs.get(col) < 0) {
                     throw new IllegalArgumentException(
                             String.format("Column index %d output bounds, matrix only has %d column(s)", col, shape[1]));
                 }
@@ -193,9 +192,9 @@ public class MatrixUtils {
                     String.format("Matrix B shape:  %d x %d,", bShape[0], bShape[1]));
         }
 
-        double[][] sum = new double[aShape[0]][aShape[1]];
-        for (int i = 0; i < aShape[0]; i++) {
-            for (int j = 0; j < aShape[1]; j++) {
+        var sum = new double[aShape[0]][aShape[1]];
+        for (var i = 0; i < aShape[0]; i++) {
+            for (var j = 0; j < aShape[1]; j++) {
                 sum[i][j] = a[i][j] + b[i][j];
             }
         }
@@ -212,9 +211,9 @@ public class MatrixUtils {
     public static double[][] matrixRowSum(double[][] a, double[] b) {
         int[] aShape = MatrixUtils.getShape(a);
         double[][] bMat = MatrixUtils.rowVector(b);
-        double[][] out = new double[aShape[0]][aShape[1]];
+        var out = new double[aShape[0]][aShape[1]];
 
-        for (int i = 0; i < aShape[0]; i++) {
+        for (var i = 0; i < aShape[0]; i++) {
             out[i] = MatrixUtils.matrixSum(MatrixUtils.rowVector(a[i]), bMat)[0];
         }
         return out;
@@ -282,9 +281,9 @@ public class MatrixUtils {
     public static double[][] matrixMultiply(double[][] a, double b) {
         int[] aShape = MatrixUtils.getShape(a);
 
-        double[][] product = new double[aShape[0]][aShape[1]];
-        for (int i = 0; i < aShape[0]; i++) {
-            for (int j = 0; j < aShape[1]; j++) {
+        var product = new double[aShape[0]][aShape[1]];
+        for (var i = 0; i < aShape[0]; i++) {
+            for (var j = 0; j < aShape[1]; j++) {
                 product[i][j] = a[i][j] * b;
             }
         }
@@ -301,15 +300,15 @@ public class MatrixUtils {
      */
     public static double[] sum(double[][] x, axis axis) {
         int[] shape = MatrixUtils.getShape(x);
-        if (axis == axis.ROW) {
-            double[][] out = new double[1][shape[1]];
-            for (int i = 0; i < shape[0]; i++) {
+        if (axis == MatrixUtils.axis.ROW) {
+            var out = new double[1][shape[1]];
+            for (var i = 0; i < shape[0]; i++) {
                 out = MatrixUtils.matrixSum(out, MatrixUtils.rowVector(x[i]));
             }
             return out[0];
         } else {
-            double[][] out = new double[1][shape[0]];
-            for (int i = 0; i < shape[1]; i++) {
+            var out = new double[1][shape[0]];
+            for (var i = 0; i < shape[1]; i++) {
                 out = MatrixUtils.matrixSum(out, MatrixUtils.rowVector(MatrixUtils.getCol(x, i)));
             }
             return out[0];
