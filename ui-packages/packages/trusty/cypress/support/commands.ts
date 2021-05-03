@@ -55,14 +55,24 @@ declare namespace Cypress {
     refreshButton(): Chainable<JQuery<HTMLBodyElement>>;
 
     /**
-     * Return DOM Element for table page.
+     * Return DOM Element for table page top.
      */
-    tablePage(): Chainable<JQuery<HTMLBodyElement>>;
+    paginationTop(): Chainable<JQuery<HTMLBodyElement>>;
+
+    /**
+     * Return DOM Element for table page bottom.
+     */
+    paginationBottom(): Chainable<JQuery<HTMLBodyElement>>;
+
+    /**
+     * Return DOM Element for table which represents page content.
+     */
+    pageContent(): Chainable<JQuery<HTMLBodyElement>>;
   }
 }
 
 Cypress.Commands.add('menuButton', () => {
-  return cy.get("[data-ouia-component-id='menuButton']");
+  return cy.get('button#nav-toggle');
 });
 
 Cypress.Commands.add('auditInvestigationItem', () => {
@@ -70,29 +80,35 @@ Cypress.Commands.add('auditInvestigationItem', () => {
 });
 
 Cypress.Commands.add('searchInput', () => {
-  return cy.get("[data-title='searchInput']");
+  return cy.get("[data-ouia-component-id='searchInput']");
 });
 
 Cypress.Commands.add('searchButton', () => {
-  return cy.get("[data-title='search']");
+  return cy.get("[data-ouia-component-id='searchButton']");
 });
 
 Cypress.Commands.add('fromInput', () => {
-  return cy.get("[data-title='fromInput']");
+  return cy.get('div.flatpickr-wrapper>input#audit-from-date+input');
 });
 
 Cypress.Commands.add('toInput', () => {
-  return cy.get("[data-ouia-component-id='toInput']");
+  return cy.get('div.flatpickr-wrapper>input#audit-to-date+input');
 });
 
 Cypress.Commands.add('refreshButton', () => {
-  return cy.get("[data-ouia-component-id='refresh']");
+  return cy.get("[data-ouia-component-id='refreshButton']");
 });
 
-Cypress.Commands.add('buttonPMML', () => {
-  return cy.get("[data-ouia-component-id='pmml-button']");
+Cypress.Commands.add('paginationTop', () => {
+  return cy.get("[data-ouia-component-id='OUIA-Generated-Pagination-top-1']");
 });
 
-Cypress.Commands.add('tablePage', () => {
-  return cy.get("[data-ouia-component-id='tablePage']");
+Cypress.Commands.add('paginationBottom', () => {
+  return cy.get(
+    "[data-ouia-component-id='OUIA-Generated-Pagination-bottom-1']"
+  );
+});
+
+Cypress.Commands.add('pageContent', () => {
+  return cy.get("[data-ouia-component-id='execTable']");
 });

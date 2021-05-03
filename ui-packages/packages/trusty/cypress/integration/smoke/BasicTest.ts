@@ -14,35 +14,57 @@
  * limitations under the License.
  */
 
-describe("Basic Elements", () => {
-    beforeEach(() => {
-      cy.visit("/");
-    });
-  
-    it("Menu button is visible", () => {
-    });
+describe('Basic Elements', () => {
+  beforeEach(() => {
+    cy.visit('/');
+  });
 
-    it("Menu button shows/hides options", () => {
-    });
-  
-    it("Search is visible", () => {
-    });
-  
-    it("Refresh is visible", () => {
-    });
+  it('Menu button is visible', () => {
+    cy.menuButton().should('be.visible');
+  });
 
-    it("Date inputs are visible", () => {
-    });
-
-    it("Top paging is visible", () => {
-    });
-
-    it("Bottom paging is visible", () => {
-    });
-
-    it("Table is visible", () => {
-    });
-
-    it("Table is empty", () => {
+  it('Menu button shows/hides options', () => {
+    cy.auditInvestigationItem().then($item => {
+      //toggle menu side bar - both directions
+      if ($item.is(':visible')) {
+        cy.menuButton().click();
+        cy.auditInvestigationItem().should('not.be.visible');
+        cy.menuButton().click();
+        cy.auditInvestigationItem().should('be.visible');
+      } else {
+        cy.menuButton().click();
+        cy.auditInvestigationItem().should('be.visible');
+        cy.menuButton().click();
+        cy.auditInvestigationItem().should('not.be.visible');
+      }
     });
   });
+
+  it('Search is visible', () => {
+    cy.searchInput().should('be.visible');
+    cy.searchInput().type('someId');
+    cy.searchButton().should('be.visible');
+  });
+
+  it('Refresh is visible', () => {
+    cy.refreshButton().should('be.visible');
+  });
+
+  it('Date inputs are visible', () => {
+    cy.fromInput().should('be.visible');
+    cy.toInput().should('be.visible');
+  });
+
+  it('Top paging is visible', () => {
+    cy.paginationTop().should('be.visible');
+  });
+
+  it('Bottom paging is visible', () => {
+    cy.get("main").scrollTo("bottom");
+    cy.paginationBottom().should('be.visible');
+  });
+
+  it('Decision result is available', () => {
+    cy.pageContent().find("tr>td>a:contains('1003')", { timeout: 5000 });
+  });
+});

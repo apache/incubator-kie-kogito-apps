@@ -88,12 +88,14 @@ export const AuditToolbarTop = (props: toolbarBaseProps & topToolbarProps) => {
                 aria-label="search executions"
                 onKeyDown={onSearchEnter}
                 placeholder="Search by ID"
+                data-ouia-component-id="searchInput"
               />
               <Button
                 id="audit-search"
                 variant={ButtonVariant.control}
                 aria-label="search button for search input"
                 onClick={onSearchSubmit}
+                ouiaId="searchButton"
               >
                 <SearchIcon />
               </Button>
@@ -134,6 +136,7 @@ export const AuditToolbarTop = (props: toolbarBaseProps & topToolbarProps) => {
                 title="Refresh"
                 aria-label="Refresh"
                 onClick={() => onRefresh()}
+                ouiaId="refreshButton"
               >
                 <SyncIcon />
               </Button>
@@ -173,5 +176,6 @@ export const AuditToolbarBottom = (props: toolbarBaseProps) => {
       paginationId="audit-overview-bottom-pagination"
       position={PaginationVariant.bottom}
     />
+
   );
 };
