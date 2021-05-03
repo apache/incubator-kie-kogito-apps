@@ -199,7 +199,7 @@ class ExplainabilityResultConsumerTest {
         assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getFeatureName(),
                 saliencyModel.getFeatureImportance().get(0).getFeatureName());
         assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getScore(),
-                     saliencyModel.getFeatureImportance().get(0).getFeatureScore(), 0.1);
+                saliencyModel.getFeatureImportance().get(0).getFeatureScore(), 0.1);
     }
 
     @Test
