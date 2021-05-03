@@ -3,10 +3,4 @@
     padding-left: var(--pf-c-page__main-section--xl--PaddingLeft);
     padding-right: var(--pf-c-page__main-section--xl--PaddingLeft);
   }
-  &__section {
-    height: 100%;
-  }
-  &__drawer {
-    --pf-c-drawer__content--BackgroundColor: transparent;
-  }
 }

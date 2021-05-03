@@ -6,13 +6,13 @@ import {
   Touchspin
 } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
-import { CFGoal } from '../../Templates/Counterfactual/Counterfactual';
+import { CFGoal } from '../../../types';
 
-interface CounterfactualOutcomeEditProps {
+type CounterfactualOutcomeEditProps = {
   goal: CFGoal;
   index: number;
   onUpdateGoal: (goal: CFGoal) => void;
-}
+};
 
 const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
   const { goal, index, onUpdateGoal } = props;

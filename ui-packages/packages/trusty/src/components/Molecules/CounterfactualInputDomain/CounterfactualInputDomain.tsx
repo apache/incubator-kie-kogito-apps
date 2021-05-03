@@ -1,5 +1,5 @@
 import React from 'react';
-import { CFSearchInput } from '../../Templates/Counterfactual/Counterfactual';
+import { CFSearchInput } from '../../../types';
 
 type CounterfactualInputDomainProps = {
   input: CFSearchInput;

@@ -1,10 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Button, Form, Modal, ModalVariant } from '@patternfly/react-core';
 import CounterfactualOutcomeEdit from '../../Molecules/CounterfactualOutcomeEdit/CounterfactualOutcomeEdit';
-import {
-  CFDispatch,
-  CFGoal
-} from '../../Templates/Counterfactual/Counterfactual';
+import { CFGoal } from '../../../types';
+import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
 import './CounterfactualOutcomeSelection.scss';
 
 type CounterfactualOutcomeSelection = {
@@ -40,7 +38,7 @@ const CounterfactualOutcomeSelection = (
         : goal
     );
     setEditingGoals(cleanedGoals);
-    dispatch({ type: 'setOutcomes', payload: cleanedGoals });
+    dispatch({ type: 'CF_SET_OUTCOMES', payload: cleanedGoals });
     onClose();
   };
 

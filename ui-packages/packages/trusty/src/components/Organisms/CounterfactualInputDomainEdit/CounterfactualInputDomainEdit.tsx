@@ -16,14 +16,14 @@ import {
   StackItem,
   Title
 } from '@patternfly/react-core';
-import {
-  CFCategoricalDomain,
-  CFDispatch,
-  CFNumericalDomain,
-  CFSearchInput
-} from '../../Templates/Counterfactual/Counterfactual';
 import CounterfactualCategoricalDomainEdit from '../CounterfactualCategoricalDomainEdit/CounterfactualCategoricalDomainEdit';
 import CounterfactualNumericalDomainEdit from '../CounterfactualNumericalDomainEdit/CounterfactualNumericalDomainEdit';
+import {
+  CFCategoricalDomain,
+  CFNumericalDomain,
+  CFSearchInput
+} from '../../../types';
+import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
 
 type CounterfactualInputDomainEditProps = {
   input: CFSearchInput;
@@ -43,7 +43,7 @@ const CounterfactualInputDomainEdit = (
     const updatedValidation = validateDomain(inputDomain);
     if (updatedValidation.isValid) {
       dispatch({
-        type: 'setInputDomain',
+        type: 'CF_SET_INPUT_DOMAIN',
         payload: { inputIndex, domain: inputDomain }
       });
       onClose();

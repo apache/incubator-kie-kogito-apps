@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CFCategoricalDomain } from '../../Templates/Counterfactual/Counterfactual';
 import {
   Button,
   ButtonVariant,
@@ -10,6 +9,7 @@ import {
   TextInput
 } from '@patternfly/react-core';
 import { TrashIcon } from '@patternfly/react-icons';
+import { CFCategoricalDomain } from '../../../types';
 
 type CounterfactualCategoricalDomainEditProps = {
   inputDomain: CFCategoricalDomain;

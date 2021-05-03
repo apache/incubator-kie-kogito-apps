@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
-  Td,
-  Thead,
-  Th,
-  Tbody,
   TableComposable,
+  Tbody,
+  Td,
+  Th,
+  Thead,
   Tr
 } from '@patternfly/react-table';
 import {
@@ -24,22 +24,23 @@ import {
   PlusCircleIcon
 } from '@patternfly/react-icons';
 import { Scrollbars } from 'react-custom-scrollbars';
-import {
-  CFDispatch,
-  CFResult,
-  CFSearchInput,
-  CFStatus
-} from '../../Templates/Counterfactual/Counterfactual';
 import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
 import useCFTableSizes from './useCFTableSizes';
 import './CounterfactualTable.scss';
+import {
+  CFExecutionStatus,
+  CFResult,
+  CFSearchInput,
+  CFStatus
+} from '../../../types';
+import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
 
-interface CounterfactualTableProps {
+type CounterfactualTableProps = {
   inputs: CFSearchInput[];
   results: CFResult[];
   status: CFStatus;
   onOpenInputDomainEdit: (input: CFSearchInput, inputIndex: number) => void;
-}
+};
 
 const CounterfactualTable = (props: CounterfactualTableProps) => {
   const { inputs, results, status, onOpenInputDomainEdit } = props;
@@ -66,7 +67,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   const scrollbars = useRef(null);
 
   useEffect(() => {
-    setIsInputSelectionEnabled(status.executionStatus === 'NOT_STARTED');
+    setIsInputSelectionEnabled(
+      status.executionStatus === CFExecutionStatus.NOT_STARTED
+    );
   }, [status]);
 
   const slideResults = (action: 'next' | 'prev') => {
@@ -111,14 +114,14 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 
   const onSelectAll = (event, isSelected: boolean) => {
     dispatch({
-      type: 'toggleAllInputs',
+      type: 'CF_TOGGLE_ALL_INPUTS',
       payload: { selected: isSelected }
     });
   };
 
   const onSelect = (event, isSelected, rowId) => {
     dispatch({
-      type: 'toggleInput',
+      type: 'CF_TOGGLE_INPUT',
       payload: { searchInputIndex: rowId }
     });
   };
@@ -325,7 +328,8 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             <Td className="cf-table__slider-cell" />
                           )}
                           {displayedResults.length === 0 &&
-                            status.executionStatus === 'RUNNING' && (
+                            status.executionStatus ===
+                              CFExecutionStatus.RUNNING && (
                               <>
                                 <Td key="results-loading-1">
                                   <Skeleton
@@ -342,7 +346,8 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                               </>
                             )}
                           {displayedResults.length === 0 &&
-                            status.executionStatus === 'NOT_STARTED' && (
+                            status.executionStatus ===
+                              CFExecutionStatus.NOT_STARTED && (
                               <>
                                 <Td key="empty-results-1">
                                   No available results

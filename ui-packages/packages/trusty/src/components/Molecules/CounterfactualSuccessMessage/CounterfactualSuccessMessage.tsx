@@ -4,7 +4,7 @@ import {
   AlertActionCloseButton,
   StackItem
 } from '@patternfly/react-core';
-import { CFStatus } from '../../Templates/Counterfactual/Counterfactual';
+import { CFExecutionStatus, CFStatus } from '../../../types';
 
 type CounterfactualSuccessMessageProps = {
   status: CFStatus;
@@ -20,12 +20,12 @@ const CounterfactualSuccessMessage = (
   useEffect(() => {
     if (
       localStatus &&
-      localStatus.executionStatus === 'RUNNING' &&
-      status.executionStatus === 'RUN'
+      localStatus.executionStatus === CFExecutionStatus.RUNNING &&
+      status.executionStatus === CFExecutionStatus.COMPLETED
     ) {
       setIsMessageVisible(true);
     }
-    if (status.executionStatus === 'NOT_STARTED') {
+    if (status.executionStatus === CFExecutionStatus.NOT_STARTED) {
       setIsMessageVisible(false);
     }
     setLocalStatus(status);

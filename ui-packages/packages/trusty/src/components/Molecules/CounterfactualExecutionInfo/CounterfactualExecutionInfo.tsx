@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CFResult } from '../../Templates/Counterfactual/Counterfactual';
 import { Badge, FlexItem } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
 
 import './CounterfactualExecutionInfo.scss';
 import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
+import { CFResult } from '../../../types';
 
 type CounterfactualExecutionInfoProps = {
   results: CFResult[];

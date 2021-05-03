@@ -115,3 +115,47 @@ export interface ModelData {
   serviceIdentifier: ServiceIdentifier;
   model: string;
 }
+
+export interface CFSearchDomain {
+  isFixed: boolean;
+  name: string;
+  typeRef: 'number' | 'string' | 'boolean';
+  domain?: CFNumericalDomain | CFCategoricalDomain;
+}
+
+export interface CFNumericalDomain {
+  type: 'numerical';
+  lowerBound?: number;
+  upperBound?: number;
+}
+
+export interface CFCategoricalDomain {
+  type: 'categorical';
+  categories: string[];
+}
+
+export interface CFSearchInput extends CFSearchDomain {
+  value: number | string | boolean;
+}
+
+export type CFGoal = Pick<ItemObject, 'name' | 'typeRef' | 'value'> & {
+  isFixed: boolean;
+  originalValue: ItemObject['value'];
+  id: string;
+};
+
+export type CFResult = Array<unknown>;
+
+export interface CFStatus {
+  isDisabled: boolean;
+  executionStatus: CFExecutionStatus;
+  lastExecutionTime: null | string;
+}
+
+export enum CFExecutionStatus {
+  COMPLETED,
+  RUNNING,
+  NOT_STARTED
+}
+
+export type CFAnalysisResetType = 'NEW' | 'EDIT';

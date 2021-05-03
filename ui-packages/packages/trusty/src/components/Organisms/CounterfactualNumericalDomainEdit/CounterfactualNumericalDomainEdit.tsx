@@ -1,4 +1,3 @@
-import { CFNumericalDomain } from '../../Templates/Counterfactual/Counterfactual';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -9,6 +8,7 @@ import {
   TextInput
 } from '@patternfly/react-core';
 import { CFConstraintValidation } from '../CounterfactualInputDomainEdit/CounterfactualInputDomainEdit';
+import { CFNumericalDomain } from '../../../types';
 
 type CounterfactualNumericalDomainEditProps = {
   inputDomain: CFNumericalDomain;

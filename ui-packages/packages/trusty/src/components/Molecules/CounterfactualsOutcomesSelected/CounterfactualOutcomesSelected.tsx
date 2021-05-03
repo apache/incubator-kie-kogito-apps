@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListVariant } from '@patternfly/react-core';
-import { CFGoal } from '../../Templates/Counterfactual/Counterfactual';
+import { CFGoal } from '../../../types';
 
 type CounterfactualOutcomesSelectedProps = {
   goals: CFGoal[];

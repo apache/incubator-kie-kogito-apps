@@ -12,13 +12,14 @@ import {
   Tooltip
 } from '@patternfly/react-core';
 import CounterfactualOutcomeSelection from '../CounterfactualOutcomeSelection/CounterfactualOutcomeSelection';
+import './CounterfactualToolbar.scss';
 import {
   CFAnalysisResetType,
-  CFDispatch,
+  CFExecutionStatus,
   CFGoal,
   CFStatus
-} from '../../Templates/Counterfactual/Counterfactual';
-import './CounterfactualToolbar.scss';
+} from '../../../types';
+import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
 
 type CounterfactualToolbarProps = {
   status: CFStatus;
@@ -40,9 +41,9 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
 
   const handleRun = () => {
     dispatch({
-      type: 'setStatus',
+      type: 'CF_SET_STATUS',
       payload: {
-        executionStatus: 'RUNNING'
+        executionStatus: CFExecutionStatus.RUNNING
       }
     });
   };
@@ -63,12 +64,15 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
   };
 
   const setupNewCF = () => {
-    dispatch({ type: 'resetAnalysis', payload: { resetType: CFResetType } });
+    dispatch({
+      type: 'CF_RESET_ANALYSIS',
+      payload: { resetType: CFResetType }
+    });
     handleNewCFModalClose();
   };
 
   const handleCFReset = () => {
-    dispatch({ type: 'resetAnalysis', payload: { resetType: 'NEW' } });
+    dispatch({ type: 'CF_RESET_ANALYSIS', payload: { resetType: 'NEW' } });
   };
 
   return (
@@ -100,7 +104,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
       </Modal>
       <Toolbar id="cf-toolbar">
         <ToolbarContent>
-          {status.executionStatus === 'NOT_STARTED' && (
+          {status.executionStatus === CFExecutionStatus.NOT_STARTED && (
             <>
               <ToolbarItem>
                 <Tooltip
@@ -163,7 +167,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
               </ToolbarItem>
             </>
           )}
-          {status.executionStatus === 'RUN' && (
+          {status.executionStatus === CFExecutionStatus.COMPLETED && (
             <>
               <ToolbarItem>
                 <Tooltip
@@ -198,7 +202,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
               </ToolbarItem>
             </>
           )}
-          {status.executionStatus === 'RUNNING' && (
+          {status.executionStatus === CFExecutionStatus.RUNNING && (
             <ToolbarItem>
               <CounterFactualProgressBar />
             </ToolbarItem>

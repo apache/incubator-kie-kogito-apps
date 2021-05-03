@@ -1,10 +1,11 @@
 import {
   CFAnalysisResetType,
+  CFExecutionStatus,
   CFGoal,
   CFResult,
   CFSearchInput,
   CFStatus
-} from './Counterfactual';
+} from '../../../types';
 
 export interface CFState {
   goals: CFGoal[];
@@ -116,45 +117,45 @@ export const cfInitialState: CFState = {
   ],
   status: {
     isDisabled: true,
-    executionStatus: 'NOT_STARTED',
+    executionStatus: CFExecutionStatus.NOT_STARTED,
     lastExecutionTime: null
   },
   results: []
 };
 
 export type cfActions =
-  | { type: 'setOutcomes'; payload: CFGoal[] }
+  | { type: 'CF_SET_OUTCOMES'; payload: CFGoal[] }
   | {
-      type: 'toggleInput';
+      type: 'CF_TOGGLE_INPUT';
       payload: {
         searchInputIndex: number;
       };
     }
   | {
-      type: 'toggleAllInputs';
+      type: 'CF_TOGGLE_ALL_INPUTS';
       payload: {
         selected: boolean;
       };
     }
   | {
-      type: 'setInputDomain';
+      type: 'CF_SET_INPUT_DOMAIN';
       payload: {
         inputIndex: number;
         domain: CFSearchInput['domain'];
       };
     }
   | {
-      type: 'setStatus';
+      type: 'CF_SET_STATUS';
       payload: Partial<CFStatus>;
     }
   | {
-      type: 'setResults';
+      type: 'CF_SET_RESULTS';
       payload: {
         results: CFResult[];
       };
     }
   | {
-      type: 'resetAnalysis';
+      type: 'CF_RESET_ANALYSIS';
       payload: {
         resetType: CFAnalysisResetType;
       };
@@ -162,9 +163,9 @@ export type cfActions =
 
 export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
   switch (action.type) {
-    case 'setOutcomes':
+    case 'CF_SET_OUTCOMES':
       return { ...state, goals: action.payload };
-    case 'toggleInput':
+    case 'CF_TOGGLE_INPUT':
       return {
         ...state,
         searchDomains: state.searchDomains.map((input, index) =>
@@ -173,7 +174,7 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
             : input
         )
       };
-    case 'toggleAllInputs':
+    case 'CF_TOGGLE_ALL_INPUTS':
       return {
         ...state,
         searchDomains: state.searchDomains.map(input => ({
@@ -181,7 +182,7 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
           isFixed: !action.payload.selected
         }))
       };
-    case 'setInputDomain':
+    case 'CF_SET_INPUT_DOMAIN':
       return {
         ...state,
         searchDomains: state.searchDomains.map((input, index) =>
@@ -193,17 +194,17 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
             : input
         )
       };
-    case 'setResults':
+    case 'CF_SET_RESULTS':
       return {
         ...state,
         results: action.payload.results
       };
-    case 'setStatus':
+    case 'CF_SET_STATUS':
       return {
         ...state,
         status: { ...state.status, ...action.payload }
       };
-    case 'resetAnalysis':
+    case 'CF_RESET_ANALYSIS':
       switch (action.payload.resetType) {
         case 'NEW':
           return cfInitialState;
