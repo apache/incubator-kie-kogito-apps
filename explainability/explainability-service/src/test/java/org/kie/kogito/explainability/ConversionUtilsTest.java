@@ -313,9 +313,4 @@ class ConversionUtilsTest {
         assertNull(categoricalFeatureDomain.getUpperBound());
     }
 
-    @Test
-    void testFromFeatureList() {
-
-    }
-
 }

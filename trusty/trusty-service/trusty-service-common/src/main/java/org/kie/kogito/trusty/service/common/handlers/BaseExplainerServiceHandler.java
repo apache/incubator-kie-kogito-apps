@@ -33,13 +33,10 @@ public abstract class BaseExplainerServiceHandler<R extends BaseExplainabilityRe
     }
 
     protected ExplainabilityStatus statusFrom(org.kie.kogito.explainability.api.ExplainabilityStatus status) {
-        switch (status) {
-            case SUCCEEDED:
-                return ExplainabilityStatus.SUCCEEDED;
-            case FAILED:
-                return ExplainabilityStatus.FAILED;
+        if (org.kie.kogito.explainability.api.ExplainabilityStatus.SUCCEEDED.equals(status)) {
+            return ExplainabilityStatus.SUCCEEDED;
         }
-        return null;
+        return ExplainabilityStatus.FAILED;
     }
 
 }
