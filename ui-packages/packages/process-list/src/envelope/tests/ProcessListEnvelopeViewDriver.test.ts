@@ -18,7 +18,7 @@ import {
   MessageBusClientApi,
   RequestPropertyNames
 } from '@kogito-tooling/envelope-bus/dist/api';
-import { MockedMessageBusClientApi } from './mocks/Mocks';
+import { MockedMessageBusClientApi, processInstance } from './mocks/Mocks';
 import ProcessListEnvelopeViewDriver from '../ProcessListEnvelopeViewDriver';
 import {
   OrderBy,
@@ -26,7 +26,10 @@ import {
   ProcessListChannelApi,
   SortBy
 } from '../../api';
-import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
+import {
+  OperationType,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 
 let channelApi: MessageBusClientApi<ProcessListChannelApi>;
 let requests: Pick<
@@ -77,6 +80,35 @@ describe('ProcessListEnvelopeViewDriver tests', () => {
       driver.applySorting(sortBy);
 
       expect(requests.processList__applySorting).toHaveBeenCalledWith(sortBy);
+    });
+
+    it('handleSkip', () => {
+      driver.handleSkip(processInstance);
+      expect(requests.processList__handleSkip).toHaveBeenCalledWith(
+        processInstance
+      );
+    });
+
+    it('handleAbort', () => {
+      driver.handleRetry(processInstance);
+      expect(requests.processList__handleRetry).toHaveBeenCalledWith(
+        processInstance
+      );
+    });
+
+    it('handleAbort', () => {
+      driver.handleAbort(processInstance);
+      expect(requests.processList__handleAbort).toHaveBeenCalledWith(
+        processInstance
+      );
+    });
+
+    it('handleMultipleAction', () => {
+      driver.handleMultipleAction([processInstance], OperationType.ABORT);
+      expect(requests.processList__handleMultipleAction).toHaveBeenCalledWith(
+        [processInstance],
+        OperationType.ABORT
+      );
     });
 
     it('query', () => {

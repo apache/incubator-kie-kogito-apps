@@ -15,6 +15,12 @@
  */
 
 import { GraphQL } from '@kogito-apps/consoles-common';
+import {
+  BulkProcessInstanceAction,
+  OperationType,
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 import axios from 'axios';
 import {
   ProcessInstance,
@@ -123,28 +129,92 @@ export const getSvg = async (data: ProcessInstance): Promise<any> => {
     });
 };
 
-// Rest Api to Abort process instances
-export const handleAbort = async (
-  data: Pick<
-    ProcessInstance,
-    'id' | 'processId' | 'processName' | 'serviceUrl' | 'state'
-  >
-): Promise<AbortResponse> => {
-  try {
-    await axios.delete(
-      `${data.serviceUrl}/management/processes/${data.processId}/instances/${data.id}`
-    );
-    data.state = ProcessInstanceState.Aborted;
-    return {
-      title: 'Abort operation',
-      content: `The process ${data.processName} was successfully aborted.`,
-      type: TitleType.SUCCESS
-    };
-  } catch (error) {
-    return {
-      title: 'Abort operation',
-      content: `Failed to abort process ${data.processName}. Message: ${error.message}`,
-      type: TitleType.FAILURE
-    };
+export const handleSkip = async (
+  processInstance: ProcessInstance
+): Promise<VoidFunction> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/skip`
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+};
+
+export const handleRetry = async (
+  processInstance: ProcessInstance
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/retrigger`
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+};
+
+export const handleAbort = (
+  processInstance: ProcessInstance
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(
+        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}`
+      )
+      .then(() => {
+        processInstance.state = ProcessInstanceState.Aborted;
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+};
+
+export const handleMultipleAction = async (
+  processInstances: ProcessInstance[],
+  operationType: OperationType
+): Promise<BulkProcessInstanceAction> => {
+  const successProcessInstances: ProcessInstance[] = [];
+  const failedProcessInstances: ProcessInstance[] = [];
+  for (const processInstance of processInstances) {
+    if (operationType === OperationType.ABORT) {
+      await handleAbort(processInstance)
+        .then(() => {
+          successProcessInstances.push(processInstance);
+        })
+        .catch(error => {
+          processInstance.errorMessage = error.message;
+          failedProcessInstances.push(processInstance);
+        });
+    }
+
+    if (operationType === OperationType.SKIP) {
+      await handleSkip(processInstance)
+        .then(() => {
+          successProcessInstances.push(processInstance);
+        })
+        .catch(error => {
+          processInstance.errorMessage = error.message;
+          failedProcessInstances.push(processInstance);
+        });
+    }
+
+    if (operationType === OperationType.RETRY) {
+      await handleRetry(processInstance)
+        .then(() => {
+          successProcessInstances.push(processInstance);
+        })
+        .catch(error => {
+          processInstance.errorMessage = error.message;
+          failedProcessInstances.push(processInstance);
+        });
+    }
   }
+
+  return { successProcessInstances, failedProcessInstances };
 };

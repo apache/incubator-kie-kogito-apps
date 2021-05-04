@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  BulkProcessInstanceAction,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import { ProcessInstanceFilter, SortBy } from './ProcessListEnvelopeApi';
 export interface ProcessListChannelApi {
   processList__initialLoad(
@@ -24,6 +28,13 @@ export interface ProcessListChannelApi {
   processList__openProcess(process: ProcessInstance): Promise<void>;
   processList__applyFilter(filter: ProcessInstanceFilter): Promise<void>;
   processList__applySorting(sortBy: SortBy): Promise<void>;
+  processList__handleSkip(processInstance: ProcessInstance): Promise<void>;
+  processList__handleRetry(processInstance: ProcessInstance): Promise<void>;
+  processList__handleAbort(processInstance: ProcessInstance): Promise<void>;
+  processList__handleMultipleAction(
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ): Promise<BulkProcessInstanceAction>;
   processList__query(offset: number, limit: number): Promise<ProcessInstance[]>;
   processList__getChildProcessesQuery(
     rootProcessInstanceId: string

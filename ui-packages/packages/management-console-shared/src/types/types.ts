@@ -47,6 +47,11 @@ export interface BulkCancel {
   failedJobs: Job[];
 }
 
+export interface BulkProcessInstanceAction {
+  successProcessInstances: ProcessInstance[];
+  failedProcessInstances: ProcessInstance[];
+}
+
 export interface JobCancel {
   modalTitle: string;
   modalContent: string;
@@ -58,6 +63,11 @@ export enum ProcessInstanceState {
   Aborted = 'ABORTED',
   Suspended = 'SUSPENDED',
   Error = 'ERROR'
+}
+
+export enum TitleType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
 }
 
 export enum MilestoneStatus {
@@ -111,6 +121,9 @@ export interface ProcessInstance {
   addons?: string[];
   lastUpdate: Date;
   businessKey?: string;
+  isSelected?: boolean;
+  errorMessage?: string;
+  isOpen?: boolean;
 }
 
 export interface SvgSuccessResponse {

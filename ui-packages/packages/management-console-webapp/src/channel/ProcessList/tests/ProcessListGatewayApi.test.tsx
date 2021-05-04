@@ -109,6 +109,45 @@ describe('ProcessListChannelApiImpl tests', () => {
     expect(gatewayApi.processListState.sortBy).toBe(sortBy);
   });
 
+  it('handleSkip', async () => {
+    let result = '';
+    await gatewayApi
+      .handleSkip(processInstance)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = 'error';
+      });
+    expect(result).toEqual('error');
+  });
+
+  it('handleRetry', async () => {
+    let result = '';
+    await gatewayApi
+      .handleRetry(processInstance)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = 'error';
+      });
+    expect(result).toEqual('error');
+  });
+
+  it('handleAbort', async () => {
+    let result = '';
+    await gatewayApi
+      .handleAbort(processInstance)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = 'error';
+      });
+    expect(result).toEqual('error');
+  });
+
   it('process instance query', () => {
     gatewayApi.initialLoad(processListFilters, sortBy);
     gatewayApi.applySorting(sortBy);

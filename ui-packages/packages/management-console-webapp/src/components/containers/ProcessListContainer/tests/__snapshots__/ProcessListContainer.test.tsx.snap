@@ -14,6 +14,10 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
         },
         "applyFilter": [Function],
         "applySorting": [Function],
+        "handleAbort": [Function],
+        "handleMultipleAction": [Function],
+        "handleRetry": [Function],
+        "handleSkip": [Function],
         "initialLoad": [Function],
         "listeners": Array [
           Object {

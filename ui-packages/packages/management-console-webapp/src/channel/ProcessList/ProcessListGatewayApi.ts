@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  BulkProcessInstanceAction,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
+import {
+  handleAbort,
+  handleMultipleAction,
+  handleRetry,
+  handleSkip
+} from '../../apis/apis';
 
 export interface ProcessListGatewayApi {
   processListState: ProcessListState;
@@ -23,6 +33,13 @@ export interface ProcessListGatewayApi {
   openProcess: (process: ProcessInstance) => Promise<void>;
   applyFilter: (filter: ProcessInstanceFilter) => Promise<void>;
   applySorting: (SortBy: SortBy) => Promise<void>;
+  handleSkip: (processInstance: ProcessInstance) => Promise<void>;
+  handleRetry: (processInstance: ProcessInstance) => Promise<void>;
+  handleAbort: (processInstance: ProcessInstance) => Promise<void>;
+  handleMultipleAction: (
+    processInstances: ProcessInstance[],
+    operationType: any
+  ) => Promise<any>;
   query(offset: number, limit: number): Promise<ProcessInstance[]>;
   getChildProcessesQuery(
     rootProcessInstanceId: string
@@ -86,6 +103,24 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
     return Promise.resolve();
   };
 
+  handleSkip = async (processInstance: ProcessInstance): Promise<void> => {
+    await handleSkip(processInstance);
+  };
+
+  handleRetry = async (processInstance: ProcessInstance): Promise<void> => {
+    await handleRetry(processInstance);
+  };
+
+  handleAbort = async (processInstance: ProcessInstance): Promise<void> => {
+    await handleAbort(processInstance);
+  };
+
+  handleMultipleAction = async (
+    processInstances: ProcessInstance[],
+    operationtype: OperationType
+  ): Promise<BulkProcessInstanceAction> => {
+    return await handleMultipleAction(processInstances, operationtype);
+  };
   query(offset: number, limit: number): Promise<ProcessInstance[]> {
     return new Promise<ProcessInstance[]>((resolve, reject) => {
       this.queries

@@ -35,12 +35,36 @@ import {
 } from '../utils/ProcessListUtils';
 import { HistoryIcon } from '@patternfly/react-icons';
 import Moment from 'react-moment';
+import ProcessListActionsKebab from '../ProcessListActionsKebab/ProcessListActionsKebab';
+import { Checkbox } from '@patternfly/react-core';
+import DisablePopup from '../DisablePopup/DisablePopup';
 export interface ProcessListChildTableProps {
   parentProcessId: string;
+  processInstances: ProcessInstance[];
+  setProcessInstances: React.Dispatch<React.SetStateAction<ProcessInstance[]>>;
+  selectedInstances: ProcessInstance[];
+  setSelectedInstances: React.Dispatch<React.SetStateAction<ProcessInstance[]>>;
   driver: ProcessListDriver;
+  onSkipClick: (processInstance: ProcessInstance) => Promise<void>;
+  onRetryClick: (processInstance: ProcessInstance) => Promise<void>;
+  onAbortClick: (processInstance: ProcessInstance) => Promise<void>;
+  setSelectableInstances: React.Dispatch<React.SetStateAction<number>>;
 }
 const ProcessListChildTable: React.FC<ProcessListChildTableProps &
-  OUIAProps> = ({ parentProcessId, driver, ouiaId, ouiaSafe }) => {
+  OUIAProps> = ({
+  parentProcessId,
+  selectedInstances,
+  setSelectedInstances,
+  processInstances,
+  setProcessInstances,
+  driver,
+  onSkipClick,
+  onRetryClick,
+  onAbortClick,
+  setSelectableInstances,
+  ouiaId,
+  ouiaSafe
+}) => {
   const [rows, setRows] = useState<(IRow | string[])[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showNoDataEmptyState, setShowNoDataEmptyState] = useState<boolean>(
@@ -48,6 +72,9 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
   );
   const [error, setError] = useState<string>(undefined);
   const columns = [
+    {
+      title: ''
+    },
     {
       title: 'Id'
     },
@@ -59,8 +86,37 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     },
     {
       title: 'Last update'
+    },
+    {
+      title: ''
     }
   ];
+
+  const checkBoxSelect = (processInstance: ProcessInstance): void => {
+    const clonedProcessInstances = [...processInstances];
+    clonedProcessInstances.forEach((instance: ProcessInstance) => {
+      if (instance.id === parentProcessId) {
+        instance.childProcessInstances.forEach(
+          (childInstance: ProcessInstance) => {
+            if (childInstance.id === processInstance.id) {
+              if (childInstance.isSelected) {
+                childInstance.isSelected = false;
+                setSelectedInstances(
+                  selectedInstances.filter(
+                    selectedInstance => selectedInstance.id !== childInstance.id
+                  )
+                );
+              } else {
+                childInstance.isSelected = true;
+                setSelectedInstances([...selectedInstances, childInstance]);
+              }
+            }
+          }
+        );
+      }
+    });
+    setProcessInstances(clonedProcessInstances);
+  };
 
   const createRows = (processInstances: ProcessInstance[]): void => {
     if (!_.isEmpty(processInstances)) {
@@ -68,6 +124,35 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
       processInstances.forEach((child: ProcessInstance) => {
         tempRows.push({
           cells: [
+            {
+              title: (
+                <>
+                  {child.addons.includes('process-management') &&
+                  child.serviceUrl !== null ? (
+                    <Checkbox
+                      isChecked={child.isSelected}
+                      onChange={() => {
+                        checkBoxSelect(child);
+                      }}
+                      aria-label="process-list-checkbox"
+                      id={`checkbox-${child.id}`}
+                      name={`checkbox-${child.id}`}
+                    />
+                  ) : (
+                    <DisablePopup
+                      processInstanceData={child}
+                      component={
+                        <Checkbox
+                          aria-label="process-list-checkbox-disabled"
+                          id={`checkbox-${child.id}`}
+                          isDisabled={true}
+                        />
+                      }
+                    />
+                  )}
+                </>
+              )
+            },
             {
               title: (
                 <>
@@ -105,6 +190,17 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
               ) : (
                 ''
               )
+            },
+            {
+              title: (
+                <ProcessListActionsKebab
+                  processInstance={child}
+                  onSkipClick={onSkipClick}
+                  onRetryClick={onRetryClick}
+                  onAbortClick={onAbortClick}
+                  key={child.id}
+                />
+              )
             }
           ]
         });
@@ -120,13 +216,37 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     try {
       setIsLoading(true);
       const response = await driver.getChildProcessesQuery(parentProcessId);
-      createRows(response);
+      const clonedProcessInstances = _.cloneDeep(processInstances);
+      clonedProcessInstances.forEach((processInstance: ProcessInstance) => {
+        if (processInstance.id === parentProcessId) {
+          response.forEach((child: ProcessInstance) => {
+            child.isSelected = false;
+            if (
+              child.serviceUrl &&
+              child.addons.includes('process-management')
+            ) {
+              setSelectableInstances(prev => prev + 1);
+            }
+          });
+          processInstance.childProcessInstances = response;
+        }
+      });
+      setProcessInstances(clonedProcessInstances);
     } catch (error) {
       setError(error);
     } finally {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (processInstances.length > 0) {
+      const processInstance = processInstances.find(
+        (processInstance: ProcessInstance) =>
+          processInstance.id === parentProcessId
+      );
+      createRows(processInstance.childProcessInstances);
+    }
+  }, [processInstances]);
 
   useEffect(() => {
     getChildProcessInstances();
