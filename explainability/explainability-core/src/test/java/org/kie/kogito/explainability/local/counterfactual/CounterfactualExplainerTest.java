@@ -630,7 +630,6 @@ class CounterfactualExplainerTest {
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
     }
 
-    @org.junit.jupiter.api.Disabled("KOGITO-5053")
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2 })
     void testIntermediateUniqueIds(int seed) throws ExecutionException, InterruptedException, TimeoutException {
