@@ -21,15 +21,19 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RandomChoiceTest {
+class RandomChoiceTest {
     List<String> obj = List.of("a", "b", "c", "d", "e");
-    Random rn = new Random();
 
-    @Test
-    void testOnlyOneWeight() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testOnlyOneWeight(int seed) {
+        Random rn = new Random();
+        rn.setSeed(seed);
         // if only one weight is nonzero, all samples should be equal to the object corresponding to that weight
         List<String> output = List.of("c", "c", "c");
         List<Double> weights = List.of(0., 0., 1., 0., 0.);
@@ -37,8 +41,11 @@ public class RandomChoiceTest {
         assertEquals(output, rc.sample(3, rn));
     }
 
-    @Test
-    void testTwoWeight() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testTwoWeight(int seed) {
+        Random rn = new Random();
+        rn.setSeed(seed);
         // if two weights are nonzero, all samples should correspond to one of those two objects
         List<Double> weights = List.of(1., 0., 1., 0., 0.);
         RandomChoice<String> rc = new RandomChoice<>(obj, weights);
@@ -56,9 +63,12 @@ public class RandomChoiceTest {
         assertThrows(IllegalArgumentException.class, () -> new RandomChoice<>(obj, weights));
     }
 
-    @Test
-    void testUniform() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testUniform(int seed) {
         RandomChoice<String> rc = new RandomChoice<>(obj);
+        Random rn = new Random();
+        rn.setSeed(seed);
 
         for (int test = 0; test < 100; test++) {
             List<String> sample = rc.sample(1000, rn);
@@ -81,10 +91,13 @@ public class RandomChoiceTest {
         }
     }
 
-    @Test
-    void testMultiWeight() {
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testMultiWeight(int seed) {
         List<Double> weights = List.of(5., 4., 3., 2., 1.);
         RandomChoice<String> rc = new RandomChoice<>(obj, weights);
+        Random rn = new Random();
+        rn.setSeed(seed);
 
         for (int test = 0; test < 100; test++) {
             List<String> sample = rc.sample(1000, rn);
