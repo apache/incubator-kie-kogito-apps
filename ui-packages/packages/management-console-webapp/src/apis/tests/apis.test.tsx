@@ -23,6 +23,7 @@ import {
 import wait from 'waait';
 import {
   getSvg,
+  handleAbort,
   handleJobReschedule,
   jobCancel,
   performMultipleCancel
@@ -363,5 +364,35 @@ describe('test utility of svg panel', () => {
       })
     );
     await getSvg(data);
+  });
+
+  describe('handle Abort tests', () => {
+    const processInstanceData = {
+      id: '123',
+      processId: 'travels',
+      processName: 'travels',
+      serviceUrl: 'http://localhost:4000',
+      state: ProcessInstanceState.Active
+    };
+    it('executes Abort process successfully', async () => {
+      mockedAxios.delete.mockResolvedValue({});
+      const abortResults = await handleAbort(processInstanceData);
+      await wait(0);
+      expect(abortResults).toEqual({
+        title: 'Abort operation',
+        content: `The process ${processInstanceData.processName} was successfully aborted.`,
+        type: 'success'
+      });
+    });
+    it('fails executing Abort process', async () => {
+      mockedAxios.delete.mockRejectedValue({ message: '403 error' });
+      const abortResults = await handleAbort(processInstanceData);
+      await wait(0);
+      expect(abortResults).toEqual({
+        title: 'Abort operation',
+        content: `Failed to abort process ${processInstanceData.processName}. Message: 403 error`,
+        type: 'failure'
+      });
+    });
   });
 });

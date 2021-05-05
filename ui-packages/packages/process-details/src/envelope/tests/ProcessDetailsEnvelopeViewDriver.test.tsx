@@ -155,6 +155,12 @@ describe('ProcessDetailsEnvelopeViewDriver tests', () => {
       );
     });
 
+    it('abortProcess', () => {
+      driver.abortProcess(data);
+
+      expect(requests.processDetails__abortProcess).toHaveBeenCalledWith(data);
+    });
+
     it('rescheduleJob', () => {
       const repeatInterval = 0;
       const repeatLimit = 0;

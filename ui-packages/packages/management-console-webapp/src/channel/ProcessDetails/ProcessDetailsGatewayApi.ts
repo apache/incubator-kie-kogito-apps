@@ -19,16 +19,23 @@ import {
   ProcessInstance,
   Job,
   JobCancel,
+  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
-import { getSvg, handleJobReschedule, jobCancel } from '../../apis';
+import {
+  getSvg,
+  handleJobReschedule,
+  handleAbort,
+  jobCancel
+} from '../../apis';
 
 export interface ProcessDetailsGatewayApi {
   processDetailsState: any;
   getProcessDiagram: (
     data: ProcessInstance
   ) => Promise<SvgSuccessResponse | SvgErrorResponse>;
+  abortProcess: (data: ProcessInstance) => Promise<AbortResponse>;
   cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
   rescheduleJob: (
     job,
@@ -62,6 +69,10 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   ): Promise<SvgSuccessResponse | SvgErrorResponse> => {
     const res = await getSvg(data);
     return Promise.resolve(res);
+  };
+
+  abortProcess = (data: ProcessInstance): Promise<AbortResponse> => {
+    return handleAbort(data);
   };
 
   cancelJob = (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {

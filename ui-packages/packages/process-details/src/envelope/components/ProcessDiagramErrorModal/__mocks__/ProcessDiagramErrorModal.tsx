@@ -16,8 +16,8 @@
 
 import React from 'react';
 
-const MockedProcessDetailsErrorModal = () => {
+const MockedProcessDiagramErrorModal = () => {
   return <></>;
 };
 
-export default MockedProcessDetailsErrorModal;
+export default MockedProcessDiagramErrorModal;

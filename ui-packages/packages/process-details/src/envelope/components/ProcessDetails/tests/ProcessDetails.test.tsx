@@ -327,12 +327,12 @@ describe('ProcessDetails tests', () => {
       wrapper = wrapper.update();
       await act(async () => {
         wrapper
-          .find('MockedProcessDetailsErrorModal')
+          .find('MockedProcessDiagramErrorModal')
           .props()
           ['handleErrorModal']();
       });
       expect(
-        wrapper.find('MockedProcessDetailsErrorModal').props()['errorModalOpen']
+        wrapper.find('MockedProcessDiagramErrorModal').props()['errorModalOpen']
       ).toEqual(true);
     });
 

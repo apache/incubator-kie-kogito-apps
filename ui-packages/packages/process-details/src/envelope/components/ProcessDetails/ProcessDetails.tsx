@@ -40,10 +40,12 @@ import {
   ServerErrors
 } from '@kogito-apps/components-common';
 import {
+  ProcessInfoModal,
   Job,
   ProcessInstance,
   ProcessInstanceState,
   setTitle,
+  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
@@ -83,6 +85,10 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const [error, setError] = useState<string>('');
   const [svgErrorModalOpen, setSvgErrorModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState<boolean>(false);
+  const [infoModalTitle, setInfoModalTitle] = useState<string>('');
+  const [titleType, setTitleType] = useState<string>('');
+  const [infoModalContent, setInfoModalContent] = useState<string>('');
 
   const initLoad = async (): Promise<void> => {
     setIsLoading(true);
@@ -187,8 +193,20 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     );
   };
 
+  const onShowMessage = (abortResults: AbortResponse): void => {
+    setTitleType(abortResults.type);
+    setInfoModalTitle(abortResults.title);
+    setInfoModalContent(abortResults.content);
+    handleInfoModalToggle();
+  };
+
+  const handleInfoModalToggle = (): void => {
+    setIsInfoModalOpen(!isInfoModalOpen);
+  };
+
   const onAbortClick = async (): Promise<void> => {
-    return null;
+    const abortResults: AbortResponse = await driver.abortProcess(data);
+    onShowMessage(abortResults);
   };
 
   const abortButton = (): JSX.Element => {
@@ -246,6 +264,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       </Flex>
     );
   };
+
   const renderPanels = (): JSX.Element => {
     if (svg !== null && svg.props.src) {
       return (
@@ -478,6 +497,13 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
           )}
         </>
       )}
+      <ProcessInfoModal
+        isModalOpen={isInfoModalOpen}
+        handleModalToggle={handleInfoModalToggle}
+        modalTitle={setTitle(titleType, infoModalTitle)}
+        modalContent={infoModalContent}
+        processName={data && data.processName}
+      />
     </>
   );
 };

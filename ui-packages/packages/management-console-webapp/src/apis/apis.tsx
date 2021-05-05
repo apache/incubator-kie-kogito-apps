@@ -16,7 +16,16 @@
 
 import { GraphQL } from '@kogito-apps/consoles-common';
 import axios from 'axios';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  ProcessInstance,
+  ProcessInstanceState,
+  AbortResponse
+} from '@kogito-apps/management-console-shared';
+
+enum TitleType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
+}
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
@@ -112,4 +121,30 @@ export const getSvg = async (data: ProcessInstance): Promise<any> => {
           });
       }
     });
+};
+
+// Rest Api to Abort process instances
+export const handleAbort = async (
+  data: Pick<
+    ProcessInstance,
+    'id' | 'processId' | 'processName' | 'serviceUrl' | 'state'
+  >
+): Promise<AbortResponse> => {
+  try {
+    await axios.delete(
+      `${data.serviceUrl}/management/processes/${data.processId}/instances/${data.id}`
+    );
+    data.state = ProcessInstanceState.Aborted;
+    return {
+      title: 'Abort operation',
+      content: `The process ${data.processName} was successfully aborted.`,
+      type: TitleType.SUCCESS
+    };
+  } catch (error) {
+    return {
+      title: 'Abort operation',
+      content: `Failed to abort process ${data.processName}. Message: ${error.message}`,
+      type: TitleType.FAILURE
+    };
+  }
 };

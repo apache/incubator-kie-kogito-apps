@@ -4,6 +4,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
 <ProcessDetails
   driver={
     Object {
+      "abortProcess": [MockFunction],
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction] {
         "calls": Array [
@@ -639,6 +640,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
               <MockedJobsPanel
                 driver={
                   Object {
+                    "abortProcess": [MockFunction],
                     "cancelJob": [MockFunction],
                     "getProcessDiagram": [MockFunction] {
                       "calls": Array [
@@ -963,9 +965,9 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
             aria-describedby=""
             aria-label="Error modal"
             aria-labelledby="Error modal"
-            boxId="pf-modal-part-0"
+            boxId="pf-modal-part-1"
             className=""
-            descriptorId="pf-modal-part-2"
+            descriptorId="pf-modal-part-3"
             hasNoBodyWrapper={false}
             header={
               <React.Fragment>
@@ -984,9 +986,9 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
               </React.Fragment>
             }
             isOpen={false}
-            labelId="pf-modal-part-1"
+            labelId="pf-modal-part-2"
             onClose={[Function]}
-            ouiaId="OUIA-Generated-Modal-small-1"
+            ouiaId="OUIA-Generated-Modal-small-2"
             ouiaSafe={true}
             showClose={true}
             title=""
@@ -1071,9 +1073,9 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
             aria-describedby=""
             aria-label="Confirmation modal"
             aria-labelledby="Confirmation modal"
-            boxId="pf-modal-part-1"
+            boxId="pf-modal-part-2"
             className=""
-            descriptorId="pf-modal-part-3"
+            descriptorId="pf-modal-part-4"
             hasNoBodyWrapper={false}
             header={
               <React.Fragment>
@@ -1092,9 +1094,9 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
               </React.Fragment>
             }
             isOpen={false}
-            labelId="pf-modal-part-2"
+            labelId="pf-modal-part-3"
             onClose={[Function]}
-            ouiaId="OUIA-Generated-Modal-small-2"
+            ouiaId="OUIA-Generated-Modal-small-3"
             ouiaSafe={true}
             showClose={true}
             title=""
@@ -1106,5 +1108,106 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
       </Modal>
     </div>
   </Flex>
+  <ProcessInfoModal
+    handleModalToggle={[Function]}
+    isModalOpen={false}
+    modalContent=""
+    modalTitle={
+      <Title
+        headingLevel="h1"
+        size="2xl"
+      >
+        <span>
+          
+        </span>
+      </Title>
+    }
+    processName="HotelBooking"
+  >
+    <Modal
+      actions={
+        Array [
+          <Button
+            onClick={[Function]}
+            variant="primary"
+          >
+            OK
+          </Button>,
+        ]
+      }
+      appendTo={[Function]}
+      aria-describedby=""
+      aria-label="process list modal"
+      aria-labelledby="process list modal"
+      className=""
+      data-ouia-component-type="process-list-modal"
+      data-ouia-safe={true}
+      hasNoBodyWrapper={false}
+      header={
+        <Title
+          headingLevel="h1"
+          size="2xl"
+        >
+          <span>
+            
+          </span>
+        </Title>
+      }
+      isOpen={false}
+      onClose={[Function]}
+      ouiaSafe={true}
+      showClose={true}
+      title=""
+      titleIconVariant={null}
+      titleLabel=""
+      variant="small"
+    >
+      <Portal
+        containerInfo={<div />}
+      >
+        <ModalContent
+          actions={
+            Array [
+              <Button
+                onClick={[Function]}
+                variant="primary"
+              >
+                OK
+              </Button>,
+            ]
+          }
+          aria-describedby=""
+          aria-label="process list modal"
+          aria-labelledby="process list modal"
+          boxId="pf-modal-part-0"
+          className=""
+          data-ouia-component-type="process-list-modal"
+          data-ouia-safe={true}
+          descriptorId="pf-modal-part-2"
+          hasNoBodyWrapper={false}
+          header={
+            <Title
+              headingLevel="h1"
+              size="2xl"
+            >
+              <span>
+                
+              </span>
+            </Title>
+          }
+          isOpen={false}
+          labelId="pf-modal-part-1"
+          onClose={[Function]}
+          ouiaId="OUIA-Generated-Modal-small-1"
+          ouiaSafe={true}
+          showClose={true}
+          title=""
+          titleIconVariant={null}
+          titleLabel=""
+          variant="small"
+        />
+      </Portal>
+    </Modal>
+  </ProcessInfoModal>
 </ProcessDetails>
 `;

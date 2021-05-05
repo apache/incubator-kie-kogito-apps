@@ -131,13 +131,15 @@ describe('job actions kebab tests', () => {
   it('test reschedule option', async () => {
     const modalTitle = 'success';
     const modalContent =
-      'The job: 6e74a570-31c8-4020-bd70-19be2cb625f3_0 is canceled successfully';
+      'The job: 6e74a570-31c8-4020-bd70-19be2cb625f3_0 is rescheduled successfully';
     // @ts-ignore
     prop2.driver.rescheduleJob.mockImplementationOnce(() =>
       Promise.resolve({ modalTitle, modalContent })
     );
     let wrapper = mount(<JobActionsKebab {...prop2} />);
-
+    const repeatInterval = 0;
+    const repeatLimit = 2;
+    const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
     await act(async () => {
       wrapper
         .find(Dropdown)
@@ -167,8 +169,29 @@ describe('job actions kebab tests', () => {
     expect(wrapper.find('JobsRescheduleModal').props()['isModalOpen']).toEqual(
       true
     );
+    await act(async () => {
+      wrapper
+        .find('JobsRescheduleModal')
+        .props()
+        ['handleJobReschedule'](repeatInterval, repeatLimit, scheduleDate);
+    });
+    expect(prop2.driver.rescheduleJob).toHaveBeenCalledWith(
+      prop2.job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
+    );
   });
   it('trigger/test apply reschedule method', async () => {
+    const modalTitle = 'failure';
+    const modalContent = 'The job reschedule is failed';
+    // @ts-ignore
+    prop2.driver.rescheduleJob.mockImplementationOnce(() =>
+      Promise.resolve({ modalTitle, modalContent })
+    );
+    const repeatInterval = 0;
+    const repeatLimit = 2;
+    const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
     let wrapper = mount(<JobActionsKebab {...prop2} />);
 
     await act(async () => {
@@ -197,6 +220,18 @@ describe('job actions kebab tests', () => {
     wrapper = wrapper.update();
     expect(wrapper.find('JobsRescheduleModal').props()['isModalOpen']).toEqual(
       true
+    );
+    await act(async () => {
+      wrapper
+        .find('JobsRescheduleModal')
+        .props()
+        ['handleJobReschedule'](repeatInterval, repeatLimit, scheduleDate);
+    });
+    expect(prop2.driver.rescheduleJob).toHaveBeenCalledWith(
+      prop2.job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate
     );
   });
 

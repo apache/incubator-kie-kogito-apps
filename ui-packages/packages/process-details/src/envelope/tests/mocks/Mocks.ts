@@ -123,7 +123,8 @@ export const MockedApiRequests = jest.fn<
   processDetails__getProcessDiagram: jest.fn(),
   processDetails__cancelJob: jest.fn(),
   processDetails__rescheduleJob: jest.fn(),
-  processDetails__jobsQuery: jest.fn()
+  processDetails__jobsQuery: jest.fn(),
+  processDetails__abortProcess: jest.fn()
 }));
 
 export const MockedApiNotifications = jest.fn<

@@ -4,6 +4,7 @@ exports[`EmbeddedProcessDetails tests Snapshot 1`] = `
 <ForwardRef
   driver={
     Object {
+      "abortProcess": [MockFunction],
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
       "jobsQuery": [MockFunction],

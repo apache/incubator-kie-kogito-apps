@@ -122,3 +122,14 @@ export interface SvgErrorResponse {
   error: string;
   svg?: never;
 }
+
+enum TitleType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
+}
+
+export interface AbortResponse {
+  title: string;
+  content: string;
+  type: TitleType;
+}

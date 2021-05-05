@@ -20,6 +20,7 @@ import {
   ProcessInstance,
   Job,
   JobCancel,
+  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
@@ -34,6 +35,10 @@ export default class ProcessDetailsEnvelopeViewDriver
     data: ProcessInstance
   ): Promise<SvgSuccessResponse | SvgErrorResponse> {
     return this.channelApi.requests.processDetails__getProcessDiagram(data);
+  }
+
+  abortProcess(data: ProcessInstance): Promise<AbortResponse> {
+    return this.channelApi.requests.processDetails__abortProcess(data);
   }
 
   cancelJob(job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> {

@@ -91,6 +91,12 @@ const props2 = {
   ouiaSafe: true
 };
 
+const props3 = {
+  jobs: [],
+  driver: MockedProcessDetailsDriver(),
+  ouiaSafe: true
+};
+
 Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
 describe('Processdetails jobs pannel component tests', () => {
   it('Snapshot testing', async () => {
@@ -103,6 +109,13 @@ describe('Processdetails jobs pannel component tests', () => {
   it('test expiration time', async () => {
     const wrapper = await getWrapperAsync(
       <JobsPanel {...props2} />,
+      'JobsPanel'
+    );
+    expect(wrapper).toMatchSnapshot();
+  });
+  it('Jobs empty response', async () => {
+    const wrapper = await getWrapperAsync(
+      <JobsPanel {...props3} />,
       'JobsPanel'
     );
     expect(wrapper).toMatchSnapshot();
