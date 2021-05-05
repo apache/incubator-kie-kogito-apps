@@ -454,7 +454,9 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
               </Flex>
             </>
           ) : (
-            <KogitoSpinner spinnerText="Loading process details..." />
+            <Card>
+              <KogitoSpinner spinnerText="Loading process details..." />
+            </Card>
           )}
           {svgErrorModalOpen && (
             <ProcessDiagramErrorModal

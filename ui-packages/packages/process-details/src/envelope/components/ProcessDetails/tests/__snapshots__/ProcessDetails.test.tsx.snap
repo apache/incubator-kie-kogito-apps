@@ -533,7 +533,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                   <Card>
                     <article
                       className="pf-c-card"
-                      data-ouia-component-id="OUIA-Generated-Card-1"
+                      data-ouia-component-id="OUIA-Generated-Card-2"
                       data-ouia-component-type="PF4/Card"
                       data-ouia-safe={true}
                       id=""

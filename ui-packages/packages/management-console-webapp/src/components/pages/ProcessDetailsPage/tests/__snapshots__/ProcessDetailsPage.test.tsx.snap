@@ -50,7 +50,7 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
     breadcrumbText={
       Array [
         "Home",
-        "Process",
+        "Process Instances",
       ]
     }
     titleText="Process Details"
@@ -132,7 +132,7 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
                       </svg>
                     </AngleRightIcon>
                   </span>
-                  Process
+                  Process Instances
                 </li>
               </BreadcrumbItem>
             </ol>
@@ -182,33 +182,21 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
     <section
       className="pf-c-page__main-section"
     >
-      <Card
-        className="kogito-management-console__card-size"
+      <ProcessDetailsContainer
+        processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
       >
-        <article
-          className="pf-c-card kogito-management-console__card-size"
-          data-ouia-component-id="OUIA-Generated-Card-1"
-          data-ouia-component-type="PF4/Card"
+        <ForwardRef
+          data-ouia-component-type="process-details-container"
           data-ouia-safe={true}
-          id=""
+          driver={null}
+          processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+          targetOrigin="http://localhost"
         >
-          <ProcessDetailsContainer
-            processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
-          >
-            <ForwardRef
-              data-ouia-component-type="process-details-container"
-              data-ouia-safe={true}
-              driver={null}
-              processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
-              targetOrigin="http://localhost"
-            >
-              <ForwardRef>
-                <div />
-              </ForwardRef>
-            </ForwardRef>
-          </ProcessDetailsContainer>
-        </article>
-      </Card>
+          <ForwardRef>
+            <div />
+          </ForwardRef>
+        </ForwardRef>
+      </ProcessDetailsContainer>
     </section>
   </PageSection>
 </ProcessDetailsPage>
