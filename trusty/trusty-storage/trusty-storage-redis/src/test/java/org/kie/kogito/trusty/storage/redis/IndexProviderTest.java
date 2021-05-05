@@ -21,9 +21,11 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.redis.RedisClientManager;
 import org.mockito.Mockito;
 
-import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.DECISIONS_STORAGE;
-import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.EXPLAINABILITY_RESULTS_STORAGE;
-import static org.kie.kogito.trusty.storage.api.TrustyStorageServiceImpl.MODELS_STORAGE;
+import static org.kie.kogito.trusty.storage.common.TrustyStorageService.COUNTERFACTUAL_REQUESTS_STORAGE;
+import static org.kie.kogito.trusty.storage.common.TrustyStorageService.COUNTERFACTUAL_RESULTS_STORAGE;
+import static org.kie.kogito.trusty.storage.common.TrustyStorageService.DECISIONS_STORAGE;
+import static org.kie.kogito.trusty.storage.common.TrustyStorageService.LIME_RESULTS_STORAGE;
+import static org.kie.kogito.trusty.storage.common.TrustyStorageService.MODELS_STORAGE;
 
 public class IndexProviderTest {
 
@@ -34,9 +36,11 @@ public class IndexProviderTest {
 
         indexProvider.createIndexes();
 
-        Assertions.assertEquals(3, redisIndexManager.getIndexNames().size());
+        Assertions.assertEquals(5, redisIndexManager.getIndexNames().size());
         Assertions.assertTrue(redisIndexManager.getIndexNames().contains(DECISIONS_STORAGE));
         Assertions.assertTrue(redisIndexManager.getIndexNames().contains(MODELS_STORAGE));
-        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(EXPLAINABILITY_RESULTS_STORAGE));
+        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(LIME_RESULTS_STORAGE));
+        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(COUNTERFACTUAL_REQUESTS_STORAGE));
+        Assertions.assertTrue(redisIndexManager.getIndexNames().contains(COUNTERFACTUAL_RESULTS_STORAGE));
     }
 }

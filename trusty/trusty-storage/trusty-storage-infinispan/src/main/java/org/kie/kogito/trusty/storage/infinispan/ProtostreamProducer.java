@@ -56,12 +56,12 @@ public class ProtostreamProducer {
 
     @Produces
     org.infinispan.protostream.MessageMarshaller explainabilityResultMarshaller() {
-        return new ExplainabilityResultMarshaller(mapper);
+        return new LIMEExplainabilityResultMarshaller(mapper);
     }
 
     @Produces
     org.infinispan.protostream.MessageMarshaller featureImportanceMarshaller() {
-        return new FeatureImportanceMarshaller(mapper);
+        return new FeatureImportanceModelMarshaller(mapper);
     }
 
     @Produces
@@ -76,16 +76,47 @@ public class ProtostreamProducer {
 
     @Produces
     org.infinispan.protostream.MessageMarshaller saliencyMarshaller() {
-        return new SaliencyMarshaller(mapper);
+        return new SaliencyModelMarshaller(mapper);
     }
 
     @Produces
     org.infinispan.protostream.MessageMarshaller typedValueMarshaller() {
-        return new TypedVariableMarshaller(mapper);
+        return new TypedVariableWithValueMarshaller(mapper);
     }
 
     @Produces
     org.infinispan.protostream.MessageMarshaller dmnModelMarshaller() {
         return new DMNModelWithMetadataMarshaller(mapper);
     }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller counterfactualMarshaller() {
+        return new CounterfactualExplainabilityRequestMarshaller(mapper);
+    }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller counterfactualDomainMarshaller() {
+        return new CounterfactualDomainMarshaller(mapper);
+    }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller counterfactualDomainCategoricalMarshaller() {
+        return new CounterfactualDomainCategoricalMarshaller(mapper);
+    }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller counterfactualDomainRangeMarshaller() {
+        return new CounterfactualDomainRangeMarshaller(mapper);
+    }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller counterfactualSearchDomainMarshaller() {
+        return new CounterfactualSearchDomainMarshaller(mapper);
+    }
+
+    @Produces
+    org.infinispan.protostream.MessageMarshaller counterfactualResultMarshaller() {
+        return new CounterfactualExplainabilityResultMarshaller(mapper);
+    }
+
 }

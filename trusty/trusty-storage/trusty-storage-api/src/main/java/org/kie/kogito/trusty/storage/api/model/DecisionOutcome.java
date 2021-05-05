@@ -31,6 +31,7 @@ public class DecisionOutcome {
     public static final String OUTCOME_INPUTS_FIELD = "outcomeInputs";
     public static final String OUTCOME_NAME_FIELD = "outcomeName";
     public static final String OUTCOME_RESULT_FIELD = "outcomeResult";
+    public static final String HAS_ERRORS_FIELD = "hasErrors";
 
     @JsonProperty(OUTCOME_ID_FIELD)
     private String outcomeId;
@@ -42,10 +43,10 @@ public class DecisionOutcome {
     private String evaluationStatus;
 
     @JsonProperty(OUTCOME_RESULT_FIELD)
-    private TypedVariable outcomeResult;
+    private TypedVariableWithValue outcomeResult;
 
     @JsonProperty(OUTCOME_INPUTS_FIELD)
-    private Collection<TypedVariable> outcomeInputs;
+    private Collection<TypedVariableWithValue> outcomeInputs;
 
     @JsonProperty(MESSAGES_FIELD)
     private Collection<Message> messages;
@@ -53,7 +54,8 @@ public class DecisionOutcome {
     public DecisionOutcome() {
     }
 
-    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus, TypedVariable outcomeResult, Collection<TypedVariable> outcomeInputs, Collection<Message> messages) {
+    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus, TypedVariableWithValue outcomeResult, Collection<TypedVariableWithValue> outcomeInputs,
+            Collection<Message> messages) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;
         this.evaluationStatus = evaluationStatus;
@@ -86,19 +88,19 @@ public class DecisionOutcome {
         this.evaluationStatus = evaluationStatus;
     }
 
-    public TypedVariable getOutcomeResult() {
+    public TypedVariableWithValue getOutcomeResult() {
         return outcomeResult;
     }
 
-    public void setOutcomeResult(TypedVariable outcomeResult) {
+    public void setOutcomeResult(TypedVariableWithValue outcomeResult) {
         this.outcomeResult = outcomeResult;
     }
 
-    public Collection<TypedVariable> getOutcomeInputs() {
+    public Collection<TypedVariableWithValue> getOutcomeInputs() {
         return outcomeInputs;
     }
 
-    public void setOutcomeInputs(Collection<TypedVariable> outcomeInputs) {
+    public void setOutcomeInputs(Collection<TypedVariableWithValue> outcomeInputs) {
         this.outcomeInputs = outcomeInputs;
     }
 
@@ -110,6 +112,7 @@ public class DecisionOutcome {
         this.messages = messages;
     }
 
+    @JsonProperty(HAS_ERRORS_FIELD)
     public boolean hasErrors() {
         return messages != null && messages.stream().anyMatch(m -> m.getLevel() == MessageLevel.ERROR);
     }

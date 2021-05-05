@@ -43,7 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>trusty-storage-api</artifactId>
+      <artifactId>trusty-storage-common</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -131,6 +131,7 @@
             <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
             <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
             <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
+            <container.image.kafka>${container.image.kafka}</container.image.kafka>
           </systemProperties>
         </configuration>
         <executions>
