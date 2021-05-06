@@ -14,6 +14,7 @@ import {
   EmptyStateBody,
   EmptyStateIcon,
   EmptyStateVariant,
+  Label,
   Skeleton,
   Title
 } from '@patternfly/react-core';
@@ -257,17 +258,54 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             </Button>
                           </Th>
                         )}
-                        {displayedResults.length === 0 && (
-                          <>
-                            <Th key="empty-results-1">
-                              <span>Counterfactual Result</span>
-                            </Th>
-                            <Th key="empty-results-2" />
-                          </>
-                        )}
+                        {displayedResults.length === 0 &&
+                          status.executionStatus ===
+                            CFExecutionStatus.RUNNING && (
+                            <>
+                              <Th key="empty-results-1">
+                                <span>Counterfactual Result</span>
+                              </Th>
+                              <Th key="empty-results-2">
+                                <span>Counterfactual Result</span>
+                              </Th>
+                            </>
+                          )}
+                        {displayedResults.length === 0 &&
+                          status.executionStatus ===
+                            CFExecutionStatus.NOT_STARTED && (
+                            <>
+                              <Th
+                                className="cf-table__no-result-cell"
+                                key="empty-results-1"
+                              >
+                                <span>Counterfactual Result</span>
+                              </Th>
+                            </>
+                          )}
                       </Tr>
                     </Thead>
                     <Tbody>
+                      {displayedResults.length > 1 && (
+                        <Tr key="id-row" className="cf-table__ids-row">
+                          <Td key="id-row_0" />
+                          <Td key="id-row_1" />
+                          <Td key="id-row_2" />
+                          <Td key="id-row_3" />
+                          <Td key="id-row_4" />
+                          {displayedResults.length > 0 &&
+                            displayedResults[0].map((value, index) => (
+                              <Td
+                                key={`id-row_${index + 4}`}
+                                dataLabel={'Counterfactual Result'}
+                              >
+                                <Label variant="outline" color="blue">
+                                  ID# {value}
+                                </Label>
+                              </Td>
+                            ))}
+                          <Td key="id-row_6" />
+                        </Tr>
+                      )}
                       {rows.map((row, rowIndex) => (
                         <Tr key={rowIndex}>
                           <Td
@@ -311,19 +349,21 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             <Td className="cf-table__slider-cell" />
                           )}
                           {displayedResults.length > 0 &&
-                            displayedResults[rowIndex].map((value, index) => (
-                              <Td
-                                key={`${rowIndex}_${index + 4}`}
-                                dataLabel={'Counterfactual Result'}
-                                className={
-                                  value !== row.value
-                                    ? 'cf-table__result-value--changed'
-                                    : 'cf-table__result-value'
-                                }
-                              >
-                                {value.toString()}
-                              </Td>
-                            ))}
+                            displayedResults[rowIndex + 1].map(
+                              (value, index) => (
+                                <Td
+                                  key={`${rowIndex}_${index + 4}`}
+                                  dataLabel={'Counterfactual Result'}
+                                  className={
+                                    value !== row.value
+                                      ? 'cf-table__result-value--changed'
+                                      : 'cf-table__result-value'
+                                  }
+                                >
+                                  {value.toString()}
+                                </Td>
+                              )
+                            )}
                           {displayedResults.length > 1 && (
                             <Td className="cf-table__slider-cell" />
                           )}
@@ -349,10 +389,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             status.executionStatus ===
                               CFExecutionStatus.NOT_STARTED && (
                               <>
-                                <Td key="empty-results-1">
+                                <Td className="cf-table__no-result-cell">
                                   No available results
                                 </Td>
-                                <Td key="empty-results-2" />
                               </>
                             )}
                         </Tr>

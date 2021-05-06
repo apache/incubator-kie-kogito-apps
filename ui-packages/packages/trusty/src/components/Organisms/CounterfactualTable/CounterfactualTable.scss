@@ -26,6 +26,10 @@
       left: 2px;
     }
   }
+  &__ids-row td {
+    padding-top: var(--pf-global--spacer--sm);
+    padding-bottom: var(--pf-global--spacer--sm);
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -146,6 +150,9 @@
     thead th:not(:first-child):not(.cf-table__slider-cell),
     tbody td:not(:first-child):not(.cf-table__slider-cell) {
       width: 250px;
+      &.cf-table__no-result-cell {
+        width: 350px;
+      }
     }
   }
 }

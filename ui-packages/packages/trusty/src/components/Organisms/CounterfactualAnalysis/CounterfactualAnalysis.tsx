@@ -209,6 +209,11 @@ export const CFDispatch = React.createContext<React.Dispatch<cfActions>>(null);
 
 const getCFResultsDemo = (inputs: CFSearchInput[], count: number) => {
   const results = [];
+  const idsRow = new Array(count > 0 ? count : 1);
+  for (let i = 0; i < idsRow.length; i++) {
+    idsRow[i] = 10000 + count - i;
+  }
+  results.push(idsRow);
   inputs.map(input => {
     const row = new Array(count > 0 ? count : 1);
     for (let i = 0; i < row.length; i++) {
