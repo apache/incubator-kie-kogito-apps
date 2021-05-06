@@ -95,7 +95,7 @@ public class MatrixUtils {
      * @return double[][] array, the converted matrix
      */
     public static double[][] rowVector(double[] v) {
-        var out = new double[1][v.length];
+        double[][] out = new double[1][v.length];
         out[0] = v;
         return out;
     }
@@ -107,8 +107,8 @@ public class MatrixUtils {
      * @return double[][] array, the converted matrix
      */
     public static double[][] columnVector(double[] v) {
-        var out = new double[v.length][1];
-        for (var i = 0; i < v.length; i++) {
+        double[][] out = new double[v.length][1];
+        for (int i = 0; i < v.length; i++) {
             out[i][0] = v[i];
         }
         return out;
@@ -160,10 +160,10 @@ public class MatrixUtils {
         }
 
         int[] shape = MatrixUtils.getShape(x);
-        var out = new double[shape[0]][idxs.size()];
+        double[][] out = new double[shape[0]][idxs.size()];
 
-        for (var i = 0; i < shape[0]; i++) {
-            for (var col = 0; col < idxs.size(); col++) {
+        for (int i = 0; i < shape[0]; i++) {
+            for (int col = 0; col < idxs.size(); col++) {
                 if (idxs.get(col) >= shape[1] || idxs.get(col) < 0) {
                     throw new IllegalArgumentException(
                             String.format("Column index %d output bounds, matrix only has %d column(s)", col, shape[1]));
@@ -192,9 +192,9 @@ public class MatrixUtils {
                     String.format("Matrix B shape:  %d x %d,", bShape[0], bShape[1]));
         }
 
-        var sum = new double[aShape[0]][aShape[1]];
-        for (var i = 0; i < aShape[0]; i++) {
-            for (var j = 0; j < aShape[1]; j++) {
+        double[][] sum = new double[aShape[0]][aShape[1]];
+        for (int i = 0; i < aShape[0]; i++) {
+            for (int j = 0; j < aShape[1]; j++) {
                 sum[i][j] = a[i][j] + b[i][j];
             }
         }
@@ -211,9 +211,9 @@ public class MatrixUtils {
     public static double[][] matrixRowSum(double[][] a, double[] b) {
         int[] aShape = MatrixUtils.getShape(a);
         double[][] bMat = MatrixUtils.rowVector(b);
-        var out = new double[aShape[0]][aShape[1]];
+        double[][] out = new double[aShape[0]][aShape[1]];
 
-        for (var i = 0; i < aShape[0]; i++) {
+        for (int i = 0; i < aShape[0]; i++) {
             out[i] = MatrixUtils.matrixSum(MatrixUtils.rowVector(a[i]), bMat)[0];
         }
         return out;
@@ -281,9 +281,9 @@ public class MatrixUtils {
     public static double[][] matrixMultiply(double[][] a, double b) {
         int[] aShape = MatrixUtils.getShape(a);
 
-        var product = new double[aShape[0]][aShape[1]];
-        for (var i = 0; i < aShape[0]; i++) {
-            for (var j = 0; j < aShape[1]; j++) {
+        double[][] product = new double[aShape[0]][aShape[1]];
+        for (int i = 0; i < aShape[0]; i++) {
+            for (int j = 0; j < aShape[1]; j++) {
                 product[i][j] = a[i][j] * b;
             }
         }
@@ -301,14 +301,14 @@ public class MatrixUtils {
     public static double[] sum(double[][] x, axis axis) {
         int[] shape = MatrixUtils.getShape(x);
         if (axis == MatrixUtils.axis.ROW) {
-            var out = new double[1][shape[1]];
-            for (var i = 0; i < shape[0]; i++) {
+            double[][] out = new double[1][shape[1]];
+            for (int i = 0; i < shape[0]; i++) {
                 out = MatrixUtils.matrixSum(out, MatrixUtils.rowVector(x[i]));
             }
             return out[0];
         } else {
-            var out = new double[1][shape[0]];
-            for (var i = 0; i < shape[1]; i++) {
+            double[][] out = new double[1][shape[0]];
+            for (int i = 0; i < shape[1]; i++) {
                 out = MatrixUtils.matrixSum(out, MatrixUtils.rowVector(MatrixUtils.getCol(x, i)));
             }
             return out[0];
