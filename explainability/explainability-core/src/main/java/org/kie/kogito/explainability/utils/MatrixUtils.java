@@ -20,13 +20,12 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 
 public class MatrixUtils {
-    public enum axis {
+    public enum Axis {
         ROW,
         COLUMN
     }
@@ -140,9 +139,7 @@ public class MatrixUtils {
             throw new IllegalArgumentException(
                     String.format("Column index %d too large, matrix only has %d column(s)", i, cols));
         }
-        return IntStream.range(0, x.length)
-                .mapToDouble(rowIdx -> x[rowIdx][i])
-                .toArray();
+        return Arrays.stream(x).mapToDouble(doubles -> doubles[i]).toArray();
     }
 
     /*
@@ -298,9 +295,9 @@ public class MatrixUtils {
      * @param axis enum; the direction which to sum. axis.ROW will add all rows together, axis.COLUMN adds columns
      * @return the result of the sum along that dimension
      */
-    public static double[] sum(double[][] x, axis axis) {
+    public static double[] sum(double[][] x, Axis axis) {
         int[] shape = MatrixUtils.getShape(x);
-        if (axis == MatrixUtils.axis.ROW) {
+        if (axis == MatrixUtils.Axis.ROW) {
             double[][] out = new double[1][shape[1]];
             for (int i = 0; i < shape[0]; i++) {
                 out = MatrixUtils.matrixSum(out, MatrixUtils.rowVector(x[i]));

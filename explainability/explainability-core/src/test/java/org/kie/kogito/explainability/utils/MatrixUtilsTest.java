@@ -305,14 +305,14 @@ class MatrixUtilsTest {
     // test that summing all the rows of matrix returns expected result
     @Test
     void testIntraSumRow() {
-        double[] sum = MatrixUtils.sum(matSquareSingular, MatrixUtils.axis.ROW);
+        double[] sum = MatrixUtils.sum(matSquareSingular, MatrixUtils.Axis.ROW);
         assertArrayEquals(mssSumRow, sum, 1e-6);
     }
 
     // test that summing all the cols of matrix returns expected result
     @Test
     void testIntraSumCol() {
-        double[] sum = MatrixUtils.sum(matSquareSingular, MatrixUtils.axis.COLUMN);
+        double[] sum = MatrixUtils.sum(matSquareSingular, MatrixUtils.Axis.COLUMN);
         assertArrayEquals(mssSumCol, sum, 1e-6);
     }
 
