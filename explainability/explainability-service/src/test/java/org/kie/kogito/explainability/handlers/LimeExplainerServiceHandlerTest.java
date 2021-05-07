@@ -286,7 +286,7 @@ public class LimeExplainerServiceHandlerTest {
     public void testExplainAsyncWithConsumerDelegation() {
         Prediction prediction = mock(Prediction.class);
         PredictionProvider predictionProvider = mock(PredictionProvider.class);
-        Consumer<Void> callback = mock(Consumer.class);
+        Consumer<Map<String, Saliency>> callback = mock(Consumer.class);
 
         handler.explainAsync(prediction, predictionProvider, callback);
 

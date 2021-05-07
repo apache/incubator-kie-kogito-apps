@@ -32,15 +32,18 @@ import static java.util.Collections.emptyMap;
 
 @Mock
 @ApplicationScoped
-public class LocalExplainerMock implements LocalExplainer<Map<String, Saliency>, Void> {
+public class LocalExplainerMock implements LocalExplainer<Map<String, Saliency>> {
 
     @Override
-    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model) {
+    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
+            PredictionProvider model) {
         return CompletableFuture.completedFuture(emptyMap());
     }
 
     @Override
-    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model, Consumer<Void> intermediateResultsConsumer) {
+    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
+            PredictionProvider model,
+            Consumer<Map<String, Saliency>> intermediateResultsConsumer) {
         return CompletableFuture.completedFuture(emptyMap());
     }
 }

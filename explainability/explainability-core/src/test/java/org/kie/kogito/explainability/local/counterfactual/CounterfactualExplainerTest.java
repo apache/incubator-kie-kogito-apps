@@ -605,7 +605,7 @@ class CounterfactualExplainerTest {
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
         @SuppressWarnings("unchecked")
-        final Consumer<CounterfactualSolution> assertIntermediateCounterfactualNotNull = mock(Consumer.class);
+        final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull = mock(Consumer.class);
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
                         .builder()

@@ -30,11 +30,10 @@ import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
  * of the {@link BaseExplainabilityResultDto} for both success and failure states of explanation calculation.
  *
  * @param <T> the type of local explanation generated
- * @param <S> the type of local intermediate explanation generated
  * @param <R> the type of the local explanation request
  */
-public interface LocalExplainerServiceHandler<T, S, R extends BaseExplainabilityRequest, D extends BaseExplainabilityRequestDto>
-        extends LocalExplainer<T, S> {
+public interface LocalExplainerServiceHandler<T, R extends BaseExplainabilityRequest, D extends BaseExplainabilityRequestDto>
+        extends LocalExplainer<T> {
 
     /**
      * Checks whether an implementation supports a type of explanation.
@@ -120,6 +119,6 @@ public interface LocalExplainerServiceHandler<T, S, R extends BaseExplainability
      * @param result The intermediate result from the LocalExplainer calculation.
      * @return
      */
-    BaseExplainabilityResultDto createIntermediateResultDto(R request, S result);
+    BaseExplainabilityResultDto createIntermediateResultDto(R request, T result);
 
 }

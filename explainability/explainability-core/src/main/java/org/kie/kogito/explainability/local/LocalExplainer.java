@@ -25,12 +25,11 @@ import org.kie.kogito.explainability.model.PredictionProvider;
  * A local explainability method.
  *
  * @param <T> the type of local explanation generated
- * @param <S> the type of local intermediate explanation generated
  */
-public interface LocalExplainer<T, S> {
+public interface LocalExplainer<T> {
 
     CompletableFuture<T> explainAsync(Prediction prediction, PredictionProvider model);
 
-    CompletableFuture<T> explainAsync(Prediction prediction, PredictionProvider model, Consumer<S> intermediateResultsConsumer);
+    CompletableFuture<T> explainAsync(Prediction prediction, PredictionProvider model, Consumer<T> intermediateResultsConsumer);
 
 }

@@ -16,7 +16,6 @@
 package org.kie.kogito.explainability.handlers;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +37,6 @@ import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainStructureDto;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
-import org.kie.kogito.explainability.local.counterfactual.CounterfactualSolution;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
@@ -62,7 +60,7 @@ import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
 public class CounterfactualExplainerServiceHandler
-        implements LocalExplainerServiceHandler<CounterfactualResult, CounterfactualSolution, CounterfactualExplainabilityRequest, CounterfactualExplainabilityRequestDto> {
+        implements LocalExplainerServiceHandler<CounterfactualResult, CounterfactualExplainabilityRequest, CounterfactualExplainabilityRequestDto> {
 
     private final CounterfactualExplainer explainer;
 
@@ -138,6 +136,23 @@ public class CounterfactualExplainerServiceHandler
     @Override
     public BaseExplainabilityResultDto createSucceededResultDto(CounterfactualExplainabilityRequest request,
             CounterfactualResult result) {
+        return buildResultDtoFromExplanation(request, result);
+    }
+
+    @Override
+    public BaseExplainabilityResultDto createFailedResultDto(CounterfactualExplainabilityRequest request, Throwable throwable) {
+        return CounterfactualExplainabilityResultDto.buildFailed(request.getExecutionId(),
+                request.getCounterfactualId(),
+                throwable.getMessage());
+    }
+
+    @Override
+    public BaseExplainabilityResultDto createIntermediateResultDto(CounterfactualExplainabilityRequest request, CounterfactualResult result) {
+        return buildResultDtoFromExplanation(request, result);
+    }
+
+    private CounterfactualExplainabilityResultDto buildResultDtoFromExplanation(CounterfactualExplainabilityRequest request,
+            CounterfactualResult result) {
         List<Feature> features = result.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
         List<PredictionOutput> predictionOutputs = result.getOutput();
         if (Objects.isNull(predictionOutputs)) {
@@ -165,26 +180,6 @@ public class CounterfactualExplainerServiceHandler
     }
 
     @Override
-    public BaseExplainabilityResultDto createFailedResultDto(CounterfactualExplainabilityRequest request, Throwable throwable) {
-        return CounterfactualExplainabilityResultDto.buildFailed(request.getExecutionId(),
-                request.getCounterfactualId(),
-                throwable.getMessage());
-    }
-
-    @Override
-    public BaseExplainabilityResultDto createIntermediateResultDto(CounterfactualExplainabilityRequest request, CounterfactualSolution result) {
-        List<Feature> features = result.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
-        return CounterfactualExplainabilityResultDto.buildSucceeded(request.getExecutionId(),
-                request.getCounterfactualId(),
-                result.getSolutionId().toString(),
-                result.getScore().isFeasible(),
-                CounterfactualExplainabilityResultDto.Stage.INTERMEDIATE,
-                ConversionUtils.fromFeatureList(features),
-                // See https://issues.redhat.com/browse/FAI-459 we don't have any outputs at present
-                Collections.emptyMap());
-    }
-
-    @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider predictionProvider) {
         return explainer.explainAsync(prediction,
@@ -194,7 +189,7 @@ public class CounterfactualExplainerServiceHandler
     @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider predictionProvider,
-            Consumer<CounterfactualSolution> intermediateResultsConsumer) {
+            Consumer<CounterfactualResult> intermediateResultsConsumer) {
         return explainer.explainAsync(prediction,
                 predictionProvider,
                 intermediateResultsConsumer);

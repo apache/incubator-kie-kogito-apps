@@ -45,7 +45,7 @@ import static org.kie.kogito.explainability.ConversionUtils.toFeatureList;
 import static org.kie.kogito.explainability.ConversionUtils.toOutputList;
 
 @ApplicationScoped
-public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler<Map<String, Saliency>, Void, LIMEExplainabilityRequest, LIMEExplainabilityRequestDto> {
+public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler<Map<String, Saliency>, LIMEExplainabilityRequest, LIMEExplainabilityRequestDto> {
 
     private final LimeExplainer explainer;
 
@@ -97,7 +97,7 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
     }
 
     @Override
-    public BaseExplainabilityResultDto createIntermediateResultDto(LIMEExplainabilityRequest request, Void result) {
+    public BaseExplainabilityResultDto createIntermediateResultDto(LIMEExplainabilityRequest request, Map<String, Saliency> result) {
         throw new UnsupportedOperationException("Intermediate results are not supported by LIME.");
     }
 
@@ -116,7 +116,7 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
     @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
             PredictionProvider predictionProvider,
-            Consumer<Void> intermediateResultsConsumer) {
+            Consumer<Map<String, Saliency>> intermediateResultsConsumer) {
         return explainer.explainAsync(prediction,
                 predictionProvider,
                 intermediateResultsConsumer);

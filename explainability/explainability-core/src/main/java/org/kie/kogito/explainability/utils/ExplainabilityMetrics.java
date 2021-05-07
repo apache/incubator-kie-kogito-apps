@@ -158,7 +158,7 @@ public class ExplainabilityMetrics {
      * @return a report about stability of all the decisions/predictions (and for each {@code k < topK})
      */
     public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, Prediction prediction,
-            LocalExplainer<Map<String, Saliency>, Void> saliencyLocalExplainer,
+            LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
             int topK, int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
         Map<String, List<Saliency>> saliencies = getMultipleSaliencies(model, prediction, saliencyLocalExplainer, runs);
@@ -202,7 +202,7 @@ public class ExplainabilityMetrics {
      * @return the generated saliencies, aggregated by decision name, across the different runs
      */
     private static Map<String, List<Saliency>> getMultipleSaliencies(PredictionProvider model, Prediction prediction,
-            LocalExplainer<Map<String, Saliency>, Void> saliencyLocalExplainer,
+            LocalExplainer<Map<String, Saliency>> saliencyLocalExplainer,
             int runs)
             throws InterruptedException, ExecutionException, TimeoutException {
         Map<String, List<Saliency>> saliencies = new HashMap<>();
@@ -263,7 +263,7 @@ public class ExplainabilityMetrics {
      * @return the saliency recall
      */
     public static double getLocalSaliencyRecall(String outputName, PredictionProvider predictionProvider,
-            LocalExplainer<Map<String, Saliency>, Void> localExplainer,
+            LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
 
@@ -369,7 +369,7 @@ public class ExplainabilityMetrics {
      * @return the saliency precision
      */
     public static double getLocalSaliencyPrecision(String outputName, PredictionProvider predictionProvider,
-            LocalExplainer<Map<String, Saliency>, Void> localExplainer,
+            LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
         List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
@@ -439,7 +439,7 @@ public class ExplainabilityMetrics {
      * @return the saliency F1
      */
     public static double getLocalSaliencyF1(String outputName, PredictionProvider predictionProvider,
-            LocalExplainer<Map<String, Saliency>, Void> localExplainer,
+            LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
         double precision = getLocalSaliencyPrecision(outputName, predictionProvider, localExplainer, dataDistribution, k, chunkSize);

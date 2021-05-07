@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  * This implementation uses the Constraint Solution Problem solver OptaPlanner to search for
  * counterfactuals which minimize a score calculated by {@link CounterFactualScoreCalculator}.
  */
-public class CounterfactualExplainer implements LocalExplainer<CounterfactualResult, CounterfactualSolution> {
+public class CounterfactualExplainer implements LocalExplainer<CounterfactualResult> {
 
     private static final Logger logger =
             LoggerFactory.getLogger(CounterfactualExplainer.class);
@@ -120,16 +120,14 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
     @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction, PredictionProvider model) {
-        return explainAsync(prediction,
-                model,
-                (CounterfactualSolution result) -> {
-                    /* NOP */});
+        return explainAsync(prediction, model, unused -> {
+            /* NOP */});
     }
 
     @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider model,
-            Consumer<CounterfactualSolution> intermediateResultsConsumer) {
+            Consumer<CounterfactualResult> intermediateResultsConsumer) {
         CounterfactualPrediction cfPrediction = (CounterfactualPrediction) prediction;
         final PredictionFeatureDomain featureDomain = cfPrediction.getDomain();
         final List<Boolean> constraints = cfPrediction.getConstraints();

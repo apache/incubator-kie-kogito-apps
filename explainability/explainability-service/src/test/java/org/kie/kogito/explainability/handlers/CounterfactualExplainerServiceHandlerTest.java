@@ -36,7 +36,6 @@ import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
-import org.kie.kogito.explainability.local.counterfactual.CounterfactualSolution;
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
@@ -54,7 +53,6 @@ import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
-import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 
 import com.fasterxml.jackson.databind.node.IntNode;
 
@@ -413,9 +411,6 @@ public class CounterfactualExplainerServiceHandlerTest {
 
     @Test
     public void testCreateIntermediateResultDto() {
-        PredictionProvider predictionProvider = mock(PredictionProvider.class);
-        BendableBigDecimalScore score = BendableBigDecimalScore.zero(0, 0);
-
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 COUNTERFACTUAL_ID,
                 SERVICE_URL,
@@ -424,12 +419,11 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyMap(),
                 Collections.emptyMap());
 
-        CounterfactualSolution counterfactuals = new CounterfactualSolution(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
-                predictionProvider,
-                List.of(new Output("goal1", Type.NUMBER, new Value(27.0d), 1.0)),
+        CounterfactualResult counterfactuals = new CounterfactualResult(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+                List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
+                true,
                 UUID.fromString(SOLUTION_ID),
                 UUID.fromString(EXECUTION_ID));
-        counterfactuals.setScore(score);
 
         BaseExplainabilityResultDto base = handler.createIntermediateResultDto(request, counterfactuals);
         assertTrue(base instanceof CounterfactualExplainabilityResultDto);
@@ -445,7 +439,12 @@ public class CounterfactualExplainerServiceHandlerTest {
         assertEquals(TypedValue.Kind.UNIT, input1.getKind());
         assertEquals(123.0, input1.toUnit().getValue().asDouble());
 
-        assertTrue(result.getOutputs().isEmpty());
+        assertEquals(1, result.getOutputs().size());
+        assertTrue(result.getOutputs().containsKey("output1"));
+        TypedValue output1 = result.getOutputs().get("output1");
+        assertEquals(Double.class.getSimpleName(), output1.getType());
+        assertEquals(TypedValue.Kind.UNIT, output1.getKind());
+        assertEquals(555.0, output1.toUnit().getValue().asDouble());
     }
 
     @Test
@@ -483,7 +482,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     public void testExplainAsyncWithConsumerDelegation() {
         Prediction prediction = mock(Prediction.class);
         PredictionProvider predictionProvider = mock(PredictionProvider.class);
-        Consumer<CounterfactualSolution> callback = mock(Consumer.class);
+        Consumer<CounterfactualResult> callback = mock(Consumer.class);
 
         handler.explainAsync(prediction, predictionProvider, callback);
 
