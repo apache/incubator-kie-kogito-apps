@@ -48,7 +48,7 @@ import {
   OperationType,
   ProcessInstance,
   ProcessInstanceState,
-  ProcessListModal,
+  ProcessInfoModal,
   setTitle
 } from '@kogito-apps/management-console-shared';
 import { ProcessInstanceFilter, ProcessListDriver } from '../../../api';
@@ -678,7 +678,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
 
   return (
     <>
-      <ProcessListModal
+      <ProcessInfoModal
         modalTitle={setTitle(titleType, modalTitle)}
         isModalOpen={isModalOpen}
         operationResult={operations[operationType]}

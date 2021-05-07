@@ -28,8 +28,9 @@ import _ from 'lodash';
 import {
   ProcessInstance,
   setTitle,
-  ProcessListModal,
-  TitleType
+  ProcessInfoModal,
+  TitleType,
+  ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import ProcessListChildTable from '../ProcessListChildTable/ProcessListChildTable';
 import {
@@ -52,6 +53,7 @@ import ProcessListActionsKebab from '../ProcessListActionsKebab/ProcessListActio
 import { Checkbox } from '@patternfly/react-core';
 import DisablePopup from '../DisablePopup/DisablePopup';
 import '../styles.css';
+import ErrorPopover from '../ErrorPopover/ErrorPopover';
 interface ProcessListTableProps {
   processInstances: ProcessInstance[];
   isLoading: boolean;
@@ -203,26 +205,26 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
           parent: [
             <>
               {processInstance.addons.includes('process-management') &&
-                processInstance.serviceUrl !== null ? (
-                  <Checkbox
-                    isChecked={processInstance.isSelected}
-                    onChange={() => checkBoxSelect(processInstance)}
-                    aria-label="process-list-checkbox"
-                    id={`checkbox-${processInstance.id}`}
-                    name={`checkbox-${processInstance.id}`}
-                  />
-                ) : (
-                  <DisablePopup
-                    processInstanceData={processInstance}
-                    component={
-                      <Checkbox
-                        aria-label="process-list-checkbox-disabled"
-                        id={`checkbox-${processInstance.id}`}
-                        isDisabled={true}
-                      />
-                    }
-                  />
-                )}
+              processInstance.serviceUrl !== null ? (
+                <Checkbox
+                  isChecked={processInstance.isSelected}
+                  onChange={() => checkBoxSelect(processInstance)}
+                  aria-label="process-list-checkbox"
+                  id={`checkbox-${processInstance.id}`}
+                  name={`checkbox-${processInstance.id}`}
+                />
+              ) : (
+                <DisablePopup
+                  processInstanceData={processInstance}
+                  component={
+                    <Checkbox
+                      aria-label="process-list-checkbox-disabled"
+                      id={`checkbox-${processInstance.id}`}
+                      isDisabled={true}
+                    />
+                  }
+                />
+              )}
             </>,
             <>
               <a
@@ -243,12 +245,20 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
                 isLinkShown={false}
               />
             </>,
-            ProcessInstanceIconCreator(processInstance.state),
+            processInstance.state === ProcessInstanceState.Error ? (
+              <ErrorPopover
+                processInstanceData={processInstance}
+                onSkipClick={onSkipClick}
+                onRetryClick={onRetryClick}
+              />
+            ) : (
+              ProcessInstanceIconCreator(processInstance.state)
+            ),
             processInstance.start ? (
               <Moment fromNow>{new Date(`${processInstance.start}`)}</Moment>
             ) : (
-                ''
-              ),
+              ''
+            ),
             processInstance.lastUpdate ? (
               <span>
                 <HistoryIcon className="pf-u-mr-sm" /> {'Updated '}
@@ -257,8 +267,8 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
                 </Moment>
               </span>
             ) : (
-                ''
-              ),
+              ''
+            ),
             <ProcessListActionsKebab
               processInstance={processInstance}
               onSkipClick={onSkipClick}
@@ -376,7 +386,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
 
   return (
     <React.Fragment>
-      <ProcessListModal
+      <ProcessInfoModal
         isModalOpen={isModalOpen}
         handleModalToggle={handleModalToggle}
         modalTitle={setTitle(titleType, modalTitle)}
@@ -479,27 +489,27 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
             );
           })
         ) : (
-            <tbody>
-              <Tr>
-                <Td colSpan={7}>
-                  <>
-                    {isLoading && (
-                      <KogitoSpinner
-                        spinnerText={'Loading process instances...'}
-                      />
-                    )}
-                    {!isLoading && rowPairs.length === 0 && (
-                      <KogitoEmptyState
-                        type={KogitoEmptyStateType.Search}
-                        title="No results found"
-                        body="Try using different filters"
-                      />
-                    )}
-                  </>
-                </Td>
-              </Tr>
-            </tbody>
-          )}
+          <tbody>
+            <Tr>
+              <Td colSpan={7}>
+                <>
+                  {isLoading && (
+                    <KogitoSpinner
+                      spinnerText={'Loading process instances...'}
+                    />
+                  )}
+                  {!isLoading && rowPairs.length === 0 && (
+                    <KogitoEmptyState
+                      type={KogitoEmptyStateType.Search}
+                      title="No results found"
+                      body="Try using different filters"
+                    />
+                  )}
+                </>
+              </Td>
+            </Tr>
+          </tbody>
+        )}
       </TableComposable>
     </React.Fragment>
   );

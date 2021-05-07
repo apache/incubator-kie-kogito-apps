@@ -18,7 +18,6 @@ import {
   ProcessInstance,
   Job,
   JobCancel,
-  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
@@ -26,7 +25,7 @@ export interface ProcessDetailsChannelApi {
   processDetails__getProcessDiagram(
     data: ProcessInstance
   ): Promise<SvgSuccessResponse | SvgErrorResponse>;
-  processDetails__abortProcess(data: ProcessInstance): Promise<AbortResponse>;
+  processDetails__handleAbort(processInstance: ProcessInstance): Promise<void>;
   processDetails__cancelJob(
     job: Pick<Job, 'id' | 'endpoint'>
   ): Promise<JobCancel>;

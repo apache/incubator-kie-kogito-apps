@@ -16,14 +16,10 @@
 
 import axios from 'axios';
 import { GraphQL } from '@kogito-apps/consoles-common';
-import {
-  ProcessInstanceState,
-  MilestoneStatus
-} from '@kogito-apps/management-console-shared';
 import wait from 'waait';
 import {
-getSvg,  
-handleAbort,
+  getSvg,
+  handleAbort,
   handleJobReschedule,
   handleMultipleAction,
   handleRetry,
@@ -32,9 +28,10 @@ handleAbort,
   performMultipleCancel
 } from '../apis';
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstanceState
+  ProcessInstanceState,
+  MilestoneStatus
 } from '@kogito-apps/management-console-shared';
 import { processInstance } from '../../channel/ProcessList/tests/ProcessListGatewayApi.test';
 jest.mock('axios');
@@ -412,136 +409,143 @@ describe('test utility of svg panel', () => {
     await getSvg(data);
   });
 
-describe('handle skip test', () => {
-  it('on successful skip', async () => {
-    mockedAxios.post.mockResolvedValue({});
-    let result = null;
-    await handleSkip(processInstance)
-      .then(() => {
-        result = 'success';
-      })
-      .catch(error => {
-        result = error.message;
-      });
-    expect(result).toEqual('success');
-  });
-  it('on failed skip', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
-    let result = null;
-    await handleSkip(processInstance)
-      .then(() => {
-        result = 'success';
-      })
-      .catch(error => {
-        result = error.message;
-      });
-    expect(result).toEqual('404 error');
-  });
-});
-
-describe('handle retry test', () => {
-  it('on successful retrigger', async () => {
-    mockedAxios.post.mockResolvedValue({});
-    let result = null;
-    await handleRetry(processInstances[0])
-      .then(() => {
-        result = 'success';
-      })
-      .catch(error => {
-        result = error.message;
-      });
-    expect(result).toEqual('success');
-  });
-  it('on failed retrigger', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
-    let result = null;
-    await handleRetry(processInstance[0])
-      .then(() => {
-        result = 'success';
-      })
-      .catch(error => {
-        result = error.message;
-      });
-    expect(result).toEqual("Cannot read property 'serviceUrl' of undefined");
-  });
-});
-
-describe('handle abort test', () => {
-  it('on successful abort', async () => {
-    mockedAxios.delete.mockResolvedValue({});
-    let result = null;
-    await handleAbort(processInstances[0])
-      .then(() => {
-        result = 'success';
-      })
-      .catch(error => {
-        result = error.message;
-      });
-    expect(result).toEqual('success');
-  });
-  it('on failed abort', async () => {
-    mockedAxios.delete.mockRejectedValue({ message: '404 error' });
-    let result = null;
-    await handleAbort(processInstances[0])
-      .then(() => {
-        result = 'success';
-      })
-      .catch(error => {
-        result = error.message;
-      });
-    expect(result).toEqual('404 error');
-  });
-});
-
-describe('multiple action in process list', () => {
-  it('multiple skip test', async () => {
-    mockedAxios.post.mockResolvedValue({});
-    const result: BulkProcessInstanceAction = await handleMultipleAction(
-      processInstances,
-      OperationType.SKIP
-    );
-    expect(result.successProcessInstances.length).toEqual(1);
-  });
-  it('multiple skip test', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
-    const result: BulkProcessInstanceAction = await handleMultipleAction(
-      processInstances,
-      OperationType.SKIP
-    );
-    expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
+  describe('handle skip test', () => {
+    it('on successful skip', async () => {
+      mockedAxios.post.mockResolvedValue({});
+      let result = null;
+      await handleSkip(processInstance)
+        .then(() => {
+          result = 'success';
+        })
+        .catch(error => {
+          result = error.message;
+        });
+      expect(result).toEqual('success');
+    });
+    it('on failed skip', async () => {
+      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      let result = null;
+      await handleSkip(processInstance)
+        .then(() => {
+          result = 'success';
+        })
+        .catch(error => {
+          result = error.message;
+        });
+      expect(result).toEqual('404 error');
+    });
   });
 
-  it('multiple retry test', async () => {
-    mockedAxios.post.mockResolvedValue({});
-    const result: BulkProcessInstanceAction = await handleMultipleAction(
-      processInstances,
-      OperationType.RETRY
-    );
-    expect(result.successProcessInstances.length).toEqual(1);
-  });
-  it('multiple retry test', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
-    const result: BulkProcessInstanceAction = await handleMultipleAction(
-      processInstances,
-      OperationType.RETRY
-    );
-    expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
+  describe('handle retry test', () => {
+    it('on successful retrigger', async () => {
+      mockedAxios.post.mockResolvedValue({});
+      let result = null;
+      await handleRetry(processInstances[0])
+        .then(() => {
+          result = 'success';
+        })
+        .catch(error => {
+          result = error.message;
+        });
+      expect(result).toEqual('success');
+    });
+    it('on failed retrigger', async () => {
+      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      let result = null;
+      await handleRetry(processInstance[0])
+        .then(() => {
+          result = 'success';
+        })
+        .catch(error => {
+          result = error.message;
+        });
+      expect(result).toEqual("Cannot read property 'serviceUrl' of undefined");
+    });
   });
 
-  it('multiple abort test', async () => {
-    mockedAxios.delete.mockResolvedValue({});
-    const result: BulkProcessInstanceAction = await handleMultipleAction(
-      processInstances,
-      OperationType.ABORT
-    );
-    expect(result.successProcessInstances.length).toEqual(1);
+  describe('handle abort test', () => {
+    it('on successful abort', async () => {
+      mockedAxios.delete.mockResolvedValue({});
+      let result = null;
+      await handleAbort(processInstances[0])
+        .then(() => {
+          result = 'success';
+        })
+        .catch(error => {
+          result = error.message;
+        });
+      expect(result).toEqual('success');
+    });
+    it('on failed abort', async () => {
+      mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+      let result = null;
+      await handleAbort(processInstances[0])
+        .then(() => {
+          result = 'success';
+        })
+        .catch(error => {
+          result = error.message;
+        });
+      expect(result).toEqual('404 error');
+    });
   });
-  it('multiple abort test', async () => {
-    mockedAxios.delete.mockRejectedValue({ message: '404 error' });
-    const result: BulkProcessInstanceAction = await handleMultipleAction(
-      processInstances,
-      OperationType.ABORT
-    );
-    expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
+
+  describe('multiple action in process list', () => {
+    it('multiple skip test', async () => {
+      mockedAxios.post.mockResolvedValue({});
+      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+        processInstances,
+        OperationType.SKIP
+      );
+      expect(result.successProcessInstances.length).toEqual(1);
+    });
+    it('multiple skip test', async () => {
+      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+        processInstances,
+        OperationType.SKIP
+      );
+      expect(result.failedProcessInstances[0].errorMessage).toEqual(
+        '404 error'
+      );
+    });
+
+    it('multiple retry test', async () => {
+      mockedAxios.post.mockResolvedValue({});
+      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+        processInstances,
+        OperationType.RETRY
+      );
+      expect(result.successProcessInstances.length).toEqual(1);
+    });
+    it('multiple retry test', async () => {
+      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+        processInstances,
+        OperationType.RETRY
+      );
+      expect(result.failedProcessInstances[0].errorMessage).toEqual(
+        '404 error'
+      );
+    });
+
+    it('multiple abort test', async () => {
+      mockedAxios.delete.mockResolvedValue({});
+      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+        processInstances,
+        OperationType.ABORT
+      );
+      expect(result.successProcessInstances.length).toEqual(1);
+    });
+    it('multiple abort test', async () => {
+      mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+        processInstances,
+        OperationType.ABORT
+      );
+      expect(result.failedProcessInstances[0].errorMessage).toEqual(
+        '404 error'
+      );
+    });
   });
 });

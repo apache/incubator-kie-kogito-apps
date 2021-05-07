@@ -15,7 +15,7 @@
  */
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { ProcessInstances } from '../mocks/Mocks';
+import { ProcessInstances } from './mocks/Mocks';
 import { OrderBy } from '../../.././../api';
 import { getWrapper } from '@kogito-apps/components-common';
 import ProcessListTable from '../ProcessListTable';
@@ -23,13 +23,15 @@ import { Button, Checkbox } from '@patternfly/react-core';
 import _ from 'lodash';
 import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
-import TestProcessListDriver from '../../ProcessListPage/mocks/TestProcessListDriver';
+import TestProcessListDriver from '../../ProcessListPage/tests/mocks/TestProcessListDriver';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('../../ProcessListChildTable/ProcessListChildTable');
 jest.mock('../../DisablePopup/DisablePopup');
 jest.mock('../../ProcessListActionsKebab/ProcessListActionsKebab');
+jest.mock('../../ErrorPopover/ErrorPopover');
 Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
+
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
@@ -46,6 +48,14 @@ jest.mock('@kogito-apps/components-common', () => ({
     return <MockedComponent />;
   }
 }));
+
+jest.mock('@kogito-apps/management-console-shared', () => ({
+  ...jest.requireActual('@kogito-apps/management-console-shared'),
+  ProcessInfo: () => {
+    return <MockedComponent />;
+  }
+}));
+
 const props = {
   processInstances: ProcessInstances,
   isLoading: false,
@@ -186,9 +196,9 @@ describe('ProcessListTable test', () => {
           ['onSkipClick'](props.processInstances[0]);
       });
       const skipSuccessWrapper = wrapper.update();
-      expect(skipSuccessWrapper.find('ProcessListModal').exists()).toBeTruthy();
+      expect(skipSuccessWrapper.find('ProcessInfoModal').exists()).toBeTruthy();
       expect(
-        skipSuccessWrapper.find('ProcessListModal').props()['modalContent']
+        skipSuccessWrapper.find('ProcessInfoModal').props()['modalContent']
       ).toEqual('The process travels was successfully skipped.');
     });
   });
@@ -211,10 +221,10 @@ describe('ProcessListTable test', () => {
       });
       const retrySuccessWrapper = wrapper.update();
       expect(
-        retrySuccessWrapper.find('ProcessListModal').exists()
+        retrySuccessWrapper.find('ProcessInfoModal').exists()
       ).toBeTruthy();
       expect(
-        retrySuccessWrapper.find('ProcessListModal').props()['modalContent']
+        retrySuccessWrapper.find('ProcessInfoModal').props()['modalContent']
       ).toEqual('The process travels was successfully re-executed.');
     });
   });
@@ -237,10 +247,10 @@ describe('ProcessListTable test', () => {
       });
       const abortSuccessWrapper = wrapper.update();
       expect(
-        abortSuccessWrapper.find('ProcessListModal').exists()
+        abortSuccessWrapper.find('ProcessInfoModal').exists()
       ).toBeTruthy();
       expect(
-        abortSuccessWrapper.find('ProcessListModal').props()['modalContent']
+        abortSuccessWrapper.find('ProcessInfoModal').props()['modalContent']
       ).toEqual('The process travels was successfully aborted.');
     });
   });

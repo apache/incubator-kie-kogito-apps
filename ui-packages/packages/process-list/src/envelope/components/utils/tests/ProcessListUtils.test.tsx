@@ -24,7 +24,7 @@ import {
   getProcessInstanceDescription,
   ProcessInstanceIconCreator
 } from '../ProcessListUtils';
-import { ProcessInstances } from '../../ProcessListTable/mocks/Mocks';
+import { ProcessInstances } from '../../ProcessListTable/tests/mocks/Mocks';
 import { OrderBy } from '../../../../api';
 describe('uitility function testing', () => {
   it('state icon creator tests', () => {

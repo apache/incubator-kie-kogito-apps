@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
 
-import { ProcessDetailsDriver } from '../../../api';
+const MockedErrorPopover = (): React.ReactElement => {
+  return <></>;
+};
 
-export const MockedProcessDetailsDriver = jest.fn<ProcessDetailsDriver, []>(
-  () => ({
-    getProcessDiagram: jest.fn(),
-    cancelJob: jest.fn(),
-    rescheduleJob: jest.fn(),
-    processDetailsQuery: jest.fn(),
-    jobsQuery: jest.fn(),
-    handleAbort: jest.fn(),
-    openProcessInstanceDetails: jest.fn()
-  })
-);
+export default MockedErrorPopover;

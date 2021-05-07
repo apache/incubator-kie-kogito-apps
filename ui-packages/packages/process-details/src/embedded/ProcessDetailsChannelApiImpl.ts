@@ -19,7 +19,6 @@ import {
   ProcessInstance,
   Job,
   JobCancel,
-  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
@@ -33,8 +32,8 @@ export class ProcessDetailsChannelApiImpl implements ProcessDetailsChannelApi {
     return this.driver.getProcessDiagram(data);
   }
 
-  processDetails__abortProcess(data: ProcessInstance): Promise<AbortResponse> {
-    return this.driver.abortProcess(data);
+  processDetails__handleAbort(processInstance: ProcessInstance): Promise<void> {
+    return this.driver.handleAbort(processInstance);
   }
 
   processDetails__cancelJob(

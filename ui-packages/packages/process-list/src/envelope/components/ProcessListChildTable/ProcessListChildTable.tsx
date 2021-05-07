@@ -17,7 +17,10 @@
 import { ProcessListDriver } from '../../../api';
 import { IRow, Table, TableBody, TableHeader } from '@patternfly/react-table';
 import React, { useEffect, useState } from 'react';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
 import _ from 'lodash';
 import {
   ServerErrors,
@@ -38,6 +41,8 @@ import Moment from 'react-moment';
 import ProcessListActionsKebab from '../ProcessListActionsKebab/ProcessListActionsKebab';
 import { Checkbox } from '@patternfly/react-core';
 import DisablePopup from '../DisablePopup/DisablePopup';
+import ErrorPopover from '../ErrorPopover/ErrorPopover';
+import '../styles.css';
 export interface ProcessListChildTableProps {
   parentProcessId: string;
   processInstances: ProcessInstance[];
@@ -171,7 +176,16 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
               )
             },
             {
-              title: ProcessInstanceIconCreator(child.state)
+              title:
+                child.state === ProcessInstanceState.Error ? (
+                  <ErrorPopover
+                    processInstanceData={child}
+                    onSkipClick={onSkipClick}
+                    onRetryClick={onRetryClick}
+                  />
+                ) : (
+                  ProcessInstanceIconCreator(child.state)
+                )
             },
             {
               title: child.start ? (
@@ -216,8 +230,7 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     try {
       setIsLoading(true);
       const response = await driver.getChildProcessesQuery(parentProcessId);
-      const clonedProcessInstances = _.cloneDeep(processInstances);
-      clonedProcessInstances.forEach((processInstance: ProcessInstance) => {
+      processInstances.forEach((processInstance: ProcessInstance) => {
         if (processInstance.id === parentProcessId) {
           response.forEach((child: ProcessInstance) => {
             child.isSelected = false;
@@ -231,13 +244,14 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
           processInstance.childProcessInstances = response;
         }
       });
-      setProcessInstances(clonedProcessInstances);
+      createRows(response);
     } catch (error) {
       setError(error);
     } finally {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     if (processInstances.length > 0) {
       const processInstance = processInstances.find(

@@ -211,7 +211,7 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
   setProcessStates={[MockFunction]}
   setSelectedInstances={[MockFunction]}
 >
-  <ProcessListModal
+  <ProcessInfoModal
     handleModalToggle={[Function]}
     isModalOpen={false}
     modalTitle={
@@ -313,7 +313,7 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
         />
       </Portal>
     </Modal>
-  </ProcessListModal>
+  </ProcessInfoModal>
   <Toolbar
     className="pf-m-toggle-group-container kogito-management-console__state-dropdown-list"
     clearAllFilters={[Function]}

@@ -16,10 +16,10 @@
 import { getWrapper } from '@kogito-apps/components-common';
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import TestProcessListDriver from '../../ProcessListPage/mocks/TestProcessListDriver';
-import { childProcessInstances } from '../mocks/Mocks';
+import TestProcessListDriver from '../../ProcessListPage/tests/mocks/TestProcessListDriver';
+import { childProcessInstances } from './mocks/Mocks';
 import ProcessListChildTable from '../ProcessListChildTable';
-import { ProcessInstances } from '../../ProcessListTable/mocks/Mocks';
+import { ProcessInstances } from '../../ProcessListTable/tests/mocks/Mocks';
 import { Checkbox } from '@patternfly/react-core';
 Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
 
@@ -46,6 +46,12 @@ jest.mock('@kogito-apps/components-common', () => ({
   }
 }));
 
+jest.mock('@kogito-apps/management-console-shared', () => ({
+  ...jest.requireActual('@kogito-apps/management-console-shared'),
+  ProcessInfoModal: () => {
+    return <MockedComponent />;
+  }
+}));
 describe('ProcessListChildTable test', () => {
   it('render table', async () => {
     const driver = new TestProcessListDriver([], childProcessInstances);

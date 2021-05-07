@@ -28,10 +28,10 @@ import {
   Toolbar,
   ToolbarFilter
 } from '@patternfly/react-core';
-import { ProcessInstances } from '../../ProcessListTable/mocks/Mocks';
+import { ProcessInstances } from '../../ProcessListTable/tests/mocks/Mocks';
 import { shallow } from 'enzyme';
 import wait from 'waait';
-import TestProcessListDriver from '../../ProcessListPage/mocks/TestProcessListDriver';
+import TestProcessListDriver from '../../ProcessListPage/tests/mocks/TestProcessListDriver';
 import axios from 'axios';
 import _ from 'lodash';
 jest.mock('axios');
@@ -436,7 +436,7 @@ describe('ProcessListToolbar test', () => {
       'ProcessListToolbar'
     );
     wrapper
-      .find('ProcessListModal')
+      .find('ProcessInfoModal')
       .props()
       ['resetSelected']();
     expect(props.setSelectedInstances).toHaveBeenCalled();

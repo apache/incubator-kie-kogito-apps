@@ -15,7 +15,7 @@
  */
 
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
@@ -32,7 +32,7 @@ export interface ProcessListDriver {
   handleMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
-  ): Promise<BulkProcessInstanceAction>;
+  ): Promise<BulkProcessInstanceActionResponse>;
   query(offset: number, limit: number): Promise<ProcessInstance[]>;
   getChildProcessesQuery(
     rootProcessInstanceId: string

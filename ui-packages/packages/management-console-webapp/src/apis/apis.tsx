@@ -16,22 +16,11 @@
 
 import { GraphQL } from '@kogito-apps/consoles-common';
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstance,
-  ProcessInstanceState
+  ProcessInstance
 } from '@kogito-apps/management-console-shared';
 import axios from 'axios';
-import {
-  ProcessInstance,
-  ProcessInstanceState,
-  AbortResponse
-} from '@kogito-apps/management-console-shared';
-
-enum TitleType {
-  SUCCESS = 'success',
-  FAILURE = 'failure'
-}
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
@@ -131,7 +120,7 @@ export const getSvg = async (data: ProcessInstance): Promise<any> => {
 
 export const handleSkip = async (
   processInstance: ProcessInstance
-): Promise<VoidFunction> => {
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     axios
       .post(
@@ -168,7 +157,6 @@ export const handleAbort = (
         `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}`
       )
       .then(() => {
-        processInstance.state = ProcessInstanceState.Aborted;
         resolve();
       })
       .catch(error => reject(error));
@@ -178,42 +166,30 @@ export const handleAbort = (
 export const handleMultipleAction = async (
   processInstances: ProcessInstance[],
   operationType: OperationType
-): Promise<BulkProcessInstanceAction> => {
+): Promise<BulkProcessInstanceActionResponse> => {
+  let operation: (processInstance: ProcessInstance) => Promise<void>;
   const successProcessInstances: ProcessInstance[] = [];
   const failedProcessInstances: ProcessInstance[] = [];
+  switch (operationType) {
+    case OperationType.ABORT:
+      operation = handleAbort;
+      break;
+    case OperationType.SKIP:
+      operation = handleSkip;
+      break;
+    case OperationType.RETRY:
+      operation = handleRetry;
+      break;
+  }
   for (const processInstance of processInstances) {
-    if (operationType === OperationType.ABORT) {
-      await handleAbort(processInstance)
-        .then(() => {
-          successProcessInstances.push(processInstance);
-        })
-        .catch(error => {
-          processInstance.errorMessage = error.message;
-          failedProcessInstances.push(processInstance);
-        });
-    }
-
-    if (operationType === OperationType.SKIP) {
-      await handleSkip(processInstance)
-        .then(() => {
-          successProcessInstances.push(processInstance);
-        })
-        .catch(error => {
-          processInstance.errorMessage = error.message;
-          failedProcessInstances.push(processInstance);
-        });
-    }
-
-    if (operationType === OperationType.RETRY) {
-      await handleRetry(processInstance)
-        .then(() => {
-          successProcessInstances.push(processInstance);
-        })
-        .catch(error => {
-          processInstance.errorMessage = error.message;
-          failedProcessInstances.push(processInstance);
-        });
-    }
+    await operation(processInstance)
+      .then(() => {
+        successProcessInstances.push(processInstance);
+      })
+      .catch(error => {
+        processInstance.errorMessage = error.message;
+        failedProcessInstances.push(processInstance);
+      });
   }
 
   return { successProcessInstances, failedProcessInstances };

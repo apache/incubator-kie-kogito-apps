@@ -21,7 +21,7 @@ import {
   SortBy
 } from '../api';
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
@@ -60,7 +60,7 @@ export class ProcessListChannelApiImpl implements ProcessListChannelApi {
   processList__handleMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
-  ): Promise<BulkProcessInstanceAction> {
+  ): Promise<BulkProcessInstanceActionResponse> {
     return this.driver.handleMultipleAction(processInstances, operationType);
   }
   processList__query(

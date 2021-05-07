@@ -15,7 +15,7 @@
  */
 
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
@@ -23,7 +23,7 @@ import {
   ProcessInstanceFilter,
   ProcessListDriver,
   SortBy
-} from '../../../../api';
+} from '../../../../../api';
 
 export default class TestProcessListDriver implements ProcessListDriver {
   private readonly processInstances: ProcessInstance[];
@@ -41,7 +41,7 @@ export default class TestProcessListDriver implements ProcessListDriver {
   handleMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
-  ): Promise<BulkProcessInstanceAction> {
+  ): Promise<BulkProcessInstanceActionResponse> {
     return Promise.resolve({
       successProcessInstances: [],
       failedProcessInstances: []

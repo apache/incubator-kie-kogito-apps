@@ -29,9 +29,9 @@ import {
 import { GraphQL } from '@kogito-apps/consoles-common';
 import {
   handleJobReschedule,
-  handleAbort,
   jobCancel,
-  getSvg
+  getSvg,
+  handleAbort
 } from '../../../apis/apis';
 
 jest.mock('../../../apis/apis', () => ({
@@ -184,19 +184,6 @@ describe('ProcessDetailsGatewayApi tests', () => {
     expect(getSvg).toHaveBeenCalledWith(data);
   });
 
-  it('abortProcess', async () => {
-    const results = {
-      title: 'Abort operation',
-      content: 'The process travels was successfully aborted.',
-      type: 'success'
-    };
-    //@ts-ignore
-    handleAbort.mockReturnValueOnce(results);
-    const abortResult = await gatewayApi.abortProcess(data);
-    expect(handleAbort).toHaveBeenCalledWith(data);
-    expect(abortResult).toStrictEqual(results);
-  });
-
   it('cancelJob', async () => {
     const modalTitle = 'failure';
     const modalContent =
@@ -234,6 +221,10 @@ describe('ProcessDetailsGatewayApi tests', () => {
     });
   });
 
+  it('handleAbort', async () => {
+    await gatewayApi.handleAbort(data);
+    expect(handleAbort).toHaveBeenCalledWith(data);
+  });
   it('processDetailsQuery- success response', () => {
     getProcessDetailsMock.mockReturnValue(Promise.resolve([]));
     gatewayApi.processDetailsQuery(id);

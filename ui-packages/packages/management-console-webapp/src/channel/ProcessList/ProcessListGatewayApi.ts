@@ -15,7 +15,7 @@
  */
 import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
@@ -38,8 +38,8 @@ export interface ProcessListGatewayApi {
   handleAbort: (processInstance: ProcessInstance) => Promise<void>;
   handleMultipleAction: (
     processInstances: ProcessInstance[],
-    operationType: any
-  ) => Promise<any>;
+    operationType: OperationType
+  ) => Promise<BulkProcessInstanceActionResponse>;
   query(offset: number, limit: number): Promise<ProcessInstance[]>;
   getChildProcessesQuery(
     rootProcessInstanceId: string
@@ -118,7 +118,7 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
   handleMultipleAction = async (
     processInstances: ProcessInstance[],
     operationtype: OperationType
-  ): Promise<BulkProcessInstanceAction> => {
+  ): Promise<BulkProcessInstanceActionResponse> => {
     return await handleMultipleAction(processInstances, operationtype);
   };
   query(offset: number, limit: number): Promise<ProcessInstance[]> {

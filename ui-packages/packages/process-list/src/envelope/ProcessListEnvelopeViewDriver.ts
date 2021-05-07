@@ -16,7 +16,7 @@
 
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
@@ -56,7 +56,7 @@ export default class ProcessListEnvelopeViewDriver
   handleMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
-  ): Promise<BulkProcessInstanceAction> {
+  ): Promise<BulkProcessInstanceActionResponse> {
     return this.channelApi.requests.processList__handleMultipleAction(
       processInstances,
       operationType

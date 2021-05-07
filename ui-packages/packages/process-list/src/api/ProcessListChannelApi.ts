@@ -15,7 +15,7 @@
  */
 
 import {
-  BulkProcessInstanceAction,
+  BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
@@ -34,7 +34,7 @@ export interface ProcessListChannelApi {
   processList__handleMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
-  ): Promise<BulkProcessInstanceAction>;
+  ): Promise<BulkProcessInstanceActionResponse>;
   processList__query(offset: number, limit: number): Promise<ProcessInstance[]>;
   processList__getChildProcessesQuery(
     rootProcessInstanceId: string
