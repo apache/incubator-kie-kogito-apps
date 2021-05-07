@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { ProcessDetailsDriver } from '../../../api';
 import {
   Job,
   JobCancel,
@@ -23,6 +22,7 @@ import {
   SvgSuccessResponse,
   TriggerableNode
 } from '@kogito-apps/management-console-shared';
+import { ProcessDetailsDriver } from '../../../../../api';
 
 export default class TestProcessDetailsDriver implements ProcessDetailsDriver {
   constructor(id: string) {
