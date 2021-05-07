@@ -111,14 +111,14 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 }).collect(Collectors.toList());
     }
 
-    private Consumer<CounterfactualSolution> createSolutionConsumer(PredictionProvider model,
-            Consumer<CounterfactualResult> consumer) {
-        return cfs -> model.predictAsync(List.of(new PredictionInput(
-                cfs.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))).thenApply(
-                        predictionOutputs -> new CounterfactualResult(cfs.getEntities(), predictionOutputs,
-                                cfs.getScore().isFeasible(),
-                                cfs.getSolutionId(), cfs.getExecutionId()))
-                .thenAccept(consumer);
+    private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer) {
+        return counterfactualSolution -> {
+            CounterfactualResult result = new CounterfactualResult(counterfactualSolution.getEntities(),
+                    counterfactualSolution.getPredictionOutputs(),
+                    counterfactualSolution.getScore().isFeasible(),
+                    counterfactualSolution.getSolutionId(), counterfactualSolution.getExecutionId());
+            consumer.accept(result);
+        };
     }
 
     @Override
@@ -146,7 +146,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
                         solverManager.solveAndListen(executionId, initial,
-                                assignSolutionId.andThen(createSolutionConsumer(model, intermediateResultsConsumer)),
+                                assignSolutionId.andThen(createSolutionConsumer(intermediateResultsConsumer)),
                                 null);
                 try {
                     // Wait until the solving ends
