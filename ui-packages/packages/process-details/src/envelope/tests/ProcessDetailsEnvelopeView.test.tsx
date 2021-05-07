@@ -23,7 +23,7 @@ import ProcessDetailsEnvelopeView, {
 } from '../ProcessDetailsEnvelopeView';
 import ProcessDetails from '../components/ProcessDetails/ProcessDetails';
 
-jest.mock('../components/ProcessDetails/ProcessDetails');
+jest.mock('../components/ProcessDetailsPanel/ProcessDetailsPanel');
 
 describe('ProcessDetailsEnvelopeView tests', () => {
   it('Snapshot', () => {

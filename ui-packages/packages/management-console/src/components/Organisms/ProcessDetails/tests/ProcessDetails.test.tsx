@@ -115,7 +115,7 @@ const props2 = {
   childResult: []
 };
 
-describe('ProcessDetails component tests', () => {
+describe('ProcessDetailsPanel component tests', () => {
   it('Snapshot testing with basic data loaded', () => {
     const wrapper = shallow(<ProcessDetails {...props} />);
     expect(wrapper).toMatchSnapshot();

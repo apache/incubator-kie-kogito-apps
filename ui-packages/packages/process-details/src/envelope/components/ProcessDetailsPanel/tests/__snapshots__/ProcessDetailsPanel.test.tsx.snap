@@ -62,6 +62,20 @@ exports[`ProcessDetailsPanel component tests Snapshot testing with basic data lo
         </Text>
       </FormGroup>
       <FormGroup
+        fieldId="endpoint"
+        label="Endpoint"
+      >
+        <Text
+          className="kogito-management-console--u-WordBreak"
+          component="p"
+        >
+          <EndpointLink
+            isLinkShown={true}
+            serviceUrl="http://localhost:4000/"
+          />
+        </Text>
+      </FormGroup>
+      <FormGroup
         fieldId="start"
         label="Start"
       >

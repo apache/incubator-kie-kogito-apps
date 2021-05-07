@@ -30,6 +30,18 @@ import {
   jobCancel
 } from '../../apis';
 
+interface OnOpenProcessInstanceDetailsListener {
+  onOpen(id: string): void;
+}
+
+export interface ProcessDetailsUnSubscribeHandler {
+  unSubscribe: () => void;
+}
+
+export interface ProcessDetailsState {
+  id: string;
+}
+
 export interface ProcessDetailsGatewayApi {
   processDetailsState: any;
   getProcessDiagram: (
@@ -45,19 +57,27 @@ export interface ProcessDetailsGatewayApi {
   ) => Promise<{ modalTitle: string; modalContent: string }>;
   processDetailsQuery(id: string): Promise<ProcessInstance>;
   jobsQuery(id: string): Promise<Job[]>;
-}
-
-export interface ProcessDetailsState {
-  id: string;
+  openProcessInstanceDetails(id: string): Promise<void>;
+  onOpenProcessInstanceDetailsListener: (
+    listener: OnOpenProcessInstanceDetailsListener
+  ) => ProcessDetailsUnSubscribeHandler;
+  clearOpenProcessInstanceDetails(): void;
 }
 
 export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   private readonly queries: ProcessDetailsQueries;
   private _ProcessDetailsState: ProcessDetailsState;
+  private _activeProcessInstanceId: string;
+  private readonly listeners: OnOpenProcessInstanceDetailsListener[] = [];
 
   constructor(queries: ProcessDetailsQueries) {
     this.queries = queries;
     this._ProcessDetailsState = { id: '' };
+    // this._activeProcessInstanceId = '';
+  }
+
+  get activeProcessInstanceId(): string {
+    return this._activeProcessInstanceId;
   }
 
   get processDetailsState(): ProcessDetailsState {
@@ -112,5 +132,32 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
           reject(reason);
         });
     });
+  }
+
+  openProcessInstanceDetails(id: string): Promise<void> {
+    this._ProcessDetailsState = { id: id };
+    this.listeners.forEach(listener => listener.onOpen(id));
+    return Promise.resolve();
+  }
+
+  onOpenProcessInstanceDetailsListener(
+    listener: OnOpenProcessInstanceDetailsListener
+  ): ProcessDetailsUnSubscribeHandler {
+    this.listeners.push(listener);
+
+    const unSubscribe = () => {
+      const index = this.listeners.indexOf(listener);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
+
+    return {
+      unSubscribe
+    };
+  }
+
+  clearOpenProcessInstanceDetails(): void {
+    this._activeProcessInstanceId = null;
   }
 }
