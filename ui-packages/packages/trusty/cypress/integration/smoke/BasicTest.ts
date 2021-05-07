@@ -20,51 +20,46 @@ describe('Basic Elements', () => {
   });
 
   it('Menu button is visible', () => {
-    cy.menuButton().should('be.visible');
+    cy.get('button#nav-toggle').should('be.visible');
   });
 
   it('Menu button shows/hides options', () => {
-    cy.auditInvestigationItem().then($item => {
+    cy.ouiaId('audit-item').then($item => {
       //toggle menu side bar - both directions
       if ($item.is(':visible')) {
-        cy.menuButton().click();
-        cy.auditInvestigationItem().should('not.be.visible');
-        cy.menuButton().click();
-        cy.auditInvestigationItem().should('be.visible');
+        cy.get('button#nav-toggle').click();
+        cy.ouiaId('audit-item').should('be.visible');
+        cy.get('button#nav-toggle').click();
+        cy.ouiaId('audit-item').should('be.visible');
       } else {
-        cy.menuButton().click();
-        cy.auditInvestigationItem().should('be.visible');
-        cy.menuButton().click();
-        cy.auditInvestigationItem().should('not.be.visible');
+        cy.get('button#nav-toggle').click();
+        cy.ouiaId('audit-item').should('be.visible');
+        cy.get('button#nav-toggle').click();
+        cy.ouiaId('audit-item').should('not.be.visible');
       }
     });
   });
 
   it('Search is visible', () => {
-    cy.searchInput().should('be.visible');
-    cy.searchInput().type('someId');
-    cy.searchButton().should('be.visible');
+    cy.ouiaId("search-input").should('be.visible');
+    cy.ouiaId("search-input").type('someId');
+    cy.ouiaId("search-button").should('be.visible');
   });
 
   it('Refresh is visible', () => {
-    cy.refreshButton().should('be.visible');
+    cy.ouiaId("refresh-button").should('be.visible');
   });
 
   it('Date inputs are visible', () => {
-    cy.fromInput().should('be.visible');
-    cy.toInput().should('be.visible');
+    cy.get('div.flatpickr-wrapper>input#audit-from-date+input').should('be.visible');
+    cy.get('div.flatpickr-wrapper>input#audit-to-date+input').should('be.visible');
   });
 
   it('Top paging is visible', () => {
-    cy.paginationTop().should('be.visible');
-  });
-
-  it('Bottom paging is visible', () => {
-    cy.get("main").scrollTo("bottom");
-    cy.paginationBottom().should('be.visible');
+    cy.ouiaId("top-pagination").should('be.visible');
   });
 
   it('Decision result is available', () => {
-    cy.pageContent().find("tr>td>a:contains('1003')", { timeout: 5000 });
+    cy.ouiaId("exec-table").find("tr>td>a:contains('1003')", { timeout: 5000 });
   });
 });

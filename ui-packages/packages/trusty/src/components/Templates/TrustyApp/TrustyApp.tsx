@@ -55,7 +55,7 @@ const TrustyApp = () => {
       <NavList>
         <NavItem
           isActive={location.pathname.startsWith('/audit')}
-          ouiaId="auditItem"
+          ouiaId="audit-item"
         >
           <NavLink to="/audit">Audit Investigation</NavLink>
         </NavItem>

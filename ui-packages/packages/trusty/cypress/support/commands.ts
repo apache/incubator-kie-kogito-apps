@@ -16,99 +16,14 @@
 
 declare namespace Cypress {
   interface Chainable {
-    /**
-     * Returns DOM Element for button which expands/collapses menu.
-     */
-    menuButton(): Chainable<JQuery<HTMLBodyElement>>;
 
     /**
-     * Return DOM Element for item which opens audit investigation.
+     * Return DOM Element which match the value of data-ouia-component-it attribute.
      */
-    auditInvestigationItem(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for input for searching by ID.
-     */
-    searchInput(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for search button.
-     */
-
-    searchButton(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for "from date" input.
-     */
-
-    fromInput(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for "to date" input.
-     */
-    toInput(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for refresh button.
-     */
-
-    refreshButton(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for table page top.
-     */
-    paginationTop(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for table page bottom.
-     */
-    paginationBottom(): Chainable<JQuery<HTMLBodyElement>>;
-
-    /**
-     * Return DOM Element for table which represents page content.
-     */
-    pageContent(): Chainable<JQuery<HTMLBodyElement>>;
+    ouiaId(valueStr: String): Chainable<JQuery<HTMLBodyElement>>;
   }
 }
 
-Cypress.Commands.add('menuButton', () => {
-  return cy.get('button#nav-toggle');
-});
-
-Cypress.Commands.add('auditInvestigationItem', () => {
-  return cy.get("[data-ouia-component-id='auditItem']");
-});
-
-Cypress.Commands.add('searchInput', () => {
-  return cy.get("[data-ouia-component-id='searchInput']");
-});
-
-Cypress.Commands.add('searchButton', () => {
-  return cy.get("[data-ouia-component-id='searchButton']");
-});
-
-Cypress.Commands.add('fromInput', () => {
-  return cy.get('div.flatpickr-wrapper>input#audit-from-date+input');
-});
-
-Cypress.Commands.add('toInput', () => {
-  return cy.get('div.flatpickr-wrapper>input#audit-to-date+input');
-});
-
-Cypress.Commands.add('refreshButton', () => {
-  return cy.get("[data-ouia-component-id='refreshButton']");
-});
-
-Cypress.Commands.add('paginationTop', () => {
-  return cy.get("[data-ouia-component-id='OUIA-Generated-Pagination-top-1']");
-});
-
-Cypress.Commands.add('paginationBottom', () => {
-  return cy.get(
-    "[data-ouia-component-id='OUIA-Generated-Pagination-bottom-1']"
-  );
-});
-
-Cypress.Commands.add('pageContent', () => {
-  return cy.get("[data-ouia-component-id='execTable']");
+Cypress.Commands.add('ouiaId', (valueStr) => {
+  return cy.get("[data-ouia-component-id='" + valueStr + "']");
 });
