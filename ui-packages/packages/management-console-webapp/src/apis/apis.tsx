@@ -167,30 +167,33 @@ export const handleMultipleAction = async (
   processInstances: ProcessInstance[],
   operationType: OperationType
 ): Promise<BulkProcessInstanceActionResponse> => {
-  let operation: (processInstance: ProcessInstance) => Promise<void>;
-  const successProcessInstances: ProcessInstance[] = [];
-  const failedProcessInstances: ProcessInstance[] = [];
-  switch (operationType) {
-    case OperationType.ABORT:
-      operation = handleAbort;
-      break;
-    case OperationType.SKIP:
-      operation = handleSkip;
-      break;
-    case OperationType.RETRY:
-      operation = handleRetry;
-      break;
-  }
-  for (const processInstance of processInstances) {
-    await operation(processInstance)
-      .then(() => {
-        successProcessInstances.push(processInstance);
-      })
-      .catch(error => {
-        processInstance.errorMessage = error.message;
-        failedProcessInstances.push(processInstance);
-      });
-  }
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
+    let operation: (processInstance: ProcessInstance) => Promise<void>;
+    const successProcessInstances: ProcessInstance[] = [];
+    const failedProcessInstances: ProcessInstance[] = [];
+    switch (operationType) {
+      case OperationType.ABORT:
+        operation = handleAbort;
+        break;
+      case OperationType.SKIP:
+        operation = handleSkip;
+        break;
+      case OperationType.RETRY:
+        operation = handleRetry;
+        break;
+    }
+    for (const processInstance of processInstances) {
+      await operation(processInstance)
+        .then(() => {
+          successProcessInstances.push(processInstance);
+        })
+        .catch(error => {
+          processInstance.errorMessage = error.message;
+          failedProcessInstances.push(processInstance);
+        });
+    }
 
-  return { successProcessInstances, failedProcessInstances };
+    resolve({ successProcessInstances, failedProcessInstances });
+  });
 };

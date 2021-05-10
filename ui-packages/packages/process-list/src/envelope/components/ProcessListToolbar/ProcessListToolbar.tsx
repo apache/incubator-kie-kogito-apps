@@ -162,17 +162,17 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
               }
             }
           );
-          const result = await driver.handleMultipleAction(
-            remainingInstances,
-            OperationType.ABORT
-          );
-          onShowMessage(
-            'Abort operation',
-            result.successProcessInstances,
-            result.failedProcessInstances,
-            ignoredItems,
-            OperationType.ABORT
-          );
+          await driver
+            .handleMultipleAction(remainingInstances, OperationType.ABORT)
+            .then(result => {
+              onShowMessage(
+                'Abort operation',
+                result.successProcessInstances,
+                result.failedProcessInstances,
+                ignoredItems,
+                OperationType.ABORT
+              );
+            });
         }
       }
     },
@@ -197,17 +197,17 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
               }
             }
           );
-          const result = await driver.handleMultipleAction(
-            remainingInstances,
-            OperationType.SKIP
-          );
-          onShowMessage(
-            'Skip operation',
-            result.successProcessInstances,
-            result.failedProcessInstances,
-            ignoredItems,
-            OperationType.SKIP
-          );
+          await driver
+            .handleMultipleAction(remainingInstances, OperationType.SKIP)
+            .then(result => {
+              onShowMessage(
+                'Skip operation',
+                result.successProcessInstances,
+                result.failedProcessInstances,
+                ignoredItems,
+                OperationType.SKIP
+              );
+            });
         }
       }
     },
@@ -230,17 +230,17 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
               return true;
             }
           });
-          const result = await driver.handleMultipleAction(
-            remainingInstances,
-            OperationType.RETRY
-          );
-          onShowMessage(
-            'Retry operation',
-            result.successProcessInstances,
-            result.failedProcessInstances,
-            ignoredItems,
-            OperationType.RETRY
-          );
+          await driver
+            .handleMultipleAction(remainingInstances, OperationType.RETRY)
+            .then(result => {
+              onShowMessage(
+                'Retry operation',
+                result.successProcessInstances,
+                result.failedProcessInstances,
+                ignoredItems,
+                OperationType.RETRY
+              );
+            });
         }
       }
     }
