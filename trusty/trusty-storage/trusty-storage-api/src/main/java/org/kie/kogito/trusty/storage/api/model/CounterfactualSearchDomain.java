@@ -31,11 +31,9 @@ public class CounterfactualSearchDomain extends TypedVariable<CounterfactualSear
     public static final String DOMAIN = "domain";
 
     @JsonProperty(IS_FIXED)
-    @NotNull(message = "isFixed object must be provided.")
     private Boolean isFixed;
 
     @JsonProperty(DOMAIN)
-    @NotNull(message = "domain object must be provided.")
     private CounterfactualDomain domain;
 
     public static CounterfactualSearchDomain buildCollection(String name, String typeRef, Collection<CounterfactualSearchDomain> components,
@@ -63,8 +61,8 @@ public class CounterfactualSearchDomain extends TypedVariable<CounterfactualSear
             @NotNull String name,
             @NotNull String typeRef,
             Collection<CounterfactualSearchDomain> components,
-            @NotNull Boolean isFixed,
-            @NotNull CounterfactualDomain domain) {
+            Boolean isFixed,
+            CounterfactualDomain domain) {
         super(kind, name, typeRef, components);
         this.isFixed = isFixed;
         this.domain = domain;
