@@ -112,6 +112,7 @@ public class ExplainabilityMessagingHandler {
     public Void sendEvent(BaseExplainabilityResultDto result) {
         //This should never happen but let's protect against it 
         if (Objects.isNull(result)) {
+            LOGGER.info("Request received to send null result. Skipping.");
             return null;
         }
 

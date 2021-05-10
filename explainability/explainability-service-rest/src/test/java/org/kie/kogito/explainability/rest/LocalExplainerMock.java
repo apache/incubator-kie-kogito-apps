@@ -36,12 +36,6 @@ public class LocalExplainerMock implements LocalExplainer<Map<String, Saliency>>
 
     @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
-            PredictionProvider model) {
-        return CompletableFuture.completedFuture(emptyMap());
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
             PredictionProvider model,
             Consumer<Map<String, Saliency>> intermediateResultsConsumer) {
         return CompletableFuture.completedFuture(emptyMap());

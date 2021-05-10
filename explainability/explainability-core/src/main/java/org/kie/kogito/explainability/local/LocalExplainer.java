@@ -28,7 +28,10 @@ import org.kie.kogito.explainability.model.PredictionProvider;
  */
 public interface LocalExplainer<T> {
 
-    CompletableFuture<T> explainAsync(Prediction prediction, PredictionProvider model);
+    default CompletableFuture<T> explainAsync(Prediction prediction, PredictionProvider model) {
+        return explainAsync(prediction, model, unused -> {
+            /* NOP */});
+    };
 
     CompletableFuture<T> explainAsync(Prediction prediction, PredictionProvider model, Consumer<T> intermediateResultsConsumer);
 

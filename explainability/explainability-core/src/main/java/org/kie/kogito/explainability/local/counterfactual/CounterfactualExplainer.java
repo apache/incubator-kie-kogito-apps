@@ -119,12 +119,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     }
 
     @Override
-    public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction, PredictionProvider model) {
-        return explainAsync(prediction, model, unused -> {
-            /* NOP */});
-    }
-
-    @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider model,
             Consumer<CounterfactualResult> intermediateResultsConsumer) {

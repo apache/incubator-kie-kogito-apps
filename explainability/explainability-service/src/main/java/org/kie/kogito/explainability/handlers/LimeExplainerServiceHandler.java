@@ -108,13 +108,6 @@ public class LimeExplainerServiceHandler implements LocalExplainerServiceHandler
 
     @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
-            PredictionProvider predictionProvider) {
-        return explainer.explainAsync(prediction,
-                predictionProvider);
-    }
-
-    @Override
-    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
             PredictionProvider predictionProvider,
             Consumer<Map<String, Saliency>> intermediateResultsConsumer) {
         return explainer.explainAsync(prediction,

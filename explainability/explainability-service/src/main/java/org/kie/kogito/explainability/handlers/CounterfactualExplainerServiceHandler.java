@@ -181,13 +181,6 @@ public class CounterfactualExplainerServiceHandler
 
     @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
-            PredictionProvider predictionProvider) {
-        return explainer.explainAsync(prediction,
-                predictionProvider);
-    }
-
-    @Override
-    public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider predictionProvider,
             Consumer<CounterfactualResult> intermediateResultsConsumer) {
         return explainer.explainAsync(prediction,

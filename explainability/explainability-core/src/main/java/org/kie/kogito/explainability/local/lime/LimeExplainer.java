@@ -75,12 +75,6 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
     }
 
     @Override
-    public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model) {
-        return explainAsync(prediction, model, unused -> {
-            /* NOP */});
-    }
-
-    @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction,
             PredictionProvider model,
             Consumer<Map<String, Saliency>> intermediateResultsConsumer) {
