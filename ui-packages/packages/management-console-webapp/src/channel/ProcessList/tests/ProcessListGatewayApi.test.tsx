@@ -20,6 +20,7 @@ import {
   SortBy
 } from '@kogito-apps/process-list';
 import {
+  OperationType,
   ProcessInstance,
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
@@ -28,7 +29,12 @@ import {
   ProcessListGatewayApiImpl
 } from '../ProcessListGatewayApi';
 import { ProcessListQueries } from '../ProcessListQueries';
-import { handleAbort, handleRetry, handleSkip } from '../../../apis/apis';
+import {
+  handleAbort,
+  handleMultipleAction,
+  handleRetry,
+  handleSkip
+} from '../../../apis/apis';
 
 export const processInstance: ProcessInstance = {
   id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
@@ -68,7 +74,8 @@ export const processInstance: ProcessInstance = {
 jest.mock('../../../apis/apis', () => ({
   handleSkip: jest.fn(),
   handleRetry: jest.fn(),
-  handleAbort: jest.fn()
+  handleAbort: jest.fn(),
+  handleMultipleAction: jest.fn()
 }));
 
 const getProcessInstancesMock = jest.fn();
@@ -117,48 +124,29 @@ describe('ProcessListChannelApiImpl tests', () => {
   });
 
   it('handleSkip', async () => {
-    // let result = '';
-    // await gatewayApi
-    //   .handleSkip(processInstance)
-    //   .then(() => {
-    //     result = 'success';
-    //   })
-    //   .catch(error => {
-    //     result = 'error';
-    //   });
-    // expect(result).toEqual('error');
     await gatewayApi.handleSkip(processInstance);
     expect(handleSkip).toHaveBeenCalledWith(processInstance);
   });
 
   it('handleRetry', async () => {
-    // let result = '';
-    // await gatewayApi
-    //   .handleRetry(processInstance)
-    //   .then(() => {
-    //     result = 'success';
-    //   })
-    //   .catch(error => {
-    //     result = 'error';
-    //   });
-    // expect(result).toEqual('error');
     await gatewayApi.handleRetry(processInstance);
     expect(handleRetry).toHaveBeenCalledWith(processInstance);
   });
 
   it('handleAbort', async () => {
-    // let result = '';
-    // await gatewayApi
-    //   .handleAbort(processInstance)
-    //   .then(() => {
-    //     result = 'success';
-    //   })
-    //   .catch(error => {
-    //     result = 'error';
-    //   });
-    // expect(result).toEqual('error');
     await gatewayApi.handleAbort(processInstance);
     expect(handleAbort).toHaveBeenCalledWith(processInstance);
+  });
+
+  it('handle multi action', async () => {
+    await gatewayApi.handleMultipleAction(
+      [processInstance],
+      OperationType.ABORT
+    );
+    expect(handleMultipleAction).toHaveBeenCalledWith(
+      [processInstance],
+      OperationType.ABORT
+    );
   });
 
   it('process instance query', () => {

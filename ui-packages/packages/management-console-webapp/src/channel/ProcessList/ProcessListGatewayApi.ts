@@ -117,9 +117,9 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
 
   handleMultipleAction = async (
     processInstances: ProcessInstance[],
-    operationtype: OperationType
+    operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse> => {
-    return await handleMultipleAction(processInstances, operationtype);
+    return await handleMultipleAction(processInstances, operationType);
   };
   query(offset: number, limit: number): Promise<ProcessInstance[]> {
     return new Promise<ProcessInstance[]>((resolve, reject) => {
