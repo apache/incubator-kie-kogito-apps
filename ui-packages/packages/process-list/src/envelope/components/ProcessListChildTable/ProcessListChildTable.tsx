@@ -97,6 +97,10 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     }
   ];
 
+  const handleClick = (childProcessInstance: ProcessInstance): void => {
+    driver.openProcess(childProcessInstance);
+  };
+
   const checkBoxSelect = (processInstance: ProcessInstance): void => {
     const clonedProcessInstances = [...processInstances];
     clonedProcessInstances.forEach((instance: ProcessInstance) => {
@@ -123,10 +127,10 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     setProcessInstances(clonedProcessInstances);
   };
 
-  const createRows = (processInstances: ProcessInstance[]): void => {
-    if (!_.isEmpty(processInstances)) {
+  const createRows = (childProcessInstances: ProcessInstance[]): void => {
+    if (!_.isEmpty(childProcessInstances)) {
       const tempRows = [];
-      processInstances.forEach((child: ProcessInstance) => {
+      childProcessInstances.forEach((child: ProcessInstance) => {
         tempRows.push({
           cells: [
             {
@@ -161,13 +165,21 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
             {
               title: (
                 <>
-                  <div>
+                  <a
+                    className="kogito-process-list__link"
+                    onClick={() => handleClick(child)}
+                    {...componentOuiaProps(
+                      ouiaId,
+                      'process-description',
+                      ouiaSafe
+                    )}
+                  >
                     <strong>
                       <ItemDescriptor
                         itemDescription={getProcessInstanceDescription(child)}
                       />
                     </strong>
-                  </div>
+                  </a>
                   <EndpointLink
                     serviceUrl={child.serviceUrl}
                     isLinkShown={false}
@@ -229,7 +241,9 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
   const getChildProcessInstances = async (): Promise<void> => {
     try {
       setIsLoading(true);
-      const response = await driver.getChildProcessesQuery(parentProcessId);
+      const response: ProcessInstance[] = await driver.getChildProcessesQuery(
+        parentProcessId
+      );
       processInstances.forEach((processInstance: ProcessInstance) => {
         if (processInstance.id === parentProcessId) {
           response.forEach((child: ProcessInstance) => {
@@ -254,9 +268,8 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
 
   useEffect(() => {
     if (processInstances.length > 0) {
-      const processInstance = processInstances.find(
-        (processInstance: ProcessInstance) =>
-          processInstance.id === parentProcessId
+      const processInstance: ProcessInstance = processInstances.find(
+        (instance: ProcessInstance) => instance.id === parentProcessId
       );
       createRows(processInstance.childProcessInstances);
     }

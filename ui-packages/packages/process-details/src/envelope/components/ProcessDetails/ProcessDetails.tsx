@@ -202,17 +202,17 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     processInstance: ProcessInstance
   ): Promise<void> => {
     try {
-      await driver.handleAbort(processInstance);
+      await driver.handleProcessAbort(processInstance);
       setTitleType(TitleType.SUCCESS);
       setInfoModalTitle('Abort operation');
       setInfoModalContent(
         `The process ${processInstance.processName} was successfully aborted.`
       );
-    } catch (error) {
+    } catch (abortError) {
       setTitleType(TitleType.FAILURE);
       setInfoModalTitle('Abort operation');
       setInfoModalContent(
-        `Failed to abort process ${processInstance.processName}. Message: ${error.message}`
+        `Failed to abort process ${processInstance.processName}. Message: ${abortError.message}`
       );
     } finally {
       handleInfoModalToggle();

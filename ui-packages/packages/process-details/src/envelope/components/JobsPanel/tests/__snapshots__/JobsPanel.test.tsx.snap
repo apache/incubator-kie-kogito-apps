@@ -6,7 +6,7 @@ exports[`Processdetails jobs pannel component tests Jobs empty response 1`] = `
     Object {
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
-      "handleAbort": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction],
       "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],
@@ -24,7 +24,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
     Object {
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
-      "handleAbort": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction],
       "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],
@@ -148,7 +148,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                           Object {
                             "cancelJob": [MockFunction],
                             "getProcessDiagram": [MockFunction],
-                            "handleAbort": [MockFunction],
+                            "handleProcessAbort": [MockFunction],
                             "jobsQuery": [MockFunction],
                             "openProcessInstanceDetails": [MockFunction],
                             "processDetailsQuery": [MockFunction],
@@ -1275,7 +1275,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                       Object {
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
-                                        "handleAbort": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
                                         "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
@@ -1323,7 +1323,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                       Object {
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
-                                        "handleAbort": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
                                         "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
@@ -1380,7 +1380,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -1468,7 +1468,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                       Object {
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
-                                        "handleAbort": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
                                         "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
@@ -1525,7 +1525,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -1803,7 +1803,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -1860,7 +1860,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                           Object {
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
-                                            "handleAbort": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
                                             "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
@@ -1975,7 +1975,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -2032,7 +2032,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                           Object {
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
-                                            "handleAbort": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
                                             "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
@@ -2122,7 +2122,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                           Object {
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
-                                            "handleAbort": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
                                             "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
@@ -2179,7 +2179,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                             Object {
                                               "cancelJob": [MockFunction],
                                               "getProcessDiagram": [MockFunction],
-                                              "handleAbort": [MockFunction],
+                                              "handleProcessAbort": [MockFunction],
                                               "jobsQuery": [MockFunction],
                                               "openProcessInstanceDetails": [MockFunction],
                                               "processDetailsQuery": [MockFunction],
@@ -2474,7 +2474,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                 Object {
                                                   "cancelJob": [MockFunction],
                                                   "getProcessDiagram": [MockFunction],
-                                                  "handleAbort": [MockFunction],
+                                                  "handleProcessAbort": [MockFunction],
                                                   "jobsQuery": [MockFunction],
                                                   "openProcessInstanceDetails": [MockFunction],
                                                   "processDetailsQuery": [MockFunction],
@@ -2531,7 +2531,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                   Object {
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
-                                                    "handleAbort": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
                                                     "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
@@ -2621,7 +2621,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                   Object {
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
-                                                    "handleAbort": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
                                                     "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
@@ -2678,7 +2678,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                     Object {
                                                       "cancelJob": [MockFunction],
                                                       "getProcessDiagram": [MockFunction],
-                                                      "handleAbort": [MockFunction],
+                                                      "handleProcessAbort": [MockFunction],
                                                       "jobsQuery": [MockFunction],
                                                       "openProcessInstanceDetails": [MockFunction],
                                                       "processDetailsQuery": [MockFunction],
@@ -2992,7 +2992,7 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                           Object {
                                                             "cancelJob": [MockFunction],
                                                             "getProcessDiagram": [MockFunction],
-                                                            "handleAbort": [MockFunction],
+                                                            "handleProcessAbort": [MockFunction],
                                                             "jobsQuery": [MockFunction],
                                                             "openProcessInstanceDetails": [MockFunction],
                                                             "processDetailsQuery": [MockFunction],
@@ -3053,7 +3053,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
     Object {
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
-      "handleAbort": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction],
       "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],
@@ -3201,7 +3201,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                           Object {
                             "cancelJob": [MockFunction],
                             "getProcessDiagram": [MockFunction],
-                            "handleAbort": [MockFunction],
+                            "handleProcessAbort": [MockFunction],
                             "jobsQuery": [MockFunction],
                             "openProcessInstanceDetails": [MockFunction],
                             "processDetailsQuery": [MockFunction],
@@ -4351,7 +4351,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                       Object {
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
-                                        "handleAbort": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
                                         "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
@@ -4399,7 +4399,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                       Object {
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
-                                        "handleAbort": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
                                         "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
@@ -4479,7 +4479,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -4590,7 +4590,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                       Object {
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
-                                        "handleAbort": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
                                         "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
@@ -4670,7 +4670,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -4971,7 +4971,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -5051,7 +5051,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                           Object {
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
-                                            "handleAbort": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
                                             "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
@@ -5189,7 +5189,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                         Object {
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
-                                          "handleAbort": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
                                           "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
@@ -5269,7 +5269,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                           Object {
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
-                                            "handleAbort": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
                                             "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
@@ -5382,7 +5382,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                           Object {
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
-                                            "handleAbort": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
                                             "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
@@ -5462,7 +5462,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                             Object {
                                               "cancelJob": [MockFunction],
                                               "getProcessDiagram": [MockFunction],
-                                              "handleAbort": [MockFunction],
+                                              "handleProcessAbort": [MockFunction],
                                               "jobsQuery": [MockFunction],
                                               "openProcessInstanceDetails": [MockFunction],
                                               "processDetailsQuery": [MockFunction],
@@ -5780,7 +5780,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                 Object {
                                                   "cancelJob": [MockFunction],
                                                   "getProcessDiagram": [MockFunction],
-                                                  "handleAbort": [MockFunction],
+                                                  "handleProcessAbort": [MockFunction],
                                                   "jobsQuery": [MockFunction],
                                                   "openProcessInstanceDetails": [MockFunction],
                                                   "processDetailsQuery": [MockFunction],
@@ -5860,7 +5860,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                   Object {
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
-                                                    "handleAbort": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
                                                     "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
@@ -5973,7 +5973,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                   Object {
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
-                                                    "handleAbort": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
                                                     "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
@@ -6053,7 +6053,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                     Object {
                                                       "cancelJob": [MockFunction],
                                                       "getProcessDiagram": [MockFunction],
-                                                      "handleAbort": [MockFunction],
+                                                      "handleProcessAbort": [MockFunction],
                                                       "jobsQuery": [MockFunction],
                                                       "openProcessInstanceDetails": [MockFunction],
                                                       "processDetailsQuery": [MockFunction],
@@ -6415,7 +6415,7 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                           Object {
                                                             "cancelJob": [MockFunction],
                                                             "getProcessDiagram": [MockFunction],
-                                                            "handleAbort": [MockFunction],
+                                                            "handleProcessAbort": [MockFunction],
                                                             "jobsQuery": [MockFunction],
                                                             "openProcessInstanceDetails": [MockFunction],
                                                             "processDetailsQuery": [MockFunction],

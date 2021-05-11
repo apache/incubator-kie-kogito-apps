@@ -82,33 +82,35 @@ describe('ProcessListEnvelopeViewDriver tests', () => {
       expect(requests.processList__applySorting).toHaveBeenCalledWith(sortBy);
     });
 
-    it('handleSkip', () => {
-      driver.handleSkip(processInstance);
-      expect(requests.processList__handleSkip).toHaveBeenCalledWith(
+    it('handleProcessSkip', () => {
+      driver.handleProcessSkip(processInstance);
+      expect(requests.processList__handleProcessSkip).toHaveBeenCalledWith(
         processInstance
       );
     });
 
-    it('handleAbort', () => {
-      driver.handleRetry(processInstance);
-      expect(requests.processList__handleRetry).toHaveBeenCalledWith(
+    it('handleProcessRetry', () => {
+      driver.handleProcessRetry(processInstance);
+      expect(requests.processList__handleProcessRetry).toHaveBeenCalledWith(
         processInstance
       );
     });
 
-    it('handleAbort', () => {
-      driver.handleAbort(processInstance);
-      expect(requests.processList__handleAbort).toHaveBeenCalledWith(
+    it('handleProcessAbort', () => {
+      driver.handleProcessAbort(processInstance);
+      expect(requests.processList__handleProcessAbort).toHaveBeenCalledWith(
         processInstance
       );
     });
 
-    it('handleMultipleAction', () => {
-      driver.handleMultipleAction([processInstance], OperationType.ABORT);
-      expect(requests.processList__handleMultipleAction).toHaveBeenCalledWith(
+    it('handleProcessMultipleAction', () => {
+      driver.handleProcessMultipleAction(
         [processInstance],
         OperationType.ABORT
       );
+      expect(
+        requests.processList__handleProcessMultipleAction
+      ).toHaveBeenCalledWith([processInstance], OperationType.ABORT);
     });
 
     it('query', () => {

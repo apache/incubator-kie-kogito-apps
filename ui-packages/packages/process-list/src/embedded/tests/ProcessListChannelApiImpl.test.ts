@@ -95,24 +95,24 @@ describe('ProcessListChannelApiImpl tests', () => {
     api.processList__applySorting(initialState.sortBy);
     expect(driver.applySorting).toHaveBeenCalledWith(initialState.sortBy);
   });
-  it('processList__handleSkip', () => {
-    api.processList__handleSkip(processInstance);
-    expect(driver.handleSkip).toHaveBeenCalledWith(processInstance);
+  it('processList__handleProcessSkip', () => {
+    api.processList__handleProcessSkip(processInstance);
+    expect(driver.handleProcessSkip).toHaveBeenCalledWith(processInstance);
   });
-  it('processList__handleRetry', () => {
-    api.processList__handleRetry(processInstance);
-    expect(driver.handleRetry).toHaveBeenCalledWith(processInstance);
+  it('processList__handleProcessRetry', () => {
+    api.processList__handleProcessRetry(processInstance);
+    expect(driver.handleProcessRetry).toHaveBeenCalledWith(processInstance);
   });
-  it('processList__handleAbort', () => {
-    api.processList__handleAbort(processInstance);
-    expect(driver.handleAbort).toHaveBeenCalledWith(processInstance);
+  it('processList__handleProcessAbort', () => {
+    api.processList__handleProcessAbort(processInstance);
+    expect(driver.handleProcessAbort).toHaveBeenCalledWith(processInstance);
   });
-  it('processList__handleMultipleAction', () => {
-    api.processList__handleMultipleAction(
+  it('processList__handleProcessMultipleAction', () => {
+    api.processList__handleProcessMultipleAction(
       [processInstance],
       OperationType.ABORT
     );
-    expect(driver.handleMultipleAction).toHaveBeenCalledWith(
+    expect(driver.handleProcessMultipleAction).toHaveBeenCalledWith(
       [processInstance],
       OperationType.ABORT
     );

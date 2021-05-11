@@ -32,8 +32,10 @@ export class ProcessDetailsChannelApiImpl implements ProcessDetailsChannelApi {
     return this.driver.getProcessDiagram(data);
   }
 
-  processDetails__handleAbort(processInstance: ProcessInstance): Promise<void> {
-    return this.driver.handleAbort(processInstance);
+  processDetails__handleProcessAbort(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessAbort(processInstance);
   }
 
   processDetails__cancelJob(

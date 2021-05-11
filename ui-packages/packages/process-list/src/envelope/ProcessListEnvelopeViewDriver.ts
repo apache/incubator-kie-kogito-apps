@@ -44,20 +44,26 @@ export default class ProcessListEnvelopeViewDriver
   applySorting(sortBy: SortBy): Promise<void> {
     return this.channelApi.requests.processList__applySorting(sortBy);
   }
-  handleSkip(processInstance: ProcessInstance): Promise<void> {
-    return this.channelApi.requests.processList__handleSkip(processInstance);
+  handleProcessSkip(processInstance: ProcessInstance): Promise<void> {
+    return this.channelApi.requests.processList__handleProcessSkip(
+      processInstance
+    );
   }
-  handleRetry(processInstance: ProcessInstance): Promise<void> {
-    return this.channelApi.requests.processList__handleRetry(processInstance);
+  handleProcessRetry(processInstance: ProcessInstance): Promise<void> {
+    return this.channelApi.requests.processList__handleProcessRetry(
+      processInstance
+    );
   }
-  handleAbort(processInstance: ProcessInstance): Promise<void> {
-    return this.channelApi.requests.processList__handleAbort(processInstance);
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void> {
+    return this.channelApi.requests.processList__handleProcessAbort(
+      processInstance
+    );
   }
-  handleMultipleAction(
+  handleProcessMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse> {
-    return this.channelApi.requests.processList__handleMultipleAction(
+    return this.channelApi.requests.processList__handleProcessMultipleAction(
       processInstances,
       operationType
     );

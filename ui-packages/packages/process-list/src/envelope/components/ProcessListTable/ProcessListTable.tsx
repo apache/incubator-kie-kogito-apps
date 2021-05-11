@@ -107,14 +107,14 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     ProcessInstance
   >(null);
 
-  const handleModalToggle = () => {
+  const handleModalToggle = (): void => {
     setIsModalOpen(!isModalOpen);
   };
   const onShowMessage = (
     title: string,
     content: string,
     type: TitleType,
-    processInstance
+    processInstance: ProcessInstance
   ): void => {
     setSelectedProcessInstance(processInstance);
     setTitleType(type);
@@ -127,7 +127,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     processInstance: ProcessInstance
   ): Promise<void> => {
     try {
-      await driver.handleSkip(processInstance);
+      await driver.handleProcessSkip(processInstance);
       onShowMessage(
         'Skip operation',
         `The process ${processInstance.processName} was successfully skipped.`,
@@ -150,7 +150,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     processInstance: ProcessInstance
   ): Promise<void> => {
     try {
-      await driver.handleRetry(processInstance);
+      await driver.handleProcessRetry(processInstance);
       onShowMessage(
         'Retry operation',
         `The process ${processInstance.processName} was successfully re-executed.`,
@@ -173,13 +173,19 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     processInstance: ProcessInstance
   ): Promise<void> => {
     try {
-      await driver.handleAbort(processInstance);
+      await driver.handleProcessAbort(processInstance);
       onShowMessage(
         'Abort operation',
         `The process ${processInstance.processName} was successfully aborted.`,
         TitleType.SUCCESS,
         processInstance
       );
+      processInstances.forEach(instance => {
+        if (instance.id === processInstance.id) {
+          instance.state = ProcessInstanceState.Aborted;
+        }
+      });
+      setProcessInstances([...processInstances]);
     } catch (error) {
       onShowMessage(
         'Abort operation',
@@ -192,7 +198,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     }
   };
 
-  const handleClick = processInstance => {
+  const handleClick = (processInstance: ProcessInstance): void => {
     driver.openProcess(processInstance);
   };
 
@@ -230,7 +236,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
               <a
                 className="kogito-process-list__link"
                 onClick={() => handleClick(processInstance)}
-                {...componentOuiaProps(ouiaId, 'task-description', ouiaSafe)}
+                {...componentOuiaProps(ouiaId, 'process-description', ouiaSafe)}
               >
                 <strong>
                   <ItemDescriptor
@@ -281,6 +287,8 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
         });
       });
       setRowPairs(tempRows);
+    } else {
+      setRowPairs([]);
     }
   }, [processInstances]);
 

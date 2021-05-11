@@ -25,7 +25,7 @@ export interface ProcessDetailsDriver {
   getProcessDiagram(
     data: ProcessInstance
   ): Promise<SvgSuccessResponse | SvgErrorResponse>;
-  handleAbort(processInstance: ProcessInstance): Promise<void>;
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
   cancelJob(job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel>;
   rescheduleJob(
     job,

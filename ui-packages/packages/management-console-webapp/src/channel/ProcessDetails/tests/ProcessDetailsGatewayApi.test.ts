@@ -31,14 +31,14 @@ import {
   handleJobReschedule,
   jobCancel,
   getSvg,
-  handleAbort
+  handleProcessAbort
 } from '../../../apis/apis';
 
 jest.mock('../../../apis/apis', () => ({
   handleJobReschedule: jest.fn(),
   jobCancel: jest.fn(),
   getSvg: jest.fn(),
-  handleAbort: jest.fn()
+  handleProcessAbort: jest.fn()
 }));
 
 export const JobData: Job = {
@@ -221,9 +221,9 @@ describe('ProcessDetailsGatewayApi tests', () => {
     });
   });
 
-  it('handleAbort', async () => {
-    await gatewayApi.handleAbort(data);
-    expect(handleAbort).toHaveBeenCalledWith(data);
+  it('handleProcessAbort', async () => {
+    await gatewayApi.handleProcessAbort(data);
+    expect(handleProcessAbort).toHaveBeenCalledWith(data);
   });
   it('processDetailsQuery- success response', () => {
     getProcessDetailsMock.mockReturnValue(Promise.resolve([]));

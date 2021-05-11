@@ -883,7 +883,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
                         >
                           <a
                             className="kogito-process-list__link"
-                            data-ouia-component-type="task-description"
+                            data-ouia-component-type="process-description"
                             data-ouia-safe={true}
                             onClick={[Function]}
                           >
@@ -1478,7 +1478,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
                         >
                           <a
                             className="kogito-process-list__link"
-                            data-ouia-component-type="task-description"
+                            data-ouia-component-type="process-description"
                             data-ouia-safe={true}
                             onClick={[Function]}
                           >

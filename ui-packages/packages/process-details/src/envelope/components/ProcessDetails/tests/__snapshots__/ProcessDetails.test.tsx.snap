@@ -100,7 +100,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
           },
         ],
       },
-      "handleAbort": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction] {
         "calls": Array [
           Array [
@@ -1734,7 +1734,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                         },
                       ],
                     },
-                    "handleAbort": [MockFunction],
+                    "handleProcessAbort": [MockFunction],
                     "jobsQuery": [MockFunction] {
                       "calls": Array [
                         Array [

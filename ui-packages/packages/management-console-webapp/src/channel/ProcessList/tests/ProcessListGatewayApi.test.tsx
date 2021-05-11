@@ -30,10 +30,10 @@ import {
 } from '../ProcessListGatewayApi';
 import { ProcessListQueries } from '../ProcessListQueries';
 import {
-  handleAbort,
-  handleMultipleAction,
-  handleRetry,
-  handleSkip
+  handleProcessAbort,
+  handleProcessMultipleAction,
+  handleProcessRetry,
+  handleProcessSkip
 } from '../../../apis/apis';
 
 export const processInstance: ProcessInstance = {
@@ -72,10 +72,10 @@ export const processInstance: ProcessInstance = {
 };
 
 jest.mock('../../../apis/apis', () => ({
-  handleSkip: jest.fn(),
-  handleRetry: jest.fn(),
-  handleAbort: jest.fn(),
-  handleMultipleAction: jest.fn()
+  handleProcessSkip: jest.fn(),
+  handleProcessRetry: jest.fn(),
+  handleProcessAbort: jest.fn(),
+  handleProcessMultipleAction: jest.fn()
 }));
 
 const getProcessInstancesMock = jest.fn();
@@ -123,27 +123,27 @@ describe('ProcessListChannelApiImpl tests', () => {
     expect(gatewayApi.processListState.sortBy).toBe(sortBy);
   });
 
-  it('handleSkip', async () => {
-    await gatewayApi.handleSkip(processInstance);
-    expect(handleSkip).toHaveBeenCalledWith(processInstance);
+  it('handleProcessSkip', async () => {
+    await gatewayApi.handleProcessSkip(processInstance);
+    expect(handleProcessSkip).toHaveBeenCalledWith(processInstance);
   });
 
-  it('handleRetry', async () => {
-    await gatewayApi.handleRetry(processInstance);
-    expect(handleRetry).toHaveBeenCalledWith(processInstance);
+  it('handleProcessRetry', async () => {
+    await gatewayApi.handleProcessRetry(processInstance);
+    expect(handleProcessRetry).toHaveBeenCalledWith(processInstance);
   });
 
-  it('handleAbort', async () => {
-    await gatewayApi.handleAbort(processInstance);
-    expect(handleAbort).toHaveBeenCalledWith(processInstance);
+  it('handleProcessAbort', async () => {
+    await gatewayApi.handleProcessAbort(processInstance);
+    expect(handleProcessAbort).toHaveBeenCalledWith(processInstance);
   });
 
   it('handle multi action', async () => {
-    await gatewayApi.handleMultipleAction(
+    await gatewayApi.handleProcessMultipleAction(
       [processInstance],
       OperationType.ABORT
     );
-    expect(handleMultipleAction).toHaveBeenCalledWith(
+    expect(handleProcessMultipleAction).toHaveBeenCalledWith(
       [processInstance],
       OperationType.ABORT
     );

@@ -25,7 +25,9 @@ export interface ProcessDetailsChannelApi {
   processDetails__getProcessDiagram(
     data: ProcessInstance
   ): Promise<SvgSuccessResponse | SvgErrorResponse>;
-  processDetails__handleAbort(processInstance: ProcessInstance): Promise<void>;
+  processDetails__handleProcessAbort(
+    processInstance: ProcessInstance
+  ): Promise<void>;
   processDetails__cancelJob(
     job: Pick<Job, 'id' | 'endpoint'>
   ): Promise<JobCancel>;

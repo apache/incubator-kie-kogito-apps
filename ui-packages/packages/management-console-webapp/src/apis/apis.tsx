@@ -118,7 +118,8 @@ export const getSvg = async (data: ProcessInstance): Promise<any> => {
     });
 };
 
-export const handleSkip = async (
+// Rest Api to skip a process in error state
+export const handleProcessSkip = async (
   processInstance: ProcessInstance
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -133,7 +134,8 @@ export const handleSkip = async (
   });
 };
 
-export const handleRetry = async (
+// Rest Api to retrigger a process in error state
+export const handleProcessRetry = async (
   processInstance: ProcessInstance
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -148,7 +150,8 @@ export const handleRetry = async (
   });
 };
 
-export const handleAbort = (
+// Rest Api to abort a process
+export const handleProcessAbort = (
   processInstance: ProcessInstance
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
@@ -163,7 +166,8 @@ export const handleAbort = (
   });
 };
 
-export const handleMultipleAction = async (
+// function to handle multiple actions(abort, skip and retry) on processes
+export const handleProcessMultipleAction = async (
   processInstances: ProcessInstance[],
   operationType: OperationType
 ): Promise<BulkProcessInstanceActionResponse> => {
@@ -174,13 +178,13 @@ export const handleMultipleAction = async (
     const failedProcessInstances: ProcessInstance[] = [];
     switch (operationType) {
       case OperationType.ABORT:
-        operation = handleAbort;
+        operation = handleProcessAbort;
         break;
       case OperationType.SKIP:
-        operation = handleSkip;
+        operation = handleProcessSkip;
         break;
       case OperationType.RETRY:
-        operation = handleRetry;
+        operation = handleProcessRetry;
         break;
     }
     for (const processInstance of processInstances) {

@@ -21,10 +21,10 @@ import {
 } from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
 import {
-  handleAbort,
-  handleMultipleAction,
-  handleRetry,
-  handleSkip
+  handleProcessAbort,
+  handleProcessMultipleAction,
+  handleProcessRetry,
+  handleProcessSkip
 } from '../../apis/apis';
 
 export interface ProcessListGatewayApi {
@@ -33,10 +33,10 @@ export interface ProcessListGatewayApi {
   openProcess: (process: ProcessInstance) => Promise<void>;
   applyFilter: (filter: ProcessInstanceFilter) => Promise<void>;
   applySorting: (SortBy: SortBy) => Promise<void>;
-  handleSkip: (processInstance: ProcessInstance) => Promise<void>;
-  handleRetry: (processInstance: ProcessInstance) => Promise<void>;
-  handleAbort: (processInstance: ProcessInstance) => Promise<void>;
-  handleMultipleAction: (
+  handleProcessSkip: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessRetry: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessAbort: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessMultipleAction: (
     processInstances: ProcessInstance[],
     operationType: OperationType
   ) => Promise<BulkProcessInstanceActionResponse>;
@@ -103,23 +103,29 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
     return Promise.resolve();
   };
 
-  handleSkip = async (processInstance: ProcessInstance): Promise<void> => {
-    await handleSkip(processInstance);
+  handleProcessSkip = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    return handleProcessSkip(processInstance);
   };
 
-  handleRetry = async (processInstance: ProcessInstance): Promise<void> => {
-    await handleRetry(processInstance);
+  handleProcessRetry = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    return handleProcessRetry(processInstance);
   };
 
-  handleAbort = async (processInstance: ProcessInstance): Promise<void> => {
-    await handleAbort(processInstance);
+  handleProcessAbort = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    return handleProcessAbort(processInstance);
   };
 
-  handleMultipleAction = async (
+  handleProcessMultipleAction = async (
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse> => {
-    return await handleMultipleAction(processInstances, operationType);
+    return handleProcessMultipleAction(processInstances, operationType);
   };
   query(offset: number, limit: number): Promise<ProcessInstance[]> {
     return new Promise<ProcessInstance[]>((resolve, reject) => {

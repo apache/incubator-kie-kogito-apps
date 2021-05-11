@@ -13,7 +13,7 @@ exports[`ProcessDetailsEnvelopeView tests Snapshot 2`] = `
       "requests": Object {
         "processDetails__cancelJob": [MockFunction],
         "processDetails__getProcessDiagram": [MockFunction],
-        "processDetails__handleAbort": [MockFunction],
+        "processDetails__handleProcessAbort": [MockFunction],
         "processDetails__initialLoad": [MockFunction],
         "processDetails__jobsQuery": [MockFunction],
         "processDetails__processDetailsQuery": [MockFunction],
@@ -35,7 +35,7 @@ exports[`ProcessDetailsEnvelopeView tests Snapshot 2`] = `
           "requests": Object {
             "processDetails__cancelJob": [MockFunction],
             "processDetails__getProcessDiagram": [MockFunction],
-            "processDetails__handleAbort": [MockFunction],
+            "processDetails__handleProcessAbort": [MockFunction],
             "processDetails__initialLoad": [MockFunction],
             "processDetails__jobsQuery": [MockFunction],
             "processDetails__processDetailsQuery": [MockFunction],

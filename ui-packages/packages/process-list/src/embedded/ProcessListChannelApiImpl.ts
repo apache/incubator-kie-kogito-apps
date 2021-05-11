@@ -48,20 +48,29 @@ export class ProcessListChannelApiImpl implements ProcessListChannelApi {
     return this.driver.applySorting(sortBy);
   }
 
-  processList__handleSkip(processInstance: ProcessInstance): Promise<void> {
-    return this.driver.handleSkip(processInstance);
+  processList__handleProcessSkip(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessSkip(processInstance);
   }
-  processList__handleRetry(processInstance: ProcessInstance): Promise<void> {
-    return this.driver.handleRetry(processInstance);
+  processList__handleProcessRetry(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessRetry(processInstance);
   }
-  processList__handleAbort(processInstance: ProcessInstance): Promise<void> {
-    return this.driver.handleAbort(processInstance);
+  processList__handleProcessAbort(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessAbort(processInstance);
   }
-  processList__handleMultipleAction(
+  processList__handleProcessMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse> {
-    return this.driver.handleMultipleAction(processInstances, operationType);
+    return this.driver.handleProcessMultipleAction(
+      processInstances,
+      operationType
+    );
   }
   processList__query(
     offset: number,

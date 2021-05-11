@@ -36,8 +36,8 @@ export default class ProcessDetailsEnvelopeViewDriver
     return this.channelApi.requests.processDetails__getProcessDiagram(data);
   }
 
-  handleAbort(processInstance: ProcessInstance): Promise<void> {
-    return this.channelApi.requests.processDetails__handleAbort(
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void> {
+    return this.channelApi.requests.processDetails__handleProcessAbort(
       processInstance
     );
   }

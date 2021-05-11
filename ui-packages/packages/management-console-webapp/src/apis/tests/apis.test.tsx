@@ -19,11 +19,11 @@ import { GraphQL } from '@kogito-apps/consoles-common';
 import wait from 'waait';
 import {
   getSvg,
-  handleAbort,
+  handleProcessAbort,
   handleJobReschedule,
-  handleMultipleAction,
-  handleRetry,
-  handleSkip,
+  handleProcessMultipleAction,
+  handleProcessRetry,
+  handleProcessSkip,
   jobCancel,
   performMultipleCancel
 } from '../apis';
@@ -413,7 +413,7 @@ describe('test utility of svg panel', () => {
     it('on successful skip', async () => {
       mockedAxios.post.mockResolvedValue({});
       let result = null;
-      await handleSkip(processInstance)
+      await handleProcessSkip(processInstance)
         .then(() => {
           result = 'success';
         })
@@ -425,7 +425,7 @@ describe('test utility of svg panel', () => {
     it('on failed skip', async () => {
       mockedAxios.post.mockRejectedValue({ message: '404 error' });
       let result = null;
-      await handleSkip(processInstance)
+      await handleProcessSkip(processInstance)
         .then(() => {
           result = 'success';
         })
@@ -440,7 +440,7 @@ describe('test utility of svg panel', () => {
     it('on successful retrigger', async () => {
       mockedAxios.post.mockResolvedValue({});
       let result = null;
-      await handleRetry(processInstances[0])
+      await handleProcessRetry(processInstances[0])
         .then(() => {
           result = 'success';
         })
@@ -452,7 +452,7 @@ describe('test utility of svg panel', () => {
     it('on failed retrigger', async () => {
       mockedAxios.post.mockRejectedValue({ message: '404 error' });
       let result = null;
-      await handleRetry(processInstance[0])
+      await handleProcessRetry(processInstance[0])
         .then(() => {
           result = 'success';
         })
@@ -467,7 +467,7 @@ describe('test utility of svg panel', () => {
     it('on successful abort', async () => {
       mockedAxios.delete.mockResolvedValue({});
       let result = null;
-      await handleAbort(processInstances[0])
+      await handleProcessAbort(processInstances[0])
         .then(() => {
           result = 'success';
         })
@@ -479,7 +479,7 @@ describe('test utility of svg panel', () => {
     it('on failed abort', async () => {
       mockedAxios.delete.mockRejectedValue({ message: '404 error' });
       let result = null;
-      await handleAbort(processInstances[0])
+      await handleProcessAbort(processInstances[0])
         .then(() => {
           result = 'success';
         })
@@ -493,7 +493,7 @@ describe('test utility of svg panel', () => {
   describe('multiple action in process list', () => {
     it('multiple skip test', async () => {
       mockedAxios.post.mockResolvedValue({});
-      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
         processInstances,
         OperationType.SKIP
       );
@@ -501,7 +501,7 @@ describe('test utility of svg panel', () => {
     });
     it('multiple skip test', async () => {
       mockedAxios.post.mockRejectedValue({ message: '404 error' });
-      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
         processInstances,
         OperationType.SKIP
       );
@@ -512,7 +512,7 @@ describe('test utility of svg panel', () => {
 
     it('multiple retry test', async () => {
       mockedAxios.post.mockResolvedValue({});
-      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
         processInstances,
         OperationType.RETRY
       );
@@ -520,7 +520,7 @@ describe('test utility of svg panel', () => {
     });
     it('multiple retry test', async () => {
       mockedAxios.post.mockRejectedValue({ message: '404 error' });
-      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
         processInstances,
         OperationType.RETRY
       );
@@ -531,7 +531,7 @@ describe('test utility of svg panel', () => {
 
     it('multiple abort test', async () => {
       mockedAxios.delete.mockResolvedValue({});
-      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
         processInstances,
         OperationType.ABORT
       );
@@ -539,7 +539,7 @@ describe('test utility of svg panel', () => {
     });
     it('multiple abort test', async () => {
       mockedAxios.delete.mockRejectedValue({ message: '404 error' });
-      const result: BulkProcessInstanceActionResponse = await handleMultipleAction(
+      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
         processInstances,
         OperationType.ABORT
       );

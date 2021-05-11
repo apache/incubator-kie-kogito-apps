@@ -25,7 +25,7 @@ import {
 import {
   getSvg,
   handleJobReschedule,
-  handleAbort,
+  handleProcessAbort,
   jobCancel
 } from '../../apis';
 
@@ -46,7 +46,7 @@ export interface ProcessDetailsGatewayApi {
   getProcessDiagram: (
     data: ProcessInstance
   ) => Promise<SvgSuccessResponse | SvgErrorResponse>;
-  handleAbort: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessAbort: (processInstance: ProcessInstance) => Promise<void>;
   cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
   rescheduleJob: (
     job,
@@ -83,8 +83,8 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
     return Promise.resolve(res);
   };
 
-  handleAbort = (processInstance: ProcessInstance): Promise<void> => {
-    return handleAbort(processInstance);
+  handleProcessAbort = (processInstance: ProcessInstance): Promise<void> => {
+    return handleProcessAbort(processInstance);
   };
 
   cancelJob = (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {

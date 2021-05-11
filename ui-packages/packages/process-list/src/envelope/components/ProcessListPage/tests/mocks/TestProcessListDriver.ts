@@ -38,7 +38,7 @@ export default class TestProcessListDriver implements ProcessListDriver {
     this.processInstances = processInstances;
     this.childProcessInstances = childProcessInstances;
   }
-  handleMultipleAction(
+  handleProcessMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse> {
@@ -47,13 +47,13 @@ export default class TestProcessListDriver implements ProcessListDriver {
       failedProcessInstances: []
     });
   }
-  handleSkip(processInstance: ProcessInstance): Promise<void> {
+  handleProcessSkip(processInstance: ProcessInstance): Promise<void> {
     return Promise.resolve();
   }
-  handleRetry(processInstance: ProcessInstance): Promise<void> {
+  handleProcessRetry(processInstance: ProcessInstance): Promise<void> {
     return Promise.resolve();
   }
-  handleAbort(processInstance: ProcessInstance): Promise<void> {
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void> {
     return Promise.resolve();
   }
   /* eslint-disable  @typescript-eslint/no-unused-vars */

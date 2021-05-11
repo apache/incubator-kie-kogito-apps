@@ -95,8 +95,8 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     doQuery(0, 10, true);
   };
 
-  const countExpandableRows = (processInstances: ProcessInstance[]) => {
-    processInstances.forEach((processInstance, index) => {
+  const countExpandableRows = (instances: ProcessInstance[]): void => {
+    instances.forEach((processInstance, index) => {
       expanded[index] = false;
       processInstance.isSelected = false;
       processInstance.isOpen = false;

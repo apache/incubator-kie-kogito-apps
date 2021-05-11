@@ -238,17 +238,13 @@ describe('ProcessListToolbar test', () => {
         .props()
         ['children']['props']['toggle']['props']['onToggle']();
     });
-    // it('select checkbox', () => {
-    // wrapper.find('#bulk-select').props()['children']['props']['toggle']['props']['splitButtonItems'][0]['props']['onChange']();
-    // expect(props.setSelectedInstances).toHaveBeenCalled();
-    // });
   });
   describe('multi Abort click tests', () => {
     const abortProps = _.cloneDeep(props);
     abortProps.driver = new TestProcessListDriver([], []);
-    const driverhandleMultipleActionMock = jest.spyOn(
+    const driverhandleProcessMultipleActionMock = jest.spyOn(
       abortProps.driver,
-      'handleMultipleAction'
+      'handleProcessMultipleAction'
     );
     it('multi abort click success', async () => {
       abortProps.selectedInstances = [ProcessInstances[0]];
@@ -275,7 +271,7 @@ describe('ProcessListToolbar test', () => {
           .simulate('click');
         await wait(0);
       });
-      expect(driverhandleMultipleActionMock).toHaveBeenCalled();
+      expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
     });
     it('multi abort click fail', async () => {
       abortProps.selectedInstances = [ProcessInstances[0]];
@@ -308,9 +304,9 @@ describe('ProcessListToolbar test', () => {
   describe('multi Skip click tests', () => {
     const skipProps = _.cloneDeep(props);
     skipProps.driver = new TestProcessListDriver([], []);
-    const driverhandleMultipleActionMock = jest.spyOn(
+    const driverhandleProcessMultipleActionMock = jest.spyOn(
       skipProps.driver,
-      'handleMultipleAction'
+      'handleProcessMultipleAction'
     );
     it('multi skip click success', async () => {
       skipProps.selectedInstances = [ProcessInstances[0]];
@@ -337,7 +333,7 @@ describe('ProcessListToolbar test', () => {
           .simulate('click');
         await wait(0);
       });
-      expect(driverhandleMultipleActionMock).toHaveBeenCalled();
+      expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
     });
     it('multi skip click fail', async () => {
       skipProps.selectedInstances = [ProcessInstances[0]];
@@ -364,16 +360,16 @@ describe('ProcessListToolbar test', () => {
           .simulate('click');
         await wait(0);
       });
-      expect(driverhandleMultipleActionMock).toHaveBeenCalled();
+      expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
     });
   });
 
   describe('multi Retry click tests', () => {
     const retryProps = _.cloneDeep(props);
     retryProps.driver = new TestProcessListDriver([], []);
-    const driverhandleMultipleActionMock = jest.spyOn(
+    const driverhandleProcessMultipleActionMock = jest.spyOn(
       retryProps.driver,
-      'handleMultipleAction'
+      'handleProcessMultipleAction'
     );
     it('multi retry click success', async () => {
       retryProps.selectedInstances = [ProcessInstances[0]];
@@ -400,7 +396,7 @@ describe('ProcessListToolbar test', () => {
           .simulate('click');
         await wait(0);
       });
-      expect(driverhandleMultipleActionMock).toHaveBeenCalled();
+      expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
     });
     it('multi retry click fail', async () => {
       retryProps.selectedInstances = [ProcessInstances[0]];
@@ -427,7 +423,7 @@ describe('ProcessListToolbar test', () => {
           .simulate('click');
         await wait(0);
       });
-      expect(driverhandleMultipleActionMock).toHaveBeenCalled();
+      expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
     });
   });
   it('reset click tests', () => {

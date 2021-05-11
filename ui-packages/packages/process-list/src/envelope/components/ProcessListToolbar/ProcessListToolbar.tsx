@@ -163,7 +163,10 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
             }
           );
           await driver
-            .handleMultipleAction(remainingInstances, OperationType.ABORT)
+            .handleProcessMultipleAction(
+              remainingInstances,
+              OperationType.ABORT
+            )
             .then(result => {
               onShowMessage(
                 'Abort operation',
@@ -172,6 +175,14 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
                 ignoredItems,
                 OperationType.ABORT
               );
+              processInstances.forEach(instance => {
+                result.successProcessInstances.forEach(successInstances => {
+                  if (successInstances.id === instance.id) {
+                    instance.state = ProcessInstanceState.Aborted;
+                  }
+                });
+              });
+              setProcessInstances([...processInstances]);
             });
         }
       }
@@ -198,7 +209,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
             }
           );
           await driver
-            .handleMultipleAction(remainingInstances, OperationType.SKIP)
+            .handleProcessMultipleAction(remainingInstances, OperationType.SKIP)
             .then(result => {
               onShowMessage(
                 'Skip operation',
@@ -231,7 +242,10 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
             }
           });
           await driver
-            .handleMultipleAction(remainingInstances, OperationType.RETRY)
+            .handleProcessMultipleAction(
+              remainingInstances,
+              OperationType.RETRY
+            )
             .then(result => {
               onShowMessage(
                 'Retry operation',

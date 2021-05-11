@@ -28,10 +28,16 @@ export interface ProcessListChannelApi {
   processList__openProcess(process: ProcessInstance): Promise<void>;
   processList__applyFilter(filter: ProcessInstanceFilter): Promise<void>;
   processList__applySorting(sortBy: SortBy): Promise<void>;
-  processList__handleSkip(processInstance: ProcessInstance): Promise<void>;
-  processList__handleRetry(processInstance: ProcessInstance): Promise<void>;
-  processList__handleAbort(processInstance: ProcessInstance): Promise<void>;
-  processList__handleMultipleAction(
+  processList__handleProcessSkip(
+    processInstance: ProcessInstance
+  ): Promise<void>;
+  processList__handleProcessRetry(
+    processInstance: ProcessInstance
+  ): Promise<void>;
+  processList__handleProcessAbort(
+    processInstance: ProcessInstance
+  ): Promise<void>;
+  processList__handleProcessMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse>;

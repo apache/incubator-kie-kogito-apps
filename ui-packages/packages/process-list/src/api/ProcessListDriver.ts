@@ -26,10 +26,10 @@ export interface ProcessListDriver {
   openProcess(process: ProcessInstance): Promise<void>;
   applyFilter(filter: ProcessInstanceFilter): Promise<void>;
   applySorting(sortBy: SortBy): Promise<void>;
-  handleSkip(processInstance: ProcessInstance): Promise<void>;
-  handleRetry(processInstance: ProcessInstance): Promise<void>;
-  handleAbort(processInstance: ProcessInstance): Promise<void>;
-  handleMultipleAction(
+  handleProcessSkip(processInstance: ProcessInstance): Promise<void>;
+  handleProcessRetry(processInstance: ProcessInstance): Promise<void>;
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
+  handleProcessMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse>;

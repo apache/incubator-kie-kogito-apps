@@ -21,10 +21,10 @@ export const MockedProcessListDriver = jest.fn<ProcessListDriver, []>(() => ({
   openProcess: jest.fn(),
   applySorting: jest.fn(),
   applyFilter: jest.fn(),
-  handleSkip: jest.fn(),
-  handleRetry: jest.fn(),
-  handleAbort: jest.fn(),
-  handleMultipleAction: jest.fn(),
+  handleProcessSkip: jest.fn(),
+  handleProcessRetry: jest.fn(),
+  handleProcessAbort: jest.fn(),
+  handleProcessMultipleAction: jest.fn(),
   query: jest.fn(),
   getChildProcessesQuery: jest.fn()
 }));

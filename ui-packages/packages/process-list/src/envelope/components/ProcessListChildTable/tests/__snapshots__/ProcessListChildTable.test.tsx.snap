@@ -396,7 +396,12 @@ exports[`ProcessListChildTable test render table 1`] = `
             },
             Object {
               "title": <React.Fragment>
-                <div>
+                <a
+                  className="kogito-process-list__link"
+                  data-ouia-component-type="process-description"
+                  data-ouia-safe={true}
+                  onClick={[Function]}
+                >
                   <strong>
                     <ItemDescriptor
                       itemDescription={
@@ -408,7 +413,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                       }
                     />
                   </strong>
-                </div>
+                </a>
                 <EndpointLink
                   isLinkShown={false}
                   serviceUrl="http://localhost:4000"
@@ -625,7 +630,12 @@ exports[`ProcessListChildTable test render table 1`] = `
             },
             Object {
               "title": <React.Fragment>
-                <div>
+                <a
+                  className="kogito-process-list__link"
+                  data-ouia-component-type="process-description"
+                  data-ouia-safe={true}
+                  onClick={[Function]}
+                >
                   <strong>
                     <ItemDescriptor
                       itemDescription={
@@ -637,7 +647,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                       }
                     />
                   </strong>
-                </div>
+                </a>
                 <EndpointLink
                   isLinkShown={false}
                   serviceUrl="http://localhost:4000"
@@ -852,7 +862,12 @@ exports[`ProcessListChildTable test render table 1`] = `
             },
             Object {
               "title": <React.Fragment>
-                <div>
+                <a
+                  className="kogito-process-list__link"
+                  data-ouia-component-type="process-description"
+                  data-ouia-safe={true}
+                  onClick={[Function]}
+                >
                   <strong>
                     <ItemDescriptor
                       itemDescription={
@@ -864,7 +879,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                       }
                     />
                   </strong>
-                </div>
+                </a>
                 <EndpointLink
                   isLinkShown={false}
                   serviceUrl="http://localhost:4000"
@@ -2772,7 +2787,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                         },
                         Object {
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -2784,7 +2804,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -3001,7 +3021,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                         },
                         Object {
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -3013,7 +3038,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -3228,7 +3253,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                         },
                         Object {
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -3240,7 +3270,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -3645,7 +3675,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                           },
                           Object {
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -3657,7 +3692,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -3977,7 +4012,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             "isVisible": true,
                           },
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -3989,7 +4029,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -4130,7 +4170,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                           },
                           Object {
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -4142,7 +4187,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -4459,7 +4504,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             "isVisible": true,
                           },
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -4471,7 +4521,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -4611,7 +4661,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                           },
                           Object {
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -4623,7 +4678,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -5213,7 +5268,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             "isVisible": true,
                           },
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -5225,7 +5285,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -5462,7 +5522,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                           },
                           Object {
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -5474,7 +5539,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -5794,7 +5859,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             "isVisible": true,
                           },
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -5806,7 +5876,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -5947,7 +6017,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                           },
                           Object {
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -5959,7 +6034,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -6276,7 +6351,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             "isVisible": true,
                           },
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -6288,7 +6368,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -6428,7 +6508,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                           },
                           Object {
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -6440,7 +6525,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -7030,7 +7115,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             "isVisible": true,
                           },
                           "title": <React.Fragment>
-                            <div>
+                            <a
+                              className="kogito-process-list__link"
+                              data-ouia-component-type="process-description"
+                              data-ouia-safe={true}
+                              onClick={[Function]}
+                            >
                               <strong>
                                 <ItemDescriptor
                                   itemDescription={
@@ -7042,7 +7132,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                   }
                                 />
                               </strong>
-                            </div>
+                            </a>
                             <EndpointLink
                               isLinkShown={false}
                               serviceUrl="http://localhost:4000"
@@ -7561,7 +7651,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             },
                             Object {
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -7573,7 +7668,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -7893,7 +7988,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               "isVisible": true,
                             },
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -7905,7 +8005,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -8046,7 +8146,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             },
                             Object {
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -8058,7 +8163,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -8375,7 +8480,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               "isVisible": true,
                             },
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -8387,7 +8497,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -8527,7 +8637,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             },
                             Object {
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -8539,7 +8654,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -9129,7 +9244,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               "isVisible": true,
                             },
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -9141,7 +9261,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -9405,7 +9525,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             },
                             Object {
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -9417,7 +9542,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -9737,7 +9862,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               "isVisible": true,
                             },
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -9749,7 +9879,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -9890,7 +10020,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             },
                             Object {
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -9902,7 +10037,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -10219,7 +10354,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               "isVisible": true,
                             },
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -10231,7 +10371,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -10371,7 +10511,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                             },
                             Object {
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -10383,7 +10528,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -10973,7 +11118,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               "isVisible": true,
                             },
                             "title": <React.Fragment>
-                              <div>
+                              <a
+                                className="kogito-process-list__link"
+                                data-ouia-component-type="process-description"
+                                data-ouia-safe={true}
+                                onClick={[Function]}
+                              >
                                 <strong>
                                   <ItemDescriptor
                                     itemDescription={
@@ -10985,7 +11135,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     }
                                   />
                                 </strong>
-                              </div>
+                              </a>
                               <EndpointLink
                                 isLinkShown={false}
                                 serviceUrl="http://localhost:4000"
@@ -11224,7 +11374,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               },
                               Object {
                                 "title": <React.Fragment>
-                                  <div>
+                                  <a
+                                    className="kogito-process-list__link"
+                                    data-ouia-component-type="process-description"
+                                    data-ouia-safe={true}
+                                    onClick={[Function]}
+                                  >
                                     <strong>
                                       <ItemDescriptor
                                         itemDescription={
@@ -11236,7 +11391,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                         }
                                       />
                                     </strong>
-                                  </div>
+                                  </a>
                                   <EndpointLink
                                     isLinkShown={false}
                                     serviceUrl="http://localhost:4000"
@@ -11556,7 +11711,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                 "isVisible": true,
                               },
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -11568,7 +11728,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -11709,7 +11869,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               },
                               Object {
                                 "title": <React.Fragment>
-                                  <div>
+                                  <a
+                                    className="kogito-process-list__link"
+                                    data-ouia-component-type="process-description"
+                                    data-ouia-safe={true}
+                                    onClick={[Function]}
+                                  >
                                     <strong>
                                       <ItemDescriptor
                                         itemDescription={
@@ -11721,7 +11886,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                         }
                                       />
                                     </strong>
-                                  </div>
+                                  </a>
                                   <EndpointLink
                                     isLinkShown={false}
                                     serviceUrl="http://localhost:4000"
@@ -12038,7 +12203,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                 "isVisible": true,
                               },
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -12050,7 +12220,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -12190,7 +12360,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                               },
                               Object {
                                 "title": <React.Fragment>
-                                  <div>
+                                  <a
+                                    className="kogito-process-list__link"
+                                    data-ouia-component-type="process-description"
+                                    data-ouia-safe={true}
+                                    onClick={[Function]}
+                                  >
                                     <strong>
                                       <ItemDescriptor
                                         itemDescription={
@@ -12202,7 +12377,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                         }
                                       />
                                     </strong>
-                                  </div>
+                                  </a>
                                   <EndpointLink
                                     isLinkShown={false}
                                     serviceUrl="http://localhost:4000"
@@ -12792,7 +12967,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                 "isVisible": true,
                               },
                               "title": <React.Fragment>
-                                <div>
+                                <a
+                                  className="kogito-process-list__link"
+                                  data-ouia-component-type="process-description"
+                                  data-ouia-safe={true}
+                                  onClick={[Function]}
+                                >
                                   <strong>
                                     <ItemDescriptor
                                       itemDescription={
@@ -12804,7 +12984,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       }
                                     />
                                   </strong>
-                                </div>
+                                </a>
                                 <EndpointLink
                                   isLinkShown={false}
                                   serviceUrl="http://localhost:4000"
@@ -13340,7 +13520,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     },
                                     Object {
                                       "title": <React.Fragment>
-                                        <div>
+                                        <a
+                                          className="kogito-process-list__link"
+                                          data-ouia-component-type="process-description"
+                                          data-ouia-safe={true}
+                                          onClick={[Function]}
+                                        >
                                           <strong>
                                             <ItemDescriptor
                                               itemDescription={
@@ -13352,7 +13537,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               }
                                             />
                                           </strong>
-                                        </div>
+                                        </a>
                                         <EndpointLink
                                           isLinkShown={false}
                                           serviceUrl="http://localhost:4000"
@@ -13672,7 +13857,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       "isVisible": true,
                                     },
                                     "title": <React.Fragment>
-                                      <div>
+                                      <a
+                                        className="kogito-process-list__link"
+                                        data-ouia-component-type="process-description"
+                                        data-ouia-safe={true}
+                                        onClick={[Function]}
+                                      >
                                         <strong>
                                           <ItemDescriptor
                                             itemDescription={
@@ -13684,7 +13874,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                             }
                                           />
                                         </strong>
-                                      </div>
+                                      </a>
                                       <EndpointLink
                                         isLinkShown={false}
                                         serviceUrl="http://localhost:4000"
@@ -13833,7 +14023,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       },
                                       Object {
                                         "title": <React.Fragment>
-                                          <div>
+                                          <a
+                                            className="kogito-process-list__link"
+                                            data-ouia-component-type="process-description"
+                                            data-ouia-safe={true}
+                                            onClick={[Function]}
+                                          >
                                             <strong>
                                               <ItemDescriptor
                                                 itemDescription={
@@ -13845,7 +14040,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                                 }
                                               />
                                             </strong>
-                                          </div>
+                                          </a>
                                           <EndpointLink
                                             isLinkShown={false}
                                             serviceUrl="http://localhost:4000"
@@ -14165,7 +14360,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                         "isVisible": true,
                                       },
                                       "title": <React.Fragment>
-                                        <div>
+                                        <a
+                                          className="kogito-process-list__link"
+                                          data-ouia-component-type="process-description"
+                                          data-ouia-safe={true}
+                                          onClick={[Function]}
+                                        >
                                           <strong>
                                             <ItemDescriptor
                                               itemDescription={
@@ -14177,7 +14377,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               }
                                             />
                                           </strong>
-                                        </div>
+                                        </a>
                                         <EndpointLink
                                           isLinkShown={false}
                                           serviceUrl="http://localhost:4000"
@@ -14413,7 +14613,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               data-label="Id"
                                               onMouseEnter={[Function]}
                                             >
-                                              <div>
+                                              <a
+                                                className="kogito-process-list__link"
+                                                data-ouia-component-type="process-description"
+                                                data-ouia-safe={true}
+                                                onClick={[Function]}
+                                              >
                                                 <strong>
                                                   <ItemDescriptor
                                                     itemDescription={
@@ -14427,7 +14632,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                                     <MockedComponent />
                                                   </ItemDescriptor>
                                                 </strong>
-                                              </div>
+                                              </a>
                                               <EndpointLink
                                                 isLinkShown={false}
                                                 serviceUrl="http://localhost:4000"
@@ -15525,7 +15730,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     },
                                     Object {
                                       "title": <React.Fragment>
-                                        <div>
+                                        <a
+                                          className="kogito-process-list__link"
+                                          data-ouia-component-type="process-description"
+                                          data-ouia-safe={true}
+                                          onClick={[Function]}
+                                        >
                                           <strong>
                                             <ItemDescriptor
                                               itemDescription={
@@ -15537,7 +15747,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               }
                                             />
                                           </strong>
-                                        </div>
+                                        </a>
                                         <EndpointLink
                                           isLinkShown={false}
                                           serviceUrl="http://localhost:4000"
@@ -15854,7 +16064,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       "isVisible": true,
                                     },
                                     "title": <React.Fragment>
-                                      <div>
+                                      <a
+                                        className="kogito-process-list__link"
+                                        data-ouia-component-type="process-description"
+                                        data-ouia-safe={true}
+                                        onClick={[Function]}
+                                      >
                                         <strong>
                                           <ItemDescriptor
                                             itemDescription={
@@ -15866,7 +16081,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                             }
                                           />
                                         </strong>
-                                      </div>
+                                      </a>
                                       <EndpointLink
                                         isLinkShown={false}
                                         serviceUrl="http://localhost:4000"
@@ -16014,7 +16229,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       },
                                       Object {
                                         "title": <React.Fragment>
-                                          <div>
+                                          <a
+                                            className="kogito-process-list__link"
+                                            data-ouia-component-type="process-description"
+                                            data-ouia-safe={true}
+                                            onClick={[Function]}
+                                          >
                                             <strong>
                                               <ItemDescriptor
                                                 itemDescription={
@@ -16026,7 +16246,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                                 }
                                               />
                                             </strong>
-                                          </div>
+                                          </a>
                                           <EndpointLink
                                             isLinkShown={false}
                                             serviceUrl="http://localhost:4000"
@@ -16343,7 +16563,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                         "isVisible": true,
                                       },
                                       "title": <React.Fragment>
-                                        <div>
+                                        <a
+                                          className="kogito-process-list__link"
+                                          data-ouia-component-type="process-description"
+                                          data-ouia-safe={true}
+                                          onClick={[Function]}
+                                        >
                                           <strong>
                                             <ItemDescriptor
                                               itemDescription={
@@ -16355,7 +16580,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               }
                                             />
                                           </strong>
-                                        </div>
+                                        </a>
                                         <EndpointLink
                                           isLinkShown={false}
                                           serviceUrl="http://localhost:4000"
@@ -16590,7 +16815,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               data-label="Id"
                                               onMouseEnter={[Function]}
                                             >
-                                              <div>
+                                              <a
+                                                className="kogito-process-list__link"
+                                                data-ouia-component-type="process-description"
+                                                data-ouia-safe={true}
+                                                onClick={[Function]}
+                                              >
                                                 <strong>
                                                   <ItemDescriptor
                                                     itemDescription={
@@ -16604,7 +16834,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                                     <MockedComponent />
                                                   </ItemDescriptor>
                                                 </strong>
-                                              </div>
+                                              </a>
                                               <EndpointLink
                                                 isLinkShown={false}
                                                 serviceUrl="http://localhost:4000"
@@ -17700,7 +17930,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                     },
                                     Object {
                                       "title": <React.Fragment>
-                                        <div>
+                                        <a
+                                          className="kogito-process-list__link"
+                                          data-ouia-component-type="process-description"
+                                          data-ouia-safe={true}
+                                          onClick={[Function]}
+                                        >
                                           <strong>
                                             <ItemDescriptor
                                               itemDescription={
@@ -17712,7 +17947,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               }
                                             />
                                           </strong>
-                                        </div>
+                                        </a>
                                         <EndpointLink
                                           isLinkShown={false}
                                           serviceUrl="http://localhost:4000"
@@ -18302,7 +18537,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       "isVisible": true,
                                     },
                                     "title": <React.Fragment>
-                                      <div>
+                                      <a
+                                        className="kogito-process-list__link"
+                                        data-ouia-component-type="process-description"
+                                        data-ouia-safe={true}
+                                        onClick={[Function]}
+                                      >
                                         <strong>
                                           <ItemDescriptor
                                             itemDescription={
@@ -18314,7 +18554,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                             }
                                           />
                                         </strong>
-                                      </div>
+                                      </a>
                                       <EndpointLink
                                         isLinkShown={false}
                                         serviceUrl="http://localhost:4000"
@@ -18553,7 +18793,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                       },
                                       Object {
                                         "title": <React.Fragment>
-                                          <div>
+                                          <a
+                                            className="kogito-process-list__link"
+                                            data-ouia-component-type="process-description"
+                                            data-ouia-safe={true}
+                                            onClick={[Function]}
+                                          >
                                             <strong>
                                               <ItemDescriptor
                                                 itemDescription={
@@ -18565,7 +18810,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                                 }
                                               />
                                             </strong>
-                                          </div>
+                                          </a>
                                           <EndpointLink
                                             isLinkShown={false}
                                             serviceUrl="http://localhost:4000"
@@ -19155,7 +19400,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                         "isVisible": true,
                                       },
                                       "title": <React.Fragment>
-                                        <div>
+                                        <a
+                                          className="kogito-process-list__link"
+                                          data-ouia-component-type="process-description"
+                                          data-ouia-safe={true}
+                                          onClick={[Function]}
+                                        >
                                           <strong>
                                             <ItemDescriptor
                                               itemDescription={
@@ -19167,7 +19417,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               }
                                             />
                                           </strong>
-                                        </div>
+                                        </a>
                                         <EndpointLink
                                           isLinkShown={false}
                                           serviceUrl="http://localhost:4000"
@@ -19493,7 +19743,12 @@ exports[`ProcessListChildTable test render table 1`] = `
                                               data-label="Id"
                                               onMouseEnter={[Function]}
                                             >
-                                              <div>
+                                              <a
+                                                className="kogito-process-list__link"
+                                                data-ouia-component-type="process-description"
+                                                data-ouia-safe={true}
+                                                onClick={[Function]}
+                                              >
                                                 <strong>
                                                   <ItemDescriptor
                                                     itemDescription={
@@ -19507,7 +19762,7 @@ exports[`ProcessListChildTable test render table 1`] = `
                                                     <MockedComponent />
                                                   </ItemDescriptor>
                                                 </strong>
-                                              </div>
+                                              </a>
                                               <EndpointLink
                                                 isLinkShown={false}
                                                 serviceUrl="http://localhost:4000"
