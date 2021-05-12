@@ -1,6 +1,6 @@
-name: Apps Build Chain Full Downstream
+name: Apps Build
 
-on: [pull_request]
+on: [pull_request_target]
 
 jobs:
   build-chain:
