@@ -583,7 +583,6 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                       <ProcessDetailsPanel
                         driver={
                           Object {
-                            "abortProcess": [MockFunction],
                             "cancelJob": [MockFunction],
                             "getProcessDiagram": [MockFunction] {
                               "calls": Array [
@@ -680,6 +679,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                                 },
                               ],
                             },
+                            "handleProcessAbort": [MockFunction],
                             "jobsQuery": [MockFunction] {
                               "calls": Array [
                                 Array [
