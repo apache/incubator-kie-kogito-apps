@@ -19,23 +19,34 @@ import {
   ProcessInstance,
   Job,
   JobCancel,
-  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
 import {
   getSvg,
   handleJobReschedule,
-  handleAbort,
+  handleProcessAbort,
   jobCancel
 } from '../../apis';
+
+export interface OnOpenProcessInstanceDetailsListener {
+  onOpen(id: string): void;
+}
+
+export interface ProcessDetailsUnSubscribeHandler {
+  unSubscribe: () => void;
+}
+
+export interface ProcessDetailsState {
+  id: string;
+}
 
 export interface ProcessDetailsGatewayApi {
   processDetailsState: any;
   getProcessDiagram: (
     data: ProcessInstance
   ) => Promise<SvgSuccessResponse | SvgErrorResponse>;
-  abortProcess: (data: ProcessInstance) => Promise<AbortResponse>;
+  handleProcessAbort: (processInstance: ProcessInstance) => Promise<void>;
   cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
   rescheduleJob: (
     job,
@@ -45,15 +56,16 @@ export interface ProcessDetailsGatewayApi {
   ) => Promise<{ modalTitle: string; modalContent: string }>;
   processDetailsQuery(id: string): Promise<ProcessInstance>;
   jobsQuery(id: string): Promise<Job[]>;
-}
-
-export interface ProcessDetailsState {
-  id: string;
+  openProcessInstanceDetails(id: string): Promise<void>;
+  onOpenProcessInstanceDetailsListener: (
+    listener: OnOpenProcessInstanceDetailsListener
+  ) => ProcessDetailsUnSubscribeHandler;
 }
 
 export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   private readonly queries: ProcessDetailsQueries;
   private _ProcessDetailsState: ProcessDetailsState;
+  private readonly listeners: OnOpenProcessInstanceDetailsListener[] = [];
 
   constructor(queries: ProcessDetailsQueries) {
     this.queries = queries;
@@ -71,8 +83,8 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
     return Promise.resolve(res);
   };
 
-  abortProcess = (data: ProcessInstance): Promise<AbortResponse> => {
-    return handleAbort(data);
+  handleProcessAbort = (processInstance: ProcessInstance): Promise<void> => {
+    return handleProcessAbort(processInstance);
   };
 
   cancelJob = (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
@@ -112,5 +124,28 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
           reject(reason);
         });
     });
+  }
+
+  openProcessInstanceDetails(id: string): Promise<void> {
+    this._ProcessDetailsState = { id: id };
+    this.listeners.forEach(listener => listener.onOpen(id));
+    return Promise.resolve();
+  }
+
+  onOpenProcessInstanceDetailsListener(
+    listener: OnOpenProcessInstanceDetailsListener
+  ): ProcessDetailsUnSubscribeHandler {
+    this.listeners.push(listener);
+
+    const unSubscribe = () => {
+      const index = this.listeners.indexOf(listener);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
+
+    return {
+      unSubscribe
+    };
   }
 }
