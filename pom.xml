@@ -216,6 +216,7 @@
     <module>apps-integration-tests</module>
   </modules>
 
+
   <profiles>
     <profile>
       <id>native</id>
