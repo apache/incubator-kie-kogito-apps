@@ -12,22 +12,24 @@ import {
   Tooltip
 } from '@patternfly/react-core';
 import CounterfactualOutcomeSelection from '../CounterfactualOutcomeSelection/CounterfactualOutcomeSelection';
-import './CounterfactualToolbar.scss';
+import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
 import {
   CFAnalysisResetType,
   CFExecutionStatus,
   CFGoal,
   CFStatus
 } from '../../../types';
-import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
+import './CounterfactualToolbar.scss';
 
 type CounterfactualToolbarProps = {
-  status: CFStatus;
   goals: CFGoal[];
+  status: CFStatus;
+  onRunAnalysis: () => void;
+  onSetupNewAnalysis: (resetType: CFAnalysisResetType) => void;
 };
 
 const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
-  const { goals, status } = props;
+  const { goals, status, onRunAnalysis, onSetupNewAnalysis } = props;
   const [isOutcomeSelectionOpen, setIsOutcomeSelectionOpen] = useState(false);
   const [CFResetType, setCFResetType] = useState<CFAnalysisResetType>();
   const [isConfirmNewCFDialogOpen, setIsConfirmNewCFDialogOpen] = useState(
@@ -40,6 +42,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
   };
 
   const handleRun = () => {
+    onRunAnalysis();
     dispatch({
       type: 'CF_SET_STATUS',
       payload: {
@@ -64,15 +67,12 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
   };
 
   const setupNewCF = () => {
-    dispatch({
-      type: 'CF_RESET_ANALYSIS',
-      payload: { resetType: CFResetType }
-    });
+    onSetupNewAnalysis(CFResetType);
     handleNewCFModalClose();
   };
 
   const handleCFReset = () => {
-    dispatch({ type: 'CF_RESET_ANALYSIS', payload: { resetType: 'NEW' } });
+    onSetupNewAnalysis('NEW');
   };
 
   return (

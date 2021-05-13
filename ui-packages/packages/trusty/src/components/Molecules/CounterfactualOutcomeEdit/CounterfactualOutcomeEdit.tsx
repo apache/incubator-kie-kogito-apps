@@ -18,7 +18,7 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
   const { goal, index, onUpdateGoal } = props;
 
   let valueEdit;
-  switch (goal.typeRef) {
+  switch (typeof goal.value) {
     case 'boolean':
       valueEdit = (
         <CounterfactualOutcomeBoolean
@@ -47,7 +47,7 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
       );
       break;
     default:
-      valueEdit = <em>Not supported</em>;
+      valueEdit = <em>Not yet supported</em>;
       break;
   }
 

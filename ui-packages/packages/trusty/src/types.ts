@@ -116,13 +116,6 @@ export interface ModelData {
   model: string;
 }
 
-export interface CFSearchDomain {
-  isFixed: boolean;
-  name: string;
-  typeRef: 'number' | 'string' | 'boolean';
-  domain?: CFNumericalDomain | CFCategoricalDomain;
-}
-
 export interface CFNumericalDomain {
   type: 'numerical';
   lowerBound?: number;
@@ -134,8 +127,9 @@ export interface CFCategoricalDomain {
   categories: string[];
 }
 
-export interface CFSearchInput extends CFSearchDomain {
-  value: number | string | boolean;
+export interface CFSearchInput extends ItemObject {
+  isFixed?: boolean;
+  domain?: CFNumericalDomain | CFCategoricalDomain;
 }
 
 export type CFGoal = Pick<ItemObject, 'name' | 'typeRef' | 'value'> & {
@@ -159,3 +153,26 @@ export enum CFExecutionStatus {
 }
 
 export type CFAnalysisResetType = 'NEW' | 'EDIT';
+
+export interface CFAnalysisExecution {
+  executionId: string;
+  counterfactualId: string;
+}
+
+export interface CFAnalysisResult extends CFAnalysisExecution {
+  type: 'counterfactual';
+  valid: boolean;
+  status: 'SUCCEEDED';
+  statusDetails: string;
+  solutionId: string;
+  isValid: boolean;
+  stage: 'INTERMEDIATE' | 'FINAL';
+  inputs: CFSearchInput[];
+  outputs: CFGoal[];
+}
+
+export interface CFAnalysisResultsSets extends CFAnalysisExecution {
+  goals: CFGoal[];
+  searchDomains: CFSearchInput[];
+  solutions: CFAnalysisResult[];
+}

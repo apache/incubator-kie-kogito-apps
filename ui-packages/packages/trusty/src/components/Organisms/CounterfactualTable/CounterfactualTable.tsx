@@ -27,18 +27,19 @@ import {
 import { Scrollbars } from 'react-custom-scrollbars';
 import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
 import useCFTableSizes from './useCFTableSizes';
-import './CounterfactualTable.scss';
 import {
+  CFAnalysisResult,
   CFExecutionStatus,
-  CFResult,
   CFSearchInput,
   CFStatus
 } from '../../../types';
 import { CFDispatch } from '../CounterfactualAnalysis/CounterfactualAnalysis';
+import FormattedValue from '../../Atoms/FormattedValue/FormattedValue';
+import './CounterfactualTable.scss';
 
 type CounterfactualTableProps = {
   inputs: CFSearchInput[];
-  results: CFResult[];
+  results: CFAnalysisResult[];
   status: CFStatus;
   onOpenInputDomainEdit: (input: CFSearchInput, inputIndex: number) => void;
 };
@@ -58,7 +59,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     prev: true,
     next: false
   });
-  const [displayedResults, setDisplayedResults] = useState(results);
+  const [displayedResults, setDisplayedResults] = useState(
+    convertCFResultsInputs(results)
+  );
   const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState<
     boolean
   >();
@@ -101,7 +104,6 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     const scrollWidth = scrollbars.current.getScrollWidth();
     const currentPosition = scrollbars.current.getScrollLeft();
 
-    console.log('checking scroll enabled/disabled status');
     if (scrollWidth - currentPosition - width < 10) {
       // disabling next button when reaching the right limit (with some tolerance)
       setIsScrollDisabled({ prev: false, next: true });
@@ -128,7 +130,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   };
 
   const canAddConstraint = (input: CFSearchInput) => {
-    return input.typeRef !== 'boolean';
+    return ['string', 'number', 'boolean'].includes(typeof input.value);
   };
 
   useEffect(() => {
@@ -137,7 +139,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   }, [inputs]);
 
   useEffect(() => {
-    setDisplayedResults(results);
+    setDisplayedResults(convertCFResultsInputs(results));
   }, [results]);
 
   const handleScrollbarRendering = (cssClass: string) => {
@@ -313,8 +315,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             select={{
                               rowIndex,
                               onSelect,
-                              isSelected: !row.isFixed,
-                              disable: !isInputSelectionEnabled
+                              isSelected: row.isFixed === false,
+                              disable: !(
+                                isInputSelectionEnabled && canAddConstraint(row)
+                              )
                             }}
                           />
                           <Td key={`${rowIndex}_1`} dataLabel={columns[0]}>
@@ -341,9 +345,14 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                 )}
                               </Button>
                             )}
+                            {!canAddConstraint(row) && (
+                              <em>Not yet supported</em>
+                            )}
                           </Td>
                           <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>
-                            {row.value.toString()}
+                            {row.components === null && (
+                              <FormattedValue value={row.value} />
+                            )}
                           </Td>
                           {displayedResults.length > 1 && (
                             <Td className="cf-table__slider-cell" />
@@ -360,7 +369,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                       : 'cf-table__result-value'
                                   }
                                 >
-                                  {value.toString()}
+                                  <FormattedValue value={value} />
                                 </Td>
                               )
                             )}
@@ -409,3 +418,20 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 };
 
 export default CounterfactualTable;
+
+const convertCFResultsInputs = (results: CFAnalysisResult[]) => {
+  const rows = [];
+  if (results.length) {
+    rows.push([]);
+    results.forEach(result => {
+      rows[0].push(result.solutionId);
+      result.inputs.forEach((input, inputIndex) => {
+        if (!rows[inputIndex + 1]) {
+          rows.push([]);
+        }
+        rows[inputIndex + 1].push(input.value);
+      });
+    });
+  }
+  return rows;
+};

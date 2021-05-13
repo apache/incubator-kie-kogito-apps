@@ -27,8 +27,9 @@ const Counterfactual = () => {
       {inputData.status === RemoteDataStatus.SUCCESS &&
       outcomesData.status === RemoteDataStatus.SUCCESS ? (
         <CounterfactualAnalysis
-          input={inputData.data}
+          inputs={inputData.data}
           outcomes={outcomesData.data}
+          executionId={executionId}
         />
       ) : (
         <PageSection variant={'light'} isFilled={true}>

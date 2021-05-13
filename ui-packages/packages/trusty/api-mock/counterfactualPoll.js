@@ -1,4 +1,5 @@
 const faker = require('faker');
+const inputData = require('./mocks/inputData');
 
 let hit = 0;
 let executionId = null;
@@ -28,13 +29,20 @@ module.exports = (req, res, next) => {
         }
         hit++;
         if (hit === 2) {
-          cfResults.push(getResult(executionId, cfResults.length, false));
-          cfResults.push(getResult(executionId, cfResults.length, false));
-          cfResults.push(getResult(executionId, cfResults.length, false));
+          for (let i = 0; i < 5; i++) {
+            cfResults.push(
+              getResult(query.executionId, cfResults.length, false)
+            );
+          }
         }
         if (hit === 3) {
-          cfResults.push(getResult(executionId, cfResults.length, false));
-          cfResults.push(getResult(executionId, cfResults.length, true));
+          for (let i = 0; i < 6; i++) {
+            cfResults.push(
+              getResult(query.executionId, cfResults.length, false)
+            );
+          }
+          cfResults.push(getResult(query.executionId, cfResults.length, true));
+          executionId = null;
         }
         try {
           const json = JSON.parse(body);
@@ -42,7 +50,7 @@ module.exports = (req, res, next) => {
             this,
             JSON.stringify({
               ...json,
-              executionId,
+              executionId: query.executionId,
               counterfactualId: query.counterfactualId,
               solutions: cfResults
             })
@@ -60,7 +68,19 @@ function getResult(executionId, solutionIdBase, isFinal) {
     ...interim,
     executionId,
     solutionId: (solutionIdBase + 10001).toString(),
-    stage: isFinal ? 'FINAL' : 'INTERMEDIATE'
+    stage: isFinal ? 'FINAL' : 'INTERMEDIATE',
+    inputs: inputData.inputs.map((input, index) => {
+      if (index === 0) {
+        return {
+          ...input,
+          value: Math.floor(
+            Math.random() * input.value * 0.2 * (Math.random() > 0.5 ? 1 : -1) +
+              input.value
+          )
+        };
+      }
+      return input;
+    })
   };
 }
 

@@ -1,127 +1,22 @@
 import {
   CFAnalysisResetType,
+  CFAnalysisResult,
   CFExecutionStatus,
   CFGoal,
-  CFResult,
   CFSearchInput,
-  CFStatus
+  CFStatus,
+  isItemObjectArray,
+  isItemObjectMultiArray,
+  ItemObject,
+  Outcome
 } from '../../../types';
 
 export interface CFState {
   goals: CFGoal[];
   searchDomains: CFSearchInput[];
   status: CFStatus;
-  results: CFResult[];
+  results: CFAnalysisResult[];
 }
-
-export const cfInitialState: CFState = {
-  goals: [
-    {
-      id: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
-      name: 'Mortgage Approval',
-      typeRef: 'boolean',
-      value: false,
-      originalValue: false,
-      isFixed: true
-    },
-    {
-      id: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
-      name: 'Risk Score',
-      typeRef: 'number',
-      value: 150,
-      originalValue: 150,
-      isFixed: true
-    },
-    {
-      id: '_4CSS8C35-4EB3-451E-874C-DB27A5A346W1',
-      name: 'Mortgage Category',
-      typeRef: 'string',
-      value: 'Product A',
-      originalValue: 'Product A',
-      isFixed: true
-    }
-  ],
-  searchDomains: [
-    {
-      name: 'Credit Score',
-      typeRef: 'number',
-      value: 738,
-      isFixed: true
-    },
-    {
-      name: 'Down Payment',
-      typeRef: 'number',
-      value: 70000,
-      isFixed: true
-    },
-    {
-      name: 'Purchase Price',
-      typeRef: 'number',
-      value: 34000,
-      isFixed: true
-    },
-    {
-      name: 'Monthly Tax Payment',
-      typeRef: 'number',
-      value: 0.2,
-      isFixed: true
-    },
-    {
-      name: 'Loan Type',
-      typeRef: 'string',
-      value: 'ALFA',
-      isFixed: true
-    },
-    {
-      name: 'First Time Client',
-      typeRef: 'boolean',
-      value: true,
-      isFixed: true
-    },
-    {
-      name: 'Demo input with a long name',
-      typeRef: 'number',
-      value: 100,
-      isFixed: true
-    },
-    {
-      name: 'Demo input again',
-      typeRef: 'number',
-      value: 2,
-      isFixed: true
-    },
-    {
-      name: 'Demo input only',
-      typeRef: 'number',
-      value: 44,
-      isFixed: true
-    },
-    {
-      name: 'Demo input for fun',
-      typeRef: 'number',
-      value: 13,
-      isFixed: true
-    },
-    {
-      name: 'Demo input rate',
-      typeRef: 'number',
-      value: 90,
-      isFixed: true
-    },
-    {
-      name: 'Demo input w/ huge number',
-      typeRef: 'number',
-      value: 4110000,
-      isFixed: true
-    }
-  ],
-  status: {
-    isDisabled: true,
-    executionStatus: CFExecutionStatus.NOT_STARTED,
-    lastExecutionTime: null
-  },
-  results: []
-};
 
 export type cfActions =
   | { type: 'CF_SET_OUTCOMES'; payload: CFGoal[] }
@@ -151,17 +46,19 @@ export type cfActions =
   | {
       type: 'CF_SET_RESULTS';
       payload: {
-        results: CFResult[];
+        results: CFAnalysisResult[];
       };
     }
   | {
       type: 'CF_RESET_ANALYSIS';
       payload: {
         resetType: CFAnalysisResetType;
+        inputs: ItemObject[];
+        outcomes: Outcome[];
       };
     };
 
-export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
+export const cfReducer = (state: CFState, action: cfActions) => {
   switch (action.type) {
     case 'CF_SET_OUTCOMES':
       return { ...state, goals: action.payload };
@@ -207,12 +104,72 @@ export const cfReducer = (state: typeof cfInitialState, action: cfActions) => {
     case 'CF_RESET_ANALYSIS':
       switch (action.payload.resetType) {
         case 'NEW':
-          return cfInitialState;
+          return cfInitState({
+            inputs: action.payload.inputs,
+            outcomes: action.payload.outcomes
+          });
         case 'EDIT':
-          return { ...state, status: cfInitialState.status, results: [] };
+          return {
+            ...state,
+            status: {
+              isDisabled: true,
+              executionStatus: CFExecutionStatus.NOT_STARTED,
+              lastExecutionTime: null
+            },
+            results: []
+          };
       }
       break;
     default:
       throw new Error();
   }
+};
+
+export const cfInitState = (parameters): CFState => {
+  const { inputs, outcomes } = parameters;
+  const initialState: CFState = {
+    goals: [],
+    searchDomains: [],
+    status: {
+      isDisabled: true,
+      executionStatus: CFExecutionStatus.NOT_STARTED,
+      lastExecutionTime: null
+    },
+    results: []
+  };
+  initialState.goals = outcomes.map(outcome => {
+    return {
+      id: outcome.outcomeId,
+      name: outcome.outcomeName,
+      typeRef: outcome.outcomeResult.typeRef,
+      value: outcome.outcomeResult.value,
+      originalValue: outcome.outcomeResult.value,
+      isFixed: true
+    };
+  });
+
+  initialState.searchDomains = convertInputToSearchDomain(inputs);
+
+  return initialState;
+};
+
+const convertInputToSearchDomain = (inputs: ItemObject[]) => {
+  const addIsFixed = (input: ItemObject): CFSearchInput => {
+    if (input.components === null) {
+      return { ...input, isFixed: true };
+    } else {
+      if (isItemObjectArray(input.components)) {
+        const searchInput = input.components.map(item => addIsFixed(item));
+        return { ...input, components: searchInput };
+      } else if (isItemObjectMultiArray(input.components)) {
+        const searchInput = input.components.map(list => {
+          return list.map(item => addIsFixed(item));
+        });
+        return { ...input, components: searchInput };
+      }
+    }
+  };
+  return inputs.map(input => {
+    return addIsFixed(input);
+  });
 };

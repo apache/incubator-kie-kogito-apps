@@ -162,14 +162,14 @@ const CounterfactualInputDomainEdit = (
             </Title>
           </StackItem>
           <StackItem>
-            {input.typeRef === 'number' && (
+            {typeof input.value === 'number' && (
               <CounterfactualNumericalDomainEdit
                 inputDomain={inputDomain as CFNumericalDomain}
                 onUpdate={onNumericDomainUpdate}
                 validation={validation}
               />
             )}
-            {input.typeRef === 'string' && (
+            {typeof input.value === 'string' && (
               <CounterfactualCategoricalDomainEdit
                 inputDomain={input.domain as CFCategoricalDomain}
                 onUpdate={onCategoricalDomainUpdate}
