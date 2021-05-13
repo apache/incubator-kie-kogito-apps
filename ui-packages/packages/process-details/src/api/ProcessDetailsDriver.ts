@@ -18,7 +18,6 @@ import {
   ProcessInstance,
   Job,
   JobCancel,
-  AbortResponse,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
@@ -26,7 +25,7 @@ export interface ProcessDetailsDriver {
   getProcessDiagram(
     data: ProcessInstance
   ): Promise<SvgSuccessResponse | SvgErrorResponse>;
-  abortProcess(data: ProcessInstance): Promise<AbortResponse>;
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
   cancelJob(job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel>;
   rescheduleJob(
     job,
@@ -36,4 +35,5 @@ export interface ProcessDetailsDriver {
   ): Promise<{ modalTitle: string; modalContent: string }>;
   processDetailsQuery(id: string): Promise<ProcessInstance>;
   jobsQuery(id: string): Promise<Job[]>;
+  openProcessInstanceDetails(id: string): void;
 }

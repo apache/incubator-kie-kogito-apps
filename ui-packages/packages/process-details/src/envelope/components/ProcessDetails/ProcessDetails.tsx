@@ -45,7 +45,7 @@ import {
   ProcessInstance,
   ProcessInstanceState,
   setTitle,
-  AbortResponse,
+  TitleType,
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
@@ -55,6 +55,7 @@ import JobsPanel from '../JobsPanel/JobsPanel';
 import ProcessDiagramErrorModal from '../ProcessDiagramErrorModal/ProcessDiagramErrorModal';
 import SVG from 'react-inlinesvg';
 import '../styles.css';
+import ProcessDetailsPanel from '../ProcessDetailsPanel/ProcessDetailsPanel';
 
 interface ProcessDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -193,20 +194,29 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     );
   };
 
-  const onShowMessage = (abortResults: AbortResponse): void => {
-    setTitleType(abortResults.type);
-    setInfoModalTitle(abortResults.title);
-    setInfoModalContent(abortResults.content);
-    handleInfoModalToggle();
-  };
-
   const handleInfoModalToggle = (): void => {
     setIsInfoModalOpen(!isInfoModalOpen);
   };
 
-  const onAbortClick = async (): Promise<void> => {
-    const abortResults: AbortResponse = await driver.abortProcess(data);
-    onShowMessage(abortResults);
+  const onAbortClick = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    try {
+      await driver.handleProcessAbort(processInstance);
+      setTitleType(TitleType.SUCCESS);
+      setInfoModalTitle('Abort operation');
+      setInfoModalContent(
+        `The process ${processInstance.processName} was successfully aborted.`
+      );
+    } catch (abortError) {
+      setTitleType(TitleType.FAILURE);
+      setInfoModalTitle('Abort operation');
+      setInfoModalContent(
+        `Failed to abort process ${processInstance.processName}. Message: ${abortError.message}`
+      );
+    } finally {
+      handleInfoModalToggle();
+    }
   };
 
   const abortButton = (): JSX.Element => {
@@ -218,7 +228,11 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       data.serviceUrl !== null
     ) {
       return (
-        <Button variant="secondary" id="abort-button" onClick={onAbortClick}>
+        <Button
+          variant="secondary"
+          id="abort-button"
+          onClick={() => onAbortClick(data)}
+        >
           Abort
         </Button>
       );
@@ -249,7 +263,9 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const renderProcessDetails = (): JSX.Element => {
     return (
       <Flex direction={{ default: 'column' }} flex={{ default: 'flex_1' }}>
-        <FlexItem>Process Details</FlexItem>
+        <FlexItem>
+          <ProcessDetailsPanel processInstance={data} driver={driver} />
+        </FlexItem>
         {data.milestones.length > 0 && <FlexItem>Milestones</FlexItem>}
       </Flex>
     );
