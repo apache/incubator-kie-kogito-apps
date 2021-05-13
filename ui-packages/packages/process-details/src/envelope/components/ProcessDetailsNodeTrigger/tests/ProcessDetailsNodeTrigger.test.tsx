@@ -7,7 +7,7 @@ import {
   ProcessInstance,
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
-import TestProcessDetailsDriver from '../tests/mocks/TestProcessDetailsDriver';
+import TestProcessDetailsDriver from '../../../tests/mocks/TestProcessDetailsDriver';
 jest.mock('../../ProcessDetailsErrorModal/ProcessDetailsErrorModal');
 
 const processInstanceData: ProcessInstance = {
