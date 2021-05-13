@@ -15,22 +15,57 @@
  */
 
 import { ProcessDetailsQueries } from './ProcessDetailsQueries';
-import { ProcessInstance, Job } from '@kogito-apps/management-console-shared';
+import {
+  ProcessInstance,
+  Job,
+  JobCancel,
+  SvgSuccessResponse,
+  SvgErrorResponse
+} from '@kogito-apps/management-console-shared';
+import {
+  getSvg,
+  handleJobReschedule,
+  handleProcessAbort,
+  jobCancel
+} from '../../apis';
 
-export interface ProcessDetailsGatewayApi {
-  processDetailsState: any;
-  initialLoad: () => Promise<void>;
-  processDetailsQuery(id: string): Promise<ProcessInstance>;
-  jobsQuery(id: string): Promise<Job[]>;
+export interface OnOpenProcessInstanceDetailsListener {
+  onOpen(id: string): void;
+}
+
+export interface ProcessDetailsUnSubscribeHandler {
+  unSubscribe: () => void;
 }
 
 export interface ProcessDetailsState {
   id: string;
 }
 
+export interface ProcessDetailsGatewayApi {
+  processDetailsState: any;
+  getProcessDiagram: (
+    data: ProcessInstance
+  ) => Promise<SvgSuccessResponse | SvgErrorResponse>;
+  handleProcessAbort: (processInstance: ProcessInstance) => Promise<void>;
+  cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
+  rescheduleJob: (
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ) => Promise<{ modalTitle: string; modalContent: string }>;
+  processDetailsQuery(id: string): Promise<ProcessInstance>;
+  jobsQuery(id: string): Promise<Job[]>;
+  openProcessInstanceDetails(id: string): Promise<void>;
+  onOpenProcessInstanceDetailsListener: (
+    listener: OnOpenProcessInstanceDetailsListener
+  ) => ProcessDetailsUnSubscribeHandler;
+}
+
 export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   private readonly queries: ProcessDetailsQueries;
   private _ProcessDetailsState: ProcessDetailsState;
+  private readonly listeners: OnOpenProcessInstanceDetailsListener[] = [];
 
   constructor(queries: ProcessDetailsQueries) {
     this.queries = queries;
@@ -41,8 +76,28 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
     return this._ProcessDetailsState;
   }
 
-  initialLoad = (): Promise<any> => {
-    return Promise.resolve();
+  getProcessDiagram = async (
+    data: ProcessInstance
+  ): Promise<SvgSuccessResponse | SvgErrorResponse> => {
+    const res = await getSvg(data);
+    return Promise.resolve(res);
+  };
+
+  handleProcessAbort = (processInstance: ProcessInstance): Promise<void> => {
+    return handleProcessAbort(processInstance);
+  };
+
+  cancelJob = (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
+    return jobCancel(job);
+  };
+
+  rescheduleJob = (
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> => {
+    return handleJobReschedule(job, repeatInterval, repeatLimit, scheduleDate);
   };
 
   processDetailsQuery(id: string): Promise<ProcessInstance> {
@@ -58,7 +113,7 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
     });
   }
 
-  jobsQuery(id: string): Promise<any> {
+  jobsQuery(id: string): Promise<Job[]> {
     return new Promise<any>((resolve, reject) => {
       this.queries
         .getJobs(id)
@@ -69,5 +124,28 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
           reject(reason);
         });
     });
+  }
+
+  openProcessInstanceDetails(id: string): Promise<void> {
+    this._ProcessDetailsState = { id: id };
+    this.listeners.forEach(listener => listener.onOpen(id));
+    return Promise.resolve();
+  }
+
+  onOpenProcessInstanceDetailsListener(
+    listener: OnOpenProcessInstanceDetailsListener
+  ): ProcessDetailsUnSubscribeHandler {
+    this.listeners.push(listener);
+
+    const unSubscribe = () => {
+      const index = this.listeners.indexOf(listener);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
+
+    return {
+      unSubscribe
+    };
   }
 }

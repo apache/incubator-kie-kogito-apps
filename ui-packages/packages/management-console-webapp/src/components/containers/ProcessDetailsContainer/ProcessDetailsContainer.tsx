@@ -14,21 +14,37 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { OUIAProps } from '@kogito-apps/components-common';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/components-common';
+import React, { useEffect } from 'react';
 import { EmbeddedProcessDetails } from '@kogito-apps/process-details';
 import { ProcessDetailsGatewayApi } from '../../../channel/ProcessDetails';
 import { useProcessDetailsGatewayApi } from '../../../channel/ProcessDetails/ProcessDetailsContext';
+import { useHistory } from 'react-router-dom';
 
 interface ProcessDetailsContainerProps {
   processId: string;
 }
 
 const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
-  OUIAProps> = ({ processId }) => {
+  OUIAProps> = ({ processId, ouiaId, ouiaSafe }) => {
+  const history = useHistory();
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
+  useEffect(() => {
+    const unSubscribeHandler = gatewayApi.onOpenProcessInstanceDetailsListener({
+      onOpen(id: string) {
+        history.push(`/`);
+        history.push(`/Process/${id}`);
+      }
+    });
+
+    return () => {
+      unSubscribeHandler.unSubscribe();
+    };
+  }, [processId]);
+
   return (
     <EmbeddedProcessDetails
+      {...componentOuiaProps(ouiaId, 'process-details-container', ouiaSafe)}
       driver={gatewayApi}
       targetOrigin={window.location.origin}
       processId={processId}

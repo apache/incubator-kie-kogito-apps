@@ -20,7 +20,11 @@ import {
   ProcessListDriver,
   SortBy
 } from '../api';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  BulkProcessInstanceActionResponse,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 
 export class ProcessListChannelApiImpl implements ProcessListChannelApi {
   constructor(private readonly driver: ProcessListDriver) {}
@@ -32,6 +36,10 @@ export class ProcessListChannelApiImpl implements ProcessListChannelApi {
     return this.driver.initialLoad(filter, sortBy);
   }
 
+  processList__openProcess(process: ProcessInstance): Promise<void> {
+    return this.driver.openProcess(process);
+  }
+
   processList__applyFilter(filter: ProcessInstanceFilter): Promise<void> {
     return this.driver.applyFilter(filter);
   }
@@ -40,6 +48,30 @@ export class ProcessListChannelApiImpl implements ProcessListChannelApi {
     return this.driver.applySorting(sortBy);
   }
 
+  processList__handleProcessSkip(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessSkip(processInstance);
+  }
+  processList__handleProcessRetry(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessRetry(processInstance);
+  }
+  processList__handleProcessAbort(
+    processInstance: ProcessInstance
+  ): Promise<void> {
+    return this.driver.handleProcessAbort(processInstance);
+  }
+  processList__handleProcessMultipleAction(
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ): Promise<BulkProcessInstanceActionResponse> {
+    return this.driver.handleProcessMultipleAction(
+      processInstances,
+      operationType
+    );
+  }
   processList__query(
     offset: number,
     limit: number

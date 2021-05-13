@@ -14,25 +14,53 @@
  * limitations under the License.
  */
 import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  BulkProcessInstanceActionResponse,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
+import {
+  handleProcessAbort,
+  handleProcessMultipleAction,
+  handleProcessRetry,
+  handleProcessSkip
+} from '../../apis/apis';
 
 export interface ProcessListGatewayApi {
   processListState: ProcessListState;
   initialLoad: (filter: ProcessInstanceFilter, sortBy: SortBy) => Promise<void>;
+  openProcess: (process: ProcessInstance) => Promise<void>;
   applyFilter: (filter: ProcessInstanceFilter) => Promise<void>;
   applySorting: (SortBy: SortBy) => Promise<void>;
+  handleProcessSkip: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessRetry: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessAbort: (processInstance: ProcessInstance) => Promise<void>;
+  handleProcessMultipleAction: (
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ) => Promise<BulkProcessInstanceActionResponse>;
   query(offset: number, limit: number): Promise<ProcessInstance[]>;
   getChildProcessesQuery(
     rootProcessInstanceId: string
   ): Promise<ProcessInstance[]>;
+  onOpenProcessListen: (listener: OnOpenProcessListener) => UnSubscribeHandler;
 }
 
 export interface ProcessListState {
   filters: ProcessInstanceFilter;
   sortBy: SortBy;
 }
+
+export interface OnOpenProcessListener {
+  onOpen: (process: ProcessInstance) => void;
+}
+
+export interface UnSubscribeHandler {
+  unSubscribe: () => void;
+}
 export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
+  private readonly listeners: OnOpenProcessListener[] = [];
   private readonly queries: ProcessListQueries;
   private _ProcessListState: ProcessListState;
 
@@ -50,6 +78,11 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
   get processListState(): ProcessListState {
     return this._ProcessListState;
   }
+
+  openProcess = (process: ProcessInstance): Promise<void> => {
+    this.listeners.forEach(listener => listener.onOpen(process));
+    return Promise.resolve();
+  };
 
   initialLoad = (
     filter: ProcessInstanceFilter,
@@ -70,6 +103,30 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
     return Promise.resolve();
   };
 
+  handleProcessSkip = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    return handleProcessSkip(processInstance);
+  };
+
+  handleProcessRetry = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    return handleProcessRetry(processInstance);
+  };
+
+  handleProcessAbort = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    return handleProcessAbort(processInstance);
+  };
+
+  handleProcessMultipleAction = async (
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ): Promise<BulkProcessInstanceActionResponse> => {
+    return handleProcessMultipleAction(processInstances, operationType);
+  };
   query(offset: number, limit: number): Promise<ProcessInstance[]> {
     return new Promise<ProcessInstance[]>((resolve, reject) => {
       this.queries
@@ -101,5 +158,20 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
           reject(reason);
         });
     });
+  }
+
+  onOpenProcessListen(listener: OnOpenProcessListener): UnSubscribeHandler {
+    this.listeners.push(listener);
+
+    const unSubscribe = () => {
+      const index = this.listeners.indexOf(listener);
+      if (index > -1) {
+        this.listeners.splice(index, 1);
+      }
+    };
+
+    return {
+      unSubscribe
+    };
   }
 }

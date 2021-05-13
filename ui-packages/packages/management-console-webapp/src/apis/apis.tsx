@@ -15,8 +15,14 @@
  */
 
 import { GraphQL } from '@kogito-apps/consoles-common';
+import {
+  BulkProcessInstanceActionResponse,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import axios from 'axios';
 
+//Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
   jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[]
 ) => {
@@ -34,6 +40,7 @@ export const performMultipleCancel = async (
   return { successJobs, failedJobs };
 };
 
+//Rest Api to Cancel a Job
 export const jobCancel = async (
   job: Pick<GraphQL.Job, 'id' | 'endpoint'>
 ): Promise<{ modalTitle: string; modalContent: string }> => {
@@ -51,6 +58,7 @@ export const jobCancel = async (
   }
 };
 
+// Rest Api to Reschedule a Job
 export const handleJobReschedule = async (
   job,
   repeatInterval: number | string,
@@ -81,4 +89,115 @@ export const handleJobReschedule = async (
     modalContent = `Reschedule of job ${job.id} failed. Message: ${error.message}`;
     return { modalTitle, modalContent };
   }
+};
+
+// Rest Api to fetch Process Diagram
+export const getSvg = async (data: ProcessInstance): Promise<any> => {
+  return axios
+    .get(`/svg/processes/${data.processId}/instances/${data.id}`)
+    .then(res => {
+      return { svg: res.data };
+    })
+    .catch(async error => {
+      /* istanbul ignore else*/
+      if (data.serviceUrl) {
+        return axios
+          .get(
+            `${data.serviceUrl}/svg/processes/${data.processId}/instances/${data.id}`
+          )
+          .then(res => {
+            return { svg: res.data };
+          })
+          .catch(err => {
+            /* istanbul ignore else*/
+            if (err.response && err.response.status !== 404) {
+              return { error: err.message };
+            }
+          });
+      }
+    });
+};
+
+// Rest Api to skip a process in error state
+export const handleProcessSkip = async (
+  processInstance: ProcessInstance
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/skip`
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+};
+
+// Rest Api to retrigger a process in error state
+export const handleProcessRetry = async (
+  processInstance: ProcessInstance
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/retrigger`
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+};
+
+// Rest Api to abort a process
+export const handleProcessAbort = (
+  processInstance: ProcessInstance
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(
+        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}`
+      )
+      .then(() => {
+        resolve();
+      })
+      .catch(error => reject(error));
+  });
+};
+
+// function to handle multiple actions(abort, skip and retry) on processes
+export const handleProcessMultipleAction = async (
+  processInstances: ProcessInstance[],
+  operationType: OperationType
+): Promise<BulkProcessInstanceActionResponse> => {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
+    let operation: (processInstance: ProcessInstance) => Promise<void>;
+    const successProcessInstances: ProcessInstance[] = [];
+    const failedProcessInstances: ProcessInstance[] = [];
+    switch (operationType) {
+      case OperationType.ABORT:
+        operation = handleProcessAbort;
+        break;
+      case OperationType.SKIP:
+        operation = handleProcessSkip;
+        break;
+      case OperationType.RETRY:
+        operation = handleProcessRetry;
+        break;
+    }
+    for (const processInstance of processInstances) {
+      await operation(processInstance)
+        .then(() => {
+          successProcessInstances.push(processInstance);
+        })
+        .catch(error => {
+          processInstance.errorMessage = error.message;
+          failedProcessInstances.push(processInstance);
+        });
+    }
+
+    resolve({ successProcessInstances, failedProcessInstances });
+  });
 };

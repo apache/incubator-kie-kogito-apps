@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  BulkProcessInstanceActionResponse,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import { ProcessInstanceFilter, SortBy } from './ProcessListEnvelopeApi';
 
 export interface ProcessListDriver {
   initialLoad(filter: ProcessInstanceFilter, sortBy: SortBy): Promise<void>;
+  openProcess(process: ProcessInstance): Promise<void>;
   applyFilter(filter: ProcessInstanceFilter): Promise<void>;
   applySorting(sortBy: SortBy): Promise<void>;
+  handleProcessSkip(processInstance: ProcessInstance): Promise<void>;
+  handleProcessRetry(processInstance: ProcessInstance): Promise<void>;
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
+  handleProcessMultipleAction(
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ): Promise<BulkProcessInstanceActionResponse>;
   query(offset: number, limit: number): Promise<ProcessInstance[]>;
   getChildProcessesQuery(
     rootProcessInstanceId: string

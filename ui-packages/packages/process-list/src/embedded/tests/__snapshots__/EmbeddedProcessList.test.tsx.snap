@@ -7,7 +7,12 @@ exports[`EmbeddedProcessList tests Snapshot 1`] = `
       "applyFilter": [MockFunction],
       "applySorting": [MockFunction],
       "getChildProcessesQuery": [MockFunction],
+      "handleProcessAbort": [MockFunction],
+      "handleProcessMultipleAction": [MockFunction],
+      "handleProcessRetry": [MockFunction],
+      "handleProcessSkip": [MockFunction],
       "initialLoad": [MockFunction],
+      "openProcess": [MockFunction],
       "query": [MockFunction],
     }
   }

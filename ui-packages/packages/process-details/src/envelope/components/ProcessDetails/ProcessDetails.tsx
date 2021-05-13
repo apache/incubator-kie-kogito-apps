@@ -40,11 +40,22 @@ import {
   ServerErrors
 } from '@kogito-apps/components-common';
 import {
+  ProcessInfoModal,
+  Job,
   ProcessInstance,
-  ProcessInstanceState
+  ProcessInstanceState,
+  setTitle,
+  TitleType,
+  SvgSuccessResponse,
+  SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
 import { ProcessDetailsDriver } from '../../../api';
+import ProcessDiagram from '../ProcessDiagram/ProcessDiagram';
+import JobsPanel from '../JobsPanel/JobsPanel';
+import ProcessDiagramErrorModal from '../ProcessDiagramErrorModal/ProcessDiagramErrorModal';
+import SVG from 'react-inlinesvg';
 import '../styles.css';
+import ProcessDetailsPanel from '../ProcessDetailsPanel/ProcessDetailsPanel';
 
 interface ProcessDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -52,12 +63,15 @@ interface ProcessDetailsProps {
   id: string;
 }
 
+type svgResponse = SvgSuccessResponse | SvgErrorResponse;
+
 const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
   id
 }) => {
   const [data, setData] = useState<any>({});
+  const [jobs, setJobs] = useState<Job[]>([]);
   //@ts-ignore
   const [updateJson, setUpdateJson] = useState<any>({});
   //@ts-ignore
@@ -67,16 +81,23 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [confirmationModal, setConfirmationModal] = useState<boolean>(false);
   const [variableError, setVariableError] = useState();
-  //@ts-ignore
-  const [svg, setSvg] = useState(null);
+  const [svg, setSvg] = useState<JSX.Element>(null);
+  const [svgError, setSvgError] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const [svgErrorModalOpen, setSvgErrorModalOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState<boolean>(false);
+  const [infoModalTitle, setInfoModalTitle] = useState<string>('');
+  const [titleType, setTitleType] = useState<string>('');
+  const [infoModalContent, setInfoModalContent] = useState<string>('');
 
   const initLoad = async (): Promise<void> => {
     setIsLoading(true);
     try {
       const response: ProcessInstance = await driver.processDetailsQuery(id);
+      const jobsResponse: Job[] = await driver.jobsQuery(id);
       response && setData(response);
+      jobsResponse && setJobs(jobsResponse);
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -84,7 +105,46 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     }
   };
 
+  const handleSvgErrorModal = (): void => {
+    setSvgErrorModalOpen(!svgErrorModalOpen);
+  };
+
+  const errorModalAction: JSX.Element[] = [
+    <Button
+      key="confirm-selection"
+      variant="primary"
+      onClick={handleSvgErrorModal}
+    >
+      OK
+    </Button>
+  ];
+
   useEffect(() => {
+    const handleSvgApi = async (): Promise<void> => {
+      if (data && data.id === id) {
+        const response: svgResponse = await driver.getProcessDiagram(data);
+        if (response && response.svg) {
+          const temp = <SVG src={response.svg} />;
+          setSvg(temp);
+        } else if (response && response.error) {
+          setSvgError(response.error);
+        }
+      }
+    };
+    /* istanbul ignore else*/
+    if (isEnvelopeConnectedToChannel) {
+      handleSvgApi();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (svgError && svgError.length > 0) {
+      setSvgErrorModalOpen(true);
+    }
+  }, [svgError]);
+
+  useEffect(() => {
+    /* istanbul ignore else*/
     if (isEnvelopeConnectedToChannel) {
       initLoad();
     }
@@ -95,6 +155,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   };
 
   const updateVariablesButton = (): JSX.Element => {
+    /* istanbul ignore else*/
     if (data.serviceUrl !== null) {
       return (
         <Button
@@ -133,8 +194,29 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     );
   };
 
-  const onAbortClick = async (): Promise<void> => {
-    return null;
+  const handleInfoModalToggle = (): void => {
+    setIsInfoModalOpen(!isInfoModalOpen);
+  };
+
+  const onAbortClick = async (
+    processInstance: ProcessInstance
+  ): Promise<void> => {
+    try {
+      await driver.handleProcessAbort(processInstance);
+      setTitleType(TitleType.SUCCESS);
+      setInfoModalTitle('Abort operation');
+      setInfoModalContent(
+        `The process ${processInstance.processName} was successfully aborted.`
+      );
+    } catch (abortError) {
+      setTitleType(TitleType.FAILURE);
+      setInfoModalTitle('Abort operation');
+      setInfoModalContent(
+        `Failed to abort process ${processInstance.processName}. Message: ${abortError.message}`
+      );
+    } finally {
+      handleInfoModalToggle();
+    }
   };
 
   const abortButton = (): JSX.Element => {
@@ -146,7 +228,11 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       data.serviceUrl !== null
     ) {
       return (
-        <Button variant="secondary" id="abort-button" onClick={onAbortClick}>
+        <Button
+          variant="secondary"
+          id="abort-button"
+          onClick={() => onAbortClick(data)}
+        >
           Abort
         </Button>
       );
@@ -163,7 +249,12 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex>
         <FlexItem>
-          {svg !== null && svg.props.src && <Card> Process Diagram</Card>}
+          {svg !== null && svg.props.src && (
+            <Card>
+              {' '}
+              <ProcessDiagram svg={svg} />{' '}
+            </Card>
+          )}
         </FlexItem>
       </Flex>
     );
@@ -172,7 +263,9 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const renderProcessDetails = (): JSX.Element => {
     return (
       <Flex direction={{ default: 'column' }} flex={{ default: 'flex_1' }}>
-        <FlexItem>Process Details</FlexItem>
+        <FlexItem>
+          <ProcessDetailsPanel processInstance={data} driver={driver} />
+        </FlexItem>
         {data.milestones.length > 0 && <FlexItem>Milestones</FlexItem>}
       </Flex>
     );
@@ -187,6 +280,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       </Flex>
     );
   };
+
   const renderPanels = (): JSX.Element => {
     if (svg !== null && svg.props.src) {
       return (
@@ -379,7 +473,9 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
                   flex={{ default: 'flex_1' }}
                 >
                   <FlexItem>Process Timeline</FlexItem>
-                  <FlexItem>Jobs Panel</FlexItem>
+                  <FlexItem>
+                    <JobsPanel jobs={jobs} driver={driver} />
+                  </FlexItem>
                   {data.addons.includes('process-management') &&
                     data.state !== ProcessInstanceState.Completed &&
                     data.state !== ProcessInstanceState.Aborted &&
@@ -393,7 +489,19 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
               </Flex>
             </>
           ) : (
-            <KogitoSpinner spinnerText="Loading process details..." />
+            <Card>
+              <KogitoSpinner spinnerText="Loading process details..." />
+            </Card>
+          )}
+          {svgErrorModalOpen && (
+            <ProcessDiagramErrorModal
+              errorString={svgError}
+              errorModalOpen={svgErrorModalOpen}
+              errorModalAction={errorModalAction}
+              handleErrorModal={handleSvgErrorModal}
+              label="svg error modal"
+              title={setTitle('failure', 'Process Diagram')}
+            />
           )}
         </>
       ) : (
@@ -405,6 +513,13 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
           )}
         </>
       )}
+      <ProcessInfoModal
+        isModalOpen={isInfoModalOpen}
+        handleModalToggle={handleInfoModalToggle}
+        modalTitle={setTitle(titleType, infoModalTitle)}
+        modalContent={infoModalContent}
+        processName={data && data.processName}
+      />
     </>
   );
 };
