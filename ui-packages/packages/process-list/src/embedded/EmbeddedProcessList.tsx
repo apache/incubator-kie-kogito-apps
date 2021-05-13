@@ -27,10 +27,12 @@ import { ProcessListChannelApiImpl } from './ProcessListChannelApiImpl';
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { init } from '../envelope';
 import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
+import { ProcessListState } from '../api';
 
 export interface Props {
   targetOrigin: string;
   driver: ProcessListDriver;
+  initialState: ProcessListState;
 }
 
 export const EmbeddedProcessList = React.forwardRef<ProcessListApi, Props>(
@@ -59,10 +61,15 @@ export const EmbeddedProcessList = React.forwardRef<ProcessListApi, Props>(
             }
           }
         });
-        return envelopeServer.envelopeApi.requests.processList__init({
-          origin: envelopeServer.origin,
-          envelopeServerId: envelopeServer.id
-        });
+        return envelopeServer.envelopeApi.requests.processList__init(
+          {
+            origin: envelopeServer.origin,
+            envelopeServerId: envelopeServer.id
+          },
+          {
+            initialState: { ...props.initialState }
+          }
+        );
       },
       []
     );

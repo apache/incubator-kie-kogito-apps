@@ -25,7 +25,7 @@ import PageTitle from '../PageTitle/PageTitle';
 interface PageSectionHeaderProps {
   titleText: string;
   breadcrumbText: string[];
-  breadcrumbPath: string[];
+  breadcrumbPath: any;
 }
 const PageSectionHeader: React.FC<PageSectionHeaderProps> = ({
   titleText,

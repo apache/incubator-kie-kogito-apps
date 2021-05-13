@@ -26,3 +26,7 @@
 .kogito-process-details--NodeTrigger-cardHeight {
     height: 494px;
 }
+
+.kogito-management-console__card-size {
+    height: 100%
+}

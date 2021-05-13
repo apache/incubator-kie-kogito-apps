@@ -61,6 +61,7 @@ interface ProcessDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: ProcessDetailsDriver;
   id: string;
+  response: ProcessInstance;
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -68,9 +69,10 @@ type svgResponse = SvgSuccessResponse | SvgErrorResponse;
 const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
-  id
+  id,
+  response
 }) => {
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<ProcessInstance>({} as ProcessInstance);
   const [jobs, setJobs] = useState<Job[]>([]);
   //@ts-ignore
   const [updateJson, setUpdateJson] = useState<any>({});
@@ -94,15 +96,21 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const initLoad = async (): Promise<void> => {
     setIsLoading(true);
     try {
-      const response: ProcessInstance = await driver.processDetailsQuery(id);
-      const jobsResponse: Job[] = await driver.jobsQuery(id);
-      response && setData(response);
-      jobsResponse && setJobs(jobsResponse);
+      const processResponse: ProcessInstance = await driver.processDetailsQuery(
+        id
+      );
+      processResponse && setData(processResponse);
+      getAllJobs();
       setIsLoading(false);
     } catch (error) {
       setError(error);
       setIsLoading(false);
     }
+  };
+
+  const getAllJobs = async (): Promise<void> => {
+    const jobsResponse: Job[] = await driver.jobsQuery(id);
+    jobsResponse && setJobs(jobsResponse);
   };
 
   const handleSvgErrorModal = (): void => {
@@ -146,7 +154,8 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   useEffect(() => {
     /* istanbul ignore else*/
     if (isEnvelopeConnectedToChannel) {
-      initLoad();
+      setData(response);
+      getAllJobs();
     }
   }, [isEnvelopeConnectedToChannel]);
 
@@ -266,7 +275,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
         <FlexItem>
           <ProcessDetailsPanel processInstance={data} driver={driver} />
         </FlexItem>
-        {data.milestones.length > 0 && <FlexItem>Milestones</FlexItem>}
+        {data && data.milestones.length > 0 && <FlexItem>Milestones</FlexItem>}
       </Flex>
     );
   };
@@ -507,9 +516,11 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       ) : (
         <>
           {isEnvelopeConnectedToChannel && (
-            <Bullseye>
-              <ServerErrors error={error} variant="large" />
-            </Bullseye>
+            <Card className="kogito-management-console__card-size">
+              <Bullseye>
+                <ServerErrors error={error} variant="large" />
+              </Bullseye>
+            </Card>
           )}
         </>
       )}

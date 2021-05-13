@@ -2,11 +2,13 @@
 
 exports[`WebApp - ProcessDetailsContainer tests Snapshot test with default values 1`] = `
 <ProcessDetailsContainer
+  detailsResponse={Object {}}
   processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
 >
   <ForwardRef
     data-ouia-component-type="process-details-container"
     data-ouia-safe={true}
+    detailsResponse={Object {}}
     driver={
       ProcessDetailsGatewayApiImpl {
         "_ProcessDetailsState": Object {

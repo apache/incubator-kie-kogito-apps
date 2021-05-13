@@ -20,10 +20,11 @@ import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import { ProcessDetailsChannelApi } from '../api';
 import ProcessDetails from './components/ProcessDetails/ProcessDetails';
 import ProcessDetailsEnvelopeViewDriver from './ProcessDetailsEnvelopeViewDriver';
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import '@patternfly/patternfly/patternfly.css';
 
 export interface ProcessDetailsEnvelopeViewApi {
-  initialize: (processId?: string) => void;
+  initialize: (processId?: string, detailsResponse?: ProcessInstance) => void;
 }
 
 interface Props {
@@ -38,12 +39,16 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
     isEnvelopeConnectedToChannel,
     setEnvelopeConnectedToChannel
   ] = useState<boolean>(false);
+  const [response, setResponse] = useState<ProcessInstance>(
+    {} as ProcessInstance
+  );
   const [id, setId] = useState<string>('');
   useImperativeHandle(
     forwardedRef,
     () => ({
-      initialize: processId => {
-        setId(processId);
+      initialize: (id, detailsResponse) => {
+        setResponse(detailsResponse);
+        setId(id);
         setEnvelopeConnectedToChannel(true);
       }
     }),
@@ -55,6 +60,7 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
       <ProcessDetails
         isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}
         driver={new ProcessDetailsEnvelopeViewDriver(props.channelApi)}
+        response={response}
         id={id}
       />
     </React.Fragment>

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ProcessInstance } from 'packages/management-console-shared/dist';
+
 export interface ProcessDetailsEnvelopeApi {
   processDetails__init(
     association: Association,
@@ -27,5 +29,6 @@ export interface Association {
 }
 
 export interface ProcessDetailsInitArgs {
+  detailsResponse: ProcessInstance;
   processId: string;
 }
