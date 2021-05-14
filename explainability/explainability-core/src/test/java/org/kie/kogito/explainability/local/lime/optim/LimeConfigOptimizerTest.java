@@ -19,34 +19,44 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalScore;
+import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class LimeConfigOptimizerTest {
 
     @Test
     void testStabilityOptimization() throws Exception {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
-        DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(5, 100, new Random());
+        Random random = new Random();
+        random.setSeed(4);
+        DataDistribution dataDistribution = DataUtils.generateRandomDataDistribution(5, 100, random);
         List<PredictionInput> samples = dataDistribution.sample(10);
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
-        LimeStabilitySolution optimize = limeConfigOptimizer.optimize(predictions, model);
-        SimpleBigDecimalScore score = optimize.getScore();
-        double expectedStability = score.getScore().doubleValue();
-        assertThat(expectedStability).isGreaterThan(0.5);
-        List<NumericLimeConfigEntity> entities = optimize.getEntities();
-        assertThat(entities).isNotNull();
-        assertThat(entities.size()).isEqualTo(4);
+        LimeConfig initialConfig = new LimeConfig();
+        PredictionInput sample = dataDistribution.sample();
+        PredictionOutput output = model.predictAsync(List.of(sample)).get(Config.DEFAULT_ASYNC_TIMEOUT,
+                                                                          Config.DEFAULT_ASYNC_TIMEUNIT).get(0);
+        Prediction prediction = new SimplePrediction(sample, output);
+        assertThatThrownBy(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, new LimeExplainer(initialConfig), 2, 0.8, 0.8));
+
+        LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
+        assertThat(optimizedConfig).isNotNull();
+        ValidationUtils.validateLocalSaliencyStability(model, prediction, new LimeExplainer(optimizedConfig), 2, 0.8, 0.8);
     }
 
 }

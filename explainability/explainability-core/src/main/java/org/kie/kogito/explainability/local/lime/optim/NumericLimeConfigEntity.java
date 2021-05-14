@@ -51,11 +51,4 @@ public class NumericLimeConfigEntity extends LimeConfigEntity<Double> {
         this.proposedValue = proposedValue;
     }
 
-    @Override
-    public String toString() {
-        return "NumericLimeConfigEntity{" +
-                "name=" + name +
-                ",proposedValue=" + proposedValue +
-                '}';
-    }
 }

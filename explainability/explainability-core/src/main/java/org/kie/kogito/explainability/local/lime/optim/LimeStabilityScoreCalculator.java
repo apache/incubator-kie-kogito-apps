@@ -36,23 +36,11 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
 
     @Override
     public SimpleBigDecimalScore calculateScore(LimeStabilitySolution solution) {
-        List<NumericLimeConfigEntity> entities = solution.getEntities();
-        Map<String, Double> map = new HashMap<>();
-        for (NumericLimeConfigEntity entity : entities) {
-            map.put(entity.getName(), entity.getProposedValue());
-        }
+        LimeConfig config = LimeOptimEntityFactory.toLimeConfig(solution);
         double stabilityScore = 0;
         List<Prediction> predictions = solution.getPredictions();
         if (!predictions.isEmpty()) {
             int topK = 2;
-            Double numericTypeClusterGaussianFilterWidth = map.get(LimeOptimEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);
-            Double numericTypeClusterThreshold = map.get(LimeOptimEntityFactory.EP_NUMERIC_CLUSTER_THRESHOLD);
-            EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
-            LimeConfig config = new LimeConfig()
-                    .withEncodingParams(encodingParams)
-                    .withProximityThreshold(map.get(LimeOptimEntityFactory.PROXIMITY_THRESHOLD))
-                    .withProximityKernelWidth(map.get(LimeOptimEntityFactory.KERNEL_WIDTH));
-
             LimeExplainer limeExplainer = new LimeExplainer(config);
             for (Prediction prediction : predictions) {
                 try {
@@ -79,4 +67,5 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
         // TODO: maybe switch to hard-soft score for pos-neg scores
         return SimpleBigDecimalScore.parseScore(Double.toString(stabilityScore));
     }
+
 }

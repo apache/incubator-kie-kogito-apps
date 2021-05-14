@@ -16,9 +16,12 @@
 package org.kie.kogito.explainability.local.lime.optim;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
+import org.kie.kogito.explainability.model.EncodingParams;
 
 public class LimeOptimEntityFactory {
 
@@ -39,5 +42,22 @@ public class LimeOptimEntityFactory {
         entities.add(new NumericLimeConfigEntity(EP_NUMERIC_CLUSTER_THRESHOLD, numericTypeClusterThreshold, 1e-4, 1e-1));
         return entities;
     }
+
+    public static LimeConfig toLimeConfig(LimeStabilitySolution solution) {
+        List<NumericLimeConfigEntity> entities = solution.getEntities();
+        Map<String, Double> map = new HashMap<>();
+        for (NumericLimeConfigEntity entity : entities) {
+            map.put(entity.getName(), entity.getProposedValue());
+        }
+        Double numericTypeClusterGaussianFilterWidth = map.get(LimeOptimEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);
+        Double numericTypeClusterThreshold = map.get(LimeOptimEntityFactory.EP_NUMERIC_CLUSTER_THRESHOLD);
+        EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
+        LimeConfig config = solution.getInitialConfig()
+                .withEncodingParams(encodingParams)
+                .withProximityThreshold(map.get(LimeOptimEntityFactory.PROXIMITY_THRESHOLD))
+                .withProximityKernelWidth(map.get(LimeOptimEntityFactory.KERNEL_WIDTH));
+        return config;
+    }
+
 
 }

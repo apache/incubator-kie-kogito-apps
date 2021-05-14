@@ -28,6 +28,8 @@ import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalS
 @PlanningSolution
 public class LimeStabilitySolution {
 
+    private LimeConfig initialConfig;
+
     private List<Prediction> predictions;
 
     @PlanningEntityCollectionProperty
@@ -41,10 +43,20 @@ public class LimeStabilitySolution {
     public LimeStabilitySolution() {
     }
 
-    public LimeStabilitySolution(List<Prediction> predictions, List<NumericLimeConfigEntity> entities, PredictionProvider model) {
+    public LimeStabilitySolution(LimeConfig initialConfig, List<Prediction> predictions,
+                                 List<NumericLimeConfigEntity> entities, PredictionProvider model) {
+        this.initialConfig = initialConfig;
         this.predictions = predictions;
         this.entities = entities;
         this.model = model;
+    }
+
+    public LimeConfig getInitialConfig() {
+        return initialConfig;
+    }
+
+    public void setInitialConfig(LimeConfig initialConfig) {
+        this.initialConfig = initialConfig;
     }
 
     public List<NumericLimeConfigEntity> getEntities() {
@@ -67,11 +79,4 @@ public class LimeStabilitySolution {
         this.score = score;
     }
 
-    @Override
-    public String toString() {
-        return "LimeStabilitySolution{" +
-                ", entities=" + entities +
-                ", score=" + score +
-                '}';
-    }
 }
