@@ -61,7 +61,7 @@ public class LimeConfigOptimizer {
     }
 
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
-        List<NumericLimeConfigEntity> entities = LimeOptimEntityFactory.createEntities(config);
+        List<NumericLimeConfigEntity> entities = LimeConfigEntityFactory.createEntities(config);
         LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions, entities, model);
 
         SolverConfig solverConfig = new SolverConfig();
@@ -89,7 +89,7 @@ public class LimeConfigOptimizer {
                 // Wait until the solving ends
                 LimeStabilitySolution finalBestSolution = solverJob.getFinalBestSolution();
                 logger.info("final best solution score {}", finalBestSolution.getScore().getScore());
-                return LimeOptimEntityFactory.toLimeConfig(finalBestSolution);
+                return LimeConfigEntityFactory.toLimeConfig(finalBestSolution);
             } catch (ExecutionException e) {
                 logger.error("Solving failed: {}", e.getMessage());
                 throw new IllegalStateException("Prediction returned an error", e);

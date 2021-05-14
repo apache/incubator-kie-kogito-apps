@@ -23,12 +23,12 @@ import java.util.Map;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.model.EncodingParams;
 
-public class LimeOptimEntityFactory {
+public class LimeConfigEntityFactory {
 
-    public static String KERNEL_WIDTH = "kernel.width";
-    public static String PROXIMITY_THRESHOLD = "proximity.threshold";
-    public static String EP_NUMERIC_CLUSTER_FILTER_WIDTH = "ep.numeric.cluster.filter.width";
-    public static String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
+    public static final String KERNEL_WIDTH = "kernel.width";
+    public static final String PROXIMITY_THRESHOLD = "proximity.threshold";
+    public static final String EP_NUMERIC_CLUSTER_FILTER_WIDTH = "ep.numeric.cluster.filter.width";
+    public static final String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
 
     public static List<NumericLimeConfigEntity> createEntities(LimeConfig config) {
         List<NumericLimeConfigEntity> entities = new ArrayList<>();
@@ -49,14 +49,13 @@ public class LimeOptimEntityFactory {
         for (NumericLimeConfigEntity entity : entities) {
             map.put(entity.getName(), entity.getProposedValue());
         }
-        Double numericTypeClusterGaussianFilterWidth = map.get(LimeOptimEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);
-        Double numericTypeClusterThreshold = map.get(LimeOptimEntityFactory.EP_NUMERIC_CLUSTER_THRESHOLD);
+        Double numericTypeClusterGaussianFilterWidth = map.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);
+        Double numericTypeClusterThreshold = map.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_THRESHOLD);
         EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
-        LimeConfig config = solution.getInitialConfig()
+        return solution.getInitialConfig()
                 .withEncodingParams(encodingParams)
-                .withProximityThreshold(map.get(LimeOptimEntityFactory.PROXIMITY_THRESHOLD))
-                .withProximityKernelWidth(map.get(LimeOptimEntityFactory.KERNEL_WIDTH));
-        return config;
+                .withProximityThreshold(map.get(LimeConfigEntityFactory.PROXIMITY_THRESHOLD))
+                .withProximityKernelWidth(map.get(LimeConfigEntityFactory.KERNEL_WIDTH));
     }
 
 }
