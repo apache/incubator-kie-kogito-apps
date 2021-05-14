@@ -50,7 +50,7 @@ class LimeConfigOptimizerTest {
         LimeConfig initialConfig = new LimeConfig();
         PredictionInput sample = dataDistribution.sample();
         PredictionOutput output = model.predictAsync(List.of(sample)).get(Config.DEFAULT_ASYNC_TIMEOUT,
-                                                                          Config.DEFAULT_ASYNC_TIMEUNIT).get(0);
+                Config.DEFAULT_ASYNC_TIMEUNIT).get(0);
         Prediction prediction = new SimplePrediction(sample, output);
         assertThatThrownBy(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, new LimeExplainer(initialConfig), 2, 0.8, 0.8));
 

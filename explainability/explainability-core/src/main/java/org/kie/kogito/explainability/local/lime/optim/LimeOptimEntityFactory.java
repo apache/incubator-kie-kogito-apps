@@ -59,5 +59,4 @@ public class LimeOptimEntityFactory {
         return config;
     }
 
-
 }

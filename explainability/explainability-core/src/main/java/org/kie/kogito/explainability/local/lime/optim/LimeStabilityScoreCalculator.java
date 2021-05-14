@@ -15,13 +15,10 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.model.EncodingParams;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.LocalSaliencyStability;

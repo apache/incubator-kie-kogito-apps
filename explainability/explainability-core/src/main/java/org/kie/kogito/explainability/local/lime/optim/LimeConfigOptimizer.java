@@ -49,7 +49,7 @@ public class LimeConfigOptimizer {
     private final EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator;
 
     public LimeConfigOptimizer(long timeLimit, int tabuSize, int acceptedCount,
-                               EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator) {
+            EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator) {
         this.timeLimit = timeLimit;
         this.tabuSize = tabuSize;
         this.acceptedCount = acceptedCount;
