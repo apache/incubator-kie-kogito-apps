@@ -28,20 +28,29 @@ module.exports = (req, res, next) => {
           cfResults = [];
         }
         hit++;
+        if (hit === 1) {
+          for (let i = 0; i < 4; i++) {
+            cfResults.unshift(
+              getResult(query.executionId, cfResults.length, false)
+            );
+          }
+        }
         if (hit === 2) {
           for (let i = 0; i < 5; i++) {
-            cfResults.push(
+            cfResults.unshift(
               getResult(query.executionId, cfResults.length, false)
             );
           }
         }
         if (hit === 3) {
           for (let i = 0; i < 6; i++) {
-            cfResults.push(
+            cfResults.unshift(
               getResult(query.executionId, cfResults.length, false)
             );
           }
-          cfResults.push(getResult(query.executionId, cfResults.length, true));
+          cfResults.unshift(
+            getResult(query.executionId, cfResults.length, true)
+          );
           executionId = null;
         }
         try {

@@ -80,11 +80,16 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
   const areInputsSelected = (inputs: CFSearchInput[]) => {
     // filtering all non fixed inputs
     const selectedInputs = inputs.filter(domain => domain.isFixed === false);
-    // checking if all inputs have a domain specified (with the exception of
-    // boolean, which do not require one)
+    // checking if all inputs have a domain specified, with the exception of
+    // boolean (do not require one) and structured inputs (not yet supported)
     return (
       selectedInputs.length > 0 &&
-      selectedInputs.every(input => input.domain || input.typeRef === 'boolean')
+      inputs.every(
+        input =>
+          input.domain ||
+          input.components !== null ||
+          typeof input.value === 'boolean'
+      )
     );
   };
 

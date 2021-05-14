@@ -111,8 +111,8 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                   content={
                     status.isDisabled ? (
                       <div>
-                        Select Inputs an set up Outcomes to run a counterfactual
-                        analysis.
+                        Select Inputs, provide inputs constraints and set up
+                        Outcomes to run a counterfactual analysis.
                       </div>
                     ) : (
                       <div>

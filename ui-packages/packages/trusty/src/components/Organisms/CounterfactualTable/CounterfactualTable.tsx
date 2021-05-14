@@ -22,7 +22,8 @@ import {
   AngleLeftIcon,
   AngleRightIcon,
   GhostIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
+  StarIcon
 } from '@patternfly/react-icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
@@ -130,6 +131,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   };
 
   const canAddConstraint = (input: CFSearchInput) => {
+    return ['string', 'number'].includes(typeof input.value);
+  };
+
+  const canSelectInput = (input: CFSearchInput) => {
     return ['string', 'number', 'boolean'].includes(typeof input.value);
   };
 
@@ -295,14 +300,20 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                           <Td key="id-row_3" />
                           <Td key="id-row_4" />
                           {displayedResults.length > 0 &&
-                            displayedResults[0].map((value, index) => (
+                            displayedResults[0].map((resultId, index) => (
                               <Td
                                 key={`id-row_${index + 4}`}
                                 dataLabel={'Counterfactual Result'}
                               >
-                                <Label variant="outline" color="blue">
-                                  ID# {value}
-                                </Label>
+                                {resultId.stage === 'INTERMEDIATE' ? (
+                                  <Label variant="outline" color="blue">
+                                    ID# {resultId.value}
+                                  </Label>
+                                ) : (
+                                  <Label icon={<StarIcon />} color="green">
+                                    ID# {resultId.value}
+                                  </Label>
+                                )}
                               </Td>
                             ))}
                           <Td key="id-row_6" />
@@ -317,7 +328,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                               onSelect,
                               isSelected: row.isFixed === false,
                               disable: !(
-                                isInputSelectionEnabled && canAddConstraint(row)
+                                isInputSelectionEnabled && canSelectInput(row)
                               )
                             }}
                           />
@@ -336,7 +347,6 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                   onOpenInputDomainEdit(row, rowIndex)
                                 }
                                 icon={!row.domain && <PlusCircleIcon />}
-                                isDisabled={row.isFixed}
                               >
                                 {row.domain ? (
                                   <CounterfactualInputDomain input={row} />
@@ -345,9 +355,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                 )}
                               </Button>
                             )}
-                            {!canAddConstraint(row) && (
-                              <em>Not yet supported</em>
-                            )}
+                            {!canSelectInput(row) && <em>Not yet supported</em>}
                           </Td>
                           <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>
                             {row.components === null && (
@@ -364,7 +372,8 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                   key={`${rowIndex}_${index + 4}`}
                                   dataLabel={'Counterfactual Result'}
                                   className={
-                                    value !== row.value
+                                    value !== row.value &&
+                                    row.components === null
                                       ? 'cf-table__result-value--changed'
                                       : 'cf-table__result-value'
                                   }
@@ -424,12 +433,12 @@ const convertCFResultsInputs = (results: CFAnalysisResult[]) => {
   if (results.length) {
     rows.push([]);
     results.forEach(result => {
-      rows[0].push(result.solutionId);
+      rows[0].push({ value: result.solutionId, stage: result.stage });
       result.inputs.forEach((input, inputIndex) => {
         if (!rows[inputIndex + 1]) {
           rows.push([]);
         }
-        rows[inputIndex + 1].push(input.value);
+        rows[inputIndex + 1].push(input.components === null ? input.value : '');
       });
     });
   }
