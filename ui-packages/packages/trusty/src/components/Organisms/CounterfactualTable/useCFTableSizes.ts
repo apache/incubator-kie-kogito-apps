@@ -1,33 +1,42 @@
 import { useEffect, useState } from 'react';
 import { debounce } from 'lodash';
+
 type useCFTableSizesParameters = {
-  containerSelector: string;
+  headerSelector: string;
+  wrapperSelector: string;
 };
 
 const useCFTableSizes = (parameters: useCFTableSizesParameters) => {
-  const { containerSelector } = parameters;
-  const [containerSize, setContainerSize] = useState(0);
+  const { headerSelector, wrapperSelector } = parameters;
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
   const [windowSize, setWindowSize] = useState();
 
   useEffect(() => {
-    const getContainerSize = () => {
-      const size = document.querySelector(containerSelector).clientWidth - 10;
+    const getContainerWidth = () => {
+      const size = document.querySelector(headerSelector).clientWidth - 10;
       return size < 768 ? 768 : size;
     };
 
-    setContainerSize(getContainerSize());
+    const getContainerHeight = () => {
+      return document.querySelector(wrapperSelector).clientHeight;
+    };
+
+    setContainerWidth(getContainerWidth());
+    setContainerHeight(getContainerHeight());
     setWindowSize(window.innerWidth);
 
     const handleWindowResize = debounce(() => {
-      setContainerSize(getContainerSize);
+      setContainerWidth(getContainerWidth());
+      setContainerHeight(getContainerHeight());
       setWindowSize(window.innerWidth);
     }, 150);
 
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [containerSelector]);
+  }, [headerSelector, wrapperSelector]);
 
-  return { containerSize, windowSize };
+  return { containerWidth, containerHeight, windowSize };
 };
 
 export default useCFTableSizes;

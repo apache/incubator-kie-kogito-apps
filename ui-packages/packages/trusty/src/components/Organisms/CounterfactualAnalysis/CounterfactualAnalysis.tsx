@@ -11,7 +11,6 @@ import {
   StackItem,
   Title
 } from '@patternfly/react-core';
-import { debounce } from 'lodash';
 import {
   cfActions,
   cfInitState,
@@ -33,6 +32,7 @@ import {
   Outcome
 } from '../../../types';
 import './CounterfactualAnalysis.scss';
+import useCFTableSizes from '../CounterfactualTable/useCFTableSizes';
 
 type CounterfactualAnalysisProps = {
   inputs: ItemObject[];
@@ -52,23 +52,11 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
     input: CFSearchInput;
     inputIndex: number;
   }>();
-  const [containerHeight, setContainerHeight] = useState(0);
+  const { containerHeight } = useCFTableSizes({
+    headerSelector: '.execution-header',
+    wrapperSelector: '.counterfactual__wrapper__container'
+  });
   const { runCFAnalysis, cfResults } = useCounterfactualExecution(executionId);
-
-  useEffect(() => {
-    const getHeight = debounce(() => {
-      const size =
-        window.innerHeight -
-        document.querySelector('.pf-c-page__main-breadcrumb').clientHeight -
-        document.querySelector('.pf-c-page__main-section').clientHeight -
-        document.querySelector('.pf-c-page__header').clientHeight -
-        25; // mind the extra space for native scrollbar size
-      setContainerHeight(size);
-    }, 150);
-    getHeight();
-    window.addEventListener('resize', getHeight);
-    return () => window.removeEventListener('resize', getHeight);
-  }, []);
 
   const handleInputDomainEdit = (input: CFSearchInput, inputIndex: number) => {
     setInputDomainEdit({ input, inputIndex });

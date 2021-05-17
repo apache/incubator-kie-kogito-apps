@@ -66,8 +66,9 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState<
     boolean
   >();
-  const { containerSize, windowSize } = useCFTableSizes({
-    containerSelector: '.execution-header'
+  const { containerWidth, windowSize } = useCFTableSizes({
+    headerSelector: '.execution-header',
+    wrapperSelector: '.counterfactual__wrapper__container'
   });
   const scrollbars = useRef(null);
 
@@ -169,13 +170,13 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
       {windowSize > 768 && (
         <div className="cf-table-outer-container">
           <div className="cf-table-inner-container">
-            {containerSize > 0 && (
+            {containerWidth > 0 && (
               <div
                 className="cf-table-container cf-table-container--with-results"
-                style={{ width: containerSize }}
+                style={{ width: containerWidth }}
               >
                 <Scrollbars
-                  style={{ width: containerSize, height: '100%' }}
+                  style={{ width: containerWidth, height: '100%' }}
                   renderTrackHorizontal={handleScrollbarRendering(
                     'cf-table__scroll-track--horizontal'
                   )}
@@ -316,7 +317,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                 )}
                               </Td>
                             ))}
-                          <Td key="id-row_6" />
+                          <Td
+                            key="id-row_6"
+                            className={'cf-table__slider-cell'}
+                          />
                         </Tr>
                       )}
                       {rows.map((row, rowIndex) => (

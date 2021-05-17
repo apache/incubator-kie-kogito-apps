@@ -24,34 +24,38 @@ const Counterfactual = () => {
   return (
     <>
       <Divider className="counterfactual__divider" />
-      {inputData.status === RemoteDataStatus.SUCCESS &&
-      outcomesData.status === RemoteDataStatus.SUCCESS ? (
-        <CounterfactualAnalysis
-          inputs={inputData.data}
-          outcomes={outcomesData.data}
-          executionId={executionId}
-        />
-      ) : (
-        <PageSection variant={'light'} isFilled={true}>
-          <Stack hasGutter={true}>
-            <StackItem>
-              <Title headingLevel="h3" size="2xl">
-                Counterfactual Analysis
-              </Title>
-            </StackItem>
-            <StackItem>
-              <SkeletonFlexStripes
-                stripesNumber={3}
-                stripesWidth={'100px'}
-                stripesHeight={'1.5em'}
-              />
-            </StackItem>
-            <StackItem>
-              <SkeletonDataList rowsCount={5} colsCount={5} />
-            </StackItem>
-          </Stack>
-        </PageSection>
-      )}
+      <div className="counterfactual__wrapper">
+        <div className="counterfactual__wrapper__container">
+          {inputData.status === RemoteDataStatus.SUCCESS &&
+          outcomesData.status === RemoteDataStatus.SUCCESS ? (
+            <CounterfactualAnalysis
+              inputs={inputData.data}
+              outcomes={outcomesData.data}
+              executionId={executionId}
+            />
+          ) : (
+            <PageSection variant={'light'} isFilled={true}>
+              <Stack hasGutter={true}>
+                <StackItem>
+                  <Title headingLevel="h3" size="2xl">
+                    Counterfactual Analysis
+                  </Title>
+                </StackItem>
+                <StackItem>
+                  <SkeletonFlexStripes
+                    stripesNumber={3}
+                    stripesWidth={'100px'}
+                    stripesHeight={'1.5em'}
+                  />
+                </StackItem>
+                <StackItem>
+                  <SkeletonDataList rowsCount={5} colsCount={5} />
+                </StackItem>
+              </Stack>
+            </PageSection>
+          )}
+        </div>
+      </div>
     </>
   );
 };
