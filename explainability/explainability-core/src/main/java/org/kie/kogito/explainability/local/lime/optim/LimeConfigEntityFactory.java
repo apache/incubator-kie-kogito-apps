@@ -27,6 +27,7 @@ public class LimeConfigEntityFactory {
 
     public static final String KERNEL_WIDTH = "kernel.width";
     public static final String PROXIMITY_THRESHOLD = "proximity.threshold";
+    public static final String PROXIMITY_FILTERED_DATASET_MINIMUM = "proximity.filtered.dataset.minimum";
     public static final String EP_NUMERIC_CLUSTER_FILTER_WIDTH = "ep.numeric.cluster.filter.width";
     public static final String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
 
@@ -40,6 +41,8 @@ public class LimeConfigEntityFactory {
         entities.add(new NumericLimeConfigEntity(EP_NUMERIC_CLUSTER_FILTER_WIDTH, numericTypeClusterGaussianFilterWidth, 0.5, 1));
         double numericTypeClusterThreshold = config.getEncodingParams().getNumericTypeClusterThreshold();
         entities.add(new NumericLimeConfigEntity(EP_NUMERIC_CLUSTER_THRESHOLD, numericTypeClusterThreshold, 1e-4, 1e-1));
+        double proximityFilteredDatasetMinimum = config.getProximityFilteredDatasetMinimum().doubleValue();
+        entities.add(new NumericLimeConfigEntity(PROXIMITY_FILTERED_DATASET_MINIMUM, proximityFilteredDatasetMinimum, 0.5, 0.9));
         return entities;
     }
 
@@ -54,6 +57,7 @@ public class LimeConfigEntityFactory {
         EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
         return solution.getInitialConfig()
                 .withEncodingParams(encodingParams)
+                .withProximityFilteredDatasetMinimum(map.get(LimeConfigEntityFactory.PROXIMITY_FILTERED_DATASET_MINIMUM))
                 .withProximityThreshold(map.get(LimeConfigEntityFactory.PROXIMITY_THRESHOLD))
                 .withProximityKernelWidth(map.get(LimeConfigEntityFactory.KERNEL_WIDTH));
     }
