@@ -132,7 +132,8 @@ class CounterfactualExplainerTest {
         PredictionInput input = new PredictionInput(features);
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction =
-                new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null, UUID.randomUUID());
+                new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null,
+                        UUID.randomUUID());
 
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -276,8 +277,6 @@ class CounterfactualExplainerTest {
         constraints.add(true);
         featureBoundaries.add(EmptyFeatureDomain.create());
         featureDistributions.add(new NumericFeatureDistribution(fnum4, (new NormalDistribution(2390.0, 0.3)).sample(1000)));
-
-        DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
 
         final DataDomain dataDomain = new DataDomain(featureBoundaries);
 
@@ -616,8 +615,9 @@ class CounterfactualExplainerTest {
                 constraints,
                 null,
                 UUID.randomUUID());
-        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model, assertIntermediateCounterfactualNotNull)
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        final CounterfactualResult counterfactualResult =
+                counterfactualExplainer.explainAsync(prediction, model, assertIntermediateCounterfactualNotNull)
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
             logger.debug("Entity: {}", entity);
         }
@@ -686,8 +686,9 @@ class CounterfactualExplainerTest {
         final UUID executionId = UUID.randomUUID();
         Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
                 constraints, null, executionId);
-        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model, captureIntermediateIds.andThen(captureExecutionIds))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        final CounterfactualResult counterfactualResult =
+                counterfactualExplainer.explainAsync(prediction, model, captureIntermediateIds.andThen(captureExecutionIds))
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
 
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
             logger.debug("Entity: {}", entity);
