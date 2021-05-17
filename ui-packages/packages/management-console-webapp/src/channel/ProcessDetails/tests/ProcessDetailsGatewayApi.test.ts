@@ -22,22 +22,23 @@ import {
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import {
+  OnOpenProcessInstanceDetailsListener,
   ProcessDetailsGatewayApi,
   ProcessDetailsGatewayApiImpl
 } from '../ProcessDetailsGatewayApi';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import {
   handleJobReschedule,
-  handleAbort,
   jobCancel,
-  getSvg
+  getSvg,
+  handleProcessAbort
 } from '../../../apis/apis';
 
 jest.mock('../../../apis/apis', () => ({
   handleJobReschedule: jest.fn(),
   jobCancel: jest.fn(),
   getSvg: jest.fn(),
-  handleAbort: jest.fn()
+  handleProcessAbort: jest.fn()
 }));
 
 export const JobData: Job = {
@@ -183,19 +184,6 @@ describe('ProcessDetailsGatewayApi tests', () => {
     expect(getSvg).toHaveBeenCalledWith(data);
   });
 
-  it('abortProcess', async () => {
-    const results = {
-      title: 'Abort operation',
-      content: 'The process travels was successfully aborted.',
-      type: 'success'
-    };
-    //@ts-ignore
-    handleAbort.mockReturnValueOnce(results);
-    const abortResult = await gatewayApi.abortProcess(data);
-    expect(handleAbort).toHaveBeenCalledWith(data);
-    expect(abortResult).toStrictEqual(results);
-  });
-
   it('cancelJob', async () => {
     const modalTitle = 'failure';
     const modalContent =
@@ -233,6 +221,10 @@ describe('ProcessDetailsGatewayApi tests', () => {
     });
   });
 
+  it('handleProcessAbort', async () => {
+    await gatewayApi.handleProcessAbort(data);
+    expect(handleProcessAbort).toHaveBeenCalledWith(data);
+  });
   it('processDetailsQuery- success response', () => {
     getProcessDetailsMock.mockReturnValue(Promise.resolve([]));
     gatewayApi.processDetailsQuery(id);
@@ -245,5 +237,21 @@ describe('ProcessDetailsGatewayApi tests', () => {
     gatewayApi.jobsQuery(id);
 
     expect(queries.getJobs).toHaveBeenCalledWith(id);
+  });
+
+  it('openProcessDetails', () => {
+    const listener: OnOpenProcessInstanceDetailsListener = {
+      onOpen: jest.fn()
+    };
+
+    const unsubscribe = gatewayApi.onOpenProcessInstanceDetailsListener(
+      listener
+    );
+
+    gatewayApi.openProcessInstanceDetails('testId');
+
+    expect(listener.onOpen).toHaveBeenLastCalledWith('testId');
+
+    unsubscribe.unSubscribe();
   });
 });

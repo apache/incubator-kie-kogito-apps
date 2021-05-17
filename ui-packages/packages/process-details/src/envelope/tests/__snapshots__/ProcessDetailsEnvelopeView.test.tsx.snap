@@ -8,11 +8,12 @@ exports[`ProcessDetailsEnvelopeView tests Snapshot 2`] = `
     Object {
       "notifications": Object {
         "jobList__sortBy": [MockFunction],
+        "processDetails__openProcessDetails": [MockFunction],
       },
       "requests": Object {
-        "processDetails__abortProcess": [MockFunction],
         "processDetails__cancelJob": [MockFunction],
         "processDetails__getProcessDiagram": [MockFunction],
+        "processDetails__handleProcessAbort": [MockFunction],
         "processDetails__initialLoad": [MockFunction],
         "processDetails__jobsQuery": [MockFunction],
         "processDetails__processDetailsQuery": [MockFunction],
@@ -29,11 +30,12 @@ exports[`ProcessDetailsEnvelopeView tests Snapshot 2`] = `
         "channelApi": Object {
           "notifications": Object {
             "jobList__sortBy": [MockFunction],
+            "processDetails__openProcessDetails": [MockFunction],
           },
           "requests": Object {
-            "processDetails__abortProcess": [MockFunction],
             "processDetails__cancelJob": [MockFunction],
             "processDetails__getProcessDiagram": [MockFunction],
+            "processDetails__handleProcessAbort": [MockFunction],
             "processDetails__initialLoad": [MockFunction],
             "processDetails__jobsQuery": [MockFunction],
             "processDetails__processDetailsQuery": [MockFunction],

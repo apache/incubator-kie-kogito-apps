@@ -4,10 +4,11 @@ exports[`Processdetails jobs pannel component tests Jobs empty response 1`] = `
 <JobsPanel
   driver={
     Object {
-      "abortProcess": [MockFunction],
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction],
+      "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],
       "rescheduleJob": [MockFunction],
     }
@@ -21,10 +22,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
 <JobsPanel
   driver={
     Object {
-      "abortProcess": [MockFunction],
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction],
+      "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],
       "rescheduleJob": [MockFunction],
     }
@@ -144,10 +146,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                       "title": <MockedJobActionsKebab
                         driver={
                           Object {
-                            "abortProcess": [MockFunction],
                             "cancelJob": [MockFunction],
                             "getProcessDiagram": [MockFunction],
+                            "handleProcessAbort": [MockFunction],
                             "jobsQuery": [MockFunction],
+                            "openProcessInstanceDetails": [MockFunction],
                             "processDetailsQuery": [MockFunction],
                             "rescheduleJob": [MockFunction],
                           }
@@ -1270,10 +1273,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                   "title": <MockedJobActionsKebab
                                     driver={
                                       Object {
-                                        "abortProcess": [MockFunction],
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
+                                        "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
                                         "rescheduleJob": [MockFunction],
                                       }
@@ -1317,10 +1321,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                   "title": <MockedJobActionsKebab
                                     driver={
                                       Object {
-                                        "abortProcess": [MockFunction],
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
+                                        "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
                                         "rescheduleJob": [MockFunction],
                                       }
@@ -1373,10 +1378,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -1460,10 +1466,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                   "title": <MockedJobActionsKebab
                                     driver={
                                       Object {
-                                        "abortProcess": [MockFunction],
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
+                                        "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
                                         "rescheduleJob": [MockFunction],
                                       }
@@ -1516,10 +1523,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -1793,10 +1801,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -1849,10 +1858,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                       "title": <MockedJobActionsKebab
                                         driver={
                                           Object {
-                                            "abortProcess": [MockFunction],
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
+                                            "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
                                             "rescheduleJob": [MockFunction],
                                           }
@@ -1963,10 +1973,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -2019,10 +2030,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                       "title": <MockedJobActionsKebab
                                         driver={
                                           Object {
-                                            "abortProcess": [MockFunction],
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
+                                            "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
                                             "rescheduleJob": [MockFunction],
                                           }
@@ -2108,10 +2120,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                       "title": <MockedJobActionsKebab
                                         driver={
                                           Object {
-                                            "abortProcess": [MockFunction],
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
+                                            "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
                                             "rescheduleJob": [MockFunction],
                                           }
@@ -2164,10 +2177,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                         "title": <MockedJobActionsKebab
                                           driver={
                                             Object {
-                                              "abortProcess": [MockFunction],
                                               "cancelJob": [MockFunction],
                                               "getProcessDiagram": [MockFunction],
+                                              "handleProcessAbort": [MockFunction],
                                               "jobsQuery": [MockFunction],
+                                              "openProcessInstanceDetails": [MockFunction],
                                               "processDetailsQuery": [MockFunction],
                                               "rescheduleJob": [MockFunction],
                                             }
@@ -2458,10 +2472,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                             "title": <MockedJobActionsKebab
                                               driver={
                                                 Object {
-                                                  "abortProcess": [MockFunction],
                                                   "cancelJob": [MockFunction],
                                                   "getProcessDiagram": [MockFunction],
+                                                  "handleProcessAbort": [MockFunction],
                                                   "jobsQuery": [MockFunction],
+                                                  "openProcessInstanceDetails": [MockFunction],
                                                   "processDetailsQuery": [MockFunction],
                                                   "rescheduleJob": [MockFunction],
                                                 }
@@ -2514,10 +2529,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                               "title": <MockedJobActionsKebab
                                                 driver={
                                                   Object {
-                                                    "abortProcess": [MockFunction],
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
+                                                    "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
                                                     "rescheduleJob": [MockFunction],
                                                   }
@@ -2603,10 +2619,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                               "title": <MockedJobActionsKebab
                                                 driver={
                                                   Object {
-                                                    "abortProcess": [MockFunction],
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
+                                                    "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
                                                     "rescheduleJob": [MockFunction],
                                                   }
@@ -2659,10 +2676,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                 "title": <MockedJobActionsKebab
                                                   driver={
                                                     Object {
-                                                      "abortProcess": [MockFunction],
                                                       "cancelJob": [MockFunction],
                                                       "getProcessDiagram": [MockFunction],
+                                                      "handleProcessAbort": [MockFunction],
                                                       "jobsQuery": [MockFunction],
+                                                      "openProcessInstanceDetails": [MockFunction],
                                                       "processDetailsQuery": [MockFunction],
                                                       "rescheduleJob": [MockFunction],
                                                     }
@@ -2972,10 +2990,11 @@ exports[`Processdetails jobs pannel component tests Snapshot testing 1`] = `
                                                       <MockedJobActionsKebab
                                                         driver={
                                                           Object {
-                                                            "abortProcess": [MockFunction],
                                                             "cancelJob": [MockFunction],
                                                             "getProcessDiagram": [MockFunction],
+                                                            "handleProcessAbort": [MockFunction],
                                                             "jobsQuery": [MockFunction],
+                                                            "openProcessInstanceDetails": [MockFunction],
                                                             "processDetailsQuery": [MockFunction],
                                                             "rescheduleJob": [MockFunction],
                                                           }
@@ -3032,10 +3051,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
 <JobsPanel
   driver={
     Object {
-      "abortProcess": [MockFunction],
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
+      "handleProcessAbort": [MockFunction],
       "jobsQuery": [MockFunction],
+      "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],
       "rescheduleJob": [MockFunction],
     }
@@ -3179,10 +3199,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                       "title": <MockedJobActionsKebab
                         driver={
                           Object {
-                            "abortProcess": [MockFunction],
                             "cancelJob": [MockFunction],
                             "getProcessDiagram": [MockFunction],
+                            "handleProcessAbort": [MockFunction],
                             "jobsQuery": [MockFunction],
+                            "openProcessInstanceDetails": [MockFunction],
                             "processDetailsQuery": [MockFunction],
                             "rescheduleJob": [MockFunction],
                           }
@@ -4328,10 +4349,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                   "title": <MockedJobActionsKebab
                                     driver={
                                       Object {
-                                        "abortProcess": [MockFunction],
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
+                                        "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
                                         "rescheduleJob": [MockFunction],
                                       }
@@ -4375,10 +4397,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                   "title": <MockedJobActionsKebab
                                     driver={
                                       Object {
-                                        "abortProcess": [MockFunction],
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
+                                        "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
                                         "rescheduleJob": [MockFunction],
                                       }
@@ -4454,10 +4477,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -4564,10 +4588,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                   "title": <MockedJobActionsKebab
                                     driver={
                                       Object {
-                                        "abortProcess": [MockFunction],
                                         "cancelJob": [MockFunction],
                                         "getProcessDiagram": [MockFunction],
+                                        "handleProcessAbort": [MockFunction],
                                         "jobsQuery": [MockFunction],
+                                        "openProcessInstanceDetails": [MockFunction],
                                         "processDetailsQuery": [MockFunction],
                                         "rescheduleJob": [MockFunction],
                                       }
@@ -4643,10 +4668,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -4943,10 +4969,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -5022,10 +5049,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                       "title": <MockedJobActionsKebab
                                         driver={
                                           Object {
-                                            "abortProcess": [MockFunction],
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
+                                            "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
                                             "rescheduleJob": [MockFunction],
                                           }
@@ -5159,10 +5187,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                     "title": <MockedJobActionsKebab
                                       driver={
                                         Object {
-                                          "abortProcess": [MockFunction],
                                           "cancelJob": [MockFunction],
                                           "getProcessDiagram": [MockFunction],
+                                          "handleProcessAbort": [MockFunction],
                                           "jobsQuery": [MockFunction],
+                                          "openProcessInstanceDetails": [MockFunction],
                                           "processDetailsQuery": [MockFunction],
                                           "rescheduleJob": [MockFunction],
                                         }
@@ -5238,10 +5267,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                       "title": <MockedJobActionsKebab
                                         driver={
                                           Object {
-                                            "abortProcess": [MockFunction],
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
+                                            "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
                                             "rescheduleJob": [MockFunction],
                                           }
@@ -5350,10 +5380,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                       "title": <MockedJobActionsKebab
                                         driver={
                                           Object {
-                                            "abortProcess": [MockFunction],
                                             "cancelJob": [MockFunction],
                                             "getProcessDiagram": [MockFunction],
+                                            "handleProcessAbort": [MockFunction],
                                             "jobsQuery": [MockFunction],
+                                            "openProcessInstanceDetails": [MockFunction],
                                             "processDetailsQuery": [MockFunction],
                                             "rescheduleJob": [MockFunction],
                                           }
@@ -5429,10 +5460,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                         "title": <MockedJobActionsKebab
                                           driver={
                                             Object {
-                                              "abortProcess": [MockFunction],
                                               "cancelJob": [MockFunction],
                                               "getProcessDiagram": [MockFunction],
+                                              "handleProcessAbort": [MockFunction],
                                               "jobsQuery": [MockFunction],
+                                              "openProcessInstanceDetails": [MockFunction],
                                               "processDetailsQuery": [MockFunction],
                                               "rescheduleJob": [MockFunction],
                                             }
@@ -5746,10 +5778,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                             "title": <MockedJobActionsKebab
                                               driver={
                                                 Object {
-                                                  "abortProcess": [MockFunction],
                                                   "cancelJob": [MockFunction],
                                                   "getProcessDiagram": [MockFunction],
+                                                  "handleProcessAbort": [MockFunction],
                                                   "jobsQuery": [MockFunction],
+                                                  "openProcessInstanceDetails": [MockFunction],
                                                   "processDetailsQuery": [MockFunction],
                                                   "rescheduleJob": [MockFunction],
                                                 }
@@ -5825,10 +5858,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                               "title": <MockedJobActionsKebab
                                                 driver={
                                                   Object {
-                                                    "abortProcess": [MockFunction],
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
+                                                    "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
                                                     "rescheduleJob": [MockFunction],
                                                   }
@@ -5937,10 +5971,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                               "title": <MockedJobActionsKebab
                                                 driver={
                                                   Object {
-                                                    "abortProcess": [MockFunction],
                                                     "cancelJob": [MockFunction],
                                                     "getProcessDiagram": [MockFunction],
+                                                    "handleProcessAbort": [MockFunction],
                                                     "jobsQuery": [MockFunction],
+                                                    "openProcessInstanceDetails": [MockFunction],
                                                     "processDetailsQuery": [MockFunction],
                                                     "rescheduleJob": [MockFunction],
                                                   }
@@ -6016,10 +6051,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                 "title": <MockedJobActionsKebab
                                                   driver={
                                                     Object {
-                                                      "abortProcess": [MockFunction],
                                                       "cancelJob": [MockFunction],
                                                       "getProcessDiagram": [MockFunction],
+                                                      "handleProcessAbort": [MockFunction],
                                                       "jobsQuery": [MockFunction],
+                                                      "openProcessInstanceDetails": [MockFunction],
                                                       "processDetailsQuery": [MockFunction],
                                                       "rescheduleJob": [MockFunction],
                                                     }
@@ -6377,10 +6413,11 @@ exports[`Processdetails jobs pannel component tests test expiration time 1`] = `
                                                       <MockedJobActionsKebab
                                                         driver={
                                                           Object {
-                                                            "abortProcess": [MockFunction],
                                                             "cancelJob": [MockFunction],
                                                             "getProcessDiagram": [MockFunction],
+                                                            "handleProcessAbort": [MockFunction],
                                                             "jobsQuery": [MockFunction],
+                                                            "openProcessInstanceDetails": [MockFunction],
                                                             "processDetailsQuery": [MockFunction],
                                                             "rescheduleJob": [MockFunction],
                                                           }
