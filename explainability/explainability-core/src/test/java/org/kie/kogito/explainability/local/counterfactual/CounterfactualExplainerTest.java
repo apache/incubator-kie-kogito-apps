@@ -34,12 +34,10 @@ import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
-import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.DataDomain;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
 import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PerturbationContext;
@@ -65,6 +63,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class CounterfactualExplainerTest {
 
@@ -93,7 +95,7 @@ class CounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         PredictionFeatureDomain domain = new PredictionFeatureDomain(dataDomain.getFeatureDomains());
         Prediction prediction =
-                new CounterfactualPrediction(input, output, domain, constraints, null, null, UUID.randomUUID());
+                new CounterfactualPrediction(input, output, domain, constraints, null, UUID.randomUUID());
         return explainer.explainAsync(prediction, model)
                 .get(predictionTimeOut, predictionTimeUnit);
     }
@@ -130,8 +132,7 @@ class CounterfactualExplainerTest {
         PredictionInput input = new PredictionInput(features);
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction =
-                new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null,
-                        null, UUID.randomUUID());
+                new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries), constraints, null, UUID.randomUUID());
 
         final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
@@ -598,9 +599,8 @@ class CounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull = counterfactual -> {
-        };
-
+        @SuppressWarnings("unchecked")
+        final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull = mock(Consumer.class);
         final CounterfactualExplainer counterfactualExplainer =
                 CounterfactualExplainer
                         .builder()
@@ -610,16 +610,21 @@ class CounterfactualExplainerTest {
         PredictionInput input = new PredictionInput(features);
         PredictionProvider model = TestUtils.getSumSkipModel(0);
         PredictionOutput output = new PredictionOutput(goal);
-        Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
-                constraints, null, assertIntermediateCounterfactualNotNull,
+        Prediction prediction = new CounterfactualPrediction(input,
+                output,
+                new PredictionFeatureDomain(featureBoundaries),
+                constraints,
+                null,
                 UUID.randomUUID());
-        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
+        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model, assertIntermediateCounterfactualNotNull)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
             logger.debug("Entity: {}", entity);
         }
 
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
+        //An intermediate result is generated when seed > 0
+        verify(assertIntermediateCounterfactualNotNull, times(seed == 0 ? 0 : 1)).accept(any());
     }
 
     @ParameterizedTest
@@ -680,8 +685,8 @@ class CounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         final UUID executionId = UUID.randomUUID();
         Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
-                constraints, null, captureIntermediateIds.andThen(captureExecutionIds), executionId);
-        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model)
+                constraints, null, executionId);
+        final CounterfactualResult counterfactualResult = counterfactualExplainer.explainAsync(prediction, model, captureIntermediateIds.andThen(captureExecutionIds))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
 
         for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
