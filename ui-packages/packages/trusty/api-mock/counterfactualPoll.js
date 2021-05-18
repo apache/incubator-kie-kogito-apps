@@ -4,6 +4,7 @@ const inputData = require('./mocks/inputData');
 let hit = 0;
 let executionId = null;
 let cfResults = [];
+let baseId = 0;
 
 module.exports = (req, res, next) => {
   const _send = res.send;
@@ -26,31 +27,29 @@ module.exports = (req, res, next) => {
           executionId = query.executionId;
           hit = 0;
           cfResults = [];
+          baseId = 1000;
         }
         hit++;
         if (hit === 1) {
-          for (let i = 0; i < 4; i++) {
-            cfResults.unshift(
-              getResult(query.executionId, cfResults.length, false)
-            );
+          for (let i = 0; i < 10; i++) {
+            cfResults.unshift(getResult(query.executionId, baseId, false));
+            baseId++;
           }
         }
         if (hit === 2) {
-          for (let i = 0; i < 5; i++) {
-            cfResults.unshift(
-              getResult(query.executionId, cfResults.length, false)
-            );
+          for (let i = 0; i < 15; i++) {
+            cfResults.unshift(getResult(query.executionId, baseId, false));
+            baseId++;
           }
+          cfResults.splice(15 - cfResults.length);
         }
         if (hit === 3) {
-          for (let i = 0; i < 6; i++) {
-            cfResults.unshift(
-              getResult(query.executionId, cfResults.length, false)
-            );
+          for (let i = 0; i < 8; i++) {
+            cfResults.unshift(getResult(query.executionId, baseId, false));
+            baseId++;
           }
-          cfResults.unshift(
-            getResult(query.executionId, cfResults.length, true)
-          );
+          cfResults.unshift(getResult(query.executionId, baseId, true));
+          cfResults.splice(15 - cfResults.length);
           executionId = null;
         }
         try {
@@ -72,11 +71,11 @@ module.exports = (req, res, next) => {
   next();
 };
 
-function getResult(executionId, solutionIdBase, isFinal) {
+function getResult(executionId, baseId, isFinal) {
   return {
     ...interim,
     executionId,
-    solutionId: (solutionIdBase + 10001).toString(),
+    solutionId: (baseId + 1).toString(),
     stage: isFinal ? 'FINAL' : 'INTERMEDIATE',
     inputs: inputData.inputs.map((input, index) => {
       if (index === 0) {
