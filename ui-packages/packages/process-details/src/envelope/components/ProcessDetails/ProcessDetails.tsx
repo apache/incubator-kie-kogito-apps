@@ -100,8 +100,8 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       response && setData(response);
       jobsResponse && setJobs(jobsResponse);
       setIsLoading(false);
-    } catch (error) {
-      setError(error);
+    } catch (errorString) {
+      setError(errorString);
       setIsLoading(false);
     }
   };

@@ -63,9 +63,9 @@ const ProcessDetailsNodeTrigger: React.FC<ProcessDetailsNodeTriggerProps &
     (async () => {
       await driver
         .getTriggerableNodes(processInstanceData)
-        .then((nodes: TriggerableNode[]) => {
+        .then((nodeInstances: TriggerableNode[]) => {
           setIsError(false);
-          setNodes(nodes);
+          setNodes(nodeInstances);
         })
         .catch(error => {
           setIsError(true);
