@@ -61,12 +61,13 @@ public class LimeConfigOptimizer {
     }
 
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
-        List<NumericLimeConfigEntity> entities = LimeConfigEntityFactory.createEntities(config);
-        LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions, entities, model);
+        List<NumericLimeConfigEntity> numericEntities = LimeConfigEntityFactory.createNumericEntities(config);
+        List<BooleanLimeConfigEntity> booleanEntities = LimeConfigEntityFactory.createBooleanEntities(config);
+        LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions, numericEntities,
+                booleanEntities, model);
 
         SolverConfig solverConfig = new SolverConfig();
-
-        solverConfig.withEntityClasses(NumericLimeConfigEntity.class);
+        solverConfig.withEntityClasses(NumericLimeConfigEntity.class, BooleanLimeConfigEntity.class);
         solverConfig.withSolutionClass(LimeStabilitySolution.class);
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         scoreDirectorFactoryConfig.setEasyScoreCalculatorClass(scoreCalculator.getClass());

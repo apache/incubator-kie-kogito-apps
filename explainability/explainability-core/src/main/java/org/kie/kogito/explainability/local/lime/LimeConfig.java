@@ -166,7 +166,7 @@ public class LimeConfig {
         return perturbationContext;
     }
 
-    public boolean adaptDatasetVariance() {
+    public boolean isAdaptDatasetVariance() {
         return adaptDatasetVariance;
     }
 
