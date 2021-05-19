@@ -16,7 +16,6 @@
 
 declare namespace Cypress {
   interface Chainable {
-
     /**
      * Return DOM Element which match the value of data-ouia-component-it attribute.
      */
@@ -24,6 +23,6 @@ declare namespace Cypress {
   }
 }
 
-Cypress.Commands.add('ouiaId', (valueStr) => {
+Cypress.Commands.add('ouiaId', valueStr => {
   return cy.get("[data-ouia-component-id='" + valueStr + "']");
 });
