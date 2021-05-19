@@ -110,7 +110,6 @@ exports[`Breadcrumbs renders outcome details breadcrumbs links 1`] = `
                   >
                     <span
                       className="execution-id"
-                      style={Object {}}
                     >
                       #
                       b2b0ed8d
