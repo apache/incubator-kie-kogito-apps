@@ -56,16 +56,15 @@ public class LimeConfigEntityFactory {
     }
 
     public static LimeConfig toLimeConfig(LimeStabilitySolution solution) {
-        List<NumericLimeConfigEntity> numericEntities = solution.getNumericEntities();
         Map<String, Double> numericEntitiesMap = new HashMap<>();
-        for (NumericLimeConfigEntity entity : numericEntities) {
-            numericEntitiesMap.put(entity.getName(), entity.getProposedValue());
-        }
-
-        List<BooleanLimeConfigEntity> booleanEntities = solution.getBooleanEntities();
         Map<String, Boolean> booleanEntitiesMap = new HashMap<>();
-        for (BooleanLimeConfigEntity entity : booleanEntities) {
-            booleanEntitiesMap.put(entity.getName(), entity.getProposedValue());
+        List<LimeConfigEntity> entities = solution.getEntities();
+        for (LimeConfigEntity entity : entities) {
+            if (entity.isNumeric()) {
+                numericEntitiesMap.put(entity.getName(), entity.asDouble());
+            } else {
+                booleanEntitiesMap.put(entity.getName(), entity.asBoolean());
+            }
         }
 
         Double numericTypeClusterGaussianFilterWidth = numericEntitiesMap.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);

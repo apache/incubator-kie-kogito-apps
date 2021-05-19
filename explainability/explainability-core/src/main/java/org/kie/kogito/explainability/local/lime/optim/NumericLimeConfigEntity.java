@@ -22,13 +22,28 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 @PlanningEntity
-public class NumericLimeConfigEntity extends LimeConfigEntity<Double> {
+public class NumericLimeConfigEntity extends LimeConfigEntity {
 
     private double rangeMinimum;
     private double rangeMaximum;
 
     public NumericLimeConfigEntity() {
         super();
+    }
+
+    @Override
+    boolean isNumeric() {
+        return true;
+    }
+
+    @Override
+    double asDouble() {
+        return (double) proposedValue;
+    }
+
+    @Override
+    boolean asBoolean() {
+        return false;
     }
 
     public NumericLimeConfigEntity(String name, double proposedValue, double rangeMinimum, double rangeMaximum) {
@@ -44,7 +59,7 @@ public class NumericLimeConfigEntity extends LimeConfigEntity<Double> {
 
     @PlanningVariable(valueRangeProviderRefs = { "doubleRange" })
     public Double getProposedValue() {
-        return proposedValue;
+        return (double) proposedValue;
     }
 
     public void setProposedValue(Double proposedValue) {

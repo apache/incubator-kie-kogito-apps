@@ -22,7 +22,11 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 
 @PlanningEntity
-public class BooleanLimeConfigEntity extends LimeConfigEntity<Boolean> {
+public class BooleanLimeConfigEntity extends LimeConfigEntity {
+
+    public BooleanLimeConfigEntity() {
+        super();
+    }
 
     public BooleanLimeConfigEntity(String name, Boolean proposedValue) {
         super(name, proposedValue);
@@ -35,10 +39,25 @@ public class BooleanLimeConfigEntity extends LimeConfigEntity<Boolean> {
 
     @PlanningVariable(valueRangeProviderRefs = { "booleanRange" })
     public Boolean getProposedValue() {
-        return proposedValue;
+        return (Boolean) proposedValue;
     }
 
     public void setProposedValue(Boolean proposedValue) {
         this.proposedValue = proposedValue;
+    }
+
+    @Override
+    boolean isNumeric() {
+        return false;
+    }
+
+    @Override
+    double asDouble() {
+        return Double.NaN;
+    }
+
+    @Override
+    boolean asBoolean() {
+        return (boolean) proposedValue;
     }
 }

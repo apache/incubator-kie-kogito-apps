@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -26,8 +27,10 @@ import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalS
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
+import org.optaplanner.core.config.localsearch.LocalSearchPhaseConfig;
 import org.optaplanner.core.config.localsearch.decider.acceptor.LocalSearchAcceptorConfig;
 import org.optaplanner.core.config.localsearch.decider.forager.LocalSearchForagerConfig;
+import org.optaplanner.core.config.phase.PhaseConfig;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.SolverManagerConfig;
@@ -61,24 +64,42 @@ public class LimeConfigOptimizer {
     }
 
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
-        List<NumericLimeConfigEntity> numericEntities = LimeConfigEntityFactory.createNumericEntities(config);
-        List<BooleanLimeConfigEntity> booleanEntities = LimeConfigEntityFactory.createBooleanEntities(config);
-        LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions, numericEntities,
-                booleanEntities, model);
+        List<LimeConfigEntity> entities = new ArrayList<>();
+        entities.addAll(LimeConfigEntityFactory.createNumericEntities(config));
+        entities.addAll(LimeConfigEntityFactory.createBooleanEntities(config));
+
+        LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions,
+                entities, model);
 
         SolverConfig solverConfig = new SolverConfig();
+
         solverConfig.withEntityClasses(NumericLimeConfigEntity.class, BooleanLimeConfigEntity.class);
+
         solverConfig.withSolutionClass(LimeStabilitySolution.class);
+
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         scoreDirectorFactoryConfig.setEasyScoreCalculatorClass(scoreCalculator.getClass());
         solverConfig.setScoreDirectorFactoryConfig(scoreDirectorFactoryConfig);
+
         TerminationConfig terminationConfig = new TerminationConfig();
         terminationConfig.setSecondsSpentLimit(timeLimit);
         solverConfig.setTerminationConfig(terminationConfig);
+
         LocalSearchAcceptorConfig acceptorConfig = new LocalSearchAcceptorConfig();
         acceptorConfig.setEntityTabuSize(tabuSize);
+
         LocalSearchForagerConfig localSearchForagerConfig = new LocalSearchForagerConfig();
         localSearchForagerConfig.setAcceptedCountLimit(acceptedCount);
+
+        LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
+        localSearchPhaseConfig.setAcceptorConfig(acceptorConfig);
+        localSearchPhaseConfig.setForagerConfig(localSearchForagerConfig);
+
+        @SuppressWarnings("rawtypes")
+        List<PhaseConfig> phaseConfigs = new ArrayList<>();
+        phaseConfigs.add(localSearchPhaseConfig);
+
+        solverConfig.setPhaseConfigList(phaseConfigs);
 
         try (SolverManager<LimeStabilitySolution, UUID> solverManager =
                 SolverManager.create(solverConfig, new SolverManagerConfig())) {

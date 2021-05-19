@@ -15,16 +15,16 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
-public abstract class LimeConfigEntity<T> {
+public abstract class LimeConfigEntity {
 
-    protected T proposedValue;
+    protected Object proposedValue;
     protected String name;
 
     protected LimeConfigEntity() {
 
     }
 
-    public LimeConfigEntity(String name, T proposedValue) {
+    public LimeConfigEntity(String name, Object proposedValue) {
         this.name = name;
         this.proposedValue = proposedValue;
     }
@@ -32,4 +32,10 @@ public abstract class LimeConfigEntity<T> {
     public String getName() {
         return name;
     }
+
+    abstract boolean isNumeric();
+
+    abstract double asDouble();
+
+    abstract boolean asBoolean();
 }

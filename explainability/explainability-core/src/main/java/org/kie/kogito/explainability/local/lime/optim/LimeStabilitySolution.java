@@ -33,10 +33,7 @@ public class LimeStabilitySolution {
     private List<Prediction> predictions;
 
     @PlanningEntityCollectionProperty
-    private List<NumericLimeConfigEntity> numericEntities;
-
-    @PlanningEntityCollectionProperty
-    private List<BooleanLimeConfigEntity> booleanEntities;
+    private List<LimeConfigEntity> entities;
 
     private PredictionProvider model;
 
@@ -47,12 +44,10 @@ public class LimeStabilitySolution {
     }
 
     public LimeStabilitySolution(LimeConfig initialConfig, List<Prediction> predictions,
-                                 List<NumericLimeConfigEntity> numericEntities,
-                                 List<BooleanLimeConfigEntity> booleanEntities, PredictionProvider model) {
+                                 List<LimeConfigEntity> entities, PredictionProvider model) {
         this.initialConfig = initialConfig;
         this.predictions = predictions;
-        this.numericEntities = numericEntities;
-        this.booleanEntities = booleanEntities;
+        this.entities = entities;
         this.model = model;
     }
 
@@ -62,10 +57,6 @@ public class LimeStabilitySolution {
 
     public void setInitialConfig(LimeConfig initialConfig) {
         this.initialConfig = initialConfig;
-    }
-
-    public List<NumericLimeConfigEntity> getNumericEntities() {
-        return numericEntities;
     }
 
     public PredictionProvider getModel() {
@@ -84,7 +75,7 @@ public class LimeStabilitySolution {
         this.score = score;
     }
 
-    public List<BooleanLimeConfigEntity> getBooleanEntities() {
-        return booleanEntities;
+    public List<LimeConfigEntity> getEntities() {
+        return entities;
     }
 }
