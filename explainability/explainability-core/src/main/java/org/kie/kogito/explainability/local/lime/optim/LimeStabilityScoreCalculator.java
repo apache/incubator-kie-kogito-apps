@@ -16,6 +16,8 @@
 package org.kie.kogito.explainability.local.lime.optim;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -56,8 +58,13 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                         // TODO: some samples might generate exceptions, hence they shouldn't count
                         stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * predictions.size());
                     }
-                } catch (Exception e) {
-                    LOGGER.error("could not calculate stability for {}", prediction, e);
+                } catch (ExecutionException e) {
+                    LOGGER.error("Saliency stability calculation returned an error {}", e.getMessage());
+                } catch (InterruptedException e) {
+                    LOGGER.error("Interrupted while waiting for saliency stability calculation {}", e.getMessage());
+                    Thread.currentThread().interrupt();
+                } catch (TimeoutException e) {
+                    LOGGER.error("Timed out while waiting for saliency stability calculation");
                 }
             }
         }
