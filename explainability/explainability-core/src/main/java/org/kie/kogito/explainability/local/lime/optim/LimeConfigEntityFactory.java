@@ -30,6 +30,8 @@ public class LimeConfigEntityFactory {
     public static final String PROXIMITY_FILTERED_DATASET_MINIMUM = "proximity.filtered.dataset.minimum";
     public static final String EP_NUMERIC_CLUSTER_FILTER_WIDTH = "ep.numeric.cluster.filter.width";
     public static final String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
+    public static final String SEPARABLE_DATASET_RATIO = "separable.dataset.ratio";
+    public static final String NUMBER_OF_SAMPLES = "samples";
 
     public static List<NumericLimeConfigEntity> createEntities(LimeConfig config) {
         List<NumericLimeConfigEntity> entities = new ArrayList<>();
@@ -42,7 +44,11 @@ public class LimeConfigEntityFactory {
         double numericTypeClusterThreshold = config.getEncodingParams().getNumericTypeClusterThreshold();
         entities.add(new NumericLimeConfigEntity(EP_NUMERIC_CLUSTER_THRESHOLD, numericTypeClusterThreshold, 1e-4, 1e-1));
         double proximityFilteredDatasetMinimum = config.getProximityFilteredDatasetMinimum().doubleValue();
-        entities.add(new NumericLimeConfigEntity(PROXIMITY_FILTERED_DATASET_MINIMUM, proximityFilteredDatasetMinimum, 0.5, 0.9));
+        entities.add(new NumericLimeConfigEntity(PROXIMITY_FILTERED_DATASET_MINIMUM, proximityFilteredDatasetMinimum, 0.1, 0.9));
+        double separableDatasetRatio = config.getSeparableDatasetRatio();
+        entities.add(new NumericLimeConfigEntity(SEPARABLE_DATASET_RATIO, separableDatasetRatio, 0.7, 0.99));
+        double noOfSamples = config.getNoOfSamples();
+        entities.add(new NumericLimeConfigEntity(NUMBER_OF_SAMPLES, noOfSamples, 10, 1000));
         return entities;
     }
 
@@ -57,6 +63,8 @@ public class LimeConfigEntityFactory {
         EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
         return solution.getInitialConfig()
                 .withEncodingParams(encodingParams)
+                .withSamples(map.get(NUMBER_OF_SAMPLES).intValue())
+                .withSeparableDatasetRatio(map.get(SEPARABLE_DATASET_RATIO))
                 .withProximityFilteredDatasetMinimum(map.get(LimeConfigEntityFactory.PROXIMITY_FILTERED_DATASET_MINIMUM))
                 .withProximityThreshold(map.get(LimeConfigEntityFactory.PROXIMITY_THRESHOLD))
                 .withProximityKernelWidth(map.get(LimeConfigEntityFactory.KERNEL_WIDTH));
