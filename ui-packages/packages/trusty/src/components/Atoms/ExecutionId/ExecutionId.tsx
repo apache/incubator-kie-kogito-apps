@@ -10,11 +10,7 @@ const ExecutionId = ({ id }: ExecutionIdProps) => {
     return id.substring(0, 8);
   }, [id]);
 
-  return (
-    <span className="execution-id" style={{}}>
-      #{shortenedId}
-    </span>
-  );
+  return <span className="execution-id">#{shortenedId}</span>;
 };
 
 export default ExecutionId;
