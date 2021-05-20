@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { List, ListItem, ListVariant } from '@patternfly/react-core';
 import { CFGoal } from '../../../types';
 
@@ -9,11 +9,9 @@ type CounterfactualOutcomesSelectedProps = {
 const CounterfactualOutcomesSelected = ({
   goals
 }: CounterfactualOutcomesSelectedProps) => {
-  const [selectedOutcomes, setSelectedOutcomes] = useState<CFGoal[]>([]);
-
-  useEffect(() => {
-    setSelectedOutcomes(goals.filter(goal => !goal.isFixed));
-  }, [goals]);
+  const selectedOutcomes = useMemo(() => goals.filter(goal => !goal.isFixed), [
+    goals
+  ]);
 
   return (
     <>

@@ -351,6 +351,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                   onOpenInputDomainEdit(row, rowIndex)
                                 }
                                 icon={!row.domain && <PlusCircleIcon />}
+                                className={'counterfactual-constraint-edit'}
                               >
                                 {row.domain ? (
                                   <CounterfactualInputDomain input={row} />

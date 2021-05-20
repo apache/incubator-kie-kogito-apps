@@ -127,6 +127,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                     aria-label="Run Counterfactual Analysis"
                     onClick={handleRun}
                     isAriaDisabled={status.isDisabled}
+                    className="counterfactual-run"
                   >
                     Run Counterfactual
                   </Button>
