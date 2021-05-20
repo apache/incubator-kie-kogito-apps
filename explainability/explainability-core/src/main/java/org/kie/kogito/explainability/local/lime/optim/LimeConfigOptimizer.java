@@ -46,12 +46,12 @@ public class LimeConfigOptimizer {
     private static final int DEFAULT_TABU_SIZE = 100;
     private static final int DEFAULT_ACCEPTED_COUNT = 5000;
 
-    private final long timeLimit;
-    private final int tabuSize;
-    private final int acceptedCount;
-    private final EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator;
+    private long timeLimit;
+    private int tabuSize;
+    private int acceptedCount;
+    private EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator;
 
-    public LimeConfigOptimizer(long timeLimit, int tabuSize, int acceptedCount,
+    private LimeConfigOptimizer(long timeLimit, int tabuSize, int acceptedCount,
             EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator) {
         this.timeLimit = timeLimit;
         this.tabuSize = tabuSize;
@@ -61,6 +61,21 @@ public class LimeConfigOptimizer {
 
     public LimeConfigOptimizer() {
         this(DEFAULT_TIME_LIMIT, DEFAULT_TABU_SIZE, DEFAULT_ACCEPTED_COUNT, new LimeStabilityScoreCalculator());
+    }
+
+    public LimeConfigOptimizer withTimeLimit(long timeLimit) {
+        this.timeLimit = timeLimit;
+        return this;
+    }
+
+    public LimeConfigOptimizer withTabuSize(int tabuSize) {
+        this.tabuSize = tabuSize;
+        return this;
+    }
+
+    public LimeConfigOptimizer withAcceptedCount(int acceptedCount) {
+        this.acceptedCount = acceptedCount;
+        return this;
     }
 
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
