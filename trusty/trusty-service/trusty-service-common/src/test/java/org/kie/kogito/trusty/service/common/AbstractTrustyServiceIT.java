@@ -416,9 +416,6 @@ public abstract class AbstractTrustyServiceIT {
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
         decision.setExecutionTimestamp(timestamp);
-        decision.setServiceUrl("serviceUrl");
-        decision.setExecutedModelNamespace("executedModelNamespace");
-        decision.setExecutedModelName("executedModelName");
         decision.setInputs(Collections.singletonList(decisionInput));
 
         trustyService.storeDecision(decision.getExecutionId(), decision);
