@@ -106,7 +106,7 @@ class PrequalificationDmnLimeExplainerTest {
         PredictionProvider model = getModel();
 
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
-        List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
+        List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withBooleanEntities(false);
         Random random = new Random();

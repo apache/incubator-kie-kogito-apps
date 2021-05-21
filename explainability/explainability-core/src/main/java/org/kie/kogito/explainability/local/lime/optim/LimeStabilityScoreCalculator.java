@@ -56,7 +56,8 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                         negativeStabilityScore /= topK;
                         // TODO: differentiate (or weight) between positive and negative
                         // TODO: some samples might generate exceptions, hence they shouldn't count
-                        stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * predictions.size());
+                        stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * predictions.size()
+                                * stability.getDecisions().size());
                     }
                 } catch (ExecutionException e) {
                     LOGGER.error("Saliency stability calculation returned an error {}", e.getMessage());
