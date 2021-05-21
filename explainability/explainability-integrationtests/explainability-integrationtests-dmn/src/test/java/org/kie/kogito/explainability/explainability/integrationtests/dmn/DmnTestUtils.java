@@ -1,0 +1,124 @@
+package org.kie.kogito.explainability.explainability.integrationtests.dmn;
+
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.utils.DataUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+public class DmnTestUtils {
+
+    public static List<PredictionInput> randomFraudScoringInputs() {
+        List<PredictionInput> predictionInputs = new ArrayList<>();
+        List<Map<String, Object>> transactions = new ArrayList<>();
+        Map<String, Object> t1 = new HashMap<>();
+        t1.put("Card Type", "Debit");
+        t1.put("Location", "Local");
+        t1.put("Amount", 1000);
+        t1.put("Auth Code", "Authorized");
+        transactions.add(t1);
+        Map<String, Object> t2 = new HashMap<>();
+        t2.put("Card Type", "Credit");
+        t2.put("Location", "Local");
+        t2.put("Amount", 100000);
+        t2.put("Auth Code", "Denied");
+        transactions.add(t2);
+        Map<String, Object> map = new HashMap<>();
+        map.put("Transactions", transactions);
+        List<Feature> features = new ArrayList<>();
+        features.add(FeatureFactory.newCompositeFeature("context", map));
+        PredictionInput predictionInput = new PredictionInput(features);
+        predictionInputs.add(predictionInput);
+
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            predictionInputs.add(new PredictionInput(perturbFeatures));
+        }
+
+        return predictionInputs;
+    }
+
+    public static List<PredictionInput> randomLoanEligibilityInputs() {
+        List<PredictionInput> predictionInputs = new ArrayList<>();
+
+        Map<String, Object> client = new HashMap<>();
+        client.put("Age", 43);
+        client.put("Salary", 1950);
+        client.put("Existing payments", 100);
+        Map<String, Object> loan = new HashMap<>();
+        loan.put("Duration", 15);
+        loan.put("Installment", 100);
+        Map<String, Object> contextVariables = new HashMap<>();
+        contextVariables.put("Client", client);
+        contextVariables.put("Loan", loan);
+        List<Feature> features = new ArrayList<>();
+        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
+        PredictionInput predictionInput = new PredictionInput(features);
+        predictionInputs.add(predictionInput);
+
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            predictionInputs.add(new PredictionInput(perturbFeatures));
+        }
+
+        return predictionInputs;
+    }
+
+    public static List<PredictionInput> randomPrequalificationInputs() {
+        List<PredictionInput> predictionInputs = new ArrayList<>();
+
+        final Map<String, Object> borrower = new HashMap<>();
+        borrower.put("Monthly Other Debt", 1000);
+        borrower.put("Monthly Income", 10000);
+        final Map<String, Object> contextVariables = new HashMap<>();
+        contextVariables.put("Appraised Value", 500000);
+        contextVariables.put("Loan Amount", 300000);
+        contextVariables.put("Credit Score", 600);
+        contextVariables.put("Borrower", borrower);
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
+        PredictionInput predictionInput = new PredictionInput(features);
+
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            predictionInputs.add(new PredictionInput(perturbFeatures));
+        }
+
+        return predictionInputs;
+    }
+
+    public static List<PredictionInput> randomTrafficViolationInputs() {
+        List<PredictionInput> predictionInputs = new ArrayList<>();
+
+        final Map<String, Object> driver = new HashMap<>();
+        driver.put("Points", 10);
+        final Map<String, Object> violation = new HashMap<>();
+        violation.put("Type", "speed");
+        violation.put("Actual Speed", 150);
+        violation.put("Speed Limit", 130);
+        final Map<String, Object> contextVariables = new HashMap<>();
+        contextVariables.put("Driver", driver);
+        contextVariables.put("Violation", violation);
+        List<Feature> features = new ArrayList<>();
+        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
+        PredictionInput predictionInput = new PredictionInput(features);
+
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            predictionInputs.add(new PredictionInput(perturbFeatures));
+        }
+
+        return predictionInputs;
+    }
+}

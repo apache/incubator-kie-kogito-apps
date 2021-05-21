@@ -60,7 +60,7 @@ class PrequalificationDmnPDPExplainerTest {
 
         PredictionProvider model = new DecisionModelWrapper(decisionModel);
 
-        List<PredictionInput> inputs = getInputs();
+        List<PredictionInput> inputs = DmnTestUtils.randomPrequalificationInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(inputs)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         List<Prediction> predictions = new ArrayList<>();
@@ -75,27 +75,4 @@ class PrequalificationDmnPDPExplainerTest {
         Assertions.assertThat(pdps).hasSize(25);
     }
 
-    private List<PredictionInput> getInputs() {
-        List<PredictionInput> predictionInputs = new ArrayList<>();
-
-        final Map<String, Object> borrower = new HashMap<>();
-        borrower.put("Monthly Other Debt", 1000);
-        borrower.put("Monthly Income", 10000);
-        final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Appraised Value", 500000);
-        contextVariables.put("Loan Amount", 300000);
-        contextVariables.put("Credit Score", 600);
-        contextVariables.put("Borrower", borrower);
-        List<Feature> features = new LinkedList<>();
-        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
-        PredictionInput predictionInput = new PredictionInput(features);
-
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
-            predictionInputs.add(new PredictionInput(perturbFeatures));
-        }
-
-        return predictionInputs;
-    }
 }

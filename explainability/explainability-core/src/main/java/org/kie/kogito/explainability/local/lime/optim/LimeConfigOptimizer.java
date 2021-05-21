@@ -45,22 +45,30 @@ public class LimeConfigOptimizer {
     private static final long DEFAULT_TIME_LIMIT = 30;
     private static final int DEFAULT_TABU_SIZE = 100;
     private static final int DEFAULT_ACCEPTED_COUNT = 5000;
+    private static final boolean DEFAULT_BOOLEAN_ENTITIES = true;
+    private static final boolean DEFAULT_NUMERIC_ENTITIES = true;
 
     private long timeLimit;
     private int tabuSize;
     private int acceptedCount;
+    private boolean numericEntities;
+    private boolean booleanEntities;
     private EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator;
 
     private LimeConfigOptimizer(long timeLimit, int tabuSize, int acceptedCount,
-            EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator) {
+            EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator, boolean numericEntities,
+                                boolean booleanEntities) {
         this.timeLimit = timeLimit;
         this.tabuSize = tabuSize;
         this.acceptedCount = acceptedCount;
         this.scoreCalculator = scoreCalculator;
+        this.numericEntities = numericEntities;
+        this.booleanEntities = booleanEntities;
     }
 
     public LimeConfigOptimizer() {
-        this(DEFAULT_TIME_LIMIT, DEFAULT_TABU_SIZE, DEFAULT_ACCEPTED_COUNT, new LimeStabilityScoreCalculator());
+        this(DEFAULT_TIME_LIMIT, DEFAULT_TABU_SIZE, DEFAULT_ACCEPTED_COUNT, new LimeStabilityScoreCalculator(),
+                DEFAULT_NUMERIC_ENTITIES, DEFAULT_BOOLEAN_ENTITIES);
     }
 
     public LimeConfigOptimizer withTimeLimit(long timeLimit) {
@@ -78,61 +86,82 @@ public class LimeConfigOptimizer {
         return this;
     }
 
+    public LimeConfigOptimizer withNumericEntities(boolean numericEntities) {
+        this.numericEntities = numericEntities;
+        return this;
+    }
+
+    public LimeConfigOptimizer withBooleanEntities(boolean booleanEntities) {
+        this.booleanEntities = booleanEntities;
+        return this;
+    }
+
+    public LimeConfigOptimizer withScoreCalculator(EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator) {
+        this.scoreCalculator = scoreCalculator;
+        return this;
+    }
+
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
         List<LimeConfigEntity> entities = new ArrayList<>();
-        entities.addAll(LimeConfigEntityFactory.createNumericEntities(config));
-        entities.addAll(LimeConfigEntityFactory.createBooleanEntities(config));
+        if (numericEntities) {
+            entities.addAll(LimeConfigEntityFactory.createNumericEntities(config));
+        }
+        if (booleanEntities) {
+            entities.addAll(LimeConfigEntityFactory.createBooleanEntities(config));
+        }
 
-        LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions,
-                entities, model);
+        if (entities.isEmpty()) {
+            return config;
+        } else {
+            LimeStabilitySolution initialSolution = new LimeStabilitySolution(config, predictions, entities, model);
+            SolverConfig solverConfig = new SolverConfig();
 
-        SolverConfig solverConfig = new SolverConfig();
+            solverConfig.withEntityClasses(NumericLimeConfigEntity.class, BooleanLimeConfigEntity.class);
 
-        solverConfig.withEntityClasses(NumericLimeConfigEntity.class, BooleanLimeConfigEntity.class);
+            solverConfig.withSolutionClass(LimeStabilitySolution.class);
 
-        solverConfig.withSolutionClass(LimeStabilitySolution.class);
+            ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
+            scoreDirectorFactoryConfig.setEasyScoreCalculatorClass(scoreCalculator.getClass());
+            solverConfig.setScoreDirectorFactoryConfig(scoreDirectorFactoryConfig);
 
-        ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        scoreDirectorFactoryConfig.setEasyScoreCalculatorClass(scoreCalculator.getClass());
-        solverConfig.setScoreDirectorFactoryConfig(scoreDirectorFactoryConfig);
+            TerminationConfig terminationConfig = new TerminationConfig();
+            terminationConfig.setSecondsSpentLimit(timeLimit);
+            solverConfig.setTerminationConfig(terminationConfig);
 
-        TerminationConfig terminationConfig = new TerminationConfig();
-        terminationConfig.setSecondsSpentLimit(timeLimit);
-        solverConfig.setTerminationConfig(terminationConfig);
+            LocalSearchAcceptorConfig acceptorConfig = new LocalSearchAcceptorConfig();
+            acceptorConfig.setEntityTabuSize(tabuSize);
 
-        LocalSearchAcceptorConfig acceptorConfig = new LocalSearchAcceptorConfig();
-        acceptorConfig.setEntityTabuSize(tabuSize);
+            LocalSearchForagerConfig localSearchForagerConfig = new LocalSearchForagerConfig();
+            localSearchForagerConfig.setAcceptedCountLimit(acceptedCount);
 
-        LocalSearchForagerConfig localSearchForagerConfig = new LocalSearchForagerConfig();
-        localSearchForagerConfig.setAcceptedCountLimit(acceptedCount);
+            LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
+            localSearchPhaseConfig.setAcceptorConfig(acceptorConfig);
+            localSearchPhaseConfig.setForagerConfig(localSearchForagerConfig);
 
-        LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
-        localSearchPhaseConfig.setAcceptorConfig(acceptorConfig);
-        localSearchPhaseConfig.setForagerConfig(localSearchForagerConfig);
+            @SuppressWarnings("rawtypes")
+            List<PhaseConfig> phaseConfigs = new ArrayList<>();
+            phaseConfigs.add(localSearchPhaseConfig);
 
-        @SuppressWarnings("rawtypes")
-        List<PhaseConfig> phaseConfigs = new ArrayList<>();
-        phaseConfigs.add(localSearchPhaseConfig);
+            solverConfig.setPhaseConfigList(phaseConfigs);
 
-        solverConfig.setPhaseConfigList(phaseConfigs);
+            try (SolverManager<LimeStabilitySolution, UUID> solverManager =
+                         SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
-        try (SolverManager<LimeStabilitySolution, UUID> solverManager =
-                SolverManager.create(solverConfig, new SolverManagerConfig())) {
-
-            UUID executionId = UUID.randomUUID();
-            SolverJob<LimeStabilitySolution, UUID> solverJob =
-                    solverManager.solve(executionId, initialSolution);
-            try {
-                // Wait until the solving ends
-                LimeStabilitySolution finalBestSolution = solverJob.getFinalBestSolution();
-                logger.info("final best solution score {}", finalBestSolution.getScore().getScore());
-                return LimeConfigEntityFactory.toLimeConfig(finalBestSolution);
-            } catch (ExecutionException e) {
-                logger.error("Solving failed: {}", e.getMessage());
-                throw new IllegalStateException("Prediction returned an error", e);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new IllegalStateException("Solving failed (Thread interrupted)", e);
+                UUID executionId = UUID.randomUUID();
+                SolverJob<LimeStabilitySolution, UUID> solverJob =
+                        solverManager.solve(executionId, initialSolution);
+                try {
+                    // Wait until the solving ends
+                    LimeStabilitySolution finalBestSolution = solverJob.getFinalBestSolution();
+                    logger.info("final best solution score {}", finalBestSolution.getScore().getScore());
+                    return LimeConfigEntityFactory.toLimeConfig(finalBestSolution);
+                } catch (ExecutionException e) {
+                    logger.error("Solving failed: {}", e.getMessage());
+                    throw new IllegalStateException("Prediction returned an error", e);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new IllegalStateException("Solving failed (Thread interrupted)", e);
+                }
             }
         }
     }

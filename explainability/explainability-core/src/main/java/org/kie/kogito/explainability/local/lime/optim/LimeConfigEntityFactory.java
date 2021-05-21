@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.model.EncodingParams;
+import org.kie.kogito.explainability.model.PerturbationContext;
 
 public class LimeConfigEntityFactory {
 
@@ -32,6 +33,7 @@ public class LimeConfigEntityFactory {
     public static final String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
     public static final String SEPARABLE_DATASET_RATIO = "separable.dataset.ratio";
     public static final String NUMBER_OF_SAMPLES = "samples";
+    public static final String NUMBER_OF_PERTURBATIONS = "perturbations";
     public static final String PROXIMITY_FILTER_ENABLED = "proximity.filter.enabled";
     public static final String PENALIZE_BALANCE_SPARSE = "penalize.balance.sparse";
     public static final String ADAPT_DATASET_VARIANCE = "penalize.balance.sparse";
@@ -52,6 +54,8 @@ public class LimeConfigEntityFactory {
         entities.add(new NumericLimeConfigEntity(SEPARABLE_DATASET_RATIO, separableDatasetRatio, 0.7, 0.99));
         double noOfSamples = config.getNoOfSamples();
         entities.add(new NumericLimeConfigEntity(NUMBER_OF_SAMPLES, noOfSamples, 10, 1000));
+        double noOfPerturbations = config.getPerturbationContext().getNoOfPerturbations();
+        entities.add(new NumericLimeConfigEntity(NUMBER_OF_PERTURBATIONS, noOfPerturbations, 1, 10));
         return entities;
     }
 
@@ -67,19 +71,28 @@ public class LimeConfigEntityFactory {
             }
         }
 
-        Double numericTypeClusterGaussianFilterWidth = numericEntitiesMap.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);
-        Double numericTypeClusterThreshold = numericEntitiesMap.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_THRESHOLD);
-        EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
-        return solution.getInitialConfig()
-                .withProximityFilter(booleanEntitiesMap.get(PROXIMITY_FILTER_ENABLED))
-                .withAdaptiveVariance(booleanEntitiesMap.get(ADAPT_DATASET_VARIANCE))
-                .withPenalizeBalanceSparse(booleanEntitiesMap.get(PENALIZE_BALANCE_SPARSE))
-                .withEncodingParams(encodingParams)
-                .withSamples(numericEntitiesMap.get(NUMBER_OF_SAMPLES).intValue())
-                .withSeparableDatasetRatio(numericEntitiesMap.get(SEPARABLE_DATASET_RATIO))
-                .withProximityFilteredDatasetMinimum(numericEntitiesMap.get(LimeConfigEntityFactory.PROXIMITY_FILTERED_DATASET_MINIMUM))
-                .withProximityThreshold(numericEntitiesMap.get(LimeConfigEntityFactory.PROXIMITY_THRESHOLD))
-                .withProximityKernelWidth(numericEntitiesMap.get(LimeConfigEntityFactory.KERNEL_WIDTH));
+        LimeConfig config = solution.getConfig();
+        if (!numericEntitiesMap.isEmpty()) {
+            Double numericTypeClusterGaussianFilterWidth = numericEntitiesMap.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_FILTER_WIDTH);
+            Double numericTypeClusterThreshold = numericEntitiesMap.get(LimeConfigEntityFactory.EP_NUMERIC_CLUSTER_THRESHOLD);
+            EncodingParams encodingParams = new EncodingParams(numericTypeClusterGaussianFilterWidth, numericTypeClusterThreshold);
+            config = config.withPerturbationContext(new PerturbationContext(solution.getConfig()
+                    .getPerturbationContext().getRandom(), numericEntitiesMap.get(NUMBER_OF_PERTURBATIONS).intValue()))
+                    .withEncodingParams(encodingParams)
+                    .withSamples(numericEntitiesMap.get(NUMBER_OF_SAMPLES).intValue())
+                    .withSeparableDatasetRatio(numericEntitiesMap.get(SEPARABLE_DATASET_RATIO))
+                    .withProximityFilteredDatasetMinimum(numericEntitiesMap.get(LimeConfigEntityFactory.PROXIMITY_FILTERED_DATASET_MINIMUM))
+                    .withProximityThreshold(numericEntitiesMap.get(LimeConfigEntityFactory.PROXIMITY_THRESHOLD))
+                    .withProximityKernelWidth(numericEntitiesMap.get(LimeConfigEntityFactory.KERNEL_WIDTH));
+        }
+        if (!booleanEntitiesMap.isEmpty()) {
+            config = config
+                    .withProximityFilter(booleanEntitiesMap.get(PROXIMITY_FILTER_ENABLED))
+                    .withAdaptiveVariance(booleanEntitiesMap.get(ADAPT_DATASET_VARIANCE))
+                    .withPenalizeBalanceSparse(booleanEntitiesMap.get(PENALIZE_BALANCE_SPARSE));
+        }
+        return config;
+
     }
 
     public static List<BooleanLimeConfigEntity> createBooleanEntities(LimeConfig config) {

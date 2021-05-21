@@ -58,7 +58,7 @@ class FraudScoringDmnPDPExplainerTest {
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
         PredictionProvider model = new DecisionModelWrapper(decisionModel);
 
-        List<PredictionInput> inputs = getInputs();
+        List<PredictionInput> inputs = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(inputs)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         List<Prediction> predictions = new ArrayList<>();
@@ -71,37 +71,6 @@ class FraudScoringDmnPDPExplainerTest {
 
         assertThat(pdps).isNotNull();
         Assertions.assertThat(pdps).hasSize(32);
-
     }
 
-    private List<PredictionInput> getInputs() {
-        List<PredictionInput> predictionInputs = new ArrayList<>();
-        List<Map<String, Object>> transactions = new ArrayList<>();
-        Map<String, Object> t1 = new HashMap<>();
-        t1.put("Card Type", "Debit");
-        t1.put("Location", "Local");
-        t1.put("Amount", 1000);
-        t1.put("Auth Code", "Authorized");
-        transactions.add(t1);
-        Map<String, Object> t2 = new HashMap<>();
-        t2.put("Card Type", "Credit");
-        t2.put("Location", "Local");
-        t2.put("Amount", 100000);
-        t2.put("Auth Code", "Denied");
-        transactions.add(t2);
-        Map<String, Object> map = new HashMap<>();
-        map.put("Transactions", transactions);
-        List<Feature> features = new ArrayList<>();
-        features.add(FeatureFactory.newCompositeFeature("context", map));
-        PredictionInput predictionInput = new PredictionInput(features);
-        predictionInputs.add(predictionInput);
-
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
-            predictionInputs.add(new PredictionInput(perturbFeatures));
-        }
-
-        return predictionInputs;
-    }
 }
