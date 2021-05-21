@@ -138,7 +138,7 @@ void checkoutKogitoRepo(String repo, String dirName=repo) {
 }
 
 void checkoutOptaplannerRepo() {
-    dir(dirName) {
+    dir('optaplanner') {
         githubscm.checkoutIfExists(repo, changeAuthor, changeBranch, 'kiegroup', getOptaplannerTargetBranch(), true)
     }
 }
