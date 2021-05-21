@@ -423,7 +423,7 @@ class MatrixUtilsTest {
     void testInvertNormal() {
         double[][] inv = MatrixUtils.jitterInvert(matSquareNonSingular, 1, 1e-9, rn);
         for (int i = 0; i < inv.length; i++) {
-            assertArrayEquals(matSNSInv[i], inv[i], 1e-5);
+            assertArrayEquals(matSNSInv[i], inv[i], 1e-4);
         }
     }
 
