@@ -19,7 +19,6 @@ package org.kie.kogito.trusty.storage.infinispan;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 
