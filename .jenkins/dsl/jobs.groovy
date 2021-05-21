@@ -37,10 +37,11 @@ def getJobParams(String jobName, String jobFolder, String jenkinsfileName, Strin
 
 Map getMultijobPRConfig() {
     return [
+        parallel: true,
         jobs : [
             [
                 id: 'Tests',
-                primary: true
+                primary: true,
             ]
         ]
     ]

@@ -72,6 +72,8 @@ pipeline {
                     if (isNormalPRCheck()) {
                         mvnCmd.withProperty('validate-formatting')
                             .withProfiles(['run-code-coverage'])
+                    } else {
+                        mvnCmd.withProperty('skipUI')
                     }
                     mvnCmd.run('clean install')
                 }
@@ -178,24 +180,24 @@ void cleanContainers() {
     cloud.cleanContainersAndImages('docker')
 }
 
-boolean isNative() {
-    return env['NATIVE'] && env['NATIVE'].toBoolean()
-}
-
 String getQuarkusBranch() {
     return env['QUARKUS_BRANCH']
 }
 
-boolean isDownstream() {
-    return env['DOWNSTREAM'] && env['DOWNSTREAM'].toBoolean()
+boolean isNative() {
+    return env['NATIVE'] && env['NATIVE'].toBoolean()
+}
+
+boolean isDownstreamJob() {
+    return env['DOWNSTREAM_BUILD'] && env['DOWNSTREAM_BUILD'].toBoolean()
+}
+
+String getUpstreamTriggerProject() {
+    return env['UPSTREAM_TRIGGER_PROJECT']
 }
 
 boolean isNormalPRCheck() {
-    return !(isDownstream() || getQuarkusBranch() || isNative())
-}
-
-boolean isMultijobPRCheck() {
-    return env['MULTIJOB_PR_CHECK'] && env['MULTIJOB_PR_CHECK'].toBoolean()
+    return !(isDownstreamJob() || getQuarkusBranch() || isNative())
 }
 
 Integer getTimeoutValue() {
