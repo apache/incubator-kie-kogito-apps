@@ -430,6 +430,7 @@ public abstract class AbstractTrustyServiceIT {
         decision.setInputs(Collections.singletonList(decisionInput));
 
         trustyService.storeDecision(decision.getExecutionId(), decision);
+        return decision;
     }
 
     private void storeModel(String model) {
