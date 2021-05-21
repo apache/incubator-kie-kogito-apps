@@ -15,18 +15,18 @@
  */
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.PerturbationContext;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.utils.DataUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.utils.DataUtils;
 
 public class DmnTestUtils {
 
