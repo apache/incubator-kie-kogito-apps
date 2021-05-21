@@ -25,7 +25,6 @@ import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Disabled
 public class DMNModelWithMetadataMarshallerTest extends MarshallerTestTemplate {
 
     @Test

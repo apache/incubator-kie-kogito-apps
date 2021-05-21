@@ -29,7 +29,6 @@ import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Disabled
 public class LIMEExplainabilityResultMarshallerTest extends MarshallerTestTemplate {
 
     @Test
