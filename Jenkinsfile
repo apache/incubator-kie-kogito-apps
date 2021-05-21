@@ -79,6 +79,13 @@ pipeline {
                 }
             }
             post {
+                always {
+                    script {
+                        archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
+                        junit '**/**/junit.xml'
+                        junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
+                    }
+                }
                 cleanup {
                     script {
                         cleanContainers()
@@ -101,13 +108,6 @@ pipeline {
         }
     }
     post {
-        always {
-            script {
-                archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
-                junit '**/**/junit.xml'
-                junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
-            }
-        }
         failure {
             script {
                 mailer.sendEmail_failedPR()
