@@ -57,7 +57,7 @@ public class LimeConfigOptimizer {
 
     private LimeConfigOptimizer(long timeLimit, int tabuSize, int acceptedCount,
             EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator, boolean numericEntities,
-                                boolean booleanEntities) {
+            boolean booleanEntities) {
         this.timeLimit = timeLimit;
         this.tabuSize = tabuSize;
         this.acceptedCount = acceptedCount;
@@ -145,7 +145,7 @@ public class LimeConfigOptimizer {
             solverConfig.setPhaseConfigList(phaseConfigs);
 
             try (SolverManager<LimeStabilitySolution, UUID> solverManager =
-                         SolverManager.create(solverConfig, new SolverManagerConfig())) {
+                    SolverManager.create(solverConfig, new SolverManagerConfig())) {
 
                 UUID executionId = UUID.randomUUID();
                 SolverJob<LimeStabilitySolution, UUID> solverJob =

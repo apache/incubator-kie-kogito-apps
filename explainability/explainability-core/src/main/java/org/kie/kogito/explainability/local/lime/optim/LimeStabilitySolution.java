@@ -44,7 +44,7 @@ public class LimeStabilitySolution {
     }
 
     public LimeStabilitySolution(LimeConfig config, List<Prediction> predictions,
-                                 List<LimeConfigEntity> entities, PredictionProvider model) {
+            List<LimeConfigEntity> entities, PredictionProvider model) {
         this.config = config;
         this.predictions = predictions;
         this.entities = entities;
