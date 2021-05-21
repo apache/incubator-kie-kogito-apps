@@ -28,9 +28,9 @@ pipeline {
                 sh 'export XAUTHORITY=$HOME/.Xauthority'
                 sh 'chmod 600 $HOME/.vnc/passwd'
 
-                checkoutRepo('kogito-runtimes')
+                checkoutKogitoRepo('kogito-runtimes')
                 checkoutOptaplannerRepo()
-                checkoutRepo('kogito-apps')
+                checkoutKogitoRepo('kogito-apps')
             }
         }
         stage('Build quarkus') {
@@ -131,9 +131,15 @@ pipeline {
     }
 }
 
-void checkoutRepo(String repo, String dirName=repo) {
+void checkoutKogitoRepo(String repo, String dirName=repo) {
     dir(dirName) {
-        githubscm.checkoutIfExists(repo, changeAuthor, changeBranch, 'kiegroup', changeTarget, true)
+        githubscm.checkoutIfExists(repo, changeAuthor, changeBranch, 'kiegroup', getKogitoTargetBranch(), true)
+    }
+}
+
+void checkoutOptaplannerRepo() {
+    dir(dirName) {
+        githubscm.checkoutIfExists(repo, changeAuthor, changeBranch, 'kiegroup', getOptaplannerTargetBranch(), true)
     }
 }
 
@@ -143,20 +149,26 @@ void checkoutQuarkusRepo() {
     }
 }
 
-void checkoutOptaplannerRepo() {
+String getKogitoTargetBranch() {
+    return getTargetBranch(isUpstreamOptaplannerProject() ? -7 : 0)
+}
+
+String getOptaplannerTargetBranch() {
+    return getTargetBranch(isUpstreamKogitoProject() ? 7 : 0)
+}
+
+String getTargetBranch(Integer addToMajor) {
     String targetBranch = changeTarget
     String [] versionSplit = targetBranch.split("\\.")
     if (versionSplit.length == 3
         && versionSplit[0].isNumber()
         && versionSplit[1].isNumber()
-       && versionSplit[2] == 'x') {
-        targetBranch = "${Integer.parseInt(versionSplit[0]) + 7}.${versionSplit[1]}.x"
+        && versionSplit[2] == 'x') {
+        targetBranch = "${Integer.parseInt(versionSplit[0]) + addToMajor}.${versionSplit[1]}.x"
     } else {
         echo "Cannot parse changeTarget as release branch so going further with current value: ${changeTarget}"
-       }
-    dir('optaplanner') {
-        githubscm.checkoutIfExists('optaplanner', changeAuthor, changeBranch, 'kiegroup', targetBranch, true)
-    }
+        }
+    return targetBranch
 }
 
 MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion=true, boolean canNative = false) {
@@ -198,6 +210,14 @@ String getUpstreamTriggerProject() {
 
 boolean isNormalPRCheck() {
     return !(isDownstreamJob() || getQuarkusBranch() || isNative())
+}
+
+boolean isUpstreamKogitoProject() {
+    return getUpstreamTriggerProject() && getUpstreamTriggerProject.startsWith('kogito')
+}
+
+boolean isUpstreamOptaplannerProject() {
+    return getUpstreamTriggerProject() && getUpstreamTriggerProject.startsWith('opta')
 }
 
 Integer getTimeoutValue() {
