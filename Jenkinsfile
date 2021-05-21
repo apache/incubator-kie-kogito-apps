@@ -81,9 +81,9 @@ pipeline {
             post {
                 always {
                     script {
-                        archiveArtifacts artifacts: '**/target/*-runner.jar, **/target/*-runner', fingerprint: true
+                        archiveArtifacts artifacts: '**/target/*-runner.jar,**/target/*-runner', fingerprint: true
                         junit '**/**/junit.xml'
-                        junit '**/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml'
+                        junit '**/target/surefire-reports/**/*.xml,**/target/failsafe-reports/**/*.xml'
                     }
                 }
                 cleanup {
