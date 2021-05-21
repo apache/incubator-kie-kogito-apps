@@ -57,9 +57,6 @@ if (isMainBranch()) {
     setupMultijobPrNativeChecks()
     setupMultijobPrLTSChecks()
 
-    // Kept to be able to merge until the repo config is changed
-    setupPrJob()
-
     // For BDD runtimes PR job
     folder(KogitoConstants.KOGITO_DSL_PULLREQUEST_FOLDER)
     folder(bddRuntimesPrFolder)
@@ -85,12 +82,6 @@ if (!isMainBranch()) {
 /////////////////////////////////////////////////////////////////
 // Methods
 /////////////////////////////////////////////////////////////////
-
-void setupPrJob() {
-    def jobParams = getDefaultJobParams()
-    jobParams.pr.ignore_for_labels = [ KogitoConstants.KOGITO_PR_MULTIJOB_LABEL ]
-    KogitoJobTemplate.createPRJob(this, jobParams)
-}
 
 void setupMultijobPrDefaultChecks() {
     KogitoJobTemplate.createMultijobPRJobs(this, getMultijobPRConfig()) {
