@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
-abstract class MarshallerTestTemplate {
+public abstract class MarshallerTestTemplate {
 
     protected MessageMarshaller.ProtoStreamWriter writer;
     protected MessageMarshaller.ProtoStreamReader reader;
