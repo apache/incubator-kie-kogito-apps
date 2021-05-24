@@ -58,8 +58,8 @@ import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInter
 class PmmlRegressionCategoricalLimeExplainerTest {
 
     private static PMMLRuntime categoricalVariableRegressionRuntime;
-    private static final String[] CATEGORY_ONE = new String[]{"red", "blue", "green", "yellow", "grey", "pink", "white", "black"};
-    private static final String[] CATEGORY_TWO = new String[]{"classA", "classB", "classC", "NA"};
+    private static final String[] CATEGORY_ONE = new String[] { "red", "blue", "green", "yellow", "grey", "pink", "white", "black" };
+    private static final String[] CATEGORY_TWO = new String[] { "classA", "classB", "classC", "NA" };
 
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {

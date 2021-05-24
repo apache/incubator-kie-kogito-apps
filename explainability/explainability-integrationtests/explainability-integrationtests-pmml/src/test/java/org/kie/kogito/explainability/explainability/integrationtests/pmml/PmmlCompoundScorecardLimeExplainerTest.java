@@ -58,7 +58,7 @@ import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInter
 class PmmlCompoundScorecardLimeExplainerTest {
 
     private static PMMLRuntime compoundScoreCardRuntime;
-    private static final String[] CATEGORY_TWO = new String[]{"classA", "classB", "classC", "NA"};
+    private static final String[] CATEGORY_TWO = new String[] { "classA", "classB", "classC", "NA" };
 
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {

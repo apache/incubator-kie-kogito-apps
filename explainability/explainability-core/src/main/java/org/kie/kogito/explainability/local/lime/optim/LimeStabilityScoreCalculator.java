@@ -55,7 +55,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                         }
                         positiveStabilityScore /= topK;
                         negativeStabilityScore /= topK;
-                        // TODO: differentiate (or weight) between positive and negative
+                        // TODO: FAI-495 - differentiate (or weight) between positive and negative
                         stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * stability.getDecisions().size());
                         succeededEvaluations++;
                     }
