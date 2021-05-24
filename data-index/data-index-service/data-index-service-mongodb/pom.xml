@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>data-index-service-mongodb</artifactId>
-  <name>Kogito :: Data Index Service with MongoDB</name>
+  <name>Kogito Apps :: Data Index Service with MongoDB</name>
 
   <dependencies>
     <dependency>
@@ -91,13 +91,13 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <executions>
           <execution>
-            <id>default</id>
+            <id>integration-test</id>
             <goals>
               <goal>integration-test</goal>
             </goals>
             <configuration>
               <excludes combine.children="append"> <!-- Add the exclude to existing ones -->
-                <exclude>**/*Keycloak*IT.java</exclude> <!-- Separate execution for this one -->
+                <exclude>**/Keycloak*IT.java</exclude> <!-- Separate execution for this one -->
               </excludes>
             </configuration>
           </execution>
