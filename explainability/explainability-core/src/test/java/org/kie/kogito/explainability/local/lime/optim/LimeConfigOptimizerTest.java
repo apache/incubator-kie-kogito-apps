@@ -33,7 +33,6 @@ import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 class LimeConfigOptimizerTest {
 
@@ -52,8 +51,6 @@ class LimeConfigOptimizerTest {
         PredictionOutput output = model.predictAsync(List.of(sample)).get(Config.DEFAULT_ASYNC_TIMEOUT,
                 Config.DEFAULT_ASYNC_TIMEUNIT).get(0);
         Prediction prediction = new SimplePrediction(sample, output);
-        assertThatThrownBy(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, new LimeExplainer(initialConfig), 2, 0.8, 0.8));
-
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotNull();
         ValidationUtils.validateLocalSaliencyStability(model, prediction, new LimeExplainer(optimizedConfig), 2, 0.8, 0.8);
