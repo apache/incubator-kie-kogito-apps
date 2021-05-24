@@ -25,11 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DecisionMarshaller extends AbstractModelMarshaller<Decision> {
 
-    private final ObjectMapper mapper;
-
     public DecisionMarshaller(ObjectMapper mapper) {
         super(mapper, Decision.class);
-        this.mapper = mapper;
     }
 
     @Override

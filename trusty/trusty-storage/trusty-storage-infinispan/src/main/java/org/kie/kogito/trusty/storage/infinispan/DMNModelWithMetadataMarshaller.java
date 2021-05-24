@@ -23,11 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class DMNModelWithMetadataMarshaller extends AbstractModelMarshaller<DMNModelWithMetadata> {
 
-    private final ObjectMapper mapper;
-
     public DMNModelWithMetadataMarshaller(ObjectMapper mapper) {
         super(mapper, DMNModelWithMetadata.class);
-        this.mapper = mapper;
     }
 
     @Override

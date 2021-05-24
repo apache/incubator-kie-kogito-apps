@@ -24,11 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LIMEExplainabilityResultMarshaller extends AbstractModelMarshaller<LIMEExplainabilityResult> {
 
-    private final ObjectMapper mapper;
-
     public LIMEExplainabilityResultMarshaller(ObjectMapper mapper) {
         super(mapper, LIMEExplainabilityResult.class);
-        this.mapper = mapper;
     }
 
     @Override

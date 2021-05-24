@@ -23,11 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CounterfactualExplainabilityRequestMarshaller extends AbstractModelMarshaller<CounterfactualExplainabilityRequest> {
 
-    private final ObjectMapper mapper;
-
     public CounterfactualExplainabilityRequestMarshaller(ObjectMapper mapper) {
         super(mapper, CounterfactualExplainabilityRequest.class);
-        this.mapper = mapper;
     }
 
     @Override
