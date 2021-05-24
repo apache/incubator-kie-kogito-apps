@@ -280,6 +280,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                         }
                       >
                         <Tooltip
+                          appendTo={[Function]}
                           content="a1e139d5-4e77-48c9-84ae-34578e904e5a"
                           data-ouia-component-type="item-descriptor"
                           data-ouia-safe={true}
@@ -372,6 +373,9 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                             </FindRefWrapper>
                           </Popper>
                         </Tooltip>
+                        <div
+                          id="kogito-consoles-tooltip-a1e139d5-4e77-48c9-84ae-34578e904e5a"
+                        />
                       </ItemDescriptor>
                     </h2>
                   </Title>
@@ -1472,6 +1476,7 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                                                   }
                                                 >
                                                   <Tooltip
+                                                    appendTo={[Function]}
                                                     content="e4448857-fa0c-403b-ad69-f0a353458b9d"
                                                     data-ouia-component-type="item-descriptor"
                                                     data-ouia-safe={true}
@@ -1564,6 +1569,9 @@ exports[`ProcessDetails tests ProcessDetails tests with success results Snapshot
                                                       </FindRefWrapper>
                                                     </Popper>
                                                   </Tooltip>
+                                                  <div
+                                                    id="kogito-consoles-tooltip-e4448857-fa0c-403b-ad69-f0a353458b9d"
+                                                  />
                                                 </ItemDescriptor>
                                               </button>
                                             </Button>
