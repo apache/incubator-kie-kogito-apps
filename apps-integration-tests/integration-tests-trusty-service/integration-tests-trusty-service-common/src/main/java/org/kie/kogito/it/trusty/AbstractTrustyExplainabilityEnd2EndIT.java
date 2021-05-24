@@ -15,17 +15,20 @@
  */
 package org.kie.kogito.it.trusty;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
 import org.kie.kogito.testcontainers.ExplainabilityServiceMessagingContainer;
-import org.kie.kogito.testcontainers.InfinispanContainer;
 import org.kie.kogito.testcontainers.InfinispanTrustyServiceContainer;
+import org.kie.kogito.testcontainers.KogitoInfinispanContainer;
 import org.kie.kogito.testcontainers.KogitoKafkaContainer;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.KogitoServiceContainer;
+import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.slf4j.Logger;
@@ -33,6 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -96,7 +101,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
         try (
                 final Network network = Network.newNetwork();
 
-                final InfinispanContainer infinispan = new InfinispanContainer()
+                final KogitoInfinispanContainer infinispan = new KogitoInfinispanContainer()
                         .withNetwork(network)
                         .withNetworkAliases(INFINISPAN_ALIAS);
 
@@ -192,6 +197,19 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                                     .extract().as(SalienciesResponse.class);
 
                             assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+
+                            CounterfactualRequestResponse counterfactualRequestResponse = given()
+                                    .port(trustyService.getFirstMappedPort())
+                                    .auth().oauth2(accessToken)
+                                    .when()
+                                    .contentType(ContentType.JSON)
+                                    .body(new CounterfactualRequest(Collections.emptyList(), Collections.emptyList()))
+                                    .post("/executions/decisions/" + executionId + "/explanations/counterfactuals")
+                                    .then().statusCode(200)
+                                    .extract().as(CounterfactualRequestResponse.class);
+
+                            assertEquals(executionId, counterfactualRequestResponse.getExecutionId());
+                            assertNotNull(counterfactualRequestResponse.getCounterfactualId());
                         });
                     });
         }

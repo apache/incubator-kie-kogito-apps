@@ -39,9 +39,7 @@ import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Message;
 import org.kie.kogito.trusty.storage.api.model.MessageExceptionField;
-import org.kie.kogito.trusty.storage.api.model.TypedVariable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -71,7 +69,6 @@ class DecisionsApiV1IT {
     private static final String TEST_OUTCOME_ID = "FirstOutcome";
     private static final long TEST_EXECUTION_TIMESTAMP = 1591692950000L;
     private static final OffsetDateTime TEST_EXECUTION_DATE = OffsetDateTime.ofInstant(Instant.ofEpochMilli(TEST_EXECUTION_TIMESTAMP), ZoneId.of("UTC"));
-    private static final Logger LOGGER = LoggerFactory.getLogger(DecisionsApiV1IT.class);
 
     @InjectMock
     TrustyService trustyService;
@@ -250,7 +247,7 @@ class DecisionsApiV1IT {
         }
     }
 
-    private void assertTypedVariableResponse(TypedVariable expected, TypedVariable actual) {
+    private void assertTypedVariableResponse(TypedVariableWithValue expected, TypedVariableWithValue actual) {
         assertNotNull(actual);
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getTypeRef(), actual.getTypeRef());
@@ -276,8 +273,8 @@ class DecisionsApiV1IT {
 
             case FULL:
                 decision.setInputs(List.of(
-                        new DecisionInput("1", "first", TypedVariable.buildUnit("first", "FirstInput", mapper.readTree("\"Hello\""))),
-                        new DecisionInput("2", "second", TypedVariable.buildUnit("second", "SecondInput", mapper.readTree("12345")))));
+                        new DecisionInput("1", "first", TypedVariableWithValue.buildUnit("first", "FirstInput", mapper.readTree("\"Hello\""))),
+                        new DecisionInput("2", "second", TypedVariableWithValue.buildUnit("second", "SecondInput", mapper.readTree("12345")))));
         }
 
         switch (outcomesStatus) {
@@ -289,7 +286,7 @@ class DecisionsApiV1IT {
                 decision.setOutcomes(List.of(
                         new DecisionOutcome(
                                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                                TypedVariable.buildUnit("result", "ResType", mapper.readTree("\"The First Outcome\"")),
+                                TypedVariableWithValue.buildUnit("result", "ResType", mapper.readTree("\"The First Outcome\"")),
                                 List.of(),
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
@@ -304,7 +301,7 @@ class DecisionsApiV1IT {
         ObjectMapper mapper = new ObjectMapper();
         return new DecisionOutcome(
                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                new TypedVariable(TypedValue.Kind.UNIT, "result", "ResType", mapper.readTree("\"The First Outcome\""), null),
+                new TypedVariableWithValue(TypedValue.Kind.UNIT, "result", "ResType", mapper.readTree("\"The First Outcome\""), null),
                 Collections.emptyList(),
                 List.of(new Message(MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                         new MessageExceptionField("TestException", "Test exception message",
@@ -332,8 +329,8 @@ class DecisionsApiV1IT {
             case FULL:
                 ObjectMapper mapper = new ObjectMapper();
                 return new DecisionStructuredInputsResponse(List.of(
-                        new TypedVariable(TypedValue.Kind.UNIT, "first", "FirstInput", mapper.readTree("\"Hello\""), null),
-                        new TypedVariable(TypedValue.Kind.UNIT, "second", "SecondInput", mapper.readTree("12345"), null)));
+                        new TypedVariableWithValue(TypedValue.Kind.UNIT, "first", "FirstInput", mapper.readTree("\"Hello\""), null),
+                        new TypedVariableWithValue(TypedValue.Kind.UNIT, "second", "SecondInput", mapper.readTree("12345"), null)));
         }
         throw new IllegalStateException();
     }

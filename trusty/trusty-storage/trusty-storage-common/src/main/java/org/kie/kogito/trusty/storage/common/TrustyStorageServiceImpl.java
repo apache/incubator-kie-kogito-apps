@@ -21,9 +21,11 @@ import javax.inject.Inject;
 
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 
 @ApplicationScoped
 public class TrustyStorageServiceImpl implements TrustyStorageService {
@@ -37,12 +39,22 @@ public class TrustyStorageServiceImpl implements TrustyStorageService {
     }
 
     @Override
-    public Storage<String, ExplainabilityResult> getExplainabilityResultStorage() {
-        return storageService.getCache(EXPLAINABILITY_RESULTS_STORAGE, ExplainabilityResult.class);
+    public Storage<String, LIMEExplainabilityResult> getLIMEResultStorage() {
+        return storageService.getCache(LIME_RESULTS_STORAGE, LIMEExplainabilityResult.class);
     }
 
     @Override
     public Storage<String, DMNModelWithMetadata> getModelStorage() {
         return storageService.getCache(MODELS_STORAGE, DMNModelWithMetadata.class);
+    }
+
+    @Override
+    public Storage<String, CounterfactualExplainabilityRequest> getCounterfactualRequestStorage() {
+        return storageService.getCache(COUNTERFACTUAL_REQUESTS_STORAGE, CounterfactualExplainabilityRequest.class);
+    }
+
+    @Override
+    public Storage<String, CounterfactualExplainabilityResult> getCounterfactualResultStorage() {
+        return storageService.getCache(COUNTERFACTUAL_RESULTS_STORAGE, CounterfactualExplainabilityResult.class);
     }
 }

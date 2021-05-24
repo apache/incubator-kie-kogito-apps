@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,27 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.io.Writer;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
@@ -39,7 +46,9 @@ import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
@@ -162,6 +171,21 @@ public class DataUtils {
      * @return a perturbed copy of the input features
      */
     public static List<Feature> perturbFeatures(List<Feature> originalFeatures, PerturbationContext perturbationContext) {
+        return perturbFeatures(originalFeatures, perturbationContext, Collections.emptyMap());
+    }
+
+    /**
+     * Perform perturbations on a fixed number of features in the given input.
+     * A map of feature distributions to draw (all, none or some of them) is given.
+     * Which feature will be perturbed is non deterministic.
+     *
+     * @param originalFeatures the input features that need to be perturbed
+     * @param perturbationContext the perturbation context
+     * @param featureDistributionsMap the map of feature distributions
+     * @return a perturbed copy of the input features
+     */
+    public static List<Feature> perturbFeatures(List<Feature> originalFeatures, PerturbationContext perturbationContext,
+            Map<String, FeatureDistribution> featureDistributionsMap) {
         List<Feature> newFeatures = new ArrayList<>(originalFeatures);
         if (!newFeatures.isEmpty()) {
             // perturb at most in the range [|features|/2), noOfPerturbations]
@@ -180,8 +204,14 @@ public class DataUtils {
                         .distinct().limit(perturbationSize).toArray();
                 for (int index : indexesToBePerturbed) {
                     Feature feature = newFeatures.get(index);
+                    Value newValue;
+                    if (featureDistributionsMap.containsKey(feature.getName())) {
+                        newValue = featureDistributionsMap.get(feature.getName()).sample();
+                    } else {
+                        newValue = feature.getType().perturb(feature.getValue(), perturbationContext);
+                    }
                     Feature perturbedFeature =
-                            FeatureFactory.copyOf(feature, feature.getType().perturb(feature.getValue(), perturbationContext));
+                            FeatureFactory.copyOf(feature, newValue);
                     newFeatures.set(index, perturbedFeature);
                 }
             }
@@ -418,7 +448,7 @@ public class DataUtils {
      */
     public static List<Prediction> getPredictions(List<PredictionInput> inputs, List<PredictionOutput> os) {
         return IntStream.range(0, os.size())
-                .mapToObj(i -> new Prediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
+                .mapToObj(i -> new SimplePrediction(inputs.get(i), os.get(i))).collect(Collectors.toList());
     }
 
     /**
@@ -442,6 +472,33 @@ public class DataUtils {
     }
 
     /**
+     * Replace an existing feature in a list with another feature.
+     * The feature to be replaced is the one whose name is equals to the name of the feature to use as replacement.
+     *
+     * @param featureToUse feature to use as replacmement
+     * @param existingFeatures list of features containing the feature to be replaced
+     * @return a new list of features having the "replaced" feature
+     */
+    public static List<Feature> replaceFeatures(Feature featureToUse, List<Feature> existingFeatures) {
+        List<Feature> newFeatures = new ArrayList<>();
+        for (Feature f : existingFeatures) {
+            Feature newFeature;
+            if (f.getName().equals(featureToUse.getName())) {
+                newFeature = FeatureFactory.copyOf(f, featureToUse.getValue());
+            } else {
+                if (Type.COMPOSITE == f.getType()) {
+                    List<Feature> elements = (List<Feature>) f.getValue().getUnderlyingObject();
+                    newFeature = FeatureFactory.newCompositeFeature(f.getName(), replaceFeatures(featureToUse, elements));
+                } else {
+                    newFeature = FeatureFactory.copyOf(f, f.getValue());
+                }
+            }
+            newFeatures.add(newFeature);
+        }
+        return newFeatures;
+    }
+
+    /**
      * Persist a {@link PartialDependenceGraph} into a CSV file.
      * 
      * @param partialDependenceGraph the PDP to persist
@@ -449,16 +506,94 @@ public class DataUtils {
      * @throws IOException whether any IO error occurs while writing the CSV
      */
     public static void toCSV(PartialDependenceGraph partialDependenceGraph, Path path) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(path)) {
+        try (Writer writer = Files.newBufferedWriter(path)) {
             List<Value> xAxis = partialDependenceGraph.getX();
             List<Value> yAxis = partialDependenceGraph.getY();
-            outputStream.write("feature,output\n".getBytes(StandardCharsets.UTF_8));
+            CSVFormat format = CSVFormat.DEFAULT.withHeader(
+                    partialDependenceGraph.getFeature().getName(), partialDependenceGraph.getOutput().getName());
+            CSVPrinter printer = new CSVPrinter(writer, format);
             for (int i = 0; i < xAxis.size(); i++) {
-                String line = xAxis.get(i).asString().replace(",", "") + ',' +
-                        yAxis.get(i).asString().replace(",", "") + '\n';
-                outputStream.write(line.getBytes(StandardCharsets.UTF_8));
+                printer.printRecord(xAxis.get(i).asString(), yAxis.get(i).asString());
             }
-            outputStream.flush();
         }
+    }
+
+    /**
+     * Read a CSV file into a {@link DataDistribution} object.
+     *
+     * @param file the path to the CSV file
+     * @param schema an ordered list of {@link Type}s as the 'schema', used to determine
+     *        the {@link Type} of each feature / column
+     * @return the parsed CSV as a {@link DataDistribution}
+     * @throws IOException when failing at reading the CSV file
+     * @throws MalformedInputException if any record in CSV has different size with respect to the specified schema
+     */
+    public static DataDistribution readCSV(Path file, List<Type> schema) throws IOException {
+        List<PredictionInput> inputs = new ArrayList<>();
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(reader);
+            for (CSVRecord record : records) {
+                int size = record.size();
+                if (schema.size() == size) {
+                    List<Feature> features = new ArrayList<>();
+                    for (int i = 0; i < size; i++) {
+                        String s = record.get(i);
+                        Type type = schema.get(i);
+                        features.add(new Feature(record.getParser().getHeaderNames().get(i), type, new Value(s)));
+                    }
+                    inputs.add(new PredictionInput(features));
+                } else {
+                    throw new MalformedInputException(size);
+                }
+            }
+        }
+        return new PredictionInputsDataDistribution(inputs);
+    }
+
+    /**
+     * Generate feature distributions from an existing (evantually small) {@link DataDistribution} for each {@link Feature}.
+     * Each feature intervals (min, max) and density information (mean, stdDev) are generated using bootstrap, then
+     * data points are sampled from a normal distribution (see {@link #generateData(double, double, int, Random)}).
+     *
+     * @param dataDistribution data distribution to take feature values from
+     * @param perturbationContext perturbation context
+     * @param featureDistributionSize desired size of generated feature distributions
+     * @param draws number of times sampling from feature values is performed
+     * @param sampleSize size of each sample draw
+     * @return a map feature name -> generated feature distribution
+     */
+    public static Map<String, FeatureDistribution> boostrapFeatureDistributions(DataDistribution dataDistribution,
+            PerturbationContext perturbationContext, int featureDistributionSize, int draws, int sampleSize) {
+        Map<String, FeatureDistribution> featureDistributions = new HashMap<>();
+        for (FeatureDistribution featureDistribution : dataDistribution.asFeatureDistributions()) {
+            Feature feature = featureDistribution.getFeature();
+            if (Type.NUMBER.equals(feature.getType())) {
+                List<Value> values = featureDistribution.getAllSamples();
+                double[] means = new double[draws];
+                double[] stdDevs = new double[draws];
+                double[] mins = new double[draws];
+                double[] maxs = new double[draws];
+                for (int i = 0; i < draws; i++) {
+                    List<Value> sampledValues = DataUtils.sampleWithReplacement(values, sampleSize, perturbationContext.getRandom());
+                    double mean = DataUtils.getMean(sampledValues.stream().mapToDouble(Value::asNumber).toArray());
+                    double stdDev = Math.pow(DataUtils.getStdDev(sampledValues.stream().mapToDouble(Value::asNumber).toArray(), mean), 2);
+                    double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
+                    double max = sampledValues.stream().mapToDouble(Value::asNumber).max().orElse(Double.MAX_VALUE);
+                    means[i] = mean;
+                    stdDevs[i] = stdDev;
+                    mins[i] = min;
+                    maxs[i] = max;
+                }
+                double finalMean = DataUtils.getMean(means);
+                double finalStdDev = Math.sqrt(DataUtils.getMean(stdDevs));
+                double finalMin = DataUtils.getMean(mins);
+                double finalMax = DataUtils.getMean(maxs);
+                double[] doubles = DataUtils.generateData(finalMean, finalStdDev, featureDistributionSize, perturbationContext.getRandom());
+                double[] boundedData = Arrays.stream(doubles).map(d -> Math.min(Math.max(d, finalMin), finalMax)).toArray();
+                NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, boundedData);
+                featureDistributions.put(feature.getName(), numericFeatureDistribution);
+            }
+        }
+        return featureDistributions;
     }
 }

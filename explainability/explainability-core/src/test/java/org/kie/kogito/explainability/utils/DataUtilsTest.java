@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,8 @@ import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.GenericFeatureDistribution;
+import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
@@ -48,6 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DataUtilsTest {
 
@@ -342,9 +347,32 @@ class DataUtilsTest {
     }
 
     @Test
+    void testBootstrap() {
+        List<Value> values = new ArrayList<>();
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        for (int i = 0; i < 4; i++) {
+            values.add(Type.NUMBER.randomValue(perturbationContext));
+        }
+        Feature mockedNumericFeature = TestUtils.getMockedNumericFeature();
+        DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(List.of(
+                new GenericFeatureDistribution(mockedNumericFeature, values)));
+        Map<String, FeatureDistribution> featureDistributionMap = DataUtils.boostrapFeatureDistributions(dataDistribution,
+                perturbationContext, 10, 1, 500);
+        assertThat(featureDistributionMap).isNotNull();
+        assertThat(featureDistributionMap).isNotEmpty();
+        FeatureDistribution actual = featureDistributionMap.get(mockedNumericFeature.getName());
+        assertThat(actual).isNotNull();
+        List<Value> allSamples = actual.getAllSamples();
+        assertThat(allSamples).isNotNull();
+        assertThat(allSamples).hasSize(10);
+    }
+
+    @Test
     void toCSV() {
         Feature feature = mock(Feature.class);
+        when(feature.getName()).thenReturn("feature-1");
         Output output = mock(Output.class);
+        when(output.getName()).thenReturn("decision-1");
         List<Value> x = new ArrayList<>();
         x.add(new Value(1));
         x.add(new Value(2));
@@ -355,5 +383,41 @@ class DataUtilsTest {
         y.add(new Value(4));
         PartialDependenceGraph partialDependenceGraph = new PartialDependenceGraph(feature, output, x, y);
         assertDoesNotThrow(() -> DataUtils.toCSV(partialDependenceGraph, Paths.get("target/test-pdp.csv")));
+    }
+
+    @Test
+    void testReadCsv() throws IOException {
+        List<Type> schema = new ArrayList<>();
+        schema.add(Type.CATEGORICAL);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.BOOLEAN);
+        schema.add(Type.NUMBER);
+        schema.add(Type.NUMBER);
+        DataDistribution dataDistribution = DataUtils.readCSV(
+                Paths.get(getClass().getResource("/mini-train.csv").getFile()), schema);
+        assertThat(dataDistribution).isNotNull();
+        assertThat(dataDistribution.getAllSamples()).hasSize(10);
+    }
+
+    @Test
+    void testReplaceFeature() {
+        List<Feature> features = new ArrayList<>();
+        Feature replacingFeature = FeatureFactory.newTextFeature("f1", "replacement");
+        features.add(FeatureFactory.newTextFeature("f0", "one two three"));
+        features.add(FeatureFactory.newTextFeature("f1", "to be replaced"));
+        features.add(FeatureFactory.newTextFeature("f2", "four five six"));
+        List<Feature> updatedFeatures = DataUtils.replaceFeatures(replacingFeature, features);
+        assertThat(updatedFeatures.get(0)).isEqualTo(features.get(0));
+        assertThat(updatedFeatures.get(2)).isEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1)).isNotEqualTo(features.get(2));
+        assertThat(updatedFeatures.get(1).getValue().asString()).isEqualTo("replacement");
     }
 }

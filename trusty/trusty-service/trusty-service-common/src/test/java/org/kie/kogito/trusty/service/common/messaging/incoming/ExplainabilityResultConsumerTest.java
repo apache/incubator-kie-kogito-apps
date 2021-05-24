@@ -17,27 +17,39 @@
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.enterprise.inject.Instance;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.cloudevents.CloudEventUtils;
-import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityResultDto;
 import org.kie.kogito.explainability.api.FeatureImportanceDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityResultDto;
 import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
+import org.kie.kogito.trusty.service.common.handlers.CounterfactualExplainerServiceHandler;
+import org.kie.kogito.trusty.service.common.handlers.ExplainerServiceHandler;
+import org.kie.kogito.trusty.service.common.handlers.ExplainerServiceHandlerRegistry;
+import org.kie.kogito.trusty.service.common.handlers.LIMEExplainerServiceHandler;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
+import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
+import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import io.cloudevents.CloudEvent;
@@ -67,8 +79,11 @@ class ExplainabilityResultConsumerTest {
     private static final String TEST_OUTCOME_1_ID = "o1-id";
     private static final String TEST_OUTCOME_1_NAME = "outcome1";
 
+    private static final String TEST_COUNTERFACTUAL_ID = "counterfactualId";
+    private static final String TEST_SOLUTION_ID = "solutionId";
+
     private static final Decision TEST_DECISION = new Decision(
-            TEST_EXECUTION_ID, null, null, true, null, null, null,
+            TEST_EXECUTION_ID, null, null, null, true, null, null, null,
             List.of(
                     new DecisionInput(TEST_FEATURE_1_ID, TEST_FEATURE_1_NAME, null),
                     new DecisionInput(TEST_FEATURE_2_ID, TEST_FEATURE_2_NAME, null)),
@@ -78,22 +93,51 @@ class ExplainabilityResultConsumerTest {
     private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_1 = new FeatureImportanceDto(TEST_FEATURE_1_NAME, 1d);
     private static final FeatureImportanceDto TEST_FEATURE_IMPORTANCE_DTO_2 = new FeatureImportanceDto(TEST_FEATURE_2_NAME, -1d);
     private static final SaliencyDto TEST_SALIENCY_DTO = new SaliencyDto(asList(TEST_FEATURE_IMPORTANCE_DTO_1, TEST_FEATURE_IMPORTANCE_DTO_2));
-    private static final ExplainabilityResultDto TEST_RESULT_DTO = ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, singletonMap(TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO));
+    private static final LIMEExplainabilityResultDto TEST_RESULT_DTO = LIMEExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, singletonMap(TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO));
 
     private TrustyService trustyService;
     private StorageExceptionsProvider storageExceptionsProvider;
     private ExplainabilityResultConsumer consumer;
+    private LIMEExplainerServiceHandler limeExplainerServiceHandler;
+    private CounterfactualExplainerServiceHandler counterfactualExplainerServiceHandler;
+    private Instance<ExplainerServiceHandler<?, ?>> explanationHandlers;
+    private ExplainerServiceHandlerRegistry explainerServiceHandlerRegistry;
+    private TrustyStorageService trustyStorage;
 
-    public static CloudEvent buildExplainabilityCloudEvent(ExplainabilityResultDto resultDto) {
+    private static CloudEvent buildLIMEExplainabilityCloudEvent(LIMEExplainabilityResultDto resultDto) {
         return CloudEventUtils.build(
                 resultDto.getExecutionId(),
                 URI.create("explainabilityResult/test"),
                 resultDto,
-                ExplainabilityResultDto.class).get();
+                LIMEExplainabilityResultDto.class).get();
     }
 
-    public static String buildCloudEventJsonString(ExplainabilityResultDto resultDto) {
-        return CloudEventUtils.encode(buildExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
+    private static String buildLIMECloudEventJsonString(LIMEExplainabilityResultDto resultDto) {
+        return CloudEventUtils.encode(buildLIMEExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
+    }
+
+    private static CloudEvent buildCounterfactualExplainabilityCloudEvent(CounterfactualExplainabilityResultDto resultDto) {
+        return CloudEventUtils.build(
+                resultDto.getExecutionId(),
+                URI.create("explainabilityResult/test"),
+                resultDto,
+                CounterfactualExplainabilityResultDto.class).get();
+    }
+
+    private static String buildCounterfactualCloudEventJsonString(CounterfactualExplainabilityResultDto resultDto) {
+        return CloudEventUtils.encode(buildCounterfactualExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
+    }
+
+    private static CloudEvent buildUnknownExplainabilityCloudEvent(BaseExplainabilityResultDto resultDto) {
+        return CloudEventUtils.build(
+                resultDto.getExecutionId(),
+                URI.create("explainabilityResult/test"),
+                resultDto,
+                BaseExplainabilityResultDto.class).get();
+    }
+
+    private static String buildUnknownExplainabilityCloudEventJsonString(BaseExplainabilityResultDto resultDto) {
+        return CloudEventUtils.encode(buildUnknownExplainabilityCloudEvent(resultDto)).orElseThrow(IllegalStateException::new);
     }
 
     private static int compareFeatureImportance(FeatureImportanceModel expected, FeatureImportanceModel actual) {
@@ -103,16 +147,37 @@ class ExplainabilityResultConsumerTest {
     }
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     void setup() {
         trustyService = mock(TrustyService.class);
         storageExceptionsProvider = mock(StorageExceptionsProvider.class);
-        consumer = new ExplainabilityResultConsumer(trustyService, TrustyServiceTestUtils.MAPPER, storageExceptionsProvider);
+        trustyStorage = mock(TrustyStorageService.class);
+        limeExplainerServiceHandler = new LIMEExplainerServiceHandler(trustyStorage);
+        counterfactualExplainerServiceHandler = new CounterfactualExplainerServiceHandler(trustyStorage);
+        explanationHandlers = mock(Instance.class);
+        when(explanationHandlers.stream()).thenReturn(Stream.of(limeExplainerServiceHandler, counterfactualExplainerServiceHandler));
+        explainerServiceHandlerRegistry = new ExplainerServiceHandlerRegistry(explanationHandlers);
+        consumer = new ExplainabilityResultConsumer(trustyService, explainerServiceHandlerRegistry, TrustyServiceTestUtils.MAPPER, storageExceptionsProvider);
     }
 
     @Test
-    void testCorrectCloudEvent() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, emptyMap())));
-        doNothing().when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
+    void testCorrectLIMECloudEvent() {
+        Message<String> message = mockMessage(buildLIMECloudEventJsonString(LIMEExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, emptyMap())));
+        doNothing().when(trustyService).storeExplainabilityResult(any(String.class), any(BaseExplainabilityResult.class));
+
+        testNumberOfInvocations(message, 1);
+    }
+
+    @Test
+    void testCorrectCounterfactualCloudEvent() {
+        Message<String> message = mockMessage(buildCounterfactualCloudEventJsonString(CounterfactualExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID,
+                TEST_COUNTERFACTUAL_ID,
+                TEST_SOLUTION_ID,
+                Boolean.TRUE,
+                CounterfactualExplainabilityResultDto.Stage.FINAL,
+                Collections.emptyMap(),
+                Collections.emptyMap())));
+        doNothing().when(trustyService).storeExplainabilityResult(any(String.class), any(BaseExplainabilityResult.class));
 
         testNumberOfInvocations(message, 1);
     }
@@ -124,15 +189,27 @@ class ExplainabilityResultConsumerTest {
     }
 
     @Test
-    void testExceptionsAreCatched() {
-        Message<String> message = mockMessage(buildCloudEventJsonString(ExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, emptyMap())));
+    void testInvalidPayloadUnknownExplanationType() {
+        BaseExplainabilityResultDto result = new BaseExplainabilityResultDto() {
+            @Override
+            public String getExecutionId() {
+                return TEST_EXECUTION_ID;
+            }
+        };
+        Message<String> message = mockMessage(buildUnknownExplainabilityCloudEventJsonString(result));
+        testNumberOfInvocations(message, 0);
+    }
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainabilityResult(any(String.class), any(ExplainabilityResult.class));
+    @Test
+    void testExceptionsAreCaught() {
+        Message<String> message = mockMessage(buildLIMECloudEventJsonString(LIMEExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, emptyMap())));
+
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).storeExplainabilityResult(any(String.class), any(BaseExplainabilityResult.class));
         Assertions.assertDoesNotThrow(() -> consumer.handleMessage(message));
     }
 
     private void testExplainabilityResultFromWith(Decision decision, String expectedOutcomeId) {
-        ExplainabilityResult explainabilityResult = ExplainabilityResultConsumer.explainabilityResultFrom(TEST_RESULT_DTO, decision);
+        LIMEExplainabilityResult explainabilityResult = (LIMEExplainabilityResult) consumer.explainabilityResultFrom(TEST_RESULT_DTO, decision);
         assertNotNull(explainabilityResult);
         assertEquals(TEST_RESULT_DTO.getExecutionId(), explainabilityResult.getExecutionId());
         assertNotNull(TEST_RESULT_DTO.getSaliencies());
@@ -156,12 +233,12 @@ class ExplainabilityResultConsumerTest {
         FeatureImportanceDto expected0 = TEST_SALIENCY_DTO.getFeatureImportance().get(0);
         FeatureImportanceModel actual0 = featureImportanceModels.get(0);
         assertEquals(expected0.getFeatureName(), actual0.getFeatureName());
-        assertEquals(expected0.getScore(), actual0.getScore());
+        assertEquals(expected0.getScore(), actual0.getFeatureScore());
 
         FeatureImportanceDto expected1 = TEST_SALIENCY_DTO.getFeatureImportance().get(1);
         FeatureImportanceModel actual1 = featureImportanceModels.get(1);
         assertEquals(expected1.getFeatureName(), actual1.getFeatureName());
-        assertEquals(expected1.getScore(), actual1.getScore());
+        assertEquals(expected1.getScore(), actual1.getFeatureScore());
     }
 
     @Test
@@ -176,40 +253,11 @@ class ExplainabilityResultConsumerTest {
 
     @Test
     void testExplainabilityResultFromWithNullDto() {
-        assertNull(ExplainabilityResultConsumer.explainabilityResultFrom(null, null));
-    }
-
-    @Test
-    void testFeatureImportanceFromWithValidParams() {
-        FeatureImportanceModel featureImportanceModel = ExplainabilityResultConsumer.featureImportanceFrom(TEST_FEATURE_IMPORTANCE_DTO_1);
-        assertNotNull(featureImportanceModel);
-        assertEquals(TEST_FEATURE_IMPORTANCE_DTO_1.getFeatureName(), featureImportanceModel.getFeatureName());
-        assertEquals(TEST_FEATURE_IMPORTANCE_DTO_1.getScore(), featureImportanceModel.getScore());
-    }
-
-    @Test
-    void testFeatureImportanceFromWithNullDto() {
-        assertNull(ExplainabilityResultConsumer.featureImportanceFrom(null));
-    }
-
-    @Test
-    void testSaliencyFromWithValidParams() {
-        SaliencyModel saliencyModel = ExplainabilityResultConsumer.saliencyFrom(TEST_OUTCOME_1_ID, TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO);
-
-        assertNotNull(saliencyModel);
-        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().size(), saliencyModel.getFeatureImportance().size());
-        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getFeatureName(),
-                saliencyModel.getFeatureImportance().get(0).getFeatureName());
-        assertEquals(TEST_SALIENCY_DTO.getFeatureImportance().get(0).getScore(),
-                saliencyModel.getFeatureImportance().get(0).getScore(), 0.1);
-    }
-
-    @Test
-    void testSaliencyFromWithNullDto() {
-        assertNull(ExplainabilityResultConsumer.saliencyFrom(null, null, null));
+        assertNull(consumer.explainabilityResultFrom(null, null));
     }
 
     private Message<String> mockMessage(String payload) {
+        @SuppressWarnings("unchecked")
         Message<String> message = mock(Message.class);
         when(message.getPayload()).thenReturn(payload);
         return message;

@@ -3,33 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>kogito-apps</artifactId>
     <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-apps-build-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../kogito-apps-build-parent/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <name>Kogito :: Security Commons</name>
+  <name>Kogito Apps :: Security Commons</name>
   <artifactId>security-commons</artifactId>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-bom</artifactId>
-        <version>${version.io.quarkus}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -87,22 +70,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <container.image.keycloak>${container.image.keycloak}</container.image.keycloak>
-          </systemPropertyVariables>
-        </configuration>
         <executions>
           <execution>
-            <id>default</id>
             <goals>
               <goal>integration-test</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>verify</id>
-            <goals>
               <goal>verify</goal>
             </goals>
           </execution>
@@ -110,13 +81,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
     </plugins>

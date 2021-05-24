@@ -78,7 +78,7 @@ class TraceEventConsumerTest {
         when(storageExceptionsProvider.isConnectionException(any(RuntimeException.class))).thenReturn(false);
         Message<String> message = mockMessage(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(String.class), any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(Decision.class));
         consumer.handleMessage(message);
         verify(message, times(1)).ack();
     }
@@ -92,7 +92,7 @@ class TraceEventConsumerTest {
         when(storageExceptionsProvider.isConnectionException(any(RuntimeException.class))).thenReturn(false);
         Message<String> message = mockMessage(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectTraceEvent(TrustyServiceTestUtils.CORRECT_CLOUDEVENT_ID)));
 
-        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(String.class), any(Decision.class));
+        doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(Decision.class));
         consumer.handleMessage(message);
         verify(message, times(1)).nack(any());
     }
@@ -111,7 +111,7 @@ class TraceEventConsumerTest {
 
     private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
-        verify(trustyService, times(wantedNumberOfServiceInvocations)).processDecision(any(), any(), any());
+        verify(trustyService, times(wantedNumberOfServiceInvocations)).processDecision(any(), any());
         verify(message, times(1)).ack();
     }
 }

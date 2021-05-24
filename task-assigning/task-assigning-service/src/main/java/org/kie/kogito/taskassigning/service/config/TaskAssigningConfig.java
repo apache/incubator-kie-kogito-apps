@@ -30,13 +30,13 @@ import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigPro
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.CLIENT_AUTH_USER;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.DATA_INDEX_SERVER_URL;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.DATA_LOADER_PAGE_SIZE;
-import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.DATA_LOADER_RETRIES;
-import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.DATA_LOADER_RETRY_INTERVAL_DURATION;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.PUBLISH_WINDOW_SIZE;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.QUARKUS_OIDC_AUTH_SERVER_URL;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.QUARKUS_OIDC_CLIENT_ID;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.QUARKUS_OIDC_CREDENTIALS_SECRET;
 import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.QUARKUS_OIDC_TENANT_ENABLED;
+import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.USER_SERVICE_CONNECTOR;
+import static org.kie.kogito.taskassigning.service.config.TaskAssigningConfigProperties.USER_SERVICE_SYNC_INTERVAL;
 
 @ApplicationScoped
 public class TaskAssigningConfig {
@@ -45,7 +45,9 @@ public class TaskAssigningConfig {
     private static final String KEYCLOAK_AUTH_REALMS_SUB_PATH = "/auth/realms/";
     private static final String KEYCLOAK_SERVER_URL_UNEXPECTED_FORMAT_ERROR = "The configuration value for property: " + QUARKUS_OIDC_AUTH_SERVER_URL +
             ", %s doesn't look to be a valid Keycloak authentication domain configuration in the form " +
-            "\'https://host:port/auth/realms/{realm}\' where '{realm}' has to be replaced by the name of the Keycloak realm.";
+            "'https://host:port/auth/realms/{realm}' where '{realm}' has to be replaced by the name of the Keycloak realm.";
+
+    public static final String DEFAULT_USER_SERVICE_CONNECTOR = "PropertiesConnector";
 
     @Inject
     @ConfigProperty(name = QUARKUS_OIDC_TENANT_ENABLED)
@@ -76,20 +78,20 @@ public class TaskAssigningConfig {
     URL dataIndexServerUrl;
 
     @Inject
-    @ConfigProperty(name = DATA_LOADER_RETRY_INTERVAL_DURATION, defaultValue = "PT1S")
-    Duration dataLoaderRetryInterval;
-
-    @Inject
-    @ConfigProperty(name = DATA_LOADER_RETRIES, defaultValue = "5")
-    int dataLoaderRetries;
-
-    @Inject
     @ConfigProperty(name = DATA_LOADER_PAGE_SIZE, defaultValue = "3000")
     int dataLoaderPageSize;
 
     @Inject
     @ConfigProperty(name = PUBLISH_WINDOW_SIZE, defaultValue = "2")
     int publishWindowSize;
+
+    @Inject
+    @ConfigProperty(name = USER_SERVICE_CONNECTOR, defaultValue = DEFAULT_USER_SERVICE_CONNECTOR)
+    String userServiceConnector;
+
+    @Inject
+    @ConfigProperty(name = USER_SERVICE_SYNC_INTERVAL, defaultValue = "PT2H")
+    Duration userServiceSyncInterval;
 
     public boolean isOidcTenantEnabled() {
         return oidcTenantEnabled;
@@ -157,20 +159,20 @@ public class TaskAssigningConfig {
         return !isKeycloakSet() && clientAuthUser.isPresent();
     }
 
-    public Duration getDataLoaderRetryInterval() {
-        return dataLoaderRetryInterval;
-    }
-
-    public int getDataLoaderRetries() {
-        return dataLoaderRetries;
-    }
-
     public int getDataLoaderPageSize() {
         return dataLoaderPageSize;
     }
 
     public int getPublishWindowSize() {
         return publishWindowSize;
+    }
+
+    public String getUserServiceConnector() {
+        return userServiceConnector;
+    }
+
+    public Duration getUserServiceSyncInterval() {
+        return userServiceSyncInterval;
     }
 
     @Override
@@ -183,10 +185,10 @@ public class TaskAssigningConfig {
                 ", clientAuthUser=" + clientAuthUser +
                 ", clientAuthPassword=" + (clientAuthPassword.isEmpty() ? null : "*****") +
                 ", dataIndexServerUrl=" + dataIndexServerUrl +
-                ", dataLoaderRetryInterval=" + dataLoaderRetryInterval +
-                ", dataLoaderRetries=" + dataLoaderRetries +
                 ", dataLoaderPageSize=" + dataLoaderPageSize +
                 ", publishWindowSize=" + publishWindowSize +
+                ", userServiceConnector=" + userServiceConnector +
+                ", userServiceSyncInterval=" + userServiceSyncInterval +
                 '}';
     }
 }

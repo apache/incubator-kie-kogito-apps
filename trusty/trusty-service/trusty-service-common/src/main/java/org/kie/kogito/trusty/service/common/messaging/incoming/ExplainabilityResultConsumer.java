@@ -16,29 +16,20 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletionStage;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.explainability.api.FeatureImportanceDto;
-import org.kie.kogito.explainability.api.SaliencyDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.trusty.service.common.TrustyService;
+import org.kie.kogito.trusty.service.common.handlers.ExplainerServiceHandlerRegistry;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
+import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
-import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
-import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,63 +39,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 
 @ApplicationScoped
-public class ExplainabilityResultConsumer extends BaseEventConsumer<ExplainabilityResultDto> {
+public class ExplainabilityResultConsumer extends BaseEventConsumer<BaseExplainabilityResultDto> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
-    private static final TypeReference<ExplainabilityResultDto> CLOUD_EVENT_TYPE = new TypeReference<>() {
+    private static final TypeReference<BaseExplainabilityResultDto> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
+
+    private ExplainerServiceHandlerRegistry explainerServiceHandlerRegistry;
 
     private ExplainabilityResultConsumer() {
         //CDI proxy
     }
 
     @Inject
-    public ExplainabilityResultConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
+    public ExplainabilityResultConsumer(TrustyService service, ExplainerServiceHandlerRegistry explainerServiceHandlerRegistry, ObjectMapper mapper,
+            StorageExceptionsProvider storageExceptionsProvider) {
         super(service, mapper, storageExceptionsProvider);
+        this.explainerServiceHandlerRegistry = explainerServiceHandlerRegistry;
     }
 
-    protected static ExplainabilityResult explainabilityResultFrom(ExplainabilityResultDto dto, Decision decision) {
-        if (dto == null) {
-            return null;
-        }
-
-        Map<String, String> outcomeNameToIdMap = decision == null
-                ? Collections.emptyMap()
-                : decision.getOutcomes().stream().collect(Collectors.toUnmodifiableMap(DecisionOutcome::getOutcomeName, DecisionOutcome::getOutcomeId));
-
-        List<SaliencyModel> saliencies = dto.getSaliencies() == null ? null
-                : dto.getSaliencies().entrySet().stream()
-                        .map(e -> saliencyFrom(outcomeNameToIdMap.get(e.getKey()), e.getKey(), e.getValue()))
-                        .collect(Collectors.toList());
-        return new ExplainabilityResult(dto.getExecutionId(), statusFrom(dto.getStatus()), dto.getStatusDetails(), saliencies);
-    }
-
-    protected static FeatureImportanceModel featureImportanceFrom(FeatureImportanceDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        return new FeatureImportanceModel(dto.getFeatureName(), dto.getScore());
-    }
-
-    protected static SaliencyModel saliencyFrom(String outcomeId, String outcomeName, SaliencyDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        List<FeatureImportanceModel> featureImportanceModel = dto.getFeatureImportance() == null ? null
-                : dto.getFeatureImportance().stream()
-                        .map(ExplainabilityResultConsumer::featureImportanceFrom)
-                        .collect(Collectors.toList());
-        return new SaliencyModel(outcomeId, outcomeName, featureImportanceModel);
-    }
-
-    protected static ExplainabilityStatus statusFrom(org.kie.kogito.explainability.api.ExplainabilityStatus status) {
-        switch (status) {
-            case SUCCEEDED:
-                return ExplainabilityStatus.SUCCEEDED;
-            case FAILED:
-                return ExplainabilityStatus.FAILED;
-        }
-        return null;
+    protected <T extends BaseExplainabilityResultDto> BaseExplainabilityResult explainabilityResultFrom(T dto, Decision decision) {
+        return explainerServiceHandlerRegistry.explainabilityResultFrom(dto, decision);
     }
 
     @Override
@@ -114,7 +69,9 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
     }
 
     @Override
-    protected void internalHandleCloudEvent(CloudEvent cloudEvent, ExplainabilityResultDto payload) {
+    protected void internalHandleCloudEvent(CloudEvent cloudEvent, BaseExplainabilityResultDto payload) {
+        LOG.debug("CloudEvent received {}", payload);
+
         String executionId = payload.getExecutionId();
         Decision decision = getDecisionById(executionId);
         if (decision == null) {
@@ -124,7 +81,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<Explainabili
     }
 
     @Override
-    protected TypeReference<ExplainabilityResultDto> getEventType() {
+    protected TypeReference<BaseExplainabilityResultDto> getEventType() {
         return CLOUD_EVENT_TYPE;
     }
 

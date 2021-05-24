@@ -16,6 +16,10 @@
 
 package org.kie.kogito.trusty.storage.api.model;
 
+import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,6 +31,7 @@ public class Execution {
 
     public final static String EXECUTION_ID_FIELD = "executionId";
     public final static String SOURCE_URL_FIELD = "sourceUrl";
+    public final static String SERVICE_URL_FIELD = "serviceUrl";
     public final static String EXECUTION_TIMESTAMP_FIELD = "executionTimestamp";
     public final static String HAS_SUCCEEDED_FIELD = "hasSucceeded";
     public final static String EXECUTOR_NAME_FIELD = "executorName";
@@ -35,10 +40,14 @@ public class Execution {
     public final static String EXECUTION_TYPE_FIELD = "executionType";
 
     @JsonProperty(EXECUTION_ID_FIELD)
+    @NotNull(message = "executionId must be provided.")
     private String executionId;
 
     @JsonProperty(SOURCE_URL_FIELD)
     private String sourceUrl;
+
+    @JsonProperty(SERVICE_URL_FIELD)
+    private String serviceUrl;
 
     @JsonProperty(EXECUTION_TIMESTAMP_FIELD)
     private Long executionTimestamp;
@@ -65,11 +74,18 @@ public class Execution {
         this.executionType = executionType;
     }
 
-    public Execution(String executionId, String sourceUrl, Long executionTimestamp, Boolean hasSucceeded,
-            String executorName, String executedModelName, String executedModelNamespace,
+    public Execution(@NotNull String executionId,
+            String sourceUrl,
+            String serviceUrl,
+            Long executionTimestamp,
+            Boolean hasSucceeded,
+            String executorName,
+            String executedModelName,
+            String executedModelNamespace,
             ExecutionType executionType) {
-        this.executionId = executionId;
+        this.executionId = Objects.requireNonNull(executionId);
         this.sourceUrl = sourceUrl;
+        this.serviceUrl = serviceUrl;
         this.executionTimestamp = executionTimestamp;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
@@ -97,21 +113,39 @@ public class Execution {
     }
 
     /**
-     * Gets the source URL of the service where the execution happened.
+     * Gets the source URL of the Cloud Event where the execution happened.
      *
-     * @return The service URL.
+     * @return The source URL.
      */
     public String getSourceUrl() {
         return sourceUrl;
     }
 
     /**
-     * Sets the source URL of the service where the execution happened.
+     * Sets the source URL of the Cloud Event where the execution happened.
      *
-     * @param sourceUrl The service URL.
+     * @param sourceUrl The source URL.
      */
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
+    }
+
+    /**
+     * Gets the source URL of the service where the execution happened.
+     *
+     * @return The service URL.
+     */
+    public String getServiceUrl() {
+        return serviceUrl;
+    }
+
+    /**
+     * Sets the service URL of the service where the execution happened.
+     *
+     * @param serviceUrl The service URL.
+     */
+    public void setServiceUrl(String serviceUrl) {
+        this.serviceUrl = serviceUrl;
     }
 
     /**

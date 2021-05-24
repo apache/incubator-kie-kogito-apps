@@ -17,14 +17,18 @@
 package org.kie.kogito.trusty.storage.common;
 
 import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 
 public interface TrustyStorageService {
 
     String DECISIONS_STORAGE = "decisions";
-    String EXPLAINABILITY_RESULTS_STORAGE = "explainability-results";
+    String LIME_RESULTS_STORAGE = "limeResults";
+    String COUNTERFACTUAL_REQUESTS_STORAGE = "counterfactualRequests";
+    String COUNTERFACTUAL_RESULTS_STORAGE = "counterfactualResults";
     String MODELS_STORAGE = "models";
 
     /**
@@ -35,11 +39,11 @@ public interface TrustyStorageService {
     Storage<String, Decision> getDecisionsStorage();
 
     /**
-     * Gets the explainability result storage.
+     * Gets the LIME results storage.
      *
-     * @return The Storage for explainability results.
+     * @return The Storage for LIME explainability results.
      */
-    Storage<String, ExplainabilityResult> getExplainabilityResultStorage();
+    Storage<String, LIMEExplainabilityResult> getLIMEResultStorage();
 
     /**
      * Gets the model definition storage.
@@ -47,4 +51,18 @@ public interface TrustyStorageService {
      * @return The Storage for model definitions.
      */
     Storage<String, DMNModelWithMetadata> getModelStorage();
+
+    /**
+     * Gets the Counterfactual requests storage.
+     *
+     * @return The Storage for Counterfactual explainability requests.
+     */
+    Storage<String, CounterfactualExplainabilityRequest> getCounterfactualRequestStorage();
+
+    /**
+     * Gets the Counterfactual results storage.
+     *
+     * @return The Storage for Counterfactual explainability results.
+     */
+    Storage<String, CounterfactualExplainabilityResult> getCounterfactualResultStorage();
 }

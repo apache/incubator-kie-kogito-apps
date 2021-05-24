@@ -15,7 +15,8 @@
  */
 
 import { ApolloClient } from 'apollo-client';
-import { SortBy, QueryFilter, UserTaskInstance } from '@kogito-apps/task-inbox';
+import { SortBy, QueryFilter } from '@kogito-apps/task-inbox';
+import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { GraphQL, User } from '@kogito-apps/consoles-common';
 import {
   buildTaskInboxWhereArgument,
@@ -23,6 +24,8 @@ import {
 } from '../../utils/QueryUtils';
 
 export interface TaskInboxQueries {
+  getUserTaskById(taskId: string): Promise<UserTaskInstance>;
+
   getUserTasks(
     user: User,
     start: number,
@@ -37,6 +40,30 @@ export class GraphQLTaskInboxQueries implements TaskInboxQueries {
 
   constructor(client: ApolloClient<any>) {
     this.client = client;
+  }
+
+  getUserTaskById(taskId: string): Promise<UserTaskInstance> {
+    return new Promise<UserTaskInstance>((resolve, reject) => {
+      this.client
+        .query({
+          query: GraphQL.GetUserTaskByIdDocument,
+          variables: {
+            id: taskId
+          },
+          fetchPolicy: 'network-only'
+        })
+        .then(value => {
+          if (
+            value.data.UserTaskInstances &&
+            value.data.UserTaskInstances.length > 0
+          ) {
+            resolve(value.data.UserTaskInstances[0]);
+            return;
+          }
+          resolve(undefined);
+        })
+        .catch(reason => reject(reason));
+    });
   }
 
   getUserTasks(

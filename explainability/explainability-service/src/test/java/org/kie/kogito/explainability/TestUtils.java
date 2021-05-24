@@ -16,17 +16,27 @@
 
 package org.kie.kogito.explainability;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityRequestDto;
+import org.kie.kogito.explainability.handlers.CounterfactualExplainerServiceHandler;
+import org.kie.kogito.explainability.handlers.LimeExplainerServiceHandler;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.models.ExplainabilityRequest;
+import org.kie.kogito.explainability.models.CounterfactualExplainabilityRequest;
+import org.kie.kogito.explainability.models.LIMEExplainabilityRequest;
 import org.kie.kogito.explainability.models.ModelIdentifier;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
@@ -43,7 +53,9 @@ public class TestUtils {
         // prevent initialization
     }
 
-    public static final String EXECUTION_ID = "executionId";
+    public static final String EXECUTION_ID = UUID.randomUUID().toString();
+    public static final String COUNTERFACTUAL_ID = UUID.randomUUID().toString();
+    public static final String SOLUTION_ID = UUID.randomUUID().toString();
     public static final String SERVICE_URL = "localhost:8080";
 
     public static final ModelIdentifier MODEL_IDENTIFIER = new ModelIdentifier("dmn", "name:namespace");
@@ -61,13 +73,37 @@ public class TestUtils {
     public static final Map<String, Saliency> SALIENCY_MAP = singletonMap("key", SALIENCY);
 
     public static final Map<String, TypedValue> INPUTS = new HashMap<>();
+
     static {
         INPUTS.put("input1", new UnitValue("string", new TextNode("value")));
         INPUTS.put("input2", new UnitValue("number", new DoubleNode(10)));
     }
 
+    public static final Map<String, CounterfactualSearchDomainDto> SEARCH_DOMAINS = new HashMap<>();
+
     public static final Map<String, TypedValue> OUTPUTS = singletonMap("output1", new UnitValue("string", new TextNode("output")));
 
-    public static final ExplainabilityRequest REQUEST = new ExplainabilityRequest(EXECUTION_ID, SERVICE_URL, MODEL_IDENTIFIER, INPUTS, OUTPUTS);
+    public static final CounterfactualExplainabilityRequestDto COUNTERFACTUAL_REQUEST_DTO =
+            new CounterfactualExplainabilityRequestDto(EXECUTION_ID,
+                    COUNTERFACTUAL_ID,
+                    SERVICE_URL,
+                    MODEL_IDENTIFIER,
+                    INPUTS,
+                    OUTPUTS,
+                    SEARCH_DOMAINS);
+    public static final LIMEExplainabilityRequestDto LIME_REQUEST_DTO = new LIMEExplainabilityRequestDto(EXECUTION_ID,
+            SERVICE_URL,
+            MODEL_IDENTIFIER,
+            INPUTS,
+            OUTPUTS);
+
+    public static final LIMEExplainabilityRequest LIME_REQUEST = new LimeExplainerServiceHandler(null).explainabilityRequestFrom(LIME_REQUEST_DTO);
+    public static final CounterfactualExplainabilityRequest COUNTERFACTUAL_REQUEST = new CounterfactualExplainerServiceHandler(null).explainabilityRequestFrom(COUNTERFACTUAL_REQUEST_DTO);
+
+    public static final CounterfactualResult COUNTERFACTUAL_RESULT = new CounterfactualResult(Collections.emptyList(),
+            List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 2.0)))),
+            true,
+            UUID.fromString(SOLUTION_ID),
+            UUID.fromString(EXECUTION_ID));
 
 }

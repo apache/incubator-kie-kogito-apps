@@ -23,12 +23,21 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.taskassigning.core.model.IdentifiableElement;
 import org.kie.kogito.taskassigning.core.model.User;
+import org.kie.kogito.taskassigning.service.processing.AttributesProcessorRegistry;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.taskassigning.service.TestUtil.mockExternalUser;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class UserUtilTest {
 
     private static final String USER_ID_1 = "USER_ID_1";
@@ -41,33 +50,43 @@ class UserUtilTest {
     private static final String ATTRIBUTE_2_NAME = "ATTRIBUTE_2_NAME";
     private static final String ATTRIBUTE_2_VALUE = "ATTRIBUTE_2_VALUE";
 
+    @Mock
+    private AttributesProcessorRegistry processorRegistry;
+
+    @Captor
+    private ArgumentCaptor<Map<String, Object>> attributesCaptor;
+
     @Test
     void fromExternalUser() {
         Map<String, Object> attributes = new HashMap<>();
         attributes.put(ATTRIBUTE_1_NAME, ATTRIBUTE_1_VALUE);
         attributes.put(ATTRIBUTE_2_NAME, ATTRIBUTE_2_VALUE);
 
-        org.kie.kogito.taskassigning.user.service.api.User externalUser = mockExternalUser(USER_ID_1,
+        org.kie.kogito.taskassigning.user.service.User externalUser = mockExternalUser(USER_ID_1,
                 Arrays.asList(GROUP_ID_1, GROUP_ID_2),
                 attributes);
-        User user = UserUtil.fromExternalUser(externalUser);
+        User user = UserUtil.fromExternalUser(externalUser, processorRegistry);
         assertThat(user.getId()).isEqualTo(USER_ID_1);
         assertThat(user.getGroups().stream().map(IdentifiableElement::getId).collect(Collectors.toSet()))
                 .containsExactlyInAnyOrder(GROUP_ID_1, GROUP_ID_2);
         assertThat(user.getAttributes()).containsExactlyEntriesOf(attributes);
+        verify(processorRegistry).applyAttributesProcessor(eq(externalUser), attributesCaptor.capture());
+        assertThat(attributesCaptor.getValue())
+                .isNotNull()
+                .containsExactlyInAnyOrderEntriesOf(attributes);
     }
 
     @Test
     void filterDuplicates() {
-        List<org.kie.kogito.taskassigning.user.service.api.User> users = Arrays.asList(mockExternalUser(USER_ID_1),
+        List<org.kie.kogito.taskassigning.user.service.User> users = Arrays.asList(mockExternalUser(USER_ID_1),
                 mockExternalUser(USER_ID_2),
                 mockExternalUser(USER_ID_1),
                 mockExternalUser(USER_ID_3),
                 mockExternalUser(USER_ID_2),
                 mockExternalUser(USER_ID_1),
                 null);
-        List<org.kie.kogito.taskassigning.user.service.api.User> filteredUsers = UserUtil.filterDuplicates(users).collect(Collectors.toList());
-        assertThat(filteredUsers.stream().map(org.kie.kogito.taskassigning.user.service.api.User::getId).collect(Collectors.toList()))
+        List<org.kie.kogito.taskassigning.user.service.User> filteredUsers = UserUtil.filterDuplicates(users).collect(Collectors.toList());
+        assertThat(filteredUsers.stream().map(org.kie.kogito.taskassigning.user.service.User::getId).collect(Collectors.toList()))
                 .containsExactlyInAnyOrderElementsOf(Arrays.asList(USER_ID_1, USER_ID_2, USER_ID_3));
     }
 }

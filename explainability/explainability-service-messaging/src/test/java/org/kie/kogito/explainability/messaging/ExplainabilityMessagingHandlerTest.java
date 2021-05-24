@@ -27,12 +27,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.ExplanationService;
-import org.kie.kogito.explainability.PredictionProviderFactory;
-import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
-import org.kie.kogito.explainability.api.ExplainabilityResultDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.LIMEExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.models.ExplainabilityRequest;
+import org.kie.kogito.explainability.handlers.LocalExplainerServiceHandlerRegistry;
+import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,24 +50,24 @@ import static org.mockito.Mockito.when;
 public class ExplainabilityMessagingHandlerTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper().registerModule(JsonFormat.getCloudEventJacksonModule());
+
+    @SuppressWarnings("rawtype")
     private ExplanationService explanationService;
     private ExplainabilityMessagingHandler handler;
 
     @BeforeEach
     void setup() {
         explanationService = mock(ExplanationService.class);
-        PredictionProviderFactory predictionProviderFactory = mock(PredictionProviderFactory.class);
-        PredictionProvider predictionProvider = mock(PredictionProvider.class);
-        when(predictionProviderFactory.createPredictionProvider(any(ExplainabilityRequest.class)))
-                .thenReturn(predictionProvider);
-        handler = new ExplainabilityMessagingHandler(explanationService, predictionProviderFactory);
+        LocalExplainerServiceHandlerRegistry explainerServiceHandlerRegistry = mock(LocalExplainerServiceHandlerRegistry.class);
+        when(explainerServiceHandlerRegistry.explainabilityRequestFrom(any())).thenReturn(mock(BaseExplainabilityRequest.class));
+        handler = new ExplainabilityMessagingHandler(explanationService, explainerServiceHandlerRegistry);
         handler.objectMapper = MAPPER;
     }
 
     @Test
     void testCorrectCloudEvent() throws InterruptedException, ExecutionException, TimeoutException {
         Message<String> message = mockMessage(buildCorrectExplainabilityRequestEvent());
-        when(explanationService.explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class)))
+        when(explanationService.explainAsync(any(BaseExplainabilityRequest.class), any()))
                 .thenReturn(completedFuture(mockExplainabilityResultDto()));
         testNumberOfInvocations(message, 1);
     }
@@ -83,7 +83,7 @@ public class ExplainabilityMessagingHandlerTest {
         Message<String> message = mockMessage(buildCorrectExplainabilityRequestEvent());
 
         doThrow(new RuntimeException("Something really bad")).when(explanationService)
-                .explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class));
+                .explainAsync(any(BaseExplainabilityRequest.class), any());
         Assertions.assertDoesNotThrow(() -> handler.handleMessage(message));
     }
 
@@ -94,8 +94,8 @@ public class ExplainabilityMessagingHandlerTest {
         return message;
     }
 
-    private ExplainabilityResultDto mockExplainabilityResultDto() {
-        return ExplainabilityResultDto.buildSucceeded(UUID.randomUUID().toString(), Collections.emptyMap());
+    private BaseExplainabilityResultDto mockExplainabilityResultDto() {
+        return LIMEExplainabilityResultDto.buildSucceeded(UUID.randomUUID().toString(), Collections.emptyMap());
     }
 
     private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) throws InterruptedException, ExecutionException, TimeoutException {
@@ -103,13 +103,13 @@ public class ExplainabilityMessagingHandlerTest {
                 .toCompletableFuture()
                 .get(1, TimeUnit.SECONDS);
         verify(explanationService, timeout(3000).times(wantedNumberOfServiceInvocations))
-                .explainAsync(any(ExplainabilityRequest.class), any(PredictionProvider.class));
+                .explainAsync(any(BaseExplainabilityRequest.class), any());
         verify(message, times(1)).ack();
     }
 
     private String buildCorrectExplainabilityRequestEvent() {
         ModelIdentifierDto modelIdentifierDto = new ModelIdentifierDto("dmn", "namespace:name");
         return ExplainabilityCloudEventBuilder
-                .buildCloudEventJsonString(new ExplainabilityRequestDto("test", "http://localhost:8080", modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
+                .buildCloudEventJsonString(new LIMEExplainabilityRequestDto("test", "http://localhost:8080", modelIdentifierDto, Collections.emptyMap(), Collections.emptyMap()));
     }
 }

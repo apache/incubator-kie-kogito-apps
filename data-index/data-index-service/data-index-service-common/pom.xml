@@ -10,12 +10,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>data-index-service-common</artifactId>
-  <name>Kogito :: Data Index Service Common</name>
+  <name>Kogito Apps :: Data Index Service Common</name>
 
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-events-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>

@@ -16,9 +16,12 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
@@ -33,8 +36,13 @@ import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDeci
 @PlanningSolution
 public class CounterfactualSolution {
 
-    @PlanningEntityCollectionProperty
     private List<CounterfactualEntity> entities;
+
+    @PlanningEntityCollectionProperty
+    public List<CounterfactualEntity> getVaryingEntities() {
+        return entities.stream().filter(counterfactualEntity -> !counterfactualEntity.isConstrained())
+                .collect(Collectors.toList());
+    }
 
     private List<Output> goal;
 
@@ -42,19 +50,28 @@ public class CounterfactualSolution {
 
     private BendableBigDecimalScore score;
 
+    private UUID solutionId;
+    private UUID executionId;
+
+    private List<PredictionOutput> predictionOutputs;
+
     protected CounterfactualSolution() {
     }
 
     public CounterfactualSolution(
             List<CounterfactualEntity> entities,
             PredictionProvider model,
-            List<Output> goal) {
+            List<Output> goal,
+            UUID solutionId,
+            UUID executionId) {
         this.entities = entities;
         this.model = model;
         this.goal = goal;
+        this.solutionId = solutionId;
+        this.executionId = executionId;
     }
 
-    @PlanningScore(bendableHardLevelsSize = 3, bendableSoftLevelsSize = 1)
+    @PlanningScore(bendableHardLevelsSize = 3, bendableSoftLevelsSize = 2)
     public BendableBigDecimalScore getScore() {
         return score;
     }
@@ -73,5 +90,29 @@ public class CounterfactualSolution {
 
     public List<CounterfactualEntity> getEntities() {
         return entities;
+    }
+
+    public void setSolutionId(UUID solutionId) {
+        this.solutionId = solutionId;
+    }
+
+    public UUID getSolutionId() {
+        return solutionId;
+    }
+
+    public UUID getExecutionId() {
+        return executionId;
+    }
+
+    public void setExecutionId(UUID executionId) {
+        this.executionId = executionId;
+    }
+
+    public List<PredictionOutput> getPredictionOutputs() {
+        return predictionOutputs;
+    }
+
+    public void setPredictionOutputs(List<PredictionOutput> predictionOutputs) {
+        this.predictionOutputs = predictionOutputs;
     }
 }

@@ -58,6 +58,12 @@ module.exports = merge(common, {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/consoles-common/dist/src/components/styles.css'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/task-console-shared/dist/envelope/styles.css'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/task-form/dist/envelope/styles.css'
           )
         ],
         loaders: ['style-loader', 'css-loader']

@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WebApp - ProcessDetailsContainer tests Snapshot test with default values 1`] = `
+<ProcessDetailsContainer
+  processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+>
+  <ForwardRef
+    data-ouia-component-type="process-details-container"
+    data-ouia-safe={true}
+    driver={
+      ProcessDetailsGatewayApiImpl {
+        "_ProcessDetailsState": Object {
+          "id": "",
+        },
+        "cancelJob": [Function],
+        "getProcessDiagram": [Function],
+        "handleProcessAbort": [Function],
+        "listeners": Array [
+          Object {
+            "onOpen": [Function],
+          },
+        ],
+        "queries": Object {
+          "getJobs": [MockFunction],
+          "getProcessDetails": [MockFunction],
+        },
+        "rescheduleJob": [Function],
+      }
+    }
+    processId="8035b580-6ae4-4aa8-9ec0-e18e19809e0b"
+    targetOrigin="http://localhost"
+  >
+    <ForwardRef>
+      <div />
+    </ForwardRef>
+  </ForwardRef>
+</ProcessDetailsContainer>
+`;

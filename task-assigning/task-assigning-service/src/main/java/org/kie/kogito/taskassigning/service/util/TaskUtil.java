@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -29,8 +30,11 @@ import java.util.stream.Collectors;
 import org.kie.kogito.taskassigning.core.model.Task;
 import org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstance;
 import org.kie.kogito.taskassigning.service.TaskData;
+import org.kie.kogito.taskassigning.service.event.TaskDataEvent;
 import org.kie.kogito.taskassigning.service.messaging.UserTaskEvent;
+import org.kie.kogito.taskassigning.util.JsonUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class TaskUtil {
@@ -42,8 +46,14 @@ public class TaskUtil {
         return fromMappedType(userTaskInstances, UserTaskInstanceTaskData::new);
     }
 
-    public static List<TaskData> fromUserTaskEvents(List<UserTaskEvent> userTaskEvents) {
-        return fromMappedType(userTaskEvents, UserTaskEventTaskData::new);
+    public static List<TaskData> fromTaskDataEvents(List<TaskDataEvent> taskDataEvents) {
+        return taskDataEvents.stream()
+                .map(TaskDataEvent::getData)
+                .collect(Collectors.toList());
+    }
+
+    public static TaskData fromUserTaskEvent(UserTaskEvent userTaskEvent) {
+        return new UserTaskEventTaskData(userTaskEvent);
     }
 
     private static <T> List<TaskData> fromMappedType(List<T> values, Function<T, TaskData> mapper) {
@@ -74,10 +84,14 @@ public class TaskUtil {
                 .started(taskData.getStarted())
                 .completed(taskData.getCompleted())
                 .lastUpdate(taskData.getLastUpdate())
-                //TODO Upcoming iteration
-                //.inputData(taskInstance.getInputs())
+                .inputData(fromJsonNode(taskData.getInputs()))
                 .endpoint(taskData.getEndpoint())
                 .build();
+    }
+
+    private static Map<String, Object> fromJsonNode(JsonNode node) {
+        return JsonUtils.OBJECT_MAPPER.convertValue(node, new TypeReference<Map<String, Object>>() {
+        });
     }
 
     /**

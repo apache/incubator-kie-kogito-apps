@@ -8,7 +8,7 @@
   </parent>
 
   <artifactId>jitexecutor-dmn</artifactId>
-  <name>Kogito :: JIT Executor DMN</name>
+  <name>Kogito Apps :: JIT Executor DMN</name>
 
   <dependencies>
     <dependency>
@@ -18,6 +18,11 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jackson</artifactId>
+    </dependency>
+    <!-- ensure Quarkus' openapi takes precedence over the v7 dependency -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
     <dependency><!-- Leverage easily the best POM from: -->
       <groupId>org.kie.kogito</groupId>

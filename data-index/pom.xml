@@ -4,14 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-apps</artifactId>
+    <artifactId>kogito-apps-build-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../kogito-apps-build-parent/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>data-index</artifactId>
   <packaging>pom</packaging>
-  <name>Kogito :: Data Index</name>
+  <name>Kogito Apps :: Data Index</name>
 
   <modules>
     <module>data-index-storage</module>

@@ -21,9 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.taskassigning.core.model.TaskAssigningSolution;
 import org.kie.kogito.taskassigning.core.model.TaskAssignment;
 import org.kie.kogito.taskassigning.core.model.User;
+import org.kie.kogito.taskassigning.service.processing.AttributesProcessorRegistry;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.taskassigning.core.model.ModelConstants.DUMMY_TASK_ASSIGNMENT;
@@ -32,9 +36,13 @@ import static org.kie.kogito.taskassigning.core.model.ModelConstants.PLANNING_US
 import static org.kie.kogito.taskassigning.service.TaskState.READY;
 import static org.kie.kogito.taskassigning.service.TaskState.RESERVED;
 import static org.kie.kogito.taskassigning.service.TestUtil.mockExternalUser;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class SolutionBuilderTest {
 
     private static final String TASK1 = "TASK1";
@@ -55,6 +63,9 @@ class SolutionBuilderTest {
     private static final String USER4 = "USER4";
     private static final String USER_NOT_IN_THE_EXTERNAL_SYSTEM = "USER_NOT_IN_THE_EXTERNAL_SYSTEM";
 
+    @Mock
+    private AttributesProcessorRegistry processorRegistry;
+
     @Test
     void build() {
         List<TaskData> taskDataList = Arrays.asList(mockTaskData(TASK1, READY.value()),
@@ -69,7 +80,7 @@ class SolutionBuilderTest {
                 mockTaskData(TASK10, RESERVED.value(), USER1),
                 mockTaskData(TASK11, RESERVED.value(), USER_NOT_IN_THE_EXTERNAL_SYSTEM));
 
-        List<org.kie.kogito.taskassigning.user.service.api.User> externalUsers = Arrays.asList(mockExternalUser(USER1),
+        List<org.kie.kogito.taskassigning.user.service.User> externalUsers = Arrays.asList(mockExternalUser(USER1),
                 mockExternalUser(USER2),
                 mockExternalUser(USER3),
                 mockExternalUser(USER4));
@@ -77,6 +88,7 @@ class SolutionBuilderTest {
         TaskAssigningSolution solution = SolutionBuilder.newBuilder()
                 .withTasks(taskDataList)
                 .withUsers(externalUsers)
+                .withProcessors(processorRegistry)
                 .build();
 
         assertThat(solution.getTaskAssignmentList()).hasSize(13);
@@ -104,6 +116,9 @@ class SolutionBuilderTest {
         assertThatTaskIsAssignedToUser(solution, TASK11, USER_NOT_IN_THE_EXTERNAL_SYSTEM);
         assertThatTaskIsNotAssigned(solution, DUMMY_TASK_ASSIGNMENT.getId());
         assertThatTaskIsNotAssigned(solution, DUMMY_TASK_ASSIGNMENT_PLANNER_1738.getId());
+        assertThatTaskProcessorsWereApplied(solution, processorRegistry, TASK1, TASK2, TASK3, TASK4, TASK5, TASK6, TASK7, TASK8, TASK9,
+                TASK10, TASK11);
+        assertThatUserProcessorsWereApplied(externalUsers);
     }
 
     private void assertThatUserHasTask(TaskAssigningSolution solution, String userId,
@@ -176,11 +191,26 @@ class SolutionBuilderTest {
                 .isNull();
     }
 
+    public static void assertThatTaskProcessorsWereApplied(TaskAssigningSolution solution, AttributesProcessorRegistry processorRegistry, String... taskIds) {
+        for (String taskId : taskIds) {
+            TaskAssignment taskAssignment = solution.getTaskAssignmentList().stream()
+                    .filter(ta -> taskId.equals(ta.getId()))
+                    .findFirst().orElseThrow(() -> new RuntimeException("Expected task was not found in solution, taskId:" + taskId));
+            verify(processorRegistry).applyAttributesProcessor(eq(taskAssignment.getTask()), any());
+        }
+    }
+
+    private void assertThatUserProcessorsWereApplied(List<org.kie.kogito.taskassigning.user.service.User> externalUsers) {
+        for (org.kie.kogito.taskassigning.user.service.User externalUser : externalUsers) {
+            verify(processorRegistry).applyAttributesProcessor(eq(externalUser), any());
+        }
+    }
+
     private static TaskData mockTaskData(String taskId, String state, String actualOwner) {
         TaskData taskData = mock(TaskData.class);
-        doReturn(taskId).when(taskData).getId();
-        doReturn(state).when(taskData).getState();
-        doReturn(actualOwner).when(taskData).getActualOwner();
+        lenient().doReturn(taskId).when(taskData).getId();
+        lenient().doReturn(state).when(taskData).getState();
+        lenient().doReturn(actualOwner).when(taskData).getActualOwner();
         return taskData;
     }
 

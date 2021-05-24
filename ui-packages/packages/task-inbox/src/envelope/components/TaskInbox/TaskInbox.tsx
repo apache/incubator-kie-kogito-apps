@@ -28,13 +28,13 @@ import {
   KogitoSpinner,
   ServerErrors
 } from '@kogito-apps/components-common';
+import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import {
   QueryFilter,
   SortBy,
   TaskInboxDriver,
   TaskInboxState
 } from '../../../api';
-import { UserTaskInstance } from '../../../types';
 import TaskInboxToolbar from '../TaskInboxToolbar/TaskInboxToolbar';
 import {
   getDateColumn,
@@ -124,6 +124,18 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
     doQueryTasks(0, pageSize, true);
   };
 
+  const initWithState = async (initialState: TaskInboxState) => {
+    setQueryFilter(initialState.filters);
+    setSortBy(initialState.sortBy);
+    setOffset(initialState.currentPage.offset);
+
+    setIsLoading(true);
+
+    const limit = initialState.currentPage.offset + pageSize;
+
+    doQueryTasks(0, limit, true);
+  };
+
   const doQueryTasks = async (
     _offset: number,
     _limit: number,
@@ -193,6 +205,8 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
     setActiveStates(activeTaskStates);
     if (!initialState) {
       initDefault();
+    } else {
+      initWithState(initialState);
     }
   }, [isEnvelopeConnectedToChannel]);
 

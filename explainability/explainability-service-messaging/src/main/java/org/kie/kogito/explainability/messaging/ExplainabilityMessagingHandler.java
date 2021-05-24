@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.messaging;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -29,11 +30,10 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.explainability.ExplanationService;
-import org.kie.kogito.explainability.PredictionProviderFactory;
-import org.kie.kogito.explainability.api.ExplainabilityRequestDto;
-import org.kie.kogito.explainability.api.ExplainabilityResultDto;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.models.ExplainabilityRequest;
+import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
+import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
+import org.kie.kogito.explainability.handlers.LocalExplainerServiceHandlerRegistry;
+import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class ExplainabilityMessagingHandler {
     private final PublishSubject<String> eventSubject = PublishSubject.create();
 
     protected ExplanationService explanationService;
-    protected PredictionProviderFactory predictionProviderFactory;
+    protected LocalExplainerServiceHandlerRegistry explainerServiceHandlerRegistry;
 
     @Inject
     ObjectMapper objectMapper;
@@ -62,9 +62,9 @@ public class ExplainabilityMessagingHandler {
     @Inject
     public ExplainabilityMessagingHandler(
             ExplanationService explanationService,
-            PredictionProviderFactory predictionProviderFactory) {
+            LocalExplainerServiceHandlerRegistry explainerServiceHandlerRegistry) {
         this.explanationService = explanationService;
-        this.predictionProviderFactory = predictionProviderFactory;
+        this.explainerServiceHandlerRegistry = explainerServiceHandlerRegistry;
     }
 
     // Incoming
@@ -85,10 +85,11 @@ public class ExplainabilityMessagingHandler {
         return message.ack();
     }
 
+    @SuppressWarnings("unchecked")
     private CompletionStage<Void> handleCloudEvent(CloudEvent cloudEvent) {
-        ExplainabilityRequestDto requestDto;
+        BaseExplainabilityRequestDto requestDto;
         try {
-            requestDto = objectMapper.readValue(cloudEvent.getData(), ExplainabilityRequestDto.class);
+            requestDto = objectMapper.readValue(cloudEvent.getData(), BaseExplainabilityRequestDto.class);
         } catch (IOException e) {
             LOGGER.error("Unable to deserialize CloudEvent data as ExplainabilityRequest", e);
             return CompletableFuture.completedFuture(null);
@@ -100,19 +101,26 @@ public class ExplainabilityMessagingHandler {
 
         LOGGER.info("Received CloudEvent with id {} from {}", cloudEvent.getId(), cloudEvent.getSource());
 
-        ExplainabilityRequest request = ExplainabilityRequest.from(requestDto);
-        PredictionProvider provider = predictionProviderFactory.createPredictionProvider(request);
+        BaseExplainabilityRequest request = explainerServiceHandlerRegistry.explainabilityRequestFrom(requestDto);
 
         return explanationService
-                .explainAsync(request, provider)
+                .explainAsync(request, this::sendEvent)
                 .thenApply(this::sendEvent);
     }
 
     // Outgoing
-    public Void sendEvent(ExplainabilityResultDto result) {
-        LOGGER.info("Explainability service emits explainability for execution with ID {}", result.getExecutionId());
+    public Void sendEvent(BaseExplainabilityResultDto result) {
+        //This should never happen but let's protect against it 
+        if (Objects.isNull(result)) {
+            LOGGER.info("Request received to send null result. Skipping.");
+            return null;
+        }
+
+        LOGGER.info("Explainability service emits explainability {} for execution with ID {}",
+                result.getClass().getSimpleName(),
+                result.getExecutionId());
         Optional<String> optPayload = CloudEventUtils
-                .build(result.getExecutionId(), URI_PRODUCER, result, ExplainabilityResultDto.class)
+                .build(result.getExecutionId(), URI_PRODUCER, result, BaseExplainabilityResultDto.class)
                 .flatMap(CloudEventUtils::encode);
         if (optPayload.isPresent()) {
             eventSubject.onNext(optPayload.get());
@@ -126,4 +134,5 @@ public class ExplainabilityMessagingHandler {
     public Publisher<String> getEventPublisher() {
         return eventSubject.toFlowable(BackpressureStrategy.BUFFER);
     }
+
 }
