@@ -39,6 +39,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
         double stabilityScore = 0;
         List<Prediction> predictions = solution.getPredictions();
         if (!predictions.isEmpty()) {
+            double succeededEvaluations = 0;
             int topK = 2;
             LimeExplainer limeExplainer = new LimeExplainer(config);
             for (Prediction prediction : predictions) {
@@ -55,9 +56,8 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                         positiveStabilityScore /= topK;
                         negativeStabilityScore /= topK;
                         // TODO: differentiate (or weight) between positive and negative
-                        // TODO: some samples might generate exceptions, hence they shouldn't count
-                        stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * predictions.size()
-                                * stability.getDecisions().size());
+                        stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * stability.getDecisions().size());
+                        succeededEvaluations++;
                     }
                 } catch (ExecutionException e) {
                     LOGGER.error("Saliency stability calculation returned an error {}", e.getMessage());
@@ -68,8 +68,10 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                     LOGGER.error("Timed out while waiting for saliency stability calculation");
                 }
             }
+            if (succeededEvaluations > 0) {
+                stabilityScore /= succeededEvaluations;
+            }
         }
-        // TODO: maybe switch to hard-soft score for pos-neg scores
         return SimpleBigDecimalScore.parseScore(Double.toString(stabilityScore));
     }
 
