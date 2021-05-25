@@ -38,7 +38,8 @@ public class LimeConfigEntityFactory {
     public static final String PENALIZE_BALANCE_SPARSE = "penalize.balance.sparse";
     public static final String ADAPT_DATASET_VARIANCE = "penalize.balance.sparse";
 
-    private LimeConfigEntityFactory() {}
+    private LimeConfigEntityFactory() {
+    }
 
     public static List<NumericLimeConfigEntity> createNumericEntities(LimeConfig config) {
         List<NumericLimeConfigEntity> entities = new ArrayList<>();
