@@ -32,16 +32,23 @@ import {
   Outcome
 } from '../../../types';
 import './CounterfactualAnalysis.scss';
-import useCFTableSizes from '../CounterfactualTable/useCFTableSizes';
 
 type CounterfactualAnalysisProps = {
   inputs: ItemObject[];
   outcomes: Outcome[];
   executionId: string;
+  containerWidth: number;
+  containerHeight: number;
 };
 
 const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
-  const { executionId, inputs, outcomes } = props;
+  const {
+    executionId,
+    inputs,
+    outcomes,
+    containerWidth,
+    containerHeight
+  } = props;
   const [state, dispatch] = useReducer(
     cfReducer,
     { inputs, outcomes },
@@ -52,10 +59,7 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
     input: CFSearchInput;
     inputIndex: number;
   }>();
-  const { containerHeight } = useCFTableSizes({
-    headerSelector: '.execution-header',
-    wrapperSelector: '.counterfactual__wrapper__container'
-  });
+
   const { runCFAnalysis, cfResults } = useCounterfactualExecution(executionId);
 
   const handleInputDomainEdit = (input: CFSearchInput, inputIndex: number) => {
@@ -64,37 +68,6 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
       setIsSidePanelExpanded(true);
     }
   };
-
-  const areInputsSelected = (inputs: CFSearchInput[]) => {
-    // filtering all non fixed inputs
-    const selectedInputs = inputs.filter(domain => domain.isFixed === false);
-    // checking if all inputs have a domain specified, with the exception of
-    // boolean (do not require one) and structured inputs (not yet supported)
-    return (
-      selectedInputs.length > 0 &&
-      inputs.every(
-        input =>
-          input.domain ||
-          input.components !== null ||
-          typeof input.value === 'boolean'
-      )
-    );
-  };
-
-  useEffect(() => {
-    if (
-      areInputsSelected(state.searchDomains) &&
-      state.goals.filter(goal => !goal.isFixed).length > 0
-    ) {
-      if (state.status.isDisabled) {
-        dispatch({ type: 'CF_SET_STATUS', payload: { isDisabled: false } });
-      }
-    } else {
-      if (!state.status.isDisabled) {
-        dispatch({ type: 'CF_SET_STATUS', payload: { isDisabled: true } });
-      }
-    }
-  }, [state.searchDomains, state.goals, state.status.isDisabled, dispatch]);
 
   const onRunAnalysis = () => {
     runCFAnalysis({ goals: state.goals, searchDomains: state.searchDomains });
@@ -199,6 +172,7 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
                         results={state.results}
                         status={state.status}
                         onOpenInputDomainEdit={handleInputDomainEdit}
+                        containerWidth={containerWidth}
                       />
                     </StackItem>
                   </Stack>

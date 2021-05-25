@@ -27,7 +27,6 @@ import {
 } from '@patternfly/react-icons';
 import { Scrollbars } from 'react-custom-scrollbars';
 import CounterfactualInputDomain from '../../Molecules/CounterfactualInputDomain/CounterfactualInputDomain';
-import useCFTableSizes from './useCFTableSizes';
 import {
   CFAnalysisResult,
   CFExecutionStatus,
@@ -43,10 +42,17 @@ type CounterfactualTableProps = {
   results: CFAnalysisResult[];
   status: CFStatus;
   onOpenInputDomainEdit: (input: CFSearchInput, inputIndex: number) => void;
+  containerWidth: number;
 };
 
 const CounterfactualTable = (props: CounterfactualTableProps) => {
-  const { inputs, results, status, onOpenInputDomainEdit } = props;
+  const {
+    inputs,
+    results,
+    status,
+    onOpenInputDomainEdit,
+    containerWidth
+  } = props;
   const dispatch = useContext(CFDispatch);
   const columns = [
     'Input',
@@ -66,10 +72,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState<
     boolean
   >();
-  const { containerWidth, windowSize } = useCFTableSizes({
-    headerSelector: '.execution-header',
-    wrapperSelector: '.counterfactual__wrapper__container'
-  });
+
   const scrollbars = useRef(null);
 
   useEffect(() => {
@@ -156,7 +159,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 
   return (
     <>
-      {windowSize <= 768 && (
+      {containerWidth <= 880 && (
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.xs}>
             <EmptyStateIcon icon={GhostIcon} />
@@ -167,7 +170,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
           </EmptyState>
         </Bullseye>
       )}
-      {windowSize > 768 && (
+      {containerWidth > 880 && (
         <div className="cf-table-outer-container">
           <div className="cf-table-inner-container">
             {containerWidth > 0 && (

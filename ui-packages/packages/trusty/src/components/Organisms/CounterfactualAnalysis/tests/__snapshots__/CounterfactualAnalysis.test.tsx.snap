@@ -2,11 +2,14 @@
 
 exports[`CounterfactualAnalysis renders correctly 1`] = `
 <CounterfactualAnalysis
+  containerHeight={900}
+  containerWidth={900}
   executionId="b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000"
   inputs={
     Array [
       Object {
         "components": null,
+        "kind": "UNIT",
         "name": "Credit Score",
         "typeRef": "number",
         "value": 738,
@@ -23,6 +26,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
         "outcomeName": "Risk Score",
         "outcomeResult": Object {
           "components": null,
+          "kind": "UNIT",
           "name": "Risk Score",
           "typeRef": "number",
           "value": 1,
@@ -50,7 +54,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
         }
         style={
           Object {
-            "height": 500,
+            "height": 900,
           }
         }
       >
@@ -62,7 +66,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
               className="pf-c-drawer__content"
               style={
                 Object {
-                  "height": 500,
+                  "height": 900,
                 }
               }
             >
@@ -141,6 +145,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                               Object {
                                                 "id": "_c6e56793-68d0-4683-b34b-5e9d69e7d0d4",
                                                 "isFixed": true,
+                                                "kind": "UNIT",
                                                 "name": "Risk Score",
                                                 "originalValue": 1,
                                                 "typeRef": "number",
@@ -479,6 +484,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                       Object {
                                         "id": "_c6e56793-68d0-4683-b34b-5e9d69e7d0d4",
                                         "isFixed": true,
+                                        "kind": "UNIT",
                                         "name": "Risk Score",
                                         "originalValue": 1,
                                         "typeRef": "number",
@@ -770,6 +776,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                     trigger={
                                                       <Button
                                                         aria-describedby="pf-tooltip-2"
+                                                        className="counterfactual-setup-outcomes"
                                                         onClick={[Function]}
                                                         variant="secondary"
                                                       >
@@ -783,6 +790,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                     >
                                                       <Button
                                                         aria-describedby="pf-tooltip-2"
+                                                        className="counterfactual-setup-outcomes"
                                                         onClick={[Function]}
                                                         variant="secondary"
                                                       >
@@ -790,7 +798,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                           aria-describedby="pf-tooltip-2"
                                                           aria-disabled={false}
                                                           aria-label={null}
-                                                          className="pf-c-button pf-m-secondary"
+                                                          className="pf-c-button pf-m-secondary counterfactual-setup-outcomes"
                                                           data-ouia-component-id="OUIA-Generated-Button-secondary-1"
                                                           data-ouia-component-type="PF4/Button"
                                                           data-ouia-safe={true}
@@ -1009,11 +1017,13 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                   </Toolbar>
                                 </CounterfactualToolbar>
                                 <CounterfactualTable
+                                  containerWidth={900}
                                   inputs={
                                     Array [
                                       Object {
                                         "components": null,
                                         "isFixed": true,
+                                        "kind": "UNIT",
                                         "name": "Credit Score",
                                         "typeRef": "number",
                                         "value": 738,
@@ -1040,7 +1050,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                         className="cf-table-container cf-table-container--with-results"
                                         style={
                                           Object {
-                                            "width": 500,
+                                            "width": 900,
                                           }
                                         }
                                       >
@@ -1061,7 +1071,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                           style={
                                             Object {
                                               "height": "100%",
-                                              "width": 500,
+                                              "width": 900,
                                             }
                                           }
                                           tagName="div"
@@ -1074,7 +1084,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                 "height": "100%",
                                                 "overflow": "hidden",
                                                 "position": "relative",
-                                                "width": 500,
+                                                "width": 900,
                                               }
                                             }
                                           >

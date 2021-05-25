@@ -18,6 +18,7 @@ const useCounterfactualExecution = (executionId: string) => {
   });
   const [cfResults, setCFResults] = useState<CFAnalysisResultsSets>();
   const [counterfactualId, setCounterfactualId] = useState();
+  const [resultsPolling, setResultsPolling] = useState<number | null>(null);
 
   const runCFAnalysis = useCallback(
     (parameters: { goals: CFGoal[]; searchDomains: CFSearchInput[] }) => {
@@ -53,7 +54,6 @@ const useCounterfactualExecution = (executionId: string) => {
     },
     [executionId]
   );
-  const [resultsPolling, setResultsPolling] = useState<number | null>(null);
 
   const getCFResults = useCallback(() => {
     let isMounted = true;
@@ -104,7 +104,7 @@ const useCounterfactualExecution = (executionId: string) => {
 
 export default useCounterfactualExecution;
 
-function useInterval(callback: () => void, delay: number | null) {
+const useInterval = (callback: () => void, delay: number | null) => {
   const savedCallback = useRef(null);
 
   useEffect(() => {
@@ -120,4 +120,4 @@ function useInterval(callback: () => void, delay: number | null) {
       return () => clearInterval(id);
     }
   }, [delay]);
-}
+};

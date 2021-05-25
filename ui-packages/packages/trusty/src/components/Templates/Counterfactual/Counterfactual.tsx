@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Divider,
   PageSection,
@@ -14,24 +14,29 @@ import useInputData from '../InputData/useInputData';
 import useDecisionOutcomes from '../AuditDetail/useDecisionOutcomes';
 import SkeletonDataList from '../../Molecules/SkeletonDataList/SkeletonDataList';
 import SkeletonFlexStripes from '../../Molecules/SkeletonFlexStripes/SkeletonFlexStripes';
+import useCFSizes from './useCFSizes';
 import './Counterfactual.scss';
 
 const Counterfactual = () => {
   const { executionId } = useParams<ExecutionRouteParams>();
   const inputData = useInputData(executionId);
   const outcomesData = useDecisionOutcomes(executionId);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { containerWidth, containerHeight } = useCFSizes(containerRef.current);
 
   return (
     <>
       <Divider className="counterfactual__divider" />
       <div className="counterfactual__wrapper">
-        <div className="counterfactual__wrapper__container">
+        <div className="counterfactual__wrapper__container" ref={containerRef}>
           {inputData.status === RemoteDataStatus.SUCCESS &&
           outcomesData.status === RemoteDataStatus.SUCCESS ? (
             <CounterfactualAnalysis
               inputs={inputData.data}
               outcomes={outcomesData.data}
               executionId={executionId}
+              containerWidth={containerWidth}
+              containerHeight={containerHeight}
             />
           ) : (
             <PageSection variant={'light'} isFilled={true}>

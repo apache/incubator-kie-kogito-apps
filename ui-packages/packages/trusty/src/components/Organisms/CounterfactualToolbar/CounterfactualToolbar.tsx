@@ -142,7 +142,11 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                     </div>
                   }
                 >
-                  <Button variant="secondary" onClick={toggleOutcomeSelection}>
+                  <Button
+                    variant="secondary"
+                    onClick={toggleOutcomeSelection}
+                    className="counterfactual-setup-outcomes"
+                  >
                     Set Up Outcomes
                   </Button>
                 </Tooltip>

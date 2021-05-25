@@ -1,25 +1,19 @@
 import { useEffect, useState } from 'react';
 import { debounce } from 'lodash';
 
-type useCFTableSizesParameters = {
-  headerSelector: string;
-  wrapperSelector: string;
-};
-
-const useCFTableSizes = (parameters: useCFTableSizesParameters) => {
-  const { headerSelector, wrapperSelector } = parameters;
+const useCFSizes = (containerRef?: HTMLDivElement) => {
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
   const [windowSize, setWindowSize] = useState();
 
   useEffect(() => {
     const getContainerWidth = () => {
-      const size = document.querySelector(headerSelector).clientWidth - 10;
+      const size = containerRef ? containerRef.clientWidth - 60 : 0;
       return size < 768 ? 768 : size;
     };
 
     const getContainerHeight = () => {
-      return document.querySelector(wrapperSelector).clientHeight;
+      return containerRef ? containerRef.clientHeight : 0;
     };
 
     setContainerWidth(getContainerWidth());
@@ -34,9 +28,9 @@ const useCFTableSizes = (parameters: useCFTableSizesParameters) => {
 
     window.addEventListener('resize', handleWindowResize);
     return () => window.removeEventListener('resize', handleWindowResize);
-  }, [headerSelector, wrapperSelector]);
+  }, [containerRef]);
 
   return { containerWidth, containerHeight, windowSize };
 };
 
-export default useCFTableSizes;
+export default useCFSizes;

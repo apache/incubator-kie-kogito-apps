@@ -60,10 +60,13 @@ export type cfActions =
 
 export const cfReducer = (state: CFState, action: cfActions) => {
   switch (action.type) {
-    case 'CF_SET_OUTCOMES':
-      return { ...state, goals: action.payload };
-    case 'CF_TOGGLE_INPUT':
-      return {
+    case 'CF_SET_OUTCOMES': {
+      const newState = { ...state, goals: action.payload };
+      return updateCFStatus(newState);
+    }
+
+    case 'CF_TOGGLE_INPUT': {
+      const newState = {
         ...state,
         searchDomains: state.searchDomains.map((input, index) =>
           index === action.payload.searchInputIndex
@@ -71,16 +74,22 @@ export const cfReducer = (state: CFState, action: cfActions) => {
             : input
         )
       };
-    case 'CF_TOGGLE_ALL_INPUTS':
-      return {
+      return updateCFStatus(newState);
+    }
+
+    case 'CF_TOGGLE_ALL_INPUTS': {
+      const newState = {
         ...state,
         searchDomains: state.searchDomains.map(input => ({
           ...input,
           isFixed: !action.payload.selected
         }))
       };
-    case 'CF_SET_INPUT_DOMAIN':
-      return {
+      return updateCFStatus(newState);
+    }
+
+    case 'CF_SET_INPUT_DOMAIN': {
+      const newState = {
         ...state,
         searchDomains: state.searchDomains.map((input, index) =>
           index === action.payload.inputIndex
@@ -91,16 +100,21 @@ export const cfReducer = (state: CFState, action: cfActions) => {
             : input
         )
       };
+      return updateCFStatus(newState);
+    }
+
     case 'CF_SET_RESULTS':
       return {
         ...state,
         results: action.payload.results
       };
+
     case 'CF_SET_STATUS':
       return {
         ...state,
         status: { ...state.status, ...action.payload }
       };
+
     case 'CF_RESET_ANALYSIS':
       switch (action.payload.resetType) {
         case 'NEW':
@@ -112,7 +126,7 @@ export const cfReducer = (state: CFState, action: cfActions) => {
           return {
             ...state,
             status: {
-              isDisabled: true,
+              isDisabled: false,
               executionStatus: CFExecutionStatus.NOT_STARTED,
               lastExecutionTime: null
             },
@@ -144,7 +158,8 @@ export const cfInitState = (parameters): CFState => {
       typeRef: outcome.outcomeResult.typeRef,
       value: outcome.outcomeResult.value,
       originalValue: outcome.outcomeResult.value,
-      isFixed: true
+      isFixed: true,
+      kind: outcome.outcomeResult.kind
     };
   });
 
@@ -172,4 +187,40 @@ const convertInputToSearchDomain = (inputs: ItemObject[]) => {
   return inputs.map(input => {
     return addIsFixed(input);
   });
+};
+
+const updateCFStatus = (state: CFState): CFState => {
+  if (areRequiredParametersSet(state)) {
+    if (state.status.isDisabled) {
+      return { ...state, status: { ...state.status, isDisabled: false } };
+    }
+  } else {
+    if (!state.status.isDisabled) {
+      return { ...state, status: { ...state.status, isDisabled: true } };
+    }
+  }
+  return state;
+};
+
+const areRequiredParametersSet = (state: CFState): boolean => {
+  return (
+    areInputsSelected(state.searchDomains) &&
+    state.goals.filter(goal => !goal.isFixed).length > 0
+  );
+};
+
+const areInputsSelected = (inputs: CFSearchInput[]) => {
+  // filtering all non fixed inputs
+  const selectedInputs = inputs.filter(domain => domain.isFixed === false);
+  // checking if all inputs have a domain specified, with the exception of
+  // boolean (do not require one) and structured inputs (not yet supported)
+  return (
+    selectedInputs.length > 0 &&
+    inputs.every(
+      input =>
+        input.domain ||
+        input.components !== null ||
+        typeof input.value === 'boolean'
+    )
+  );
 };
