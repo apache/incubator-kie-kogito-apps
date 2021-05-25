@@ -47,16 +47,8 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                     LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(solution.getModel(),
                             prediction, limeExplainer, topK, 5);
                     for (String decision : stability.getDecisions()) {
-                        double positiveStabilityScore = 0;
-                        double negativeStabilityScore = 0;
-                        for (int i = 1; i <= topK; i++) {
-                            positiveStabilityScore += stability.getPositiveStabilityScore(decision, i);
-                            negativeStabilityScore += stability.getNegativeStabilityScore(decision, i);
-                        }
-                        positiveStabilityScore /= topK;
-                        negativeStabilityScore /= topK;
-                        // TODO: FAI-495 - differentiate (or weight) between positive and negative
-                        stabilityScore += (positiveStabilityScore + negativeStabilityScore) / (2d * stability.getDecisions().size());
+                        double decisionMarginalScore = getDecisionMarginalScore(topK, stability, decision);
+                        stabilityScore += decisionMarginalScore;
                         succeededEvaluations++;
                     }
                 } catch (ExecutionException e) {
@@ -73,6 +65,20 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
             }
         }
         return SimpleBigDecimalScore.parseScore(Double.toString(stabilityScore));
+    }
+
+    private double getDecisionMarginalScore(int topK, LocalSaliencyStability stability, String decision) {
+        double positiveStabilityScore = 0;
+        double negativeStabilityScore = 0;
+        for (int i = 1; i <= topK; i++) {
+            positiveStabilityScore += stability.getPositiveStabilityScore(decision, i);
+            negativeStabilityScore += stability.getNegativeStabilityScore(decision, i);
+        }
+        positiveStabilityScore /= topK;
+        negativeStabilityScore /= topK;
+        // TODO: FAI-495 - differentiate (or weight) between positive and negative
+        double decisionMarginalScore = (positiveStabilityScore + negativeStabilityScore) / (2d * stability.getDecisions().size());
+        return decisionMarginalScore;
     }
 
 }
