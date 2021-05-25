@@ -24,7 +24,7 @@ import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.model.EncodingParams;
 import org.kie.kogito.explainability.model.PerturbationContext;
 
-public class LimeConfigEntityFactory {
+class LimeConfigEntityFactory {
 
     public static final String KERNEL_WIDTH = "kernel.width";
     public static final String PROXIMITY_THRESHOLD = "proximity.threshold";
@@ -41,7 +41,7 @@ public class LimeConfigEntityFactory {
     private LimeConfigEntityFactory() {
     }
 
-    public static List<NumericLimeConfigEntity> createNumericEntities(LimeConfig config) {
+    static List<NumericLimeConfigEntity> createNumericEntities(LimeConfig config) {
         List<NumericLimeConfigEntity> entities = new ArrayList<>();
         double proximityKernelWidth = config.getProximityKernelWidth();
         entities.add(new NumericLimeConfigEntity(KERNEL_WIDTH, proximityKernelWidth, 0.1, 0.9));
@@ -62,7 +62,7 @@ public class LimeConfigEntityFactory {
         return entities;
     }
 
-    public static LimeConfig toLimeConfig(LimeStabilitySolution solution) {
+    static LimeConfig toLimeConfig(LimeStabilitySolution solution) {
         Map<String, Double> numericEntitiesMap = new HashMap<>();
         Map<String, Boolean> booleanEntitiesMap = new HashMap<>();
         List<LimeConfigEntity> entities = solution.getEntities();
@@ -98,7 +98,7 @@ public class LimeConfigEntityFactory {
 
     }
 
-    public static List<BooleanLimeConfigEntity> createBooleanEntities(LimeConfig config) {
+    static List<BooleanLimeConfigEntity> createBooleanEntities(LimeConfig config) {
         List<BooleanLimeConfigEntity> entities = new ArrayList<>();
         boolean proximityKernelWidth = config.isProximityFilter();
         entities.add(new BooleanLimeConfigEntity(PROXIMITY_FILTER_ENABLED, proximityKernelWidth));
