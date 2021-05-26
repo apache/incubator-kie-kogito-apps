@@ -14,4 +14,10 @@
  * limitations under the License.
  */
 
-module.exports = (on: any, config: any) => {};
+/**
+ * @type {Cypress.PluginConfig}
+ */
+export default (on, config) => {
+  // `on` is used to hook into various events Cypress emits
+  // `config` is the resolved Cypress config
+};

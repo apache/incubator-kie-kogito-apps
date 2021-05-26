@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 
-Cypress.Commands.add('ouiaId', valueStr => {
-  return cy.get(`[data-ouia-component-id='${valueStr}']`);
-});
+declare namespace Cypress {
+  interface Chainable {
+    /**
+     * Return DOM Element which match the value of data-ouia-component-it attribute.
+     */
+    ouiaId(valueStr: string): Chainable;
+  }
+}
