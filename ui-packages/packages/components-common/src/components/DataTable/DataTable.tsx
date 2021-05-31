@@ -131,33 +131,88 @@ const DataTable: React.FC<IOwnProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   const [rows, setRows] = useState<IRow[]>([]);
-  const [columnList, setColumnList] = useState<ICell[]>([]);
+  const [columnList, setColumnList] = useState<(ICell | string)[]>([]);
 
   useEffect(() => {
-    if (data) {
+    const defaultColumns = [
+      {
+        title: 'Name',
+        props: {
+          style: {
+            width: '667px'
+          }
+        }
+      },
+      {
+        title: 'Process'
+      },
+      {
+        title: 'Priority'
+      },
+      {
+        title: 'Status'
+      },
+      {
+        title: 'Started'
+      },
+      {
+        title: 'Last update'
+      }
+    ];
+    if (isLoading) {
+      const row = [
+        {
+          cells: [
+            {
+              props: { colSpan: 6 },
+              title: LoadingComponent ? (
+                <>{LoadingComponent}</>
+              ) : (
+                <Bullseye>
+                  <KogitoSpinner spinnerText="Loading ..." />
+                </Bullseye>
+              )
+            }
+          ],
+          rowKey: '0'
+        }
+      ];
+      setColumnList(defaultColumns);
+      setRows(row);
+    } else if (_.isEmpty(data)) {
+      const row = [
+        {
+          cells: [
+            {
+              props: { colSpan: 6 },
+              title: (
+                <KogitoEmptyState
+                  type={KogitoEmptyStateType.Search}
+                  title="No results found"
+                  body="Try using different filters"
+                />
+              )
+            }
+          ],
+          rowKey: '0'
+        }
+      ];
+      setColumnList(defaultColumns);
+      setRows(row);
+    } else {
       const cols = getColumns(data, columns);
       if (!_.isEmpty(cols)) {
         setColumnList(cols);
         setRows(getRows(data, cols));
       }
     }
-  }, [data]);
+  }, [data, isLoading]);
 
   const onSort = (event, index, direction) => {
     if (_.isFunction(onSorting)) {
       onSorting(index, direction);
     }
   };
-
-  if (isLoading) {
-    return LoadingComponent ? (
-      <React.Fragment>{LoadingComponent}</React.Fragment>
-    ) : (
-      <Bullseye>
-        <KogitoSpinner spinnerText="Loading..." />
-      </Bullseye>
-    );
-  }
 
   if (error) {
     return ErrorComponent ? (
@@ -170,16 +225,6 @@ const DataTable: React.FC<IOwnProps & OUIAProps> = ({
           body="Try using the refresh action to reload"
         />
       </div>
-    );
-  }
-
-  if (_.isEmpty(data)) {
-    return (
-      <KogitoEmptyState
-        type={KogitoEmptyStateType.Search}
-        title="No results found"
-        body="Try using different filters"
-      />
     );
   }
 
