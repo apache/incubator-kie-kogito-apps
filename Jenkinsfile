@@ -153,7 +153,7 @@ String getKogitoTargetBranch() {
 }
 
 String getOptaplannerTargetBranch() {
-    return getTargetBranch(isUpstreamKogitoProject() ? 7 : 0)
+    return getTargetBranch(isUpstreamOptaplannerProject() ? 0 : 7)
 }
 
 String getTargetBranch(Integer addToMajor) {
