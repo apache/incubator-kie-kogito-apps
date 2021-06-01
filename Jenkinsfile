@@ -220,5 +220,5 @@ boolean isUpstreamOptaplannerProject() {
 }
 
 Integer getTimeoutValue() {
-    return isNative() ? 360 : 120
+    return isNative() ? 360 : 180
 }
