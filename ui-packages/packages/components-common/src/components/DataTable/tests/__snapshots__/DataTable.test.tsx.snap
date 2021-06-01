@@ -3676,27 +3676,24 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
     cells={
       Array [
         Object {
-          "props": Object {
-            "style": Object {
-              "width": "667px",
-            },
-          },
+          "data": "$.processId",
+          "title": "ProcessId",
+        },
+        Object {
+          "data": "$.name",
           "title": "Name",
         },
         Object {
-          "title": "Process",
-        },
-        Object {
+          "data": "$.priority",
           "title": "Priority",
         },
         Object {
-          "title": "Status",
+          "data": "$.processInstanceId",
+          "title": "ProcessInstanceId",
         },
         Object {
-          "title": "Started",
-        },
-        Object {
-          "title": "Last update",
+          "data": "$.state",
+          "title": "State",
         },
       ]
     }
@@ -3719,7 +3716,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
           "cells": Array [
             Object {
               "props": Object {
-                "colSpan": 6,
+                "colSpan": 5,
               },
               "title": <Bullseye>
                 <MockedKogitoSpinner
@@ -3750,7 +3747,53 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": undefined,
+            "data": "$.processId",
+            "extraParams": Object {
+              "actionResolver": undefined,
+              "actions": undefined,
+              "allRowsSelected": false,
+              "areActionsDisabled": undefined,
+              "canSelectAll": true,
+              "canSortFavorites": true,
+              "contentId": "expanded-content",
+              "dropdownDirection": "down",
+              "dropdownPosition": "right",
+              "expandId": "expandable-toggle",
+              "firstUserColumnIndex": 0,
+              "onCollapse": undefined,
+              "onExpand": undefined,
+              "onFavorite": undefined,
+              "onRowEdit": undefined,
+              "onSelect": undefined,
+              "onSort": [Function],
+              "rowLabeledBy": "simple-node",
+              "selectVariant": "checkbox",
+              "sortBy": undefined,
+            },
+            "header": Object {
+              "formatters": Array [],
+              "label": "ProcessId",
+              "transforms": Array [
+                [Function],
+                [Function],
+              ],
+            },
+            "property": "processid",
+            "props": Object {
+              "data-key": 0,
+              "data-label": "ProcessId",
+            },
+          },
+          Object {
+            "cell": Object {
+              "formatters": Array [
+                [Function],
+              ],
+              "transforms": Array [
+                [Function],
+              ],
+            },
+            "data": "$.name",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3783,57 +3826,8 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
             },
             "property": "name",
             "props": Object {
-              "data-key": 0,
-              "data-label": "Name",
-              "style": Object {
-                "width": "667px",
-              },
-            },
-          },
-          Object {
-            "cell": Object {
-              "formatters": Array [
-                [Function],
-              ],
-              "transforms": Array [
-                [Function],
-              ],
-            },
-            "data": undefined,
-            "extraParams": Object {
-              "actionResolver": undefined,
-              "actions": undefined,
-              "allRowsSelected": false,
-              "areActionsDisabled": undefined,
-              "canSelectAll": true,
-              "canSortFavorites": true,
-              "contentId": "expanded-content",
-              "dropdownDirection": "down",
-              "dropdownPosition": "right",
-              "expandId": "expandable-toggle",
-              "firstUserColumnIndex": 0,
-              "onCollapse": undefined,
-              "onExpand": undefined,
-              "onFavorite": undefined,
-              "onRowEdit": undefined,
-              "onSelect": undefined,
-              "onSort": [Function],
-              "rowLabeledBy": "simple-node",
-              "selectVariant": "checkbox",
-              "sortBy": undefined,
-            },
-            "header": Object {
-              "formatters": Array [],
-              "label": "Process",
-              "transforms": Array [
-                [Function],
-                [Function],
-              ],
-            },
-            "property": "process",
-            "props": Object {
               "data-key": 1,
-              "data-label": "Process",
+              "data-label": "Name",
             },
           },
           Object {
@@ -3845,7 +3839,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": undefined,
+            "data": "$.priority",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3891,7 +3885,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": undefined,
+            "data": "$.processInstanceId",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3916,16 +3910,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
             },
             "header": Object {
               "formatters": Array [],
-              "label": "Status",
+              "label": "ProcessInstanceId",
               "transforms": Array [
                 [Function],
                 [Function],
               ],
             },
-            "property": "status",
+            "property": "processinstanceid",
             "props": Object {
               "data-key": 3,
-              "data-label": "Status",
+              "data-label": "ProcessInstanceId",
             },
           },
           Object {
@@ -3937,7 +3931,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": undefined,
+            "data": "$.state",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3962,62 +3956,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
             },
             "header": Object {
               "formatters": Array [],
-              "label": "Started",
+              "label": "State",
               "transforms": Array [
                 [Function],
                 [Function],
               ],
             },
-            "property": "started",
+            "property": "state",
             "props": Object {
               "data-key": 4,
-              "data-label": "Started",
-            },
-          },
-          Object {
-            "cell": Object {
-              "formatters": Array [
-                [Function],
-              ],
-              "transforms": Array [
-                [Function],
-              ],
-            },
-            "data": undefined,
-            "extraParams": Object {
-              "actionResolver": undefined,
-              "actions": undefined,
-              "allRowsSelected": false,
-              "areActionsDisabled": undefined,
-              "canSelectAll": true,
-              "canSortFavorites": true,
-              "contentId": "expanded-content",
-              "dropdownDirection": "down",
-              "dropdownPosition": "right",
-              "expandId": "expandable-toggle",
-              "firstUserColumnIndex": 0,
-              "onCollapse": undefined,
-              "onExpand": undefined,
-              "onFavorite": undefined,
-              "onRowEdit": undefined,
-              "onSelect": undefined,
-              "onSort": [Function],
-              "rowLabeledBy": "simple-node",
-              "selectVariant": "checkbox",
-              "sortBy": undefined,
-            },
-            "header": Object {
-              "formatters": Array [],
-              "label": "Last update",
-              "transforms": Array [
-                [Function],
-                [Function],
-              ],
-            },
-            "property": "last-update",
-            "props": Object {
-              "data-key": 5,
-              "data-label": "Last update",
+              "data-label": "State",
             },
           },
         ]
@@ -4096,7 +4044,53 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.processId",
+                          "extraParams": Object {
+                            "actionResolver": undefined,
+                            "actions": undefined,
+                            "allRowsSelected": false,
+                            "areActionsDisabled": undefined,
+                            "canSelectAll": true,
+                            "canSortFavorites": true,
+                            "contentId": "expanded-content",
+                            "dropdownDirection": "down",
+                            "dropdownPosition": "right",
+                            "expandId": "expandable-toggle",
+                            "firstUserColumnIndex": 0,
+                            "onCollapse": undefined,
+                            "onExpand": undefined,
+                            "onFavorite": undefined,
+                            "onRowEdit": undefined,
+                            "onSelect": undefined,
+                            "onSort": [Function],
+                            "rowLabeledBy": "simple-node",
+                            "selectVariant": "checkbox",
+                            "sortBy": undefined,
+                          },
+                          "header": Object {
+                            "formatters": Array [],
+                            "label": "ProcessId",
+                            "transforms": Array [
+                              [Function],
+                              [Function],
+                            ],
+                          },
+                          "property": "processid",
+                          "props": Object {
+                            "data-key": 0,
+                            "data-label": "ProcessId",
+                          },
+                        },
+                        Object {
+                          "cell": Object {
+                            "formatters": Array [
+                              [Function],
+                            ],
+                            "transforms": Array [
+                              [Function],
+                            ],
+                          },
+                          "data": "$.name",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4129,57 +4123,8 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           },
                           "property": "name",
                           "props": Object {
-                            "data-key": 0,
-                            "data-label": "Name",
-                            "style": Object {
-                              "width": "667px",
-                            },
-                          },
-                        },
-                        Object {
-                          "cell": Object {
-                            "formatters": Array [
-                              [Function],
-                            ],
-                            "transforms": Array [
-                              [Function],
-                            ],
-                          },
-                          "data": undefined,
-                          "extraParams": Object {
-                            "actionResolver": undefined,
-                            "actions": undefined,
-                            "allRowsSelected": false,
-                            "areActionsDisabled": undefined,
-                            "canSelectAll": true,
-                            "canSortFavorites": true,
-                            "contentId": "expanded-content",
-                            "dropdownDirection": "down",
-                            "dropdownPosition": "right",
-                            "expandId": "expandable-toggle",
-                            "firstUserColumnIndex": 0,
-                            "onCollapse": undefined,
-                            "onExpand": undefined,
-                            "onFavorite": undefined,
-                            "onRowEdit": undefined,
-                            "onSelect": undefined,
-                            "onSort": [Function],
-                            "rowLabeledBy": "simple-node",
-                            "selectVariant": "checkbox",
-                            "sortBy": undefined,
-                          },
-                          "header": Object {
-                            "formatters": Array [],
-                            "label": "Process",
-                            "transforms": Array [
-                              [Function],
-                              [Function],
-                            ],
-                          },
-                          "property": "process",
-                          "props": Object {
                             "data-key": 1,
-                            "data-label": "Process",
+                            "data-label": "Name",
                           },
                         },
                         Object {
@@ -4191,7 +4136,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.priority",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4237,7 +4182,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.processInstanceId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4262,16 +4207,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           },
                           "header": Object {
                             "formatters": Array [],
-                            "label": "Status",
+                            "label": "ProcessInstanceId",
                             "transforms": Array [
                               [Function],
                               [Function],
                             ],
                           },
-                          "property": "status",
+                          "property": "processinstanceid",
                           "props": Object {
                             "data-key": 3,
-                            "data-label": "Status",
+                            "data-label": "ProcessInstanceId",
                           },
                         },
                         Object {
@@ -4283,7 +4228,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.state",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4308,62 +4253,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           },
                           "header": Object {
                             "formatters": Array [],
-                            "label": "Started",
+                            "label": "State",
                             "transforms": Array [
                               [Function],
                               [Function],
                             ],
                           },
-                          "property": "started",
+                          "property": "state",
                           "props": Object {
                             "data-key": 4,
-                            "data-label": "Started",
-                          },
-                        },
-                        Object {
-                          "cell": Object {
-                            "formatters": Array [
-                              [Function],
-                            ],
-                            "transforms": Array [
-                              [Function],
-                            ],
-                          },
-                          "data": undefined,
-                          "extraParams": Object {
-                            "actionResolver": undefined,
-                            "actions": undefined,
-                            "allRowsSelected": false,
-                            "areActionsDisabled": undefined,
-                            "canSelectAll": true,
-                            "canSortFavorites": true,
-                            "contentId": "expanded-content",
-                            "dropdownDirection": "down",
-                            "dropdownPosition": "right",
-                            "expandId": "expandable-toggle",
-                            "firstUserColumnIndex": 0,
-                            "onCollapse": undefined,
-                            "onExpand": undefined,
-                            "onFavorite": undefined,
-                            "onRowEdit": undefined,
-                            "onSelect": undefined,
-                            "onSort": [Function],
-                            "rowLabeledBy": "simple-node",
-                            "selectVariant": "checkbox",
-                            "sortBy": undefined,
-                          },
-                          "header": Object {
-                            "formatters": Array [],
-                            "label": "Last update",
-                            "transforms": Array [
-                              [Function],
-                              [Function],
-                            ],
-                          },
-                          "property": "last-update",
-                          "props": Object {
-                            "data-key": 5,
-                            "data-label": "Last update",
+                            "data-label": "State",
                           },
                         },
                       ]
@@ -4435,7 +4334,53 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": undefined,
+                                  "data": "$.processId",
+                                  "extraParams": Object {
+                                    "actionResolver": undefined,
+                                    "actions": undefined,
+                                    "allRowsSelected": false,
+                                    "areActionsDisabled": undefined,
+                                    "canSelectAll": true,
+                                    "canSortFavorites": true,
+                                    "contentId": "expanded-content",
+                                    "dropdownDirection": "down",
+                                    "dropdownPosition": "right",
+                                    "expandId": "expandable-toggle",
+                                    "firstUserColumnIndex": 0,
+                                    "onCollapse": undefined,
+                                    "onExpand": undefined,
+                                    "onFavorite": undefined,
+                                    "onRowEdit": undefined,
+                                    "onSelect": undefined,
+                                    "onSort": [Function],
+                                    "rowLabeledBy": "simple-node",
+                                    "selectVariant": "checkbox",
+                                    "sortBy": undefined,
+                                  },
+                                  "header": Object {
+                                    "formatters": Array [],
+                                    "label": "ProcessId",
+                                    "transforms": Array [
+                                      [Function],
+                                      [Function],
+                                    ],
+                                  },
+                                  "property": "processid",
+                                  "props": Object {
+                                    "data-key": 0,
+                                    "data-label": "ProcessId",
+                                  },
+                                },
+                                Object {
+                                  "cell": Object {
+                                    "formatters": Array [
+                                      [Function],
+                                    ],
+                                    "transforms": Array [
+                                      [Function],
+                                    ],
+                                  },
+                                  "data": "$.name",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4468,57 +4413,8 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                   },
                                   "property": "name",
                                   "props": Object {
-                                    "data-key": 0,
-                                    "data-label": "Name",
-                                    "style": Object {
-                                      "width": "667px",
-                                    },
-                                  },
-                                },
-                                Object {
-                                  "cell": Object {
-                                    "formatters": Array [
-                                      [Function],
-                                    ],
-                                    "transforms": Array [
-                                      [Function],
-                                    ],
-                                  },
-                                  "data": undefined,
-                                  "extraParams": Object {
-                                    "actionResolver": undefined,
-                                    "actions": undefined,
-                                    "allRowsSelected": false,
-                                    "areActionsDisabled": undefined,
-                                    "canSelectAll": true,
-                                    "canSortFavorites": true,
-                                    "contentId": "expanded-content",
-                                    "dropdownDirection": "down",
-                                    "dropdownPosition": "right",
-                                    "expandId": "expandable-toggle",
-                                    "firstUserColumnIndex": 0,
-                                    "onCollapse": undefined,
-                                    "onExpand": undefined,
-                                    "onFavorite": undefined,
-                                    "onRowEdit": undefined,
-                                    "onSelect": undefined,
-                                    "onSort": [Function],
-                                    "rowLabeledBy": "simple-node",
-                                    "selectVariant": "checkbox",
-                                    "sortBy": undefined,
-                                  },
-                                  "header": Object {
-                                    "formatters": Array [],
-                                    "label": "Process",
-                                    "transforms": Array [
-                                      [Function],
-                                      [Function],
-                                    ],
-                                  },
-                                  "property": "process",
-                                  "props": Object {
                                     "data-key": 1,
-                                    "data-label": "Process",
+                                    "data-label": "Name",
                                   },
                                 },
                                 Object {
@@ -4530,7 +4426,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": undefined,
+                                  "data": "$.priority",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4576,7 +4472,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": undefined,
+                                  "data": "$.processInstanceId",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4601,16 +4497,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                   },
                                   "header": Object {
                                     "formatters": Array [],
-                                    "label": "Status",
+                                    "label": "ProcessInstanceId",
                                     "transforms": Array [
                                       [Function],
                                       [Function],
                                     ],
                                   },
-                                  "property": "status",
+                                  "property": "processinstanceid",
                                   "props": Object {
                                     "data-key": 3,
-                                    "data-label": "Status",
+                                    "data-label": "ProcessInstanceId",
                                   },
                                 },
                                 Object {
@@ -4622,7 +4518,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": undefined,
+                                  "data": "$.state",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4647,62 +4543,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                   },
                                   "header": Object {
                                     "formatters": Array [],
-                                    "label": "Started",
+                                    "label": "State",
                                     "transforms": Array [
                                       [Function],
                                       [Function],
                                     ],
                                   },
-                                  "property": "started",
+                                  "property": "state",
                                   "props": Object {
                                     "data-key": 4,
-                                    "data-label": "Started",
-                                  },
-                                },
-                                Object {
-                                  "cell": Object {
-                                    "formatters": Array [
-                                      [Function],
-                                    ],
-                                    "transforms": Array [
-                                      [Function],
-                                    ],
-                                  },
-                                  "data": undefined,
-                                  "extraParams": Object {
-                                    "actionResolver": undefined,
-                                    "actions": undefined,
-                                    "allRowsSelected": false,
-                                    "areActionsDisabled": undefined,
-                                    "canSelectAll": true,
-                                    "canSortFavorites": true,
-                                    "contentId": "expanded-content",
-                                    "dropdownDirection": "down",
-                                    "dropdownPosition": "right",
-                                    "expandId": "expandable-toggle",
-                                    "firstUserColumnIndex": 0,
-                                    "onCollapse": undefined,
-                                    "onExpand": undefined,
-                                    "onFavorite": undefined,
-                                    "onRowEdit": undefined,
-                                    "onSelect": undefined,
-                                    "onSort": [Function],
-                                    "rowLabeledBy": "simple-node",
-                                    "selectVariant": "checkbox",
-                                    "sortBy": undefined,
-                                  },
-                                  "header": Object {
-                                    "formatters": Array [],
-                                    "label": "Last update",
-                                    "transforms": Array [
-                                      [Function],
-                                      [Function],
-                                    ],
-                                  },
-                                  "property": "last-update",
-                                  "props": Object {
-                                    "data-key": 5,
-                                    "data-label": "Last update",
+                                    "data-label": "State",
                                   },
                                 },
                               ]
@@ -4722,27 +4572,17 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                 >
                                   <HeaderCell
                                     data-key={0}
-                                    data-label="Name"
+                                    data-label="ProcessId"
                                     key="0-header"
                                     scope="col"
-                                    style={
-                                      Object {
-                                        "width": "667px",
-                                      }
-                                    }
                                   >
                                     <Th
                                       className=""
                                       component="th"
                                       data-key={0}
-                                      data-label="Name"
+                                      data-label="ProcessId"
                                       onMouseEnter={[Function]}
                                       scope="col"
-                                      style={
-                                        Object {
-                                          "width": "667px",
-                                        }
-                                      }
                                       textCenter={false}
                                       tooltip=""
                                     >
@@ -4750,38 +4590,28 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         className=""
                                         component="th"
                                         data-key={0}
-                                        data-label="Name"
+                                        data-label="ProcessId"
                                         innerRef={null}
                                         onMouseEnter={[Function]}
                                         scope="col"
-                                        style={
-                                          Object {
-                                            "width": "667px",
-                                          }
-                                        }
                                         textCenter={false}
                                         tooltip=""
                                       >
                                         <th
                                           className=""
                                           data-key={0}
-                                          data-label="Name"
+                                          data-label="ProcessId"
                                           onMouseEnter={[Function]}
                                           scope="col"
-                                          style={
-                                            Object {
-                                              "width": "667px",
-                                            }
-                                          }
                                         >
-                                          Name
+                                          ProcessId
                                         </th>
                                       </ThBase>
                                     </Th>
                                   </HeaderCell>
                                   <HeaderCell
                                     data-key={1}
-                                    data-label="Process"
+                                    data-label="Name"
                                     key="1-header"
                                     scope="col"
                                   >
@@ -4789,7 +4619,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       className=""
                                       component="th"
                                       data-key={1}
-                                      data-label="Process"
+                                      data-label="Name"
                                       onMouseEnter={[Function]}
                                       scope="col"
                                       textCenter={false}
@@ -4799,7 +4629,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         className=""
                                         component="th"
                                         data-key={1}
-                                        data-label="Process"
+                                        data-label="Name"
                                         innerRef={null}
                                         onMouseEnter={[Function]}
                                         scope="col"
@@ -4809,11 +4639,11 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         <th
                                           className=""
                                           data-key={1}
-                                          data-label="Process"
+                                          data-label="Name"
                                           onMouseEnter={[Function]}
                                           scope="col"
                                         >
-                                          Process
+                                          Name
                                         </th>
                                       </ThBase>
                                     </Th>
@@ -4859,7 +4689,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                   </HeaderCell>
                                   <HeaderCell
                                     data-key={3}
-                                    data-label="Status"
+                                    data-label="ProcessInstanceId"
                                     key="3-header"
                                     scope="col"
                                   >
@@ -4867,7 +4697,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       className=""
                                       component="th"
                                       data-key={3}
-                                      data-label="Status"
+                                      data-label="ProcessInstanceId"
                                       onMouseEnter={[Function]}
                                       scope="col"
                                       textCenter={false}
@@ -4877,7 +4707,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         className=""
                                         component="th"
                                         data-key={3}
-                                        data-label="Status"
+                                        data-label="ProcessInstanceId"
                                         innerRef={null}
                                         onMouseEnter={[Function]}
                                         scope="col"
@@ -4887,18 +4717,18 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         <th
                                           className=""
                                           data-key={3}
-                                          data-label="Status"
+                                          data-label="ProcessInstanceId"
                                           onMouseEnter={[Function]}
                                           scope="col"
                                         >
-                                          Status
+                                          ProcessInstanceId
                                         </th>
                                       </ThBase>
                                     </Th>
                                   </HeaderCell>
                                   <HeaderCell
                                     data-key={4}
-                                    data-label="Started"
+                                    data-label="State"
                                     key="4-header"
                                     scope="col"
                                   >
@@ -4906,7 +4736,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       className=""
                                       component="th"
                                       data-key={4}
-                                      data-label="Started"
+                                      data-label="State"
                                       onMouseEnter={[Function]}
                                       scope="col"
                                       textCenter={false}
@@ -4916,7 +4746,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         className=""
                                         component="th"
                                         data-key={4}
-                                        data-label="Started"
+                                        data-label="State"
                                         innerRef={null}
                                         onMouseEnter={[Function]}
                                         scope="col"
@@ -4926,50 +4756,11 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         <th
                                           className=""
                                           data-key={4}
-                                          data-label="Started"
+                                          data-label="State"
                                           onMouseEnter={[Function]}
                                           scope="col"
                                         >
-                                          Started
-                                        </th>
-                                      </ThBase>
-                                    </Th>
-                                  </HeaderCell>
-                                  <HeaderCell
-                                    data-key={5}
-                                    data-label="Last update"
-                                    key="5-header"
-                                    scope="col"
-                                  >
-                                    <Th
-                                      className=""
-                                      component="th"
-                                      data-key={5}
-                                      data-label="Last update"
-                                      onMouseEnter={[Function]}
-                                      scope="col"
-                                      textCenter={false}
-                                      tooltip=""
-                                    >
-                                      <ThBase
-                                        className=""
-                                        component="th"
-                                        data-key={5}
-                                        data-label="Last update"
-                                        innerRef={null}
-                                        onMouseEnter={[Function]}
-                                        scope="col"
-                                        textCenter={false}
-                                        tooltip=""
-                                      >
-                                        <th
-                                          className=""
-                                          data-key={5}
-                                          data-label="Last update"
-                                          onMouseEnter={[Function]}
-                                          scope="col"
-                                        >
-                                          Last update
+                                          State
                                         </th>
                                       </ThBase>
                                     </Th>
@@ -5001,7 +4792,53 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": undefined,
+                      "data": "$.processId",
+                      "extraParams": Object {
+                        "actionResolver": undefined,
+                        "actions": undefined,
+                        "allRowsSelected": false,
+                        "areActionsDisabled": undefined,
+                        "canSelectAll": true,
+                        "canSortFavorites": true,
+                        "contentId": "expanded-content",
+                        "dropdownDirection": "down",
+                        "dropdownPosition": "right",
+                        "expandId": "expandable-toggle",
+                        "firstUserColumnIndex": 0,
+                        "onCollapse": undefined,
+                        "onExpand": undefined,
+                        "onFavorite": undefined,
+                        "onRowEdit": undefined,
+                        "onSelect": undefined,
+                        "onSort": [Function],
+                        "rowLabeledBy": "simple-node",
+                        "selectVariant": "checkbox",
+                        "sortBy": undefined,
+                      },
+                      "header": Object {
+                        "formatters": Array [],
+                        "label": "ProcessId",
+                        "transforms": Array [
+                          [Function],
+                          [Function],
+                        ],
+                      },
+                      "property": "processid",
+                      "props": Object {
+                        "data-key": 0,
+                        "data-label": "ProcessId",
+                      },
+                    },
+                    Object {
+                      "cell": Object {
+                        "formatters": Array [
+                          [Function],
+                        ],
+                        "transforms": Array [
+                          [Function],
+                        ],
+                      },
+                      "data": "$.name",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -5034,57 +4871,8 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                       },
                       "property": "name",
                       "props": Object {
-                        "data-key": 0,
-                        "data-label": "Name",
-                        "style": Object {
-                          "width": "667px",
-                        },
-                      },
-                    },
-                    Object {
-                      "cell": Object {
-                        "formatters": Array [
-                          [Function],
-                        ],
-                        "transforms": Array [
-                          [Function],
-                        ],
-                      },
-                      "data": undefined,
-                      "extraParams": Object {
-                        "actionResolver": undefined,
-                        "actions": undefined,
-                        "allRowsSelected": false,
-                        "areActionsDisabled": undefined,
-                        "canSelectAll": true,
-                        "canSortFavorites": true,
-                        "contentId": "expanded-content",
-                        "dropdownDirection": "down",
-                        "dropdownPosition": "right",
-                        "expandId": "expandable-toggle",
-                        "firstUserColumnIndex": 0,
-                        "onCollapse": undefined,
-                        "onExpand": undefined,
-                        "onFavorite": undefined,
-                        "onRowEdit": undefined,
-                        "onSelect": undefined,
-                        "onSort": [Function],
-                        "rowLabeledBy": "simple-node",
-                        "selectVariant": "checkbox",
-                        "sortBy": undefined,
-                      },
-                      "header": Object {
-                        "formatters": Array [],
-                        "label": "Process",
-                        "transforms": Array [
-                          [Function],
-                          [Function],
-                        ],
-                      },
-                      "property": "process",
-                      "props": Object {
                         "data-key": 1,
-                        "data-label": "Process",
+                        "data-label": "Name",
                       },
                     },
                     Object {
@@ -5096,7 +4884,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": undefined,
+                      "data": "$.priority",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -5142,7 +4930,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": undefined,
+                      "data": "$.processInstanceId",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -5167,16 +4955,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                       },
                       "header": Object {
                         "formatters": Array [],
-                        "label": "Status",
+                        "label": "ProcessInstanceId",
                         "transforms": Array [
                           [Function],
                           [Function],
                         ],
                       },
-                      "property": "status",
+                      "property": "processinstanceid",
                       "props": Object {
                         "data-key": 3,
-                        "data-label": "Status",
+                        "data-label": "ProcessInstanceId",
                       },
                     },
                     Object {
@@ -5188,7 +4976,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": undefined,
+                      "data": "$.state",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -5213,62 +5001,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                       },
                       "header": Object {
                         "formatters": Array [],
-                        "label": "Started",
+                        "label": "State",
                         "transforms": Array [
                           [Function],
                           [Function],
                         ],
                       },
-                      "property": "started",
+                      "property": "state",
                       "props": Object {
                         "data-key": 4,
-                        "data-label": "Started",
-                      },
-                    },
-                    Object {
-                      "cell": Object {
-                        "formatters": Array [
-                          [Function],
-                        ],
-                        "transforms": Array [
-                          [Function],
-                        ],
-                      },
-                      "data": undefined,
-                      "extraParams": Object {
-                        "actionResolver": undefined,
-                        "actions": undefined,
-                        "allRowsSelected": false,
-                        "areActionsDisabled": undefined,
-                        "canSelectAll": true,
-                        "canSortFavorites": true,
-                        "contentId": "expanded-content",
-                        "dropdownDirection": "down",
-                        "dropdownPosition": "right",
-                        "expandId": "expandable-toggle",
-                        "firstUserColumnIndex": 0,
-                        "onCollapse": undefined,
-                        "onExpand": undefined,
-                        "onFavorite": undefined,
-                        "onRowEdit": undefined,
-                        "onSelect": undefined,
-                        "onSort": [Function],
-                        "rowLabeledBy": "simple-node",
-                        "selectVariant": "checkbox",
-                        "sortBy": undefined,
-                      },
-                      "header": Object {
-                        "formatters": Array [],
-                        "label": "Last update",
-                        "transforms": Array [
-                          [Function],
-                          [Function],
-                        ],
-                      },
-                      "property": "last-update",
-                      "props": Object {
-                        "data-key": 5,
-                        "data-label": "Last update",
+                        "data-label": "State",
                       },
                     },
                   ]
@@ -5283,7 +5025,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                       "cells": Array [
                         Object {
                           "props": Object {
-                            "colSpan": 6,
+                            "colSpan": 5,
                           },
                           "title": <Bullseye>
                             <MockedKogitoSpinner
@@ -5306,7 +5048,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                         "cells": Array [
                           Object {
                             "props": Object {
-                              "colSpan": 6,
+                              "colSpan": 5,
                             },
                             "title": <Bullseye>
                               <MockedKogitoSpinner
@@ -5321,10 +5063,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                         "isHeightAuto": false,
                         "isLast": true,
                         "isLastVisible": true,
-                        "name": Object {
+                        "processid": Object {
                           "formatters": Array [],
                           "props": Object {
-                            "colSpan": 6,
+                            "colSpan": 5,
                             "isVisible": true,
                           },
                           "title": <Bullseye>
@@ -5346,7 +5088,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                         "cells": Array [
                           Object {
                             "props": Object {
-                              "colSpan": 6,
+                              "colSpan": 5,
                             },
                             "title": <Bullseye>
                               <MockedKogitoSpinner
@@ -5361,10 +5103,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                         "isHeightAuto": false,
                         "isLast": true,
                         "isLastVisible": true,
-                        "name": Object {
+                        "processid": Object {
                           "formatters": Array [],
                           "props": Object {
-                            "colSpan": 6,
+                            "colSpan": 5,
                             "isVisible": true,
                           },
                           "title": <Bullseye>
@@ -5392,7 +5134,53 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.processId",
+                          "extraParams": Object {
+                            "actionResolver": undefined,
+                            "actions": undefined,
+                            "allRowsSelected": false,
+                            "areActionsDisabled": undefined,
+                            "canSelectAll": true,
+                            "canSortFavorites": true,
+                            "contentId": "expanded-content",
+                            "dropdownDirection": "down",
+                            "dropdownPosition": "right",
+                            "expandId": "expandable-toggle",
+                            "firstUserColumnIndex": 0,
+                            "onCollapse": undefined,
+                            "onExpand": undefined,
+                            "onFavorite": undefined,
+                            "onRowEdit": undefined,
+                            "onSelect": undefined,
+                            "onSort": [Function],
+                            "rowLabeledBy": "simple-node",
+                            "selectVariant": "checkbox",
+                            "sortBy": undefined,
+                          },
+                          "header": Object {
+                            "formatters": Array [],
+                            "label": "ProcessId",
+                            "transforms": Array [
+                              [Function],
+                              [Function],
+                            ],
+                          },
+                          "property": "processid",
+                          "props": Object {
+                            "data-key": 0,
+                            "data-label": "ProcessId",
+                          },
+                        },
+                        Object {
+                          "cell": Object {
+                            "formatters": Array [
+                              [Function],
+                            ],
+                            "transforms": Array [
+                              [Function],
+                            ],
+                          },
+                          "data": "$.name",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5425,57 +5213,8 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           },
                           "property": "name",
                           "props": Object {
-                            "data-key": 0,
-                            "data-label": "Name",
-                            "style": Object {
-                              "width": "667px",
-                            },
-                          },
-                        },
-                        Object {
-                          "cell": Object {
-                            "formatters": Array [
-                              [Function],
-                            ],
-                            "transforms": Array [
-                              [Function],
-                            ],
-                          },
-                          "data": undefined,
-                          "extraParams": Object {
-                            "actionResolver": undefined,
-                            "actions": undefined,
-                            "allRowsSelected": false,
-                            "areActionsDisabled": undefined,
-                            "canSelectAll": true,
-                            "canSortFavorites": true,
-                            "contentId": "expanded-content",
-                            "dropdownDirection": "down",
-                            "dropdownPosition": "right",
-                            "expandId": "expandable-toggle",
-                            "firstUserColumnIndex": 0,
-                            "onCollapse": undefined,
-                            "onExpand": undefined,
-                            "onFavorite": undefined,
-                            "onRowEdit": undefined,
-                            "onSelect": undefined,
-                            "onSort": [Function],
-                            "rowLabeledBy": "simple-node",
-                            "selectVariant": "checkbox",
-                            "sortBy": undefined,
-                          },
-                          "header": Object {
-                            "formatters": Array [],
-                            "label": "Process",
-                            "transforms": Array [
-                              [Function],
-                              [Function],
-                            ],
-                          },
-                          "property": "process",
-                          "props": Object {
                             "data-key": 1,
-                            "data-label": "Process",
+                            "data-label": "Name",
                           },
                         },
                         Object {
@@ -5487,7 +5226,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.priority",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5533,7 +5272,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.processInstanceId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5558,16 +5297,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           },
                           "header": Object {
                             "formatters": Array [],
-                            "label": "Status",
+                            "label": "ProcessInstanceId",
                             "transforms": Array [
                               [Function],
                               [Function],
                             ],
                           },
-                          "property": "status",
+                          "property": "processinstanceid",
                           "props": Object {
                             "data-key": 3,
-                            "data-label": "Status",
+                            "data-label": "ProcessInstanceId",
                           },
                         },
                         Object {
@@ -5579,7 +5318,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": undefined,
+                          "data": "$.state",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5604,62 +5343,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           },
                           "header": Object {
                             "formatters": Array [],
-                            "label": "Started",
+                            "label": "State",
                             "transforms": Array [
                               [Function],
                               [Function],
                             ],
                           },
-                          "property": "started",
+                          "property": "state",
                           "props": Object {
                             "data-key": 4,
-                            "data-label": "Started",
-                          },
-                        },
-                        Object {
-                          "cell": Object {
-                            "formatters": Array [
-                              [Function],
-                            ],
-                            "transforms": Array [
-                              [Function],
-                            ],
-                          },
-                          "data": undefined,
-                          "extraParams": Object {
-                            "actionResolver": undefined,
-                            "actions": undefined,
-                            "allRowsSelected": false,
-                            "areActionsDisabled": undefined,
-                            "canSelectAll": true,
-                            "canSortFavorites": true,
-                            "contentId": "expanded-content",
-                            "dropdownDirection": "down",
-                            "dropdownPosition": "right",
-                            "expandId": "expandable-toggle",
-                            "firstUserColumnIndex": 0,
-                            "onCollapse": undefined,
-                            "onExpand": undefined,
-                            "onFavorite": undefined,
-                            "onRowEdit": undefined,
-                            "onSelect": undefined,
-                            "onSort": [Function],
-                            "rowLabeledBy": "simple-node",
-                            "selectVariant": "checkbox",
-                            "sortBy": undefined,
-                          },
-                          "header": Object {
-                            "formatters": Array [],
-                            "label": "Last update",
-                            "transforms": Array [
-                              [Function],
-                              [Function],
-                            ],
-                          },
-                          "property": "last-update",
-                          "props": Object {
-                            "data-key": 5,
-                            "data-label": "Last update",
+                            "data-label": "State",
                           },
                         },
                       ]
@@ -5671,7 +5364,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           "cells": Array [
                             Object {
                               "props": Object {
-                                "colSpan": 6,
+                                "colSpan": 5,
                               },
                               "title": <Bullseye>
                                 <MockedKogitoSpinner
@@ -5686,10 +5379,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           "isHeightAuto": false,
                           "isLast": true,
                           "isLastVisible": true,
-                          "name": Object {
+                          "processid": Object {
                             "formatters": Array [],
                             "props": Object {
-                              "colSpan": 6,
+                              "colSpan": 5,
                               "isVisible": true,
                             },
                             "title": <Bullseye>
@@ -5738,7 +5431,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           "cells": Array [
                             Object {
                               "props": Object {
-                                "colSpan": 6,
+                                "colSpan": 5,
                               },
                               "title": <Bullseye>
                                 <MockedKogitoSpinner
@@ -5753,10 +5446,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           "isHeightAuto": false,
                           "isLast": true,
                           "isLastVisible": true,
-                          "name": Object {
+                          "processid": Object {
                             "formatters": Array [],
                             "props": Object {
-                              "colSpan": 6,
+                              "colSpan": 5,
                               "isVisible": true,
                             },
                             "title": <Bullseye>
@@ -5780,7 +5473,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                             "cells": Array [
                               Object {
                                 "props": Object {
-                                  "colSpan": 6,
+                                  "colSpan": 5,
                                 },
                                 "title": <Bullseye>
                                   <MockedKogitoSpinner
@@ -5795,10 +5488,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                             "isHeightAuto": false,
                             "isLast": true,
                             "isLastVisible": true,
-                            "name": Object {
+                            "processid": Object {
                               "formatters": Array [],
                               "props": Object {
-                                "colSpan": 6,
+                                "colSpan": 5,
                                 "isVisible": true,
                               },
                               "title": <Bullseye>
@@ -5836,7 +5529,53 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": undefined,
+                                    "data": "$.processId",
+                                    "extraParams": Object {
+                                      "actionResolver": undefined,
+                                      "actions": undefined,
+                                      "allRowsSelected": false,
+                                      "areActionsDisabled": undefined,
+                                      "canSelectAll": true,
+                                      "canSortFavorites": true,
+                                      "contentId": "expanded-content",
+                                      "dropdownDirection": "down",
+                                      "dropdownPosition": "right",
+                                      "expandId": "expandable-toggle",
+                                      "firstUserColumnIndex": 0,
+                                      "onCollapse": undefined,
+                                      "onExpand": undefined,
+                                      "onFavorite": undefined,
+                                      "onRowEdit": undefined,
+                                      "onSelect": undefined,
+                                      "onSort": [Function],
+                                      "rowLabeledBy": "simple-node",
+                                      "selectVariant": "checkbox",
+                                      "sortBy": undefined,
+                                    },
+                                    "header": Object {
+                                      "formatters": Array [],
+                                      "label": "ProcessId",
+                                      "transforms": Array [
+                                        [Function],
+                                        [Function],
+                                      ],
+                                    },
+                                    "property": "processid",
+                                    "props": Object {
+                                      "data-key": 0,
+                                      "data-label": "ProcessId",
+                                    },
+                                  },
+                                  Object {
+                                    "cell": Object {
+                                      "formatters": Array [
+                                        [Function],
+                                      ],
+                                      "transforms": Array [
+                                        [Function],
+                                      ],
+                                    },
+                                    "data": "$.name",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -5869,57 +5608,8 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                     },
                                     "property": "name",
                                     "props": Object {
-                                      "data-key": 0,
-                                      "data-label": "Name",
-                                      "style": Object {
-                                        "width": "667px",
-                                      },
-                                    },
-                                  },
-                                  Object {
-                                    "cell": Object {
-                                      "formatters": Array [
-                                        [Function],
-                                      ],
-                                      "transforms": Array [
-                                        [Function],
-                                      ],
-                                    },
-                                    "data": undefined,
-                                    "extraParams": Object {
-                                      "actionResolver": undefined,
-                                      "actions": undefined,
-                                      "allRowsSelected": false,
-                                      "areActionsDisabled": undefined,
-                                      "canSelectAll": true,
-                                      "canSortFavorites": true,
-                                      "contentId": "expanded-content",
-                                      "dropdownDirection": "down",
-                                      "dropdownPosition": "right",
-                                      "expandId": "expandable-toggle",
-                                      "firstUserColumnIndex": 0,
-                                      "onCollapse": undefined,
-                                      "onExpand": undefined,
-                                      "onFavorite": undefined,
-                                      "onRowEdit": undefined,
-                                      "onSelect": undefined,
-                                      "onSort": [Function],
-                                      "rowLabeledBy": "simple-node",
-                                      "selectVariant": "checkbox",
-                                      "sortBy": undefined,
-                                    },
-                                    "header": Object {
-                                      "formatters": Array [],
-                                      "label": "Process",
-                                      "transforms": Array [
-                                        [Function],
-                                        [Function],
-                                      ],
-                                    },
-                                    "property": "process",
-                                    "props": Object {
                                       "data-key": 1,
-                                      "data-label": "Process",
+                                      "data-label": "Name",
                                     },
                                   },
                                   Object {
@@ -5931,7 +5621,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": undefined,
+                                    "data": "$.priority",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -5977,7 +5667,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": undefined,
+                                    "data": "$.processInstanceId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -6002,16 +5692,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                     },
                                     "header": Object {
                                       "formatters": Array [],
-                                      "label": "Status",
+                                      "label": "ProcessInstanceId",
                                       "transforms": Array [
                                         [Function],
                                         [Function],
                                       ],
                                     },
-                                    "property": "status",
+                                    "property": "processinstanceid",
                                     "props": Object {
                                       "data-key": 3,
-                                      "data-label": "Status",
+                                      "data-label": "ProcessInstanceId",
                                     },
                                   },
                                   Object {
@@ -6023,7 +5713,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": undefined,
+                                    "data": "$.state",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -6048,62 +5738,16 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                     },
                                     "header": Object {
                                       "formatters": Array [],
-                                      "label": "Started",
+                                      "label": "State",
                                       "transforms": Array [
                                         [Function],
                                         [Function],
                                       ],
                                     },
-                                    "property": "started",
+                                    "property": "state",
                                     "props": Object {
                                       "data-key": 4,
-                                      "data-label": "Started",
-                                    },
-                                  },
-                                  Object {
-                                    "cell": Object {
-                                      "formatters": Array [
-                                        [Function],
-                                      ],
-                                      "transforms": Array [
-                                        [Function],
-                                      ],
-                                    },
-                                    "data": undefined,
-                                    "extraParams": Object {
-                                      "actionResolver": undefined,
-                                      "actions": undefined,
-                                      "allRowsSelected": false,
-                                      "areActionsDisabled": undefined,
-                                      "canSelectAll": true,
-                                      "canSortFavorites": true,
-                                      "contentId": "expanded-content",
-                                      "dropdownDirection": "down",
-                                      "dropdownPosition": "right",
-                                      "expandId": "expandable-toggle",
-                                      "firstUserColumnIndex": 0,
-                                      "onCollapse": undefined,
-                                      "onExpand": undefined,
-                                      "onFavorite": undefined,
-                                      "onRowEdit": undefined,
-                                      "onSelect": undefined,
-                                      "onSort": [Function],
-                                      "rowLabeledBy": "simple-node",
-                                      "selectVariant": "checkbox",
-                                      "sortBy": undefined,
-                                    },
-                                    "header": Object {
-                                      "formatters": Array [],
-                                      "label": "Last update",
-                                      "transforms": Array [
-                                        [Function],
-                                        [Function],
-                                      ],
-                                    },
-                                    "property": "last-update",
-                                    "props": Object {
-                                      "data-key": 5,
-                                      "data-label": "Last update",
+                                      "data-label": "State",
                                     },
                                   },
                                 ]
@@ -6122,7 +5766,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                   "cells": Array [
                                     Object {
                                       "props": Object {
-                                        "colSpan": 6,
+                                        "colSpan": 5,
                                       },
                                       "title": <Bullseye>
                                         <MockedKogitoSpinner
@@ -6137,10 +5781,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                   "isHeightAuto": false,
                                   "isLast": true,
                                   "isLastVisible": true,
-                                  "name": Object {
+                                  "processid": Object {
                                     "formatters": Array [],
                                     "props": Object {
-                                      "colSpan": 6,
+                                      "colSpan": 5,
                                       "isVisible": true,
                                     },
                                     "title": <Bullseye>
@@ -6164,7 +5808,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                     "cells": Array [
                                       Object {
                                         "props": Object {
-                                          "colSpan": 6,
+                                          "colSpan": 5,
                                         },
                                         "title": <Bullseye>
                                           <MockedKogitoSpinner
@@ -6179,10 +5823,10 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                     "isHeightAuto": false,
                                     "isLast": true,
                                     "isLastVisible": true,
-                                    "name": Object {
+                                    "processid": Object {
                                       "formatters": Array [],
                                       "props": Object {
-                                        "colSpan": 6,
+                                        "colSpan": 5,
                                         "isVisible": true,
                                       },
                                       "title": <Bullseye>
@@ -6220,57 +5864,37 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       onMouseDown={[Function]}
                                     >
                                       <BodyCell
-                                        colSpan={6}
+                                        colSpan={5}
                                         data-key={0}
-                                        data-label="Name"
+                                        data-label="ProcessId"
                                         isVisible={true}
                                         key="col-0-row-0"
-                                        style={
-                                          Object {
-                                            "width": "667px",
-                                          }
-                                        }
                                       >
                                         <Td
                                           className=""
-                                          colSpan={6}
+                                          colSpan={5}
                                           component="td"
                                           data-key={0}
-                                          dataLabel="Name"
+                                          dataLabel="ProcessId"
                                           onMouseEnter={[Function]}
-                                          style={
-                                            Object {
-                                              "width": "667px",
-                                            }
-                                          }
                                           textCenter={false}
                                         >
                                           <TdBase
                                             className=""
-                                            colSpan={6}
+                                            colSpan={5}
                                             component="td"
                                             data-key={0}
-                                            dataLabel="Name"
+                                            dataLabel="ProcessId"
                                             innerRef={null}
                                             onMouseEnter={[Function]}
-                                            style={
-                                              Object {
-                                                "width": "667px",
-                                              }
-                                            }
                                             textCenter={false}
                                           >
                                             <td
                                               className=""
-                                              colSpan={6}
+                                              colSpan={5}
                                               data-key={0}
-                                              data-label="Name"
+                                              data-label="ProcessId"
                                               onMouseEnter={[Function]}
-                                              style={
-                                                Object {
-                                                  "width": "667px",
-                                                }
-                                              }
                                             >
                                               <Bullseye>
                                                 <div
@@ -6287,7 +5911,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       </BodyCell>
                                       <BodyCell
                                         data-key={1}
-                                        data-label="Process"
+                                        data-label="Name"
                                         key="col-1-row-0"
                                       />
                                       <BodyCell
@@ -6297,18 +5921,13 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       />
                                       <BodyCell
                                         data-key={3}
-                                        data-label="Status"
+                                        data-label="ProcessInstanceId"
                                         key="col-3-row-0"
                                       />
                                       <BodyCell
                                         data-key={4}
-                                        data-label="Started"
+                                        data-label="State"
                                         key="col-4-row-0"
-                                      />
-                                      <BodyCell
-                                        data-key={5}
-                                        data-label="Last update"
-                                        key="col-5-row-0"
                                       />
                                     </tr>
                                   </TrBase>
