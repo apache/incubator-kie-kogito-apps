@@ -31,8 +31,10 @@ import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import io.cloudevents.CloudEvent;
 
@@ -65,6 +67,15 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
         if (traceEventType == TraceEventType.DMN) {
             String sourceUrl = cloudEvent.getSource().toString();
             String serviceUrl = payload.getHeader().getResourceId().getServiceUrl();
+
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+                LOG.trace(String.format("Incoming event:-\n%s", writer.writeValueAsString(payload)));
+            } catch (JsonProcessingException jpe) {
+                //Swallow
+            }
+
             service.processDecision(cloudEvent.getId(),
                     TraceEventConverter.toDecision(payload, sourceUrl, serviceUrl));
         } else {

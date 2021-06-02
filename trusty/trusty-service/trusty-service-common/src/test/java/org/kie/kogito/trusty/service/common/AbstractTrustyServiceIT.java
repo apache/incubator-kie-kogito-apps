@@ -41,6 +41,7 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
+import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
@@ -183,7 +184,13 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution1";
         storeExecution(executionId, 0L);
 
-        CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
+
+        CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
         assertNotNull(request);
         assertEquals(request.getExecutionId(), executionId);
@@ -200,8 +207,14 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution2";
         storeExecution(executionId, 0L);
 
-        CounterfactualExplainabilityRequest request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
-        CounterfactualExplainabilityRequest request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
+
+        CounterfactualExplainabilityRequest request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
+        CounterfactualExplainabilityRequest request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
         List<CounterfactualExplainabilityRequest> result = trustyService.getCounterfactualRequests(executionId);
         assertNotNull(result);
@@ -215,8 +228,14 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution3";
         storeExecution(executionId, 0L);
 
-        CounterfactualExplainabilityRequest request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
-        CounterfactualExplainabilityRequest request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList());
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
+
+        CounterfactualExplainabilityRequest request1 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
+        CounterfactualExplainabilityRequest request2 = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
         CounterfactualExplainabilityRequest result1 = trustyService.getCounterfactualRequest(executionId, request1.getCounterfactualId());
         assertNotNull(result1);
@@ -235,12 +254,18 @@ public abstract class AbstractTrustyServiceIT {
         String executionId2 = "myCFExecution2";
         storeExecution(executionId2, 0L);
 
-        CounterfactualExplainabilityRequest request1 = trustyService.requestCounterfactuals(executionId1, Collections.emptyList(), Collections.emptyList());
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
+
+        CounterfactualExplainabilityRequest request1 = trustyService.requestCounterfactuals(executionId1, Collections.emptyList(), Collections.singletonList(searchDomain));
         assertNotNull(request1);
         assertEquals(request1.getExecutionId(), executionId1);
         assertNotNull(request1.getCounterfactualId());
 
-        CounterfactualExplainabilityRequest request2 = trustyService.requestCounterfactuals(executionId2, Collections.emptyList(), Collections.emptyList());
+        CounterfactualExplainabilityRequest request2 = trustyService.requestCounterfactuals(executionId2, Collections.emptyList(), Collections.singletonList(searchDomain));
         assertNotNull(request2);
         assertEquals(request2.getExecutionId(), executionId2);
         assertNotNull(request2.getCounterfactualId());
@@ -254,12 +279,18 @@ public abstract class AbstractTrustyServiceIT {
     @Test
     public void testCounterfactuals_StoreSingleAndRetrieveSingleWithGoals() {
         String executionId = "myCFExecution1";
-        storeExecution(executionId, 0L);
+        storeExecutionWithOutcomes(executionId, 0L);
 
-        TypedVariableWithValue goal1 = TypedVariableWithValue.buildUnit("field1", "typeRef1", new IntNode(25));
-        TypedVariableWithValue goal2 = TypedVariableWithValue.buildUnit("field2", "typeRef2", new IntNode(99));
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
 
-        CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, List.of(goal1, goal2), Collections.emptyList());
+        TypedVariableWithValue goal1 = TypedVariableWithValue.buildUnit("outcome1", "number", new IntNode(25));
+        TypedVariableWithValue goal2 = TypedVariableWithValue.buildUnit("outcome2", "string", new TextNode("cheese"));
+
+        CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, List.of(goal1, goal2), Collections.singletonList(searchDomain));
 
         assertNotNull(request);
         assertEquals(request.getExecutionId(), executionId);
@@ -290,9 +321,10 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution1";
         storeExecution(executionId, 0L);
 
-        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildUnit("field1",
-                "typeRef1",
-                true,
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
                 new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
 
         CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
@@ -336,8 +368,10 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution1";
         storeExecution(executionId, 0L);
 
-        Collection<JsonNode> categories = List.of(new TextNode("A"), new TextNode("B"));
-        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildUnit("field1", "typeRef1", true, new CounterfactualDomainCategorical(categories));
+        // The Goals and Search Domain structures must match those of the original decision
+        // See https://issues.redhat.com/browse/FAI-486
+        Collection<JsonNode> categories = List.of(new TextNode("1"), new TextNode("2"));
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test", "number", new CounterfactualDomainCategorical(categories));
 
         CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain));
 
@@ -415,7 +449,7 @@ public abstract class AbstractTrustyServiceIT {
         assertNotNull(result);
     }
 
-    private Decision storeExecution(String executionId, Long timestamp) {
+    private void storeExecution(String executionId, Long timestamp) {
         DecisionInput decisionInput = new DecisionInput();
         decisionInput.setId("inputId");
         decisionInput.setName("inputName");
@@ -430,7 +464,34 @@ public abstract class AbstractTrustyServiceIT {
         decision.setInputs(Collections.singletonList(decisionInput));
 
         trustyService.storeDecision(decision.getExecutionId(), decision);
-        return decision;
+    }
+
+    private void storeExecutionWithOutcomes(String executionId, Long timestamp) {
+        DecisionInput decisionInput = new DecisionInput();
+        decisionInput.setId("inputId");
+        decisionInput.setName("inputName");
+        decisionInput.setValue(new TypedVariableWithValue(TypedValue.Kind.UNIT, "test", "number", JsonNodeFactory.instance.numberNode(10), null));
+
+        DecisionOutcome decisionOutcome1 = new DecisionOutcome();
+        decisionOutcome1.setOutcomeId("outcomeId1");
+        decisionOutcome1.setOutcomeName("outputName1");
+        decisionOutcome1.setOutcomeResult(TypedVariableWithValue.buildUnit("outcome1", "number", JsonNodeFactory.instance.numberNode(20)));
+
+        DecisionOutcome decisionOutcome2 = new DecisionOutcome();
+        decisionOutcome2.setOutcomeId("outcomeId2");
+        decisionOutcome2.setOutcomeName("outputName2");
+        decisionOutcome2.setOutcomeResult(TypedVariableWithValue.buildUnit("outcome2", "string", JsonNodeFactory.instance.textNode("food")));
+
+        Decision decision = new Decision();
+        decision.setExecutionId(executionId);
+        decision.setExecutionTimestamp(timestamp);
+        decision.setServiceUrl("serviceUrl");
+        decision.setExecutedModelNamespace("executedModelNamespace");
+        decision.setExecutedModelName("executedModelName");
+        decision.setInputs(Collections.singletonList(decisionInput));
+        decision.setOutcomes(List.of(decisionOutcome1, decisionOutcome2));
+
+        trustyService.storeDecision(decision.getExecutionId(), decision);
     }
 
     private void storeModel(String model) {

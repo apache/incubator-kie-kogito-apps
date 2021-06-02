@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.CounterfactualDomainCategoricalDto;
+import org.kie.kogito.explainability.api.CounterfactualDomainFixedDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainCollectionDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
@@ -224,6 +225,30 @@ class MessagingUtilsTest {
         CounterfactualDomainRangeDto range = (CounterfactualDomainRangeDto) unit.getDomain();
         assertEquals(1000, range.getLowerBound().asInt());
         assertEquals(2000, range.getUpperBound().asInt());
+    }
+
+    @Test
+    void modelToCounterfactualSearchDomainDto_Unit_nullDomain() {
+        CounterfactualSearchDomain searchDomain = new CounterfactualSearchDomain(TypedValue.Kind.UNIT,
+                "name",
+                "string",
+                null,
+                Boolean.TRUE,
+                null);
+
+        CounterfactualSearchDomainDto searchDomainDto = MessagingUtils.modelToCounterfactualSearchDomainDto(searchDomain);
+        assertNotNull(searchDomainDto);
+        assertEquals(CounterfactualSearchDomainDto.Kind.UNIT, searchDomainDto.getKind());
+        assertEquals("string", searchDomainDto.getType());
+        assertTrue(searchDomainDto instanceof CounterfactualSearchDomainUnitDto);
+
+        CounterfactualSearchDomainUnitDto unit = (CounterfactualSearchDomainUnitDto) searchDomainDto;
+        assertTrue(unit.isUnit());
+        assertFalse(unit.isCollection());
+        assertFalse(unit.isStructure());
+        assertTrue(unit.isFixed());
+        assertNotNull(unit.getDomain());
+        assertTrue(unit.getDomain() instanceof CounterfactualDomainFixedDto);
     }
 
     @Test
