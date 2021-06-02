@@ -29,7 +29,6 @@ import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
-import org.kie.kogito.explainability.model.DataDomain;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
@@ -50,44 +49,51 @@ import org.slf4j.LoggerFactory;
  */
 public class CounterfactualExplainer implements LocalExplainer<CounterfactualResult> {
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(CounterfactualExplainer.class);
-
-    private final SolverConfig solverConfig;
-    private final Executor executor;
-
     public static final Consumer<CounterfactualSolution> assignSolutionId =
             counterfactual -> counterfactual.setSolutionId(UUID.randomUUID());
+    private static final Logger logger =
+            LoggerFactory.getLogger(CounterfactualExplainer.class);
+    private final SolverConfig solverConfig;
+    private final Executor executor;
+    private final double goalThreshold;
 
     public CounterfactualExplainer() {
         this.solverConfig = CounterfactualConfigurationFactory.builder().build();
         this.executor = ForkJoinPool.commonPool();
+        this.goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
     }
 
     /**
      * Create a new {@link CounterfactualExplainer} using OptaPlanner as the underlying engine.
      * The data distribution information (if available) will be used to scale the features during the search.
-     * The bounds of the search space must be specified using a {@link DataDomain} and any feature constraints
-     * must be specified using a {@link List} of {@link Boolean}.
-     * The desired outcome is passed using an {@link Output}, where the score of each feature represents the
-     * minimum prediction score for a counterfactual to be considered.
      * A customizable OptaPlanner solver configuration can be passed using a {@link SolverConfig}.
-     * A {@link Consumer<CounterfactualSolution>} should be provided for the intermediate and final search results.
+     * An specific {@link Executor} can also be provided.
+     * The score calculation (as performed by {@link CounterFactualScoreCalculator}) will use the goal threshold
+     * to if a proposed solution is close enough to the goal to be considered a match. This will only apply
+     * to numerical variables. This threshold is a positive ratio of the variable value (e.g. 0.01 of the value)
+     * A strict match can be implemented by using a threshold of zero.
      *
      * @param solverConfig An OptaPlanner {@link SolverConfig} configuration
+     * @param executor The {@link Executor} to be used by the explainer
+     * @param goalThreshold A positive threshold as a ratio of the variable's value
      */
     protected CounterfactualExplainer(SolverConfig solverConfig,
-            Executor executor) {
+            Executor executor, double goalThreshold) {
         this.solverConfig = solverConfig;
         this.executor = executor;
-    }
-
-    public SolverConfig getSolverConfig() {
-        return solverConfig;
+        this.goalThreshold = goalThreshold;
     }
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public double getGoalThreshold() {
+        return goalThreshold;
+    }
+
+    public SolverConfig getSolverConfig() {
+        return solverConfig;
     }
 
     private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer) {
@@ -115,7 +121,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         final List<Output> goal = prediction.getOutput().getOutputs();
 
         Function<UUID, CounterfactualSolution> initial =
-                uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId);
+                uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId, this.goalThreshold);
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =
@@ -152,6 +158,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public static class Builder {
         private Executor executor = ForkJoinPool.commonPool();
         private SolverConfig solverConfig = null;
+        private double goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
 
         private Builder() {
         }
@@ -166,14 +173,20 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             return this;
         }
 
+        public Builder withGoalThreshold(double goalThreshold) {
+            this.goalThreshold = goalThreshold;
+            return this;
+        }
+
         public CounterfactualExplainer build() {
             // Create a default solver configuration if none provided
             if (this.solverConfig == null) {
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
             }
             return new CounterfactualExplainer(
-                    solverConfig,
-                    executor);
+                    this.solverConfig,
+                    this.executor,
+                    this.goalThreshold);
         }
     }
 }

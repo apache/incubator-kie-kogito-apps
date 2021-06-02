@@ -28,6 +28,7 @@ import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.Type;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.slf4j.Logger;
@@ -110,8 +111,18 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 for (int i = 0; i < outputs.size(); i++) {
                     final Output output = outputs.get(i);
                     final Output goalOutput = goal.get(i);
-                    final double d = goalOutput.getValue().asNumber() - output.getValue().asNumber();
-                    distance += d * d;
+
+                    if (output.getType().equals(Type.NUMBER)) {
+                        final double d = goalOutput.getValue().asNumber() - output.getValue().asNumber();
+                        if (Math.abs(d) > Math.abs(goalOutput.getValue().asNumber() * solution.getGoalThreshold())) {
+                            distance += d * d;
+                        }
+                    } else {
+                        distance +=
+                                goalOutput.getValue().getUnderlyingObject().equals(output.getValue().getUnderlyingObject()) ? 0
+                                        : 1;
+                    }
+
                     if (output.getScore() < goalOutput.getScore()) {
                         tertiaryHardScore -= 1;
                     }

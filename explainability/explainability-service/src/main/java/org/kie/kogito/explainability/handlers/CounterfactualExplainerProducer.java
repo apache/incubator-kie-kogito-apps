@@ -32,12 +32,16 @@ public class CounterfactualExplainerProducer {
     private static final Logger LOG = LoggerFactory.getLogger(CounterfactualExplainerProducer.class);
 
     private final Long maxRunningTimeSeconds;
+    private final Double goalThreshold;
 
     @Inject
     public CounterfactualExplainerProducer(
             @ConfigProperty(name = "trusty.explainability.counterfactuals.maxRunningTimeSeconds",
-                    defaultValue = "60") Integer maxRunningTimeSeconds) {
+                    defaultValue = "60") Integer maxRunningTimeSeconds,
+            @ConfigProperty(name = "trusty.explainability.counterfactuals.goalThreshold",
+                    defaultValue = "0.01") Double goalThreshold) {
         this.maxRunningTimeSeconds = Long.valueOf(maxRunningTimeSeconds);
+        this.goalThreshold = goalThreshold;
     }
 
     @Produces
@@ -46,6 +50,7 @@ public class CounterfactualExplainerProducer {
         return CounterfactualExplainer.builder()
                 .withSolverConfig(
                         CounterfactualConfigurationFactory.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build())
+                .withGoalThreshold(this.goalThreshold)
                 .build();
     }
 }
