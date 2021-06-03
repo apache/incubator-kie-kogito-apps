@@ -23,32 +23,27 @@ import {
   Job,
   JobStatus,
   MilestoneStatus,
+  ProcessInstance,
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 
 jest.mock('../../JobsPanel/JobsPanel');
 jest.mock('../../ProcessDiagram/ProcessDiagram');
-jest.mock('../../ProcessDiagramErrorModal/ProcessDiagramErrorModal');
+jest.mock('../../ProcessDetailsErrorModal/ProcessDetailsErrorModal');
+jest.mock('../../ProcessVariables/ProcessVariables');
+jest.mock('../../ProcessDetailsPanel/ProcessDetailsPanel');
+jest.mock('../../ProcessDetailsMilestonesPanel/ProcessDetailsMilestonesPanel');
 Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
+
 describe('ProcessDetails tests', () => {
   describe('ProcessDetails tests with success results', () => {
-    const props = {
-      isEnvelopeConnectedToChannel: true,
-      driver: MockedProcessDetailsDriver(),
-      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a'
-    };
-
-    const data: any = {
+    const data: ProcessInstance = {
       id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
       processId: 'hotelBooking',
       processName: 'HotelBooking',
       businessKey: 'T1234HotelBooking01',
       parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-      parentProcessInstance: {
-        id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-        processName: 'travels',
-        businessKey: 'T1234'
-      },
+      parentProcessInstance: null,
       roles: [],
       variables:
         '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
@@ -117,6 +112,12 @@ describe('ProcessDetails tests', () => {
           __typename: 'Milestone'
         }
       ]
+    };
+    const props = {
+      isEnvelopeConnectedToChannel: true,
+      driver: MockedProcessDetailsDriver(),
+      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
+      processDetails: data
     };
 
     const Jobs: Job[] = [
@@ -147,11 +148,16 @@ describe('ProcessDetails tests', () => {
     beforeEach(() => {
       jest.clearAllMocks();
       //@ts-ignore
-      props.driver.processDetailsQuery.mockImplementationOnce(() => data);
-      //@ts-ignore
       props.driver.jobsQuery.mockImplementationOnce(() => Jobs);
       //@ts-ignore
       props.driver.getProcessDiagram.mockImplementationOnce(() => svgResults);
+      //@ts-ignore
+      props.driver.handleProcessVariableUpdate.mockImplementationOnce(
+        () =>
+          new Promise((resolve, reject) => {
+            resolve(data.variables);
+          })
+      );
     });
     it('Snapshot tests with default prop', async () => {
       const wrapper = await getWrapperAsync(
@@ -169,6 +175,7 @@ describe('ProcessDetails tests', () => {
       wrapper = wrapper.update();
       expect(wrapper.find('MockedJobsPanel')).toBeTruthy();
       expect(wrapper.find('MockedProcessDiagram')).toBeTruthy();
+      expect(wrapper.find('MockedProcessVariables')).toBeTruthy();
     });
 
     it('handle save option', async () => {
@@ -177,10 +184,12 @@ describe('ProcessDetails tests', () => {
         'ProcessDetails'
       );
       wrapper = wrapper.update();
-      wrapper
-        .find('#save-button')
-        .at(1)
-        .simulate('click');
+      await act(async () => {
+        wrapper
+          .find('#save-button')
+          .at(1)
+          .simulate('click');
+      });
     });
 
     it('handle refresh option', async () => {
@@ -195,29 +204,18 @@ describe('ProcessDetails tests', () => {
           .at(1)
           .simulate('click');
       });
-      expect(props.driver.processDetailsQuery).toHaveBeenCalled();
       expect(props.driver.jobsQuery).toHaveBeenCalled();
     });
   });
 
   describe('ProcessDetails tests with error response', () => {
-    const props = {
-      isEnvelopeConnectedToChannel: true,
-      driver: MockedProcessDetailsDriver(),
-      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a'
-    };
-
-    const data: any = {
+    const data: ProcessInstance = {
       id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
       processId: 'hotelBooking',
       processName: 'HotelBooking',
       businessKey: 'T1234HotelBooking01',
       parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-      parentProcessInstance: {
-        id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-        processName: 'travels',
-        businessKey: 'T1234'
-      },
+      parentProcessInstance: null,
       roles: [],
       variables:
         '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
@@ -286,6 +284,13 @@ describe('ProcessDetails tests', () => {
           __typename: 'Milestone'
         }
       ]
+    };
+
+    const props = {
+      isEnvelopeConnectedToChannel: true,
+      driver: MockedProcessDetailsDriver(),
+      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
+      processDetails: data
     };
 
     const Jobs: Job[] = [
@@ -319,6 +324,13 @@ describe('ProcessDetails tests', () => {
       props.driver.jobsQuery.mockImplementationOnce(() => Jobs);
       //@ts-ignore
       props.driver.getProcessDiagram.mockImplementationOnce(() => svgResults);
+      //@ts-ignore
+      props.driver.handleProcessVariableUpdate.mockImplementationOnce(
+        () =>
+          new Promise((resolve, reject) => {
+            resolve(data.variables);
+          })
+      );
     });
     it('Test svg error modal', async () => {
       let wrapper = await getWrapperAsync(
@@ -328,12 +340,12 @@ describe('ProcessDetails tests', () => {
       wrapper = wrapper.update();
       await act(async () => {
         wrapper
-          .find('MockedProcessDiagramErrorModal')
+          .find('MockedProcessDetailsErrorModal')
           .props()
           ['handleErrorModal']();
       });
       expect(
-        wrapper.find('MockedProcessDiagramErrorModal').props()['errorModalOpen']
+        wrapper.find('MockedProcessDetailsErrorModal').props()['errorModalOpen']
       ).toEqual(true);
     });
 

@@ -6,7 +6,10 @@ exports[`job actions kebab tests dropdown open/close tests and details click 1`]
     Object {
       "cancelJob": [MockFunction],
       "getProcessDiagram": [MockFunction],
+      "getTriggerableNodes": [MockFunction],
+      "handleNodeTrigger": [MockFunction],
       "handleProcessAbort": [MockFunction],
+      "handleProcessVariableUpdate": [MockFunction],
       "jobsQuery": [MockFunction],
       "openProcessInstanceDetails": [MockFunction],
       "processDetailsQuery": [MockFunction],

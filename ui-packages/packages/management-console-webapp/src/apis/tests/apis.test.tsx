@@ -20,12 +20,15 @@ import wait from 'waait';
 import {
   getSvg,
   handleProcessAbort,
-  handleJobReschedule,
-  handleProcessMultipleAction,
   handleProcessRetry,
   handleProcessSkip,
+  handleJobReschedule,
+  handleProcessMultipleAction,
   jobCancel,
-  performMultipleCancel
+  performMultipleCancel,
+  getTriggerableNodes,
+  handleNodeTrigger,
+  handleProcessVariableUpdate
 } from '../apis';
 import {
   BulkProcessInstanceActionResponse,
@@ -489,63 +492,246 @@ describe('test utility of svg panel', () => {
       expect(result).toEqual('404 error');
     });
   });
+});
 
-  describe('multiple action in process list', () => {
-    it('multiple skip test', async () => {
-      mockedAxios.post.mockResolvedValue({});
-      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-        processInstances,
-        OperationType.SKIP
-      );
-      expect(result.successProcessInstances.length).toEqual(1);
-    });
-    it('multiple skip test', async () => {
-      mockedAxios.post.mockRejectedValue({ message: '404 error' });
-      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-        processInstances,
-        OperationType.SKIP
-      );
-      expect(result.failedProcessInstances[0].errorMessage).toEqual(
-        '404 error'
-      );
-    });
+describe('multiple action in process list', () => {
+  it('multiple skip test', async () => {
+    mockedAxios.post.mockResolvedValue({});
+    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
+      processInstances,
+      OperationType.SKIP
+    );
+    expect(result.successProcessInstances.length).toEqual(1);
+  });
+  it('multiple skip test', async () => {
+    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
+      processInstances,
+      OperationType.SKIP
+    );
+    expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
+  });
 
-    it('multiple retry test', async () => {
-      mockedAxios.post.mockResolvedValue({});
-      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-        processInstances,
-        OperationType.RETRY
-      );
-      expect(result.successProcessInstances.length).toEqual(1);
-    });
-    it('multiple retry test', async () => {
-      mockedAxios.post.mockRejectedValue({ message: '404 error' });
-      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-        processInstances,
-        OperationType.RETRY
-      );
-      expect(result.failedProcessInstances[0].errorMessage).toEqual(
-        '404 error'
-      );
-    });
+  it('multiple retry test', async () => {
+    mockedAxios.post.mockResolvedValue({});
+    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
+      processInstances,
+      OperationType.RETRY
+    );
+    expect(result.successProcessInstances.length).toEqual(1);
+  });
+  it('multiple retry test', async () => {
+    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
+      processInstances,
+      OperationType.RETRY
+    );
+    expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
+  });
 
-    it('multiple abort test', async () => {
-      mockedAxios.delete.mockResolvedValue({});
-      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-        processInstances,
-        OperationType.ABORT
-      );
-      expect(result.successProcessInstances.length).toEqual(1);
+  it('multiple abort test', async () => {
+    mockedAxios.delete.mockResolvedValue({});
+    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
+      processInstances,
+      OperationType.ABORT
+    );
+    expect(result.successProcessInstances.length).toEqual(1);
+  });
+  it('multiple abort test', async () => {
+    mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
+      processInstances,
+      OperationType.ABORT
+    );
+    expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
+  });
+});
+
+describe('test utilities of process variables', () => {
+  const mockData = {
+    flight: {
+      flightNumber: 'MX555',
+      seat: null,
+      gate: null,
+      departure: '2020-09-23T03:30:00.000+05:30',
+      arrival: '2020-09-28T03:30:00.000+05:30'
+    },
+    hotel: {
+      name: 'Perfect hotel',
+      address: {
+        street: 'street',
+        city: 'Sydney',
+        zipCode: '12345',
+        country: 'Australia'
+      },
+      phone: '09876543',
+      bookingNumber: 'XX-012345',
+      room: null
+    },
+    traveller: {
+      firstName: 'Saravana',
+      lastName: 'Srinivasan',
+      email: 'Saravana@gmai.com',
+      nationality: 'US',
+      address: {
+        street: 'street',
+        city: 'city',
+        zipCode: '123156',
+        country: 'US'
+      }
+    },
+    trip: {
+      city: 'Sydney',
+      country: 'Australia',
+      begin: '2020-09-23T03:30:00.000+05:30',
+      end: '2020-09-28T03:30:00.000+05:30',
+      visaRequired: false
+    }
+  };
+
+  const updateJson = {
+    flight: {
+      flightNumber: 'MX5555',
+      seat: null,
+      gate: null,
+      departure: '2020-09-23T03:30:00.000+05:30',
+      arrival: '2020-09-28T03:30:00.000+05:30'
+    },
+    hotel: {
+      name: 'Perfect hotel',
+      address: {
+        street: 'street',
+        city: 'Sydney',
+        zipCode: '12345',
+        country: 'Australia'
+      },
+      phone: '09876543',
+      bookingNumber: 'XX-012345',
+      room: null
+    },
+    traveller: {
+      firstName: 'Saravana',
+      lastName: 'Srinivasan',
+      email: 'Saravana@gmai.com',
+      nationality: 'US',
+      address: {
+        street: 'street',
+        city: 'city',
+        zipCode: '123156',
+        country: 'US'
+      }
+    },
+    trip: {
+      city: 'Sydney',
+      country: 'Australia',
+      begin: '2020-09-23T03:30:00.000+05:30',
+      end: '2020-09-28T03:30:00.000+05:30',
+      visaRequired: false
+    }
+  };
+
+  it('test put method that updates process variables-success', async () => {
+    mockedAxios.put.mockResolvedValue({
+      status: 200,
+      statusText: 'OK',
+      data: mockData
     });
-    it('multiple abort test', async () => {
-      mockedAxios.delete.mockRejectedValue({ message: '404 error' });
-      const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-        processInstances,
-        OperationType.ABORT
-      );
-      expect(result.failedProcessInstances[0].errorMessage).toEqual(
-        '404 error'
-      );
+    let result;
+    await handleProcessVariableUpdate(processInstance, updateJson)
+      .then(data => {
+        result = data;
+      })
+      .catch(error => {
+        result = error.message;
+      });
+    expect(result).toEqual(mockData);
+  });
+});
+
+describe('retrieve list of triggerable nodes test', () => {
+  const mockTriggerableNodes = [
+    {
+      nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
+      name: 'Send visa application',
+      id: 1,
+      type: 'ActionNode',
+      uniqueId: '1'
+    },
+    {
+      nodeDefinitionId: '_175DC79D-C2F1-4B28-BE2D-B583DFABF70D',
+      name: 'Book',
+      id: 2,
+      type: 'Split',
+      uniqueId: '2'
+    },
+    {
+      nodeDefinitionId: '_E611283E-30B0-46B9-8305-768A002C7518',
+      name: 'visasrejected',
+      id: 3,
+      type: 'EventNode',
+      uniqueId: '3'
+    }
+  ];
+
+  it('successfully retrieves the list of nodes', async () => {
+    mockedAxios.get.mockResolvedValue({
+      data: mockTriggerableNodes
     });
+    let result = null;
+    await getTriggerableNodes(processInstance)
+      .then(nodes => {
+        result = nodes;
+      })
+      .catch(error => {
+        result = error;
+      });
+    expect(result).toEqual(mockTriggerableNodes);
+  });
+  it('fails to retrieve the list of nodes', async () => {
+    mockedAxios.get.mockRejectedValue({ message: '403 error' });
+    let result = null;
+    await getTriggerableNodes(processInstance)
+      .then(nodes => {
+        result = nodes;
+      })
+      .catch(error => {
+        result = error.message;
+      });
+    expect(result).toEqual('403 error');
+  });
+});
+
+describe('handle node trigger click tests', () => {
+  const node = {
+    nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
+    name: 'Send visa application',
+    id: 1,
+    type: 'ActionNode',
+    uniqueId: '1'
+  };
+  it('executes node trigger successfully', async () => {
+    let result = '';
+    mockedAxios.post.mockResolvedValue({});
+    await handleNodeTrigger(processInstance, node)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = 'error';
+      });
+    expect(result).toEqual('success');
+  });
+
+  it('fails to execute node trigger', async () => {
+    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    let result = '';
+    await handleNodeTrigger(processInstance, node)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = 'error';
+      });
+    expect(result).toEqual('error');
   });
 });
