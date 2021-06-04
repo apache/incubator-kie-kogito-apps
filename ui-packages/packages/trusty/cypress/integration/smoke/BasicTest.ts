@@ -64,6 +64,6 @@ describe('Basic Elements', () => {
   });
 
   it('Decision result is available', () => {
-    cy.ouiaId('exec-table').find("tr>td>a:contains('1003')", { timeout: 5000 });
+    cy.ouiaId('exec-table').find("tr>td>a:contains('6603c574')", { timeout: 5000 });
   });
 });
