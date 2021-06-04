@@ -113,10 +113,17 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                     final Output goalOutput = goal.get(i);
 
                     if (output.getType().equals(Type.NUMBER)) {
-                        final double d = goalOutput.getValue().asNumber() - output.getValue().asNumber();
-                        if (Math.abs(d) > Math.abs(goalOutput.getValue().asNumber() * solution.getGoalThreshold())) {
-                            distance += d * d;
+
+                        final double outputValue = output.getValue().asNumber();
+                        final double goalValue = goalOutput.getValue().asNumber();
+                        final double difference = Math.abs(outputValue - goalValue);
+                        final double threshold = solution.getGoalThreshold();
+                        final double change = difference / Math.max(outputValue, goalValue);
+
+                        if ((goalValue == 0.0 && difference > threshold) || (goalValue != 0.0 && change > threshold)) {
+                            distance += difference * difference;
                         }
+
                     } else {
                         distance +=
                                 goalOutput.getValue().getUnderlyingObject().equals(output.getValue().getUnderlyingObject()) ? 0

@@ -682,17 +682,17 @@ class CounterfactualExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
 
-        final List<Output> goal = List.of(new Output("class", Type.BOOLEAN, new Value(false), 0.0d));
+        final List<Output> goal = List.of(new Output("class", Type.NUMBER, new Value(100.0), 0.9d));
         List<Feature> features = new LinkedList<>();
         List<FeatureDomain> featureBoundaries = new LinkedList<>();
         List<Boolean> constraints = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
             features.add(TestUtils.getMockedNumericFeature(i));
-            featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+            featureBoundaries.add(NumericalFeatureDomain.create(0.0, 100.0));
             constraints.add(false);
         }
-        final DataDomain dataDomain = new DataDomain(featureBoundaries);
-        final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10L);
+
+        final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(1000L);
         // for the purpose of this test, only a few steps are necessary
         final SolverConfig solverConfig = CounterfactualConfigurationFactory
                 .builder().withTerminationConfig(terminationConfig).build();
@@ -705,10 +705,11 @@ class CounterfactualExplainerTest {
                 CounterfactualExplainer
                         .builder()
                         .withSolverConfig(solverConfig)
+                        .withGoalThreshold(0.01)
                         .build();
 
         PredictionInput input = new PredictionInput(features);
-        PredictionProvider model = TestUtils.getSumSkipModel(0);
+        PredictionProvider model = TestUtils.getSumThresholdModel(100.0, 1.0);
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
@@ -719,9 +720,6 @@ class CounterfactualExplainerTest {
         final CounterfactualResult counterfactualResult =
                 counterfactualExplainer.explainAsync(prediction, model, assertIntermediateCounterfactualNotNull)
                         .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
-            logger.debug("Entity: {}", entity);
-        }
 
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
         //An intermediate result is generated when seed > 0
