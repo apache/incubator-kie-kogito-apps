@@ -32,6 +32,7 @@ export interface ExecutionRouteParams {
 
 export interface ItemObject {
   name: string;
+  kind: 'STRUCTURE' | 'UNIT' | 'COLLECTION';
   typeRef: string;
   value: string | number | boolean | Array<string | number | boolean> | null;
   components: (ItemObject | ItemObject[])[] | null;
@@ -117,13 +118,13 @@ export interface ModelData {
 }
 
 export interface CFNumericalDomain {
-  type: 'numerical';
+  type: 'RANGE';
   lowerBound?: number;
   upperBound?: number;
 }
 
 export interface CFCategoricalDomain {
-  type: 'categorical';
+  type: 'CATEGORICAL';
   categories: string[];
 }
 
@@ -132,7 +133,7 @@ export interface CFSearchInput extends ItemObject {
   domain?: CFNumericalDomain | CFCategoricalDomain;
 }
 
-export type CFGoal = Pick<ItemObject, 'name' | 'typeRef' | 'value'> & {
+export type CFGoal = Pick<ItemObject, 'name' | 'kind' | 'typeRef' | 'value'> & {
   isFixed: boolean;
   originalValue: ItemObject['value'];
   id: string;

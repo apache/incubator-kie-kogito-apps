@@ -81,7 +81,7 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
   };
 
   useEffect(() => {
-    if (cfResults && cfResults.solutions.length) {
+    if (cfResults && cfResults.solutions && cfResults.solutions.length) {
       dispatch({
         type: 'CF_SET_RESULTS',
         payload: {

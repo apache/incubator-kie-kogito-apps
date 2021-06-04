@@ -10,14 +10,14 @@ const CounterfactualInputDomain = ({
 }: CounterfactualInputDomainProps) => {
   let domain;
   switch (input.domain.type) {
-    case 'numerical':
+    case 'RANGE':
       domain = (
         <span>
           {input.domain.lowerBound}-{input.domain.upperBound}
         </span>
       );
       break;
-    case 'categorical':
+    case 'CATEGORICAL':
       domain = (
         <span>
           {input.domain.categories.map((category, index, list) => (

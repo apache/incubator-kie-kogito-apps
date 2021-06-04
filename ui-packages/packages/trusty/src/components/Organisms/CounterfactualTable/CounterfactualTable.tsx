@@ -311,11 +311,11 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                               >
                                 {resultId.stage === 'INTERMEDIATE' ? (
                                   <Label variant="outline" color="blue">
-                                    ID# {resultId.value}
+                                    ID #{resultId.value.substring(0, 7)}
                                   </Label>
                                 ) : (
                                   <Label icon={<StarIcon />} color="green">
-                                    ID# {resultId.value}
+                                    ID #{resultId.value.substring(0, 7)}
                                   </Label>
                                 )}
                               </Td>

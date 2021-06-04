@@ -57,7 +57,7 @@ const CounterfactualInputDomainEdit = (
   ) => {
     let updatedDomain = inputDomain
       ? ({ ...inputDomain } as CFNumericalDomain)
-      : ({ type: 'numerical' } as CFNumericalDomain);
+      : ({ type: 'RANGE' } as CFNumericalDomain);
     if (typeof min === 'number') {
       updatedDomain = { ...updatedDomain, lowerBound: min };
     } else {
@@ -77,7 +77,7 @@ const CounterfactualInputDomainEdit = (
   const onCategoricalDomainUpdate = (categories: string[]) => {
     let updatedDomain = inputDomain
       ? ({ ...inputDomain } as CFCategoricalDomain)
-      : ({ type: 'categorical' } as CFCategoricalDomain);
+      : ({ type: 'CATEGORICAL' } as CFCategoricalDomain);
     if (
       categories.filter(category => category === '').length ===
       categories.length
@@ -90,7 +90,7 @@ const CounterfactualInputDomainEdit = (
   };
 
   const validateDomain = (domain: CFSearchInput['domain']) => {
-    if (domain && domain.type === 'numerical') {
+    if (domain && domain.type === 'RANGE') {
       return validateNumericDomain(domain);
     } else {
       return { isValid: true, message: '' };
