@@ -1,4 +1,4 @@
-# Kogito Apps
+# Kogito Apps 
 
 ## Contributing to Kogito
 
