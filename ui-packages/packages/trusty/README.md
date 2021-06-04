@@ -67,7 +67,7 @@ Run this project:
 docker-compose up
 ```
 
-Send REST Request which starts this [DMN asset|https://kiegroup.github.io/kogito-online/?file=https://raw.githubusercontent.com/kiegroup/kogito-apps/master/explainability/explainability-integrationtests/explainability-integrationtests-dmn/src/test/resources/dmn/TrafficViolation.dmn#/editor/dmn]:
+Send REST Request which starts this [DMN asset](https://kiegroup.github.io/kogito-online/?file=https://raw.githubusercontent.com/kiegroup/kogito-apps/master/explainability/explainability-integrationtests/explainability-integrationtests-dmn/src/test/resources/dmn/TrafficViolation.dmn#/editor/dmn):
 ```
 curl -H "Content-Type: application/json" -X POST -d "{\"Driver\":
 {\"State\":\"aa\",\"City\":\"bb\",\"Age\":25,\"Points\":13}
