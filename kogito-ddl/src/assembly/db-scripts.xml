@@ -8,11 +8,20 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <directory>${project.root.dir}/jobs-service/jobs-service-postgresql/src/main/resources</directory>
+            <directory>${project.root.dir}</directory>
             <outputDirectory>postgresql</outputDirectory>
             <includes>
-                <include>**/*.sql</include>
+                <include>**/*postgresql*/src/main/resources/**/*.sql</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>${project.root.dir}</directory>
+            <outputDirectory>jdbc</outputDirectory>
+            <includes>
+                <include>**/*jdbc*/src/main/resources/**/*.sql</include>
+            </includes>
+        </fileSet>
+        <!-- more per db script collections - any new fileSet or change on existing fileSet want to
+            probably also do in Kogito-runtimes project -->
     </fileSets>
 </assembly>

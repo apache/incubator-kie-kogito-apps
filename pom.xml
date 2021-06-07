@@ -18,7 +18,6 @@
   <modules>
     <module>kogito-apps-bom</module>
     <module>kogito-apps-build-parent</module>
-    <module>kogito-ddl</module>
     <module>persistence-commons</module>
     <module>jobs-service</module>
     <module>data-index</module>
@@ -32,6 +31,8 @@
     <module>task-assigning</module>
     <module>jitexecutor</module>
     <module>apps-integration-tests</module>
+    <module>kogito-ddl</module>
+    <module>kogito-ddl-all</module>
   </modules>
 
 </project>
