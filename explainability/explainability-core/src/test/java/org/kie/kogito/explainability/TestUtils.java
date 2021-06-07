@@ -73,6 +73,27 @@ public class TestUtils {
         });
     }
 
+    public static PredictionProvider getSumSkipTwoOutputModel(int skipFeatureIndex) {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                double result = 0;
+                for (int i = 0; i < features.size(); i++) {
+                    if (skipFeatureIndex != i) {
+                        result += features.get(i).getValue().asNumber();
+                    }
+                }
+                Output output0 = new Output("sum-but" + skipFeatureIndex, Type.NUMBER, new Value(result), 1d);
+                Output output1 = new Output("sum-but" + skipFeatureIndex + "*2", Type.NUMBER, new Value(result * 2), 1d);
+
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(output0, output1));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
+        });
+    }
+
     public static PredictionProvider getEvenFeatureModel(int featureIndex) {
         return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
@@ -100,8 +121,7 @@ public class TestUtils {
                     }
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
-                        List.of(new Output("sum-even-but" + skipFeatureIndex, Type.BOOLEAN, new Value(((int) result) % 2 == 0),
-                                1d)));
+                        List.of(new Output("sum-even-but" + skipFeatureIndex, Type.BOOLEAN, new Value(((int) result) % 2 == 0), 1d)));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
