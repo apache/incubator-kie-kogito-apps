@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ProcessInstance } from '@kogito-apps/management-console-shared';
+
 export interface ProcessDetailsEnvelopeApi {
   processDetails__init(
     association: Association,
@@ -27,5 +29,5 @@ export interface Association {
 }
 
 export interface ProcessDetailsInitArgs {
-  processId: string;
+  processInstance: ProcessInstance;
 }

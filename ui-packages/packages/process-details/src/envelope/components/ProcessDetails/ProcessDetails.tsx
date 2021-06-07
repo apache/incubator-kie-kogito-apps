@@ -52,15 +52,18 @@ import {
 import { ProcessDetailsDriver } from '../../../api';
 import ProcessDiagram from '../ProcessDiagram/ProcessDiagram';
 import JobsPanel from '../JobsPanel/JobsPanel';
-import ProcessDiagramErrorModal from '../ProcessDiagramErrorModal/ProcessDiagramErrorModal';
+import ProcessDetailsErrorModal from '../ProcessDetailsErrorModal/ProcessDetailsErrorModal';
 import SVG from 'react-inlinesvg';
 import '../styles.css';
 import ProcessDetailsPanel from '../ProcessDetailsPanel/ProcessDetailsPanel';
+import ProcessDetailsNodeTrigger from '../ProcessDetailsNodeTrigger/ProcessDetailsNodeTrigger';
+import ProcessVariables from '../ProcessVariables/ProcessVariables';
+import ProcessDetailsMilestonesPanel from '../ProcessDetailsMilestonesPanel/ProcessDetailsMilestonesPanel';
 
 interface ProcessDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: ProcessDetailsDriver;
-  id: string;
+  processDetails: ProcessInstance;
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -68,19 +71,16 @@ type svgResponse = SvgSuccessResponse | SvgErrorResponse;
 const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
-  id
+  processDetails
 }) => {
-  const [data, setData] = useState<any>({});
+  const [data, setData] = useState<ProcessInstance>({} as ProcessInstance);
   const [jobs, setJobs] = useState<Job[]>([]);
-  //@ts-ignore
   const [updateJson, setUpdateJson] = useState<any>({});
-  //@ts-ignore
   const [displayLabel, setDisplayLabel] = useState<boolean>(false);
-  //@ts-ignore
   const [displaySuccess, setDisplaySuccess] = useState<boolean>(false);
   const [errorModalOpen, setErrorModalOpen] = useState<boolean>(false);
   const [confirmationModal, setConfirmationModal] = useState<boolean>(false);
-  const [variableError, setVariableError] = useState();
+  const [variableError, setVariableError] = useState('');
   const [svg, setSvg] = useState<JSX.Element>(null);
   const [svgError, setSvgError] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -91,18 +91,24 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const [titleType, setTitleType] = useState<string>('');
   const [infoModalContent, setInfoModalContent] = useState<string>('');
 
-  const initLoad = async (): Promise<void> => {
+  const handleReload = async (): Promise<void> => {
     setIsLoading(true);
     try {
-      const response: ProcessInstance = await driver.processDetailsQuery(id);
-      const jobsResponse: Job[] = await driver.jobsQuery(id);
-      response && setData(response);
-      jobsResponse && setJobs(jobsResponse);
+      const processResponse: ProcessInstance = await driver.processDetailsQuery(
+        processDetails.id
+      );
+      processResponse && setData(processResponse);
+      getAllJobs();
       setIsLoading(false);
-    } catch (error) {
-      setError(error);
+    } catch (errorString) {
+      setError(errorString);
       setIsLoading(false);
     }
+  };
+
+  const getAllJobs = async (): Promise<void> => {
+    const jobsResponse: Job[] = await driver.jobsQuery(processDetails.id);
+    jobsResponse && setJobs(jobsResponse);
   };
 
   const handleSvgErrorModal = (): void => {
@@ -121,7 +127,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
 
   useEffect(() => {
     const handleSvgApi = async (): Promise<void> => {
-      if (data && data.id === id) {
+      if (data && data.id === processDetails.id) {
         const response: svgResponse = await driver.getProcessDiagram(data);
         if (response && response.svg) {
           const temp = <SVG src={response.svg} />;
@@ -131,9 +137,15 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
         }
       }
     };
+    const getVariableJSON = (): void => {
+      if (data && data.id === processDetails.id) {
+        setUpdateJson(JSON.parse(data.variables));
+      }
+    };
     /* istanbul ignore else*/
     if (isEnvelopeConnectedToChannel) {
       handleSvgApi();
+      getVariableJSON();
     }
   }, [data]);
 
@@ -144,14 +156,33 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   }, [svgError]);
 
   useEffect(() => {
+    if (variableError && variableError.length > 0) {
+      setErrorModalOpen(true);
+    }
+  }, [variableError]);
+
+  useEffect(() => {
     /* istanbul ignore else*/
     if (isEnvelopeConnectedToChannel) {
-      initLoad();
+      setData(processDetails);
+      getAllJobs();
     }
   }, [isEnvelopeConnectedToChannel]);
 
-  const handleSave = async (): Promise<void> => {
-    setDisplaySuccess(false);
+  const handleSave = (): void => {
+    driver
+      .handleProcessVariableUpdate(data, updateJson)
+      .then((updatedJson: Record<string, unknown>) => {
+        setUpdateJson(updatedJson);
+        setDisplayLabel(false);
+        setDisplaySuccess(true);
+        setTimeout(() => {
+          setDisplaySuccess(false);
+        }, 2000);
+      })
+      .catch((errorMessage: string) => {
+        setVariableError(errorMessage);
+      });
   };
 
   const updateVariablesButton = (): JSX.Element => {
@@ -175,7 +206,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     if (displayLabel === true) {
       setConfirmationModal(true);
     } else {
-      initLoad();
+      handleReload();
     }
   };
 
@@ -266,7 +297,11 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
         <FlexItem>
           <ProcessDetailsPanel processInstance={data} driver={driver} />
         </FlexItem>
-        {data.milestones.length > 0 && <FlexItem>Milestones</FlexItem>}
+        {data.milestones.length > 0 && (
+          <FlexItem>
+            <ProcessDetailsMilestonesPanel milestones={data.milestones} />
+          </FlexItem>
+        )}
       </Flex>
     );
   };
@@ -275,7 +310,16 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex direction={{ default: 'column' }} flex={{ default: 'flex_1' }}>
         {Object.keys(updateJson).length > 0 && (
-          <FlexItem>Process Variables</FlexItem>
+          <FlexItem>
+            <ProcessVariables
+              displayLabel={displayLabel}
+              displaySuccess={displaySuccess}
+              setUpdateJson={setUpdateJson}
+              setDisplayLabel={setDisplayLabel}
+              updateJson={updateJson}
+              processInstance={data}
+            />
+          </FlexItem>
         )}
       </Flex>
     );
@@ -481,7 +525,12 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
                     data.state !== ProcessInstanceState.Aborted &&
                     data.serviceUrl &&
                     data.addons.includes('process-management') && (
-                      <FlexItem>Node Trigger</FlexItem>
+                      <FlexItem>
+                        <ProcessDetailsNodeTrigger
+                          driver={driver}
+                          processInstanceData={data}
+                        />
+                      </FlexItem>
                     )}
                 </Flex>
                 {errorModal()}
@@ -494,7 +543,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
             </Card>
           )}
           {svgErrorModalOpen && (
-            <ProcessDiagramErrorModal
+            <ProcessDetailsErrorModal
               errorString={svgError}
               errorModalOpen={svgErrorModalOpen}
               errorModalAction={errorModalAction}
@@ -507,9 +556,11 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
       ) : (
         <>
           {isEnvelopeConnectedToChannel && (
-            <Bullseye>
-              <ServerErrors error={error} variant="large" />
-            </Bullseye>
+            <Card className="kogito-process-details__card-size">
+              <Bullseye>
+                <ServerErrors error={error} variant="large" />
+              </Bullseye>
+            </Card>
           )}
         </>
       )}

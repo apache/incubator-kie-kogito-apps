@@ -20,7 +20,8 @@ import {
   Job,
   JobCancel,
   SvgSuccessResponse,
-  SvgErrorResponse
+  SvgErrorResponse,
+  TriggerableNode
 } from '@kogito-apps/management-console-shared';
 
 export class ProcessDetailsChannelApiImpl implements ProcessDetailsChannelApi {
@@ -55,6 +56,29 @@ export class ProcessDetailsChannelApiImpl implements ProcessDetailsChannelApi {
       repeatInterval,
       repeatLimit,
       scheduleDate
+    );
+  }
+
+  processDetails__getTriggerableNodes(
+    processInstance: ProcessInstance
+  ): Promise<TriggerableNode[]> {
+    return this.driver.getTriggerableNodes(processInstance);
+  }
+
+  processDetails__handleNodeTrigger(
+    processInstance: ProcessInstance,
+    node: TriggerableNode
+  ): Promise<void> {
+    return this.driver.handleNodeTrigger(processInstance, node);
+  }
+
+  processDetails__handleProcessVariableUpdate(
+    processInstance: ProcessInstance,
+    updatedJson: Record<string, unknown>
+  ) {
+    return this.driver.handleProcessVariableUpdate(
+      processInstance,
+      updatedJson
     );
   }
 

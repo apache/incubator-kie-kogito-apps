@@ -123,8 +123,11 @@ export const MockedApiRequests = jest.fn<
   processDetails__getProcessDiagram: jest.fn(),
   processDetails__cancelJob: jest.fn(),
   processDetails__rescheduleJob: jest.fn(),
+  processDetails__getTriggerableNodes: jest.fn(),
+  processDetails__handleNodeTrigger: jest.fn(),
   processDetails__jobsQuery: jest.fn(),
-  processDetails__handleProcessAbort: jest.fn()
+  processDetails__handleProcessAbort: jest.fn(),
+  processDetails__handleProcessVariableUpdate: jest.fn()
 }));
 
 export const MockedApiNotifications = jest.fn<
@@ -135,6 +138,7 @@ export const MockedApiNotifications = jest.fn<
   []
 >(() => ({
   jobList__sortBy: jest.fn(),
+  processDetails__handleProcessVariableUpdate: jest.fn(),
   processDetails__openProcessDetails: jest.fn()
 }));
 
