@@ -13,7 +13,9 @@ jobs:
     name: Maven Build
     steps:
       - name: printenv
-        run: printenv
+        run: |
+          printenv
+          echo $GITHUB_BASE_REF
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
