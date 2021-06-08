@@ -7,8 +7,8 @@ module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src', 'consoles/index.ts')
   },
-  plugins: [new CopyPlugin({ patterns: [{ from: "./resources", to: "./resources" },
-  {from: path.resolve(__dirname, nodeModulesDir + "/@kogito-apps/runtime-tools-dev-ui-webapp/dist"), to: './webapp'}
+  plugins: [new CopyPlugin({ patterns: [{ from: "./resources", to: "./" },
+  {from: path.resolve(__dirname, nodeModulesDir + "/@kogito-apps/runtime-tools-dev-ui-webapp/dist"), to: './'}
 ] })],
   module: {
     rules: [
@@ -30,7 +30,7 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: 'standalone.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },

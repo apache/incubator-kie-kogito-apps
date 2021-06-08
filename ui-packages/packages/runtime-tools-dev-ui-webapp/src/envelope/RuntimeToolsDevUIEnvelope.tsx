@@ -25,23 +25,6 @@ export class RuntimeToolsDevUIEnvelope {
       channelApi: envelope.channelApi
     }
   ) {}
-  // private renderView(container: HTMLElement) {
-  //     const editorEnvelopeViewRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
-
-  //     const app = (
-  //       <RuntimeToolsDevUIEnvelopeContext.Provider value={this.context}>
-  //             {({ setLocale }) => <RuntimeToolsDevUIEView ref={editorEnvelopeViewRef} setLocale={setLocale} />}
-  //       </RuntimeToolsDevUIEnvelopeContext.Provider>
-  //     );
-
-  //     return new Promise<() => RuntimeToolsDevUIEnvelopeViewApi>((res) => {
-  //       setTimeout(() => {
-  //         ReactDOM.render(app, container, () => {
-  //           res(() => editorEnvelopeViewRef.current!);
-  //         });
-  //       }, 0);
-  //     });
-  //   }
 
   public start(container: HTMLElement) {
     return this.envelope.start(

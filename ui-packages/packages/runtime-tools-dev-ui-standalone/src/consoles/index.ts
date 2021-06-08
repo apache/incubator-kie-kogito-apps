@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import devUIEnvelopeIndex from '!!raw-loader!../../dist/webapp/index.html';
+import devUIEnvelopeIndex from '!!raw-loader!@kogito-apps/runtime-tools-dev-ui-webapp/dist/index.html';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import {
   RuntimeToolsDevUIChannelApi,

@@ -24,7 +24,6 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
       association.origin,
       association.envelopeServerId
     );
-    // this.args.view().initialize(initArgs.initialState);
     return Promise.resolve();
   };
 }
