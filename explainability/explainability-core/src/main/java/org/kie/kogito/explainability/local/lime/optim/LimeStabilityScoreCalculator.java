@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -64,7 +65,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                 stabilityScore /= succeededEvaluations;
             }
         }
-        return SimpleBigDecimalScore.parseScore(Double.toString(stabilityScore));
+        return SimpleBigDecimalScore.of(new BigDecimal(stabilityScore));
     }
 
     private double getDecisionMarginalScore(int topK, LocalSaliencyStability stability, String decision) {
