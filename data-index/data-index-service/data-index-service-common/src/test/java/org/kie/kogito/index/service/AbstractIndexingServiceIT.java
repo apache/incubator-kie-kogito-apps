@@ -88,7 +88,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIndexingServiceIT.class);
 
     @Inject
-    DataIndexStorageService cacheService;
+    public DataIndexStorageService cacheService;
 
     @BeforeAll
     static void setup() {

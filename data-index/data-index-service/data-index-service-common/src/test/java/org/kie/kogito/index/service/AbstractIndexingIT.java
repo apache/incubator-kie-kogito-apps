@@ -27,7 +27,7 @@ import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
 public abstract class AbstractIndexingIT {
 
     @Inject
-    ReactiveMessagingEventConsumer consumer;
+    public ReactiveMessagingEventConsumer consumer;
 
     protected void indexProcessCloudEvent(KogitoProcessCloudEvent event) {
         consumer.onProcessInstanceEvent(event).subscribe().withSubscriber(UniAssertSubscriber.create()).assertCompleted();

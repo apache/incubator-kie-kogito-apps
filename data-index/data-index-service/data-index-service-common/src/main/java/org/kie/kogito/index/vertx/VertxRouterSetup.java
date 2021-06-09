@@ -26,15 +26,16 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import io.quarkus.oidc.AccessTokenCredential;
 import io.quarkus.vertx.http.runtime.security.QuarkusHttpUser;
 import io.vertx.core.MultiMap;
+import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.FaviconHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.handler.graphql.ApolloWSHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandler;
-import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
 
@@ -54,18 +55,22 @@ public class VertxRouterSetup {
     @Inject
     GraphQL graphQL;
 
+    @Inject
+    Vertx vertx;
+
     void setupRouter(@Observes Router router) {
+        router.route().handler(LoggerHandler.create());
         GraphiQLHandler graphiQLHandler = GraphiQLHandler.create(new GraphiQLHandlerOptions().setEnabled(true));
         if (Boolean.TRUE.equals(authEnabled)) {
             addGraphiqlRequestHeader(graphiQLHandler);
         }
+        router.route().handler(BodyHandler.create());
         router.route(graphUIPath + "/*").handler(graphiQLHandler);
-        router.route().handler(LoggerHandler.create());
-        router.route().handler(StaticHandler.create());
-        router.route().handler(FaviconHandler.create());
         router.route("/").handler(ctx -> ctx.response().putHeader("location", graphUIPath + "/").setStatusCode(302).end());
         router.route("/graphql").handler(ApolloWSHandler.create(graphQL));
-        router.route("/graphql").handler(GraphQLHandler.create(graphQL, new GraphQLHandlerOptions()));
+        router.route("/graphql").handler(GraphQLHandler.create(graphQL));
+        router.route().handler(StaticHandler.create());
+        router.route().handler(FaviconHandler.create(vertx));
     }
 
     protected void addGraphiqlRequestHeader(GraphiQLHandler graphiQLHandler) {
