@@ -56,6 +56,7 @@ import com.fasterxml.jackson.databind.node.TextNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractTrustyServiceIT {
@@ -132,13 +133,13 @@ public abstract class AbstractTrustyServiceIT {
     public void givenADuplicatedDecisionWhenTheDecisionIsStoredThenAnExceptionIsRaised() {
         String executionId = "myExecution";
         storeExecution(executionId, 1591692950000L);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> storeExecution(executionId, 1591692950000L));
+        assertThrows(IllegalArgumentException.class, () -> storeExecution(executionId, 1591692950000L));
     }
 
     @Test
     public void givenNoExecutionsWhenADecisionIsRetrievedThenAnExceptionIsRaised() {
         String executionId = "myExecution";
-        Assertions.assertThrows(IllegalArgumentException.class, () -> trustyService.getDecisionById(executionId));
+        assertThrows(IllegalArgumentException.class, () -> trustyService.getDecisionById(executionId));
     }
 
     @Test
@@ -154,12 +155,12 @@ public abstract class AbstractTrustyServiceIT {
     public void givenADuplicatedModelWhenTheModelIsStoredThenAnExceptionIsRaised() {
         String model = "definition";
         storeModel(model);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> storeModel(model));
+        assertThrows(IllegalArgumentException.class, () -> storeModel(model));
     }
 
     @Test
     public void givenNoModelsWhenAModelIsRetrievedThenAnExceptionIsRaised() {
-        Assertions.assertThrows(IllegalArgumentException.class, this::getModel);
+        assertThrows(IllegalArgumentException.class, this::getModel);
     }
 
     @Test
@@ -407,6 +408,35 @@ public abstract class AbstractTrustyServiceIT {
 
         assertEquals(expectedDomainCategorical.getCategories().size(), actualDomainCategorical.getCategories().size());
         assertTrue(expectedDomainCategorical.getCategories().containsAll(actualDomainCategorical.getCategories()));
+    }
+
+    @Test
+    public void testCounterfactuals_WithDisparateSearchDomainStructure() {
+        String executionId = "myCFExecution1";
+        storeExecution(executionId, 0L);
+
+        // The Goals and Search Domain structures must match those of the original decision.
+        // For this test we're providing an incorrect structure for searchDomains but the correct structure for goals.
+        // See https://issues.redhat.com/browse/FAI-486
+
+        assertThrows(IllegalArgumentException.class,
+                () -> trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.emptyList()));
+    }
+
+    @Test
+    public void testCounterfactuals_WithDisparateGoalsStructure() {
+        String executionId = "myCFExecution1";
+        storeExecutionWithOutcomes(executionId, 0L);
+
+        // The Goals and Search Domain structures must match those of the original decision.
+        // For this test we're providing the correct structure for searchDomains but an incorrect structure for goals.
+        // See https://issues.redhat.com/browse/FAI-486
+        CounterfactualSearchDomain searchDomain = CounterfactualSearchDomain.buildSearchDomainUnit("test",
+                "number",
+                new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> trustyService.requestCounterfactuals(executionId, Collections.emptyList(), Collections.singletonList(searchDomain)));
     }
 
     @Test
