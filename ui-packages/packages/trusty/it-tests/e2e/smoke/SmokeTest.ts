@@ -51,12 +51,8 @@ describe('E2E - smoke test', () => {
   });
 
   it('Date inputs are visible', () => {
-    cy.get('div.flatpickr-wrapper>input#audit-from-date+input').should(
-      'be.visible'
-    );
-    cy.get('div.flatpickr-wrapper>input#audit-to-date+input').should(
-      'be.visible'
-    );
+    cy.get('#audit-from-date+input').should('be.visible');
+    cy.get('#audit-to-date+input').should('be.visible');
   });
 
   it('Top paging is visible', () => {
