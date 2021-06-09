@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Function;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -171,6 +172,7 @@ class OpenNLPLimeExplainerTest {
                 .withSamples(100)
                 .withPerturbationContext(new PerturbationContext(random, 2));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(limeConfig, predictions, model);
+        Assertions.assertThat(optimizedConfig).isNotSameAs(limeConfig);
 
         LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);
         PredictionInput testPredictionInput = getTestInput(getTokenizer());

@@ -51,6 +51,7 @@ import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
 import org.kie.kogito.explainability.utils.ValidationUtils;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -110,6 +111,7 @@ class TrafficViolationDmnLimeExplainerTest {
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
+        assertThat(optimizedConfig).isNotSameAs(initialConfig);
 
         LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);
         PredictionInput testPredictionInput = getTestInput();

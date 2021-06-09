@@ -113,6 +113,7 @@ class PrequalificationDmnLimeExplainerTest {
         random.setSeed(0);
         LimeConfig initialConfig = new LimeConfig();
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
+        assertThat(optimizedConfig).isNotSameAs(initialConfig);
 
         LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);
         PredictionInput testPredictionInput = getTestInput();

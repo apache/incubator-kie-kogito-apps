@@ -117,7 +117,7 @@ class PmmlRegressionLimeExplainerTest {
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
-
+        assertThat(optimizedConfig).isNotSameAs(initialConfig);
         LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);
         PredictionInput testPredictionInput = getTestInput();
         List<PredictionOutput> testPredictionOutputs = model.predictAsync(List.of(testPredictionInput))

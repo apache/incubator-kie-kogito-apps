@@ -78,4 +78,11 @@ public class LimeStabilitySolution {
     public List<LimeConfigEntity> getEntities() {
         return entities;
     }
+
+    @Override
+    public String toString() {
+        return "LimeStabilitySolution{" +
+                "config=" + config +
+                '}';
+    }
 }
