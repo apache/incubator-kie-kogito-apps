@@ -87,6 +87,14 @@ export interface NodeInstance {
   nodeId: string;
 }
 
+export interface TriggerableNode {
+  id: number;
+  name: string;
+  type: string;
+  uniqueId: string;
+  nodeDefinitionId: string;
+}
+
 export interface Milestone {
   __typename?: 'Milestone';
   id: string;
@@ -124,6 +132,26 @@ export interface ProcessInstance {
   isSelected?: boolean;
   errorMessage?: string;
   isOpen?: boolean;
+}
+
+export interface ProcessInstanceFilter {
+  status: ProcessInstanceState[];
+  businessKey?: string[];
+}
+
+export enum OrderBy {
+  ASC = 'ASC',
+  DESC = 'DESC'
+}
+export interface SortBy {
+  processName?: OrderBy;
+  state?: OrderBy;
+  start?: OrderBy;
+  lastUpdate?: OrderBy;
+}
+export interface ProcessListState {
+  filters: ProcessInstanceFilter;
+  sortBy: SortBy;
 }
 
 export interface SvgSuccessResponse {

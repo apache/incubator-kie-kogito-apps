@@ -8,7 +8,7 @@
     <version>2.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <name>Kogito :: Persistence Commons API</name>
+  <name>Kogito Apps :: Persistence Commons API</name>
   <artifactId>persistence-commons-api</artifactId>
 
   <dependencies>
@@ -27,6 +27,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-mutiny</artifactId>
     </dependency>
 
     <dependency>

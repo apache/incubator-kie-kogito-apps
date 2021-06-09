@@ -19,7 +19,8 @@ import {
   Job,
   JobCancel,
   SvgSuccessResponse,
-  SvgErrorResponse
+  SvgErrorResponse,
+  TriggerableNode
 } from '@kogito-apps/management-console-shared';
 export interface ProcessDetailsChannelApi {
   processDetails__getProcessDiagram(
@@ -37,6 +38,17 @@ export interface ProcessDetailsChannelApi {
     repeatLimit: number | string,
     scheduleDate: Date
   ): Promise<{ modalTitle: string; modalContent: string }>;
+  processDetails__getTriggerableNodes(
+    processInstance: ProcessInstance
+  ): Promise<TriggerableNode[]>;
+  processDetails__handleNodeTrigger(
+    processInstance: ProcessInstance,
+    node: TriggerableNode
+  ): Promise<void>;
+  processDetails__handleProcessVariableUpdate(
+    processInstance: ProcessInstance,
+    updatedJson: Record<string, unknown>
+  );
   processDetails__processDetailsQuery(id: string): Promise<ProcessInstance>;
   processDetails__jobsQuery(id: string): Promise<Job[]>;
   processDetails__openProcessDetails(id: string): void;

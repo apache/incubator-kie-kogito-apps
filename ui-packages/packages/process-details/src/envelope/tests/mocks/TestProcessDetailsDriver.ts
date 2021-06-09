@@ -20,8 +20,10 @@ import {
   JobCancel,
   ProcessInstance,
   SvgErrorResponse,
-  SvgSuccessResponse
+  SvgSuccessResponse,
+  TriggerableNode
 } from '@kogito-apps/management-console-shared';
+import { ProcessDetails } from './Mocks';
 
 export default class TestProcessDetailsDriver implements ProcessDetailsDriver {
   constructor(id: string) {
@@ -60,8 +62,11 @@ export default class TestProcessDetailsDriver implements ProcessDetailsDriver {
     return Promise.resolve(undefined);
   }
 
-  jobsQuery(id: string): Promise<Job[]> {
-    return Promise.resolve([]);
+  handleProcessVariableUpdate(
+    processInstance: ProcessInstance,
+    updatedJson: Record<string, unknown>
+  ) {
+    return Promise.resolve(ProcessDetails.variables);
   }
 
   rescheduleJob(
@@ -71,5 +76,48 @@ export default class TestProcessDetailsDriver implements ProcessDetailsDriver {
     scheduleDate: Date
   ): Promise<{ modalTitle: string; modalContent: string }> {
     return Promise.resolve({ modalContent: '', modalTitle: '' });
+  }
+
+  getTriggerableNodes(
+    processInstance: ProcessInstance
+  ): Promise<TriggerableNode[]> {
+    return new Promise((resolve, reject) => {
+      resolve([
+        {
+          nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
+          name: 'Send visa application',
+          id: 1,
+          type: 'ActionNode',
+          uniqueId: '1'
+        },
+        {
+          nodeDefinitionId: '_175DC79D-C2F1-4B28-BE2D-B583DFABF70D',
+          name: 'Book',
+          id: 2,
+          type: 'Split',
+          uniqueId: '2'
+        },
+        {
+          nodeDefinitionId: '_E611283E-30B0-46B9-8305-768A002C7518',
+          name: 'visasrejected',
+          id: 3,
+          type: 'EventNode',
+          uniqueId: '3'
+        }
+      ]);
+    });
+  }
+
+  handleNodeTrigger(
+    processInstance: ProcessInstance,
+    node: TriggerableNode
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      resolve();
+    });
+  }
+
+  jobsQuery(id: string): Promise<Job[]> {
+    return Promise.resolve([]);
   }
 }

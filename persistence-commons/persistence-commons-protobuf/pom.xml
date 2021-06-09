@@ -10,16 +10,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>persistence-commons-protobuf</artifactId>
-  <name>Kogito :: Persistence Commons Protobuf</name>
+  <name>Kogito Apps :: Persistence Commons Protobuf</name>
 
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>persistence-commons-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>infinispan-persistence-addon</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

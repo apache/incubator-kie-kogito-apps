@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
 import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
@@ -39,6 +40,7 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResul
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
@@ -48,6 +50,7 @@ import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.IntNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -116,6 +119,15 @@ public abstract class AbstractTrustyServiceIT {
     }
 
     @Test
+    public void givenAnExecutionWhenGetDecisionByIdThenTheComponentsInUnitTypesIsNull() {
+        String executionId = "myExecution";
+        storeExecution(executionId, 1591692950000L);
+
+        Decision result = trustyService.getDecisionById(executionId);
+        Assertions.assertNull(result.getInputs().stream().findFirst().get().getValue().getComponents());
+    }
+
+    @Test
     public void givenADuplicatedDecisionWhenTheDecisionIsStoredThenAnExceptionIsRaised() {
         String executionId = "myExecution";
         storeExecution(executionId, 1591692950000L);
@@ -131,7 +143,6 @@ public abstract class AbstractTrustyServiceIT {
     @Test
     public void givenAModelWhenGetModelByIdIsCalledThenTheModelIsReturned() {
         String model = "definition";
-        String modelId = "name:namespace";
         storeModel(model);
 
         DMNModelWithMetadata result = getModel();
@@ -153,7 +164,7 @@ public abstract class AbstractTrustyServiceIT {
     @Test
     public void searchExecutionsByPrefixTest() {
         String executionId = "da8ad1e9-a679-4ded-a6d5-53fd019e7002";
-        Long executionTimestamp = 1617270053L;
+        long executionTimestamp = 1617270053L;
         Instant instant = Instant.ofEpochMilli(executionTimestamp);
         storeExecution(executionId, executionTimestamp);
 
@@ -405,17 +416,24 @@ public abstract class AbstractTrustyServiceIT {
     }
 
     private Decision storeExecution(String executionId, Long timestamp) {
+        DecisionInput decisionInput = new DecisionInput();
+        decisionInput.setId("inputId");
+        decisionInput.setName("inputName");
+        decisionInput.setValue(new TypedVariableWithValue(TypedValue.Kind.UNIT, "test", "number", JsonNodeFactory.instance.numberNode(10), null));
+
         Decision decision = new Decision();
         decision.setExecutionId(executionId);
         decision.setExecutionTimestamp(timestamp);
         decision.setServiceUrl("serviceUrl");
         decision.setExecutedModelNamespace("executedModelNamespace");
         decision.setExecutedModelName("executedModelName");
+        decision.setInputs(Collections.singletonList(decisionInput));
+
         trustyService.storeDecision(decision.getExecutionId(), decision);
         return decision;
     }
 
-    private DMNModelWithMetadata storeModel(String model) {
+    private void storeModel(String model) {
         DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "modelVersion", "dmnVersion", "name", "namespace", model);
         ModelIdentifier identifier = new ModelIdentifier("groupId",
                 "artifactId",
@@ -423,7 +441,6 @@ public abstract class AbstractTrustyServiceIT {
                 "name",
                 "namespace");
         trustyService.storeModel(identifier, dmnModelWithMetadata);
-        return dmnModelWithMetadata;
     }
 
     private DMNModelWithMetadata getModel() {
