@@ -76,14 +76,14 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
     @Test
     void testDoSchedule() {
         PublisherBuilder<ManageableJobHandle> schedule = tested.doSchedule(scheduledJob, Optional.empty());
-        Multi.createFrom().publisher(schedule.buildRs()).subscribe().with(dummyCallback());
+        Multi.createFrom().publisher(schedule.buildRs()).subscribe().with(dummyCallback(), dummyCallback());
         verify(timer).scheduleJob(any(HttpJob.class), any(HttpJobContext.class), eq(scheduledJob.getTrigger()));
     }
 
     @Test
     void testDoCancel() {
         Publisher<ManageableJobHandle> cancel = tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(SCHEDULED_ID).build());
-        Multi.createFrom().publisher(cancel).subscribe().with(dummyCallback());
+        Multi.createFrom().publisher(cancel).subscribe().with(dummyCallback(), dummyCallback());
         verify(timer).removeJob(any(ManageableJobHandle.class));
     }
 
@@ -91,7 +91,7 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
     void testDoCancelNullId() {
         Publisher<ManageableJobHandle> cancel =
                 tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(null).build());
-        Multi.createFrom().publisher(cancel).subscribe().with(dummyCallback());
+        Multi.createFrom().publisher(cancel).subscribe().with(dummyCallback(), dummyCallback());
         verify(timer, never()).removeJob(any(ManageableJobHandle.class));
     }
 

@@ -58,13 +58,13 @@ public abstract class BaseJobResourceIT {
     private int port;
 
     @Inject
-    public ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @Inject
-    public TimerDelegateJobScheduler scheduler;
+    private TimerDelegateJobScheduler scheduler;
 
     @Inject
-    public VertxTimerServiceScheduler timer;
+    private VertxTimerServiceScheduler timer;
 
     @Test
     void create() throws Exception {
