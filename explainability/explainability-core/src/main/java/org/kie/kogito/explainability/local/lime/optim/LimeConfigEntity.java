@@ -15,7 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
-public abstract class LimeConfigEntity {
+abstract class LimeConfigEntity {
 
     protected Object proposedValue;
     protected String name;
@@ -24,7 +24,7 @@ public abstract class LimeConfigEntity {
 
     }
 
-    public LimeConfigEntity(String name, Object proposedValue) {
+    protected LimeConfigEntity(String name, Object proposedValue) {
         this.name = name;
         this.proposedValue = proposedValue;
     }

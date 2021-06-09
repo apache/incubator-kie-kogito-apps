@@ -43,7 +43,7 @@ public class LimeConfigOptimizer {
     private static final Logger logger = LoggerFactory.getLogger(LimeConfigOptimizer.class);
 
     private static final long DEFAULT_TIME_LIMIT = 30;
-    private static final int DEFAULT_TABU_SIZE = 100;
+    private static final int DEFAULT_TABU_SIZE = 10;
     private static final int DEFAULT_ACCEPTED_COUNT = 5000;
     private static final boolean DEFAULT_BOOLEAN_ENTITIES = true;
     private static final boolean DEFAULT_NUMERIC_ENTITIES = true;

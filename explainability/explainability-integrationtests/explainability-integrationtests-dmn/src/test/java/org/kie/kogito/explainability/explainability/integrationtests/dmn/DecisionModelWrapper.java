@@ -92,7 +92,11 @@ class DecisionModelWrapper implements PredictionProvider {
                 if (isList) {
                     List<Object> objects = new ArrayList<>(compositeFeatures.size());
                     for (Feature fs : compositeFeatures) {
-                        objects.add(fs.getValue().getUnderlyingObject());
+                        try {
+                            objects.add(toMap((List<Feature>) fs.getValue().getUnderlyingObject()));
+                        } catch (ClassCastException cce) {
+                            objects.add(fs.getValue().getUnderlyingObject());
+                        }
                     }
                     map.put(f.getName(), objects);
                 } else {
