@@ -92,7 +92,7 @@ public class TestUtils {
                     OUTPUTS,
                     SEARCH_DOMAINS);
     public static final LIMEExplainabilityRequestDto LIME_REQUEST_DTO = new LIMEExplainabilityRequestDto(EXECUTION_ID,
-            SERVICE_URL, /**/
+            SERVICE_URL,
             MODEL_IDENTIFIER,
             INPUTS,
             OUTPUTS);
