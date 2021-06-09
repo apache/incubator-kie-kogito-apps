@@ -68,13 +68,7 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
             String sourceUrl = cloudEvent.getSource().toString();
             String serviceUrl = payload.getHeader().getResourceId().getServiceUrl();
 
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-                LOG.trace(String.format("Incoming event:-\n%s", writer.writeValueAsString(payload)));
-            } catch (JsonProcessingException jpe) {
-                //Swallow
-            }
+            logEvent(payload);
 
             service.processDecision(cloudEvent.getId(),
                     TraceEventConverter.toDecision(payload, sourceUrl, serviceUrl));
@@ -86,5 +80,17 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     @Override
     protected TypeReference<TraceEvent> getEventType() {
         return CLOUD_EVENT_TYPE;
+    }
+
+    private void logEvent(TraceEvent event) {
+        if (LOG.isTraceEnabled()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+                LOG.trace(String.format("Incoming event:-\n%s", writer.writeValueAsString(event)));
+            } catch (JsonProcessingException jpe) {
+                //Swallow
+            }
+        }
     }
 }
