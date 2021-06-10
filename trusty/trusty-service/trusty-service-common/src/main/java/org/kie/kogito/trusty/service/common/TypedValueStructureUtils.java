@@ -21,7 +21,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
+import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 public class TypedValueStructureUtils {
 
@@ -29,51 +31,92 @@ public class TypedValueStructureUtils {
         //Prevent instantiation of this utility class
     }
 
-    public static <D extends TypedVariable<D>, C extends TypedVariable<C>> boolean isStructureIdentical(Collection<D> originalInputs,
-            Collection<C> counterfactualSearchDomains) {
+    private interface Check<D extends TypedVariable<D>, C extends TypedVariable<C>> {
 
-        //Basic size checks
-        if (Objects.isNull(originalInputs) && Objects.isNull(counterfactualSearchDomains)) {
-            return true;
-        }
-        if (Objects.isNull(originalInputs)) {
-            return false;
-        }
-        if (Objects.isNull(counterfactualSearchDomains)) {
-            return false;
-        }
-        if (originalInputs.isEmpty() && counterfactualSearchDomains.isEmpty()) {
-            return true;
+        boolean check(Collection<D> structure1,
+                Collection<C> structure2);
+    }
+
+    private static abstract class BaseCheck<D extends TypedVariable<D>, C extends TypedVariable<C>> implements Check<D, C> {
+
+        @Override
+        public boolean check(Collection<D> structure1, Collection<C> structure2) {
+            if (Objects.isNull(structure1) && Objects.isNull(structure2)) {
+                return true;
+            }
+            if (Objects.isNull(structure1)) {
+                return false;
+            }
+            if (Objects.isNull(structure2)) {
+                return false;
+            }
+            if (structure1.isEmpty() && structure2.isEmpty()) {
+                return true;
+            }
+
+            Map<String, StructureHolder<D>> structure1Map = structure1.stream().map(StructureHolder::new).collect(Collectors.toMap(ih -> ih.name, ih -> ih));
+            Map<String, StructureHolder<C>> structure2Map = structure2.stream().map(StructureHolder::new).collect(Collectors.toMap(ih -> ih.name, ih -> ih));
+            if (!checkMembership(structure1Map, structure2Map)) {
+                return false;
+            }
+
+            //Check direct descendents
+            Collection<D> structure1ChildStructures =
+                    structure1Map.values()
+                            .stream()
+                            .filter(e -> e.kind == TypedValue.Kind.STRUCTURE)
+                            .map(ih -> ih.original.getComponents())
+                            .flatMap(Collection::stream)
+                            .collect(Collectors.toList());
+            Collection<C> structure2ChildStructures =
+                    structure2Map.values()
+                            .stream()
+                            .filter(e -> e.kind == TypedValue.Kind.STRUCTURE)
+                            .map(ih -> ih.original.getComponents())
+                            .flatMap(Collection::stream)
+                            .collect(Collectors.toList());
+
+            return check(structure1ChildStructures, structure2ChildStructures);
         }
 
-        //Check all peers are equal
-        Map<String, StructureHolder<D>> originalInputsMap = originalInputs.stream().map(StructureHolder::new).collect(Collectors.toMap(ih -> ih.name, ih -> ih));
-        Map<String, StructureHolder<C>> searchDomainsInputMap =
-                counterfactualSearchDomains.stream().map(StructureHolder::new).collect(Collectors.toMap(ih -> ih.name, ih -> ih));
-        if (originalInputsMap.size() != searchDomainsInputMap.size()) {
-            return false;
+        protected abstract boolean checkMembership(Map<String, StructureHolder<D>> structure1Map,
+                Map<String, StructureHolder<C>> structure2Map);
+
+    }
+
+    private static class IdenticalCheck extends BaseCheck<TypedVariableWithValue, CounterfactualSearchDomain> {
+
+        @Override
+        @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+        protected boolean checkMembership(Map<String, StructureHolder<TypedVariableWithValue>> structure1Map,
+                Map<String, StructureHolder<CounterfactualSearchDomain>> structure2Map) {
+            boolean validSize = structure2Map.size() == structure1Map.size();
+            boolean validEntries = structure2Map.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), structure1Map.get(e.getKey())));
+            return validSize && validEntries;
         }
-        if (!originalInputsMap.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), searchDomainsInputMap.get(e.getKey())))) {
-            return false;
+    }
+
+    private static class ComparableCheck extends BaseCheck<TypedVariableWithValue, TypedVariableWithValue> {
+
+        @Override
+        protected boolean checkMembership(Map<String, StructureHolder<TypedVariableWithValue>> structure1Map,
+                Map<String, StructureHolder<TypedVariableWithValue>> structure2Map) {
+            boolean validSize = structure2Map.size() <= structure1Map.size();
+            boolean validEntries = structure2Map.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), structure1Map.get(e.getKey())));
+            return validSize && validEntries;
         }
 
-        //Check direct descendents
-        Collection<D> originalInputsStructures =
-                originalInputsMap.values()
-                        .stream()
-                        .filter(e -> e.kind == TypedValue.Kind.STRUCTURE)
-                        .map(ih -> ih.original.getComponents())
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList());
-        Collection<C> searchDomainsStructures =
-                searchDomainsInputMap.values()
-                        .stream()
-                        .filter(e -> e.kind == TypedValue.Kind.STRUCTURE)
-                        .map(ih -> ih.original.getComponents())
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList());
+    }
 
-        return isStructureIdentical(originalInputsStructures, searchDomainsStructures);
+    private static final IdenticalCheck IDENTICAL = new IdenticalCheck();
+    private static final ComparableCheck COMPARABLE = new ComparableCheck();
+
+    public static boolean isStructureIdentical(Collection<TypedVariableWithValue> inputs, Collection<CounterfactualSearchDomain> searchDomains) {
+        return IDENTICAL.check(inputs, searchDomains);
+    }
+
+    public static boolean isStructureComparable(Collection<TypedVariableWithValue> outcomes, Collection<TypedVariableWithValue> goals) {
+        return COMPARABLE.check(outcomes, goals);
     }
 
     private static class StructureHolder<T extends TypedVariable<T>> {

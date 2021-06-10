@@ -66,6 +66,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import static java.util.Arrays.asList;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.api.query.SortDirection.DESC;
+import static org.kie.kogito.trusty.service.common.TypedValueStructureUtils.isStructureComparable;
 import static org.kie.kogito.trusty.service.common.TypedValueStructureUtils.isStructureIdentical;
 
 @ApplicationScoped
@@ -236,10 +237,11 @@ public class TrustyServiceImpl implements TrustyService {
 
         //This is returned as null under Redis, so play safe
         Collection<DecisionOutcome> decisionOutcomes = Objects.nonNull(decision.getOutcomes()) ? decision.getOutcomes() : Collections.emptyList();
-        if (!isStructureIdentical(decisionOutcomes.stream().map(DecisionOutcome::getOutcomeResult).collect(Collectors.toList()), goals)) {
-            String error = buildCounterfactualErrorMessage(String.format("The structure of the Goals do not match the structure of the original Outcomes for decision with ID %s.", executionId),
-                    "Decision outcomes:-", decisionOutcomes,
-                    "Goals:-", goals);
+        if (!isStructureComparable(decisionOutcomes.stream().map(DecisionOutcome::getOutcomeResult).collect(Collectors.toList()), goals)) {
+            String error =
+                    buildCounterfactualErrorMessage(String.format("The structure of the Goals is not comparable to the structure of the original Outcomes for decision with ID %s.", executionId),
+                            "Decision outcomes:-", decisionOutcomes,
+                            "Goals:-", goals);
             LOG.error(error);
             throw new IllegalArgumentException(error);
         }

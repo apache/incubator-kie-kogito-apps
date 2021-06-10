@@ -27,107 +27,108 @@ import com.fasterxml.jackson.databind.node.IntNode;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.trusty.service.common.TypedValueStructureUtils.isStructureIdentical;
 
-public class TypedValueStructureUtilsInputStructuresTest {
+public class TypedValueStructureUtilsIdenticalTest {
 
     @Test
-    public void testInputs_NullNull() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(null, null));
+    public void testSearchDomains_NullNull() {
+        assertTrue(isStructureIdentical(null, null));
     }
 
     @Test
-    public void testInputs_EmptyEmpty() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(Collections.<TypedVariableWithValue> emptyList(), Collections.<CounterfactualSearchDomain> emptyList()));
+    public void testSearchDomains_EmptyEmpty() {
+        assertTrue(isStructureIdentical(Collections.emptyList(), Collections.emptyList()));
     }
 
     @Test
-    public void testInputs_NullEmpty() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(null, Collections.<CounterfactualSearchDomain> emptyList()));
+    public void testSearchDomains_NullEmpty() {
+        assertFalse(isStructureIdentical(null, Collections.emptyList()));
     }
 
     @Test
-    public void testInputs_EmptyNull() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(Collections.<TypedVariableWithValue> emptyList(), null));
+    public void testSearchDomains_EmptyNull() {
+        assertFalse(isStructureIdentical(Collections.emptyList(), null));
     }
 
     @Test
-    public void testInputs_UnitNull() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))), null));
+    public void testSearchDomains_UnitNull() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))), null));
     }
 
     @Test
-    public void testInputs_UnitEmpty() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
-                Collections.<CounterfactualSearchDomain> emptyList()));
+    public void testSearchDomains_UnitEmpty() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
+                Collections.emptyList()));
     }
 
     @Test
-    public void testInputs_NullUnit() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(null,
+    public void testSearchDomains_NullUnit() {
+        assertFalse(isStructureIdentical(null,
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))))));
     }
 
     @Test
-    public void testInputs_EmptyUnit() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(Collections.<TypedVariableWithValue> emptyList(),
+    public void testSearchDomains_EmptyUnit() {
+        assertFalse(isStructureIdentical(Collections.emptyList(),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))))));
     }
 
     @Test
-    public void testInputs_UnitUnit() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
+    public void testSearchDomains_UnitUnit() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))))));
     }
 
     @Test
-    public void testInputs_UnitUnits() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
+    public void testSearchDomains_UnitUnits() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))),
                         CounterfactualSearchDomain.buildSearchDomainUnit("salary", "integer", new CounterfactualDomainRange(new IntNode(5000), new IntNode(100000))))));
     }
 
     @Test
-    public void testInputs_UnitsUnit() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
+    public void testSearchDomains_UnitsUnit() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
                 TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000))),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))))));
     }
 
     @Test
-    public void testInputs_UnitsUnits() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
+    public void testSearchDomains_UnitsUnits() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
                 TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000))),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))),
                         CounterfactualSearchDomain.buildSearchDomainUnit("salary", "integer", new CounterfactualDomainRange(new IntNode(5000), new IntNode(100000))))));
     }
 
     @Test
-    public void testInputs_UnitsUnits__WithDifferentOrder() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000)),
+    public void testSearchDomains_UnitsUnits__WithDifferentOrder() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000)),
                 TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))),
                         CounterfactualSearchDomain.buildSearchDomainUnit("salary", "integer", new CounterfactualDomainRange(new IntNode(5000), new IntNode(100000))))));
     }
 
     @Test
-    public void testInputs_StructureUnit() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
+    public void testSearchDomains_StructureUnit() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
                 List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
                         TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000))))),
                 List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))))));
     }
 
     @Test
-    public void testInputs_UnitStructure() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
+    public void testSearchDomains_UnitStructure() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))),
                 List.of(CounterfactualSearchDomain.buildStructure("person", "tPerson",
                         List.of(CounterfactualSearchDomain.buildSearchDomainUnit("age", "integer", new CounterfactualDomainRange(new IntNode(18), new IntNode(65))),
                                 CounterfactualSearchDomain.buildSearchDomainUnit("salary", "integer", new CounterfactualDomainRange(new IntNode(5000), new IntNode(100000))))))));
     }
 
     @Test
-    public void testInputs_StructureStructure() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
+    public void testSearchDomains_StructureStructure() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
                 List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
                         TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000))))),
                 List.of(CounterfactualSearchDomain.buildStructure("person", "tPerson",
@@ -136,8 +137,8 @@ public class TypedValueStructureUtilsInputStructuresTest {
     }
 
     @Test
-    public void testInputs_StructureStructure__WithDifferentOrder() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
+    public void testSearchDomains_StructureStructure__WithDifferentOrder() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
                 List.of(TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000)),
                         TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18))))),
                 List.of(CounterfactualSearchDomain.buildStructure("person", "tPerson",
@@ -146,8 +147,8 @@ public class TypedValueStructureUtilsInputStructuresTest {
     }
 
     @Test
-    public void testInputs_StructureWithStructureStructureWithStructure() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
+    public void testSearchDomains_StructureWithStructureStructureWithStructure() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
                 List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
                         TypedVariableWithValue.buildStructure("income", "tIncome",
                                 List.of(TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000)),
@@ -160,8 +161,8 @@ public class TypedValueStructureUtilsInputStructuresTest {
     }
 
     @Test
-    public void testInputs_ComplexComplex() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("hatSize", "integer", new IntNode(16)),
+    public void testSearchDomains_ComplexComplex() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildUnit("hatSize", "integer", new IntNode(16)),
                 TypedVariableWithValue.buildStructure("person", "tPerson",
                         List.of(TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)),
                                 TypedVariableWithValue.buildStructure("income", "tIncome",
@@ -177,8 +178,8 @@ public class TypedValueStructureUtilsInputStructuresTest {
     }
 
     @Test
-    public void testInputs_ComplexComplex__WithDifferentOrder() {
-        assertTrue(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
+    public void testSearchDomains_ComplexComplex__WithDifferentOrder() {
+        assertTrue(isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
                 List.of(TypedVariableWithValue.buildStructure("income", "tIncome",
                         List.of(TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000)),
                                 TypedVariableWithValue.buildUnit("bonuses", "integer", new IntNode(50000)))),
@@ -194,8 +195,8 @@ public class TypedValueStructureUtilsInputStructuresTest {
     }
 
     @Test
-    public void testInputs_ComplexComplex__WithDifferentOrder_WithDifference() {
-        assertFalse(TypedValueStructureUtils.isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
+    public void testSearchDomains_ComplexComplex__WithDifferentOrder_WithDifference() {
+        assertFalse(isStructureIdentical(List.of(TypedVariableWithValue.buildStructure("person", "tPerson",
                 List.of(TypedVariableWithValue.buildStructure("income", "tIncome",
                         List.of(TypedVariableWithValue.buildUnit("salary", "integer", new IntNode(10000)))),
                         TypedVariableWithValue.buildUnit("age", "integer", new IntNode(18)))),
