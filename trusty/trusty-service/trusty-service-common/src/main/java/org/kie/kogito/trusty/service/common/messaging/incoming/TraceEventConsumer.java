@@ -42,6 +42,9 @@ import io.cloudevents.CloudEvent;
 public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectWriter WRITER = MAPPER.writerWithDefaultPrettyPrinter();
+
     private static final TypeReference<TraceEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
@@ -85,9 +88,7 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     private void logEvent(TraceEvent event) {
         if (LOG.isTraceEnabled()) {
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
-                LOG.trace(String.format("Incoming event:-\n%s", writer.writeValueAsString(event)));
+                LOG.trace(String.format("Incoming event:-\n%s", WRITER.writeValueAsString(event)));
             } catch (JsonProcessingException jpe) {
                 //Swallow
             }

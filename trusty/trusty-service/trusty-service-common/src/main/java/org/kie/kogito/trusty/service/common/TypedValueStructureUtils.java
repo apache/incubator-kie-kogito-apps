@@ -53,7 +53,6 @@ public class TypedValueStructureUtils {
         if (originalInputsMap.size() != searchDomainsInputMap.size()) {
             return false;
         }
-        //InteliJ reports the use of .equals as invalid.. but it's perfectly good
         if (!originalInputsMap.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), searchDomainsInputMap.get(e.getKey())))) {
             return false;
         }
