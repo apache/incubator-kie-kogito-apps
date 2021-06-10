@@ -49,7 +49,7 @@ public abstract class BaseKeycloakJobServiceIT {
     public static final int FORBIDDEN_CODE = 401;
 
     @ConfigProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY)
-    String keycloakURL;
+    public String keycloakURL;
 
     @BeforeAll
     public static void setup() {
