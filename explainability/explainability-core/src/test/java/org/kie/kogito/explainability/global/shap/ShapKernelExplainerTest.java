@@ -26,7 +26,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
-
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
@@ -38,7 +37,6 @@ import org.kie.kogito.explainability.utils.MatrixUtils;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class ShapKernelExplainerTest {
     double[][] backgroundRaw = {
@@ -143,8 +141,8 @@ class ShapKernelExplainerTest {
      * test that the computed shape values match expected shap values
      */
     private void shapTestCase(PredictionProvider model, ShapConfig skConfig,
-                              double[][] backgroundRaw, double[][] toExplainRaw, double[][][] expected)
-            throws InterruptedException, TimeoutException, ExecutionException  {
+            double[][] backgroundRaw, double[][] toExplainRaw, double[][][] expected)
+            throws InterruptedException, TimeoutException, ExecutionException {
 
         // establish background data and desired data to explain
         List<PredictionInput> background = createPIFromMatrix(backgroundRaw);
@@ -232,7 +230,7 @@ class ShapKernelExplainerTest {
 
     // Test cases where search space cannot be fully enumerated ========================================================
     @Test
-    void testLargeBackground()  throws InterruptedException, TimeoutException, ExecutionException {
+    void testLargeBackground() throws InterruptedException, TimeoutException, ExecutionException {
         // establish background data and desired data to explain
         double[][] largeBackground = new double[100][10];
         for (int i = 0; i < 100; i++) {
@@ -296,7 +294,7 @@ class ShapKernelExplainerTest {
         List<Prediction> predictions = DataUtils.getPredictions(toExplain, predictionOutputs);
 
         // evaluate if the explanations match the expected value
-        CompletableFuture<double[][][]> explanationsFuture =  ske.explainFromPredictions(model, predictions);
+        CompletableFuture<double[][][]> explanationsFuture = ske.explainFromPredictions(model, predictions);
         assertThrows(IllegalArgumentException.class, () -> explanationsFuture.get(5, TimeUnit.SECONDS));
     }
 }

@@ -16,7 +16,6 @@
 
 package org.kie.kogito.explainability.global.shap;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +35,6 @@ import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
-
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
@@ -84,9 +82,9 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      */
     public ShapKernelExplainer(PredictionProvider model,
-                               ShapConfig config,
-                               List<PredictionInput> background,
-                               Random rn)
+            ShapConfig config,
+            List<PredictionInput> background,
+            Random rn)
             throws InterruptedException, ExecutionException, TimeoutException {
         this.link = config.getLink();
         this.model = model;
@@ -506,7 +504,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
 
         for (int i = 0; i < this.samplesAdded.size(); i++) {
             ShapSyntheticDataSample sample = this.samplesAdded.get(i);
-            if (!sample.isFixed() && nonFixedWeight!=0) {
+            if (!sample.isFixed() && nonFixedWeight != 0) {
                 sample.setWeight(sample.getWeight() * nonFullWeight / nonFixedWeight);
             }
         }

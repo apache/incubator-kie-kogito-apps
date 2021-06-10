@@ -16,13 +16,12 @@
 
 package org.kie.kogito.explainability.global.shap;
 
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.PredictionInput;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PredictionInput;
 
 public class ShapSyntheticDataSample {
     private final PredictionInput x;
