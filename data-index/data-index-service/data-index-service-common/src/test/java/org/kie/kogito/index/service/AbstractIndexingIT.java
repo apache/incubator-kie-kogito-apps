@@ -31,7 +31,8 @@ import static org.kie.kogito.index.messaging.ReactiveMessagingEventConsumer.KOGI
 public abstract class AbstractIndexingIT {
 
     @Inject
-    public ReactiveMessagingEventConsumer consumer;
+    @Any
+    public InMemoryConnector connector;
 
     protected void indexProcessCloudEvent(KogitoProcessCloudEvent event) {
         connector.source(KOGITO_PROCESSINSTANCES_EVENTS).send(event);

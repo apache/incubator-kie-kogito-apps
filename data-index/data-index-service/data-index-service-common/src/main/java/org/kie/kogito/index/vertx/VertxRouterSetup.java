@@ -34,8 +34,6 @@ import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.FaviconHandler;
 import io.vertx.ext.web.handler.LoggerHandler;
 import io.vertx.ext.web.handler.StaticHandler;
-import io.vertx.ext.web.handler.graphql.ApolloWSHandler;
-import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
 
@@ -51,9 +49,6 @@ public class VertxRouterSetup {
     String graphUIPath;
 
     @Inject
-    GraphQL graphQL;
-
-    @Inject
     Vertx vertx;
 
     void setupRouter(@Observes Router router) {
@@ -65,8 +60,6 @@ public class VertxRouterSetup {
         router.route().handler(BodyHandler.create());
         router.route(graphUIPath + "/*").handler(graphiQLHandler);
         router.route("/").handler(ctx -> ctx.response().putHeader("location", graphUIPath + "/").setStatusCode(302).end());
-        router.route("/graphql").handler(ApolloWSHandler.create(graphQL));
-        router.route("/graphql").handler(GraphQLHandler.create(graphQL));
         router.route().handler(StaticHandler.create());
         router.route().handler(FaviconHandler.create(vertx));
     }
