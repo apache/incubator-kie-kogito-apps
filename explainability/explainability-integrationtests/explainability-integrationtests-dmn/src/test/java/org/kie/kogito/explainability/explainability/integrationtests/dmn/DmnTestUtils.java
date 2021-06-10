@@ -31,7 +31,6 @@ import org.kie.kogito.explainability.utils.DataUtils;
 public class DmnTestUtils {
 
     public static List<PredictionInput> randomFraudScoringInputs() {
-        List<PredictionInput> predictionInputs = new ArrayList<>();
         List<Map<String, Object>> transactions = new ArrayList<>();
         Map<String, Object> t1 = new HashMap<>();
         t1.put("Card Type", "Debit");
@@ -50,19 +49,11 @@ public class DmnTestUtils {
         List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCompositeFeature("context", map));
         PredictionInput predictionInput = new PredictionInput(features);
-        predictionInputs.add(predictionInput);
 
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
-            predictionInputs.add(new PredictionInput(perturbFeatures));
-        }
-
-        return predictionInputs;
+        return getPredictionInputs(predictionInput);
     }
 
     public static List<PredictionInput> randomLoanEligibilityInputs() {
-        List<PredictionInput> predictionInputs = new ArrayList<>();
 
         Map<String, Object> client = new HashMap<>();
         client.put("Age", 43);
@@ -77,20 +68,11 @@ public class DmnTestUtils {
         List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
-        predictionInputs.add(predictionInput);
 
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
-            predictionInputs.add(new PredictionInput(perturbFeatures));
-        }
-
-        return predictionInputs;
+        return getPredictionInputs(predictionInput);
     }
 
     public static List<PredictionInput> randomPrequalificationInputs() {
-        List<PredictionInput> predictionInputs = new ArrayList<>();
-
         final Map<String, Object> borrower = new HashMap<>();
         borrower.put("Monthly Other Debt", 1000);
         borrower.put("Monthly Income", 10000);
@@ -103,17 +85,10 @@ public class DmnTestUtils {
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
 
-        Random random = new Random();
-        for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
-            predictionInputs.add(new PredictionInput(perturbFeatures));
-        }
-
-        return predictionInputs;
+        return getPredictionInputs(predictionInput);
     }
 
     public static List<PredictionInput> randomTrafficViolationInputs() {
-        List<PredictionInput> predictionInputs = new ArrayList<>();
 
         final Map<String, Object> driver = new HashMap<>();
         driver.put("Points", 10);
@@ -128,12 +103,20 @@ public class DmnTestUtils {
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         PredictionInput predictionInput = new PredictionInput(features);
 
+        return getPredictionInputs(predictionInput);
+    }
+
+    private static List<PredictionInput> getPredictionInputs(PredictionInput predictionInput) {
+        List<PredictionInput> predictionInputs = new ArrayList<>();
         Random random = new Random();
+        random.setSeed(4);
+        int noOfPerturbations = predictionInput.getFeatures().size();
         for (int i = 0; i < 100; i++) {
-            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(), new PerturbationContext(random, predictionInput.getFeatures().size()));
+            List<Feature> perturbFeatures = DataUtils.perturbFeatures(predictionInput.getFeatures(),
+                    new PerturbationContext(random, noOfPerturbations));
             predictionInputs.add(new PredictionInput(perturbFeatures));
         }
-
         return predictionInputs;
     }
+
 }
