@@ -22,9 +22,9 @@ import org.keycloak.representations.AccessTokenResponse;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 
-import io.restassured.RestAssured;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
 
 import static io.restassured.RestAssured.given;
 
@@ -35,7 +35,7 @@ class KeycloakExplainabilityServiceIT {
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-    
+
     private static final String VALID_USER = "jdoe";
     private static final String SERVICE_ENDPOINT = "/health/live";
 

@@ -19,10 +19,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 
-import io.quarkus.qute.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.Router;
