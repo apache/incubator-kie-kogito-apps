@@ -34,7 +34,7 @@ public class VertxRouter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VertxRouter.class);
 
-    @Location("index.html")
+    @Location("index")
     Template indexTemplate;
 
     private String index;
