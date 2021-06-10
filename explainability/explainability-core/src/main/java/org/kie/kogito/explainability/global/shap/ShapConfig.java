@@ -16,14 +16,16 @@
 
 package org.kie.kogito.explainability.global.shap;
 
+import java.util.Optional;
+
 public class ShapConfig {
-    public enum linkType {
+    public enum LinkType {
         LOGIT,
         IDENTITY
     }
 
-    private final linkType link;
-    private final Integer nsamples;
+    private final LinkType link;
+    private final Integer nSamples;
 
     /**
      * Create a ShapConfig instance. This sets the global configuration of the SHAP explainer.
@@ -33,12 +35,11 @@ public class ShapConfig {
      *        - If you want the shapValues to sum to the exact modelOutput, use IDENTITY
      *        - If your model outputs probabilities and you want the shap values to
      *        use log-odds units, use LOGIT
-     * @param nsamples: int, the number of data samples to run when computing shap values
-     * @return ShapConfig
+     * @param nSamples: int, the number of data samples to run when computing shap values
      */
-    public ShapConfig(linkType link, Integer nsamples) {
+    public ShapConfig(LinkType link, Integer nSamples) {
         this.link = link;
-        this.nsamples = nsamples;
+        this.nSamples = nSamples;
     }
 
     /**
@@ -47,21 +48,20 @@ public class ShapConfig {
      *
      * @param link: enum, either LOGIT or IDENTITY. For models that output probabilities,
      *        use LOGIT to make the explanations use log-odds units. For other models, use IDENTITY
-     * @return ShapConfig object
      */
-    public ShapConfig(linkType link) {
+    public ShapConfig(LinkType link) {
         this.link = link;
-        this.nsamples = null;
+        this.nSamples = null;
     }
 
     /**
      * getters and setters for the various attributes
      */
-    public linkType getLink() {
+    public LinkType getLink() {
         return this.link;
     }
 
-    public Integer getNsamples() {
-        return this.nsamples;
+    public Optional<Integer> getNSamples() {
+        return Optional.ofNullable(this.nSamples);
     }
 }

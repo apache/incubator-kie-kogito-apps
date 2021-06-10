@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.kie.kogito.explainability.global.shap;
 
 import org.junit.jupiter.api.Test;
@@ -25,15 +26,15 @@ class ShapConfigTest {
     // Test that everything recovers as expected
     @Test
     void testRecovery() {
-        ShapConfig skConfig = new ShapConfig(ShapConfig.linkType.IDENTITY, 100);
-        assertEquals(ShapConfig.linkType.IDENTITY, skConfig.getLink());
-        assertEquals(100, skConfig.getNsamples());
+        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, 100);
+        assertEquals(ShapConfig.LinkType.IDENTITY, skConfig.getLink());
+        assertEquals(100, skConfig.getnSamples());
     }
 
     @Test
     void testNullRecovery() {
-        ShapConfig skConfig = new ShapConfig(ShapConfig.linkType.LOGIT);
-        assertEquals(ShapConfig.linkType.LOGIT, skConfig.getLink());
-        assertNull(skConfig.getNsamples());
+        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.LOGIT);
+        assertEquals(ShapConfig.LinkType.LOGIT, skConfig.getLink());
+        assertNull(skConfig.getnSamples());
     }
 }

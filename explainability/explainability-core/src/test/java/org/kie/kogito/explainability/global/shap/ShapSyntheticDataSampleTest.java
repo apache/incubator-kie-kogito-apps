@@ -24,12 +24,15 @@ import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionInput;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ShapSampleTest {
+
+class ShapSyntheticDataSampleTest {
 
     // generate a specific shap sample from scratch
-    private ShapSample generateShapSample() {
+    private ShapSyntheticDataSample generateShapSample() {
         List<Feature> fs = new ArrayList<>();
         fs.add(FeatureFactory.newNumericalFeature("f1", -1));
         fs.add(FeatureFactory.newNumericalFeature("f2", -1));
@@ -46,8 +49,7 @@ public class ShapSampleTest {
         double weight = .5;
         boolean fixed = true;
 
-        ShapSample shapSamp = new ShapSample(pi, mask, background, weight, fixed);
-        return shapSamp;
+        return new ShapSyntheticDataSample(pi, mask, background, weight, fixed);
     }
 
     // generate some sample expected synthetic data
@@ -76,7 +78,7 @@ public class ShapSampleTest {
     // Test that everything recovers as expected
     @Test
     void testSyntheticCreation() {
-        ShapSample shapSamp = generateShapSample();
+        ShapSyntheticDataSample shapSamp = generateShapSample();
         List<PredictionInput> expectedSynth = generateExpectedSynthData();
         List<PredictionInput> generatedSynth = shapSamp.getSyntheticData();
         for (int i = 0; i < generatedSynth.size(); i++) {
@@ -90,20 +92,20 @@ public class ShapSampleTest {
 
     @Test
     void testIsFixed() {
-        ShapSample shapSamp = generateShapSample();
+        ShapSyntheticDataSample shapSamp = generateShapSample();
         assertTrue(shapSamp.isFixed());
     }
 
     @Test
     void testGetMask() {
-        ShapSample shapSamp = generateShapSample();
+        ShapSyntheticDataSample shapSamp = generateShapSample();
         boolean[] mask = { true, true, false, false, true };
         assertArrayEquals(mask, shapSamp.getMask());
     }
 
     @Test
     void testWeight() {
-        ShapSample shapSamp = generateShapSample();
+        ShapSyntheticDataSample shapSamp = generateShapSample();
         assertEquals(.5, shapSamp.getWeight());
         shapSamp.incrementWeight();
         assertEquals(1.5, shapSamp.getWeight());

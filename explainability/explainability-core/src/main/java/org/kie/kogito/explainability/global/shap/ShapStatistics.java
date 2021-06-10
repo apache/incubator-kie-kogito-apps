@@ -19,10 +19,10 @@ package org.kie.kogito.explainability.global.shap;
 public class ShapStatistics {
 
     // subset stats =================================
-    private int numSubsetSizes;
+    private final int numSubsetSizes;
     private int numFullSubsets;
-    private int[] numSubsetsAtSize;
-    private int largestPairedSubsetSize;
+    private final int[] numSubsetsAtSize;
+    private final int largestPairedSubsetSize;
 
     // sample stats
     private double[] remainingWeights;
@@ -31,7 +31,7 @@ public class ShapStatistics {
     private int numSamplesRemaining;
 
     /**
-     * Define a ShapStatistics object. This carries neccesary information for a single ShapKernelExplainer
+     * Define a ShapStatistics object. This carries necessary information for a single ShapKernelExplainer
      * explanation run, and a new one is created per explanation.
      * This is used internally by the ShapKernelExplainer, and should never need to be directly
      * interacted with by the user.
@@ -42,10 +42,8 @@ public class ShapStatistics {
      *        not including complement subset sizes.
      * @param largestPairedSubsetSize: the largest subset that has a complement subset
      * @param numSubsetsAtSize: the size of each subset (ie, how many different
-     *        permuations of n features are there?)
+     *        permutations of n features are there?)
      * @param numSamplesRemaining: A tracker of the number of available samples we have left
-     *
-     * @return ShapStatistics object
      */
     public ShapStatistics(int numSubsetSizes, int largestPairedSubsetSize, int[] numSubsetsAtSize, int numSamplesRemaining) {
         this.numSubsetSizes = numSubsetSizes;

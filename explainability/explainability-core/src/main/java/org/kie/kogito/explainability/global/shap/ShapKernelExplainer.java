@@ -16,7 +16,16 @@
 
 package org.kie.kogito.explainability.global.shap;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -27,9 +36,16 @@ import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.global.GlobalExplainer;
-import org.kie.kogito.explainability.global.pdp.PartialDependencePlotExplainer;
-import org.kie.kogito.explainability.model.*;
-import org.kie.kogito.explainability.utils.*;
+
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderMetadata;
+import org.kie.kogito.explainability.utils.MatrixUtils;
+import org.kie.kogito.explainability.utils.RandomChoice;
+import org.kie.kogito.explainability.utils.WeightedLinearRegression;
+import org.kie.kogito.explainability.utils.WeightedLinearRegressionResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,9 +55,8 @@ import org.slf4j.LoggerFactory;
  * see also https://github.com/slundberg/shap/blob/master/shap/explainers/_kernel.py
  */
 public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<double[][][]>> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PartialDependencePlotExplainer.class);
-
-    private final ShapConfig.linkType link;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShapKernelExplainer.class);
+    private final ShapConfig.LinkType link;
     private final PredictionProvider model;
     private final double[][] backgroundData;
     private final double[][] modelnull;
@@ -51,11 +66,11 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
     private final int cols;
     private final int outputSize;
     private Integer numSamples;
-    private ArrayList<ShapSample> samplesAdded;
+    private ArrayList<ShapSyntheticDataSample> samplesAdded;
     private ArrayList<Integer> varyingFeatureGroups;
     private int numVarying;
     private HashMap<Integer, Integer> masksUsed;
-    private final Random rn = new Random();
+    private final Random rn;
 
     /**
      * Define a ShapKernelExplainer.
@@ -67,14 +82,15 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *        null background for the model. Automated guidance for background data selection
      *        is a WIP.
      *
-     * @return ShapKernelExplainer object
      */
     public ShapKernelExplainer(PredictionProvider model,
-            ShapConfig config,
-            List<PredictionInput> background)
+                               ShapConfig config,
+                               List<PredictionInput> background,
+                               Random rn)
             throws InterruptedException, ExecutionException, TimeoutException {
         this.link = config.getLink();
         this.model = model;
+        this.rn = rn;
         this.backgroundData = MatrixUtils.matrixFromPredictionInput(background);
 
         // get shapes of input and output data
@@ -87,9 +103,9 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
         }
 
         // establish background data
-        List<PredictionOutput> model_out = model.predictAsync(background)
+        List<PredictionOutput> modelOut = model.predictAsync(background)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        this.modelnull = MatrixUtils.matrixFromPredictionOutput(model_out);
+        this.modelnull = MatrixUtils.matrixFromPredictionOutput(modelOut);
         this.outputSize = MatrixUtils.getShape(this.modelnull)[1];
 
         //compute the mean of each column
@@ -99,9 +115,12 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
         this.linkNull = MatrixUtils.rowVector(this.link(this.fnull));
 
         // track number of samples
-        this.numSamples = config.getNsamples();
-        if (this.numSamples == null) {
-            this.setNumSamples(2048 + (2 * this.cols));
+
+        Optional<Integer> numConfigSamples = config.getNSamples();
+        if (numConfigSamples.isPresent()) {
+            this.setNumSamples(numConfigSamples.get());
+        } else {
+            this.setNumSamples(2048 + (2 * this.cols));///
         }
 
         // lower number of samples if it's greater than total feature permutation size
@@ -129,10 +148,10 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @param x: the input to the link function
      *
-     * @returns link(x)
+     * @return link(x)
      */
     private double link(double x) {
-        if (this.link.equals(ShapConfig.linkType.IDENTITY)) {
+        if (this.link.equals(ShapConfig.LinkType.IDENTITY)) {
             return x;
         } else {
             return Math.log(x / (1 - x));
@@ -144,7 +163,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @param v: the input to the link function
      *
-     * @returns link(v)
+     * @return link(v)
      */
     private double[] link(double[] v) {
         return Arrays.stream(v)
@@ -216,10 +235,10 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
         }
         int maskHash = this.hashMask(mask);
         if (this.masksUsed.containsKey(maskHash)) {
-            ShapSample previousSample = this.samplesAdded.get(this.masksUsed.get(maskHash));
+            ShapSyntheticDataSample previousSample = this.samplesAdded.get(this.masksUsed.get(maskHash));
             previousSample.incrementWeight();
         } else {
-            ShapSample sample = new ShapSample(pi, mask, this.backgroundData, weight, fixed);
+            ShapSyntheticDataSample sample = new ShapSyntheticDataSample(pi, mask, this.backgroundData, weight, fixed);
             // map index in the samplesAdded list to the unique hash of this mask
             this.masksUsed.put(maskHash, this.samplesAdded.size());
             this.samplesAdded.add(sample);
@@ -232,7 +251,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @param mask: The boolean mask to be hashed.
      *
-     * @returns the mask hash
+     * @return the mask hash
      */
     private int hashMask(boolean[] mask) {
         int maskSize = mask.length;
@@ -248,7 +267,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @param prediction: The prediction to be explained.
      *
-     * @returns the shap values for this prediction, of shape [n_model_outputs x n_features]
+     * @return the shap values for this prediction, of shape [n_model_outputs x n_features]
      */
     private double[][] explain(Prediction prediction) throws InterruptedException, ExecutionException {
         this.samplesAdded = new ArrayList<>();
@@ -312,7 +331,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
     /**
      * Create a shap statistics object for this explanation, given the configuration for this explainer.
      *
-     * @returns ShapStatics object
+     * @return ShapStatics object
      */
     private ShapStatistics computeSubsetStatistics() {
         // the size of the range (0, numVarying//2) is the number of possible feature permutations
@@ -486,8 +505,8 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
         }
 
         for (int i = 0; i < this.samplesAdded.size(); i++) {
-            ShapSample sample = this.samplesAdded.get(i);
-            if (!sample.isFixed()) {
+            ShapSyntheticDataSample sample = this.samplesAdded.get(i);
+            if (!sample.isFixed() && nonFixedWeight!=0) {
                 sample.setWeight(sample.getWeight() * nonFullWeight / nonFixedWeight);
             }
         }
@@ -498,7 +517,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      * the mean output of the model over the entirely of that sample's synthetic data, subtracted
      * from the mean output of the model over the background data.
      *
-     * @returns the expectations of the model over the synthetic data, of shape [nsamples x modelOutputSize]
+     * @return the expectations of the model over the synthetic data, of shape [nsamples x modelOutputSize]
      */
     private double[][] runSyntheticData() throws InterruptedException, ExecutionException {
         double[][] expectations = new double[this.samplesAdded.size()][this.outputSize];
@@ -522,7 +541,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      * @param expectations: The expectations of each sample
      * @param poMatrix: The predictionOutputs for this explanation's prediction
      *
-     * @returns the shap values as found by the WLR
+     * @return the shap values as found by the WLR
      */
     private double[][] solve(double[][] expectations, double[] poMatrix) {
         double[][] shapVals = new double[this.outputSize][this.cols];
@@ -571,7 +590,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      * @param outputChange: The raw difference between the model output and the null output
      * @param dropIdx: The regularization feature index
      *
-     * @returns the shap values as found by the WLR
+     * @return the shap values as found by the WLR
      */
     // run the WLRR for a single output
     private double[] runWLRR(double[][] maskDiff, double[] adjY, double[] ws, double outputChange, int dropIdx) {
@@ -594,7 +613,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
     /**
      * Shap from model and metadata. Shap cannot do this, use
      *
-     * @returns IllegalArgumentException
+     * @return IllegalArgumentException
      */
     @Override
     public CompletableFuture<double[][][]> explainFromMetadata(PredictionProvider model,
@@ -608,7 +627,7 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @param model: The model to be explained
      * @param predictions: An iterable of model predictions
-     * @returns IllegalArgumentException
+     * @return IllegalArgumentException
      */
     @Override
     public CompletableFuture<double[][][]> explainFromPredictions(PredictionProvider model,

@@ -16,12 +16,15 @@
 
 package org.kie.kogito.explainability.global.shap;
 
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PredictionInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kie.kogito.explainability.model.*;
 
-public class ShapSample {
+public class ShapSyntheticDataSample {
     private final PredictionInput x;
     private final boolean[] mask;
     private final double[][] background;
@@ -30,7 +33,7 @@ public class ShapSample {
     private final List<PredictionInput> syntheticData;
 
     /**
-     * Define a ShapSample object, which tracks the synthetic data generated in the kernel shap process.
+     * Define a ShapSyntheticDataSample object, which tracks the synthetic data generated in the kernel shap process.
      * This is used internally by the ShapKernelExplainer, and should never need to be directly
      * interacted with by the user.
      *
@@ -41,10 +44,9 @@ public class ShapSample {
      * @param fixed: Whether or not this sample comes from a fully enumerated subset or not. If not, the weight
      *        provided will need to be adjusted later.
      *
-     * @return ShapSample object
      */
 
-    public ShapSample(PredictionInput x, boolean[] mask, double[][] background, double weight, boolean fixed) {
+    public ShapSyntheticDataSample(PredictionInput x, boolean[] mask, double[][] background, double weight, boolean fixed) {
         this.x = x;
         this.mask = mask;
         this.background = background;
@@ -55,7 +57,7 @@ public class ShapSample {
 
     /**
      * Create synthetic data for this particular sample,
-     * according to the conditions set up in the ShapSample initialization.
+     * according to the conditions set up in the ShapSyntheticDataSample initialization.
      *
      * @return Synthetic data for this particular sample
      */
