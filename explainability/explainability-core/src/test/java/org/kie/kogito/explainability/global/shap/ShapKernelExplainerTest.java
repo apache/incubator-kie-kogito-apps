@@ -19,7 +19,6 @@ package org.kie.kogito.explainability.global.shap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -294,7 +293,6 @@ class ShapKernelExplainerTest {
         List<Prediction> predictions = DataUtils.getPredictions(toExplain, predictionOutputs);
 
         // evaluate if the explanations match the expected value
-        CompletableFuture<double[][][]> explanationsFuture = ske.explainFromPredictions(model, predictions);
-        assertThrows(IllegalArgumentException.class, () -> explanationsFuture.get(5, TimeUnit.SECONDS));
+        assertThrows(IllegalArgumentException.class, () -> ske.explainFromPredictions(model, predictions));
     }
 }

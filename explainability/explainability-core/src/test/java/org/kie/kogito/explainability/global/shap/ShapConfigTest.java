@@ -19,7 +19,7 @@ package org.kie.kogito.explainability.global.shap;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class ShapConfigTest {
 
@@ -28,13 +28,13 @@ class ShapConfigTest {
     void testRecovery() {
         ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, 100);
         assertEquals(ShapConfig.LinkType.IDENTITY, skConfig.getLink());
-        assertEquals(100, skConfig.getnSamples());
+        assertEquals(100, skConfig.getNSamples().get());
     }
 
     @Test
     void testNullRecovery() {
         ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.LOGIT);
         assertEquals(ShapConfig.LinkType.LOGIT, skConfig.getLink());
-        assertNull(skConfig.getnSamples());
+        assertFalse(skConfig.getNSamples().isPresent());
     }
 }
