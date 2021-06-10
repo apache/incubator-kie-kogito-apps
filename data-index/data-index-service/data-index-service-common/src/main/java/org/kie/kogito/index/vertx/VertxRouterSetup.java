@@ -39,8 +39,6 @@ import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
 
-import graphql.GraphQL;
-
 @ApplicationScoped
 public class VertxRouterSetup {
 
