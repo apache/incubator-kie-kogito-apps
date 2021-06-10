@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
@@ -41,21 +42,15 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.reactivestreams.Publisher;
 
-import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.subscription.Cancellable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
 import static org.kie.kogito.jobs.service.model.JobStatus.SCHEDULED;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("java:S5786")
 public abstract class BaseTimerJobSchedulerTest {
@@ -342,8 +337,8 @@ public abstract class BaseTimerJobSchedulerTest {
         assertThat(scheduled).isNotNull().isPresent();
     }
 
-    private Disposable subscribeOn(Publisher<JobDetails> schedule) {
-        return Flowable.fromPublisher(schedule).subscribe(dummyCallback(), dummyCallback());
+    private Cancellable subscribeOn(Publisher<JobDetails> schedule) {
+        return Multi.createFrom().publisher(schedule).subscribe().with(dummyCallback());
     }
 
     @Test
