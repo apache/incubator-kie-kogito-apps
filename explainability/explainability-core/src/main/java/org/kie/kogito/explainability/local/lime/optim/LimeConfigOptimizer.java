@@ -45,14 +45,18 @@ public class LimeConfigOptimizer {
     private static final long DEFAULT_TIME_LIMIT = 30;
     private static final int DEFAULT_TABU_SIZE = 10;
     private static final int DEFAULT_ACCEPTED_COUNT = 5000;
-    private static final boolean DEFAULT_BOOLEAN_ENTITIES = true;
-    private static final boolean DEFAULT_NUMERIC_ENTITIES = true;
+    private static final boolean DEFAULT_PROXIMITY_ENTITIES = true;
+    private static final boolean DEFAULT_SAMPLING_ENTITIES = true;
+    private static final boolean DEFAULT_ENCODING_ENTITIES = true;
+    private static final boolean DEFAULT_WEIGHTING_ENTITIES = true;
 
     private long timeLimit;
     private int tabuSize;
     private int acceptedCount;
-    private boolean numericEntities;
-    private boolean booleanEntities;
+    private boolean proximityEntities;
+    private boolean samplingEntities;
+    private boolean encodingEntities;
+    private boolean weightingEntities;
     private EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> scoreCalculator;
 
     public LimeConfigOptimizer() {
@@ -60,8 +64,10 @@ public class LimeConfigOptimizer {
         this.tabuSize = DEFAULT_TABU_SIZE;
         this.acceptedCount = DEFAULT_ACCEPTED_COUNT;
         this.scoreCalculator = new LimeStabilityScoreCalculator();
-        this.numericEntities = DEFAULT_NUMERIC_ENTITIES;
-        this.booleanEntities = DEFAULT_BOOLEAN_ENTITIES;
+        this.proximityEntities = DEFAULT_PROXIMITY_ENTITIES;
+        this.samplingEntities = DEFAULT_SAMPLING_ENTITIES;
+        this.encodingEntities = DEFAULT_ENCODING_ENTITIES;
+        this.weightingEntities = DEFAULT_WEIGHTING_ENTITIES;
     }
 
     public LimeConfigOptimizer withTimeLimit(long timeLimit) {
@@ -79,13 +85,23 @@ public class LimeConfigOptimizer {
         return this;
     }
 
-    public LimeConfigOptimizer withNumericEntities(boolean numericEntities) {
-        this.numericEntities = numericEntities;
+    public LimeConfigOptimizer withProximity(boolean proximityEntities) {
+        this.proximityEntities = proximityEntities;
         return this;
     }
 
-    public LimeConfigOptimizer withBooleanEntities(boolean booleanEntities) {
-        this.booleanEntities = booleanEntities;
+    public LimeConfigOptimizer withSampling(boolean samplingEntities) {
+        this.samplingEntities = samplingEntities;
+        return this;
+    }
+
+    public LimeConfigOptimizer withEncoding(boolean encodingEntities) {
+        this.encodingEntities = encodingEntities;
+        return this;
+    }
+
+    public LimeConfigOptimizer withWeighting(boolean weightingEntities) {
+        this.weightingEntities = weightingEntities;
         return this;
     }
 
@@ -96,11 +112,17 @@ public class LimeConfigOptimizer {
 
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
         List<LimeConfigEntity> entities = new ArrayList<>();
-        if (numericEntities) {
-            entities.addAll(LimeConfigEntityFactory.createNumericEntities(config));
+        if (samplingEntities) {
+            entities.addAll(LimeConfigEntityFactory.createSamplingEntities(config));
         }
-        if (booleanEntities) {
-            entities.addAll(LimeConfigEntityFactory.createBooleanEntities(config));
+        if (proximityEntities) {
+            entities.addAll(LimeConfigEntityFactory.createProximityEntities(config));
+        }
+        if (encodingEntities) {
+            entities.addAll(LimeConfigEntityFactory.createEncodingEntities(config));
+        }
+        if (weightingEntities) {
+            entities.addAll(LimeConfigEntityFactory.createWeightingEntities(config));
         }
 
         if (entities.isEmpty()) {
