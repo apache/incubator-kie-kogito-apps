@@ -177,6 +177,9 @@ MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion=true, b
                 .withSettingsXmlId('kogito_release_settings')
                 .withProperty('java.net.preferIPv4Stack', true)
                 .inDirectory(directory)
+    if (getMavenProfiles()) {
+        mvnCmd.withProfiles(getMavenProfiles().split(','))
+    }
     if (addQuarkusVersion && getQuarkusBranch()) {
         mvnCmd.withProperty('version.io.quarkus', '999-SNAPSHOT')
     }
@@ -227,4 +230,8 @@ boolean isUpstreamOptaplannerProject() {
 
 Integer getTimeoutValue() {
     return isNative() ? 360 : 180
+}
+
+String getMavenProfiles() {
+    return env['MAVEN_PROFILES']
 }
