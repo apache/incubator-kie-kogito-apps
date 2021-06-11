@@ -37,7 +37,7 @@ class KeycloakExplainabilityServiceIT {
     }
 
     private static final String VALID_USER = "jdoe";
-    private static final String SERVICE_ENDPOINT = "/health/live";
+    private static final String SERVICE_ENDPOINT = "/q/health/live";
 
     @ConfigProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY)
     String keycloakURL;
