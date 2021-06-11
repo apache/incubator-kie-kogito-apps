@@ -86,7 +86,7 @@ pipeline {
         stage('Apps Integration tests') {
             steps {
                 script {
-                    runIntegrationTests(kogitoAppsRepo)
+                    runIntegrationTests()
                 }
             }
             post {
@@ -160,10 +160,6 @@ String getTargetBranch(Integer addToMajor) {
         echo "Cannot parse changeTarget as release branch so going further with current value: ${changeTarget}"
         }
     return targetBranch
-}
-
-void checkoutQuarkusRepo() {
-    checkoutRepo(quarkusRepo, 'quarkusio', getQuarkusBranch())
 }
 
 MavenCommand getMavenCommand(String directory, boolean addQuarkusVersion = true, boolean canNative = true) {
