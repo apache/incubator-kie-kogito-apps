@@ -144,7 +144,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
             return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(),
-                    solution.getSolutionId(), solution.getExecutionId());
+                    UUID.randomUUID(), solution.getExecutionId());
         });
 
     }
