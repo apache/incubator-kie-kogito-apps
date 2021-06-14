@@ -73,8 +73,8 @@ class OpenNLPLimeExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
-                .withSamples(100)
-                .withPerturbationContext(new PerturbationContext(random, 2));
+                .withSamples(10)
+                .withPerturbationContext(new PerturbationContext(random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = getModel();
 
@@ -101,7 +101,7 @@ class OpenNLPLimeExplainerTest {
             assertEquals(1d, i1);
         }
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 2,
-                0.8, 0.8));
+                0.6, 0.6));
 
         List<PredictionInput> inputs = getSamples(tokenizer);
 
@@ -169,8 +169,8 @@ class OpenNLPLimeExplainerTest {
         Random random = new Random();
         random.setSeed(0);
         LimeConfig limeConfig = new LimeConfig()
-                .withSamples(100)
-                .withPerturbationContext(new PerturbationContext(random, 2));
+                .withSamples(10)
+                .withPerturbationContext(new PerturbationContext(random, 1));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(limeConfig, predictions, model);
         Assertions.assertThat(optimizedConfig).isNotSameAs(limeConfig);
 

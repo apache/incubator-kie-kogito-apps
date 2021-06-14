@@ -27,21 +27,21 @@ import org.kie.kogito.explainability.model.PerturbationContext;
 
 class LimeConfigEntityFactory {
 
-    public static final String PROXIMITY_KERNEL_WIDTH = "proximity.kernel.width";
-    public static final String PROXIMITY_THRESHOLD = "proximity.threshold";
-    public static final String PROXIMITY_FILTERED_DATASET_MINIMUM = "proximity.filtered.dataset.minimum";
-    public static final String EP_NUMERIC_CLUSTER_FILTER_WIDTH = "ep.numeric.cluster.filter.width";
-    public static final String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
-    public static final String SEPARABLE_DATASET_RATIO = "separable.dataset.ratio";
-    public static final String NUMBER_OF_SAMPLES = "samples";
-    public static final String NUMBER_OF_PERTURBATIONS = "perturbations";
-    public static final String PROXIMITY_FILTER_ENABLED = "proximity.filter.enabled";
-    public static final String PENALIZE_BALANCE_SPARSE = "penalize.balance.sparse";
-    public static final String ADAPT_DATASET_VARIANCE = "adapt.dataset.variance";
+    private static final String PROXIMITY_KERNEL_WIDTH = "proximity.kernel.width";
+    private static final String PROXIMITY_THRESHOLD = "proximity.threshold";
+    private static final String PROXIMITY_FILTERED_DATASET_MINIMUM = "proximity.filtered.dataset.minimum";
+    private static final String PROXIMITY_FILTER_ENABLED = "proximity.filter.enabled";
+    private static final String EP_NUMERIC_CLUSTER_FILTER_WIDTH = "ep.numeric.cluster.filter.width";
+    private static final String EP_NUMERIC_CLUSTER_THRESHOLD = "ep.numeric.cluster.threshold";
+    private static final String SAMPLING_SEPARABLE_DATASET_RATIO = "sampling.separable.dataset.ratio";
+    private static final String SAMPLING_SIZE = "sampling.size";
+    private static final String SAMPLING_PERTURBATIONS = "sampling.perturbations";
+    private static final String SAMPLING_ADAPT_DATASET_VARIANCE = "sampling.adapt.dataset.variance";
+    private static final String WEIGHTING_PENALIZE_BALANCE_SPARSE = "weighting.penalize.balance.sparse";
 
     private static final Map<String, BiFunction<LimeConfig, LimeConfigEntity, LimeConfig>> processors = initProcessors();
 
-    static Map<String, BiFunction<LimeConfig, LimeConfigEntity, LimeConfig>> initProcessors() {
+    private static Map<String, BiFunction<LimeConfig, LimeConfigEntity, LimeConfig>> initProcessors() {
         Map<String, BiFunction<LimeConfig, LimeConfigEntity, LimeConfig>> processors = new HashMap<>();
         processors.put(PROXIMITY_KERNEL_WIDTH, (limeConfig, limeConfigEntity) -> limeConfig.withProximityKernelWidth(limeConfigEntity.asDouble()));
         processors.put(PROXIMITY_THRESHOLD, (limeConfig, limeConfigEntity) -> limeConfig.withProximityThreshold(limeConfigEntity.asDouble()));
@@ -51,13 +51,13 @@ class LimeConfigEntityFactory {
         processors.put(EP_NUMERIC_CLUSTER_THRESHOLD,
                 (limeConfig, limeConfigEntity) -> limeConfig.withEncodingParams(new EncodingParams(limeConfig.getEncodingParams().getNumericTypeClusterGaussianFilterWidth(),
                         limeConfigEntity.asDouble())));
-        processors.put(SEPARABLE_DATASET_RATIO, (limeConfig, limeConfigEntity) -> limeConfig.withSeparableDatasetRatio(limeConfigEntity.asDouble()));
-        processors.put(NUMBER_OF_SAMPLES, (limeConfig, limeConfigEntity) -> limeConfig.withSamples((int) limeConfigEntity.asDouble()));
-        processors.put(NUMBER_OF_PERTURBATIONS, (limeConfig, limeConfigEntity) -> limeConfig.withPerturbationContext(new PerturbationContext(limeConfig.getPerturbationContext().getRandom(),
+        processors.put(SAMPLING_SEPARABLE_DATASET_RATIO, (limeConfig, limeConfigEntity) -> limeConfig.withSeparableDatasetRatio(limeConfigEntity.asDouble()));
+        processors.put(SAMPLING_SIZE, (limeConfig, limeConfigEntity) -> limeConfig.withSamples((int) limeConfigEntity.asDouble()));
+        processors.put(SAMPLING_PERTURBATIONS, (limeConfig, limeConfigEntity) -> limeConfig.withPerturbationContext(new PerturbationContext(limeConfig.getPerturbationContext().getRandom(),
                 (int) limeConfigEntity.asDouble())));
         processors.put(PROXIMITY_FILTER_ENABLED, (limeConfig, limeConfigEntity) -> limeConfig.withProximityFilter(limeConfigEntity.asBoolean()));
-        processors.put(PENALIZE_BALANCE_SPARSE, (limeConfig, limeConfigEntity) -> limeConfig.withPenalizeBalanceSparse(limeConfigEntity.asBoolean()));
-        processors.put(ADAPT_DATASET_VARIANCE, (limeConfig, limeConfigEntity) -> limeConfig.withAdaptiveVariance(limeConfigEntity.asBoolean()));
+        processors.put(WEIGHTING_PENALIZE_BALANCE_SPARSE, (limeConfig, limeConfigEntity) -> limeConfig.withPenalizeBalanceSparse(limeConfigEntity.asBoolean()));
+        processors.put(SAMPLING_ADAPT_DATASET_VARIANCE, (limeConfig, limeConfigEntity) -> limeConfig.withAdaptiveVariance(limeConfigEntity.asBoolean()));
         return processors;
     }
 
@@ -77,13 +77,13 @@ class LimeConfigEntityFactory {
     static List<LimeConfigEntity> createSamplingEntities(LimeConfig config) {
         List<LimeConfigEntity> entities = new ArrayList<>();
         boolean adaptDatasetVariance = config.isAdaptDatasetVariance();
-        entities.add(new BooleanLimeConfigEntity(ADAPT_DATASET_VARIANCE, adaptDatasetVariance));
+        entities.add(new BooleanLimeConfigEntity(SAMPLING_ADAPT_DATASET_VARIANCE, adaptDatasetVariance));
         double noOfSamples = config.getNoOfSamples();
-        entities.add(new NumericLimeConfigEntity(NUMBER_OF_SAMPLES, noOfSamples, 10, 1000));
+        entities.add(new NumericLimeConfigEntity(SAMPLING_SIZE, noOfSamples, 10, 1000));
         double noOfPerturbations = config.getPerturbationContext().getNoOfPerturbations();
-        entities.add(new NumericLimeConfigEntity(NUMBER_OF_PERTURBATIONS, noOfPerturbations, 1, 10));
+        entities.add(new NumericLimeConfigEntity(SAMPLING_PERTURBATIONS, noOfPerturbations, 1, 10));
         double separableDatasetRatio = config.getSeparableDatasetRatio();
-        entities.add(new NumericLimeConfigEntity(SEPARABLE_DATASET_RATIO, separableDatasetRatio, 0.7, 0.99));
+        entities.add(new NumericLimeConfigEntity(SAMPLING_SEPARABLE_DATASET_RATIO, separableDatasetRatio, 0.7, 0.99));
         return entities;
     }
 
@@ -112,7 +112,7 @@ class LimeConfigEntityFactory {
     static List<LimeConfigEntity> createWeightingEntities(LimeConfig config) {
         List<LimeConfigEntity> entities = new ArrayList<>();
         boolean penalizeBalanceSparse = config.isPenalizeBalanceSparse();
-        entities.add(new BooleanLimeConfigEntity(PENALIZE_BALANCE_SPARSE, penalizeBalanceSparse));
+        entities.add(new BooleanLimeConfigEntity(WEIGHTING_PENALIZE_BALANCE_SPARSE, penalizeBalanceSparse));
         return entities;
     }
 }

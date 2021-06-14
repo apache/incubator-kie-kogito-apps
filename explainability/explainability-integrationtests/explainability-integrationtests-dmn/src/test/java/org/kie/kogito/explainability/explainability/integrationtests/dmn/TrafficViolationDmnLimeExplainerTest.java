@@ -103,7 +103,7 @@ class TrafficViolationDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomTrafficViolationInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
         Random random = new Random();
         random.setSeed(0);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
