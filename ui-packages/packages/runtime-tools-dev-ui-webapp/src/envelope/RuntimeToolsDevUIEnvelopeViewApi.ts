@@ -1,2 +1,3 @@
-// eslint-disable-next-line  @typescript-eslint/no-empty-interface
-export interface RuntimeToolsDevUIEnvelopeViewApi {}
+export interface RuntimeToolsDevUIEnvelopeViewApi {
+  setDataIndexUrl: (dataIndexUrl: string) => void;
+}

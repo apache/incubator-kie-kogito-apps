@@ -8,6 +8,8 @@ import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeVie
 
 export class RuntimeToolsDevUIEnvelopeApiImpl
   implements RuntimeToolsDevUIEnvelopeApi {
+  private capturedInitRequestYet = false;
+
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
       RuntimeToolsDevUIEnvelopeApi,
@@ -16,6 +18,15 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
       RuntimeToolsDevUIEnvelopeContextType
     >
   ) {}
+
+  private hasCapturedInitRequestYet() {
+    return this.capturedInitRequestYet;
+  }
+
+  private ackCapturedInitRequest() {
+    this.capturedInitRequestYet = true;
+  }
+
   public runtimeToolsDevUI_initRequest = (
     association: any,
     initArgs: any
@@ -24,6 +35,15 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
       association.origin,
       association.envelopeServerId
     );
-    return Promise.resolve();
+
+    if (this.hasCapturedInitRequestYet()) {
+      return;
+    }
+
+    this.ackCapturedInitRequest();
+
+    this.args.view().setDataIndexUrl('testUrl');
+
+    return new Promise<void>(res => res());
   };
 }

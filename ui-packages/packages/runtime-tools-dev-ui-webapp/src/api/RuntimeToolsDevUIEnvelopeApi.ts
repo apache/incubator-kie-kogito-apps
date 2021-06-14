@@ -1,5 +1,8 @@
 export interface RuntimeToolsDevUIEnvelopeApi {
-  runtimeToolsDevUI_initRequest(association: Association, initArgs: argTypes);
+  runtimeToolsDevUI_initRequest(
+    association: Association,
+    initArgs: argTypes
+  ): Promise<void>;
 }
 
 export interface Association {

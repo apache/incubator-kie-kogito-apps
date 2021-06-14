@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -20,7 +21,8 @@ module.exports = {
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Runtime tools dev-ui',
       TEST_USER_SYSTEM_ENABLED: false
-    })
+    }),
+    new CopyPlugin({ patterns: [{ from: "./src/static", to: "./static" }, { from: "./src/components/styles.css", to: "./components/styles.css" }]})
   ],
   module: {
     rules: [

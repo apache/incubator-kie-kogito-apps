@@ -23,16 +23,16 @@ import { onError } from 'apollo-link-error';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { setContext } from 'apollo-link-context';
 import {
-  appRenderWithAxiosInterceptorConfig,
+  //appRenderWithAxiosInterceptorConfig,
   getToken,
   isAuthEnabled,
   UserContext,
   ServerUnavailablePage
 } from '@kogito-apps/consoles-common';
 import ConsolesLayout from './components/console/ConsolesLayout/ConsolesLayout';
-// import ConsolesRoutes from './components/console/ConsolesRoutes/ConsolesRoutes';
+import ConsolesRoutes from './components/console/ConsolesRoutes/ConsolesRoutes';
 
-const appRender = (ctx: UserContext) => {
+export const appRender = (ctx: UserContext) => {
   const httpLink = new HttpLink({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -73,12 +73,12 @@ const appRender = (ctx: UserContext) => {
   });
 
   ReactDOM.render(
-    // <ConsolesLayout apolloClient={client} userContext={ctx}>
-    //   <ConsolesRoutes />
-    // </ConsolesLayout>,
-    <p>test Ui</p>,
+    <ConsolesLayout apolloClient={client} userContext={ctx}>
+      <ConsolesRoutes />
+    </ConsolesLayout>,
+    //<p>test Ui</p>,
     document.getElementById('envelope-app')
   );
 };
 
-appRenderWithAxiosInterceptorConfig((ctx: UserContext) => appRender(ctx));
+//appRenderWithAxiosInterceptorConfig((ctx: UserContext) => appRender(ctx));

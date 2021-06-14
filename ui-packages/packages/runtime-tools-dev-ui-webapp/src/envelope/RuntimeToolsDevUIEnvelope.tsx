@@ -1,11 +1,20 @@
 import { Envelope, EnvelopeApiFactory } from '@kogito-tooling/envelope';
 import {
-  RuntimeToolsDevUIEnvelopeApi,
-  RuntimeToolsDevUIChannelApi
+  RuntimeToolsDevUIChannelApi,
+  RuntimeToolsDevUIEnvelopeApi
 } from '../api';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
 import { RuntimeToolsDevUIEnvelopeView } from './RuntimeToolsDevUIEnvelopeView';
-import { RuntimeToolsDevUIEnvelopeContextType } from './RuntimeToolsDevUIEnvelopeContext';
+import {
+  RuntimeToolsDevUIEnvelopeContext,
+  RuntimeToolsDevUIEnvelopeContextType
+} from './RuntimeToolsDevUIEnvelopeContext';
+import ReactDOM from 'react-dom';
+import React from 'react';
+import {
+  appRenderWithAxiosInterceptorConfig,
+  UserContext
+} from '../../../consoles-common';
 
 export class RuntimeToolsDevUIEnvelope {
   constructor(
@@ -28,9 +37,36 @@ export class RuntimeToolsDevUIEnvelope {
 
   public start(container: HTMLElement) {
     return this.envelope.start(
-      () => Promise.resolve(() => new RuntimeToolsDevUIEnvelopeView()),
+      () => this.renderView(container),
       this.context,
       this.envelopeApiFactory
     );
+  }
+
+  private renderView(container: HTMLElement) {
+    const runtimeToolsDevUIEnvelopeViewRef = React.createRef<
+      RuntimeToolsDevUIEnvelopeViewApi
+    >();
+
+    const app = (userContext: UserContext) => {
+      return (
+        <RuntimeToolsDevUIEnvelopeContext.Provider value={this.context}>
+          <RuntimeToolsDevUIEnvelopeView
+            ref={runtimeToolsDevUIEnvelopeViewRef}
+            userContext={userContext}
+          />
+        </RuntimeToolsDevUIEnvelopeContext.Provider>
+      );
+    };
+
+    return new Promise<() => RuntimeToolsDevUIEnvelopeViewApi>(res => {
+      setTimeout(() => {
+        appRenderWithAxiosInterceptorConfig((userContext: UserContext) => {
+          ReactDOM.render(app(userContext), container, () => {
+            res(() => runtimeToolsDevUIEnvelopeViewRef.current!);
+          });
+        });
+      }, 0);
+    });
   }
 }
