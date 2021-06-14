@@ -25,9 +25,9 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.TypedVariable;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
-public class TypedValueStructureUtils {
+public class CounterfactualParameterValidation {
 
-    private TypedValueStructureUtils() {
+    private CounterfactualParameterValidation() {
         //Prevent instantiation of this utility class
     }
 
@@ -90,33 +90,53 @@ public class TypedValueStructureUtils {
         @SuppressWarnings("EqualsBetweenInconvertibleTypes")
         protected boolean checkMembership(Map<String, StructureHolder<TypedVariableWithValue>> structure1Map,
                 Map<String, StructureHolder<CounterfactualSearchDomain>> structure2Map) {
+            //Are the maps equal in size?
             boolean validSize = structure2Map.size() == structure1Map.size();
-            boolean validEntries = structure2Map.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), structure1Map.get(e.getKey())));
+            //Do all members of Structure 1 exist in Structure 2?
+            boolean validEntries = structure1Map.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), structure2Map.get(e.getKey())));
+            //If they're equal size and the members are identical the structures must be equal.
             return validSize && validEntries;
         }
     }
 
-    private static class ComparableCheck extends BaseCheck<TypedVariableWithValue, TypedVariableWithValue> {
+    private static class SubsetCheck extends BaseCheck<TypedVariableWithValue, TypedVariableWithValue> {
 
         @Override
         protected boolean checkMembership(Map<String, StructureHolder<TypedVariableWithValue>> structure1Map,
                 Map<String, StructureHolder<TypedVariableWithValue>> structure2Map) {
+            //Is the second map at least the size of the first?
             boolean validSize = structure2Map.size() <= structure1Map.size();
+            //Do all members of Structure 2 exist in Structure 1?
             boolean validEntries = structure2Map.entrySet().stream().allMatch(e -> Objects.equals(e.getValue(), structure1Map.get(e.getKey())));
+            //If Structure 2's size is less than of equal to that of Structure 1 and all members of Structure 2 exist in Structure 1 then Structure 2 must be s subset of Structure 1.
             return validSize && validEntries;
         }
 
     }
 
     private static final IdenticalCheck IDENTICAL = new IdenticalCheck();
-    private static final ComparableCheck COMPARABLE = new ComparableCheck();
+    private static final SubsetCheck SUBSET = new SubsetCheck();
 
+    /**
+     * Checks whether the two structures are identical; irrespective of values.
+     * 
+     * @param inputs Inputs for a Decision
+     * @param searchDomains Search Domains for a Counterfactual Explanation
+     * @return True if they are identical
+     */
     public static boolean isStructureIdentical(Collection<TypedVariableWithValue> inputs, Collection<CounterfactualSearchDomain> searchDomains) {
         return IDENTICAL.check(inputs, searchDomains);
     }
 
-    public static boolean isStructureComparable(Collection<TypedVariableWithValue> outcomes, Collection<TypedVariableWithValue> goals) {
-        return COMPARABLE.check(outcomes, goals);
+    /**
+     * Checks whether the structure of the Goals is a subset of the structure of the Outcomes; irrespective of values.
+     * 
+     * @param outcomes Outcomes for a Decision
+     * @param goals Goals for a Counterfactual Explanation
+     * @return True if Goals is a subset of Outcomes
+     */
+    public static boolean isStructureSubset(Collection<TypedVariableWithValue> outcomes, Collection<TypedVariableWithValue> goals) {
+        return SUBSET.check(outcomes, goals);
     }
 
     private static class StructureHolder<T extends TypedVariable<T>> {
