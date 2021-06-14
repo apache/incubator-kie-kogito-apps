@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
@@ -28,12 +29,12 @@ import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalS
 @PlanningSolution
 public class LimeStabilitySolution {
 
-    private LimeConfig config;
+    private LimeConfig config = new LimeConfig();
 
     private List<Prediction> predictions;
 
     @PlanningEntityCollectionProperty
-    private List<LimeConfigEntity> entities;
+    private List<LimeConfigEntity> entities = new ArrayList<>();
 
     private PredictionProvider model;
 

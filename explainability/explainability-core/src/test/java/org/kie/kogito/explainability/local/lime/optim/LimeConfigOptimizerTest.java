@@ -23,15 +23,12 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.kie.kogito.explainability.utils.ValidationUtils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -51,11 +48,9 @@ class LimeConfigOptimizerTest {
         PredictionInput sample = dataDistribution.sample();
         PredictionOutput output = model.predictAsync(List.of(sample)).get(Config.DEFAULT_ASYNC_TIMEOUT,
                 Config.DEFAULT_ASYNC_TIMEUNIT).get(0);
-        Prediction prediction = new SimplePrediction(sample, output);
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotNull();
         Assertions.assertThat(optimizedConfig).isNotSameAs(initialConfig);
-        ValidationUtils.validateLocalSaliencyStability(model, prediction, new LimeExplainer(optimizedConfig), 2, 0.8, 0.8);
     }
 
 }
