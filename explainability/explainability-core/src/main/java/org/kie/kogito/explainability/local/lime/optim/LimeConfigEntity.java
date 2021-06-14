@@ -33,8 +33,6 @@ abstract class LimeConfigEntity {
         return name;
     }
 
-    abstract boolean isNumeric();
-
     abstract double asDouble();
 
     abstract boolean asBoolean();

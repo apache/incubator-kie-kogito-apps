@@ -47,11 +47,6 @@ public class BooleanLimeConfigEntity extends LimeConfigEntity {
     }
 
     @Override
-    boolean isNumeric() {
-        return false;
-    }
-
-    @Override
     double asDouble() {
         return Double.NaN;
     }

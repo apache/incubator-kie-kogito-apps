@@ -98,7 +98,7 @@ class LoanEligibilityDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
         Random random = new Random();
         random.setSeed(0);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);

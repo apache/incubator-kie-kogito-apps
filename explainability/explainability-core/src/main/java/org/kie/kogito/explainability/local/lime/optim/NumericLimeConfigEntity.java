@@ -32,11 +32,6 @@ public class NumericLimeConfigEntity extends LimeConfigEntity {
     }
 
     @Override
-    boolean isNumeric() {
-        return true;
-    }
-
-    @Override
     double asDouble() {
         return (double) proposedValue;
     }
