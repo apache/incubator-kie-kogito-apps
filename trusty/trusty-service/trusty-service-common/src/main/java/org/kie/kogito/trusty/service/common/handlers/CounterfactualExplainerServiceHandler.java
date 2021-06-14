@@ -40,13 +40,18 @@ public class CounterfactualExplainerServiceHandler extends BaseExplainerServiceH
 
     private static final Logger LOG = LoggerFactory.getLogger(CounterfactualExplainerServiceHandler.class);
 
+    private final CounterfactualSlidingWindowExplainabilityResultsManager explainabilityResultsManager;
+
+    //CDI proxy
     protected CounterfactualExplainerServiceHandler() {
-        //CDI proxy
+        this(null, null);
     }
 
     @Inject
-    public CounterfactualExplainerServiceHandler(TrustyStorageService storageService) {
+    public CounterfactualExplainerServiceHandler(TrustyStorageService storageService,
+            CounterfactualSlidingWindowExplainabilityResultsManager explainabilityResultsManager) {
         super(storageService);
+        this.explainabilityResultsManager = explainabilityResultsManager;
     }
 
     @Override
@@ -64,6 +69,7 @@ public class CounterfactualExplainerServiceHandler extends BaseExplainerServiceH
         return new CounterfactualExplainabilityResult(dto.getExecutionId(),
                 dto.getCounterfactualId(),
                 dto.getSolutionId(),
+                dto.getSequenceId(),
                 statusFrom(dto.getStatus()),
                 dto.getStatusDetails(),
                 dto.isValid(),
@@ -100,6 +106,9 @@ public class CounterfactualExplainerServiceHandler extends BaseExplainerServiceH
                     String.format("A Counterfactual result for Execution ID '%s' and SolutionId '%s' is already present in the Counterfactual results storage.", executionId, solutionId));
         }
         storage.put(solutionId, result);
+
+        explainabilityResultsManager.purge(executionId, storage);
+
         LOG.info("Stored Counterfactual explainability result for execution {}", executionId);
     }
 
