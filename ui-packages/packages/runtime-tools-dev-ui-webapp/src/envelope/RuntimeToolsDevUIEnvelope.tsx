@@ -12,7 +12,7 @@ import {
 import ReactDOM from 'react-dom';
 import React from 'react';
 import {
-  appRenderWithAxiosInterceptorConfig,
+  //appRenderWithAxiosInterceptorConfig,
   UserContext
 } from '../../../consoles-common';
 
@@ -61,11 +61,19 @@ export class RuntimeToolsDevUIEnvelope {
 
     return new Promise<() => RuntimeToolsDevUIEnvelopeViewApi>(res => {
       setTimeout(() => {
-        appRenderWithAxiosInterceptorConfig((userContext: UserContext) => {
-          ReactDOM.render(app(userContext), container, () => {
+        //appRenderWithAxiosInterceptorConfig((userContext: UserContext) => {
+        ReactDOM.render(
+          app({
+            getCurrentUser: () => {
+              return { id: 'user', groups: [] };
+            }
+          }),
+          container,
+          () => {
             res(() => runtimeToolsDevUIEnvelopeViewRef.current!);
-          });
-        });
+          }
+        );
+        //});
       }, 0);
     });
   }

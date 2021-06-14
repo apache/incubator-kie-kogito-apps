@@ -42,7 +42,7 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
 
     this.ackCapturedInitRequest();
 
-    this.args.view().setDataIndexUrl('testUrl');
+    this.args.view().setDataIndexUrl(initArgs.dataIndexUrl);
 
     return new Promise<void>(res => res());
   };
