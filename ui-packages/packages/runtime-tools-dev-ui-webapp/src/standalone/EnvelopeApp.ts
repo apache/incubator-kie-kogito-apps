@@ -17,13 +17,13 @@ import { Envelope } from '@kogito-tooling/envelope';
 import {
   RuntimeToolsDevUIEnvelopeApi,
   RuntimeToolsDevUIChannelApi
-} from '@kogito-apps/runtime-tools-dev-ui-webapp/dist/api';
+} from '../api';
 import {
   RuntimeToolsDevUIEnvelopeViewApi,
   RuntimeToolsDevUIEnvelopeContextType,
   RuntimeToolsDevUIEnvelope,
   RuntimeToolsDevUIEnvelopeApiImpl
-} from '@kogito-apps/runtime-tools-dev-ui-webapp/dist/envelope';
+} from '../envelope';
 
 const initEnvelope = () => {
   const container = document.getElementById('envelope-app')!;

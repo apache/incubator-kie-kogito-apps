@@ -25,7 +25,7 @@ import {
   isAuthEnabled,
   ServerUnavailablePage,
   UserContext
-} from '../../../consoles-common';
+} from '@kogito-apps/consoles-common';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';

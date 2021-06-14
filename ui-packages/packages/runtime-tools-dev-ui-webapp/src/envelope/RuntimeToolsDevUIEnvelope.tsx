@@ -14,7 +14,7 @@ import React from 'react';
 import {
   //appRenderWithAxiosInterceptorConfig,
   UserContext
-} from '../../../consoles-common';
+} from '@kogito-apps/consoles-common';
 
 export class RuntimeToolsDevUIEnvelope {
   constructor(

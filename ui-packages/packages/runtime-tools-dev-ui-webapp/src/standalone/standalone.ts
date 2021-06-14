@@ -19,8 +19,8 @@ import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import {
   RuntimeToolsDevUIChannelApi,
   RuntimeToolsDevUIEnvelopeApi
-} from '@kogito-apps/runtime-tools-dev-ui-webapp/dist/api';
-import { RuntimeToolsDevUIChannelApiImpl } from '../envelope/RuntimeToolsDevUIChannelApiImpl';
+} from '../api';
+import { RuntimeToolsDevUIChannelApiImpl } from '../standalone/RuntimeToolsDevUIChannelApiImpl';
 
 export interface StandaloneDevUIApi {
   close: () => void;

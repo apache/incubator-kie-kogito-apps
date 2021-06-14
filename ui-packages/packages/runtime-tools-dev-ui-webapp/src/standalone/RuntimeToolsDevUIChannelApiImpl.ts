@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { RuntimeToolsDevUIChannelApi } from '@kogito-apps/runtime-tools-dev-ui-webapp/dist/api';
+import { RuntimeToolsDevUIChannelApi } from '../api';
 
 export class RuntimeToolsDevUIChannelApiImpl
   implements RuntimeToolsDevUIChannelApi {}

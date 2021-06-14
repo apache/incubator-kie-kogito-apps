@@ -8,11 +8,12 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src', 'index.tsx')
+    standalone: path.resolve(__dirname, 'src', 'standalone', 'standalone.ts'),
+    envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts')
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src', 'index.html'),
+      template: path.resolve(__dirname, 'resources', 'iframe.html'),
       favicon: 'src/favicon.ico',
       chunks: ['app']
     }),
@@ -22,7 +23,11 @@ module.exports = {
       KOGITO_APP_NAME: 'Runtime tools dev-ui',
       TEST_USER_SYSTEM_ENABLED: false
     }),
-    new CopyPlugin({ patterns: [{ from: "./src/static", to: "./static" }, { from: "./src/components/styles.css", to: "./components/styles.css" }]})
+    new CopyPlugin({ patterns: [
+        { from: "./resources", to: "./" },
+        { from: "./src/static", to: "./static" },
+        { from: "./src/components/styles.css", to: "./components/styles.css" }
+    ]})
   ],
   module: {
     rules: [
@@ -168,7 +173,6 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
