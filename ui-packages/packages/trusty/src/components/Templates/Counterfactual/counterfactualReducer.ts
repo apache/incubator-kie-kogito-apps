@@ -213,14 +213,11 @@ const areInputsSelected = (inputs: CFSearchInput[]) => {
   // filtering all non fixed inputs
   const selectedInputs = inputs.filter(domain => domain.isFixed === false);
   // checking if all inputs have a domain specified, with the exception of
-  // boolean (do not require one) and structured inputs (not yet supported)
+  // booleans (do not require one)
   return (
     selectedInputs.length > 0 &&
-    inputs.every(
-      input =>
-        input.domain ||
-        input.components !== null ||
-        typeof input.value === 'boolean'
+    selectedInputs.every(
+      input => input.domain || typeof input.value === 'boolean'
     )
   );
 };

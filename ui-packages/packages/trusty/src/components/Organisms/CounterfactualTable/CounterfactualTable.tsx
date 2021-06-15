@@ -132,6 +132,19 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
       type: 'CF_TOGGLE_INPUT',
       payload: { searchInputIndex: rowId }
     });
+    // boolean search domain hack
+    if (isSelected && typeof rows[rowId].value === 'boolean') {
+      dispatch({
+        type: 'CF_SET_INPUT_DOMAIN',
+        payload: {
+          inputIndex: rowId,
+          domain: {
+            type: 'CATEGORICAL',
+            categories: ['false']
+          }
+        }
+      });
+    }
   };
 
   const canAddConstraint = (input: CFSearchInput) => {
@@ -354,6 +367,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                   onOpenInputDomainEdit(row, rowIndex)
                                 }
                                 icon={!row.domain && <PlusCircleIcon />}
+                                isDisabled={row.isFixed}
                                 className={'counterfactual-constraint-edit'}
                               >
                                 {row.domain ? (

@@ -175,7 +175,7 @@ describe('CounterfactualAnalysis', () => {
         {
           components: null,
           domain: {
-            type: 'range',
+            type: 'RANGE',
             lowerBound: 1,
             upperBound: 10
           },
@@ -209,7 +209,7 @@ describe('CounterfactualAnalysis', () => {
         .find('CounterfactualTable Tbody Tr:first-child Td')
         .at(5)
         .text()
-    ).toMatch(`ID# ${cfResultsFinal.solutions[0].solutionId}`);
+    ).toMatch(`ID #${cfResultsFinal.solutions[0].solutionId}`);
 
     expect(
       wrapper
