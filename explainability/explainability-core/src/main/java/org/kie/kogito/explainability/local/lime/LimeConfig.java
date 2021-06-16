@@ -17,7 +17,6 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.security.SecureRandom;
 import java.util.Collections;
-import java.util.Random;
 
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.EncodingParams;
@@ -227,7 +226,7 @@ public class LimeConfig {
                 .withSeparableDatasetRatio(separableDatasetRatio)
                 .withSamples(noOfSamples)
                 .withRetries(noOfRetries)
-                .withPerturbationContext(new PerturbationContext(new Random(),
+                .withPerturbationContext(new PerturbationContext(perturbationContext.getRandom(),
                         perturbationContext.getNoOfPerturbations()))
                 .withAdaptiveVariance(adaptDatasetVariance)
                 .withDataDistribution(dataDistribution)

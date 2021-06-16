@@ -20,7 +20,6 @@ import java.util.Random;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.model.DataDistribution;
@@ -31,11 +30,51 @@ import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.utils.DataUtils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LimeConfigOptimizerTest {
 
     @Test
     void testStabilityOptimization() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testStabilityOptimizationNoSampling() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testStabilityOptimizationNoWeighting() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeighting(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testStabilityOptimizationNoEncoding() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withEncoding(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testStabilityOptimizationNoProximity() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withProximity(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testStabilityOptimizationNoEntity() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer()
+                .withSampling(false)
+                .withEncoding(false)
+                .withWeighting(false)
+                .withProximity(false);
+        assertThrows(AssertionError.class, () -> assertConfigOptimized(limeConfigOptimizer));
+    }
+
+    private void assertConfigOptimized(LimeConfigOptimizer limeConfigOptimizer) throws InterruptedException, java.util.concurrent.ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
         Random random = new Random();
         random.setSeed(4);
@@ -43,14 +82,9 @@ class LimeConfigOptimizerTest {
         List<PredictionInput> samples = dataDistribution.sample(10);
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
         LimeConfig initialConfig = new LimeConfig().withSamples(10);
-        PredictionInput sample = dataDistribution.sample();
-        PredictionOutput output = model.predictAsync(List.of(sample)).get(Config.DEFAULT_ASYNC_TIMEOUT,
-                Config.DEFAULT_ASYNC_TIMEUNIT).get(0);
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotNull();
         Assertions.assertThat(optimizedConfig).isNotSameAs(initialConfig);
     }
-
 }

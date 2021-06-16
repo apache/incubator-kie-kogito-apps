@@ -40,32 +40,38 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
         double stabilityScore = 0;
         List<Prediction> predictions = solution.getPredictions();
         if (!predictions.isEmpty()) {
-            double succeededEvaluations = 0;
-            int topK = 2;
-            LimeExplainer limeExplainer = new LimeExplainer(config);
-            for (Prediction prediction : predictions) {
-                try {
-                    LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(solution.getModel(),
-                            prediction, limeExplainer, topK, 5);
-                    for (String decision : stability.getDecisions()) {
-                        double decisionMarginalScore = getDecisionMarginalScore(topK, stability, decision);
-                        stabilityScore += decisionMarginalScore;
-                        succeededEvaluations++;
-                    }
-                } catch (ExecutionException e) {
-                    LOGGER.error("Saliency stability calculation returned an error {}", e.getMessage());
-                } catch (InterruptedException e) {
-                    LOGGER.error("Interrupted while waiting for saliency stability calculation {}", e.getMessage());
-                    Thread.currentThread().interrupt();
-                } catch (TimeoutException e) {
-                    LOGGER.error("Timed out while waiting for saliency stability calculation");
+            stabilityScore = getStabilityScore(solution, config, predictions);
+        }
+        return SimpleBigDecimalScore.of(BigDecimal.valueOf(stabilityScore));
+    }
+
+    private double getStabilityScore(LimeStabilitySolution solution, LimeConfig config, List<Prediction> predictions) {
+        double succeededEvaluations = 0;
+        double stabilityScore = 0;
+        int topK = 2;
+        LimeExplainer limeExplainer = new LimeExplainer(config);
+        for (Prediction prediction : predictions) {
+            try {
+                LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(solution.getModel(),
+                        prediction, limeExplainer, topK, 5);
+                for (String decision : stability.getDecisions()) {
+                    double decisionMarginalScore = getDecisionMarginalScore(topK, stability, decision);
+                    stabilityScore += decisionMarginalScore;
+                    succeededEvaluations++;
                 }
-            }
-            if (succeededEvaluations > 0) {
-                stabilityScore /= succeededEvaluations;
+            } catch (ExecutionException e) {
+                LOGGER.error("Saliency stability calculation returned an error {}", e.getMessage());
+            } catch (InterruptedException e) {
+                LOGGER.error("Interrupted while waiting for saliency stability calculation {}", e.getMessage());
+                Thread.currentThread().interrupt();
+            } catch (TimeoutException e) {
+                LOGGER.error("Timed out while waiting for saliency stability calculation", e);
             }
         }
-        return SimpleBigDecimalScore.of(new BigDecimal(stabilityScore));
+        if (succeededEvaluations > 0) {
+            stabilityScore /= succeededEvaluations;
+        }
+        return stabilityScore;
     }
 
     private double getDecisionMarginalScore(int topK, LocalSaliencyStability stability, String decision) {

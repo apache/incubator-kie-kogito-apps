@@ -49,28 +49,24 @@ class LimeConfigEntityFactoryTest {
     @Test
     void testWeightingEntities() {
         List<? extends LimeConfigEntity> entities = LimeConfigEntityFactory.createWeightingEntities(new LimeConfig());
-        assertThat(entities).isNotNull();
-        assertThat(entities).hasSize(1);
+        assertThat(entities).isNotNull().hasSize(1);
     }
 
     @Test
     void testSamplingEntities() {
         List<? extends LimeConfigEntity> entities = LimeConfigEntityFactory.createSamplingEntities(new LimeConfig());
-        assertThat(entities).isNotNull();
-        assertThat(entities).hasSize(4);
+        assertThat(entities).isNotNull().hasSize(4);
     }
 
     @Test
     void testEncodingEntities() {
         List<? extends LimeConfigEntity> entities = LimeConfigEntityFactory.createEncodingEntities(new LimeConfig());
-        assertThat(entities).isNotNull();
-        assertThat(entities).hasSize(2);
+        assertThat(entities).isNotNull().hasSize(2);
     }
 
     @Test
     void testProximityEntities() {
         List<? extends LimeConfigEntity> entities = LimeConfigEntityFactory.createProximityEntities(new LimeConfig());
-        assertThat(entities).isNotNull();
-        assertThat(entities).hasSize(4);
+        assertThat(entities).isNotNull().hasSize(4);
     }
 }

@@ -87,7 +87,7 @@ class LimeConfigEntityFactory {
         return entities;
     }
 
-    static List<? extends LimeConfigEntity> createProximityEntities(LimeConfig config) {
+    static List<LimeConfigEntity> createProximityEntities(LimeConfig config) {
         List<LimeConfigEntity> entities = new ArrayList<>();
         boolean proximityFilterEnabled = config.isProximityFilter();
         entities.add(new BooleanLimeConfigEntity(PROXIMITY_FILTER_ENABLED, proximityFilterEnabled));
@@ -100,7 +100,7 @@ class LimeConfigEntityFactory {
         return entities;
     }
 
-    static List<? extends LimeConfigEntity> createEncodingEntities(LimeConfig config) {
+    static List<LimeConfigEntity> createEncodingEntities(LimeConfig config) {
         List<LimeConfigEntity> entities = new ArrayList<>();
         double numericTypeClusterGaussianFilterWidth = config.getEncodingParams().getNumericTypeClusterGaussianFilterWidth();
         entities.add(new NumericLimeConfigEntity(EP_NUMERIC_CLUSTER_FILTER_WIDTH, numericTypeClusterGaussianFilterWidth, 0.5, 1));
