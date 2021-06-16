@@ -32,7 +32,7 @@
     "cypress:open:it": "yarn run cypress open --project it-tests --config-file cypress.it.json",
     "cypress:run:it": "yarn run cypress run -b chrome --project it-tests --config-file cypress.it.json",
     "start-and-mock": "yarn run start & yarn run mock-server",
-    "build:services": "./it-tests/docker-compose/script.sh",
+    "build:services": "./it-tests/docker-compose/build.sh",
     "start-with-backend": "./it-tests/docker-compose/start_docker.sh",
     "test:it": "start-server-and-test start-and-mock http://0.0.0.0:9000 cypress:run:it",
     "cypress:open:e2e": "yarn run cypress open --project it-tests --config-file cypress.e2e.json",
