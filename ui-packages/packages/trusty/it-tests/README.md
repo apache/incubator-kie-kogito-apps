@@ -13,11 +13,6 @@ To install dependencies
 yarn install
 ```
 
-To build Docker Images
-```
-yarn run build:services
-```
-
 To run Cypress test suite with mocked data
 ```
 yarn run test:it
@@ -41,6 +36,11 @@ Note: also previous versions of `docker` and `docker-compose` might work, but th
 To install dependencies
 ```
 yarn install
+```
+
+To build KIE Docker images
+```
+yarn run build:services
 ```
 
 To run Cypress test suite with real data
@@ -79,13 +79,16 @@ To be sure that you have built all necessary docker images. Check file docker-co
 ```
 docker images
 ```
+You can perform previous steps by [this Bash script](docker-compose/build.sh). It deletes previous images of SNAPSHOT version and build new ones.
+
 
 Run this project:
 ```
 docker-compose up
 ```
+You can perform previous steps by [this Bash script](docker-compose/start_docker.sh). It starts services.
 
-You can perform previous steps by [this Bash script](docker-compose/script.sh). It deletes previous images of SNAPSHOT version and build new ones.
+#### User interaction
 
 Send REST Request which starts this [DMN asset](https://kiegroup.github.io/kogito-online/?file=https://raw.githubusercontent.com/kiegroup/kogito-apps/master/apps-integration-tests/integration-tests-trusty-service/integration-tests-trusty-service-common/src/main/resources/TrafficViolation.dmn#/editor/dmn):
 ```
@@ -93,7 +96,6 @@ curl -H "Content-Type: application/json" -X POST -d "{\"Driver\":
 {\"State\":\"aa\",\"City\":\"bb\",\"Age\":25,\"Points\":13}
 ,\"Violation\":{\"Type\":\"speed\",\"Actual Speed\":105,\"Speed Limit\":80}}" http://localhost:8080/Traffic%20Violation
 ```
-#### User interaction
 
 Open [http://localhost:1338](http://localhost:1338) to view Trusty Console in the browser.
 

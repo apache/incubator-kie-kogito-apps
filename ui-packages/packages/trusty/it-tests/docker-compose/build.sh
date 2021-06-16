@@ -1,20 +1,18 @@
 #!/bin/bash
 KOGITO_APPS=''
-SCRIPT_LOC=''
 if [[ "$PWD" == */docker-compose ]]
 then 
     KOGITO_APPS='../../../../..'
-    echo "what"
-    echo $KOGITO_APPS
-    echo 'script runs from docker-compose'
+    echo 'script runs from the docker-compose folder'
 elif [[ "$PWD" == */packages/trusty ]]
 then 
     KOGITO_APPS='../../../'
     echo "what"
     echo $KOGITO_APPS
-    echo 'script runs from trusty'
+    echo 'script runs from the trusty folder'
 else
     >&2 echo "error: script starts from unexpected location: ${PWD}"
+    >&2 echo "error: script expects /ui-packages/packages/trusty or /ui-packages/packages/trusty/it-tests/docker-compose folders"
     exit
 fi
 
