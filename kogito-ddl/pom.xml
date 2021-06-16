@@ -12,9 +12,19 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kie.kogito.persistence.ddl</groupId>
-    <artifactId>kogito-apps</artifactId>
-    <name>Kogito :: db scripts collection</name>
+    <artifactId>kogito-ddl</artifactId>
+    <name>Kogito Apps :: DB Scripts Collection Multi Repo</name>
     <packaging>pom</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.kie.kogito.persistence.ddl</groupId>
+            <artifactId>kogito-runtimes-ddl</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+            <classifier>db-scripts</classifier>
+            <type>zip</type>
+         </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -24,9 +34,8 @@
                 <inherited>false</inherited>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/assembly/db-scripts.xml</descriptor>
+                        <descriptor>src/assembly/multi-repo-zip.xml</descriptor>
                     </descriptors>
-
                 </configuration>
                 <executions>
                     <execution>
