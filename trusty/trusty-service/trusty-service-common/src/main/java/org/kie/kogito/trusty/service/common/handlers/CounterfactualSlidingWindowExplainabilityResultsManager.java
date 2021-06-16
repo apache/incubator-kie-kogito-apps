@@ -45,10 +45,10 @@ public class CounterfactualSlidingWindowExplainabilityResultsManager implements 
     }
 
     @Override
-    public void purge(String executionId, Storage<String, CounterfactualExplainabilityResult> storage) {
+    public void purge(String counterfactualId, Storage<String, CounterfactualExplainabilityResult> storage) {
         List<CounterfactualExplainabilityResult> results = new ArrayList<>(storage.query()
                 .sort(List.of(orderBy(CounterfactualExplainabilityResult.COUNTERFACTUAL_SEQUENCE_ID_FIELD, ASC)))
-                .filter(List.of(QueryFilterFactory.equalTo(CounterfactualExplainabilityResult.EXECUTION_ID_FIELD, executionId)))
+                .filter(List.of(QueryFilterFactory.equalTo(CounterfactualExplainabilityResult.COUNTERFACTUAL_ID_FIELD, counterfactualId)))
                 .execute());
 
         //Remove old results from window

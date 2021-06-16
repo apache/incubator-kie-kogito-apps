@@ -100,16 +100,17 @@ public class CounterfactualExplainerServiceHandler extends BaseExplainerServiceH
     @Override
     public void storeExplainabilityResult(String executionId, CounterfactualExplainabilityResult result) {
         String solutionId = result.getSolutionId();
+        String counterfactualId = result.getCounterfactualId();
         Storage<String, CounterfactualExplainabilityResult> storage = storageService.getCounterfactualResultStorage();
         if (storage.containsKey(solutionId)) {
             throw new IllegalArgumentException(
                     String.format("A Counterfactual result for Execution ID '%s' and SolutionId '%s' is already present in the Counterfactual results storage.", executionId, solutionId));
         }
+        LOG.info("Storing Counterfactual Explainability result for execution {}", executionId);
         storage.put(solutionId, result);
 
-        explainabilityResultsManager.purge(executionId, storage);
-
-        LOG.info("Stored Counterfactual explainability result for execution {}", executionId);
+        LOG.info("Purging Counterfactual Explainability results storage for Counterfactual {}", counterfactualId);
+        explainabilityResultsManager.purge(counterfactualId, storage);
     }
 
     private CounterfactualExplainabilityResult.Stage stageFrom(CounterfactualExplainabilityResultDto.Stage stage) {

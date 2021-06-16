@@ -75,7 +75,7 @@ public class CounterfactualSlidingWindowExplainabilityResultsManagerTest {
     public void testPurgeWhenResultSetSizeIsSmallerThanWindowSize() {
         when(query.execute()).thenReturn(Collections.emptyList());
 
-        manager.purge(EXECUTION_ID, storage);
+        manager.purge(COUNTERFACTUAL_ID, storage);
 
         verify(storage, never()).remove(anyString());
     }
@@ -88,7 +88,7 @@ public class CounterfactualSlidingWindowExplainabilityResultsManagerTest {
         CounterfactualExplainabilityResult result3 = makeResult(3);
         when(query.execute()).thenReturn(List.of(result0, result1, result2, result3));
 
-        manager.purge(EXECUTION_ID, storage);
+        manager.purge(COUNTERFACTUAL_ID, storage);
 
         verify(storage, times(2)).remove(anyString());
         verify(storage).remove(result0.getSolutionId());

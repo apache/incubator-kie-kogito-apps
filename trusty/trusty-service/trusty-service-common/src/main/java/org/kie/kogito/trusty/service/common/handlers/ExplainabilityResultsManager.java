@@ -20,6 +20,12 @@ import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 
 public interface ExplainabilityResultsManager<R extends BaseExplainabilityResult> {
 
-    void purge(String executionId, Storage<String, R> storage);
+    /**
+     * Purge the results storage of any unwanted entries.
+     * 
+     * @param counterfactualId The counterfactual request Id.
+     * @param storage The results storage.
+     */
+    void purge(String counterfactualId, Storage<String, R> storage);
 
 }

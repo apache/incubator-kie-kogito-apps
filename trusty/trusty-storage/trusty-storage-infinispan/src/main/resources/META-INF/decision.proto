@@ -48,7 +48,7 @@ message CounterfactualExplainabilityResult {
     /* @Field(store = Store.YES) */
     optional string counterfactualId = 2;
 
-    /* @Field(store = Store.YES) */
+    /* @Field(store = Store.YES) @SortableField */
     optional string sequenceId = 3;
 
     optional string rawObject = 4;

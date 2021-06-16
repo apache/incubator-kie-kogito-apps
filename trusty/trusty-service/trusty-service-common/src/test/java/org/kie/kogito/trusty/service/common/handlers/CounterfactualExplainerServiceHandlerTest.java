@@ -79,6 +79,7 @@ public class CounterfactualExplainerServiceHandlerTest
     public void setup() {
         super.setup();
         when(result.getStage()).thenReturn(CounterfactualExplainabilityResult.Stage.FINAL);
+        when(result.getCounterfactualId()).thenReturn(COUNTERFACTUAL_ID);
         when(result.getSolutionId()).thenReturn(SOLUTION_ID);
     }
 
@@ -138,7 +139,7 @@ public class CounterfactualExplainerServiceHandlerTest
         handler.storeExplainabilityResult(EXECUTION_ID, result);
 
         verify(storage).put(eq(SOLUTION_ID), eq(result));
-        verify(counterfactualExplainabilityResultsManager).purge(eq(EXECUTION_ID), eq(storage));
+        verify(counterfactualExplainabilityResultsManager).purge(eq(COUNTERFACTUAL_ID), eq(storage));
     }
 
     @Test
