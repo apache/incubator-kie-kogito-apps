@@ -25,7 +25,6 @@ import {
   PageLayout
 } from '@kogito-apps/consoles-common';
 import ConsolesNav from '../ConsolesNav/ConsolesNav';
-import managementConsoleLogo from '../../../static/managementConsoleLogo.svg';
 import JobsManagementContextProvider from '../../../channel/JobsManagement/JobsManagementContextProvider';
 import ProcessDetailsContextProvider from '../../../channel/ProcessDetails/ProcessDetailsContextProvider';
 import ProcessListContextProvider from '../../../channel/ProcessList/ProcessListContextProvider';
@@ -44,10 +43,8 @@ const ConsolesLayout: React.FC<IOwnProps> = ({
   const renderPage = routeProps => {
     return (
       <PageLayout
-        BrandSrc={managementConsoleLogo}
         pageNavOpen={true}
-        BrandAltText={'Management Console Logo'}
-        BrandClick={() => routeProps.history.push('/')}
+        withHeader={false}
         PageNav={<ConsolesNav pathname={routeProps.location.pathname} />}
       >
         {children}
