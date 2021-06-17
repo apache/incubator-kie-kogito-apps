@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.local.lime.optim;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -37,17 +38,17 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
     @Override
     public SimpleBigDecimalScore calculateScore(LimeStabilitySolution solution) {
         LimeConfig config = LimeConfigEntityFactory.toLimeConfig(solution);
-        double stabilityScore = 0;
+        BigDecimal stabilityScore = BigDecimal.valueOf(0d);
         List<Prediction> predictions = solution.getPredictions();
         if (!predictions.isEmpty()) {
             stabilityScore = getStabilityScore(solution, config, predictions);
         }
-        return SimpleBigDecimalScore.of(BigDecimal.valueOf(stabilityScore));
+        return SimpleBigDecimalScore.of(stabilityScore);
     }
 
-    private double getStabilityScore(LimeStabilitySolution solution, LimeConfig config, List<Prediction> predictions) {
+    private BigDecimal getStabilityScore(LimeStabilitySolution solution, LimeConfig config, List<Prediction> predictions) {
         double succeededEvaluations = 0;
-        double stabilityScore = 0;
+        BigDecimal stabilityScore = BigDecimal.valueOf(0d);
         int topK = 2;
         LimeExplainer limeExplainer = new LimeExplainer(config);
         for (Prediction prediction : predictions) {
@@ -55,8 +56,8 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
                 LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(solution.getModel(),
                         prediction, limeExplainer, topK, 5);
                 for (String decision : stability.getDecisions()) {
-                    double decisionMarginalScore = getDecisionMarginalScore(topK, stability, decision);
-                    stabilityScore += decisionMarginalScore;
+                    BigDecimal decisionMarginalScore = getDecisionMarginalScore(topK, stability, decision);
+                    stabilityScore = stabilityScore.add(decisionMarginalScore);
                     succeededEvaluations++;
                 }
             } catch (ExecutionException e) {
@@ -69,22 +70,24 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
             }
         }
         if (succeededEvaluations > 0) {
-            stabilityScore /= succeededEvaluations;
+            stabilityScore = stabilityScore.divide(BigDecimal.valueOf(succeededEvaluations), RoundingMode.CEILING);
         }
         return stabilityScore;
     }
 
-    private double getDecisionMarginalScore(int topK, LocalSaliencyStability stability, String decision) {
-        double positiveStabilityScore = 0;
-        double negativeStabilityScore = 0;
+    private BigDecimal getDecisionMarginalScore(int topK, LocalSaliencyStability stability, String decision) {
+        BigDecimal positiveStabilityScore = BigDecimal.valueOf(0);
+        BigDecimal negativeStabilityScore = BigDecimal.valueOf(0);
         for (int i = 1; i <= topK; i++) {
-            positiveStabilityScore += stability.getPositiveStabilityScore(decision, i);
-            negativeStabilityScore += stability.getNegativeStabilityScore(decision, i);
+            positiveStabilityScore = positiveStabilityScore.add(BigDecimal.valueOf(stability.getPositiveStabilityScore(decision, i)));
+            negativeStabilityScore = negativeStabilityScore.add(BigDecimal.valueOf(stability.getNegativeStabilityScore(decision, i)));
         }
-        positiveStabilityScore /= topK;
-        negativeStabilityScore /= topK;
+        positiveStabilityScore = positiveStabilityScore.divide(BigDecimal.valueOf(topK), RoundingMode.CEILING);
+        negativeStabilityScore = negativeStabilityScore.divide(BigDecimal.valueOf(topK), RoundingMode.CEILING);
         // TODO: FAI-495 - differentiate (or weight) between positive and negative
-        return (positiveStabilityScore + negativeStabilityScore) / (2d * stability.getDecisions().size());
+        return positiveStabilityScore.add(negativeStabilityScore)
+                .divide(BigDecimal.valueOf(2d).multiply(BigDecimal.valueOf(stability.getDecisions().size())),
+                        RoundingMode.CEILING);
     }
 
 }
