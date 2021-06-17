@@ -171,41 +171,45 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
               </ToolbarItem>
             </>
           )}
-          {status.executionStatus === CFExecutionStatus.COMPLETED && (
-            <>
-              <ToolbarItem>
-                <Tooltip
-                  content={
-                    <div>
-                      Clear all and set up a new Counterfactual analysis.
-                    </div>
-                  }
-                >
-                  <Button
-                    variant={ButtonVariant.primary}
-                    aria-label="New Counterfactual Analysis"
-                    onClick={handleNewCF}
+          {status.executionStatus === CFExecutionStatus.COMPLETED ||
+            (status.executionStatus === CFExecutionStatus.FAILED && (
+              <>
+                <ToolbarItem>
+                  <Tooltip
+                    content={
+                      <div>
+                        Clear all and set up a new Counterfactual analysis.
+                      </div>
+                    }
                   >
-                    New Counterfactual
-                  </Button>
-                </Tooltip>
-              </ToolbarItem>
-              <ToolbarItem>
-                <Tooltip
-                  content={
-                    <div>
-                      Edit Inputs and Outcomes to rerun a counterfactual
-                      analysis.
-                    </div>
-                  }
-                >
-                  <Button variant="secondary" onClick={handleEditSearchDomain}>
-                    Edit Counterfactual
-                  </Button>
-                </Tooltip>
-              </ToolbarItem>
-            </>
-          )}
+                    <Button
+                      variant={ButtonVariant.primary}
+                      aria-label="New Counterfactual Analysis"
+                      onClick={handleNewCF}
+                    >
+                      New Counterfactual
+                    </Button>
+                  </Tooltip>
+                </ToolbarItem>
+                <ToolbarItem>
+                  <Tooltip
+                    content={
+                      <div>
+                        Edit Inputs and Outcomes to rerun a counterfactual
+                        analysis.
+                      </div>
+                    }
+                  >
+                    <Button
+                      variant="secondary"
+                      onClick={handleEditSearchDomain}
+                    >
+                      Edit Counterfactual
+                    </Button>
+                  </Tooltip>
+                </ToolbarItem>
+              </>
+            ))}
           {status.executionStatus === CFExecutionStatus.RUNNING && (
             <ToolbarItem>
               <CounterfactualProgressBar />

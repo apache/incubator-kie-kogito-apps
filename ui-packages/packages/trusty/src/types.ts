@@ -150,7 +150,8 @@ export interface CFStatus {
 export enum CFExecutionStatus {
   COMPLETED,
   RUNNING,
-  NOT_STARTED
+  NOT_STARTED,
+  FAILED
 }
 
 export type CFAnalysisResetType = 'NEW' | 'EDIT';
@@ -163,7 +164,7 @@ export interface CFAnalysisExecution {
 export interface CFAnalysisResult extends CFAnalysisExecution {
   type: 'counterfactual';
   valid: boolean;
-  status: 'SUCCEEDED';
+  status: 'SUCCEEDED' | 'FAILED';
   statusDetails: string;
   solutionId: string;
   isValid: boolean;

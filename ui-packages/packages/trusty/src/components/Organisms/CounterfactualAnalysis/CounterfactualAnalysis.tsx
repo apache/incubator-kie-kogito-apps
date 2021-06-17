@@ -20,7 +20,7 @@ import CounterfactualInputDomainEdit from '../CounterfactualInputDomainEdit/Coun
 import CounterfactualOutcomesSelected from '../../Molecules/CounterfactualsOutcomesSelected/CounterfactualOutcomesSelected';
 import CounterfactualExecutionInfo from '../../Molecules/CounterfactualExecutionInfo/CounterfactualExecutionInfo';
 import CounterfactualHint from '../../Molecules/CounterfactualHint/CounterfactualHint';
-import CounterfactualSuccessMessage from '../../Molecules/CounterfactualSuccessMessage/CounterfactualSuccessMessage';
+import CounterfactualCompletedMessage from '../../Molecules/CounterfactualCompletedMessage/CounterfactualCompletedMessage';
 import CounterfactualToolbar from '../CounterfactualToolbar/CounterfactualToolbar';
 import CounterfactualTable from '../CounterfactualTable/CounterfactualTable';
 import useCounterfactualExecution from './useCounterfactualExecution';
@@ -81,21 +81,29 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
   };
 
   useEffect(() => {
-    if (cfResults && cfResults.solutions && cfResults.solutions.length) {
-      dispatch({
-        type: 'CF_SET_RESULTS',
-        payload: {
-          results: cfResults.solutions
-        }
-      });
-      if (
-        cfResults.solutions.find(result => result.stage === 'FINAL') !==
-        undefined
-      ) {
+    if (cfResults) {
+      const succeededResults = cfResults.solutions.filter(
+        result => result.status !== 'FAILED'
+      );
+      if (succeededResults.length) {
+        dispatch({
+          type: 'CF_SET_RESULTS',
+          payload: {
+            results: succeededResults
+          }
+        });
+      }
+      const finalResult = cfResults.solutions.find(
+        result => result.stage === 'FINAL'
+      );
+      if (finalResult !== undefined) {
         dispatch({
           type: 'CF_SET_STATUS',
           payload: {
-            executionStatus: CFExecutionStatus.COMPLETED
+            executionStatus:
+              finalResult.status === 'FAILED'
+                ? CFExecutionStatus.FAILED
+                : CFExecutionStatus.COMPLETED
           }
         });
       }
@@ -159,7 +167,7 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
                         CFExecutionStatus.NOT_STARTED
                       }
                     />
-                    <CounterfactualSuccessMessage status={state.status} />
+                    <CounterfactualCompletedMessage status={state.status} />
                     <StackItem isFilled={true} style={{ overflow: 'hidden' }}>
                       <CounterfactualToolbar
                         status={state.status}
