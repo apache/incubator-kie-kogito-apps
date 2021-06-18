@@ -5,7 +5,7 @@
   ~ you may not use this file except in compliance with the License.
   ~ You may obtain a copy of the License at
   ~
-  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~     http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
   ~ distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,20 @@
   ~ limitations under the License.
   -->
 
+{#include main}
+
 <!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <meta charset="utf-8" />
-    <title>Kogito Runtime Tools - Dev UI</title>
-    <meta id="appName" name="application-name" content="Kogito Runtime Tools - Dev UI" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-<body class="pf-m-redhat-font">
-<noscript>Enabling JavaScript is required to run this app.</noscript>
-<div id="envelope-app" style="height: 100%;"></div>
-<script type="text/javascript" src="../envelope.js"></script>
-</body>
-</html>
+{#title}Runtime UI{/title}
+{#body}
+    <div id="envelope-app"></div>
+
+    <script src="resources/webapp/standalone.js"></script>
+    <script>
+        const devUI = RuntimeToolsDevUI.open({
+            container: document.getElementById("envelope-app"),
+            users: ["admin", "paulo", "saravana"],
+            dataIndexUrl: "http://localhost:8280/graphql"
+        })
+    </script>
+{/body}
+{/include}

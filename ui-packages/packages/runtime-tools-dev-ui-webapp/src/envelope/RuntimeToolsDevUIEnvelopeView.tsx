@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import '@patternfly/patternfly/patternfly.css';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
 import { useImperativeHandle } from 'react';
 import { HttpLink } from 'apollo-link-http';

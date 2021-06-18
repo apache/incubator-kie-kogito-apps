@@ -1,9 +1,13 @@
-name: Runtime Tools Quarkus Extension
-#description: Runtime Tools Quarkus Extension ...
+name: Kogito Runtime Tools
 metadata:
-#  keywords:
-#    - runtime-tools-quarkus-extension
-#  guide: ...
-#  categories:
-#    - "miscellaneous"
-#  status: "preview"
+  keywords:
+    - "kogito"
+    - "drools"
+    - "jbpm"
+    - "processes"
+    - "rules"
+    - "decisions"
+  guide: "https://quarkus.io/guides/kogito"
+  categories:
+    - "business-automation"
+  status: "preview"

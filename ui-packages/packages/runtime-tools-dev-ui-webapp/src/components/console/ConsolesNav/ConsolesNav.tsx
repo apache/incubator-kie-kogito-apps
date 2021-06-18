@@ -35,7 +35,7 @@ const ConsolesNav: React.FC<IOwnProps> = ({ pathname }) => {
             to="/ProcessInstances"
             {...ouiaAttribute('data-ouia-navigation-name', 'process-instances')}
           >
-            Process Instances
+            Processes
           </Link>
         </NavItem>
         <NavItem
@@ -46,7 +46,7 @@ const ConsolesNav: React.FC<IOwnProps> = ({ pathname }) => {
             to="/JobsManagement"
             {...ouiaAttribute('data-ouia-navigation-name', 'jobs-management')}
           >
-            Jobs Management
+            Jobs
           </Link>
         </NavItem>
         <NavItem key={'task-inbox-nav'} isActive={pathname === '/TaskInbox'}>
@@ -54,7 +54,7 @@ const ConsolesNav: React.FC<IOwnProps> = ({ pathname }) => {
             to="/TaskInbox"
             {...ouiaAttribute('data-ouia-navigation-name', 'task-inbox')}
           >
-            Task Inbox
+            Tasks
           </Link>
         </NavItem>
       </NavList>

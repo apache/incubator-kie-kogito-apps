@@ -9,6 +9,7 @@
   </parent>
   <artifactId>runtime-tools-quarkus-extension</artifactId>
   <name>Runtime Tools Quarkus Extension - Runtime</name>
+  <description>Runtime development tools for Kogito projects</description>
   <dependencies>
 
     <dependency>
@@ -31,6 +32,21 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-jackson</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-rest-client-jsonb</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-multipart</artifactId>
     </dependency>
 
     <dependency>
@@ -83,22 +99,6 @@
               <version>${version.io.quarkus}</version>
             </path>
           </annotationProcessorPaths>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>16</source>
-          <target>16</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>16</source>
-          <target>16</target>
         </configuration>
       </plugin>
     </plugins>

@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 
@@ -28,6 +28,8 @@ import ConsolesNav from '../ConsolesNav/ConsolesNav';
 import JobsManagementContextProvider from '../../../channel/JobsManagement/JobsManagementContextProvider';
 import ProcessDetailsContextProvider from '../../../channel/ProcessDetails/ProcessDetailsContextProvider';
 import ProcessListContextProvider from '../../../channel/ProcessList/ProcessListContextProvider';
+import TaskConsoleContextsProvider from '../../../channel/TaskInbox/TaskInboxContextProvider';
+import { MemoryRouter } from 'react-router';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
@@ -55,17 +57,19 @@ const ConsolesLayout: React.FC<IOwnProps> = ({
   return (
     <ApolloProvider client={apolloClient}>
       <KogitoAppContextProvider userContext={userContext}>
-        <ProcessListContextProvider apolloClient={apolloClient}>
-          <ProcessDetailsContextProvider apolloClient={apolloClient}>
-            <JobsManagementContextProvider apolloClient={apolloClient}>
-              <BrowserRouter>
-                <Switch>
-                  <Route path="/" render={renderPage} />
-                </Switch>
-              </BrowserRouter>
-            </JobsManagementContextProvider>
-          </ProcessDetailsContextProvider>
-        </ProcessListContextProvider>
+        <TaskConsoleContextsProvider apolloClient={apolloClient}>
+          <ProcessListContextProvider apolloClient={apolloClient}>
+            <ProcessDetailsContextProvider apolloClient={apolloClient}>
+              <JobsManagementContextProvider apolloClient={apolloClient}>
+                <MemoryRouter>
+                  <Switch>
+                    <Route path="/" render={renderPage} />
+                  </Switch>
+                </MemoryRouter>
+              </JobsManagementContextProvider>
+            </ProcessDetailsContextProvider>
+          </ProcessListContextProvider>
+        </TaskConsoleContextsProvider>
       </KogitoAppContextProvider>
     </ApolloProvider>
   );

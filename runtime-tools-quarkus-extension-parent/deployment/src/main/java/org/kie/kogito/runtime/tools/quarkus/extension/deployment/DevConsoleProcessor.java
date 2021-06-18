@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.KogitoSupplier;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.user.UserInfoSupplier;
 
 import io.quarkus.bootstrap.model.AppArtifact;
 import io.quarkus.deployment.IsDevelopment;
@@ -29,6 +29,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
+import io.quarkus.deployment.builditem.LiveReloadBuildItem;
 import io.quarkus.deployment.builditem.ShutdownContextBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.deployment.util.WebJarUtil;
@@ -40,13 +41,17 @@ import io.quarkus.vertx.http.runtime.devmode.DevConsoleRecorder;
 public class DevConsoleProcessor {
 
     private static String STATIC_RESOURCES_PATH = "dev-static/";
-    private static final Logger LOGGER = LoggerFactory.getLogger(DevConsoleProcessor.class);
 
     @BuildStep(onlyIf = IsDevelopment.class)
     public DevConsoleRuntimeTemplateInfoBuildItem collectBeanInfo() {
-        LOGGER.warn("deployStaticResources");
-        return new DevConsoleRuntimeTemplateInfoBuildItem("info",
+        return new DevConsoleRuntimeTemplateInfoBuildItem("data",
                 new KogitoSupplier());
+    }
+
+    @BuildStep(onlyIf = IsDevelopment.class)
+    public DevConsoleRuntimeTemplateInfoBuildItem collectUsersInfo() {
+        return new DevConsoleRuntimeTemplateInfoBuildItem("userInfo",
+                new UserInfoSupplier());
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)
@@ -54,19 +59,21 @@ public class DevConsoleProcessor {
     public void deployStaticResources(final DevConsoleRecorder recorder,
             final List<DevConsoleRouteBuildItem> routes,
             final CurateOutcomeBuildItem curateOutcomeBuildItem,
+            final LiveReloadBuildItem liveReloadBuildItem,
             final LaunchModeBuildItem launchMode,
             final ShutdownContextBuildItem shutdownContext,
             final BuildProducer<RouteBuildItem> routeBuildItemBuildProducer) throws IOException {
-        LOGGER.warn("deployStaticResources");
         AppArtifact devConsoleResourcesArtifact = WebJarUtil.getAppArtifact(curateOutcomeBuildItem,
                 "org.kie.kogito",
                 "runtime-tools-quarkus-extension-deployment");
 
         Path devConsoleStaticResourcesDeploymentPath = WebJarUtil.copyResourcesForDevOrTest(
+                liveReloadBuildItem,
                 curateOutcomeBuildItem,
                 launchMode,
                 devConsoleResourcesArtifact,
-                STATIC_RESOURCES_PATH);
+                STATIC_RESOURCES_PATH,
+                true);
 
         routeBuildItemBuildProducer.produce(new RouteBuildItem.Builder()
                 .route("/q/dev/org.kie.kogito.runtime-tools-quarkus-extension/resources/*")

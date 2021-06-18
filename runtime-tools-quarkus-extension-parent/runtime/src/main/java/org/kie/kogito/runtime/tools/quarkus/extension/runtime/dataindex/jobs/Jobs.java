@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.runtime.tools.quarkus.extension.deployment;
+package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Supplier;
+import java.util.List;
 
-public class KogitoSupplier implements Supplier<Collection<String>> {
+public class Jobs {
 
-    @Override
-    public Collection<String> get() {
-        return Collections.EMPTY_LIST;
+    public List<Job> jobs;
+
+    public Jobs() {
+    }
+
+    public Jobs(final List<Job> jobs) {
+        this.jobs = jobs;
+    }
+
+    public List<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(final List<Job> jobs) {
+        this.jobs = jobs;
     }
 }

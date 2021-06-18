@@ -20,7 +20,7 @@
 <html lang="en">
 <head>
   <style>
-    #consoles-container {
+    #webapp {
       height: calc(100vh - 50px);
     }
   </style>
@@ -29,15 +29,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <script src="standalone.js"></script>
+  <script src="../standalone.js"></script>
 </head>
 
 <body>
-<div id="envelope-app"></div>
+<div id="webapp"></div>
 
 <script>
   const devUI = RuntimeToolsDevUI.open({
-    container: document.getElementById("envelope-app"),
+    container: document.getElementById("webapp"),
     users: ["admin", "paulo", "saravana"],
     dataIndexUrl: "http://localhost:8280/graphql"
   })

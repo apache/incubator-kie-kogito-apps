@@ -43,7 +43,7 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
     this.capturedInitRequestYet = true;
   }
 
-  public runtimeToolsDevUI_initRequest = (
+  public runtimeToolsDevUI_initRequest = async (
     association: any,
     initArgs: any
   ): Promise<void> => {
@@ -59,7 +59,5 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
     this.ackCapturedInitRequest();
 
     this.args.view().setDataIndexUrl(initArgs.dataIndexUrl);
-
-    return new Promise<void>(res => res());
   };
 }
