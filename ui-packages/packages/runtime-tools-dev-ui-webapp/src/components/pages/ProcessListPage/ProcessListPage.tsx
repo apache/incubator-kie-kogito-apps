@@ -16,10 +16,7 @@
 
 import React, { useEffect } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import {
-  OUIAProps,
-  ouiaPageTypeAndObjectId
-} from '@kogito-apps/components-common';
+import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
 import { RouteComponentProps } from 'react-router-dom';
 import * as H from 'history';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';

@@ -15,17 +15,16 @@
  */
 
 import React from 'react';
-import { getWrapper } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import ConsolesNav from '../ConsolesNav';
 import { MemoryRouter } from 'react-router-dom';
 
 describe('ConsolesNav tests', () => {
   it('Snapshot testing with process list props', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter>
         <ConsolesNav pathname={'/ProcessInstances'} />
-      </MemoryRouter>,
-      'ConsolesNav'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -39,11 +38,10 @@ describe('ConsolesNav tests', () => {
   });
 
   it('Snapshot testing with jobs management props', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter>
         <ConsolesNav pathname={'/JobsManagement'} />
-      </MemoryRouter>,
-      'ConsolesNav'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();

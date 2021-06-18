@@ -19,11 +19,8 @@ import * as H from 'history';
 import { MemoryRouter } from 'react-router';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
-import {
-  KogitoEmptyState,
-  getWrapperAsync,
-  ServerErrors
-} from '@kogito-apps/components-common';
+import { KogitoEmptyState, ServerErrors } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskInboxGatewayApi } from '../../../../channel/TaskInbox';
 import * as TaskInboxContext from '../../../../channel/TaskInbox/TaskInboxContext';
@@ -154,11 +151,10 @@ let gatewayApi: TaskInboxGatewayApi;
 const getTaskDetailsPageWrapper = async () => {
   let wrapper = null;
   await act(async () => {
-    wrapper = await getWrapperAsync(
+    wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/']}>
         <TaskDetailsPage {...props} />
-      </MemoryRouter>,
-      'TaskDetailsPage'
+      </MemoryRouter>
     );
     wait();
   });

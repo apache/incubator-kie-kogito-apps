@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { getWrapper } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import ConsolesLayout from '../ConsolesLayout';
 import ConsolesRoutes from '../../ConsolesRoutes/ConsolesRoutes';
 import { ApolloClient } from 'apollo-client';
@@ -43,11 +43,10 @@ describe('ConsolesLayout tests', () => {
       apolloClient: client,
       userContext: { getCurrentUser: jest.fn() }
     };
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <ConsolesLayout {...props}>
         <ConsolesRoutes />
-      </ConsolesLayout>,
-      'ConsolesLayout'
+      </ConsolesLayout>
     );
     expect(wrapper).toMatchSnapshot();
   });
@@ -59,11 +58,10 @@ describe('ConsolesLayout tests', () => {
       apolloClient: client,
       userContext: { getCurrentUser: jest.fn() }
     };
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <ConsolesLayout {...props}>
         <ConsolesRoutes />
-      </ConsolesLayout>,
-      'ConsolesLayout'
+      </ConsolesLayout>
     );
     await act(async () => {
       wrapper

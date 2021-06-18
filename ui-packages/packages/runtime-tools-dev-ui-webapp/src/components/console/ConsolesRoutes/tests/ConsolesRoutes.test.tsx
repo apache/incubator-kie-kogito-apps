@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { getWrapper } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import ConsolesRoutes from '../ConsolesRoutes';
 import { MemoryRouter, Route } from 'react-router-dom';
 
@@ -37,11 +37,10 @@ jest.mock('@kogito-apps/consoles-common', () => ({
 }));
 describe('ConsolesRoutes tests', () => {
   it('Test Jobs management route', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -53,11 +52,10 @@ describe('ConsolesRoutes tests', () => {
     expect(MockedProcessListPage.exists()).toBeTruthy();
   });
   it('process list test', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/ProcessInstances']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -68,11 +66,10 @@ describe('ConsolesRoutes tests', () => {
     expect(MockedProcessListPage.exists()).toBeTruthy();
   });
   it('jobs management page test', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/JobsManagement']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -84,11 +81,10 @@ describe('ConsolesRoutes tests', () => {
   });
 
   it('no data page test', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/NoData']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -99,11 +95,10 @@ describe('ConsolesRoutes tests', () => {
   });
 
   it('page not found page test', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['*']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -114,11 +109,10 @@ describe('ConsolesRoutes tests', () => {
   });
 
   it('Test NoData route', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/NoData']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -129,11 +123,10 @@ describe('ConsolesRoutes tests', () => {
   });
 
   it('Test PageNotFound route', () => {
-    const wrapper = getWrapper(
+    const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['*']}>
         <ConsolesRoutes />
-      </MemoryRouter>,
-      'ConsolesRoutes'
+      </MemoryRouter>
     );
 
     expect(wrapper).toMatchSnapshot();

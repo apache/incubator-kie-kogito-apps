@@ -16,7 +16,7 @@
 
 import React from 'react';
 import * as H from 'history';
-import { getWrapperAsync } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import {
   MilestoneStatus,
   ProcessInstance,
@@ -149,11 +149,10 @@ describe('WebApp - ProcessDetailsPage tests', () => {
   it('Snapshot test with default values', async () => {
     //@ts-ignore
     getProcessDetails.mockReturnValue(data);
-    const wrapper = await getWrapperAsync(
+    const wrapper = await mount(
       <BrowserRouter>
         <ProcessDetailsPage {...props} />
-      </BrowserRouter>,
-      'ProcessDetailsPage'
+      </BrowserRouter>
     );
     expect(wrapper).toMatchSnapshot();
   });

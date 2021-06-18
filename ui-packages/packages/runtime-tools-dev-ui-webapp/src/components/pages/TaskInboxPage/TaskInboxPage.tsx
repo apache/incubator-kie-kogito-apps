@@ -20,7 +20,7 @@ import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
-} from '@kogito-apps/components-common';
+} from '@kogito-apps/ouia-tools';
 import { PageTitle } from '@kogito-apps/consoles-common';
 import TaskInboxContainer from '../../containers/TaskInboxContainer/TaskInboxContainer';
 import '../../styles.css';
