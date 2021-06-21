@@ -81,6 +81,11 @@ public class CategoricalEntity extends AbstractEntity<String> {
         return proposedValue.equals(originalValue) ? 0.0 : 1.0;
     }
 
+    @Override
+    public double similarity() {
+        return proposedValue.equals(originalValue) ? 1.0 : 0.0;
+    }
+
     /**
      * Returns the {@link CategoricalEntity} as a {@link Feature}
      *

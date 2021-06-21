@@ -25,4 +25,11 @@ public interface CounterfactualEntity {
     public boolean isConstrained();
 
     public boolean isChanged();
+
+    /**
+     * Returns a similarity score akin to the Gower similarity, weighted by the search domain bounds
+     * 
+     * @return Similarity score, a {@link Double} between 0.0 (lowest similarity) and 1.0 (highest similarity).
+     */
+    public double similarity();
 }
