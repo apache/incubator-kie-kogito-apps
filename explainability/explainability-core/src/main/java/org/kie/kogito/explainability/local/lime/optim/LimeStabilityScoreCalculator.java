@@ -48,7 +48,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
 
     private BigDecimal getStabilityScore(LimeStabilitySolution solution, LimeConfig config, List<Prediction> predictions) {
         double succeededEvaluations = 0;
-        BigDecimal stabilityScore = BigDecimal.valueOf(0d);
+        BigDecimal stabilityScore = BigDecimal.ZERO;
         int topK = 2;
         LimeExplainer limeExplainer = new LimeExplainer(config);
         for (Prediction prediction : predictions) {
