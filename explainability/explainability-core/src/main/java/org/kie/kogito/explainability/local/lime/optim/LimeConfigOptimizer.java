@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -169,8 +170,10 @@ public class LimeConfigOptimizer {
             try {
                 // Wait until the solving ends
                 LimeStabilitySolution finalBestSolution = solverJob.getFinalBestSolution();
-                logger.info("final best solution score {}", finalBestSolution.getScore().getScore());
-                return LimeConfigEntityFactory.toLimeConfig(finalBestSolution);
+                LimeConfig finalConfig = LimeConfigEntityFactory.toLimeConfig(finalBestSolution);
+                BigDecimal score = finalBestSolution.getScore().getScore();
+                logger.info("final best solution score {} with config {}", score, finalConfig);
+                return finalConfig;
             } catch (ExecutionException e) {
                 logger.error("Solving failed: {}", e.getMessage());
                 throw new IllegalStateException("Prediction returned an error", e);
