@@ -38,7 +38,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
     @Override
     public SimpleBigDecimalScore calculateScore(LimeStabilitySolution solution) {
         LimeConfig config = LimeConfigEntityFactory.toLimeConfig(solution);
-        BigDecimal stabilityScore = BigDecimal.valueOf(0d);
+        BigDecimal stabilityScore = BigDecimal.ZERO;
         List<Prediction> predictions = solution.getPredictions();
         if (!predictions.isEmpty()) {
             stabilityScore = getStabilityScore(solution, config, predictions);
