@@ -1,248 +1,284 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`] = `
-<ProcessDetailsPage
-  history={
-    Object {
-      "action": "POP",
-      "block": [Function],
-      "createHref": [Function],
-      "go": [Function],
-      "goBack": [Function],
-      "goForward": [Function],
-      "length": 1,
-      "listen": [Function],
-      "location": Object {
-        "hash": "",
-        "pathname": "/",
-        "search": "",
-        "state": undefined,
-      },
-      "push": [Function],
-      "replace": [Function],
-    }
-  }
-  location={
-    Object {
-      "hash": "",
-      "pathname": "/",
-      "search": "",
-      "state": undefined,
-    }
-  }
-  match={
-    Object {
-      "isExact": false,
-      "params": Object {
-        "instanceID": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
-      },
-      "path": "",
-      "url": "",
-    }
-  }
->
-  <PageSectionHeader
-    breadcrumbPath={
-      Array [
-        "/",
-        Object {
-          "pathname": "/ProcessInstances",
-          "state": Object {},
+<BrowserRouter>
+  <Router
+    history={
+      Object {
+        "action": "PUSH",
+        "block": [Function],
+        "createHref": [Function],
+        "go": [Function],
+        "goBack": [Function],
+        "goForward": [Function],
+        "length": 2,
+        "listen": [Function],
+        "location": Object {
+          "hash": "",
+          "key": "6p795m",
+          "pathname": "/NoData",
+          "search": "",
+          "state": Object {
+            "buttonText": "Go to process instances",
+            "description": "Process instance with the id 8035b580-6ae4-4aa8-9ec0-e18e19809e0b not found",
+            "prev": "/ProcessInstances",
+            "rememberedData": Object {},
+            "title": "Process not found",
+          },
         },
-      ]
+        "push": [Function],
+        "replace": [Function],
+      }
     }
-    breadcrumbText={
-      Array [
-        "Home",
-        "Processes",
-        undefined,
-      ]
-    }
-    titleText="Process Details"
   >
-    <PageSection
-      variant="light"
+    <ProcessDetailsPage
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "createHref": [Function],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
+      }
+      location={
+        Object {
+          "hash": "",
+          "pathname": "/",
+          "search": "",
+          "state": undefined,
+        }
+      }
+      match={
+        Object {
+          "isExact": false,
+          "params": Object {
+            "instanceID": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+          },
+          "path": "",
+          "url": "",
+        }
+      }
     >
-      <section
-        className="pf-c-page__main-section pf-m-light"
+      <PageSectionHeader
+        breadcrumbPath={
+          Array [
+            "/",
+            Object {
+              "pathname": "/ProcessInstances",
+              "state": Object {},
+            },
+          ]
+        }
+        breadcrumbText={
+          Array [
+            "Home",
+            "Processes",
+            undefined,
+          ]
+        }
+        titleText="Process Details"
       >
-        <Breadcrumb>
-          <nav
-            aria-label="Breadcrumb"
-            className="pf-c-breadcrumb"
-            data-ouia-component-id="OUIA-Generated-Breadcrumb-1"
-            data-ouia-component-type="PF4/Breadcrumb"
+        <PageSection
+          data-ouia-component-type="page-section-header"
+          data-ouia-safe={true}
+          variant="light"
+        >
+          <section
+            className="pf-c-page__main-section pf-m-light"
+            data-ouia-component-type="page-section-header"
             data-ouia-safe={true}
           >
-            <ol
-              className="pf-c-breadcrumb__list"
-            >
-              <BreadcrumbItem
-                key=".$0"
-                showDivider={false}
+            <Breadcrumb>
+              <nav
+                aria-label="Breadcrumb"
+                className="pf-c-breadcrumb"
+                data-ouia-component-id="OUIA-Generated-Breadcrumb-1"
+                data-ouia-component-type="PF4/Breadcrumb"
+                data-ouia-safe={true}
               >
-                <li
-                  className="pf-c-breadcrumb__item"
+                <ol
+                  className="pf-c-breadcrumb__list"
                 >
-                  <Link
-                    to="/"
+                  <BreadcrumbItem
+                    key=".$0"
+                    showDivider={false}
                   >
-                    <LinkAnchor
-                      href="/"
-                      navigate={[Function]}
+                    <li
+                      className="pf-c-breadcrumb__item"
                     >
-                      <a
-                        href="/"
-                        onClick={[Function]}
+                      <Link
+                        to="/"
                       >
-                        Home
-                      </a>
-                    </LinkAnchor>
-                  </Link>
-                </li>
-              </BreadcrumbItem>
-              <BreadcrumbItem
-                key=".$1"
-                showDivider={true}
-              >
-                <li
-                  className="pf-c-breadcrumb__item"
-                >
-                  <span
-                    className="pf-c-breadcrumb__item-divider"
+                        <LinkAnchor
+                          href="/"
+                          navigate={[Function]}
+                        >
+                          <a
+                            href="/"
+                            onClick={[Function]}
+                          >
+                            Home
+                          </a>
+                        </LinkAnchor>
+                      </Link>
+                    </li>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem
+                    key=".$1"
+                    showDivider={true}
                   >
-                    <AngleRightIcon
-                      color="currentColor"
-                      noVerticalAlign={false}
-                      size="sm"
+                    <li
+                      className="pf-c-breadcrumb__item"
                     >
-                      <svg
-                        aria-hidden={true}
-                        aria-labelledby={null}
-                        fill="currentColor"
-                        height="1em"
-                        role="img"
-                        style={
+                      <span
+                        className="pf-c-breadcrumb__item-divider"
+                      >
+                        <AngleRightIcon
+                          color="currentColor"
+                          noVerticalAlign={false}
+                          size="sm"
+                        >
+                          <svg
+                            aria-hidden={true}
+                            aria-labelledby={null}
+                            fill="currentColor"
+                            height="1em"
+                            role="img"
+                            style={
+                              Object {
+                                "verticalAlign": "-0.125em",
+                              }
+                            }
+                            viewBox="0 0 256 512"
+                            width="1em"
+                          >
+                            <path
+                              d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                            />
+                          </svg>
+                        </AngleRightIcon>
+                      </span>
+                      <Link
+                        to={
                           Object {
-                            "verticalAlign": "-0.125em",
+                            "pathname": "/ProcessInstances",
+                            "state": Object {},
                           }
                         }
-                        viewBox="0 0 256 512"
-                        width="1em"
                       >
-                        <path
-                          d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
-                        />
-                      </svg>
-                    </AngleRightIcon>
-                  </span>
-                  <Link
-                    to={
+                        <LinkAnchor
+                          href="/ProcessInstances"
+                          navigate={[Function]}
+                        >
+                          <a
+                            href="/ProcessInstances"
+                            onClick={[Function]}
+                          >
+                            Processes
+                          </a>
+                        </LinkAnchor>
+                      </Link>
+                    </li>
+                  </BreadcrumbItem>
+                  <BreadcrumbItem
+                    isActive={true}
+                    key=".$2"
+                    showDivider={true}
+                  >
+                    <li
+                      className="pf-c-breadcrumb__item"
+                    >
+                      <span
+                        className="pf-c-breadcrumb__item-divider"
+                      >
+                        <AngleRightIcon
+                          color="currentColor"
+                          noVerticalAlign={false}
+                          size="sm"
+                        >
+                          <svg
+                            aria-hidden={true}
+                            aria-labelledby={null}
+                            fill="currentColor"
+                            height="1em"
+                            role="img"
+                            style={
+                              Object {
+                                "verticalAlign": "-0.125em",
+                              }
+                            }
+                            viewBox="0 0 256 512"
+                            width="1em"
+                          >
+                            <path
+                              d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                            />
+                          </svg>
+                        </AngleRightIcon>
+                      </span>
+                    </li>
+                  </BreadcrumbItem>
+                </ol>
+              </nav>
+            </Breadcrumb>
+            <PageTitle
+              title="Process Details"
+            >
+              <Flex
+                data-ouia-component-type="page-title"
+                data-ouia-safe={true}
+              >
+                <div
+                  className="pf-l-flex"
+                  data-ouia-component-type="page-title"
+                  data-ouia-safe={true}
+                >
+                  <FlexItem
+                    spacer={
                       Object {
-                        "pathname": "/ProcessInstances",
-                        "state": Object {},
+                        "default": "spacerSm",
                       }
                     }
                   >
-                    <LinkAnchor
-                      href="/ProcessInstances"
-                      navigate={[Function]}
+                    <div
+                      className="pf-m-spacer-sm"
                     >
-                      <a
-                        href="/ProcessInstances"
-                        onClick={[Function]}
+                      <Title
+                        headingLevel="h1"
+                        size="4xl"
                       >
-                        Processes
-                      </a>
-                    </LinkAnchor>
-                  </Link>
-                </li>
-              </BreadcrumbItem>
-              <BreadcrumbItem
-                isActive={true}
-                key=".$2"
-                showDivider={true}
-              >
-                <li
-                  className="pf-c-breadcrumb__item"
-                >
-                  <span
-                    className="pf-c-breadcrumb__item-divider"
-                  >
-                    <AngleRightIcon
-                      color="currentColor"
-                      noVerticalAlign={false}
-                      size="sm"
-                    >
-                      <svg
-                        aria-hidden={true}
-                        aria-labelledby={null}
-                        fill="currentColor"
-                        height="1em"
-                        role="img"
-                        style={
-                          Object {
-                            "verticalAlign": "-0.125em",
-                          }
-                        }
-                        viewBox="0 0 256 512"
-                        width="1em"
-                      >
-                        <path
-                          d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
-                        />
-                      </svg>
-                    </AngleRightIcon>
-                  </span>
-                </li>
-              </BreadcrumbItem>
-            </ol>
-          </nav>
-        </Breadcrumb>
-        <PageTitle
-          title="Process Details"
-        >
-          <Flex
-            data-ouia-component-type="page-title"
-            data-ouia-safe={true}
-          >
-            <div
-              className="pf-l-flex"
-              data-ouia-component-type="page-title"
-              data-ouia-safe={true}
-            >
-              <FlexItem
-                spacer={
-                  Object {
-                    "default": "spacerSm",
-                  }
-                }
-              >
-                <div
-                  className="pf-m-spacer-sm"
-                >
-                  <Title
-                    headingLevel="h1"
-                    size="4xl"
-                  >
-                    <h1
-                      className="pf-c-title pf-m-4xl"
-                    >
-                      Process Details
-                    </h1>
-                  </Title>
+                        <h1
+                          className="pf-c-title pf-m-4xl"
+                        >
+                          Process Details
+                        </h1>
+                      </Title>
+                    </div>
+                  </FlexItem>
                 </div>
-              </FlexItem>
-            </div>
-          </Flex>
-        </PageTitle>
-      </section>
-    </PageSection>
-  </PageSectionHeader>
-  <PageSection>
-    <section
-      className="pf-c-page__main-section"
-    />
-  </PageSection>
-</ProcessDetailsPage>
+              </Flex>
+            </PageTitle>
+          </section>
+        </PageSection>
+      </PageSectionHeader>
+      <PageSection>
+        <section
+          className="pf-c-page__main-section"
+        />
+      </PageSection>
+    </ProcessDetailsPage>
+  </Router>
+</BrowserRouter>
 `;

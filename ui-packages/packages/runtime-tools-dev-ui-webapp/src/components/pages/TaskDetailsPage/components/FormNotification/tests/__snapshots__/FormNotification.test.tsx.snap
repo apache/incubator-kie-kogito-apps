@@ -468,6 +468,13 @@ exports[`FormNotification test Notification with details 2`] = `
         </AlertActionCloseButton>
       </div>
       <div
+        className="pf-c-alert__description"
+      >
+        <p>
+          The details here!
+        </p>
+      </div>
+      <div
         className="pf-c-alert__action-group"
       >
         <AlertActionLink

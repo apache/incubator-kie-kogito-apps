@@ -12,7 +12,11 @@
         "../../config/declare.d.ts"
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/__mocks__",
+        "src/**/tests"
     ],
     "preserveSymlinks": true
 }

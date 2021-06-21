@@ -32,7 +32,17 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
   }
   userContext={
     Object {
-      "getCurrentUser": [MockFunction],
+      "getCurrentUser": [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
     }
   }
 >
@@ -69,11 +79,21 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
     <KogitoAppContextProvider
       userContext={
         Object {
-          "getCurrentUser": [MockFunction],
+          "getCurrentUser": [MockFunction] {
+            "calls": Array [
+              Array [],
+            ],
+            "results": Array [
+              Object {
+                "type": "return",
+                "value": undefined,
+              },
+            ],
+          },
         }
       }
     >
-      <ProcessListContextProvider
+      <TaskInboxContextProvider
         apolloClient={
           ApolloClient {
             "__actionHookForDevTools": [MockFunction],
@@ -103,7 +123,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
           }
         }
       >
-        <ProcessDetailsContextProvider
+        <ProcessListContextProvider
           apolloClient={
             ApolloClient {
               "__actionHookForDevTools": [MockFunction],
@@ -133,7 +153,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
             }
           }
         >
-          <JobsManagementContextProvider
+          <ProcessDetailsContextProvider
             apolloClient={
               ApolloClient {
                 "__actionHookForDevTools": [MockFunction],
@@ -163,70 +183,112 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
               }
             }
           >
-            <BrowserRouter>
-              <Router
-                history={
-                  Object {
-                    "action": "POP",
-                    "block": [Function],
-                    "createHref": [Function],
-                    "go": [Function],
-                    "goBack": [Function],
-                    "goForward": [Function],
-                    "length": 1,
-                    "listen": [Function],
-                    "location": Object {
-                      "hash": "",
-                      "pathname": "/",
-                      "search": "",
-                      "state": undefined,
-                    },
-                    "push": [Function],
-                    "replace": [Function],
-                  }
+            <JobsManagementContextProvider
+              apolloClient={
+                ApolloClient {
+                  "__actionHookForDevTools": [MockFunction],
+                  "__requestRaw": [MockFunction],
+                  "addResolvers": [MockFunction],
+                  "clearStore": [MockFunction],
+                  "extract": [MockFunction],
+                  "getResolvers": [MockFunction],
+                  "initQueryManager": [MockFunction],
+                  "mutate": [MockFunction],
+                  "onClearStore": [MockFunction],
+                  "onResetStore": [MockFunction],
+                  "query": [MockFunction],
+                  "reFetchObservableQueries": [MockFunction],
+                  "readFragment": [MockFunction],
+                  "readQuery": [MockFunction],
+                  "resetStore": [MockFunction],
+                  "restore": [MockFunction],
+                  "setLocalStateFragmentMatcher": [MockFunction],
+                  "setResolvers": [MockFunction],
+                  "stop": [MockFunction],
+                  "subscribe": [MockFunction],
+                  "watchQuery": [MockFunction],
+                  "writeData": [MockFunction],
+                  "writeFragment": [MockFunction],
+                  "writeQuery": [MockFunction],
                 }
-              >
-                <Switch>
-                  <Route
-                    computedMatch={
-                      Object {
-                        "isExact": true,
-                        "params": Object {},
-                        "path": "/",
-                        "url": "/",
-                      }
-                    }
-                    location={
-                      Object {
+              }
+            >
+              <MemoryRouter>
+                <Router
+                  history={
+                    Object {
+                      "action": "POP",
+                      "block": [Function],
+                      "canGo": [Function],
+                      "createHref": [Function],
+                      "entries": Array [
+                        Object {
+                          "hash": "",
+                          "key": "5entl4",
+                          "pathname": "/",
+                          "search": "",
+                          "state": undefined,
+                        },
+                      ],
+                      "go": [Function],
+                      "goBack": [Function],
+                      "goForward": [Function],
+                      "index": 0,
+                      "length": 1,
+                      "listen": [Function],
+                      "location": Object {
                         "hash": "",
+                        "key": "5entl4",
                         "pathname": "/",
                         "search": "",
                         "state": undefined,
-                      }
+                      },
+                      "push": [Function],
+                      "replace": [Function],
                     }
-                    path="/"
-                    render={[Function]}
-                  >
-                    <PageLayout
-                      BrandAltText="Management Console Logo"
-                      BrandClick={[Function]}
-                      BrandSrc="managementConsoleLogo.svg"
-                      PageNav={
-                        <ConsolesNav
-                          pathname="/"
-                        />
+                  }
+                >
+                  <Switch>
+                    <Route
+                      computedMatch={
+                        Object {
+                          "isExact": true,
+                          "params": Object {},
+                          "path": "/",
+                          "url": "/",
+                        }
                       }
-                      pageNavOpen={true}
+                      location={
+                        Object {
+                          "hash": "",
+                          "key": "5entl4",
+                          "pathname": "/",
+                          "search": "",
+                          "state": undefined,
+                        }
+                      }
+                      path="/"
+                      render={[Function]}
                     >
-                      <MockedComponent />
-                    </PageLayout>
-                  </Route>
-                </Switch>
-              </Router>
-            </BrowserRouter>
-          </JobsManagementContextProvider>
-        </ProcessDetailsContextProvider>
-      </ProcessListContextProvider>
+                      <PageLayout
+                        PageNav={
+                          <ConsolesNav
+                            pathname="/"
+                          />
+                        }
+                        pageNavOpen={true}
+                        withHeader={false}
+                      >
+                        <MockedComponent />
+                      </PageLayout>
+                    </Route>
+                  </Switch>
+                </Router>
+              </MemoryRouter>
+            </JobsManagementContextProvider>
+          </ProcessDetailsContextProvider>
+        </ProcessListContextProvider>
+      </TaskInboxContextProvider>
     </KogitoAppContextProvider>
   </ApolloProvider>
 </ConsolesLayout>
