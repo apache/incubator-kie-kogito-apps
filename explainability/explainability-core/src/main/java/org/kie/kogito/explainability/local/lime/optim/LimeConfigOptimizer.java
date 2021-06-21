@@ -29,8 +29,7 @@ import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.config.localsearch.LocalSearchPhaseConfig;
-import org.optaplanner.core.config.localsearch.decider.acceptor.LocalSearchAcceptorConfig;
-import org.optaplanner.core.config.localsearch.decider.forager.LocalSearchForagerConfig;
+import org.optaplanner.core.config.localsearch.LocalSearchType;
 import org.optaplanner.core.config.phase.PhaseConfig;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.SolverConfig;
@@ -44,16 +43,12 @@ public class LimeConfigOptimizer {
     private static final Logger logger = LoggerFactory.getLogger(LimeConfigOptimizer.class);
 
     private static final long DEFAULT_TIME_LIMIT = 30;
-    private static final int DEFAULT_TABU_SIZE = 10;
-    private static final int DEFAULT_ACCEPTED_COUNT = 5000;
     private static final boolean DEFAULT_PROXIMITY_ENTITIES = true;
     private static final boolean DEFAULT_SAMPLING_ENTITIES = true;
     private static final boolean DEFAULT_ENCODING_ENTITIES = true;
     private static final boolean DEFAULT_WEIGHTING_ENTITIES = true;
 
     private long timeLimit;
-    private int tabuSize;
-    private int acceptedCount;
     private boolean proximityEntities;
     private boolean samplingEntities;
     private boolean encodingEntities;
@@ -62,8 +57,6 @@ public class LimeConfigOptimizer {
 
     public LimeConfigOptimizer() {
         this.timeLimit = DEFAULT_TIME_LIMIT;
-        this.tabuSize = DEFAULT_TABU_SIZE;
-        this.acceptedCount = DEFAULT_ACCEPTED_COUNT;
         this.scoreCalculator = new LimeStabilityScoreCalculator();
         this.proximityEntities = DEFAULT_PROXIMITY_ENTITIES;
         this.samplingEntities = DEFAULT_SAMPLING_ENTITIES;
@@ -73,16 +66,6 @@ public class LimeConfigOptimizer {
 
     public LimeConfigOptimizer withTimeLimit(long timeLimit) {
         this.timeLimit = timeLimit;
-        return this;
-    }
-
-    public LimeConfigOptimizer withTabuSize(int tabuSize) {
-        this.tabuSize = tabuSize;
-        return this;
-    }
-
-    public LimeConfigOptimizer withAcceptedCount(int acceptedCount) {
-        this.acceptedCount = acceptedCount;
         return this;
     }
 
@@ -145,15 +128,8 @@ public class LimeConfigOptimizer {
         terminationConfig.setSecondsSpentLimit(timeLimit);
         solverConfig.setTerminationConfig(terminationConfig);
 
-        LocalSearchAcceptorConfig acceptorConfig = new LocalSearchAcceptorConfig();
-        acceptorConfig.setEntityTabuSize(tabuSize);
-
-        LocalSearchForagerConfig localSearchForagerConfig = new LocalSearchForagerConfig();
-        localSearchForagerConfig.setAcceptedCountLimit(acceptedCount);
-
         LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
-        localSearchPhaseConfig.setAcceptorConfig(acceptorConfig);
-        localSearchPhaseConfig.setForagerConfig(localSearchForagerConfig);
+        localSearchPhaseConfig.setLocalSearchType(LocalSearchType.LATE_ACCEPTANCE);
 
         @SuppressWarnings("rawtypes")
         List<PhaseConfig> phaseConfigs = new ArrayList<>();
