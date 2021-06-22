@@ -707,7 +707,7 @@ class CounterfactualExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
 
-        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.0));
+        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.9));
 
         List<Feature> features = new LinkedList<>();
         List<FeatureDomain> featureBoundaries = new LinkedList<>();
@@ -726,7 +726,7 @@ class CounterfactualExplainerTest {
         featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
 
         final double center = 400.0;
-        final double epsilon = 1e-10;
+        final double epsilon = 10;
 
         PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
 
@@ -772,10 +772,15 @@ class CounterfactualExplainerTest {
         assertEquals((int) intermediateIds.stream().distinct().count(), intermediateIds.size());
         // There should be at least one intermediate id
         assertTrue(intermediateIds.size() > 0);
-        // There should be no duplicate execution ids
+        // There should be at least one execution id
+        assertTrue(executionIds.size() > 0);
+        // We should have the same number of execution ids as intermediate ids (captured from intermediate results)
+        assertEquals(executionIds.size(), intermediateIds.size());
+        // All execution ids should be the same
         assertEquals((int) executionIds.stream().distinct().count(), 1);
         // The last intermediate id must be different from the final result id
         assertNotEquals(intermediateIds.get(intermediateIds.size() - 1), counterfactualResult.getSolutionId());
+        // Captured execution ids should be the same as the one provided
         assertEquals(executionIds.get(0), executionId);
     }
 
