@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CounterfactualScoreCalculatorTest {
+class CounterfactualScoreCalculatorTest {
 
     /**
      * If the goal and the model's output is the same, the distances should all be zero.
@@ -93,13 +93,13 @@ public class CounterfactualScoreCalculatorTest {
         assertEquals(2, goal.size());
         assertEquals(1, predictionOutputs.size()); // A single prediction is expected
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
-        assertEquals(score.getHardScore(0).compareTo(BigDecimal.ZERO), 0);
-        assertEquals(score.getHardScore(1).compareTo(BigDecimal.ZERO), 0);
-        assertEquals(score.getHardScore(2).compareTo(BigDecimal.ZERO), 0);
-        assertEquals(score.getSoftScore(0).compareTo(BigDecimal.ZERO), 0);
-        assertEquals(score.getSoftScore(1).compareTo(BigDecimal.ZERO), 0);
-        assertEquals(score.getHardLevelsSize(), 3);
-        assertEquals(score.getSoftLevelsSize(), 2);
+        assertEquals(0, score.getHardScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(2).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(3, score.getHardLevelsSize());
+        assertEquals(2, score.getSoftLevelsSize());
     }
 
     /**
@@ -151,7 +151,7 @@ public class CounterfactualScoreCalculatorTest {
             scoreCalculator.calculateScore(solution);
         });
 
-        assertEquals(exception.getMessage(), "Prediction size must be equal to goal size");
+        assertEquals("Prediction size must be equal to goal size", exception.getMessage());
 
     }
 
@@ -206,7 +206,7 @@ public class CounterfactualScoreCalculatorTest {
             scoreCalculator.calculateScore(solution);
         });
 
-        assertEquals(exception.getMessage(), "Prediction size must be equal to goal size");
+        assertEquals("Prediction size must be equal to goal size", exception.getMessage());
 
     }
 }
