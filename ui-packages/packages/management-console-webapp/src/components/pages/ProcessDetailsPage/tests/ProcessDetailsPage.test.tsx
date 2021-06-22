@@ -16,7 +16,7 @@
 
 import React from 'react';
 import * as H from 'history';
-import { getWrapperAsync } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import {
   MilestoneStatus,
   ProcessInstance,
@@ -26,6 +26,8 @@ import ProcessDetailsPage from '../ProcessDetailsPage';
 import { BrowserRouter } from 'react-router-dom';
 import * as ProcessDetailsContext from '../../../../channel/ProcessDetails/ProcessDetailsContext';
 import { ProcessDetailsGatewayApi } from '../../../../channel/ProcessDetails/ProcessDetailsGatewayApi';
+import { act } from 'react-dom/test-utils';
+import wait from 'waait';
 
 describe('WebApp - ProcessDetailsPage tests', () => {
   const props = {
@@ -132,7 +134,11 @@ describe('WebApp - ProcessDetailsPage tests', () => {
       openProcessInstanceDetails: jest.fn(),
       onOpenProcessInstanceDetailsListener: jest.fn(),
       processDetailsQuery: getProcessDetails,
-      processDetailsState: undefined
+      processDetailsState: undefined,
+      handleProcessRetry: jest.fn(),
+      handleNodeInstanceCancel: jest.fn(),
+      handleProcessSkip: jest.fn(),
+      handleNodeInstanceRetrigger: jest.fn()
     })
   );
 
@@ -149,12 +155,16 @@ describe('WebApp - ProcessDetailsPage tests', () => {
   it('Snapshot test with default values', async () => {
     //@ts-ignore
     getProcessDetails.mockReturnValue(data);
-    const wrapper = await getWrapperAsync(
-      <BrowserRouter>
-        <ProcessDetailsPage {...props} />
-      </BrowserRouter>,
-      'ProcessDetailsPage'
-    );
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(
+        <BrowserRouter>
+          <ProcessDetailsPage {...props} />
+        </BrowserRouter>
+      );
+      await wait(0);
+      wrapper = wrapper.update().find('ProcessDetailsPage');
+    });
     expect(wrapper).toMatchSnapshot();
   });
 });
