@@ -18,7 +18,8 @@ import devUIEnvelopeIndex from '!!raw-loader!../../resources/iframe.html';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import {
   RuntimeToolsDevUIChannelApi,
-  RuntimeToolsDevUIEnvelopeApi
+  RuntimeToolsDevUIEnvelopeApi,
+  User
 } from '../api';
 import { RuntimeToolsDevUIChannelApiImpl } from '../standalone/RuntimeToolsDevUIChannelApiImpl';
 
@@ -29,8 +30,9 @@ export interface StandaloneDevUIApi {
 export interface Consoles {
   open: (args: {
     container: Element;
-    users: string[]; // check the type
+    users: User[];
     dataIndexUrl: string;
+    page: string;
     origin?: string;
   }) => StandaloneDevUIApi;
 }
@@ -60,8 +62,9 @@ export const createDevUI = (
 
 const createEnvelopeServer = (
   iframe: HTMLIFrameElement,
-  users: string[],
+  users: User[],
   dataIndexUrl: string,
+  page: string,
   origin?: string
 ) => {
   const defaultOrigin =
@@ -80,7 +83,8 @@ const createEnvelopeServer = (
         },
         {
           users,
-          dataIndexUrl
+          dataIndexUrl,
+          page
         }
       );
     }
@@ -89,8 +93,9 @@ const createEnvelopeServer = (
 
 export function open(args: {
   container: Element;
-  users: string[]; // check the type
+  users: User[];
   dataIndexUrl: string;
+  page: string;
   origin?: string;
 }): StandaloneDevUIApi {
   const iframe = document.createElement('iframe');
@@ -103,6 +108,7 @@ export function open(args: {
     iframe,
     args.users,
     args.dataIndexUrl,
+    args.page,
     args.origin
   );
 

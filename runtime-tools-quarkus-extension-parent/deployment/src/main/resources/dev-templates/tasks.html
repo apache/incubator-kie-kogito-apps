@@ -14,9 +14,17 @@
   ~ limitations under the License.
   -->
 
-{#include main}
-
-<!DOCTYPE html>
+{#include main fluid=true}
+{#style}
+    .main-container {
+        margin: 0;
+        padding: 0;
+    }
+    #envelope-app {
+        width: 100vw;
+        height: calc(100vh - 98px);
+    }
+{/style}
 {#title}Runtime UI{/title}
 {#body}
     <div id="envelope-app"></div>
@@ -25,8 +33,9 @@
     <script>
         const devUI = RuntimeToolsDevUI.open({
             container: document.getElementById("envelope-app"),
-            users: ["admin", "paulo", "saravana"],
-            dataIndexUrl: "http://localhost:8280/graphql"
+            users: {info:userInfo.arrayRepresentation.raw},
+            dataIndexUrl: "http://localhost:8180/graphql",
+            initialPage: "TaskInbox"
         })
     </script>
 {/body}

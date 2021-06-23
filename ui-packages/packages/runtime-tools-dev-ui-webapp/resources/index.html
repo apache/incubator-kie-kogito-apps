@@ -38,8 +38,9 @@
 <script>
   const devUI = RuntimeToolsDevUI.open({
     container: document.getElementById("webapp"),
-    users: ["admin", "paulo", "saravana"],
-    dataIndexUrl: "http://localhost:4000/graphql"
+    users: [ { name: "admin", roles: ["admin"] }, { name: "paulo", roles: ["admin", "analyst"] }, { name: "saravana", roles: [] } ],
+    dataIndexUrl: "http://localhost:8180/graphql",
+    page: "JobsManagement"
   })
 </script>
 </body>

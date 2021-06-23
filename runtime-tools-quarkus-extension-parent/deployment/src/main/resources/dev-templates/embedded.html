@@ -16,15 +16,34 @@
 
 <a href="{urlbase}/processes" class="badge badge-light">
     <i class="fa fa-project-diagram fa-fw"></i>
-    Processes <span class="badge badge-light">{info:data.processesCounter}</span>
+    Processes <span id="processesCount" class="badge badge-light" />
 </a>
 <br/>
 <a href="{urlbase}/tasks" class="badge badge-light">
     <i class="fa fa-tasks fa-fw"></i>
-    Tasks {info:userInfo.mapRepresentation}<span class="badge badge-light">{info:data.tasksCounter}</span>
+    Tasks <span id="tasksCount" class="badge badge-light" />
 </a>
 <br/>
 <a href="{urlbase}/jobs" class="badge badge-light">
     <i class="fa fa-clock fa-fw"></i>
-    Jobs <span class="badge badge-light">{info:data.jobsCounter}</span>
+    Jobs <span id="jobsCount" class="badge badge-light" />
 </a>
+<script>
+    fetch('http://localhost:8080/dataindex/tasks/count')
+            .then(response => response.text())
+            .then(count => {
+                document.getElementById("tasksCount").innerText = count;
+            });
+
+    fetch('http://localhost:8080/dataindex/processes/count')
+            .then(response => response.text())
+            .then(count => {
+                document.getElementById("processesCount").innerText = count;
+            });
+
+    fetch('http://localhost:8080/dataindex/jobs/count')
+            .then(response => response.text())
+            .then(count => {
+                document.getElementById("jobsCount").innerText = count;
+            });
+</script>

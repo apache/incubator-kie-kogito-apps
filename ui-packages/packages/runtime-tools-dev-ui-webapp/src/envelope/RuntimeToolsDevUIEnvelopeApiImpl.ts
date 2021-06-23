@@ -16,8 +16,10 @@
 
 import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
 import {
+  Association,
   RuntimeToolsDevUIChannelApi,
-  RuntimeToolsDevUIEnvelopeApi
+  RuntimeToolsDevUIEnvelopeApi,
+  RuntimeToolsDevUIInitArgs
 } from '../api';
 import { RuntimeToolsDevUIEnvelopeContextType } from './RuntimeToolsDevUIEnvelopeContext';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
@@ -44,8 +46,8 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
   }
 
   public runtimeToolsDevUI_initRequest = async (
-    association: any,
-    initArgs: any
+    association: Association,
+    initArgs: RuntimeToolsDevUIInitArgs
   ): Promise<void> => {
     this.args.envelopeBusController.associate(
       association.origin,
@@ -59,5 +61,7 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
     this.ackCapturedInitRequest();
 
     this.args.view().setDataIndexUrl(initArgs.dataIndexUrl);
+    this.args.view().setUsers(initArgs.users);
+    this.args.view().navigateTo(initArgs.page);
   };
 }

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020 Red Hat, Inc. and/or its affiliates.
+  ~ Copyright 2021 Red Hat, Inc. and/or its affiliates.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,22 +14,29 @@
   ~ limitations under the License.
   -->
 
-{#include main}
-
-<!DOCTYPE html>
+{#include main fluid=true}
+{#style}
+.main-container {
+margin: 0;
+padding: 0;
+}
+#envelope-app {
+width: 100vw;
+height: calc(100vh - 98px);
+}
+{/style}
 {#title}Runtime UI{/title}
 {#body}
-<iframe>
-    <div class="pf-m-redhat-font">
-        <noscript>Enabling JavaScript is required to run this app.</noscript>
+<div id="envelope-app"></div>
 
-        <div id="root" style="height: 100%;"></div>
-        <script type="text/javascript" src="https://pefernan.github.io/mgmt-console/app.bundle.js"></script>
-    </div>
-    <script>
-        console.log("{config:property('quarkus.arc.dev-mode.monitoring-enabled')}");
-        console.log("{config:property('kogito.task.users')}");
-    </script>
-</iframe>
+<script src="resources/webapp/standalone.js"></script>
+<script>
+    const devUI = RuntimeToolsDevUI.open({
+        container: document.getElementById("envelope-app"),
+        users: {info:userInfo.arrayRepresentation.raw},
+        dataIndexUrl: "http://localhost:8180/graphql",
+        initialPage: "ProcessInstances"
+    })
+</script>
 {/body}
 {/include}

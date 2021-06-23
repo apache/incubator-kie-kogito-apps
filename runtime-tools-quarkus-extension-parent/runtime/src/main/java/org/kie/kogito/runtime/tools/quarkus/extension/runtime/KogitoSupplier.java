@@ -22,7 +22,7 @@ import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.DataIndexService;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.DataIndexClient;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs.JobsInstancesAdapter;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs.JobsResponse;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes.ProcessInstancesAdapter;
@@ -49,7 +49,7 @@ public class KogitoSupplier implements Supplier<EntitiesCounters> {
         return new EntitiesCounters(0, 0, 0);
     }
 
-    private int getTasksCount(final DataIndexService dataIndexService) {
+    private int getTasksCount(final DataIndexClient dataIndexService) {
         final String tasksQueryResponse = dataIndexService.query(ALL_TASKS_IDS_QUERY);
 
         Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new UserTaskInstancesAdapter()));
@@ -59,7 +59,7 @@ public class KogitoSupplier implements Supplier<EntitiesCounters> {
         return tasksResponse.getData().getUserTaskInstances().size();
     }
 
-    private int getProcessesCount(final DataIndexService dataIndexService) {
+    private int getProcessesCount(final DataIndexClient dataIndexService) {
         final String processesQueryResponse = dataIndexService.query(ALL_PROCESSES_IDS_QUERY);
 
         Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new ProcessInstancesAdapter()));
@@ -69,7 +69,7 @@ public class KogitoSupplier implements Supplier<EntitiesCounters> {
         return processesResponse.getData().getProcessInstances().size();
     }
 
-    private int getJobsCount(final DataIndexService dataIndexService) {
+    private int getJobsCount(final DataIndexClient dataIndexService) {
         final String jobsQueryResponse = dataIndexService.query(ALL_JOBS_IDS_QUERY);
 
         Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new JobsInstancesAdapter()));

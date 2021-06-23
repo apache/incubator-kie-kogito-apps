@@ -31,8 +31,8 @@ public class UserInfo {
         return users;
     }
 
-    public String getMapRepresentation() {
-        return "new Map([ " + users.stream().map(user -> "[\"" + user.getUsername() + "\", [" + user.getRoles().stream().map(role -> "\"" + role + "\"").collect(Collectors.joining(", ")) + "] ]")
-                .collect(Collectors.joining(", ")) + " ] )";
+    public String getArrayRepresentation() {
+        return "[ " + users.stream().map(user -> "{ name: '" + user.getUsername() + "', roles: [" + user.getRoles().stream().map(role -> "'" + role + "'").collect(Collectors.joining(", ")) + "] }")
+                .collect(Collectors.joining(", ")) + " ]";
     }
 }

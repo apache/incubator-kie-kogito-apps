@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-export interface RuntimeToolsDevUIEnvelopeApi {
-  runtimeToolsDevUI_initRequest(
-    association: Association,
-    initArgs: RuntimeToolsDevUIInitArgs
-  ): Promise<void>;
-}
+package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex;
 
-export interface Association {
-  origin: string;
-  envelopeServerId: string;
-}
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
-export interface User {
-  name: string;
-  roles: string[];
-}
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-export interface RuntimeToolsDevUIInitArgs {
-  users: User[];
-  dataIndexUrl: string;
-  page: string;
+@Path("/graphql")
+@RegisterRestClient
+public interface DataIndexClient {
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    String query(String query);
+
 }

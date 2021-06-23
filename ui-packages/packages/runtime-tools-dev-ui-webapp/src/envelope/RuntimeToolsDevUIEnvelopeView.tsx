@@ -20,6 +20,7 @@ import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeVie
 import { useImperativeHandle } from 'react';
 import RuntimeTools from '../components/console/RuntimeTools/RuntimeTools';
 import { UserContext } from '@kogito-apps/consoles-common';
+import { useHistory } from 'react-router-dom';
 
 export interface Props {
   userContext: UserContext;
@@ -30,14 +31,26 @@ export const RuntimeToolsDevUIEnvelopeViewRef: React.ForwardRefRenderFunction<
   Props
 > = (props: Props, forwardingRef) => {
   const [dataIndex, setDataIndex] = React.useState('');
+  // @ts-ignore
+  const [users, setUsers] = React.useState([]);
+
+  const history = useHistory();
 
   useImperativeHandle(
     forwardingRef,
     () => {
       return {
         setDataIndexUrl: dataIndexUrl => {
-          /**/
+          console.log('setDataIndexUrl: ' + dataIndexUrl);
           setDataIndex(dataIndexUrl);
+        },
+        setUsers: users => {
+          console.log('setUsers: ' + users);
+          setUsers(users);
+        },
+        navigateTo: page => {
+          console.log('navigateTo: ' + page);
+          history.push('/' + page);
         }
       };
     },

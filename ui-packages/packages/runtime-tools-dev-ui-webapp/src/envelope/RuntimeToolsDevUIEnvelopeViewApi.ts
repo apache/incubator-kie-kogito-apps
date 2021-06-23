@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+import { User } from '../api';
+
 export interface RuntimeToolsDevUIEnvelopeViewApi {
   setDataIndexUrl: (dataIndexUrl: string) => void;
+  setUsers: (users: User[]) => void;
+  navigateTo: (page: string) => void;
 }
