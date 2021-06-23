@@ -1,52 +1,130 @@
-#!/bin/bash
-KOGITO_APPS=''
-if [[ "$PWD" == */docker-compose ]]
-then 
-    KOGITO_APPS='../../../../..'
-    echo 'script runs from the docker-compose folder'
-elif [[ "$PWD" == */packages/trusty ]]
-then 
-    KOGITO_APPS='../../../'
-    echo 'script runs from the trusty folder'
-else
-    >&2 echo "error: script starts from unexpected location: ${PWD}"
-    >&2 echo "error: script expects /ui-packages/packages/trusty or /ui-packages/packages/trusty/it-tests/docker-compose folders"
-    exit
-fi
+#!/usr/bin/env bash
 
-KIE_IMAGES=(
-    'org.kie.kogito/integration-tests-trusty-service-quarkus'
-    'org.kie.kogito/trusty-service-infinispan'
-    'org.kie.kogito/explainability-service-messaging'
-    'org.kie.kogito/trusty-ui'
-    'org.kie.kogito/data-index-service-mongodb'
-    'org.kie.kogito/data-index-service-infinispan'
-    'org.kie.kogito/jobs-service-mongodb'
-    'org.kie.kogito/jobs-service-postgresql'
-    'org.kie.kogito/jobs-service-infinispan'
-    'org.kie.kogito/jobs-service-common'
-)
+trap finish SIGTERM EXIT
 
-for IMG in ${KIE_IMAGES[@]}
-    do
-        HASH_IMG=$(docker images ${IMG} -a -q)
-        if [ ! -z "$HASH_IMG" ]
-        then
-            echo "Remove image ${IMG}"
-            docker rmi $HASH_IMG
+set -o errexit
+set -o nounset
+#set -o xtrace
+
+#######################################
+# Write information about script on stdout
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+usage() {
+    echo "This script builds docker images based on the current state of this git repository."
+    echo "Useage: build.sh [OPTION]"
+    echo "Options:"
+    echo "-c remove previously build docker images"
+    echo "-h show help"
+}
+
+#######################################
+# Clear docker images. List of deleted images is saved in local array.
+# It writes information about state of docker images on stdout to help maintain list of images.
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+clean() {
+    echo "Clean docker images:"
+    local kie_images=(
+        'org.kie.kogito/integration-tests-trusty-service-quarkus'
+        'org.kie.kogito/trusty-service-infinispan'
+        'org.kie.kogito/explainability-service-messaging'
+        'org.kie.kogito/trusty-ui'
+        'org.kie.kogito/data-index-service-mongodb'
+        'org.kie.kogito/data-index-service-infinispan'
+        'org.kie.kogito/jobs-service-mongodb'
+        'org.kie.kogito/jobs-service-postgresql'
+        'org.kie.kogito/jobs-service-infinispan'
+        'org.kie.kogito/jobs-service-common'
+        'org.kie.kogito/integration-tests-trusty-service-springboot'
+        'org.kie.kogito/data-index-service-postgresql'
+    )
+
+    for img in ${kie_images[@]}; do
+        local hash_img=$(docker images ${img} --all --quiet)
+        if [ ! -z "${hash_img}" ]; then
+            echo "Image ${img} was removed"
+            docker rmi ${hash_img}
         else
-            echo "Image ${IMG} is not present"
+            echo "Image '${img}' has been allready removed"
         fi
     done
 
-echo $KOGITO_APPS | tr -d '\r'
-cd $(echo $KOGITO_APPS | tr -d '\r')
-if [[ "$PWD" == */kogito-apps ]]
-then 
-    mvn clean install -DskipTests
+    echo "State of 'docker images':"
+    docker images
+}
+
+#######################################
+# Clear popd stack.
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+finish() {
+    popd
+}
+
+#######################################
+# Build project to prepare docker images with backend applications.
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+
+pushd .
+
+while getopts "ch" opt; do
+    case "${opt}" in
+    c)
+        clean
+        ;;
+    h)
+        usage
+        exit 0
+        ;;
+    \?)
+        echo >&2 "error: Invalid option"
+        usage
+        exit 1
+        ;;
+    :) ;;
+
+    *)
+        usage
+        exit 0
+        ;;
+    esac
+done
+
+kogito_apps=''
+if [[ "${PWD}" == */docker-compose ]]; then
+    kogito_apps='../../../../..'
+    echo 'script starts from the docker-compose folder'
+elif [[ "${PWD}" == */packages/trusty ]]; then
+    kogito_apps='../../../'
+    echo 'script starts from the ui-trusty folder'
 else
-    >&2 echo "error: script is not in kogito-apps ${KOGITO_APPS}"
-    exit
+    echo >&2 "error: script starts from unexpected location: ${PWD}"
+    echo >&2 "error: script expects /ui-packages/packages/trusty or /ui-packages/packages/trusty/it-tests/docker-compose folders"
+    exit 1
 fi
 
-cd ui-packages/packages/trusty/it-tests/docker-compose
+cd $(tr --delete '\r' <<<${kogito_apps})
+if [[ "${PWD}" == */kogito-apps ]]; then
+    mvn clean install -DskipTests
+else
+    echo >&2 "error: script is not in kogito-apps ${kogito_apps}"
+    exit 1
+fi
