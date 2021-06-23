@@ -27,9 +27,14 @@ import {
   getToken,
   isAuthEnabled,
   UserContext,
-  ServerUnavailablePage
+  ServerUnavailablePage,
+  KeyCloakUnavailablePage
 } from '@kogito-apps/consoles-common';
 import { TaskConsole, TaskConsoleRoutes } from './components/console';
+
+const onLoadFailure = () => {
+  ReactDOM.render(<KeyCloakUnavailablePage />, document.getElementById('root'));
+};
 
 const appRender = (ctx: UserContext) => {
   const httpLink = new HttpLink({
@@ -79,4 +84,7 @@ const appRender = (ctx: UserContext) => {
   );
 };
 
-appRenderWithAxiosInterceptorConfig((ctx: UserContext) => appRender(ctx));
+appRenderWithAxiosInterceptorConfig(
+  (ctx: UserContext) => appRender(ctx),
+  onLoadFailure
+);
