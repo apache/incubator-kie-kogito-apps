@@ -15,24 +15,26 @@
  */
 package org.kie.kogito.jobs.service.stream;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.StartupEvent;
 import io.smallrye.common.annotation.Identifier;
 import io.vertx.kafka.admin.NewTopic;
 import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.kafka.admin.KafkaAdminClient;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.kie.kogito.jobs.service.stream.KafkaJobStreams.PUBLISH_EVENTS_CONFIG_KEY;
 
