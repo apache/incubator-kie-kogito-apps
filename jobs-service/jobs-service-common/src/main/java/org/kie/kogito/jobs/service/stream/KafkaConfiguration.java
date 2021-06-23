@@ -15,26 +15,24 @@
  */
 package org.kie.kogito.jobs.service.stream;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import io.quarkus.runtime.Startup;
+import io.quarkus.runtime.StartupEvent;
+import io.smallrye.common.annotation.Identifier;
+import io.vertx.kafka.admin.NewTopic;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.kafka.admin.KafkaAdminClient;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.quarkus.runtime.Startup;
-import io.quarkus.runtime.StartupEvent;
-import io.vertx.kafka.admin.NewTopic;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.kafka.admin.KafkaAdminClient;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.kie.kogito.jobs.service.stream.KafkaJobStreams.PUBLISH_EVENTS_CONFIG_KEY;
 
@@ -55,7 +53,7 @@ public class KafkaConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConfiguration.class);
 
     @Inject
-    public KafkaConfiguration(@Named("default-kafka-broker") Instance<Map<String, Object>> defaultKafkaConfiguration,
+    public KafkaConfiguration(@Identifier("default-kafka-broker") Instance<Map<String, Object>> defaultKafkaConfiguration,
             Vertx vertx,
             @ConfigProperty(name = PUBLISH_EVENTS_CONFIG_KEY) Optional<Boolean> enabled,
             @ConfigProperty(name = "kogito.jobs-events-topic") String topic) {

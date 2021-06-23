@@ -15,23 +15,21 @@
  */
 package org.kie.kogito.jobs.service.stream;
 
+import io.quarkus.runtime.StartupEvent;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.smallrye.common.annotation.Identifier;
+import io.vertx.mutiny.core.Vertx;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
+
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-
-import io.quarkus.runtime.StartupEvent;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.vertx.mutiny.core.Vertx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -48,7 +46,7 @@ class KafkaConfigurationIT {
     Vertx vertx;
 
     @Inject
-    @Named("default-kafka-broker")
+    @Identifier("default-kafka-broker")
     Instance<Map<String, Object>> defaultKafkaConfiguration;
 
     @Test
