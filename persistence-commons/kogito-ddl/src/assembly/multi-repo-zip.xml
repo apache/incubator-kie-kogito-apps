@@ -11,13 +11,20 @@
             <unpack>true</unpack>
             <outputDirectory>.</outputDirectory>
             <includes>
-                <include>org.kie.kogito.persistence.ddl:kogito-runtimes-ddl:zip:db-scripts</include>
+                <include>org.kie.kogito:kogito-ddl-runtimes:zip:db-scripts</include>
             </includes>
         </dependencySet>
     </dependencySets>
     <fileSets>
         <fileSet>
             <directory>${project.root.dir}/jobs-service/jobs-service-postgresql/src/main/resources/db/migration</directory>
+            <outputDirectory>postgresql</outputDirectory>
+            <includes>
+                <include>*.sql</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources</directory>
             <outputDirectory>postgresql</outputDirectory>
             <includes>
                 <include>*.sql</include>
