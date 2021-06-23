@@ -16,18 +16,31 @@
 
 import React, { useEffect } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  ouiaPageTypeAndObjectId,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools';
 import { RouteComponentProps } from 'react-router-dom';
+import { StaticContext } from 'react-router';
 import * as H from 'history';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import ProcessListContainer from '../../containers/ProcessListContainer/ProcessListContainer';
 import '../../styles.css';
 import { ProcessListState } from '@kogito-apps/management-console-shared';
 
-const ProcessListPage: React.FC<RouteComponentProps<H.LocationState> &
+interface MatchProps {
+  instanceID: string;
+}
+
+const ProcessListPage: React.FC<RouteComponentProps<
+  MatchProps,
+  StaticContext,
+  H.LocationState
+> &
   OUIAProps> = props => {
   useEffect(() => {
-    return ouiaPageTypeAndObjectId('jobs-management');
+    return ouiaPageTypeAndObjectId('process-instances');
   });
 
   const initialState: ProcessListState =
@@ -37,10 +50,17 @@ const ProcessListPage: React.FC<RouteComponentProps<H.LocationState> &
     <React.Fragment>
       <PageSectionHeader
         titleText="Process Instances"
-        breadcrumbText={['Home', 'process-instances']}
+        breadcrumbText={['Home', 'Processes']}
         breadcrumbPath={['/']}
+        ouiaId={props.ouiaId}
       />
-      <PageSection>
+      <PageSection
+        {...componentOuiaProps(
+          props.ouiaId,
+          'page-section-content',
+          props.ouiaSafe
+        )}
+      >
         <Card className="kogito-consoles__card-size">
           <ProcessListContainer initialState={initialState} />
         </Card>

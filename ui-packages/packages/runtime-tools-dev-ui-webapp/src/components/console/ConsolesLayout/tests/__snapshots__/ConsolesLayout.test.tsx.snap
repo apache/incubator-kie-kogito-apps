@@ -224,7 +224,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
                       "entries": Array [
                         Object {
                           "hash": "",
-                          "key": "5entl4",
+                          "key": "t61c75",
                           "pathname": "/",
                           "search": "",
                           "state": undefined,
@@ -238,7 +238,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
                       "listen": [Function],
                       "location": Object {
                         "hash": "",
-                        "key": "5entl4",
+                        "key": "t61c75",
                         "pathname": "/",
                         "search": "",
                         "state": undefined,
@@ -261,7 +261,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
                       location={
                         Object {
                           "hash": "",
-                          "key": "5entl4",
+                          "key": "t61c75",
                           "pathname": "/",
                           "search": "",
                           "state": undefined,

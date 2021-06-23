@@ -15,7 +15,7 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
         "listen": [Function],
         "location": Object {
           "hash": "",
-          "key": "6p795m",
+          "key": "vx3ft3",
           "pathname": "/NoData",
           "search": "",
           "state": Object {

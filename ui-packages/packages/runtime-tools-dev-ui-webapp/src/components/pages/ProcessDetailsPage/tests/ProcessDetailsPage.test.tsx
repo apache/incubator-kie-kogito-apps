@@ -132,7 +132,11 @@ describe('WebApp - ProcessDetailsPage tests', () => {
       openProcessInstanceDetails: jest.fn(),
       onOpenProcessInstanceDetailsListener: jest.fn(),
       processDetailsQuery: getProcessDetails,
-      processDetailsState: undefined
+      processDetailsState: undefined,
+      handleProcessRetry: jest.fn(),
+      handleNodeInstanceCancel: jest.fn(),
+      handleProcessSkip: jest.fn(),
+      handleNodeInstanceRetrigger: jest.fn()
     })
   );
 

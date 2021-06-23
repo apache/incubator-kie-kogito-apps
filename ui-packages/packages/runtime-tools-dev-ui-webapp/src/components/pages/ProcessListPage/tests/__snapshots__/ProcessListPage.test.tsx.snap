@@ -73,7 +73,7 @@ exports[`ProcessListPage tests Snapshot 1`] = `
         breadcrumbText={
           Array [
             "Home",
-            "process-instances",
+            "Processes",
           ]
         }
         titleText="Process Instances"
@@ -159,7 +159,7 @@ exports[`ProcessListPage tests Snapshot 1`] = `
                           </svg>
                         </AngleRightIcon>
                       </span>
-                      process-instances
+                      Processes
                     </li>
                   </BreadcrumbItem>
                 </ol>
@@ -205,9 +205,14 @@ exports[`ProcessListPage tests Snapshot 1`] = `
           </section>
         </PageSection>
       </PageSectionHeader>
-      <PageSection>
+      <PageSection
+        data-ouia-component-type="page-section-content"
+        data-ouia-safe={true}
+      >
         <section
           className="pf-c-page__main-section"
+          data-ouia-component-type="page-section-content"
+          data-ouia-safe={true}
         >
           <Card
             className="kogito-consoles__card-size"
