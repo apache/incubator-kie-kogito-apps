@@ -52,7 +52,7 @@ const ProcessListContainer: React.FC<ProcessListContainerProps & OUIAProps> = ({
   return (
     <EmbeddedProcessList
       driver={gatewayApi}
-      targetOrigin={window.location.origin}
+      targetOrigin={'*'}
       initialState={initialState}
     />
   );
