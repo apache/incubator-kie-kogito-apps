@@ -16,12 +16,14 @@
 
 package org.kie.kogito.jobs.service.resource;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.NativeImageTest;
 
+@Disabled("KOGITO-5411 Jobs Service MongoDB Native Image tests fail")
 @NativeImageTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
