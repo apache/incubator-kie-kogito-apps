@@ -15,7 +15,8 @@
  */
 
 import React from 'react';
-import { getWrapper } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
+import { ProcessListState } from '@kogito-apps/management-console-shared';
 import ProcessListContainer from '../ProcessListContainer';
 import * as ProcessListContext from '../../../../channel/ProcessList/ProcessListContext';
 import { ProcessListQueries } from '../../../../channel/ProcessList/ProcessListQueries';
@@ -31,9 +32,11 @@ jest
   .mockImplementation(() => new ProcessListGatewayApiImpl(new MockQueries()));
 
 describe('ProcessListContainer tests', () => {
+  const props = {
+    initialState: {} as ProcessListState
+  };
   it('Snapshot', () => {
-    const wrapper = getWrapper(
-      <ProcessListContainer />,
+    const wrapper = mount(<ProcessListContainer {...props} />).find(
       'ProcessListContainer'
     );
 

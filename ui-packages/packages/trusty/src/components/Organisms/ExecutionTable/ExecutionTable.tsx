@@ -12,6 +12,7 @@ import { ExclamationCircleIcon, SearchIcon } from '@patternfly/react-icons';
 import ExecutionStatus from '../../Atoms/ExecutionStatus/ExecutionStatus';
 import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
 import skeletonRows from '../../../utils/skeletonRows/skeletonRows';
+import ExecutionId from '../../Atoms/ExecutionId/ExecutionId';
 import {
   Execution,
   Executions,
@@ -30,10 +31,15 @@ const ExecutionTable = (props: ExecutionTableProps) => {
 
   useEffect(() => {
     setRows(prepareRows(columns.length, data));
-  }, [data.status]);
+  }, [data, columns.length]);
 
   return (
-    <Table cells={columns} rows={rows} aria-label="Executions list">
+    <Table
+      cells={columns}
+      rows={rows}
+      aria-label="Executions list"
+      ouiaId="exec-table"
+    >
       <TableHeader />
       <TableBody rowKey="executionKey" />
     </Table>
@@ -75,7 +81,7 @@ const prepareExecutionsRows = (rowData: Execution[]) => {
               item.executionId
             }`}
           >
-            {'#' + item.executionId.toUpperCase()}
+            <ExecutionId id={item.executionId} />
           </Link>
         )
       },

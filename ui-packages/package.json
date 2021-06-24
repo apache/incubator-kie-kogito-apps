@@ -10,7 +10,7 @@
     "init": "lerna bootstrap",
     "build": "lerna run build --stream --",
     "build:fast": "lerna run build:fast --stream --",
-    "build:prod": "lerna run build:prod --stream --",
+    "build:prod": "lerna run build:prod --include-dependencies --stream --",
     "test": "lerna run test:coverage --stream --",
     "cypress:run": "lerna run cypress:run --",
     "cypress:run-management-console": "cypress run --project ./packages/management-console",
@@ -38,7 +38,7 @@
     "@patternfly/react-tokens": "4.9.22",
     "apollo-boost": "^0.4.4",
     "apollo-link-context": "^1.0.20",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "camel-case": "^3.0.0",
     "graphql": "^14.6.0",
     "jsonpath": "^1.0.2",
@@ -68,6 +68,8 @@
     "@graphql-codegen/typescript": "^1.12.2",
     "@graphql-codegen/typescript-operations": "^1.12.2",
     "@graphql-codegen/typescript-react-apollo": "^1.12.2",
+    "@kogito-apps/ouia-tools": "^1.0.0",
+    "@kogito-apps/cypress-ouia": "^1.0.0",
     "@types/enzyme": "^3.10.5",
     "@types/jest": "^25.1.2",
     "@types/react": "^16.9.43",
@@ -112,7 +114,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.10.2",
-    "start-server-and-test": "^1.10.8",
+    "start-server-and-test": "^1.12.0",
     "strip-ansi": "^6.0.0",
     "style-loader": "^1.0.0",
     "svg-url-loader": "^4.0.0",
@@ -133,6 +135,7 @@
     "@patternfly/react-core": "4.84.4",
     "@patternfly/react-icons": "4.7.22",
     "@patternfly/react-styles": "4.7.22",
-    "@patternfly/react-tokens": "4.9.22"
+    "@patternfly/react-tokens": "4.9.22",
+    "axios": "0.21.1"
   }
 }

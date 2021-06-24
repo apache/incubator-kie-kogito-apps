@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
@@ -85,8 +86,10 @@ public class CounterfactualExplainerServiceHandlerTest {
 
     @BeforeEach
     public void setup() {
+        PredictionProviderFactory predictionProviderFactory = mock(PredictionProviderFactory.class);
+
         this.explainer = mock(CounterfactualExplainer.class);
-        this.handler = new CounterfactualExplainerServiceHandler(explainer);
+        this.handler = new CounterfactualExplainerServiceHandler(explainer, predictionProviderFactory);
     }
 
     @Test
@@ -118,8 +121,8 @@ public class CounterfactualExplainerServiceHandlerTest {
         assertEquals(requestDto.getServiceUrl(), request.getServiceUrl());
         assertEquals(requestDto.getModelIdentifier().getResourceId(), request.getModelIdentifier().getResourceId());
         assertEquals(requestDto.getModelIdentifier().getResourceType(), request.getModelIdentifier().getResourceType());
-        assertEquals(requestDto.getInputs(), request.getInputs());
-        assertEquals(requestDto.getOutputs(), request.getOutputs());
+        assertEquals(requestDto.getOriginalInputs(), request.getOriginalInputs());
+        assertEquals(requestDto.getGoals(), request.getGoals());
         assertEquals(requestDto.getSearchDomains(), request.getSearchDomains());
     }
 
@@ -328,7 +331,8 @@ public class CounterfactualExplainerServiceHandlerTest {
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
-                UUID.fromString(EXECUTION_ID));
+                UUID.fromString(EXECUTION_ID),
+                0);
 
         BaseExplainabilityResultDto base = handler.createSucceededResultDto(request, counterfactuals);
         assertTrue(base instanceof CounterfactualExplainabilityResultDto);
@@ -367,7 +371,8 @@ public class CounterfactualExplainerServiceHandlerTest {
                 null,
                 true,
                 UUID.fromString(SOLUTION_ID),
-                UUID.fromString(EXECUTION_ID));
+                UUID.fromString(EXECUTION_ID),
+                0);
 
         assertThrows(NullPointerException.class, () -> handler.createSucceededResultDto(request, counterfactuals));
     }
@@ -386,7 +391,8 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyList(),
                 true,
                 UUID.fromString(SOLUTION_ID),
-                UUID.fromString(EXECUTION_ID));
+                UUID.fromString(EXECUTION_ID),
+                0);
 
         assertThrows(IllegalStateException.class, () -> handler.createSucceededResultDto(request, counterfactuals));
     }
@@ -406,7 +412,8 @@ public class CounterfactualExplainerServiceHandlerTest {
                         new PredictionOutput(List.of(new Output("output2", Type.NUMBER, new Value(777.0d), 2.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
-                UUID.fromString(EXECUTION_ID));
+                UUID.fromString(EXECUTION_ID),
+                0);
 
         assertThrows(IllegalStateException.class, () -> handler.createSucceededResultDto(request, counterfactuals));
     }
@@ -425,7 +432,8 @@ public class CounterfactualExplainerServiceHandlerTest {
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
-                UUID.fromString(EXECUTION_ID));
+                UUID.fromString(EXECUTION_ID),
+                0);
 
         BaseExplainabilityResultDto base = handler.createIntermediateResultDto(request, counterfactuals);
         assertTrue(base instanceof CounterfactualExplainabilityResultDto);

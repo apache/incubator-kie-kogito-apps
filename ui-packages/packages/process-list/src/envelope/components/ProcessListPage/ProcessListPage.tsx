@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import React, { useEffect, useState } from 'react';
 import {
   OrderBy,
   ProcessInstanceFilter,
-  ProcessListDriver
+  ProcessListDriver,
+  ProcessListState,
+  SortBy
 } from '../../../api';
-import React, { useEffect, useState } from 'react';
 import {
   ProcessInstance,
   ProcessInstanceState
@@ -29,23 +32,39 @@ import {
   KogitoEmptyState,
   KogitoEmptyStateType,
   ServerErrors,
-  LoadMore,
-  OUIAProps,
-  componentOuiaProps
+  LoadMore
 } from '@kogito-apps/components-common';
-import { ISortBy, SortByDirection } from '@patternfly/react-table';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import { ISortBy } from '@patternfly/react-table';
 import _ from 'lodash';
 import { alterOrderByObj } from '../utils/ProcessListUtils';
+
+import '../styles.css';
 interface ProcessListPageProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: ProcessListDriver;
+  initialState: ProcessListState;
 }
 const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
   driver,
   isEnvelopeConnectedToChannel,
+  initialState,
   ouiaId,
   ouiaSafe
 }) => {
+  const defaultFilters: ProcessInstanceFilter =
+    initialState && initialState.filters
+      ? { ...initialState.filters }
+      : {
+          status: [ProcessInstanceState.Active],
+          businessKey: []
+        };
+  const defaultOrderBy: any =
+    initialState && initialState.sortBy
+      ? initialState.sortBy
+      : {
+          lastUpdate: OrderBy.DESC
+        };
   const [defaultPageSize] = useState<number>(10);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
@@ -56,20 +75,14 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     []
   );
   const [error, setError] = useState<string>(undefined);
-  const [filters, setFilters] = useState<ProcessInstanceFilter>({
-    status: [ProcessInstanceState.Active],
-    businessKey: []
-  });
+  const [filters, setFilters] = useState<ProcessInstanceFilter>(defaultFilters);
   const [processStates, setProcessStates] = useState<ProcessInstanceState[]>([
     ProcessInstanceState.Active
   ]);
   const [expanded, setExpanded] = React.useState<{ [key: number]: boolean }>(
     {}
   );
-  const [sortBy, setSortBy] = useState<ISortBy>({
-    index: 3,
-    direction: SortByDirection.desc
-  });
+  const [sortBy, setSortBy] = useState<SortBy | ISortBy>(defaultOrderBy);
   const [selectedInstances, setSelectedInstances] = useState<ProcessInstance[]>(
     []
   );
@@ -82,16 +95,19 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     }
   }, [isEnvelopeConnectedToChannel]);
 
-  const initLoad = async () => {
-    const defaultState = {
-      filters: {
-        status: [ProcessInstanceState.Active],
-        businessKey: []
-      },
-      sortBy: { lastUpdate: OrderBy.DESC }
-    };
+  useEffect(() => {
     setIsLoading(true);
-    await driver.initialLoad(defaultState.filters, defaultState.sortBy);
+    if (initialState && initialState.filters) {
+      setFilters(initialState.filters);
+      setProcessStates(initialState.filters.status);
+      setSortBy(initialState.sortBy);
+    }
+  }, [initialState]);
+
+  const initLoad = async () => {
+    setIsLoading(true);
+    setFilters(defaultFilters);
+    await driver.initialLoad(defaultFilters, defaultOrderBy);
     doQuery(0, 10, true);
   };
 
@@ -155,6 +171,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
 
   const applyFilter = async (filter: ProcessInstanceFilter): Promise<void> => {
     setIsLoading(true);
+    setProcessInstances([]);
     await driver.applyFilter(filter);
     doQuery(0, defaultPageSize, true, true);
   };
@@ -165,6 +182,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
     direction: 'asc' | 'desc'
   ) => {
     setIsLoading(true);
+    setProcessInstances([]);
     setSortBy({ index, direction });
     let sortingColumn: string = event.target.innerText;
     sortingColumn = _.camelCase(sortingColumn);
@@ -176,18 +194,19 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
 
   const doRefresh = async (): Promise<void> => {
     setIsLoading(true);
+    setProcessInstances([]);
     doQuery(0, defaultPageSize, true, true);
   };
 
   const doResetFilters = (): void => {
-    const defaultFilters: ProcessInstanceFilter = {
+    const resetFilter = {
       status: [ProcessInstanceState.Active],
       businessKey: []
     };
     setIsLoading(true);
     setProcessStates([ProcessInstanceState.Active]);
-    setFilters(defaultFilters);
-    applyFilter(defaultFilters);
+    setFilters(resetFilter);
+    applyFilter(resetFilter);
   };
 
   const mustShowLoadMore =
@@ -254,12 +273,14 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
           )}
         </>
       ) : (
-        <KogitoEmptyState
-          type={KogitoEmptyStateType.Reset}
-          title="No filters applied."
-          body="Try applying at least one filter to see results"
-          onClick={doResetFilters}
-        />
+        <div className="kogito-process-list__emptyState-card">
+          <KogitoEmptyState
+            type={KogitoEmptyStateType.Reset}
+            title="No filters applied."
+            body="Try applying at least one filter to see results"
+            onClick={doResetFilters}
+          />
+        </div>
       )}
     </div>
   );

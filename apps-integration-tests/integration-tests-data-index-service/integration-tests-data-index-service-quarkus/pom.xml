@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-events-reactive-messaging-addon</artifactId>
+      <artifactId>kogito-addons-quarkus-events-smallrye</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -31,7 +31,12 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>filesystem-persistence-addon</artifactId>
+      <artifactId>kogito-addons-persistence-filesystem</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -59,6 +64,12 @@
                     <include>**/*.bpmn</include>
                   </includes>
                 </resource>
+                <resource>
+                  <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources</directory>
+                  <includes>
+                    <include>create.sql</include>
+                  </includes>
+                </resource>
               </resources>
             </configuration>
           </execution>
@@ -69,9 +80,10 @@
         <configuration>
           <filesets>
             <fileset>
-              <directory>${project.basedir}/src/main/resources/kogito/</directory>
+              <directory>${project.basedir}/src/main/resources/</directory>
               <includes>
-                <include>**</include>
+                <include>**/*.bpmn</include>
+                <include>create.sql</include>
               </includes>
             </fileset>
           </filesets>

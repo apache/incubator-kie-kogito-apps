@@ -1,7 +1,46 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProcessListPage tests Snapshot 1`] = `
-<ProcessListPage>
+<ProcessListPage
+  history={
+    Object {
+      "action": "POP",
+      "block": [Function],
+      "createHref": [Function],
+      "go": [Function],
+      "goBack": [Function],
+      "goForward": [Function],
+      "length": 1,
+      "listen": [Function],
+      "location": Object {
+        "hash": "",
+        "pathname": "/",
+        "search": "",
+        "state": undefined,
+      },
+      "push": [Function],
+      "replace": [Function],
+    }
+  }
+  location={
+    Object {
+      "hash": "",
+      "pathname": "/",
+      "search": "",
+      "state": undefined,
+    }
+  }
+  match={
+    Object {
+      "isExact": false,
+      "params": Object {
+        "instanceID": "8035b580-6ae4-4aa8-9ec0-e18e19809e0b",
+      },
+      "path": "",
+      "url": "",
+    }
+  }
+>
   <PageSectionHeader
     breadcrumbPath={
       Array [
@@ -17,10 +56,14 @@ exports[`ProcessListPage tests Snapshot 1`] = `
     titleText="Process Instances"
   >
     <PageSection
+      data-ouia-component-type="page-section-header"
+      data-ouia-safe={true}
       variant="light"
     >
       <section
         className="pf-c-page__main-section pf-m-light"
+        data-ouia-component-type="page-section-header"
+        data-ouia-safe={true}
       >
         <Breadcrumb>
           <nav
@@ -139,9 +182,14 @@ exports[`ProcessListPage tests Snapshot 1`] = `
       </section>
     </PageSection>
   </PageSectionHeader>
-  <PageSection>
+  <PageSection
+    data-ouia-component-type="page-section-content"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-type="page-section-content"
+      data-ouia-safe={true}
     >
       <Card
         className="kogito-management-console__card-size"

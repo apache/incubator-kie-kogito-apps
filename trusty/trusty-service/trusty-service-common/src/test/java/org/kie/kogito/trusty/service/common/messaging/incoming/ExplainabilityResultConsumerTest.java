@@ -38,9 +38,11 @@ import org.kie.kogito.explainability.api.SaliencyDto;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.service.common.handlers.CounterfactualExplainerServiceHandler;
+import org.kie.kogito.trusty.service.common.handlers.CounterfactualSlidingWindowExplainabilityResultsManager;
 import org.kie.kogito.trusty.service.common.handlers.ExplainerServiceHandler;
 import org.kie.kogito.trusty.service.common.handlers.ExplainerServiceHandlerRegistry;
 import org.kie.kogito.trusty.service.common.handlers.LIMEExplainerServiceHandler;
+import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
@@ -95,6 +97,7 @@ class ExplainabilityResultConsumerTest {
     private static final LIMEExplainabilityResultDto TEST_RESULT_DTO = LIMEExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID, singletonMap(TEST_OUTCOME_1_NAME, TEST_SALIENCY_DTO));
 
     private TrustyService trustyService;
+    private StorageExceptionsProvider storageExceptionsProvider;
     private ExplainabilityResultConsumer consumer;
     private LIMEExplainerServiceHandler limeExplainerServiceHandler;
     private CounterfactualExplainerServiceHandler counterfactualExplainerServiceHandler;
@@ -148,13 +151,19 @@ class ExplainabilityResultConsumerTest {
     @SuppressWarnings("unchecked")
     void setup() {
         trustyService = mock(TrustyService.class);
+        storageExceptionsProvider = mock(StorageExceptionsProvider.class);
         trustyStorage = mock(TrustyStorageService.class);
         limeExplainerServiceHandler = new LIMEExplainerServiceHandler(trustyStorage);
-        counterfactualExplainerServiceHandler = new CounterfactualExplainerServiceHandler(trustyStorage);
+        counterfactualExplainerServiceHandler = new CounterfactualExplainerServiceHandler(trustyStorage,
+                mock(CounterfactualSlidingWindowExplainabilityResultsManager.class));
         explanationHandlers = mock(Instance.class);
-        when(explanationHandlers.stream()).thenReturn(Stream.of(limeExplainerServiceHandler, counterfactualExplainerServiceHandler));
+        when(explanationHandlers.stream()).thenReturn(Stream.of(limeExplainerServiceHandler,
+                counterfactualExplainerServiceHandler));
         explainerServiceHandlerRegistry = new ExplainerServiceHandlerRegistry(explanationHandlers);
-        consumer = new ExplainabilityResultConsumer(trustyService, explainerServiceHandlerRegistry, TrustyServiceTestUtils.MAPPER);
+        consumer = new ExplainabilityResultConsumer(trustyService,
+                explainerServiceHandlerRegistry,
+                TrustyServiceTestUtils.MAPPER,
+                storageExceptionsProvider);
     }
 
     @Test
@@ -170,6 +179,7 @@ class ExplainabilityResultConsumerTest {
         Message<String> message = mockMessage(buildCounterfactualCloudEventJsonString(CounterfactualExplainabilityResultDto.buildSucceeded(TEST_EXECUTION_ID,
                 TEST_COUNTERFACTUAL_ID,
                 TEST_SOLUTION_ID,
+                0L,
                 Boolean.TRUE,
                 CounterfactualExplainabilityResultDto.Stage.FINAL,
                 Collections.emptyMap(),
