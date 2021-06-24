@@ -33,7 +33,7 @@ public class LimeConfig {
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
     private static final DataDistribution EMPTY_DATA_DISTRIBUTION = new PredictionInputsDataDistribution(Collections.emptyList());
-    private static final boolean DEFAULT_PENALIZE_BALANCE_SPARSE = false;
+    private static final boolean DEFAULT_PENALIZE_BALANCE_SPARSE = true;
     private static final boolean DEFAULT_PROXIMITY_FILTER = true;
     private static final double DEFAULT_PROXIMITY_THRESHOLD = 0.8;
     private static final Number DEFAULT_PROXIMITY_FILTERED_DATASET_MIN = 10;
