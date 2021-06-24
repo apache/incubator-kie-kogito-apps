@@ -656,7 +656,8 @@ class CounterfactualExplainerTest {
             sequenceIds.add(counterfactual.getSequenceId());
         };
 
-        ArgumentCaptor<Consumer<CounterfactualSolution>> intermediateSolutionConsumerCaptor = ArgumentCaptor.forClass(Consumer.class);
+        ArgumentCaptor<Consumer<CounterfactualSolution>> intermediateSolutionConsumerCaptor =
+                ArgumentCaptor.forClass(Consumer.class);
 
         //Mock SolverManager and SolverJob to guarantee deterministic test behaviour
         SolverManager<CounterfactualSolution, UUID> solverManager = mock(SolverManager.class);
@@ -774,7 +775,7 @@ class CounterfactualExplainerTest {
 
         // all intermediate Ids must be distinct
         assertEquals((int) intermediateIds.stream().distinct().count(), intermediateIds.size());
-        assertEquals((int) executionIds.stream().distinct().count(), 1);
+        assertEquals(1, (int) executionIds.stream().distinct().count());
         assertEquals(executionIds.get(0), executionId);
     }
 
