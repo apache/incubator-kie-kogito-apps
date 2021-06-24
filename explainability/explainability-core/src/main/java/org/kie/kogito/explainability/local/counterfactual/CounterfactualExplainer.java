@@ -95,8 +95,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         return new Builder();
     }
 
-    private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer,
-            AtomicLong sequenceId) {
     /**
      * Wrap the provided {@link Consumer<CounterfactualResult>} in a OptaPlanner-accepted
      * {@link Consumer<CounterfactualSolution>}.
@@ -105,15 +103,18 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      * @param consumer {@link Consumer<CounterfactualResult>} provided to the explainer for intermediate results
      * @return {@link Consumer<CounterfactualSolution>} as accepted by OptaPlanner
      */
-    private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer) {
+    private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer,
+            AtomicLong sequenceId) {
         return counterfactualSolution -> {
-            CounterfactualResult result = new CounterfactualResult(counterfactualSolution.getEntities(),
-                    counterfactualSolution.getPredictionOutputs(),
-                    counterfactualSolution.getScore().isFeasible(),
-                    counterfactualSolution.getSolutionId(),
-                    counterfactualSolution.getExecutionId(),
-                    sequenceId.incrementAndGet());
-            consumer.accept(result);
+            if (counterfactualSolution.getScore().isFeasible()) {
+                CounterfactualResult result = new CounterfactualResult(counterfactualSolution.getEntities(),
+                        counterfactualSolution.getPredictionOutputs(),
+                        counterfactualSolution.getScore().isFeasible(),
+                        counterfactualSolution.getSolutionId(),
+                        counterfactualSolution.getExecutionId(),
+                        sequenceId.incrementAndGet());
+                consumer.accept(result);
+            }
         };
     }
 
@@ -189,7 +190,8 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             return this;
         }
 
-        public Builder withSolverManagerFactory(Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory) {
+        public Builder withSolverManagerFactory(
+                Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory) {
             this.solverManagerFactory = solverManagerFactory;
             return this;
         }
