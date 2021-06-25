@@ -45,7 +45,7 @@ services:
       - ./infinispan/infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z
 
   kogito-app:
-    image: org.kie.kogito/integration-tests-trusty-service-quarkus:2.0.0-SNAPSHOT
+    image: "org.kie.kogito/integration-tests-trusty-service-quarkus:${VERSION}"
     ports:
       - 8080:8080
     environment:
@@ -55,7 +55,7 @@ services:
       - kafka
 
   explainability:
-    image: org.kie.kogito/explainability-service-messaging:2.0.0-SNAPSHOT
+    image: "org.kie.kogito/explainability-service-messaging:${VERSION}"
     depends_on:
       - kafka
       - kogito-app
@@ -65,7 +65,7 @@ services:
       - 1336:8080
 
   trusty:
-    image: org.kie.kogito/trusty-service-infinispan:2.0.0-SNAPSHOT
+    image: "org.kie.kogito/trusty-service-infinispan:${VERSION}"
     depends_on:
       - kafka
       - infinispan
@@ -78,7 +78,7 @@ services:
       - 1337:8080
 
   trusty-ui:
-    image: org.kie.kogito/trusty-ui:2.0.0-SNAPSHOT
+    image: "org.kie.kogito/trusty-ui:${VERSION}"
     depends_on:
       - kafka
     environment:
