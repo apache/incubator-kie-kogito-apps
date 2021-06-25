@@ -27,7 +27,6 @@ import {
 import { TaskInboxChannelApiImpl } from './TaskInboxChannelApiImpl';
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { init } from '../envelope';
-import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
 
 export interface Props {
   targetOrigin: string;
@@ -54,12 +53,8 @@ export const EmbeddedTaskInbox = React.forwardRef<TaskInboxApi, Props>(
           },
           container: container(),
           bus: {
-            postMessage<D, Type>(
-              message: EnvelopeBusMessage<D, Type>,
-              targetOrigin?: string,
-              transfer?: any
-            ) {
-              window.parent.postMessage(message, '*', transfer);
+            postMessage(message, targetOrigin, transfer) {
+              window.postMessage(message, '*', transfer);
             }
           }
         });

@@ -28,6 +28,7 @@ import { TaskInboxEnvelopeContext } from './TaskInboxEnvelopeContext';
  * Implementation of the TaskInboxEnvelopeApi
  */
 export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
+  private capturedInitRequestYet = false;
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
       TaskInboxEnvelopeApi,
@@ -37,6 +38,14 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
     >
   ) {}
 
+  private hasCapturedInitRequestYet() {
+    return this.capturedInitRequestYet;
+  }
+
+  private ackCapturedInitRequest() {
+    this.capturedInitRequestYet = true;
+  }
+
   taskInbox__init = (
     association: Association,
     initArgs: TaskInboxInitArgs
@@ -45,6 +54,12 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
       association.origin,
       association.envelopeServerId
     );
+
+    if (this.hasCapturedInitRequestYet()) {
+      return;
+    }
+
+    this.ackCapturedInitRequest();
     this.args
       .view()
       .initialize(
@@ -52,6 +67,5 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
         initArgs.allTaskStates,
         initArgs.activeTaskStates
       );
-    return Promise.resolve();
   };
 }
