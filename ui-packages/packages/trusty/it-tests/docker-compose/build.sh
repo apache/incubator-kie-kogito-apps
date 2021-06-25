@@ -38,6 +38,7 @@ clean() {
         'org.kie.kogito/trusty-service-infinispan'
         'org.kie.kogito/explainability-service-messaging'
         'org.kie.kogito/trusty-ui'
+        'org.kie.kogito/data-index-service-postgresql'
         'org.kie.kogito/data-index-service-mongodb'
         'org.kie.kogito/data-index-service-infinispan'
         'org.kie.kogito/jobs-service-mongodb'
@@ -45,7 +46,6 @@ clean() {
         'org.kie.kogito/jobs-service-infinispan'
         'org.kie.kogito/jobs-service-common'
         'org.kie.kogito/integration-tests-trusty-service-springboot'
-        'org.kie.kogito/data-index-service-postgresql'
     )
 
     for img in ${kie_images[@]}; do

@@ -1,9 +1,39 @@
-#!/bin/bash
-KOGITO_APPS=''
-if [[ "$PWD" == */docker-compose ]]
+#!/usr/bin/env bash
+
+trap finish SIGTERM EXIT
+
+set -o errexit
+set -o nounset
+#set -o xtrace
+
+
+#######################################
+# Clear popd stack.
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+finish() {
+    popd
+}
+
+#######################################
+# Run docker images. Based on docker-compose.yml
+#
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+
+pushd .
+
+if [[ "${PWD}" == */docker-compose ]]
 then 
     echo 'Application starts from the docker-compose folder - probably manual start of this script'
-elif [[ "$PWD" == */packages/trusty ]]
+elif [[ "${PWD}" == */packages/trusty ]]
 then 
     echo 'Application starts from the trusty folder - probably run some yarn script'
     echo 'Move to the docker-compose folder'
