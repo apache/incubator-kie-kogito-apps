@@ -63,7 +63,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
     public CounterfactualExplainer() {
         this.solverConfig = CounterfactualConfigurationFactory.builder().build();
-        this.solverManagerFactory = (solverConfig) -> SolverManager.create(solverConfig, new SolverManagerConfig());
+        this.solverManagerFactory = solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
         this.executor = ForkJoinPool.commonPool();
     }
 
@@ -192,7 +192,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
             }
             if (this.solverManagerFactory == null) {
-                this.solverManagerFactory = (solverConfig) -> SolverManager.create(solverConfig, new SolverManagerConfig());
+                this.solverManagerFactory = solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
             }
             return new CounterfactualExplainer(
                     solverConfig,
