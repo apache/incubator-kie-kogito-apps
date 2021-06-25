@@ -70,7 +70,7 @@ class PmmlRegressionLimeExplainerTest {
         random.setSeed(0);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         LimeConfig limeConfig = new LimeConfig()
-                .withSamples(10)
+                .withSamples(100)
                 .withPerturbationContext(perturbationContext);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionInput input = getTestInput();
