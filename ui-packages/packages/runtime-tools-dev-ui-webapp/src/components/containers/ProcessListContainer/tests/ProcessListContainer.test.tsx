@@ -44,6 +44,6 @@ describe('ProcessListContainer tests', () => {
 
     expect(forwardRef.props().driver).not.toBeNull();
     // expect(forwardRef.props().envelopePath).toBe('/envelope/process-list.html');
-    expect(forwardRef.props().targetOrigin).toBe('http://localhost');
+    expect(forwardRef.props().targetOrigin).toBe('*');
   });
 });

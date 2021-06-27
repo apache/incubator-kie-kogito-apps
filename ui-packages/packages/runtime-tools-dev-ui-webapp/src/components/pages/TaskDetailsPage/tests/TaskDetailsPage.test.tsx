@@ -170,7 +170,8 @@ describe('TaskDetailsPage tests', () => {
 
   it('Empty state', async () => {
     const wrapper = await getTaskDetailsPageWrapper();
-
+    wrapper.update();
+    
     expect(wrapper).toMatchSnapshot();
 
     const emptyState = wrapper.find(KogitoEmptyState);
@@ -188,6 +189,7 @@ describe('TaskDetailsPage tests', () => {
     });
 
     const wrapper = await getTaskDetailsPageWrapper();
+    wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 
@@ -202,6 +204,7 @@ describe('TaskDetailsPage tests', () => {
     getUserTaskByIdMock.mockReturnValue(userTask);
 
     const wrapper = await getTaskDetailsPageWrapper();
+    wrapper.update();
 
     expect(wrapper).toMatchSnapshot();
 
@@ -215,6 +218,7 @@ describe('TaskDetailsPage tests', () => {
     getUserTaskByIdMock.mockReturnValue(userTask);
 
     let wrapper = await getTaskDetailsPageWrapper();
+    wrapper.update();
 
     const taskForm = wrapper.find(TaskFormContainer);
 
@@ -257,7 +261,7 @@ describe('TaskDetailsPage tests', () => {
     getUserTaskByIdMock.mockReturnValue(userTask);
 
     let wrapper = await getTaskDetailsPageWrapper();
-
+    wrapper.update();
     const taskForm = wrapper.find(TaskFormContainer);
 
     expect(taskForm.exists()).toBeTruthy();
@@ -290,7 +294,7 @@ describe('TaskDetailsPage tests', () => {
     getUserTaskByIdMock.mockReturnValue(userTask);
 
     let wrapper = await getTaskDetailsPageWrapper();
-
+    wrapper.update();
     const taskForm = wrapper.find(TaskFormContainer);
 
     expect(taskForm.exists()).toBeTruthy();
@@ -333,7 +337,7 @@ describe('TaskDetailsPage tests', () => {
     getUserTaskByIdMock.mockReturnValue(userTask);
 
     let wrapper = await getTaskDetailsPageWrapper();
-
+    wrapper.update();
     // open details drawer
     await act(async () => {
       const button = wrapper

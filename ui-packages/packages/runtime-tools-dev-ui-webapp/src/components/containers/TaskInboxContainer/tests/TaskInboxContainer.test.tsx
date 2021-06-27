@@ -53,6 +53,6 @@ describe('TaskInboxContainer tests', () => {
       'Skipped'
     ]);
     expect(forwardRef.props().driver).not.toBeNull();
-    expect(forwardRef.props().targetOrigin).toBe('http://localhost');
+    expect(forwardRef.props().targetOrigin).toBe('*');
   });
 });

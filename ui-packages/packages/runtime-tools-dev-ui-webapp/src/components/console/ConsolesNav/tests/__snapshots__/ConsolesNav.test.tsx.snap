@@ -12,7 +12,7 @@ exports[`ConsolesNav tests Snapshot testing with jobs management props 1`] = `
         "entries": Array [
           Object {
             "hash": "",
-            "key": "jcnso4",
+            "key": "kdm8ug",
             "pathname": "/",
             "search": "",
             "state": undefined,
@@ -26,7 +26,7 @@ exports[`ConsolesNav tests Snapshot testing with jobs management props 1`] = `
         "listen": [Function],
         "location": Object {
           "hash": "",
-          "key": "jcnso4",
+          "key": "kdm8ug",
           "pathname": "/",
           "search": "",
           "state": undefined,
@@ -196,7 +196,7 @@ exports[`ConsolesNav tests Snapshot testing with process list props 1`] = `
         "entries": Array [
           Object {
             "hash": "",
-            "key": "e1mrkt",
+            "key": "3htscu",
             "pathname": "/",
             "search": "",
             "state": undefined,
@@ -210,7 +210,7 @@ exports[`ConsolesNav tests Snapshot testing with process list props 1`] = `
         "listen": [Function],
         "location": Object {
           "hash": "",
-          "key": "e1mrkt",
+          "key": "3htscu",
           "pathname": "/",
           "search": "",
           "state": undefined,

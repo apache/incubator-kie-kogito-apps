@@ -4,7 +4,7 @@ exports[`WebApp - JobsManagementContainer tests Snapshot test with default value
 <JobsManagementContainer>
   <ForwardRef
     driver={null}
-    targetOrigin="http://localhost"
+    targetOrigin="*"
   >
     <ForwardRef>
       <div />

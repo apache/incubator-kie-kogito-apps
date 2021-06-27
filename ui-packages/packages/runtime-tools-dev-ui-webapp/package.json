@@ -53,7 +53,8 @@
       "core-js"
     ],
     "coveragePathIgnorePatterns": [
-      "./src/static"
+      "./src/static",
+      "./tests/mocks/"
     ],
     "moduleFileExtensions": [
       "ts",

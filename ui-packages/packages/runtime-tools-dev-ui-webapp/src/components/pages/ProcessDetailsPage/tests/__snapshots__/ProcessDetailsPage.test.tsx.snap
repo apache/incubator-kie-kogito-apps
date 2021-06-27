@@ -1,21 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`] = `
-<BrowserRouter>
+<MemoryRouter
+  initialEntries={
+    Array [
+      "/",
+    ]
+  }
+  keyLength={0}
+>
   <Router
     history={
       Object {
         "action": "PUSH",
         "block": [Function],
+        "canGo": [Function],
         "createHref": [Function],
+        "entries": Array [
+          Object {
+            "hash": "",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          Object {
+            "hash": "",
+            "pathname": "/NoData",
+            "search": "",
+            "state": Object {
+              "buttonText": "Go to process instances",
+              "description": "Process instance with the id 8035b580-6ae4-4aa8-9ec0-e18e19809e0b not found",
+              "prev": "/ProcessInstances",
+              "rememberedData": Object {},
+              "title": "Process not found",
+            },
+          },
+        ],
         "go": [Function],
         "goBack": [Function],
         "goForward": [Function],
+        "index": 1,
         "length": 2,
         "listen": [Function],
         "location": Object {
           "hash": "",
-          "key": "vx3ft3",
           "pathname": "/NoData",
           "search": "",
           "state": Object {
@@ -280,5 +308,5 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
       </PageSection>
     </ProcessDetailsPage>
   </Router>
-</BrowserRouter>
+</MemoryRouter>
 `;

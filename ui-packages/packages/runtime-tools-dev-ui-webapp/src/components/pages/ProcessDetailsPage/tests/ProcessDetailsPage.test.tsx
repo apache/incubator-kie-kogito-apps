@@ -23,7 +23,7 @@ import {
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import ProcessDetailsPage from '../ProcessDetailsPage';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import * as ProcessDetailsContext from '../../../../channel/ProcessDetails/ProcessDetailsContext';
 import { ProcessDetailsGatewayApi } from '../../../../channel/ProcessDetails/ProcessDetailsGatewayApi';
 
@@ -154,9 +154,9 @@ describe('WebApp - ProcessDetailsPage tests', () => {
     //@ts-ignore
     getProcessDetails.mockReturnValue(data);
     const wrapper = await mount(
-      <BrowserRouter>
+      <MemoryRouter initialEntries={['/']} keyLength={0}>
         <ProcessDetailsPage {...props} />
-      </BrowserRouter>
+      </MemoryRouter>
     );
     expect(wrapper).toMatchSnapshot();
   });

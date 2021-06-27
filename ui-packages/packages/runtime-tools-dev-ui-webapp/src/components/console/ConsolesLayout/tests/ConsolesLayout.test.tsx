@@ -19,7 +19,7 @@ import { mount } from 'enzyme';
 import ConsolesLayout from '../ConsolesLayout';
 import ConsolesRoutes from '../../ConsolesRoutes/ConsolesRoutes';
 import { ApolloClient } from 'apollo-client';
-import { act } from 'react-dom/test-utils';
+import { MemoryRouter } from 'react-router-dom'
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -44,30 +44,12 @@ describe('ConsolesLayout tests', () => {
       userContext: { getCurrentUser: jest.fn() }
     };
     const wrapper = mount(
+      <MemoryRouter initialEntries={['/']} keyLength={0}>
       <ConsolesLayout {...props}>
         <ConsolesRoutes />
       </ConsolesLayout>
+      </MemoryRouter>
     );
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('test brandClick prop on PageLayout', async () => {
-    // @ts-ignore
-    const client = new ApolloClientMock();
-    const props = {
-      apolloClient: client,
-      userContext: { getCurrentUser: jest.fn() }
-    };
-    const wrapper = mount(
-      <ConsolesLayout {...props}>
-        <ConsolesRoutes />
-      </ConsolesLayout>
-    );
-    await act(async () => {
-      wrapper
-        .find('PageLayout')
-        .props()
-        ['BrandClick']();
-    });
+    expect(wrapper.find('ConsolesLayout')).toMatchSnapshot();
   });
 });

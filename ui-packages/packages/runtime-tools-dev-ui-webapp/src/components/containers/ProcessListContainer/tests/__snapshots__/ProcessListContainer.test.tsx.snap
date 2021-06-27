@@ -34,7 +34,7 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
       }
     }
     initialState={Object {}}
-    targetOrigin="http://localhost"
+    targetOrigin="*"
   >
     <ForwardRef>
       <div />

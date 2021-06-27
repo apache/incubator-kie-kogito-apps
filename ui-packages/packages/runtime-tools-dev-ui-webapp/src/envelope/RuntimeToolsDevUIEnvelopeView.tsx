@@ -25,10 +25,10 @@ export interface Props {
   userContext: UserContext;
 }
 
-export const RuntimeToolsDevUIEnvelopeViewRef: React.ForwardRefRenderFunction<
+export const RuntimeToolsDevUIEnvelopeView= React.forwardRef<
   RuntimeToolsDevUIEnvelopeViewApi,
   Props
-> = (props: Props, forwardingRef) => {
+> ((props: Props, forwardingRef) => {
   const [dataIndex, setDataIndex] = React.useState('');
   // @ts-ignore
   const [users, setUsers] = React.useState([]);
@@ -40,7 +40,6 @@ export const RuntimeToolsDevUIEnvelopeViewRef: React.ForwardRefRenderFunction<
     () => {
       return {
         setDataIndexUrl: dataIndexUrl => {
-          console.log('setDataIndexUrl: ' + dataIndexUrl);
           setDataIndex(dataIndexUrl);
         },
         setUsers: users => {
@@ -61,13 +60,10 @@ export const RuntimeToolsDevUIEnvelopeViewRef: React.ForwardRefRenderFunction<
       {dataIndex.length > 0 && (
         <RuntimeTools userContext={props.userContext} dataIndex={dataIndex} />
       )}
-      {/* <ConsolesLayout apolloClient={client} userContext={props.userContext}>
-        <ConsolesRoutes />
-      </ConsolesLayout> */}
     </>
   );
-};
+});
 
-export const RuntimeToolsDevUIEnvelopeView = React.forwardRef(
-  RuntimeToolsDevUIEnvelopeViewRef
-);
+// export const RuntimeToolsDevUIEnvelopeView = React.forwardRef(
+//   RuntimeToolsDevUIEnvelopeViewRef
+// );

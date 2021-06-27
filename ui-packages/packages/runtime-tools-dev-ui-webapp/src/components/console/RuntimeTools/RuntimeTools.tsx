@@ -19,7 +19,6 @@ const RuntimeTools = props => {
     // @ts-ignore
     uri: props.dataIndex
   });
-  console.log('httpLink', httpLink);
 
   const fallbackUI = onError(({ networkError }: any) => {
     if (networkError && networkError.stack === 'TypeError: Failed to fetch') {
@@ -53,7 +52,6 @@ const RuntimeTools = props => {
     cache,
     link: setGQLContext.concat(fallbackUI.concat(httpLink))
   });
-  //   }
 
   return (
     <ConsolesLayout apolloClient={client} userContext={props.userContext}>
