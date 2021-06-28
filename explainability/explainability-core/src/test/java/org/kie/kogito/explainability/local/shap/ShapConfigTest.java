@@ -14,27 +14,49 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.explainability.global.shap;
+package org.kie.kogito.explainability.local.shap;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ShapConfigTest {
+    Random rn = new Random();
+    List<Feature> fs = Arrays.asList(
+            FeatureFactory.newNumericalFeature("f", 1.),
+            FeatureFactory.newNumericalFeature("f", 2.));
+    PredictionInput pi = new PredictionInput(fs);
+    List<PredictionInput> pis = Arrays.asList(pi, pi);
 
     // Test that everything recovers as expected
     @Test
     void testRecovery() {
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, 100);
+        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, pis, rn, 100);
         assertEquals(ShapConfig.LinkType.IDENTITY, skConfig.getLink());
+        assertTrue(skConfig.getNSamples().isPresent());
         assertEquals(100, skConfig.getNSamples().get());
+        assertSame(rn, skConfig.getRN());
+        assertSame(pis, skConfig.getBackground());
     }
 
     @Test
     void testNullRecovery() {
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.LOGIT);
+        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.LOGIT, pis, rn);
         assertEquals(ShapConfig.LinkType.LOGIT, skConfig.getLink());
         assertFalse(skConfig.getNSamples().isPresent());
+        assertSame(rn, skConfig.getRN());
+        assertSame(pis, skConfig.getBackground());
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.explainability.global.shap;
+package org.kie.kogito.explainability.local.shap;
 
 import org.junit.jupiter.api.Test;
 

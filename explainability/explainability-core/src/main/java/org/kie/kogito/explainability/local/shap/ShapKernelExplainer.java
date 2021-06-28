@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.explainability.global.shap;
+package org.kie.kogito.explainability.local.shap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,20 +25,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.commons.math3.exception.MathArithmeticException;
 import org.apache.commons.math3.util.CombinatoricsUtils;
-import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.global.GlobalExplainer;
+import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.PredictionProviderMetadata;
+import org.kie.kogito.explainability.model.ShapPrediction;
 import org.kie.kogito.explainability.utils.MatrixUtils;
 import org.kie.kogito.explainability.utils.RandomChoice;
 import org.kie.kogito.explainability.utils.WeightedLinearRegression;
@@ -52,44 +49,33 @@ import org.slf4j.LoggerFactory;
  * https://proceedings.neurips.cc/paper/2017/file/8a20a8621978632d76c43dfd28b67767-Paper.pdf
  * see also https://github.com/slundberg/shap/blob/master/shap/explainers/_kernel.py
  */
-public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<double[][][]>> {
+public class ShapKernelExplainer implements LocalExplainer<double[][]> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShapKernelExplainer.class);
-    private final ShapConfig.LinkType link;
-    private final PredictionProvider model;
-    private final double[][] backgroundData;
-    private final double[][] modelnull;
-    private final double[][] linkNull;
-    private final double[] fnull;
-    private final int rows;
-    private final int cols;
-    private final int outputSize;
+    private ShapConfig.LinkType link;
+    private PredictionProvider model;
+    private double[][] backgroundData;
+    private CompletableFuture<double[][]> modelnull;
+    private CompletableFuture<double[][]> linkNull;
+    private CompletableFuture<double[]> fnull;
+    private int rows;
+    private int cols;
+    private CompletableFuture<Integer> outputSize;
     private Integer numSamples;
     private ArrayList<ShapSyntheticDataSample> samplesAdded;
     private ArrayList<Integer> varyingFeatureGroups;
     private int numVarying;
     private HashMap<Integer, Integer> masksUsed;
-    private final Random rn;
+    private Random rn;
+    private ShapConfig config;
 
-    /**
-     * Define a ShapKernelExplainer.
-     *
-     * @param model: The PredictionProvider to be explained
-     * @param config: A ShapConfig object with the configuration for this particular explainer
-     * @param background: The background data used to define the context for any particular model
-     *        output. This should be a representative sample of the data, to provide a useful
-     *        null background for the model. Automated guidance for background data selection
-     *        is a WIP.
-     *
-     */
-    public ShapKernelExplainer(PredictionProvider model,
-            ShapConfig config,
-            List<PredictionInput> background,
-            Random rn)
-            throws InterruptedException, ExecutionException, TimeoutException {
-        this.link = config.getLink();
+    public ShapKernelExplainer(){}
+
+    private void initialize(ShapPrediction prediction, PredictionProvider model) {
+        this.config = prediction.getConfig();
         this.model = model;
-        this.rn = rn;
-        this.backgroundData = MatrixUtils.matrixFromPredictionInput(background);
+        this.link = this.config.getLink();
+        this.rn = this.config.getRN();
+        this.backgroundData = MatrixUtils.matrixFromPredictionInput(this.config.getBackground());
 
         // get shapes of input and output data
         int[] shape = MatrixUtils.getShape(this.backgroundData);
@@ -101,24 +87,22 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
         }
 
         // establish background data
-        List<PredictionOutput> modelOut = model.predictAsync(background)
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        this.modelnull = MatrixUtils.matrixFromPredictionOutput(modelOut);
-        this.outputSize = MatrixUtils.getShape(this.modelnull)[1];
+        CompletableFuture<List<PredictionOutput>> modelOut = model.predictAsync(this.config.getBackground());
+        this.modelnull = modelOut.thenApply(MatrixUtils::matrixFromPredictionOutput);
+        this.outputSize = this.modelnull.thenApply(mn -> MatrixUtils.getShape(mn)[1]);
 
         //compute the mean of each column
-        this.fnull = MatrixUtils.sum(
-                MatrixUtils.matrixMultiply(this.modelnull, 1. / this.rows),
-                MatrixUtils.Axis.ROW);
-        this.linkNull = MatrixUtils.rowVector(this.link(this.fnull));
+        this.fnull = this.modelnull.thenApply(mn -> MatrixUtils.sum(
+                MatrixUtils.matrixMultiply(mn, 1. / this.rows),
+                MatrixUtils.Axis.ROW));
+        this.linkNull = this.fnull.thenApply(fn -> MatrixUtils.rowVector(this.link(fn)));
 
         // track number of samples
-
         Optional<Integer> numConfigSamples = config.getNSamples();
         if (numConfigSamples.isPresent()) {
             this.setNumSamples(numConfigSamples.get());
         } else {
-            this.setNumSamples(2048 + (2 * this.cols));///
+            this.setNumSamples(2048 + (2 * this.cols));
         }
 
         // lower number of samples if it's greater than total feature permutation size
@@ -267,39 +251,48 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @return the shap values for this prediction, of shape [n_model_outputs x n_features]
      */
-    private double[][] explain(Prediction prediction) throws InterruptedException, ExecutionException {
+    private CompletableFuture<double[][]> explain(ShapPrediction prediction, PredictionProvider model) {
+        this.initialize(prediction, model);
         this.samplesAdded = new ArrayList<>();
         PredictionInput pi = prediction.getInput();
         PredictionOutput po = prediction.getOutput();
+        CompletableFuture<double[][]> output = this.outputSize.thenApply(x -> new double[x][this.cols]);
+
         if (pi.getFeatures().size() != this.cols) {
             throw new IllegalArgumentException(String.format(
                     "Prediction input feature count (%d) does not match background data feature count (%d)",
                     pi.getFeatures().size(), this.cols));
         }
-        if (po.getOutputs().size() != this.outputSize) {
-            throw new IllegalArgumentException(String.format(
-                    "Prediction output size (%d) does not match background data output size (%d)",
-                    po.getOutputs().size(), this.outputSize));
-        }
+
+        this.outputSize.thenAccept(os -> {
+            if (po.getOutputs().size() != os) {
+                IllegalArgumentException e = new IllegalArgumentException(String.format(
+                        "Prediction output size (%d) does not match background data output size (%d)",
+                        po.getOutputs().size(), os));
+                output.completeExceptionally(e);
+            }
+        });
 
         double[][] poMatrix = MatrixUtils.matrixFromPredictionOutput(po);
 
         //first find varying features
         this.setVaryingFeatureGroups(pi);
 
-        double[][] out = new double[this.outputSize][this.cols];
-
         // if no features vary, then the features do not effect output, and all shap values are zero.
         if (this.numVarying == 0) {
-            return out;
+            return output;
         } else if (this.numVarying == 1)
         // if 1 feature varies, this feature has all the effect
         {
-            double[] diff = MatrixUtils.matrixDifference(poMatrix, this.linkNull)[0];
-            for (int i = 0; i < this.outputSize; i++) {
-                out[i][this.varyingFeatureGroups.get(0)] = diff[i];
-            }
-            return out;
+            CompletableFuture<double[]> diff = this.linkNull.thenApply(ln -> MatrixUtils.matrixDifference(poMatrix, ln)[0]);
+            diff.thenAcceptBoth(this.outputSize, (df, os) -> output
+                    .thenApply(out -> {
+                        for (int i = 0; i < os; i++) {
+                            out[i][this.varyingFeatureGroups.get(0)] = df[i];
+                        }
+                        return out;
+                    }));
+            return output;
         } else
         // if more than 1 feature varies, we need to perform WLR
         {
@@ -319,10 +312,10 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
             this.addNonCompleteSubsets(shapStats, pi);
 
             // run the synthetic data generated through the model
-            double[][] expectations = this.runSyntheticData();
+            CompletableFuture<double[][]> expectations = this.runSyntheticData();
 
             // run the wlr model over the synthetic data results
-            return this.solve(expectations, poMatrix[0]);
+            return this.solveSystem(expectations, poMatrix[0]);
         }
     }
 
@@ -517,66 +510,99 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
      *
      * @return the expectations of the model over the synthetic data, of shape [nsamples x modelOutputSize]
      */
-    private double[][] runSyntheticData() throws InterruptedException, ExecutionException {
-        double[][] expectations = new double[this.samplesAdded.size()][this.outputSize];
-        for (int i = 0; i < this.samplesAdded.size(); i++) {
-            List<PredictionInput> pis = this.samplesAdded.get(i).getSyntheticData();
-            List<PredictionOutput> pos = this.model.predictAsync(pis).get();
 
-            double[][] posMatrix = MatrixUtils.matrixFromPredictionOutput(pos);
-            double[] expectation = MatrixUtils.sum(
-                    MatrixUtils.matrixMultiply(posMatrix, 1. / this.rows),
-                    MatrixUtils.Axis.ROW);
-            expectation = this.link(expectation);
-            expectations[i] = MatrixUtils.matrixDifference(MatrixUtils.rowVector(expectation), this.linkNull)[0];
-        }
-        return expectations;
+    private CompletableFuture<double[][]> runSyntheticData() {
+        return this.linkNull.thenCompose(ln -> this.outputSize.thenCompose(os -> {
+            HashMap<Integer, CompletableFuture<double[]>> expectationSlices = new HashMap<>();
+
+            //in theory all of these can happen in parallel
+            for (int i = 0; i < this.samplesAdded.size(); i++) {
+                List<PredictionInput> pis = this.samplesAdded.get(i).getSyntheticData();
+                expectationSlices.put(i,
+                        this.model.predictAsync(pis)
+                                .thenApply(MatrixUtils::matrixFromPredictionOutput)
+                                .thenApply(posMatrix -> MatrixUtils.sum(
+                                        MatrixUtils.matrixMultiply(posMatrix, 1. / this.rows),
+                                        MatrixUtils.Axis.ROW))
+                                .thenApply(this::link)
+                                .thenApply(x -> MatrixUtils.matrixDifference(MatrixUtils.rowVector(x), ln)[0]));
+            }
+
+            // reduce parallel operations into single array
+            final CompletableFuture<double[][]>[] expectations = new CompletableFuture[] { CompletableFuture.supplyAsync(() -> new double[this.samplesAdded.size()][os]) };
+            expectationSlices.forEach((idx, slice) -> expectations[0] = expectations[0].thenCompose(e -> slice.thenApply(s -> {
+                e[idx] = s;
+                return e;
+            })));
+            return expectations[0];
+        }));
     }
 
     /**
-     * Create a WLR model to explain how the model depends on each particular feature.
+     * Create a WLR model to retrieve the SHAP values for a particular output of the model
+     *
+     * @param expectations: The expectations of each sample
+     * @param output: The index of the particular output
+     * @param poMatrix: The predictionOutputs for this explanation's prediction
+     * @param fnull: The value stored in the CompletableFuture this.fnull
+     * @param dropIdx: The regularization feature to use in the wlr model
+     *
+     * @return the shap values as found by the WLR
+     */
+    private double[] solve(double[][] expectations, int output, double[] poMatrix, double[] fnull, int dropIdx) {
+        double[][] xs = new double[this.samplesAdded.size()][this.cols];
+        double[] ws = new double[this.samplesAdded.size()];
+        double[] ys = new double[this.samplesAdded.size()];
+
+        for (int i = 0; i < this.samplesAdded.size(); i++) {
+            for (int j = 0; j < this.cols; j++) {
+                xs[i][j] = this.samplesAdded.get(i).getMask()[j] ? 1. : 0.;
+            }
+            ys[i] = expectations[i][output];
+            ws[i] = this.samplesAdded.get(i).getWeight();
+        }
+
+        double outputChange = this.link(poMatrix[output]) - this.link(fnull[output]);
+        double[][] dropMask = MatrixUtils.rowVector(MatrixUtils.getCol(xs, dropIdx));
+        double[][] dropEffect = MatrixUtils.matrixMultiply(dropMask, outputChange);
+        double[] adjY = MatrixUtils.matrixDifference(MatrixUtils.rowVector(ys), dropEffect)[0];
+        List<Integer> included = new ArrayList<>();
+        this.varyingFeatureGroups.forEach(v -> {
+            if (v != dropIdx) {
+                included.add(v);
+            }
+        });
+        double[][] includeMask = MatrixUtils.transpose(MatrixUtils.getCols(xs, included));
+        double[][] maskDiff = MatrixUtils.transpose(MatrixUtils.matrixRowDifference(includeMask, dropMask[0]));
+        return this.runWLRR(maskDiff, adjY, ws, outputChange, dropIdx);
+    }
+
+    /**
+     * Run WLRRs in parallel, with each parallel thread computing the shap values for a particular output of the model
      *
      * @param expectations: The expectations of each sample
      * @param poMatrix: The predictionOutputs for this explanation's prediction
      *
      * @return the shap values as found by the WLR
      */
-    private double[][] solve(double[][] expectations, double[] poMatrix) {
-        double[][] shapVals = new double[this.outputSize][this.cols];
-        double[][] xs = new double[this.samplesAdded.size()][this.cols];
-        double[] ws = new double[this.samplesAdded.size()];
-        double[] ys = new double[this.samplesAdded.size()];
+    private CompletableFuture<double[][]> solveSystem(CompletableFuture<double[][]> expectations, double[] poMatrix) {
+        int dropIdx = this.varyingFeatureGroups.get(this.varyingFeatureGroups.size() - 1);
 
-        for (int output = 0; output < this.outputSize; output++) {
-            int dropIdx = this.varyingFeatureGroups.get(this.varyingFeatureGroups.size() - 1);
-
-            for (int i = 0; i < this.samplesAdded.size(); i++) {
-                for (int j = 0; j < this.cols; j++) {
-                    xs[i][j] = this.samplesAdded.get(i).getMask()[j] ? 1. : 0.;
-                }
-                ws[i] = this.samplesAdded.get(i).getWeight();
-                ys[i] = expectations[i][output];
+        return expectations.thenCompose(exps -> this.fnull.thenCompose(fn -> this.outputSize.thenCompose(os -> {
+            HashMap<Integer, CompletableFuture<double[]>> shapSlices = new HashMap<>();
+            for (int output = 0; output < os; output++) {
+                int finalOutput = output;
+                shapSlices.put(output, CompletableFuture.supplyAsync(() -> solve(exps, finalOutput, poMatrix, fn, dropIdx)));
             }
 
-            double outputChange = this.link(poMatrix[output]) - this.link(this.fnull[output]);
-
-            // drop a feature for regularization
-            double[][] dropMask = MatrixUtils.rowVector(MatrixUtils.getCol(xs, dropIdx));
-            double[][] dropEffect = MatrixUtils.matrixMultiply(dropMask, outputChange);
-            double[] adjY = MatrixUtils.matrixDifference(MatrixUtils.rowVector(ys), dropEffect)[0];
-            List<Integer> included = new ArrayList<>();
-            this.varyingFeatureGroups.forEach(v -> {
-                if (v != dropIdx) {
-                    included.add(v);
-                }
-            });
-            double[][] includeMask = MatrixUtils.transpose(MatrixUtils.getCols(xs, included));
-            double[][] maskDiff = MatrixUtils.transpose(MatrixUtils.matrixRowDifference(includeMask, dropMask[0]));
-
-            shapVals[output] = this.runWLRR(maskDiff, adjY, ws, outputChange, dropIdx);
-
-        }
-        return shapVals;
+            // reduce parallel operations into single array
+            final CompletableFuture<double[][]>[] shapVals = new CompletableFuture[] { CompletableFuture.supplyAsync(() -> new double[os][this.cols]) };
+            shapSlices.forEach((idx, slice) -> shapVals[0] = shapVals[0].thenCompose(e -> slice.thenApply(s -> {
+                e[idx] = s;
+                return e;
+            })));
+            return shapVals[0];
+        })));
     }
 
     /**
@@ -609,34 +635,29 @@ public class ShapKernelExplainer implements GlobalExplainer<CompletableFuture<do
     }
 
     /**
-     * Shap from model and metadata. Shap cannot do this, use
+     * Perform SHAP from a model and predictions.
      *
-     * @return IllegalArgumentException
+     * @param prediction: The prediction to be explained
+     * @param model: The model to be explained
+     * @return shap values, double[][] of shape [n_outputs x n_features]
      */
     @Override
-    public CompletableFuture<double[][][]> explainFromMetadata(PredictionProvider model,
-            PredictionProviderMetadata metadata) {
-        throw new IllegalArgumentException("Shap cannot be performed using PredictionProviderMetadata. Please " +
-                "use explainFromPredictions instead.");
+    public CompletableFuture<double[][]> explainAsync(Prediction prediction, PredictionProvider model) {
+        return explainAsync(prediction, model, null);
     }
 
     /**
      * Perform SHAP from a model and predictions.
      *
+     * @param prediction: The prediction to be explained
      * @param model: The model to be explained
-     * @param predictions: An iterable of model predictions
-     * @return IllegalArgumentException
+     * @param intermediateResultsConsumer: Unused
+     *
+     * @return shap values, double[][] of shape [n_outputs x n_features]
      */
     @Override
-    public CompletableFuture<double[][][]> explainFromPredictions(PredictionProvider model,
-            Collection<Prediction> predictions)
-            throws InterruptedException, ExecutionException {
-        double[][][] shapValues = new double[predictions.size()][this.outputSize][this.cols];
-        Iterator<Prediction> predictionIterator = predictions.iterator();
-        for (int i = 0; i < predictions.size(); i++) {
-            shapValues[i] = this.explain(predictionIterator.next());
-        }
-        return CompletableFuture.completedFuture(shapValues);
+    public CompletableFuture<double[][]> explainAsync(Prediction prediction, PredictionProvider model, Consumer<double[][]> intermediateResultsConsumer) {
+        ShapPrediction sPrediction = (ShapPrediction) prediction;
+        return this.explain(sPrediction, model);
     }
-
 }

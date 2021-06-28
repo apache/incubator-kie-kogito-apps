@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.explainability.global.shap;
+package org.kie.kogito.explainability.local.shap;
 
+import org.kie.kogito.explainability.model.PredictionInput;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class ShapConfig {
     public enum LinkType {
@@ -26,6 +30,8 @@ public class ShapConfig {
 
     private final LinkType link;
     private final Integer nSamples;
+    private final Random rn;
+    private List<PredictionInput> background;
 
     /**
      * Create a ShapConfig instance. This sets the global configuration of the SHAP explainer.
@@ -37,9 +43,12 @@ public class ShapConfig {
      *        use log-odds units, use LOGIT
      * @param nSamples: int, the number of data samples to run when computing shap values
      */
-    public ShapConfig(LinkType link, Integer nSamples) {
+    public ShapConfig(LinkType link, List<PredictionInput> background, Random rn, Integer nSamples) {
         this.link = link;
         this.nSamples = nSamples;
+        this.rn = rn;
+        this.background = background;
+
     }
 
     /**
@@ -49,9 +58,11 @@ public class ShapConfig {
      * @param link: enum, either LOGIT or IDENTITY. For models that output probabilities,
      *        use LOGIT to make the explanations use log-odds units. For other models, use IDENTITY
      */
-    public ShapConfig(LinkType link) {
+    public ShapConfig(LinkType link, List<PredictionInput> background, Random rn) {
         this.link = link;
         this.nSamples = null;
+        this.background = background;
+        this.rn = rn;
     }
 
     /**
@@ -60,6 +71,10 @@ public class ShapConfig {
     public LinkType getLink() {
         return this.link;
     }
+
+    public Random getRN() {return this.rn; }
+
+    public List<PredictionInput> getBackground() {return this.background; }
 
     public Optional<Integer> getNSamples() {
         return Optional.ofNullable(this.nSamples);
