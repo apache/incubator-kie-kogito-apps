@@ -20,8 +20,9 @@ abstract class LimeConfigEntity {
     protected Object proposedValue;
     protected String name;
 
-    protected LimeConfigEntity() {
-
+    public LimeConfigEntity() {
+        this.name = "";
+        this.proposedValue = null;
     }
 
     protected LimeConfigEntity(String name, Object proposedValue) {

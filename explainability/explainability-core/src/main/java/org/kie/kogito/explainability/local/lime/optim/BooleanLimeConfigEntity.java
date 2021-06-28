@@ -48,7 +48,7 @@ public class BooleanLimeConfigEntity extends LimeConfigEntity {
 
     @Override
     double asDouble() {
-        return Double.NaN;
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class NumericLimeConfigEntity extends LimeConfigEntity {
 
     @Override
     boolean asBoolean() {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     public NumericLimeConfigEntity(String name, double proposedValue, double rangeMinimum, double rangeMaximum) {
