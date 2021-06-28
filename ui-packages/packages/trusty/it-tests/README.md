@@ -1,6 +1,6 @@
-## Trusty AI - Integration tests
+## Trusty AI Console - Integration tests
 
-This project contains Cypress test suites to verify UI of Trusty AI. 
+This project contains Cypress test suites to verify UI of Trusty AI Console. 
 
 ### Run integration tests with mocked data
 
@@ -33,6 +33,8 @@ Note: also previous versions of `docker` and `docker-compose` might work, but th
 Note: set [Manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/)
 
 #### Perform e2e test suite
+
+NOTE: In case that version of project (in pom.xml) was changed than update the 'VERSION' property in [.env file](docker-compose/.env). This parameter is used by [docker-compose.yml file](docker-compose/docker-compose.yml).
 
 To install dependencies
 ```
