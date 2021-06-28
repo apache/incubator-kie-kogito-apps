@@ -16,7 +16,6 @@
 
 package org.kie.kogito.explainability.local.shap;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -65,14 +64,12 @@ class ShapConfigTest {
     @Test
     void testNullRecovery() {
         ShapConfig skConfig = ShapConfig.builder()
-                .withLink(ShapConfig.LinkType.IDENTITY)
+                .withLink(ShapConfig.LinkType.LOGIT)
                 .withBackground(pis)
                 .build();
         assertEquals(ShapConfig.LinkType.LOGIT, skConfig.getLink());
         assertFalse(skConfig.getNSamples().isPresent());
-        assertSame(rn, skConfig.getRN());
         assertSame(pis, skConfig.getBackground());
-        assertSame(SecureRandom.class, skConfig.getRN().getClass());
         assertSame(ForkJoinPool.commonPool(), skConfig.getExecutor());
         assertFalse(skConfig.getNSamples().isPresent());
     }
