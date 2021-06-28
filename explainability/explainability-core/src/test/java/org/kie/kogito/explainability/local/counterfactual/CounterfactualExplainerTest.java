@@ -786,7 +786,7 @@ class CounterfactualExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
 
-        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.9));
+        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.5));
 
         List<Feature> features = new LinkedList<>();
         List<FeatureDomain> featureBoundaries = new LinkedList<>();
