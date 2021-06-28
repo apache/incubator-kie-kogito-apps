@@ -22,7 +22,7 @@ abstract class LimeConfigEntity {
 
     public LimeConfigEntity() {
         this.name = "";
-        this.proposedValue = null;
+        this.proposedValue = new Object();
     }
 
     protected LimeConfigEntity(String name, Object proposedValue) {
