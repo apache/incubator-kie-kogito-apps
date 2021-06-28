@@ -17,7 +17,7 @@
 import React from 'react';
 
 const RuntimeTools = () => {
-    return (<></>);
-}
+  return <></>;
+};
 
 export default RuntimeTools;

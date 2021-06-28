@@ -19,7 +19,7 @@ import { mount } from 'enzyme';
 import ConsolesLayout from '../ConsolesLayout';
 import ConsolesRoutes from '../../ConsolesRoutes/ConsolesRoutes';
 import { ApolloClient } from 'apollo-client';
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -45,9 +45,9 @@ describe('ConsolesLayout tests', () => {
     };
     const wrapper = mount(
       <MemoryRouter initialEntries={['/']} keyLength={0}>
-      <ConsolesLayout {...props}>
-        <ConsolesRoutes />
-      </ConsolesLayout>
+        <ConsolesLayout {...props}>
+          <ConsolesRoutes />
+        </ConsolesLayout>
       </MemoryRouter>
     );
     expect(wrapper.find('ConsolesLayout')).toMatchSnapshot();

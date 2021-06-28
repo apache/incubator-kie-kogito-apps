@@ -171,7 +171,7 @@ describe('TaskDetailsPage tests', () => {
   it('Empty state', async () => {
     const wrapper = await getTaskDetailsPageWrapper();
     wrapper.update();
-    
+
     expect(wrapper).toMatchSnapshot();
 
     const emptyState = wrapper.find(KogitoEmptyState);

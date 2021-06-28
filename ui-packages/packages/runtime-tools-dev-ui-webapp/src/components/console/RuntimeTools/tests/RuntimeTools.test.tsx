@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-import { TestUserContextImpl } from "@kogito-apps/consoles-common";
-import { mount } from "enzyme";
-import React from "react";
-import { MemoryRouter } from "react-router-dom";
+import { TestUserContextImpl } from '@kogito-apps/consoles-common';
+import { mount } from 'enzyme';
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import RuntimeTools from '../RuntimeTools';
 
 jest.mock('apollo-link-http');
 describe('Runtime Tools tests', () => {
-    it('Snapshot tests with default props', () => {
-        const wrapper = mount(
-            <MemoryRouter initialEntries={['/']} keyLength={0}>
-        <RuntimeTools userContext={new TestUserContextImpl()} dataIndex={'http:localhost:4000'}/>
-        </MemoryRouter>)
+  it('Snapshot tests with default props', () => {
+    const wrapper = mount(
+      <MemoryRouter initialEntries={['/']} keyLength={0}>
+        <RuntimeTools
+          userContext={new TestUserContextImpl()}
+          dataIndex={'http:localhost:4000'}
+        />
+      </MemoryRouter>
+    );
 
-        expect(wrapper).toMatchSnapshot();
-    })
-})
+    expect(wrapper).toMatchSnapshot();
+  });
+});

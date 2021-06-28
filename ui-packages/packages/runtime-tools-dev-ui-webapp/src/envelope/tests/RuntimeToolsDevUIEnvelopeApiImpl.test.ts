@@ -15,46 +15,50 @@
  */
 
 import {
-    MockedEnvelopeBusController,
-    MockedRuntimeToolsDevUIEnvelopeViewApi
-  } from './mocks/Mocks';
-  import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
-  import { RuntimeToolsDevUIChannelApi, RuntimeToolsDevUIEnvelopeApi } from '../../api';
-  import { RuntimeToolsDevUIEnvelopeApiImpl } from '../RuntimeToolsDevUIEnvelopeApiImpl';
-  import { RuntimeToolsDevUIEnvelopeContextType } from '../RuntimeToolsDevUIEnvelopeContext';
+  MockedEnvelopeBusController,
+  MockedRuntimeToolsDevUIEnvelopeViewApi
+} from './mocks/Mocks';
+import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import {
+  RuntimeToolsDevUIChannelApi,
+  RuntimeToolsDevUIEnvelopeApi
+} from '../../api';
+import { RuntimeToolsDevUIEnvelopeApiImpl } from '../RuntimeToolsDevUIEnvelopeApiImpl';
+import { RuntimeToolsDevUIEnvelopeContextType } from '../RuntimeToolsDevUIEnvelopeContext';
 import { RuntimeToolsDevUIEnvelopeViewApi } from '../RuntimeToolsDevUIEnvelopeViewApi';
-  
-  describe('JobsManagementEnvelopeApiImpl tests', () => {
-    it('initialize', () => {
-      const envelopeBusController = new MockedEnvelopeBusController();
-      const view = new MockedRuntimeToolsDevUIEnvelopeViewApi();
-      const args: EnvelopeApiFactoryArgs<
-        RuntimeToolsDevUIEnvelopeApi,
-        RuntimeToolsDevUIChannelApi,
-        RuntimeToolsDevUIEnvelopeViewApi,
-        RuntimeToolsDevUIEnvelopeContextType
-      > = {
-        envelopeBusController,
-        envelopeContext: {} as any,
-        view: () => view
-      };
-  
-      const envelopeApi = new RuntimeToolsDevUIEnvelopeApiImpl(args);
-  
-      envelopeApi.runtimeToolsDevUI_initRequest({
-            envelopeServerId: 'envelopeServerId',
-            origin: 'origin'
-        },
-        {
-            users: [],
-            dataIndexUrl: '',
-            page: ''
-      });
-  
-      expect(envelopeBusController.associate).toHaveBeenCalledWith(
-        'origin',
-        'envelopeServerId'
-      );
-    });
+
+describe('JobsManagementEnvelopeApiImpl tests', () => {
+  it('initialize', () => {
+    const envelopeBusController = new MockedEnvelopeBusController();
+    const view = new MockedRuntimeToolsDevUIEnvelopeViewApi();
+    const args: EnvelopeApiFactoryArgs<
+      RuntimeToolsDevUIEnvelopeApi,
+      RuntimeToolsDevUIChannelApi,
+      RuntimeToolsDevUIEnvelopeViewApi,
+      RuntimeToolsDevUIEnvelopeContextType
+    > = {
+      envelopeBusController,
+      envelopeContext: {} as any,
+      view: () => view
+    };
+
+    const envelopeApi = new RuntimeToolsDevUIEnvelopeApiImpl(args);
+
+    envelopeApi.runtimeToolsDevUI_initRequest(
+      {
+        envelopeServerId: 'envelopeServerId',
+        origin: 'origin'
+      },
+      {
+        users: [],
+        dataIndexUrl: '',
+        page: ''
+      }
+    );
+
+    expect(envelopeBusController.associate).toHaveBeenCalledWith(
+      'origin',
+      'envelopeServerId'
+    );
   });
-  
+});

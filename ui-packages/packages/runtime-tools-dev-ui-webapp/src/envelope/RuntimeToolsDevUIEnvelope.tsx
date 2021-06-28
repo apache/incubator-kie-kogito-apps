@@ -28,7 +28,6 @@ import {
 import ReactDOM from 'react-dom';
 import React from 'react';
 import {
-  //appRenderWithAxiosInterceptorConfig,
   UserContext
 } from '@kogito-apps/consoles-common';
 
@@ -77,7 +76,6 @@ export class RuntimeToolsDevUIEnvelope {
 
     return new Promise<() => RuntimeToolsDevUIEnvelopeViewApi>(res => {
       setTimeout(() => {
-        //appRenderWithAxiosInterceptorConfig((userContext: UserContext) => {
         ReactDOM.render(
           app({
             getCurrentUser: () => {
@@ -89,7 +87,6 @@ export class RuntimeToolsDevUIEnvelope {
             res(() => runtimeToolsDevUIEnvelopeViewRef.current!);
           }
         );
-        //});
       }, 0);
     });
   }

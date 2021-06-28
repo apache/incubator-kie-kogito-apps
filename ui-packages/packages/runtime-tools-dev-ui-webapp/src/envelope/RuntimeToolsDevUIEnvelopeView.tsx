@@ -25,10 +25,10 @@ export interface Props {
   userContext: UserContext;
 }
 
-export const RuntimeToolsDevUIEnvelopeView= React.forwardRef<
+export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
   RuntimeToolsDevUIEnvelopeViewApi,
   Props
-> ((props: Props, forwardingRef) => {
+>((props: Props, forwardingRef) => {
   const [dataIndex, setDataIndex] = React.useState('');
   // @ts-ignore
   const [users, setUsers] = React.useState([]);
@@ -63,7 +63,3 @@ export const RuntimeToolsDevUIEnvelopeView= React.forwardRef<
     </>
   );
 });
-
-// export const RuntimeToolsDevUIEnvelopeView = React.forwardRef(
-//   RuntimeToolsDevUIEnvelopeViewRef
-// );

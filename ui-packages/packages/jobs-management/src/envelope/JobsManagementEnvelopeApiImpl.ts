@@ -42,7 +42,7 @@ export class JobsManagementEnvelopeApiImpl
     this.capturedInitRequestYet = true;
   }
 
-  jobsManagement__init = (association: Association): Promise<void> => {
+  jobsManagement__init = async (association: Association): Promise<void> => {
     this.args.envelopeBusController.associate(
       association.origin,
       association.envelopeServerId

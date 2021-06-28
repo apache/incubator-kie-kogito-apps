@@ -46,7 +46,7 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
     this.capturedInitRequestYet = true;
   }
 
-  taskInbox__init = (
+  taskInbox__init = async (
     association: Association,
     initArgs: TaskInboxInitArgs
   ): Promise<void> => {
