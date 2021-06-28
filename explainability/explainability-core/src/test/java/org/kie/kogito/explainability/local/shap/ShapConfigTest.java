@@ -16,20 +16,22 @@
 
 package org.kie.kogito.explainability.local.shap;
 
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionInput;
-
-import java.util.ArrayList;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ForkJoinPool;
+
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.PredictionInput;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ShapConfigTest {
@@ -43,20 +45,45 @@ class ShapConfigTest {
     // Test that everything recovers as expected
     @Test
     void testRecovery() {
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, pis, rn, 100);
+        ExecutorService executor = ForkJoinPool.commonPool();
+        ShapConfig skConfig = ShapConfig.builder()
+                .withLink(ShapConfig.LinkType.IDENTITY)
+                .withBackground(pis)
+                .withRN(rn)
+                .withExecutor(executor)
+                .withNSamples(100)
+                .build();
         assertEquals(ShapConfig.LinkType.IDENTITY, skConfig.getLink());
         assertTrue(skConfig.getNSamples().isPresent());
         assertEquals(100, skConfig.getNSamples().get());
         assertSame(rn, skConfig.getRN());
+        assertSame(executor, skConfig.getExecutor());
         assertSame(pis, skConfig.getBackground());
     }
 
+    // Test that the default arguments recover as expected
     @Test
     void testNullRecovery() {
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.LOGIT, pis, rn);
+        ShapConfig skConfig = ShapConfig.builder()
+                .withLink(ShapConfig.LinkType.IDENTITY)
+                .withBackground(pis)
+                .build();
         assertEquals(ShapConfig.LinkType.LOGIT, skConfig.getLink());
         assertFalse(skConfig.getNSamples().isPresent());
         assertSame(rn, skConfig.getRN());
         assertSame(pis, skConfig.getBackground());
+        assertSame(SecureRandom.class, skConfig.getRN().getClass());
+        assertSame(ForkJoinPool.commonPool(), skConfig.getExecutor());
+        assertFalse(skConfig.getNSamples().isPresent());
+    }
+
+    // Test that not setting mandatory arguments throws errors
+    @Test
+    void testMandatoryErrors() {
+        ShapConfig.Builder linkNoBG = ShapConfig.builder().withLink(ShapConfig.LinkType.IDENTITY);
+        ShapConfig.Builder bgNoLink = ShapConfig.builder().withBackground(pis);
+        assertThrows(IllegalArgumentException.class, linkNoBG::build);
+        assertThrows(IllegalArgumentException.class, bgNoLink::build);
+
     }
 }

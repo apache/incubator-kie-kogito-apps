@@ -22,7 +22,6 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -36,7 +35,6 @@ import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.ShapPrediction;
-import org.kie.kogito.explainability.utils.DataUtils;
 import org.kie.kogito.explainability.utils.MatrixUtils;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -125,6 +123,8 @@ class ShapKernelExplainerTest {
 
     Random rn = new Random(0);
 
+    ShapConfig.Builder testConfig = ShapConfig.builder().withLink(ShapConfig.LinkType.IDENTITY).withRN(rn);
+
     // test helper functions ===========================================================================================
     // create a list of prediction inputs from double matrix
     private List<PredictionInput> createPIFromMatrix(double[][] m) {
@@ -145,7 +145,7 @@ class ShapKernelExplainerTest {
      * test that the computed shape values match expected shap values
      */
     private void shapTestCase(PredictionProvider model, ShapConfig skConfig,
-                              double[][] toExplainRaw, double[][][] expected)
+            double[][] toExplainRaw, double[][][] expected)
             throws InterruptedException, TimeoutException, ExecutionException {
 
         // establish background data and desired data to explain
@@ -155,20 +155,46 @@ class ShapKernelExplainerTest {
         //initialize explainer
         List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get(5, TimeUnit.SECONDS);
         List<Prediction> predictions = new ArrayList<>();
-        for (int i=0; i<predictionOutputs.size(); i++){
+        for (int i = 0; i < predictionOutputs.size(); i++) {
             predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
         }
 
         // evaluate if the explanations match the expected value
         for (int i = 0; i < toExplain.size(); i++) {
-
             //explanations shape: outputSize x nfeatures
             double[][] explanations = new ShapKernelExplainer().explainAsync(predictions.get(i), model).get(5, TimeUnit.SECONDS);
-
             for (int j = 0; j < explanations.length; j++) {
                 assertArrayEquals(expected[i][j], explanations[j], 1e-6);
             }
+        }
+    }
 
+    /*
+     * given a specific model, config, background, explanations, ske, and expected shap values,
+     * test that the computed shape values match expected shap values
+     */
+    private void shapTestCase(PredictionProvider model, ShapConfig skConfig, ShapKernelExplainer ske,
+            double[][] toExplainRaw, double[][][] expected)
+            throws InterruptedException, TimeoutException, ExecutionException {
+
+        // establish background data and desired data to explain
+
+        List<PredictionInput> toExplain = createPIFromMatrix(toExplainRaw);
+
+        //initialize explainer
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get(5, TimeUnit.SECONDS);
+        List<Prediction> predictions = new ArrayList<>();
+        for (int i = 0; i < predictionOutputs.size(); i++) {
+            predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
+        }
+
+        // evaluate if the explanations match the expected value
+        for (int i = 0; i < toExplain.size(); i++) {
+            //explanations shape: outputSize x nfeatures
+            double[][] explanations = ske.explainAsync(predictions.get(i), model).get(5, TimeUnit.SECONDS);
+            for (int j = 0; j < explanations.length; j++) {
+                assertArrayEquals(expected[i][j], explanations[j], 1e-6);
+            }
         }
     }
 
@@ -178,7 +204,7 @@ class ShapKernelExplainerTest {
     void testNoVarianceOneOutput() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundNoVariance);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn,100);
+        ShapConfig skConfig = testConfig.withBackground(background).withNSamples(100).build();
         shapTestCase(model, skConfig, toExplainZeroVariance, zeroVarianceOneOutputSHAP);
     }
 
@@ -187,7 +213,7 @@ class ShapKernelExplainerTest {
     void testOneVarianceOneOutput() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundNoVariance);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn, 100);
+        ShapConfig skConfig = testConfig.withBackground(background).withNSamples(100).build();
         shapTestCase(model, skConfig, toExplainOneVariance, oneVarianceOneOutputSHAP);
     }
 
@@ -196,7 +222,7 @@ class ShapKernelExplainerTest {
     void testMultiVarianceOneOutput() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundRaw);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn, 35);
+        ShapConfig skConfig = testConfig.withBackground(background).withNSamples(35).build();
         shapTestCase(model, skConfig, toExplainRaw, multiVarianceOneOutputSHAP);
     }
 
@@ -205,7 +231,12 @@ class ShapKernelExplainerTest {
     void testMultiVarianceOneOutputLogit() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundLogit);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.LOGIT, background, rn, 100);
+        ShapConfig skConfig = ShapConfig.builder()
+                .withBackground(background)
+                .withLink(ShapConfig.LinkType.LOGIT)
+                .withNSamples(100)
+                .withRN(rn)
+                .build();
         shapTestCase(model, skConfig, toExplainLogit, logitSHAP);
     }
 
@@ -215,7 +246,7 @@ class ShapKernelExplainerTest {
     void testNoVarianceMultiOutput() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipTwoOutputModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundNoVariance);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn, 100);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
         shapTestCase(model, skConfig, toExplainZeroVariance, zeroVarianceMultiOutputSHAP);
     }
 
@@ -224,7 +255,7 @@ class ShapKernelExplainerTest {
     void testOneVarianceMultiOutput() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipTwoOutputModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundNoVariance);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn, 100);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
         shapTestCase(model, skConfig, toExplainOneVariance, oneVarianceMultiOutputSHAP);
     }
 
@@ -233,7 +264,7 @@ class ShapKernelExplainerTest {
     void testMultiVarianceMultiOutput() throws InterruptedException, TimeoutException, ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipTwoOutputModel(1);
         List<PredictionInput> background = createPIFromMatrix(backgroundRaw);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn,  100);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
         shapTestCase(model, skConfig, toExplainRaw, multiVarianceMultiOutputSHAP);
     }
 
@@ -260,12 +291,12 @@ class ShapKernelExplainerTest {
         List<PredictionInput> toExplain = createPIFromMatrix(toExplainLargeBackground);
 
         PredictionProvider model = TestUtils.getSumSkipModel(1);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
 
         //initialize explainer
         List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
         List<Prediction> predictions = new ArrayList<>();
-        for (int i=0; i<predictionOutputs.size(); i++){
+        for (int i = 0; i < predictionOutputs.size(); i++) {
             predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
         }
 
@@ -279,7 +310,7 @@ class ShapKernelExplainerTest {
     }
 
     @Test
-    void testParallel() throws InterruptedException, TimeoutException, ExecutionException {
+    void testParallel() throws InterruptedException, ExecutionException {
         // establish background data and desired data to explain
         double[][] largeBackground = new double[100][10];
         for (int i = 0; i < 100; i++) {
@@ -300,12 +331,12 @@ class ShapKernelExplainerTest {
         List<PredictionInput> toExplain = createPIFromMatrix(toExplainLargeBackground);
 
         PredictionProvider model = TestUtils.getSumSkipModel(1);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
 
         //initialize explainer
         List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
         List<Prediction> predictions = new ArrayList<>();
-        for (int i=0; i<predictionOutputs.size(); i++){
+        for (int i = 0; i < predictionOutputs.size(); i++) {
             predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
         }
 
@@ -330,22 +361,116 @@ class ShapKernelExplainerTest {
             }
         }
         double[][] toExplainTooSmall = {
-                { 0, 1., -2., 3.5 }
+                { 0, 1., 2., 3., 4. }
         };
 
         List<PredictionInput> background = createPIFromMatrix(tooLargeBackground);
         List<PredictionInput> toExplain = createPIFromMatrix(toExplainTooSmall);
 
         PredictionProvider model = TestUtils.getSumSkipModel(1);
-        ShapConfig skConfig = new ShapConfig(ShapConfig.LinkType.IDENTITY, background, rn);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
 
         //initialize explainer
-        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get(5, TimeUnit.SECONDS);
-        List<Prediction> predictions = DataUtils.getPredictions(toExplain, predictionOutputs);
+        List<PredictionOutput> predictionOutputs = model
+                .predictAsync(toExplain)
+                .get(5, TimeUnit.SECONDS);
+        List<Prediction> predictions = new ArrayList<>();
+        for (int i = 0; i < predictionOutputs.size(); i++) {
+            predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
+        }
 
-        // evaluate if the explanations match the expected value
+        // make sure we get an illegal argument exception because our background is bigger than the point to be explained
         Prediction p = predictions.get(0);
         ShapKernelExplainer ske = new ShapKernelExplainer();
         assertThrows(IllegalArgumentException.class, () -> ske.explainAsync(p, model));
+    }
+
+    // Test cases with prediction size mismatches ========================================================
+    @Test
+    void testPredictionWrongSize() throws InterruptedException, TimeoutException, ExecutionException {
+        // establish background data and desired data to explain
+        double[][] backgroundMat = new double[5][5];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                backgroundMat[i][j] = i / 5. + j;
+            }
+        }
+        double[][] toExplainTooSmall = {
+                { 0, 1., 2., 3., 4. }
+        };
+
+        List<PredictionInput> background = createPIFromMatrix(backgroundMat);
+        List<PredictionInput> toExplain = createPIFromMatrix(toExplainTooSmall);
+
+        PredictionProvider modelForPredictions = TestUtils.getSumSkipTwoOutputModel(1);
+        PredictionProvider modelForShap = TestUtils.getSumSkipModel(1);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
+
+        //initialize explainer
+        List<PredictionOutput> predictionOutputs = modelForPredictions
+                .predictAsync(toExplain)
+                .get(5, TimeUnit.SECONDS);
+        List<Prediction> predictions = new ArrayList<>();
+        for (int i = 0; i < predictionOutputs.size(); i++) {
+            predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
+        }
+
+        // make sure we get an illegal argument exception; our prediction to explain has a different shape t
+        // than the background predictions will
+        Prediction p = predictions.get(0);
+        ShapKernelExplainer ske = new ShapKernelExplainer();
+        assertThrows(ExecutionException.class, () -> ske.explainAsync(p, modelForShap).get());
+    }
+
+    // See if using the same explainer multiple times causes issues ====================================================
+    @Test
+    void testStateless() throws InterruptedException, TimeoutException, ExecutionException {
+        PredictionProvider model = TestUtils.getSumSkipModel(1);
+        ShapKernelExplainer ske = new ShapKernelExplainer();
+
+        ShapConfig skConfig1 = testConfig
+                .withBackground(createPIFromMatrix(backgroundNoVariance))
+                .withNSamples(100)
+                .build();
+        ShapConfig skConfig2 = testConfig.withBackground(createPIFromMatrix(backgroundRaw)).withNSamples(35).build();
+        ShapConfig skConfig3 = ShapConfig.builder()
+                .withBackground(createPIFromMatrix(backgroundLogit))
+                .withLink(ShapConfig.LinkType.LOGIT)
+                .withNSamples(100)
+                .withRN(rn)
+                .build();
+        for (int i = 0; i < 10; i++) {
+            shapTestCase(model, skConfig1, ske, toExplainOneVariance, oneVarianceOneOutputSHAP);
+            shapTestCase(model, skConfig2, ske, toExplainRaw, multiVarianceOneOutputSHAP);
+            shapTestCase(model, skConfig3, ske, toExplainLogit, logitSHAP);
+        }
+    }
+
+    // Test 0 rows of background data ========================================================================
+    @Test
+    void test0Background() throws InterruptedException, TimeoutException, ExecutionException {
+        // establish background data and desired data to explain
+        double[][] toExplainTooSmall = {
+                { 0, 1., 2., 3., 4. }
+        };
+
+        List<PredictionInput> background = new ArrayList<>();
+        List<PredictionInput> toExplain = createPIFromMatrix(toExplainTooSmall);
+
+        PredictionProvider model = TestUtils.getSumSkipModel(1);
+        ShapConfig skConfig = testConfig.withBackground(background).build();
+
+        //initialize explainer
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get(5, TimeUnit.SECONDS);
+        List<Prediction> predictions = new ArrayList<>();
+        for (int i = 0; i < predictionOutputs.size(); i++) {
+            predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
+        }
+
+        // make sure we get an illegal argument exception; our prediction to explain has a different shape t
+        // than the background predictions will
+        Prediction p = predictions.get(0);
+        ShapKernelExplainer ske = new ShapKernelExplainer();
+        assertThrows(IllegalArgumentException.class, () -> ske.explainAsync(p, model).get());
     }
 }
