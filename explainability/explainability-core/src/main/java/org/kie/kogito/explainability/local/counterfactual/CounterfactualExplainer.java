@@ -165,7 +165,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             return new CounterfactualResult(solution.getEntities(),
                     cfOutputs.join(),
                     solution.getScore().isFeasible(),
-                    solution.getSolutionId(),
+                    UUID.randomUUID(),
                     solution.getExecutionId(),
                     sequenceId.incrementAndGet());
         });
