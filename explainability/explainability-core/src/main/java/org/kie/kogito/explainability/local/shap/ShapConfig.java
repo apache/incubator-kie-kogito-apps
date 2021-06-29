@@ -24,6 +24,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.utils.MatrixUtils;
 
 public class ShapConfig {
     public enum LinkType {
@@ -36,6 +37,7 @@ public class ShapConfig {
     private final Random rn;
     private final Executor executor;
     private List<PredictionInput> background;
+    private double[][] backgroundMatrix;
 
     /**
      * Create a ShapConfig instance. This sets the configuration of the SHAP explainer.
@@ -55,7 +57,11 @@ public class ShapConfig {
      */
     protected ShapConfig(LinkType link, List<PredictionInput> background, Random rn, Executor executor, Integer nSamples) {
         this.link = link;
+        if (background.isEmpty()) {
+            throw new IllegalArgumentException("Background data list cannot be empty.");
+        }
         this.background = background;
+        this.backgroundMatrix = MatrixUtils.matrixFromPredictionInput(background);
         this.rn = rn;
         this.executor = executor;
         this.nSamples = nSamples;
@@ -170,6 +176,10 @@ public class ShapConfig {
 
     public Random getRN() {
         return this.rn;
+    }
+
+    public double[][] getBackgroundMatrix() {
+        return this.backgroundMatrix;
     }
 
     public List<PredictionInput> getBackground() {

@@ -16,6 +16,7 @@
 
 package org.kie.kogito.explainability.local.shap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.utils.MatrixUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -40,6 +42,8 @@ class ShapConfigTest {
             FeatureFactory.newNumericalFeature("f", 2.));
     PredictionInput pi = new PredictionInput(fs);
     List<PredictionInput> pis = Arrays.asList(pi, pi);
+    List<PredictionInput> piEmpty = new ArrayList<>();
+    double[][] piMatrix = MatrixUtils.matrixFromPredictionInput(pis);
 
     // Test that everything recovers as expected
     @Test
@@ -58,6 +62,7 @@ class ShapConfigTest {
         assertSame(rn, skConfig.getRN());
         assertSame(executor, skConfig.getExecutor());
         assertSame(pis, skConfig.getBackground());
+        assertTrue(Arrays.deepEquals(piMatrix, skConfig.getBackgroundMatrix()));
     }
 
     // Test that the default arguments recover as expected
@@ -70,6 +75,7 @@ class ShapConfigTest {
         assertEquals(ShapConfig.LinkType.LOGIT, skConfig.getLink());
         assertFalse(skConfig.getNSamples().isPresent());
         assertSame(pis, skConfig.getBackground());
+        assertTrue(Arrays.deepEquals(piMatrix, skConfig.getBackgroundMatrix()));
         assertSame(ForkJoinPool.commonPool(), skConfig.getExecutor());
         assertFalse(skConfig.getNSamples().isPresent());
     }
@@ -81,6 +87,15 @@ class ShapConfigTest {
         ShapConfig.Builder bgNoLink = ShapConfig.builder().withBackground(pis);
         assertThrows(IllegalArgumentException.class, linkNoBG::build);
         assertThrows(IllegalArgumentException.class, bgNoLink::build);
+
+    }
+
+    @Test
+    void testEmptyBackgroundMandatoryErrors() {
+        ShapConfig.Builder emptyBG = ShapConfig.builder()
+                .withLink(ShapConfig.LinkType.IDENTITY)
+                .withBackground(piEmpty);
+        assertThrows(IllegalArgumentException.class, emptyBG::build);
 
     }
 }

@@ -445,32 +445,4 @@ class ShapKernelExplainerTest {
             shapTestCase(model, skConfig3, ske, toExplainLogit, logitSHAP);
         }
     }
-
-    // Test 0 rows of background data ========================================================================
-    @Test
-    void test0Background() throws InterruptedException, TimeoutException, ExecutionException {
-        // establish background data and desired data to explain
-        double[][] toExplainTooSmall = {
-                { 0, 1., 2., 3., 4. }
-        };
-
-        List<PredictionInput> background = new ArrayList<>();
-        List<PredictionInput> toExplain = createPIFromMatrix(toExplainTooSmall);
-
-        PredictionProvider model = TestUtils.getSumSkipModel(1);
-        ShapConfig skConfig = testConfig.withBackground(background).build();
-
-        //initialize explainer
-        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get(5, TimeUnit.SECONDS);
-        List<Prediction> predictions = new ArrayList<>();
-        for (int i = 0; i < predictionOutputs.size(); i++) {
-            predictions.add(new ShapPrediction(toExplain.get(i), predictionOutputs.get(i), skConfig));
-        }
-
-        // make sure we get an illegal argument exception; our prediction to explain has a different shape t
-        // than the background predictions will
-        Prediction p = predictions.get(0);
-        ShapKernelExplainer ske = new ShapKernelExplainer();
-        assertThrows(IllegalArgumentException.class, () -> ske.explainAsync(p, model).get());
-    }
 }

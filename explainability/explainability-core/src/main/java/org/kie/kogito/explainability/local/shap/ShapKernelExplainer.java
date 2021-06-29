@@ -22,10 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -52,82 +49,63 @@ import org.slf4j.LoggerFactory;
  */
 public class ShapKernelExplainer implements LocalExplainer<double[][]> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShapKernelExplainer.class);
-    private ShapConfig.LinkType link;
-    private PredictionProvider model;
-    private Executor executor;
-    private double[][] backgroundData;
-    private CompletableFuture<double[][]> linkNull;
-    private CompletableFuture<double[]> fnull;
-    private int rows;
-    private int cols;
-    private CompletableFuture<Integer> outputSize;
-    private Integer numSamples;
-    private ArrayList<ShapSyntheticDataSample> samplesAdded;
-    private ArrayList<Integer> varyingFeatureGroups;
-    private int numVarying;
-    private HashMap<Integer, Integer> masksUsed;
-    private Random rn;
 
     public ShapKernelExplainer() {
         // nothing to set
     }
 
-    private void initialize(ShapPrediction prediction, PredictionProvider model) {
+    private ShapDataCarrier initialize(ShapPrediction prediction, PredictionProvider model) {
         ShapConfig config = prediction.getConfig();
-        this.model = model;
-        this.executor = config.getExecutor();
-        this.link = config.getLink();
-        this.rn = config.getRN();
-        if (config.getBackground().isEmpty()) {
-            throw new IllegalArgumentException("Background data list cannot be empty.");
-        }
-
-        this.backgroundData = MatrixUtils.matrixFromPredictionInput(config.getBackground());
 
         // get shapes of input and output data
-        int[] shape = MatrixUtils.getShape(this.backgroundData);
-        this.rows = shape[0];
-        this.cols = shape[1];
+        int[] shape = MatrixUtils.getShape(config.getBackgroundMatrix());
+        int rows = shape[0];
+        int cols = shape[1];
 
-        if (this.rows > 100) {
+        if (rows > 100) {
             LOGGER.debug("Warning: Background data sets larger than 100 samples might be slow!");
         }
 
         // establish background data
         CompletableFuture<List<PredictionOutput>> modelOut = model.predictAsync(config.getBackground());
-        CompletableFuture<double[][]> modelnull = modelOut.thenApply(MatrixUtils::matrixFromPredictionOutput);
-        this.outputSize = modelnull.thenApply(mn -> MatrixUtils.getShape(mn)[1]);
+        CompletableFuture<double[][]> modelNull = modelOut.thenApply(MatrixUtils::matrixFromPredictionOutput);
+        CompletableFuture<Integer> outputSize = modelNull.thenApply(mn -> MatrixUtils.getShape(mn)[1]);
 
         //compute the mean of each column
-        this.fnull = modelnull.thenApply(mn -> MatrixUtils.sum(
-                MatrixUtils.matrixMultiply(mn, 1. / this.rows),
+        CompletableFuture<double[]> fnull = modelNull.thenApply(mn -> MatrixUtils.sum(
+                MatrixUtils.matrixMultiply(mn, 1. / rows),
                 MatrixUtils.Axis.ROW));
-        this.linkNull = this.fnull.thenApply(fn -> MatrixUtils.rowVector(this.link(fn)));
+        CompletableFuture<double[][]> linkNull =
+                fnull.thenApply(fn -> MatrixUtils.rowVector(this.link(fn, config.getLink())));
 
         // track number of samples
-        Optional<Integer> numConfigSamples = config.getNSamples();
-        if (numConfigSamples.isPresent()) {
-            this.setNumSamples(numConfigSamples.get());
-        } else {
-            this.setNumSamples(2048 + (2 * this.cols));
-        }
+        int numSamples = config.getNSamples().orElseGet(() -> 2048 + (2 * cols));
 
         // lower number of samples if it's greater than total feature permutation size
-        if (this.cols <= 30) {
-            int maxSamples = (int) Math.pow(2, this.cols) - 2;
-            if (maxSamples < this.numSamples) {
-                this.setNumSamples(maxSamples);
+        if (cols <= 30) {
+            int maxSamples = (int) Math.pow(2, cols) - 2;
+            if (maxSamples < numSamples) {
+                numSamples = maxSamples;
             }
         }
-    }
 
-    /**
-     * Update the number of samples for the explanation
-     *
-     * @param numSamples: The new number of samples
-     */
-    private void setNumSamples(int numSamples) {
-        this.numSamples = numSamples;
+        ShapDataCarrier sdc = new ShapDataCarrier();
+
+        // add data statistics to data carrier
+        sdc.setRows(rows);
+        sdc.setCols(cols);
+        sdc.setOutputSize(outputSize);
+
+        // add model data
+        sdc.setModel(model);
+        sdc.setFnull(fnull);
+        sdc.setLinkNull(linkNull);
+
+        // add shap run configuration data
+        sdc.setNumSamples(numSamples);
+        sdc.setConfig(config);
+
+        return sdc;
     }
 
     /**
@@ -139,8 +117,8 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @return link(x)
      */
-    private double link(double x) {
-        if (this.link.equals(ShapConfig.LinkType.IDENTITY)) {
+    private double link(double x, ShapConfig.LinkType l) {
+        if (l.equals(ShapConfig.LinkType.IDENTITY)) {
             return x;
         } else {
             return Math.log(x / (1 - x));
@@ -154,9 +132,9 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @return link(v)
      */
-    private double[] link(double[] v) {
+    private double[] link(double[] v, ShapConfig.LinkType l) {
         return Arrays.stream(v)
-                .map(this::link)
+                .map(x -> this.link(x, l))
                 .toArray();
     }
 
@@ -166,20 +144,21 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @param input: The PredictionInput to look for variance with, in conjunction with the background data
      */
-    private void setVaryingFeatureGroups(PredictionInput input) {
-        this.varyingFeatureGroups = new ArrayList<>();
+    private void setVaryingFeatureGroups(PredictionInput input, ShapDataCarrier sdc) {
+        List<Integer> varyingFeatureGroups = new ArrayList<>();
         double[] inputVector = MatrixUtils.matrixFromPredictionInput(input)[0];
-        double[] columnFeatures = new double[this.rows + 1];
-        for (int col = 0; col < this.cols; col++) {
-            System.arraycopy(MatrixUtils.getCol(this.backgroundData, col),
-                    0, columnFeatures, 0, this.rows);
-            columnFeatures[this.rows] = inputVector[col];
+        double[] columnFeatures = new double[sdc.getRows() + 1];
+        for (int col = 0; col < sdc.getCols(); col++) {
+            System.arraycopy(MatrixUtils.getCol(sdc.getConfig().getBackgroundMatrix(), col),
+                    0, columnFeatures, 0, sdc.getRows());
+            columnFeatures[sdc.getRows()] = inputVector[col];
             long uniques = Arrays.stream(columnFeatures).distinct().count();
             if (uniques > 1) {
-                this.varyingFeatureGroups.add(col);
+                varyingFeatureGroups.add(col);
             }
         }
-        this.numVarying = this.varyingFeatureGroups.size();
+        sdc.setVaryingFeatureGroups(varyingFeatureGroups);
+        sdc.setNumVarying(varyingFeatureGroups.size());
     }
 
     /**
@@ -211,26 +190,26 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *        need to readjust the given weight after we randomly choose samples.
      */
     private void addSample(PredictionInput pi, List<Integer> combination, double weight,
-            boolean inverse, boolean fixed) {
-        boolean[] mask = new boolean[this.cols];
+            boolean inverse, boolean fixed, ShapDataCarrier sdc) {
+        boolean[] mask = new boolean[sdc.getCols()];
         if (inverse) {
-            for (int i = 0; i < numVarying; i++) {
-                mask[this.varyingFeatureGroups.get(i)] = true;
+            for (int i = 0; i < sdc.getNumVarying(); i++) {
+                mask[sdc.getVaryingFeatureGroups(i)] = true;
             }
         }
 
         for (int i = 0; i < combination.size(); i++) {
-            mask[this.varyingFeatureGroups.get(combination.get(i))] = !inverse;
+            mask[sdc.getVaryingFeatureGroups(combination.get(i))] = !inverse;
         }
         int maskHash = this.hashMask(mask);
-        if (this.masksUsed.containsKey(maskHash)) {
-            ShapSyntheticDataSample previousSample = this.samplesAdded.get(this.masksUsed.get(maskHash));
+        if (sdc.getMasksUsed().containsKey(maskHash)) {
+            ShapSyntheticDataSample previousSample = sdc.getSamplesAdded(sdc.getMasksUsed(maskHash));
             previousSample.incrementWeight();
         } else {
-            ShapSyntheticDataSample sample = new ShapSyntheticDataSample(pi, mask, this.backgroundData, weight, fixed);
+            ShapSyntheticDataSample sample = new ShapSyntheticDataSample(pi, mask, sdc.getConfig().getBackgroundMatrix(), weight, fixed);
             // map index in the samplesAdded list to the unique hash of this mask
-            this.masksUsed.put(maskHash, this.samplesAdded.size());
-            this.samplesAdded.add(sample);
+            sdc.addMask(maskHash, sdc.getSamplesAddedSize());
+            sdc.addSample(sample);
         }
     }
 
@@ -260,42 +239,44 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      * @return the shap values for this prediction, of shape [n_model_outputs x n_features]
      */
     private CompletableFuture<double[][]> explain(ShapPrediction prediction, PredictionProvider model) {
-        this.initialize(prediction, model);
-        this.samplesAdded = new ArrayList<>();
+        ShapDataCarrier sdc = this.initialize(prediction, model);
+        sdc.setSamplesAdded(new ArrayList<>());
         PredictionInput pi = prediction.getInput();
         PredictionOutput po = prediction.getOutput();
 
-        if (pi.getFeatures().size() != this.cols) {
+        if (pi.getFeatures().size() != sdc.getCols()) {
             throw new IllegalArgumentException(String.format(
                     "Prediction input feature count (%d) does not match background data feature count (%d)",
-                    pi.getFeatures().size(), this.cols));
+                    pi.getFeatures().size(), sdc.getCols()));
         }
 
-        CompletableFuture<double[][]> output = this.outputSize.thenApply(os -> {
+        int cols = sdc.getCols();
+        CompletableFuture<double[][]> output = sdc.getOutputSize().thenApply(os -> {
             if (po.getOutputs().size() != os) {
                 throw new IllegalArgumentException(String.format(
                         "Prediction output size (%d) does not match background data output size (%d)",
                         po.getOutputs().size(), os));
             }
-            return new double[os][this.cols];
+            return new double[os][cols];
         });
 
         double[][] poMatrix = MatrixUtils.matrixFromPredictionOutput(po);
 
         //first find varying features
-        this.setVaryingFeatureGroups(pi);
+        this.setVaryingFeatureGroups(pi, sdc);
 
         // if no features vary, then the features do not effect output, and all shap values are zero.
-        if (this.numVarying == 0) {
+        if (sdc.getNumVarying() == 0) {
             return output;
-        } else if (this.numVarying == 1)
+        } else if (sdc.getNumVarying() == 1)
         // if 1 feature varies, this feature has all the effect
         {
-            CompletableFuture<double[]> diff = this.linkNull.thenApply(ln -> MatrixUtils.matrixDifference(poMatrix, ln)[0]);
-            return output.thenCompose(o -> diff.thenCombine(this.outputSize, (df, os) -> {
-                double[][] out = new double[os][this.cols];
+            CompletableFuture<double[]> diff = sdc.getLinkNull()
+                    .thenApply(ln -> MatrixUtils.matrixDifference(poMatrix, ln)[0]);
+            return output.thenCompose(o -> diff.thenCombine(sdc.getOutputSize(), (df, os) -> {
+                double[][] out = new double[os][cols];
                 for (int i = 0; i < os; i++) {
-                    out[i][this.varyingFeatureGroups.get(0)] = df[i];
+                    out[i][sdc.getVaryingFeatureGroups(0)] = df[i];
                 }
                 return out;
             }));
@@ -303,25 +284,25 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
         // if more than 1 feature varies, we need to perform WLR
         {
             // establish sizes of feature permutations (called subsets)
-            ShapStatistics shapStats = this.computeSubsetStatistics();
+            ShapStatistics shapStats = this.computeSubsetStatistics(sdc);
 
             // weight each subset by number of features
-            this.initializeWeights(shapStats);
+            this.initializeWeights(shapStats, sdc);
 
             // add all fully enumerated subsets
-            this.addCompleteSubsets(shapStats, pi);
+            this.addCompleteSubsets(shapStats, pi, sdc);
 
             // renormalize weights after full subsets have been added
             this.renormalizeWeights(shapStats);
 
             // sample non-fully enumerated subsets
-            this.addNonCompleteSubsets(shapStats, pi);
+            this.addNonCompleteSubsets(shapStats, pi, sdc);
 
             // run the synthetic data generated through the model
-            CompletableFuture<double[][]> expectations = this.runSyntheticData();
+            CompletableFuture<double[][]> expectations = this.runSyntheticData(sdc);
 
             // run the wlr model over the synthetic data results
-            return output.thenCompose(o -> this.solveSystem(expectations, poMatrix[0]));
+            return output.thenCompose(o -> this.solveSystem(expectations, poMatrix[0], sdc));
         }
     }
 
@@ -330,13 +311,13 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @return ShapStatics object
      */
-    private ShapStatistics computeSubsetStatistics() {
+    private ShapStatistics computeSubsetStatistics(ShapDataCarrier sdc) {
         // the size of the range (0, numVarying//2) is the number of possible feature permutations
         // above numVarying//2 all sets are complements of earlier sets
-        int numSubsetSizes = (int) Math.ceil((this.numVarying - 1) / 2.);
+        int numSubsetSizes = (int) Math.ceil((sdc.getNumVarying() - 1) / 2.);
 
         // how many of those subsets have a complement set? If numVarying is even, all. If odd, all but the "middle" set
-        int largestPairedSubsetSize = numVarying % 2 == 1 ? numSubsetSizes : numSubsetSizes - 1;
+        int largestPairedSubsetSize = sdc.getNumVarying() % 2 == 1 ? numSubsetSizes : numSubsetSizes - 1;
 
         // compute the number of subsets at each size
         // this can be a potentially colossal number.
@@ -344,13 +325,13 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
         int[] numSubsetsAtSize = new int[numSubsetSizes + 1];
         for (int i = 1; i < numSubsetSizes + 1; i++) {
             try {
-                numSubsetsAtSize[i] = (int) CombinatoricsUtils.binomialCoefficient(this.numVarying, i);
+                numSubsetsAtSize[i] = (int) CombinatoricsUtils.binomialCoefficient(sdc.getNumVarying(), i);
             } catch (MathArithmeticException e) {
-                numSubsetsAtSize[i] = this.numSamples * this.numSamples;
+                numSubsetsAtSize[i] = sdc.getNumSamples() * sdc.getNumSamples();
             }
         }
 
-        int numSamplesRemaining = this.numSamples;
+        int numSamplesRemaining = sdc.getNumSamples();
         return new ShapStatistics(numSubsetSizes, largestPairedSubsetSize, numSubsetsAtSize, numSamplesRemaining);
     }
 
@@ -360,11 +341,11 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @param shapStats: The ShapStatistics object for this explanation
      */
-    private void initializeWeights(ShapStatistics shapStats) {
+    private void initializeWeights(ShapStatistics shapStats, ShapDataCarrier sdc) {
         // compute the weighting for a subset of a particular size
         double[] rawWeights = new double[shapStats.getNumSubsetSizes() + 1];
         for (int subsetSize = 1; subsetSize <= shapStats.getNumSubsetSizes(); subsetSize++) {
-            double weight = (this.numVarying - 1.) / (subsetSize * (this.numVarying - subsetSize));
+            double weight = (sdc.getNumVarying() - 1.) / (subsetSize * (sdc.getNumVarying() - subsetSize));
             // the inverse subset has the same weight
             if (subsetSize <= shapStats.getLargestPairedSubsetSize()) {
                 weight *= 2;
@@ -383,8 +364,8 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      * @param shapStats: The ShapStatistics object for this explanation
      * @param pi: The PredictionInput for this explanation
      */
-    private void addCompleteSubsets(ShapStatistics shapStats, PredictionInput pi) {
-        this.masksUsed = new HashMap<>();
+    private void addCompleteSubsets(ShapStatistics shapStats, PredictionInput pi, ShapDataCarrier sdc) {
+        sdc.setMasksUsed(new HashMap<>());
 
         // fill out all subsets that can be completely filled
         for (int subsetSize = 1; subsetSize < shapStats.getNumSubsetSizes() + 1; subsetSize++) {
@@ -402,13 +383,13 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
                 remainingWeights[subsetSize] = 0;
                 shapStats.setRemainingWeights(normalizeWeightVector(remainingWeights));
 
-                Iterator<int[]> combinations = CombinatoricsUtils.combinationsIterator(this.numVarying, subsetSize);
+                Iterator<int[]> combinations = CombinatoricsUtils.combinationsIterator(sdc.getNumVarying(), subsetSize);
                 double individualWeight = shapStats.getWeightOfSubsetSize()[subsetSize] / numSubsets;
                 while (combinations.hasNext()) {
                     List<Integer> combination = Arrays.stream(combinations.next()).boxed().collect(Collectors.toList());
-                    addSample(pi, combination, individualWeight, false, true);
+                    addSample(pi, combination, individualWeight, false, true, sdc);
                     if (subsetSize <= shapStats.getLargestPairedSubsetSize()) {
-                        addSample(pi, combination, individualWeight, true, true);
+                        addSample(pi, combination, individualWeight, true, true, sdc);
                     }
                 }
             } else {
@@ -444,7 +425,7 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      * @param shapStats: The ShapStatistics object for this explanation
      * @param pi: The PredictionInput for this explanation
      */
-    private void addNonCompleteSubsets(ShapStatistics shapStats, PredictionInput pi) {
+    private void addNonCompleteSubsets(ShapStatistics shapStats, PredictionInput pi, ShapDataCarrier sdc) {
         if (shapStats.getNumFullSubsets() < shapStats.getNumSubsetSizes()) {
             // draw a bunch of random samples from remaining subsets
             List<Integer> subsetSizesRemaining = IntStream
@@ -457,8 +438,9 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
                     .collect(Collectors.toList());
 
             RandomChoice<Integer> subsetSampler = new RandomChoice<>(subsetSizesRemaining, subsetSizeWeights);
-            List<Integer> sizeSamples = subsetSampler.sample(shapStats.getNumSamplesRemaining() * 4, this.rn);
-            List<Integer> maskSizes = IntStream.range(0, this.numVarying).boxed().collect(Collectors.toList());
+            List<Integer> sizeSamples = subsetSampler.sample(shapStats.getNumSamplesRemaining() * 4,
+                    sdc.getConfig().getRN());
+            List<Integer> maskSizes = IntStream.range(0, sdc.getNumVarying()).boxed().collect(Collectors.toList());
 
             int sampleIdx = 0;
             while (shapStats.getNumSamplesRemaining() > 0) {
@@ -466,17 +448,17 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
                 sampleIdx += 1;
                 Collections.shuffle(maskSizes);
                 List<Integer> maskIdxs = maskSizes.subList(0, subsetSize);
-                this.addSample(pi, maskIdxs, 1., false, false);
+                this.addSample(pi, maskIdxs, 1., false, false, sdc);
                 shapStats.decreaseNumSamplesRemainingBy(1);
 
                 // add compliment if possible
                 if (shapStats.getNumSamplesRemaining() > 0 && subsetSize <= shapStats.getLargestPairedSubsetSize()) {
-                    this.addSample(pi, maskIdxs, 1., true, false);
+                    this.addSample(pi, maskIdxs, 1., true, false, sdc);
                     shapStats.decreaseNumSamplesRemainingBy(1);
                 }
             }
 
-            this.normalizeSampleWeights(shapStats);
+            this.normalizeSampleWeights(shapStats, sdc);
         }
     }
 
@@ -488,21 +470,21 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @param shapStats: The ShapStatistics object for this explanation
      */
-    private void normalizeSampleWeights(ShapStatistics shapStats) {
+    private void normalizeSampleWeights(ShapStatistics shapStats, ShapDataCarrier sdc) {
         double nonFullWeight = 0;
         for (int i = shapStats.getNumFullSubsets() + 1; i < shapStats.getNumSubsetSizes() + 1; i++) {
             nonFullWeight += shapStats.getWeightOfSubsetSize()[i];
         }
 
         double nonFixedWeight = 0.;
-        for (int i = 0; i < this.samplesAdded.size(); i++) {
-            if (!this.samplesAdded.get(i).isFixed()) {
-                nonFixedWeight += this.samplesAdded.get(i).getWeight();
+        for (int i = 0; i < sdc.getSamplesAddedSize(); i++) {
+            if (!sdc.getSamplesAdded(i).isFixed()) {
+                nonFixedWeight += sdc.getSamplesAdded(i).getWeight();
             }
         }
 
-        for (int i = 0; i < this.samplesAdded.size(); i++) {
-            ShapSyntheticDataSample sample = this.samplesAdded.get(i);
+        for (int i = 0; i < sdc.getSamplesAddedSize(); i++) {
+            ShapSyntheticDataSample sample = sdc.getSamplesAdded(i);
             if (!sample.isFixed() && nonFixedWeight != 0) {
                 sample.setWeight(sample.getWeight() * nonFullWeight / nonFixedWeight);
             }
@@ -517,26 +499,27 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      * @return the expectations of the model over the synthetic data, of shape [nsamples x modelOutputSize]
      */
 
-    private CompletableFuture<double[][]> runSyntheticData() {
-        return this.linkNull.thenCompose(ln -> this.outputSize.thenCompose(os -> {
+    private CompletableFuture<double[][]> runSyntheticData(ShapDataCarrier sdc) {
+        return sdc.getLinkNull().thenCompose(ln -> sdc.getOutputSize().thenCompose(os -> {
             HashMap<Integer, CompletableFuture<double[]>> expectationSlices = new HashMap<>();
 
             //in theory all of these can happen in parallel
-            for (int i = 0; i < this.samplesAdded.size(); i++) {
-                List<PredictionInput> pis = this.samplesAdded.get(i).getSyntheticData();
+            for (int i = 0; i < sdc.getSamplesAddedSize(); i++) {
+                List<PredictionInput> pis = sdc.getSamplesAdded(i).getSyntheticData();
                 expectationSlices.put(i,
-                        this.model.predictAsync(pis)
+                        sdc.getModel().predictAsync(pis)
                                 .thenApply(MatrixUtils::matrixFromPredictionOutput)
                                 .thenApply(posMatrix -> MatrixUtils.sum(
-                                        MatrixUtils.matrixMultiply(posMatrix, 1. / this.rows),
+                                        MatrixUtils.matrixMultiply(posMatrix, 1. / sdc.getRows()),
                                         MatrixUtils.Axis.ROW))
-                                .thenApply(this::link)
+                                .thenApply(x -> this.link(x, sdc.getConfig().getLink()))
                                 .thenApply(x -> MatrixUtils.matrixDifference(MatrixUtils.rowVector(x), ln)[0]));
             }
 
             // reduce parallel operations into single array
             final CompletableFuture<double[][]>[] expectations = new CompletableFuture[] {
-                    CompletableFuture.supplyAsync(() -> new double[this.samplesAdded.size()][os], this.executor) };
+                    CompletableFuture.supplyAsync(() -> new double[sdc.getSamplesAddedSize()][os],
+                            sdc.getConfig().getExecutor()) };
             expectationSlices.forEach((idx, slice) -> expectations[0] = expectations[0].thenCompose(e -> slice.thenApply(s -> {
                 e[idx] = s;
                 return e;
@@ -556,32 +539,34 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @return the shap values as found by the WLR
      */
-    private double[] solve(double[][] expectations, int output, double[] poMatrix, double[] fnull, int dropIdx) {
-        double[][] xs = new double[this.samplesAdded.size()][this.cols];
-        double[] ws = new double[this.samplesAdded.size()];
-        double[] ys = new double[this.samplesAdded.size()];
+    private double[] solve(double[][] expectations, int output, double[] poMatrix, double[] fnull,
+            int dropIdx, ShapDataCarrier sdc) {
+        double[][] xs = new double[sdc.getSamplesAddedSize()][sdc.getCols()];
+        double[] ws = new double[sdc.getSamplesAddedSize()];
+        double[] ys = new double[sdc.getSamplesAddedSize()];
 
-        for (int i = 0; i < this.samplesAdded.size(); i++) {
-            for (int j = 0; j < this.cols; j++) {
-                xs[i][j] = this.samplesAdded.get(i).getMask()[j] ? 1. : 0.;
+        for (int i = 0; i < sdc.getSamplesAddedSize(); i++) {
+            for (int j = 0; j < sdc.getCols(); j++) {
+                xs[i][j] = sdc.getSamplesAdded(i).getMask()[j] ? 1. : 0.;
             }
             ys[i] = expectations[i][output];
-            ws[i] = this.samplesAdded.get(i).getWeight();
+            ws[i] = sdc.getSamplesAdded(i).getWeight();
         }
 
-        double outputChange = this.link(poMatrix[output]) - this.link(fnull[output]);
+        ShapConfig.LinkType l = sdc.getConfig().getLink();
+        double outputChange = this.link(poMatrix[output], l) - this.link(fnull[output], l);
         double[][] dropMask = MatrixUtils.rowVector(MatrixUtils.getCol(xs, dropIdx));
         double[][] dropEffect = MatrixUtils.matrixMultiply(dropMask, outputChange);
         double[] adjY = MatrixUtils.matrixDifference(MatrixUtils.rowVector(ys), dropEffect)[0];
         List<Integer> included = new ArrayList<>();
-        this.varyingFeatureGroups.forEach(v -> {
+        sdc.getVaryingFeatureGroups().forEach(v -> {
             if (v != dropIdx) {
                 included.add(v);
             }
         });
         double[][] includeMask = MatrixUtils.transpose(MatrixUtils.getCols(xs, included));
         double[][] maskDiff = MatrixUtils.transpose(MatrixUtils.matrixRowDifference(includeMask, dropMask[0]));
-        return this.runWLRR(maskDiff, adjY, ws, outputChange, dropIdx);
+        return this.runWLRR(maskDiff, adjY, ws, outputChange, dropIdx, sdc);
     }
 
     /**
@@ -592,21 +577,22 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      *
      * @return the shap values as found by the WLR
      */
-    private CompletableFuture<double[][]> solveSystem(CompletableFuture<double[][]> expectations, double[] poMatrix) {
-        int dropIdx = this.varyingFeatureGroups.get(this.varyingFeatureGroups.size() - 1);
+    private CompletableFuture<double[][]> solveSystem(CompletableFuture<double[][]> expectations, double[] poMatrix,
+            ShapDataCarrier sdc) {
+        int dropIdx = sdc.getVaryingFeatureGroups(sdc.getVaryingFeatureGroups().size() - 1);
 
-        return expectations.thenCompose(exps -> this.fnull.thenCompose(fn -> this.outputSize.thenCompose(os -> {
+        return expectations.thenCompose(exps -> sdc.getFnull().thenCompose(fn -> sdc.getOutputSize().thenCompose(os -> {
             HashMap<Integer, CompletableFuture<double[]>> shapSlices = new HashMap<>();
             for (int output = 0; output < os; output++) {
                 int finalOutput = output;
                 shapSlices.put(output, CompletableFuture.supplyAsync(
-                        () -> solve(exps, finalOutput, poMatrix, fn, dropIdx),
-                        this.executor));
+                        () -> solve(exps, finalOutput, poMatrix, fn, dropIdx, sdc),
+                        sdc.getConfig().getExecutor()));
             }
 
             // reduce parallel operations into single array
             final CompletableFuture<double[][]>[] shapVals = new CompletableFuture[] {
-                    CompletableFuture.supplyAsync(() -> new double[os][this.cols], this.executor) };
+                    CompletableFuture.supplyAsync(() -> new double[os][sdc.getCols()], sdc.getConfig().getExecutor()) };
             shapSlices.forEach((idx, slice) -> shapVals[0] = shapVals[0].thenCompose(e -> slice.thenApply(s -> {
                 e[idx] = s;
                 return e;
@@ -627,14 +613,15 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
      * @return the shap values as found by the WLR
      */
     // run the WLRR for a single output
-    private double[] runWLRR(double[][] maskDiff, double[] adjY, double[] ws, double outputChange, int dropIdx) {
+    private double[] runWLRR(double[][] maskDiff, double[] adjY, double[] ws, double outputChange,
+            int dropIdx, ShapDataCarrier sdc) {
         WeightedLinearRegressionResults wlrr = WeightedLinearRegression.fit(maskDiff, adjY,
-                ws, false, this.rn);
+                ws, false, sdc.getConfig().getRN());
         double[] coeffs = wlrr.getCoefficients();
         int usedCoefs = 0;
-        double[] shapSlice = new double[this.cols];
-        for (int i = 0; i < this.varyingFeatureGroups.size(); i++) {
-            int idx = this.varyingFeatureGroups.get(i);
+        double[] shapSlice = new double[sdc.getCols()];
+        for (int i = 0; i < sdc.getVaryingFeatureGroups().size(); i++) {
+            int idx = sdc.getVaryingFeatureGroups(i);
             if (idx != dropIdx) {
                 shapSlice[idx] = coeffs[usedCoefs];
                 usedCoefs += 1;
