@@ -94,6 +94,15 @@ public class LimeConfigOptimizer {
         return this;
     }
 
+    public LimeConfigOptimizer withWeightedStability(double negative, double positive) {
+        if ((negative + positive) != 1) {
+            throw new IllegalArgumentException("negative and positive weights must sum up to 1");
+        }
+        this.scoreCalculator = new LimeStabilityScoreCalculator(BigDecimal.valueOf(negative),
+                BigDecimal.valueOf(positive));
+        return this;
+    }
+
     public LimeConfig optimize(LimeConfig config, List<Prediction> predictions, PredictionProvider model) {
         List<LimeConfigEntity> entities = new ArrayList<>();
         if (samplingEntities) {

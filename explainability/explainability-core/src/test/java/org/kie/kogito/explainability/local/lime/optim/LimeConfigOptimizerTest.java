@@ -74,6 +74,17 @@ class LimeConfigOptimizerTest {
         assertThrows(AssertionError.class, () -> assertConfigOptimized(limeConfigOptimizer));
     }
 
+    @Test
+    void testWeightedStabilityOptimization() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.3, 0.7);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testWeightedStabilityWrongParamsOptimization() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> new LimeConfigOptimizer().withWeightedStability(0.8, 0.7));
+    }
+
     private void assertConfigOptimized(LimeConfigOptimizer limeConfigOptimizer) throws InterruptedException, java.util.concurrent.ExecutionException {
         PredictionProvider model = TestUtils.getSumSkipModel(1);
         Random random = new Random();
