@@ -51,12 +51,8 @@ export const EmbeddedTaskForm = React.forwardRef<
         },
         container: container(),
         bus: {
-          postMessage<D, Type>(
-            message: EnvelopeBusMessage<D, Type>,
-            targetOrigin?: string,
-            transfer?: any
-          ) {
-            window.parent.postMessage(message, '*', transfer);
+          postMessage(message, targetOrigin, transfer) {
+            window.postMessage(message, '*', transfer);
           }
         }
       });

@@ -48,12 +48,7 @@ const ProcessListPage: React.FC<RouteComponentProps<
 
   return (
     <React.Fragment>
-      <PageSectionHeader
-        titleText="Process Instances"
-        breadcrumbText={['Home', 'Processes']}
-        breadcrumbPath={['/']}
-        ouiaId={props.ouiaId}
-      />
+      <PageSectionHeader titleText="Process Instances" ouiaId={props.ouiaId} />
       <PageSection
         {...componentOuiaProps(
           props.ouiaId,

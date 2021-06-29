@@ -56,7 +56,7 @@ const TaskFormContainer: React.FC<Props & OUIAProps> = ({
           return gatewayApi.getTaskFormSchema(userTask);
         }
       }}
-      targetOrigin={window.location.origin}
+      targetOrigin={'*'}
     />
   );
 };

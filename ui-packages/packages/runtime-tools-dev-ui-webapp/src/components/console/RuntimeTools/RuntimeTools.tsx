@@ -33,9 +33,10 @@ import ReactDOM from 'react-dom';
 interface IOwnProps {
   users: User[];
   dataIndex: string;
+  navigate: string;
 }
 
-const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex }) => {
+const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex, navigate }) => {
   const httpLink = new HttpLink({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -77,7 +78,7 @@ const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex }) => {
 
   return (
     <ConsolesLayout apolloClient={client} users={users}>
-      <ConsolesRoutes />
+      <ConsolesRoutes navigate={navigate} />
     </ConsolesLayout>
   );
 };

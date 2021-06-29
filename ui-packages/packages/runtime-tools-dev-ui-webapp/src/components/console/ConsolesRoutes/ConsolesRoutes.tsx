@@ -22,14 +22,14 @@ import ProcessDetailsPage from '../../pages/ProcessDetailsPage/ProcessDetailsPag
 import TaskInboxPage from '../../pages/TaskInboxPage/TaskInboxPage';
 import TaskDetailsPage from '../../pages/TaskDetailsPage/TaskDetailsPage';
 
-const ConsolesRoutes: React.FC = () => {
+interface IOwnProps {
+  navigate: string;
+}
+
+const ConsolesRoutes: React.FC<IOwnProps> = ({ navigate }) => {
   return (
     <Switch>
-      <Route
-        exact
-        path="/"
-        render={() => <Redirect to="/ProcessInstances" />}
-      />
+      <Route exact path="/" render={() => <Redirect to={`/${navigate}`} />} />
       <Route exact path="/ProcessInstances" component={ProcessListPage} />
       <Route exact path="/Process/:instanceID" component={ProcessDetailsPage} />
       <Route exact path="/JobsManagement" component={JobsManagementPage} />

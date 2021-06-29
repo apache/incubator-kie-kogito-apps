@@ -106,8 +106,6 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
     }
   }, [processId]);
 
-  const processName = processInstance ? processInstance.processName : '';
-
   const renderItems = () => {
     if (!isLoading) {
       return (
@@ -140,14 +138,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
 
   return (
     <React.Fragment>
-      <PageSectionHeader
-        titleText="Process Details"
-        breadcrumbText={['Home', 'Processes', processName]}
-        breadcrumbPath={[
-          '/',
-          { pathname: '/ProcessInstances', state: { ...props.location.state } }
-        ]}
-      />
+      <PageSectionHeader titleText="Process Details" ouiaId={props.ouiaId} />
       <PageSection>{renderItems()}</PageSection>
     </React.Fragment>
   );

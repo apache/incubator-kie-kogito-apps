@@ -25,10 +25,8 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
   RuntimeToolsDevUIEnvelopeViewApi
 >((props, forwardingRef) => {
   const [dataIndex, setDataIndex] = React.useState('');
-  // @ts-ignore
   const [DevUiUsers, setDevUiUsers] = React.useState<User[]>([]);
-
-  //const history = useHistory();
+  const [navigate, setNavigate] = React.useState<string>('');
 
   useImperativeHandle(
     forwardingRef,
@@ -38,12 +36,10 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
           setDataIndex(dataIndexUrl);
         },
         setUsers: users => {
-          console.log('setUsers: ' + users);
           setDevUiUsers(users);
         },
         navigateTo: page => {
-          console.log('navigateTo: ' + page);
-          //history.push('/' + page);
+          setNavigate(page);
         }
       };
     },
@@ -52,8 +48,12 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
 
   return (
     <>
-      {dataIndex.length > 0 && (
-        <RuntimeTools users={DevUiUsers} dataIndex={dataIndex} />
+      {dataIndex.length > 0 && navigate.length > 0 && (
+        <RuntimeTools
+          users={DevUiUsers}
+          dataIndex={dataIndex}
+          navigate={navigate}
+        />
       )}
     </>
   );

@@ -28,6 +28,7 @@ import { TaskFormEnvelopeContext } from './TaskFormEnvelopeContext';
  * Implementation of the TaskFormEnvelopeApi
  */
 export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
+  private capturedInitRequestYet = false;
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
       TaskFormEnvelopeApi,
@@ -37,6 +38,14 @@ export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
     >
   ) {}
 
+  private hasCapturedInitRequestYet() {
+    return this.capturedInitRequestYet;
+  }
+
+  private ackCapturedInitRequest() {
+    this.capturedInitRequestYet = true;
+  }
+
   taskForm__init = (
     association: Association,
     initArgs: TaskFormInitArgs
@@ -45,6 +54,12 @@ export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
       association.origin,
       association.envelopeServerId
     );
+
+    if (this.hasCapturedInitRequestYet()) {
+      return;
+    }
+
+    this.ackCapturedInitRequest();
     this.args.view().initialize(initArgs.userTask);
     return Promise.resolve();
   };

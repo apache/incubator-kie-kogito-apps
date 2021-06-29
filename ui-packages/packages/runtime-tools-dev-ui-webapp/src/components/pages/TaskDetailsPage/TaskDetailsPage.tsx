@@ -15,10 +15,8 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import {
-  Breadcrumb,
-  BreadcrumbItem,
   Bullseye,
   Button,
   Card,
@@ -247,19 +245,6 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
           ouiaSafe
         )}
       >
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <Link
-              to={'/'}
-              onClick={() => {
-                taskInboxGatewayApi.clearOpenTask();
-              }}
-            >
-              Task Inbox
-            </Link>
-          </BreadcrumbItem>
-          <BreadcrumbItem>{userTask.referenceName}</BreadcrumbItem>
-        </Breadcrumb>
         <Flex justifyContent={{ default: 'justifyContentSpaceBetween' }}>
           <FlexItem>
             <PageTitle
