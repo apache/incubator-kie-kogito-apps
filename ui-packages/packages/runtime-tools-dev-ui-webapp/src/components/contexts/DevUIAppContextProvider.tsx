@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-export interface RuntimeToolsDevUIEnvelopeApi {
-  runtimeToolsDevUI_initRequest(
-    association: Association,
-    initArgs: RuntimeToolsDevUIInitArgs
-  ): Promise<void>;
-}
+import React from 'react';
+import { User } from '@kogito-apps/consoles-common';
+import RuntimeToolsDevUIAppContext, {
+  DevUIAppContextImpl
+} from './DevUIAppContext';
 
-export interface Association {
-  origin: string;
-  envelopeServerId: string;
-}
-
-export interface User {
-  id: string;
-  groups: string[];
-}
-
-export interface RuntimeToolsDevUIInitArgs {
+interface IOwnProps {
   users: User[];
-  dataIndexUrl: string;
-  page: string;
 }
+
+const DevUIAppContextProvider: React.FC<IOwnProps> = ({ users, children }) => {
+  return (
+    <RuntimeToolsDevUIAppContext.Provider
+      value={new DevUIAppContextImpl(users)}
+    >
+      {children}
+    </RuntimeToolsDevUIAppContext.Provider>
+  );
+};
+
+export default DevUIAppContextProvider;

@@ -67,5 +67,6 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
         initArgs.allTaskStates,
         initArgs.activeTaskStates
       );
+    return Promise.resolve();
   };
 }

@@ -54,5 +54,6 @@ export class JobsManagementEnvelopeApiImpl
 
     this.ackCapturedInitRequest();
     this.args.view().initialize();
+    return Promise.resolve();
   };
 }

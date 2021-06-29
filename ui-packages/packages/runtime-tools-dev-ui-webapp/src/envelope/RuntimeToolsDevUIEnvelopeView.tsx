@@ -19,19 +19,14 @@ import '@patternfly/patternfly/patternfly.css';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
 import { useImperativeHandle } from 'react';
 import RuntimeTools from '../components/console/RuntimeTools/RuntimeTools';
-import { UserContext } from '@kogito-apps/consoles-common';
-
-export interface Props {
-  userContext: UserContext;
-}
+import { User } from '@kogito-apps/consoles-common';
 
 export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
-  RuntimeToolsDevUIEnvelopeViewApi,
-  Props
->((props: Props, forwardingRef) => {
+  RuntimeToolsDevUIEnvelopeViewApi
+>((props, forwardingRef) => {
   const [dataIndex, setDataIndex] = React.useState('');
   // @ts-ignore
-  const [users, setUsers] = React.useState([]);
+  const [DevUiUsers, setDevUiUsers] = React.useState<User[]>([]);
 
   //const history = useHistory();
 
@@ -44,7 +39,7 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
         },
         setUsers: users => {
           console.log('setUsers: ' + users);
-          setUsers(users);
+          setDevUiUsers(users);
         },
         navigateTo: page => {
           console.log('navigateTo: ' + page);
@@ -58,7 +53,7 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
   return (
     <>
       {dataIndex.length > 0 && (
-        <RuntimeTools userContext={props.userContext} dataIndex={dataIndex} />
+        <RuntimeTools users={DevUiUsers} dataIndex={dataIndex} />
       )}
     </>
   );

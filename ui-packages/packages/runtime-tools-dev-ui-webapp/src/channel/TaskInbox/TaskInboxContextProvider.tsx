@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { ApolloClient } from 'apollo-client';
-import { useKogitoAppContext } from '@kogito-apps/consoles-common';
+import { useDevUIAppContext } from '../../components/contexts/DevUIAppContext';
 import TaskInboxContext from './TaskInboxContext';
 import { TaskInboxGatewayApiImpl } from './TaskInboxGatewayApi';
 import { GraphQLTaskInboxQueries } from './TaskInboxQueries';
@@ -30,7 +30,7 @@ const TaskInboxContextProvider: React.FC<IOwnProps> = ({
   apolloClient,
   children
 }) => {
-  const appContext = useKogitoAppContext();
+  const appContext = useDevUIAppContext();
 
   return (
     <TaskInboxContext.Provider

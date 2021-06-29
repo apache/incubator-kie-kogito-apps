@@ -3396,7 +3396,7 @@ UserTaskInstances: [
     rootProcessInstanceId: null,
     rootProcessId: null,
     state: 'Ready',
-    actualOwner: 'john',
+    actualOwner: 'admin',
     adminGroups: [],
     adminUsers: [],
     completed: null,

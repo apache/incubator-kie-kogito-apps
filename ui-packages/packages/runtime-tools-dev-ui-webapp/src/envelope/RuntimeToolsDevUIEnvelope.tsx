@@ -27,9 +27,6 @@ import {
 } from './RuntimeToolsDevUIEnvelopeContext';
 import ReactDOM from 'react-dom';
 import React from 'react';
-import {
-  UserContext
-} from '@kogito-apps/consoles-common';
 
 export class RuntimeToolsDevUIEnvelope {
   constructor(
@@ -63,12 +60,11 @@ export class RuntimeToolsDevUIEnvelope {
       RuntimeToolsDevUIEnvelopeViewApi
     >();
 
-    const app = (userContext: UserContext) => {
+    const app = () => {
       return (
         <RuntimeToolsDevUIEnvelopeContext.Provider value={this.context}>
           <RuntimeToolsDevUIEnvelopeView
             ref={runtimeToolsDevUIEnvelopeViewRef}
-            userContext={userContext}
           />
         </RuntimeToolsDevUIEnvelopeContext.Provider>
       );
@@ -76,17 +72,9 @@ export class RuntimeToolsDevUIEnvelope {
 
     return new Promise<() => RuntimeToolsDevUIEnvelopeViewApi>(res => {
       setTimeout(() => {
-        ReactDOM.render(
-          app({
-            getCurrentUser: () => {
-              return { id: 'user', groups: [] };
-            }
-          }),
-          container,
-          () => {
-            res(() => runtimeToolsDevUIEnvelopeViewRef.current!);
-          }
-        );
+        ReactDOM.render(app(), container, () => {
+          res(() => runtimeToolsDevUIEnvelopeViewRef.current!);
+        });
       }, 0);
     });
   }

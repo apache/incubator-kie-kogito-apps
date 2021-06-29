@@ -19,27 +19,24 @@ import { Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 
-import {
-  KogitoAppContextProvider,
-  UserContext,
-  PageLayout
-} from '@kogito-apps/consoles-common';
+import { User, PageLayout } from '@kogito-apps/consoles-common';
 import ConsolesNav from '../ConsolesNav/ConsolesNav';
 import JobsManagementContextProvider from '../../../channel/JobsManagement/JobsManagementContextProvider';
 import ProcessDetailsContextProvider from '../../../channel/ProcessDetails/ProcessDetailsContextProvider';
 import ProcessListContextProvider from '../../../channel/ProcessList/ProcessListContextProvider';
 import TaskConsoleContextsProvider from '../../../channel/TaskInbox/TaskInboxContextProvider';
 import { MemoryRouter } from 'react-router';
+import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
-  userContext: UserContext;
+  users: User[];
   children: React.ReactElement;
 }
 
 const ConsolesLayout: React.FC<IOwnProps> = ({
   apolloClient,
-  userContext,
+  users,
   children
 }) => {
   const renderPage = routeProps => {
@@ -56,7 +53,7 @@ const ConsolesLayout: React.FC<IOwnProps> = ({
 
   return (
     <ApolloProvider client={apolloClient}>
-      <KogitoAppContextProvider userContext={userContext}>
+      <DevUIAppContextProvider users={users}>
         <TaskConsoleContextsProvider apolloClient={apolloClient}>
           <ProcessListContextProvider apolloClient={apolloClient}>
             <ProcessDetailsContextProvider apolloClient={apolloClient}>
@@ -70,7 +67,7 @@ const ConsolesLayout: React.FC<IOwnProps> = ({
             </ProcessDetailsContextProvider>
           </ProcessListContextProvider>
         </TaskConsoleContextsProvider>
-      </KogitoAppContextProvider>
+      </DevUIAppContextProvider>
     </ApolloProvider>
   );
 };

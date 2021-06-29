@@ -276,6 +276,7 @@ module.exports = typeDefs = gql`
     outputs: String
     referenceName: String
     lastUpdate: DateTime!
+    endpoint: String
   }
 
   type UserTaskInstanceMeta {
@@ -300,6 +301,7 @@ module.exports = typeDefs = gql`
   input UserTaskInstanceArgument {
     and: [UserTaskInstanceArgument!]
     or: [UserTaskInstanceArgument!]
+    not: UserTaskInstanceArgument
     state: StringArgument
     id: IdArgument
     description: StringArgument

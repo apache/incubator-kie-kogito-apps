@@ -20,7 +20,8 @@ import { onError } from 'apollo-link-error';
 import {
   getToken,
   isAuthEnabled,
-  ServerUnavailablePage
+  ServerUnavailablePage,
+  User
 } from '@kogito-apps/consoles-common';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
@@ -29,18 +30,23 @@ import ConsolesRoutes from '../ConsolesRoutes/ConsolesRoutes';
 import ConsolesLayout from '../ConsolesLayout/ConsolesLayout';
 import ReactDOM from 'react-dom';
 
-const RuntimeTools = props => {
+interface IOwnProps {
+  users: User[];
+  dataIndex: string;
+}
+
+const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex }) => {
   const httpLink = new HttpLink({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    uri: props.dataIndex
+    uri: dataIndex
   });
 
   const fallbackUI = onError(({ networkError }: any) => {
     if (networkError && networkError.stack === 'TypeError: Failed to fetch') {
       // eslint-disable-next-line react/no-render-return-value
       return ReactDOM.render(
-        <ConsolesLayout apolloClient={client} userContext={props.userContext}>
+        <ConsolesLayout apolloClient={client} users={users}>
           <ServerUnavailablePage
             displayName={'Runtime Dev UI'}
             reload={() => window.location.reload()}
@@ -70,7 +76,7 @@ const RuntimeTools = props => {
   });
 
   return (
-    <ConsolesLayout apolloClient={client} userContext={props.userContext}>
+    <ConsolesLayout apolloClient={client} users={users}>
       <ConsolesRoutes />
     </ConsolesLayout>
   );

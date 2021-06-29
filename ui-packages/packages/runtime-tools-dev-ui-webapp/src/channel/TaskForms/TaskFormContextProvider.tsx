@@ -15,12 +15,12 @@
  */
 
 import React from 'react';
-import { useKogitoAppContext } from '@kogito-apps/consoles-common';
+import { useDevUIAppContext } from '../../components/contexts/DevUIAppContext';
 import { TaskFormGatewayApiImpl } from './TaskFormGatewayApi';
 import TaskFormContext from './TaskFormContext';
 
 const TaskFormContextProvider: React.FC = ({ children }) => {
-  const appContext = useKogitoAppContext();
+  const appContext = useDevUIAppContext();
 
   return (
     <TaskFormContext.Provider
