@@ -608,7 +608,7 @@ class CounterfactualExplainerTest {
         constraints.add(false);
         featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
 
-        final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(1000L);
+        final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10_000L);
         // for the purpose of this test, only a few steps are necessary
         final SolverConfig solverConfig = CounterfactualConfigurationFactory
                 .builder().withTerminationConfig(terminationConfig).build();
@@ -733,7 +733,7 @@ class CounterfactualExplainerTest {
         featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
 
         final double center = 400.0;
-        final double epsilon = 1e-10;
+        final double epsilon = 10.0;
 
         PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
 
