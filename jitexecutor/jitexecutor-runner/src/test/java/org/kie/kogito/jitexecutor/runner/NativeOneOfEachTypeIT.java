@@ -21,7 +21,6 @@ import org.kie.kogito.jitexecutor.dmn.OneOfEachTypeTest;
 
 import io.quarkus.test.junit.NativeImageTest;
 
-@Disabled("KOGITO-5409 JIT Executor Native Image tests fail")
 @NativeImageTest
 public class NativeOneOfEachTypeIT extends OneOfEachTypeTest {
     // Execute the same tests but in native mode.

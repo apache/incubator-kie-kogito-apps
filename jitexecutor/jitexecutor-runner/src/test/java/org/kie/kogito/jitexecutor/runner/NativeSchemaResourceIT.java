@@ -21,7 +21,6 @@ import org.kie.kogito.jitexecutor.dmn.api.SchemaResourceTest;
 
 import io.quarkus.test.junit.NativeImageTest;
 
-@Disabled("KOGITO-5409 JIT Executor Native Image tests fail")
 @NativeImageTest
 public class NativeSchemaResourceIT extends SchemaResourceTest {
     // Execute the same tests but in native mode.
