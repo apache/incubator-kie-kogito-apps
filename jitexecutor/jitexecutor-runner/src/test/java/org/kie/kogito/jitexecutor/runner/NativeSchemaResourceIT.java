@@ -16,7 +16,6 @@
 
 package org.kie.kogito.jitexecutor.runner;
 
-import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.jitexecutor.dmn.api.SchemaResourceTest;
 
 import io.quarkus.test.junit.NativeImageTest;
