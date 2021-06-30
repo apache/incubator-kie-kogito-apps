@@ -67,8 +67,8 @@ public class ShapKernelExplainer implements LocalExplainer<double[][]> {
         }
 
         // establish background data
-        CompletableFuture<List<PredictionOutput>> modelOut = model.predictAsync(config.getBackground());
-        CompletableFuture<double[][]> modelNull = modelOut.thenApply(MatrixUtils::matrixFromPredictionOutput);
+        CompletableFuture<double[][]> modelNull = model.predictAsync(config.getBackground())
+                .thenApply(MatrixUtils::matrixFromPredictionOutput);
         CompletableFuture<Integer> outputSize = modelNull.thenApply(mn -> MatrixUtils.getShape(mn)[1]);
 
         //compute the mean of each column

@@ -36,8 +36,8 @@ public class ShapConfig {
     private final Integer nSamples;
     private final Random rn;
     private final Executor executor;
-    private List<PredictionInput> background;
-    private double[][] backgroundMatrix;
+    private final List<PredictionInput> background;
+    private final double[][] backgroundMatrix;
 
     /**
      * Create a ShapConfig instance. This sets the configuration of the SHAP explainer.
@@ -57,9 +57,6 @@ public class ShapConfig {
      */
     protected ShapConfig(LinkType link, List<PredictionInput> background, Random rn, Executor executor, Integer nSamples) {
         this.link = link;
-        if (background.isEmpty()) {
-            throw new IllegalArgumentException("Background data list cannot be empty.");
-        }
         this.background = background;
         this.backgroundMatrix = MatrixUtils.matrixFromPredictionInput(background);
         this.rn = rn;
@@ -162,6 +159,9 @@ public class ShapConfig {
             if (this.builderLink == null || this.builderBackground == null) {
                 throw new IllegalArgumentException("Both a link function and background must be" +
                         "provided to the ShapConfig");
+            }
+            if (this.builderBackground.isEmpty()) {
+                throw new IllegalArgumentException("Background data list cannot be empty.");
             }
             return new ShapConfig(this.builderLink, this.builderBackground, this.builderRN, this.builderExecutor, this.builderNSamples);
         }

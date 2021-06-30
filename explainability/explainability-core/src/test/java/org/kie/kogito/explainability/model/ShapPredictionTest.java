@@ -23,13 +23,13 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.local.shap.ShapConfig;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class ShapPredictionTest {
 
     @Test
     void getConfig() {
-        Random rn = new Random();
+        Random rn = new Random(1);
         List<Feature> fs = Arrays.asList(
                 FeatureFactory.newNumericalFeature("f", 1.),
                 FeatureFactory.newNumericalFeature("f", 2.));
