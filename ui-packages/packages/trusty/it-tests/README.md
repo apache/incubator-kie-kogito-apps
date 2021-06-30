@@ -2,6 +2,9 @@
 
 This project contains Cypress test suites to verify UI of Trusty AI Console. 
 
+All steps should be performed from the component folder it means kogito-apps/ui-packages/packages/trusty (`cd ..`).
+
+
 ### Run integration tests with mocked data
 
 This is a basis test suite which should verify that UI of Trusty AI is running and mocked data are shown as expected. 
