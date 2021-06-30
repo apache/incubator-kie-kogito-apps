@@ -18,12 +18,17 @@ import React from 'react';
 import { mount } from 'enzyme';
 import TaskInboxPage from '../TaskInboxPage';
 import TaskInboxContainer from '../../../containers/TaskInboxContainer/TaskInboxContainer';
+import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
 
 jest.mock('../../../containers/TaskInboxContainer/TaskInboxContainer');
 
 describe('TaskInboxPage tests', () => {
   it('Snapshot', () => {
-    const wrapper = mount(<TaskInboxPage />);
+    const wrapper = mount(
+      <DevUIAppContextProvider users={[{ id: 'John snow', groups: ['admin'] }]}>
+        <TaskInboxPage />
+      </DevUIAppContextProvider>
+    );
 
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find(TaskInboxContainer).exists()).toBeTruthy();

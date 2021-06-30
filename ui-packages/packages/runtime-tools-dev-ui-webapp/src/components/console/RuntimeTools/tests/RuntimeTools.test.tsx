@@ -26,8 +26,9 @@ describe('Runtime Tools tests', () => {
     const wrapper = mount(
       <MemoryRouter initialEntries={['/']} keyLength={0}>
         <RuntimeTools
-          userContext={new TestUserContextImpl()}
+          users={[{ id: 'John snow', groups: ['admin'] }]}
           dataIndex={'http:localhost:4000'}
+          navigate="JobsManagement"
         />
       </MemoryRouter>
     );

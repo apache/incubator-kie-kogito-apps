@@ -75,7 +75,7 @@ const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex, navigate }) => {
     cache,
     link: setGQLContext.concat(fallbackUI.concat(httpLink))
   });
-
+  console.log('RT', users);
   return (
     <ConsolesLayout apolloClient={client} users={users}>
       <ConsolesRoutes navigate={navigate} />

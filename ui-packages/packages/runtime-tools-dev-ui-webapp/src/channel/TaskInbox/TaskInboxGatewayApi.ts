@@ -22,6 +22,7 @@ import { User } from '@kogito-apps/consoles-common';
 export interface TaskInboxGatewayApi {
   taskInboxState: TaskInboxState;
   setInitialState: (initialState: TaskInboxState) => Promise<void>;
+  setUser: (user: User) => Promise<void>;
   applyFilter(filter: QueryFilter): Promise<void>;
   applySorting(sortBy: SortBy): Promise<void>;
   query(offset: number, limit: number): Promise<UserTaskInstance[]>;
@@ -42,7 +43,7 @@ export interface UnSubscribeHandler {
 
 export class TaskInboxGatewayApiImpl implements TaskInboxGatewayApi {
   private readonly listeners: OnOpenTaskListener[] = [];
-  private readonly user: User;
+  private user: User;
   private readonly queries: TaskInboxQueries;
   private _taskInboxState: TaskInboxState;
   private activeTask: UserTaskInstance;
@@ -54,6 +55,11 @@ export class TaskInboxGatewayApiImpl implements TaskInboxGatewayApi {
 
   get taskInboxState(): TaskInboxState {
     return this._taskInboxState;
+  }
+
+  setUser(user: User): Promise<void> {
+    this.user = user;
+    return Promise.resolve();
   }
 
   setInitialState(taskInboxState: TaskInboxState): Promise<void> {
@@ -90,6 +96,7 @@ export class TaskInboxGatewayApiImpl implements TaskInboxGatewayApi {
   }
 
   query(offset: number, limit: number): Promise<UserTaskInstance[]> {
+    console.log('check user', this.user);
     return new Promise<UserTaskInstance[]>((resolve, reject) => {
       this.queries
         .getUserTasks(

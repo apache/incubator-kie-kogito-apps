@@ -35,11 +35,15 @@ jest.mock('@kogito-apps/consoles-common', () => ({
     return <MockedComponent />;
   }
 }));
+
+const props = {
+  navigate: 'JobsManagement'
+};
 describe('ConsolesRoutes tests', () => {
   it('Test Jobs management route', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 
@@ -48,13 +52,13 @@ describe('ConsolesRoutes tests', () => {
     const route = wrapper.find(Route);
     expect(route.exists()).toBeTruthy();
 
-    const MockedProcessListPage = wrapper.find('MockedProcessListPage');
-    expect(MockedProcessListPage.exists()).toBeTruthy();
+    const MockedJobsManagementPage = wrapper.find('MockedJobsManagementPage');
+    expect(MockedJobsManagementPage.exists()).toBeTruthy();
   });
   it('process list test', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/ProcessInstances']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 
@@ -68,7 +72,7 @@ describe('ConsolesRoutes tests', () => {
   it('jobs management page test', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/JobsManagement']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 
@@ -83,7 +87,7 @@ describe('ConsolesRoutes tests', () => {
   it('no data page test', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/NoData']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 
@@ -97,7 +101,7 @@ describe('ConsolesRoutes tests', () => {
   it('page not found page test', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['*']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 
@@ -111,7 +115,7 @@ describe('ConsolesRoutes tests', () => {
   it('Test NoData route', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['/NoData']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 
@@ -125,7 +129,7 @@ describe('ConsolesRoutes tests', () => {
   it('Test PageNotFound route', () => {
     const wrapper = mount(
       <MemoryRouter keyLength={0} initialEntries={['*']}>
-        <ConsolesRoutes />
+        <ConsolesRoutes {...props} />
       </MemoryRouter>
     );
 

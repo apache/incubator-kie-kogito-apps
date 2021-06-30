@@ -19,7 +19,7 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
         "entries": Array [
           Object {
             "hash": "",
-            "pathname": "/ProcessInstances",
+            "pathname": "/JobsManagement",
             "search": "",
             "state": undefined,
           },
@@ -32,7 +32,7 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
         "listen": [Function],
         "location": Object {
           "hash": "",
-          "pathname": "/ProcessInstances",
+          "pathname": "/JobsManagement",
           "search": "",
           "state": undefined,
         },
@@ -41,7 +41,9 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           component={[Function]}
@@ -49,22 +51,22 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
             Object {
               "isExact": true,
               "params": Object {},
-              "path": "/ProcessInstances",
-              "url": "/ProcessInstances",
+              "path": "/JobsManagement",
+              "url": "/JobsManagement",
             }
           }
           exact={true}
           location={
             Object {
               "hash": "",
-              "pathname": "/ProcessInstances",
+              "pathname": "/JobsManagement",
               "search": "",
               "state": undefined,
             }
           }
-          path="/ProcessInstances"
+          path="/JobsManagement"
         >
-          <MockedProcessListPage
+          <MockedJobsManagementPage
             history={
               Object {
                 "action": "REPLACE",
@@ -74,7 +76,7 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
                 "entries": Array [
                   Object {
                     "hash": "",
-                    "pathname": "/ProcessInstances",
+                    "pathname": "/JobsManagement",
                     "search": "",
                     "state": undefined,
                   },
@@ -87,7 +89,7 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
                 "listen": [Function],
                 "location": Object {
                   "hash": "",
-                  "pathname": "/ProcessInstances",
+                  "pathname": "/JobsManagement",
                   "search": "",
                   "state": undefined,
                 },
@@ -98,7 +100,7 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
             location={
               Object {
                 "hash": "",
-                "pathname": "/ProcessInstances",
+                "pathname": "/JobsManagement",
                 "search": "",
                 "state": undefined,
               }
@@ -107,8 +109,8 @@ exports[`ConsolesRoutes tests Test Jobs management route 1`] = `
               Object {
                 "isExact": true,
                 "params": Object {},
-                "path": "/ProcessInstances",
-                "url": "/ProcessInstances",
+                "path": "/JobsManagement",
+                "url": "/JobsManagement",
               }
             }
           />
@@ -160,7 +162,9 @@ exports[`ConsolesRoutes tests Test NoData route 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           computedMatch={
@@ -282,7 +286,9 @@ exports[`ConsolesRoutes tests Test PageNotFound route 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           computedMatch={
@@ -408,7 +414,9 @@ exports[`ConsolesRoutes tests jobs management page test 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           component={[Function]}
@@ -527,7 +535,9 @@ exports[`ConsolesRoutes tests no data page test 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           computedMatch={
@@ -649,7 +659,9 @@ exports[`ConsolesRoutes tests page not found page test 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           computedMatch={
@@ -775,7 +787,9 @@ exports[`ConsolesRoutes tests process list test 1`] = `
       }
     }
   >
-    <ConsolesRoutes>
+    <ConsolesRoutes
+      navigate="JobsManagement"
+    >
       <Switch>
         <Route
           component={[Function]}

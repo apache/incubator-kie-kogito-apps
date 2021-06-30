@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ export const buildTaskInboxWhereArgument = (
   currentUser: User,
   activeFilters: QueryFilter
 ) => {
+  /* istanbul ignore else*/
   if (activeFilters) {
     const filtersClause = [];
     if (activeFilters.taskStates.length > 0) {

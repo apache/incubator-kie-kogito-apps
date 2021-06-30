@@ -100,6 +100,7 @@ export function open(args: {
 }): StandaloneDevUIApi {
   const iframe = document.createElement('iframe');
   iframe.srcdoc = devUIEnvelopeIndex; // index coming from webapp
+  iframe.id = 'iframe';
   iframe.style.width = '100%';
   iframe.style.height = '100%';
   iframe.style.border = 'none';

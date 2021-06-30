@@ -25,24 +25,8 @@ exports[`RuntimeToolsDevUIEnvelopeView tests Snapshot 2`] = `
 >
   <RuntimeTools
     dataIndex="http://localhost:4000"
-    userContext={
-      TestUserContextImpl {
-        "currentUser": Object {
-          "groups": Array [
-            "employees",
-          ],
-          "id": "john",
-        },
-        "userManager": TestUserManagerImpl {
-          "system": Array [
-            "john",
-            "mary",
-            "poul",
-          ],
-          "users": Array [],
-        },
-      }
-    }
+    navigate="test"
+    users={Array []}
   />
 </ForwardRef>
 `;

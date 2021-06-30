@@ -43,23 +43,16 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
   >
     <RuntimeTools
       dataIndex="http:localhost:4000"
-      userContext={
-        TestUserContextImpl {
-          "currentUser": Object {
+      navigate="JobsManagement"
+      users={
+        Array [
+          Object {
             "groups": Array [
-              "employees",
+              "admin",
             ],
-            "id": "john",
+            "id": "John snow",
           },
-          "userManager": TestUserManagerImpl {
-            "system": Array [
-              "john",
-              "mary",
-              "poul",
-            ],
-            "users": Array [],
-          },
-        }
+        ]
       }
     >
       <ConsolesLayout
@@ -277,23 +270,15 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
             "watchQuery": [Function],
           }
         }
-        userContext={
-          TestUserContextImpl {
-            "currentUser": Object {
+        users={
+          Array [
+            Object {
               "groups": Array [
-                "employees",
+                "admin",
               ],
-              "id": "john",
+              "id": "John snow",
             },
-            "userManager": TestUserManagerImpl {
-              "system": Array [
-                "john",
-                "mary",
-                "poul",
-              ],
-              "users": Array [],
-            },
-          }
+          ]
         }
       >
         <ApolloProvider
@@ -512,24 +497,16 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
             }
           }
         >
-          <KogitoAppContextProvider
-            userContext={
-              TestUserContextImpl {
-                "currentUser": Object {
+          <DevUIAppContextProvider
+            users={
+              Array [
+                Object {
                   "groups": Array [
-                    "employees",
+                    "admin",
                   ],
-                  "id": "john",
+                  "id": "John snow",
                 },
-                "userManager": TestUserManagerImpl {
-                  "system": Array [
-                    "john",
-                    "mary",
-                    "poul",
-                  ],
-                  "users": Array [],
-                },
-              }
+              ]
             }
           >
             <TaskInboxContextProvider
@@ -1407,8 +1384,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                             "entries": Array [
                               Object {
                                 "hash": "",
-                                "key": "tctzcf",
-                                "pathname": "/ProcessInstances",
+                                "key": "3ipxv5",
+                                "pathname": "/JobsManagement",
                                 "search": "",
                                 "state": undefined,
                               },
@@ -1421,8 +1398,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                             "listen": [Function],
                             "location": Object {
                               "hash": "",
-                              "key": "tctzcf",
-                              "pathname": "/ProcessInstances",
+                              "key": "3ipxv5",
+                              "pathname": "/JobsManagement",
                               "search": "",
                               "state": undefined,
                             },
@@ -1444,8 +1421,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                             location={
                               Object {
                                 "hash": "",
-                                "key": "tctzcf",
-                                "pathname": "/ProcessInstances",
+                                "key": "3ipxv5",
+                                "pathname": "/JobsManagement",
                                 "search": "",
                                 "state": undefined,
                               }
@@ -1456,7 +1433,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                             <PageLayout
                               PageNav={
                                 <ConsolesNav
-                                  pathname="/ProcessInstances"
+                                  pathname="/JobsManagement"
                                 />
                               }
                               pageNavOpen={true}
@@ -1481,7 +1458,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                     isNavOpen={true}
                                     nav={
                                       <ConsolesNav
-                                        pathname="/ProcessInstances"
+                                        pathname="/JobsManagement"
                                       />
                                     }
                                     theme="dark"
@@ -1498,7 +1475,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                     isNavOpen={true}
                                     nav={
                                       <ConsolesNav
-                                        pathname="/ProcessInstances"
+                                        pathname="/JobsManagement"
                                       />
                                     }
                                     theme="dark"
@@ -1512,7 +1489,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                         className="pf-c-page__sidebar-body"
                                       >
                                         <ConsolesNav
-                                          pathname="/ProcessInstances"
+                                          pathname="/JobsManagement"
                                         >
                                           <Nav
                                             aria-label="Nav"
@@ -1537,7 +1514,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                   onScroll={[Function]}
                                                 >
                                                   <NavItem
-                                                    isActive={true}
+                                                    isActive={false}
                                                     key="process-instances-nav"
                                                   >
                                                     <li
@@ -1547,23 +1524,23 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                       data-ouia-safe={true}
                                                     >
                                                       <Link
-                                                        aria-current="page"
-                                                        className="pf-c-nav__link pf-m-current"
+                                                        aria-current={null}
+                                                        className="pf-c-nav__link"
                                                         data-ouia-navigation-name="process-instances"
                                                         onClick={[Function]}
                                                         to="/ProcessInstances"
                                                       >
                                                         <LinkAnchor
-                                                          aria-current="page"
-                                                          className="pf-c-nav__link pf-m-current"
+                                                          aria-current={null}
+                                                          className="pf-c-nav__link"
                                                           data-ouia-navigation-name="process-instances"
                                                           href="/ProcessInstances"
                                                           navigate={[Function]}
                                                           onClick={[Function]}
                                                         >
                                                           <a
-                                                            aria-current="page"
-                                                            className="pf-c-nav__link pf-m-current"
+                                                            aria-current={null}
+                                                            className="pf-c-nav__link"
                                                             data-ouia-navigation-name="process-instances"
                                                             href="/ProcessInstances"
                                                             onClick={[Function]}
@@ -1575,7 +1552,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                     </li>
                                                   </NavItem>
                                                   <NavItem
-                                                    isActive={false}
+                                                    isActive={true}
                                                     key="jobs-management-nav"
                                                   >
                                                     <li
@@ -1585,23 +1562,23 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                       data-ouia-safe={true}
                                                     >
                                                       <Link
-                                                        aria-current={null}
-                                                        className="pf-c-nav__link"
+                                                        aria-current="page"
+                                                        className="pf-c-nav__link pf-m-current"
                                                         data-ouia-navigation-name="jobs-management"
                                                         onClick={[Function]}
                                                         to="/JobsManagement"
                                                       >
                                                         <LinkAnchor
-                                                          aria-current={null}
-                                                          className="pf-c-nav__link"
+                                                          aria-current="page"
+                                                          className="pf-c-nav__link pf-m-current"
                                                           data-ouia-navigation-name="jobs-management"
                                                           href="/JobsManagement"
                                                           navigate={[Function]}
                                                           onClick={[Function]}
                                                         >
                                                           <a
-                                                            aria-current={null}
-                                                            className="pf-c-nav__link"
+                                                            aria-current="page"
+                                                            className="pf-c-nav__link pf-m-current"
                                                             data-ouia-navigation-name="jobs-management"
                                                             href="/JobsManagement"
                                                             onClick={[Function]}
@@ -1663,7 +1640,9 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                     id="main-content-page-layout-default-nav"
                                     tabIndex={-1}
                                   >
-                                    <ConsolesRoutes>
+                                    <ConsolesRoutes
+                                      navigate="JobsManagement"
+                                    >
                                       <Switch>
                                         <Route
                                           component={[Function]}
@@ -1671,23 +1650,23 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                             Object {
                                               "isExact": true,
                                               "params": Object {},
-                                              "path": "/ProcessInstances",
-                                              "url": "/ProcessInstances",
+                                              "path": "/JobsManagement",
+                                              "url": "/JobsManagement",
                                             }
                                           }
                                           exact={true}
                                           location={
                                             Object {
                                               "hash": "",
-                                              "key": "tctzcf",
-                                              "pathname": "/ProcessInstances",
+                                              "key": "3ipxv5",
+                                              "pathname": "/JobsManagement",
                                               "search": "",
                                               "state": undefined,
                                             }
                                           }
-                                          path="/ProcessInstances"
+                                          path="/JobsManagement"
                                         >
-                                          <ProcessListPage
+                                          <JobsManagementPage
                                             history={
                                               Object {
                                                 "action": "REPLACE",
@@ -1697,8 +1676,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                 "entries": Array [
                                                   Object {
                                                     "hash": "",
-                                                    "key": "tctzcf",
-                                                    "pathname": "/ProcessInstances",
+                                                    "key": "3ipxv5",
+                                                    "pathname": "/JobsManagement",
                                                     "search": "",
                                                     "state": undefined,
                                                   },
@@ -1711,8 +1690,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                 "listen": [Function],
                                                 "location": Object {
                                                   "hash": "",
-                                                  "key": "tctzcf",
-                                                  "pathname": "/ProcessInstances",
+                                                  "key": "3ipxv5",
+                                                  "pathname": "/JobsManagement",
                                                   "search": "",
                                                   "state": undefined,
                                                 },
@@ -1723,8 +1702,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                             location={
                                               Object {
                                                 "hash": "",
-                                                "key": "tctzcf",
-                                                "pathname": "/ProcessInstances",
+                                                "key": "3ipxv5",
+                                                "pathname": "/JobsManagement",
                                                 "search": "",
                                                 "state": undefined,
                                               }
@@ -1733,24 +1712,13 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                               Object {
                                                 "isExact": true,
                                                 "params": Object {},
-                                                "path": "/ProcessInstances",
-                                                "url": "/ProcessInstances",
+                                                "path": "/JobsManagement",
+                                                "url": "/JobsManagement",
                                               }
                                             }
                                           >
                                             <PageSectionHeader
-                                              breadcrumbPath={
-                                                Array [
-                                                  "/",
-                                                ]
-                                              }
-                                              breadcrumbText={
-                                                Array [
-                                                  "Home",
-                                                  "Processes",
-                                                ]
-                                              }
-                                              titleText="Process Instances"
+                                              titleText="Jobs Management"
                                             >
                                               <PageSection
                                                 data-ouia-component-type="page-section-header"
@@ -1762,85 +1730,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                   data-ouia-component-type="page-section-header"
                                                   data-ouia-safe={true}
                                                 >
-                                                  <Breadcrumb>
-                                                    <nav
-                                                      aria-label="Breadcrumb"
-                                                      className="pf-c-breadcrumb"
-                                                      data-ouia-component-id="OUIA-Generated-Breadcrumb-1"
-                                                      data-ouia-component-type="PF4/Breadcrumb"
-                                                      data-ouia-safe={true}
-                                                    >
-                                                      <ol
-                                                        className="pf-c-breadcrumb__list"
-                                                      >
-                                                        <BreadcrumbItem
-                                                          key=".$0"
-                                                          showDivider={false}
-                                                        >
-                                                          <li
-                                                            className="pf-c-breadcrumb__item"
-                                                          >
-                                                            <Link
-                                                              to="/"
-                                                            >
-                                                              <LinkAnchor
-                                                                href="/"
-                                                                navigate={[Function]}
-                                                              >
-                                                                <a
-                                                                  href="/"
-                                                                  onClick={[Function]}
-                                                                >
-                                                                  Home
-                                                                </a>
-                                                              </LinkAnchor>
-                                                            </Link>
-                                                          </li>
-                                                        </BreadcrumbItem>
-                                                        <BreadcrumbItem
-                                                          isActive={true}
-                                                          key=".$1"
-                                                          showDivider={true}
-                                                        >
-                                                          <li
-                                                            className="pf-c-breadcrumb__item"
-                                                          >
-                                                            <span
-                                                              className="pf-c-breadcrumb__item-divider"
-                                                            >
-                                                              <AngleRightIcon
-                                                                color="currentColor"
-                                                                noVerticalAlign={false}
-                                                                size="sm"
-                                                              >
-                                                                <svg
-                                                                  aria-hidden={true}
-                                                                  aria-labelledby={null}
-                                                                  fill="currentColor"
-                                                                  height="1em"
-                                                                  role="img"
-                                                                  style={
-                                                                    Object {
-                                                                      "verticalAlign": "-0.125em",
-                                                                    }
-                                                                  }
-                                                                  viewBox="0 0 256 512"
-                                                                  width="1em"
-                                                                >
-                                                                  <path
-                                                                    d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
-                                                                  />
-                                                                </svg>
-                                                              </AngleRightIcon>
-                                                            </span>
-                                                            Processes
-                                                          </li>
-                                                        </BreadcrumbItem>
-                                                      </ol>
-                                                    </nav>
-                                                  </Breadcrumb>
                                                   <PageTitle
-                                                    title="Process Instances"
+                                                    title="Jobs Management"
                                                   >
                                                     <Flex
                                                       data-ouia-component-type="page-title"
@@ -1868,7 +1759,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                               <h1
                                                                 className="pf-c-title pf-m-4xl"
                                                               >
-                                                                Process Instances
+                                                                Jobs Management
                                                               </h1>
                                                             </Title>
                                                           </div>
@@ -1879,14 +1770,9 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                 </section>
                                               </PageSection>
                                             </PageSectionHeader>
-                                            <PageSection
-                                              data-ouia-component-type="page-section-content"
-                                              data-ouia-safe={true}
-                                            >
+                                            <PageSection>
                                               <section
                                                 className="pf-c-page__main-section"
-                                                data-ouia-component-type="page-section-content"
-                                                data-ouia-safe={true}
                                               >
                                                 <Card
                                                   className="kogito-consoles__card-size"
@@ -1898,31 +1784,19 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                     data-ouia-safe={true}
                                                     id=""
                                                   >
-                                                    <ProcessListContainer>
+                                                    <JobsManagementContainer>
                                                       <ForwardRef
                                                         driver={
-                                                          ProcessListGatewayApiImpl {
-                                                            "_ProcessListState": Object {
-                                                              "filters": Object {
-                                                                "businessKey": Array [],
-                                                                "status": Array [],
-                                                              },
-                                                              "sortBy": Object {},
+                                                          JobsManagementGatewayApiImpl {
+                                                            "_JobsManagementState": Object {
+                                                              "filters": Array [],
+                                                              "orderBy": Object {},
                                                             },
                                                             "applyFilter": [Function],
-                                                            "applySorting": [Function],
-                                                            "handleProcessAbort": [Function],
-                                                            "handleProcessMultipleAction": [Function],
-                                                            "handleProcessRetry": [Function],
-                                                            "handleProcessSkip": [Function],
+                                                            "bulkCancel": [Function],
+                                                            "cancelJob": [Function],
                                                             "initialLoad": [Function],
-                                                            "listeners": Array [
-                                                              Object {
-                                                                "onOpen": [Function],
-                                                              },
-                                                            ],
-                                                            "openProcess": [Function],
-                                                            "queries": GraphQLProcessListQueries {
+                                                            "queries": GraphQLJobsManagementQueries {
                                                               "client": ApolloClient {
                                                                 "cache": InMemoryCache {
                                                                   "addTypename": true,
@@ -2136,6 +2010,8 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                                 "watchQuery": [Function],
                                                               },
                                                             },
+                                                            "rescheduleJob": [Function],
+                                                            "sortBy": [Function],
                                                           }
                                                         }
                                                         targetOrigin="*"
@@ -2144,12 +2020,12 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                                                           <div />
                                                         </ForwardRef>
                                                       </ForwardRef>
-                                                    </ProcessListContainer>
+                                                    </JobsManagementContainer>
                                                   </article>
                                                 </Card>
                                               </section>
                                             </PageSection>
-                                          </ProcessListPage>
+                                          </JobsManagementPage>
                                         </Route>
                                       </Switch>
                                     </ConsolesRoutes>
@@ -2165,7 +2041,7 @@ exports[`Runtime Tools tests Snapshot tests with default props 1`] = `
                 </ProcessDetailsContextProvider>
               </ProcessListContextProvider>
             </TaskInboxContextProvider>
-          </KogitoAppContextProvider>
+          </DevUIAppContextProvider>
         </ApolloProvider>
       </ConsolesLayout>
     </RuntimeTools>

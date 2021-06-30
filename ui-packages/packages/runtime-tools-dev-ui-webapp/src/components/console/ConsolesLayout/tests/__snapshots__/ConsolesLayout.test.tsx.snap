@@ -30,20 +30,15 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
       "writeQuery": [MockFunction],
     }
   }
-  userContext={
-    Object {
-      "getCurrentUser": [MockFunction] {
-        "calls": Array [
-          Array [],
+  users={
+    Array [
+      Object {
+        "groups": Array [
+          "admin",
         ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": undefined,
-          },
-        ],
+        "id": "John snow",
       },
-    }
+    ]
   }
 >
   <ApolloProvider
@@ -76,21 +71,16 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
       }
     }
   >
-    <KogitoAppContextProvider
-      userContext={
-        Object {
-          "getCurrentUser": [MockFunction] {
-            "calls": Array [
-              Array [],
+    <DevUIAppContextProvider
+      users={
+        Array [
+          Object {
+            "groups": Array [
+              "admin",
             ],
-            "results": Array [
-              Object {
-                "type": "return",
-                "value": undefined,
-              },
-            ],
+            "id": "John snow",
           },
-        }
+        ]
       }
     >
       <TaskInboxContextProvider
@@ -224,7 +214,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
                       "entries": Array [
                         Object {
                           "hash": "",
-                          "key": "cmllg6",
+                          "key": "01y2nk",
                           "pathname": "/",
                           "search": "",
                           "state": undefined,
@@ -238,7 +228,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
                       "listen": [Function],
                       "location": Object {
                         "hash": "",
-                        "key": "cmllg6",
+                        "key": "01y2nk",
                         "pathname": "/",
                         "search": "",
                         "state": undefined,
@@ -261,7 +251,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
                       location={
                         Object {
                           "hash": "",
-                          "key": "cmllg6",
+                          "key": "01y2nk",
                           "pathname": "/",
                           "search": "",
                           "state": undefined,
@@ -289,7 +279,7 @@ exports[`ConsolesLayout tests Snapshot test with default props 1`] = `
           </ProcessDetailsContextProvider>
         </ProcessListContextProvider>
       </TaskInboxContextProvider>
-    </KogitoAppContextProvider>
+    </DevUIAppContextProvider>
   </ApolloProvider>
 </ConsolesLayout>
 `;

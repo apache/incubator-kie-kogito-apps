@@ -41,12 +41,12 @@ describe('ConsolesLayout tests', () => {
     const client = new ApolloClientMock();
     const props = {
       apolloClient: client,
-      userContext: { getCurrentUser: jest.fn() }
+      users: [{ id: 'John snow', groups: ['admin'] }]
     };
     const wrapper = mount(
       <MemoryRouter initialEntries={['/']} keyLength={0}>
         <ConsolesLayout {...props}>
-          <ConsolesRoutes />
+          <ConsolesRoutes navigate={'JobsManagement'} />
         </ConsolesLayout>
       </MemoryRouter>
     );

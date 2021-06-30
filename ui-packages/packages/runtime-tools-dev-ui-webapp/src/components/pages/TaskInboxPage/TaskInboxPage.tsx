@@ -14,21 +14,64 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
-import { Card, Grid, GridItem, PageSection } from '@patternfly/react-core';
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  Grid,
+  GridItem,
+  PageSection,
+  Dropdown,
+  DropdownToggle,
+  DropdownItem,
+  Tooltip
+} from '@patternfly/react-core';
+import { ThIcon } from '@patternfly/react-icons';
 import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools';
 import { PageTitle } from '@kogito-apps/consoles-common';
+import { TaskInboxGatewayApi } from '../../../channel/TaskInbox';
+import { useTaskInboxGatewayApi } from '../../../channel/TaskInbox/TaskInboxContext';
 import TaskInboxContainer from '../../containers/TaskInboxContainer/TaskInboxContainer';
 import '../../styles.css';
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
+  const gatewayApi: TaskInboxGatewayApi = useTaskInboxGatewayApi();
+  const appContext = useDevUIAppContext();
+  const allUsers = appContext.getAllUsers();
   useEffect(() => {
     return ouiaPageTypeAndObjectId('task-inbox-page');
   });
+
+  const frame = window.parent.frames;
+  console.log('window', frame);
+
+  const onSelect = (event): void => {
+    const selectedUser = event.target.innerHTML;
+    const obj = allUsers.find(user => user.id === selectedUser);
+    gatewayApi.setUser(obj);
+    gatewayApi.query(0, 10);
+    setCurrentUser(obj);
+
+    setIsOpen(!isOpen);
+  };
+
+  const dropdownItems = (): JSX.Element[] => {
+    const userIds = [];
+    allUsers.map(user => {
+      userIds.push(<DropdownItem key={user.id}>{user.id}</DropdownItem>);
+    });
+    return userIds;
+  };
+
+  const onToggle = (isOpen): void => {
+    setIsOpen(isOpen);
+  };
 
   return (
     <React.Fragment>
@@ -40,7 +83,31 @@ const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
           ouiaSafe
         )}
       >
-        <PageTitle title="Task Inbox" />
+        <Grid>
+          <GridItem span={11}>
+            <PageTitle title="Task Inbox" />
+          </GridItem>
+          <GridItem span={1}>
+            <Dropdown
+              onSelect={onSelect}
+              toggle={
+                <DropdownToggle
+                  toggleIndicator={null}
+                  onToggle={onToggle}
+                  aria-label="Applications"
+                  id="toggle-id-7"
+                >
+                  <Tooltip position="top" content={<div>{currentUser}</div>}>
+                    <ThIcon />
+                  </Tooltip>
+                </DropdownToggle>
+              }
+              isOpen={isOpen}
+              isPlain
+              dropdownItems={dropdownItems()}
+            />
+          </GridItem>
+        </Grid>
       </PageSection>
       <PageSection
         {...componentOuiaProps(

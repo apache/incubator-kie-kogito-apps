@@ -3422,7 +3422,7 @@ UserTaskInstances: [
     rootProcessInstanceId: null,
     rootProcessId: null,
     state: 'Ready',
-    actualOwner: 'john',
+    actualOwner: 'paulo',
     adminGroups: [],
     adminUsers: [],
     completed: null,
