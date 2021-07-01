@@ -17,16 +17,19 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
-import { EmbeddedTaskInbox } from '@kogito-apps/task-inbox';
+import { EmbeddedTaskInbox, TaskInboxApi } from '@kogito-apps/task-inbox';
 import { TaskInboxGatewayApi } from '../../../channel/TaskInbox';
 import { useTaskInboxGatewayApi } from '../../../channel/TaskInbox/TaskInboxContext';
 import { getActiveTaskStates, getAllTaskStates } from '../../../utils/Utils';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import UserTaskInstance = GraphQL.UserTaskInstance;
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 const TaskInboxContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const history = useHistory();
   const gatewayApi: TaskInboxGatewayApi = useTaskInboxGatewayApi();
+  const taskInboxApiRef = React.useRef<TaskInboxApi>();
+  const appContext = useDevUIAppContext();
 
   useEffect(() => {
     const unsubscriber = gatewayApi.onOpenTaskListen({
@@ -35,8 +38,14 @@ const TaskInboxContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
       }
     });
 
+    const unsubscribeUserChange = appContext.onUserChange({
+      onUserChange(user) {
+        taskInboxApiRef.current.taskInbox__notify(user.id);
+      }
+    });
     return () => {
       unsubscriber.unSubscribe();
+      unsubscribeUserChange.unSubscribe();
     };
   }, []);
 
@@ -48,6 +57,7 @@ const TaskInboxContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
       allTaskStates={getAllTaskStates()}
       activeTaskStates={getActiveTaskStates()}
       targetOrigin={'*'}
+      ref={taskInboxApiRef}
     />
   );
 };

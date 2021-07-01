@@ -3448,7 +3448,7 @@ UserTaskInstances: [
     rootProcessInstanceId: null,
     rootProcessId: null,
     state: 'Completed',
-    actualOwner: 'john',
+    actualOwner: 'paulo',
     adminGroups: [],
     adminUsers: [],
     completed: '2020-02-19T10:49:24.623Z',

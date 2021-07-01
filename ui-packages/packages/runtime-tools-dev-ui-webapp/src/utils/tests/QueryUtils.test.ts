@@ -14,188 +14,182 @@
  * limitations under the License.
  */
 
+import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 import {
-    ProcessInstanceState
-} from '@kogito-apps/management-console-shared';
-import {
-    buildProcessListWhereArgument,
-    getOrderByObject,
-    buildTaskInboxWhereArgument
+  buildProcessListWhereArgument,
+  getOrderByObject,
+  buildTaskInboxWhereArgument
 } from '../QueryUtils';
 
 describe('QueryUtils test', () => {
-    it('buildWhereArgument', () => {
-        const filtersWithoutBusinessKey = {
-            status: [ProcessInstanceState.Active],
-            businessKey: []
-        };
+  it('buildWhereArgument', () => {
+    const filtersWithoutBusinessKey = {
+      status: [ProcessInstanceState.Active],
+      businessKey: []
+    };
 
-        const filtersWithBusinessKey = {
-            status: [ProcessInstanceState.Active],
-            businessKey: ['GMR31']
-        };
-        const result1 = buildProcessListWhereArgument(filtersWithoutBusinessKey);
-        const result2 = buildProcessListWhereArgument(filtersWithBusinessKey);
-        expect(result1.or).toBe(undefined);
-        expect(result2.or).toEqual([
-            { businessKey: { like: filtersWithBusinessKey.businessKey[0] } }
-        ]);
-    });
+    const filtersWithBusinessKey = {
+      status: [ProcessInstanceState.Active],
+      businessKey: ['GMR31']
+    };
+    const result1 = buildProcessListWhereArgument(filtersWithoutBusinessKey);
+    const result2 = buildProcessListWhereArgument(filtersWithBusinessKey);
+    expect(result1.or).toBe(undefined);
+    expect(result2.or).toEqual([
+      { businessKey: { like: filtersWithBusinessKey.businessKey[0] } }
+    ]);
+  });
 
-    it('getOrderByObject', () => {
-        const sortBy: any = {
-            direction: 'desc',
-            property: 'lastUpdate'
-        };
-        const result = getOrderByObject(sortBy);
+  it('getOrderByObject', () => {
+    const sortBy: any = {
+      direction: 'desc',
+      property: 'lastUpdate'
+    };
+    const result = getOrderByObject(sortBy);
 
-        expect(result).toEqual({ lastUpdate: 'DESC' });
-    });
+    expect(result).toEqual({ lastUpdate: 'DESC' });
+  });
 
-    it('getOrderByObject - empty sortBy', () => {
-        const sortBy: any = {};
-        const result = getOrderByObject(sortBy);
+  it('getOrderByObject - empty sortBy', () => {
+    const sortBy: any = {};
+    const result = getOrderByObject(sortBy);
 
-        expect(result).toEqual({ lastUpdate: 'DESC' });
-    });
-    it('buildTaskInboxWhereArgument', () => {
-        const currentUser = { id: '', groups: [] };
-        const activeFilters = {
-            taskNames: [],
-            taskStates: ['Ready, Reserved']
-        };
+    expect(result).toEqual({ lastUpdate: 'DESC' });
+  });
+  it('buildTaskInboxWhereArgument', () => {
+    const currentUser = { id: '', groups: [] };
+    const activeFilters = {
+      taskNames: [],
+      taskStates: ['Ready, Reserved']
+    };
 
-        const expectedResult = {
-            and: [
+    const expectedResult = {
+      and: [
+        {
+          or: [
+            {
+              actualOwner: { equal: '' }
+            },
+            {
+              and: [
                 {
-                    or: [
-                        {
-                            actualOwner: { equal: "" }
-                        },
-                        {
-                            and: [
-                                {
-                                    actualOwner: { isNull: true }
-                                },
-                                {
-                                    not: { excludedUsers: { contains: "" } }
-                                },
-                                {
-                                    or: [
-                                        { potentialUsers: { contains: "" } },
-                                        { potentialGroups: { containsAny: [] } }
-                                    ]
-
-                                }
-                            ]
-                        }
-                    ]
+                  actualOwner: { isNull: true }
                 },
                 {
-                    and: [
-                        {
-                            state: {
-                                in: ["Ready, Reserved"]
-                            }
-                        }
-                    ]
-                }
-            ]
-        };
-        const result = buildTaskInboxWhereArgument(currentUser, activeFilters);
-        expect(result).toEqual(expectedResult);
-    });
-
-    it('buildTaskInboxWhereArgument - with empty taskStates', () => {
-        const currentUser = { id: '', groups: [] };
-        const activeFilters = {
-            taskNames: [],
-            taskStates: []
-        };
-
-        const expectedResult = {
-                    or: [
-                        {
-                            actualOwner: { equal: "" }
-                        },
-                        {
-                            and: [
-                                {
-                                    actualOwner: { isNull: true }
-                                },
-                                {
-                                    not: { excludedUsers: { contains: "" } }
-                                },
-                                {
-                                    or: [
-                                        { potentialUsers: { contains: "" } },
-                                        { potentialGroups: { containsAny: [] } }
-                                    ]
-
-                                }
-                            ]
-                        }
-                    ]
-               
-        };
-        const result = buildTaskInboxWhereArgument(currentUser, activeFilters);
-        expect(result).toEqual(expectedResult);
-    });
-
-    it('buildTaskInboxWhereArgument- with taskName', () => {
-        const currentUser = { id: '', groups: [] };
-        const activeFilters = {
-            taskNames: ['test'],
-            taskStates: ['Ready, Reserved']
-        };
-
-        const expectedResult = {
-            and: [
-                {
-                    or: [
-                        {
-                            actualOwner: { equal: "" }
-                        },
-                        {
-                            and: [
-                                {
-                                    actualOwner: { isNull: true }
-                                },
-                                {
-                                    not: { excludedUsers: { contains: "" } }
-                                },
-                                {
-                                    or: [
-                                        { potentialUsers: { contains: "" } },
-                                        { potentialGroups: { containsAny: [] } }
-                                    ]
-
-                                }
-                            ]
-                        }
-                    ]
+                  not: { excludedUsers: { contains: '' } }
                 },
                 {
-                    and: [
-                        {
-                            state: {
-                                in: ["Ready, Reserved"]
-                            }
-                        },
-                        {
-                            "or": [
-                                {
-                                    referenceName: {
-                                        like: "*test*",
-                                    },
-                                },
-                            ],
-                        }
-                    ]
+                  or: [
+                    { potentialUsers: { contains: '' } },
+                    { potentialGroups: { containsAny: [] } }
+                  ]
                 }
-            ]
-        };
-        const result = buildTaskInboxWhereArgument(currentUser, activeFilters);
-        expect(result).toEqual(expectedResult);
-    });
+              ]
+            }
+          ]
+        },
+        {
+          and: [
+            {
+              state: {
+                in: ['Ready, Reserved']
+              }
+            }
+          ]
+        }
+      ]
+    };
+    const result = buildTaskInboxWhereArgument(currentUser, activeFilters);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('buildTaskInboxWhereArgument - with empty taskStates', () => {
+    const currentUser = { id: '', groups: [] };
+    const activeFilters = {
+      taskNames: [],
+      taskStates: []
+    };
+
+    const expectedResult = {
+      or: [
+        {
+          actualOwner: { equal: '' }
+        },
+        {
+          and: [
+            {
+              actualOwner: { isNull: true }
+            },
+            {
+              not: { excludedUsers: { contains: '' } }
+            },
+            {
+              or: [
+                { potentialUsers: { contains: '' } },
+                { potentialGroups: { containsAny: [] } }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+    const result = buildTaskInboxWhereArgument(currentUser, activeFilters);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('buildTaskInboxWhereArgument- with taskName', () => {
+    const currentUser = { id: '', groups: [] };
+    const activeFilters = {
+      taskNames: ['test'],
+      taskStates: ['Ready, Reserved']
+    };
+
+    const expectedResult = {
+      and: [
+        {
+          or: [
+            {
+              actualOwner: { equal: '' }
+            },
+            {
+              and: [
+                {
+                  actualOwner: { isNull: true }
+                },
+                {
+                  not: { excludedUsers: { contains: '' } }
+                },
+                {
+                  or: [
+                    { potentialUsers: { contains: '' } },
+                    { potentialGroups: { containsAny: [] } }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          and: [
+            {
+              state: {
+                in: ['Ready, Reserved']
+              }
+            },
+            {
+              or: [
+                {
+                  referenceName: {
+                    like: '*test*'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+    const result = buildTaskInboxWhereArgument(currentUser, activeFilters);
+    expect(result).toEqual(expectedResult);
+  });
 });

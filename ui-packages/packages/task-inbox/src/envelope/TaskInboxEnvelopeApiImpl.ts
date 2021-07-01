@@ -69,4 +69,9 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
       );
     return Promise.resolve();
   };
+
+  taskInbox__notify = (userName): Promise<void> => {
+    this.args.view().notify(userName);
+    return Promise.resolve();
+  };
 }
