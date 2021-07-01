@@ -125,7 +125,7 @@ class PmmlRegressionLimeExplainerTest {
         Prediction instance = new SimplePrediction(testPredictionInput, testPredictionOutputs.get(0));
 
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
-                0.5, 0.5));
+                0.3, 0.3));
     }
 
     private List<PredictionInput> getSamples() {
