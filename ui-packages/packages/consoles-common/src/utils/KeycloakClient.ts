@@ -15,7 +15,7 @@
  */
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import {
   ANONYMOUS_USER,
   User,
@@ -44,8 +44,7 @@ export const getLoadedSecurityContext = (): UserContext => {
 
 export const checkAuthServerHealth = () => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(window['KOGITO_CONSOLES_KEYCLOAK_HEALTH_CHECK_URL'])
+    fetch(window['KOGITO_CONSOLES_KEYCLOAK_HEALTH_CHECK_URL'])
       .then(response => {
         if (response.status === 200) {
           resolve();
@@ -125,6 +124,25 @@ export const getToken = (): string => {
   }
 };
 
+const setBearerToken = (
+  config: AxiosRequestConfig
+): Promise<AxiosRequestConfig> => {
+  if (!isAuthEnabled()) {
+    return Promise.resolve(config);
+  }
+  return new Promise<AxiosRequestConfig>((resolve, reject) => {
+    keycloak
+      .updateToken(30)
+      .then(() => {
+        config.headers.Authorization = 'Bearer ' + getToken();
+        resolve(config);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
 export const appRenderWithAxiosInterceptorConfig = (
   appRender: (ctx: UserContext) => void,
   onLoadFailure: () => void
@@ -137,27 +155,14 @@ export const appRenderWithAxiosInterceptorConfig = (
       response => response,
       error => {
         if (error.response.status === 401) {
-          loadSecurityContext(() => {
-            /* tslint:disable:no-string-literal */
-            axios.defaults.headers.common['Authorization'] =
-              'Bearer ' + getToken();
-            /* tslint:enable:no-string-literal */
-            return axios(error.config);
-          }, onLoadFailure);
+          // if token expired - log the user out
+          handleLogout();
         }
         return Promise.reject(error);
       }
     );
     axios.interceptors.request.use(
-      config => {
-        if (currentSecurityContext) {
-          const t = getToken();
-          /* tslint:disable:no-string-literal */
-          config.headers['Authorization'] = 'Bearer ' + t;
-          /* tslint:enable:no-string-literal */
-          return config;
-        }
-      },
+      config => setBearerToken(config),
       error => {
         /* tslint:disable:no-floating-promises */
         Promise.reject(error);

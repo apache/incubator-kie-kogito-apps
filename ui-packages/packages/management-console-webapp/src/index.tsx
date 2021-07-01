@@ -36,6 +36,7 @@ import ManagementConsoleRoutes from './components/console/ManagementConsoleRoute
 const onLoadFailure = (): void => {
   ReactDOM.render(<KeyCloakUnavailablePage />, document.getElementById('root'));
 };
+
 const appRender = async (ctx: UserContext) => {
   const httpLink = new HttpLink({
     uri:
