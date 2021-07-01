@@ -133,7 +133,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
 
                 final List<Output> outputs = predictionOutput.getOutputs();
 
-                if (outputs.size() != predictions.size()) {
+                if (goal.size() != outputs.size()) {
                     throw new IllegalArgumentException("Prediction size must be equal to goal size");
                 }
 
