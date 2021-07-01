@@ -63,7 +63,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
             distance = a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
         } else {
-            String message = "Feature type not supported";
+            String message = "Feature type " + aType.toString() + " not supported";
             logger.error(message);
             throw new IllegalArgumentException(message);
         }

@@ -230,7 +230,7 @@ class CounterfactualScoreCalculatorTest {
             CounterFactualScoreCalculator.outputDistance(ox, oy);
         });
 
-        assertEquals("Feature type not supported", exception.getMessage());
+        assertEquals("Feature type time not supported", exception.getMessage());
     }
 
     /**

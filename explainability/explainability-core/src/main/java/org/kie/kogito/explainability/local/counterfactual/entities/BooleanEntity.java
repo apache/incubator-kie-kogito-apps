@@ -72,7 +72,7 @@ public class BooleanEntity extends AbstractEntity<Boolean> {
 
     @Override
     public double similarity() {
-        return proposedValue.equals(originalValue) ? 1.0 : 0.0;
+        return 1.0 - distance();
     }
 
     /**
