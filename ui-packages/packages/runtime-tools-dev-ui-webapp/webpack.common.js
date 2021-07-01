@@ -5,6 +5,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
 const CopyPlugin = require("copy-webpack-plugin");
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -27,7 +28,16 @@ module.exports = {
         { from: "./resources", to: "./resources" },
         { from: "./src/static", to: "./static" },
         { from: "./src/components/styles.css", to: "./components/styles.css" }
-    ]})
+    ]}),
+    new FileManagerPlugin({
+      events: {
+        onEnd: {
+          copy: [
+            { source: './dist/envelope.js', destination: './dist/resources/resources/webapp/envelope.js' },
+          ]
+        },
+      },
+    }),
   ],
   module: {
     rules: [

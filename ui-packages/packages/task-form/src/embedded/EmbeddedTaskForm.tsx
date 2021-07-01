@@ -27,7 +27,6 @@ import {
 import { EmbeddedTaskFormChannelApiImpl } from './EmbeddedTaskFormChannelApiImpl';
 import { init } from '../envelope';
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
-import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
 
 export interface EmbeddedTaskFormProps {
   targetOrigin: string;

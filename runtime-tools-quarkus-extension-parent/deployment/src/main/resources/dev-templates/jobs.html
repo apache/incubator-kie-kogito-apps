@@ -25,6 +25,7 @@ width: 100vw;
 height: calc(100vh - 98px);
 }
 {/style}
+{#title}Runtime UI{/title}
 {#body}
 <div id="envelope-app"></div>
 
@@ -32,9 +33,9 @@ height: calc(100vh - 98px);
 <script>
     const devUI = RuntimeToolsDevUI.open({
         container: document.getElementById("envelope-app"),
-        users: {info:userInfo.arrayRepresentation.raw},
+        users: {info: userInfo.arrayRepresentation.raw},
         dataIndexUrl: "http://localhost:8180/graphql",
-        initialPage: "JobsManagement"
+        page: "JobsManagement"
     })
 </script>
 {/body}

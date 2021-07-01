@@ -35,10 +35,10 @@ public class UserInfoSupplier implements Supplier<UserInfo> {
 
         List<User> users = new ArrayList<>();
         for (String userName : userNames.get()) {
-            Optional<String[]> roles = ConfigProvider.getConfig().getOptionalValue("quarkus.runtime-tools.users." + userName + ".roles",
+            Optional<String[]> groups = ConfigProvider.getConfig().getOptionalValue("quarkus.runtime-tools.users." + userName + ".groups",
                     String[].class);
 
-            users.add(new User(userName, Arrays.asList(roles.orElse(new String[] {}))));
+            users.add(new User(userName, Arrays.asList(groups.orElse(new String[] {}))));
         }
 
         return new UserInfo(users);

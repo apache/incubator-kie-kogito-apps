@@ -16,27 +16,27 @@
 
 {#include main fluid=true}
 {#style}
-    .main-container {
-        margin: 0;
-        padding: 0;
-    }
-    #envelope-app {
-        width: 100vw;
-        height: calc(100vh - 98px);
-    }
+.main-container {
+margin: 0;
+padding: 0;
+}
+#envelope-app {
+width: 100vw;
+height: calc(100vh - 98px);
+}
 {/style}
 {#title}Runtime UI{/title}
 {#body}
-    <div id="envelope-app"></div>
+<div id="envelope-app"></div>
 
-    <script src="resources/webapp/standalone.js"></script>
-    <script>
-        const devUI = RuntimeToolsDevUI.open({
-            container: document.getElementById("envelope-app"),
-            users: {info:userInfo.arrayRepresentation.raw},
-            dataIndexUrl: "http://localhost:8180/graphql",
-            initialPage: "TaskInbox"
-        })
-    </script>
+<script src="resources/webapp/standalone.js"></script>
+<script>
+    const devUI = RuntimeToolsDevUI.open({
+        container: document.getElementById("envelope-app"),
+        users: {info: userInfo.arrayRepresentation.raw},
+        dataIndexUrl: "http://localhost:8180/graphql",
+        page: "TaskInbox"
+    })
+</script>
 {/body}
 {/include}

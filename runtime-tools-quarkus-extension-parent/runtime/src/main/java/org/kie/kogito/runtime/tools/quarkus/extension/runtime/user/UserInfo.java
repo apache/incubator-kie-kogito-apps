@@ -32,7 +32,9 @@ public class UserInfo {
     }
 
     public String getArrayRepresentation() {
-        return "[ " + users.stream().map(user -> "{ name: '" + user.getUsername() + "', roles: [" + user.getRoles().stream().map(role -> "'" + role + "'").collect(Collectors.joining(", ")) + "] }")
-                .collect(Collectors.joining(", ")) + " ]";
+        return "[ "
+                + users.stream().map(user -> "{ name: '" + user.getUsername() + "', groups: [" + user.getGroups().stream().map(group -> "'" + group + "'").collect(Collectors.joining(", ")) + "] }")
+                        .collect(Collectors.joining(", "))
+                + " ]";
     }
 }

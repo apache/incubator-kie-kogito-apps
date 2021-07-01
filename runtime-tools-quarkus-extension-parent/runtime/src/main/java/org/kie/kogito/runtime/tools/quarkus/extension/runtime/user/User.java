@@ -22,19 +22,19 @@ public class User {
 
     private String username;
 
-    private List<String> roles;
+    private List<String> groups;
 
     public User(String username,
-            List<String> roles) {
+            List<String> groups) {
         this.username = username;
-        this.roles = roles;
+        this.groups = groups;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public List<String> getGroups() {
+        return groups;
     }
 }
