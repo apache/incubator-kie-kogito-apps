@@ -35,8 +35,48 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class LimeConfigOptimizerTest {
 
     @Test
-    void testStabilityOptimization() throws Exception {
+    void testImpactOptimization() throws Exception {
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testImpactOptimizationNoSampling() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withSampling(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testImpactOptimizationNoWeighting() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withWeighting(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testImpactOptimizationNoEncoding() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withEncoding(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testImpactOptimizationNoProximity() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withProximity(false);
+        assertConfigOptimized(limeConfigOptimizer);
+    }
+
+    @Test
+    void testImpactOptimizationNoEntity() {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore()
+                .withSampling(false)
+                .withEncoding(false)
+                .withWeighting(false)
+                .withProximity(false);
+        assertThrows(AssertionError.class, () -> assertConfigOptimized(limeConfigOptimizer));
+    }
+
+    @Test
+    void testStabilityOptimization() throws Exception {
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore();
         assertConfigOptimized(limeConfigOptimizer);
     }
 
@@ -65,7 +105,7 @@ class LimeConfigOptimizerTest {
     }
 
     @Test
-    void testStabilityOptimizationNoEntity() throws Exception {
+    void testStabilityOptimizationNoEntity() {
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer()
                 .withSampling(false)
                 .withEncoding(false)

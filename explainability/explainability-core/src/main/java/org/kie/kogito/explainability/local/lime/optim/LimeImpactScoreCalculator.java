@@ -18,47 +18,50 @@ package org.kie.kogito.explainability.local.lime.optim;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.LocalSaliencyStability;
 import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalScore;
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeConfigSolution, SimpleBigDecimalScore> {
+public class LimeImpactScoreCalculator implements EasyScoreCalculator<LimeConfigSolution, SimpleBigDecimalScore> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LimeStabilityScoreCalculator.class);
-    private static final BigDecimal TWO = BigDecimal.valueOf(2d);
-    private static final BigDecimal ZERO = BigDecimal.valueOf(0);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LimeImpactScoreCalculator.class);
+    private static final int TOP_FEATURES = 2;
 
     @Override
     public SimpleBigDecimalScore calculateScore(LimeConfigSolution solution) {
         LimeConfig config = LimeConfigEntityFactory.toLimeConfig(solution);
-        BigDecimal stabilityScore = BigDecimal.ZERO;
+        BigDecimal impactScore = BigDecimal.ZERO;
         List<Prediction> predictions = solution.getPredictions();
         if (!predictions.isEmpty()) {
-            stabilityScore = getStabilityScore(solution, config, predictions);
+            impactScore = getImpactScore(solution, config, predictions);
         }
-        return SimpleBigDecimalScore.of(stabilityScore);
+        return SimpleBigDecimalScore.of(impactScore);
     }
 
-    private BigDecimal getStabilityScore(LimeConfigSolution solution, LimeConfig config, List<Prediction> predictions) {
+    private BigDecimal getImpactScore(LimeConfigSolution solution, LimeConfig config, List<Prediction> predictions) {
         double succeededEvaluations = 0;
-        BigDecimal stabilityScore = BigDecimal.ZERO;
+        BigDecimal impactScore = BigDecimal.ZERO;
         LimeExplainer limeExplainer = new LimeExplainer(config);
         for (Prediction prediction : predictions) {
             try {
-                LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(solution.getModel(),
-                        prediction, limeExplainer, TWO.intValue(), 5);
-                for (String decision : stability.getDecisions()) {
-                    BigDecimal decisionMarginalScore = getDecisionMarginalScore(TWO, stability, decision);
-                    stabilityScore = stabilityScore.add(decisionMarginalScore);
+                Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, solution.getModel()).get(
+                        Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+
+                for (Map.Entry<String, Saliency> entry : saliencyMap.entrySet()) {
+                    double v = ExplainabilityMetrics.impactScore(solution.getModel(),
+                            prediction, entry.getValue().getTopFeatures(TOP_FEATURES));
+                    impactScore = impactScore.add(BigDecimal.valueOf(v));
                     succeededEvaluations++;
                 }
             } catch (ExecutionException e) {
@@ -71,24 +74,9 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeCon
             }
         }
         if (succeededEvaluations > 0) {
-            stabilityScore = stabilityScore.divide(BigDecimal.valueOf(succeededEvaluations), RoundingMode.CEILING);
+            impactScore = impactScore.divide(BigDecimal.valueOf(succeededEvaluations), RoundingMode.CEILING);
         }
-        return stabilityScore;
-    }
-
-    private BigDecimal getDecisionMarginalScore(BigDecimal topK, LocalSaliencyStability stability, String decision) {
-        BigDecimal positiveStabilityScore = ZERO;
-        BigDecimal negativeStabilityScore = ZERO;
-        for (int i = 1; i <= topK.intValue(); i++) {
-            positiveStabilityScore = positiveStabilityScore.add(BigDecimal.valueOf(stability.getPositiveStabilityScore(decision, i)));
-            negativeStabilityScore = negativeStabilityScore.add(BigDecimal.valueOf(stability.getNegativeStabilityScore(decision, i)));
-        }
-        positiveStabilityScore = positiveStabilityScore.divide(topK, RoundingMode.CEILING);
-        negativeStabilityScore = negativeStabilityScore.divide(topK, RoundingMode.CEILING);
-        // TODO: FAI-495 - differentiate (or weight) between positive and negative
-        return positiveStabilityScore.add(negativeStabilityScore)
-                .divide(TWO.multiply(BigDecimal.valueOf(stability.getDecisions().size())),
-                        RoundingMode.CEILING);
+        return impactScore;
     }
 
 }
