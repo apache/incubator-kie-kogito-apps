@@ -25,6 +25,7 @@ import java.util.concurrent.TimeoutException;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
@@ -59,18 +60,21 @@ public class LimeImpactScoreCalculator implements EasyScoreCalculator<LimeConfig
                         Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
 
                 for (Map.Entry<String, Saliency> entry : saliencyMap.entrySet()) {
-                    double v = ExplainabilityMetrics.impactScore(solution.getModel(),
-                            prediction, entry.getValue().getTopFeatures(TOP_FEATURES));
-                    impactScore = impactScore.add(BigDecimal.valueOf(v));
-                    succeededEvaluations++;
+                    List<FeatureImportance> topFeatures = entry.getValue().getTopFeatures(TOP_FEATURES);
+                    if (!topFeatures.isEmpty()) {
+                        double v = ExplainabilityMetrics.impactScore(solution.getModel(),
+                                prediction, topFeatures);
+                        impactScore = impactScore.add(BigDecimal.valueOf(v));
+                        succeededEvaluations++;
+                    }
                 }
             } catch (ExecutionException e) {
-                LOGGER.error("Saliency stability calculation returned an error {}", e.getMessage());
+                LOGGER.error("Saliency impact-score calculation returned an error {}", e.getMessage());
             } catch (InterruptedException e) {
-                LOGGER.error("Interrupted while waiting for saliency stability calculation {}", e.getMessage());
+                LOGGER.error("Interrupted while waiting for saliency impact-score calculation {}", e.getMessage());
                 Thread.currentThread().interrupt();
             } catch (TimeoutException e) {
-                LOGGER.error("Timed out while waiting for saliency stability calculation", e);
+                LOGGER.error("Timed out while waiting for saliency impact-score calculation", e);
             }
         }
         if (succeededEvaluations > 0) {

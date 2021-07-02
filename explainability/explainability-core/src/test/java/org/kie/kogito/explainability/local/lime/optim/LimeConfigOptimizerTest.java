@@ -36,7 +36,7 @@ class LimeConfigOptimizerTest {
 
     @Test
     void testImpactOptimization() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore();
         assertConfigOptimized(limeConfigOptimizer);
     }
 
