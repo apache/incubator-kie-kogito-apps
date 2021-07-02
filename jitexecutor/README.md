@@ -164,3 +164,18 @@ The native mode is supported by this application. You can create the native Quar
 ```bash
 mvn clean package -DskipTests -Pnative
 ```
+
+## Security 
+
+It is possible to enable oidc on this application according to the [quarkus oidc extension](https://quarkus.io/guides/security-openid-connect). For example, in order to secure all the endpoints it is possible to compile the application with
+
+```bash 
+mvn clean -Dquarkus.oidc.enabled=true -Dquarkus.http.auth.permission.authenticated.paths=/* -Dquarkus.http.auth.permission.authenticated.policy=authenticated package
+```
+
+and then at runtime specify the authentication server url and the client ID
+```bash
+export QUARKUS_OIDC_CLIENT_ID=your-client-id
+export QUARKUS_OIDC_AUTH_SERVER_URL=https://example.sso.com/auth/realms/example
+java -jar jitexecutor-runner/target/jitexecutor-runner-2.0.0-SNAPSHOT-runner.jar
+```
