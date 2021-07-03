@@ -19,15 +19,25 @@ import { mount } from 'enzyme';
 import TaskInboxPage from '../TaskInboxPage';
 import TaskInboxContainer from '../../../containers/TaskInboxContainer/TaskInboxContainer';
 import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
+import { TaskInboxContextProvider } from '../../../../channel/TaskInbox';
+import { TaskInboxQueries } from '../../../../channel/TaskInbox/TaskInboxQueries';
 
 jest.mock('../../../containers/TaskInboxContainer/TaskInboxContainer');
 
 describe('TaskInboxPage tests', () => {
+  const MockQueries = jest.fn<TaskInboxQueries, []>(() => ({
+    getUserTaskById: jest.fn(),
+    getUserTasks: jest.fn()
+  }));
   it('Snapshot', () => {
     const wrapper = mount(
-      <DevUIAppContextProvider users={[{ id: 'John snow', groups: ['admin'] }]}>
-        <TaskInboxPage />
-      </DevUIAppContextProvider>
+      <TaskInboxContextProvider apolloClient={new MockQueries()}>
+        <DevUIAppContextProvider
+          users={[{ id: 'John snow', groups: ['admin'] }]}
+        >
+          <TaskInboxPage />
+        </DevUIAppContextProvider>
+      </TaskInboxContextProvider>
     );
 
     expect(wrapper).toMatchSnapshot();

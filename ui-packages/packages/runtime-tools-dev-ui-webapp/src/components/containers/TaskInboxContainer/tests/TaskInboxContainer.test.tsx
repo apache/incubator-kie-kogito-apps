@@ -16,27 +16,33 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { DefaultUser } from '@kogito-apps/consoles-common';
 import TaskInboxContainer from '../TaskInboxContainer';
 import * as TaskInboxContext from '../../../../channel/TaskInbox/TaskInboxContext';
 import { TaskInboxQueries } from '../../../../channel/TaskInbox/TaskInboxQueries';
 import { TaskInboxGatewayApiImpl } from '../../../../channel/TaskInbox/TaskInboxGatewayApi';
+import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
+import { TaskInboxContextProvider } from '../../../../channel/TaskInbox';
 
 const MockQueries = jest.fn<TaskInboxQueries, []>(() => ({
   getUserTaskById: jest.fn(),
   getUserTasks: jest.fn()
 }));
-
+const getCurrentUser = jest.fn();
 jest
   .spyOn(TaskInboxContext, 'useTaskInboxGatewayApi')
   .mockImplementation(
-    () =>
-      new TaskInboxGatewayApiImpl(new DefaultUser('jon', []), new MockQueries())
+    () => new TaskInboxGatewayApiImpl(getCurrentUser(), new MockQueries())
   );
 
 describe('TaskInboxContainer tests', () => {
   it('Snapshot', () => {
-    const wrapper = mount(<TaskInboxContainer />);
+    const wrapper = mount(
+      <DevUIAppContextProvider users={[{ id: 'John snow', groups: ['admin'] }]}>
+        <TaskInboxContextProvider apolloClient={new MockQueries()}>
+          <TaskInboxContainer />
+        </TaskInboxContextProvider>
+      </DevUIAppContextProvider>
+    );
 
     expect(wrapper).toMatchSnapshot();
 

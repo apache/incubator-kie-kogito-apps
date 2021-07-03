@@ -23,10 +23,13 @@ import {
 } from '@kogito-apps/ouia-tools';
 import { PageTitle } from '@kogito-apps/consoles-common';
 import TaskInboxContainer from '../../containers/TaskInboxContainer/TaskInboxContainer';
-import TaskInboxSwitchUser from '../../containers/TaskInboxContainer/components/TaskInboxSwitchUser';
+import TaskInboxSwitchUser from './components/TaskInboxSwitchUser';
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 import '../../styles.css';
 
 const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
+  const appContext = useDevUIAppContext();
+  const user: string = appContext.getCurrentUser().id;
   useEffect(() => {
     return ouiaPageTypeAndObjectId('task-inbox-page');
   });
@@ -50,7 +53,7 @@ const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
             <PageTitle title="Task Inbox" />
           </GridItem>
           <GridItem span={1}>
-            <TaskInboxSwitchUser />
+            {user.length > 0 && <TaskInboxSwitchUser user={user} />}
           </GridItem>
         </Grid>
       </PageSection>

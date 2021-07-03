@@ -47,7 +47,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
     <EmbeddedProcessDetails
       {...componentOuiaProps(ouiaId, 'process-details-container', ouiaSafe)}
       driver={gatewayApi}
-      targetOrigin={window.location.origin}
+      targetOrigin={'*'}
       processInstance={processInstance}
     />
   );

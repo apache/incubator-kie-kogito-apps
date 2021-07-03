@@ -66,6 +66,7 @@ let queries: TaskInboxQueries;
 let gatewayApi: TaskInboxGatewayApi;
 
 describe('TaskInboxChannelApiImpl tests', () => {
+  const getCurrentUser = jest.fn();
   beforeEach(() => {
     jest.clearAllMocks();
     initialState = {
@@ -83,7 +84,7 @@ describe('TaskInboxChannelApiImpl tests', () => {
       }
     };
     queries = new MockTaskInboxQueries();
-    gatewayApi = new TaskInboxGatewayApiImpl(user, queries);
+    gatewayApi = new TaskInboxGatewayApiImpl(queries, getCurrentUser);
     getUserTasksMock.mockReturnValue(Promise.resolve([]));
   });
 
@@ -121,7 +122,7 @@ describe('TaskInboxChannelApiImpl tests', () => {
     gatewayApi.query(0, 10);
 
     expect(queries.getUserTasks).toHaveBeenCalledWith(
-      user,
+      getCurrentUser(),
       0,
       10,
       initialState.filters,

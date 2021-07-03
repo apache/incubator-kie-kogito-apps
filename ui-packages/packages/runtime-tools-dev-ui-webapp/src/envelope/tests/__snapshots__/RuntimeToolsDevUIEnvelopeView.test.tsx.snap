@@ -3,26 +3,7 @@
 exports[`RuntimeToolsDevUIEnvelopeView tests Snapshot 1`] = `null`;
 
 exports[`RuntimeToolsDevUIEnvelopeView tests Snapshot 2`] = `
-<ForwardRef
-  userContext={
-    TestUserContextImpl {
-      "currentUser": Object {
-        "groups": Array [
-          "employees",
-        ],
-        "id": "john",
-      },
-      "userManager": TestUserManagerImpl {
-        "system": Array [
-          "john",
-          "mary",
-          "poul",
-        ],
-        "users": Array [],
-      },
-    }
-  }
->
+<ForwardRef>
   <RuntimeTools
     dataIndex="http://localhost:4000"
     navigate="test"

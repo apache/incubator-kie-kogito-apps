@@ -15,9 +15,15 @@
  */
 
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
-import { getTaskSchemaEndPoint } from '../Utils';
+import {
+  getTaskEndpointSecurityParams,
+  getTaskSchemaEndPoint,
+  resolveTaskPriority,
+  trimTaskEndpoint
+} from '../Utils';
 
 describe('Utils tests', () => {
+  process.env = Object.assign(process.env, { CUSTOM_VAR: 'value' });
   const userTask: UserTaskInstance = {
     id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
     description: null,
@@ -55,11 +61,40 @@ describe('Utils tests', () => {
   it('getTaskSchemaEndPoint - with completed', () => {
     const currentUser = { id: '', groups: [] };
     const expectedResult =
-      'http://localhost:8080/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3/schema?user=';
+      'http://localhost:8080/travels/VisaApplication/schema';
     const result = getTaskSchemaEndPoint(
-      { ...userTask, completed: '' },
+      { ...userTask, completed: true },
       currentUser
     );
     expect(result).toEqual(expectedResult);
+  });
+
+  it('getTaskEndpointSecurityParams', () => {
+    const currentUser = { id: 'admin', groups: ['admin'] };
+    const expectedResult = 'user=admin&group=admin';
+    const result = getTaskEndpointSecurityParams(currentUser);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('trimTaskEndpoint', () => {
+    const expectedResult = 'http://localhost:8080/travels/...';
+    const result = trimTaskEndpoint(userTask);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it('trimTaskEndpoint - without endpoint', () => {
+    const expectedResult = '-';
+    const result = trimTaskEndpoint({ ...userTask, endpoint: '' });
+    expect(result).toEqual(expectedResult);
+  });
+  it('resolveTaskPriority', () => {
+    const HighResult = resolveTaskPriority('0');
+    expect(HighResult).toEqual('0 - High');
+    const MediumResult = resolveTaskPriority('5');
+    expect(MediumResult).toEqual('5 - Medium');
+    const LowResult = resolveTaskPriority('10');
+    expect(LowResult).toEqual('10 - Low');
+    const OtherResult = resolveTaskPriority('15');
+    expect(OtherResult).toEqual('15');
   });
 });

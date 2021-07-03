@@ -1,0 +1,272 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskInboxSwitchUser tests Snapshot test with default props 1`] = `
+<DevUIAppContextProvider
+  users={
+    Array [
+      Object {
+        "groups": Array [
+          "admin",
+        ],
+        "id": "John snow",
+      },
+    ]
+  }
+>
+  <TaskInboxSwitchUser
+    user="John"
+  >
+    <Dropdown
+      dropdownItems={
+        Array [
+          <DropdownItem>
+            John snow
+          </DropdownItem>,
+        ]
+      }
+      isOpen={false}
+      isPlain={true}
+      onSelect={[Function]}
+      toggle={
+        <DropdownToggle
+          aria-label="Applications"
+          id="toggle-id-7"
+          onToggle={[Function]}
+          toggleIndicator={null}
+        >
+          <UserIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+          />
+          <Text
+            component="p"
+          >
+            John
+          </Text>
+        </DropdownToggle>
+      }
+    >
+      <DropdownWithContext
+        autoFocus={true}
+        className=""
+        direction="down"
+        dropdownItems={
+          Array [
+            <DropdownItem>
+              John snow
+            </DropdownItem>,
+          ]
+        }
+        isGrouped={false}
+        isOpen={false}
+        isPlain={true}
+        menuAppendTo="inline"
+        onSelect={[Function]}
+        position="left"
+        toggle={
+          <DropdownToggle
+            aria-label="Applications"
+            id="toggle-id-7"
+            onToggle={[Function]}
+            toggleIndicator={null}
+          >
+            <UserIcon
+              color="currentColor"
+              noVerticalAlign={false}
+              size="sm"
+            />
+            <Text
+              component="p"
+            >
+              John
+            </Text>
+          </DropdownToggle>
+        }
+      >
+        <div
+          className="pf-c-dropdown"
+          data-ouia-component-id="OUIA-Generated-Dropdown-1"
+          data-ouia-component-type="PF4/Dropdown"
+          data-ouia-safe={true}
+        >
+          <DropdownToggle
+            aria-haspopup={true}
+            aria-label="Applications"
+            getMenuRef={[Function]}
+            id="toggle-id-7"
+            isOpen={false}
+            isPlain={true}
+            key=".0"
+            onEnter={[Function]}
+            onToggle={[Function]}
+            parentRef={
+              Object {
+                "current": <div
+                  class="pf-c-dropdown"
+                  data-ouia-component-id="OUIA-Generated-Dropdown-1"
+                  data-ouia-component-type="PF4/Dropdown"
+                  data-ouia-safe="true"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Applications"
+                    class="pf-c-dropdown__toggle pf-m-plain"
+                    data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                    data-ouia-component-type="PF4/DropdownToggle"
+                    data-ouia-safe="true"
+                    id="toggle-id-7"
+                    type="button"
+                  >
+                    <span>
+                      <svg
+                        aria-hidden="true"
+                        fill="currentColor"
+                        height="1em"
+                        role="img"
+                        style="vertical-align: -0.125em;"
+                        viewBox="0 0 448 512"
+                        width="1em"
+                      >
+                        <path
+                          d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+                        />
+                      </svg>
+                      <p
+                        class=""
+                        data-pf-content="true"
+                      >
+                        John
+                      </p>
+                    </span>
+                  </button>
+                </div>,
+              }
+            }
+            toggleIndicator={null}
+          >
+            <Toggle
+              aria-haspopup={true}
+              aria-label="Applications"
+              bubbleEvent={false}
+              className=""
+              data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+              data-ouia-component-type="PF4/DropdownToggle"
+              data-ouia-safe={true}
+              getMenuRef={[Function]}
+              id="toggle-id-7"
+              isActive={false}
+              isDisabled={false}
+              isOpen={false}
+              isPlain={true}
+              isPrimary={false}
+              isSplitButton={false}
+              onEnter={[Function]}
+              onToggle={[Function]}
+              parentRef={
+                Object {
+                  "current": <div
+                    class="pf-c-dropdown"
+                    data-ouia-component-id="OUIA-Generated-Dropdown-1"
+                    data-ouia-component-type="PF4/Dropdown"
+                    data-ouia-safe="true"
+                  >
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      aria-label="Applications"
+                      class="pf-c-dropdown__toggle pf-m-plain"
+                      data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                      data-ouia-component-type="PF4/DropdownToggle"
+                      data-ouia-safe="true"
+                      id="toggle-id-7"
+                      type="button"
+                    >
+                      <span>
+                        <svg
+                          aria-hidden="true"
+                          fill="currentColor"
+                          height="1em"
+                          role="img"
+                          style="vertical-align: -0.125em;"
+                          viewBox="0 0 448 512"
+                          width="1em"
+                        >
+                          <path
+                            d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+                          />
+                        </svg>
+                        <p
+                          class=""
+                          data-pf-content="true"
+                        >
+                          John
+                        </p>
+                      </span>
+                    </button>
+                  </div>,
+                }
+              }
+            >
+              <button
+                aria-expanded={false}
+                aria-haspopup={true}
+                aria-label="Applications"
+                className="pf-c-dropdown__toggle pf-m-plain"
+                data-ouia-component-id="OUIA-Generated-DropdownToggle-1"
+                data-ouia-component-type="PF4/DropdownToggle"
+                data-ouia-safe={true}
+                disabled={false}
+                id="toggle-id-7"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                type="button"
+              >
+                <span
+                  className={null}
+                >
+                  <UserIcon
+                    color="currentColor"
+                    noVerticalAlign={false}
+                    size="sm"
+                  >
+                    <svg
+                      aria-hidden={true}
+                      aria-labelledby={null}
+                      fill="currentColor"
+                      height="1em"
+                      role="img"
+                      style={
+                        Object {
+                          "verticalAlign": "-0.125em",
+                        }
+                      }
+                      viewBox="0 0 448 512"
+                      width="1em"
+                    >
+                      <path
+                        d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
+                      />
+                    </svg>
+                  </UserIcon>
+                  <Text
+                    component="p"
+                  >
+                    <p
+                      className=""
+                      data-pf-content={true}
+                    >
+                      John
+                    </p>
+                  </Text>
+                </span>
+              </button>
+            </Toggle>
+          </DropdownToggle>
+        </div>
+      </DropdownWithContext>
+    </Dropdown>
+  </TaskInboxSwitchUser>
+</DevUIAppContextProvider>
+`;

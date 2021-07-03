@@ -18,21 +18,17 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { RuntimeToolsDevUIEnvelopeView } from '../RuntimeToolsDevUIEnvelopeView';
-import RuntimeTools from '../../components/console/RuntimeTools/RuntimeTools';
+import RuntimeTools from '../../components/DevUI/RuntimeTools/RuntimeTools';
 import { RuntimeToolsDevUIEnvelopeViewApi } from '../RuntimeToolsDevUIEnvelopeViewApi';
-import { TestUserContextImpl } from '@kogito-apps/consoles-common';
 
-jest.mock('../../components/console/RuntimeTools/RuntimeTools');
+jest.mock('../../components/DevUI/RuntimeTools/RuntimeTools');
 
 describe('RuntimeToolsDevUIEnvelopeView tests', () => {
   it('Snapshot', () => {
     const forwardRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
 
     const wrapper = mount(
-      <RuntimeToolsDevUIEnvelopeView
-        userContext={new TestUserContextImpl()}
-        ref={forwardRef}
-      />
+      <RuntimeToolsDevUIEnvelopeView ref={forwardRef} />
     ).find('RuntimeToolsDevUIEnvelopeView');
 
     expect(wrapper).toMatchSnapshot();
@@ -44,8 +40,9 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.navigateTo('test');
       }
     });
-
+    console.log('before', wrapper);
     const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
+    console.log('after', envelopeView);
 
     expect(envelopeView).toMatchSnapshot();
 

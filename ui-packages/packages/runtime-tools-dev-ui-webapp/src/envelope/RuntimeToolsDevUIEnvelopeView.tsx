@@ -18,7 +18,7 @@ import * as React from 'react';
 import '@patternfly/patternfly/patternfly.css';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
 import { useImperativeHandle } from 'react';
-import RuntimeTools from '../components/console/RuntimeTools/RuntimeTools';
+import RuntimeTools from '../components/DevUI/RuntimeTools/RuntimeTools';
 import { User } from '@kogito-apps/consoles-common';
 
 export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
@@ -45,7 +45,7 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
     },
     []
   );
-  console.log('view file', DevUiUsers);
+
   return (
     <>
       {dataIndex.length > 0 && navigate.length > 0 && (
