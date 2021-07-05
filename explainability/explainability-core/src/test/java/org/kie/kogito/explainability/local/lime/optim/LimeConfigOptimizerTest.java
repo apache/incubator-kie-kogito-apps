@@ -76,37 +76,37 @@ class LimeConfigOptimizerTest {
 
     @Test
     void testStabilityOptimization() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forStabilityScore();
         assertConfigOptimized(limeConfigOptimizer);
     }
 
     @Test
     void testStabilityOptimizationNoSampling() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forStabilityScore().withSampling(false);
         assertConfigOptimized(limeConfigOptimizer);
     }
 
     @Test
     void testStabilityOptimizationNoWeighting() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeighting(false);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forStabilityScore().withWeighting(false);
         assertConfigOptimized(limeConfigOptimizer);
     }
 
     @Test
     void testStabilityOptimizationNoEncoding() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withEncoding(false);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forStabilityScore().withEncoding(false);
         assertConfigOptimized(limeConfigOptimizer);
     }
 
     @Test
     void testStabilityOptimizationNoProximity() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withProximity(false);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forStabilityScore().withProximity(false);
         assertConfigOptimized(limeConfigOptimizer);
     }
 
     @Test
     void testStabilityOptimizationNoEntity() {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer()
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forStabilityScore()
                 .withSampling(false)
                 .withEncoding(false)
                 .withWeighting(false)
