@@ -275,28 +275,28 @@
 
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-inmemory-postgresql-parent</artifactId>
+                <artifactId>quarkus-postgresql-inmemory-parent</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-inmemory-postgresql</artifactId>
+                <artifactId>quarkus-postgresql-inmemory</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-inmemory-postgresql</artifactId>
+                <artifactId>quarkus-postgresql-inmemory</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-inmemory-postgresql-deployment</artifactId>
+                <artifactId>quarkus-postgresql-inmemory-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-inmemory-postgresql-deployment</artifactId>
+                <artifactId>quarkus-postgresql-inmemory-deployment</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
