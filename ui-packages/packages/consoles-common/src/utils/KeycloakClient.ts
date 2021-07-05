@@ -124,6 +124,24 @@ export const getToken = (): string => {
   }
 };
 
+export const updateKeycloakToken = (): Promise<void> => {
+  if (!isAuthEnabled()) {
+    return;
+  }
+  return new Promise((resolve, reject) => {
+    keycloak
+      .updateToken(30)
+      .then(() => {
+        const ctx = getLoadedSecurityContext() as KeycloakUserContext;
+        ctx.setToken(keycloak.token);
+        resolve();
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
+
 const setBearerToken = (
   config: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
@@ -131,15 +149,12 @@ const setBearerToken = (
     return Promise.resolve(config);
   }
   return new Promise<AxiosRequestConfig>((resolve, reject) => {
-    keycloak
-      .updateToken(30)
+    updateKeycloakToken()
       .then(() => {
-        config.headers.Authorization = 'Bearer ' + getToken();
+        config.headers.Authorization = 'Bearer ' + keycloak.token;
         resolve(config);
       })
-      .catch(error => {
-        reject(error);
-      });
+      .catch(error => reject(error));
   });
 };
 

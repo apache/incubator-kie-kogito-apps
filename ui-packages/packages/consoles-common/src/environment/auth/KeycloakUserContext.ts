@@ -19,7 +19,7 @@ import { handleLogout, isAuthEnabled } from '../../utils/KeycloakClient';
 
 export class KeycloakUserContext implements LogoutUserContext {
   private readonly currentUser: User;
-  private readonly token: string;
+  private token: string;
 
   constructor(keycloakInfo) {
     if (!isAuthEnabled()) {
@@ -44,5 +44,9 @@ export class KeycloakUserContext implements LogoutUserContext {
 
   getToken(): string {
     return this.token;
+  }
+
+  setToken(token: string): void {
+    this.token = token;
   }
 }
