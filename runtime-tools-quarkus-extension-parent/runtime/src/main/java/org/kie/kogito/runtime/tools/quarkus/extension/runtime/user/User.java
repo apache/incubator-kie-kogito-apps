@@ -20,18 +20,18 @@ import java.util.List;
 
 public class User {
 
-    private String username;
+    private String id;
 
     private List<String> groups;
 
-    public User(String username,
-            List<String> groups) {
-        this.username = username;
+    public User(final String id,
+            final List<String> groups) {
+        this.id = id;
         this.groups = groups;
     }
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
     public List<String> getGroups() {
