@@ -67,7 +67,6 @@ export class TaskInboxEnvelopeApiImpl implements TaskInboxEnvelopeApi {
         initArgs.allTaskStates,
         initArgs.activeTaskStates
       );
-    return Promise.resolve();
   };
 
   taskInbox__notify = (userName): Promise<void> => {

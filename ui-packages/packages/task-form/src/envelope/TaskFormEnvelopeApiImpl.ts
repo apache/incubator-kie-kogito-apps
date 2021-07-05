@@ -46,7 +46,7 @@ export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
     this.capturedInitRequestYet = true;
   }
 
-  taskForm__init = (
+  taskForm__init = async (
     association: Association,
     initArgs: TaskFormInitArgs
   ): Promise<void> => {
@@ -61,6 +61,5 @@ export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
 
     this.ackCapturedInitRequest();
     this.args.view().initialize(initArgs.userTask);
-    return Promise.resolve();
   };
 }

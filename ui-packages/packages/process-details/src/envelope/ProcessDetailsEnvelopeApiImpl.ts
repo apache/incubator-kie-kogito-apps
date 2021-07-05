@@ -43,7 +43,7 @@ export class ProcessDetailsEnvelopeApiImpl
     this.capturedInitRequestYet = true;
   }
 
-  processDetails__init = (
+  processDetails__init = async (
     association: Association,
     initArgs: ProcessDetailsInitArgs
   ): Promise<void> => {
@@ -57,6 +57,5 @@ export class ProcessDetailsEnvelopeApiImpl
 
     this.ackCapturedInitRequest();
     this.args.view().initialize(initArgs.processInstance);
-    return Promise.resolve();
   };
 }
