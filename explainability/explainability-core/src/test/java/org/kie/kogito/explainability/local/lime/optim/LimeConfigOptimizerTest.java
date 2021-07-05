@@ -76,7 +76,7 @@ class LimeConfigOptimizerTest {
 
     @Test
     void testStabilityOptimization() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore();
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
         assertConfigOptimized(limeConfigOptimizer);
     }
 
