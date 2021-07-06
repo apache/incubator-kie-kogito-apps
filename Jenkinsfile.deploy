@@ -144,18 +144,6 @@ pipeline {
                 }
             }
         }
-        stage('Stage artifacts for release') {
-            when {
-                expression { return  !env.MAVEN_DEPLOY_REPOSITORY && isRelease() }
-            }
-            steps {
-                script {
-                    // Deploy locally and then to staging
-                    runMavenDeployLocally()
-                    runMavenStage()
-                }
-            }
-        }
         stage('Create PR') {
             when {
                 expression { return isRelease() || isCreatePr()  }
