@@ -16,10 +16,7 @@
 
 import * as KeycloakClient from '../KeycloakClient';
 import axios from 'axios';
-import {
-  ANONYMOUS_USER,
-  KeycloakUserContext,
-} from '../../environment/auth';
+import { ANONYMOUS_USER, KeycloakUserContext } from '../../environment/auth';
 import Keycloak from 'keycloak-js';
 
 describe('mocked function tests in KeycloakClient', () => {
@@ -36,7 +33,7 @@ describe('mocked function tests in KeycloakClient', () => {
     await expect(KeycloakClient.checkAuthServerHealth()).resolves.not.toThrow();
     window = unMockedWindow;
   });
-  it('check auth server health - resolved', async () => {
+  it('check auth server health - rejected', async () => {
     const unMockedWindow = window;
     window.fetch = jest
       .fn()
@@ -101,12 +98,6 @@ describe('Tests for keycloak client functions', () => {
 
   const setBearerTokenMock: any = jest.spyOn(KeycloakClient, 'setBearerToken');
   describe('Wrong API usage tests', () => {
-    test('getLoadedSecurityContext called before login - with auth', () => {
-      expect(() => KeycloakClient.getLoadedSecurityContext()).toThrowError(
-        'Cannot load security context! Please reload screen and log in again.'
-      );
-    });
-
     test('getLoadedSecurityContext called before login - without auth anonymous', () => {
       isAuthEnabledMock.mockReturnValue(false);
 

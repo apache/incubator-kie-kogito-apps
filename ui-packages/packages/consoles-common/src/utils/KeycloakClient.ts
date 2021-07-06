@@ -81,19 +81,18 @@ export const initializeKeycloak = (onloadSuccess: () => void) => {
       onLoad: 'login-required'
     })
     .then(authenticated => {
+      /* istanbul ignore else */
       if (authenticated) {
         currentSecurityContext = new KeycloakUserContext({
           userName: keycloak.tokenParsed['preferred_username'],
           roles: keycloak.tokenParsed['groups'],
-          token: keycloak.token
+          token: keycloak.token,
+          tokenMinValidity: checkUpdateTokenIsNumber(
+            window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY']
+          ),
+          logout: () => handleLogout()
         });
         onloadSuccess();
-      } else {
-        currentSecurityContext = new KeycloakUserContext({
-          userName: 'invalid user',
-          roles: [],
-          token: ''
-        });
       }
     });
 };
@@ -139,14 +138,10 @@ export const updateKeycloakToken = (): Promise<void> => {
     return;
   }
   return new Promise((resolve, reject) => {
+    const ctx = getLoadedSecurityContext() as KeycloakUserContext;
     keycloak
-      .updateToken(
-        checkUpdateTokenIsNumber(
-          window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY']
-        )
-      )
+      .updateToken(checkUpdateTokenIsNumber(ctx.getTokenMinValidity()))
       .then(() => {
-        const ctx = getLoadedSecurityContext() as KeycloakUserContext;
         ctx.setToken(keycloak.token);
         resolve();
       })
@@ -205,7 +200,6 @@ export const appRenderWithAxiosInterceptorConfig = (
 export const handleLogout = (): void => {
   currentSecurityContext = undefined;
   /* istanbul ignore else */
-
   if (keycloak) {
     keycloak.logout();
   }
