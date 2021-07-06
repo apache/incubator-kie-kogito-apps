@@ -42,10 +42,20 @@ export const getLoadedSecurityContext = (): UserContext => {
   return currentSecurityContext;
 };
 
+export const checkUpdateTokenIsNumber = (
+  updateTokenValidiy: number
+): number => {
+  if (typeof updateTokenValidiy !== 'number') {
+    return 30;
+  }
+  return updateTokenValidiy;
+};
+
 export const checkAuthServerHealth = () => {
   return new Promise((resolve, reject) => {
     fetch(window['KOGITO_CONSOLES_KEYCLOAK_HEALTH_CHECK_URL'])
       .then(response => {
+        /* istanbul ignore else */
         if (response.status === 200) {
           resolve();
         }
@@ -64,7 +74,7 @@ export const getKeycloakClient = (): Keycloak.KeycloakInstance => {
   });
 };
 
-const initializeKeycloak = (onloadSuccess: () => void) => {
+export const initializeKeycloak = (onloadSuccess: () => void) => {
   keycloak = getKeycloakClient();
   keycloak
     .init({
@@ -130,7 +140,11 @@ export const updateKeycloakToken = (): Promise<void> => {
   }
   return new Promise((resolve, reject) => {
     keycloak
-      .updateToken(30)
+      .updateToken(
+        checkUpdateTokenIsNumber(
+          window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY']
+        )
+      )
       .then(() => {
         const ctx = getLoadedSecurityContext() as KeycloakUserContext;
         ctx.setToken(keycloak.token);
@@ -142,7 +156,7 @@ export const updateKeycloakToken = (): Promise<void> => {
   });
 };
 
-const setBearerToken = (
+export const setBearerToken = (
   config: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
   if (!isAuthEnabled()) {
@@ -169,6 +183,7 @@ export const appRenderWithAxiosInterceptorConfig = (
     axios.interceptors.response.use(
       response => response,
       error => {
+        /* istanbul ignore else */
         if (error.response.status === 401) {
           // if token expired - log the user out
           handleLogout();
@@ -189,6 +204,8 @@ export const appRenderWithAxiosInterceptorConfig = (
 
 export const handleLogout = (): void => {
   currentSecurityContext = undefined;
+  /* istanbul ignore else */
+
   if (keycloak) {
     keycloak.logout();
   }

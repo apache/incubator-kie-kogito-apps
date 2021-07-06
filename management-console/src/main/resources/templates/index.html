@@ -14,6 +14,7 @@
     window.KOGITO_CONSOLES_KEYCLOAK_CLIENT_ID = '{config:property('kogito.consoles.keycloak.config.client-id') or 'kogito-console-quarkus'}';
     window.KOGITO_CONSOLES_KEYCLOAK_HEALTH_CHECK_URL = '{config:property('kogito.consoles.keycloak.config.health-check-url') or 'http://localhost:8280/auth/realms/kogito/.well-known/openid-configuration'}';
     window.KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK={config:property('kogito.consoles.keycloak.config.disable-health-check') or false};
+    window.KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY={config:property('kogito.consoles.keycloak.config.update-token-validity') or 30};
   </script>
   <body class="pf-m-redhat-font">
     <noscript>Enabling JavaScript is required to run this app.</noscript>

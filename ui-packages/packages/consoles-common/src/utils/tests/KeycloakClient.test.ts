@@ -28,17 +28,47 @@ describe('mocked function tests in KeycloakClient', () => {
     const result = KeycloakClient.isAuthEnabled();
     expect(result).toBeTruthy();
   });
-  it('check auth server health - resolved', () => {
-    const getMock = jest.spyOn(axios, 'get');
-    getMock.mockResolvedValue({ status: 200 });
-    KeycloakClient.checkAuthServerHealth().then(response => {
-      expect(response).toEqual(200);
-    });
-    getMock.mockClear();
+  it('check auth server health - resolved', async () => {
+    const unMockedWindow = window;
+    window.fetch = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve({ ok: true, status: 200 }));
+    await expect(KeycloakClient.checkAuthServerHealth()).resolves.not.toThrow();
+    window = unMockedWindow;
+  });
+  it('check auth server health - resolved', async () => {
+    const unMockedWindow = window;
+    window.fetch = jest
+      .fn()
+      .mockImplementation(() => Promise.reject({ ok: true, status: 500 }));
+    await expect(KeycloakClient.checkAuthServerHealth()).rejects.not.toThrow();
+    window = unMockedWindow;
   });
   it('getKeycloakClient test', async () => {
     const result = KeycloakClient.getKeycloakClient();
     expect(result).toBeInstanceOf(Keycloak);
+  });
+
+  it('test setBearer token', () => {
+    process.env.KOGITO_ENV_MODE = 'DEV';
+    expect(
+      KeycloakClient.setBearerToken({
+        headers: 'Authorization undefined'
+      })
+    ).resolves.not.toThrow();
+    process.env.KOGITO_ENV_MODE = 'PROD';
+    KeycloakClient.setBearerToken({
+      headers: 'Authorization token'
+    });
+  });
+  it('test checkUpdateTokenValidity', () => {
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = '30';
+    // @ts-ignore
+    const result1 = KeycloakClient.checkUpdateTokenIsNumber('30');
+    expect(result1).toEqual(30);
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = 50;
+    const result2 = KeycloakClient.checkUpdateTokenIsNumber(50);
+    expect(result2).toEqual(50);
   });
 });
 
@@ -51,10 +81,11 @@ describe('Tests for keycloak client functions', () => {
 
   beforeEach(() => {
     isAuthEnabledMock.mockReturnValue(true);
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = 30;
   });
 
   const isAuthEnabledMock = jest.spyOn(KeycloakClient, 'isAuthEnabled');
-  const getKeyCloakClient: any = jest.spyOn(
+  const getKeyCloakClientMock: any = jest.spyOn(
     KeycloakClient,
     'getKeycloakClient'
   );
@@ -63,6 +94,12 @@ describe('Tests for keycloak client functions', () => {
     'checkAuthServerHealth'
   );
 
+  const updateKeycloakTokenMock: any = jest.spyOn(
+    KeycloakClient,
+    'updateKeycloakToken'
+  );
+
+  const setBearerTokenMock: any = jest.spyOn(KeycloakClient, 'setBearerToken');
   describe('Wrong API usage tests', () => {
     test('getLoadedSecurityContext called before login - with auth', () => {
       expect(() => KeycloakClient.getLoadedSecurityContext()).toThrowError(
@@ -97,24 +134,31 @@ describe('Tests for keycloak client functions', () => {
     expect(context.getCurrentUser()).toBe(ANONYMOUS_USER);
   });
 
-  it('keycloak with no health check', () => {
+  it('keycloak with health check', () => {
     isAuthEnabledMock.mockReturnValue(true);
     window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = true;
-    getKeyCloakClient.mockReturnValue({
+    getKeyCloakClientMock.mockReturnValue({
       init: () => new Promise((resolve, reject) => resolve(true)),
       logout: () => {
         //logs out the user
       }
     });
+    // @ts-ignore
+    const mockInitializeKeycloak = jest.spyOn(
+      KeycloakClient,
+      'initializeKeycloak'
+    );
     const success = jest.fn();
     const failure = jest.fn();
     KeycloakClient.loadSecurityContext(success, failure);
+    expect(mockInitializeKeycloak).toHaveBeenCalledWith(success);
+    mockInitializeKeycloak.mockClear();
   });
 
   it('keycloak with no health check', () => {
     isAuthEnabledMock.mockReturnValue(true);
     window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = false;
-    getKeyCloakClient.mockReturnValue({
+    getKeyCloakClientMock.mockReturnValue({
       init: () => new Promise((resolve, reject) => resolve(true)),
       logout: () => {
         // logs out the user
@@ -191,15 +235,20 @@ describe('Tests for keycloak client functions', () => {
     expect(renderMock).toBeCalled();
   });
 
-  it('Test appRenderWithQuarkusAuthenticationEnabled function', () => {
-    const renderMock = jest.fn();
+  it('Test appRenderWithQuarkusAuthenticationEnabled function', async () => {
+    const renderSuccessMock = jest.fn();
+    const renderFailureMock = jest.fn();
+
     const getTokenMock = jest.spyOn(KeycloakClient, 'getToken');
-
     getTokenMock.mockReturnValue('testToken');
-    KeycloakClient.appRenderWithAxiosInterceptorConfig(renderMock, () => {
-      // renders error
+    updateKeycloakTokenMock.mockResolvedValue({});
+    setBearerTokenMock.mockResolvedValue({
+      headers: { Authorization: 'Bearer testToken' }
     });
-
+    KeycloakClient.appRenderWithAxiosInterceptorConfig(
+      renderSuccessMock,
+      renderFailureMock
+    );
     expect(
       // @ts-ignore
       // tslint:disable-next-line:no-floating-promises
@@ -219,15 +268,14 @@ describe('Tests for keycloak client functions', () => {
         }
       }
     });
-
     expect(
       // @ts-ignore
-      axios.interceptors.request.handlers[0].fulfilled({
-        headers: { Authorization: 'Bearer No token' }
+      await axios.interceptors.request.handlers[0].fulfilled({
+        headers: { Authorization: 'Bearer testToken' }
       })
     ).toMatchObject({
       headers: { Authorization: 'Bearer testToken' }
     });
-    expect(getTokenMock.mock.calls.length).toBe(1);
+    expect(setBearerTokenMock.mock.calls.length).toBe(3);
   });
 });
