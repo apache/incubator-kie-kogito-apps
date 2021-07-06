@@ -6,6 +6,22 @@ const confirmTravelForm = require('./forms/ConfirmTravel');
 const applyForVisaForm = require('./forms/ApplyForVisa');
 const emptyForm = require('./forms/EmptyForm');
 
+const tasksUnableToTransition = [
+  '047ec38d-5d57-4330-8c8d-9bd67b53a529',
+  '841b9dba-3d91-4725-9de3-f9f4853b417e'
+];
+
+const taskWithoutForm = [
+  '475e3eb3-1de4-4f68-a146-79c236353a03',
+  '615b9143-1468-4028-b454-6122e2139f5c'
+];
+
+const taskWithEmptyForm = [
+  '45a73767-5da3-49bf-9c40-d533c3e77ef3',
+  '809aae9e-f0bf-4892-b0c9-4be80664d2aa'
+];
+
+
 const processSvg = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b','8035b580-6ae4-4aa8-9ec0-e18e19809e0blmnop', '2d962eef-45b8-48a9-ad4e-9cde0ad6af88', 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e']
 module.exports = controller = {
   showError: (req, res) => {
@@ -213,7 +229,7 @@ module.exports = controller = {
       return data.processId === req.params.processId;
     });
 
-    const task = graphQL.UserTaskInstances.find(userTask => {
+    const task = graphData.UserTaskInstances.find(userTask => {
       return userTask.id === req.params.taskId;
     });
 
@@ -236,7 +252,7 @@ module.exports = controller = {
       `......ProcessId:${req.params.processId} --piId:${req.params.processInstanceId} --taskId:${req.params.taskId}`
     );
 
-    const task = graphQL.UserTaskInstances.find(userTask => {
+    const task = graphData.UserTaskInstances.find(userTask => {
       return userTask.id === req.params.taskId;
     });
 

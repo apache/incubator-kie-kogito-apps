@@ -42,7 +42,7 @@ describe('TaskInboxContainer tests', () => {
           <TaskInboxContainer />
         </TaskInboxContextProvider>
       </DevUIAppContextProvider>
-    );
+    ).find('TaskInboxContainer');
 
     expect(wrapper).toMatchSnapshot();
 

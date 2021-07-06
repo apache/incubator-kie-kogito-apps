@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
-import { mount } from 'enzyme';
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import RuntimeTools from '../RuntimeTools';
 
-jest.mock('apollo-link-http');
-jest.mock('../../RuntimeTools/RuntimeTools');
-describe('Runtime Tools tests', () => {
-  it('Snapshot tests with default props', () => {
-    const wrapper = mount(
-      <MemoryRouter initialEntries={['/']} keyLength={0}>
-        <RuntimeTools
-          users={[{ id: 'John snow', groups: ['admin'] }]}
-          dataIndex={'http:localhost:4000'}
-          navigate="JobsManagement"
-        />
-      </MemoryRouter>
-    );
+const MockedDevUILayout = () => {
+  return <></>;
+};
 
-    expect(wrapper.find('RuntimeTools')).toMatchSnapshot();
-  });
-});
+export default MockedDevUILayout;

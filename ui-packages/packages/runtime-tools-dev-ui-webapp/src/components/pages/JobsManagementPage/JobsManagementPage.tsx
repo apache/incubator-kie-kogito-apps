@@ -30,7 +30,7 @@ const JobsManagementPage: React.FC<OUIAProps> = () => {
     <React.Fragment>
       <PageSectionHeader titleText="Jobs Management" />
       <PageSection>
-        <Card className="kogito-consoles__card-size">
+        <Card className="Dev-ui__card-size">
           <JobsManagementContainer />
         </Card>
       </PageSection>

@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
- .kogito-consoles__card-size {
+ .Dev-ui__card-size {
     height: 100%
+}
+
+.DevUI-switchUser-dropdown-styling {
+    margin-left: 5em !important;
 }

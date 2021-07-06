@@ -212,10 +212,10 @@ const TaskInbox: React.FC<TaskInboxProps & OUIAProps> = ({
   }, [isEnvelopeConnectedToChannel]);
 
   useEffect(() => {
-    if (currentUser.length > 0) {
+    if (isEnvelopeConnectedToChannel && currentUser.length > 0) {
       initDefault();
     }
-  }, [currentUser]);
+  }, [isEnvelopeConnectedToChannel, currentUser]);
 
   if (error) {
     return <ServerErrors error={error} variant={'large'} />;

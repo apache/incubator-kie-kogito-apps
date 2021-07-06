@@ -24,7 +24,7 @@ const TaskFormContextProvider: React.FC = ({ children }) => {
 
   return (
     <TaskFormContext.Provider
-      value={new TaskFormGatewayApiImpl(appContext.getCurrentUser())}
+      value={new TaskFormGatewayApiImpl(() => appContext.getCurrentUser())}
     >
       {children}
     </TaskFormContext.Provider>

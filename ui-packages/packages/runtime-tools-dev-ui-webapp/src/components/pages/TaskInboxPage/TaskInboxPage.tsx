@@ -49,10 +49,10 @@ const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
         )}
       >
         <Grid>
-          <GridItem span={11}>
+          <GridItem span={10}>
             <PageTitle title="Task Inbox" />
           </GridItem>
-          <GridItem span={1}>
+          <GridItem span={2}>
             {user.length > 0 && <TaskInboxSwitchUser user={user} />}
           </GridItem>
         </Grid>

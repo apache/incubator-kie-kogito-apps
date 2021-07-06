@@ -40,9 +40,7 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.navigateTo('test');
       }
     });
-    console.log('before', wrapper);
     const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
-    console.log('after', envelopeView);
 
     expect(envelopeView).toMatchSnapshot();
 

@@ -47,8 +47,9 @@ describe('TaskInboxSwitchUser tests', () => {
     wrapper.update();
     expect(
       wrapper
-        .find('Text')
-        .find('p')
+        .find('Toggle')
+        .find('button')
+        .find('.pf-c-dropdown__toggle-text')
         .text()
     ).toEqual('admin');
   });

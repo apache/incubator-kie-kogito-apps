@@ -29,7 +29,7 @@ exports[`WebApp - ProcessDetailsContainer tests Snapshot test with default value
       }
     }
     processInstance={Object {}}
-    targetOrigin="http://localhost"
+    targetOrigin="*"
   >
     <ForwardRef>
       <div />

@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
-import {
-  Dropdown,
-  DropdownToggle,
-  DropdownItem,
-  Text,
-  TextVariants
-} from '@patternfly/react-core';
-import { UserIcon } from '@patternfly/react-icons';
+import { Dropdown, DropdownToggle, DropdownItem } from '@patternfly/react-core';
+import { UserIcon, CaretDownIcon } from '@patternfly/react-icons';
 import { useDevUIAppContext } from '../../../contexts/DevUIAppContext';
+import '../../../styles.css';
 
 interface IOwnProps {
   user: string;
@@ -43,18 +38,19 @@ const TaskInboxSwitchUser: React.FC<IOwnProps> = ({ user }) => {
       onSelect={onSelect}
       toggle={
         <DropdownToggle
-          toggleIndicator={null}
           onToggle={onToggle}
           aria-label="Applications"
           id="toggle-id-7"
+          toggleIndicator={CaretDownIcon}
+          icon={<UserIcon />}
         >
-          <UserIcon />
-          <Text component={TextVariants.p}>{currentUser}</Text>
+          {currentUser}
         </DropdownToggle>
       }
       isOpen={isOpen}
       isPlain
       dropdownItems={dropdownItems()}
+      className="DevUI-switchUser-dropdown-styling"
     />
   );
 };

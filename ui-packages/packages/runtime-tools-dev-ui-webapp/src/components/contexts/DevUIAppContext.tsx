@@ -39,7 +39,7 @@ export class DevUIAppContextImpl implements DevUIAppContext {
 
   constructor(users) {
     this.users = users;
-    if (users.length > 1) {
+    if (users.length > 0) {
       this.currentUser = users[0];
     }
   }

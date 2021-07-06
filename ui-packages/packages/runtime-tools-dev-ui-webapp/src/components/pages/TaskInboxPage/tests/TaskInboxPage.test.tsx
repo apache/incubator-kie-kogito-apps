@@ -31,13 +31,11 @@ describe('TaskInboxPage tests', () => {
   }));
   it('Snapshot', () => {
     const wrapper = mount(
-      <TaskInboxContextProvider apolloClient={new MockQueries()}>
-        <DevUIAppContextProvider
-          users={[{ id: 'John snow', groups: ['admin'] }]}
-        >
+      <DevUIAppContextProvider users={[{ id: 'John snow', groups: ['admin'] }]}>
+        <TaskInboxContextProvider apolloClient={new MockQueries()}>
           <TaskInboxPage />
-        </DevUIAppContextProvider>
-      </TaskInboxContextProvider>
+        </TaskInboxContextProvider>
+      </DevUIAppContextProvider>
     );
 
     expect(wrapper).toMatchSnapshot();

@@ -1,66 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TaskInboxContainer tests Snapshot 1`] = `
-<DevUIAppContextProvider
-  users={
-    Array [
-      Object {
-        "groups": Array [
-          "admin",
+<TaskInboxContainer>
+  <ForwardRef
+    activeTaskStates={
+      Array [
+        "Ready",
+        "Reserved",
+      ]
+    }
+    allTaskStates={
+      Array [
+        "Ready",
+        "Reserved",
+        "Completed",
+        "Aborted",
+        "Skipped",
+      ]
+    }
+    data-ouia-component-type="task-inbox-container"
+    data-ouia-safe={true}
+    driver={
+      TaskInboxGatewayApiImpl {
+        "getCurrentUser": Object {
+          "getUserTaskById": [MockFunction],
+          "getUserTasks": [MockFunction],
+        },
+        "listeners": Array [
+          Object {
+            "onOpen": [Function],
+          },
         ],
-        "id": "John snow",
-      },
-    ]
-  }
->
-  <TaskInboxContextProvider
-    apolloClient={
-      Object {
-        "getUserTaskById": [MockFunction],
-        "getUserTasks": [MockFunction],
+        "queries": undefined,
       }
     }
+    targetOrigin="*"
   >
-    <TaskInboxContainer>
-      <ForwardRef
-        activeTaskStates={
-          Array [
-            "Ready",
-            "Reserved",
-          ]
-        }
-        allTaskStates={
-          Array [
-            "Ready",
-            "Reserved",
-            "Completed",
-            "Aborted",
-            "Skipped",
-          ]
-        }
-        data-ouia-component-type="task-inbox-container"
-        data-ouia-safe={true}
-        driver={
-          TaskInboxGatewayApiImpl {
-            "getCurrentUser": Object {
-              "getUserTaskById": [MockFunction],
-              "getUserTasks": [MockFunction],
-            },
-            "listeners": Array [
-              Object {
-                "onOpen": [Function],
-              },
-            ],
-            "queries": undefined,
-          }
-        }
-        targetOrigin="*"
-      >
-        <ForwardRef>
-          <div />
-        </ForwardRef>
-      </ForwardRef>
-    </TaskInboxContainer>
-  </TaskInboxContextProvider>
-</DevUIAppContextProvider>
+    <ForwardRef>
+      <div />
+    </ForwardRef>
+  </ForwardRef>
+</TaskInboxContainer>
 `;

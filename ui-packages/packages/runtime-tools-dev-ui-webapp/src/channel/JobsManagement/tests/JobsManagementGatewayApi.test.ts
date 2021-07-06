@@ -21,6 +21,7 @@ import {
   JobsManagementGatewayApiImpl
 } from '../JobsManagementGatewayApi';
 import { GraphQL } from '@kogito-apps/consoles-common';
+import { performMultipleCancel, jobCancel } from '../../apis/apis';
 
 export const JobData: Job = {
   callbackEndpoint:
@@ -74,6 +75,12 @@ const job = {
   scheduledId: null,
   status: JobStatus.Scheduled
 };
+
+jest.mock('../../apis/apis', () => ({
+  handleJobReschedule: jest.fn(),
+  jobCancel: jest.fn(),
+  performMultipleCancel: jest.fn()
+}));
 describe('JobsManagementChannelApiImpl tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -99,6 +106,8 @@ describe('JobsManagementChannelApiImpl tests', () => {
     const modalTitle = 'failure';
     const modalContent =
       'The job: eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0 failed to cancel. Error message: Network Error';
+    //@ts-ignore
+    jobCancel.mockReturnValueOnce({ modalTitle, modalContent });
     const result = await gatewayApi.cancelJob(job);
 
     expect(result).toEqual({ modalTitle, modalContent });
@@ -107,6 +116,8 @@ describe('JobsManagementChannelApiImpl tests', () => {
   it('bulkCancel', async () => {
     const successJobs = [];
     const failedJobs = [job];
+    //@ts-ignore
+    performMultipleCancel.mockReturnValue({ successJobs, failedJobs });
     const result = await gatewayApi.bulkCancel([job]);
 
     expect(result).toEqual({ successJobs, failedJobs });

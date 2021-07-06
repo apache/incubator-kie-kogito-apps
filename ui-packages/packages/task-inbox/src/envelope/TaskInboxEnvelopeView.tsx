@@ -71,7 +71,6 @@ export const TaskInboxEnvelopeView = React.forwardRef<
         setEnvelopeConnectedToChannel(true);
       },
       notify: userName => {
-        console.log('test reset');
         if (!_.isEmpty(userName)) {
           setCurrentUser(userName);
         }

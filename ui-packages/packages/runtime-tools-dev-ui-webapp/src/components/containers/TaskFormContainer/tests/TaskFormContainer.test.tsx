@@ -20,6 +20,7 @@ import TaskFormContainer from '../TaskFormContainer';
 import { TaskFormGatewayApi } from '../../../../channel/TaskForms';
 import * as TaskFormContext from '../../../../channel/TaskForms/TaskFormContext';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
+import { DefaultUser } from '@kogito-apps/consoles-common';
 
 const testUserTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -48,6 +49,8 @@ const testUserTask: UserTaskInstance = {
     'http://localhost:8080/travels/9ae7ce3b-d49c-4f35-b843-8ac3d22fa427/VisaApplication/45a73767-5da3-49bf-9c40-d533c3e77ef3'
 };
 
+const mockFunc = () => new DefaultUser('jon snow', ['hero']);
+
 const MockTaskFormGatewayApi = jest.fn<TaskFormGatewayApi, []>(() => ({
   getTaskFormSchema: jest.fn(),
   doSubmit: jest.fn()
@@ -55,7 +58,7 @@ const MockTaskFormGatewayApi = jest.fn<TaskFormGatewayApi, []>(() => ({
 
 jest
   .spyOn(TaskFormContext, 'useTaskFormGatewayApi')
-  .mockImplementation(() => new MockTaskFormGatewayApi());
+  .mockImplementation(() => new MockTaskFormGatewayApi(mockFunc));
 
 describe('TaskFormContainer tests', () => {
   it('Snapshot', () => {

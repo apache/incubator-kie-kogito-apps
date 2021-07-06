@@ -83,10 +83,10 @@ exports[`WebApp - JobsManagementPage tests Snapshot test with default values 1`]
           className="pf-c-page__main-section"
         >
           <Card
-            className="kogito-consoles__card-size"
+            className="Dev-ui__card-size"
           >
             <article
-              className="pf-c-card kogito-consoles__card-size"
+              className="pf-c-card Dev-ui__card-size"
               data-ouia-component-id="OUIA-Generated-Card-1"
               data-ouia-component-type="PF4/Card"
               data-ouia-safe={true}

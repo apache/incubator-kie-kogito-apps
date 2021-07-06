@@ -56,7 +56,7 @@ const ProcessListPage: React.FC<RouteComponentProps<
           props.ouiaSafe
         )}
       >
-        <Card className="kogito-consoles__card-size">
+        <Card className="Dev-ui__card-size">
           <ProcessListContainer initialState={initialState} />
         </Card>
       </PageSection>

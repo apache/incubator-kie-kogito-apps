@@ -62,7 +62,7 @@ let gatewayApi: TaskFormGatewayApi;
 describe('TaskFormGatewayApi tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    gatewayApi = new TaskFormGatewayApiImpl(user);
+    gatewayApi = new TaskFormGatewayApiImpl(() => user);
   });
 
   it('getTaskFormSchema', async () => {

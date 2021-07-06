@@ -25,6 +25,8 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
+jest.mock('../../DevUIRoutes/DevUIRoutes');
+
 jest.mock('@kogito-apps/consoles-common', () => ({
   ...jest.requireActual('@kogito-apps/consoles-common'),
   PageLayout: () => {
@@ -44,12 +46,12 @@ describe('DevUILayout tests', () => {
       users: [{ id: 'John snow', groups: ['admin'] }]
     };
     const wrapper = mount(
-      <MemoryRouter initialEntries={['/']} keyLength={0}>
-        <DevUILayout {...props}>
+      <DevUILayout {...props}>
+        <MemoryRouter initialEntries={['/']} keyLength={0}>
           <DevUIRoutes navigate={'JobsManagement'} />
-        </DevUILayout>
-      </MemoryRouter>
+        </MemoryRouter>
+      </DevUILayout>
     );
-    expect(wrapper.find('DevUILayout')).toMatchSnapshot();
+    expect(wrapper.find('PageLayout')).toMatchSnapshot();
   });
 });

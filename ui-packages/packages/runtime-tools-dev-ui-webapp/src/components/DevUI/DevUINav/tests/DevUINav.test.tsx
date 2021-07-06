@@ -27,7 +27,7 @@ describe('DevUINav tests', () => {
       </MemoryRouter>
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
       nested => nested.key() === 'process-instances-nav'
@@ -44,7 +44,7 @@ describe('DevUINav tests', () => {
       </MemoryRouter>
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
       nested => nested.key() === 'jobs-management-nav'
