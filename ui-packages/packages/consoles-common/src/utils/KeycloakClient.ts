@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import axios, { AxiosRequestConfig } from 'axios';
 import {
   ANONYMOUS_USER,

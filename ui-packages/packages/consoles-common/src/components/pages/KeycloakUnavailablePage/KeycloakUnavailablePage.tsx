@@ -25,8 +25,9 @@ import {
   CardTitle
 } from '@patternfly/react-core';
 import React from 'react';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import kogitoLogo from '../../../static/kogito.png';
-const KeyCloakUnavailablePage: React.FC = () => {
+const KeycloakUnavailablePage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   return (
     <div
       style={{
@@ -36,6 +37,7 @@ const KeyCloakUnavailablePage: React.FC = () => {
         background: '#868686',
         height: '100%'
       }}
+      {...componentOuiaProps(ouiaId, 'server-unavailable', ouiaSafe)}
     >
       {' '}
       <Card
@@ -75,4 +77,4 @@ const KeyCloakUnavailablePage: React.FC = () => {
   );
 };
 
-export default KeyCloakUnavailablePage;
+export default KeycloakUnavailablePage;

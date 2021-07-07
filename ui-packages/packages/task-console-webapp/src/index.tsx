@@ -28,13 +28,13 @@ import {
   isAuthEnabled,
   UserContext,
   ServerUnavailablePage,
-  KeyCloakUnavailablePage,
+  KeycloakUnavailablePage,
   updateKeycloakToken
 } from '@kogito-apps/consoles-common';
 import { TaskConsole, TaskConsoleRoutes } from './components/console';
 
 const onLoadFailure = () => {
-  ReactDOM.render(<KeyCloakUnavailablePage />, document.getElementById('root'));
+  ReactDOM.render(<KeycloakUnavailablePage />, document.getElementById('root'));
 };
 
 const appRender = (ctx: UserContext) => {
@@ -60,7 +60,7 @@ const appRender = (ctx: UserContext) => {
   });
 
   const setGQLContext = setContext((_, { headers }) => {
-    if (!isAuthEnabled) {
+    if (!isAuthEnabled()) {
       return {
         headers
       };

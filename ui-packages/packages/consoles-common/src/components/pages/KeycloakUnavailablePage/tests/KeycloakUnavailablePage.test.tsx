@@ -1,9 +1,9 @@
 import { Button } from '@patternfly/react-core';
 import { mount } from 'enzyme';
 import React from 'react';
-import KeyCloakUnavailablePage from '../KeyCloakUnavailablePage';
+import KeyCloakUnavailablePage from '../KeycloakUnavailablePage';
 
-describe('KeyCloakUnavailablePage test', () => {
+describe('KeycloakUnavailablePage test', () => {
   it('render the page', () => {
     const wrapper = mount(<KeyCloakUnavailablePage />);
     expect(wrapper).toMatchSnapshot();

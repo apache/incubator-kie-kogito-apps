@@ -28,8 +28,8 @@ const keycloakInfo = {
   logout: () => Keycloak.handleLogout()
 };
 
-const prepareMock = (keyCloakEnabled: boolean) => {
-  isAuthEnabled.mockReturnValue(keyCloakEnabled);
+const prepareMock = (keycloakEnabled: boolean) => {
+  isAuthEnabled.mockReturnValue(keycloakEnabled);
   handleLogout.mockReturnValue();
 };
 

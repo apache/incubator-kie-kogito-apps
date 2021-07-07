@@ -1,8 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`KeyCloakUnavailablePage test render the page 1`] = `
-<KeyCloakUnavailablePage>
+exports[`KeycloakUnavailablePage test render the page 1`] = `
+<KeycloakUnavailablePage>
   <div
+    data-ouia-component-type="server-unavailable"
+    data-ouia-safe={true}
     style={
       Object {
         "background": "#868686",
@@ -140,5 +142,5 @@ exports[`KeyCloakUnavailablePage test render the page 1`] = `
       </article>
     </Card>
   </div>
-</KeyCloakUnavailablePage>
+</KeycloakUnavailablePage>
 `;
