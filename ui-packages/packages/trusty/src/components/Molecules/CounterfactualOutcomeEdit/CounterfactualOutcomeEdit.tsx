@@ -1,12 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  Checkbox,
   FormGroup,
   Switch,
   TextInput,
   Touchspin
 } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
-import { CFGoal } from '../../../types';
+import { CFGoal, CFGoalRole } from '../../../types';
+import './CounterfactualOutcomeEdit.scss';
+import CounterfactualOutcomeUnsupported from '../../Atoms/CounterfactualOutcomeUnsupported/CounterfactualOutcomeUnsupported';
 
 type CounterfactualOutcomeEditProps = {
   goal: CFGoal;
@@ -16,6 +19,10 @@ type CounterfactualOutcomeEditProps = {
 
 const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
   const { goal, index, onUpdateGoal } = props;
+
+  if (goal.role === CFGoalRole.UNSUPPORTED) {
+    return <CounterfactualOutcomeUnsupported goal={goal} />;
+  }
 
   let valueEdit;
   switch (typeof goal.value) {
@@ -46,15 +53,35 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
         />
       );
       break;
-    default:
-      valueEdit = <em>Not yet supported</em>;
-      break;
   }
 
   return (
-    <FormGroup label={goal.name} fieldId={goal.id}>
-      {valueEdit}
-    </FormGroup>
+    <>
+      <Checkbox
+        id={goal.id}
+        isChecked={goal.role === CFGoalRole.FLOATING}
+        onChange={checked => {
+          let updatedRole = CFGoalRole.FIXED;
+          if (checked) {
+            updatedRole = CFGoalRole.FLOATING;
+          } else if (goal.value === goal.originalValue) {
+            updatedRole = CFGoalRole.ORIGINAL;
+          }
+          onUpdateGoal({
+            ...goal,
+            role: updatedRole
+          });
+        }}
+        label={
+          <FormGroup
+            fieldId={goal.id}
+            label={goal.name}
+            style={{ paddingTop: '4px' }}
+          />
+        }
+      />
+      <div className={'counterfactual-outcome__child'}>{valueEdit}</div>
+    </>
   );
 };
 
@@ -71,6 +98,9 @@ const CounterfactualOutcomeBoolean = (
   }, [goal.value]);
 
   const handleChange = (checked: boolean) => {
+    if (isFloating(goal)) {
+      return;
+    }
     onUpdateGoal({ ...goal, value: checked });
   };
 
@@ -80,6 +110,7 @@ const CounterfactualOutcomeBoolean = (
       label="True"
       labelOff="False"
       isChecked={booleanValue}
+      isDisabled={isFloating(goal)}
       onChange={handleChange}
     />
   );
@@ -94,14 +125,23 @@ const CounterfactualOutcomeNumber = (props: CounterfactualOutcomeEditProps) => {
   ]);
 
   const onMinus = () => {
+    if (isFloating(goal)) {
+      return;
+    }
     onUpdateGoal({ ...goal, value: (goal.value as number) - 1 });
   };
 
   const onChange = event => {
+    if (isFloating(goal)) {
+      return;
+    }
     onUpdateGoal({ ...goal, value: Number(event.target.value) });
   };
 
   const onPlus = () => {
+    if (isFloating(goal)) {
+      return;
+    }
     onUpdateGoal({ ...goal, value: (goal.value as number) + 1 });
   };
 
@@ -121,6 +161,7 @@ const CounterfactualOutcomeNumber = (props: CounterfactualOutcomeEditProps) => {
       minusBtnAriaLabel="minus"
       plusBtnAriaLabel="plus"
       widthChars={touchSpinWidth}
+      isDisabled={isFloating(goal)}
     />
   );
 };
@@ -129,6 +170,9 @@ const CounterfactualOutcomeString = (props: CounterfactualOutcomeEditProps) => {
   const { goal, index, onUpdateGoal } = props;
 
   const handleChange = (value: string) => {
+    if (isFloating(goal)) {
+      return;
+    }
     onUpdateGoal({ ...goal, value });
   };
 
@@ -139,6 +183,11 @@ const CounterfactualOutcomeString = (props: CounterfactualOutcomeEditProps) => {
       value={goal.value as string}
       onChange={handleChange}
       style={{ width: 250 }}
+      isDisabled={isFloating(goal)}
     />
   );
+};
+
+const isFloating = (goal: CFGoal) => {
+  return goal.role === CFGoalRole.FLOATING;
 };

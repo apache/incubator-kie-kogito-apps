@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { List, ListItem, ListVariant } from '@patternfly/react-core';
-import { CFGoal } from '../../../types';
+import { CFGoal, CFGoalRole } from '../../../types';
 
 type CounterfactualOutcomesSelectedProps = {
   goals: CFGoal[];
@@ -9,9 +9,14 @@ type CounterfactualOutcomesSelectedProps = {
 const CounterfactualOutcomesSelected = ({
   goals
 }: CounterfactualOutcomesSelectedProps) => {
-  const selectedOutcomes = useMemo(() => goals.filter(goal => !goal.isFixed), [
-    goals
-  ]);
+  const selectedOutcomes = useMemo(
+    () =>
+      goals.filter(
+        goal =>
+          goal.role === CFGoalRole.FIXED || goal.role === CFGoalRole.FLOATING
+      ),
+    [goals]
+  );
 
   return (
     <>
@@ -24,9 +29,14 @@ const CounterfactualOutcomesSelected = ({
             <span>Selected Outcomes:</span>{' '}
             {selectedOutcomes.map((goal, index) => (
               <span key={goal.id}>
-                <span>
-                  {goal.name}: {goal.value.toString()}
-                </span>
+                {goal.role === CFGoalRole.FIXED && (
+                  <span>
+                    {goal.name}: {goal.value.toString()}
+                  </span>
+                )}
+                {goal.role === CFGoalRole.FLOATING && (
+                  <span>{goal.name}: Any</span>
+                )}
                 {index + 1 !== selectedOutcomes.length && <span>, </span>}
               </span>
             ))}

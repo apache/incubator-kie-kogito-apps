@@ -3,6 +3,7 @@ import {
   CFAnalysisResult,
   CFExecutionStatus,
   CFGoal,
+  CFGoalRole,
   CFSearchInput,
   CFStatus,
   isItemObjectArray,
@@ -158,7 +159,9 @@ export const cfInitState = (parameters): CFState => {
       typeRef: outcome.outcomeResult.typeRef,
       value: outcome.outcomeResult.value,
       originalValue: outcome.outcomeResult.value,
-      isFixed: true,
+      role: isOutcomeSupported(outcome)
+        ? CFGoalRole.ORIGINAL
+        : CFGoalRole.UNSUPPORTED,
       kind: outcome.outcomeResult.kind
     };
   });
@@ -205,7 +208,7 @@ const updateCFStatus = (state: CFState): CFState => {
 const areRequiredParametersSet = (state: CFState): boolean => {
   return (
     areInputsSelected(state.searchDomains) &&
-    state.goals.filter(goal => !goal.isFixed).length > 0
+    state.goals.filter(goal => goal.role !== CFGoalRole.ORIGINAL).length > 0
   );
 };
 
@@ -220,4 +223,15 @@ const areInputsSelected = (inputs: CFSearchInput[]) => {
       input => input.domain || typeof input.value === 'boolean'
     )
   );
+};
+
+const isOutcomeSupported = outcome => {
+  switch (typeof outcome.outcomeResult.value) {
+    case 'boolean':
+    case 'number':
+    case 'string':
+      return true;
+    default:
+      return false;
+  }
 };

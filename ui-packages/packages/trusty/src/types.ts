@@ -88,10 +88,12 @@ export interface Saliency {
   outcomeId: string;
   featureImportance: FeatureScores[];
 }
+
 export enum SaliencyStatus {
   SUCCEEDED = 'SUCCEEDED',
   FAILED = 'FAILED'
 }
+
 export type SaliencyStatusStrings = keyof typeof SaliencyStatus;
 
 export interface Saliencies {
@@ -133,8 +135,15 @@ export interface CFSearchInput extends ItemObject {
   domain?: CFNumericalDomain | CFCategoricalDomain;
 }
 
+export enum CFGoalRole {
+  UNSUPPORTED,
+  ORIGINAL,
+  FIXED,
+  FLOATING
+}
+
 export type CFGoal = Pick<ItemObject, 'name' | 'kind' | 'typeRef' | 'value'> & {
-  isFixed: boolean;
+  role: CFGoalRole;
   originalValue: ItemObject['value'];
   id: string;
 };

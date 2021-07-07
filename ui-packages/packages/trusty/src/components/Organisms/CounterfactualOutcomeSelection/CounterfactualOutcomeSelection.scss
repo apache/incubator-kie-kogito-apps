@@ -1,3 +1,22 @@
-.counterfactual__outcomes-form {
-  margin: var(--pf-global--spacer--lg) 0;
+.counterfactual__outcomes-grid {
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: var(--pf-global--spacer--lg);
+
+  &__row {
+    padding-bottom: var(--pf-global--spacer--md);
+  }
+
+  &__separator {
+    border-right: 1px solid var(--pf-global--BorderColor--100)
+  }
 }
+
+.counterfactual__outcomes-form {
+
+  &__desired {
+    padding-left: var(--pf-global--spacer--lg);
+  }
+}
+
