@@ -46,45 +46,57 @@ public class DataIndexService {
     @Path("/tasks/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response tasksCount() {
-        final String tasksQueryResponse = getDataIndexClient().query(ALL_TASKS_IDS_QUERY);
+        try {
+            final String tasksQueryResponse = getDataIndexClient().query(ALL_TASKS_IDS_QUERY);
 
-        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new UserTaskInstancesAdapter()));
-        TasksResponse tasksResponse = jsonb.fromJson(tasksQueryResponse,
-                TasksResponse.class);
+            Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new UserTaskInstancesAdapter()));
+            TasksResponse tasksResponse = jsonb.fromJson(tasksQueryResponse,
+                    TasksResponse.class);
 
-        int tasksCount = tasksResponse.getData().getUserTaskInstances().size();
+            int tasksCount = tasksResponse.getData().getUserTaskInstances().size();
 
-        return Response.ok(tasksCount).build();
+            return Response.ok(tasksCount).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
     }
 
     @GET
     @Path("/processes/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response processesCount() {
-        final String processesQueryResponse = getDataIndexClient().query(ALL_PROCESSES_IDS_QUERY);
+        try {
+            final String processesQueryResponse = getDataIndexClient().query(ALL_PROCESSES_IDS_QUERY);
 
-        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new ProcessInstancesAdapter()));
-        ProcessesResponse processesResponse = jsonb.fromJson(processesQueryResponse,
-                ProcessesResponse.class);
+            Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new ProcessInstancesAdapter()));
+            ProcessesResponse processesResponse = jsonb.fromJson(processesQueryResponse,
+                    ProcessesResponse.class);
 
-        int processesCount = processesResponse.getData().getProcessInstances().size();
+            int processesCount = processesResponse.getData().getProcessInstances().size();
 
-        return Response.ok(processesCount).build();
+            return Response.ok(processesCount).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
     }
 
     @GET
     @Path("/jobs/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response jobsCount() {
-        final String jobsQueryResponse = getDataIndexClient().query(ALL_JOBS_IDS_QUERY);
+        try {
+            final String jobsQueryResponse = getDataIndexClient().query(ALL_JOBS_IDS_QUERY);
 
-        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new JobsInstancesAdapter()));
-        JobsResponse jobsResponse = jsonb.fromJson(jobsQueryResponse,
-                JobsResponse.class);
+            Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new JobsInstancesAdapter()));
+            JobsResponse jobsResponse = jsonb.fromJson(jobsQueryResponse,
+                    JobsResponse.class);
 
-        int jobsCount = jobsResponse.getData().getJobs().size();
+            int jobsCount = jobsResponse.getData().getJobs().size();
 
-        return Response.ok(jobsCount).build();
+            return Response.ok(jobsCount).build();
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }
     }
 
     private DataIndexClient getDataIndexClient() {

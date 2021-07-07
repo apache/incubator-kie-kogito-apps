@@ -33,17 +33,23 @@
             .then(response => response.text())
             .then(count => {
                 document.getElementById("tasksCount").innerText = count;
+            }).catch(function() {
+                console.log("Error while trying to fetch tasks count.");
             });
 
     fetch('http://localhost:8080/dataindex/processes/count')
             .then(response => response.text())
             .then(count => {
                 document.getElementById("processesCount").innerText = count;
-            });
+            }).catch(function() {
+        console.log("Error while trying to fetch process instances count.");
+    });
 
     fetch('http://localhost:8080/dataindex/jobs/count')
             .then(response => response.text())
             .then(count => {
                 document.getElementById("jobsCount").innerText = count;
-            });
+            }).catch(function() {
+        console.log("Error while trying to fetch jobs count.");
+    });
 </script>

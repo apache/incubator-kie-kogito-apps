@@ -43,5 +43,4 @@ public class UserInfoSupplier implements Supplier<UserInfo> {
 
         return new UserInfo(users);
     }
-
 }
