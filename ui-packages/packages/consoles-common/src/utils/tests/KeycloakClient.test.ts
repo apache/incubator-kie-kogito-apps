@@ -59,11 +59,9 @@ describe('mocked function tests in KeycloakClient', () => {
     });
   });
   it('test checkUpdateTokenValidity', () => {
-    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = '30';
     // @ts-ignore
     const result1 = KeycloakClient.checkUpdateTokenIsNumber('30');
     expect(result1).toEqual(30);
-    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = 50;
     const result2 = KeycloakClient.checkUpdateTokenIsNumber(50);
     expect(result2).toEqual(50);
   });
@@ -125,7 +123,7 @@ describe('Tests for keycloak client functions', () => {
     expect(context.getCurrentUser()).toBe(ANONYMOUS_USER);
   });
 
-  it('keycloak with health check', () => {
+  it('keycloak with health check - success', () => {
     isAuthEnabledMock.mockReturnValue(true);
     window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = true;
     getKeyCloakClientMock.mockReturnValue({
@@ -146,6 +144,27 @@ describe('Tests for keycloak client functions', () => {
     mockInitializeKeycloak.mockClear();
   });
 
+  it('keycloak with health check - fails', () => {
+    isAuthEnabledMock.mockReturnValue(true);
+    window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = false;
+    getKeyCloakClientMock.mockReturnValue({
+      init: () => new Promise((resolve, reject) => resolve(true)),
+      logout: () => {
+        //logs out the user
+      }
+    });
+    checkAuthServerHealthMock.mockRejectedValue({});
+    // @ts-ignore
+    const mockInitializeKeycloak = jest.spyOn(
+      KeycloakClient,
+      'initializeKeycloak'
+    );
+    const success = jest.fn();
+    const failure = jest.fn();
+    KeycloakClient.loadSecurityContext(success, failure);
+    expect(checkAuthServerHealthMock).rejects.not.toThrow();
+    mockInitializeKeycloak.mockClear();
+  });
   it('keycloak with no health check', () => {
     isAuthEnabledMock.mockReturnValue(true);
     window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = false;
