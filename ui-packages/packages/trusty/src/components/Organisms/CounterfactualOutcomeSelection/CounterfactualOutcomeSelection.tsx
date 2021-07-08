@@ -156,7 +156,7 @@ const CounterfactualOutcomeSelection = (
               />
             </div>
             {editingGoals.map((goal, index) => (
-              <>
+              <React.Fragment key={index}>
                 <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-grid__separator">
                   <CounterfactualOutcome key={index} goal={goal} />
                 </div>
@@ -168,7 +168,7 @@ const CounterfactualOutcomeSelection = (
                     onUpdateGoal={updateGoal}
                   />
                 </div>
-              </>
+              </React.Fragment>
             ))}
           </div>
         </Form>
