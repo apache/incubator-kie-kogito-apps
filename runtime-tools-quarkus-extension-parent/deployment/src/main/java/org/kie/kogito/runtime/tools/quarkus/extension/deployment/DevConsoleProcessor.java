@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.KogitoSupplier;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.user.UserInfoSupplier;
 
 import io.quarkus.bootstrap.model.AppArtifact;
@@ -41,12 +40,6 @@ import io.quarkus.vertx.http.runtime.devmode.DevConsoleRecorder;
 public class DevConsoleProcessor {
 
     private static String STATIC_RESOURCES_PATH = "dev-static/";
-
-    @BuildStep(onlyIf = IsDevelopment.class)
-    public DevConsoleRuntimeTemplateInfoBuildItem collectBeanInfo() {
-        return new DevConsoleRuntimeTemplateInfoBuildItem("data",
-                new KogitoSupplier());
-    }
 
     @BuildStep(onlyIf = IsDevelopment.class)
     public DevConsoleRuntimeTemplateInfoBuildItem collectUsersInfo() {

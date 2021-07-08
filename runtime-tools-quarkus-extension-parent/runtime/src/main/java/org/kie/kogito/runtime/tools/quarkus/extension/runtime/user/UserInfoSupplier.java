@@ -28,14 +28,14 @@ import org.eclipse.microprofile.config.ConfigProvider;
 public class UserInfoSupplier implements Supplier<UserInfo> {
 
     public UserInfo get() {
-        Optional<String[]> userNames = ConfigProvider.getConfig().getOptionalValue("quarkus.runtime-tools.users", String[].class);
+        Optional<String[]> userNames = ConfigProvider.getConfig().getOptionalValue("quarkus.kogito-runtime-tools.users", String[].class);
         if (!userNames.isPresent()) {
             return new UserInfo(Collections.emptyList());
         }
 
         List<User> users = new ArrayList<>();
         for (String userName : userNames.get()) {
-            Optional<String[]> groups = ConfigProvider.getConfig().getOptionalValue("quarkus.runtime-tools.users." + userName + ".groups",
+            Optional<String[]> groups = ConfigProvider.getConfig().getOptionalValue("quarkus.kogito-runtime-tools.users." + userName + ".groups",
                     String[].class);
 
             users.add(new User(userName, Arrays.asList(groups.orElse(new String[] {}))));
