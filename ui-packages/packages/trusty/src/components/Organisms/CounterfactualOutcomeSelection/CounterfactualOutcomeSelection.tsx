@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react';
 import {
+  Alert,
   Button,
-  Checkbox,
   Form,
   Modal,
   ModalVariant,
@@ -29,34 +29,11 @@ const CounterfactualOutcomeSelection = (
   const [editingGoals, setEditingGoals] = useState(goals);
   const dispatch = useContext(CFDispatch);
 
-  const adjustAllOutcomes = useCallback(
+  const isDesiredOutcomeDefined = useCallback(
     () =>
-      editingGoals.filter(
-        goal =>
-          goal.role === CFGoalRole.FLOATING ||
-          goal.role === CFGoalRole.UNSUPPORTED
-      ).length === editingGoals.length,
+      editingGoals.filter(goal => goal.role === CFGoalRole.FIXED).length > 0,
     [editingGoals]
   );
-
-  const setAdjustAllOutcomes = (checked: boolean) => {
-    const updatedGoals = editingGoals.map(goal => {
-      if (goal.role === CFGoalRole.UNSUPPORTED) {
-        return goal;
-      }
-      let updatedRole = CFGoalRole.FIXED;
-      if (checked) {
-        updatedRole = CFGoalRole.FLOATING;
-      } else if (goal.value === goal.originalValue) {
-        updatedRole = CFGoalRole.ORIGINAL;
-      }
-      return {
-        ...goal,
-        role: updatedRole
-      };
-    });
-    setEditingGoals(updatedGoals);
-  };
 
   const updateGoal = (updatedGoal: CFGoal) => {
     const updatedGoals = editingGoals.map(goal => {
@@ -109,7 +86,12 @@ const CounterfactualOutcomeSelection = (
         onClose={onClose}
         description="Define the desired outcome that must be achieved by the counterfactual scenarios."
         actions={[
-          <Button key="confirm" variant="primary" onClick={handleApply}>
+          <Button
+            key="confirm"
+            variant="primary"
+            onClick={handleApply}
+            isDisabled={!isDesiredOutcomeDefined()}
+          >
             Confirm
           </Button>,
           <Button key="cancel" variant="link" onClick={onClose}>
@@ -117,6 +99,13 @@ const CounterfactualOutcomeSelection = (
           </Button>
         ]}
       >
+        {!isDesiredOutcomeDefined() && (
+          <Alert
+            variant="warning"
+            isInline={true}
+            title="At least one desired outcome must have an explicit value set different to the original."
+          />
+        )}
         <Form className="counterfactual__outcomes-form">
           <div className="counterfactual__outcomes-grid">
             <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-grid__separator">
@@ -148,12 +137,6 @@ const CounterfactualOutcomeSelection = (
                   </Button>
                 </Tooltip>
               </Title>
-              <Checkbox
-                id={'allowAllAdjustments'}
-                label={'Allow all counterfactual outcomes to be adjusted.'}
-                isChecked={adjustAllOutcomes()}
-                onChange={setAdjustAllOutcomes}
-              />
             </div>
             {editingGoals.map((goal, index) => (
               <React.Fragment key={index}>
