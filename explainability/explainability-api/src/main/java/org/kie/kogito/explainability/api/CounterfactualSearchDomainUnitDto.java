@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -47,10 +48,12 @@ public class CounterfactualSearchDomainUnitDto extends CounterfactualSearchDomai
         this.domain = Objects.requireNonNull(domain);
     }
 
+    @JsonIgnore
     public Boolean isFixed() {
         return isFixed;
     }
 
+    @JsonIgnore
     public CounterfactualDomainDto getDomain() {
         return domain;
     }

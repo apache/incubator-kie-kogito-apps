@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -44,18 +45,22 @@ public class ModelIdentifierDto {
         this.resourceId = Objects.requireNonNull(resourceId);
     }
 
+    @JsonIgnore
     public String getResourceType() {
         return resourceType;
     }
 
+    @JsonIgnore
     public void setResourceType(String resourceType) {
         this.resourceType = resourceType;
     }
 
+    @JsonIgnore
     public String getResourceId() {
         return resourceId;
     }
 
+    @JsonIgnore
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
     }

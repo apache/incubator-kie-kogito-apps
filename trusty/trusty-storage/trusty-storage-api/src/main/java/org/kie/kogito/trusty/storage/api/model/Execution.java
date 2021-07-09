@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -99,6 +100,7 @@ public class Execution {
      *
      * @return The execution id.
      */
+    @JsonIgnore
     public String getExecutionId() {
         return executionId;
     }
@@ -108,6 +110,7 @@ public class Execution {
      *
      * @param executionId The execution Id.
      */
+    @JsonIgnore
     public void setExecutionId(String executionId) {
         this.executionId = executionId;
     }
@@ -117,6 +120,7 @@ public class Execution {
      *
      * @return The source URL.
      */
+    @JsonIgnore
     public String getSourceUrl() {
         return sourceUrl;
     }
@@ -126,6 +130,7 @@ public class Execution {
      *
      * @param sourceUrl The source URL.
      */
+    @JsonIgnore
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
     }
@@ -135,6 +140,7 @@ public class Execution {
      *
      * @return The service URL.
      */
+    @JsonIgnore
     public String getServiceUrl() {
         return serviceUrl;
     }
@@ -144,6 +150,7 @@ public class Execution {
      *
      * @param serviceUrl The service URL.
      */
+    @JsonIgnore
     public void setServiceUrl(String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
@@ -153,6 +160,7 @@ public class Execution {
      *
      * @return The execution date.
      */
+    @JsonIgnore
     public Long getExecutionTimestamp() {
         return executionTimestamp;
     }
@@ -162,6 +170,7 @@ public class Execution {
      *
      * @param executionTimestamp The execution timestamp.
      */
+    @JsonIgnore
     public void setExecutionTimestamp(Long executionTimestamp) {
         this.executionTimestamp = executionTimestamp;
     }
@@ -171,6 +180,7 @@ public class Execution {
      *
      * @return true if the execution was successful from an technical point of view, false otherwise.
      */
+    @JsonIgnore
     public Boolean hasSucceeded() {
         return hasSucceeded;
     }
@@ -180,6 +190,7 @@ public class Execution {
      *
      * @return The executor name.
      */
+    @JsonIgnore
     public String getExecutorName() {
         return executorName;
     }
@@ -189,6 +200,7 @@ public class Execution {
      *
      * @param executorName The executor name.
      */
+    @JsonIgnore
     public void setExecutorName(String executorName) {
         this.executorName = executorName;
     }
@@ -198,6 +210,7 @@ public class Execution {
      *
      * @return The name of the executed model.
      */
+    @JsonIgnore
     public String getExecutedModelName() {
         return executedModelName;
     }
@@ -207,6 +220,7 @@ public class Execution {
      *
      * @param executedModelName The executed model name.
      */
+    @JsonIgnore
     public void setExecutedModelName(String executedModelName) {
         this.executedModelName = executedModelName;
     }
@@ -216,6 +230,7 @@ public class Execution {
      *
      * @return The namespace of the executed model.
      */
+    @JsonIgnore
     public String getExecutedModelNamespace() {
         return executedModelNamespace;
     }
@@ -225,6 +240,7 @@ public class Execution {
      *
      * @param executedModelNamespace The executed model namespace.
      */
+    @JsonIgnore
     public void setExecutedModelNamespace(String executedModelNamespace) {
         this.executedModelNamespace = executedModelNamespace;
     }
@@ -234,6 +250,7 @@ public class Execution {
      *
      * @return The execution type.
      */
+    @JsonIgnore
     public ExecutionType getExecutionType() {
         return executionType;
     }
@@ -243,6 +260,7 @@ public class Execution {
      *
      * @param executionType The execution type.
      */
+    @JsonIgnore
     public void setExecutionType(ExecutionType executionType) {
         this.executionType = executionType;
     }
@@ -252,6 +270,7 @@ public class Execution {
      *
      * @param hasSucceeded Success value.
      */
+    @JsonIgnore
     public void setSuccess(Boolean hasSucceeded) {
         this.hasSucceeded = hasSucceeded;
     }

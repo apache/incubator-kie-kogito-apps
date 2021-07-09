@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -67,18 +68,22 @@ public class CounterfactualExplainabilityRequest {
         this.searchDomains = Objects.requireNonNull(searchDomains);
     }
 
+    @JsonIgnore
     public String getExecutionId() {
         return executionId;
     }
 
+    @JsonIgnore
     public String getCounterfactualId() {
         return counterfactualId;
     }
 
+    @JsonIgnore
     public Collection<TypedVariableWithValue> getGoals() {
         return goals;
     }
 
+    @JsonIgnore
     public Collection<CounterfactualSearchDomain> getSearchDomains() {
         return searchDomains;
     }
@@ -86,18 +91,23 @@ public class CounterfactualExplainabilityRequest {
     //-------------
     // Test methods
     //-------------
+
+    @JsonIgnore
     public void setExecutionId(String executionId) {
         this.executionId = executionId;
     }
 
+    @JsonIgnore
     public void setCounterfactualId(String counterfactualId) {
         this.counterfactualId = counterfactualId;
     }
 
+    @JsonIgnore
     public void setGoals(Collection<TypedVariableWithValue> goals) {
         this.goals = goals;
     }
 
+    @JsonIgnore
     public void setSearchDomains(Collection<CounterfactualSearchDomain> searchDomains) {
         this.searchDomains = searchDomains;
     }

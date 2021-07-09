@@ -19,6 +19,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,10 +43,12 @@ public class FeatureImportanceDto {
         this.score = Objects.requireNonNull(score);
     }
 
+    @JsonIgnore
     public String getFeatureName() {
         return featureName;
     }
 
+    @JsonIgnore
     public Double getScore() {
         return score;
     }

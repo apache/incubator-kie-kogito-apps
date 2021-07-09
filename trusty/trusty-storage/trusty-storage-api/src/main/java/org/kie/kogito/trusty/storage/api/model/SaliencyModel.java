@@ -17,6 +17,7 @@ package org.kie.kogito.trusty.storage.api.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -45,26 +46,32 @@ public class SaliencyModel {
         this.featureImportance = featureImportance;
     }
 
+    @JsonIgnore
     public String getOutcomeId() {
         return outcomeId;
     }
 
+    @JsonIgnore
     public void setOutcomeId(String outcomeId) {
         this.outcomeId = outcomeId;
     }
 
+    @JsonIgnore
     public String getOutcomeName() {
         return outcomeName;
     }
 
+    @JsonIgnore
     public void setOutcomeName(String outcomeName) {
         this.outcomeName = outcomeName;
     }
 
+    @JsonIgnore
     public List<FeatureImportanceModel> getFeatureImportance() {
         return featureImportance;
     }
 
+    @JsonIgnore
     public void setFeatureImportance(List<FeatureImportanceModel> featureImportance) {
         this.featureImportance = featureImportance;
     }

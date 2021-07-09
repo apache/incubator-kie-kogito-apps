@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.trusty.storage.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -38,18 +39,22 @@ public class FeatureImportanceModel {
         this.featureScore = featureScore;
     }
 
+    @JsonIgnore
     public String getFeatureName() {
         return featureName;
     }
 
+    @JsonIgnore
     public void setFeatureName(String featureName) {
         this.featureName = featureName;
     }
 
+    @JsonIgnore
     public Double getFeatureScore() {
         return featureScore;
     }
 
+    @JsonIgnore
     public void setFeatureScore(Double score) {
         this.featureScore = score;
     }

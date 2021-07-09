@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -69,18 +70,22 @@ public class CounterfactualExplainabilityRequestDto extends BaseExplainabilityRe
         this.searchDomains = Objects.requireNonNull(searchDomains);
     }
 
+    @JsonIgnore
     public String getCounterfactualId() {
         return counterfactualId;
     }
 
+    @JsonIgnore
     public Map<String, TypedValue> getOriginalInputs() {
         return originalInputs;
     }
 
+    @JsonIgnore
     public Map<String, TypedValue> getGoals() {
         return goals;
     }
 
+    @JsonIgnore
     public Map<String, CounterfactualSearchDomainDto> getSearchDomains() {
         return searchDomains;
     }

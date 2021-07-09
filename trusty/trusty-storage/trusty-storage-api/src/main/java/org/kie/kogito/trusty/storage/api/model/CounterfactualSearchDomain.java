@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -68,10 +69,12 @@ public class CounterfactualSearchDomain extends TypedVariable<CounterfactualSear
         this.domain = domain;
     }
 
+    @JsonIgnore
     public Boolean isFixed() {
         return isFixed;
     }
 
+    @JsonIgnore
     public CounterfactualDomain getDomain() {
         return domain;
     }
@@ -80,10 +83,12 @@ public class CounterfactualSearchDomain extends TypedVariable<CounterfactualSear
     // Test methods
     //-------------
 
+    @JsonIgnore
     public void setFixed(Boolean isFixed) {
         this.isFixed = isFixed;
     }
 
+    @JsonIgnore
     public void setDomain(CounterfactualDomain domain) {
         this.domain = domain;
     }

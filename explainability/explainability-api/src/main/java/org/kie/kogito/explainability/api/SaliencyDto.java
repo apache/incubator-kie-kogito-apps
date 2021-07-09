@@ -20,6 +20,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -37,6 +38,7 @@ public class SaliencyDto {
         this.featureImportance = Objects.requireNonNull(featureImportance);
     }
 
+    @JsonIgnore
     public List<FeatureImportanceDto> getFeatureImportance() {
         return featureImportance;
     }

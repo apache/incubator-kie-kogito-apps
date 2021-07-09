@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.trusty.storage.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -43,26 +44,32 @@ public class DecisionInput {
         this.value = value;
     }
 
+    @JsonIgnore
     public String getId() {
         return id;
     }
 
+    @JsonIgnore
     public void setId(String id) {
         this.id = id;
     }
 
+    @JsonIgnore
     public String getName() {
         return name;
     }
 
+    @JsonIgnore
     public void setName(String name) {
         this.name = name;
     }
 
+    @JsonIgnore
     public TypedVariableWithValue getValue() {
         return value;
     }
 
+    @JsonIgnore
     public void setValue(TypedVariableWithValue value) {
         this.value = value;
     }

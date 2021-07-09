@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.api.CounterfactualDomainCategoricalDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainDto;
+import org.kie.kogito.explainability.api.CounterfactualDomainFixedDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainDto;
 import org.kie.kogito.explainability.model.Feature;
@@ -37,6 +38,7 @@ import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
@@ -235,6 +237,8 @@ public class ConversionUtils {
             } else {
                 throw new IllegalArgumentException(String.format("Unsupported CounterfactualDomainCategoricalDto [%s]", String.join(", ", categories)));
             }
+        } else if (domain instanceof CounterfactualDomainFixedDto) {
+            return Optional.of(EmptyFeatureDomain.create());
         }
         return Optional.empty();
     }
