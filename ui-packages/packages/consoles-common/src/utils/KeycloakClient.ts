@@ -27,6 +27,14 @@ export const isAuthEnabled = (): boolean => {
   return process.env.KOGITO_ENV_MODE !== 'DEV';
 };
 
+export const isKeycloakHealthCheckDisabled = (): boolean => {
+  return window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'];
+};
+
+export const getUpdateTokenValidity = (): number => {
+  return window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'];
+};
+
 let currentSecurityContext: UserContext;
 let keycloak: Keycloak.KeycloakInstance;
 export const getLoadedSecurityContext = (): UserContext => {
@@ -86,9 +94,7 @@ export const initializeKeycloak = (onloadSuccess: () => void) => {
           userName: keycloak.tokenParsed['preferred_username'],
           roles: keycloak.tokenParsed['groups'],
           token: keycloak.token,
-          tokenMinValidity: checkUpdateTokenIsNumber(
-            window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY']
-          ),
+          tokenMinValidity: checkUpdateTokenIsNumber(getUpdateTokenValidity()),
           logout: () => handleLogout()
         });
         onloadSuccess();
@@ -101,7 +107,7 @@ export const loadSecurityContext = (
   onLoadFailure: () => void
 ) => {
   if (isAuthEnabled()) {
-    if (window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK']) {
+    if (isKeycloakHealthCheckDisabled()) {
       initializeKeycloak(onloadSuccess);
     } else {
       checkAuthServerHealth()

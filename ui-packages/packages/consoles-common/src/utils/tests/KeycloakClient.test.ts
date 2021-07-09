@@ -65,6 +65,16 @@ describe('mocked function tests in KeycloakClient', () => {
     const result2 = KeycloakClient.checkUpdateTokenIsNumber(50);
     expect(result2).toEqual(50);
   });
+
+  it('test isKeycloakHealthCheckDisabled', () => {
+    window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = true;
+    expect(KeycloakClient.isKeycloakHealthCheckDisabled()).toBeTruthy();
+  });
+
+  it('test getUpdateTokenValidity', () => {
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = 30;
+    expect(KeycloakClient.getUpdateTokenValidity()).toEqual(30);
+  });
 });
 
 describe('Tests for keycloak client functions', () => {
