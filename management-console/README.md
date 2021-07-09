@@ -26,7 +26,7 @@ The application is now runnable using:
 java -jar target/management-console-8.0.0-SNAPSHOT-runner.jar
 ```
 
-> Note: task-console requires keycloak server to be initialied for authentication.
+> Note: management-console requires keycloak server to be initialied for authentication.
 
 ## Creating a native executable
 
