@@ -58,13 +58,6 @@ describe('mocked function tests in KeycloakClient', () => {
       headers: 'Authorization token'
     });
   });
-  it('test checkUpdateTokenValidity', () => {
-    // @ts-ignore
-    const result1 = KeycloakClient.checkUpdateTokenIsNumber('30');
-    expect(result1).toEqual(30);
-    const result2 = KeycloakClient.checkUpdateTokenIsNumber(50);
-    expect(result2).toEqual(50);
-  });
 
   it('test isKeycloakHealthCheckDisabled', () => {
     window['KOGITO_CONSOLES_KEYCLOAK_DISABLE_HEALTH_CHECK'] = true;
@@ -72,8 +65,10 @@ describe('mocked function tests in KeycloakClient', () => {
   });
 
   it('test getUpdateTokenValidity', () => {
-    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = 30;
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = '30';
     expect(KeycloakClient.getUpdateTokenValidity()).toEqual(30);
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'] = 50;
+    expect(KeycloakClient.getUpdateTokenValidity()).toEqual(50);
   });
 });
 

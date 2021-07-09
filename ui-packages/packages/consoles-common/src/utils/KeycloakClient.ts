@@ -32,7 +32,12 @@ export const isKeycloakHealthCheckDisabled = (): boolean => {
 };
 
 export const getUpdateTokenValidity = (): number => {
-  return window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'];
+  const updateTokenValidity =
+    window['KOGITO_CONSOLES_KEYCLOAK_UPDATE_TOKEN_VALIDITY'];
+  if (typeof updateTokenValidity !== 'number') {
+    return 30;
+  }
+  return updateTokenValidity;
 };
 
 let currentSecurityContext: UserContext;
@@ -47,15 +52,6 @@ export const getLoadedSecurityContext = (): UserContext => {
     currentSecurityContext = getNonAuthUserContext();
   }
   return currentSecurityContext;
-};
-
-export const checkUpdateTokenIsNumber = (
-  updateTokenValidiy: number
-): number => {
-  if (typeof updateTokenValidiy !== 'number') {
-    return 30;
-  }
-  return updateTokenValidiy;
 };
 
 export const checkAuthServerHealth = () => {
@@ -94,7 +90,7 @@ export const initializeKeycloak = (onloadSuccess: () => void) => {
           userName: keycloak.tokenParsed['preferred_username'],
           roles: keycloak.tokenParsed['groups'],
           token: keycloak.token,
-          tokenMinValidity: checkUpdateTokenIsNumber(getUpdateTokenValidity()),
+          tokenMinValidity: getUpdateTokenValidity(),
           logout: () => handleLogout()
         });
         onloadSuccess();
@@ -145,7 +141,7 @@ export const updateKeycloakToken = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     const ctx = getLoadedSecurityContext() as KeycloakUserContext;
     keycloak
-      .updateToken(checkUpdateTokenIsNumber(ctx.getTokenMinValidity()))
+      .updateToken(getUpdateTokenValidity())
       .then(() => {
         ctx.setToken(keycloak.token);
         resolve();
