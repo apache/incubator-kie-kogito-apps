@@ -37,8 +37,6 @@ Note: set [Manage Docker as a non-root user](https://docs.docker.com/engine/inst
 
 #### Perform e2e test suite
 
-NOTE: In case that version of project (in pom.xml) was changed than update the 'VERSION' property in [.env file](docker-compose/.env). This parameter is used by [docker-compose.yml file](docker-compose/docker-compose.yml).
-
 To install dependencies
 ```
 yarn install
@@ -48,8 +46,10 @@ To build KIE Docker images
 ```
 yarn run build:services
 ```
+NOTE: The "build:services" script generates the ".env" file in the "docker-compose" folder. This file contents the "VERSION" property which is same as ${project.version} in the pom file. This parameter is used by [docker-compose.yml file](docker-compose/docker-compose.yml).  
 
 To run Cypress test suite with real data
+NOTE: Be sure that the .env file exists and contents the right version of docker images.
 ```
 yarn run test:e2e
 ```
@@ -80,6 +80,8 @@ Go to the docker-compose folder:
 ```
 cd ui-packages/packages/trusty/docker-compose
 ```
+
+Create the ".env" file which content the "VERSION=${project.version}" tag. Be sure that this tag reference to the right version of docker images. For example: "VERSION=2.0.0-SNAPSHOT"
 
 To be sure that you have built all necessary docker images. Check file docker-compose.yml and output of this command:
 ```

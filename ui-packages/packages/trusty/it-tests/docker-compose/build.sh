@@ -123,6 +123,12 @@ fi
 
 cd $(tr --delete '\r' <<<${kogito_apps})
 if [[ "${PWD}" == */kogito-apps ]]; then
+    #create environment file for docker compose. The content is based on actual project version
+    project_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+    rm --force ui-packages/packages/trusty/it-tests/docker-compose/.env
+    echo VERSION=${project_version} >> ui-packages/packages/trusty/it-tests/docker-compose/.env
+    
+    #build docker images
     mvn clean install -DskipTests
 else
     echo >&2 "error: script is not in kogito-apps ${kogito_apps}"
