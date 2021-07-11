@@ -28,6 +28,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.infinispan</groupId>
+      <artifactId>infinispan-commons-jdk11</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-service-common</artifactId>
       <type>test-jar</type>
@@ -77,6 +82,11 @@
     <dependency>
       <groupId>io.smallrye.reactive</groupId>
       <artifactId>smallrye-reactive-messaging-in-memory</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock-jre8</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

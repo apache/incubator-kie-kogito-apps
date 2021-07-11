@@ -470,26 +470,38 @@
             <!-- Security -->
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>security-commons</artifactId>
-                <version>${project.version}</version>
+              <artifactId>security-commons</artifactId>
+              <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>security-commons</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
+          <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>security-commons</artifactId>
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+          </dependency>
 
+          <!-- Data Index API -->
+          <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>data-index-api-client</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>data-index-api-client</artifactId>
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+          </dependency>
 
-            <!-- Explainability Services -->
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>explainability-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>explainability-api</artifactId>
+          <!-- Explainability Services -->
+          <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>explainability-api</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>explainability-api</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>

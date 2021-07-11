@@ -3,12 +3,20 @@ scalar DateTime
 schema {
     query: Query
     subscription: Subscription
+    mutation: Mutation
 }
 
 type Query {
     ProcessInstances(where: ProcessInstanceArgument, orderBy: ProcessInstanceOrderBy, pagination: Pagination): [ProcessInstance]
     UserTaskInstances(where: UserTaskInstanceArgument, orderBy: UserTaskInstanceOrderBy, pagination: Pagination):  [UserTaskInstance]
     Jobs(where: JobArgument, orderBy: JobOrderBy, pagination: Pagination):  [Job]
+}
+
+type Mutation {
+    ProcessInstanceAbort(processInstanceId: String): String
+    ProcessInstanceRetry(processInstanceId: String): String
+    GetProcessInstanceDiagram(processInstanceId: String): String
+    GetProcessInstanceNodes(processInstanceId: String):  [NodeInstance]
 }
 
 type ProcessInstance {

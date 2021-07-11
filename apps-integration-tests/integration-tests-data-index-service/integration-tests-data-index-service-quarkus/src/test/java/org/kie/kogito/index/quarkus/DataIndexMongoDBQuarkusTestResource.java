@@ -25,6 +25,7 @@ import org.kie.kogito.resources.ConditionalQuarkusTestResource;
 public class DataIndexMongoDBQuarkusTestResource extends ConditionalQuarkusTestResource<DataIndexMongoDBResource> {
 
     public static final String KOGITO_DATA_INDEX_SERVICE_URL = "kogito.data-index-service.url";
+    public static final String KOGITO_DATA_INDEX_HTTP_URL = "kogito.dataindex.http.url";
 
     public DataIndexMongoDBQuarkusTestResource() {
         super(new DataIndexMongoDBResource());
@@ -34,6 +35,7 @@ public class DataIndexMongoDBQuarkusTestResource extends ConditionalQuarkusTestR
     protected Map<String, String> getProperties() {
         Map<String, String> properties = new HashMap<>();
         properties.put(KOGITO_DATA_INDEX_SERVICE_URL, "http://localhost:" + getTestResource().getMappedPort());
+        properties.put(KOGITO_DATA_INDEX_HTTP_URL, "http://localhost:" + getTestResource().getMappedPort());
         properties.putAll(getTestResource().getProperties());
         return properties;
     }

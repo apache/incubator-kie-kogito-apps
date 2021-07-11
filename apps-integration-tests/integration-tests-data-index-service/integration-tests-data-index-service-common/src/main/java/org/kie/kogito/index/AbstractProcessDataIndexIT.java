@@ -15,13 +15,19 @@
  */
 package org.kie.kogito.index;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
@@ -209,6 +215,94 @@ public abstract class AbstractProcessDataIndexIT {
                             .body("data.Approvals[0].metadata.userTasks", is(notNullValue()))
                             .body("data.Approvals[0].metadata.userTasks.size()", is(2)));
         }
+
+        String pId2 = createTestProcessInstance();
+        getProcessInstanceById(pId2, "ACTIVE");
+
+        await().untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ GetProcessInstanceDiagram( processInstanceId: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200));
+
+        await().untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ GetProcessInstanceNodes( processInstanceId: \\\"" + pId2 + "\\\"){id name}}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.GetProcessInstanceNodes.size()", is(1)));
+
+        await().untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ ProcessInstanceAbort( processInstanceId: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then().statusCode(200));
+
+        await().untilAsserted(() -> getProcessInstanceById(pId2, "ABORTED"));
+
+        await().untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( processInstanceId: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200));
     }
 
+    protected String createTestProcessInstance() {
+        return given()
+                .contentType(ContentType.JSON)
+                .body("{\"traveller\" : {\"firstName\" : \"Darth\",\"lastName\" : \"Vader\",\"email\" : \"darth.vader@deathstar.com\",\"nationality\" : \"Tatooine\"}}")
+                .when()
+                .post("/approvals")
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .extract()
+                .path("id");
+    }
+
+    protected ValidatableResponse getProcessInstanceById(String processInstanceId, String state) {
+        return given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ProcessInstances(where: {  id: {  equal : \\\"" + processInstanceId + "\\\"}}){ id, processId, state } }\" }")
+                .when().post("/graphql")
+                .then().statusCode(200)
+                .body("data.ProcessInstances.size()", is(1))
+                .body("data.ProcessInstances[0].id", is(processInstanceId))
+                .body("data.ProcessInstances[0].processId", is("approvals"))
+                .body("data.ProcessInstances[0].state", is(state));
+    }
+
+    private String readFileFromResources(String filePath) {
+        try {
+            return readFileContent(filePath);
+        } catch (Exception e) {
+            return "Resource not found";
+        }
+    }
+
+    protected static String readFileContent(String file) throws Exception {
+        InputStream inputStream = null;
+        BufferedInputStream bis = null;
+        ByteArrayOutputStream buf = null;
+        try {
+            inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
+            Objects.requireNonNull(inputStream, "Could not resolve file path: " + file);
+            bis = new BufferedInputStream(inputStream);
+            buf = new ByteArrayOutputStream();
+            int result = bis.read();
+            while (result != -1) {
+                buf.write((byte) result);
+                result = bis.read();
+            }
+            return buf.toString(StandardCharsets.UTF_8.name());
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (bis != null) {
+                bis.close();
+            }
+            if (buf != null) {
+                buf.close();
+            }
+        }
+    }
 }
