@@ -16,14 +16,23 @@
 package org.kie.kogito.explainability.local.lime.optim;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalScore;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -40,8 +49,28 @@ class LimeImpactScoreCalculatorTest {
         LimeConfigSolution solution = new LimeConfigSolution(config, predictions, entities, model);
         SimpleBigDecimalScore score = scoreCalculator.calculateScore(solution);
         assertThat(score).isNotNull();
-        assertThat(score.getScore()).isNotNull();
-        assertThat(score.getScore()).isEqualTo(BigDecimal.valueOf(0));
+        assertThat(score.getScore()).isNotNull().isEqualTo(BigDecimal.valueOf(0));
+    }
+
+    @Test
+    void testNonZeroScore() throws ExecutionException, InterruptedException, TimeoutException {
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        LimeImpactScoreCalculator scoreCalculator = new LimeImpactScoreCalculator();
+        LimeConfig config = new LimeConfig();
+        List<Feature> features = List.of(FeatureFactory.newFulltextFeature("text","money so they say is the root of all evil today"));
+        PredictionInput input = new PredictionInput(features);
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
+                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+        assertThat(predictionOutputs).isNotNull();
+        assertThat(predictionOutputs.size()).isEqualTo(1);
+        PredictionOutput output = predictionOutputs.get(0);
+        Prediction prediction = new SimplePrediction(input, output);
+        List<Prediction> predictions = List.of(prediction);
+        List<LimeConfigEntity> entities = LimeConfigEntityFactory.createEncodingEntities(config);
+        LimeConfigSolution solution = new LimeConfigSolution(config, predictions, entities, model);
+        SimpleBigDecimalScore score = scoreCalculator.calculateScore(solution);
+        assertThat(score).isNotNull();
+        assertThat(score.getScore()).isNotNull().isNotEqualTo(BigDecimal.valueOf(0));
     }
 
 }
