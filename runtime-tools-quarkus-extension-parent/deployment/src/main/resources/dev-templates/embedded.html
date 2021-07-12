@@ -14,9 +14,9 @@
   ~ limitations under the License.
   -->
 
-<a href="{urlbase}/processes" class="badge badge-light">
+<a href="{urlbase}/processInstances" class="badge badge-light">
     <i class="fa fa-project-diagram fa-fw"></i>
-    Processes <span id="processesCount" class="badge badge-light"/>
+    Process Instances <span id="processInstancesCount" class="badge badge-light"/>
 </a>
 <br/>
 <a href="{urlbase}/tasks" class="badge badge-light">
@@ -31,15 +31,15 @@
 <script>
     const fillCount = (resourceType) => {
         fetch("http://localhost:8080/dataindex/" + resourceType + "/count")
-            .then(response => response.text())
-            .then(count => {
-                document.getElementById(resourceType + "Count").innerText = count;
-            }).catch(function() {
-                console.log("Error while trying to fetch " + resourceType + " count.");
-            });
+                .then(response => response.text())
+                .then(count => {
+                    document.getElementById(resourceType + "Count").innerText = count;
+                }).catch(function () {
+            console.log("Error while trying to fetch " + resourceType + " count.");
+        });
     };
 
-    fillCount("processes");
+    fillCount("processInstances");
     fillCount("tasks");
     fillCount("jobs");
 </script>

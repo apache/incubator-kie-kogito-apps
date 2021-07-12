@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.runtime.tools.quarkus.extension.it;
+package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes;
 
-import org.junit.jupiter.api.Test;
+public class ProcessInstancesResponse {
 
-import io.quarkus.test.junit.QuarkusTest;
+    public ProcessInstances data;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+    public ProcessInstancesResponse() {
+    }
 
-@QuarkusTest
-public class RuntimeToolsQuarkusExtensionResourceTest {
+    public ProcessInstancesResponse(final ProcessInstances data) {
+        this.data = data;
+    }
 
-    @Test
-    public void testHelloEndpoint() {
-        given()
-                .when().get("/runtime-tools-quarkus-extension")
-                .then()
-                .statusCode(200)
-                .body(is("Hello runtime-tools-quarkus-extension"));
+    public ProcessInstances getData() {
+        return data;
+    }
+
+    public void setData(final ProcessInstances data) {
+        this.data = data;
     }
 }

@@ -14,19 +14,36 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.runtime.tools.quarkus.extension.it;
+package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.json.JsonValue;
 
-@Path("/runtime-tools-quarkus-extension")
-@ApplicationScoped
-public class RuntimeToolsQuarkusExtensionResource {
-    // add some rest methods here
+public class ProcessInstance implements JsonValue {
 
-    @GET
-    public String hello() {
-        return "Hello runtime-tools-quarkus-extension";
+    private String id;
+
+    public ProcessInstance() {
+    }
+
+    public ProcessInstance(final String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+    @Override
+    public ValueType getValueType() {
+        return ValueType.OBJECT;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

@@ -29,7 +29,7 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs.JobsInstancesAdapter;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs.JobsResponse;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes.ProcessInstancesAdapter;
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes.ProcessesResponse;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes.ProcessInstancesResponse;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.tasks.TasksResponse;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.tasks.UserTaskInstancesAdapter;
 
@@ -39,7 +39,7 @@ import io.quarkus.arc.Arc;
 public class DataIndexService {
 
     public static final String ALL_TASKS_IDS_QUERY = "{ \"operationName\": \"getAllTasksIds\", \"query\": \"query getAllTasksIds{  UserTaskInstances{ id } }\" }";
-    public static final String ALL_PROCESSES_IDS_QUERY = "{ \"operationName\": \"getAllProcessesIds\", \"query\": \"query getAllProcessesIds{  ProcessInstances{ id } }\" }";
+    public static final String ALL_PROCESS_INSTANCES_IDS_QUERY = "{ \"operationName\": \"getAllProcessesIds\", \"query\": \"query getAllProcessesIds{  ProcessInstances{ id } }\" }";
     public static final String ALL_JOBS_IDS_QUERY = "{ \"operationName\": \"getAllJobsIds\", \"query\": \"query getAllJobsIds{  Jobs{ id } }\" }";
 
     @GET
@@ -62,19 +62,19 @@ public class DataIndexService {
     }
 
     @GET
-    @Path("/processes/count")
+    @Path("/processInstances/count")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response processesCount() {
+    public Response processInstancesCount() {
         try {
-            final String processesQueryResponse = getDataIndexClient().query(ALL_PROCESSES_IDS_QUERY);
+            final String processInstancesQueryResponse = getDataIndexClient().query(ALL_PROCESS_INSTANCES_IDS_QUERY);
 
             Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new ProcessInstancesAdapter()));
-            ProcessesResponse processesResponse = jsonb.fromJson(processesQueryResponse,
-                    ProcessesResponse.class);
+            ProcessInstancesResponse processInstancesResponse = jsonb.fromJson(processInstancesQueryResponse,
+                    ProcessInstancesResponse.class);
 
-            int processesCount = processesResponse.getData().getProcessInstances().size();
+            int processInstancesCount = processInstancesResponse.getData().getProcessInstances().size();
 
-            return Response.ok(processesCount).build();
+            return Response.ok(processInstancesCount).build();
         } catch (Exception e) {
             return Response.serverError().build();
         }

@@ -28,6 +28,6 @@ public class ProcessInstancesAdapter implements JsonbAdapter<ProcessInstances, J
 
     @Override
     public ProcessInstances adaptFromJson(final JsonObject jsonObject) {
-        return new ProcessInstances(jsonObject.getJsonArray("ProcessInstances").getValuesAs(Process.class));
+        return new ProcessInstances(jsonObject.getJsonArray("ProcessInstances").getValuesAs(ProcessInstance.class));
     }
 }
