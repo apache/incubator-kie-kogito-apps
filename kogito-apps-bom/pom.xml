@@ -775,6 +775,7 @@
                 <type>test-jar</type>
             </dependency>
 
+            <!-- UI packages -->
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>kogito-apps-ui-packages</artifactId>

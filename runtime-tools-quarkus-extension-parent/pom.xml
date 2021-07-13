@@ -8,15 +8,16 @@
     <relativePath>../kogito-apps-build-parent/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.kie.kogito</groupId>
-  <artifactId>runtime-tools-quarkus-extension-parent</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+
   <name>Runtime Tools Quarkus Extension - Parent</name>
+  <artifactId>runtime-tools-quarkus-extension-parent</artifactId>
+  <packaging>pom</packaging>
+
   <modules>
-    <module>deployment</module>
-    <module>runtime</module>
+    <module>runtime-tools-quarkus-extension-deployment</module>
+    <module>runtime-tools-quarkus-extension</module>
   </modules>
+
   <build>
     <pluginManagement>
       <plugins>
