@@ -207,6 +207,6 @@ class OpenNLPLimeExplainerTest {
         Prediction instance = new SimplePrediction(testPredictionInput, testPredictionOutputs.get(0));
 
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
-                                                                                0.8, 0.9));
+                0.8, 0.9));
     }
 }

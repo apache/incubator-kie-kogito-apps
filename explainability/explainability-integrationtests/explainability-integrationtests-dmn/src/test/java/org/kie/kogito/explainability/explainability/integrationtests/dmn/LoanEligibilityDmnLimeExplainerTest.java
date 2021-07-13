@@ -140,7 +140,7 @@ class LoanEligibilityDmnLimeExplainerTest {
         Prediction instance = new SimplePrediction(testPredictionInput, testPredictionOutputs.get(0));
 
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
-                                                                                0.4, 0.6));
+                0.4, 0.6));
     }
 
     private PredictionProvider getModel() {
