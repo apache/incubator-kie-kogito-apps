@@ -31,7 +31,7 @@ import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeStabilitySolution, SimpleBigDecimalScore> {
+public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeConfigSolution, SimpleBigDecimalScore> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LimeStabilityScoreCalculator.class);
     private static final BigDecimal TWO = BigDecimal.valueOf(2d);
@@ -52,7 +52,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
     }
 
     @Override
-    public SimpleBigDecimalScore calculateScore(LimeStabilitySolution solution) {
+    public SimpleBigDecimalScore calculateScore(LimeConfigSolution solution) {
         LimeConfig config = LimeConfigEntityFactory.toLimeConfig(solution);
         BigDecimal stabilityScore = BigDecimal.ZERO;
         List<Prediction> predictions = solution.getPredictions();
@@ -62,7 +62,7 @@ public class LimeStabilityScoreCalculator implements EasyScoreCalculator<LimeSta
         return SimpleBigDecimalScore.of(stabilityScore);
     }
 
-    private BigDecimal getStabilityScore(LimeStabilitySolution solution, LimeConfig config, List<Prediction> predictions) {
+    private BigDecimal getStabilityScore(LimeConfigSolution solution, LimeConfig config, List<Prediction> predictions) {
         double succeededEvaluations = 0;
         BigDecimal stabilityScore = BigDecimal.ZERO;
         LimeExplainer limeExplainer = new LimeExplainer(config);
