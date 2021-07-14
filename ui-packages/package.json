@@ -16,6 +16,7 @@
     "cypress:run-management-console": "cypress run --project ./packages/management-console",
     "cypress:run-management-console-webapp": "cypress run --project ./packages/management-console-webapp",
     "cypress:run-task-console-webapp": "cypress run --project ./packages/task-console-webapp",
+    "cypress:run-runtime-tools-dev-ui-webapp": "cypress run --project ./packages/runtime-tools-dev-ui-webapp",
     "locktt": "locktt",
     "postinstall": "patch-package"
   },
