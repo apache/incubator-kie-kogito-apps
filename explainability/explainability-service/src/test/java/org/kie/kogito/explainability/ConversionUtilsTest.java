@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.CounterfactualDomainCategoricalDto;
+import org.kie.kogito.explainability.api.CounterfactualDomainDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainFixedDto;
 import org.kie.kogito.explainability.api.CounterfactualDomainRangeDto;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitDto;
@@ -331,6 +332,16 @@ class ConversionUtilsTest {
                         true,
                         new CounterfactualDomainFixedDto()));
         assertTrue(featureDomain instanceof EmptyFeatureDomain);
+    }
+
+    @Test
+    void testToFeatureDomain_UnitNull() {
+        assertThrows(IllegalArgumentException.class, () -> ConversionUtils.toFeatureDomain("numberOfFingers",
+                new CounterfactualSearchDomainUnitDto("integer",
+                        true,
+                        new CounterfactualDomainDto() {
+                            //New (unsupported) domain type
+                        })));
     }
 
 }

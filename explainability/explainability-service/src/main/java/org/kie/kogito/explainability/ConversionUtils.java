@@ -211,13 +211,14 @@ public class ConversionUtils {
 
     public static FeatureDomain toFeatureDomain(String name, CounterfactualSearchDomainDto domain) {
         if (domain.isUnit()) {
-            return toCounterfactualSearchDomain(domain.toUnit().getDomain()).orElse(null);
+            return toCounterfactualSearchDomain(domain.toUnit().getDomain())
+                    .orElseThrow(() -> new IllegalArgumentException(String.format("Unsupported CounterfactualSearchDomain type %s", domain.getClass().getName())));
         } else {
             throw new IllegalArgumentException(String.format("Unsupported CounterfactualSearchDomain kind %s", domain.getKind()));
         }
     }
 
-    public static Optional<FeatureDomain> toCounterfactualSearchDomain(CounterfactualDomainDto domain) {
+    private static Optional<FeatureDomain> toCounterfactualSearchDomain(CounterfactualDomainDto domain) {
         if (domain instanceof CounterfactualDomainRangeDto) {
             CounterfactualDomainRangeDto range = (CounterfactualDomainRangeDto) domain;
             JsonNode lb = range.getLowerBound();
