@@ -95,8 +95,8 @@ public class LimeConfigOptimizer {
     }
 
     public LimeConfigOptimizer withWeightedStability(double negative, double positive) {
-        if ((negative + positive) != 1) {
-            throw new IllegalArgumentException("negative and positive weights must sum up to 1");
+        if (negative < 0 || positive < 0 || negative > 1 || positive > 1 || Math.abs(1.0 - negative - positive) > 1e-3) {
+            throw new IllegalArgumentException("negative and positive weights must be positive and sum up to 1");
         }
         this.scoreCalculator = new LimeStabilityScoreCalculator(BigDecimal.valueOf(negative),
                 BigDecimal.valueOf(positive));
