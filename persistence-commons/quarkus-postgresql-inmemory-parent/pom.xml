@@ -15,5 +15,6 @@
   <modules>
     <module>quarkus-postgresql-inmemory</module>
     <module>quarkus-postgresql-inmemory-deployment</module>
+    <module>quarkus-postgresql-inmemory-integration-tests</module>
   </modules>
 </project>

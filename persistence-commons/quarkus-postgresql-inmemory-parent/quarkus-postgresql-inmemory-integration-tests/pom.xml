@@ -7,17 +7,32 @@
     <artifactId>quarkus-postgresql-inmemory-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
   </parent>
+
   <artifactId>quarkus-postgresql-inmemory-integration-tests</artifactId>
   <name>Quarkus :: PostgreSQL :: In-memory :: Integration Tests</name>
+
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
+      <artifactId>quarkus-reactive-pg-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>quarkus-postgresql-inmemory</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-flyway</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -29,6 +44,7 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -44,6 +60,7 @@
       </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>native-image</id>
