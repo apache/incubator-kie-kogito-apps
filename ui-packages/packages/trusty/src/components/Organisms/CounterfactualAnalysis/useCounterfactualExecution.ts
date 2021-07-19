@@ -4,6 +4,7 @@ import {
   CFAnalysisExecution,
   CFAnalysisResultsSets,
   CFGoal,
+  CFGoalRole,
   CFSearchInput,
   RemoteData,
   RemoteDataStatus
@@ -26,11 +27,19 @@ const useCounterfactualExecution = (executionId: string) => {
       const { goals, searchDomains } = parameters;
       setCFAnalysis({ status: RemoteDataStatus.LOADING });
 
+      const partialGoals = goals
+        .filter(
+          goal =>
+            goal.role === CFGoalRole.FIXED || goal.role === CFGoalRole.ORIGINAL
+        )
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .map(({ role, ...rest }) => rest);
+
       const config: AxiosRequestConfig = {
         url: `${EXECUTIONS_PATH}/decisions/${executionId}/explanations/counterfactuals`,
         method: 'post',
         data: {
-          goals,
+          goals: partialGoals,
           searchDomains
         }
       };
