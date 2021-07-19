@@ -116,7 +116,19 @@ class LimeConfigOptimizerTest {
 
     @Test
     void testWeightedStabilityOptimization() throws Exception {
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.3, 0.7);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.5, 0.5);
+        assertConfigOptimized(limeConfigOptimizer);
+
+        limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.3, 0.7);
+        assertConfigOptimized(limeConfigOptimizer);
+
+        limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.7, 0.3);
+        assertConfigOptimized(limeConfigOptimizer);
+
+        limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(1, 0);
+        assertConfigOptimized(limeConfigOptimizer);
+
+        limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0, 1);
         assertConfigOptimized(limeConfigOptimizer);
     }
 

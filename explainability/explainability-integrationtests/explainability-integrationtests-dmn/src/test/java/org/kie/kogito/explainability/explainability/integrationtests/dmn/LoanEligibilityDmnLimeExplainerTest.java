@@ -161,7 +161,6 @@ class LoanEligibilityDmnLimeExplainerTest {
 
         assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
                 0.4, 0.6));
-
     }
 
     private PredictionProvider getModel() {
