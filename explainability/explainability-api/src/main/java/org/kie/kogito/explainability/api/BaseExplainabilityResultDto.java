@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -59,17 +58,14 @@ public abstract class BaseExplainabilityResultDto {
         this.statusDetails = statusDetails;
     }
 
-    @JsonIgnore
     public String getExecutionId() {
         return executionId;
     }
 
-    @JsonIgnore
     public ExplainabilityStatus getStatus() {
         return status;
     }
 
-    @JsonIgnore
     public String getStatusDetails() {
         return statusDetails;
     }

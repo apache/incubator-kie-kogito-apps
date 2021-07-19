@@ -20,7 +20,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -41,7 +40,6 @@ public class CounterfactualSearchDomainStructureDto extends CounterfactualSearch
         this.value = Objects.requireNonNull(value);
     }
 
-    @JsonIgnore
     public Map<String, CounterfactualSearchDomainDto> getValue() {
         return value;
     }

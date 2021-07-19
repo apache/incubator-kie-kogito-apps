@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -60,22 +59,18 @@ public class Decision extends Execution {
         this.outcomes = outcomes;
     }
 
-    @JsonIgnore
     public Collection<DecisionInput> getInputs() {
         return inputs;
     }
 
-    @JsonIgnore
     public void setInputs(Collection<DecisionInput> inputs) {
         this.inputs = inputs;
     }
 
-    @JsonIgnore
     public Collection<DecisionOutcome> getOutcomes() {
         return outcomes;
     }
 
-    @JsonIgnore
     public void setOutcomes(Collection<DecisionOutcome> outcomes) {
         this.outcomes = outcomes;
     }

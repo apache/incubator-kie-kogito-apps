@@ -23,7 +23,6 @@ import javax.validation.constraints.NotNull;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LIMEExplainabilityRequestDto extends BaseExplainabilityRequestDto {
@@ -52,12 +51,10 @@ public class LIMEExplainabilityRequestDto extends BaseExplainabilityRequestDto {
         this.outputs = Objects.requireNonNull(outputs);
     }
 
-    @JsonIgnore
     public Map<String, TypedValue> getInputs() {
         return inputs;
     }
 
-    @JsonIgnore
     public Map<String, TypedValue> getOutputs() {
         return outputs;
     }

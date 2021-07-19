@@ -21,7 +21,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -47,12 +46,10 @@ public class LIMEExplainabilityResult extends BaseExplainabilityResult {
         this.saliencies = Objects.requireNonNull(saliencies);
     }
 
-    @JsonIgnore
     public List<SaliencyModel> getSaliencies() {
         return saliencies;
     }
 
-    @JsonIgnore
     public void setSaliencies(List<SaliencyModel> saliencies) {
         this.saliencies = saliencies;
     }

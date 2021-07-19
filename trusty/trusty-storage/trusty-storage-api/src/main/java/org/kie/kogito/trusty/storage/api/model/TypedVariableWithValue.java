@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -50,12 +49,10 @@ public class TypedVariableWithValue extends TypedVariable<TypedVariableWithValue
         this.value = value;
     }
 
-    @JsonIgnore
     public JsonNode getValue() {
         return value;
     }
 
-    @JsonIgnore
     public void setValue(JsonNode value) {
         this.value = value;
     }

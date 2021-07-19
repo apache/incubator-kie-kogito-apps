@@ -19,7 +19,6 @@ import java.util.Collection;
 
 import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -65,62 +64,50 @@ public class DecisionOutcome {
         this.messages = messages;
     }
 
-    @JsonIgnore
     public String getOutcomeId() {
         return outcomeId;
     }
 
-    @JsonIgnore
     public void setOutcomeId(String outcomeId) {
         this.outcomeId = outcomeId;
     }
 
-    @JsonIgnore
     public String getOutcomeName() {
         return outcomeName;
     }
 
-    @JsonIgnore
     public void setOutcomeName(String outcomeName) {
         this.outcomeName = outcomeName;
     }
 
-    @JsonIgnore
     public String getEvaluationStatus() {
         return evaluationStatus;
     }
 
-    @JsonIgnore
     public void setEvaluationStatus(String evaluationStatus) {
         this.evaluationStatus = evaluationStatus;
     }
 
-    @JsonIgnore
     public TypedVariableWithValue getOutcomeResult() {
         return outcomeResult;
     }
 
-    @JsonIgnore
     public void setOutcomeResult(TypedVariableWithValue outcomeResult) {
         this.outcomeResult = outcomeResult;
     }
 
-    @JsonIgnore
     public Collection<TypedVariableWithValue> getOutcomeInputs() {
         return outcomeInputs;
     }
 
-    @JsonIgnore
     public void setOutcomeInputs(Collection<TypedVariableWithValue> outcomeInputs) {
         this.outcomeInputs = outcomeInputs;
     }
 
-    @JsonIgnore
     public Collection<Message> getMessages() {
         return messages;
     }
 
-    @JsonIgnore
     public void setMessages(Collection<Message> messages) {
         this.messages = messages;
     }

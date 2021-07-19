@@ -21,7 +21,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -100,37 +99,30 @@ public class CounterfactualExplainabilityResult extends BaseExplainabilityResult
         this.outputs = Objects.requireNonNull(outputs);
     }
 
-    @JsonIgnore
     public String getCounterfactualId() {
         return counterfactualId;
     }
 
-    @JsonIgnore
     public String getSolutionId() {
         return solutionId;
     }
 
-    @JsonIgnore
     public Long getSequenceId() {
         return sequenceId;
     }
 
-    @JsonIgnore
     public Boolean isValid() {
         return isValid;
     }
 
-    @JsonIgnore
     public Stage getStage() {
         return stage;
     }
 
-    @JsonIgnore
     public Collection<TypedVariableWithValue> getInputs() {
         return inputs;
     }
 
-    @JsonIgnore
     public Collection<TypedVariableWithValue> getOutputs() {
         return outputs;
     }
@@ -139,37 +131,30 @@ public class CounterfactualExplainabilityResult extends BaseExplainabilityResult
     // Test methods
     //-------------
 
-    @JsonIgnore
     public void setCounterfactualId(String counterfactualId) {
         this.counterfactualId = counterfactualId;
     }
 
-    @JsonIgnore
     public void setSolutionId(String solutionId) {
         this.solutionId = solutionId;
     }
 
-    @JsonIgnore
     public void setSequenceId(Long sequenceId) {
         this.sequenceId = sequenceId;
     }
 
-    @JsonIgnore
     public void setValid(Boolean valid) {
         isValid = valid;
     }
 
-    @JsonIgnore
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    @JsonIgnore
     public void setInputs(Collection<TypedVariableWithValue> inputs) {
         this.inputs = inputs;
     }
 
-    @JsonIgnore
     public void setOutputs(Collection<TypedVariableWithValue> outputs) {
         this.outputs = outputs;
     }

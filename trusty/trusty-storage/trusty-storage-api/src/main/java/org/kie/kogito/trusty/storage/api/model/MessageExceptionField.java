@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.trusty.storage.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -51,32 +50,26 @@ public class MessageExceptionField {
         return new MessageExceptionField(throwable.getClass().getName(), throwable.getMessage(), from(throwable.getCause()));
     }
 
-    @JsonIgnore
     public String getClassName() {
         return className;
     }
 
-    @JsonIgnore
     public void setClassName(String className) {
         this.className = className;
     }
 
-    @JsonIgnore
     public String getMessage() {
         return message;
     }
 
-    @JsonIgnore
     public void setMessage(String message) {
         this.message = message;
     }
 
-    @JsonIgnore
     public MessageExceptionField getCause() {
         return cause;
     }
 
-    @JsonIgnore
     public void setCause(MessageExceptionField cause) {
         this.cause = cause;
     }

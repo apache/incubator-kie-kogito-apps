@@ -24,7 +24,6 @@ import javax.validation.constraints.NotNull;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CounterfactualExplainabilityResultDto extends BaseExplainabilityResultDto {
@@ -137,37 +136,30 @@ public class CounterfactualExplainabilityResultDto extends BaseExplainabilityRes
                 Collections.emptyMap());
     }
 
-    @JsonIgnore
     public String getCounterfactualId() {
         return counterfactualId;
     }
 
-    @JsonIgnore
     public String getSolutionId() {
         return solutionId;
     }
 
-    @JsonIgnore
     public Long getSequenceId() {
         return sequenceId;
     }
 
-    @JsonIgnore
     public Boolean isValid() {
         return isValid;
     }
 
-    @JsonIgnore
     public Stage getStage() {
         return stage;
     }
 
-    @JsonIgnore
     public Map<String, TypedValue> getInputs() {
         return inputs;
     }
 
-    @JsonIgnore
     public Map<String, TypedValue> getOutputs() {
         return outputs;
     }

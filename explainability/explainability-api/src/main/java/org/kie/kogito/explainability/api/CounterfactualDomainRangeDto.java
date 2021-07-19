@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -46,12 +45,10 @@ public class CounterfactualDomainRangeDto extends CounterfactualDomainDto {
         this.upperBound = Objects.requireNonNull(upperBound);
     }
 
-    @JsonIgnore
     public JsonNode getLowerBound() {
         return this.lowerBound;
     }
 
-    @JsonIgnore
     public JsonNode getUpperBound() {
         return this.upperBound;
     }

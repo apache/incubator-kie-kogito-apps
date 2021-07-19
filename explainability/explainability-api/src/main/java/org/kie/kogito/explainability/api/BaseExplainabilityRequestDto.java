@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -63,17 +62,14 @@ public abstract class BaseExplainabilityRequestDto {
         this.modelIdentifier = Objects.requireNonNull(modelIdentifier);
     }
 
-    @JsonIgnore
     public String getExecutionId() {
         return executionId;
     }
 
-    @JsonIgnore
     public String getServiceUrl() {
         return serviceUrl;
     }
 
-    @JsonIgnore
     public ModelIdentifierDto getModelIdentifier() {
         return modelIdentifier;
     }

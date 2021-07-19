@@ -20,7 +20,6 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -40,7 +39,6 @@ public class CounterfactualDomainCategoricalDto extends CounterfactualDomainDto 
         this.categories = Objects.requireNonNull(categories);
     }
 
-    @JsonIgnore
     public Collection<JsonNode> getCategories() {
         return this.categories;
     }

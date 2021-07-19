@@ -19,18 +19,17 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CounterfactualSearchDomainUnitDto extends CounterfactualSearchDomainDto {
 
-    public static final String IS_FIXED_FIELD = "isFixed";
+    public static final String FIXED_FIELD = "fixed";
     public static final String DOMAIN_FIELD = "domain";
 
-    @JsonProperty(IS_FIXED_FIELD)
-    @NotNull(message = "isFixed must be provided.")
+    @JsonProperty(FIXED_FIELD)
+    @NotNull(message = "fixed must be provided.")
     private Boolean isFixed;
 
     @JsonProperty(DOMAIN_FIELD)
@@ -48,12 +47,10 @@ public class CounterfactualSearchDomainUnitDto extends CounterfactualSearchDomai
         this.domain = Objects.requireNonNull(domain);
     }
 
-    @JsonIgnore
     public Boolean isFixed() {
         return isFixed;
     }
 
-    @JsonIgnore
     public CounterfactualDomainDto getDomain() {
         return domain;
     }

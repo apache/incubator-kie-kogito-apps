@@ -17,7 +17,6 @@ package org.kie.kogito.trusty.storage.api.model;
 
 import org.kie.kogito.tracing.decision.event.message.MessageLevel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -61,62 +60,50 @@ public class Message {
         this.exception = exception;
     }
 
-    @JsonIgnore
     public MessageLevel getLevel() {
         return level;
     }
 
-    @JsonIgnore
     public void setLevel(MessageLevel level) {
         this.level = level;
     }
 
-    @JsonIgnore
     public String getCategory() {
         return category;
     }
 
-    @JsonIgnore
     public void setCategory(String category) {
         this.category = category;
     }
 
-    @JsonIgnore
     public String getType() {
         return type;
     }
 
-    @JsonIgnore
     public void setType(String type) {
         this.type = type;
     }
 
-    @JsonIgnore
     public String getSourceId() {
         return sourceId;
     }
 
-    @JsonIgnore
     public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
     }
 
-    @JsonIgnore
     public String getText() {
         return text;
     }
 
-    @JsonIgnore
     public void setText(String text) {
         this.text = text;
     }
 
-    @JsonIgnore
     public MessageExceptionField getException() {
         return exception;
     }
 
-    @JsonIgnore
     public void setException(MessageExceptionField exception) {
         this.exception = exception;
     }

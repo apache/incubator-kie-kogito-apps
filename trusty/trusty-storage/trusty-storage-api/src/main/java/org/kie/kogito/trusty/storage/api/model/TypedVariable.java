@@ -19,7 +19,6 @@ import java.util.Collection;
 
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public abstract class TypedVariable<T extends TypedVariable<?>> {
@@ -52,42 +51,34 @@ public abstract class TypedVariable<T extends TypedVariable<?>> {
         this.components = components;
     }
 
-    @JsonIgnore
     public TypedValue.Kind getKind() {
         return kind;
     }
 
-    @JsonIgnore
     public void setKind(TypedValue.Kind kind) {
         this.kind = kind;
     }
 
-    @JsonIgnore
     public String getName() {
         return name;
     }
 
-    @JsonIgnore
     public void setName(String name) {
         this.name = name;
     }
 
-    @JsonIgnore
     public String getTypeRef() {
         return typeRef;
     }
 
-    @JsonIgnore
     public void setTypeRef(String typeRef) {
         this.typeRef = typeRef;
     }
 
-    @JsonIgnore
     public Collection<T> getComponents() {
         return components;
     }
 
-    @JsonIgnore
     public void setComponents(Collection<T> components) {
         this.components = components;
     }
