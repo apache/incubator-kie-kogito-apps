@@ -24,9 +24,6 @@
         <version.node>v12.16.2</version.node>
         <version.npm>6.10.3</version.npm>
         <version.yarn>v1.19.1</version.yarn>
-        <maven.compiler.release>11</maven.compiler.release>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
 
         <!-- external containers used for testing -->
         <container.image.redis>redislabs/redisearch:${version.org.redis}</container.image.redis>
@@ -40,7 +37,7 @@
         <container.image.trusty-service>org.kie.kogito/trusty-service:${project.version}</container.image.trusty-service>
 
         <!-- OptaPlanner version -->
-        <version.org.optaplanner>8.9.0-SNAPSHOT</version.org.optaplanner>
+        <version.org.optaplanner>8.10.0-SNAPSHOT</version.org.optaplanner>
 
         <version.org.apache.opennlp>1.9.2</version.org.apache.opennlp>
         <version.org.apache.commons.csv>1.8</version.org.apache.commons.csv>
