@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.TestUtils;
@@ -40,11 +41,15 @@ import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.handler.graphql.ApolloWSMessageType;
 
 import static io.restassured.RestAssured.given;
 import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.COMPLETE;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.CONNECTION_ACK;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.CONNECTION_INIT;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.CONNECTION_KEEP_ALIVE;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.CONNECTION_TERMINATE;
 import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.DATA;
+import static io.vertx.ext.web.handler.graphql.ApolloWSMessageType.START;
 import static java.lang.String.format;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.hamcrest.CoreMatchers.isA;
@@ -55,21 +60,29 @@ import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 public abstract class AbstractWebSocketSubscriptionIT extends AbstractIndexingIT {
 
     @Inject
-    ProtobufService protobufService;
+    public ProtobufService protobufService;
 
     @Inject
-    MockGraphQLInstrumentation instrumentation;
+    public MockGraphQLInstrumentation instrumentation;
 
     @Inject
-    Vertx vertx;
+    public Vertx vertx;
 
     @Inject
-    DataIndexStorageService cacheService;
+    public DataIndexStorageService cacheService;
 
     private AtomicInteger counter = new AtomicInteger(0);
 
+    private HttpClient httpClient;
+
+    @BeforeEach
+    void setup() {
+        httpClient = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(TestUtils.getPortFromConfig()));
+    }
+
     @AfterEach
     void tearDown() {
+        httpClient.close();
         cacheService.getJobsCache().clear();
         cacheService.getProcessInstancesCache().clear();
         cacheService.getUserTaskInstancesCache().clear();
@@ -208,9 +221,9 @@ public abstract class AbstractWebSocketSubscriptionIT extends AbstractIndexingIT
     }
 
     private CompletableFuture<JsonObject> subscribe(String subscription) throws Exception {
-        HttpClient httpClient = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(TestUtils.getPortFromConfig()));
         CompletableFuture<JsonObject> cf = new CompletableFuture<>();
         CompletableFuture<Void> wsFuture = new CompletableFuture<>();
+        JsonObject terminate = new JsonObject().put("type", CONNECTION_TERMINATE.getText());
         instrumentation.setFuture(wsFuture);
         httpClient.webSocket("/graphql", websocketRes -> {
             if (websocketRes.succeeded()) {
@@ -219,25 +232,32 @@ public abstract class AbstractWebSocketSubscriptionIT extends AbstractIndexingIT
                     JsonObject json = message.toJsonObject();
                     String type = json.getString("type");
                     if (COMPLETE.getText().equals(type)) {
+                        webSocket.write(terminate.toBuffer());
                         cf.complete(null);
                     } else if (DATA.getText().equals(type)) {
+                        webSocket.write(terminate.toBuffer());
                         cf.complete(message.toJsonObject());
+                    } else if (CONNECTION_ACK.getText().equals(type)) {
+                        JsonObject init = new JsonObject()
+                                .put("id", String.valueOf(counter.getAndIncrement()))
+                                .put("type", START.getText())
+                                .put("payload", new JsonObject().put("query", subscription));
+                        webSocket.write(init.toBuffer());
+                    } else if (CONNECTION_KEEP_ALIVE.getText().equals(type)) {
+                        //Ignore
                     } else {
+                        webSocket.write(terminate.toBuffer());
                         cf.completeExceptionally(new RuntimeException(format("Unexpected message type: %s\nMessage: %s", type, message.toString())));
                     }
                 });
 
-                JsonObject init = new JsonObject()
-                        .put("id", String.valueOf(counter.getAndIncrement()))
-                        .put("type", ApolloWSMessageType.START.getText())
-                        .put("payload", new JsonObject().put("query", subscription));
+                JsonObject init = new JsonObject().put("type", CONNECTION_INIT.getText());
                 webSocket.write(init.toBuffer());
             } else {
                 websocketRes.cause().printStackTrace();
                 wsFuture.completeExceptionally(websocketRes.cause());
             }
         });
-        cf.whenComplete((r, t) -> httpClient.close());
         wsFuture.get(1, TimeUnit.MINUTES);
         return cf;
     }

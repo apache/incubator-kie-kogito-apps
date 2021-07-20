@@ -17,14 +17,16 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import ProcessDetails from '../ProcessDetails';
-import { getWrapperAsync } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import { MockedProcessDetailsDriver } from '../../../../embedded/tests/mocks/Mocks';
 import {
   Job,
   JobStatus,
   MilestoneStatus,
+  ProcessInstance,
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
+import wait from 'waait';
 
 jest.mock('../../JobsPanel/JobsPanel');
 jest.mock('../../ProcessDiagram/ProcessDiagram');
@@ -32,27 +34,20 @@ jest.mock('../../ProcessDetailsErrorModal/ProcessDetailsErrorModal');
 jest.mock('../../ProcessVariables/ProcessVariables');
 jest.mock('../../ProcessDetailsPanel/ProcessDetailsPanel');
 jest.mock('../../ProcessDetailsMilestonesPanel/ProcessDetailsMilestonesPanel');
+jest.mock('../../ProcessDetailsTimelinePanel/ProcessDetailsTimelinePanel');
+jest.mock('../../ProcessDetailsNodeTrigger/ProcessDetailsNodeTrigger');
+
 Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
 
 describe('ProcessDetails tests', () => {
   describe('ProcessDetails tests with success results', () => {
-    const props = {
-      isEnvelopeConnectedToChannel: true,
-      driver: MockedProcessDetailsDriver(),
-      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a'
-    };
-
-    const data: any = {
+    const data: ProcessInstance = {
       id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
       processId: 'hotelBooking',
       processName: 'HotelBooking',
       businessKey: 'T1234HotelBooking01',
       parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-      parentProcessInstance: {
-        id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-        processName: 'travels',
-        businessKey: 'T1234'
-      },
+      parentProcessInstance: null,
       roles: [],
       variables:
         '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
@@ -121,6 +116,12 @@ describe('ProcessDetails tests', () => {
           __typename: 'Milestone'
         }
       ]
+    };
+    const props = {
+      isEnvelopeConnectedToChannel: true,
+      driver: MockedProcessDetailsDriver(),
+      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
+      processDetails: data
     };
 
     const Jobs: Job[] = [
@@ -151,8 +152,6 @@ describe('ProcessDetails tests', () => {
     beforeEach(() => {
       jest.clearAllMocks();
       //@ts-ignore
-      props.driver.processDetailsQuery.mockImplementationOnce(() => data);
-      //@ts-ignore
       props.driver.jobsQuery.mockImplementationOnce(() => Jobs);
       //@ts-ignore
       props.driver.getProcessDiagram.mockImplementationOnce(() => svgResults);
@@ -165,18 +164,22 @@ describe('ProcessDetails tests', () => {
       );
     });
     it('Snapshot tests with default prop', async () => {
-      const wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       expect(wrapper).toMatchSnapshot();
     });
 
     it('Initiaload with query responses', async () => {
-      let wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       wrapper = wrapper.update();
       expect(wrapper.find('MockedJobsPanel')).toBeTruthy();
       expect(wrapper.find('MockedProcessDiagram')).toBeTruthy();
@@ -184,10 +187,12 @@ describe('ProcessDetails tests', () => {
     });
 
     it('handle save option', async () => {
-      let wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       wrapper = wrapper.update();
       await act(async () => {
         wrapper
@@ -198,10 +203,12 @@ describe('ProcessDetails tests', () => {
     });
 
     it('handle refresh option', async () => {
-      let wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       wrapper = wrapper.update();
       await act(async () => {
         wrapper
@@ -209,29 +216,18 @@ describe('ProcessDetails tests', () => {
           .at(1)
           .simulate('click');
       });
-      expect(props.driver.processDetailsQuery).toHaveBeenCalled();
       expect(props.driver.jobsQuery).toHaveBeenCalled();
     });
   });
 
   describe('ProcessDetails tests with error response', () => {
-    const props = {
-      isEnvelopeConnectedToChannel: true,
-      driver: MockedProcessDetailsDriver(),
-      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a'
-    };
-
-    const data: any = {
+    const data: ProcessInstance = {
       id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
       processId: 'hotelBooking',
       processName: 'HotelBooking',
       businessKey: 'T1234HotelBooking01',
       parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-      parentProcessInstance: {
-        id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-        processName: 'travels',
-        businessKey: 'T1234'
-      },
+      parentProcessInstance: null,
       roles: [],
       variables:
         '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
@@ -300,6 +296,13 @@ describe('ProcessDetails tests', () => {
           __typename: 'Milestone'
         }
       ]
+    };
+
+    const props = {
+      isEnvelopeConnectedToChannel: true,
+      driver: MockedProcessDetailsDriver(),
+      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
+      processDetails: data
     };
 
     const Jobs: Job[] = [
@@ -342,10 +345,12 @@ describe('ProcessDetails tests', () => {
       );
     });
     it('Test svg error modal', async () => {
-      let wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       wrapper = wrapper.update();
       await act(async () => {
         wrapper
@@ -359,10 +364,12 @@ describe('ProcessDetails tests', () => {
     });
 
     it('Test process variable success modal', async () => {
-      let wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       wrapper = wrapper.update();
       await act(async () => {
         wrapper
@@ -416,10 +423,12 @@ describe('ProcessDetails tests', () => {
     });
 
     it('Test process variable error modal', async () => {
-      let wrapper = await getWrapperAsync(
-        <ProcessDetails {...props} />,
-        'ProcessDetails'
-      );
+      let wrapper;
+      await act(async () => {
+        wrapper = mount(<ProcessDetails {...props} />);
+        await wait(0);
+        wrapper = wrapper.update().find('ProcessDetails');
+      });
       wrapper = wrapper.update();
       await act(async () => {
         wrapper

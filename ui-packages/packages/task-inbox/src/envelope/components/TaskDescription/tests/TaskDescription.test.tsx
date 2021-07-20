@@ -16,7 +16,7 @@
 
 import React from 'react';
 import TaskDescription from '../TaskDescription';
-import { getWrapper } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import { act } from 'react-test-renderer';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 
@@ -61,18 +61,17 @@ jest.mock('@kogito-apps/components-common', () => ({
 describe('TaskDescription test', () => {
   it('Render task description with task des', () => {
     const onClick = jest.fn();
-    const wrapper = getWrapper(
-      <TaskDescription task={userTask} onClick={onClick} />,
-      'TaskDescription'
-    );
+    const wrapper = mount(
+      <TaskDescription task={userTask} onClick={onClick} />
+    ).find('TaskDescription');
     expect(wrapper).toMatchSnapshot();
 
-    const button = wrapper.find('Button');
+    const anchor = wrapper.find('a');
 
-    expect(button.exists()).toBeTruthy();
+    expect(anchor.exists()).toBeTruthy();
 
     act(() => {
-      button.simulate('click');
+      anchor.simulate('click');
     });
 
     expect(onClick).toHaveBeenCalled();

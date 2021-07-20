@@ -31,40 +31,20 @@ exports[`TaskConsole tests Snapshot 1`] = `
     }
   }
   userContext={
-    TestUserContextImpl {
-      "currentUser": Object {
-        "groups": Array [
-          "employees",
-        ],
-        "id": "john",
-      },
-      "userManager": TestUserManagerImpl {
-        "system": Array [
-          "john",
-          "mary",
-          "poul",
-        ],
-        "users": Array [],
+    TestUserContext {
+      "user": DefaultUser {
+        "groups": Array [],
+        "id": "Dev User",
       },
     }
   }
 >
   <KogitoAppContextProvider
     userContext={
-      TestUserContextImpl {
-        "currentUser": Object {
-          "groups": Array [
-            "employees",
-          ],
-          "id": "john",
-        },
-        "userManager": TestUserManagerImpl {
-          "system": Array [
-            "john",
-            "mary",
-            "poul",
-          ],
-          "users": Array [],
+      TestUserContext {
+        "user": DefaultUser {
+          "groups": Array [],
+          "id": "Dev User",
         },
       }
     }

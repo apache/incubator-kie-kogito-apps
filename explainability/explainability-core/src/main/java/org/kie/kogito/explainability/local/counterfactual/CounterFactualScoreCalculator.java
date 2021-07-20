@@ -46,6 +46,30 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
     private static final Logger logger =
             LoggerFactory.getLogger(CounterFactualScoreCalculator.class);
 
+    public static Double outputDistance(Output a, Output b) throws IllegalArgumentException {
+        double distance = 0.0;
+
+        final Type aType = a.getType();
+        final Type bType = b.getType();
+
+        if (aType != bType) {
+            String message = "Features must have the same type, got " + aType.toString() + " and " + bType.toString();
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        }
+
+        if (a.getType() == Type.NUMBER) {
+            distance = a.getValue().asNumber() - b.getValue().asNumber();
+        } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
+            distance = a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
+        } else {
+            String message = "Feature type " + aType.toString() + " not supported";
+            logger.error(message);
+            throw new IllegalArgumentException(message);
+        }
+        return distance;
+    }
+
     /**
      * Calculates the counterfactual score for each proposed solution.
      * This method assumes that each model used as {@link org.kie.kogito.explainability.model.PredictionProvider} is
@@ -66,11 +90,14 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
 
         StringBuilder builder = new StringBuilder();
 
+        // Calculate similarities between original inputs and proposed inputs
+        double inputSimilarities = 0.0;
+        final int numberOfEntities = solution.getEntities().size();
         for (CounterfactualEntity entity : solution.getEntities()) {
-            final double entityDistance = entity.distance();
-            primarySoftScore += entityDistance;
+            final double entitySimilarity = entity.similarity();
+            inputSimilarities += entitySimilarity / (double) numberOfEntities;
             final Feature f = entity.asFeature();
-            builder.append(String.format("%s=%s (d:%f)", f.getName(), f.getValue().getUnderlyingObject(), entityDistance));
+            builder.append(String.format("%s=%s (d:%f)", f.getName(), f.getValue().getUnderlyingObject(), entitySimilarity));
 
             if (entity.isChanged()) {
                 secondarySoftscore -= 1;
@@ -80,6 +107,8 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 }
             }
         }
+        // Calculate Gower distance from the similarities
+        final double primarySoftScore = -Math.sqrt(1.0 - inputSimilarities);
 
         logger.debug("Current solution: {}", builder);
 
@@ -99,18 +128,22 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
 
             solution.setPredictionOutputs(predictions);
 
-            double distance = 0.0;
+            double outputDistance = 0.0;
 
             for (PredictionOutput predictionOutput : predictions) {
 
                 final List<Output> outputs = predictionOutput.getOutputs();
 
-                if (outputs.size() != predictions.size()) {
+                if (goal.size() != outputs.size()) {
                     throw new IllegalArgumentException("Prediction size must be equal to goal size");
                 }
-                for (int i = 0; i < outputs.size(); i++) {
+
+                final int numberOutputs = outputs.size();
+                for (int i = 0; i < numberOutputs; i++) {
                     final Output output = outputs.get(i);
                     final Output goalOutput = goal.get(i);
+                    final double d = CounterFactualScoreCalculator.outputDistance(output, goalOutput);
+                    outputDistance += d * d;
 
                     if (output.getType().equals(Type.NUMBER)) {
 
@@ -134,7 +167,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                         tertiaryHardScore -= 1;
                     }
                 }
-                primaryHardScore -= Math.sqrt(distance);
+                primaryHardScore -= Math.sqrt(outputDistance);
                 logger.debug("Distance penalty: {}", primaryHardScore);
                 logger.debug("Changed constraints penalty: {}", secondaryHardScore);
                 logger.debug("Confidence threshold penalty: {}", tertiaryHardScore);

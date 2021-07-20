@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getWrapper } from '@kogito-apps/components-common';
+import { mount } from 'enzyme';
 import React from 'react';
 import TestProcessListDriver from './mocks/TestProcessListDriver';
 import ProcessListPage from '../ProcessListPage';
 import { processInstances } from './mocks/Mocks';
 import wait from 'waait';
-import { SortByDirection } from '@patternfly/react-table';
 import { act } from 'react-dom/test-utils';
 import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
 
@@ -67,7 +66,7 @@ const getProcessListDriver = (items: number): TestProcessListDriver => {
 let props;
 
 const getProcessListWrapper = () =>
-  getWrapper(<ProcessListPage {...props} />, 'ProcessListPage');
+  mount(<ProcessListPage {...props} />).find('ProcessListPage');
 describe('ProcessListPage test', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -118,8 +117,8 @@ describe('ProcessListPage test', () => {
     expect(table.exists()).toBeTruthy();
     expect(table.props().isLoading).toBeFalsy();
     expect(table.props().processInstances).toHaveLength(3);
-    expect(table.props().sortBy.index).toBe(3);
-    expect(table.props().sortBy.direction).toBe(SortByDirection.desc);
+    expect(Object.keys(table.props().sortBy)[0]).toBe('lastUpdate');
+    expect(Object.values(table.props().sortBy)[0]).toBe('DESC');
 
     const loadMore = wrapper.find('LoadMore');
     expect(loadMore.exists()).toBeFalsy();

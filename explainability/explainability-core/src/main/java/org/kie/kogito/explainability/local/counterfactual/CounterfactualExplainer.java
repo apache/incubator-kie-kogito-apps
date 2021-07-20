@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -54,11 +55,13 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     private static final Logger logger =
             LoggerFactory.getLogger(CounterfactualExplainer.class);
     private final SolverConfig solverConfig;
+    private final Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory;
     private final Executor executor;
     private final double goalThreshold;
 
     public CounterfactualExplainer() {
         this.solverConfig = CounterfactualConfigurationFactory.builder().build();
+        this.solverManagerFactory = solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
         this.executor = ForkJoinPool.commonPool();
         this.goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
     }
@@ -79,7 +82,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      */
     protected CounterfactualExplainer(SolverConfig solverConfig,
             Executor executor, double goalThreshold) {
+            Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory,
+            Executor executor) {
         this.solverConfig = solverConfig;
+        this.solverManagerFactory = solverManagerFactory;
         this.executor = executor;
         this.goalThreshold = goalThreshold;
     }
@@ -97,12 +103,30 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     }
 
     private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer) {
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Wrap the provided {@link Consumer<CounterfactualResult>} in a OptaPlanner-accepted
+     * {@link Consumer<CounterfactualSolution>}.
+     * The consumer is only called when the provided {@link CounterfactualSolution} is valid.
+     *
+     * @param consumer {@link Consumer<CounterfactualResult>} provided to the explainer for intermediate results
+     * @return {@link Consumer<CounterfactualSolution>} as accepted by OptaPlanner
+     */
+    private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer,
+            AtomicLong sequenceId) {
         return counterfactualSolution -> {
-            CounterfactualResult result = new CounterfactualResult(counterfactualSolution.getEntities(),
-                    counterfactualSolution.getPredictionOutputs(),
-                    counterfactualSolution.getScore().isFeasible(),
-                    counterfactualSolution.getSolutionId(), counterfactualSolution.getExecutionId());
-            consumer.accept(result);
+            if (counterfactualSolution.getScore().isFeasible()) {
+                CounterfactualResult result = new CounterfactualResult(counterfactualSolution.getEntities(),
+                        counterfactualSolution.getPredictionOutputs(),
+                        counterfactualSolution.getScore().isFeasible(),
+                        counterfactualSolution.getSolutionId(),
+                        counterfactualSolution.getExecutionId(),
+                        sequenceId.incrementAndGet());
+                consumer.accept(result);
+            }
         };
     }
 
@@ -110,6 +134,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider model,
             Consumer<CounterfactualResult> intermediateResultsConsumer) {
+        final AtomicLong sequenceId = new AtomicLong(0);
         CounterfactualPrediction cfPrediction = (CounterfactualPrediction) prediction;
         final PredictionFeatureDomain featureDomain = cfPrediction.getDomain();
         final List<Boolean> constraints = cfPrediction.getConstraints();
@@ -124,12 +149,12 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId, this.goalThreshold);
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
-            try (SolverManager<CounterfactualSolution, UUID> solverManager =
-                    SolverManager.create(solverConfig, new SolverManagerConfig())) {
+            try (SolverManager<CounterfactualSolution, UUID> solverManager = solverManagerFactory.apply(solverConfig)) {
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
                         solverManager.solveAndListen(executionId, initial,
-                                assignSolutionId.andThen(createSolutionConsumer(intermediateResultsConsumer)),
+                                assignSolutionId.andThen(createSolutionConsumer(intermediateResultsConsumer,
+                                        sequenceId)),
                                 null);
                 try {
                     // Wait until the solving ends
@@ -149,8 +174,12 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                         s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
-            return new CounterfactualResult(solution.getEntities(), cfOutputs.join(), solution.getScore().isFeasible(),
-                    solution.getSolutionId(), solution.getExecutionId());
+            return new CounterfactualResult(solution.getEntities(),
+                    cfOutputs.join(),
+                    solution.getScore().isFeasible(),
+                    UUID.randomUUID(),
+                    solution.getExecutionId(),
+                    sequenceId.incrementAndGet());
         });
 
     }
@@ -159,6 +188,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         private Executor executor = ForkJoinPool.commonPool();
         private SolverConfig solverConfig = null;
         private double goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
+        private Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory = null;
 
         private Builder() {
         }
@@ -178,15 +208,27 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             return this;
         }
 
+        public Builder withSolverManagerFactory(
+                Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory) {
+            this.solverManagerFactory = solverManagerFactory;
+            return this;
+        }
+
         public CounterfactualExplainer build() {
             // Create a default solver configuration if none provided
             if (this.solverConfig == null) {
                 this.solverConfig = CounterfactualConfigurationFactory.builder().build();
             }
+            if (this.solverManagerFactory == null) {
+                this.solverManagerFactory = solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
+            }
             return new CounterfactualExplainer(
                     this.solverConfig,
                     this.executor,
                     this.goalThreshold);
+                    solverConfig,
+                    solverManagerFactory,
+                    executor);
         }
     }
 }

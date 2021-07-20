@@ -15,12 +15,8 @@
  */
 
 import React from 'react';
-import { Button } from '@patternfly/react-core';
-import {
-  componentOuiaProps,
-  OUIAProps,
-  ItemDescriptor
-} from '@kogito-apps/components-common';
+import { ItemDescriptor } from '@kogito-apps/components-common';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 
 interface IOwnProps {
@@ -35,8 +31,7 @@ const TaskDescription: React.FC<IOwnProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   return (
-    <Button
-      variant={'link'}
+    <a
       onClick={onClick}
       {...componentOuiaProps(ouiaId, 'task-description', ouiaSafe)}
     >
@@ -48,7 +43,7 @@ const TaskDescription: React.FC<IOwnProps & OUIAProps> = ({
           }}
         />
       </strong>
-    </Button>
+    </a>
   );
 };
 

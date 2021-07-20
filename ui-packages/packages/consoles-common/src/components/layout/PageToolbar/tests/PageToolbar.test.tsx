@@ -16,36 +16,31 @@
 
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { Dropdown } from '@patternfly/react-core';
-import { getWrapper } from '@kogito-apps/components-common';
 import PageToolbar from '../PageToolbar';
 import {
   resetTestKogitoAppContext,
-  testHandleLogoutMock,
-  testIsTestUserSystemEnabledMock
+  testHandleLogoutMock
 } from '../../../../environment/auth/tests/utils/KogitoAppContextTestingUtils';
 
 jest.mock('../../AboutModalBox/AboutModalBox');
-jest.mock('../../PageToolbarUsersDropdownGroup/PageToolbarUsersDropdownGroup');
-jest.mock('../../AddTestUser/AddTestUser');
 
 describe('PageToolbar component tests', () => {
   beforeEach(() => {
-    testIsTestUserSystemEnabledMock.mockReturnValue(false);
     testHandleLogoutMock.mockClear();
     resetTestKogitoAppContext(false);
   });
 
   it('Snapshot testing - auth disabled', () => {
-    const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
+    const wrapper = mount(<PageToolbar />).find('PageToolbar');
 
     expect(wrapper).toMatchSnapshot();
   });
 
   it('Snapshot testing - auth enabled', () => {
     resetTestKogitoAppContext(true);
-    const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
+    const wrapper = mount(<PageToolbar />).find('PageToolbar');
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -96,20 +91,6 @@ describe('PageToolbar component tests', () => {
     expect(dropdownItems.length).toStrictEqual(1);
   });
 
-  it('Testing dropdown items - auth disabled TestUserSystem enabled', () => {
-    testIsTestUserSystemEnabledMock.mockReturnValue(true);
-
-    const wrapper = shallow(<PageToolbar />);
-
-    expect(wrapper).toMatchSnapshot();
-
-    const dropdown = wrapper.find(Dropdown);
-
-    const dropdownItems = dropdown.prop('dropdownItems');
-
-    expect(dropdownItems.length).toStrictEqual(3);
-  });
-
   it('Testing select dropdown test', () => {
     let wrapper = shallow(<PageToolbar />);
 
@@ -147,7 +128,7 @@ describe('PageToolbar component tests', () => {
   });
 
   it('handleAboutModalToggle test', () => {
-    const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
+    const wrapper = mount(<PageToolbar />).find('PageToolbar');
 
     let aboutModalBox = wrapper.find('MockedAboutModalBox');
 
@@ -163,45 +144,5 @@ describe('PageToolbar component tests', () => {
     aboutModalBox = wrapper.update().find('MockedAboutModalBox');
 
     expect(aboutModalBox.prop('isOpenProp')).toBeTruthy();
-  });
-
-  it('Testing handleaddUserModalToggle - TestUserSystem enabled', () => {
-    testIsTestUserSystemEnabledMock.mockReturnValue(true);
-
-    const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
-
-    let addUserModal = wrapper.find('MockedAddTestUser');
-
-    expect(addUserModal.exists()).toBeTruthy();
-
-    expect(addUserModal.prop('isOpen')).toBeFalsy();
-
-    act(() => {
-      addUserModal.props()['toggleModal']();
-    });
-
-    addUserModal = wrapper.update().find('MockedAddTestUser');
-
-    expect(addUserModal.prop('isOpen')).toBeTruthy();
-  });
-
-  it('Testing handleaddUserModalToggle test - TestUserSystem disabled', () => {
-    testIsTestUserSystemEnabledMock.mockReturnValue(false);
-
-    const wrapper = getWrapper(<PageToolbar />, 'PageToolbar');
-
-    let addUserModal = wrapper.find('MockedAddTestUser');
-
-    expect(addUserModal.exists()).toBeTruthy();
-
-    expect(addUserModal.prop('isOpen')).toBeFalsy();
-
-    act(() => {
-      addUserModal.props()['toggleModal']();
-    });
-
-    addUserModal = wrapper.update().find('MockedAddTestUser');
-
-    expect(addUserModal.prop('isOpen')).toBeFalsy();
   });
 });

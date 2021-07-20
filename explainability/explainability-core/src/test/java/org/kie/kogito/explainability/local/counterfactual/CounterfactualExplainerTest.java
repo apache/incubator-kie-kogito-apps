@@ -16,15 +16,18 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -53,6 +56,10 @@ import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.kie.kogito.explainability.utils.DataUtils;
+import org.mockito.ArgumentCaptor;
+import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
+import org.optaplanner.core.api.solver.SolverJob;
+import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
@@ -61,12 +68,15 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class CounterfactualExplainerTest {
 
@@ -109,7 +119,7 @@ class CounterfactualExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
 
-        final List<Output> goal = List.of(new Output("class", Type.BOOLEAN, new Value(false), 0.0d));
+        final List<Output> goal = List.of(new Output("class", Type.NUMBER, new Value(10.0), 0.0d));
         List<Feature> features = new LinkedList<>();
         List<FeatureDomain> featureBoundaries = new LinkedList<>();
         List<Boolean> constraints = new LinkedList<>();
@@ -358,7 +368,7 @@ class CounterfactualExplainerTest {
      * Search for a counterfactual using categorical features with the Symbolic arithmetic model.
      * The outcome match is strict (goal threshold of zero).
      * The CF should be invalid with this number of iterations.
-     * 
+     *
      * @param seed
      * @throws ExecutionException
      * @throws InterruptedException
@@ -682,17 +692,25 @@ class CounterfactualExplainerTest {
         Random random = new Random();
         random.setSeed(seed);
 
-        final List<Output> goal = List.of(new Output("class", Type.NUMBER, new Value(100.0), 0.9d));
+        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.0));
+
         List<Feature> features = new LinkedList<>();
         List<FeatureDomain> featureBoundaries = new LinkedList<>();
         List<Boolean> constraints = new LinkedList<>();
-        for (int i = 0; i < 4; i++) {
-            features.add(TestUtils.getMockedNumericFeature(i));
-            featureBoundaries.add(NumericalFeatureDomain.create(0.0, 100.0));
-            constraints.add(false);
-        }
+        features.add(FeatureFactory.newNumericalFeature("f-num1", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num2", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num3", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num4", 100.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 1000.0));
 
-        final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(1000L);
+        final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10_000L);
         // for the purpose of this test, only a few steps are necessary
         final SolverConfig solverConfig = CounterfactualConfigurationFactory
                 .builder().withTerminationConfig(terminationConfig).build();
@@ -709,7 +727,12 @@ class CounterfactualExplainerTest {
                         .build();
 
         PredictionInput input = new PredictionInput(features);
-        PredictionProvider model = TestUtils.getSumThresholdModel(100.0, 1.0);
+
+        final double center = 500.0;
+        final double epsilon = 10.0;
+
+        final PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
+
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
@@ -722,8 +745,67 @@ class CounterfactualExplainerTest {
                         .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
 
         logger.debug("Outputs: {}", counterfactualResult.getOutput().get(0).getOutputs());
-        //An intermediate result is generated when seed > 0
-        verify(assertIntermediateCounterfactualNotNull, times(seed == 0 ? 0 : 1)).accept(any());
+        // At least one intermediate result is generated
+        verify(assertIntermediateCounterfactualNotNull, atLeast(1)).accept(any());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 1, 2, 3, 5, 8 })
+    @SuppressWarnings("unchecked")
+    void testSequenceIds(int numberOfIntermediateSolutions) throws ExecutionException, InterruptedException, TimeoutException {
+        final List<Long> sequenceIds = new ArrayList<>();
+        final Consumer<CounterfactualResult> captureSequenceIds = counterfactual -> {
+            sequenceIds.add(counterfactual.getSequenceId());
+        };
+
+        ArgumentCaptor<Consumer<CounterfactualSolution>> intermediateSolutionConsumerCaptor =
+                ArgumentCaptor.forClass(Consumer.class);
+
+        //Mock SolverManager and SolverJob to guarantee deterministic test behaviour
+        SolverManager<CounterfactualSolution, UUID> solverManager = mock(SolverManager.class);
+        SolverJob<CounterfactualSolution, UUID> solverJob = mock(SolverJob.class);
+        CounterfactualSolution solution = mock(CounterfactualSolution.class);
+        BendableBigDecimalScore score = BendableBigDecimalScore.zero(0, 0);
+        when(solverManager.solveAndListen(any(), any(), any(), any())).thenReturn(solverJob);
+        when(solverJob.getFinalBestSolution()).thenReturn(solution);
+        when(solution.getScore()).thenReturn(score);
+
+        //Setup Explainer
+        final CounterfactualExplainer counterfactualExplainer =
+                CounterfactualExplainer
+                        .builder()
+                        .withSolverManagerFactory(solverConfig -> solverManager)
+                        .build();
+
+        //Setup mock model, what it does is not important
+        Prediction prediction = new CounterfactualPrediction(new PredictionInput(Collections.emptyList()),
+                new PredictionOutput(Collections.emptyList()),
+                new PredictionFeatureDomain(Collections.emptyList()),
+                Collections.emptyList(),
+                null,
+                UUID.randomUUID());
+
+        CounterfactualResult result = counterfactualExplainer.explainAsync(prediction,
+                (List<PredictionInput> inputs) -> CompletableFuture.completedFuture(Collections.emptyList()),
+                captureSequenceIds)
+                .get(Config.INSTANCE.getAsyncTimeout(),
+                        Config.INSTANCE.getAsyncTimeUnit());
+
+        verify(solverManager).solveAndListen(any(), any(), intermediateSolutionConsumerCaptor.capture(), any());
+        Consumer<CounterfactualSolution> intermediateSolutionConsumer = intermediateSolutionConsumerCaptor.getValue();
+
+        //Mock the intermediate Solution callback being invoked
+        IntStream.range(0, numberOfIntermediateSolutions).forEach(i -> {
+            CounterfactualSolution intermediate = mock(CounterfactualSolution.class);
+            BendableBigDecimalScore intermediateScore = BendableBigDecimalScore.zero(0, 0);
+            when(intermediate.getScore()).thenReturn(intermediateScore);
+            intermediateSolutionConsumer.accept(intermediate);
+        });
+
+        //The final and intermediate Solutions should all have unique Sequence Ids.
+        sequenceIds.add(result.getSequenceId());
+        assertEquals(numberOfIntermediateSolutions + 1, sequenceIds.size());
+        assertEquals(numberOfIntermediateSolutions + 1, (int) sequenceIds.stream().distinct().count());
     }
 
     @ParameterizedTest
@@ -751,7 +833,7 @@ class CounterfactualExplainerTest {
         featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
 
         final double center = 400.0;
-        final double epsilon = 1e-10;
+        final double epsilon = 10.0;
 
         PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
 
@@ -795,7 +877,90 @@ class CounterfactualExplainerTest {
 
         // all intermediate Ids must be distinct
         assertEquals((int) intermediateIds.stream().distinct().count(), intermediateIds.size());
-        assertEquals((int) executionIds.stream().distinct().count(), 1);
+        assertEquals(1, (int) executionIds.stream().distinct().count());
+        assertEquals(executionIds.get(0), executionId);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testFinalUniqueIds(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+        Random random = new Random();
+        random.setSeed(seed);
+
+        final List<Output> goal = List.of(new Output("inside", Type.BOOLEAN, new Value(true), 0.5));
+
+        List<Feature> features = new LinkedList<>();
+        List<FeatureDomain> featureBoundaries = new LinkedList<>();
+        List<Boolean> constraints = new LinkedList<>();
+        features.add(FeatureFactory.newNumericalFeature("f-num1", 10.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num2", 10.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num3", 10.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
+        features.add(FeatureFactory.newNumericalFeature("f-num4", 10.0));
+        constraints.add(false);
+        featureBoundaries.add(NumericalFeatureDomain.create(0.0, 10000.0));
+
+        final double center = 400.0;
+        final double epsilon = 10;
+
+        PredictionProvider model = TestUtils.getSumThresholdModel(center, epsilon);
+
+        final TerminationConfig terminationConfig =
+                new TerminationConfig().withBestScoreFeasible(true).withScoreCalculationCountLimit(10_000L);
+        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+                .builder().withTerminationConfig(terminationConfig).build();
+
+        solverConfig.setRandomSeed((long) seed);
+        solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
+
+        final List<UUID> intermediateIds = new ArrayList<>();
+        final List<UUID> executionIds = new ArrayList<>();
+
+        final Consumer<CounterfactualResult> captureIntermediateIds = counterfactual -> {
+            intermediateIds.add(counterfactual.getSolutionId());
+        };
+
+        final Consumer<CounterfactualResult> captureExecutionIds = counterfactual -> {
+            executionIds.add(counterfactual.getExecutionId());
+        };
+
+        final CounterfactualExplainer counterfactualExplainer =
+                CounterfactualExplainer
+                        .builder()
+                        .withSolverConfig(solverConfig)
+                        .build();
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionOutput output = new PredictionOutput(goal);
+        final UUID executionId = UUID.randomUUID();
+        Prediction prediction = new CounterfactualPrediction(input, output, new PredictionFeatureDomain(featureBoundaries),
+                constraints, null, executionId);
+        final CounterfactualResult counterfactualResult =
+                counterfactualExplainer.explainAsync(prediction, model, captureIntermediateIds.andThen(captureExecutionIds))
+                        .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+
+        for (CounterfactualEntity entity : counterfactualResult.getEntities()) {
+            logger.debug("Entity: {}", entity);
+        }
+
+        // All intermediate ids should be unique
+        assertEquals((int) intermediateIds.stream().distinct().count(), intermediateIds.size());
+        // There should be at least one intermediate id
+        assertTrue(intermediateIds.size() > 0);
+        // There should be at least one execution id
+        assertTrue(executionIds.size() > 0);
+        // We should have the same number of execution ids as intermediate ids (captured from intermediate results)
+        assertEquals(executionIds.size(), intermediateIds.size());
+        // All execution ids should be the same
+        assertEquals(1, (int) executionIds.stream().distinct().count());
+        // The last intermediate id must be different from the final result id
+        assertNotEquals(intermediateIds.get(intermediateIds.size() - 1), counterfactualResult.getSolutionId());
+        // Captured execution ids should be the same as the one provided
         assertEquals(executionIds.get(0), executionId);
     }
 

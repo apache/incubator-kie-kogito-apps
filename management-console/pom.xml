@@ -14,17 +14,13 @@
   <name>Kogito Apps :: Management Console</name>
 
   <properties>
-    <path.to.frontend.app>../ui-packages/packages/management-console</path.to.frontend.app>
+    <path.to.frontend.app>../ui-packages/packages/management-console-webapp</path.to.frontend.app>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>security-commons</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>process-svg-quarkus-addon</artifactId>
+      <artifactId>kogito-addons-quarkus-process-svg</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -38,6 +34,13 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-qute</artifactId>
     </dependency>
+
+    <!-- Health Check -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
