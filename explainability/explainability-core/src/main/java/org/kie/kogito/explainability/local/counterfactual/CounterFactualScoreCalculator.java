@@ -47,8 +47,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             LoggerFactory.getLogger(CounterFactualScoreCalculator.class);
 
     public static Double outputDistance(Output a, Output b) throws IllegalArgumentException {
-        double distance = 0.0;
+        return outputDistance(a, b, 0.0);
+    }
 
+    public static Double outputDistance(Output a, Output b, double threshold) throws IllegalArgumentException {
         final Type aType = a.getType();
         final Type bType = b.getType();
 
@@ -59,15 +61,27 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         }
 
         if (a.getType() == Type.NUMBER) {
-            distance = a.getValue().asNumber() - b.getValue().asNumber();
+            final double aValue = a.getValue().asNumber();
+            final double bValue = b.getValue().asNumber();
+            final double difference = Math.abs(aValue - bValue);
+            // Avoid calculating the change if both zero
+            if (aValue == 0.0 && bValue == 0.0) {
+                return 0.0;
+            } else {
+                final double change = difference / Math.max(aValue, bValue);
+                if (change < threshold) {
+                    return 0.0;
+                } else {
+                    return change;
+                }
+            }
         } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
-            distance = a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
+            return a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
         } else {
             String message = "Feature type " + aType.toString() + " not supported";
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
-        return distance;
     }
 
     /**
@@ -85,7 +99,6 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         double primaryHardScore = 0;
         int secondaryHardScore = 0;
         int tertiaryHardScore = 0;
-        double primarySoftScore = 0.0;
         int secondarySoftscore = 0;
 
         StringBuilder builder = new StringBuilder();
@@ -142,26 +155,9 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 for (int i = 0; i < numberOutputs; i++) {
                     final Output output = outputs.get(i);
                     final Output goalOutput = goal.get(i);
-                    final double d = CounterFactualScoreCalculator.outputDistance(output, goalOutput);
+                    final double d =
+                            CounterFactualScoreCalculator.outputDistance(output, goalOutput, solution.getGoalThreshold());
                     outputDistance += d * d;
-
-                    if (output.getType().equals(Type.NUMBER)) {
-
-                        final double outputValue = output.getValue().asNumber();
-                        final double goalValue = goalOutput.getValue().asNumber();
-                        final double difference = Math.abs(outputValue - goalValue);
-                        final double threshold = solution.getGoalThreshold();
-                        final double change = difference / Math.max(outputValue, goalValue);
-
-                        if ((goalValue == 0.0 && difference > threshold) || (goalValue != 0.0 && change > threshold)) {
-                            distance += difference * difference;
-                        }
-
-                    } else {
-                        distance +=
-                                goalOutput.getValue().getUnderlyingObject().equals(output.getValue().getUnderlyingObject()) ? 0
-                                        : 1;
-                    }
 
                     if (output.getScore() < goalOutput.getScore()) {
                         tertiaryHardScore -= 1;

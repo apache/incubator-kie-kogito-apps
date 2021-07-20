@@ -124,7 +124,7 @@ class CounterfactualScoreCalculatorTest {
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void IntegerDistanceDifferentValue(int seed) {
         final Random random = new Random(seed);
-        int value = random.nextInt();
+        int value = random.nextInt(1000);
         Feature x = FeatureFactory.newNumericalFeature("x", value);
         Feature y = FeatureFactory.newNumericalFeature("y", value + 100);
 
@@ -270,7 +270,7 @@ class CounterfactualScoreCalculatorTest {
         goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID());
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
 
@@ -333,7 +333,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID());
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);
@@ -388,7 +388,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID());
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);

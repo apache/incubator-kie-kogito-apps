@@ -81,9 +81,8 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      * @param goalThreshold A positive threshold as a ratio of the variable's value
      */
     protected CounterfactualExplainer(SolverConfig solverConfig,
-            Executor executor, double goalThreshold) {
             Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory,
-            Executor executor) {
+            Executor executor, double goalThreshold) {
         this.solverConfig = solverConfig;
         this.solverManagerFactory = solverManagerFactory;
         this.executor = executor;
@@ -100,11 +99,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
     public SolverConfig getSolverConfig() {
         return solverConfig;
-    }
-
-    private Consumer<CounterfactualSolution> createSolutionConsumer(Consumer<CounterfactualResult> consumer) {
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -224,11 +218,9 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             }
             return new CounterfactualExplainer(
                     this.solverConfig,
+                    this.solverManagerFactory,
                     this.executor,
                     this.goalThreshold);
-                    solverConfig,
-                    solverManagerFactory,
-                    executor);
         }
     }
 }
