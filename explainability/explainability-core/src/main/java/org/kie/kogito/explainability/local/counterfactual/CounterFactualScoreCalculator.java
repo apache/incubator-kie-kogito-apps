@@ -65,12 +65,12 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             final double bValue = b.getValue().asNumber();
             final double difference = Math.abs(aValue - bValue);
             // Avoid calculating the change if both zero
-            if (aValue == 0.0 && bValue == 0.0) {
-                return 0.0;
+            if (aValue == 0 && bValue == 0) {
+                return 0d;
             } else {
                 final double change = difference / Math.max(aValue, bValue);
                 if (change < threshold) {
-                    return 0.0;
+                    return 0d;
                 } else {
                     return change;
                 }

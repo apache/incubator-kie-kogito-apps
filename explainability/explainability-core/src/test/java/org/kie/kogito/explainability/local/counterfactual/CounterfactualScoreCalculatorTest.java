@@ -44,6 +44,7 @@ import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -64,10 +65,29 @@ class CounterfactualScoreCalculatorTest {
         Output ox = outputFromFeature(x);
         Output oy = outputFromFeature(y);
 
-        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        // Use a random threshold, mustn't make a difference
+        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
 
         assertEquals(Type.NUMBER, ox.getType());
-        assertEquals(0.0, distance);
+        assertEquals(0.0, Math.abs(distance));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void IntegerDistanceSameValueZero(int seed) {
+        final Random random = new Random(seed);
+        final int value = 0;
+        Feature x = FeatureFactory.newNumericalFeature("x", value);
+        Feature y = FeatureFactory.newNumericalFeature("y", value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        // Use a random threshold, mustn't make a difference
+        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(Type.NUMBER, ox.getType());
+        assertEquals(0.0, Math.abs(distance));
     }
 
     @ParameterizedTest
@@ -81,7 +101,26 @@ class CounterfactualScoreCalculatorTest {
         Output ox = outputFromFeature(x);
         Output oy = outputFromFeature(y);
 
-        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        // Use a random threshold, mustn't make a difference
+        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(Type.NUMBER, ox.getType());
+        assertEquals(0.0, distance);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void DoubleDistanceSameValueZero(int seed) {
+        final Random random = new Random(seed);
+        final double value = 0.0;
+        Feature x = FeatureFactory.newNumericalFeature("x", value);
+        Feature y = FeatureFactory.newNumericalFeature("y", value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        // Use a random threshold, mustn't make a difference
+        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
 
         assertEquals(Type.NUMBER, ox.getType());
         assertEquals(0.0, distance);
@@ -98,15 +137,21 @@ class CounterfactualScoreCalculatorTest {
         Output ox = outputFromFeature(x);
         Output oy = outputFromFeature(y);
 
-        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
 
         assertEquals(Type.BOOLEAN, ox.getType());
+        assertEquals(0.0, distance);
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
         assertEquals(0.0, distance);
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void CategoricalDistanceSameValue(int seed) {
+        final Random random = new Random(seed);
         final String value = UUID.randomUUID().toString();
         Feature x = FeatureFactory.newCategoricalFeature("x", value);
         Feature y = FeatureFactory.newCategoricalFeature("y", value);
@@ -114,9 +159,14 @@ class CounterfactualScoreCalculatorTest {
         Output ox = outputFromFeature(x);
         Output oy = outputFromFeature(y);
 
-        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
 
         assertEquals(Type.CATEGORICAL, ox.getType());
+        assertEquals(0.0, distance);
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
         assertEquals(0.0, distance);
     }
 
@@ -140,6 +190,30 @@ class CounterfactualScoreCalculatorTest {
         y = FeatureFactory.newNumericalFeature("y", value - 100);
         oy = outputFromFeature(y);
         distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertTrue(distance * distance > 0);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void IntegerDistanceDifferentValueThreshold(int seed) {
+        final Random random = new Random(seed);
+        int value = random.nextInt(1000);
+        Feature x = FeatureFactory.newNumericalFeature("x", value);
+        Feature y = FeatureFactory.newNumericalFeature("y", value + 100);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.05);
+
+        assertEquals(Type.NUMBER, ox.getType());
+        assertEquals(Type.NUMBER, oy.getType());
+        assertTrue(distance * distance > 0);
+
+        y = FeatureFactory.newNumericalFeature("y", value - 100);
+        oy = outputFromFeature(y);
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.05);
 
         assertTrue(distance * distance > 0);
     }
@@ -170,6 +244,57 @@ class CounterfactualScoreCalculatorTest {
 
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void DoubleDistanceDifferentValueThresholdMet(int seed) {
+        final double value = 100.0;
+        Feature x = FeatureFactory.newNumericalFeature("x", value);
+        Feature y = FeatureFactory.newNumericalFeature("y", value - 20.0);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.NUMBER, ox.getType());
+        assertEquals(Type.NUMBER, oy.getType());
+        assertTrue(distance * distance > 0);
+
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.1);
+        assertTrue(distance * distance > 0);
+
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.2);
+        assertTrue(distance * distance > 0);
+
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.3);
+        assertFalse(distance * distance > 0);
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void DoubleDistanceDifferentValueThreshold(int seed) {
+        final Random random = new Random(seed);
+        double value = random.nextDouble() * 100.0;
+        Feature x = FeatureFactory.newNumericalFeature("x", value);
+        Feature y = FeatureFactory.newNumericalFeature("y", value + 100.0);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.25);
+
+        assertEquals(Type.NUMBER, ox.getType());
+        assertEquals(Type.NUMBER, oy.getType());
+        assertTrue(distance * distance > 0);
+
+        y = FeatureFactory.newNumericalFeature("y", value - 100);
+        oy = outputFromFeature(y);
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.25);
+
+        assertTrue(distance * distance > 0);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void BooleanDistanceDifferentValue(int seed) {
         final Random random = new Random(seed);
         boolean value = random.nextBoolean();
@@ -180,6 +305,24 @@ class CounterfactualScoreCalculatorTest {
         Output oy = outputFromFeature(y);
 
         double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.BOOLEAN, ox.getType());
+        assertEquals(Type.BOOLEAN, oy.getType());
+        assertEquals(1.0, distance);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void BooleanDistanceDifferentValueThreshold(int seed) {
+        final Random random = new Random(seed);
+        boolean value = random.nextBoolean();
+        Feature x = FeatureFactory.newBooleanFeature("x", value);
+        Feature y = FeatureFactory.newBooleanFeature("y", !value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.25);
 
         assertEquals(Type.BOOLEAN, ox.getType());
         assertEquals(Type.BOOLEAN, oy.getType());
@@ -201,6 +344,12 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(Type.CATEGORICAL, ox.getType());
         assertEquals(Type.CATEGORICAL, oy.getType());
         assertEquals(1.0, distance);
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(1.0, distance);
+
     }
 
     @Test
