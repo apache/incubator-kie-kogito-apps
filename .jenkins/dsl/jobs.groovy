@@ -26,6 +26,9 @@ Map getMultijobPRConfig() {
                 id: 'Apps',
                 primary: true,
             ]
+        ],
+        extraEnv : [
+            ENABLE_SONARCLOUD: Utils.isMainBranch(this)
         ]
     ]
 }
@@ -35,7 +38,7 @@ def nightlyBranchFolder = "${KogitoConstants.KOGITO_DSL_NIGHTLY_FOLDER}/${JOB_BR
 def releaseBranchFolder = "${KogitoConstants.KOGITO_DSL_RELEASE_FOLDER}/${JOB_BRANCH_FOLDER}"
 
 if (Utils.isMainBranch(this)) {
-    // Old PR checks. 
+    // Old PR checks.
     // To be removed once supported release branches (<= 1.7.x) are no more there.
     setupPrJob()
     setupQuarkusLTSPrJob()
