@@ -71,7 +71,7 @@ export const cfReducer = (state: CFState, action: cfActions) => {
         ...state,
         searchDomains: state.searchDomains.map((input, index) =>
           index === action.payload.searchInputIndex
-            ? { ...input, isFixed: !input.isFixed }
+            ? { ...input, fixed: !input.fixed }
             : input
         )
       };
@@ -174,7 +174,7 @@ export const cfInitState = (parameters): CFState => {
 const convertInputToSearchDomain = (inputs: ItemObject[]) => {
   const addIsFixed = (input: ItemObject): CFSearchInput => {
     if (input.components === null) {
-      return { ...input, isFixed: true };
+      return { ...input, fixed: true };
     } else {
       if (isItemObjectArray(input.components)) {
         const searchInput = input.components.map(item => addIsFixed(item));
@@ -214,7 +214,7 @@ const areRequiredParametersSet = (state: CFState): boolean => {
 
 const areInputsSelected = (inputs: CFSearchInput[]) => {
   // filtering all non fixed inputs
-  const selectedInputs = inputs.filter(domain => domain.isFixed === false);
+  const selectedInputs = inputs.filter(domain => domain.fixed === false);
   // checking if all inputs have a domain specified, with the exception of
   // booleans (do not require one)
   return (

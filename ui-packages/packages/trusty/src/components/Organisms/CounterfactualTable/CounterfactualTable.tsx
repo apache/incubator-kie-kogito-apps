@@ -157,7 +157,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 
   useEffect(() => {
     setRows(inputs);
-    setAreAllRowsSelected(inputs.find(input => input.isFixed) === undefined);
+    setAreAllRowsSelected(inputs.find(input => input.fixed) === undefined);
   }, [inputs]);
 
   useEffect(() => {
@@ -346,7 +346,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             select={{
                               rowIndex,
                               onSelect,
-                              isSelected: row.isFixed === false,
+                              isSelected: row.fixed === false,
                               disable: !(
                                 isInputSelectionEnabled && canSelectInput(row)
                               )
@@ -367,7 +367,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                   onOpenInputDomainEdit(row, rowIndex)
                                 }
                                 icon={!row.domain && <PlusCircleIcon />}
-                                isDisabled={row.isFixed}
+                                isDisabled={row.fixed}
                                 className={'counterfactual-constraint-edit'}
                               >
                                 {row.domain ? (

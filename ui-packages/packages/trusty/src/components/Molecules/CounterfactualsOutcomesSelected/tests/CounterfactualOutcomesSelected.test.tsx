@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import CounterfactualOutcomesSelected from '../CounterfactualOutcomesSelected';
-import { CFGoal } from '../../../../types';
+import { CFGoal, CFGoalRole } from '../../../../types';
 
 describe('CounterfactualOutcomesSelected', () => {
   test('renders correctly', () => {
@@ -34,36 +34,40 @@ const goals: CFGoal[] = [
   {
     id: '1001',
     name: 'Score',
+    kind: 'UNIT',
     typeRef: 'number',
     value: 1,
     originalValue: 0,
-    isFixed: false
+    role: CFGoalRole.FIXED
   },
   {
     id: '1002',
     name: 'Approval',
+    kind: 'UNIT',
     typeRef: 'boolean',
     value: true,
     originalValue: false,
-    isFixed: false
+    role: CFGoalRole.FIXED
   },
   {
     id: '1003',
     name: 'Risk',
+    kind: 'UNIT',
     typeRef: 'number',
     value: 33,
     originalValue: 33,
-    isFixed: true
+    role: CFGoalRole.ORIGINAL
   }
 ];
 
-const noGoals = [
+const noGoals: CFGoal[] = [
   {
     id: '1003',
     name: 'Risk',
+    kind: 'UNIT',
     typeRef: 'number',
     value: 33,
     originalValue: 33,
-    isFixed: true
+    role: CFGoalRole.ORIGINAL
   }
 ];

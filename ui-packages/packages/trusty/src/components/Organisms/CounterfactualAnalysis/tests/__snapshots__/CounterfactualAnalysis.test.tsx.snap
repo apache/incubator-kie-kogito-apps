@@ -144,10 +144,10 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                             Array [
                                               Object {
                                                 "id": "_c6e56793-68d0-4683-b34b-5e9d69e7d0d4",
-                                                "isFixed": true,
                                                 "kind": "UNIT",
                                                 "name": "Risk Score",
                                                 "originalValue": 1,
+                                                "role": 1,
                                                 "typeRef": "number",
                                                 "value": 1,
                                               },
@@ -453,7 +453,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                 </div>
                               </StackItem>
                             </CounterfactualHint>
-                            <CounterfactualSuccessMessage
+                            <CounterfactualCompletedMessage
                               status={
                                 Object {
                                   "executionStatus": 2,
@@ -483,10 +483,10 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                     Array [
                                       Object {
                                         "id": "_c6e56793-68d0-4683-b34b-5e9d69e7d0d4",
-                                        "isFixed": true,
                                         "kind": "UNIT",
                                         "name": "Risk Score",
                                         "originalValue": 1,
+                                        "role": 1,
                                         "typeRef": "number",
                                         "value": 1,
                                       },
@@ -1022,7 +1022,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                     Array [
                                       Object {
                                         "components": null,
-                                        "isFixed": true,
+                                        "fixed": true,
                                         "kind": "UNIT",
                                         "name": "Credit Score",
                                         "typeRef": "number",
@@ -1789,20 +1789,22 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                                             size="sm"
                                                                           />
                                                                         }
+                                                                        isDisabled={true}
                                                                         isInline={true}
                                                                         onClick={[Function]}
                                                                         variant="link"
                                                                       >
                                                                         <button
-                                                                          aria-disabled={false}
+                                                                          aria-disabled={true}
                                                                           aria-label={null}
-                                                                          className="pf-c-button pf-m-link pf-m-inline counterfactual-constraint-edit"
+                                                                          className="pf-c-button pf-m-link pf-m-disabled pf-m-inline counterfactual-constraint-edit"
                                                                           data-ouia-component-id="OUIA-Generated-Button-link-2"
                                                                           data-ouia-component-type="PF4/Button"
                                                                           data-ouia-safe={true}
-                                                                          disabled={false}
+                                                                          disabled={true}
                                                                           onClick={[Function]}
                                                                           role={null}
+                                                                          tabIndex={null}
                                                                           type="button"
                                                                         >
                                                                           <span

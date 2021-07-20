@@ -131,7 +131,7 @@ export interface CFCategoricalDomain {
 }
 
 export interface CFSearchInput extends ItemObject {
-  isFixed?: boolean;
+  fixed?: boolean;
   domain?: CFNumericalDomain | CFCategoricalDomain;
 }
 

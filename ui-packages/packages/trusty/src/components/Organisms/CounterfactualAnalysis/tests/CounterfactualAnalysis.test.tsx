@@ -1,7 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import CounterfactualAnalysis from '../CounterfactualAnalysis';
-import { CFAnalysisResultsSets, ItemObject, Outcome } from '../../../../types';
+import {
+  CFAnalysisResultsSets,
+  CFGoalRole,
+  ItemObject,
+  Outcome
+} from '../../../../types';
 import useCounterfactualExecution from '../useCounterfactualExecution';
 
 jest.mock('../useCounterfactualExecution');
@@ -163,7 +168,7 @@ describe('CounterfactualAnalysis', () => {
       goals: [
         {
           id: '_c6e56793-68d0-4683-b34b-5e9d69e7d0d4',
-          isFixed: false,
+          role: CFGoalRole.FIXED,
           kind: 'UNIT',
           name: 'Risk Score',
           originalValue: 1,
@@ -179,7 +184,7 @@ describe('CounterfactualAnalysis', () => {
             lowerBound: 1,
             upperBound: 10
           },
-          isFixed: false,
+          fixed: false,
           kind: 'UNIT',
           name: 'Credit Score',
           typeRef: 'number',
