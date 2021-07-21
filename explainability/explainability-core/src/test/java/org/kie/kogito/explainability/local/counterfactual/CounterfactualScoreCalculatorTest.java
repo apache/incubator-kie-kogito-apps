@@ -220,26 +220,23 @@ class CounterfactualScoreCalculatorTest {
 
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
-    void DoubleDistanceDifferentValue(int seed) {
+    void DoubleDistanceZero(int seed) {
         final Random random = new Random(seed);
-        double value = random.nextDouble() * 100.0;
-        Feature x = FeatureFactory.newNumericalFeature("x", value);
-        Feature y = FeatureFactory.newNumericalFeature("y", value + 100.0);
+        Feature x = FeatureFactory.newNumericalFeature("x", 0.0);
+        Feature y = FeatureFactory.newNumericalFeature("y", 1.0);
 
         Output ox = outputFromFeature(x);
         Output oy = outputFromFeature(y);
 
         double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
-
         assertEquals(Type.NUMBER, ox.getType());
         assertEquals(Type.NUMBER, oy.getType());
-        assertTrue(distance * distance > 0);
+        assertEquals(1, distance);
 
-        y = FeatureFactory.newNumericalFeature("y", value - 100);
+        y = FeatureFactory.newNumericalFeature("y", -1.0);
         oy = outputFromFeature(y);
         distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
-
-        assertTrue(distance * distance > 0);
+        assertEquals(1, distance);
     }
 
     @ParameterizedTest

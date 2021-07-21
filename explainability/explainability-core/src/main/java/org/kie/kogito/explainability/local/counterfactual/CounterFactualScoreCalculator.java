@@ -64,17 +64,20 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             final double aValue = a.getValue().asNumber();
             final double bValue = b.getValue().asNumber();
             final double difference = Math.abs(aValue - bValue);
-            // Avoid calculating the change if both zero
-            if (aValue == 0 && bValue == 0) {
+            // If any of the values is zero use the difference instead of change
+            // If neither of the values is zero use the change rate
+            double distance;
+            if (aValue == 0 || bValue == 0) {
+                distance = difference;
+            } else {
+                distance = difference / Math.max(aValue, bValue);
+            }
+            if (distance < threshold) {
                 return 0d;
             } else {
-                final double change = difference / Math.max(aValue, bValue);
-                if (change < threshold) {
-                    return 0d;
-                } else {
-                    return change;
-                }
+                return distance;
             }
+
         } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
             return a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
         } else {
