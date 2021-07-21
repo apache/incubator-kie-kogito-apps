@@ -28,7 +28,7 @@ import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
  */
 public class LimeConfig {
 
-    private static final int DEFAULT_NO_OF_SAMPLES = 300;
+    private static final int DEFAULT_NO_OF_SAMPLES = 0;
     private static final double DEFAULT_SEPARABLE_DATASET_RATIO = 0.99;
     public static final int DEFAULT_NO_OF_RETRIES = 3;
     private static final boolean DEFAULT_ADAPT_DATASET_VARIANCE = false;
