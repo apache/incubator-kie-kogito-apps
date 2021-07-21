@@ -74,7 +74,9 @@ pipeline {
                     mvnCmd = getMavenCommand('kogito-apps', true, true)
                     if (isNormalPRCheck()) {
                         mvnCmd.withProperty('validate-formatting')
-                            .withProfiles(['run-code-coverage'])
+                        if (isSonarCloudEnabled()) {
+                            mvnCmd.withProfiles(['run-code-coverage'])
+                        }
                     }
                     mvnCmd.run('clean install')
                 }
@@ -89,7 +91,7 @@ pipeline {
         }
         stage('Analyze Apps by SonarCloud') {
             when {
-                expression { isNormalPRCheck() }
+                expression { isNormalPRCheck() && isSonarCloudEnabled() }
             }
             steps {
                 script {
@@ -192,4 +194,8 @@ String getQuarkusBranch() {
 
 boolean isNormalPRCheck() {
     return !(getQuarkusBranch() || isNative())
+}
+
+boolean isSonarCloudEnabled() {
+    return env['ENABLE_SONARCLOUD'] && env['ENABLE_SONARCLOUD'].toBoolean()
 }
