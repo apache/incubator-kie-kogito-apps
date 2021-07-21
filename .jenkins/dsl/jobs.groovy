@@ -48,12 +48,15 @@ if (isMainBranch()) {
     folder(bddRuntimesPrFolder)
 
     setupDeployJob(bddRuntimesPrFolder, KogitoJobType.PR)
+
+    // Sonarcloud analysis only on main branch
+    // As we have only Community edition
+    setupSonarCloudJob(nightlyBranchFolder)
 }
 
 // Nightly jobs
 folder(KogitoConstants.KOGITO_DSL_NIGHTLY_FOLDER)
 folder(nightlyBranchFolder)
-setupSonarCloudJob(nightlyBranchFolder)
 setupDeployJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
 setupPromoteJob(nightlyBranchFolder, KogitoJobType.NIGHTLY)
 
