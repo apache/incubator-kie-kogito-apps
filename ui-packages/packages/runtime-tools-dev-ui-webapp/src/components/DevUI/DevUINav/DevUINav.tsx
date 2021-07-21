@@ -35,7 +35,7 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
             to="/ProcessInstances"
             {...ouiaAttribute('data-ouia-navigation-name', 'process-instances')}
           >
-            Processes
+            Process Instances
           </Link>
         </NavItem>
         <NavItem

@@ -13,13 +13,6 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.graalvm.nativeimage</groupId>
-      <artifactId>svm</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- quarkus -->
-    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-core</artifactId>
     </dependency>
@@ -66,7 +59,6 @@
       <artifactId>quarkus-undertow</artifactId>
     </dependency>
 
-    <!-- kogito -->
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
