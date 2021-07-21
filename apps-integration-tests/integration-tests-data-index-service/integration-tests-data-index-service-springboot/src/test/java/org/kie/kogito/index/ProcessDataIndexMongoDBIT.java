@@ -18,6 +18,7 @@ package org.kie.kogito.index;
 import org.junit.jupiter.api.BeforeEach;
 import org.kie.kogito.KogitoApplication;
 import org.kie.kogito.index.spring.DataIndexMongoDBSpringTestResource;
+import org.kie.kogito.index.spring.KogitoServiceRandomPortSpringTestResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -28,8 +29,8 @@ import io.restassured.RestAssured;
 
 import static org.kie.kogito.index.spring.DataIndexInfinispanSpringTestResource.KOGITO_DATA_INDEX_SERVICE_URL;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = { KogitoApplication.class })
-@ContextConfiguration(initializers = DataIndexMongoDBSpringTestResource.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = { KogitoApplication.class })
+@ContextConfiguration(initializers = { DataIndexMongoDBSpringTestResource.class, KogitoServiceRandomPortSpringTestResource.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ProcessDataIndexMongoDBIT extends AbstractProcessDataIndexIT {
 
