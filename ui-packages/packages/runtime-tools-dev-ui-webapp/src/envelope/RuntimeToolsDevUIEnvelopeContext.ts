@@ -24,7 +24,7 @@ export interface RuntimeToolsDevUIEnvelopeContextType {
 
 export const RuntimeToolsDevUIEnvelopeContext = React.createContext<
   RuntimeToolsDevUIEnvelopeContextType
->({} as any);
+>({} as RuntimeToolsDevUIEnvelopeContextType);
 
 export function useRuntimeToolsDevUIEnvelopeContext() {
   return useContext(

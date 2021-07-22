@@ -172,7 +172,7 @@ describe('TaskDetailsPage tests', () => {
     const wrapper = await getTaskDetailsPageWrapper();
     wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     const emptyState = wrapper.find(KogitoEmptyState);
     expect(emptyState.exists()).toBeTruthy();
@@ -191,7 +191,7 @@ describe('TaskDetailsPage tests', () => {
     const wrapper = await getTaskDetailsPageWrapper();
     wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     const serverErrors = wrapper.find(ServerErrors);
     expect(serverErrors.exists()).toBeTruthy();
@@ -206,7 +206,7 @@ describe('TaskDetailsPage tests', () => {
     const wrapper = await getTaskDetailsPageWrapper();
     wrapper.update();
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     const taskForm = wrapper.find(TaskFormContainer);
 
@@ -232,7 +232,7 @@ describe('TaskDetailsPage tests', () => {
 
     wrapper = wrapper.update().find(TaskDetailsPage);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     const notificationComponent = wrapper.find(FormNotification);
     expect(notificationComponent.exists()).toBeTruthy();
@@ -252,7 +252,7 @@ describe('TaskDetailsPage tests', () => {
     });
 
     wrapper = wrapper.update().find(TaskDetailsPage);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     expect(wrapper.find(FormNotification).exists()).toBeFalsy();
   });
@@ -307,7 +307,7 @@ describe('TaskDetailsPage tests', () => {
 
     wrapper = wrapper.update().find(TaskDetailsPage);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     const notificationComponent = wrapper.find(FormNotification);
     expect(notificationComponent.exists()).toBeTruthy();
@@ -328,7 +328,7 @@ describe('TaskDetailsPage tests', () => {
 
     wrapper = wrapper.update().find(TaskDetailsPage);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskDetailsPage)).toMatchSnapshot();
 
     expect(wrapper.find(FormNotification).exists()).toBeFalsy();
   });

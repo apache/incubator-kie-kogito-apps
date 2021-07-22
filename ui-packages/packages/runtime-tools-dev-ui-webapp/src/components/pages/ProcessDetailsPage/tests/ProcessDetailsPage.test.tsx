@@ -151,13 +151,13 @@ describe('WebApp - ProcessDetailsPage tests', () => {
     gatewayApi = new MockProcessDetailsGatewayApi();
   });
   it('Snapshot test with default values', async () => {
-    //@ts-ignore
+    // eslint-disable-next-line
     getProcessDetails.mockReturnValue(data);
     const wrapper = await mount(
       <MemoryRouter initialEntries={['/']} keyLength={0}>
         <ProcessDetailsPage {...props} />
       </MemoryRouter>
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(ProcessDetailsPage)).toMatchSnapshot();
   });
 });

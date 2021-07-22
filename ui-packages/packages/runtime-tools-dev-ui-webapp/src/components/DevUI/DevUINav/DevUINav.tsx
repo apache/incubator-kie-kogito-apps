@@ -25,7 +25,7 @@ interface IOwnProps {
 
 const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
   return (
-    <Nav aria-label="Nav" theme="dark">
+    <Nav aria-label="Nav" theme="dark" data-ouia-navigation="true">
       <NavList>
         <NavItem
           key={'process-instances-nav'}

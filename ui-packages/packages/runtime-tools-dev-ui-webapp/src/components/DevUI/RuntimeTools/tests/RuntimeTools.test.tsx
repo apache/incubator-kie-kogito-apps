@@ -20,7 +20,7 @@ import { MemoryRouter } from 'react-router-dom';
 import RuntimeTools from '../RuntimeTools';
 
 jest.mock('apollo-link-http');
-jest.mock('../../RuntimeTools/RuntimeTools');
+jest.mock('../../DevUILayout/DevUILayout');
 describe('Runtime Tools tests', () => {
   it('Snapshot tests with default props', () => {
     const wrapper = mount(

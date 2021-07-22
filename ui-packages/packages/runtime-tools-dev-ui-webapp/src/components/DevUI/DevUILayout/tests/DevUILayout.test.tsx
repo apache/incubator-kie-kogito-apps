@@ -39,7 +39,7 @@ const ApolloClientMock = ApolloClient as jest.MockedClass<typeof ApolloClient>;
 
 describe('DevUILayout tests', () => {
   it('Snapshot test with default props', () => {
-    // @ts-ignore
+    // eslint-disable-next-line
     const client = new ApolloClientMock();
     const props = {
       apolloClient: client,
@@ -52,6 +52,6 @@ describe('DevUILayout tests', () => {
         </MemoryRouter>
       </DevUILayout>
     );
-    expect(wrapper.find('PageLayout')).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });

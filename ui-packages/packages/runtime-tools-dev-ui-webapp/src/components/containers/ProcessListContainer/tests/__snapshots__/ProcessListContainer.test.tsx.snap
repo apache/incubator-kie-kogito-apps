@@ -5,6 +5,8 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
   initialState={Object {}}
 >
   <ForwardRef
+    data-ouia-component-type="process-list-container"
+    data-ouia-safe={true}
     driver={
       ProcessListGatewayApiImpl {
         "_ProcessListState": Object {

@@ -16,12 +16,16 @@
 
 import React, { useEffect } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
-import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  ouiaPageTypeAndObjectId,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import JobsManagementContainer from '../../containers/JobsManagementContainer/JobsManagementContainer';
 import '../../styles.css';
 
-const JobsManagementPage: React.FC<OUIAProps> = () => {
+const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   useEffect(() => {
     return ouiaPageTypeAndObjectId('jobs-management');
   });
@@ -29,7 +33,13 @@ const JobsManagementPage: React.FC<OUIAProps> = () => {
   return (
     <React.Fragment>
       <PageSectionHeader titleText="Jobs Management" />
-      <PageSection>
+      <PageSection
+        {...componentOuiaProps(
+          ouiaId,
+          'jobs-management-page-section',
+          ouiaSafe
+        )}
+      >
         <Card className="Dev-ui__card-size">
           <JobsManagementContainer />
         </Card>

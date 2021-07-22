@@ -60,7 +60,7 @@ const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
       <PageSection
         {...componentOuiaProps(
           'content' + (ouiaId ? '-' + ouiaId : ''),
-          'task-inbox-page',
+          'task-inbox-page-section',
           ouiaSafe
         )}
       >

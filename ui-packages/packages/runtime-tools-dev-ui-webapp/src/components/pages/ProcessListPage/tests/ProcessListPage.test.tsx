@@ -42,7 +42,7 @@ describe('ProcessListPage tests', () => {
       </BrowserRouter>
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(ProcessListPage)).toMatchSnapshot();
     expect(wrapper.find('MockedProcessListContainer').exists()).toBeTruthy();
   });
 });

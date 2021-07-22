@@ -18,7 +18,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
-
+import { MemoryRouter } from 'react-router';
 import { User, PageLayout } from '@kogito-apps/consoles-common';
 import ConsolesNav from '../DevUINav/DevUINav';
 import JobsManagementContextProvider from '../../../channel/JobsManagement/JobsManagementContextProvider';
@@ -26,7 +26,6 @@ import ProcessDetailsContextProvider from '../../../channel/ProcessDetails/Proce
 import ProcessListContextProvider from '../../../channel/ProcessList/ProcessListContextProvider';
 import TaskConsoleContextsProvider from '../../../channel/TaskInbox/TaskInboxContextProvider';
 import TaskFormContextProvider from '../../../channel/TaskForms/TaskFormContextProvider';
-import { MemoryRouter } from 'react-router';
 import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
 
 interface IOwnProps {

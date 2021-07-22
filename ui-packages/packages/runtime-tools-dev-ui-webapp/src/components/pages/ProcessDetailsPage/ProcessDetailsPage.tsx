@@ -39,7 +39,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   StaticContext,
   H.LocationState
 > &
-  OUIAProps> = ({ ...props }) => {
+  OUIAProps> = ({ ouiaId, ...props }) => {
   useEffect(() => {
     return ouiaPageTypeAndObjectId('process-details');
   });
@@ -138,7 +138,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
 
   return (
     <React.Fragment>
-      <PageSectionHeader titleText="Process Details" ouiaId={props.ouiaId} />
+      <PageSectionHeader titleText="Process Details" ouiaId={ouiaId} />
       <PageSection>{renderItems()}</PageSection>
     </React.Fragment>
   );

@@ -27,7 +27,7 @@ describe('TaskInboxSwitchUser tests', () => {
         <TaskInboxSwitchUser user="John" />
       </DevUIAppContextProvider>
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskInboxSwitchUser)).toMatchSnapshot();
   });
 
   it('Trigger onSelect event', () => {

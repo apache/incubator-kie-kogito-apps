@@ -15,18 +15,19 @@
  */
 
 import React from 'react';
-import { OUIAProps } from '@kogito-apps/ouia-tools';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { EmbeddedJobsManagement } from '@kogito-apps/jobs-management';
 import { JobsManagementGatewayApi } from '../../../channel/JobsManagement';
 import { useJobsManagementGatewayApi } from '../../../channel/JobsManagement/JobsManagementContext';
 
-const JobsManagementContainer: React.FC<OUIAProps> = () => {
+const JobsManagementContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const gatewayApi: JobsManagementGatewayApi = useJobsManagementGatewayApi();
   return (
     <EmbeddedJobsManagement
       //@ts-ignore
       driver={gatewayApi}
       targetOrigin={'*'}
+      {...componentOuiaProps(ouiaId, 'jobs-management-container', ouiaSafe)}
     />
   );
 };

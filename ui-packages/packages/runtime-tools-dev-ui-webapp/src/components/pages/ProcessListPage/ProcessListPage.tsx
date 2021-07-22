@@ -38,7 +38,7 @@ const ProcessListPage: React.FC<RouteComponentProps<
   StaticContext,
   H.LocationState
 > &
-  OUIAProps> = props => {
+  OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
   useEffect(() => {
     return ouiaPageTypeAndObjectId('process-instances');
   });
@@ -48,13 +48,9 @@ const ProcessListPage: React.FC<RouteComponentProps<
 
   return (
     <React.Fragment>
-      <PageSectionHeader titleText="Process Instances" ouiaId={props.ouiaId} />
+      <PageSectionHeader titleText="Process Instances" ouiaId={ouiaId} />
       <PageSection
-        {...componentOuiaProps(
-          props.ouiaId,
-          'page-section-content',
-          props.ouiaSafe
-        )}
+        {...componentOuiaProps(ouiaId, 'page-section-content', ouiaSafe)}
       >
         <Card className="Dev-ui__card-size">
           <ProcessListContainer initialState={initialState} />

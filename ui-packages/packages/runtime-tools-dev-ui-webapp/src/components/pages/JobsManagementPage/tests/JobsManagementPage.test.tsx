@@ -26,6 +26,6 @@ describe('WebApp - JobsManagementPage tests', () => {
         <JobsManagementPage />
       </BrowserRouter>
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(JobsManagementPage)).toMatchSnapshot();
   });
 });

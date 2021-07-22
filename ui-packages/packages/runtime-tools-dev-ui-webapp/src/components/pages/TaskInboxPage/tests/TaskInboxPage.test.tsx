@@ -38,7 +38,7 @@ describe('TaskInboxPage tests', () => {
       </DevUIAppContextProvider>
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find(TaskInboxPage)).toMatchSnapshot();
     expect(wrapper.find(TaskInboxContainer).exists()).toBeTruthy();
   });
 });
