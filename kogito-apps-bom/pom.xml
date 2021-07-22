@@ -74,12 +74,12 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>jobs-service-inmemory-postgresql</artifactId>
+                <artifactId>jobs-service-inmemory</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>jobs-service-inmemory-postgresql</artifactId>
+                <artifactId>jobs-service-inmemory</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
@@ -191,12 +191,12 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-inmemory-postgresql</artifactId>
+                <artifactId>data-index-service-inmemory</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-inmemory-postgresql</artifactId>
+                <artifactId>data-index-service-inmemory</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
