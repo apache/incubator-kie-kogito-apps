@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { useImperativeHandle } from 'react';
 import '@patternfly/patternfly/patternfly.css';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
-import { useImperativeHandle } from 'react';
 import RuntimeTools from '../components/DevUI/RuntimeTools/RuntimeTools';
 import { User } from '@kogito-apps/consoles-common';
 

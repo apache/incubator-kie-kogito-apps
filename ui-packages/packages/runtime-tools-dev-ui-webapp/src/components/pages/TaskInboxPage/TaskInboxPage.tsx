@@ -64,13 +64,7 @@ const TaskInboxPage: React.FC<OUIAProps> = (ouiaId, ouiaSafe) => {
           ouiaSafe
         )}
       >
-        <Grid hasGutter md={1} className={'kogito-task-console__full-size'}>
-          <GridItem span={12} className={'kogito-task-console__full-size'}>
-            <Card className={'kogito-task-console__full-size'}>
-              {renderTaskInbox()}
-            </Card>
-          </GridItem>
-        </Grid>
+        <Card className="Dev-ui__card-size">{renderTaskInbox()}</Card>
       </PageSection>
     </React.Fragment>
   );

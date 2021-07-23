@@ -287,7 +287,7 @@ describe('TaskDetailsPage tests', () => {
       wait();
     });
 
-    expect(pushSpy).toBeCalledWith('/');
+    expect(pushSpy).toBeCalledWith('/TaskInbox');
   });
 
   it('Error notification', async () => {

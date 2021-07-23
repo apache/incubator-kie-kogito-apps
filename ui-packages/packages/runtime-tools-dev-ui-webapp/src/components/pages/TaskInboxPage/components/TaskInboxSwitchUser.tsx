@@ -15,7 +15,7 @@ const TaskInboxSwitchUser: React.FC<IOwnProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   const appContext = useDevUIAppContext();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(user);
   const allUsers = appContext.getAllUsers();
 
@@ -23,19 +23,19 @@ const TaskInboxSwitchUser: React.FC<IOwnProps & OUIAProps> = ({
     const selectedUser = event.target.innerHTML;
     appContext.switchUser(selectedUser);
     setCurrentUser(selectedUser);
-    setIsOpen(!isOpen);
+    setIsDropDownOpen(!isDropDownOpen);
   };
 
   const dropdownItems = (): JSX.Element[] => {
     const userIds = [];
-    allUsers.map(user => {
-      userIds.push(<DropdownItem key={user.id}>{user.id}</DropdownItem>);
+    allUsers.forEach(userObj => {
+      userIds.push(<DropdownItem key={userObj.id}>{userObj.id}</DropdownItem>);
     });
     return userIds;
   };
 
   const onToggle = (isOpen): void => {
-    setIsOpen(isOpen);
+    setIsDropDownOpen(isOpen);
   };
 
   return (
@@ -52,11 +52,11 @@ const TaskInboxSwitchUser: React.FC<IOwnProps & OUIAProps> = ({
           {currentUser}
         </DropdownToggle>
       }
-      isOpen={isOpen}
+      isOpen={isDropDownOpen}
       isPlain
       dropdownItems={dropdownItems()}
       className="DevUI-switchUser-dropdown-styling"
-      {...componentOuiaProps(ouiaId, 'error-popover', ouiaSafe)}
+      {...componentOuiaProps(ouiaId, 'task-inbox-switch-user', ouiaSafe)}
     />
   );
 };

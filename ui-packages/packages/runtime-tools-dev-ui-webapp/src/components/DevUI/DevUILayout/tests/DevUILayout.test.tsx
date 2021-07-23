@@ -21,18 +21,7 @@ import DevUIRoutes from '../../DevUIRoutes/DevUIRoutes';
 import { ApolloClient } from 'apollo-client';
 import { MemoryRouter } from 'react-router-dom';
 
-const MockedComponent = (): React.ReactElement => {
-  return <></>;
-};
-
 jest.mock('../../DevUIRoutes/DevUIRoutes');
-
-jest.mock('@kogito-apps/consoles-common', () => ({
-  ...jest.requireActual('@kogito-apps/consoles-common'),
-  PageLayout: () => {
-    return <MockedComponent />;
-  }
-}));
 
 jest.mock('apollo-client');
 const ApolloClientMock = ApolloClient as jest.MockedClass<typeof ApolloClient>;
@@ -52,6 +41,6 @@ describe('DevUILayout tests', () => {
         </MemoryRouter>
       </DevUILayout>
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('PageLayout')).toMatchSnapshot();
   });
 });

@@ -50,7 +50,7 @@ const ProcessListPage: React.FC<RouteComponentProps<
     <React.Fragment>
       <PageSectionHeader titleText="Process Instances" ouiaId={ouiaId} />
       <PageSection
-        {...componentOuiaProps(ouiaId, 'page-section-content', ouiaSafe)}
+        {...componentOuiaProps(ouiaId, 'process-list-page-section', ouiaSafe)}
       >
         <Card className="Dev-ui__card-size">
           <ProcessListContainer initialState={initialState} />

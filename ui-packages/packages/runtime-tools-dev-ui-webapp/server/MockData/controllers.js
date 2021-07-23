@@ -225,10 +225,6 @@ module.exports = controller = {
       `......ProcessId:${req.params.processId} --piId:${req.params.processId} --taskId:${req.params.taskId}`
     );
 
-    const processId = restData.process.filter(data => {
-      return data.processId === req.params.processId;
-    });
-
     const task = graphData.UserTaskInstances.find(userTask => {
       return userTask.id === req.params.taskId;
     });

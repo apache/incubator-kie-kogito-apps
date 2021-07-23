@@ -17,7 +17,11 @@
 import React, { useState, useEffect } from 'react';
 import { Bullseye, Card, PageSection } from '@patternfly/react-core';
 import { KogitoSpinner, ServerErrors } from '@kogito-apps/components-common';
-import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  ouiaPageTypeAndObjectId,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools';
 import { RouteComponentProps } from 'react-router-dom';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import ProcessDetailsContainer from '../../containers/ProcessDetailsContainer/ProcessDetailsContainer';
@@ -39,7 +43,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   StaticContext,
   H.LocationState
 > &
-  OUIAProps> = ({ ouiaId, ...props }) => {
+  OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
   useEffect(() => {
     return ouiaPageTypeAndObjectId('process-details');
   });
@@ -52,7 +56,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
     {} as ProcessInstance
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [fetchError, setFetchError] = useState<string>('');
   let currentPage = JSON.parse(window.localStorage.getItem('state'));
 
   useEffect(() => {
@@ -68,11 +72,11 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
       response = await gatewayApi.processDetailsQuery(processId);
       setProcessInstance(response);
     } catch (error) {
-      setError(error);
+      setFetchError(error);
     } finally {
       setIsLoading(false);
       /* istanbul ignore else */
-      if (error.length === 0 && Object.keys(response).length === 0) {
+      if (fetchError.length === 0 && Object.keys(response).length === 0) {
         let prevPath;
         /* istanbul ignore else */
         if (currentPage) {
@@ -112,14 +116,14 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
         <>
           {processInstance &&
           Object.keys(processInstance).length > 0 &&
-          !error ? (
+          !fetchError ? (
             <ProcessDetailsContainer processInstance={processInstance} />
           ) : (
             <>
-              {error.length > 0 && (
+              {fetchError.length > 0 && (
                 <Card className="kogito-management-console__card-size">
                   <Bullseye>
-                    <ServerErrors error={error} variant="large" />
+                    <ServerErrors error={fetchError} variant="large" />
                   </Bullseye>
                 </Card>
               )}
@@ -137,10 +141,18 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   };
 
   return (
-    <React.Fragment>
+    <>
       <PageSectionHeader titleText="Process Details" ouiaId={ouiaId} />
-      <PageSection>{renderItems()}</PageSection>
-    </React.Fragment>
+      <PageSection
+        {...componentOuiaProps(
+          ouiaId,
+          'process-details-page-section',
+          ouiaSafe
+        )}
+      >
+        {renderItems()}
+      </PageSection>
+    </>
   );
 };
 

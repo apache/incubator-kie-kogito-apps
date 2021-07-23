@@ -19,10 +19,8 @@ module.exports = {
       chunks: ['app']
     }),
     new webpack.EnvironmentPlugin({
-      KOGITO_DATAINDEX_HTTP_URL: 'http://localhost:8180/graphql/',
       KOGITO_APP_VERSION: 'DEV',
-      KOGITO_APP_NAME: 'Runtime tools dev-ui',
-      TEST_USER_SYSTEM_ENABLED: false
+      KOGITO_APP_NAME: 'Runtime tools dev-ui'
     }),
     new CopyPlugin({ patterns: [
         { from: "./resources", to: "./resources" },

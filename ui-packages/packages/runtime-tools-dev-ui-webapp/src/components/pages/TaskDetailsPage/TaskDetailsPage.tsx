@@ -119,7 +119,7 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
 
   const goToInbox = () => {
     taskInboxGatewayApi.clearOpenTask();
-    props.history.push('/');
+    props.history.push('/TaskInbox');
   };
 
   const onSubmitSuccess = (phase: string) => {
@@ -143,17 +143,13 @@ const TaskDetailsPage: React.FC<RouteComponentProps<Props> & OUIAProps> = ({
           ouiaSafe
         )}
       >
-        <Grid hasGutter md={1} className={'kogito-task-console__full-size'}>
-          <GridItem span={12} className={'kogito-task-console__full-size'}>
-            <Card className={'kogito-task-console__full-size'}>
-              <Bullseye>
-                <KogitoSpinner
-                  spinnerText={`Loading details for task: ${taskId}`}
-                />
-              </Bullseye>
-            </Card>
-          </GridItem>
-        </Grid>
+        <Card className="Dev-ui__card-size">
+          <Bullseye>
+            <KogitoSpinner
+              spinnerText={`Loading details for task: ${taskId}`}
+            />
+          </Bullseye>
+        </Card>
       </PageSection>
     );
   }

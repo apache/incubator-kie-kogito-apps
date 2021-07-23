@@ -95,12 +95,12 @@ exports[`ProcessListPage tests Snapshot 1`] = `
     </PageSection>
   </PageSectionHeader>
   <PageSection
-    data-ouia-component-type="page-section-content"
+    data-ouia-component-type="process-list-page-section"
     data-ouia-safe={true}
   >
     <section
       className="pf-c-page__main-section"
-      data-ouia-component-type="page-section-content"
+      data-ouia-component-type="process-list-page-section"
       data-ouia-safe={true}
     >
       <Card

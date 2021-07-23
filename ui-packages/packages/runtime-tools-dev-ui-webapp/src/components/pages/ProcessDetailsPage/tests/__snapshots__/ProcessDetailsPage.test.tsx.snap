@@ -94,9 +94,14 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
       </section>
     </PageSection>
   </PageSectionHeader>
-  <PageSection>
+  <PageSection
+    data-ouia-component-type="process-details-page-section"
+    data-ouia-safe={true}
+  >
     <section
       className="pf-c-page__main-section"
+      data-ouia-component-type="process-details-page-section"
+      data-ouia-safe={true}
     />
   </PageSection>
 </ProcessDetailsPage>

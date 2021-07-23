@@ -32,7 +32,7 @@ const JobsManagementPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
 
   return (
     <React.Fragment>
-      <PageSectionHeader titleText="Jobs Management" />
+      <PageSectionHeader titleText="Jobs Management" ouiaId={ouiaId} />
       <PageSection
         {...componentOuiaProps(
           ouiaId,

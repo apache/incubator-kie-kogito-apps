@@ -6,7 +6,7 @@ exports[`TaskInboxSwitchUser tests Snapshot test with default props 1`] = `
 >
   <Dropdown
     className="DevUI-switchUser-dropdown-styling"
-    data-ouia-component-type="error-popover"
+    data-ouia-component-type="task-inbox-switch-user"
     data-ouia-safe={true}
     dropdownItems={
       Array [
@@ -39,7 +39,7 @@ exports[`TaskInboxSwitchUser tests Snapshot test with default props 1`] = `
     <DropdownWithContext
       autoFocus={true}
       className="DevUI-switchUser-dropdown-styling"
-      data-ouia-component-type="error-popover"
+      data-ouia-component-type="task-inbox-switch-user"
       data-ouia-safe={true}
       direction="down"
       dropdownItems={

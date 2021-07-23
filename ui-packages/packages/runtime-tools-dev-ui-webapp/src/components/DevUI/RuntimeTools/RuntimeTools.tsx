@@ -17,13 +17,7 @@
 import React from 'react';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
-import {
-  getToken,
-  isAuthEnabled,
-  ServerUnavailablePage,
-  User
-} from '@kogito-apps/consoles-common';
-import { setContext } from 'apollo-link-context';
+import { ServerUnavailablePage, User } from '@kogito-apps/consoles-common';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
 import DevUIRoutes from '../DevUIRoutes/DevUIRoutes';
@@ -58,22 +52,10 @@ const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex, navigate }) => {
     }
   });
 
-  const setGQLContext = setContext((_, { headers }) => {
-    if (isAuthEnabled()) {
-      const token = getToken();
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : ''
-        }
-      };
-    }
-  });
-
   const cache = new InMemoryCache();
   const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache,
-    link: setGQLContext.concat(fallbackUI.concat(httpLink))
+    link: fallbackUI.concat(httpLink)
   });
 
   return (

@@ -71,11 +71,11 @@ export class TaskFormGatewayApiImpl implements TaskFormGatewayApi {
             Accept: 'application/json'
           }
         })
-        .then(response => {
-          if (response.status == 200) {
-            resolve(response.data);
+        .then(responseObj => {
+          if (responseObj.status == 200) {
+            resolve(responseObj.data);
           } else {
-            reject(response);
+            reject(responseObj);
           }
         })
         .catch(error => reject(error));
