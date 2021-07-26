@@ -13,9 +13,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Maven Build
     steps:
-      - name: Check env
-        shell: bash
-        run: printenv
       - name: Disk space report before modification
         shell: bash
         run: |
