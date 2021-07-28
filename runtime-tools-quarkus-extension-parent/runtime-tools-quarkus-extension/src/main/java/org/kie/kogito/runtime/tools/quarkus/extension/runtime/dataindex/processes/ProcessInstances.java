@@ -20,20 +20,20 @@ import java.util.List;
 
 public class ProcessInstances {
 
-    private List<ProcessInstance> processInstances;
+    private List<ProcessInstance> processInstancesList;
 
     public ProcessInstances() {
     }
 
-    public ProcessInstances(final List<ProcessInstance> processInstances) {
-        this.processInstances = processInstances;
+    public ProcessInstances(final List<ProcessInstance> processInstancesList) {
+        this.processInstancesList = processInstancesList;
     }
 
     public List<ProcessInstance> getProcessInstances() {
-        return processInstances;
+        return processInstancesList;
     }
 
-    public void setProcessInstances(final List<ProcessInstance> processInstances) {
-        this.processInstances = processInstances;
+    public void setProcessInstances(final List<ProcessInstance> processInstancesList) {
+        this.processInstancesList = processInstancesList;
     }
 }
