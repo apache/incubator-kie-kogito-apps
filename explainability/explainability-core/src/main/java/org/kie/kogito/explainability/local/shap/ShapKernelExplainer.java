@@ -233,6 +233,16 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
         return hash;
     }
 
+    /**
+     * Given an n x m matrix of n outputs and m feature importances, return an array of Saliencies
+     *
+     * @param m: The n x m matrix
+     * @param pi: The prediction input
+     * @param po: The prediction output
+     *
+     * @return an array of n saliencies, one for each output of the model. Each Saliency lists the feature
+     * importances of each input feature to that particular output
+     */
     public static Saliency[] saliencyFromMatrix(double[][] m, PredictionInput pi, PredictionOutput po) {
         int[] shape = MatrixUtils.getShape(m);
         Saliency[] saliencies = new Saliency[shape[0]];
@@ -246,6 +256,17 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
         return saliencies;
     }
 
+        /**
+     * Given an n x m matrix of feature importances and an nxm matrix of confidences, return an array of Saliencies
+     *
+     * @param m: The n x m matrix
+     * @param bounds: The n x m matrix of confidences
+     * @param pi: The prediction input
+     * @param po: The prediction output
+     *
+     * @return an array of n saliencies, one for each output of the model. Each Saliency lists the feature
+     * importances and confidences of each input feature to that particular output
+     */
     public static Saliency[] saliencyFromMatrix(double[][] m, double[][] bounds, PredictionInput pi, PredictionOutput po) {
         int[] shape = MatrixUtils.getShape(m);
         Saliency[] saliencies = new Saliency[shape[0]];
@@ -642,7 +663,7 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
      * @param outputChange: The raw difference between the model output and the null output
      * @param dropIdx: The regularization feature index
      *
-     * @return a 2xnFeatures array, containing the shap values as found by the WLR iin the first row and the
+     * @return a 2xnFeatures array, containing the shap values as found by the WLR in the first row and the
      *         confidences of those values in the second row.
      */
     // run the WLRR for a single output
@@ -680,7 +701,7 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
      *
      * @param prediction: A ShapPrediction to be explained
      * @param model: The model to be explained
-     * @return shap values, double[][] of shape [n_outputs x n_features]
+     * @return shap values, Saliency[] of shape [n_outputs], with each saliency reporting m feature importances+confidences
      */
     @Override
     public CompletableFuture<Saliency[]> explainAsync(Prediction prediction, PredictionProvider model) {
@@ -694,7 +715,7 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
      * @param model: The model to be explained
      * @param intermediateResultsConsumer: Unused
      *
-     * @return shap values, double[][] of shape [n_outputs x n_features]
+     * @return shap values, Saliency[] of shape [n_outputs], with each saliency reporting m feature importances+confidences
      */
     @Override
     public CompletableFuture<Saliency[]> explainAsync(Prediction prediction, PredictionProvider model, Consumer<Saliency[]> intermediateResultsConsumer) {

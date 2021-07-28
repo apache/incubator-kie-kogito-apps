@@ -471,7 +471,7 @@ class ShapKernelExplainerTest {
             { 1., 1., 1., 1., 1, 1. }
     };
 
-    //given a noisy model,
+    //given a noisy model, expect the confidence window to align with noise magnitude
     @ParameterizedTest
     @ValueSource(doubles = { .001, .1, .25, .5 })
     void testErrorBounds(double noise) throws InterruptedException, ExecutionException {

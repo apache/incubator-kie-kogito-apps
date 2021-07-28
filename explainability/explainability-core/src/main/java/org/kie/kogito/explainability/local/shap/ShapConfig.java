@@ -145,7 +145,7 @@ public class ShapConfig {
          * Add confidence interval to the builder
          *
          * @param confidence: double, the desired confidence interval to report in the ShapValues, default is .95 for
-         *        the 95% confidence interval
+         *        a 95% confidence interval
          *
          * @return Builder
          */
