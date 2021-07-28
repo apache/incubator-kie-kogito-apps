@@ -18,7 +18,7 @@ package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.process
 
 public class ProcessInstancesResponse {
 
-    public ProcessInstances data;
+    private ProcessInstances data;
 
     public ProcessInstancesResponse() {
     }

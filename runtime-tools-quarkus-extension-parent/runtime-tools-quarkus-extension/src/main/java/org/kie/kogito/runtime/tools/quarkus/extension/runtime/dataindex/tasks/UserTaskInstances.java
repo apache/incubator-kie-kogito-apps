@@ -20,20 +20,20 @@ import java.util.List;
 
 public class UserTaskInstances {
 
-    public List<Task> userTaskInstances;
+    private List<Task> userTaskInstancesList;
 
     public UserTaskInstances() {
     }
 
-    public UserTaskInstances(final List<Task> userTaskInstances) {
-        this.userTaskInstances = userTaskInstances;
+    public UserTaskInstances(final List<Task> userTaskInstancesList) {
+        this.userTaskInstancesList = userTaskInstancesList;
     }
 
     public List<Task> getUserTaskInstances() {
-        return userTaskInstances;
+        return userTaskInstancesList;
     }
 
-    public void setUserTaskInstances(final List<Task> userTaskInstances) {
-        this.userTaskInstances = userTaskInstances;
+    public void setUserTaskInstances(final List<Task> userTaskInstancesList) {
+        this.userTaskInstancesList = userTaskInstancesList;
     }
 }

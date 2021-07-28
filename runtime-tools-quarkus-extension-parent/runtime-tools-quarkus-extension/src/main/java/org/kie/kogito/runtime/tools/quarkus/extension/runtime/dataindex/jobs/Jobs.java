@@ -20,20 +20,20 @@ import java.util.List;
 
 public class Jobs {
 
-    public List<Job> jobs;
+    private List<Job> jobsList;
 
     public Jobs() {
     }
 
-    public Jobs(final List<Job> jobs) {
-        this.jobs = jobs;
+    public Jobs(final List<Job> jobsList) {
+        this.jobsList = jobsList;
     }
 
     public List<Job> getJobs() {
-        return jobs;
+        return jobsList;
     }
 
-    public void setJobs(final List<Job> jobs) {
-        this.jobs = jobs;
+    public void setJobs(final List<Job> jobsList) {
+        this.jobsList = jobsList;
     }
 }

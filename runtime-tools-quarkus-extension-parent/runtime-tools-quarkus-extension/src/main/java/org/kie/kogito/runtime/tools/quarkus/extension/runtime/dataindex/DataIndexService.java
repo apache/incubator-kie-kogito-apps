@@ -46,10 +46,9 @@ public class DataIndexService {
     @Path("/tasks/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response tasksCount() {
-        try {
+        try (Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new UserTaskInstancesAdapter()))) {
             final String tasksQueryResponse = getDataIndexClient().query(ALL_TASKS_IDS_QUERY);
 
-            Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new UserTaskInstancesAdapter()));
             TasksResponse tasksResponse = jsonb.fromJson(tasksQueryResponse,
                     TasksResponse.class);
 
@@ -65,10 +64,9 @@ public class DataIndexService {
     @Path("/processInstances/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response processInstancesCount() {
-        try {
+        try (Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new ProcessInstancesAdapter()))) {
             final String processInstancesQueryResponse = getDataIndexClient().query(ALL_PROCESS_INSTANCES_IDS_QUERY);
 
-            Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new ProcessInstancesAdapter()));
             ProcessInstancesResponse processInstancesResponse = jsonb.fromJson(processInstancesQueryResponse,
                     ProcessInstancesResponse.class);
 
@@ -84,10 +82,9 @@ public class DataIndexService {
     @Path("/jobs/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response jobsCount() {
-        try {
+        try (Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new JobsInstancesAdapter()))) {
             final String jobsQueryResponse = getDataIndexClient().query(ALL_JOBS_IDS_QUERY);
 
-            Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withAdapters(new JobsInstancesAdapter()));
             JobsResponse jobsResponse = jsonb.fromJson(jobsQueryResponse,
                     JobsResponse.class);
 

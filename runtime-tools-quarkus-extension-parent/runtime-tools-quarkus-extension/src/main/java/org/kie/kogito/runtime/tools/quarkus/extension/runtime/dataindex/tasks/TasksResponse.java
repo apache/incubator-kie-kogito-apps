@@ -18,7 +18,7 @@ package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.tasks;
 
 public class TasksResponse {
 
-    public UserTaskInstances data;
+    private UserTaskInstances data;
 
     public TasksResponse() {
     }

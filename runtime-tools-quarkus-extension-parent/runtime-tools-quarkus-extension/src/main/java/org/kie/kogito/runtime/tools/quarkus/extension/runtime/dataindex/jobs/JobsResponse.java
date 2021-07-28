@@ -18,7 +18,7 @@ package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs;
 
 public class JobsResponse {
 
-    public Jobs data;
+    private Jobs data;
 
     public JobsResponse() {
     }

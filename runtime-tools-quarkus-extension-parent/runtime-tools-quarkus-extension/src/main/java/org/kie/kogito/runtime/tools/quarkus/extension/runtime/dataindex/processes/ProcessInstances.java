@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ProcessInstances {
 
-    public List<ProcessInstance> processInstances;
+    private List<ProcessInstance> processInstances;
 
     public ProcessInstances() {
     }
