@@ -35,8 +35,10 @@ public class WeightedLinearRegressionResults {
      * @param intercept Whether or not the weighted linear regression computed an intercept. If true, then the
      *        last value of the coefficients array is taken as the intercept. If false, the intercept is
      *        set to 0.
-     * @param gof: The goodness of fit of the weighted linear regression
-     * @param gof: The mean square error of the weighted linear regression
+     * @param dof: The degress of freedom of the weighted linear regression
+     * @param mse: The mean square error of the weighted linear regression
+     * @param stdErrors: The standard errors of each coefficient of the weighted linear regression
+     * @param pvalues: The pvalues of each coefficient of the weighted linear regression
      *
      */
     public WeightedLinearRegressionResults(double[][] coefficients, boolean intercept, int dof, double mse,

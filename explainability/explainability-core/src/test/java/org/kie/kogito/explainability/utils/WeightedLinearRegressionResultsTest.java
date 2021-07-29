@@ -39,16 +39,6 @@ class WeightedLinearRegressionResultsTest {
         assertEquals(.01, wlrr.getMSE());
     }
 
-    // check that confidence intervals
-    @Test
-    void testWLRResultsConfidence() {
-        double[][] coefficients = { { 5. }, { 1. }, { -1. }, { 3. } };
-        double[] stdErrs = { 1., 10., -1., -10. };
-        double[] pvalues = new double[4];
-        WeightedLinearRegressionResults wlrr =
-                new WeightedLinearRegressionResults(coefficients, false, 1, .01, stdErrs, pvalues);
-    }
-
     // check that WLRR works with intercept, that the intercept is extracted from coefficient matrix
     @Test
     void testWLRResultWithIntercept() {

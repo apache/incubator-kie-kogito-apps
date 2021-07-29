@@ -100,8 +100,6 @@ public class WeightedLinearRegression {
 
         // recover the coefficients by multiplying the inverse coefficient matrix by B
         double[][] coefficients = MatrixUtils.matrixMultiply(x, b);
-        double gof = WeightedLinearRegression
-                .getGoodnessOfFit(adjustedFeatures, observations, sampleWeights, coefficients);
         double mse = WeightedLinearRegression
                 .getMSE(adjustedFeatures, observations, sampleWeights, coefficients);
 
@@ -222,20 +220,6 @@ public class WeightedLinearRegression {
                 .mapToDouble(i -> coefs[i] / coefficientError[i]).toArray();
         TDistribution tdist = new TDistribution(dof);
         return Arrays.stream(tvalues).map(x -> 2 * (1 - tdist.cumulativeProbability(x))).toArray();
-    }
-
-    /**
-     * Recover the goodness-of-fit of the WLR model. This is the coefficient of determination, as per:
-     * https://en.wikipedia.org/wiki/Multiple_correlation
-     * 
-     * @return the coefficient of determination
-     */
-    private static double getGoodnessOfFit(double[][] features,
-            double[] observations,
-            double[] sampleWeights,
-            double[][] coefficients) {
-        ModelSquareSums mss = WeightedLinearRegression.getRSSandTSS(features, observations, sampleWeights, coefficients);
-        return 1 - (mss.residualSquareSum / mss.totalSquareSum);
     }
 
     /**
