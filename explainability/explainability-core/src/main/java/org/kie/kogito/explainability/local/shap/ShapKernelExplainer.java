@@ -241,7 +241,7 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
      * @param po: The prediction output
      *
      * @return an array of n saliencies, one for each output of the model. Each Saliency lists the feature
-     * importances of each input feature to that particular output
+     *         importances of each input feature to that particular output
      */
     public static Saliency[] saliencyFromMatrix(double[][] m, PredictionInput pi, PredictionOutput po) {
         int[] shape = MatrixUtils.getShape(m);
@@ -256,7 +256,7 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
         return saliencies;
     }
 
-        /**
+    /**
      * Given an n x m matrix of feature importances and an nxm matrix of confidences, return an array of Saliencies
      *
      * @param m: The n x m matrix
@@ -265,7 +265,7 @@ public class ShapKernelExplainer implements LocalExplainer<Saliency[]> {
      * @param po: The prediction output
      *
      * @return an array of n saliencies, one for each output of the model. Each Saliency lists the feature
-     * importances and confidences of each input feature to that particular output
+     *         importances and confidences of each input feature to that particular output
      */
     public static Saliency[] saliencyFromMatrix(double[][] m, double[][] bounds, PredictionInput pi, PredictionOutput po) {
         int[] shape = MatrixUtils.getShape(m);

@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -173,12 +172,6 @@ class WeightedLinearRegressionTest {
             double[] conf = wlrr.getConf(.01);
             double[] ub = IntStream.range(0, coefs.length).mapToDouble(i -> coefs[i] + conf[i]).toArray();
             double[] lb = IntStream.range(0, coefs.length).mapToDouble(i -> coefs[i] - conf[i]).toArray();
-            System.out.println("Std Error Test");
-            System.out.printf("Coef %s %n", Arrays.toString(coefs));
-            System.out.printf("Err  %s %n", Arrays.toString(wlrr.getStdErrors()));
-            System.out.printf("P    %s %n", Arrays.toString(wlrr.getPValues()));
-            System.out.printf("Conf %s %n", Arrays.toString(lb));
-            System.out.printf("Conf %s %n", Arrays.toString(ub));
             assertArrayEquals(expectedErr, wlrr.getStdErrors(), .01);
             assertArrayEquals(expectedP, wlrr.getPValues(), .01);
 
