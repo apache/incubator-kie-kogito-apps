@@ -17,6 +17,7 @@
 package org.kie.kogito.explainability.local.shap;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -463,38 +464,49 @@ class ShapKernelExplainerTest {
         }
     }
 
-    double[][] backgroundAllZeros = {
-            { 0., 0., 0., 0., 0., 0., }
-    };
+    double[][] backgroundAllZeros = new double[100][6];
 
     double[][] toExplainAllOnes = {
             { 1., 1., 1., 1., 1, 1. }
     };
 
-    //given a noisy model, expect the confidence window to align with noise magnitude
+    //given a noisy model, expect the n% confidence window to include true value roughly n% of the time
     @ParameterizedTest
     @ValueSource(doubles = { .001, .1, .25, .5 })
     void testErrorBounds(double noise) throws InterruptedException, ExecutionException {
-        PredictionProvider model = TestUtils.getNoisySumModel(pc.getRandom(), noise);
-        ShapConfig skConfig = testConfig
-                .withBackground(createPIFromMatrix(backgroundAllZeros))
-                .withConfidence(.99)
-                .build();
-        List<PredictionInput> toExplain = createPIFromMatrix(toExplainAllOnes);
-        ShapKernelExplainer ske = new ShapKernelExplainer(skConfig);
-        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
-        Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
-        Saliency[] saliencies = ske.explainAsync(p, model).get();
-        double[][][] explanationsAndConfs = saliencyToMatrix(saliencies);
-        double[][] explanations = explanationsAndConfs[0];
-        double[][] confidence = explanationsAndConfs[1];
-        int[] shape = MatrixUtils.getShape(confidence);
-        for (int i = 0; i < shape[0]; i++) {
-            for (int j = 0; j < shape[1]; j++) {
-                double conf = confidence[i][j];
-                double exp = explanations[i][j];
-                assertTrue((exp + conf) > 1.0 & 1.0 > (exp - conf));
+        for (double interval : new double[] { .95, .975, .99 }) {
+            int[] testResults = new int[600];
+            for (int test = 0; test < 100; test++) {
+                PredictionProvider model = TestUtils.getNoisySumModel(pc.getRandom(), noise);
+                ShapConfig skConfig = testConfig
+                        .withBackground(createPIFromMatrix(backgroundAllZeros))
+                        .withConfidence(interval)
+                        .build();
+                List<PredictionInput> toExplain = createPIFromMatrix(toExplainAllOnes);
+                ShapKernelExplainer ske = new ShapKernelExplainer(skConfig);
+                List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
+                Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
+                Saliency[] saliencies = ske.explainAsync(p, model).get();
+                double[][][] explanationsAndConfs = saliencyToMatrix(saliencies);
+                double[][] explanations = explanationsAndConfs[0];
+
+                double[][] confidence = explanationsAndConfs[1];
+
+                int[] shape = MatrixUtils.getShape(confidence);
+                for (int i = 0; i < shape[0]; i++) {
+                    for (int j = 0; j < shape[1]; j++) {
+                        double conf = confidence[i][j];
+                        double exp = explanations[i][j];
+
+                        // see if true value falls into confidence interval
+                        testResults[test * 6 + j] = (exp + conf) > 1.0 & 1.0 > (exp - conf) ? 1 : 0;
+                    }
+                }
             }
+
+            // roughly interval% of the tests should be true
+            double score = Arrays.stream(testResults).sum() / 600.;
+            assertEquals(interval, score, interval / 50);
         }
     }
 
