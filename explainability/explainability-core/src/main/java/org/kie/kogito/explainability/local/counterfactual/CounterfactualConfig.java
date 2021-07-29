@@ -30,7 +30,7 @@ import org.optaplanner.core.config.solver.SolverManagerConfig;
 public class CounterfactualConfig {
 
     private Executor executor = ForkJoinPool.commonPool();
-    private SolverConfig solverConfig = CounterfactualConfigurationFactory.builder().build();
+    private SolverConfig solverConfig = SolverConfigBuilder.builder().build();
     private Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory =
             solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
 

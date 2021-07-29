@@ -65,7 +65,7 @@ class CounterfactualExplainerTest {
             List<Feature> features,
             PredictionProvider model) throws InterruptedException, ExecutionException, TimeoutException {
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(steps);
-        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+        final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed(randomSeed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
@@ -98,7 +98,7 @@ class CounterfactualExplainerTest {
         }
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10L);
         // for the purpose of this test, only a few steps are necessary
-        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+        final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
@@ -580,7 +580,7 @@ class CounterfactualExplainerTest {
 
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10_000L);
         // for the purpose of this test, only a few steps are necessary
-        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+        final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
@@ -706,7 +706,7 @@ class CounterfactualExplainerTest {
 
         final TerminationConfig terminationConfig =
                 new TerminationConfig().withBestScoreFeasible(true).withScoreCalculationCountLimit(10_000L);
-        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+        final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
 
         solverConfig.setRandomSeed((long) seed);
@@ -777,7 +777,7 @@ class CounterfactualExplainerTest {
 
         final TerminationConfig terminationConfig =
                 new TerminationConfig().withBestScoreFeasible(true).withScoreCalculationCountLimit(10_000L);
-        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+        final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
 
         solverConfig.setRandomSeed((long) seed);
