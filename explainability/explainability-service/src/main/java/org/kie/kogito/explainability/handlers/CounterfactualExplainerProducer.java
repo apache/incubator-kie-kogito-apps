@@ -21,6 +21,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfig;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfigurationFactory;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.slf4j.Logger;
@@ -43,9 +44,8 @@ public class CounterfactualExplainerProducer {
     @Produces
     public CounterfactualExplainer produce() {
         LOG.debug("CounterfactualExplainer created");
-        return CounterfactualExplainer.builder()
-                .withSolverConfig(
-                        CounterfactualConfigurationFactory.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build())
-                .build();
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(
+                CounterfactualConfigurationFactory.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build());
+        return new CounterfactualExplainer(counterfactualConfig);
     }
 }

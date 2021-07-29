@@ -15,12 +15,7 @@
  */
 package org.kie.kogito.explainability.local.counterfactual;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -36,21 +31,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.model.CounterfactualPrediction;
-import org.kie.kogito.explainability.model.DataDomain;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.NumericFeatureDistribution;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PerturbationContext;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionFeatureDomain;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
+import org.kie.kogito.explainability.model.*;
 import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
@@ -66,25 +47,17 @@ import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class CounterfactualExplainerTest {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(CounterfactualExplainerTest.class);
     final long predictionTimeOut = 10L;
     final TimeUnit predictionTimeUnit = TimeUnit.MINUTES;
     final Long steps = 30_000L;
-
-    private static final Logger logger =
-            LoggerFactory.getLogger(CounterfactualExplainerTest.class);
 
     private CounterfactualResult runCounterfactualSearch(Long randomSeed, List<Output> goal,
             List<Boolean> constraints,
@@ -96,10 +69,9 @@ class CounterfactualExplainerTest {
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed(randomSeed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
-        final CounterfactualExplainer explainer = CounterfactualExplainer
-                .builder()
-                .withSolverConfig(solverConfig)
-                .build();
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig();
+        counterfactualConfig.withSolverConfig(solverConfig);
+        final CounterfactualExplainer explainer = new CounterfactualExplainer(counterfactualConfig);
         final PredictionInput input = new PredictionInput(features);
         PredictionOutput output = new PredictionOutput(goal);
         PredictionFeatureDomain domain = new PredictionFeatureDomain(dataDomain.getFeatureDomains());
@@ -130,11 +102,9 @@ class CounterfactualExplainerTest {
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig);
         final CounterfactualExplainer counterfactualExplainer =
-                CounterfactualExplainer
-                        .builder()
-                        .withSolverConfig(solverConfig)
-                        .build();
+                new CounterfactualExplainer(counterfactualConfig);
 
         PredictionProvider model = TestUtils.getSumSkipModel(0);
 
@@ -617,11 +587,9 @@ class CounterfactualExplainerTest {
 
         @SuppressWarnings("unchecked")
         final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull = mock(Consumer.class);
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig);
         final CounterfactualExplainer counterfactualExplainer =
-                CounterfactualExplainer
-                        .builder()
-                        .withSolverConfig(solverConfig)
-                        .build();
+                new CounterfactualExplainer(counterfactualConfig);
 
         PredictionInput input = new PredictionInput(features);
 
@@ -671,11 +639,10 @@ class CounterfactualExplainerTest {
         when(solution.getScore()).thenReturn(score);
 
         //Setup Explainer
+        final CounterfactualConfig counterfactualConfig =
+                new CounterfactualConfig().withSolverManagerFactory(solverConfig -> solverManager);
         final CounterfactualExplainer counterfactualExplainer =
-                CounterfactualExplainer
-                        .builder()
-                        .withSolverManagerFactory(solverConfig -> solverManager)
-                        .build();
+                new CounterfactualExplainer(counterfactualConfig);
 
         //Setup mock model, what it does is not important
         Prediction prediction = new CounterfactualPrediction(new PredictionInput(Collections.emptyList()),
@@ -756,11 +723,9 @@ class CounterfactualExplainerTest {
             executionIds.add(counterfactual.getExecutionId());
         };
 
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig);
         final CounterfactualExplainer counterfactualExplainer =
-                CounterfactualExplainer
-                        .builder()
-                        .withSolverConfig(solverConfig)
-                        .build();
+                new CounterfactualExplainer(counterfactualConfig);
 
         PredictionInput input = new PredictionInput(features);
         PredictionOutput output = new PredictionOutput(goal);
@@ -829,11 +794,9 @@ class CounterfactualExplainerTest {
             executionIds.add(counterfactual.getExecutionId());
         };
 
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig);
         final CounterfactualExplainer counterfactualExplainer =
-                CounterfactualExplainer
-                        .builder()
-                        .withSolverConfig(solverConfig)
-                        .build();
+                new CounterfactualExplainer(counterfactualConfig);
 
         PredictionInput input = new PredictionInput(features);
         PredictionOutput output = new PredictionOutput(goal);
