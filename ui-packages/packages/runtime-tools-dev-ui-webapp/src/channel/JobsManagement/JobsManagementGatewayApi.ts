@@ -67,22 +67,17 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
     return Promise.resolve();
   };
 
-  cancelJob = async (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
-    return await jobCancel(job);
+  cancelJob = (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
+    return jobCancel(job);
   };
 
-  rescheduleJob = async (
+  rescheduleJob = (
     job,
     repeatInterval: number | string,
     repeatLimit: number | string,
     scheduleDate: Date
   ): Promise<{ modalTitle: string; modalContent: string }> => {
-    return await handleJobReschedule(
-      job,
-      repeatInterval,
-      repeatLimit,
-      scheduleDate
-    );
+    return handleJobReschedule(job, repeatInterval, repeatLimit, scheduleDate);
   };
 
   bulkCancel = (
