@@ -25,6 +25,9 @@ import java.util.concurrent.CompletionStage;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cloudevents.CloudEvent;
+import io.smallrye.mutiny.operators.multi.processors.BroadcastProcessor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -37,11 +40,6 @@ import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.cloudevents.CloudEvent;
-import io.smallrye.mutiny.operators.multi.processors.BroadcastProcessor;
 
 @ApplicationScoped
 public class ExplainabilityMessagingHandler {
@@ -86,9 +84,11 @@ public class ExplainabilityMessagingHandler {
 
     @SuppressWarnings("unchecked")
     private CompletionStage<Void> handleCloudEvent(CloudEvent cloudEvent) {
-        BaseExplainabilityRequestDto requestDto;
+        BaseExplainabilityRequestDto requestDto = null;
         try {
-            requestDto = objectMapper.readValue(cloudEvent.getData(), BaseExplainabilityRequestDto.class);
+            if (cloudEvent.getData() != null) {
+                requestDto = objectMapper.readValue(cloudEvent.getData().toBytes(), BaseExplainabilityRequestDto.class);
+            }
         } catch (IOException e) {
             LOGGER.error("Unable to deserialize CloudEvent data as ExplainabilityRequest", e);
             return CompletableFuture.completedFuture(null);
@@ -116,8 +116,8 @@ public class ExplainabilityMessagingHandler {
         }
 
         LOGGER.info("Explainability service emits explainability {} for execution with ID {}",
-                result.getClass().getSimpleName(),
-                result.getExecutionId());
+                    result.getClass().getSimpleName(),
+                    result.getExecutionId());
         Optional<String> optPayload = CloudEventUtils
                 .build(result.getExecutionId(), URI_PRODUCER, result, BaseExplainabilityResultDto.class)
                 .flatMap(CloudEventUtils::encode);
@@ -133,5 +133,4 @@ public class ExplainabilityMessagingHandler {
     public Publisher<String> getEventPublisher() {
         return eventSubject.toHotStream();
     }
-
 }
