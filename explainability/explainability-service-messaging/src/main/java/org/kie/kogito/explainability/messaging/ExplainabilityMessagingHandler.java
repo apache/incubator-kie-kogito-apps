@@ -118,8 +118,8 @@ public class ExplainabilityMessagingHandler {
         }
 
         LOGGER.info("Explainability service emits explainability {} for execution with ID {}",
-                    result.getClass().getSimpleName(),
-                    result.getExecutionId());
+                result.getClass().getSimpleName(),
+                result.getExecutionId());
         Optional<String> optPayload = CloudEventUtils
                 .build(result.getExecutionId(), URI_PRODUCER, result, BaseExplainabilityResultDto.class)
                 .flatMap(CloudEventUtils::encode);
