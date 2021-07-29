@@ -506,7 +506,7 @@ class ShapKernelExplainerTest {
 
             // roughly interval% of the tests should be true
             double score = Arrays.stream(testResults).sum() / 600.;
-            assertEquals(interval, score, interval / 50);
+            assertEquals(interval, score, .05);
         }
     }
 
