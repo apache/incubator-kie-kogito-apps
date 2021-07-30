@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
@@ -125,17 +126,19 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("data.UserTaskInstances[0].name", is("firstLineApproval"))
                         .body("data.UserTaskInstances[0].state", is("Ready")));
 
-        given().contentType(ContentType.JSON)
-                .when()
-                .queryParam("user", "admin")
-                .queryParam("group", "managers")
-                .pathParam("processId", pId)
-                .pathParam("taskId", flTaskId)
-                .body(singletonMap("approved", true))
-                .post("/approvals/{processId}/firstLineApproval/{taskId}")
-                .then()
-                .statusCode(200)
-                .body("firstLineApproval", is(true));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().contentType(ContentType.JSON)
+                        .when()
+                        .queryParam("user", "admin")
+                        .queryParam("group", "managers")
+                        .pathParam("processId", pId)
+                        .pathParam("taskId", flTaskId)
+                        .body(singletonMap("approved", true))
+                        .post("/approvals/{processId}/firstLineApproval/{taskId}")
+                        .then()
+                        .statusCode(200)
+                        .body("firstLineApproval", is(true)));
 
         String slTaskId = given()
                 .contentType(ContentType.JSON)
@@ -152,25 +155,29 @@ public abstract class AbstractProcessDataIndexIT {
                 .extract()
                 .path("[0].id");
 
-        given().contentType(ContentType.JSON)
-                .when()
-                .queryParam("user", "manager")
-                .queryParam("group", "managers")
-                .pathParam("processId", pId)
-                .pathParam("taskId", slTaskId)
-                .body(singletonMap("approved", true))
-                .post("/approvals/{processId}/secondLineApproval/{taskId}")
-                .then()
-                .statusCode(200)
-                .body("secondLineApproval", is(true));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().contentType(ContentType.JSON)
+                        .when()
+                        .queryParam("user", "manager")
+                        .queryParam("group", "managers")
+                        .pathParam("processId", pId)
+                        .pathParam("taskId", slTaskId)
+                        .body(singletonMap("approved", true))
+                        .post("/approvals/{processId}/secondLineApproval/{taskId}")
+                        .then()
+                        .statusCode(200)
+                        .body("secondLineApproval", is(true)));
 
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .pathParam("processId", pId)
-                .get("/approvals/{processId}")
-                .then()
-                .statusCode(404);
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given()
+                        .contentType(ContentType.JSON)
+                        .when()
+                        .pathParam("processId", pId)
+                        .get("/approvals/{processId}")
+                        .then()
+                        .statusCode(404));
 
         await()
                 .atMost(TIMEOUT)
@@ -209,6 +216,65 @@ public abstract class AbstractProcessDataIndexIT {
                             .body("data.Approvals[0].metadata.userTasks", is(notNullValue()))
                             .body("data.Approvals[0].metadata.userTasks.size()", is(2)));
         }
+
+        String pId2 = createTestProcessInstance();
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> getProcessInstanceById(pId2, "ACTIVE"));
+
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"query { ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) {nodeDefinitions {id}} }\" }")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.ProcessInstances.nodeDefinitions.size()", is(1)));
+
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"mutation{ ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
+                        .when().post("/graphql")
+                        .then().statusCode(200));
+
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200));
     }
 
+    protected String createTestProcessInstance() {
+        return given()
+                .contentType(ContentType.JSON)
+                .body("{\"traveller\" : {\"firstName\" : \"Darth\",\"lastName\" : \"Vader\",\"email\" : \"darth.vader@deathstar.com\",\"nationality\" : \"Tatooine\"}}")
+                .when()
+                .post("/approvals")
+                .then()
+                .statusCode(201)
+                .body("id", notNullValue())
+                .extract()
+                .path("id");
+    }
+
+    protected ValidatableResponse getProcessInstanceById(String processInstanceId, String state) {
+        return given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ProcessInstances(where: {  id: {  equal : \\\"" + processInstanceId + "\\\"}}){ id, processId, state } }\" }")
+                .when().post("/graphql")
+                .then().statusCode(200)
+                .body("data.ProcessInstances.size()", is(1))
+                .body("data.ProcessInstances[0].id", is(processInstanceId))
+                .body("data.ProcessInstances[0].processId", is("approvals"))
+                .body("data.ProcessInstances[0].state", is(state));
+    }
 }

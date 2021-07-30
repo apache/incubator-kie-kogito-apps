@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.quarkus;
+package org.kie.kogito.index.api.predicate;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.function.Predicate;
 
-import io.quarkus.test.junit.QuarkusTestProfile;
+import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.index.model.ProcessInstanceState;
 
-public class InfinispanTestProfile implements QuarkusTestProfile {
+public class AbortProcessInstancePredicate implements Predicate<ProcessInstance> {
 
     @Override
-    public List<TestResourceEntry> testResources() {
-        return Arrays.asList(new TestResourceEntry(KogitoServiceRandomPortQuarkusTestResource.class),
-                new TestResourceEntry(DataIndexInfinispanQuarkusTestResource.class));
+    public boolean test(final ProcessInstance processInstance) {
+        return processInstance.getState() == ProcessInstanceState.ACTIVE.ordinal();
     }
 }

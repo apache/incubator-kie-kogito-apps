@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.index.quarkus;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import org.kie.kogito.index.resources.DataIndexInfinispanResource;
+import org.kie.kogito.index.resources.KogitoServiceRandomPortTestResource;
 import org.kie.kogito.resources.ConditionalQuarkusTestResource;
 
-public class DataIndexInfinispanQuarkusTestResource extends ConditionalQuarkusTestResource<DataIndexInfinispanResource> {
+import static java.util.Collections.singletonMap;
 
-    public static final String KOGITO_DATA_INDEX_SERVICE_URL = "kogito.dataindex.http.url";
+public class KogitoServiceRandomPortQuarkusTestResource extends ConditionalQuarkusTestResource {
 
-    public DataIndexInfinispanQuarkusTestResource() {
-        super(new DataIndexInfinispanResource());
+    public static final String QUARKUS_SERVICE_HTTP_PORT = "quarkus.http.test-port";
+
+    public KogitoServiceRandomPortQuarkusTestResource() {
+        super(new KogitoServiceRandomPortTestResource());
+    }
+
+    /**
+     * The Kogito Service must be run first to make the port available in the rest of services.
+     */
+    @Override
+    public int order() {
+        return -1;
     }
 
     @Override
     protected Map<String, String> getProperties() {
-        Map<String, String> properties = new HashMap<>();
-        properties.put(KOGITO_DATA_INDEX_SERVICE_URL, "http://localhost:" + getTestResource().getMappedPort());
-        properties.putAll(getTestResource().getProperties());
-        return properties;
+        return singletonMap(QUARKUS_SERVICE_HTTP_PORT, String.valueOf(getTestResource().getMappedPort()));
     }
-
 }
