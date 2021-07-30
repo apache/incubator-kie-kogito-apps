@@ -31,10 +31,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.FeatureImportance;
+import org.kie.kogito.explainability.model.PerturbationContext;
+import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.utils.MatrixUtils;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ShapKernelExplainerTest {
     double[][] backgroundRaw = {
