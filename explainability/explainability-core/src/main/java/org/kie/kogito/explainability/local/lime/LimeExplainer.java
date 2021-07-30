@@ -94,6 +94,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
         if (noOfSamples <= 0) {
             noOfSamples = (int) Math.pow(2, linearizedTargetInputFeatures.size());
+            LOGGER.info("using 2^|features| samples ({})", noOfSamples);
         }
 
         return explainRetryCycle(
