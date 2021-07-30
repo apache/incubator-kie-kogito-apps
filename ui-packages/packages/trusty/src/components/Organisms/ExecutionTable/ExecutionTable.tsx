@@ -80,6 +80,7 @@ const prepareExecutionsRows = (rowData: Execution[]) => {
             to={`/audit/${item.executionType.toLocaleLowerCase()}/${
               item.executionId
             }`}
+            data-ouia-component-id={`${item.executionId}`}
           >
             <ExecutionId id={item.executionId} />
           </Link>

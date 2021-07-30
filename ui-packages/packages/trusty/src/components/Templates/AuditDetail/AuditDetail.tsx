@@ -30,6 +30,7 @@ import InputData from '../InputData/InputData';
 import ModelLookup from '../ModelLookup/ModelLookup';
 import './AuditDetail.scss';
 import Counterfactual from '../Counterfactual/Counterfactual';
+import { attributeOuiaId } from '@kogito-apps/ouia-tools';
 
 const AuditDetail = () => {
   const { path, url } = useRouteMatch();
@@ -81,7 +82,11 @@ const AuditDetail = () => {
           </div>
         )}
         {thirdLevelNav.length > 0 && (
-          <Nav className="audit-detail__nav" variant="tertiary">
+          <Nav
+            className="audit-detail__nav"
+            variant="tertiary"
+            {...attributeOuiaId('nav-audit-detail')}
+          >
             <NavList>
               {thirdLevelNav.map((item, index) => (
                 <NavItem

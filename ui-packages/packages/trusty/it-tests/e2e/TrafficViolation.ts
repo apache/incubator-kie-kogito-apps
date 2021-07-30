@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+let reqId;
+let auditDetailsUrl;
 
 describe('Traffic Violation', () => {
   before(() => {
@@ -36,126 +38,146 @@ describe('Traffic Violation', () => {
       expect(response.body).to.have.property('Fine');
       expect(response.body.Fine).to.have.property('Points', 3);
       expect(response.body.Fine).to.have.property('Amount', 500);
-      /*expect(response.body.data).to.have.length.of.at.least(4);
-      {
-        Violation: {
-          Type: 'speed',
-          'Speed Limit': 80,
-          'Actual Speed': 105,
-          Code: null,
-          Date: null
-        },
-        Driver: { Points: 13, State: 'aa', City: 'bb', Age: 25, Name: null },
-        Fine: { Points: 3, Amount: 500 },
-        'Should the driver be suspended?': 'No'
-      });*/
+      expect(response.headers).to.have.property('x-kogito-execution-id');
+      reqId = response.headers['x-kogito-execution-id'];
+      auditDetailsUrl = `/audit/decision/${reqId}/outcomes`;
     });
   });
 
-  beforeEach(() => {
+  it('open Audit Details', () => {
     cy.visit('/');
+    cy.ouiaId('refresh-button').click();
+    cy.ouiaId(reqId).click();
+    cy.url().should('contains', auditDetailsUrl);
   });
 
-  it('verify results', () => {
-    cy.ouiaId('refresh-button').click();
-    cy.ouiaId('exec-table')
-      .find("td[data-label='ID']:first>a")
-      .click();
-    cy.get('section.outcomes').should('be.visible');
-
-    cy.get('div.pf-c-card__header:contains(Fine)').should('be.visible');
-    cy.get(
-      'div.outcome__property:contains(Points)>div.outcome__property__value'
-    ).should($value => {
-      expect($value).to.have.text('3');
-    });
-    cy.get(
-      'div.outcome__property:contains(Amount)>div.outcome__property__value'
-    ).should($value => {
-      expect($value).to.have.text('500');
+  describe('verify decision results', () => {
+    beforeEach(() => {
+      cy.visit(auditDetailsUrl);
     });
 
-    cy.get('div.pf-c-card__header:contains(suspended)').should('be.visible');
-    cy.get(
-      'div.pf-c-card__header:contains(suspended)+div.pf-c-card__body'
-    ).should($value => {
-      expect($value).to.have.text('No');
-    });
-  });
+    it('Audit Details header', () => {
+      const title = 'Execution #' + String(reqId).substring(0, 8);
 
-  it('verify inputs - Violation', () => {
-    cy.ouiaId('refresh-button').click();
-    cy.ouiaId('exec-table')
-      .find("td[data-label='ID']:first>a")
-      .click();
-
-    cy.get('ul.pf-c-nav__list>li:contains(Input)').click();
-    cy.get('div.input-browser button:contains(Violation)').click();
-    cy.get(
-      'ul.input-browser__data-list>li:contains(Type) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('speed');
-    });
-    cy.get(
-      "ul.input-browser__data-list>li:contains('Speed Limit') div.pf-c-data-list__cell:nth-child(2)"
-    ).should($value => {
-      expect($value).to.have.text('80');
-    });
-
-    cy.get(
-      "ul.input-browser__data-list>li:contains('Actual Speed') div.pf-c-data-list__cell:nth-child(2)"
-    ).should($value => {
-      expect($value).to.have.text('105');
-    });
-
-    cy.get(
-      'ul.input-browser__data-list>li:contains(Code) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('Null');
-    });
-
-    cy.get(
-      'ul.input-browser__data-list>li:contains(Date) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('Null');
-    });
-  });
-
-  it('verify inputs - Driver', () => {
-    cy.ouiaId('refresh-button').click();
-    cy.ouiaId('exec-table')
-      .find("td[data-label='ID']:first>a")
-      .click();
-
-    cy.get('ul.pf-c-nav__list>li:contains(Input)').click();
-    cy.get('div.input-browser button:contains(Driver)').click();
-    cy.get(
-      'ul.input-browser__data-list>li:contains(Points) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('13');
-    });
-    cy.get(
-      'ul.input-browser__data-list>li:contains(State) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('aa');
+      cy.ouiaType('PF4/Breadcrumb')
+        .should('exist')
+        .within($nav => {
+          cy.wrap($nav)
+            .find('li>a')
+            .should('have.length', 3)
+            .within($items => {
+              expect($items.eq(0)).have.text('Audit Investigation');
+              expect($items.eq(1)).have.text(title);
+              expect($items.eq(2)).have.text('Outcomes');
+            });
+        });
+      cy.ouiaId('execution-title')
+        .should('be.visible')
+        .should('contain', title);
+      cy.ouiaId('execution-status')
+        .should('be.visible')
+        .should('contain', 'Completed');
+      cy.ouiaId('nav-audit-detail')
+        .should('exist')
+        .within($nav => {
+          cy.wrap($nav)
+            .find('li>a')
+            .should('have.length', 4)
+            .within($items => {
+              expect($items.eq(0)).have.text('Outcomes');
+              expect($items.eq(0)).have.class('pf-m-current');
+              expect($items.eq(1)).have.text('Outcomes Details');
+              expect($items.eq(2)).have.text('Input Data');
+              expect($items.eq(3)).have.text('Model Lookup');
+            });
+        });
+      cy.get('section.outcomes').should('be.visible');
     });
 
-    cy.get(
-      'ul.input-browser__data-list>li:contains(City) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('bb');
+    it('Outcomes', () => {
+      cy.get(
+        'div.outcome__property:contains(Points)>div.outcome__property__value'
+      ).should($value => {
+        expect($value).to.have.text('3');
+      });
+      cy.get(
+        'div.outcome__property:contains(Amount)>div.outcome__property__value'
+      ).should($value => {
+        expect($value).to.have.text('500');
+      });
+
+      cy.get('div.pf-c-card__header:contains(suspended)').should('be.visible');
+      cy.get(
+        'div.pf-c-card__header:contains(suspended)+div.pf-c-card__body'
+      ).should($value => {
+        expect($value).to.have.text('No');
+      });
     });
 
-    cy.get(
-      'ul.input-browser__data-list>li:contains(Age) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('25');
+    it('Input Data - Violation', () => {
+      cy.get('ul.pf-c-nav__list>li:contains(Input)').click();
+      cy.get('div.input-browser button:contains(Violation)').click();
+      cy.get(
+        'ul.input-browser__data-list>li:contains(Type) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('speed');
+      });
+      cy.get(
+        "ul.input-browser__data-list>li:contains('Speed Limit') div.pf-c-data-list__cell:nth-child(2)"
+      ).should($value => {
+        expect($value).to.have.text('80');
+      });
+
+      cy.get(
+        "ul.input-browser__data-list>li:contains('Actual Speed') div.pf-c-data-list__cell:nth-child(2)"
+      ).should($value => {
+        expect($value).to.have.text('105');
+      });
+
+      cy.get(
+        'ul.input-browser__data-list>li:contains(Code) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('Null');
+      });
+
+      cy.get(
+        'ul.input-browser__data-list>li:contains(Date) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('Null');
+      });
     });
 
-    cy.get(
-      'ul.input-browser__data-list>li:contains(Name) div.pf-c-data-list__cell:nth-child(2)'
-    ).should($value => {
-      expect($value).to.have.text('Null');
+    it('Input Data - Driver', () => {
+      cy.get('ul.pf-c-nav__list>li:contains(Input)').click();
+      cy.get('div.input-browser button:contains(Driver)').click();
+      cy.get(
+        'ul.input-browser__data-list>li:contains(Points) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('13');
+      });
+      cy.get(
+        'ul.input-browser__data-list>li:contains(State) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('aa');
+      });
+
+      cy.get(
+        'ul.input-browser__data-list>li:contains(City) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('bb');
+      });
+
+      cy.get(
+        'ul.input-browser__data-list>li:contains(Age) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('25');
+      });
+
+      cy.get(
+        'ul.input-browser__data-list>li:contains(Name) div.pf-c-data-list__cell:nth-child(2)'
+      ).should($value => {
+        expect($value).to.have.text('Null');
+      });
     });
   });
 });

@@ -6,6 +6,7 @@ import FormattedDate from '../../Atoms/FormattedDate/FormattedDate';
 import ExecutionId from '../../Atoms/ExecutionId/ExecutionId';
 import { RemoteData, Execution, RemoteDataStatus } from '../../../types';
 import './ExecutionHeader.scss';
+import { attributeOuiaId } from '@kogito-apps/ouia-tools';
 
 type ExecutionHeaderProps = {
   execution: RemoteData<Error, Execution>;
@@ -30,7 +31,11 @@ const ExecutionHeader = (props: ExecutionHeaderProps) => {
             />
           )}
           {execution.status === RemoteDataStatus.SUCCESS && (
-            <Title size="3xl" headingLevel="h2">
+            <Title
+              size="3xl"
+              headingLevel="h2"
+              {...attributeOuiaId('execution-title')}
+            >
               <span className="execution-header__uuid">
                 Execution <ExecutionId id={execution.data.executionId} />
               </span>
@@ -62,7 +67,7 @@ const ExecutionHeader = (props: ExecutionHeaderProps) => {
                 </div>
               }
             >
-              <div>
+              <div {...attributeOuiaId('execution-status')}>
                 <ExecutionStatus
                   result={
                     execution.data.executionSucceeded ? 'success' : 'failure'

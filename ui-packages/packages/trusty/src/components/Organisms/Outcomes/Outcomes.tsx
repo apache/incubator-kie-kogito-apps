@@ -23,6 +23,7 @@ import {
   isItemObjectMultiArray
 } from '../../../types';
 import './Outcomes.scss';
+import { componentOuiaProps } from '@kogito-apps/ouia-tools';
 
 type OutcomesProps =
   | {
@@ -37,7 +38,11 @@ const Outcomes = (props: OutcomesProps) => {
     return (
       <section className="outcomes">
         {props.outcomes.length && (
-          <Gallery className="outcome-cards" hasGutter>
+          <Gallery
+            className="outcome-cards"
+            hasGutter
+            {...componentOuiaProps('outcome-cards', 'gallery', true)}
+          >
             {props.outcomes.map(item =>
               renderCard(item, props.onExplanationClick)
             )}
@@ -56,7 +61,12 @@ const Outcomes = (props: OutcomesProps) => {
           isItemObjectMultiArray(item.outcomeResult.components)
         ) {
           return (
-            <Gallery className="outcome-cards" hasGutter key={uuid()}>
+            <Gallery
+              className="outcome-cards"
+              hasGutter
+              key={uuid()}
+              {...componentOuiaProps('outcome-cards', 'gallery', true)}
+            >
               {item.outcomeResult.components.map(subList => {
                 return (
                   <GalleryItem key={uuid()}>
@@ -128,16 +138,21 @@ type OutcomeCardProps = {
   titleAsLabel?: boolean;
 };
 
-const OutcomeCard = (props: OutcomeCardProps) => {
+const OutcomeCard = (props: OutcomeCardProps, ouiaId) => {
   const { children, outcome, onExplanation, titleAsLabel = false } = props;
   return (
     <Card
       className="outcome-cards__card outcome-cards__card--list-view"
       isHoverable
+      {...componentOuiaProps(ouiaId, 'outcome-card')}
     >
       <CardHeader>
         {titleAsLabel ? (
-          <Label className="outcome-cards__card__label" color="blue">
+          <Label
+            className="outcome-cards__card__label"
+            color="blue"
+            data-ouia-component-type="outcome-name"
+          >
             {outcome.outcomeName}
           </Label>
         ) : (
@@ -145,6 +160,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
             className="outcome-cards__card__title"
             headingLevel="h4"
             size="xl"
+            data-ouia-component-type="outcome-name"
           >
             {outcome.outcomeName}
           </Title>
@@ -166,6 +182,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
             onClick={() => {
               onExplanation(outcome.outcomeId);
             }}
+            data-ouia-component-type="view-detail"
           >
             View Details <LongArrowAltRightIcon />
           </Button>
@@ -246,17 +263,24 @@ const OutcomeProperty = (props: {
   }
 };
 
-const OutcomeComposed = (props: {
-  outcome: ItemObject;
-  compact: boolean;
-  name: string;
-}) => {
+const OutcomeComposed = (
+  props: {
+    outcome: ItemObject;
+    compact: boolean;
+    name: string;
+  },
+  ouiaId
+) => {
   const { outcome, compact, name } = props;
   const renderItems: JSX.Element[] = [];
 
   for (const subItem of outcome.components as ItemObject[]) {
     renderItems.push(
-      <div className="outcome-item" key={subItem.name}>
+      <div
+        className="outcome-item"
+        key={subItem.name}
+        {...componentOuiaProps(ouiaId, 'outcome-item')}
+      >
         {renderOutcome(subItem, name, compact)}
       </div>
     );
@@ -305,10 +329,14 @@ type LightCardProps = {
   isHoverable?: boolean;
 };
 
-const LightCard = (props: LightCardProps) => {
+const LightCard = (props: LightCardProps, ouiaId) => {
   const { children, className = '', isHoverable = false } = props;
   return (
-    <Card className={className} isHoverable={isHoverable}>
+    <Card
+      className={className}
+      isHoverable={isHoverable}
+      {...componentOuiaProps(ouiaId, 'outcome-card')}
+    >
       <CardBody>{children}</CardBody>
     </Card>
   );
