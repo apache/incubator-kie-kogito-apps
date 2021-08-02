@@ -121,9 +121,6 @@ public class CounterfactualExplainerServiceHandler
 
         return new CounterfactualPrediction(input,
                 output,
-                featureDomain,
-                featureConstraints,
-                null,
                 UUID.fromString(request.getExecutionId()));
     }
 
@@ -165,7 +162,7 @@ public class CounterfactualExplainerServiceHandler
     private CounterfactualExplainabilityResultDto buildResultDtoFromExplanation(CounterfactualExplainabilityRequest request,
             CounterfactualResult result,
             CounterfactualExplainabilityResultDto.Stage stage) {
-        List<Feature> features = result.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+        List<Feature> features = result.getFeatures();
         List<PredictionOutput> predictionOutputs = result.getOutput();
         if (Objects.isNull(predictionOutputs)) {
             throw new NullPointerException(String.format("Null Outputs produced for Explanation with ExecutionId '%s' and CounterfactualId '%s'",

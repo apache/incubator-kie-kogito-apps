@@ -29,13 +29,8 @@ import java.util.stream.Collectors;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.model.CounterfactualPrediction;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionFeatureDomain;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.local.counterfactual.entities.NestedFeatureHandler;
+import org.kie.kogito.explainability.model.*;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.config.solver.SolverConfig;
@@ -113,7 +108,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             AtomicLong sequenceId) {
         return counterfactualSolution -> {
             if (counterfactualSolution.getScore().isFeasible()) {
-                CounterfactualResult result = new CounterfactualResult(counterfactualSolution.getEntities(),
+                final List<CounterfactualEntity> entities = counterfactualSolution.getEntities();
+                final List<Feature> features = entities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+                final List<Feature> unflattenedFeatures = NestedFeatureHandler.getDelinearizedFeatures(features, counterfactualSolution.getOriginalFeatures());
+                CounterfactualResult result = new CounterfactualResult(entities, unflattenedFeatures,
                         counterfactualSolution.getPredictionOutputs(),
                         counterfactualSolution.getScore().isFeasible(),
                         counterfactualSolution.getSolutionId(),
@@ -124,23 +122,40 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         };
     }
 
+    /**
+     * Assembles the counterfactual response from the entities returned from the search
+     * 
+     * @param entities
+     * @return
+     */
+    private static List<PredictionInput> buildInput(List<CounterfactualEntity> entities) {
+        return List.of(new PredictionInput(
+                entities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())));
+    }
+
     @Override
     public CompletableFuture<CounterfactualResult> explainAsync(Prediction prediction,
             PredictionProvider model,
             Consumer<CounterfactualResult> intermediateResultsConsumer) {
         final AtomicLong sequenceId = new AtomicLong(0);
         CounterfactualPrediction cfPrediction = (CounterfactualPrediction) prediction;
-        final PredictionFeatureDomain featureDomain = cfPrediction.getDomain();
-        final List<Boolean> constraints = cfPrediction.getConstraints();
         final UUID executionId = cfPrediction.getExecutionId();
         final List<CounterfactualEntity> entities =
-                CounterfactualEntityFactory.createEntities(prediction.getInput(), featureDomain, constraints,
-                        cfPrediction.getDataDistribution());
+                CounterfactualEntityFactory.createEntities(prediction.getInput());
 
         final List<Output> goal = prediction.getOutput().getOutputs();
 
+        // Original features kept as structural reference to re-assemble composite features
+        final List<Feature> originalFeatures = prediction.getInput().getFeatures();
+
         Function<UUID, CounterfactualSolution> initial =
-                uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId, this.goalThreshold);
+                uuid -> new CounterfactualSolution(entities,
+                        originalFeatures,
+                        model,
+                        goal,
+                        UUID.randomUUID(),
+                        executionId,
+                        this.goalThreshold);
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager = solverManagerFactory.apply(solverConfig)) {
@@ -164,11 +179,14 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         }, this.executor);
 
         final CompletableFuture<List<PredictionOutput>> cfOutputs =
-                cfSolution.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
-                        s.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList())))));
+                cfSolution.thenCompose(s -> model.predictAsync(buildInput(s.getEntities())));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
+//            final List<Feature> features = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+//            final List<Feature> unflattenedFeatures = NestedFeatureHandler.getDelinearizedFeatures(features, solution.getOriginalFeatures());
             return new CounterfactualResult(solution.getEntities(),
+                    solution.getOriginalFeatures(),
+//                    unflattenedFeatures,
                     cfOutputs.join(),
                     solution.getScore().isFeasible(),
                     UUID.randomUUID(),

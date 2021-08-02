@@ -19,16 +19,12 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Currency;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import org.kie.kogito.explainability.model.domain.FeatureDomain;
 
 /**
  * Factory class for {@link Feature}s
@@ -61,12 +57,24 @@ public class FeatureFactory {
         return new Feature(name, Type.CATEGORICAL, new Value(category));
     }
 
+    public static Feature newCategoricalFeature(String name, String category, boolean constrained, FeatureDomain domain) {
+        return new Feature(name, Type.CATEGORICAL, new Value(category), constrained, domain);
+    }
+
     public static Feature newNumericalFeature(String name, Number number) {
         return new Feature(name, Type.NUMBER, new Value(number));
     }
 
+    public static Feature newNumericalFeature(String name, Number number, boolean constrained, FeatureDomain domain) {
+        return new Feature(name, Type.NUMBER, new Value(number), constrained, domain);
+    }
+
     public static Feature newBooleanFeature(String name, Boolean truthValue) {
         return new Feature(name, Type.BOOLEAN, new Value(truthValue));
+    }
+
+    public static Feature newBooleanFeature(String name, Boolean truthValue, boolean constrained, FeatureDomain domain) {
+        return new Feature(name, Type.BOOLEAN, new Value(truthValue), constrained, domain);
     }
 
     public static Feature newCurrencyFeature(String name, Currency currency) {

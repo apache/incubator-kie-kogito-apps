@@ -166,7 +166,7 @@ class ExplanationServiceImplTest {
         assertEquals(COUNTERFACTUAL_ID, counterfactualResultDto.getCounterfactualId());
         assertSame(ExplainabilityStatus.SUCCEEDED, counterfactualResultDto.getStatus());
         assertNull(counterfactualResultDto.getStatusDetails());
-        assertEquals(COUNTERFACTUAL_RESULT.getEntities().size(), counterfactualResultDto.getInputs().size());
+        assertEquals(COUNTERFACTUAL_RESULT.getFeatures().size(), counterfactualResultDto.getInputs().size());
         assertEquals(COUNTERFACTUAL_RESULT.getOutput().size(), counterfactualResultDto.getOutputs().size());
         assertTrue(counterfactualResultDto.getOutputs().containsKey("output1"));
 

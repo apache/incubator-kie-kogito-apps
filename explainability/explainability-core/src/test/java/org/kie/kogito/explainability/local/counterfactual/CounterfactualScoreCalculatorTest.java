@@ -29,24 +29,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PredictionFeatureDomain;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Type;
-import org.kie.kogito.explainability.model.Value;
+import org.kie.kogito.explainability.model.*;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CounterfactualScoreCalculatorTest {
 
@@ -409,14 +398,14 @@ class CounterfactualScoreCalculatorTest {
 
         PredictionInput input = new PredictionInput(features);
         PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.NUMBER, new Value(2.0), 0.0));
         goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
 
@@ -467,7 +456,7 @@ class CounterfactualScoreCalculatorTest {
 
         PredictionInput input = new PredictionInput(features);
         PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.NUMBER, new Value(2.0), 0.0));
@@ -479,7 +468,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);
@@ -520,7 +509,7 @@ class CounterfactualScoreCalculatorTest {
 
         PredictionInput input = new PredictionInput(features);
         PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-1", Type.NUMBER, new Value(1.0), 0.0));
@@ -534,7 +523,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);

@@ -16,7 +16,10 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -24,11 +27,8 @@ import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionOutput;
-import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.local.counterfactual.entities.NestedFeatureHandler;
+import org.kie.kogito.explainability.model.*;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.slf4j.Logger;
@@ -60,6 +60,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             throw new IllegalArgumentException(message);
         }
 
+        if (a.getValue() == null || b.getValue() == null) {
+            return 1.0;
+        }
+
         if (a.getType() == Type.NUMBER) {
             final double aValue = a.getValue().asNumber();
             final double bValue = b.getValue().asNumber();
@@ -78,8 +82,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 return distance;
             }
 
-        } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
-            return a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
+        } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN || a.getType() == Type.TEXT) {
+//            System.out.println(a.getValue());
+//            System.out.println(b.getValue());
+            return a.getValue().equals(b.getValue()) ? 0.0 : 1.0;
         } else {
             String message = "Feature type " + aType.toString() + " not supported";
             logger.error(message);
@@ -128,11 +134,11 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
 
         logger.debug("Current solution: {}", builder);
 
-        List<Feature> input = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+        List<Feature> flattenedFeatures = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
 
-        PredictionInput predictionInput = new PredictionInput(input);
+        List<Feature> input = NestedFeatureHandler.getDelinearizedFeatures(flattenedFeatures, solution.getOriginalFeatures());
 
-        List<PredictionInput> inputs = List.of(predictionInput);
+        List<PredictionInput> inputs = List.of(new PredictionInput(input));
 
         CompletableFuture<List<PredictionOutput>> predictionAsync = solution.getModel().predictAsync(inputs);
 
@@ -149,10 +155,6 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             for (PredictionOutput predictionOutput : predictions) {
 
                 final List<Output> outputs = predictionOutput.getOutputs();
-
-                if (goal.size() != outputs.size()) {
-                    throw new IllegalArgumentException("Prediction size must be equal to goal size");
-                }
 
                 final int numberOutputs = outputs.size();
                 for (int i = 0; i < numberOutputs; i++) {
@@ -189,5 +191,22 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                         BigDecimal.valueOf(tertiaryHardScore)
                 },
                 new BigDecimal[] { BigDecimal.valueOf(-Math.abs(primarySoftScore)), BigDecimal.valueOf(secondarySoftscore) });
+    }
+
+    private PredictionInput getTestInput() {
+        final Map<String, Object> client = new HashMap<>();
+        client.put("Age", 43);
+        client.put("Salary", 1950);
+        client.put("Existing payments", 100);
+        final Map<String, Object> loan = new HashMap<>();
+        loan.put("Duration", 15);
+        loan.put("Installment", 100);
+        final Map<String, Object> contextVariables = new HashMap<>();
+        contextVariables.put("Client", client);
+        contextVariables.put("Loan", loan);
+
+        List<Feature> features = new ArrayList<>();
+        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
+        return new PredictionInput(features);
     }
 }

@@ -19,21 +19,12 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FeatureFactoryTest {
 
@@ -148,7 +139,7 @@ class FeatureFactoryTest {
         Map<String, Object> map = new HashMap<>();
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newObjectFeature("f1", new Object()));
-        features.add(FeatureFactory.newTextFeature("f2", "hola"));
+        features.add(FeatureFactory.newCategoricalFeature("f2", "hola"));
         features.add(FeatureFactory.newFulltextFeature("f3", "foo bar"));
         features.add(FeatureFactory.newNumericalFeature("f4", 131));
         features.add(FeatureFactory.newBooleanFeature("f5", false));
