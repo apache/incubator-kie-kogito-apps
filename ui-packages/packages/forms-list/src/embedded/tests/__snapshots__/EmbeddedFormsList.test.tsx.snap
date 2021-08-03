@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmbeddedFormsList tests Snapshot 1`] = `
+<ForwardRef
+  driver={
+    Object {
+      "applyFilter": [MockFunction],
+      "getFormsQuery": [MockFunction],
+      "openForm": [MockFunction],
+    }
+  }
+  envelopePath="path"
+  targetOrigin="origin"
+>
+  <ForwardRef>
+    <div />
+  </ForwardRef>
+</ForwardRef>
+`;
