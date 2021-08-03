@@ -12,16 +12,6 @@
   <artifactId>integration-tests-data-index-service-quarkus</artifactId>
   <name>Kogito Apps :: Integration Tests :: Data Index :: Quarkus</name>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>integration-tests-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>

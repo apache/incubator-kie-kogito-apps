@@ -29,7 +29,7 @@ import io.restassured.RestAssured;
 
 import static org.kie.kogito.index.spring.DataIndexInfinispanSpringTestResource.KOGITO_DATA_INDEX_SERVICE_URL;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = { KogitoApplication.class })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = { KogitoApplication.class })
 @ContextConfiguration(initializers = { DataIndexPostgreSqlSpringTestResource.class, KogitoServiceRandomPortSpringTestResource.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class ProcessDataIndexPostgreSqlIT extends AbstractProcessDataIndexIT {

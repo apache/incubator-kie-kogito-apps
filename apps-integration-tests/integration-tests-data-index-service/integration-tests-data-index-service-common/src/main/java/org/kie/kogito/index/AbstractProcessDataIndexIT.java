@@ -225,33 +225,27 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"query { ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) {nodeDefinitions {id}} }\" }")
+                        .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) {nodeDefinitions {id}} }\"}")
                         .when().post("/graphql")
                         .then()
                         .statusCode(200)
                         .body("data.ProcessInstances.nodeDefinitions.size()", is(1)));
 
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"mutation{ ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
-                        .when().post("/graphql")
-                        .then().statusCode(200));
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}{}\"}")
+                .when().post("/graphql")
+                .then().statusCode(200);
 
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200));
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200));
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200);
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200);
     }
 
     protected String createTestProcessInstance() {

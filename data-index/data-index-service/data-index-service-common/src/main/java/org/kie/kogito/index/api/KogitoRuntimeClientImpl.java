@@ -107,7 +107,7 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     }
 
     @Override
-    public CompletableFuture getProcessInstanceDiagram(String serviceURL, ProcessInstance processInstance) {
+    public CompletableFuture<String> getProcessInstanceDiagram(String serviceURL, ProcessInstance processInstance) {
         String requestURI = format(GET_PROCESS_INSTANCE_DIAGRAM_URI, processInstance.getProcessId(), processInstance.getId());
         return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Process Instance diagram with id: " + processInstance.getId(), null);
     }
