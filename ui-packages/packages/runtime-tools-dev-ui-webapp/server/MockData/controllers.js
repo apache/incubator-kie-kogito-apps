@@ -282,6 +282,22 @@ module.exports = controller = {
     );
 
     res.send(JSON.stringify(getTaskSchema(req.params.taskName, true)));
+  },
+
+  getForms:(req,res)=>{
+    if(req.body.length===0){
+      res.send(formData)
+    }else{
+      const filteredForms=[];
+      req.body.forEach((name)=>{
+        formData.forEach((form)=>{
+          if(form.name===name){
+            filteredForms.push(form);
+          }
+        });
+      });
+      res.send(filteredForms)
+    }
   }
 };
 

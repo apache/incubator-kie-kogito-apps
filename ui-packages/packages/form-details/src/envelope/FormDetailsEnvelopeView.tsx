@@ -38,11 +38,12 @@ export const FormDetailsEnvelopeView = React.forwardRef<
     isEnvelopeConnectedToChannel,
     setEnvelopeConnectedToChannel
   ] = useState<boolean>(false);
-
+  const [formData, setFormData] = useState<FormInfo>(null);
   useImperativeHandle(
     forwardedRef,
     () => ({
-      initialize: () => {
+      initialize: (form: FormInfo) => {
+        setFormData(form);
         setEnvelopeConnectedToChannel(true);
       }
     }),
@@ -54,6 +55,7 @@ export const FormDetailsEnvelopeView = React.forwardRef<
       <FormDetails
         isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}
         driver={new FormDetailsEnvelopeViewDriver(props.channelApi)}
+        formData={formData}
       />
     </React.Fragment>
   );

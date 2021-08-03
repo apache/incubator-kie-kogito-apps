@@ -17,20 +17,24 @@
 import React from 'react';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { FormDetailsDriver } from '../../../api/FormDetailsDriver';
+import { FormInfo } from '@kogito-apps/forms-list';
 export interface FormDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: FormDetailsDriver;
+  formData: FormInfo;
 }
 
 const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
+  formData,
   ouiaId,
   ouiaSafe
 }) => {
+  console.log(formData);
   return (
     <div {...componentOuiaProps(ouiaId, 'form-details', ouiaSafe)}>
-      render form details
+      I am form details
     </div>
   );
 };

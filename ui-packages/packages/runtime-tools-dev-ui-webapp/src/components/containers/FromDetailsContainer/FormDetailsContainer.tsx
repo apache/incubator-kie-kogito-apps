@@ -20,9 +20,11 @@ import { useHistory } from 'react-router-dom';
 import { FormDetailsGatewayApi } from '../../../channel/FormDetails';
 import { useFormDetailsGatewayApi } from '../../../channel/FormDetails/FormDetailsContext';
 import { EmbeddedFormDetails } from '@kogito-apps/form-details';
+import { FormInfo } from '@kogito-apps/forms-list';
 
 const FormDetailsContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const history = useHistory();
+  const formData: FormInfo = history.location.state['formData'];
   const gatewayApi: FormDetailsGatewayApi = useFormDetailsGatewayApi();
   useEffect(() => {
     const unSubscribeHandler = gatewayApi.onOpenFormDetailsListener({
@@ -42,6 +44,7 @@ const FormDetailsContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
       {...componentOuiaProps(ouiaId, 'form-details-container', ouiaSafe)}
       driver={gatewayApi}
       targetOrigin={'*'}
+      formData={formData}
     />
   );
 };

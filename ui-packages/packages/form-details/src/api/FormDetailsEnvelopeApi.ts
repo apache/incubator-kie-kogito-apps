@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { FormInfo } from '@kogito-apps/forms-list';
+
 /**
  * Envelope Api
  */
@@ -22,7 +24,10 @@ export interface FormDetailsEnvelopeApi {
    * Initializes the envelope.
    * @param association
    */
-  formDetails__init(association: Association): Promise<void>;
+  formDetails__init(
+    association: Association,
+    formData: FormInfo
+  ): Promise<void>;
 }
 
 export interface Association {

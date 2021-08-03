@@ -53,10 +53,16 @@ export const EmbeddedFormDetails = React.forwardRef<FormDetailsApi, Props>(
             }
           }
         });
-        return envelopeServer.envelopeApi.requests.formDetails__init({
-          origin: envelopeServer.origin,
-          envelopeServerId: envelopeServer.id
-        });
+        return envelopeServer.envelopeApi.requests.formDetails__init(
+          {
+            origin: envelopeServer.origin,
+            envelopeServerId: envelopeServer.id
+          },
+          {
+            // @ts-ignore
+            formData: props.formData
+          }
+        );
       },
       []
     );

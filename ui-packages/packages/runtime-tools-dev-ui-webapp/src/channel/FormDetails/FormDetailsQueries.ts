@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-export interface FormDetailsApi {
-  // forms details api
+import { ApolloClient } from 'apollo-client';
+/* eslint-disable @typescript-eslint/no-empty-interface */
+export interface FormDetailsQueries {}
+
+export class GraphQLFormDetailsQueries implements FormDetailsQueries {
+  //@ts-ignore
+  private readonly client: ApolloClient<any>;
+
+  constructor(client: ApolloClient<any>) {
+    this.client = client;
+  }
 }
