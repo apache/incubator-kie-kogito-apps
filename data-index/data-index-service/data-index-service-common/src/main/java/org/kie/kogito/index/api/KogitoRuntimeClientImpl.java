@@ -25,8 +25,6 @@ import java.util.concurrent.CompletableFuture;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.kie.kogito.index.api.predicate.AbortProcessInstancePredicate;
-import org.kie.kogito.index.api.predicate.ProcessInstanceInErrorPredicate;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.service.DataIndexServiceException;
@@ -79,31 +77,19 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     @Override
     public CompletableFuture<String> abortProcessInstance(String serviceURL, ProcessInstance processInstance) {
         String requestURI = format(ABORT_PROCESS_INSTANCE_URI, processInstance.getProcessId(), processInstance.getId());
-        if (new AbortProcessInstancePredicate().test(processInstance)) {
-            return sendDeleteClientRequest(getWebClient(serviceURL), requestURI, "ABORT ProcessInstance with id: " + processInstance.getId());
-        }
-        LOGGER.info("Unable to complete abortProcessInstance regarding its status: " + processInstance.getState());
-        return CompletableFuture.failedFuture(new DataIndexServiceException("ProcessInstance can't be aborted regarding is not in ACTIVE State"));
+        return sendDeleteClientRequest(getWebClient(serviceURL), requestURI, "ABORT ProcessInstance with id: " + processInstance.getId());
     }
 
     @Override
     public CompletableFuture<String> retryProcessInstance(String serviceURL, ProcessInstance processInstance) {
         String requestURI = format(RETRY_PROCESS_INSTANCE_URI, processInstance.getProcessId(), processInstance.getId());
-        if (new ProcessInstanceInErrorPredicate().test(processInstance)) {
-            return sendPostClientRequest(getWebClient(serviceURL), requestURI, "RETRY ProcessInstance with id: " + processInstance.getId());
-        }
-        LOGGER.info("Unable to complete retryProcessInstance regarding its status: " + processInstance.getState());
-        return CompletableFuture.failedFuture(new DataIndexServiceException("ProcessInstance can't be retried regarding is not in ERROR State"));
+        return sendPostClientRequest(getWebClient(serviceURL), requestURI, "RETRY ProcessInstance with id: " + processInstance.getId());
     }
 
     @Override
     public CompletableFuture<String> skipProcessInstance(String serviceURL, ProcessInstance processInstance) {
         String requestURI = format(SKIP_PROCESS_INSTANCE_URI, processInstance.getProcessId(), processInstance.getId());
-        if (new ProcessInstanceInErrorPredicate().test(processInstance)) {
-            return sendPostClientRequest(getWebClient(serviceURL), requestURI, "SKIP ProcessInstance with id: " + processInstance.getId());
-        }
-        LOGGER.info("Unable to complete skipProcessInstance regarding its status: " + processInstance.getState());
-        return CompletableFuture.failedFuture(new DataIndexServiceException("ProcessInstance can't be skipped regarding is not in ERROR State"));
+        return sendPostClientRequest(getWebClient(serviceURL), requestURI, "SKIP ProcessInstance with id: " + processInstance.getId());
     }
 
     @Override

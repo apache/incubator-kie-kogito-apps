@@ -47,7 +47,6 @@ import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.SKIP_PROCESS_INST
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -102,13 +101,6 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testAbortProcessInstanceStatusCheck() {
-        ProcessInstance pI2 = createProcessInstance(PROCESS_INSTANCE_ID, ABORTED);
-        client.abortProcessInstance(SERVICE_URL, pI2);
-        verify(client, never()).sendDeleteClientRequest(any(), anyString(), anyString());
-    }
-
-    @Test
     public void testRetryProcessInstanceOne() {
         when(webClientMock.post(any())).thenReturn(httpRequestMock);
         when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
@@ -129,13 +121,6 @@ public class KogitoRuntimeClientTest {
         handlerCaptor.getValue().handle(successfulMockAsyncResult);
 
         verify(response).bodyAsString();
-    }
-
-    @Test
-    public void testRetryProcessInstanceStatusCheck() {
-        ProcessInstance pI2 = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
-        client.retryProcessInstance(SERVICE_URL, pI2);
-        verify(client, never()).sendPostClientRequest(any(), anyString(), anyString());
     }
 
     @Test
@@ -160,13 +145,6 @@ public class KogitoRuntimeClientTest {
         handlerCaptor.getValue().handle(successfulMockAsyncResult);
 
         verify(response).bodyAsString();
-    }
-
-    @Test
-    public void testSkipProcessInstanceStatusCheck() {
-        ProcessInstance pI2 = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
-        client.skipProcessInstance(SERVICE_URL, pI2);
-        verify(client, never()).sendPostClientRequest(any(), anyString(), anyString());
     }
 
     @Test
