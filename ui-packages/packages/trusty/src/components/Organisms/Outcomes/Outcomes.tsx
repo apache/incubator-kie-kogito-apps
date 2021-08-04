@@ -23,7 +23,7 @@ import {
   isItemObjectMultiArray
 } from '../../../types';
 import './Outcomes.scss';
-import { componentOuiaProps } from '@kogito-apps/ouia-tools';
+import { ouiaAttribute, componentOuiaProps } from '@kogito-apps/ouia-tools';
 
 type OutcomesProps =
   | {
@@ -138,13 +138,13 @@ type OutcomeCardProps = {
   titleAsLabel?: boolean;
 };
 
-const OutcomeCard = (props: OutcomeCardProps, ouiaId) => {
+const OutcomeCard = (props: OutcomeCardProps) => {
   const { children, outcome, onExplanation, titleAsLabel = false } = props;
   return (
     <Card
       className="outcome-cards__card outcome-cards__card--list-view"
+      {...ouiaAttribute('data-ouia-component-type', 'outcome-card')}
       isHoverable
-      {...componentOuiaProps(ouiaId, 'outcome-card')}
     >
       <CardHeader>
         {titleAsLabel ? (
@@ -245,17 +245,28 @@ const OutcomeProperty = (props: {
 
   if (bigOutcome) {
     return (
-      <div className="outcome__property__value--bigger">
+      <div
+        className="outcome__property__value--bigger"
+        data-ouia-component-type="simple-property-value"
+      >
         <FormattedValue value={property.value} />
       </div>
     );
   } else {
     return (
       <Split key={uuid()} className="outcome__property">
-        <SplitItem className="outcome__property__name" key="property-name">
+        <SplitItem
+          className="outcome__property__name"
+          key="property-name"
+          {...ouiaAttribute('data-ouia-component-type', 'property-name')}
+        >
           {hidePropertyName ? 'Result' : property.name}:
         </SplitItem>
-        <SplitItem className="outcome__property__value" key="property-value">
+        <SplitItem
+          className="outcome__property__value"
+          key="property-value"
+          {...ouiaAttribute('data-ouia-component-type', 'property-value')}
+        >
           <FormattedValue value={property.value} />
         </SplitItem>
       </Split>
@@ -279,7 +290,7 @@ const OutcomeComposed = (
       <div
         className="outcome-item"
         key={subItem.name}
-        {...componentOuiaProps(ouiaId, 'outcome-item')}
+        {...ouiaAttribute('data-ouia-component-type', 'outcome-property')}
       >
         {renderOutcome(subItem, name, compact)}
       </div>
@@ -288,7 +299,12 @@ const OutcomeComposed = (
   return (
     <>
       <div className="outcome__title outcome__title--struct" key={uuid()}>
-        <span className="outcome__property__name">{outcome.name}</span>
+        <span
+          className="outcome__property__name"
+          {...ouiaAttribute('data-ouia-component-type', 'outcome-name')}
+        >
+          {outcome.name}
+        </span>
       </div>
       <div className="outcome outcome--struct" key={outcome.name}>
         {renderItems.map(item => item)}
@@ -308,12 +324,17 @@ const OutcomeSubList = (props: OutcomeSubListProps) => {
       {subListItem &&
         subListItem.map(item => (
           <Split key={uuid()} className="outcome__property">
-            <SplitItem className="outcome__property__name" key="property-name">
+            <SplitItem
+              className="outcome__property__name"
+              key="property-name"
+              {...ouiaAttribute('data-ouia-component-type', 'property-name')}
+            >
               {item.name}:
             </SplitItem>
             <SplitItem
               className="outcome__property__value"
               key="property-value"
+              {...ouiaAttribute('data-ouia-component-type', 'property-value')}
             >
               <FormattedValue value={item.value} />
             </SplitItem>
@@ -329,13 +350,13 @@ type LightCardProps = {
   isHoverable?: boolean;
 };
 
-const LightCard = (props: LightCardProps, ouiaId) => {
+const LightCard = (props: LightCardProps) => {
   const { children, className = '', isHoverable = false } = props;
   return (
     <Card
       className={className}
       isHoverable={isHoverable}
-      {...componentOuiaProps(ouiaId, 'outcome-card')}
+      {...ouiaAttribute('data-ouia-component-type', 'outcome-card')}
     >
       <CardBody>{children}</CardBody>
     </Card>

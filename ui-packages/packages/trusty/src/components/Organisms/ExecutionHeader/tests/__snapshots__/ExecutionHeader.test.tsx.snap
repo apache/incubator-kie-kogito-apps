@@ -32,6 +32,7 @@ exports[`ExecutionHeader renders the execution info 1`] = `
   <Flex>
     <FlexItem>
       <Title
+        data-ouia-component-id="execution-title"
         headingLevel="h2"
         size="3xl"
       >
@@ -73,7 +74,9 @@ exports[`ExecutionHeader renders the execution info 1`] = `
         exitDelay={23}
         position="bottom"
       >
-        <div>
+        <div
+          data-ouia-component-id="execution-status"
+        >
           <ExecutionStatus
             result="success"
           />
