@@ -39,14 +39,15 @@ import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.ABORT_PROCESS_INSTANCE_URI;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_DIAGRAM_URI;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_NODE_DEFINITIONS_URI;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRY_PROCESS_INSTANCE_URI;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.SKIP_PROCESS_INSTANCE_URI;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.ABORT_PROCESS_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_DIAGRAM_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRY_PROCESS_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.SKIP_PROCESS_INSTANCE_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -84,42 +85,37 @@ public class KogitoRuntimeClientTest {
 
         client.abortProcessInstance(SERVICE_URL, pI);
         verify(client).sendDeleteClientRequest(webClientMock,
-                format(ABORT_PROCESS_INSTANCE_URI, pI.getProcessId(), pI.getId()),
+                format(ABORT_PROCESS_INSTANCE_PATH, pI.getProcessId(), pI.getId()),
                 "ABORT ProcessInstance with id: " + pI.getId());
-
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
-        handlerCaptor.getValue().handle(mock(AsyncResult.class));
-
-        AsyncResult successfulMockAsyncResult = mock(AsyncResult.class);
         HttpResponse response = mock(HttpResponse.class);
-        setupResponseMocks(successfulMockAsyncResult, response, true, 200);
 
-        handlerCaptor.getValue().handle(successfulMockAsyncResult);
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
 
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
         verify(response).bodyAsString();
     }
 
     @Test
-    public void testRetryProcessInstanceOne() {
+    public void testRetryProcessInstance() {
         when(webClientMock.post(any())).thenReturn(httpRequestMock);
         when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ERROR);
 
         client.retryProcessInstance(SERVICE_URL, pI);
         verify(client).sendPostClientRequest(webClientMock,
-                format(RETRY_PROCESS_INSTANCE_URI, pI.getProcessId(), pI.getId()),
+                format(RETRY_PROCESS_INSTANCE_PATH, pI.getProcessId(), pI.getId()),
                 "RETRY ProcessInstance with id: " + pI.getId());
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
-        handlerCaptor.getValue().handle(mock(AsyncResult.class));
-
-        AsyncResult successfulMockAsyncResult = mock(AsyncResult.class);
         HttpResponse response = mock(HttpResponse.class);
-        setupResponseMocks(successfulMockAsyncResult, response, true, 200);
 
-        handlerCaptor.getValue().handle(successfulMockAsyncResult);
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
 
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
         verify(response).bodyAsString();
     }
 
@@ -132,18 +128,16 @@ public class KogitoRuntimeClientTest {
 
         client.skipProcessInstance(SERVICE_URL, pI);
         verify(client).sendPostClientRequest(webClientMock,
-                format(SKIP_PROCESS_INSTANCE_URI, pI.getProcessId(), pI.getId()),
+                format(SKIP_PROCESS_INSTANCE_PATH, pI.getProcessId(), pI.getId()),
                 "SKIP ProcessInstance with id: " + pI.getId());
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
-        handlerCaptor.getValue().handle(mock(AsyncResult.class));
-
-        AsyncResult successfulMockAsyncResult = mock(AsyncResult.class);
         HttpResponse response = mock(HttpResponse.class);
-        setupResponseMocks(successfulMockAsyncResult, response, true, 200);
 
-        handlerCaptor.getValue().handle(successfulMockAsyncResult);
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
 
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
         verify(response).bodyAsString();
     }
 
@@ -156,18 +150,17 @@ public class KogitoRuntimeClientTest {
 
         client.getProcessInstanceDiagram(SERVICE_URL, pI);
         verify(client).sendGetClientRequest(webClientMock,
-                format(GET_PROCESS_INSTANCE_DIAGRAM_URI, pI.getProcessId(), pI.getId()),
+                format(GET_PROCESS_INSTANCE_DIAGRAM_PATH, pI.getProcessId(), pI.getId()),
                 "Get Process Instance diagram with id: " + pI.getId(),
                 null);
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
-        handlerCaptor.getValue().handle(mock(AsyncResult.class));
-
-        AsyncResult successfulMockAsyncResult = mock(AsyncResult.class);
         HttpResponse response = mock(HttpResponse.class);
-        setupResponseMocks(successfulMockAsyncResult, response, true, 200);
 
-        handlerCaptor.getValue().handle(successfulMockAsyncResult);
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
         verify(response).bodyAsString();
     }
 
@@ -180,18 +173,17 @@ public class KogitoRuntimeClientTest {
 
         client.getProcessInstanceNodeDefinitions(SERVICE_URL, pI);
         verify(client).sendGetClientRequest(webClientMock,
-                format(GET_PROCESS_INSTANCE_NODE_DEFINITIONS_URI, pI.getProcessId(), pI.getId()),
+                format(GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH, pI.getProcessId(), pI.getId()),
                 "Get Process Instance available nodes with id: " + pI.getId(),
                 List.class);
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
-        handlerCaptor.getValue().handle(mock(AsyncResult.class));
-
-        AsyncResult successfulMockAsyncResult = mock(AsyncResult.class);
         HttpResponse response = mock(HttpResponse.class);
-        setupResponseMocks(successfulMockAsyncResult, response, true, 200);
 
-        handlerCaptor.getValue().handle(successfulMockAsyncResult);
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsJson(List.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
         verify(response).bodyAsJson(List.class);
     }
 
@@ -227,10 +219,12 @@ public class KogitoRuntimeClientTest {
         assertThat(client.getWebClientToURLOptions("malformedURL")).isNull();
     }
 
-    private void setupResponseMocks(AsyncResult successfulMockAsyncResult, HttpResponse response, boolean succeed, int statusCode) {
-        when(successfulMockAsyncResult.succeeded()).thenReturn(succeed);
-        when(successfulMockAsyncResult.result()).thenReturn(response);
+    private AsyncResult createResponseMocks(HttpResponse response, boolean succeed, int statusCode) {
+        AsyncResult asyncResultMock = mock(AsyncResult.class);
+        when(asyncResultMock.succeeded()).thenReturn(succeed);
+        when(asyncResultMock.result()).thenReturn(response);
         when(response.statusCode()).thenReturn(statusCode);
+        return asyncResultMock;
     }
 
     private ProcessInstance createProcessInstance(String processInstanceId, int status) {

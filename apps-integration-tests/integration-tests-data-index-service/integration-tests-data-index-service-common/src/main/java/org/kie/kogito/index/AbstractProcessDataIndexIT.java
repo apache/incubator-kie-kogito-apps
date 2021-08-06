@@ -28,8 +28,10 @@ import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 import static java.util.Collections.singletonMap;
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public abstract class AbstractProcessDataIndexIT {
 
@@ -44,6 +46,10 @@ public abstract class AbstractProcessDataIndexIT {
     public abstract String getDataIndexURL();
 
     public boolean validateDomainData() {
+        return true;
+    }
+
+    public boolean checkRuntimeConnectionsResponses() {
         return true;
     }
 
@@ -221,31 +227,76 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> getProcessInstanceById(pId2, "ACTIVE"));
+        if (checkRuntimeConnectionsResponses()) {
+            await()
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { nodeDefinitions {id} nodes {id}} }\"}")
+                            .when().post("/graphql")
+                            .then()
+                            .statusCode(200)
+                            .body("data.ProcessInstances[0].nodeDefinitions", notNullValue())
+                            .body("data.ProcessInstances[0].nodeDefinitions.size()", is(4))
+                            .body("data.ProcessInstances[0].nodes.size()", is(2)));
 
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) {nodeDefinitions {id}} }\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200)
-                        .body("data.ProcessInstances.nodeDefinitions.size()", is(1)));
+            await()
+                    .atMost(TIMEOUT).untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
+                            .when().post("/graphql")
+                            .then()
+                            .statusCode(200)
+                            .body("errors", nullValue()));
+            await()
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> getProcessInstanceById(pId2, "ABORTED"));
 
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}{}\"}")
-                .when().post("/graphql")
-                .then().statusCode(200);
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("data.ProcessInstanceRetry", nullValue());
 
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200);
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200);
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("errors[0].message", containsString("FAILED: SKIP"));
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation{ UndefinedMutation( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("errors[0].message", containsString("Field 'UndefinedMutation' in type 'Mutation' is undefined"));
+        } else {
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200);
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200);
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200);
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"mutation{ UndefinedMutation( id: \\\"" + pId2 + "\\\")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("errors[0].message", containsString("Field 'UndefinedMutation' in type 'Mutation' is undefined"));
+        }
     }
 
     protected String createTestProcessInstance() {

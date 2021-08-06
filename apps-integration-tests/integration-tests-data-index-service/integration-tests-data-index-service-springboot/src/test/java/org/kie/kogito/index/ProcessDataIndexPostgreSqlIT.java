@@ -50,6 +50,11 @@ public class ProcessDataIndexPostgreSqlIT extends AbstractProcessDataIndexIT {
         return false;
     }
 
+    @Override
+    public boolean checkRuntimeConnectionsResponses() {
+        return false;
+    }
+
     @BeforeEach
     public void setup() {
         RestAssured.port = httpPort;

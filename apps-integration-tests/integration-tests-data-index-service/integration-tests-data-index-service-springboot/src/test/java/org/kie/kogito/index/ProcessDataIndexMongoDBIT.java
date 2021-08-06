@@ -50,4 +50,8 @@ public class ProcessDataIndexMongoDBIT extends AbstractProcessDataIndexIT {
         RestAssured.port = httpPort;
     }
 
+    @Override
+    public boolean checkRuntimeConnectionsResponses() {
+        return false;
+    }
 }

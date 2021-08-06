@@ -42,11 +42,11 @@ import static java.lang.String.format;
 @ApplicationScoped
 public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
 
-    public static final String ABORT_PROCESS_INSTANCE_URI = "/management/processes/%s/instances/%s";
-    public static final String RETRY_PROCESS_INSTANCE_URI = "/management/processes/%s/instances/%s/retrigger";
-    public static final String SKIP_PROCESS_INSTANCE_URI = "/management/processes/%s/instances/%s/skip";
-    public static final String GET_PROCESS_INSTANCE_DIAGRAM_URI = "/svg/processes/%s/instances/%s";
-    public static final String GET_PROCESS_INSTANCE_NODE_DEFINITIONS_URI = "/management/processes/%s/nodes";
+    public static final String ABORT_PROCESS_INSTANCE_PATH = "/management/processes/%s/instances/%s";
+    public static final String RETRY_PROCESS_INSTANCE_PATH = "/management/processes/%s/instances/%s/retrigger";
+    public static final String SKIP_PROCESS_INSTANCE_PATH = "/management/processes/%s/instances/%s/skip";
+    public static final String GET_PROCESS_INSTANCE_DIAGRAM_PATH = "/svg/processes/%s/instances/%s";
+    public static final String GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH = "/management/processes/%s/nodes";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KogitoRuntimeClientImpl.class);
     private Vertx vertx;
@@ -76,37 +76,38 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
 
     @Override
     public CompletableFuture<String> abortProcessInstance(String serviceURL, ProcessInstance processInstance) {
-        String requestURI = format(ABORT_PROCESS_INSTANCE_URI, processInstance.getProcessId(), processInstance.getId());
+        String requestURI = format(ABORT_PROCESS_INSTANCE_PATH, processInstance.getProcessId(), processInstance.getId());
         return sendDeleteClientRequest(getWebClient(serviceURL), requestURI, "ABORT ProcessInstance with id: " + processInstance.getId());
     }
 
     @Override
     public CompletableFuture<String> retryProcessInstance(String serviceURL, ProcessInstance processInstance) {
-        String requestURI = format(RETRY_PROCESS_INSTANCE_URI, processInstance.getProcessId(), processInstance.getId());
+        String requestURI = format(RETRY_PROCESS_INSTANCE_PATH, processInstance.getProcessId(), processInstance.getId());
         return sendPostClientRequest(getWebClient(serviceURL), requestURI, "RETRY ProcessInstance with id: " + processInstance.getId());
     }
 
     @Override
     public CompletableFuture<String> skipProcessInstance(String serviceURL, ProcessInstance processInstance) {
-        String requestURI = format(SKIP_PROCESS_INSTANCE_URI, processInstance.getProcessId(), processInstance.getId());
+        String requestURI = format(SKIP_PROCESS_INSTANCE_PATH, processInstance.getProcessId(), processInstance.getId());
         return sendPostClientRequest(getWebClient(serviceURL), requestURI, "SKIP ProcessInstance with id: " + processInstance.getId());
     }
 
     @Override
     public CompletableFuture<String> getProcessInstanceDiagram(String serviceURL, ProcessInstance processInstance) {
-        String requestURI = format(GET_PROCESS_INSTANCE_DIAGRAM_URI, processInstance.getProcessId(), processInstance.getId());
+        String requestURI = format(GET_PROCESS_INSTANCE_DIAGRAM_PATH, processInstance.getProcessId(), processInstance.getId());
         return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Process Instance diagram with id: " + processInstance.getId(), null);
     }
 
     @Override
     public CompletableFuture<List<Node>> getProcessInstanceNodeDefinitions(String serviceURL, ProcessInstance processInstance) {
-        String requestURI = format(GET_PROCESS_INSTANCE_NODE_DEFINITIONS_URI, processInstance.getProcessId());
+        String requestURI = format(GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH, processInstance.getProcessId());
         return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Process Instance available nodes with id: " + processInstance.getId(), List.class);
     }
 
     protected CompletableFuture sendDeleteClientRequest(WebClient webClient, String requestURI, String logMessage) {
         CompletableFuture future = new CompletableFuture<>();
-        webClient.delete(requestURI).putHeader("Authorization", getAuthHeader())
+        webClient.delete(requestURI)
+                .putHeader("Authorization", getAuthHeader())
                 .send(res -> {
                     if (res.succeeded() && (res.result().statusCode() == 200)) {
                         future.complete(res.result().bodyAsString());

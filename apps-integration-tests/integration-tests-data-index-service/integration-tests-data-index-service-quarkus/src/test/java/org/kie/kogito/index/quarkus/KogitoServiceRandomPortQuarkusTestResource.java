@@ -40,6 +40,7 @@ public class KogitoServiceRandomPortQuarkusTestResource extends ConditionalQuark
 
     @Override
     protected Map<String, String> getProperties() {
+        System.setProperty(QUARKUS_SERVICE_HTTP_PORT, String.valueOf(getTestResource().getMappedPort()));
         return singletonMap(QUARKUS_SERVICE_HTTP_PORT, String.valueOf(getTestResource().getMappedPort()));
     }
 }
