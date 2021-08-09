@@ -3,7 +3,10 @@ import {
   Checkbox,
   FormGroup,
   Switch,
+  Text,
+  TextContent,
   TextInput,
+  TextVariants,
   Touchspin
 } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
@@ -57,15 +60,20 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
 
   return (
     <>
+      <FormGroup fieldId={goal.id} label={goal.name}>
+        {valueEdit}
+      </FormGroup>
       <Checkbox
         id={goal.id}
+        className="counterfactual-outcome__floating"
         isChecked={goal.role === CFGoalRole.FLOATING}
         onChange={checked => {
           let updatedRole = CFGoalRole.FIXED;
+          if (goal.value === goal.originalValue) {
+            updatedRole = CFGoalRole.ORIGINAL;
+          }
           if (checked) {
             updatedRole = CFGoalRole.FLOATING;
-          } else if (goal.value === goal.originalValue) {
-            updatedRole = CFGoalRole.ORIGINAL;
           }
           onUpdateGoal({
             ...goal,
@@ -73,14 +81,13 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
           });
         }}
         label={
-          <FormGroup
-            fieldId={goal.id}
-            label={goal.name}
-            style={{ paddingTop: '4px' }}
-          />
+          <TextContent>
+            <Text component={TextVariants.small}>
+              Automatically adjust for counterfactual.
+            </Text>
+          </TextContent>
         }
       />
-      <div className={'counterfactual-outcome__child'}>{valueEdit}</div>
     </>
   );
 };

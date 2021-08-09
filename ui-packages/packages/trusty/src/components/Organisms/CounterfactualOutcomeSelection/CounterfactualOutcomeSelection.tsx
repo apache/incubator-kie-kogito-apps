@@ -35,6 +35,14 @@ const CounterfactualOutcomeSelection = (
     [editingGoals]
   );
 
+  const areAllDesiredOutcomeFloating = useCallback(
+    () =>
+      editingGoals
+        .filter(goal => goal.role !== CFGoalRole.UNSUPPORTED)
+        .every(goal => goal.role === CFGoalRole.FLOATING),
+    [editingGoals]
+  );
+
   const updateGoal = (updatedGoal: CFGoal) => {
     const updatedGoals = editingGoals.map(goal => {
       if (goal.id !== updatedGoal.id) {
@@ -43,11 +51,12 @@ const CounterfactualOutcomeSelection = (
       if (goal.role === CFGoalRole.UNSUPPORTED) {
         return goal;
       }
-      let updatedRole = CFGoalRole.FIXED;
-      if (updatedGoal.role === CFGoalRole.FLOATING) {
-        updatedRole = CFGoalRole.FLOATING;
-      } else if (updatedGoal.value === updatedGoal.originalValue) {
-        updatedRole = CFGoalRole.ORIGINAL;
+      let updatedRole = CFGoalRole.FLOATING;
+      if (updatedGoal.role !== CFGoalRole.FLOATING) {
+        updatedRole = CFGoalRole.FIXED;
+        if (updatedGoal.value === updatedGoal.originalValue) {
+          updatedRole = CFGoalRole.ORIGINAL;
+        }
       }
       return {
         ...updatedGoal,
@@ -76,85 +85,122 @@ const CounterfactualOutcomeSelection = (
     onClose();
   };
 
-  return (
-    <>
-      <Modal
-        variant={ModalVariant.medium}
-        aria-label="Counterfactual desired outcomes"
-        title="Select the desired outcomes"
-        isOpen={isOpen}
-        onClose={onClose}
-        description="Define the desired outcome that must be achieved by the counterfactual scenarios."
-        actions={[
+  const modalActions = useCallback(() => {
+    const actions = isDesiredOutcomeDefined()
+      ? [
           <Button
             key="confirm"
             variant="primary"
+            aria-label="Run Counterfactual Analysis"
             onClick={handleApply}
-            isDisabled={!isDesiredOutcomeDefined()}
           >
             Confirm
-          </Button>,
-          <Button key="cancel" variant="link" onClick={onClose}>
-            Cancel
           </Button>
-        ]}
+        ]
+      : [
+          // See https://github.com/patternfly/patternfly-react/pull/5991.
+          // We will currently get a memory leak error. Fixed in @patternfly/react-core@4.135.6
+          <Tooltip
+            key="cf-outcomes-confirm"
+            position="top"
+            content={
+              <div>
+                At least one desired outcome must have a value that is different
+                from the original outcome.
+              </div>
+            }
+          >
+            <Button
+              key="confirm"
+              variant="primary"
+              aria-label="Run Counterfactual Analysis"
+              isAriaDisabled={!isDesiredOutcomeDefined()}
+            >
+              Confirm
+            </Button>
+          </Tooltip>
+        ];
+    actions.push(
+      <Button key="cancel" variant="link" onClick={onClose}>
+        Cancel
+      </Button>
+    );
+    return actions;
+  }, [isDesiredOutcomeDefined]);
+
+  return (
+    <>
+      <Modal
+        variant={ModalVariant.large}
+        aria-label="Counterfactual desired outcomes"
+        title="Specify desired outcomes"
+        isOpen={isOpen}
+        onClose={onClose}
+        description="Specify desired counterfactual outcomes for one or more original decision outcomes."
+        actions={modalActions()}
       >
-        {!isDesiredOutcomeDefined() && (
-          <Alert
-            variant="warning"
-            isInline={true}
-            title="At least one desired outcome must have an explicit value set different to the original."
-          />
-        )}
-        <Form className="counterfactual__outcomes-form">
-          <div className="counterfactual__outcomes-grid">
-            <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-grid__separator">
-              <Title headingLevel="h5" size={TitleSizes.lg}>
-                Original decision outcome
-                <Tooltip content={<div>Outcome of the original decision.</div>}>
-                  <Button variant="plain">
-                    <InfoCircleIcon
-                      color={'var(--pf-global--info-color--100)'}
+        <>
+          {areAllDesiredOutcomeFloating() && (
+            <Alert
+              variant="info"
+              isInline={true}
+              title="At least one desired counterfactual outcome cannot be automatically adjusted."
+              className="counterfactual__outcomes-alert"
+            />
+          )}
+          <Form className="counterfactual__outcomes-form">
+            <div className="counterfactual__outcomes-grid">
+              <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-form__original">
+                <Title headingLevel="h4" size={TitleSizes.md}>
+                  Original decision outcome
+                  <Tooltip
+                    content={<div>Outcome of the original decision.</div>}
+                  >
+                    <Button variant="plain">
+                      <InfoCircleIcon
+                        color={'var(--pf-global--info-color--100)'}
+                      />
+                    </Button>
+                  </Tooltip>
+                </Title>
+              </div>
+              <div className="counterfactual__outcomes-grid__row">
+                <Title headingLevel="h4" size={TitleSizes.md}>
+                  Desired counterfactual outcome
+                  <Tooltip
+                    content={
+                      <div>
+                        Outcome to be fulfilled by the counterfactual
+                        processing.
+                      </div>
+                    }
+                  >
+                    <Button variant="plain">
+                      <InfoCircleIcon
+                        color={'var(--pf-global--info-color--100)'}
+                      />
+                    </Button>
+                  </Tooltip>
+                </Title>
+              </div>
+              {editingGoals.map((goal, index) => (
+                <React.Fragment key={index}>
+                  <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-form__original">
+                    <CounterfactualOutcome key={index} goal={goal} />
+                  </div>
+                  <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-form__desired">
+                    <CounterfactualOutcomeEdit
+                      key={index}
+                      goal={goal}
+                      index={index}
+                      onUpdateGoal={updateGoal}
                     />
-                  </Button>
-                </Tooltip>
-              </Title>
+                  </div>
+                </React.Fragment>
+              ))}
             </div>
-            <div className="counterfactual__outcomes-grid__row">
-              <Title headingLevel="h5" size={TitleSizes.lg}>
-                Desired counterfactual outcome
-                <Tooltip
-                  content={
-                    <div>
-                      Outcome to be fulfilled by the counterfactual processing.
-                    </div>
-                  }
-                >
-                  <Button variant="plain">
-                    <InfoCircleIcon
-                      color={'var(--pf-global--info-color--100)'}
-                    />
-                  </Button>
-                </Tooltip>
-              </Title>
-            </div>
-            {editingGoals.map((goal, index) => (
-              <React.Fragment key={index}>
-                <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-grid__separator">
-                  <CounterfactualOutcome key={index} goal={goal} />
-                </div>
-                <div className="counterfactual__outcomes-grid__row counterfactual__outcomes-form__desired">
-                  <CounterfactualOutcomeEdit
-                    key={index}
-                    goal={goal}
-                    index={index}
-                    onUpdateGoal={updateGoal}
-                  />
-                </div>
-              </React.Fragment>
-            ))}
-          </div>
-        </Form>
+          </Form>
+        </>
       </Modal>
     </>
   );

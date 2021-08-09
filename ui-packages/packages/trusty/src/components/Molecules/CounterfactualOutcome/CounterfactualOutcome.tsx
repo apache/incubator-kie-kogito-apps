@@ -29,7 +29,7 @@ const CounterfactualOutcome = (props: CounterfactualOutcomeProps) => {
   }
 
   return (
-    <FormGroup label={goal.name} fieldId={goal.id}>
+    <FormGroup fieldId={goal.id} label={goal.name}>
       {value}
     </FormGroup>
   );
