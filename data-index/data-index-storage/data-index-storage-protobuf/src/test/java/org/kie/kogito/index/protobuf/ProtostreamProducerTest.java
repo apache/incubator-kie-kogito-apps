@@ -40,8 +40,8 @@ class ProtostreamProducerTest {
         try {
             FileDescriptorSource fileDescriptorSource = protostreamProducer.kogitoTypesDescriptor();
 
-            assertTrue(fileDescriptorSource.getFileDescriptors().containsKey(KOGITO_INDEX_PROTO));
-            assertTrue(fileDescriptorSource.getFileDescriptors().containsKey(KOGITO_TYPES_PROTO));
+            assertTrue(fileDescriptorSource.getFiles().containsKey(KOGITO_INDEX_PROTO));
+            assertTrue(fileDescriptorSource.getFiles().containsKey(KOGITO_TYPES_PROTO));
         } catch (IOException e) {
             fail("Failed with IOException", e);
         }
