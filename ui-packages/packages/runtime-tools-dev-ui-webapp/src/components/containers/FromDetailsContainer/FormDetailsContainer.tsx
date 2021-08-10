@@ -22,10 +22,17 @@ import { useFormDetailsGatewayApi } from '../../../channel/FormDetails/FormDetai
 import { EmbeddedFormDetails } from '@kogito-apps/form-details';
 import { FormInfo } from '@kogito-apps/forms-list';
 
-const FormDetailsContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
+interface FormDetailSContainerProps {
+  formData: FormInfo;
+}
+const FormDetailsContainer: React.FC<FormDetailSContainerProps & OUIAProps> = ({
+  formData,
+  ouiaId,
+  ouiaSafe
+}) => {
   const history = useHistory();
-  const formData: FormInfo = history.location.state['formData'];
   const gatewayApi: FormDetailsGatewayApi = useFormDetailsGatewayApi();
+
   useEffect(() => {
     const unSubscribeHandler = gatewayApi.onOpenFormDetailsListener({
       onOpen(name: string) {

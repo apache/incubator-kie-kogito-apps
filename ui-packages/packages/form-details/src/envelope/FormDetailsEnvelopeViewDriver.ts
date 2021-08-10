@@ -26,4 +26,7 @@ export default class FormDetailsEnvelopeViewDriver
     // @ts-ignore
     private readonly channelApi: MessageBusClientApi<FormDetailsChannelApi>
   ) {}
+  getFormContent(formName: string): Promise<any[]> {
+    return this.channelApi.requests.formDetails__getFormContent(formName);
+  }
 }

@@ -87,10 +87,23 @@ module.exports = merge(common, {
           ),
           path.resolve(
             '../../node_modules/react-datetime-picker/dist/DateTimePicker.css'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/form-details/dist/styles/styles.css'
+          )
+        ],
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.css$/,
+        include: [
+          path.resolve(
+            '../../node_modules/monaco-editor'
           )
         ],
         use: ['style-loader', 'css-loader']
       }
+      
     ]
   },
   resolve: {

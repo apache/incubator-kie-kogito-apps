@@ -25,7 +25,6 @@ import {
 import { FormDetailsChannelApiImpl } from './FormDetailsChannelApiImpl';
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { init } from '../envelope';
-
 export interface Props {
   targetOrigin: string;
   driver: FormDetailsDriver;

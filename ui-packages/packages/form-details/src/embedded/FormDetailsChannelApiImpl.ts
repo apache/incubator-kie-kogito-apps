@@ -22,4 +22,8 @@ import { FormDetailsDriver, FormDetailsChannelApi } from '../api';
 export class FormDetailsChannelApiImpl implements FormDetailsChannelApi {
   // @ts-ignore
   constructor(private readonly driver: FormDetailsDriver) {}
+
+  formDetails__getFormContent(formName: string): Promise<any[]> {
+    return this.driver.getFormContent(formName);
+  }
 }

@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
 const CopyPlugin = require("copy-webpack-plugin");
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -13,6 +14,11 @@ module.exports = {
     envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts')
   },
   plugins: [
+    new MonacoWebpackPlugin({
+      languages: ['typescript', 'html', 'json'],
+      features: ['find', 'bracketMatching', 'comment', 'folding', 'suggest', 'contextmenu', 'coreCommands', 'rename', 'wordHighlighter', 'codeAction', 'clipboard', 'linesOperations', 'gotoError', 'rename', 'smartSelect', 'snippets', 'suggest', 'toggleHighContrast', 'toggleTabFocusMode', 'transpose', 'unusualLineTerminators', 'viewportSemanticTokens', 'wordHighlighter', 'wordOperations', 'wordPartOperations'],
+      globalAPI:true
+    }),
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Runtime tools dev-ui'
@@ -26,11 +32,19 @@ module.exports = {
       events: {
         onEnd: {
           copy: [
-            { source: './dist/envelope.js', destination: './dist/resources/webapp/envelope.js' },
+            { source: './dist/envelope.js', destination: './dist/resources/resources/webapp/envelope.js' },
+            { source: './dist/envelope.js', destination: './dist/resources/resources/webapp/envelope.js.map' },
+            { source: './dist/json.worker.js', destination: './dist/resources/resources/webapp/json.worker.js' },
+            { source: './dist/html.worker.js', destination: './dist/resources/resources/webapp/html.worker.js' },
+            { source: './dist/editor.worker.js', destination: './dist/resources/resources/webapp/editor.worker.js' },
+            { source: './dist/json.worker.js.map', destination: './dist/resources/resources/webapp/json.worker.js.map' },
+            { source: './dist/html.worker.js.map', destination: './dist/resources/resources/webapp/html.worker.js.map' },
+            { source: './dist/editor.worker.js.map', destination: './dist/resources/resources/webapp/editor.worker.js.map' }
+
           ]
         },
       },
-    }),
+    })
   ],
   module: {
     rules: [
@@ -87,6 +101,9 @@ module.exports = {
           path.resolve(
             '../../node_modules/@kogito-apps/task-form/dist/static'
           ),
+          path.resolve(
+            '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
+          )
         ],
         use: {
           loader: 'file-loader',

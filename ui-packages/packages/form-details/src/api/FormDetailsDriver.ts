@@ -17,4 +17,6 @@
 /**
  * Interface that defines a Driver for FormDetails views.
  */
-export interface FormDetailsDriver {}
+export interface FormDetailsDriver {
+  getFormContent(formName: string): Promise<any[]>;
+}

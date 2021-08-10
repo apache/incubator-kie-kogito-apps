@@ -16,6 +16,7 @@
 
 const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -56,6 +57,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@patternfly/patternfly/assets/pficon'
+          ),
+          path.resolve(
+            '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
           ),
           path.resolve('./src/static')
         ],
@@ -118,5 +122,12 @@ module.exports = {
     ],
     symlinks: false,
     cacheWithContext: false
-  }
+  },
+  plugins: [
+    new MonacoWebpackPlugin({
+      languages: ['typescript', 'html', 'json'],
+      features: ['find', 'bracketMatching', 'comment', 'folding', 'suggest', 'contextmenu', 'coreCommands', 'rename', 'wordHighlighter', 'codeAction', 'clipboard', 'linesOperations', 'gotoError', 'rename', 'smartSelect', 'snippets', 'suggest', 'toggleHighContrast', 'toggleTabFocusMode', 'transpose', 'unusualLineTerminators', 'viewportSemanticTokens', 'wordHighlighter', 'wordOperations', 'wordPartOperations'],
+      globalAPI:true
+    })
+  ]
 };

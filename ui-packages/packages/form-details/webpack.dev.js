@@ -42,6 +42,15 @@ module.exports = merge(common, {
           )
         ],
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.css$/,
+        include: [
+          path.resolve(
+            '../../node_modules/monaco-editor'
+          )
+        ],
+        use: ['style-loader', 'css-loader']
       }
     ]
   },

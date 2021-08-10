@@ -6,7 +6,7 @@ const confirmTravelForm = require('./forms/ConfirmTravel');
 const applyForVisaForm = require('./forms/ApplyForVisa');
 const emptyForm = require('./forms/EmptyForm');
 const formData = require('../MockData/forms/formData');
-
+const formContentData =require('../MockData/forms/FormContent');
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
   '841b9dba-3d91-4725-9de3-f9f4853b417e'
@@ -297,6 +297,14 @@ module.exports = controller = {
         });
       });
       res.send(filteredForms)
+    }
+  },
+
+  getFormContent:(req,res)=>{
+    const formName = req.params.formName;
+    const formContent = formContentData.filter((content)=>content.name===formName);
+    if(formContent){
+      res.send(formContent[0]);
     }
   }
 };

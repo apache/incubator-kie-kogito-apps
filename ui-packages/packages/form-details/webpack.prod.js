@@ -47,6 +47,20 @@ module.exports = merge(common, {
             publicPath: '../../',
           }
         }, 'css-loader']
+      },
+      {
+        test: /\.css$/,
+        include: [
+          path.resolve(
+            '../../node_modules/monaco-editor'
+          )
+        ],
+        use: [{
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            publicPath: '../../',
+          }
+        },'css-loader']
       }
     ]
   }

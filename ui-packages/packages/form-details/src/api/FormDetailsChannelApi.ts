@@ -17,4 +17,6 @@
 /**
  * Channel Api for Forms Details
  */
-export interface FormDetailsChannelApi {}
+export interface FormDetailsChannelApi {
+  formDetails__getFormContent(formName: string): Promise<any[]>;
+}

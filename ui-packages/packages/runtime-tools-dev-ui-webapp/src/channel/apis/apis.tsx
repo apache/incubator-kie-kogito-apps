@@ -306,3 +306,14 @@ export const getForms = (formFilter: string[]): Promise<FormInfo[]> => {
       .catch(error => reject(error));
   });
 };
+
+export const getFormContent = (formName: string): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`http://localhost:4000/forms/${formName}`)
+      .then(result => {
+        resolve(result.data);
+      })
+      .catch(error => reject(error));
+  });
+};
