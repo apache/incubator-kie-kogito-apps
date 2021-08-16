@@ -32,7 +32,7 @@ export type Props = {
   userTask: UserTaskInstance;
 };
 
-export const EmbeddedTaskDetails = React.forwardRef<TaskDetailsApi, Props>(
+export const EmbeddedTaskDetails = React.forwardRef<FormDisplayerApi, Props>(
   (props, forwardedRef) => {
     const pollInit = useCallback(
       (
@@ -75,10 +75,10 @@ export const EmbeddedTaskDetails = React.forwardRef<TaskDetailsApi, Props>(
     const refDelegate = useCallback(
       (
         envelopeServer: EnvelopeServer<
-          TaskDetailsChannelApi,
-          TaskDetailsEnvelopeApi
+          FormDisplayerChannelApi,
+          FormDisplayerEnvelopeApi
         >
-      ): TaskDetailsApi => {
+      ): FormDisplayerApi => {
         return {};
       },
       []

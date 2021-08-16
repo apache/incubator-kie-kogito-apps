@@ -36,6 +36,7 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
   FormDisplayerEnvelopeViewApi,
   Props
 >((props, forwardedRef) => {
+  // @ts-ignore
   const [task, setTask] = useState<UserTaskInstance>();
 
   useImperativeHandle(
