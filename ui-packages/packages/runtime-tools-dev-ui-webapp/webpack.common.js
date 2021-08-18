@@ -34,6 +34,7 @@ module.exports = {
           copy: [
             { source: './dist/*.js', destination: './dist/resources/resources/webapp' },
             { source: './dist/*.map', destination: './dist/resources/resources/webapp' },
+            { source: './fonts', destination: './dist/resources/resources/webapp' },
 
           ]
         },
