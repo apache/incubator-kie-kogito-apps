@@ -17,7 +17,7 @@ module.exports = {
     new MonacoWebpackPlugin({
       languages: ['typescript', 'html', 'json'],
       features: ['find', 'bracketMatching', 'comment', 'folding', 'suggest', 'contextmenu', 'coreCommands', 'rename', 'wordHighlighter', 'codeAction', 'clipboard', 'linesOperations', 'gotoError', 'rename', 'smartSelect', 'snippets', 'suggest', 'toggleHighContrast', 'toggleTabFocusMode', 'transpose', 'unusualLineTerminators', 'viewportSemanticTokens', 'wordHighlighter', 'wordOperations', 'wordPartOperations'],
-      globalAPI:true
+      globalAPI: true
     }),
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',
@@ -32,14 +32,8 @@ module.exports = {
       events: {
         onEnd: {
           copy: [
-            { source: './dist/envelope.js', destination: './dist/resources/resources/webapp/envelope.js' },
-            { source: './dist/envelope.js', destination: './dist/resources/resources/webapp/envelope.js.map' },
-            { source: './dist/json.worker.js', destination: './dist/resources/resources/webapp/json.worker.js' },
-            { source: './dist/html.worker.js', destination: './dist/resources/resources/webapp/html.worker.js' },
-            { source: './dist/editor.worker.js', destination: './dist/resources/resources/webapp/editor.worker.js' },
-            { source: './dist/json.worker.js.map', destination: './dist/resources/resources/webapp/json.worker.js.map' },
-            { source: './dist/html.worker.js.map', destination: './dist/resources/resources/webapp/html.worker.js.map' },
-            { source: './dist/editor.worker.js.map', destination: './dist/resources/resources/webapp/editor.worker.js.map' }
+            { source: './dist/*.js', destination: './dist/resources/resources/webapp' },
+            { source: './dist/*.map', destination: './dist/resources/resources/webapp' },
 
           ]
         },
@@ -193,8 +187,7 @@ module.exports = {
     ]
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    path: path.resolve(__dirname, 'dist')
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
