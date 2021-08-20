@@ -182,7 +182,7 @@ class ShapKernelExplainerTest {
         for (int i = 0; i < toExplain.size(); i++) {
             //explanations shape: outputSize x nfeatures
             Saliency[] explanationSaliencies = ske.explainAsync(predictions.get(i), model)
-                    .get(5, TimeUnit.SECONDS).saliencies;
+                    .get(5, TimeUnit.SECONDS).getSaliencies();
             double[][] explanations = saliencyToMatrix(explanationSaliencies)[0];
             for (int j = 0; j < explanations.length; j++) {
                 assertArrayEquals(expected[i][j], explanations[j], 1e-6);
@@ -213,7 +213,7 @@ class ShapKernelExplainerTest {
         for (int i = 0; i < toExplain.size(); i++) {
             //explanations shape: outputSize x nfeatures
             Saliency[] exlanationSaliencies = ske.explainAsync(predictions.get(i), model)
-                    .get(5, TimeUnit.SECONDS).saliencies;
+                    .get(5, TimeUnit.SECONDS).getSaliencies();
             double[][] explanations = saliencyToMatrix(exlanationSaliencies)[0];
             for (int j = 0; j < explanations.length; j++) {
                 assertArrayEquals(expected[i][j], explanations[j], 1e-6);
@@ -327,7 +327,7 @@ class ShapKernelExplainerTest {
         ShapKernelExplainer ske = new ShapKernelExplainer(skConfig);
         for (int i = 0; i < toExplain.size(); i++) {
             Saliency[] explanationSaliencies = ske.explainAsync(predictions.get(i), model)
-                    .get(5, TimeUnit.SECONDS).saliencies;
+                    .get(5, TimeUnit.SECONDS).getSaliencies();
             double[][][] explanationsAndConfs = saliencyToMatrix(explanationSaliencies);
             double[][] explanations = explanationsAndConfs[0];
 
@@ -374,7 +374,7 @@ class ShapKernelExplainerTest {
 
         ExecutorService executor = ForkJoinPool.commonPool();
         executor.submit(() -> {
-            Saliency[] explanationSaliencies = explanationsCF.join().saliencies;
+            Saliency[] explanationSaliencies = explanationsCF.join().getSaliencies();
             double[][] explanations = saliencyToMatrix(explanationSaliencies)[0];
             assertArrayEquals(expected[0][0], explanations[0], 1e-2);
         });
@@ -500,7 +500,7 @@ class ShapKernelExplainerTest {
                 ShapKernelExplainer ske = new ShapKernelExplainer(skConfig);
                 List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
                 Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
-                Saliency[] saliencies = ske.explainAsync(p, model).get().saliencies;
+                Saliency[] saliencies = ske.explainAsync(p, model).get().getSaliencies();
                 double[][][] explanationsAndConfs = saliencyToMatrix(saliencies);
                 double[][] explanations = explanationsAndConfs[0];
 

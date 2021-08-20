@@ -19,11 +19,19 @@ package org.kie.kogito.explainability.local.shap;
 import org.kie.kogito.explainability.model.Saliency;
 
 public class ShapResults {
-    public final Saliency[] saliencies;
-    public final double[] fnull;
+    private final Saliency[] saliencies;
+    private final double[] fnull;
 
     public ShapResults(Saliency[] saliencies, double[] fnull) {
         this.saliencies = saliencies;
         this.fnull = fnull;
+    }
+
+    public Saliency[] getSaliencies() {
+        return saliencies;
+    }
+
+    public double[] getFnull() {
+        return fnull;
     }
 }
