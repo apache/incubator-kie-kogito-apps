@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import {
   TableComposable,
   Tbody,
@@ -104,21 +110,25 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     });
   };
 
-  const onScrollUpdate = () => {
+  const onScrollUpdate = useCallback(() => {
     const width = scrollbars.current.getClientWidth();
     const scrollWidth = scrollbars.current.getScrollWidth();
     const currentPosition = scrollbars.current.getScrollLeft();
 
-    if (scrollWidth - currentPosition - width < 10) {
-      // disabling next button when reaching the right limit (with some tolerance)
-      setIsScrollDisabled({ prev: false, next: true });
-    } else if (currentPosition < 10) {
-      // disabling prev button when at the start (again with tolerance)
-      setIsScrollDisabled({ prev: true, next: false });
+    if (scrollWidth === width) {
+      setIsScrollDisabled({ prev: true, next: true });
     } else {
-      setIsScrollDisabled({ prev: false, next: false });
+      if (scrollWidth - currentPosition - width < 10) {
+        // disabling next button when reaching the right limit (with some tolerance)
+        setIsScrollDisabled({ prev: false, next: true });
+      } else if (currentPosition < 10) {
+        // disabling prev button when at the start (again with tolerance)
+        setIsScrollDisabled({ prev: true, next: false });
+      } else {
+        setIsScrollDisabled({ prev: false, next: false });
+      }
     }
-  };
+  }, [scrollbars]);
 
   const onSelectAll = (event, isSelected: boolean) => {
     dispatch({
@@ -163,6 +173,10 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   useEffect(() => {
     setDisplayedResults(convertCFResultsInputs(results));
   }, [results]);
+
+  useEffect(() => {
+    onScrollUpdate();
+  }, [displayedResults, onScrollUpdate]);
 
   const handleScrollbarRendering = (cssClass: string) => {
     return ({ style, ...props }) => {

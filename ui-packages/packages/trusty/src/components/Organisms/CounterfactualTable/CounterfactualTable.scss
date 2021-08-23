@@ -24,6 +24,7 @@
       position: absolute;
       bottom: 8px;
       left: 2px;
+      --pf-c-button--disabled--Color: var(--pf-global--disabled-color--200);
     }
   }
   &__ids-row td {
@@ -35,6 +36,7 @@
 @media screen and (min-width: 768px) {
   .cf-table--with-results {
     table-layout: fixed;
+    width: 100%;
     // separate border collapse needed to keep border bottom in thead th's with position sticky
     border-collapse: separate;
 
@@ -78,6 +80,8 @@
     tbody td:first-child {
       left: 0;
       width: 53px;
+      min-width: 53px;
+      max-width: 53px;
     }
     thead th:nth-child(2),
     tbody td:nth-child(2) {
@@ -103,10 +107,13 @@
     thead th:not(:first-child):not(.cf-table__slider-cell),
     tbody td:not(:first-child):not(.cf-table__slider-cell) {
       width: 200px;
+      min-width: 200px;
     }
     thead th.cf-table__slider-cell,
     thead td.cf-table__slider-cell {
       width: 30px;
+      min-width: 30px;
+      max-width: 30px;
     }
   }
 
@@ -150,8 +157,10 @@
     thead th:not(:first-child):not(.cf-table__slider-cell),
     tbody td:not(:first-child):not(.cf-table__slider-cell) {
       width: 250px;
+      min-width: 250px;
       &.cf-table__no-result-cell {
         width: 350px;
+        min-width: 350px;
       }
     }
   }
