@@ -126,7 +126,6 @@ module.exports = {
   plugins: [
     new MonacoWebpackPlugin({
       languages: ['typescript', 'html', 'json'],
-      features: ['find', 'bracketMatching', 'comment', 'folding', 'suggest', 'contextmenu', 'coreCommands', 'rename', 'wordHighlighter', 'codeAction', 'clipboard', 'linesOperations', 'gotoError', 'rename', 'smartSelect', 'snippets', 'suggest', 'toggleHighContrast', 'toggleTabFocusMode', 'transpose', 'unusualLineTerminators', 'viewportSemanticTokens', 'wordHighlighter', 'wordOperations', 'wordPartOperations'],
       globalAPI:true
     })
   ]

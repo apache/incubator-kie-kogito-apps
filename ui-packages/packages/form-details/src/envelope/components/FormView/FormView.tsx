@@ -62,21 +62,7 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
   const editorDidMount = (editor, monaco) => {
     setTimeout(() => {
       console.log(editor);
-      monaco.languages.registerDocumentFormattingEditProvider('json', {
-        provideDocumentFormattingEdits: function(model, options, token) {
-          return [
-            {
-              range: {
-                startLineNumber: 1,
-                startColumn: 1,
-                endLineNumber: 1,
-                endColumn: 1
-              },
-              text: 'a'
-            }
-          ];
-        }
-      });
+      console.log(monaco);
       editor.trigger('anyString', 'editor.action.formatDocument');
     }, 4000);
   };
@@ -93,12 +79,8 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
   //   }
   // }
   return (
-    <div
-      {...componentOuiaProps(ouiaId, 'form-view', ouiaSafe)}
-      id="code-editor-test"
-    >
+    <div {...componentOuiaProps(ouiaId, 'form-view', ouiaSafe)}>
       <CodeEditor
-        id="code-editor-test"
         isCopyEnabled
         isDarkTheme={false}
         isLineNumbersVisible={true}
@@ -131,7 +113,6 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
        // onChange={onChange}
         editorDidMount={editorDidMount}
       /> */}
-      <div id="render"></div>
     </div>
   );
 };
