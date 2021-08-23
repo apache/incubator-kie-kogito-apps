@@ -18,7 +18,7 @@
     <dependencies>
       <dependency>
         <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-springboot-bom</artifactId>
+        <artifactId>kogito-spring-boot-bom</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -42,6 +42,11 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>integration-tests-jobs-service-common</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-spring-boot-test-utils</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

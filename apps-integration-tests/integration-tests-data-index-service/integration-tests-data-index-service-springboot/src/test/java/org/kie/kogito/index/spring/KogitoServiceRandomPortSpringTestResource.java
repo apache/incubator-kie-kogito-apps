@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.resources;
+package org.kie.kogito.index.spring;
 
 import java.util.Map;
 
-import org.kie.kogito.it.KogitoServiceRandomPortTestResource;
+import org.kie.kogito.index.resources.KogitoServiceRandomPortTestResource;
+import org.kie.kogito.test.resources.ConditionalSpringBootTestResource;
 
 import static java.util.Collections.singletonMap;
 
-public class KogitoServiceRandomPortSpringBootTestResource extends ConditionalSpringBootTestResource<KogitoServiceRandomPortTestResource> {
+public class KogitoServiceRandomPortSpringTestResource extends ConditionalSpringBootTestResource<KogitoServiceRandomPortTestResource> {
 
     public static final String SPRINGBOOT_SERVICE_HTTP_PORT = "server.port";
 
-    public KogitoServiceRandomPortSpringBootTestResource() {
+    public KogitoServiceRandomPortSpringTestResource() {
         super(new KogitoServiceRandomPortTestResource());
     }
 
@@ -33,5 +34,4 @@ public class KogitoServiceRandomPortSpringBootTestResource extends ConditionalSp
     protected Map<String, String> getProperties() {
         return singletonMap(SPRINGBOOT_SERVICE_HTTP_PORT, String.valueOf(getTestResource().getMappedPort()));
     }
-
 }
