@@ -30,6 +30,7 @@ import {
   TabTitleText
 } from '@patternfly/react-core';
 import FormView from '../FormView/FormView';
+import { ServerErrors } from '@kogito-apps/components-common';
 import _ from 'lodash';
 
 export interface FormDetailsProps {
@@ -47,6 +48,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [formContent, setFormContent] = useState({});
+  const [error, setError] = useState<any>(null);
   useEffect(() => {
     if (isEnvelopeConnectedToChannel) {
       init();
@@ -60,11 +62,11 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
         setFormContent(response);
       }
     } catch (error) {
-      // handle error here
+      setError(error);
     }
   };
   const panelContent = (
-    <DrawerPanelContent isResizable defaultSize={'750px'} minSize={'400px'}>
+    <DrawerPanelContent isResizable defaultSize={'800px'} minSize={'700px'}>
       <DrawerHead>
         <span>render displayer here</span>
       </DrawerHead>
@@ -74,6 +76,22 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   const onTabSelect = (event, tabIndex) => {
     setActiveTab(tabIndex);
   };
+
+  const getSource = () => {
+    if (!_.isEmpty(formContent)) {
+      return formContent['source']['sourceContent'];
+    }
+  };
+
+  const getConfig = () => {
+    if (!_.isEmpty(formContent)) {
+      return JSON.stringify(formContent['formConfiguration']['resources']);
+    }
+  };
+
+  if (error) {
+    return <ServerErrors error={error} variant={'large'} />;
+  }
 
   return (
     <div {...componentOuiaProps(ouiaId, 'form-details', ouiaSafe)}>
@@ -86,42 +104,32 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   background: 'var(--pf-c-page__main-section--BackgroundColor)'
                 }}
               >
-                {/* <FormView
-                code={!_.isEmpty(formContent) && formContent['source']['sourceContent']}
-                  isSource={true}
-                  isConfig={false}
-                  formType={
-                    formData &&
-                    formData['formData'] &&
-                    formData['formData'].type
-                  }
-                  formContent={formContent}
-                  setFormContent={setFormContent}
-                /> */}
-                <FormView
-                  code={
-                    !_.isEmpty(formContent) && formContent['formConfiguration']
-                  }
-                  isSource={false}
-                  isConfig={true}
-                  formContent={formContent}
-                  setFormContent={setFormContent}
-                />
-                <Button variant="primary">Refresh</Button>
+                {activeTab === 0 && (
+                  <FormView
+                    code={getSource()}
+                    isSource
+                    formType={
+                      formData &&
+                      formData['formData'] &&
+                      formData['formData'].type
+                    }
+                  />
+                )}
+                <Button variant="primary" className="pf-u-mt-md">
+                  Refresh
+                </Button>
               </DrawerContentBody>
             </Tab>
             <Tab eventKey={1} title={<TabTitleText>Connections</TabTitleText>}>
-              <DrawerContentBody>
-                <FormView
-                  code={
-                    !_.isEmpty(formContent) && formContent['formConfiguration']
-                  }
-                  isSource={false}
-                  isConfig={true}
-                  formContent={formContent}
-                  setFormContent={setFormContent}
-                />
-                <Button variant="primary">Refresh</Button>
+              <DrawerContentBody
+                style={{
+                  background: 'var(--pf-c-page__main-section--BackgroundColor)'
+                }}
+              >
+                {activeTab === 1 && <FormView code={getConfig()} isConfig />}
+                <Button variant="primary" className="pf-u-mt-md">
+                  Refresh
+                </Button>
               </DrawerContentBody>
             </Tab>
           </Tabs>

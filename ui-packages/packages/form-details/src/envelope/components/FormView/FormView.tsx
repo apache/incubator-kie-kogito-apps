@@ -19,65 +19,38 @@ import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
 export interface FormViewProps {
   formType?: string;
-  formContent: any;
   isSource?: boolean;
   isConfig?: boolean;
-  setFormContent: any;
   code: string;
 }
 
 const FormView: React.FC<FormViewProps & OUIAProps> = ({
   code,
   formType,
-  formContent,
-  isSource,
-  isConfig,
-  setFormContent,
+  isSource = false,
+  isConfig = false,
   ouiaId,
   ouiaSafe
 }) => {
-  // const getFormLanguage = (): Language => {
-  //   if (isSource && formType) {
-  //     switch (formType) {
-  //       case 'tsx':
-  //         return Language.typescript;
-  //       case 'html':
-  //         return Language.html;
-  //     }
-  //   } else if (isConfig) {
-  //     return Language.json;
-  //   }
-  // };
-  //  function formatJSON(val) {
-  //     try {
-  //       const res = JSON.parse(JSON.stringify(val));
-  //       return JSON.stringify(res, null, 2)
-  //     } catch {
-  //       const errorJson = {
-  //         "error": `parsing json`
-  //       }
-  //       return JSON.stringify(errorJson, null, 2)
-  //     }
-  //   }
+  const getFormLanguage = (): Language => {
+    if (isSource && formType) {
+      switch (formType) {
+        case 'tsx':
+          return Language.typescript;
+        case 'html':
+          return Language.html;
+      }
+    } else if (isConfig) {
+      return Language.json;
+    }
+  };
+
   const editorDidMount = (editor, monaco) => {
     setTimeout(() => {
-      console.log(editor);
-      console.log(monaco);
       editor.trigger('anyString', 'editor.action.formatDocument');
-    }, 4000);
+    }, 500);
   };
-  // console.log(code)
-  // const onCodeChange = (value) => {
-  //   if (isSource) {
-  //     const newFormContent = JSON.parse(JSON.stringify(formContent));
-  //     newFormContent['source']['sourceContent'] = value;
-  //     setFormContent(newFormContent)
-  //   }else if(isConfig){
-  //     const newFormContent = JSON.parse(JSON.stringify(formContent));
-  //     newFormContent['formConfiguration'] = value;
-  //     setFormContent(newFormContent)
-  //   }
-  // }
+
   return (
     <div {...componentOuiaProps(ouiaId, 'form-view', ouiaSafe)}>
       <CodeEditor
@@ -87,32 +60,11 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
         isReadOnly={false}
         isMinimapVisible={false}
         isLanguageLabelVisible
-        code={JSON.stringify(code)}
-        language={Language.json}
-        height="600px"
+        code={code}
+        language={getFormLanguage()}
+        height="800px"
         onEditorDidMount={editorDidMount}
-        // onChange={onCodeChange}
       />
-      {/* <MonacoEditor
-        width="800"
-        height="600"
-        language="javascript"
-        theme="vs-dark"
-        value={ [
-          '"use strict";',
-          'function Person(age) {',
-          '	if (age) {',
-          '		this.age = age;',
-          '	}',
-          '}',
-          'Person.prototype.getAge = function () {',
-          '	return this.age;',
-          '};'
-        ].join('\n')}
-        options={{selectOnLineNumbers: true}}
-       // onChange={onChange}
-        editorDidMount={editorDidMount}
-      /> */}
     </div>
   );
 };
