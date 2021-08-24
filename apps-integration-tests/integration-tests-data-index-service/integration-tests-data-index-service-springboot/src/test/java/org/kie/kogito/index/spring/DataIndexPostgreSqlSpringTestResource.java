@@ -20,11 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kie.kogito.index.resources.DataIndexPostgreSqlResource;
-import org.kie.kogito.resources.ConditionalSpringBootTestResource;
+import org.kie.kogito.test.resources.ConditionalSpringBootTestResource;
 
 public class DataIndexPostgreSqlSpringTestResource extends ConditionalSpringBootTestResource<DataIndexPostgreSqlResource> {
 
-    public static final String KOGITO_DATA_INDEX_SERVICE_URL = "kogito.data-index-service.url";
+    public static final String KOGITO_DATA_INDEX_SERVICE_URL = "kogito.dataindex.http.url";
 
     public DataIndexPostgreSqlSpringTestResource() {
         super(new DataIndexPostgreSqlResource());

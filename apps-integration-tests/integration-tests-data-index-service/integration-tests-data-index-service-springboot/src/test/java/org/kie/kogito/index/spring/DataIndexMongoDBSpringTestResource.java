@@ -20,11 +20,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kie.kogito.index.resources.DataIndexMongoDBResource;
-import org.kie.kogito.resources.ConditionalSpringBootTestResource;
+import org.kie.kogito.test.resources.ConditionalSpringBootTestResource;
 
 public class DataIndexMongoDBSpringTestResource extends ConditionalSpringBootTestResource<DataIndexMongoDBResource> {
 
-    public static final String KOGITO_DATA_INDEX_SERVICE_URL = "kogito.data-index-service.url";
+    public static final String KOGITO_DATA_INDEX_SERVICE_URL = "kogito.dataindex.http.url";
 
     public DataIndexMongoDBSpringTestResource() {
         super(new DataIndexMongoDBResource());

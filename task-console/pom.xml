@@ -14,14 +14,10 @@
   <name>Kogito Apps :: Task Console</name>
 
   <properties>
-    <path.to.frontend.app>../ui-packages/packages/task-console</path.to.frontend.app>
+    <path.to.frontend.app>../ui-packages/packages/task-console-webapp</path.to.frontend.app>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>security-commons</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-web</artifactId>
@@ -119,29 +115,6 @@
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-                <configuration combine.self="override">
-                  <includes>
-                    <include>**/Native*IT.java</include>
-                  </includes>
-                  <systemProperties>
-                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                  </systemProperties>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 </project>

@@ -22,14 +22,15 @@
     "test:report": "yarn test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "yarn test --coverage",
+    "test:coverage": "rimraf coverage && yarn test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist",
     "codegen": "graphql-codegen"
   },
   "dependencies": {
-    "@kogito-apps/components-common": "^1.0.0"
+    "@kogito-apps/components-common": "^1.0.0",
+    "keycloak-js": "^13.0.1"
   },
   "devDependencies": {
     "@kogito-apps/ouia-tools": "^1.0.0",
@@ -52,6 +53,7 @@
       "./src/graphql",
       "dist/"
     ],
+    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],

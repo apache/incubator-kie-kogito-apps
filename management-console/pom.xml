@@ -14,14 +14,10 @@
   <name>Kogito Apps :: Management Console</name>
 
   <properties>
-    <path.to.frontend.app>../ui-packages/packages/management-console</path.to.frontend.app>
+    <path.to.frontend.app>../ui-packages/packages/management-console-webapp</path.to.frontend.app>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>security-commons</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-addons-quarkus-process-svg</artifactId>
@@ -112,6 +108,9 @@
           <name>native</name>
         </property>
       </activation>
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
     </profile>
   </profiles>
 </project>
