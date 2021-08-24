@@ -812,23 +812,23 @@ describe('handle node instance cancel', () => {
   });
 
   it('get forms query test - success', async () => {
-    mockedAxios.post.mockResolvedValue({
+    mockedAxios.get.mockResolvedValue({
       data: [
         {
           name: 'form1',
           type: 'html',
-          lastUpdate: new Date(2020, 6, 12)
+          lastModified: new Date(2020, 6, 12)
         }
       ]
     });
     const result = await getForms(['form1']);
     expect(result).toEqual([
-      { name: 'form1', type: 'html', lastUpdate: new Date(2020, 6, 12) }
+      { name: 'form1', type: 'html', lastModified: new Date(2020, 6, 12) }
     ]);
   });
 
   it('get forms query test - failure', async () => {
-    mockedAxios.post.mockRejectedValue({ errorMessage: 'failed to load data' });
+    mockedAxios.get.mockRejectedValue({ errorMessage: 'failed to load data' });
     try {
       await getForms(['form1']);
     } catch (error) {
