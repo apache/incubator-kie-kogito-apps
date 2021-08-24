@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.jobs.service.resource;
+package org.kie.kogito.explainability.local.shap;
 
-import org.junit.jupiter.api.TestInstance;
-import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
+import org.kie.kogito.explainability.model.Saliency;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.NativeImageTest;
+public class ShapResults {
+    private final Saliency[] saliencies;
+    private final double[] fnull;
 
-@NativeImageTest
-@QuarkusTestResource(MongoDBQuarkusTestResource.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class NativeMongoDBJobResourceIT extends MongoDBJobResourceIT {
+    public ShapResults(Saliency[] saliencies, double[] fnull) {
+        this.saliencies = saliencies;
+        this.fnull = fnull;
+    }
 
+    public Saliency[] getSaliencies() {
+        return saliencies;
+    }
+
+    public double[] getFnull() {
+        return fnull;
+    }
 }
