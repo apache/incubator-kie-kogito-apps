@@ -12,7 +12,7 @@ exports[`Form card tests renders card - with html 1`] = `
   }
 >
   <Card
-    data-ouia-component-type="forms-list"
+    data-ouia-component-type="forms-card"
     data-ouia-safe={true}
     isSelectable={true}
     onClick={[Function]}
@@ -200,7 +200,7 @@ exports[`Form card tests renders card - with tsx 1`] = `
   }
 >
   <Card
-    data-ouia-component-type="forms-list"
+    data-ouia-component-type="forms-card"
     data-ouia-safe={true}
     isSelectable={true}
     onClick={[Function]}

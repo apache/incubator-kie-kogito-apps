@@ -36,7 +36,7 @@ exports[`forms gallery tests renders gallery of forms 1`] = `
   isLoading={false}
 >
   <Gallery
-    data-ouia-component-type="forms-list"
+    data-ouia-component-type="forms-gallery"
     data-ouia-safe={true}
     hasGutter={true}
     style={
@@ -47,7 +47,7 @@ exports[`forms gallery tests renders gallery of forms 1`] = `
   >
     <div
       className="pf-l-gallery pf-m-gutter"
-      data-ouia-component-type="forms-list"
+      data-ouia-component-type="forms-gallery"
       data-ouia-safe={true}
       style={
         Object {
@@ -71,7 +71,7 @@ exports[`forms gallery tests renders gallery of forms 1`] = `
             key="0"
           >
             <Card
-              data-ouia-component-type="forms-list"
+              data-ouia-component-type="forms-card"
               data-ouia-safe={true}
               isSelectable={true}
               onClick={[Function]}
@@ -263,7 +263,7 @@ exports[`forms gallery tests renders gallery of forms 1`] = `
             key="1"
           >
             <Card
-              data-ouia-component-type="forms-list"
+              data-ouia-component-type="forms-card"
               data-ouia-safe={true}
               isSelectable={true}
               onClick={[Function]}

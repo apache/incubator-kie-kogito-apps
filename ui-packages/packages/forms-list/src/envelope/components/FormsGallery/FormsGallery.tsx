@@ -64,7 +64,7 @@ const FormsGallery: React.FC<FormsGalleryProps & OUIAProps> = ({
     <Gallery
       hasGutter
       style={{ margin: '25px' }}
-      {...componentOuiaProps(ouiaId, 'forms-list', ouiaSafe)}
+      {...componentOuiaProps(ouiaId, 'forms-gallery', ouiaSafe)}
     >
       {formsData &&
         formsData.map((formData, index) => (

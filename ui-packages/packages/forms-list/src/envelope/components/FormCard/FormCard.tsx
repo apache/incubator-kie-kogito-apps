@@ -41,7 +41,7 @@ const FormCard: React.FC<FormCardProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  const getLabel = () => {
+  const getLabel = (): string | JSX.Element => {
     switch (formData.type) {
       case 'html':
         return <Label variant="outline">HTML</Label>;
@@ -53,13 +53,13 @@ const FormCard: React.FC<FormCardProps & OUIAProps> = ({
     }
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = (): void => {
     driver.openForm(formData);
   };
 
   return (
     <Card
-      {...componentOuiaProps(ouiaId, 'forms-list', ouiaSafe)}
+      {...componentOuiaProps(ouiaId, 'forms-card', ouiaSafe)}
       isSelectable
       onClick={handleCardClick}
     >

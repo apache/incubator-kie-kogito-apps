@@ -30,6 +30,7 @@ import {
 } from '../FormsListUtils/FormsListUtils';
 import _ from 'lodash';
 import { Bullseye } from '@patternfly/react-core';
+import { ISortBy } from '@patternfly/react-table';
 
 export interface FormsTableProps {
   driver: FormsListDriver;
@@ -69,14 +70,14 @@ const FormsTable: React.FC<FormsTableProps & OUIAProps> = ({
     }
   }, [isLoading]);
 
-  const getSortBy = () => {
+  const getSortBy = (): ISortBy => {
     return {
       index: columns.findIndex(column => column.path === sortBy.property),
       direction: sortBy.direction
     };
   };
 
-  const onSort = async (index: number, direction) => {
+  const onSort = async (index: number, direction): Promise<void> => {
     const sortObj: SortBy = {
       property: columns[index].path,
       direction: direction.toLowerCase()
@@ -95,7 +96,7 @@ const FormsTable: React.FC<FormsTableProps & OUIAProps> = ({
     setSortBy(sortObj);
   };
 
-  const formsLoadingComponent = (
+  const formsLoadingComponent: JSX.Element = (
     <Bullseye>
       <KogitoSpinner
         spinnerText="Loading forms..."

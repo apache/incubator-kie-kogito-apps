@@ -37,12 +37,16 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   const [formsData, setFormsData] = useState<FormInfo[]>([]);
-  const [isSelected, setIsSelected] = useState({
+  const [isSelected, setIsSelected] = useState<{
+    tableView: boolean;
+    cardsView: boolean;
+  }>({
     tableView: true,
     cardsView: false
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
+
   useEffect(() => {
     if (!isEnvelopeConnectedToChannel) {
       setIsLoading(true);
@@ -51,7 +55,7 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
     init();
   }, [isEnvelopeConnectedToChannel]);
 
-  const init = async () => {
+  const init = async (): Promise<void> => {
     try {
       setIsLoading(true);
       const response = await driver.getFormsQuery();
@@ -67,7 +71,7 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
     init();
   };
 
-  const handleItemClick = (isChosen, event) => {
+  const handleItemClick = (isChosen, event): void => {
     const toggleButtonId = event.currentTarget.id;
     if (toggleButtonId === 'tableView') {
       setIsSelected({

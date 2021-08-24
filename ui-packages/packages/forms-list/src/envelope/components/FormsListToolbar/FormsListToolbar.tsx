@@ -49,14 +49,14 @@ const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
 
   const [formNameInput, setFormNameInput] = useState<string>('');
 
-  const doResetFilter = () => {
+  const doResetFilter = (): void => {
     applyFilter({
       formNames: []
     });
     setFilterFormNames([]);
   };
 
-  const doRefresh = () => {
+  const doRefresh = (): void => {
     applyFilter({
       formNames: [...filterFormNames]
     });
@@ -84,7 +84,7 @@ const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
     }
   };
 
-  const doApplyFilter = () => {
+  const doApplyFilter = (): void => {
     const newFormNames = [...filterFormNames];
     if (formNameInput && !newFormNames.includes(formNameInput)) {
       newFormNames.push(formNameInput);
@@ -96,7 +96,7 @@ const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
     });
   };
 
-  const toggleGroupItems = (
+  const toggleGroupItems: JSX.Element = (
     <React.Fragment>
       <ToolbarGroup variant="filter-group">
         <ToolbarFilter
@@ -127,7 +127,7 @@ const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
     </React.Fragment>
   );
 
-  const toolbarItems = (
+  const toolbarItems: JSX.Element = (
     <React.Fragment>
       <ToolbarToggleGroup toggleIcon={<FilterIcon />} breakpoint="xl">
         {toggleGroupItems}
