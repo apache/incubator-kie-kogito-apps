@@ -50,7 +50,8 @@ public class CounterfactualExplainerProducer {
         LOG.debug("CounterfactualExplainer created");
         final CounterfactualConfig counterfactualConfig = new CounterfactualConfig()
                 .withSolverConfig(
-                        SolverConfigBuilder.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build()).withGoalThreshold(this.goalThreshold);
+                        SolverConfigBuilder.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build())
+                .withGoalThreshold(this.goalThreshold);
         return new CounterfactualExplainer(counterfactualConfig);
     }
 }

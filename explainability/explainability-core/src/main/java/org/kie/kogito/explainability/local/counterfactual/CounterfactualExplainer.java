@@ -20,7 +20,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -30,7 +29,6 @@ import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
-import org.kie.kogito.explainability.model.DataDomain;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
@@ -40,7 +38,6 @@ import org.kie.kogito.explainability.model.PredictionProvider;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.config.solver.SolverConfig;
-import org.optaplanner.core.config.solver.SolverManagerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,12 +52,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             counterfactual -> counterfactual.setSolutionId(UUID.randomUUID());
     private static final Logger logger =
             LoggerFactory.getLogger(CounterfactualExplainer.class);
-    private final double goalThreshold;
 
     private final CounterfactualConfig counterfactualConfig;
 
     public CounterfactualExplainer() {
-        this.goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
         this.counterfactualConfig = new CounterfactualConfig();
     }
 
@@ -78,19 +73,6 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      */
     public CounterfactualExplainer(CounterfactualConfig counterfactualConfig) {
         this.counterfactualConfig = counterfactualConfig;
-        this.goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public double getGoalThreshold() {
-        return goalThreshold;
-    }
-
-    public SolverConfig getSolverConfig() {
-        return solverConfig;
     }
 
     public CounterfactualConfig getCounterfactualConfig() {
@@ -136,7 +118,8 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         final List<Output> goal = prediction.getOutput().getOutputs();
 
         Function<UUID, CounterfactualSolution> initial =
-                uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId, this.goalThreshold);
+                uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId,
+                        this.counterfactualConfig.getGoalThreshold());
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
             try (SolverManager<CounterfactualSolution, UUID> solverManager =

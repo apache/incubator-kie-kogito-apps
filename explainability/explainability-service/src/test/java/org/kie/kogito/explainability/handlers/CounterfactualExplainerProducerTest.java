@@ -35,7 +35,7 @@ class CounterfactualExplainerProducerTest {
         assertTrue(counterfactualExplainer instanceof CounterfactualExplainer);
         assertEquals(10, ((CounterfactualExplainer) counterfactualExplainer).getCounterfactualConfig().getSolverConfig()
                 .getTerminationConfig().getSecondsSpentLimit());
-        assertEquals(0.01, ((CounterfactualExplainer) counterfactualExplainer).getGoalThreshold());
+        assertEquals(0.01, ((CounterfactualExplainer) counterfactualExplainer).getCounterfactualConfig().getGoalThreshold());
     }
 
 }
