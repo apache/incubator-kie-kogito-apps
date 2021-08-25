@@ -34,7 +34,7 @@ import org.kie.kogito.explainability.api.BaseExplainabilityRequestDto;
 import org.kie.kogito.explainability.api.BaseExplainabilityResultDto;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.models.BaseExplainabilityRequest;
-import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.test.kafka.KafkaTestClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,11 +72,11 @@ abstract class BaseExplainabilityMessagingHandlerIT {
     @Inject
     protected ObjectMapper objectMapper;
 
-    KafkaClient kafkaClient;
+    KafkaTestClient kafkaClient;
 
     @BeforeEach
     public void setup() {
-        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+        kafkaClient = new KafkaTestClient(kafkaBootstrapServers);
     }
 
     @AfterEach
@@ -104,7 +104,7 @@ abstract class BaseExplainabilityMessagingHandlerIT {
             LOGGER.info("Received from kafka: {}", s);
             CloudEventUtils.decode(s).ifPresent((CloudEvent cloudEvent) -> {
                 try {
-                    BaseExplainabilityResultDto event = objectMapper.readValue(cloudEvent.getData(), BaseExplainabilityResultDto.class);
+                    BaseExplainabilityResultDto event = objectMapper.readValue(cloudEvent.getData().toBytes(), BaseExplainabilityResultDto.class);
                     assertNotNull(event);
                     assertResult(event);
                     countDownLatch.countDown();
@@ -144,7 +144,7 @@ abstract class BaseExplainabilityMessagingHandlerIT {
             LOGGER.info("Received from kafka: {}", s);
             CloudEventUtils.decode(s).ifPresent((CloudEvent cloudEvent) -> {
                 try {
-                    BaseExplainabilityResultDto event = objectMapper.readValue(cloudEvent.getData(), BaseExplainabilityResultDto.class);
+                    BaseExplainabilityResultDto event = objectMapper.readValue(cloudEvent.getData().toBytes(), BaseExplainabilityResultDto.class);
                     assertNotNull(event);
                     assertResult(event);
                     countDownLatch.countDown();

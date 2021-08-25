@@ -30,6 +30,7 @@ import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
+import org.kie.kogito.explainability.model.DataDomain;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
@@ -54,16 +55,13 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             counterfactual -> counterfactual.setSolutionId(UUID.randomUUID());
     private static final Logger logger =
             LoggerFactory.getLogger(CounterfactualExplainer.class);
-    private final SolverConfig solverConfig;
-    private final Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory;
-    private final Executor executor;
     private final double goalThreshold;
 
+    private final CounterfactualConfig counterfactualConfig;
+
     public CounterfactualExplainer() {
-        this.solverConfig = CounterfactualConfigurationFactory.builder().build();
-        this.solverManagerFactory = solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
-        this.executor = ForkJoinPool.commonPool();
         this.goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
+        this.counterfactualConfig = new CounterfactualConfig();
     }
 
     /**
@@ -76,17 +74,11 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
      * to numerical variables. This threshold is a positive ratio of the variable value (e.g. 0.01 of the value)
      * A strict match can be implemented by using a threshold of zero.
      *
-     * @param solverConfig An OptaPlanner {@link SolverConfig} configuration
-     * @param executor The {@link Executor} to be used by the explainer
-     * @param goalThreshold A positive threshold as a ratio of the variable's value
+     * @param counterfactualConfig An Counterfactual {@link CounterfactualConfig} configuration
      */
-    protected CounterfactualExplainer(SolverConfig solverConfig,
-            Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory,
-            Executor executor, double goalThreshold) {
-        this.solverConfig = solverConfig;
-        this.solverManagerFactory = solverManagerFactory;
-        this.executor = executor;
-        this.goalThreshold = goalThreshold;
+    public CounterfactualExplainer(CounterfactualConfig counterfactualConfig) {
+        this.counterfactualConfig = counterfactualConfig;
+        this.goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;;
     }
 
     public static Builder builder() {
@@ -99,6 +91,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
     public SolverConfig getSolverConfig() {
         return solverConfig;
+    }
+
+    public CounterfactualConfig getCounterfactualConfig() {
+        return this.counterfactualConfig;
     }
 
     /**
@@ -143,7 +139,8 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId, this.goalThreshold);
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {
-            try (SolverManager<CounterfactualSolution, UUID> solverManager = solverManagerFactory.apply(solverConfig)) {
+            try (SolverManager<CounterfactualSolution, UUID> solverManager =
+                    this.counterfactualConfig.getSolverManagerFactory().apply(this.counterfactualConfig.getSolverConfig())) {
 
                 SolverJob<CounterfactualSolution, UUID> solverJob =
                         solverManager.solveAndListen(executionId, initial,
@@ -161,7 +158,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                     throw new IllegalStateException("Solving failed (Thread interrupted)", e);
                 }
             }
-        }, this.executor);
+        }, this.counterfactualConfig.getExecutor());
 
         final CompletableFuture<List<PredictionOutput>> cfOutputs =
                 cfSolution.thenCompose(s -> model.predictAsync(List.of(new PredictionInput(
@@ -178,49 +175,4 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
 
     }
 
-    public static class Builder {
-        private Executor executor = ForkJoinPool.commonPool();
-        private SolverConfig solverConfig = null;
-        private double goalThreshold = CounterfactualConfigurationFactory.DEFAULT_GOAL_THRESHOLD;
-        private Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory = null;
-
-        private Builder() {
-        }
-
-        public Builder withExecutor(Executor executor) {
-            this.executor = executor;
-            return this;
-        }
-
-        public Builder withSolverConfig(SolverConfig solverConfig) {
-            this.solverConfig = solverConfig;
-            return this;
-        }
-
-        public Builder withGoalThreshold(double goalThreshold) {
-            this.goalThreshold = goalThreshold;
-            return this;
-        }
-
-        public Builder withSolverManagerFactory(
-                Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory) {
-            this.solverManagerFactory = solverManagerFactory;
-            return this;
-        }
-
-        public CounterfactualExplainer build() {
-            // Create a default solver configuration if none provided
-            if (this.solverConfig == null) {
-                this.solverConfig = CounterfactualConfigurationFactory.builder().build();
-            }
-            if (this.solverManagerFactory == null) {
-                this.solverManagerFactory = solverConfig -> SolverManager.create(solverConfig, new SolverManagerConfig());
-            }
-            return new CounterfactualExplainer(
-                    this.solverConfig,
-                    this.solverManagerFactory,
-                    this.executor,
-                    this.goalThreshold);
-        }
-    }
 }

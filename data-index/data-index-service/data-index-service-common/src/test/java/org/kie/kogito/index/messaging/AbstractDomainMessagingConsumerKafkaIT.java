@@ -26,8 +26,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.DataIndexStorageService;
-import org.kie.kogito.kafka.KafkaClient;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
+import org.kie.kogito.test.kafka.KafkaTestClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
 import io.restassured.http.ContentType;
@@ -40,7 +40,7 @@ import static org.kie.kogito.index.TestUtils.readFileContent;
 
 public abstract class AbstractDomainMessagingConsumerKafkaIT {
 
-    Duration timeout = Duration.ofSeconds(5);
+    Duration timeout = Duration.ofSeconds(30);
 
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY, defaultValue = "localhost:9092")
     public String kafkaBootstrapServers;
@@ -51,11 +51,11 @@ public abstract class AbstractDomainMessagingConsumerKafkaIT {
     @Inject
     public DataIndexStorageService cacheService;
 
-    KafkaClient kafkaClient;
+    KafkaTestClient kafkaClient;
 
     @BeforeEach
     void setup() throws Exception {
-        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+        kafkaClient = new KafkaTestClient(kafkaBootstrapServers);
         protobufService.registerProtoBufferType(getTestProtobufFileContent());
         cacheService.getProcessInstancesCache().clear();
         cacheService.getUserTaskInstancesCache().clear();
