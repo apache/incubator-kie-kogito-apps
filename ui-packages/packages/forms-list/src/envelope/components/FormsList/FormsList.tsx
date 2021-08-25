@@ -36,6 +36,7 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
+  const [filterFormNames, setFilterFormNames] = useState<string[]>([]);
   const [formsData, setFormsData] = useState<FormInfo[]>([]);
   const [isSelected, setIsSelected] = useState<{
     tableView: boolean;
@@ -57,6 +58,8 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
 
   const init = async (): Promise<void> => {
     try {
+      const namesFilter = await driver.getFormFilter();
+      setFilterFormNames(namesFilter.formNames);
       setIsLoading(true);
       const response = await driver.getFormsQuery();
       setFormsData(response);
@@ -93,7 +96,11 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
     <div {...componentOuiaProps(ouiaId, 'forms-list', ouiaSafe)}>
       <Split hasGutter>
         <SplitItem>
-          <FormsListToolbar applyFilter={applyFilter} />
+          <FormsListToolbar
+            applyFilter={applyFilter}
+            setFilterFormNames={setFilterFormNames}
+            filterFormNames={filterFormNames}
+          />
         </SplitItem>
         <SplitItem isFilled></SplitItem>
         <SplitItem style={{ padding: '20px' }}>

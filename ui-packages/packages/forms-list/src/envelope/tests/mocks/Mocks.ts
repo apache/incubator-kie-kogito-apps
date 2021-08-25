@@ -26,6 +26,7 @@ export const MockedApiRequests = jest.fn<
   Pick<FormsListChannelApi, RequestPropertyNames<FormsListChannelApi>>,
   []
 >(() => ({
+  formsList__getFormFilter: jest.fn(),
   formsList__applyFilter: jest.fn(),
   formsList__openForm: jest.fn(),
   formsList__getFormsQuery: jest.fn()

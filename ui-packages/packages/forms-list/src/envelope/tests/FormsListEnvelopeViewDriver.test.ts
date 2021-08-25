@@ -43,6 +43,11 @@ describe('FormsListEnvelopeViewDriver tests', () => {
       expect(requests.formsList__getFormsQuery).toHaveBeenCalled();
     });
 
+    it('getFormFilter', () => {
+      driver.getFormFilter();
+      expect(requests.formsList__getFormFilter).toHaveBeenCalled();
+    });
+
     it('applyFilter', () => {
       const formsFilter = {
         formNames: ['form1']

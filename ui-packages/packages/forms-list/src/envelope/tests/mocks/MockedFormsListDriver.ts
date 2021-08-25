@@ -31,6 +31,9 @@ export const formList: FormInfo[] = [
   }
 ];
 export class MockedFormsListDriver implements FormsListDriver {
+  getFormFilter(): Promise<FormFilter> {
+    return Promise.resolve({ formNames: [] });
+  }
   applyFilter(formFilter: FormFilter): Promise<void> {
     return Promise.resolve();
   }

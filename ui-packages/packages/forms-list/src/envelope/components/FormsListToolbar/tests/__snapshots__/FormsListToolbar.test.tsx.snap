@@ -3,6 +3,8 @@
 exports[`forms list toolbar tests render toolbar 1`] = `
 <FormsListToolbar
   applyFilter={[MockFunction]}
+  filterFormNames={Array []}
+  setFilterFormNames={[MockFunction]}
 >
   <Toolbar
     className="pf-m-toggle-group-container"

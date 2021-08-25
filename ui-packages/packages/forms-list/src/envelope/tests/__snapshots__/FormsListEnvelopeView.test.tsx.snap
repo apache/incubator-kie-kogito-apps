@@ -9,6 +9,7 @@ exports[`FormsListEnvelopeView tests Snapshot 2`] = `
       "notifications": [MockFunction],
       "requests": Object {
         "formsList__applyFilter": [MockFunction],
+        "formsList__getFormFilter": [MockFunction],
         "formsList__getFormsQuery": [MockFunction],
         "formsList__openForm": [MockFunction],
       },
@@ -24,6 +25,7 @@ exports[`FormsListEnvelopeView tests Snapshot 2`] = `
           "notifications": [MockFunction],
           "requests": Object {
             "formsList__applyFilter": [MockFunction],
+            "formsList__getFormFilter": [MockFunction],
             "formsList__getFormsQuery": [MockFunction],
             "formsList__openForm": [MockFunction],
           },

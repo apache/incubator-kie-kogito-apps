@@ -21,6 +21,8 @@ exports[`forms list tests render forms list - gallery 1`] = `
           >
             <MockedFormsListToolbar
               applyFilter={[Function]}
+              filterFormNames={Array []}
+              setFilterFormNames={[Function]}
             />
           </div>
         </SplitItem>
@@ -234,6 +236,8 @@ exports[`forms list tests render forms list - table 1`] = `
           >
             <MockedFormsListToolbar
               applyFilter={[Function]}
+              filterFormNames={Array []}
+              setFilterFormNames={[Function]}
             />
           </div>
         </SplitItem>

@@ -20,7 +20,7 @@ import { getForms } from '../apis';
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface FormsListGatewayApi {
-  getFormFilter(): FormFilter;
+  getFormFilter(): Promise<FormFilter>;
   applyFilter(formList: FormFilter): Promise<void>;
   getFormsQuery(): Promise<FormInfo[]>;
   openForm: (formData: FormInfo) => Promise<void>;
@@ -45,8 +45,8 @@ export class FormsListGatewayApiImpl implements FormsListGatewayApi {
     // queries constructor
   }
 
-  getFormFilter = (): FormFilter => {
-    return this._FormFilter;
+  getFormFilter = (): Promise<FormFilter> => {
+    return Promise.resolve(this._FormFilter);
   };
 
   applyFilter = (formFilter: FormFilter): Promise<void> => {

@@ -27,6 +27,11 @@ describe('FormsListChannelApiImpl tests', () => {
     api = new FormsListChannelApiImpl(driver);
   });
 
+  it('FormsList__getFormFilter', () => {
+    api.formsList__getFormFilter();
+    expect(driver.getFormFilter).toHaveBeenCalled();
+  });
+
   it('FormsList__applyFilter', () => {
     const formFilter = {
       formNames: ['form1']

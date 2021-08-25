@@ -33,6 +33,8 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { FormFilter } from 'packages/forms-list/src/api';
 
 interface FormsListToolbarProps {
+  filterFormNames: string[];
+  setFilterFormNames: React.Dispatch<React.SetStateAction<string[]>>;
   applyFilter: (filter: FormFilter) => void;
 }
 
@@ -42,11 +44,11 @@ enum Category {
 
 const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
   applyFilter,
+  filterFormNames,
+  setFilterFormNames,
   ouiaSafe,
   ouiaId
 }) => {
-  const [filterFormNames, setFilterFormNames] = useState<string[]>([]);
-
   const [formNameInput, setFormNameInput] = useState<string>('');
 
   const doResetFilter = (): void => {

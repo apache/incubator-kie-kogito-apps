@@ -30,6 +30,10 @@ export default class FormsListEnvelopeViewDriver implements FormsListDriver {
     private readonly channelApi: MessageBusClientApi<FormsListChannelApi>
   ) {}
 
+  getFormFilter(): Promise<FormFilter> {
+    return this.channelApi.requests.formsList__getFormFilter();
+  }
+
   applyFilter(formFilter: FormFilter): Promise<void> {
     return this.channelApi.requests.formsList__applyFilter(formFilter);
   }

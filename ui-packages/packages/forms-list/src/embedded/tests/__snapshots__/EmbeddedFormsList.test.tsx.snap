@@ -5,6 +5,7 @@ exports[`EmbeddedFormsList tests Snapshot 1`] = `
   driver={
     Object {
       "applyFilter": [MockFunction],
+      "getFormFilter": [MockFunction],
       "getFormsQuery": [MockFunction],
       "openForm": [MockFunction],
     }

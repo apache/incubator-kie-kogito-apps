@@ -6,13 +6,25 @@ import { Button, ToolbarFilter, Tooltip } from '@patternfly/react-core';
 
 describe('forms list toolbar tests', () => {
   it('render toolbar', () => {
-    const wrapper = mount(<FormsListToolbar applyFilter={jest.fn()} />);
+    const wrapper = mount(
+      <FormsListToolbar
+        applyFilter={jest.fn()}
+        setFilterFormNames={jest.fn()}
+        filterFormNames={[]}
+      />
+    );
     expect(wrapper).toMatchSnapshot();
   });
 
   it('apply filter click', () => {
     const applyFilter = jest.fn();
-    const wrapper = mount(<FormsListToolbar applyFilter={applyFilter} />);
+    const wrapper = mount(
+      <FormsListToolbar
+        applyFilter={applyFilter}
+        setFilterFormNames={jest.fn()}
+        filterFormNames={[]}
+      />
+    );
     act(() => {
       wrapper
         .find('TextInputBase')
@@ -32,7 +44,13 @@ describe('forms list toolbar tests', () => {
 
   it('reset click', () => {
     const applyFilter = jest.fn();
-    const wrapper = mount(<FormsListToolbar applyFilter={applyFilter} />);
+    const wrapper = mount(
+      <FormsListToolbar
+        applyFilter={applyFilter}
+        setFilterFormNames={jest.fn()}
+        filterFormNames={[]}
+      />
+    );
     act(() => {
       wrapper
         .find('Toolbar')
@@ -44,7 +62,13 @@ describe('forms list toolbar tests', () => {
 
   it('refresh click', () => {
     const applyFilter = jest.fn();
-    const wrapper = mount(<FormsListToolbar applyFilter={applyFilter} />);
+    const wrapper = mount(
+      <FormsListToolbar
+        applyFilter={applyFilter}
+        setFilterFormNames={jest.fn()}
+        filterFormNames={[]}
+      />
+    );
     act(() => {
       wrapper
         .find(Tooltip)
@@ -56,7 +80,13 @@ describe('forms list toolbar tests', () => {
 
   it('enter clicked', () => {
     const applyFilter = jest.fn();
-    const wrapper = mount(<FormsListToolbar applyFilter={applyFilter} />);
+    const wrapper = mount(
+      <FormsListToolbar
+        applyFilter={applyFilter}
+        setFilterFormNames={jest.fn()}
+        filterFormNames={[]}
+      />
+    );
     act(() => {
       wrapper
         .find('TextInputBase')
@@ -77,7 +107,13 @@ describe('forms list toolbar tests', () => {
 
   it('on delete chip', () => {
     const applyFilter = jest.fn();
-    const wrapper = mount(<FormsListToolbar applyFilter={applyFilter} />);
+    const wrapper = mount(
+      <FormsListToolbar
+        applyFilter={applyFilter}
+        setFilterFormNames={jest.fn()}
+        filterFormNames={[]}
+      />
+    );
     act(() => {
       wrapper
         .find(ToolbarFilter)
