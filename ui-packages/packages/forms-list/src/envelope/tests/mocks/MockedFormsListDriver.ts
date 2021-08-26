@@ -22,12 +22,12 @@ export const formList: FormInfo[] = [
   {
     name: 'form1',
     type: 'tsx',
-    lastModified: new Date(2020, 6, 12)
+    lastModified: new Date('2020-07-11T18:30:00.000Z')
   },
   {
     name: 'form2',
     type: 'html',
-    lastModified: new Date(2020, 6, 12)
+    lastModified: new Date('2020-07-11T18:30:00.000Z')
   }
 ];
 export class MockedFormsListDriver implements FormsListDriver {

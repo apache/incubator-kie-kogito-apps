@@ -25,6 +25,7 @@ jest.mock('@kogito-apps/components-common', () => ({
 }));
 
 describe('forms gallery tests', () => {
+  Date.now = jest.fn(() => 1487076708000);
   const driver = new MockedFormsListDriver();
   it('renders gallery of forms', () => {
     const wrapper = mount(

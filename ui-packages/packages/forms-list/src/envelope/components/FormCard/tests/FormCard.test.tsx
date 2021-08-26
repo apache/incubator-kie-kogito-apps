@@ -24,6 +24,7 @@ import FormCard from '../FormCard';
 import { Card } from '@patternfly/react-core';
 
 describe('Form card tests', () => {
+  Date.now = jest.fn(() => 1487076708000);
   const driver = new MockedFormsListDriver();
   it('renders card - with tsx', () => {
     const wrapper = mount(<FormCard driver={driver} formData={formList[0]} />);

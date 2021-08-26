@@ -11,15 +11,16 @@ jest.mock('../../FormsListToolbar/FormsListToolbar');
 jest.mock('../../FormsTable/FormsTable');
 
 describe('forms list tests', () => {
+  Date.now = jest.fn(() => 1487076708000);
   const driver = new MockedFormsListDriver();
 
-  it('envelope not connected to channel', () => {
+  it('envelope not connected to channel', async () => {
     const props = {
       isEnvelopeConnectedToChannel: false,
       driver: null
     };
     let wrapper;
-    act(() => {
+    await act(async () => {
       wrapper = mount(<FormsList {...props} />);
     });
     expect(
@@ -27,13 +28,13 @@ describe('forms list tests', () => {
     ).toBeFalsy();
   });
 
-  it('render forms list - table', () => {
+  it('render forms list - table', async () => {
     const props = {
       isEnvelopeConnectedToChannel: true,
       driver: driver
     };
     let wrapper;
-    act(() => {
+    await act(async () => {
       wrapper = mount(<FormsList {...props} />);
     });
     expect(wrapper).toMatchSnapshot();
@@ -46,7 +47,7 @@ describe('forms list tests', () => {
     };
     let wrapper;
     // switches to gallery view
-    act(() => {
+    await act(async () => {
       wrapper = mount(<FormsList {...props} />);
       wrapper
         .find(ToggleGroupItem)
@@ -55,13 +56,13 @@ describe('forms list tests', () => {
         .simulate('click');
     });
     await wait(0);
-    act(() => {
+    await act(async () => {
       wrapper = wrapper.update();
     });
     expect(wrapper).toMatchSnapshot();
 
     // switches to table view
-    act(() => {
+    await act(async () => {
       wrapper
         .find(ToggleGroupItem)
         .at(0)
@@ -69,7 +70,7 @@ describe('forms list tests', () => {
         .simulate('click');
     });
     await wait(0);
-    act(() => {
+    await act(async () => {
       wrapper = wrapper.update();
     });
     expect(wrapper.find('MockedFormsTable').exists()).toBeTruthy();
