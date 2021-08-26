@@ -27,34 +27,34 @@ jest.mock('../../apis/apis', () => ({
 
 let gatewayApi: FormsListGatewayApi;
 
-describe('FormsListChannelApiImpl tests', () => {
+describe('FormsListGatewayApi tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     gatewayApi = new FormsListGatewayApiImpl({});
   });
 
-  it('applyFilter', () => {
+  it('applyFilter', async () => {
     const formsFilter = {
       formNames: ['form1']
     };
     gatewayApi.applyFilter(formsFilter);
-    expect(gatewayApi.getFormFilter()).toEqual(formsFilter);
+    expect(await gatewayApi.getFormFilter()).toEqual(formsFilter);
   });
 
-  it('getForms', () => {
+  it('getForms', async () => {
     const formsFilter = {
       formNames: ['form1']
     };
     gatewayApi.applyFilter(formsFilter);
     gatewayApi.getFormsQuery();
-    expect(gatewayApi.getFormFilter()).toEqual(formsFilter);
+    expect(await gatewayApi.getFormFilter()).toEqual(formsFilter);
   });
 
   it('openForm', () => {
     const form: FormInfo = {
       name: 'form1',
       type: 'html',
-      lastUpdate: new Date(2020, 6, 12)
+      lastModified: new Date(2020, 6, 12)
     };
     const listener: OnOpenFormListener = {
       onOpen: jest.fn()
