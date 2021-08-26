@@ -73,16 +73,14 @@ const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
 
   const onDeleteFilterGroup = (categoryName: Category, value: string): void => {
     const newFilterFormNames = [...filterFormNames];
-    switch (categoryName) {
-      case Category.FORM_NAME:
-        _.remove(newFilterFormNames, (status: string) => {
-          return status === value;
-        });
-        setFilterFormNames(newFilterFormNames);
-        applyFilter({
-          formNames: newFilterFormNames
-        });
-        break;
+    if (categoryName === Category.FORM_NAME) {
+      _.remove(newFilterFormNames, (status: string) => {
+        return status === value;
+      });
+      setFilterFormNames(newFilterFormNames);
+      applyFilter({
+        formNames: newFilterFormNames
+      });
     }
   };
 
@@ -109,13 +107,13 @@ const FormsListToolbar: React.FC<FormsListToolbarProps & OUIAProps> = ({
         >
           <InputGroup>
             <TextInput
-              name="taskName"
-              id="taskName"
+              name="formName"
+              id="formName"
               type="search"
-              aria-label="task name"
+              aria-label="form name"
               onChange={setFormNameInput}
               onKeyPress={onEnterClicked}
-              placeholder="Filter by Task name"
+              placeholder="Filter by Form name"
               value={formNameInput}
             />
           </InputGroup>

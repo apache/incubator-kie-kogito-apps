@@ -28,7 +28,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/task-inbox": "^1.0.0"
+    "@kogito-apps/components-common": "^1.0.0"
   },
   "devDependencies": {
     "@kogito-apps/ouia-tools": "^1.0.0",

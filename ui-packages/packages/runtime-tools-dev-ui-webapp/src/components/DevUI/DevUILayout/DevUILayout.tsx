@@ -61,8 +61,8 @@ const DevUILayout: React.FC<IOwnProps> = ({
             <ProcessListContextProvider apolloClient={apolloClient}>
               <ProcessDetailsContextProvider apolloClient={apolloClient}>
                 <JobsManagementContextProvider apolloClient={apolloClient}>
-                  <FormsListContextProvider apolloClient={apolloClient}>
-                    <FormDetailsContextProvider apolloClient={apolloClient}>
+                  <FormsListContextProvider>
+                    <FormDetailsContextProvider>
                       <MemoryRouter>
                         <Switch>
                           <Route path="/" render={renderPage} />

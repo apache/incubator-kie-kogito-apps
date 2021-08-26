@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { FormDetailsQueries } from './FormDetailsQueries';
-
 export interface OnOpenFormDetailsListener {
   onOpen(name: string): void;
 }
@@ -35,10 +32,6 @@ export class FormDetailsGatewayApiImpl implements FormDetailsGatewayApi {
   //@ts-ignore
   private readonly queries: FormDetailsQueries;
   private readonly listeners: OnOpenFormDetailsListener[] = [];
-
-  constructor(queries: FormDetailsQueries) {
-    this.queries = queries;
-  }
 
   openFormDetails(name: string): Promise<void> {
     this.listeners.forEach(listener => listener.onOpen(name));

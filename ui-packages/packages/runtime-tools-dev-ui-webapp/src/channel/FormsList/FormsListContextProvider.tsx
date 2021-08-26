@@ -15,26 +15,18 @@
  */
 
 import React from 'react';
-import { ApolloClient } from 'apollo-client';
 import FormsListContext from './FormsListContext';
 import { FormsListGatewayApiImpl } from './FormsListGatewayApi';
-import { GraphQLFormsListQueries } from './FormsListQueries';
 
 interface FormsListContextProviderProps {
-  apolloClient: ApolloClient<any>;
   children;
 }
 
 const FormsListContextProvider: React.FC<FormsListContextProviderProps> = ({
-  apolloClient,
   children
 }) => {
   return (
-    <FormsListContext.Provider
-      value={
-        new FormsListGatewayApiImpl(new GraphQLFormsListQueries(apolloClient))
-      }
-    >
+    <FormsListContext.Provider value={new FormsListGatewayApiImpl()}>
       {children}
     </FormsListContext.Provider>
   );

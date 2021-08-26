@@ -15,28 +15,16 @@
  */
 
 import React from 'react';
-import { ApolloClient } from 'apollo-client';
 import FormDetailsContext from './FormDetailsContext';
 import { FormDetailsGatewayApiImpl } from './FormDetailsGatewayApi';
-import { GraphQLFormDetailsQueries } from './FormDetailsQueries';
 
 interface IOwnProps {
-  apolloClient: ApolloClient<any>;
   children;
 }
 
-const FormDetailsContextProvider: React.FC<IOwnProps> = ({
-  apolloClient,
-  children
-}) => {
+const FormDetailsContextProvider: React.FC<IOwnProps> = ({ children }) => {
   return (
-    <FormDetailsContext.Provider
-      value={
-        new FormDetailsGatewayApiImpl(
-          new GraphQLFormDetailsQueries(apolloClient)
-        )
-      }
-    >
+    <FormDetailsContext.Provider value={new FormDetailsGatewayApiImpl()}>
       {children}
     </FormDetailsContext.Provider>
   );

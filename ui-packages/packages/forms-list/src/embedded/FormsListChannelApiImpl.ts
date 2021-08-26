@@ -22,7 +22,7 @@ import {
 } from '../api';
 
 /**
- * Implementation of the TaskInboxChannelApi delegating to a TaskInboxDriver
+ * Implementation of the FormsListChannelApiImpl delegating to a FormsListDriver
  */
 export class FormsListChannelApiImpl implements FormsListChannelApi {
   constructor(private readonly driver: FormsListDriver) {}

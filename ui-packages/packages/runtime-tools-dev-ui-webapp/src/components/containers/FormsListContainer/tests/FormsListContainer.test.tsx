@@ -18,14 +18,11 @@ import React from 'react';
 import { mount } from 'enzyme';
 import FormsListContainer from '../FormsListContainer';
 import * as FormsListContext from '../../../../channel/FormsList/FormsListContext';
-import { FormsListQueries } from '../../../../channel/FormsList/FormsListQueries';
 import { FormsListGatewayApiImpl } from '../../../../channel/FormsList/FormsListGatewayApi';
-
-const MockQueries = jest.fn<FormsListQueries, []>(() => ({}));
 
 jest
   .spyOn(FormsListContext, 'useFormsListGatewayApi')
-  .mockImplementation(() => new FormsListGatewayApiImpl(new MockQueries()));
+  .mockImplementation(() => new FormsListGatewayApiImpl());
 
 describe('FormsListContainer tests', () => {
   it('Snapshot', () => {

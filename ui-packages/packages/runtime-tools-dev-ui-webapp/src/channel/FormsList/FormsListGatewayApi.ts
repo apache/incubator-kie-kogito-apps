@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { FormsListQueries } from './FormsListQueries';
 import { FormFilter, FormInfo } from '@kogito-apps/forms-list';
 import { getForms } from '../apis';
 
@@ -40,10 +39,6 @@ export class FormsListGatewayApiImpl implements FormsListGatewayApi {
     formNames: []
   };
   private readonly listeners: OnOpenFormListener[] = [];
-  // @ts-ignore
-  constructor(queries: FormsListQueries) {
-    // queries constructor
-  }
 
   getFormFilter = (): Promise<FormFilter> => {
     return Promise.resolve(this._FormFilter);
