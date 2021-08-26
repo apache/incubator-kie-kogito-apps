@@ -34,3 +34,21 @@ export interface Association {
   origin: string;
   envelopeServerId: string;
 }
+
+interface FormResources {
+  scripts: {
+    [key: string]: string;
+  };
+  styles: {
+    [key: string]: string;
+  };
+}
+interface FormConfiguration {
+  schema: string;
+  resources: FormResources;
+}
+export interface Form {
+  source: string;
+  name: string;
+  configuration: FormConfiguration;
+}

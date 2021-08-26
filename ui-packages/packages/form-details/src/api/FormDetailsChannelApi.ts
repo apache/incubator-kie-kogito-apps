@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { Form } from './FormDetailsEnvelopeApi';
+
 /**
  * Channel Api for Forms Details
  */
 export interface FormDetailsChannelApi {
-  formDetails__getFormContent(formName: string): Promise<any[]>;
+  formDetails__getFormContent(formName: string): Promise<Form>;
 }

@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { Form } from './FormDetailsEnvelopeApi';
+
 /**
  * Interface that defines a Driver for FormDetails views.
  */
 export interface FormDetailsDriver {
-  getFormContent(formName: string): Promise<any[]>;
+  getFormContent(formName: string): Promise<Form>;
 }

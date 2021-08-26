@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Form } from '@kogito-apps/form-details';
 import { getFormContent } from '../apis';
 import { FormDetailsQueries } from './FormDetailsQueries';
 
@@ -30,7 +31,7 @@ export interface FormDetailsGatewayApi {
   onOpenFormDetailsListener: (
     listener: OnOpenFormDetailsListener
   ) => FormDetailsUnSubscribeHandler;
-  getFormContent: (formName: string) => Promise<any[]>;
+  getFormContent: (formName: string) => Promise<Form>;
 }
 
 export class FormDetailsGatewayApiImpl implements FormDetailsGatewayApi {
@@ -42,7 +43,7 @@ export class FormDetailsGatewayApiImpl implements FormDetailsGatewayApi {
     this.queries = queries;
   }
 
-  getFormContent(formName: string): Promise<any[]> {
+  getFormContent(formName: string): Promise<Form> {
     return getFormContent(formName);
   }
 

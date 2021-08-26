@@ -32,6 +32,8 @@ import {
 import FormView from '../FormView/FormView';
 import { ServerErrors } from '@kogito-apps/components-common';
 import _ from 'lodash';
+import { Form } from 'packages/form-details/src/api';
+// import { Form } from 'packages/form-details/src/api';
 
 export interface FormDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -47,7 +49,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const [formContent, setFormContent] = useState({});
+  const [formContent, setFormContent] = useState<Form>(null);
   const [error, setError] = useState<any>(null);
   useEffect(() => {
     if (isEnvelopeConnectedToChannel) {
