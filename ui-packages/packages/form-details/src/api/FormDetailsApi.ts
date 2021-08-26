@@ -15,5 +15,5 @@
  */
 
 export interface FormDetailsApi {
-  // forms list api
+  // forms details api
 }

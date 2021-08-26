@@ -15,6 +15,6 @@
  */
 
 /**
- * Channel Api for Forms List
+ * Channel Api for Forms Details
  */
 export interface FormDetailsChannelApi {}

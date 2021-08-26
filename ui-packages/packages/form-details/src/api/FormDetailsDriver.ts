@@ -15,6 +15,6 @@
  */
 
 /**
- * Interface that defines a Driver for FormsList views.
+ * Interface that defines a Driver for FormDetails views.
  */
 export interface FormDetailsDriver {}
