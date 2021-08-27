@@ -16,7 +16,6 @@
 
 import React, { useImperativeHandle, useState } from 'react';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import _ from 'lodash';
 import { FormsListChannelApi } from '../api';
 import FormsList from './components/FormsList/FormsList';
 import FormsListEnvelopeViewDriver from './FormsListEnvelopeViewDriver';

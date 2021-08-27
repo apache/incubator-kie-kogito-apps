@@ -22,7 +22,7 @@ import ProcessDetailsPage from '../../pages/ProcessDetailsPage/ProcessDetailsPag
 import TaskInboxPage from '../../pages/TaskInboxPage/TaskInboxPage';
 import TaskDetailsPage from '../../pages/TaskDetailsPage/TaskDetailsPage';
 import FormsListPage from '../../pages/FormsListPage/FormsListPage';
-import FormDetailPage from '../../pages/FormDetailPage/FormDetailPage';
+import FormDetailPage from '../../pages/FormDetailsPage/FormDetailsPage';
 
 interface IOwnProps {
   navigate: string;

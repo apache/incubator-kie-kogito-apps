@@ -18,11 +18,16 @@ import React, { useEffect, useState } from 'react';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { FormsListDriver } from '../../../api/FormsListDriver';
 import FormsListToolbar from '../FormsListToolbar/FormsListToolbar';
-import { Divider, Split, SplitItem } from '@patternfly/react-core';
+import {
+  Divider,
+  Split,
+  SplitItem,
+  ToggleGroup,
+  ToggleGroupItem
+} from '@patternfly/react-core';
 import { FormInfo, FormFilter } from '../../../api/FormsListEnvelopeApi';
 import FormsTable from '../FormsTable/FormsTable';
 import FormsGallery from '../FormsGallery/FormsGallery';
-import { ToggleGroup, ToggleGroupItem } from '@patternfly/react-core';
 import { BarsIcon, ThIcon } from '@patternfly/react-icons';
 import { ServerErrors } from '@kogito-apps/components-common';
 export interface FormsListProps {
@@ -64,8 +69,8 @@ const FormsList: React.FC<FormsListProps & OUIAProps> = ({
       const response = await driver.getFormsQuery();
       setFormsData(response);
       setIsLoading(false);
-    } catch (error) {
-      setError(error);
+    } catch (errorResponse) {
+      setError(errorResponse);
     }
   };
 
