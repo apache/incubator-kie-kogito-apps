@@ -414,7 +414,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                                       : 'cf-table__result-value'
                                   }
                                 >
-                                  <FormattedValue value={value} />
+                                  <FormattedValue value={value} round={true} />
                                 </Td>
                               )
                             )}
