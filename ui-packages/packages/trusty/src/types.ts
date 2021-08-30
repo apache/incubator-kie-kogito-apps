@@ -180,6 +180,7 @@ export interface CFAnalysisResult extends CFAnalysisExecution {
   stage: 'INTERMEDIATE' | 'FINAL';
   inputs: CFSearchInput[];
   outputs: CFGoal[];
+  sequenceId: number;
 }
 
 export interface CFAnalysisResultsSets extends CFAnalysisExecution {

@@ -107,7 +107,9 @@ export const cfReducer = (state: CFState, action: cfActions) => {
     case 'CF_SET_RESULTS':
       return {
         ...state,
-        results: action.payload.results
+        results: [...action.payload.results].sort(
+          (a, b) => b.sequenceId - a.sequenceId
+        )
       };
 
     case 'CF_SET_STATUS':
