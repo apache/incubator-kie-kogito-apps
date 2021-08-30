@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -238,5 +239,36 @@ class LimeExplainerTest {
         Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
         assertNotNull(saliencyMap);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void testDeterministic(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+        List<Saliency> saliencies = new ArrayList<>();
+        for (int j = 0; j < 2; j++) {
+            Random random = new Random();
+            random.setSeed(seed);
+            LimeConfig limeConfig = new LimeConfig()
+                    .withPerturbationContext(new PerturbationContext(random, DEFAULT_NO_OF_PERTURBATIONS))
+                    .withSamples(10);
+            LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
+            List<Feature> features = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                features.add(TestUtils.getMockedNumericFeature(i));
+            }
+            PredictionInput input = new PredictionInput(features);
+            PredictionProvider model = TestUtils.getSumSkipModel(0);
+            PredictionOutput output = model.predictAsync(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                    .get(0);
+            Prediction prediction = new SimplePrediction(input, output);
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            saliencies.add(saliencyMap.get("sum-but0"));
+        }
+        assertThat(saliencies.get(0).getPerFeatureImportance().stream().map(FeatureImportance::getScore)
+                .collect(Collectors.toList()))
+                        .isEqualTo(saliencies.get(1).getPerFeatureImportance().stream().map(FeatureImportance::getScore)
+                                .collect(Collectors.toList()));
     }
 }

@@ -138,9 +138,10 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
@@ -165,10 +166,11 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withSampling(false);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore().withSampling(false);
 
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
@@ -186,9 +188,10 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.4, 0.6);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withWeightedStability(0.4, 0.6);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)

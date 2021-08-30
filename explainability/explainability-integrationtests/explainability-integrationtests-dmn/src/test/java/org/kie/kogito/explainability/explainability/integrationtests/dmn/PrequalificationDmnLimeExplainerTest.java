@@ -109,9 +109,10 @@ class PrequalificationDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomPrequalificationInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withSampling(false);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         LimeConfig initialConfig = new LimeConfig().withSamples(10);
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotSameAs(initialConfig);
@@ -134,9 +135,10 @@ class PrequalificationDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
 
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withSampling(false);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore().withSampling(false);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
@@ -154,9 +156,11 @@ class PrequalificationDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
 
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false).withWeightedStability(0.4, 0.6);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed)
+                .withWeightedStability(0.4, 0.6).withSampling(false);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         LimeConfig initialConfig = new LimeConfig().withSamples(10);
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotSameAs(initialConfig);

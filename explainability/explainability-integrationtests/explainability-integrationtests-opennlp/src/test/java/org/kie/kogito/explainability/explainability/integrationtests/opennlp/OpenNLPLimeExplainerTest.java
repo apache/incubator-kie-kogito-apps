@@ -165,9 +165,10 @@ class OpenNLPLimeExplainerTest {
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withSampling(false);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(new PerturbationContext(random, 1));
@@ -190,9 +191,10 @@ class OpenNLPLimeExplainerTest {
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withSampling(false);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore().withSampling(false);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(new PerturbationContext(random, 1));
@@ -207,9 +209,10 @@ class OpenNLPLimeExplainerTest {
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withSampling(false);
+        int seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withSampling(false);
         Random random = new Random();
-        random.setSeed(0);
+        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(new PerturbationContext(random, 1));
