@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-/* istanbul ignore file */
-
 import { FormFilter, FormInfo, FormsListDriver } from '../../../api';
 
 export const formList: FormInfo[] = [

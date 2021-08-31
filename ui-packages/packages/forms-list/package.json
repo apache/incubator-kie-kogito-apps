@@ -47,7 +47,9 @@
     ],
     "coveragePathIgnorePatterns": [
       "./src/static",
-      "dist/"
+      "dist/",
+      "./src/envelope/tests/mocks",
+      "./src/envelope/FormsListEnvelope.tsx"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"

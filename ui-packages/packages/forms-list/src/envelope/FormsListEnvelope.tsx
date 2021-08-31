@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-/* istanbul ignore file */
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { EnvelopeBus } from '@kogito-tooling/envelope-bus/dist/api';
