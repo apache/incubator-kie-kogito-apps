@@ -160,7 +160,8 @@ export enum CFExecutionStatus {
   COMPLETED,
   RUNNING,
   NOT_STARTED,
-  FAILED
+  FAILED,
+  NO_RESULTS
 }
 
 export type CFAnalysisResetType = 'NEW' | 'EDIT';

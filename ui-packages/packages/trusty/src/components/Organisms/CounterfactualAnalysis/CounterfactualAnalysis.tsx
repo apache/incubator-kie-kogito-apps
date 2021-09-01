@@ -83,7 +83,7 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
   useEffect(() => {
     if (cfResults) {
       const succeededResults = cfResults.solutions.filter(
-        result => result.status !== 'FAILED'
+        result => result.status !== 'FAILED' && result.isValid
       );
       if (succeededResults.length) {
         dispatch({
@@ -103,7 +103,9 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
             executionStatus:
               finalResult.status === 'FAILED'
                 ? CFExecutionStatus.FAILED
-                : CFExecutionStatus.COMPLETED
+                : finalResult.isValid
+                ? CFExecutionStatus.COMPLETED
+                : CFExecutionStatus.NO_RESULTS
           }
         });
       }

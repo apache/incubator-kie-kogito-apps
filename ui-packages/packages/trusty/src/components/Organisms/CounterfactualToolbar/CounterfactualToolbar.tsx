@@ -51,13 +51,21 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
   };
 
   const handleNewCF = () => {
-    setIsConfirmNewCFDialogOpen(true);
-    setCFResetType('NEW');
+    if (status.executionStatus === CFExecutionStatus.NO_RESULTS) {
+      onSetupNewAnalysis('NEW');
+    } else {
+      setIsConfirmNewCFDialogOpen(true);
+      setCFResetType('NEW');
+    }
   };
 
   const handleEditSearchDomain = () => {
-    setIsConfirmNewCFDialogOpen(true);
-    setCFResetType('EDIT');
+    if (status.executionStatus === CFExecutionStatus.NO_RESULTS) {
+      onSetupNewAnalysis('EDIT');
+    } else {
+      setIsConfirmNewCFDialogOpen(true);
+      setCFResetType('EDIT');
+    }
   };
 
   const handleNewCFModalClose = () => {
@@ -172,7 +180,8 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
             </>
           )}
           {(status.executionStatus === CFExecutionStatus.COMPLETED ||
-            status.executionStatus === CFExecutionStatus.FAILED) && (
+            status.executionStatus === CFExecutionStatus.FAILED ||
+            status.executionStatus === CFExecutionStatus.NO_RESULTS) && (
             <>
               <ToolbarItem>
                 <Tooltip

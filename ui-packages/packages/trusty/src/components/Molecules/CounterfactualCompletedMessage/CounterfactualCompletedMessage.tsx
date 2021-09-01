@@ -22,7 +22,8 @@ const CounterfactualCompletedMessage = (
       localStatus &&
       localStatus.executionStatus === CFExecutionStatus.RUNNING &&
       (status.executionStatus === CFExecutionStatus.COMPLETED ||
-        status.executionStatus === CFExecutionStatus.FAILED)
+        status.executionStatus === CFExecutionStatus.FAILED ||
+        status.executionStatus === CFExecutionStatus.NO_RESULTS)
     ) {
       setIsMessageVisible(true);
     }
@@ -70,6 +71,26 @@ const CounterfactualCompletedMessage = (
               <p>
                 <span>
                   There was an error while elaborating counterfactual results.
+                </span>
+              </p>
+            </Alert>
+          )}
+          {status.executionStatus === CFExecutionStatus.NO_RESULTS && (
+            <Alert
+              isInline
+              variant="warning"
+              title="No counterfactual solutions found"
+              actionClose={
+                <AlertActionCloseButton onClose={handleAlertClosing} />
+              }
+            >
+              <p>
+                <span>
+                  The Counterfactual Analysis wasn&apos;t able to find
+                  counterfactual solutions for the provided combination of
+                  outcomes and inputs.
+                  <br /> Try changing the input settings and running the
+                  analysis again.
                 </span>
               </p>
             </Alert>
