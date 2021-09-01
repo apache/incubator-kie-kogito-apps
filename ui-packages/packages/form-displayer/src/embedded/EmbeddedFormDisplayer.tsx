@@ -24,15 +24,14 @@ import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import { EmbeddedEnvelopeFactory } from '@kogito-tooling/envelope/dist/embedded';
 import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
-import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { init } from '../envelope';
 
 export type Props = {
   targetOrigin: string;
-  userTask: UserTaskInstance;
+  formContent: any;
 };
 
-export const EmbeddedTaskDetails = React.forwardRef<FormDisplayerApi, Props>(
+export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
   (props, forwardedRef) => {
     const pollInit = useCallback(
       (
@@ -65,11 +64,11 @@ export const EmbeddedTaskDetails = React.forwardRef<FormDisplayerApi, Props>(
             envelopeServerId: envelopeServer.id
           },
           {
-            task: props.userTask
+            formContent: props.formContent
           }
         );
       },
-      [props.userTask]
+      [props.formContent]
     );
 
     const refDelegate = useCallback(

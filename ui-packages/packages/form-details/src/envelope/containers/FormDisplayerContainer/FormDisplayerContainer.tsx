@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-export interface FormDisplayerEnvelopeApi {
-  formDisplayer__init(
-    association: Association,
-    initArgs: FormDisplayerInitArgs
-  ): Promise<void>;
+import React from 'react';
+import { EmbeddedFormDisplayer } from '@kogito-apps/form-displayer';
+import { Form } from 'packages/form-details/src/api';
+
+interface FormDisplayerContainerProps {
+  formContent: Form;
 }
 
-export interface Association {
-  origin: string;
-  envelopeServerId: string;
-}
+const FormDisplayerContainer: React.FC<FormDisplayerContainerProps> = ({
+  formContent
+}) => {
+  return <EmbeddedFormDisplayer targetOrigin={'*'} formContent={formContent} />;
+};
 
-export interface FormDisplayerInitArgs {
-  formContent: any;
-}
+export default FormDisplayerContainer;

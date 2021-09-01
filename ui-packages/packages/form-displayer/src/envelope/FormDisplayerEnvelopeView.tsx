@@ -20,7 +20,7 @@ import { useImperativeHandle, useState } from 'react';
 import { FormDisplayerChannelApi } from '../api';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
-// import TaskDetails from './component/TaskDetails';
+import ReactFormRenderer from './components/ReactFormRenderer/ReactFormRenderer';
 
 import '@patternfly/patternfly/patternfly.css';
 
@@ -43,13 +43,13 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     forwardedRef,
     () => {
       return {
-        setTask: (userTask: UserTaskInstance) => {
-          setTask(userTask);
+        setTask: (formContent: any) => {
+          setTask(formContent);
         }
       };
     },
     []
   );
-
-  return <></>;
+  console.log('task', task);
+  return <ReactFormRenderer />;
 });

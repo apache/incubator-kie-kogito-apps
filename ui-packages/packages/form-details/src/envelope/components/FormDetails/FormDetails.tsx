@@ -33,6 +33,7 @@ import FormView from '../FormView/FormView';
 import { ServerErrors } from '@kogito-apps/components-common';
 import _ from 'lodash';
 import { Form } from 'packages/form-details/src/api';
+import FormDisplayerContainer from '../../containers/FormDisplayerContainer/FormDisplayerContainer';
 // import { Form } from 'packages/form-details/src/api';
 
 export interface FormDetailsProps {
@@ -61,16 +62,20 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
     try {
       if (formData['formData']) {
         const response = await driver.getFormContent(formData['formData'].name);
+        console.log('formdata', response);
         setFormContent(response);
       }
     } catch (error) {
       setError(error);
     }
   };
+  console.log('formContent', formContent);
   const panelContent = (
     <DrawerPanelContent isResizable defaultSize={'800px'} minSize={'700px'}>
       <DrawerHead>
-        <span>render displayer here</span>
+        <span>
+          <FormDisplayerContainer formContent={formContent} />
+        </span>
       </DrawerHead>
     </DrawerPanelContent>
   );

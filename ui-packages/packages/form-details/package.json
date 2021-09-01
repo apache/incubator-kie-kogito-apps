@@ -28,8 +28,9 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/forms-list": "^1.0.0",
-    "@kogito-apps/components-common": "^1.0.0"
+    "@kogito-apps/components-common": "^1.0.0",
+    "@kogito-apps/form-displayer": "^1.0.0",
+    "@kogito-apps/forms-list": "^1.0.0"
   },
   "devDependencies": {
     "@kogito-apps/ouia-tools": "^1.0.0",
