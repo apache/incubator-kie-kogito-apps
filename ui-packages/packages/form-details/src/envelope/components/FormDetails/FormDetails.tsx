@@ -34,7 +34,6 @@ import { ServerErrors } from '@kogito-apps/components-common';
 import _ from 'lodash';
 import { Form } from 'packages/form-details/src/api';
 import FormDisplayerContainer from '../../containers/FormDisplayerContainer/FormDisplayerContainer';
-// import { Form } from 'packages/form-details/src/api';
 
 export interface FormDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -60,8 +59,8 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
 
   const init = async () => {
     try {
-      if (formData['formData']) {
-        const response = await driver.getFormContent(formData['formData'].name);
+      if (formData) {
+        const response = await driver.getFormContent(formData.name);
         console.log('formdata', response);
         setFormContent(response);
       }
@@ -115,11 +114,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   <FormView
                     code={getSource()}
                     isSource
-                    formType={
-                      formData &&
-                      formData['formData'] &&
-                      formData['formData'].type
-                    }
+                    formType={formData && formData.type}
                   />
                 )}
                 <Button variant="primary" className="pf-u-mt-md">

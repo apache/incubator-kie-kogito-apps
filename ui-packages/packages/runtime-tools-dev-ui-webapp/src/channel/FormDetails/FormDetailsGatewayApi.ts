@@ -16,7 +16,6 @@
 
 import { Form } from '@kogito-apps/form-details';
 import { getFormContent } from '../apis';
-import { FormDetailsQueries } from './FormDetailsQueries';
 
 export interface OnOpenFormDetailsListener {
   onOpen(name: string): void;
@@ -35,13 +34,7 @@ export interface FormDetailsGatewayApi {
 }
 
 export class FormDetailsGatewayApiImpl implements FormDetailsGatewayApi {
-  //@ts-ignore
-  private readonly queries: FormDetailsQueries;
   private readonly listeners: OnOpenFormDetailsListener[] = [];
-
-  constructor(queries: FormDetailsQueries) {
-    this.queries = queries;
-  }
 
   getFormContent(formName: string): Promise<Form> {
     return getFormContent(formName);
